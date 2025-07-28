@@ -1,10 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useCorrectionsStore, CorrectionRule } from '../correctionsStore';
 interface WorkflowManagerProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  type WorkflowTab = 'pending' | 'published' | 'deprecated' | 'suggestions';
-  export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ ),
+}
+
+type WorkflowTab = 'pending' | 'published' | 'deprecated' | 'suggestions';
+
+export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
   isOpen,
   onClose
 }) => {

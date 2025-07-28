@@ -350,6 +350,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       },
       hasUnsavedChanges: true
     }),
+
   // Region groups operations (Epic 8.7 Task 3)
   setRegionGroups: (groups: RegionGroup[]) =>
     set((state) => ({
