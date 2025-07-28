@@ -76,7 +76,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
   const rect = e.currentTarget.getBoundingClientRect();
   const startX = e.clientX - rect.left;
   const startY = e.clientY - rect.top;
-  setSelectionRect({)
+  setSelectionRect({
   startX,
   startY,
   currentX: startX,
