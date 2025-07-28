@@ -8,23 +8,23 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
 export interface AutosaveState {
-  nodes: Node;,
-  edges: Edge;
-  timestamp: number;,
+  nodes: Node[];
+  edges: Edge[];
+  timestamp: number;
   version: number;
-  checksum: string;,
-  metadata: {,
-  nodeCount: number;,
-  edgeCount: number;
-  lastModified: string;,
-  sessionId: string;
+  checksum: string;
+  metadata: {
+    nodeCount: number;
+    edgeCount: number;
+    lastModified: string;
+    sessionId: string;
 };
 }
 export interface AutosaveManagerProps {
-  nodes: Node;,
-  edges: Edge;
-  interval?: number; // Autosave interval in milliseconds,
-  maxVersions?: number; // Maximum number of autosave versions to keep,
+  nodes: Node[];
+  edges: Edge[];
+  interval?: number; // Autosave interval in milliseconds
+  maxVersions?: number; // Maximum number of autosave versions to keep
   onRestore?: (state: AutosaveState) => void;
   onConflict?: (current: AutosaveState, saved: AutosaveState) => void;
   theme?: 'light' | 'dark' | 'cinema';
@@ -36,11 +36,11 @@ export class AutosaveSystem {
   private maxVersions: number;
   private listeners: Set<(status: AutosaveStatus) => void> = new Set();
   constructor(projectId: string = 'default', maxVersions: number = 10) {
-    this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-    this.storageKey = `autosave_${projectId}`;}
+    this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.storageKey = `autosave_${projectId}`;
     this.maxVersions = maxVersions;
   // Generate checksum for data integrity
-  private generateChecksum(nodes: Node, edges: Edge): string {
+  private generateChecksum(nodes: Node[], edges: Edge[]): string {
     const data = JSON.stringify({ nodes, edges });
     let hash = 0;
     for (let i = 0; i < data.length; i++) {

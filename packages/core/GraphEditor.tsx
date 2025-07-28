@@ -313,7 +313,9 @@ const NODE_TYPES: NodeMeta[] = [
   // In practice, you'd need to wire this up with the actual save dialog result
   resolve(true);
   });
-}
+  }
+});
+
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
   const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());

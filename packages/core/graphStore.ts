@@ -190,15 +190,15 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       if (!nodeToClone) return state;
       const newNode = {
         ...nodeToClone,
-        id: `${nodeToClone.id}-copy-${Date.now()}`}
-},
-  position: {
-  x: nodeToClone.position.x + 100,
-  y: nodeToClone.position.y + 100,
-},
-  data: {
+        id: `${nodeToClone.id}-copy-${Date.now()}`,
+        position: {
+          x: nodeToClone.position.x + 100,
+          y: nodeToClone.position.y + 100,
+        },
+        data: {
           ...nodeToClone.data,
-          label: `${nodeToClone.data.label} (Copy)`}
+          label: `${nodeToClone.data.label} (Copy)`
+        }
       };
       return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
     }),
@@ -216,11 +216,11 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   ...state.annotations,
   stickyNotes: notes,
   metadata: {
-  ...state.annotations.metadata,
-  modified: new Date().toISOString(),
-},
+    ...state.annotations.metadata,
+    modified: new Date().toISOString(),
+  },
   hasUnsavedChanges: true
-  })),
+})),
   addStickyNote: (note: StickyNote) =>
     set((state) => ({
   stickyNotes: [...state.stickyNotes, note],

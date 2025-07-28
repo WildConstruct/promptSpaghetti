@@ -517,6 +517,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           e.stopPropagation();
                           if (!regenerating && !locked) {
                             handleResultAction('regenerate', i);
+                          }
                         }}
                         disabled={regenerating || locked}
                         style={{
@@ -829,8 +830,11 @@ style.textContent = `
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
+    }
     50% {
       opacity: 0.5;
+    }
+  }
 `;
 document.head.appendChild(style);
 
