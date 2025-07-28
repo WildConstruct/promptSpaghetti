@@ -18,14 +18,14 @@ export interface MultiSelectionManagerProps {
   nodes: Node[];
   edges: Edge[];
   selectedNodes: Node[];
-  selectedEdges: Edge;
-  onNodesSelect: (nodes: Node) => void;,
-  onEdgesSelect: (edges: Edge) => void;,
-  onSelectionChange: (selection: { nodes: Node; edges: Edge }) => void;
+  selectedEdges: Edge[];
+  onNodesSelect: (nodes: Node[]) => void;
+  onEdgesSelect: (edges: Edge[]) => void;
+  onSelectionChange: (selection: { nodes: Node[]; edges: Edge[] }) => void;
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
 }
-export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
+export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
   nodes,
   edges,
   selectedNodes,

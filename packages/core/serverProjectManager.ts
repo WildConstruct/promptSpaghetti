@@ -9,13 +9,17 @@ import { ProjectMetadata, PSGFile, SaveProjectOptions, LoadProjectResult, SavePr
 export interface ServerProjectMetadata extends ProjectMetadata {
   id: string;
   userId?: number;
-  export interface ServerProject extends PSGFile {
+}
+
+export interface ServerProject extends PSGFile {
   id: string;
   userId?: number;
-  export interface ProjectListResponse {
-  projects: ServerProject;,
+}
+
+export interface ProjectListResponse {
+  projects: ServerProject[];
   total: number;
-  limit: number;,
+  limit: number;
   offset: number;
 }
 export interface ProjectQuery {

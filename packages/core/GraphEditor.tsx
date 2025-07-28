@@ -400,7 +400,7 @@ const NODE_TYPES: NodeMeta[] = [
   const previewTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // Selected node & schema for inspector
   const selectedNode = nodes.find((n) => n.id === selectedNodeId) || null;
-  const selectedSchema = selectedNode && selectedNode.data?.nodeType;
+  const selectedSchema = selectedNode && selectedNode.data?.nodeType
     ? nodeSchemas[selectedNode.data.nodeType as keyof typeof nodeSchemas] ?? null
     : null;
   // Epic 8.5-5: Global preview trigger for weight changes
