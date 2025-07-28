@@ -7,12 +7,10 @@ import { TrendChart } from './TrendChart';
 import { formatNumber, formatCurrency, formatPercentage } from '../../../utils/formatters';
 import './DashboardOverview.css';
 interface DashboardOverviewProps {
-  dashboard: CreatorDashboard;
-  insights: AnalyticsInsight[];
+  dashboard: CreatorDashboard;,
+  insights: AnalyticsInsight;
   onRefresh: () => void;
-}
-
-export const DashboardOverview: React.FC<DashboardOverviewProps> = ({)
+  export const DashboardOverview: React.FC<DashboardOverviewProps> = ({,)
   dashboard,
   insights,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,7 +28,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({)
   const downloadsTrend = getTrendIcon(performance_summary.downloads_trend);
   const revenueTrend = getTrendIcon(performance_summary.revenue_trend);
   const ratingTrend = getTrendIcon(performance_summary.rating_trend);
-  return ()
+  return;
     <div className="dashboard-overview">
       {/* Key Metrics Grid */}
       <div className="metrics-grid">

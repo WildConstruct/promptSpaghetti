@@ -35,81 +35,78 @@ import type {
 import { MFAEnrollmentWorkflow } from './MFAEnrollmentWorkflow';
 interface MFASettingsManagerProps {
   userId: string;
-  onMethodChange?: (methods: BaseMFAConfiguration[]) => void;
-}
-interface SettingsState {
-  profile: UserMFAProfile | null;
-  configurations: BaseMFAConfiguration[];
-  isLoading: boolean;
+  onMethodChange?: (methods: BaseMFAConfiguration) => void;
+  interface SettingsState {
+  profile: UserMFAProfile | null;,
+  configurations: BaseMFAConfiguration;
+  isLoading: boolean;,
   error: string | null;
-  showEnrollment: boolean;
+  showEnrollment: boolean;,
   showBackupCodes: boolean;
-  showDeleteConfirm: string | null;
+  showDeleteConfirm: string | null;,
   editingMethod: BaseMFAConfiguration | null;
   generatingBackupCodes: boolean;
-}
-const MFA_METHOD_ICONS = {
+  const MFA_METHOD_ICONS = {
   [MFAMethodType.TOTP]: Smartphone,
   [MFAMethodType.EMAIL]: Mail,
-  [MFAMethodType.SMS]: MessageSquare
+  [MFAMethodType.SMS]: MessageSquare,
 };
 const STATUS_CONFIG = {
-  [MFAMethodStatus.ACTIVE]: {
-    color: 'green',
-    label: 'Active',
-    icon: CheckCircle,
-  },
+  [MFAMethodStatus.ACTIVE]: {,
+  color: 'green',
+  label: 'Active',
+  icon: CheckCircle,
+}
   [MFAMethodStatus.PENDING]: {
-    color: 'yellow',
-    label: 'Pending Setup',
-    icon: Clock,
-  },
+  color: 'yellow',
+  label: 'Pending Setup',
+  icon: Clock,
+}
   [MFAMethodStatus.DISABLED]: {
-    color: 'gray',
-    label: 'Disabled',
-    icon: XCircle,
-  },
+  color: 'gray',
+  label: 'Disabled',
+  icon: XCircle,
+}
   [MFAMethodStatus.REVOKED]: {
-    color: 'red',
-    label: 'Revoked',
-    icon: XCircle,
-  }
+  color: 'red',
+  label: 'Revoked',
+  icon: XCircle,
 };
 
 export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManagerProps) {
   const [state, setState] = useState<SettingsState>({)
-    profile: null,
-    configurations: [],
-    isLoading: true,
-    error: null,
-    showEnrollment: false,
-    showBackupCodes: false,
-    showDeleteConfirm: null,
-    editingMethod: null,
-    generatingBackupCodes: false,
-  });
+  profile: null,
+  configurations: [],
+  isLoading: true,
+  error: null,
+  showEnrollment: false,
+  showBackupCodes: false,
+  showDeleteConfirm: null,
+  editingMethod: null,
+  generatingBackupCodes: false,
+});
   const loadMFAData = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
     try {
       const response = await fetch(`/api/mfa/list/${userId}`, {)}
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  },
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (!response.ok) throw new Error('Failed to load MFA data');
       const data: MFAListResponse = await response.json();
       setState(prev => ({)
-        ...prev,
-        profile: data.profile,
-        configurations: data.configurations,
-        isLoading: false,
-      }));
+  ...prev,
+  profile: data.profile,
+  configurations: data.configurations,
+  isLoading: false,
+}));
       onMethodChange?.(data.configurations);
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        error: error.message,
-        isLoading: false,
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  error: error.message,
+  isLoading: false,
+}));
   }, [userId, onMethodChange]);
   useEffect(() => {
     loadMFAData();
@@ -117,23 +114,24 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
   const toggleMethodStatus = async (configId: string, newStatus: MFAMethodStatus) => {
     try {
       const response = await fetch(`/api/mfa/configure/${configId}`, {)}
-        method: 'PATCH',
+  },
+  method: 'PATCH',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({ status: newStatus })
+  },
+  body: JSON.stringify({ status: newStatus })
       });
       if (!response.ok) throw new Error('Failed to update method status');
       await loadMFAData();
     } catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
-    }
   };
   const deleteMethod = async (configId: string) => {
     try {
       const response = await fetch(`/api/mfa/configure/${configId}`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (!response.ok) throw new Error('Failed to delete method');
@@ -141,25 +139,24 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       await loadMFAData();
     } catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
-    }
   };
   const setPrimaryMethod = async (configId: string) => {
     try {
       const response = await fetch(`/api/mfa/configure/${configId}/primary`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (!response.ok) throw new Error('Failed to set primary method');
       await loadMFAData();
     } catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
-    }
   };
   const generateNewBackupCodes = async () => {
     setState(prev => ({ ...prev, generatingBackupCodes: true }));
     try {
       const response = await fetch('/api/mfa/backup-codes/generate', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (!response.ok) throw new Error('Failed to generate backup codes');
@@ -170,14 +167,15 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       setState(prev => ({ ...prev, error: error.message }));
     } finally {
       setState(prev => ({ ...prev, generatingBackupCodes: false }));
-    }
   };
-  const downloadBackupCodes = (codes: string[]) => {
+  const downloadBackupCodes = (codes: string) => {
     const content = [;
       'PromptScape MFA Backup Codes',
       '================================',
-      `Generated: ${new Date().toISOString()}`,}
-      `User: ${userId}`,}
+      `Generated: ${new Date().toISOString()}`}
+}
+      `User: ${userId}`}
+}
       '',
       'IMPORTANT: Save these codes in a safe place.',
       'Each code can only be used once.',
@@ -198,7 +196,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
     loadMFAData();
   };
   if (state.isLoading) {
-    return ()
+    return;
       <Card className="w-full max-w-4xl mx-auto">
         <CardContent className="flex items-center justify-center h-48">
           <div className="text-center">
@@ -208,8 +206,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
         </CardContent>
       </Card>
     );
-  }
-  return ()
+  return;
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Profile Overview */}
       <Card>
@@ -224,8 +221,8 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-3 h-3 rounded-full ${
-                  state.profile?.isEnabled ? 'bg-green-500' : 'bg-red-500'
-                }`}></div>
+  state.profile?.isEnabled ? 'bg-green-500' : 'bg-red-500',
+}`}></div>
                 <span className="font-medium">
                   MFA Status: {state.profile?.isEnabled ? 'Enabled' : 'Disabled'}
                 </span>
@@ -297,7 +294,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
                 const Icon = MFA_METHOD_ICONS[config.methodType];
                 const statusConfig = STATUS_CONFIG[config.status];
                 const StatusIcon = statusConfig.icon;
-                return ()
+                return;
                   <div key={config.id} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
@@ -344,10 +341,9 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
                         <Switch
                           checked={config.status === MFAMethodStatus.ACTIVE}
                           onCheckedChange={(checked) => 
-                            toggleMethodStatus()
+                            toggleMethodStatus();
                               config.id, 
                               checked ? MFAMethodStatus.ACTIVE : MFAMethodStatus.DISABLED
-                          }
                           disabled={config.isPrimary && config.status === MFAMethodStatus.ACTIVE}
                         />
                         <Button
@@ -474,4 +470,3 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       )}
     </div>
   );
-}

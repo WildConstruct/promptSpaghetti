@@ -20,7 +20,7 @@ import {
 const mockElement = {
   textContent: '',
   innerHTML: '',
-  setAttribute: jest.fn<unknown[], unknown>()
+  setAttribute: jest.fn<unknown, unknown>(),
 };
 
 // Mock document methods
@@ -35,17 +35,17 @@ Object.defineProperty(global, 'document', {)
 });
 describe('Security Utilities', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockElement.textContent = '';
-    mockElement.innerHTML = '';
-    // Mock window.location for URL validation tests
-    Object.defineProperty(window, 'location', {)
-      value: {,
-        origin: 'https://example.com',
-        href: 'https://example.com',
-      },
-      writable: true,
-    });
+  jest.clearAllMocks();
+  mockElement.textContent = '';
+  mockElement.innerHTML = '';
+  // Mock window.location for URL validation tests
+  Object.defineProperty(window, 'location', {)
+  value: {,
+  origin: 'https://example.com',
+  href: 'https://example.com',
+},
+  writable: true;
+  });
   });
   describe('sanitizeText', () => {
     it('should handle basic text input', () => {
@@ -64,54 +64,53 @@ describe('Security Utilities', () => {
       expect(sanitizeText({} as any)).toBe('');
     });
     it('should preserve safe special characters', () => {
-      mockElement.innerHTML = 'Price: $19.99 &amp; Free Shipping!';
-      const result = sanitizeText('Price: $19.99 & Free Shipping!');
-      expect(result).toBe('Price: $19.99 & Free Shipping!');
-    });
+  mockElement.innerHTML = 'Price: $19.99 &amp; Free Shipping!';
+  const result = sanitizeText('Price: $19.99 & Free Shipping!');
+  expect(result).toBe('Price: $19.99 & Free Shipping!');
+});
   });
   describe('validateUrl', () => {
-    it('should allow same-origin URLs', () => {
-      const result = validateUrl('/dashboard');
-      expect(result).toBe('https://example.com/dashboard');
-    });
+  it('should allow same-origin URLs', () => {
+  const result = validateUrl('/dashboard');
+  expect(result).toBe('https://example.com/dashboard');
+});
     it('should allow HTTPS URLs from allowed origins', () => {
-      const allowedOrigins = ['https://trusted-site.com'];
-      const result = validateUrl('https://trusted-site.com/api', allowedOrigins);
-      expect(result).toBe('https://trusted-site.com/api');
-    });
+  const allowedOrigins = ['https://trusted-site.com'];
+  const result = validateUrl('https://trusted-site.com/api', allowedOrigins);
+  expect(result).toBe('https://trusted-site.com/api');
+});
     it('should block dangerous schemes', () => {
-      const dangerousUrls = [;
-        'javascript:alert(1)',
-        'data:text/html,<script>alert(1)</script>',
-        'vbscript:msgbox(1)',
-        'file:///etc/passwd',
-        'ftp://malicious.com'
-      ];
-      dangerousUrls.forEach(url => {)
-        expect(validateUrl(url)).toBeNull();
-      });
+  const dangerousUrls = [;
+  'javascript:alert(1)',
+  'data:text/html,<script>alert(1)</script>',
+  'vbscript:msgbox(1)',
+  'file:///etc/passwd',
+  'ftp://malicious.com'];
+  dangerousUrls.forEach(url => {)
+  expect(validateUrl(url)).toBeNull();
+});
     });
     it('should block external URLs not in allowed origins', () => {
-      const result = validateUrl('https://malicious-site.com/steal-data');
-      expect(result).toBeNull();
-    });
+  const result = validateUrl('https://malicious-site.com/steal-data');
+  expect(result).toBeNull();
+});
     it('should handle invalid URLs', () => {
-      const invalidUrls = [;
-        'not-a-url',
-        'http://',
-        'https://',
-        '',
-        null,
-        undefined
-      ];
-      invalidUrls.forEach(url => {)
-        expect(validateUrl(url as any)).toBeNull();
-      });
+  const invalidUrls = [;
+  'not-a-url',
+  'http://',
+  'https://',
+  '',
+  null,
+  undefined
+  ];
+  invalidUrls.forEach(url => {)
+  expect(validateUrl(url as any)).toBeNull();
+});
     });
     it('should handle relative URLs correctly', () => {
-      const result = validateUrl('../admin/dashboard');
-      expect(result).toBe('https://example.com/../admin/dashboard');
-    });
+  const result = validateUrl('../admin/dashboard');
+  expect(result).toBe('https://example.com/../admin/dashboard');
+});
   });
   describe('validateInput', () => {
     it('should validate basic string input', () => {
@@ -136,26 +135,26 @@ describe('Security Utilities', () => {
       expect(invalidResult.errors[0]).toContain('invalid characters');
     });
     it('should block dangerous patterns', () => {
-      const dangerousInputs = [;
-        '<script>alert(1)</script>',
-        'javascript:alert(1)',
-        'vbscript:msgbox(1)',
-        'onload=alert(1)',
-        'onerror=alert(1)',
-        'eval(maliciousCode)',
-        'setTimeout(attack, 1000)'
-      ];
-      dangerousInputs.forEach(input => {)
-        const result = validateInput(input);
-        expect(result.isValid).toBe(false);
-        expect(result.errors[0]).toContain('dangerous content');
-      });
+  const dangerousInputs = [;
+  '<script>alert(1)</script>',
+  'javascript:alert(1)',
+  'vbscript:msgbox(1)',
+  'onload=alert(1)',
+  'onerror=alert(1)',
+  'eval(maliciousCode)',
+  'setTimeout(attack, 1000)'
+  ];
+  dangerousInputs.forEach(input => {)
+  const result = validateInput(input);
+  expect(result.isValid).toBe(false);
+  expect(result.errors[0]).toContain('dangerous content');
+});
     });
     it('should handle custom blocked patterns', () => {
-      const customBlockedPattern = /admin|root|sudo/gi;
-      const result = validateInput('admin user login', {)
-        blockedPatterns: [customBlockedPattern],
-      });
+  const customBlockedPattern = /admin|root|sudo/gi;
+  const result = validateInput('admin user login', {)
+  blockedPatterns: [customBlockedPattern],
+});
       expect(result.isValid).toBe(false);
       expect(result.sanitized).toBe(' user login');
     });
@@ -202,20 +201,19 @@ describe('Security Utilities', () => {
     });
   });
   describe('Security Headers', () => {
-    // Mock crypto.getRandomValues for testing
-    const mockCrypto = {
-      getRandomValues: jest.fn((array) => {,
-        for (let i = 0; i < array.length; i++) {
-          array[i] = Math.floor(Math.random() * 256);
-        }
-        return array;
-      })
+  // Mock crypto.getRandomValues for testing
+  const mockCrypto = {
+  getRandomValues: jest.fn((array) => {,
+  for (let i = 0; i < array.length; i++) {
+  array[i] = Math.floor(Math.random() * 256);
+  return array;
+}
     };
     beforeEach(() => {
-      Object.defineProperty(global, 'crypto', {)
-        value: mockCrypto,
-        writable: true,
-      });
+  Object.defineProperty(global, 'crypto', {)
+  value: mockCrypto,
+  writable: true,
+});
     });
     it('should generate valid nonces', () => {
       const nonce = securityHeaders.generateNonce();
@@ -230,12 +228,12 @@ describe('Security Utilities', () => {
     });
   });
   describe('Safe DOM Manipulation', () => {
-    let mockElement: unknown;
-    beforeEach(() => {
-      mockElement = {
-        textContent: '',
-        setAttribute: jest.fn<unknown[], unknown>()
-      };
+  let mockElement: unknown;
+  beforeEach(() => {
+  mockElement = {
+  textContent: '',
+  setAttribute: jest.fn<unknown, unknown>(),
+};
     });
     it('should safely set text content', () => {
       safeDom.setText(mockElement, 'Safe text content');
@@ -244,19 +242,19 @@ describe('Security Utilities', () => {
     it('should block dangerous attributes', () => {
       const dangerousAttrs = ['onclick', 'onload', 'onerror', 'onmouseover'];
       dangerousAttrs.forEach(attr => {)
-        safeDom.setAttribute(mockElement, attr, 'alert(1)');
+  safeDom.setAttribute(mockElement, attr, 'alert(1)');
         expect(mockElement.setAttribute).not.toHaveBeenCalled();
         jest.clearAllMocks();
       });
     });
     it('should validate href attributes', () => {
-      safeDom.setAttribute(mockElement, 'href', '/safe-url');
-      expect(mockElement.setAttribute).toHaveBeenCalledWith('href', 'https://example.com/safe-url');
-    });
+  safeDom.setAttribute(mockElement, 'href', '/safe-url');
+  expect(mockElement.setAttribute).toHaveBeenCalledWith('href', 'https://example.com/safe-url');
+});
     it('should block dangerous href values', () => {
-      safeDom.setAttribute(mockElement, 'href', 'javascript:alert(1)');
-      expect(mockElement.setAttribute).not.toHaveBeenCalled();
-    });
+  safeDom.setAttribute(mockElement, 'href', 'javascript:alert(1)');
+  expect(mockElement.setAttribute).not.toHaveBeenCalled();
+});
     it('should sanitize safe attributes', () => {
       safeDom.setAttribute(mockElement, 'title', 'Safe title text');
       expect(mockElement.setAttribute).toHaveBeenCalledWith('title', 'Safe title text');
@@ -277,20 +275,20 @@ describe('Security Utilities', () => {
         'user..double.dot@domain.com'
       ];
       validEmails.forEach(email => {)
-        expect(validationPatterns.email.test(email)).toBe(true);
+  expect(validationPatterns.email.test(email)).toBe(true);
       });
       invalidEmails.forEach(email => {)
-        expect(validationPatterns.email.test(email)).toBe(false);
+  expect(validationPatterns.email.test(email)).toBe(false);
       });
     });
     it('should validate usernames', () => {
       const validUsernames = ['user123', 'test_user', 'admin-panel'];
       const invalidUsernames = ['ab', 'user@domain', 'very-long-username-that-exceeds-limit'];
       validUsernames.forEach(username => {)
-        expect(validationPatterns.username.test(username)).toBe(true);
+  expect(validationPatterns.username.test(username)).toBe(true);
       });
       invalidUsernames.forEach(username => {)
-        expect(validationPatterns.username.test(username)).toBe(false);
+  expect(validationPatterns.username.test(username)).toBe(false);
       });
     });
     it('should validate API keys', () => {
@@ -301,11 +299,11 @@ describe('Security Utilities', () => {
     });
   });
   describe('ClientRateLimiter', () => {
-    let rateLimiter: ClientRateLimiter;
-    beforeEach(() => {
-      rateLimiter = new ClientRateLimiter(3, 1000); // 3 requests per second
-      jest.useFakeTimers();
-    });
+  let rateLimiter: ClientRateLimiter;
+  beforeEach(() => {
+  rateLimiter = new ClientRateLimiter(3, 1000); // 3 requests per second
+  jest.useFakeTimers();
+});
     afterEach(() => {
       jest.useRealTimers();
     });

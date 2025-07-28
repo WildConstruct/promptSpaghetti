@@ -22,20 +22,18 @@ import {
 } from '@mui/icons-material';
 
 export interface RecurrenceData {
-  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
+  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
   interval: number;
-  daysOfWeek?: number[]; // 0-6 (Sunday-Saturday)
-  daysOfMonth?: number[]; // 1-31
-  monthsOfYear?: number[]; // 1-12
+  daysOfWeek?: number; // 0-6 (Sunday-Saturday)
+  daysOfMonth?: number; // 1-31
+  monthsOfYear?: number; // 1-12
   cronExpression?: string;
   maxOccurrences?: number;
   endDate?: Date;
-}
 interface RecurrenceEditorProps {
   value?: RecurrenceData;
   onChange: (recurrence: RecurrenceData | undefined) => void;
   error?: string;
-}
 const RECURRENCE_TYPES = [;
   { value: 'daily', label: 'Daily', description: 'Repeat every day(s)' },
   { value: 'weekly', label: 'Weekly', description: 'Repeat every week(s)' },
@@ -66,19 +64,15 @@ const MONTHS_OF_YEAR = [;
   { value: 11, label: 'Nov', fullLabel: 'November' },
   { value: 12, label: 'Dec', fullLabel: 'December' }
 ];
-
-export 
   const [endType, setEndType] = useState<'never' | 'after' | 'on'>()
     value?.maxOccurrences ? 'after' : value?.endDate ? 'on' : 'never'
   );
   useEffect(() => {
-    if (value) {
-      setRecurrenceData(value);
-      setEndType()
-        value.maxOccurrences ? 'after' : value.endDate ? 'on' : 'never'
-      );
-    }
-  }, [value]);
+  if (value) {
+  setRecurrenceData(value);
+  setEndType();
+  value.maxOccurrences ? 'after' : value.endDate ? 'on' : 'never');
+}, [value]);
   const handleChange = (updates: Partial<RecurrenceData>) => {
     const newData = { ...recurrenceData, ...updates };
     setRecurrenceData(newData);
@@ -94,13 +88,10 @@ export
       updates.endDate = undefined;
       if (!recurrenceData.maxOccurrences) {
         updates.maxOccurrences = 10;
-      }
     } else if (type === 'on') {
       updates.maxOccurrences = undefined;
       if (!recurrenceData.endDate) {
         updates.endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-      }
-    }
     handleChange(updates);
   };
   const handleDayOfWeekToggle = (day: number) => {
@@ -140,7 +131,6 @@ export
           : `Every ${interval} weeks on ${dayNames}`;}
       } else {
         description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;}
-      }
       break;
     case 'monthly':
       if (daysOfMonth && daysOfMonth.length > 0) {
@@ -150,7 +140,6 @@ export
           : `Every ${interval} months on day ${dayList}`;}
       } else {
         description = interval === 1 ? 'Every month' : `Every ${interval} months`;}
-      }
       break;
     case 'yearly':
       if (monthsOfYear && monthsOfYear.length > 0) {
@@ -160,21 +149,18 @@ export
           : `Every ${interval} years in ${monthNames}`;}
       } else {
         description = interval === 1 ? 'Every year' : `Every ${interval} years`;}
-      }
       break;
     case 'custom':
       description = recurrenceData.cronExpression || 'Custom schedule';
       break;
-    }
     // Add end condition
     if (endType === 'after' && recurrenceData.maxOccurrences) {
       description += `, ${recurrenceData.maxOccurrences} times total`;}
     } else if (endType === 'on' && recurrenceData.endDate) {
       description += `, until ${recurrenceData.endDate.toLocaleDateString()}`;}
-    }
     return description;
   };
-  return ()
+  return;
     <Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Grid container spacing={3}>
@@ -380,3 +366,4 @@ export
     </Box>
   );
 };
+}

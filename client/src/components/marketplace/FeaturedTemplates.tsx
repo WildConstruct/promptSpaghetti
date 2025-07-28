@@ -3,34 +3,31 @@ import React, { useRef, useState, useEffect } from 'react';
 import { TemplateCard } from './TemplateCard';
 import './FeaturedTemplates.css';
 interface Template {
-  id: string;
+  id: string;,
   title: string;
   description?: string;
-  tags: string[];
+  tags: string;,
   price_cents: number;
-  avg_rating: number;
+  avg_rating: number;,
   total_reviews: number;
   total_purchases: number;
-  categories?: string[];
-  owner?: {
-    id: string;
-    name: string;
-    verified: boolean;
-  };
+  categories?: string;
+  owner?: {,
+  id: string;,
+  name: string;
+  verified: boolean;
+};
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
-  claude_compat: string[];
-}
+  claude_compat: string;
 interface FeaturedTemplatesProps {
-  templates: Template[];
+  templates: Template;,
   onTemplateClick: (templateId: string) => void;
   autoPlay?: boolean;
   autoPlayInterval?: number;
   className?: string;
-}
-
-export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({)
+  export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({,)
   templates,
   onTemplateClick,
   autoPlay = true,
@@ -50,11 +47,9 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({)
       timeoutRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % totalSlides);
       }, autoPlayInterval);
-    }
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
     };
   }, [currentIndex, isPlaying, totalSlides, autoPlayInterval]);
   const handlePrevious = () => {
@@ -78,28 +73,24 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({)
   const handleMouseLeave = () => {
     if (autoPlay) {
       setIsPlaying(true);
-    }
   };
   if (templates.length === 0) {
-    return ()
+    return;
       <div className={`featured-templates empty ${className}`}>}
         <p>No featured templates available</p>
       </div>
     );
-  }
   const getVisibleTemplates = () => {
     if (totalSlides <= maxVisibleSlides) {
       return templates;
-    }
     const visible = [];
     for (let i = 0; i < maxVisibleSlides; i++) {
       const index = (currentIndex + i) % totalSlides;
       visible.push(templates[index]);
-    }
     return visible;
   };
   const visibleTemplates = getVisibleTemplates();
-  return ()
+  return;
     <div 
       className={`featured-templates ${className}`}
       onMouseEnter={handleMouseEnter}
@@ -146,8 +137,8 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({)
           ref={carouselRef}
           className="carousel-track"
           style={{
-            transform: totalSlides <= maxVisibleSlides ? 'translateX(0)' : undefined,
-          }}
+  transform: totalSlides <= maxVisibleSlides ? 'translateX(0)' : undefined,
+}}
         >
           {visibleTemplates.map((template, index) => ()
             <div key={`${template.id}-${currentIndex}-${index}`} className="carousel-slide">}

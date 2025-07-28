@@ -49,54 +49,50 @@ import {
 
 // Types
 interface ExportHistoryItem {
-  id: string;
+  id: string;,
   success: boolean;
-  format: string;
+  format: string;,
   delivery: string;
-  filename: string;
+  filename: string;,
   size: number;
   generatedAt: string;
   deliveredAt?: string;
   error?: string;
   downloadUrl?: string;
   metadata: {,
-    recordCount: number;
-    processingTime: number;
-    compressionRatio?: number;
-  };
-}
+  recordCount: number;,
+  processingTime: number;
+  compressionRatio?: number;
+};
 interface ScheduledExport {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   exportConfig: {,
-    format: string;
-    delivery: string;
-  };
+  format: string;,
+  delivery: string;
+};
   schedule: {,
-    frequency: string;
-    time: string;
-    dayOfWeek?: number;
-    dayOfMonth?: number;
-  };
+  frequency: string;
+  time: string;
+  dayOfWeek?: number;
+  dayOfMonth?: number;
+};
   enabled: boolean;
   lastRun?: string;
   nextRun?: string;
   createdBy: string;
-}
 interface ExportStatistics {
-  totalExports: number;
+  totalExports: number;,
   successfulExports: number;
-  failedExports: number;
+  failedExports: number;,
   averageProcessingTime: number;
   formatBreakdown: Record<string, number>;
   deliveryBreakdown: Record<string, number>;
-}
-
-export const ExportHistoryPanel: React.FC = () => {
+  export const ExportHistoryPanel: React.FC = () => {,
   const [activeTab, setActiveTab] = useState('history');
-  const [exportHistory, setExportHistory] = useState<ExportHistoryItem[]>([]);
-  const [scheduledExports, setScheduledExports] = useState<ScheduledExport[]>([]);
+  const [exportHistory, setExportHistory] = useState<ExportHistoryItem>([]);
+  const [scheduledExports, setScheduledExports] = useState<ScheduledExport>([]);
   const [statistics, setStatistics] = useState<ExportStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -104,8 +100,8 @@ export const ExportHistoryPanel: React.FC = () => {
   const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
   // Load data on component mount
   useEffect(() => {
-    loadExportData();
-  }, [loadExportData]);
+  loadExportData();
+}, [loadExportData]);
   const loadExportData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     try {
@@ -115,10 +111,9 @@ export const ExportHistoryPanel: React.FC = () => {
         loadExportStatistics();
       ]);
     } catch (error: unknown) {
-      console.error('Failed to load export data:', error);
-    } finally {
+  console.error('Failed to load export data:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [loadExportHistory, loadScheduledExports, loadExportStatistics]);
   const loadExportHistory = useCallback(async (): Promise<void> => {
     try {
@@ -126,33 +121,27 @@ export const ExportHistoryPanel: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         setExportHistory(data.data);
-      }
     } catch (error: unknown) {
-      console.error('Failed to load export history:', error);
-    }
-  }, [formatFilter, deliveryFilter]);
+  console.error('Failed to load export history:', error);
+}, [formatFilter, deliveryFilter]);
   const loadScheduledExports = useCallback(async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/schedules');
       const data = await response.json();
       if (data.success) {
         setScheduledExports(data.data);
-      }
     } catch (error: unknown) {
-      console.error('Failed to load scheduled exports:', error);
-    }
-  }, []);
+  console.error('Failed to load scheduled exports:', error);
+}, []);
   const loadExportStatistics = useCallback(async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/statistics');
       const data = await response.json();
       if (data.success) {
         setStatistics(data.data);
-      }
     } catch (error: unknown) {
-      console.error('Failed to load export statistics:', error);
-    }
-  }, []);
+  console.error('Failed to load export statistics:', error);
+}, []);
   // Handle download
   const handleDownload = (downloadUrl: string) => {
     window.open(downloadUrl, '_blank');
@@ -165,25 +154,23 @@ export const ExportHistoryPanel: React.FC = () => {
       // Reload data after update
       await loadScheduledExports();
     } catch (error: unknown) {
-      console.error('Failed to toggle scheduled export:', error);
-    }
-  };
+  console.error('Failed to toggle scheduled export:', error);
+};
   // Handle scheduled export deletion
   const deleteScheduledExport = async (scheduleId: string): Promise<void> => {
     try {
       const response = await fetch(`/api/reports/schedules/${scheduleId}`, {)}
-        method: 'DELETE',
-      });
+  },
+  method: 'DELETE';
+  });
       if (response.ok) {
         await loadScheduledExports();
-      }
     } catch (error: unknown) {
-      console.error('Failed to delete scheduled export:', error);
-    }
-  };
+  console.error('Failed to delete scheduled export:', error);
+};
   // Filter export history based on search and filters
   const filteredHistory = exportHistory.filter(item => {)
-    const matchesSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||;
+  const matchesSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                          item.id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFormat = formatFilter === 'all' || item.format === formatFilter;
     const matchesDelivery = deliveryFilter === 'all' || item.delivery === deliveryFilter;
@@ -196,12 +183,11 @@ export const ExportHistoryPanel: React.FC = () => {
   };
   // Get delivery icon
   const getDeliveryIcon = (delivery: string) => {
-    switch (delivery) {
-    case 'email': return <Mail className="w-4 h-4" />;
-    case 'webhook': return <Webhook className="w-4 h-4" />;
-    default: return <Download className="w-4 h-4" />;
-    }
-  };
+  switch (delivery) {
+  case 'email': return <Mail className="w-4 h-4" />;
+  case 'webhook': return <Webhook className="w-4 h-4" />;
+  default: return <Download className="w-4 h-4" />;
+};
   // Get status badge
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStatusBadge = (success: boolean, _error?: string) => {
@@ -209,7 +195,6 @@ export const ExportHistoryPanel: React.FC = () => {
       return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Success</Badge>;
     } else {
       return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Failed</Badge>;
-    }
   };
   // Format file size
   const formatFileSize = (bytes: number) => {
@@ -227,7 +212,7 @@ export const ExportHistoryPanel: React.FC = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[dayOfWeek];
   };
-  return ()
+  return;
     <div className="space-y-6">
       {/* Statistics Overview */}
       {statistics && ()
@@ -486,7 +471,6 @@ export const ExportHistoryPanel: React.FC = () => {
                           {schedule.schedule.frequency === 'weekly' 
                             ? `${getDayName(schedule.schedule.dayOfWeek || 1)} at ${schedule.schedule.time}`}
                             : `${schedule.schedule.frequency} at ${schedule.schedule.time}`}
-                          }
                         </p>
                       </div>
                       <div>

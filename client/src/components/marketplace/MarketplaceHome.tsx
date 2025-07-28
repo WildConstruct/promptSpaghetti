@@ -10,7 +10,6 @@ import { useMarketplace } from '../../hooks/useMarketplace';
 import './MarketplaceHome.css';
 interface MarketplaceHomeProps {
   className?: string;
-}
 
 export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = '' }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,15 +17,15 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
   const [sortBy, setSortBy] = useState<'relevance' | 'popularity' | 'newest' | 'price_asc' | 'price_desc' | 'rating'>('relevance');
   const [priceFilter, setPriceFilter] = useState<'all' | 'free' | 'paid'>('all');
   const [advancedFilters, setAdvancedFilters] = useState({)
-    categories: [] as string[],
-    tags: [] as string[],
+  categories: [] as string,
+    tags: [] as string,
     priceRange: {} as { min?: number; max?: number },
     rating: 0,
     complexity: 'all' as 'beginner' | 'intermediate' | 'advanced' | 'all',
-    compatibility: [] as string[],
+    compatibility: [] as string,
     isFree: null as boolean | null,
     isAiGenerated: null as boolean | null,
-    sortBy: 'relevance' as 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest',
+    sortBy: 'relevance' as 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest';
   });
   const {
     templates,
@@ -49,20 +48,20 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     handleSearch();
   }, [handleSearch]);
   const handleSearch = useCallback(() => {
-    const filters = {
-      query: searchQuery || undefined,
-      categories: selectedCategory ? [selectedCategory] : ,
-        advancedFilters.categories.length > 0 ? advancedFilters.categories : undefined,
-      tags: advancedFilters.tags.length > 0 ? advancedFilters.tags : undefined,
-      price_min: advancedFilters.priceRange.min,
-      price_max: advancedFilters.priceRange.max,
-      rating_min: advancedFilters.rating > 0 ? advancedFilters.rating : undefined,
-      sort_by: advancedFilters.sortBy !== 'relevance' ? advancedFilters.sortBy : sortBy,
-      is_free: advancedFilters.isFree !== null ? advancedFilters.isFree : ,
-        priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
-      page: 1,
-      limit: 20,
-    };
+  const filters = {
+  query: searchQuery || undefined,
+  categories: selectedCategory ? [selectedCategory] : ,
+  advancedFilters.categories.length > 0 ? advancedFilters.categories : undefined,
+  tags: advancedFilters.tags.length > 0 ? advancedFilters.tags : undefined,
+  price_min: advancedFilters.priceRange.min,
+  price_max: advancedFilters.priceRange.max,
+  rating_min: advancedFilters.rating > 0 ? advancedFilters.rating : undefined,
+  sort_by: advancedFilters.sortBy !== 'relevance' ? advancedFilters.sortBy : sortBy,
+  is_free: advancedFilters.isFree !== null ? advancedFilters.isFree : ,
+  priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
+  page: 1,
+  limit: 20,
+};
     searchTemplates(filters);
   }, [searchQuery, selectedCategory, advancedFilters, sortBy, priceFilter, searchTemplates]);
   const handleCategorySelect = (categoryId: string | null) => {
@@ -73,7 +72,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     window.location.href = `/marketplace/templates/${templateId}`;}
   };
   if (error) {
-    return ()
+    return;
       <div className={`marketplace-home error ${className}`}>}
         <div className="error-message">
           <h2>Unable to load marketplace</h2>
@@ -84,8 +83,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`marketplace-home ${className}`}>}
       {/* Hero Section */}
       <section className="hero-section">
@@ -221,15 +219,15 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
             <div className="load-more-section">
               <button 
                 onClick={() => {
-                  const nextPage = templates.page + 1;
-                  const filters = {
-                    query: searchQuery || undefined,
-                    categories: selectedCategory ? [selectedCategory] : undefined,
-                    sort_by: sortBy,
-                    is_free: priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
-                    page: nextPage,
-                    limit: 20,
-                  };
+  const nextPage = templates.page + 1;
+  const filters = {
+  query: searchQuery || undefined,
+  categories: selectedCategory ? [selectedCategory] : undefined,
+  sort_by: sortBy,
+  is_free: priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
+  page: nextPage,
+  limit: 20,
+};
                   // Load more templates by appending to existing results
                   searchTemplates(filters, true); // true indicates append mode
                 }}

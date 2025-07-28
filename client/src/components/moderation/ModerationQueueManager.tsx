@@ -1,41 +1,38 @@
 import React, { useState, useMemo } from 'react';
 import './ModerationQueueManager.css';
 interface ModerationItem {
-  id: string;
+  id: string;,
   type: 'content' | 'user' | 'template' | 'comment' | 'report';
-  content: string;
+  content: string;,
   author: string;
   reportedBy?: string;
-  status: 'pending' | 'approved' | 'rejected' | 'flagged' | 'escalated';
+  status: 'pending' | 'approved' | 'rejected' | 'flagged' | 'escalated';,
   priority: 'low' | 'medium' | 'high' | 'critical';
   reason?: string;
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
-  tags: string[];
+  tags: string;,
   category: string;
-  riskScore: number;
-  automatedFlags: string[];
+  riskScore: number;,
+  automatedFlags: string;
   source: 'user_report' | 'automated_detection' | 'proactive_review';
   metadata?: Record<string, unknown>;
-}
 interface QueueFilters {
-  status: string;
+  status: string;,
   type: string;
-  priority: string;
+  priority: string;,
   source: string;
-  assignee: string;
+  assignee: string;,
   dateRange: string;
-  riskLevel: string;
+  riskLevel: string;,
   searchTerm: string;
-}
 interface ModerationQueueManagerProps {
-  items: ModerationItem[];
+  items: ModerationItem;,
   moderators: Array<{ id: string; name: string; online: boolean }>;
   onItemAction: (itemId: string, action: string, data: Record<string, unknown>) => void;
-  onBulkAction: (itemIds: string[], action: string, data: Record<string, unknown>) => void;
+  onBulkAction: (itemIds: string, action: string, data: Record<string, unknown>) => void;
   currentUserId: string;
-}
 
 export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
   items,
@@ -44,40 +41,38 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
   onBulkAction,
   currentUserId
 }) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string>([]);
   const [filters, setFilters] = useState<QueueFilters>({)
-    status: 'pending',
-    type: 'all',
-    priority: 'all',
-    source: 'all',
-    assignee: 'unassigned',
-    dateRange: 'today',
-    riskLevel: 'all',
-    searchTerm: '',
-  });
+  status: 'pending',
+  type: 'all',
+  priority: 'all',
+  source: 'all',
+  assignee: 'unassigned',
+  dateRange: 'today',
+  riskLevel: 'all',
+  searchTerm: '',
+});
   const [sortBy, setSortBy] = useState<string>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid' | 'detailed'>('list');
   const [/*_showBulkActions*/, setShowBulkActions] = useState(false); // Commented out unused variable
   const filteredAndSortedItems = useMemo(() => {
-    const filtered = items.filter(item => {)
-      if (filters.status !== 'all' && item.status !== filters.status) return false;
-      if (filters.type !== 'all' && item.type !== filters.type) return false;
-      if (filters.priority !== 'all' && item.priority !== filters.priority) return false;
-      if (filters.source !== 'all' && item.source !== filters.source) return false;
-      if (filters.riskLevel !== 'all') {
-        const riskThreshold = filters.riskLevel === 'high' ? 70 : ;
-          filters.riskLevel === 'medium' ? 40 : 10;
-        if (item.riskScore < riskThreshold) return false;
-      }
-      if (filters.searchTerm) {
-        const searchLower = filters.searchTerm.toLowerCase();
-        return item.content.toLowerCase().includes(searchLower) ||
-               item.author.toLowerCase().includes(searchLower) ||
-               item.tags.some(tag => tag.toLowerCase().includes(searchLower));
-      }
-      return true;
-    });
+  const filtered = items.filter(item => {)
+  if (filters.status !== 'all' && item.status !== filters.status) return false;
+  if (filters.type !== 'all' && item.type !== filters.type) return false;
+  if (filters.priority !== 'all' && item.priority !== filters.priority) return false;
+  if (filters.source !== 'all' && item.source !== filters.source) return false;
+  if (filters.riskLevel !== 'all') {
+  const riskThreshold = filters.riskLevel === 'high' ? 70 : ;
+  filters.riskLevel === 'medium' ? 40 : 10;
+  if (item.riskScore < riskThreshold) return false;
+  if (filters.searchTerm) {
+  const searchLower = filters.searchTerm.toLowerCase();
+  return item.content.toLowerCase().includes(searchLower) ||
+  item.author.toLowerCase().includes(searchLower) ||
+  item.tags.some(tag => tag.toLowerCase().includes(searchLower));
+  return true;
+});
     return filtered.sort((a, b) => {
       let compareValue = 0;
       switch (sortBy) {
@@ -85,7 +80,6 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
         const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
         compareValue = priorityOrder[a.priority] - priorityOrder[b.priority];
         break;
-      }
       case 'date':
         compareValue = a.createdAt.getTime() - b.createdAt.getTime();
         break;
@@ -97,7 +91,6 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
         break;
       default:
         return 0;
-      }
       return sortOrder === 'asc' ? compareValue : -compareValue;
     });
   }, [items, filters, sortBy, sortOrder]);
@@ -106,15 +99,13 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
       setSelectedItems([]);
     } else {
       setSelectedItems(filteredAndSortedItems.map(item => item.id));
-    }
   };
   const handleItemSelect = (itemId: string) => {
-    setSelectedItems(prev =>)
-      prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
+  setSelectedItems(prev =>)
+  prev.includes(itemId)
+  ? prev.filter(id => id !== itemId)
+  : [...prev, itemId]);
+};
   const handleBulkAction = (action: string, data?: unknown) => {
     if (selectedItems.length === 0) return;
     onBulkAction(selectedItems, action, data);
@@ -127,14 +118,13 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
     return '#28a745';
   };
   const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-    case 'critical': return '🔥';
-    case 'high': return '⚡';
-    case 'medium': return '⚠️';
-    case 'low': return '🔵';
-    default: return '';
-    }
-  };
+  switch (priority) {
+  case 'critical': return '🔥';
+  case 'high': return '⚡';
+  case 'medium': return '⚠️';
+  case 'low': return '🔵';
+  default: return '';
+};
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -143,7 +133,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
     if (diffHours < 24) return `${diffHours}h ago`;}
     return `${Math.floor(diffHours / 24)}d ago`;}
   };
-  return ()
+  return;
     <div className="moderation-queue-manager">
       <div className="queue-header">
         <div className="queue-title">
@@ -267,9 +257,9 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
             <option value="month">This Month</option>
           </select>
           <button className="clear-filters-btn" onClick={() => setFilters({)
-            status: 'pending', type: 'all', priority: 'all', source: 'all',
-            assignee: 'unassigned', dateRange: 'today', riskLevel: 'all', searchTerm: ''
-          })}>
+  status: 'pending', type: 'all', priority: 'all', source: 'all',
+  assignee: 'unassigned', dateRange: 'today', riskLevel: 'all', searchTerm: '',
+})}>
             Clear Filters
           </button>
         </div>
@@ -335,7 +325,6 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
                 {item.content.length > 150 
                   ? `${item.content.substring(0, 150)}...`}
                   : item.content
-                }
               </div>
               <div className="content-meta">
                 <span className="author">by {item.author}</span>

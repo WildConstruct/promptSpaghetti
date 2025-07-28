@@ -47,21 +47,18 @@ enum VerificationStatus {
   SKIPPED = 'skipped',
   TIMEOUT = 'timeout',
   ERROR = 'error'
-}
-enum SessionStatus {
+  enum SessionStatus {
   PENDING = 'pending',
   RUNNING = 'running',
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
-enum RiskLevel {
+  enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
-enum VerificationStepType {
+  enum VerificationStepType {
   INTEGRITY = 'integrity',
   ACCESSIBILITY = 'accessibility',
   ENCRYPTION = 'encryption',
@@ -69,87 +66,77 @@ enum VerificationStepType {
   COMPLIANCE = 'compliance',
   METADATA = 'metadata',
   PERFORMANCE = 'performance'
-}
-interface BackupVerificationStep {
-  stepId: string;
+  interface BackupVerificationStep {
+  stepId: string;,
   stepName: string;
-  stepType: VerificationStepType;
+  stepType: VerificationStepType;,
   description: string;
-  required: boolean;
+  required: boolean;,
   timeout: number;
   retryAttempts: number;
-  dependencies?: string[];
-  configurable: boolean;
+  dependencies?: string;
+  configurable: boolean;,
   estimatedDuration: number;
-}
-interface BackupVerificationResult {
-  stepId: string;
+  interface BackupVerificationResult {
+  stepId: string;,
   status: VerificationStatus;
-  message: string;
+  message: string;,
   timestamp: Date;
-  duration: number;
+  duration: number;,
   details: Record<string, unknown>;
-  warnings?: string[];
-  recommendations?: string[];
-}
-interface VerificationSession {
-  sessionId: string;
+  warnings?: string;
+  recommendations?: string;
+  interface VerificationSession {
+  sessionId: string;,
   backupId: string;
-  initiatedBy: string;
+  initiatedBy: string;,
   initiatedAt: Date;
   completedAt?: Date;
-  status: SessionStatus;
-  steps: BackupVerificationResult[];
-  summary: VerificationSummary;
+  status: SessionStatus;,
+  steps: BackupVerificationResult;
+  summary: VerificationSummary;,
   configuration: VerificationConfiguration;
-}
-interface VerificationSummary {
-  totalSteps: number;
+  interface VerificationSummary {
+  totalSteps: number;,
   passedSteps: number;
-  failedSteps: number;
+  failedSteps: number;,
   warningSteps: number;
-  skippedSteps: number;
+  skippedSteps: number;,
   totalDuration: number;
-  overallStatus: VerificationStatus;
-  criticalIssues: string[];
+  overallStatus: VerificationStatus;,
+  criticalIssues: string;
   riskLevel: RiskLevel;
-}
-interface VerificationConfiguration {
-  stepsEnabled: string[];
-  stepsDisabled: string[];
+  interface VerificationConfiguration {
+  stepsEnabled: string;,
+  stepsDisabled: string;
   timeoutOverrides: Record<string, number>;
   retryOverrides: Record<string, number>;
   customParameters: Record<string, unknown>;
-  skipOnWarnings: boolean;
+  skipOnWarnings: boolean;,
   abortOnCriticalFailure: boolean;
-}
-interface BackupData {
-  backupId: string;
+  interface BackupData {
+  backupId: string;,
   backupPath: string;
-  backupType: string;
+  backupType: string;,
   createdAt: Date;
-  originalSize: number;
+  originalSize: number;,
   compressedSize: number;
   checksum: string;
-}
-
-// ==========================================
-// MAIN COMPONENT
-// ==========================================
-
-export interface BackupVerificationDashboardProps {
+  // ==========================================
+  // MAIN COMPONENT
+  // ==========================================
+  export interface BackupVerificationDashboardProps {
   className?: string;
 }
-
 export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardProps> = ({ className }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Data state
-  const [verificationSteps, setVerificationSteps] = useState<BackupVerificationStep[]>([]);
-  const [activeSessions, setActiveSessions] = useState<VerificationSession[]>([]);
-  const [recentSessions, setRecentSessions] = useState<VerificationSession[]>([]);
-  const [backups, setBackups] = useState<BackupData[]>([]);
+  const [verificationSteps, setVerificationSteps] = useState<BackupVerificationStep>([]);
+  const [activeSessions, setActiveSessions] = useState<VerificationSession>([]);
+  const [recentSessions, setRecentSessions] = useState<VerificationSession>([]);
+  const [backups, setBackups] = useState<BackupData>([]);
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBackup, setSelectedBackup] = useState<string>('');
@@ -157,83 +144,76 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   const [filterRiskLevel, setFilterRiskLevel] = useState<string>('');
   // Configuration state
   const [verificationConfig, setVerificationConfig] = useState<Partial<VerificationConfiguration>>({)
-    stepsEnabled: [],
+  stepsEnabled: [],
     stepsDisabled: [],
     timeoutOverrides: {},
     retryOverrides: {},
     customParameters: {},
     skipOnWarnings: false,
-    abortOnCriticalFailure: true,
+    abortOnCriticalFailure: true;
   });
   // Load dashboard data
   const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      const [stepsResponse, sessionsResponse, backupsResponse] = await Promise.all([)
-        fetch('/api/admin/backup-verification/steps'),
-        fetch('/api/admin/backup-verification/sessions?limit=20'),
-        fetch('/api/admin/backups?limit=50')
-      ]);
-      if (stepsResponse.ok) {
-        const stepsResult = await stepsResponse.json();
-        setVerificationSteps(stepsResult.data || []);
-      }
-      if (sessionsResponse.ok) {
-        const sessionsResult = await sessionsResponse.json();
-        const sessions = sessionsResult.data || [];
-        setActiveSessions(sessions.filter((s: VerificationSession) => 
-          [SessionStatus.PENDING, SessionStatus.RUNNING].includes(s.status)
-        ));
-        setRecentSessions(sessions.filter((s: VerificationSession) => 
-          [SessionStatus.COMPLETED, SessionStatus.FAILED].includes(s.status)
-        ));
-      }
-      if (backupsResponse.ok) {
-        const backupsResult = await backupsResponse.json();
-        setBackups(backupsResult.data || []);
-      }
-    } catch (err) {
-      setError('Failed to load dashboard data');
-      console.error('Dashboard loading error:', err);
-    } finally {
+  try {
+  setLoading(true);
+  const [stepsResponse, sessionsResponse, backupsResponse] = await Promise.all([)
+  fetch('/api/admin/backup-verification/steps'),
+  fetch('/api/admin/backup-verification/sessions?limit=20'),
+  fetch('/api/admin/backups?limit=50')
+  ]);
+  if (stepsResponse.ok) {
+  const stepsResult = await stepsResponse.json();
+  setVerificationSteps(stepsResult.data || []);
+  if (sessionsResponse.ok) {
+  const sessionsResult = await sessionsResponse.json();
+  const sessions = sessionsResult.data || [];
+  setActiveSessions(sessions.filter((s: VerificationSession) =>,
+  [SessionStatus.PENDING, SessionStatus.RUNNING].includes(s.status)
+  ));
+  setRecentSessions(sessions.filter((s: VerificationSession) =>,
+  [SessionStatus.COMPLETED, SessionStatus.FAILED].includes(s.status)
+  ));
+  if (backupsResponse.ok) {
+  const backupsResult = await backupsResponse.json();
+  setBackups(backupsResult.data || []);
+} catch (err) {
+  setError('Failed to load dashboard data');
+  console.error('Dashboard loading error:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Start backup verification
   const startVerification = async (backupId: string, config?: Partial<VerificationConfiguration>) => {
     try {
       const response = await fetch('/api/admin/backup-verification/verify', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({),
           backupId,
           configuration: { ...verificationConfig, ...config }
-        })
+  }
       });
       if (response.ok) {
         await loadDashboardData();
       } else {
         const error = await response.json();
         setError(error.error || 'Failed to start verification');
-      }
     } catch (err) {
-      setError('Error starting verification');
-      console.error('Verification start error:', err);
-    }
-  };
+  setError('Error starting verification');
+  console.error('Verification start error:', err);
+};
   // Cancel verification session
   const cancelVerification = async (sessionId: string) => {
     try {
       const response = await fetch(`/api/admin/backup-verification/sessions/${sessionId}/cancel`, {)}
-        method: 'POST',
-      });
+  },
+  method: 'POST';
+  });
       if (response.ok) {
         await loadDashboardData();
-      }
     } catch (err) {
-      console.error('Error cancelling verification:', err);
-    }
-  };
+  console.error('Error cancelling verification:', err);
+};
   useEffect(() => {
     loadDashboardData();
     // Auto-refresh every 30 seconds for active sessions
@@ -248,69 +228,65 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
     return `${seconds}s`;}
   };
   const getStatusColor = (status: VerificationStatus | SessionStatus) => {
-    switch (status) {
-    case 'passed':
-    case 'completed':
-      return 'bg-green-100 text-green-800';
-    case 'failed':
-    case 'error':
-      return 'bg-red-100 text-red-800';
-    case 'warning':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'running':
-    case 'pending':
-      return 'bg-blue-100 text-blue-800';
-    case 'timeout':
-    case 'cancelled':
-      return 'bg-gray-100 text-gray-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'passed':,
+  case 'completed':,
+  return 'bg-green-100 text-green-800';
+  case 'failed':,
+  case 'error':,
+  return 'bg-red-100 text-red-800';
+  case 'warning':,
+  return 'bg-yellow-100 text-yellow-800';
+  case 'running':,
+  case 'pending':,
+  return 'bg-blue-100 text-blue-800';
+  case 'timeout':,
+  case 'cancelled':,
+  return 'bg-gray-100 text-gray-800';
+  default:,
+  return 'bg-gray-100 text-gray-800';
+};
   const getRiskLevelColor = (level: RiskLevel) => {
-    switch (level) {
-    case RiskLevel.LOW:
-      return 'bg-green-100 text-green-800';
-    case RiskLevel.MEDIUM:
-      return 'bg-yellow-100 text-yellow-800';
-    case RiskLevel.HIGH:
-      return 'bg-orange-100 text-orange-800';
-    case RiskLevel.CRITICAL:
-      return 'bg-red-100 text-red-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (level) {
+  case RiskLevel.LOW:,
+  return 'bg-green-100 text-green-800';
+  case RiskLevel.MEDIUM:,
+  return 'bg-yellow-100 text-yellow-800';
+  case RiskLevel.HIGH:,
+  return 'bg-orange-100 text-orange-800';
+  case RiskLevel.CRITICAL:,
+  return 'bg-red-100 text-red-800';
+  default:,
+  return 'bg-gray-100 text-gray-800';
+};
   const getStepIcon = (stepType: VerificationStepType) => {
-    switch (stepType) {
-    case VerificationStepType.INTEGRITY:
-      return <Shield className="w-4 h-4" />;
-    case VerificationStepType.ACCESSIBILITY:
-      return <Unlock className="w-4 h-4" />;
-    case VerificationStepType.ENCRYPTION:
-      return <Lock className="w-4 h-4" />;
-    case VerificationStepType.RESTORATION:
-      return <RotateCcw className="w-4 h-4" />;
-    case VerificationStepType.COMPLIANCE:
-      return <FileCheck className="w-4 h-4" />;
-    case VerificationStepType.METADATA:
-      return <Database className="w-4 h-4" />;
-    case VerificationStepType.PERFORMANCE:
-      return <Zap className="w-4 h-4" />;
-    default:
-      return <Target className="w-4 h-4" />;
-    }
-  };
+  switch (stepType) {
+  case VerificationStepType.INTEGRITY:,
+  return <Shield className="w-4 h-4" />;
+  case VerificationStepType.ACCESSIBILITY:,
+  return <Unlock className="w-4 h-4" />;
+  case VerificationStepType.ENCRYPTION:,
+  return <Lock className="w-4 h-4" />;
+  case VerificationStepType.RESTORATION:,
+  return <RotateCcw className="w-4 h-4" />;
+  case VerificationStepType.COMPLIANCE:,
+  return <FileCheck className="w-4 h-4" />;
+  case VerificationStepType.METADATA:,
+  return <Database className="w-4 h-4" />;
+  case VerificationStepType.PERFORMANCE:,
+  return <Zap className="w-4 h-4" />;
+  default:,
+  return <Target className="w-4 h-4" />;
+};
   if (loading && verificationSteps.length === 0) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading backup verification dashboard...</div>
         </CardContent>
       </Card>
     );
-  }
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -460,8 +436,8 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 <CardContent>
                   <div className="space-y-3">
                     {verificationSteps.slice(0, 5).map(step => {)
-                      const successRate = Math.random() * 30 + 70; // Mock success rate;
-                      return ()
+  const successRate = Math.random() * 30 + 70; // Mock success rate;
+                      return;
                         <div key={step.stepId}>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="flex items-center gap-1">
@@ -680,7 +656,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       checked={verificationConfig.skipOnWarnings} 
                       onCheckedChange={(checked) => 
                         setVerificationConfig(prev => ({ ...prev, skipOnWarnings: checked }))
-                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -692,7 +667,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       checked={verificationConfig.abortOnCriticalFailure} 
                       onCheckedChange={(checked) => 
                         setVerificationConfig(prev => ({ ...prev, abortOnCriticalFailure: checked }))
-                      }
                     />
                   </div>
                 </div>
@@ -713,14 +687,14 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                           <Switch 
                             checked={!verificationConfig.stepsDisabled?.includes(step.stepId)}
                             onCheckedChange={(checked) => {
-                              const disabled = verificationConfig.stepsDisabled || [];
-                              const newDisabled = checked ;
-                                ? disabled.filter(id => id !== step.stepId)
-                                : [...disabled, step.stepId];
-                              setVerificationConfig(prev => ({ )
-                                ...prev, 
-                                stepsDisabled: newDisabled ,
-                              }));
+  const disabled = verificationConfig.stepsDisabled || [];
+  const newDisabled = checked ;
+  ? disabled.filter(id => id !== step.stepId)
+  : [...disabled, step.stepId];
+  setVerificationConfig(prev => ({ )
+  ...prev,
+  stepsDisabled: newDisabled,
+}));
                             }}
                             disabled={step.required}
                           />

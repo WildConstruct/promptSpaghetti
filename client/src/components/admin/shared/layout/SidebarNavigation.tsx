@@ -20,26 +20,24 @@ import {
   ChevronRight
 } from 'lucide-react';
 interface NavItem {
-  id: string;
+  id: string;,
   label: string;
   href?: string;
   icon?: React.ComponentType<{ size?: number }>;
-  children?: NavItem[];
+  children?: NavItem;
   permission?: string;
   badge?: string | number;
-}
 interface SidebarNavigationProps {
   collapsed?: boolean;
   onToggle?: () => void;
   currentPath?: string;
-}
-const navigationItems: NavItem[] = [
+  const navigationItems: NavItem = [
   {
-    id: 'dashboard',
-    label: 'Dashboard',
-    href: '/admin',
-    icon: Home,
-  },
+  id: 'dashboard',
+  label: 'Dashboard',
+  href: '/admin',
+  icon: Home,
+}
   {
     id: 'users',
     label: 'User Management',
@@ -49,7 +47,7 @@ const navigationItems: NavItem[] = [
       { id: 'users-roles', label: 'Roles & Permissions', href: '/admin/users/roles' },
       { id: 'users-groups', label: 'User Groups', href: '/admin/users/groups' }
     ]
-  },
+  }
   {
     id: 'features',
     label: 'Feature Toggles',
@@ -59,7 +57,7 @@ const navigationItems: NavItem[] = [
       { id: 'features-create', label: 'Create Toggle', href: '/admin/features/create' },
       { id: 'features-audit', label: 'Audit Log', href: '/admin/features/audit' }
     ]
-  },
+  }
   {
     id: 'policies',
     label: 'Policy Management',
@@ -69,7 +67,7 @@ const navigationItems: NavItem[] = [
       { id: 'policies-assignments', label: 'Assignments', href: '/admin/policies/assignments' },
       { id: 'policies-compliance', label: 'Compliance', href: '/admin/policies/compliance' }
     ]
-  },
+  }
   {
     id: 'analytics',
     label: 'Analytics',
@@ -79,7 +77,7 @@ const navigationItems: NavItem[] = [
       { id: 'analytics-performance', label: 'Performance', href: '/admin/analytics/performance' },
       { id: 'analytics-reports', label: 'Reports', href: '/admin/analytics/reports' }
     ]
-  },
+  }
   {
     id: 'data',
     label: 'Data Management',
@@ -89,7 +87,7 @@ const navigationItems: NavItem[] = [
       { id: 'data-classification', label: 'Classification', href: '/admin/data/classification' },
       { id: 'data-retention', label: 'Retention', href: '/admin/data/retention' }
     ]
-  },
+  }
   {
     id: 'audit',
     label: 'Audit & Compliance',
@@ -99,14 +97,14 @@ const navigationItems: NavItem[] = [
       { id: 'audit-reports', label: 'Reports', href: '/admin/audit/reports' },
       { id: 'audit-calendar', label: 'Calendar', href: '/admin/audit/calendar' }
     ]
-  },
+  }
   {
-    id: 'notifications',
-    label: 'Notifications',
-    href: '/admin/notifications',
-    icon: Bell,
-    badge: 3,
-  },
+  id: 'notifications',
+  label: 'Notifications',
+  href: '/admin/notifications',
+  icon: Bell,
+  badge: 3,
+}
   {
     id: 'security',
     label: 'Security',
@@ -116,29 +114,25 @@ const navigationItems: NavItem[] = [
       { id: 'security-incidents', label: 'Incidents', href: '/admin/security/incidents' },
       { id: 'security-settings', label: 'Settings', href: '/admin/security/settings' }
     ]
-  },
-  {
-    id: 'settings',
-    label: 'System Settings',
-    href: '/admin/settings',
-    icon: Settings,
   }
-];
-
-export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
+  {
+  id: 'settings',
+  label: 'System Settings',
+  href: '/admin/settings',
+  icon: Settings];
+  export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({,)
   collapsed = false,
   currentPath = '/admin'
 }) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['users', 'features']));
-  const toggleExpanded = (itemId: string) => {
-    if (collapsed) return; // Don't expand when sidebar is collapsed
-    setExpandedItems(prev => {)
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
+  const toggleExpanded = (itemId: string) => {,
+  if (collapsed) return; // Don't expand when sidebar is collapsed
+  setExpandedItems(prev => {)
+  const newSet = new Set(prev);
+  if (newSet.has(itemId)) {
+  newSet.delete(itemId);
+} else {
         newSet.add(itemId);
-      }
       return newSet;
     });
   };
@@ -146,7 +140,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
     if (!href) return false;
     return currentPath === href || currentPath.startsWith(href + '/');
   };
-  const hasActiveChild = (children?: NavItem[]) => {
+  const hasActiveChild = (children?: NavItem) => {
     if (!children) return false;
     return children.some(child => isActive(child.href));
   };
@@ -156,7 +150,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
     const isItemActive = isActive(item.href);
     const hasActiveChildItem = hasActiveChild(item.children);
     const showAsActive = isItemActive || hasActiveChildItem;
-    return ()
+    return;
       <li key={item.id} className="nav-item">
         <div
           className={`nav-link ${showAsActive ? 'active' : ''} ${level > 0 ? 'child' : ''}`}
@@ -165,7 +159,6 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
               toggleExpanded(item.id);
             } else if (item.href) {
               window.location.href = item.href;
-            }
           }}
         >
           {/* Icon */}
@@ -198,7 +191,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
       </li>
     );
   };
-  return ()
+  return;
     <nav className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>}
       <div className="sidebar-header">
         {!collapsed && ()

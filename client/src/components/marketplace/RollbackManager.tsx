@@ -3,65 +3,60 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RollbackManager.css';
 interface TemplateVersion {
-  id: string;
+  id: string;,
   version_number: string;
-  status: 'draft' | 'published' | 'deprecated' | 'archived';
+  status: 'draft' | 'published' | 'deprecated' | 'archived';,
   visibility: 'public' | 'private' | 'beta';
-  compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';
+  compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';,
   release_notes: string;
   created_at: string;
   published_at?: string;
-  download_count: number;
-  new_features: string[];
-  bug_fixes: string[];
-  breaking_changes: string[];
-  known_issues: string[];
-}
-interface RollbackData {
-  to_version_id: string;
+  download_count: number;,
+  new_features: string;
+  bug_fixes: string;,
+  breaking_changes: string;
+  known_issues: string;
+  interface RollbackData {
+  to_version_id: string;,
   rollback_reason: string;
-  rollback_type: 'emergency' | 'planned' | 'issue_resolution';
+  rollback_type: 'emergency' | 'planned' | 'issue_resolution';,
   impact_assessment: string;
-  rollback_plan: string;
-  verification_steps: string[];
-}
-interface RollbackResult {
-  id: string;
+  rollback_plan: string;,
+  verification_steps: string;
+  interface RollbackResult {
+  id: string;,
   template_id: string;
-  from_version_id: string;
+  from_version_id: string;,
   to_version_id: string;
-  rollback_type: string;
+  rollback_type: string;,
   rollback_reason: string;
-  initiated_by: string;
+  initiated_by: string;,
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
   created_at: string;
   completed_at?: string;
   error_message?: string;
+  const ROLLBACK_TYPES = [;
+  {
+  value: 'emergency',
+  label: 'Emergency Rollback',
+  description: 'Critical issues requiring immediate rollback',
+  icon: '🚨',
+  color: '#ef4444',
 }
-const ROLLBACK_TYPES = [;
-  { 
-    value: 'emergency', 
-    label: 'Emergency Rollback', 
-    description: 'Critical issues requiring immediate rollback',
-    icon: '🚨',
-    color: '#ef4444',
-  },
-  { 
-    value: 'planned', 
-    label: 'Planned Rollback', 
-    description: 'Scheduled rollback for testing or maintenance',
-    icon: '📅',
-    color: '#3b82f6',
-  },
-  { 
-    value: 'issue_resolution', 
-    label: 'Issue Resolution', 
-    description: 'Rollback to resolve specific bugs or problems',
-    icon: '🔧',
-    color: '#f59e0b',
-  }
-];
-const DEFAULT_ROLLBACK_DATA: RollbackData = {
+  {
+  value: 'planned',
+  label: 'Planned Rollback',
+  description: 'Scheduled rollback for testing or maintenance',
+  icon: '📅',
+  color: '#3b82f6',
+}
+  {
+  value: 'issue_resolution',
+  label: 'Issue Resolution',
+  description: 'Rollback to resolve specific bugs or problems',
+  icon: '🔧',
+  color: '#f59e0b'];
+  const DEFAULT_ROLLBACK_DATA: RollbackData = {,
   to_version_id: '',
   rollback_reason: '',
   rollback_type: 'planned',
@@ -73,7 +68,7 @@ const DEFAULT_ROLLBACK_DATA: RollbackData = {
 export const RollbackManager: React.FC = () => {
   const { templateId } = useParams<{ templateId: string }>();
   const navigate = useNavigate();
-  const [versions, setVersions] = useState<TemplateVersion[]>([]);
+  const [versions, setVersions] = useState<TemplateVersion>([]);
   const [currentVersion, setCurrentVersion] = useState<TemplateVersion | null>(null);
   const [rollbackData, setRollbackData] = useState<RollbackData>(DEFAULT_ROLLBACK_DATA);
   const [selectedVersion, setSelectedVersion] = useState<TemplateVersion | null>(null);
@@ -87,129 +82,121 @@ export const RollbackManager: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions?include_private=true`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch versions');
-      }
-      const data = await response.json();
-      const publishedVersions = data.filter((v: TemplateVersion) => v.status === 'published');
-      setVersions(publishedVersions);
-      // Find current version (most recent published)
-      if (publishedVersions.length > 0) {
-        setCurrentVersion(publishedVersions[0]);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch versions');
-    } finally {
+  throw new Error('Failed to fetch versions');
+  const data = await response.json();
+  const publishedVersions = data.filter((v: TemplateVersion) => v.status === 'published');
+  setVersions(publishedVersions);
+  // Find current version (most recent published)
+  if (publishedVersions.length > 0) {
+  setCurrentVersion(publishedVersions[0]);
+} catch (err) {
+  setError(err instanceof Error ? err.message : 'Failed to fetch versions');
+} finally {
       setIsLoading(false);
-    }
   }, [templateId]);
   useEffect(() => {
     if (templateId) {
       fetchVersions();
-    }
   }, [templateId, fetchVersions]);
   const handleInputChange = (field: keyof RollbackData, value: string) => {
-    setRollbackData(prev => ({)
-      ...prev,
-      [field]: value
-    }));
+  setRollbackData(prev => ({)
+  ...prev,
+  [field]: value,
+}));
   };
   const handleVerificationStepChange = (index: number, value: string) => {
-    const steps = [...rollbackData.verification_steps];
-    steps[index] = value;
-    setRollbackData(prev => ({)
-      ...prev,
-      verification_steps: steps,
-    }));
+  const steps = [...rollbackData.verification_steps];
+  steps[index] = value;
+  setRollbackData(prev => ({)
+  ...prev,
+  verification_steps: steps,
+}));
   };
   const addVerificationStep = () => {
-    setRollbackData(prev => ({)
-      ...prev,
-      verification_steps: [...prev.verification_steps, '']
-    }));
+  setRollbackData(prev => ({)
+  ...prev,
+  verification_steps: [...prev.verification_steps, ''],
+}));
   };
   const removeVerificationStep = (index: number) => {
-    const steps = [...rollbackData.verification_steps];
-    steps.splice(index, 1);
-    setRollbackData(prev => ({)
-      ...prev,
-      verification_steps: steps,
-    }));
+  const steps = [...rollbackData.verification_steps];
+  steps.splice(index, 1);
+  setRollbackData(prev => ({)
+  ...prev,
+  verification_steps: steps,
+}));
   };
   const handleVersionSelect = (version: TemplateVersion) => {
-    setSelectedVersion(version);
-    setRollbackData(prev => ({)
-      ...prev,
-      to_version_id: version.id,
-    }));
+  setSelectedVersion(version);
+  setRollbackData(prev => ({)
+  ...prev,
+  to_version_id: version.id,
+}));
   };
   const validateStep = (step: number): boolean => {
-    switch (step) {
-    case 1: // Version Selection
-      return !!rollbackData.to_version_id;
-    case 2: // Rollback Details
-      return !!(rollbackData.rollback_reason && rollbackData.rollback_type);
-    case 3: // Impact Assessment
-      return !!(rollbackData.impact_assessment && rollbackData.rollback_plan);
-    case 4: // Verification Steps
-      return rollbackData.verification_steps.some(step => step.trim().length > 0);
-    default:
-      return true;
-    }
-  };
+  switch (step) {
+  case 1: // Version Selection,
+  return !!rollbackData.to_version_id;
+  case 2: // Rollback Details,
+  return !!(rollbackData.rollback_reason && rollbackData.rollback_type);
+  case 3: // Impact Assessment,
+  return !!(rollbackData.impact_assessment && rollbackData.rollback_plan);
+  case 4: // Verification Steps,
+  return rollbackData.verification_steps.some(step => step.trim().length > 0);
+  default:,
+  return true;
+};
   const handleNext = () => {
     if (currentStep < totalSteps && validateStep(currentStep)) {
       setCurrentStep(currentStep + 1);
-    }
   };
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-    }
   };
   const executeRollback = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const rollbackRequest = {
-        ...rollbackData,
-        verification_steps: rollbackData.verification_steps.filter(step => step.trim().length > 0),
-      };
+  try {
+  setIsLoading(true);
+  setError(null);
+  const rollbackRequest = {
+  ...rollbackData,
+  verification_steps: rollbackData.verification_steps.filter(step => step.trim().length > 0),
+};
       const response = await fetch(`/api/marketplace/templates/${templateId}/rollback`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify(rollbackRequest),
-      });
+  },
+  body: JSON.stringify(rollbackRequest);
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to execute rollback');
-      }
       const result = await response.json();
       setRollbackResult(result);
       setShowConfirmation(false);
       // Refresh versions to show updated state
       await fetchVersions();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to execute rollback');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to execute rollback');
+} finally {
       setIsLoading(false);
-    }
   };
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {)
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
   };
   const getRollbackType = (type: string) => {
     return ROLLBACK_TYPES.find(t => t.value === type) || ROLLBACK_TYPES[0];
@@ -225,7 +212,7 @@ export const RollbackManager: React.FC = () => {
     if (currentPatch > selectedPatch) return 'patch-downgrade';
     return 'same-version';
   };
-  const renderStep1 = () => (;)
+  const renderStep1 = () => (;);
     <div className="step-content">
       <h3>Select Target Version</h3>
       <p className="step-description">
@@ -258,11 +245,11 @@ export const RollbackManager: React.FC = () => {
             >
               <div className="version-header">
                 <span className="version-number">v{version.version_number}</span>
-                <span className="compatibility-badge" style={{ 
-                  backgroundColor: version.compatibility_level === 'breaking' ? '#ef4444' : ,
-                    version.compatibility_level === 'major' ? '#f59e0b' :
-                      version.compatibility_level === 'minor' ? '#10b981' : '#3b82f6'
-                }}>
+                <span className="compatibility-badge" style={{
+  backgroundColor: version.compatibility_level === 'breaking' ? '#ef4444' : ,
+  version.compatibility_level === 'major' ? '#f59e0b' :,
+  version.compatibility_level === 'minor' ? '#10b981' : '#3b82f6',
+}}>
                   {version.compatibility_level}
                 </span>
               </div>
@@ -298,7 +285,7 @@ export const RollbackManager: React.FC = () => {
       )}
     </div>
   );
-  const renderStep2 = () => (;)
+  const renderStep2 = () => (;);
     <div className="step-content">
       <h3>Rollback Details</h3>
       <p className="step-description">
@@ -357,7 +344,7 @@ export const RollbackManager: React.FC = () => {
       )}
     </div>
   );
-  const renderStep3 = () => (;)
+  const renderStep3 = () => (;);
     <div className="step-content">
       <h3>Impact Assessment & Plan</h3>
       <p className="step-description">
@@ -418,7 +405,7 @@ export const RollbackManager: React.FC = () => {
       )}
     </div>
   );
-  const renderStep4 = () => (;)
+  const renderStep4 = () => (;);
     <div className="step-content">
       <h3>Verification Steps</h3>
       <p className="step-description">
@@ -473,14 +460,13 @@ export const RollbackManager: React.FC = () => {
     </div>
   );
   if (isLoading && !versions.length) {
-    return ()
+    return;
       <div className="rollback-manager loading">
         <div className="loading-spinner">Loading rollback manager...</div>
       </div>
     );
-  }
   if (rollbackResult) {
-    return ()
+    return;
       <div className="rollback-manager">
         <div className="rollback-result">
           <div className="result-header">
@@ -537,8 +523,7 @@ export const RollbackManager: React.FC = () => {
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="rollback-manager">
       <div className="rollback-header">
         <h2>Version Rollback</h2>

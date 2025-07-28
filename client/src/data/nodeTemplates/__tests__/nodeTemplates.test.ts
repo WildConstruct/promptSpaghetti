@@ -74,7 +74,7 @@ describe('Node Templates', () => {
       expect(retroGamingDemoTemplate.edges).toHaveLength(4);
       // Verify all nodes are valid
       retroGamingDemoTemplate.nodes.forEach(node => {)
-        expect(validateTemplate(node)).toBe(true);
+  expect(validateTemplate(node)).toBe(true);
       });
     });
   });
@@ -114,16 +114,16 @@ describe('Node Templates', () => {
     });
     test('all options should have positive weights', () => {
       allNodeTemplates.forEach(template => {)
-        template.data.options.forEach(option => {)
-          expect(option.weight).toBeGreaterThan(0);
+  template.data.options.forEach(option => {)
+  expect(option.weight).toBeGreaterThan(0);
           expect(typeof option.weight).toBe('number');
         });
       });
     });
     test('all options should have required fields', () => {
       allNodeTemplates.forEach(template => {)
-        template.data.options.forEach(option => {)
-          expect(option.label).toBeDefined();
+  template.data.options.forEach(option => {)
+  expect(option.label).toBeDefined();
           expect(option.value).toBeDefined();
           expect(option.weight).toBeDefined();
           expect(typeof option.label).toBe('string');
@@ -134,7 +134,7 @@ describe('Node Templates', () => {
     });
     test('templates should have valid positions', () => {
       allNodeTemplates.forEach(template => {)
-        expect(typeof template.position.x).toBe('number');
+  expect(typeof template.position.x).toBe('number');
         expect(typeof template.position.y).toBe('number');
         expect(template.position.x).toBeGreaterThanOrEqual(0);
         expect(template.position.y).toBeGreaterThanOrEqual(0);

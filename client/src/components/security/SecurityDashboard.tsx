@@ -21,110 +21,102 @@ import './SecurityDashboard.css';
 interface SecurityDashboardProps {
   onIncidentClick?: (incidentId: string) => void;
   onThreatClick?: (threatId: string) => void;
-}
-interface SecurityAlert {
-  id: string;
+  interface SecurityAlert {
+  id: string;,
   type: 'critical' | 'high' | 'medium' | 'low';
-  title: string;
+  title: string;,
   description: string;
-  timestamp: Date;
+  timestamp: Date;,
   source: string;
   status: 'open' | 'investigating' | 'resolved';
-}
-interface ThreatMetrics {
-  totalThreats: number;
+  interface ThreatMetrics {
+  totalThreats: number;,
   blockedThreats: number;
-  activeIncidents: number;
+  activeIncidents: number;,
   riskScore: number;
   lastScan: Date;
-}
-
-export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({)
+  export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({,)
   onIncidentClick,
   // onThreatClick // Commented out unused prop
 }) => {
   const [metrics, setMetrics] = useState<ThreatMetrics>({)
-    totalThreats: 0,
-    blockedThreats: 0,
-    activeIncidents: 0,
-    riskScore: 0,
-    lastScan: new Date(),
-  });
-  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
+  totalThreats: 0,
+  blockedThreats: 0,
+  activeIncidents: 0,
+  riskScore: 0,
+  lastScan: new Date(),
+});
+  const [alerts, setAlerts] = useState<SecurityAlert>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    // Simulate loading security metrics
-    const loadSecurityData = async () => {
-      setIsLoading(true);
-      // Mock data - replace with actual API calls
-      setTimeout(() => {
-        setMetrics({)
-          totalThreats: 127,
-          blockedThreats: 119,
-          activeIncidents: 3,
-          riskScore: 7.2,
-          lastScan: new Date(Date.now() - 5 * 60 * 1000) // 5 minutes ago,
-        });
+  // Simulate loading security metrics
+  const loadSecurityData = async () => {
+  setIsLoading(true);
+  // Mock data - replace with actual API calls
+  setTimeout(() => {
+  setMetrics({)
+  totalThreats: 127,
+  blockedThreats: 119,
+  activeIncidents: 3,
+  riskScore: 7.2,
+  lastScan: new Date(Date.now() - 5 * 60 * 1000) // 5 minutes ago,
+});
         setAlerts([)
           {
-            id: 'alert-1',
-            type: 'critical',
-            title: 'Multiple Failed Login Attempts',
-            description: 'Unusual login activity detected from IP 192.168.1.100',
-            timestamp: new Date(Date.now() - 2 * 60 * 1000),
-            source: 'Authentication System',
-            status: 'investigating',
-          },
+  id: 'alert-1',
+  type: 'critical',
+  title: 'Multiple Failed Login Attempts',
+  description: 'Unusual login activity detected from IP 192.168.1.100',
+  timestamp: new Date(Date.now() - 2 * 60 * 1000),
+  source: 'Authentication System',
+  status: 'investigating',
+}
           {
-            id: 'alert-2',
-            type: 'high',
-            title: 'Suspicious API Usage Pattern',
-            description: 'Potential data scraping detected on /api/templates endpoint',
-            timestamp: new Date(Date.now() - 10 * 60 * 1000),
-            source: 'API Gateway',
-            status: 'open',
-          },
+  id: 'alert-2',
+  type: 'high',
+  title: 'Suspicious API Usage Pattern',
+  description: 'Potential data scraping detected on /api/templates endpoint',
+  timestamp: new Date(Date.now() - 10 * 60 * 1000),
+  source: 'API Gateway',
+  status: 'open',
+}
           {
-            id: 'alert-3',
-            type: 'medium',
-            title: 'Rate Limit Threshold Exceeded',
-            description: 'Client exceeded rate limit by 150%',
-            timestamp: new Date(Date.now() - 15 * 60 * 1000),
-            source: 'Rate Limiter',
-            status: 'resolved',
-          }
-        ]);
-        setIsLoading(false);
-      }, 1000);
+  id: 'alert-3',
+  type: 'medium',
+  title: 'Rate Limit Threshold Exceeded',
+  description: 'Client exceeded rate limit by 150%',
+  timestamp: new Date(Date.now() - 15 * 60 * 1000),
+  source: 'Rate Limiter',
+  status: 'resolved']);
+  setIsLoading(false);
+}, 1000);
     };
     loadSecurityData();
   }, []);
   const getAlertIcon = (type: SecurityAlert['type']) => {
-    switch (type) {
-    case 'critical':
-      return <XCircle className="h-4 w-4 text-red-500" />;
-    case 'high':
-      return <AlertCircle className="h-4 w-4 text-orange-500" />;
-    case 'medium':
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case 'low':
-      return <CheckCircle className="h-4 w-4 text-blue-500" />;
-    default:
-      return <AlertCircle className="h-4 w-4 text-gray-500" />;
-    }
-  };
+  switch (type) {
+  case 'critical':,
+  return <XCircle className="h-4 w-4 text-red-500" />;
+  case 'high':,
+  return <AlertCircle className="h-4 w-4 text-orange-500" />;
+  case 'medium':,
+  return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+  case 'low':,
+  return <CheckCircle className="h-4 w-4 text-blue-500" />;
+  default:,
+  return <AlertCircle className="h-4 w-4 text-gray-500" />;
+};
   const getStatusColor = (status: SecurityAlert['status']) => {
-    switch (status) {
-    case 'open':
-      return 'bg-red-100 text-red-800';
-    case 'investigating':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'resolved':
-      return 'bg-green-100 text-green-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'open':,
+  return 'bg-red-100 text-red-800';
+  case 'investigating':,
+  return 'bg-yellow-100 text-yellow-800';
+  case 'resolved':,
+  return 'bg-green-100 text-green-800';
+  default:,
+  return 'bg-gray-100 text-gray-800';
+};
   const getRiskScoreColor = (score: number) => {
     if (score >= 8) return 'text-red-600';
     if (score >= 6) return 'text-yellow-600';
@@ -132,7 +124,7 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({)
     return 'text-green-600';
   };
   if (isLoading) {
-    return ()
+    return;
       <div className="security-dashboard loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -140,8 +132,7 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="security-dashboard">
       {/* Header */}
       <div className="dashboard-header">

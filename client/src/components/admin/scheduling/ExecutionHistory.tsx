@@ -39,37 +39,38 @@ import {
   Timeline as TimelineIcon,
   History as HistoryIcon
 } from '@mui/icons-material';
+
 interface ExecutionRecord {
-  id: string;
+  id: string;,
   scheduleId: string;
-  toggleId: string;
+  toggleId: string;,
   executionTime: Date;
-  status: 'scheduled' | 'running' | 'success' | 'failed' | 'skipped' | 'retrying';
+  status: 'scheduled' | 'running' | 'success' | 'failed' | 'skipped' | 'retrying';,
   triggeredBy: 'scheduler' | 'manual' | 'retry';
   executionContext: {,
-    timezone: string;
-    originalTime: Date;
-    actualTime: Date;
-    delay?: number;
-  };
+  timezone: string;,
+  originalTime: Date;
+  actualTime: Date;
+  delay?: number;
+};
   beforeValue?: unknown;
   afterValue?: unknown;
   affectedUsers?: number;
   error?: {
-    code: string;
-    message: string;
-    stack?: string;
-    retryable: boolean;
-  };
+  code: string;,
+  message: string;
+  stack?: string;
+  retryable: boolean;
+};
   duration: number;
   metadata?: Record<string, unknown>;
   createdAt: Date;
-}
+
 interface ExecutionHistoryProps {
-  open: boolean;
+  open: boolean;,
   onClose: () => void;
   scheduleId: string | null;
-}
+
 const STATUS_CONFIG = {
   scheduled: { color: 'info', icon: PendingIcon, label: 'Scheduled' },
   running: { color: 'warning', icon: PendingIcon, label: 'Running' },
@@ -83,96 +84,94 @@ export const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
   const loadExecutions = useCallback(async () => {
-    if (!scheduleId) return;
-    setLoading(true);
-    try {
-      // Simulate API call
-      const mockExecutions: ExecutionRecord[] = [
-        {
-          id: 'exec_1',
-          scheduleId: scheduleId,
-          toggleId: 'toggle_1',
-          executionTime: new Date(Date.now() - 60 * 60 * 1000),
-          status: 'success',
-          triggeredBy: 'scheduler',
-          executionContext: {,
-            timezone: 'America/New_York',
-            originalTime: new Date(Date.now() - 60 * 60 * 1000),
-            actualTime: new Date(Date.now() - 60 * 60 * 1000 + 500),
-            delay: 500,
-          },
-          beforeValue: { enabled: false },
+  if (!scheduleId) return;
+  setLoading(true);
+  try {
+  // Simulate API call
+  const mockExecutions: ExecutionRecord = [
+  {
+  id: 'exec_1',
+  scheduleId: scheduleId,
+  toggleId: 'toggle_1',
+  executionTime: new Date(Date.now() - 60 * 60 * 1000),
+  status: 'success',
+  triggeredBy: 'scheduler',
+  executionContext: {,
+  timezone: 'America/New_York',
+  originalTime: new Date(Date.now() - 60 * 60 * 1000),
+  actualTime: new Date(Date.now() - 60 * 60 * 1000 + 500),
+  delay: 500,
+},
+  beforeValue: { enabled: false },
           afterValue: { enabled: true },
           affectedUsers: 1250,
           duration: 2500,
           metadata: {,
-            action: 'enable',
-            executor: 'scheduler-v1.2',
-          },
-          createdAt: new Date(Date.now() - 60 * 60 * 1000),
-        },
+  action: 'enable',
+  executor: 'scheduler-v1.2',
+},
+  createdAt: new Date(Date.now() - 60 * 60 * 1000);
+  }
         {
-          id: 'exec_2',
-          scheduleId: scheduleId,
-          toggleId: 'toggle_1',
-          executionTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          status: 'failed',
-          triggeredBy: 'scheduler',
-          executionContext: {,
-            timezone: 'America/New_York',
-            originalTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-            actualTime: new Date(Date.now() - 2 * 60 * 60 * 1000 + 15000),
-            delay: 15000,
-          },
-          error: {,
-            code: 'TOGGLE_NOT_FOUND',
-            message: 'Feature toggle not found or has been deleted',
-            retryable: false,
-          },
-          duration: 1200,
+  id: 'exec_2',
+  scheduleId: scheduleId,
+  toggleId: 'toggle_1',
+  executionTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  status: 'failed',
+  triggeredBy: 'scheduler',
+  executionContext: {,
+  timezone: 'America/New_York',
+  originalTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  actualTime: new Date(Date.now() - 2 * 60 * 60 * 1000 + 15000),
+  delay: 15000,
+},
+  error: {,
+  code: 'TOGGLE_NOT_FOUND',
+  message: 'Feature toggle not found or has been deleted',
+  retryable: false,
+},
+  duration: 1200,
           metadata: {,
-            action: 'enable',
-            executor: 'scheduler-v1.2',
-            retryAttempt: 1,
-          },
-          createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        },
+  action: 'enable',
+  executor: 'scheduler-v1.2',
+  retryAttempt: 1,
+},
+  createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000);
+  }
         {
-          id: 'exec_3',
-          scheduleId: scheduleId,
-          toggleId: 'toggle_1',
-          executionTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
-          status: 'success',
-          triggeredBy: 'manual',
-          executionContext: {,
-            timezone: 'America/New_York',
-            originalTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
-            actualTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 200),
-            delay: 200,
-          },
-          beforeValue: { percentage: 25 },
+  id: 'exec_3',
+  scheduleId: scheduleId,
+  toggleId: 'toggle_1',
+  executionTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
+  status: 'success',
+  triggeredBy: 'manual',
+  executionContext: {,
+  timezone: 'America/New_York',
+  originalTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
+  actualTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 200),
+  delay: 200,
+},
+  beforeValue: { percentage: 25 },
           afterValue: { percentage: 50 },
           affectedUsers: 875,
           duration: 1800,
           metadata: {,
-            action: 'modify_percentage',
-            executor: 'manual-admin',
-            requestedBy: 'admin@example.com',
-          },
-          createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
-        }
-      ];
+  action: 'modify_percentage',
+  executor: 'manual-admin',
+  requestedBy: 'admin@example.com',
+},
+  createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000)];
       setExecutions(mockExecutions);
     } catch (error) {
-      console.error('Failed to load execution history:', error);
-    } finally {
+  console.error('Failed to load execution history:', error);
+} finally {
       setLoading(false);
-    }
+
   }, [scheduleId]);
   useEffect(() => {
     if (open && scheduleId) {
       loadExecutions();
-    }
+
   }, [open, scheduleId, loadExecutions]);
   const getExecutionStats = () => {
     const total = executions.length;
@@ -193,7 +192,7 @@ export const [page, setPage] = useState(0);
     return `${delay}ms late`;}
   };
   const stats = getExecutionStats();
-  const renderStatsCards = () => (;)
+  const renderStatsCards = () => (;);
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
         <Card>
@@ -265,7 +264,7 @@ export const [page, setPage] = useState(0);
       </Grid>
     </Grid>
   );
-  const renderExecutionDetails = (execution: ExecutionRecord) => (;)
+  const renderExecutionDetails = (execution: ExecutionRecord) => (;);
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="subtitle2">
@@ -382,7 +381,7 @@ export const [page, setPage] = useState(0);
       </AccordionDetails>
     </Accordion>
   );
-  return ()
+  return;
     <Dialog
       open={open}
       onClose={onClose}
@@ -445,7 +444,7 @@ export const [page, setPage] = useState(0);
                     .map((execution) => {
                       const statusConfig = STATUS_CONFIG[execution.status];
                       const StatusIcon = statusConfig.icon;
-                      return ()
+                      return;
                         <TableRow key={execution.id}>
                           <TableCell>
                             <Box>

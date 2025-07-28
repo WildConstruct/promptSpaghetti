@@ -10,8 +10,8 @@ import { panelArchetypeTemplate, NodeTemplate } from '../../data/nodeTemplates';
 describe('NodeFactory', () => {
   let factory: NodeFactory;
   beforeEach(() => {
-    factory = NodeFactory.getInstance();
-  });
+  factory = NodeFactory.getInstance();
+});
   describe('Singleton Pattern', () => {
     test('getInstance should return same instance', () => {
       const factory1 = NodeFactory.getInstance();
@@ -21,28 +21,27 @@ describe('NodeFactory', () => {
   });
   describe('Template Registration', () => {
     test('should register valid templates', () => {
-      const testTemplate: NodeTemplate = {
-        id: 'test-template',
+      const testTemplate: NodeTemplate = {,
+  id: 'test-template',
         type: 'logic',
         position: { x: 0, y: 0 },
         data: {,
-          label: 'Test Template',
+  label: 'Test Template',
           description: 'Test description',
           category: 'logic',
           options: [,
             { label: 'Option 1', value: 'option1', weight: 1 }
           ]
-        }
       };
       const result = factory.registerTemplate(testTemplate);
       expect(result).toBe(true);
       expect(factory.getTemplate('test-template')).toEqual(testTemplate);
     });
     test('should reject invalid templates', () => {
-      const invalidTemplate = {
-        id: 'invalid',
-        type: 'invalid-type',
-      } as any;
+  const invalidTemplate = {
+  id: 'invalid',
+  type: 'invalid-type',
+} as any;
       const result = factory.registerTemplate(invalidTemplate);
       expect(result).toBe(false);
       expect(factory.getTemplate('invalid')).toBeUndefined();
@@ -61,10 +60,10 @@ describe('NodeFactory', () => {
       const customId = 'custom-id';
       const customData = { label: 'Custom Label' };
       const node = factory.createNode('archetype-2', {)
-        position: customPosition,
-        customId,
-        overrides: customData,
-      });
+  position: customPosition,
+  customId,
+  overrides: customData,
+});
       expect(node).toBeDefined();
       expect(node!.id).toBe(customId);
       expect(node!.position).toEqual(customPosition);
@@ -87,10 +86,10 @@ describe('NodeFactory', () => {
       expect(logicTemplates.length).toBeGreaterThan(0);
       expect(transformTemplates.length).toBeGreaterThan(0);
       logicTemplates.forEach(template => {)
-        expect(template.type).toBe('logic');
+  expect(template.type).toBe('logic');
       });
       transformTemplates.forEach(template => {)
-        expect(template.type).toBe('transform');
+  expect(template.type).toBe('transform');
       });
     });
   });
@@ -121,7 +120,7 @@ describe('useNodeFactory Hook', () => {
     const { result } = renderHook(() => useNodeFactory());
     act(() => {
       const node = result.current.createNode('archetype-2', {)
-        position: { x: 50, y: 50 }
+  position: { x: 50, y: 50 }
       });
       expect(node).toBeDefined();
       expect(node!.position).toEqual({ x: 50, y: 50 });
@@ -153,7 +152,7 @@ describe('NodeTemplateSelector Component', () => {
   test('should call onTemplateSelect when template is clicked', () => {
     const onTemplateSelect = jest.fn();
     const onNodeCreate = jest.fn();
-    render()
+    render();
       <NodeTemplateSelector
         onTemplateSelect={onTemplateSelect}
         onNodeCreate={onNodeCreate}
@@ -165,10 +164,10 @@ describe('NodeTemplateSelector Component', () => {
     expect(onNodeCreate).toHaveBeenCalled();
   });
   test('should display template information', () => {
-    render(<NodeTemplateSelector />);
-    expect(screen.getByText('Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.')).toBeInTheDocument();
-    expect(screen.getByText('8 options')).toBeInTheDocument();
-  });
+  render(<NodeTemplateSelector />);
+  expect(screen.getByText('Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.')).toBeInTheDocument();
+  expect(screen.getByText('8 options')).toBeInTheDocument();
+});
   test('should filter templates by availability', () => {
     const limitedTemplates = [panelArchetypeTemplate];
     render(<NodeTemplateSelector availableTemplates={limitedTemplates} />);

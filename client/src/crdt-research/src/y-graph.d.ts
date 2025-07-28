@@ -100,6 +100,6 @@ export declare class YGraph extends Y.AbstractType<any> {
      * Unobserve changes to edges
      */
     unobserveEdges(callback: (event: Y.YEvent<any>) => void): void;
-}
+
 export declare function registerYGraphType(): void;
 //# sourceMappingURL=y-graph.d.ts.map

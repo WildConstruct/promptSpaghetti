@@ -20,46 +20,42 @@ import {
 } from 'lucide-react';
 
 export interface PasswordPolicy {
-  minLength: number;
+  minLength: number;,
   maxLength: number;
-  requireUppercase: boolean;
+  requireUppercase: boolean;,
   requireLowercase: boolean;
-  requireNumbers: boolean;
+  requireNumbers: boolean;,
   requireSpecialChars: boolean;
-  forbidCommonPasswords: boolean;
+  forbidCommonPasswords: boolean;,
   forbidPersonalInfo: boolean;
-  maxConsecutiveChars: number;
+  maxConsecutiveChars: number;,
   minUniqueChars: number;
   forbidRepeatingPatterns: boolean;
 }
-
 export interface UserContext {
   email?: string;
   firstName?: string;
   lastName?: string;
   username?: string;
-  previousPasswords?: string[];
+  previousPasswords?: string;
 }
-
 export interface ValidationResult {
-  isValid: boolean;
-  score: number; // 0-100
-  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';
-  checks: ValidationCheck[];
-  suggestions: string[];
+  isValid: boolean;,
+  score: number; // 0-100,
+  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';,
+  checks: ValidationCheck;
+  suggestions: string;,
   estimatedCrackTime: string;
   entropy: number;
 }
-
 export interface ValidationCheck {
-  id: string;
+  id: string;,
   label: string;
-  passed: boolean;
+  passed: boolean;,
   required: boolean;
   weight: number;
   message?: string;
-}
-interface PasswordValidatorProps {
+  interface PasswordValidatorProps {
   password: string;
   policy?: Partial<PasswordPolicy>;
   userContext?: UserContext;
@@ -69,8 +65,7 @@ interface PasswordValidatorProps {
   showPassword?: boolean;
   onValidationChange?: (result: ValidationResult) => void;
   className?: string;
-}
-const DEFAULT_POLICY: PasswordPolicy = {
+  const DEFAULT_POLICY: PasswordPolicy = {,
   minLength: 12,
   maxLength: 128,
   requireUppercase: true,
@@ -96,7 +91,7 @@ const STRENGTH_CONFIG = {
   'strong': { color: 'green', label: 'Strong', min: 80 },
   'very-strong': { color: 'green', label: 'Very Strong', min: 95 }
 };
-
+}
 export function PasswordValidator({)
   password,
   policy: customPolicy,
@@ -117,7 +112,7 @@ export function PasswordValidator({)
     onValidationChange?.(validationResult);
   }, [validationResult, onValidationChange]);
   const strengthConfig = STRENGTH_CONFIG[validationResult.strength];
-  return ()
+  return;
     <div className={`space-y-4 ${className}`}>}
       {/* Strength Meter */}
       {showStrengthMeter && password && ()
@@ -217,31 +212,29 @@ export function PasswordValidator({)
       )}
     </div>
   );
-}
-function validatePassword()
-  password: string, 
+function validatePassword(password: string, )
   policy: PasswordPolicy, 
   userContext?: UserContext
 ): ValidationResult {
-  const checks: ValidationCheck[] = [];
-  const suggestions: string[] = [];
+  const checks: ValidationCheck = [];
+  const suggestions: string = [];
   let score = 0;
   if (!password) {
-    return {
-      isValid: false,
-      score: 0,
-      strength: 'very-weak',
-      checks: [],
-      suggestions: ['Enter a password to see strength analysis'],
-      estimatedCrackTime: 'Instant',
-      entropy: 0,
-    };
-  }
+  return {
+  isValid: false,
+  score: 0,
+  strength: 'very-weak',
+  checks: [],
+  suggestions: ['Enter a password to see strength analysis'],
+  estimatedCrackTime: 'Instant',
+  entropy: 0,
+};
   // Length checks
   const lengthCheck = {
     id: 'length',
-    label: `At least ${policy.minLength} characters`,}
-    passed: password.length >= policy.minLength,
+    label: `At least ${policy.minLength} characters`}
+},
+  passed: password.length >= policy.minLength,
     required: true,
     weight: 20,
     message: `${password.length}/${policy.minLength}`}
@@ -251,86 +244,86 @@ function validatePassword()
   else suggestions.push(`Use at least ${policy.minLength} characters`);}
   // Character type checks
   const uppercaseCheck = {
-    id: 'uppercase',
-    label: 'Contains uppercase letters',
-    passed: /[A-Z]/.test(password),
-    required: policy.requireUppercase,
-    weight: 10,
-  };
+  id: 'uppercase',
+  label: 'Contains uppercase letters',
+  passed: /[A-Z]/.test(password),
+  required: policy.requireUppercase,
+  weight: 10,
+};
   checks.push(uppercaseCheck);
   if (uppercaseCheck.passed) score += uppercaseCheck.weight;
   else if (policy.requireUppercase) suggestions.push('Add uppercase letters (A-Z)');
   const lowercaseCheck = {
-    id: 'lowercase',
-    label: 'Contains lowercase letters',
-    passed: /[a-z]/.test(password),
-    required: policy.requireLowercase,
-    weight: 10,
-  };
+  id: 'lowercase',
+  label: 'Contains lowercase letters',
+  passed: /[a-z]/.test(password),
+  required: policy.requireLowercase,
+  weight: 10,
+};
   checks.push(lowercaseCheck);
   if (lowercaseCheck.passed) score += lowercaseCheck.weight;
   else if (policy.requireLowercase) suggestions.push('Add lowercase letters (a-z)');
   const numbersCheck = {
-    id: 'numbers',
-    label: 'Contains numbers',
-    passed: /[0-9]/.test(password),
-    required: policy.requireNumbers,
-    weight: 10,
-  };
+  id: 'numbers',
+  label: 'Contains numbers',
+  passed: /[0-9]/.test(password),
+  required: policy.requireNumbers,
+  weight: 10,
+};
   checks.push(numbersCheck);
   if (numbersCheck.passed) score += numbersCheck.weight;
   else if (policy.requireNumbers) suggestions.push('Add numbers (0-9)');
   const specialCharsCheck = {
-    id: 'special',
-    label: 'Contains special characters',
-    passed: /[^A-Za-z0-9]/.test(password),
-    required: policy.requireSpecialChars,
-    weight: 15,
-  };
+  id: 'special',
+  label: 'Contains special characters',
+  passed: /[^A-Za-z0-9]/.test(password),
+  required: policy.requireSpecialChars,
+  weight: 15,
+};
   checks.push(specialCharsCheck);
   if (specialCharsCheck.passed) score += specialCharsCheck.weight;
   else if (policy.requireSpecialChars) suggestions.push('Add special characters (!@#$%^&*)');
   // Advanced security checks
   const commonPasswordCheck = {
-    id: 'common',
-    label: 'Not a common password',
-    passed: !COMMON_PASSWORDS.some(common => ),
-      password.toLowerCase().includes(common.toLowerCase())
-    ),
-    required: policy.forbidCommonPasswords,
-    weight: 15,
-  };
+  id: 'common',
+  label: 'Not a common password',
+  passed: !COMMON_PASSWORDS.some(common => ),
+  password.toLowerCase().includes(common.toLowerCase())
+  ),
+  required: policy.forbidCommonPasswords,
+  weight: 15,
+};
   checks.push(commonPasswordCheck);
   if (commonPasswordCheck.passed) score += commonPasswordCheck.weight;
   else suggestions.push('Avoid common passwords and dictionary words');
   // Personal info check
   if (userContext && policy.forbidPersonalInfo) {
-    const personalInfo = [;
-      userContext.email?.split('@')[0],
-      userContext.firstName,
-      userContext.lastName,
-      userContext.username
-    ].filter(Boolean);
-    const personalInfoCheck = {
-      id: 'personal',
-      label: 'Does not contain personal information',
-      passed: !personalInfo.some(info => ),
-        info && password.toLowerCase().includes(info.toLowerCase())
-      ),
-      required: true,
-      weight: 10,
-    };
+  const personalInfo = [;
+  userContext.email?.split('@')[0],
+  userContext.firstName,
+  userContext.lastName,
+  userContext.username
+  ].filter(Boolean);
+  const personalInfoCheck = {
+  id: 'personal',
+  label: 'Does not contain personal information',
+  passed: !personalInfo.some(info => ),
+  info && password.toLowerCase().includes(info.toLowerCase())
+  ),
+  required: true,
+  weight: 10,
+};
     checks.push(personalInfoCheck);
     if (personalInfoCheck.passed) score += personalInfoCheck.weight;
     else suggestions.push('Avoid using your name, email, or username');
-  }
   // Consecutive characters check
   const consecutiveCheck = {
     id: 'consecutive',
-    label: `No more than ${policy.maxConsecutiveChars} consecutive identical characters`,}
-    passed: !hasConsecutiveChars(password, policy.maxConsecutiveChars),
+    label: `No more than ${policy.maxConsecutiveChars} consecutive identical characters`}
+},
+  passed: !hasConsecutiveChars(password, policy.maxConsecutiveChars),
     required: true,
-    weight: 5,
+    weight: 5;
   };
   checks.push(consecutiveCheck);
   if (consecutiveCheck.passed) score += consecutiveCheck.weight;
@@ -339,8 +332,9 @@ function validatePassword()
   const uniqueChars = new Set(password).size;
   const uniqueCheck = {
     id: 'unique',
-    label: `At least ${policy.minUniqueChars} unique characters`,}
-    passed: uniqueChars >= policy.minUniqueChars,
+    label: `At least ${policy.minUniqueChars} unique characters`}
+},
+  passed: uniqueChars >= policy.minUniqueChars,
     required: true,
     weight: 10,
     message: `${uniqueChars}/${policy.minUniqueChars}`}
@@ -350,24 +344,22 @@ function validatePassword()
   else suggestions.push('Use more unique characters');
   // Repeating patterns check
   if (policy.forbidRepeatingPatterns) {
-    const patternCheck = {
-      id: 'patterns',
-      label: 'No obvious repeating patterns',
-      passed: !hasRepeatingPatterns(password),
-      required: true,
-      weight: 5,
-    };
+  const patternCheck = {
+  id: 'patterns',
+  label: 'No obvious repeating patterns',
+  passed: !hasRepeatingPatterns(password),
+  required: true,
+  weight: 5,
+};
     checks.push(patternCheck);
     if (patternCheck.passed) score += patternCheck.weight;
     else suggestions.push('Avoid predictable patterns like "abc123" or "password1"');
-  }
   // Calculate entropy
   const entropy = calculateEntropy(password);
   // Bonus points for length beyond minimum
   if (password.length > policy.minLength) {
-    const lengthBonus = Math.min((password.length - policy.minLength) * 2, 15);
-    score += lengthBonus;
-  }
+  const lengthBonus = Math.min((password.length - policy.minLength) * 2, 15);
+  score += lengthBonus;
   // Determine strength based on score
   let strength: ValidationResult['strength'] = 'very-weak';
   if (score >= 95) strength = 'very-strong';
@@ -382,15 +374,14 @@ function validatePassword()
   const passedRequiredChecks = requiredChecks.filter(c => c.passed);
   const isValid = passedRequiredChecks.length === requiredChecks.length;
   return {
-    isValid,
-    score: Math.min(score, 100),
-    strength,
-    checks,
-    suggestions,
-    estimatedCrackTime,
-    entropy
-  };
-}
+  isValid,
+  score: Math.min(score, 100),
+  strength,
+  checks,
+  suggestions,
+  estimatedCrackTime,
+  entropy
+};
 function hasConsecutiveChars(password: string, maxConsecutive: number): boolean {
   let count = 1;
   for (let i = 1; i < password.length; i++) {
@@ -399,10 +390,7 @@ function hasConsecutiveChars(password: string, maxConsecutive: number): boolean 
       if (count > maxConsecutive) return true;
     } else {
       count = 1;
-    }
-  }
   return false;
-}
 function hasRepeatingPatterns(password: string): boolean {
   // Check for keyboard patterns, sequences, and simple repeating patterns
   const patterns = [;
@@ -411,7 +399,6 @@ function hasRepeatingPatterns(password: string): boolean {
   ];
   const lower = password.toLowerCase();
   return patterns.some(pattern => lower.includes(pattern));
-}
 function calculateEntropy(password: string): number {
   // Calculate character set size
   let charsetSize = 0;
@@ -421,7 +408,6 @@ function calculateEntropy(password: string): number {
   if (/[^A-Za-z0-9]/.test(password)) charsetSize += 32; // Approximate special chars
   // Shannon entropy approximation
   return password.length * Math.log2(charsetSize);
-}
 function estimateCrackTime(entropy: number): string {
   // Approximate time for brute force attack (assuming 1 billion attempts per second)
   const attempts = Math.pow(2, entropy - 1); // Half the keyspace on average;
@@ -434,4 +420,3 @@ function estimateCrackTime(entropy: number): string {
   if (seconds < 31536000) return `${Math.round(seconds / 86400)} days`;}
   if (seconds < 31536000000) return `${Math.round(seconds / 31536000)} years`;}
   return 'Centuries';
-}

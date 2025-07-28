@@ -12,26 +12,23 @@ import {
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 interface TargetingRule {
-  id: string;
+  id: string;,
   attribute: string;
-  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists';
+  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists';,
   value: Error;
   logicalOperator?: 'AND' | 'OR';
-}
 interface UserSegment {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  rules: TargetingRule[];
+  rules: TargetingRule;
   estimatedUsers?: number;
   isActive: boolean;
-}
 interface TargetingRuleBuilderProps {
-  initialRules?: TargetingRule[];
-  onRulesChange: (rules: TargetingRule[]) => void;
-  segments?: UserSegment[];
-  onTestRule?: (rules: TargetingRule[]) => Promise<{ matches: boolean; userCount: number }>;
-}
+  initialRules?: TargetingRule;
+  onRulesChange: (rules: TargetingRule) => void;
+  segments?: UserSegment;
+  onTestRule?: (rules: TargetingRule) => Promise<{ matches: boolean; userCount: number }>;
 const AVAILABLE_ATTRIBUTES = [;
   { key: 'user_id', label: 'User ID', type: 'string', description: 'Unique user identifier' },
   { key: 'email', label: 'Email', type: 'string', description: 'User email address' },
@@ -63,22 +60,22 @@ const OPERATORS = {
 export const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
   const [testing, setTesting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [rules, setRules] = useState<TargetingRule[]>(initialRules);
+  const [rules, setRules] = useState<TargetingRule>(initialRules);
   const generateRuleId = () => `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   const addRule = () => {
-    const newRule: TargetingRule = {
-      id: generateRuleId(),
-      attribute: 'user_type',
-      operator: 'equals',
-      value: '',
-      logicalOperator: rules.length > 0 ? 'AND' : undefined,
-    };
+  const newRule: TargetingRule = {,
+  id: generateRuleId(),
+  attribute: 'user_type',
+  operator: 'equals',
+  value: '',
+  logicalOperator: rules.length > 0 ? 'AND' : undefined,
+};
     const updatedRules = [...rules, newRule];
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
   const updateRule = (id: string, updates: Partial<TargetingRule>) => {
-    const updatedRules = rules.map(rule => ;)
+    const updatedRules = rules.map(rule => ;);
       rule.id === id ? { ...rule, ...updates } : rule
     );
     setRules(updatedRules);
@@ -89,18 +86,17 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
     // Remove logical operator from first rule if it exists
     if (updatedRules.length > 0 && updatedRules[0].logicalOperator) {
       updatedRules[0] = { ...updatedRules[0], logicalOperator: undefined };
-    }
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
   const duplicateRule = (id: string) => {
-    const ruleToDuplicate = rules.find(rule => rule.id === id);
-    if (!ruleToDuplicate) return;
-    const duplicatedRule: TargetingRule = {
-      ...ruleToDuplicate,
-      id: generateRuleId(),
-      logicalOperator: 'AND',
-    };
+  const ruleToDuplicate = rules.find(rule => rule.id === id);
+  if (!ruleToDuplicate) return;
+  const duplicatedRule: TargetingRule = {,
+  ...ruleToDuplicate,
+  id: generateRuleId(),
+  logicalOperator: 'AND',
+};
     const ruleIndex = rules.findIndex(rule => rule.id === id);
     const updatedRules = [;
       ...rules.slice(0, ruleIndex + 1),
@@ -117,20 +113,18 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
       const result = await onTestRule(rules);
       setTestResult(result);
     } catch (error) {
-      console.error('Failed to test rules:', error);
-    } finally {
+  console.error('Failed to test rules:', error);
+} finally {
       setTesting(false);
-    }
   };
   const renderValueInput = (rule: TargetingRule) => {
     const attribute = AVAILABLE_ATTRIBUTES.find(attr => attr.key === rule.attribute);
     // No value input needed for exists/not_exists operators
     if (rule.operator === 'exists' || rule.operator === 'not_exists') {
       return null;
-    }
     // Multiple values for in/not_in operators
     if (rule.operator === 'in' || rule.operator === 'not_in') {
-      return ()
+      return;
         <textarea
           className="rule-value-input multi-value"
           placeholder="Enter values separated by commas"
@@ -142,10 +136,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
           rows={2}
         />
       );
-    }
     // Enum dropdown
     if (attribute?.type === 'enum' && attribute.options) {
-      return ()
+      return;
         <select
           className="rule-value-input"
           value={rule.value}
@@ -157,10 +150,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
           ))}
         </select>
       );
-    }
     // Date input
     if (attribute?.type === 'date') {
-      return ()
+      return;
         <input
           type="datetime-local"
           className="rule-value-input"
@@ -168,10 +160,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
           onChange={(e) => updateRule(rule.id, { value: e.target.value })}
         />
       );
-    }
     // Number input
     if (attribute?.type === 'number') {
-      return ()
+      return;
         <input
           type="number"
           className="rule-value-input"
@@ -180,9 +171,8 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
           onChange={(e) => updateRule(rule.id, { value: parseInt(e.target.value) || 0 })}
         />
       );
-    }
     // Default text input
-    return ()
+    return;
       <input
         type="text"
         className="rule-value-input"
@@ -202,10 +192,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
       valueDisplay = `[${rule.value.join(', ')}]`;}
     } else {
       valueDisplay = String(rule.value);
-    }
     return `${attribute?.label || rule.attribute} ${operator.symbol} ${valueDisplay}`.trim();}
   };
-  return ()
+  return;
     <div className="targeting-rule-builder">
       {/* Header */}
       <div className="builder-header">
@@ -272,8 +261,8 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
                     <select
                       value={rule.logicalOperator || 'AND'}
                       onChange={(e) => updateRule(rule.id, { )
-                        logicalOperator: e.target.value as 'AND' | 'OR' ,
-                      })}
+                        logicalOperator: e.target.value as 'AND' | 'OR' ;
+  })}
                       className="operator-select"
                     >
                       <option value="AND">AND</option>
@@ -291,8 +280,8 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
                         value={rule.attribute}
                         onChange={(e) => updateRule(rule.id, { )
                           attribute: e.target.value,
-                          value: '' // Reset value when attribute changes,
-                        })}
+                          value: '' // Reset value when attribute changes;
+  })}
                         className="rule-input"
                       >
                         {AVAILABLE_ATTRIBUTES.map(attr => ()
@@ -309,8 +298,8 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
                         value={rule.operator}
                         onChange={(e) => updateRule(rule.id, { )
                           operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists',
-                          value: '' // Reset value when operator changes,
-                        })}
+                          value: '' // Reset value when operator changes;
+  })}
                         className="rule-input"
                       >
                         {Object.entries(OPERATORS).map(([key, op]) => ()

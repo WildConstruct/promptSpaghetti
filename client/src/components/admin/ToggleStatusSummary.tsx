@@ -28,60 +28,58 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ToggleStatusSummary.css';
 interface ToggleSummaryMetrics {
   // System Overview
-  totalToggles: number;
+  totalToggles: number;,
   activeToggles: number;
-  inactiveToggles: number;
+  inactiveToggles: number;,
   archivedToggles: number;
   // Toggle Types Distribution
   typeBreakdown: {,
-    boolean: number;
-    percentage_rollout: number;
-    multivariate: number;
-    scheduled: number;
-    segmentation: number;
-  };
+  boolean: number;,
+  percentage_rollout: number;
+  multivariate: number;,
+  scheduled: number;
+  segmentation: number;
+};
   // Claude Impact Analysis
   claudeImpact: {,
-    NONE: number;
-    PROMPT_COST: number;
-    MODEL_VERSION: number;
-    OUTPUT_QUALITY: number;
-    HALLUCINATION_RISK: number;
-  };
+  NONE: number;
+  PROMPT_COST: number;,
+  MODEL_VERSION: number;
+  OUTPUT_QUALITY: number;,
+  HALLUCINATION_RISK: number;
+};
   // Health & Performance
-  healthScore: number; // 0-100
+  healthScore: number; // 0-100,
   alertsActive: number;
-  performanceIssues: number;
+  performanceIssues: number;,
   averageResponseTime: number;
   // Recent Activity
-  recentChanges: number; // Last 24h
+  recentChanges: number; // Last 24h,
   rolloutSuccess: number; // Percentage
   errorRate: number; // Percentage
   // Usage Statistics
-  evaluationsToday: number;
-  topPerformingToggles: Array<{,
-    id: string;
-    name: string;
-    evaluations: number;
-    successRate: number;
-  }>;
+  evaluationsToday: number;,
+  topPerformingToggles: Array<{;
+  id: string;,
+  name: string;
+  evaluations: number;,
+  successRate: number;
+}>;
   // Organization Insights
-  organizationCoverage: number; // Percentage of orgs using toggles
+  organizationCoverage: number; // Percentage of orgs using toggles,
   averageTogglesPerOrg: number;
   // Trends
-  growthRate: number; // Percentage change from last period
+  growthRate: number; // Percentage change from last period,
   lastUpdated: string;
-}
 interface StatusCard {
-  title: string;
+  title: string;,
   value: string | number;
   change?: number;
   changeLabel?: string;
-  icon: React.ReactNode;
+  icon: React.ReactNode;,
   variant: 'success' | 'warning' | 'danger' | 'info';
   description?: string;
   details?: Array<{ label: string; value: string | number }>;
-}
 
 export const ToggleStatusSummary: React.FC = () => {
   const [metrics, setMetrics] = useState<ToggleSummaryMetrics | null>(null);
@@ -100,10 +98,9 @@ export const ToggleStatusSummary: React.FC = () => {
       setMetrics(response);
       setLastRefresh(new Date());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
+} finally {
       setLoading(false);
-    }
   };
   // Auto-refresh functionality
   useEffect(() => {
@@ -111,7 +108,6 @@ export const ToggleStatusSummary: React.FC = () => {
     if (autoRefresh) {
       const interval = setInterval(fetchMetrics, 30000); // Refresh every 30 seconds;
       return () => clearInterval(interval);
-    }
   }, [autoRefresh]);
   const handleRefresh = () => {
     fetchMetrics();
@@ -120,15 +116,14 @@ export const ToggleStatusSummary: React.FC = () => {
     setAutoRefresh(!autoRefresh);
   };
   if (loading && !metrics) {
-    return ()
+    return;
       <div className="toggle-status-summary loading">
         <LoadingSpinner size="small" />
         <span>Loading system status...</span>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="toggle-status-summary error">
         <AlertTriangle className="error-icon" />
         <span>Failed to load system status: {error}</span>
@@ -138,10 +133,9 @@ export const ToggleStatusSummary: React.FC = () => {
         </button>
       </div>
     );
-  }
   if (!metrics) return null;
   // Generate status cards based on metrics
-  const statusCards: StatusCard[] = [
+  const statusCards: StatusCard = [
     {
       title: 'Total Toggles',
       value: metrics.totalToggles,
@@ -155,11 +149,12 @@ export const ToggleStatusSummary: React.FC = () => {
         { label: 'Inactive', value: metrics.inactiveToggles },
         { label: 'Archived', value: metrics.archivedToggles }
       ]
-    },
+  }
     {
       title: 'System Health',
-      value: `${metrics.healthScore}%`,}
-      icon: metrics.healthScore >= 90 ? <CheckCircle /> : ,
+      value: `${metrics.healthScore}%`}
+},
+  icon: metrics.healthScore >= 90 ? <CheckCircle /> : ,
         metrics.healthScore >= 70 ? <AlertCircle /> : <AlertTriangle />,
       variant: metrics.healthScore >= 90 ? 'success' : ,
         metrics.healthScore >= 70 ? 'warning' : 'danger',
@@ -169,7 +164,7 @@ export const ToggleStatusSummary: React.FC = () => {
         { label: 'Performance Issues', value: metrics.performanceIssues },
         { label: 'Avg Response Time', value: `${metrics.averageResponseTime}ms` }
       ]
-    },
+  }
     {
       title: 'Claude Impact',
       value: Object.values(metrics.claudeImpact).reduce((a, b) => a + b, 0) - metrics.claudeImpact.NONE,
@@ -182,7 +177,7 @@ export const ToggleStatusSummary: React.FC = () => {
         { label: 'Quality Impact', value: metrics.claudeImpact.OUTPUT_QUALITY },
         { label: 'Risk Impact', value: metrics.claudeImpact.HALLUCINATION_RISK }
       ]
-    },
+  }
     {
       title: 'Daily Evaluations',
       value: formatLargeNumber(metrics.evaluationsToday),
@@ -192,10 +187,11 @@ export const ToggleStatusSummary: React.FC = () => {
       variant: 'success',
       description: 'Toggle evaluations performed today',
       details: [,
-        { label: 'Success Rate', value: `${metrics.rolloutSuccess}%` },}
+        { label: 'Success Rate', value: `${metrics.rolloutSuccess}%` }
+}
         { label: 'Error Rate', value: `${metrics.errorRate}%` }
       ]
-    },
+  }
     {
       title: 'Recent Changes',
       value: metrics.recentChanges,
@@ -207,19 +203,19 @@ export const ToggleStatusSummary: React.FC = () => {
         { label: 'Modified', value: Math.floor(metrics.recentChanges * 0.6) },
         { label: 'Archived', value: Math.floor(metrics.recentChanges * 0.1) }
       ]
-    },
+  }
     {
       title: 'Organization Coverage',
-      value: `${metrics.organizationCoverage}%`,}
-      icon: <Shield />,
+      value: `${metrics.organizationCoverage}%`}
+},
+  icon: <Shield />,
       variant: 'success',
       description: 'Organizations using feature toggles',
       details: [,
         { label: 'Avg per Org', value: metrics.averageTogglesPerOrg.toFixed(1) }
       ]
-    }
   ];
-  return ()
+  return;
     <div className="toggle-status-summary">
       {/* Header */}
       <div className="summary-header">
@@ -361,21 +357,20 @@ const StatusCard: React.FC<StatusCard> = ({ )
 
 // Distribution Card Component
 interface DistributionCardProps {
-  title: string;
+  title: string;,
   value: number;
-  total: number;
+  total: number;,
   color: string;
   icon: React.ReactNode;
-}
-const DistributionCard: React.FC<DistributionCardProps> = ({ )
-  title, 
-  value, 
-  total, 
-  color, 
-  icon 
+  const DistributionCard: React.FC<DistributionCardProps> = ({ ),
+  title,
+  value,
+  total,
+  color,
+  icon
 }) => {
   const percentage = total > 0 ? (value / total) * 100 : 0;
-  return ()
+  return;
     <div className="distribution-card">
       <div className="distribution-header">
         <div className="distribution-icon" style={{ color }}>
@@ -405,7 +400,6 @@ const formatLargeNumber = (num: number): string => {
     return (num / 1000000).toFixed(1) + 'M';
   } else if (num >= 1000) {
     return (num / 1000).toFixed(1) + 'K';
-  }
   return num.toString();
 };
 
@@ -414,25 +408,25 @@ const simulateMetricsAPI = async (): Promise<ToggleSummaryMetrics> => {
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 800));
   return {
-    totalToggles: 247,
-    activeToggles: 184,
-    inactiveToggles: 51,
-    archivedToggles: 12,
-    typeBreakdown: {,
-      boolean: 145,
-      percentage_rollout: 67,
-      multivariate: 23,
-      scheduled: 8,
-      segmentation: 4,
-    },
-    claudeImpact: {,
-      NONE: 156,
-      PROMPT_COST: 34,
-      MODEL_VERSION: 28,
-      OUTPUT_QUALITY: 19,
-      HALLUCINATION_RISK: 10,
-    },
-    healthScore: 94,
+  totalToggles: 247,
+  activeToggles: 184,
+  inactiveToggles: 51,
+  archivedToggles: 12,
+  typeBreakdown: {,
+  boolean: 145,
+  percentage_rollout: 67,
+  multivariate: 23,
+  scheduled: 8,
+  segmentation: 4,
+},
+  claudeImpact: {,
+  NONE: 156,
+  PROMPT_COST: 34,
+  MODEL_VERSION: 28,
+  OUTPUT_QUALITY: 19,
+  HALLUCINATION_RISK: 10,
+},
+  healthScore: 94,
     alertsActive: 2,
     performanceIssues: 1,
     averageResponseTime: 23,
@@ -450,7 +444,7 @@ const simulateMetricsAPI = async (): Promise<ToggleSummaryMetrics> => {
     organizationCoverage: 78.5,
     averageTogglesPerOrg: 12.4,
     growthRate: 8.2,
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: new Date().toISOString();
   };
 };
 

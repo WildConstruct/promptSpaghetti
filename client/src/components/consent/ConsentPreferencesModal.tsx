@@ -15,14 +15,12 @@ import {
 import { useConsent } from '../../hooks/useConsent';
 import './ConsentPreferencesModal.css';
 interface ConsentPreferencesModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  onSave: (preferences: ConsentPreferences) => Promise<void>;
+  onSave: (preferences: ConsentPreferences) => Promise<void>;,
   preferences: ConsentPreferences | null;
   config: ConsentConfiguration | null;
-}
-
-export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({)
+  export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({,)
   isOpen,
   onClose,
   onSave,
@@ -42,17 +40,16 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
       // Initialize local state from current preferences
       const initialState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
       config.consentTypes.forEach(typeConfig => {)
-        initialState[typeConfig.type] = hasConsent(typeConfig.type);
+  initialState[typeConfig.type] = hasConsent(typeConfig.type);
       });
       setLocalPreferences(initialState);
       setError(null);
-    }
   }, [isOpen, config, preferences, hasConsent]);
   const handleConsentToggle = (consentType: ConsentType, granted: boolean) => {
-    setLocalPreferences(prev => ({)
-      ...prev,
-      [consentType]: granted
-    }));
+  setLocalPreferences(prev => ({)
+  ...prev,
+  [consentType]: granted,
+}));
   };
   const handleSave = async () => {
     if (!preferences || !config) return;
@@ -66,33 +63,29 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
           await grantConsent(consentType as ConsentType, 'preferences');
         } else if (!granted && currentStatus) {
           await withdrawConsent(consentType as ConsentType, 'preferences');
-        }
-      }
       // Call parent save handler
       await onSave(preferences);
     } catch (error) {
-      console.error('Failed to save consent preferences:', error);
-      setError('Failed to save preferences. Please try again.');
-    } finally {
+  console.error('Failed to save consent preferences:', error);
+  setError('Failed to save preferences. Please try again.');
+} finally {
       setIsLoading(false);
-    }
   };
   const handleCancel = () => {
     // Reset local state
     if (config && preferences) {
       const resetState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
       config.consentTypes.forEach(typeConfig => {)
-        resetState[typeConfig.type] = hasConsent(typeConfig.type);
+  resetState[typeConfig.type] = hasConsent(typeConfig.type);
       });
       setLocalPreferences(resetState);
-    }
     setError(null);
     onClose();
   };
   const renderConsentTypeCard = (typeConfig: ConsentTypeConfig) => {
     const isEssential = typeConfig.isEssential;
     const isGranted = localPreferences[typeConfig.type];
-    return ()
+    return;
       <div key={typeConfig.type} className="consent-card">
         <div className="consent-card__header">
           <div className="consent-card__info">
@@ -184,7 +177,7 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   const renderPrivacySettings = () => {
     if (!preferences) return null;
     const privacySettings = preferences.userPreferences.privacySettings;
-    return ()
+    return;
       <div className="privacy-settings">
         <h3>Privacy Settings</h3>
         <div className="setting-item">
@@ -193,9 +186,9 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={!privacySettings.dataProcessingOptOut}
               onChange={(e) => {
-                // Handle privacy setting change
-                console.log('Data processing opt-out changed:', !e.target.checked);
-              }}
+  // Handle privacy setting change
+  console.log('Data processing opt-out changed:', !e.target.checked);
+}}
             />
             Allow data processing for service improvement
           </label>
@@ -206,9 +199,9 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             <select
               value={privacySettings.profileVisibility}
               onChange={(e) => {
-                // Handle profile visibility change
-                console.log('Profile visibility changed:', e.target.value);
-              }}
+  // Handle profile visibility change
+  console.log('Profile visibility changed:', e.target.value);
+}}
             >
               <option value="public">Public</option>
               <option value="limited">Limited</option>
@@ -222,8 +215,8 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={!privacySettings.trackingOptOut}
               onChange={(e) => {
-                console.log('Tracking opt-out changed:', !e.target.checked);
-              }}
+  console.log('Tracking opt-out changed:', !e.target.checked);
+}}
             />
             Allow cross-site tracking
           </label>
@@ -234,7 +227,7 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   const renderCommunicationSettings = () => {
     if (!preferences) return null;
     const commSettings = preferences.userPreferences.communicationPreferences;
-    return ()
+    return;
       <div className="communication-settings">
         <h3>Communication Preferences</h3>
         <div className="setting-item">
@@ -243,8 +236,8 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={commSettings.emailNotifications}
               onChange={(e) => {
-                console.log('Email notifications changed:', e.target.checked);
-              }}
+  console.log('Email notifications changed:', e.target.checked);
+}}
             />
             Email notifications
           </label>
@@ -255,8 +248,8 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={commSettings.marketingEmails}
               onChange={(e) => {
-                console.log('Marketing emails changed:', e.target.checked);
-              }}
+  console.log('Marketing emails changed:', e.target.checked);
+}}
             />
             Marketing emails
           </label>
@@ -267,8 +260,8 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={commSettings.productUpdates}
               onChange={(e) => {
-                console.log('Product updates changed:', e.target.checked);
-              }}
+  console.log('Product updates changed:', e.target.checked);
+}}
             />
             Product updates
           </label>
@@ -279,8 +272,8 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               type="checkbox"
               checked={commSettings.securityAlerts}
               onChange={(e) => {
-                console.log('Security alerts changed:', e.target.checked);
-              }}
+  console.log('Security alerts changed:', e.target.checked);
+}}
               disabled
             />
             Security alerts (required)
@@ -291,8 +284,7 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   };
   if (!isOpen) {
     return null;
-  }
-  return ()
+  return;
     <div className="consent-modal-overlay" onClick={onClose}>
       <div 
         className="consent-modal" 

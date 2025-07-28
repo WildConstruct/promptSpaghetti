@@ -17,19 +17,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Mock the API service
 jest.mock('../../services/templateService', () => ({)
   templateService: {,
-    createFromGraph: jest.fn<unknown[], unknown>(),
-    getTemplatesByCategory: jest.fn<unknown[], unknown>(),
-    validateTemplate: jest.fn<unknown[], unknown>()
-  }
+  createFromGraph: jest.fn<unknown, unknown>(),
+  getTemplatesByCategory: jest.fn<unknown, unknown>(),
+  validateTemplate: jest.fn<unknown, unknown>(),
 }));
 
 // Mock React Flow components
 jest.mock('reactflow', () => ({)
   ReactFlow: ({ children, nodes = [], edges = [], ...props }: { )
     children?: React.ReactNode; 
-    nodes?: unknown[];
-    edges?: unknown[];
-    [key: string]: unknown 
+    nodes?: unknown;
+    edges?: unknown;
+    [key: string]: unknown ;
   }) => ()
     <div data-testid="react-flow" {...props}>
       {children}
@@ -39,27 +38,27 @@ jest.mock('reactflow', () => ({)
   ),
   Controls: () => <div data-testid="flow-controls">Controls</div>,
   Background: () => <div data-testid="flow-background">Background</div>,
-  useNodesState: () => [[], jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
-  useEdgesState: () => [[], jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
-  addEdge: jest.fn<unknown[], unknown>(),
-  useReactFlow: () => ({),
-    getNodes: jest.fn(() => []),
+  useNodesState: () => [[], jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
+  useEdgesState: () => [[], jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
+  addEdge: jest.fn<unknown, unknown>(),
+  useReactFlow: () => ({,)
+  getNodes: jest.fn(() => []),
     getEdges: jest.fn(() => []),
-    setNodes: jest.fn<unknown[], unknown>(),
-    setEdges: jest.fn<unknown[], unknown>(),
+    setNodes: jest.fn<unknown, unknown>(),
+    setEdges: jest.fn<unknown, unknown>(),
     getViewport: jest.fn(() => ({ x: 0, y: 0, zoom: 1 }))
-  })
+  }
 }));
 
 // Mock the drag and drop context
 jest.mock('react-dnd', () => ({)
-  useDrag: () => [{ isDragging: false }, jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
-  useDrop: () => [{ isOver: false }, jest.fn<unknown[], unknown>()],
+  useDrag: () => [{ isDragging: false }, jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
+  useDrop: () => [{ isOver: false }, jest.fn<unknown, unknown>()],
   DndProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 import { templateService } from '../../services/templateService';
 const mockTemplateService = templateService as jest.Mocked<{
-  createFromGraph: jest.MockedFunction<any>;
+  createFromGraph: jest.MockedFunction<any>;,
   getTemplatesByCategory: jest.MockedFunction<any>;
   validateTemplate: jest.MockedFunction<any>;
 }>;
@@ -67,12 +66,11 @@ const mockTemplateService = templateService as jest.Mocked<{
 // Test wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = new QueryClient({)
-    defaultOptions: {,
-      queries: { retry: false },
+  defaultOptions: {,
+  queries: { retry: false },
       mutations: { retry: false }
-    }
   });
-  return ()
+  return;
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         {children}
@@ -98,18 +96,18 @@ describe('TemplateCreationWizard', () => {
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
         metadata: {,
-          created: new Date( as unknown as unknown),
-          lastModified: new Date(),
-          usageCount: 0,
-          tags: ['ai', 'analytics'],
-          difficulty: 'intermediate',
-          category: 'AI',
-          language: 'en',
-          license: 'MIT',
-          dependencies: [],
-        },
+  created: new Date( as unknown as unknown),
+  lastModified: new Date(),
+  usageCount: 0,
+  tags: ['ai', 'analytics'],
+  difficulty: 'intermediate',
+  category: 'AI',
+  language: 'en',
+  license: 'MIT',
+  dependencies: [],
+}
         // tags: ['ai', 'analytics'] // Tags property not in Template interface
-      },
+  }
       { 
         id: '2', 
         name: 'Data Processing', 
@@ -121,18 +119,18 @@ describe('TemplateCreationWizard', () => {
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
         metadata: {,
-          created: new Date(),
-          lastModified: new Date(),
-          usageCount: 0,
-          tags: ['data'],
-          difficulty: 'intermediate',
-          category: 'Data',
-          language: 'en',
-          license: 'MIT',
-          dependencies: [],
-        },
-        // tags: ['data'] // Tags property not in Template interface
-      },
+  created: new Date(),
+  lastModified: new Date(),
+  usageCount: 0,
+  tags: ['data'],
+  difficulty: 'intermediate',
+  category: 'Data',
+  language: 'en',
+  license: 'MIT',
+  dependencies: [],
+}
+        // tags: ['data'] // Tags property not in Template interface;
+  }
       { 
         id: '3', 
         name: 'Creative', 
@@ -144,7 +142,7 @@ describe('TemplateCreationWizard', () => {
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
         metadata: {,
-          created: new Date(),
+  created: new Date(),
           lastModified: new Date(),
           usageCount: 0,
           tags: ['creative'],
@@ -152,10 +150,7 @@ describe('TemplateCreationWizard', () => {
           category: 'Creative',
           language: 'en',
           license: 'MIT',
-          dependencies: [],
-        }
-      }
-    ]);
+          dependencies: []]);
     mockTemplateService.validateTemplate.mockResolvedValue({ )
       isValid: true, 
       errors: [], 
@@ -166,13 +161,13 @@ describe('TemplateCreationWizard', () => {
   describe('Wizard Navigation', () => {
     it('should render the template creation wizard with initial step', async () => {
       // Act
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -188,13 +183,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should navigate between wizard steps', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -220,13 +215,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should prevent navigation to next step with invalid data', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -239,13 +234,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should show progress indicator for current step', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -266,13 +261,13 @@ describe('TemplateCreationWizard', () => {
         warnings: [], 
         compatibility: { version: '1.0', features: [], missingFeatures: [] } 
       } as unknown as unknown);
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -288,13 +283,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should handle category selection', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -307,13 +302,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should handle tag input and management', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -336,13 +331,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should enforce character limits for text fields', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -358,13 +353,13 @@ describe('TemplateCreationWizard', () => {
   describe('Graph Design Step', () => {
     beforeEach(async () => {
       // Navigate to graph design step
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -393,16 +388,16 @@ describe('TemplateCreationWizard', () => {
       expect(screen.getByText('Conditional Node')).toBeInTheDocument();
     });
     it('should add nodes to the graph when dragged from palette', async () => {
-      // Act: Simulate dragging input node to canvas
-      const inputNode = screen.getByTestId('palette-node-input');
-      const canvas = screen.getByTestId('react-flow');
-      // Simulate drag and drop
-      fireEvent.dragStart(inputNode);
-      fireEvent.dragOver(canvas);
-      fireEvent.drop(canvas, {)
-        clientX: 200,
-        clientY: 200,
-      });
+  // Act: Simulate dragging input node to canvas,
+  const inputNode = screen.getByTestId('palette-node-input');
+  const canvas = screen.getByTestId('react-flow');
+  // Simulate drag and drop
+  fireEvent.dragStart(inputNode);
+  fireEvent.dragOver(canvas);
+  fireEvent.drop(canvas, {)
+  clientX: 200,
+  clientY: 200,
+});
       // Assert: Node should be added to canvas
       await waitFor(() => {
         const nodesData = screen.getByTestId('flow-nodes');
@@ -419,16 +414,16 @@ describe('TemplateCreationWizard', () => {
       expect(screen.getByText('Step 2 of 5')).toBeInTheDocument(); // Should stay on current step
     });
     it('should allow node property editing', async () => {
-      // Arrange: Add a node first
-      const inputNode = screen.getByTestId('palette-node-input');
-      const canvas = screen.getByTestId('react-flow');
-      fireEvent.dragStart(inputNode);
-      fireEvent.drop(canvas);
-      // Act: Click on node to select it
-      await waitFor(() => {
-        const nodeElement = screen.getByTestId('graph-node-input-1');
-        fireEvent.click(nodeElement);
-      });
+  // Arrange: Add a node first,
+  const inputNode = screen.getByTestId('palette-node-input');
+  const canvas = screen.getByTestId('react-flow');
+  fireEvent.dragStart(inputNode);
+  fireEvent.drop(canvas);
+  // Act: Click on node to select it,
+  await waitFor(() => {
+  const nodeElement = screen.getByTestId('graph-node-input-1');
+  fireEvent.click(nodeElement);
+});
       // Assert: Properties panel should appear
       expect(screen.getByTestId('node-properties-panel')).toBeInTheDocument();
       expect(screen.getByLabelText(/node label/i)).toBeInTheDocument();
@@ -445,13 +440,13 @@ describe('TemplateCreationWizard', () => {
   describe('Variables Step', () => {
     beforeEach(async () => {
       // Navigate to variables step
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -552,13 +547,13 @@ describe('TemplateCreationWizard', () => {
   describe('Customization Points Step', () => {
     beforeEach(async () => {
       // Navigate to customization points step
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -622,13 +617,13 @@ describe('TemplateCreationWizard', () => {
   describe('Review and Submit Step', () => {
     beforeEach(async () => {
       // Navigate to final step
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -642,50 +637,49 @@ describe('TemplateCreationWizard', () => {
       for (let step = 2; step <= 4; step++) {
         await waitFor(() => screen.getByText(`Step ${step} of 5`));}
         await user.click(screen.getByRole('button', { name: /next/i }));
-      }
       await waitFor(() => {
         expect(screen.getByText('Step 5 of 5')).toBeInTheDocument();
         expect(screen.getByText('Review & Submit')).toBeInTheDocument();
       });
     });
     it('should display template summary for review', () => {
-      // Assert: Should show template details
-      expect(screen.getByText('Complete Template')).toBeInTheDocument();
-      expect(screen.getByText('A complete test template')).toBeInTheDocument();
-      expect(screen.getByText('AI & Analytics')).toBeInTheDocument();
-      // Should show graph summary
-      expect(screen.getByText(/nodes:/i)).toBeInTheDocument();
-      expect(screen.getByText(/variables:/i)).toBeInTheDocument();
-      expect(screen.getByText(/customization points:/i)).toBeInTheDocument();
-    });
+  // Assert: Should show template details,
+  expect(screen.getByText('Complete Template')).toBeInTheDocument();
+  expect(screen.getByText('A complete test template')).toBeInTheDocument();
+  expect(screen.getByText('AI & Analytics')).toBeInTheDocument();
+  // Should show graph summary
+  expect(screen.getByText(/nodes:/i)).toBeInTheDocument();
+  expect(screen.getByText(/variables:/i)).toBeInTheDocument();
+  expect(screen.getByText(/customization points:/i)).toBeInTheDocument();
+});
     it('should allow editing from review step', async () => {
-      // Act: Click edit basic info
-      await user.click(screen.getByTestId('edit-basic-info'));
-      // Assert: Should navigate back to step 1
-      await waitFor(() => {
-        expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
-      });
+  // Act: Click edit basic info,
+  await user.click(screen.getByTestId('edit-basic-info'));
+  // Assert: Should navigate back to step 1,
+  await waitFor(() => {
+  expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
+});
       // Verify form is populated with existing data
       expect(screen.getByDisplayValue('Complete Template')).toBeInTheDocument();
     });
     it('should submit template successfully', async () => {
-      // Arrange
-      const mockOnComplete = jest.fn<unknown[], unknown>();
-      const createdTemplate = {
-        id: 1,
-        name: 'Complete Template',
-        description: 'A complete test template',
-        category_id: 1,
-        author_id: 123,
-        created_at: new Date().toISOString(),
-      };
+  // Arrange
+  const mockOnComplete = jest.fn<unknown, unknown>();
+  const createdTemplate = {
+  id: 1,
+  name: 'Complete Template',
+  description: 'A complete test template',
+  category_id: 1,
+  author_id: 123,
+  created_at: new Date().toISOString(),
+};
       mockTemplateService.createFromGraph.mockResolvedValue(createdTemplate as unknown as unknown);
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
             onComplete={mockOnComplete}
             templateManager={{} as any}
           />
@@ -699,8 +693,6 @@ describe('TemplateCreationWizard', () => {
         await user.click(screen.getByRole('button', { name: /next/i }));
         if (step < 4) {
           await waitFor(() => screen.getByText(`Step ${step + 1} of 5`));}
-        }
-      }
       await waitFor(() => screen.getByText('Step 5 of 5'));
       // Act: Submit template
       await user.click(screen.getByRole('button', { name: /create template/i }));
@@ -712,10 +704,10 @@ describe('TemplateCreationWizard', () => {
       });
       expect(mockTemplateService.createFromGraph).toHaveBeenCalledWith()
         expect.objectContaining({)
-          name: 'Complete Template',
-          description: 'A complete test template',
-          category_id: 1,
-        })
+  name: 'Complete Template',
+  description: 'A complete test template',
+  category_id: 1,
+}
       );
     });
     it('should handle submission errors gracefully', async () => {
@@ -741,13 +733,13 @@ describe('TemplateCreationWizard', () => {
   describe('Wizard State Management', () => {
     it('should maintain form data when navigating between steps', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -767,14 +759,14 @@ describe('TemplateCreationWizard', () => {
     });
     it('should handle wizard cancellation', async () => {
       // Arrange
-      const mockOnCancel = jest.fn<unknown[], unknown>();
-      render()
+      const mockOnCancel = jest.fn<unknown, unknown>();
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
             onClose={mockOnCancel}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -788,13 +780,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should warn about unsaved changes when canceling', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -810,19 +802,19 @@ describe('TemplateCreationWizard', () => {
     it('should auto-save draft templates periodically', async () => {
       // This would require implementing auto-save functionality
       // Mock implementation for testing purposes
-      const mockAutoSave = jest.fn<unknown[], unknown>();
+      const mockAutoSave = jest.fn<unknown, unknown>();
       jest.spyOn(window, 'setInterval').mockImplementation((fn) => {
         // Simulate auto-save trigger
         setTimeout(fn, 5000);
         return 1 as any;
       });
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -838,13 +830,13 @@ describe('TemplateCreationWizard', () => {
   describe('Accessibility', () => {
     it('should support keyboard navigation', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -858,13 +850,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should have proper ARIA labels and roles', () => {
       // Arrange & Act
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -876,13 +868,13 @@ describe('TemplateCreationWizard', () => {
     });
     it('should announce step changes to screen readers', async () => {
       // Arrange
-      render()
+      render();
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn<unknown[], unknown>()}
-            onComplete={jest.fn<unknown[], unknown>()}
+            onClose={jest.fn<unknown, unknown>()}
+            onComplete={jest.fn<unknown, unknown>()}
             templateManager={{} as any}
           />
         </TestWrapper>
@@ -894,8 +886,8 @@ describe('TemplateCreationWizard', () => {
       await user.click(screen.getByRole('button', { name: /next/i }));
       // Assert: Should have live region for announcements
       await waitFor(() => {
-        expect(screen.getByTestId('step-announcement')).toHaveTextContent('Step 2 of 5: Graph Design');
-      });
+  expect(screen.getByTestId('step-announcement')).toHaveTextContent('Step 2 of 5: Graph Design');
+});
     });
   });
 });

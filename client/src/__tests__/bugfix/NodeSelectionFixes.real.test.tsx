@@ -7,22 +7,21 @@ import App from '../../App';
 // Helper to create proper drag events with coordinates
 const createDragEvent = (type: string, clientX: number, clientY: number, dataTransferData: string) => {
   const event = new MouseEvent(type, {)
-    bubbles: true,
-    cancelable: true,
-    clientX,
-    clientY
-  }) as MouseEvent & { dataTransfer: DataTransfer };
+  bubbles: true,
+  cancelable: true,
+  clientX,
+  clientY
+}) as MouseEvent & { dataTransfer: DataTransfer };
   // Add dataTransfer for drag events
   event.dataTransfer = {
-    getData: (format: string) => {,
-      if (format === 'application/reactflow' || format === 'application/node-type') {
-        return dataTransferData;
-      }
-      return '';
-    },
-    setData: jest.fn(),
+  getData: (format: string) => {,
+  if (format === 'application/reactflow' || format === 'application/node-type') {
+  return dataTransferData;
+  return '';
+},
+  setData: jest.fn(),
     dropEffect: 'move',
-    effectAllowed: 'all',
+    effectAllowed: 'all';
   };
   return event;
 };
@@ -66,7 +65,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     });
     // Simulate drag and drop
     fireEvent.dragStart(subjectNodeInPalette, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     // Create and dispatch the drop event
     const dropEvent = createDragEvent('drop', 200, 150, 'Subject');
@@ -113,7 +112,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     });
     // Simulate drag and drop at specific coordinates
     fireEvent.dragStart(actionNodeInPalette, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
     fireEvent(pane!, dropEvent);
@@ -146,7 +145,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     });
     // Create the node
     fireEvent.dragStart(actionNodeInPalette, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
     fireEvent(pane!, dropEvent);
@@ -159,7 +158,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     // Check that cursor style is set for nodes (ReactFlow may override to 'pointer')
     const cursorStyle = createdNode.style.cursor;
     expect(['grab', 'pointer']).toContain(cursorStyle);
-    // Future enhancement: Test cursor style changes during different interaction modes
+    // Future enhancement: Test cursor style changes during different interaction modes;
   });
   /**
    * Test for Issue #4: Multiple nodes should not all drop off-screen
@@ -178,7 +177,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       return screen.getByTestId('palette-node-Subject');
     });
     fireEvent.dragStart(subjectNodeInPalette, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const firstDropEvent = createDragEvent('drop', 100, 100, 'Subject');
     fireEvent(pane!, firstDropEvent);
@@ -192,7 +191,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       return screen.getByTestId('palette-node-Action');
     });
     fireEvent.dragStart(actionNodeInPalette, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const secondDropEvent = createDragEvent('drop', 100, 100, 'Action');
     fireEvent(pane!, secondDropEvent);
@@ -215,7 +214,6 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       if (index === 1) {
         // Should have some visual separation from the first node
         expect(element.textContent).toBeTruthy();
-      }
     });
   });
 });

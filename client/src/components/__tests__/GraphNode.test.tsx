@@ -11,7 +11,8 @@ jest.mock('reactflow', () => ({)
     <div 
       data-testid={`handle-${type}-${position}`} }
       className={[
-        `react-flow__handle-${position}`,}
+        `react-flow__handle-${position}`}
+}
         'react-flow__handle',
         'nodrag',
         'nopan',
@@ -27,16 +28,16 @@ jest.mock('reactflow', () => ({)
     />
   ),
   Position: {,
-    Top: 'top',
-    Bottom: 'bottom',
-    Left: 'left',
-    Right: 'right',
-  },
+  Top: 'top',
+  Bottom: 'bottom',
+  Left: 'left',
+  Right: 'right',
+},
   ReactFlowProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 
 // Create a complete mock NodeProps object to avoid TypeScript errors
-const createMockNodeProps = (label: string): NodeProps => ({)
+const createMockNodeProps = (label: string): NodeProps => ({,)
   id: '1',
   type: 'graphNode',
   data: { label },
@@ -45,8 +46,8 @@ const createMockNodeProps = (label: string): NodeProps => ({)
   xPos: 100,
   yPos: 100,
   dragging: false,
-  zIndex: 1,
-});
+  zIndex: 1;
+  });
 describe('GraphNode Component', () => {
   /**
    * Tests if the GraphNode correctly renders with the provided label
@@ -54,7 +55,7 @@ describe('GraphNode Component', () => {
   test('renders node with correct label', () => {
     const testLabel = 'Test Node';
     const nodeProps = createMockNodeProps(testLabel);
-    render()
+    render();
       <ReactFlowProvider>
         <GraphNode {...nodeProps} />
       </ReactFlowProvider>
@@ -66,7 +67,7 @@ describe('GraphNode Component', () => {
    */
   test('renders input and output handles', () => {
     const nodeProps = createMockNodeProps('Test Node');
-    render()
+    render();
       <ReactFlowProvider>
         <GraphNode {...nodeProps} />
       </ReactFlowProvider>
@@ -82,7 +83,6 @@ describe('GraphNode Component', () => {
       const sourceHandle = container.querySelector('.react-flow__handle-bottom');
       expect(targetHandle).not.toBeNull();
       expect(sourceHandle).not.toBeNull();
-    }
   });
   /**
    * Test for snapshot comparison to detect unexpected UI changes

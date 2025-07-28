@@ -6,29 +6,26 @@ interface VerificationFormProps {
   onError?: (error: string) => void;
   initialData?: Partial<VerificationInformation>;
   isEditing?: boolean;
-}
 const VERIFICATION_LEVELS: Array<{ value: VerificationLevel; label: string; description: string }> = [
   {
-    value: 'basic',
-    label: 'Basic Verification',
-    description: 'Email and basic personal information verification',
-  },
+  value: 'basic',
+  label: 'Basic Verification',
+  description: 'Email and basic personal information verification',
+}
   {
-    value: 'intermediate',
-    label: 'Intermediate Verification', 
-    description: 'Professional credentials and portfolio verification',
-  },
+  value: 'intermediate',
+  label: 'Intermediate Verification',
+  description: 'Professional credentials and portfolio verification',
+}
   {
-    value: 'advanced',
-    label: 'Advanced Verification',
-    description: 'Business entity verification with documentation',
-  },
+  value: 'advanced',
+  label: 'Advanced Verification',
+  description: 'Business entity verification with documentation',
+}
   {
     value: 'premium',
     label: 'Premium Verification',
-    description: 'Enhanced verification with manual review',
-  }
-];
+    description: 'Enhanced verification with manual review'];
 const COUNTRIES = [;
   { code: 'US', name: 'United States' },
   { code: 'CA', name: 'Canada' },
@@ -40,93 +37,85 @@ const COUNTRIES = [;
 ];
 
 export const [formData, setFormData] = useState<VerificationInformation>({)
-    personal_info: {,
-      full_name: initialData?.personal_info?.full_name || '',
-      email: initialData?.personal_info?.email || '',
-      phone: initialData?.personal_info?.phone || '',
-      date_of_birth: initialData?.personal_info?.date_of_birth || '',
-      country: initialData?.personal_info?.country || 'US',
-      state_province: initialData?.personal_info?.state_province || '',
-      city: initialData?.personal_info?.city || '',
-      postal_code: initialData?.personal_info?.postal_code || '',
-      address_line_1: initialData?.personal_info?.address_line_1 || '',
-      address_line_2: initialData?.personal_info?.address_line_2 || '',
-    },
-    professional_info: {,
-      job_title: initialData?.professional_info?.job_title || '',
-      company: initialData?.professional_info?.company || '',
-      industry: initialData?.professional_info?.industry || '',
-      years_experience: initialData?.professional_info?.years_experience || undefined,
-      linkedin_url: initialData?.professional_info?.linkedin_url || '',
-      website_url: initialData?.professional_info?.website_url || '',
-      portfolio_url: initialData?.professional_info?.portfolio_url || '',
-    },
-    business_info: {,
-      business_name: initialData?.business_info?.business_name || '',
-      business_type: initialData?.business_info?.business_type || '',
-      registration_number: initialData?.business_info?.registration_number || '',
-      tax_id: initialData?.business_info?.tax_id || '',
-      business_address: {,
-        country: initialData?.business_info?.business_address?.country || 'US',
-        state_province: initialData?.business_info?.business_address?.state_province || '',
-        city: initialData?.business_info?.business_address?.city || '',
-        postal_code: initialData?.business_info?.business_address?.postal_code || '',
-        address_line_1: initialData?.business_info?.business_address?.address_line_1 || '',
-        address_line_2: initialData?.business_info?.business_address?.address_line_2 || '',
-      }
-    },
-    verification_purpose: initialData?.verification_purpose || '',
-    additional_notes: initialData?.additional_notes || '',
+  personal_info: {,
+  full_name: initialData?.personal_info?.full_name || '',
+  email: initialData?.personal_info?.email || '',
+  phone: initialData?.personal_info?.phone || '',
+  date_of_birth: initialData?.personal_info?.date_of_birth || '',
+  country: initialData?.personal_info?.country || 'US',
+  state_province: initialData?.personal_info?.state_province || '',
+  city: initialData?.personal_info?.city || '',
+  postal_code: initialData?.personal_info?.postal_code || '',
+  address_line_1: initialData?.personal_info?.address_line_1 || '',
+  address_line_2: initialData?.personal_info?.address_line_2 || '',
+},
+  professional_info: {,
+  job_title: initialData?.professional_info?.job_title || '',
+  company: initialData?.professional_info?.company || '',
+  industry: initialData?.professional_info?.industry || '',
+  years_experience: initialData?.professional_info?.years_experience || undefined,
+  linkedin_url: initialData?.professional_info?.linkedin_url || '',
+  website_url: initialData?.professional_info?.website_url || '',
+  portfolio_url: initialData?.professional_info?.portfolio_url || '',
+},
+  business_info: {,
+  business_name: initialData?.business_info?.business_name || '',
+  business_type: initialData?.business_info?.business_type || '',
+  registration_number: initialData?.business_info?.registration_number || '',
+  tax_id: initialData?.business_info?.tax_id || '',
+  business_address: {,
+  country: initialData?.business_info?.business_address?.country || 'US',
+  state_province: initialData?.business_info?.business_address?.state_province || '',
+  city: initialData?.business_info?.business_address?.city || '',
+  postal_code: initialData?.business_info?.business_address?.postal_code || '',
+  address_line_1: initialData?.business_info?.business_address?.address_line_1 || '',
+  address_line_2: initialData?.business_info?.business_address?.address_line_2 || '',
+},
+  verification_purpose: initialData?.verification_purpose || '',
+    additional_notes: initialData?.additional_notes || '';
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = useCallback((section: keyof VerificationInformation, field: string, value: Error) => {
-    setFormData(prev => {)
-      if (section === 'business_info' && field.startsWith('business_address.')) {
-        const addressField = field.replace('business_address.', '');
-        return {
-          ...prev,
-          business_info: {,
-            ...prev.business_info!,
-            business_address: {,
-              ...prev.business_info!.business_address!,
-              [addressField]: value
-            }
-          }
-        };
-      }
+  setFormData(prev => {)
+  if (section === 'business_info' && field.startsWith('business_address.')) {
+  const addressField = field.replace('business_address.', '');
+  return {
+  ...prev,
+  business_info: {,
+  ...prev.business_info!,
+  business_address: {,
+  ...prev.business_info!.business_address!,
+  [addressField]: value,
+};
       return {
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [field]: value
-        }
-      };
+  ...prev,
+  [section]: {,
+  ...prev[section],
+  [field]: value,
+};
     });
   }, []);
   const handleSubmit = useCallback(async (event: React.FormEvent) => {
-    event.preventDefault();
-    // Basic validation
-    if (!formData.personal_info.full_name || !formData.personal_info.email) {
-      onError?.('Full name and email are required');
-      return;
-    }
-    if (!formData.verification_purpose || formData.verification_purpose.length < 10) {
-      onError?.('Verification purpose must be at least 10 characters');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await onSubmit?.({)
-        requested_level: requestedLevel,
-        information: formData,
-      });
+  event.preventDefault();
+  // Basic validation
+  if (!formData.personal_info.full_name || !formData.personal_info.email) {
+  onError?.('Full name and email are required');
+  return;
+  if (!formData.verification_purpose || formData.verification_purpose.length < 10) {
+  onError?.('Verification purpose must be at least 10 characters');
+  return;
+  setIsSubmitting(true);
+  try {
+  await onSubmit?.({)
+  requested_level: requestedLevel,
+  information: formData,
+});
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : 'Submission failed');
-    } finally {
+  onError?.(error instanceof Error ? error.message : 'Submission failed');
+} finally {
       setIsSubmitting(false);
-    }
   }, [formData, requestedLevel, onSubmit, onError]);
-  return ()
+  return;
     <form onSubmit={handleSubmit} className="verification-form">
       <h2>{isEditing ? 'Update' : 'Create'} Verification Request</h2>
       {/* Verification Level Selection */}
@@ -266,7 +255,7 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
                 min="0"
                 max="70"
                 value={formData.professional_info?.years_experience || ''}
-                onChange={(e) => handleInputChange('professional_info', 'years_experience', )
+                onChange={(e) => handleInputChange('professional_info', 'years_experience')
                   e.target.value ? parseInt(e.target.value) : undefined)}
               />
             </div>
@@ -363,130 +352,106 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
       </div>
       <style>{`
         .verification-form {
-          max-width: 800px;
-          margin: 0 auto;
+          max-width: 800px;,
+  margin: 0 auto;
           padding: 24px;
           background-color: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
         .verification-form h2 {
-          margin-bottom: 24px;
-          color: #333;
+          margin-bottom: 24px;,
+  color: #333;
           text-align: center;
-        }
         .form-section {
           margin-bottom: 32px;
           padding-bottom: 24px;
           border-bottom: 1px solid #e0e0e0;
-        }
         .form-section:last-of-type {
           border-bottom: none;
-        }
         .form-section h3 {
-          margin-bottom: 16px;
-          color: #555;
+          margin-bottom: 16px;,
+  color: #555;
           font-size: 18px;
-        }
         .level-options {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+          flex-direction: column;,
+  gap: 12px;
         .level-option {
           border: 1px solid #ddd;
-          border-radius: 6px;
-          padding: 16px;
+          border-radius: 6px;,
+  padding: 16px;
           transition: all 0.2s;
-        }
         .level-option:has(input:checked) {
           border-color: #007bff;
           background-color: #f8f9fa;
-        }
         .level-option label {
           display: flex;
-          align-items: flex-start;
-          gap: 12px;
+          align-items: flex-start;,
+  gap: 12px;
           cursor: pointer;
-        }
         .level-option input[type="radio"] {
           margin-top: 2px;
-        }
         .level-info strong {
           display: block;
-          margin-bottom: 4px;
-          color: #333;
-        }
+          margin-bottom: 4px;,
+  color: #333;
         .level-info p {
-          margin: 0;
-          color: #666;
+          margin: 0;,
+  color: #666;
           font-size: 14px;
-        }
         .form-row {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
+          grid-template-columns: 1fr 1fr;,
+  gap: 16px;
           margin-bottom: 16px;
-        }
         @media (max-width: 768px) {
           .form-row {
             grid-template-columns: 1fr;
-          }
-        }
         .form-group {
           display: flex;
           flex-direction: column;
-        }
         .form-group label {
           margin-bottom: 6px;
-          font-weight: 600;
-          color: #555;
+          font-weight: 600;,
+  color: #555;
           font-size: 14px;
-        }
         .form-group input,
         .form-group select,
         .form-group textarea {
-          padding: 10px 12px;
-          border: 1px solid #ccc;
+          padding: 10px 12px;,
+  border: 1px solid #ccc;
           border-radius: 4px;
-          font-size: 14px;
-          transition: border-color 0.2s;
-        }
+          font-size: 14px;,
+  transition: border-color 0.2s;
         .form-group input:focus,
         .form-group select:focus,
-        .form-group textarea:focus {
-          outline: none;
+        .form-group textarea:focus {,
+  outline: none;
           border-color: #007bff;
           box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-        }
         .form-group small {
-          margin-top: 4px;
-          color: #666;
+          margin-top: 4px;,
+  color: #666;
           font-size: 12px;
-        }
         .form-actions {
           margin-top: 32px;
           text-align: center;
-        }
         .submit-button {
           padding: 12px 32px;
-          background-color: #007bff;
-          color: white;
+          background-color: #007bff;,
+  color: white;
           border: none;
           border-radius: 6px;
           font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
+          font-weight: 600;,
+  cursor: pointer;
           transition: background-color 0.2s;
           min-width: 200px;
-        }
         .submit-button:hover:not(:disabled) {
           background-color: #0056b3;
-        }
         .submit-button:disabled {
-          background-color: #6c757d;
-          cursor: not-allowed;
-        }
+          background-color: #6c757d;,
+  cursor: not-allowed;
       `}</style>
     </form>
   );

@@ -43,25 +43,25 @@ describe('Authentication Store', () => {
     it('should login successfully with valid credentials', async () => {
       const { result } = renderHook(() => useAuthStore());
       const mockUser = {
-        id: '1',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-        isEmailVerified: true,
-        roles: ['user'],
-        permissions: ['graphs:read'],
-      };
+  id: '1',
+  email: 'test@example.com',
+  firstName: 'Test',
+  lastName: 'User',
+  isEmailVerified: true,
+  roles: ['user'],
+  permissions: ['graphs:read'],
+};
       const mockResponse = {
-        accessToken: 'mock-access-token',
-        refreshToken: 'mock-refresh-token',
-        user: mockUser,
-        expiresAt: new Date(Date.now() + 900000).toISOString(), // 15 minutes
-        sessionId: 'mock-session-id',
-      };
+  accessToken: 'mock-access-token',
+  refreshToken: 'mock-refresh-token',
+  user: mockUser,
+  expiresAt: new Date(Date.now() + 900000).toISOString(), // 15 minutes,
+  sessionId: 'mock-session-id',
+};
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      } as Response);
+  ok: true,
+  json: () => Promise.resolve(mockResponse),
+} as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.login('test@example.com', 'password123', true);
@@ -77,7 +77,7 @@ describe('Authentication Store', () => {
     it('should handle login failure gracefully', async () => {
       const { result } = renderHook(() => useAuthStore());
       mockFetch.mockResolvedValueOnce({)
-        ok: false,
+  ok: false,
         json: () => Promise.resolve({ message: 'Invalid credentials' })
       } as Response);
       let success: boolean;
@@ -96,7 +96,7 @@ describe('Authentication Store', () => {
       // Create a promise that we can control
       let resolvePromise: (value: any) => void;
       const controlledPromise = new Promise(resolve => {)
-        resolvePromise = resolve;
+  resolvePromise = resolve;
       });
       mockFetch.mockReturnValueOnce(controlledPromise as any);
       // Start login
@@ -108,7 +108,7 @@ describe('Authentication Store', () => {
       // Resolve the promise
       await act(async () => {
         resolvePromise!({)
-          ok: false,
+  ok: false,
           json: () => Promise.resolve({ message: 'Error' })
         });
       });
@@ -120,17 +120,17 @@ describe('Authentication Store', () => {
     it('should register successfully', async () => {
       const { result } = renderHook(() => useAuthStore());
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ message: 'Registration successful' })
       } as Response);
       let success: boolean;
       await act(async () => {
-        success = await result.current.register({)
-          email: 'newuser@example.com',
-          password: 'password123',
-          firstName: 'New',
-          lastName: 'User',
-        });
+  success = await result.current.register({)
+  email: 'newuser@example.com',
+  password: 'password123',
+  firstName: 'New',
+  lastName: 'User',
+});
       });
       expect(success!).toBe(true);
       expect(result.current.error).toBeNull();
@@ -139,17 +139,17 @@ describe('Authentication Store', () => {
     it('should handle registration failure', async () => {
       const { result } = renderHook(() => useAuthStore());
       mockFetch.mockResolvedValueOnce({)
-        ok: false,
+  ok: false,
         json: () => Promise.resolve({ message: 'Email already exists' })
       } as Response);
       let success: boolean;
       await act(async () => {
-        success = await result.current.register({)
-          email: 'existing@example.com',
-          password: 'password123',
-          firstName: 'Test',
-          lastName: 'User',
-        });
+  success = await result.current.register({)
+  email: 'existing@example.com',
+  password: 'password123',
+  firstName: 'Test',
+  lastName: 'User',
+});
       });
       expect(success!).toBe(false);
       expect(result.current.error).toBe('Email already exists');
@@ -160,19 +160,19 @@ describe('Authentication Store', () => {
       const { result } = renderHook(() => useAuthStore());
       // Set initial authenticated state
       act(() => {
-        useAuthStore.setState({)
-          isAuthenticated: true,
-          accessToken: 'old-access-token',
-          refreshToken: 'valid-refresh-token',
-          tokenExpiration: Date.now() + 60000 // 1 minute,
-        });
+  useAuthStore.setState({)
+  isAuthenticated: true,
+  accessToken: 'old-access-token',
+  refreshToken: 'valid-refresh-token',
+  tokenExpiration: Date.now() + 60000 // 1 minute,
+});
       });
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve({),
-          accessToken: 'new-access-token',
-          refreshToken: 'new-refresh-token',
-        })
+  ok: true,
+  json: () => Promise.resolve({,)
+  accessToken: 'new-access-token',
+  refreshToken: 'new-refresh-token',
+}
       } as Response);
       let success: boolean;
       await act(async () => {
@@ -188,14 +188,14 @@ describe('Authentication Store', () => {
       // Set initial authenticated state
       act(() => {
         useAuthStore.setState({)
-          isAuthenticated: true,
+  isAuthenticated: true,
           accessToken: 'access-token',
           refreshToken: 'invalid-refresh-token',
           user: { id: '1', email: 'test@example.com' }
         });
       });
       mockFetch.mockResolvedValueOnce({)
-        ok: false,
+  ok: false,
         json: () => Promise.resolve({ message: 'Invalid refresh token' })
       } as Response);
       let success: boolean;
@@ -230,19 +230,19 @@ describe('Authentication Store', () => {
       const { result } = renderHook(() => useAuthStore());
       // Set authenticated state with expired token
       act(() => {
-        useAuthStore.setState({)
-          accessToken: 'expired-token',
-          refreshToken: 'valid-refresh-token',
-          tokenExpiration: Date.now() - 60000 // Expired 1 minute ago,
-        });
+  useAuthStore.setState({)
+  accessToken: 'expired-token',
+  refreshToken: 'valid-refresh-token',
+  tokenExpiration: Date.now() - 60000 // Expired 1 minute ago,
+});
       });
       // Mock successful refresh
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve({),
-          accessToken: 'new-access-token',
-          refreshToken: 'new-refresh-token',
-        })
+  ok: true,
+  json: () => Promise.resolve({,)
+  accessToken: 'new-access-token',
+  refreshToken: 'new-refresh-token',
+}
       } as Response);
       let status: boolean;
       await act(async () => {
@@ -255,25 +255,25 @@ describe('Authentication Store', () => {
       const { result } = renderHook(() => useAuthStore());
       // Set authenticated state with valid token
       act(() => {
-        useAuthStore.setState({)
-          accessToken: 'valid-token',
-          refreshToken: 'refresh-token',
-          tokenExpiration: Date.now() + 600000 // Valid for 10 minutes,
-        });
+  useAuthStore.setState({)
+  accessToken: 'valid-token',
+  refreshToken: 'refresh-token',
+  tokenExpiration: Date.now() + 600000 // Valid for 10 minutes,
+});
       });
       const mockUser = {
-        id: '1',
-        email: 'test@example.com',
-        emailVerified: true,
-        createdAt: '2024-01-01T00:00:00.000Z',
-        lastLoginAt: null,
-        roles: ['user'],
-        permissions: ['graphs:read'],
-      };
+  id: '1',
+  email: 'test@example.com',
+  emailVerified: true,
+  createdAt: '2024-01-01T00:00:00.000Z',
+  lastLoginAt: null,
+  roles: ['user'],
+  permissions: ['graphs:read'],
+};
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve(mockUser),
-      } as Response);
+  ok: true,
+  json: () => Promise.resolve(mockUser),
+} as Response);
       let status: boolean;
       await act(async () => {
         status = await result.current.checkAuthStatus();
@@ -289,19 +289,19 @@ describe('Authentication Store', () => {
       // Set authenticated state
       act(() => {
         useAuthStore.setState({)
-          isAuthenticated: true,
+  isAuthenticated: true,
           user: { id: '1', email: 'test@example.com' },
           accessToken: 'access-token',
           refreshToken: 'refresh-token',
           tokenExpiration: Date.now() + 600000,
           error: 'some error',
-          returnUrl: '/dashboard',
-        });
+          returnUrl: '/dashboard';
+  });
       });
       // Mock logout endpoint
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-      } as Response);
+  ok: true,
+} as Response);
       act(() => {
         result.current.logout();
       });
@@ -316,9 +316,9 @@ describe('Authentication Store', () => {
     it('should call logout endpoint with refresh token', () => {
       const { result } = renderHook(() => useAuthStore());
       act(() => {
-        useAuthStore.setState({)
-          refreshToken: 'refresh-token-to-invalidate',
-        });
+  useAuthStore.setState({)
+  refreshToken: 'refresh-token-to-invalidate',
+});
       });
       act(() => {
         result.current.logout();
@@ -326,10 +326,10 @@ describe('Authentication Store', () => {
       expect(mockFetch).toHaveBeenCalledWith()
         'http://localhost:8000/api/auth/logout',
         expect.objectContaining({)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sessionId: undefined })
-        })
+  }
       );
     });
   });
@@ -337,13 +337,13 @@ describe('Authentication Store', () => {
     it('should initiate OAuth login successfully', async () => {
       const { result } = renderHook(() => useAuthStore());
       const mockOAuthResponse = {
-        url: 'https://oauth-provider.com/auth?state=abc123',
-        state: 'abc123',
-      };
+  url: 'https://oauth-provider.com/auth?state=abc123',
+  state: 'abc123',
+};
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve(mockOAuthResponse),
-      } as Response);
+  ok: true,
+  json: () => Promise.resolve(mockOAuthResponse),
+} as Response);
       let oauthResult: { url: string; state: string };
       await act(async () => {
         oauthResult = await result.current.oauthLogin('google', '/dashboard');
@@ -354,25 +354,24 @@ describe('Authentication Store', () => {
     it('should process OAuth callback successfully', async () => {
       const { result } = renderHook(() => useAuthStore());
       const mockUser = {
-        id: '1',
-        email: 'oauth@example.com',
-        firstName: 'OAuth',
-        lastName: 'User',
-        isEmailVerified: true,
-        roles: ['user'],
-      };
+  id: '1',
+  email: 'oauth@example.com',
+  firstName: 'OAuth',
+  lastName: 'User',
+  isEmailVerified: true,
+  roles: ['user'],
+};
       const mockCallbackResponse = {
-        user: mockUser,
-        tokens: {,
-          accessToken: 'oauth-access-token',
-          refreshToken: 'oauth-refresh-token',
-          expiresAt: new Date(Date.now() + 900000).toISOString(),
-        }
-      };
+  user: mockUser,
+  tokens: {,
+  accessToken: 'oauth-access-token',
+  refreshToken: 'oauth-refresh-token',
+  expiresAt: new Date(Date.now() + 900000).toISOString(),
+};
       mockFetch.mockResolvedValueOnce({)
-        ok: true,
-        json: () => Promise.resolve(mockCallbackResponse),
-      } as Response);
+  ok: true,
+  json: () => Promise.resolve(mockCallbackResponse),
+} as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.processOAuthCallback('google', 'auth-code', 'state-123');
@@ -405,13 +404,13 @@ describe('Authentication Store', () => {
     it('should update user data', () => {
       const { result } = renderHook(() => useAuthStore());
       const initialUser = {
-        id: '1',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-        isEmailVerified: false,
-        roles: ['user'],
-      };
+  id: '1',
+  email: 'test@example.com',
+  firstName: 'Test',
+  lastName: 'User',
+  isEmailVerified: false,
+  roles: ['user'],
+};
       act(() => {
         useAuthStore.setState({ user: initialUser });
       });
@@ -438,9 +437,9 @@ describe('Authentication Store', () => {
     it('should handle malformed API responses', async () => {
       const { result } = renderHook(() => useAuthStore());
       mockFetch.mockResolvedValueOnce({)
-        ok: false,
-        json: () => Promise.reject(new Error('Invalid JSON')),
-      } as Response);
+  ok: false,
+  json: () => Promise.reject(new Error('Invalid JSON')),
+} as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.login('test@example.com', 'password');

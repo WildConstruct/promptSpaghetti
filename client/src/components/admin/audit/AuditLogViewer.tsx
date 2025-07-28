@@ -63,9 +63,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
 interface AuditEvent {
-  id: string;
+  id: string;,
   eventType: string;
-  category: string;
+  category: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
   actorId?: string;
   actorEmail?: string;
@@ -73,44 +73,41 @@ interface AuditEvent {
   resourceType: string;
   resourceId?: string;
   resourceName?: string;
-  action: string;
+  action: string;,
   description: string;
   outcome: 'success' | 'failure' | 'partial';
   beforeValue?: unknown;
   afterValue?: unknown;
-  changedFields?: string[];
+  changedFields?: string;
   sessionId?: string;
   ipAddress?: string;
   userAgent?: string;
   metadata: Record<string, unknown>;
-  tags: string[];
+  tags: string;,
   timestamp: Date;
   duration?: number;
-  error?: {
-    code: string;
-    message: string;
-  };
-}
+  error?: {,
+  code: string;,
+  message: string;
+};
 interface AuditFilters {
   startDate?: Date;
   endDate?: Date;
-  eventTypes: string[];
-  categories: string[];
-  severities: string[];
-  outcomes: string[];
-  actorEmails: string[];
-  resourceTypes: string[];
+  eventTypes: string;,
+  categories: string;
+  severities: string;,
+  outcomes: string;
+  actorEmails: string;,
+  resourceTypes: string;
   searchTerm: string;
-}
 interface AuditStatistics {
-  totalEvents: number;
+  totalEvents: number;,
   eventsByCategory: Record<string, number>;
   eventsBySeverity: Record<string, number>;
-  uniqueActors: number;
+  uniqueActors: number;,
   eventsToday: number;
-  eventsThisWeek: number;
+  eventsThisWeek: number;,
   securityEvents: number;
-}
 const EVENT_CATEGORIES = [;
   'authentication',
   'authorization',
@@ -135,21 +132,23 @@ const OUTCOME_CONFIG = {
   partial: { color: 'warning', icon: WarningIcon }
 };
 
-export const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
+export const AuditLogViewer: React.FC = () => {
+  const [events, setEvents] = useState<AuditEvent>([]);
+  const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [totalEvents, setTotalEvents] = useState(0);
   // Filters
   const [filters, setFilters] = useState<AuditFilters>({)
-    eventTypes: [],
-    categories: [],
-    severities: [],
-    outcomes: [],
-    actorEmails: [],
-    resourceTypes: [],
-    searchTerm: '',
-  });
+  eventTypes: [],
+  categories: [],
+  severities: [],
+  outcomes: [],
+  actorEmails: [],
+  resourceTypes: [],
+  searchTerm: '',
+});
   // UI State
   const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -163,7 +162,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
     setLoading(true);
     try {
       // Mock API call - replace with actual API
-      const mockEvents: AuditEvent[] = [
+      const mockEvents: AuditEvent = [
         {
           id: 'audit_1',
           eventType: 'toggle_created',
@@ -184,8 +183,8 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
           userAgent: 'Mozilla/5.0...',
           metadata: { toggleType: 'boolean', claudeImpact: 'none' },
           tags: ['feature', 'ui'],
-          timestamp: new Date(Date.now() - 60 * 60 * 1000),
-        },
+          timestamp: new Date(Date.now() - 60 * 60 * 1000);
+  }
         {
           id: 'audit_2',
           eventType: 'login_failed',
@@ -203,10 +202,9 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
           tags: ['security', 'authentication'],
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
           error: {,
-            code: 'INVALID_CREDENTIALS',
-            message: 'Invalid email or password',
-          }
-        },
+  code: 'INVALID_CREDENTIALS',
+  message: 'Invalid email or password',
+}
         {
           id: 'audit_3',
           eventType: 'schedule_executed',
@@ -222,53 +220,49 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
           beforeValue: { enabled: false },
           afterValue: { enabled: true },
           changedFields: ['enabled'],
-          metadata: { ,
-            executionId: 'exec_1', 
-            duration: 2500,
-            affectedUsers: 1250,
-            triggeredBy: 'scheduler',
-          },
-          tags: ['schedule', 'automation'],
+          metadata: {,
+  executionId: 'exec_1',
+  duration: 2500,
+  affectedUsers: 1250,
+  triggeredBy: 'scheduler',
+},
+  tags: ['schedule', 'automation'],
           timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
-          duration: 2500,
-        }
-      ];
+          duration: 2500];
       setEvents(mockEvents);
       setTotalEvents(mockEvents.length);
     } catch (error) {
-      console.error('Failed to load audit events:', error);
-    } finally {
+  console.error('Failed to load audit events:', error);
+} finally {
       setLoading(false);
-    }
   };
   const loadStatistics = async () => {
-    try {
-      // Mock statistics - replace with actual API
-      const mockStats: AuditStatistics = {
-        totalEvents: 15423,
-        eventsByCategory: {,
-          'data_modification': 5840,
-          'authentication': 3210,
-          'system_configuration': 2876,
-          'security': 1843,
-          'authorization': 1654
-        },
-        eventsBySeverity: {,
-          'low': 8934,
-          'medium': 4521,
-          'high': 1756,
-          'critical': 212
-        },
-        uniqueActors: 156,
+  try {
+  // Mock statistics - replace with actual API
+  const mockStats: AuditStatistics = {,
+  totalEvents: 15423,
+  eventsByCategory: {,
+  'data_modification': 5840,
+  'authentication': 3210,
+  'system_configuration': 2876,
+  'security': 1843,
+  'authorization': 1654,
+},
+  eventsBySeverity: {,
+  'low': 8934,
+  'medium': 4521,
+  'high': 1756,
+  'critical': 212,
+},
+  uniqueActors: 156,
         eventsToday: 342,
         eventsThisWeek: 2108,
-        securityEvents: 89,
-      };
+        securityEvents: 89;
+  };
       setStatistics(mockStats);
     } catch (error) {
-      console.error('Failed to load statistics:', error);
-    }
-  };
+  console.error('Failed to load statistics:', error);
+};
   const handleFilterChange = (field: keyof AuditFilters, value: unknown) => {
     setFilters(prev => ({ ...prev, [field]: value }));
     setPage(0); // Reset to first page when filters change
@@ -283,19 +277,18 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
       console.log(`Exporting audit logs as ${format}`);}
       setExportMenuAnchor(null);
     } catch (error) {
-      console.error('Export failed:', error);
-    }
-  };
+  console.error('Export failed:', error);
+};
   const clearFilters = () => {
-    setFilters({)
-      eventTypes: [],
-      categories: [],
-      severities: [],
-      outcomes: [],
-      actorEmails: [],
-      resourceTypes: [],
-      searchTerm: '',
-    });
+  setFilters({)
+  eventTypes: [],
+  categories: [],
+  severities: [],
+  outcomes: [],
+  actorEmails: [],
+  resourceTypes: [],
+  searchTerm: '',
+});
   };
   //   //   if (ms < 1000) return `${ms}ms`;}
   //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;}
@@ -306,7 +299,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
   };
   const renderStatisticsCards = () => {
     if (!statistics) return null;
-    return ()
+    return;
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
@@ -379,7 +372,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
       </Grid>
     );
   };
-  const renderFilters = () => (;)
+  const renderFilters = () => (;);
     <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={4}>
@@ -404,7 +397,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
               label="Category"
               renderValue={(selected: unknown) => ()
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected as string[]).map((value) => ()
+                  {(selected as string).map((value) => ()
                     <Chip key={value} label={value} size="small" />
                   ))}
                 </Box>
@@ -428,7 +421,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
               label="Severity"
               renderValue={(selected: unknown) => ()
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected as string[]).map((value) => ()
+                  {(selected as string).map((value) => ()
                     <Chip key={value} label={value} size="small" />
                   ))}
                 </Box>
@@ -492,7 +485,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
       </Box>
     </Paper>
   );
-  const renderEventsTable = () => (;)
+  const renderEventsTable = () => (;);
     <Paper elevation={1}>
       {loading && <LinearProgress />}
       <TableContainer>
@@ -515,7 +508,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
               const outcomeConfig = OUTCOME_CONFIG[event.outcome];
               const SeverityIcon = severityConfig.icon;
               const OutcomeIcon = outcomeConfig.icon;
-              return ()
+              return;
                 <TableRow key={event.id} hover>
                   <TableCell>
                     <Typography variant="body2">
@@ -563,7 +556,6 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
                           outcomeConfig.color as ()
                             'inherit' | 'primary' | 'secondary' | 
                             'success' | 'error' | 'info' | 'warning'
-                        } 
                         fontSize="small" 
                       />
                       <Typography variant="body2">
@@ -578,7 +570,6 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
                           severityConfig.color as ()
                             'inherit' | 'primary' | 'secondary' | 
                             'success' | 'error' | 'info' | 'warning'
-                        } 
                         fontSize="small" 
                       />
                       <Typography variant="body2">
@@ -616,7 +607,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
       />
     </Paper>
   );
-  const renderEventDetails = () => (;)
+  const renderEventDetails = () => (;);
     <Dialog
       open={detailsOpen}
       onClose={() => setDetailsOpen(false)}
@@ -768,7 +759,7 @@ export const [statistics, setStatistics] = useState<AuditStatistics | null>(null
       </DialogActions>
     </Dialog>
   );
-  return ()
+  return;
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}

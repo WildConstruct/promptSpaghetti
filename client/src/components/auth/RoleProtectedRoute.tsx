@@ -7,16 +7,15 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { PrivateRoute } from './PrivateRoute';
+
 interface RoleProtectedRouteProps {
-  children: React.ReactNode;
-  requiredRoles: string[];
-  requireAll?: boolean; // If true, user must have ALL roles; if false, ANY role
+  children: React.ReactNode;,
+  requiredRoles: string;
+  requireAll?: boolean; // If true, user must have ALL roles; if false, ANY role,
   redirectTo?: string;
   fallback?: React.ReactNode;
-}
-
-export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ )
-  children, 
+  export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ ),
+  children,
   requiredRoles,
   requireAll = false,
   redirectTo = '/unauthorized',
@@ -26,12 +25,12 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ )
   const location = useLocation();
   // First ensure user is authenticated
   if (!isAuthenticated || isLoading || !user) {
-    return ()
+    return;
       <PrivateRoute>
         {children}
       </PrivateRoute>
     );
-  }
+
   // Check if user has required roles (skip check if no roles required)
   if (requiredRoles.length > 0) {
     const userRoles = user.roles || [];
@@ -41,10 +40,10 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ )
     if (!hasRequiredRoles) {
       if (fallback) {
         return <>{fallback}</>;
-      }
+
       return <Navigate to={redirectTo} state={{ from: location, reason: 'insufficient_permissions' }} replace />;
-    }
-  }
+
+
   // User is authenticated and has required roles
   return <>{children}</>;
 };

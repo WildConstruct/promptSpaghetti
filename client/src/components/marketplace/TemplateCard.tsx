@@ -6,34 +6,31 @@ import { Badge } from '../common/Badge';
 import { PreviewModal } from './PreviewModal';
 import './TemplateCard.css';
 interface Template {
-  id: string;
+  id: string;,
   title: string;
   description?: string;
-  tags: string[];
+  tags: string;,
   price_cents: number;
-  avg_rating: number;
+  avg_rating: number;,
   total_reviews: number;
   total_purchases: number;
-  categories?: string[];
-  owner?: {
-    id: string;
-    name: string;
-    verified: boolean;
-  };
+  categories?: string;
+  owner?: {,
+  id: string;,
+  name: string;
+  verified: boolean;
+};
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
-  claude_compat: string[];
-}
+  claude_compat: string;
 interface TemplateCardProps {
-  template: Template;
+  template: Template;,
   onClick: () => void;
   variant?: 'grid' | 'list' | 'featured';
   showStats?: boolean;
   className?: string;
-}
-
-export const TemplateCard: React.FC<TemplateCardProps> = ({)
+  export const TemplateCard: React.FC<TemplateCardProps> = ({,)
   template,
   onClick,
   variant = 'grid',
@@ -71,9 +68,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({)
     // Navigate to creator profile
     if (owner?.id) {
       window.location.href = `/creators/${owner.id}`;}
-    }
   };
-  return ()
+  return;
     <div 
       className={`template-card ${variant} ${className}`}
       onClick={handleCardClick}
@@ -83,7 +79,6 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({)
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           onClick();
-        }
       }}
     >
       {/* Card Header */}

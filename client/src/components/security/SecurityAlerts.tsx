@@ -22,38 +22,35 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 interface SecurityAlert {
-  id: string;
+  id: string;,
   type: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';
+  category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';,
   title: string;
-  message: string;
+  message: string;,
   timestamp: Date;
-  source: string;
+  source: string;,
   status: 'unread' | 'read' | 'acknowledged' | 'dismissed';
-  actions?: AlertAction[];
+  actions?: AlertAction;
   metadata?: Record<string, unknown>;
   escalation_level: number;
-}
-interface AlertAction {
-  id: string;
+  interface AlertAction {
+  id: string;,
   label: string;
-  type: 'primary' | 'secondary' | 'danger';
+  type: 'primary' | 'secondary' | 'danger';,
   action: 'block_ip' | 'quarantine_user' | 'escalate' | 'investigate' | 'dismiss';
-}
-interface SecurityAlertsProps {
+  interface SecurityAlertsProps {
   onAlertAction?: (alertId: string, action: string) => void;
   maxVisible?: number;
   showDismissed?: boolean;
-}
-const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
-  onAlertAction, 
-  maxVisible = 50, 
-  showDismissed = false 
+  const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ ),
+  onAlertAction,
+  maxVisible = 50,
+  showDismissed = false
 }) => {
-  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
-  const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
+  const [alerts, setAlerts] = useState<SecurityAlert>([]);
+  const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string>([]);
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -69,7 +66,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
   const loadAlerts = useCallback(async () => {
     try {
       // Mock data - replace with actual API call
-      const mockAlerts: SecurityAlert[] = [
+      const mockAlerts: SecurityAlert = [
         {
           id: 'alert-1',
           type: 'critical',
@@ -85,7 +82,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ],
           metadata: { ip: '192.168.1.100', attempts: 127, duration: '5 minutes' }
-        },
+  }
         {
           id: 'alert-2',
           type: 'high',
@@ -100,7 +97,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
             { id: 'rate-limit', label: 'Apply Rate Limit', type: 'primary', action: 'block_ip' },
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ]
-        },
+  }
         {
           id: 'alert-3',
           type: 'medium',
@@ -115,47 +112,43 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
             { id: 'quarantine', label: 'Quarantine User', type: 'danger', action: 'quarantine_user' },
             { id: 'review', label: 'Review Permissions', type: 'secondary', action: 'investigate' }
           ]
-        },
+  }
         {
-          id: 'alert-4',
-          type: 'info',
-          category: 'system',
-          title: 'Security Scan Completed',
-          message: 'Daily security scan completed successfully. No issues detected.',
-          timestamp: new Date(Date.now() - 45 * 60 * 1000),
-          source: 'Security Scanner',
-          status: 'read',
-          escalation_level: 0,
-        },
+  id: 'alert-4',
+  type: 'info',
+  category: 'system',
+  title: 'Security Scan Completed',
+  message: 'Daily security scan completed successfully. No issues detected.',
+  timestamp: new Date(Date.now() - 45 * 60 * 1000),
+  source: 'Security Scanner',
+  status: 'read',
+  escalation_level: 0,
+}
         {
-          id: 'alert-5',
-          type: 'high',
-          category: 'network',
-          title: 'DDoS Attack Detected',
-          message: 'Distributed denial of service attack detected and mitigated',
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          source: 'Network Monitor',
-          status: 'dismissed',
-          escalation_level: 2,
-        }
-      ];
-      setAlerts(mockAlerts);
-      setIsLoading(false);
-      // Play sound for new critical alerts
-      const newCriticalAlerts = mockAlerts.filter(;)
-        alert => alert.type === 'critical' && alert.status === 'unread'
-      );
-      if (newCriticalAlerts.length > 0 && soundEnabled) {
-        playAlertSound();
-      }
-    } catch (error) {
-      console.error('Failed to load security alerts:', error);
-      setIsLoading(false);
-    }
-  }, [soundEnabled]);
+  id: 'alert-5',
+  type: 'high',
+  category: 'network',
+  title: 'DDoS Attack Detected',
+  message: 'Distributed denial of service attack detected and mitigated',
+  timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  source: 'Network Monitor',
+  status: 'dismissed',
+  escalation_level: 2];
+  setAlerts(mockAlerts);
+  setIsLoading(false);
+  // Play sound for new critical alerts
+  const newCriticalAlerts = mockAlerts.filter(;);
+  alert => alert.type === 'critical' && alert.status === 'unread'
+  );
+  if (newCriticalAlerts.length > 0 && soundEnabled) {
+  playAlertSound();
+} catch (error) {
+  console.error('Failed to load security alerts:', error);
+  setIsLoading(false);
+}, [soundEnabled]);
   const filterAndSortAlerts = useCallback(() => {
     const filtered = alerts.filter(alert => {)
-      if (!showDismissed && alert.status === 'dismissed') return false;
+  if (!showDismissed && alert.status === 'dismissed') return false;
       if (selectedFilters.length === 0) return true;
       return selectedFilters.includes(alert.type) || selectedFilters.includes(alert.category);
     });
@@ -166,7 +159,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
       } else {
         const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
         return severityOrder[b.type] - severityOrder[a.type];
-      }
     });
     setFilteredAlerts(filtered.slice(0, maxVisible));
   }, [alerts, selectedFilters, sortBy, showDismissed, maxVisible]);
@@ -186,35 +178,33 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
     oscillator.stop(audioContext.currentTime + 0.3);
   };
   const getAlertIcon = (type: SecurityAlert['type']) => {
-    switch (type) {
-    case 'critical':
-      return <AlertOctagon className="h-4 w-4 text-red-600" />;
-    case 'high':
-      return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-    case 'medium':
-      return <Zap className="h-4 w-4 text-yellow-600" />;
-    case 'low':
-      return <Shield className="h-4 w-4 text-blue-600" />;
-    case 'info':
-      return <Info className="h-4 w-4 text-green-600" />;
-    default:
-      return <Bell className="h-4 w-4 text-gray-600" />;
-    }
-  };
+  switch (type) {
+  case 'critical':,
+  return <AlertOctagon className="h-4 w-4 text-red-600" />;
+  case 'high':,
+  return <AlertTriangle className="h-4 w-4 text-orange-600" />;
+  case 'medium':,
+  return <Zap className="h-4 w-4 text-yellow-600" />;
+  case 'low':,
+  return <Shield className="h-4 w-4 text-blue-600" />;
+  case 'info':,
+  return <Info className="h-4 w-4 text-green-600" />;
+  default:,
+  return <Bell className="h-4 w-4 text-gray-600" />;
+};
   const getStatusIcon = (status: SecurityAlert['status']) => {
-    switch (status) {
-    case 'unread':
-      return <Eye className="h-3 w-3 text-blue-600" />;
-    case 'read':
-      return <EyeOff className="h-3 w-3 text-gray-500" />;
-    case 'acknowledged':
-      return <CheckCircle className="h-3 w-3 text-green-600" />;
-    case 'dismissed':
-      return <XCircle className="h-3 w-3 text-gray-400" />;
-    default:
-      return null;
-    }
-  };
+  switch (status) {
+  case 'unread':,
+  return <Eye className="h-3 w-3 text-blue-600" />;
+  case 'read':,
+  return <EyeOff className="h-3 w-3 text-gray-500" />;
+  case 'acknowledged':,
+  return <CheckCircle className="h-3 w-3 text-green-600" />;
+  case 'dismissed':,
+  return <XCircle className="h-3 w-3 text-gray-400" />;
+  default:,
+  return null;
+};
   const handleAlertAction = async (alertId: string, actionType: string) => {
     try {
       // Update local state immediately for better UX
@@ -229,9 +219,8 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
       // Here you would make the actual API call
       console.log(`Performing action: ${actionType} on alert: ${alertId}`);}
     } catch (error) {
-      console.error('Failed to perform alert action:', error);
-    }
-  };
+  console.error('Failed to perform alert action:', error);
+};
   const handleStatusChange = (alertId: string, newStatus: SecurityAlert['status']) => {
     setAlerts(prevAlerts =>)
       prevAlerts.map(alert =>)
@@ -244,7 +233,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
   const unreadCount = alerts.filter(alert => alert.status === 'unread').length;
   const criticalCount = alerts.filter(alert => alert.type === 'critical' && alert.status !== 'dismissed').length;
   if (isLoading) {
-    return ()
+    return;
       <div className="security-alerts loading">
         <div className="flex items-center justify-center h-32">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -252,8 +241,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="security-alerts">
       {/* Header */}
       <div className="alerts-header">
@@ -307,7 +295,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
                         setSelectedFilters([...selectedFilters, severity]);
                       } else {
                         setSelectedFilters(selectedFilters.filter(f => f !== severity));
-                      }
                     }}
                   />
                   <span className="capitalize">{severity}</span>
@@ -328,7 +315,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
                         setSelectedFilters([...selectedFilters, category]);
                       } else {
                         setSelectedFilters(selectedFilters.filter(f => f !== category));
-                      }
                     }}
                   />
                   <span className="capitalize">{category.replace('_', ' ')}</span>

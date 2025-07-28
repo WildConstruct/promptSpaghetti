@@ -16,232 +16,215 @@ import {
 
 // Types for user data preview
 interface UserDataCategory {
-  category: string;
+  category: string;,
   displayName: string;
-  itemCount: number;
+  itemCount: number;,
   dataVolume: number;
   dataSensitivity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   retentionPeriod?: number;
-  items: UserDataItem[];
-  affectedSystems: string[];
-}
-interface UserDataItem {
-  id: string;
+  items: UserDataItem;,
+  affectedSystems: string;
+  interface UserDataItem {
+  id: string;,
   type: string;
-  description: string;
+  description: string;,
   createdAt: string;
-  lastModified: string;
+  lastModified: string;,
   dataSize: number;
-  systemSource: string;
+  systemSource: string;,
   hasPersonalData: boolean;
-}
-interface RetentionPolicy {
-  id: string;
+  interface RetentionPolicy {
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   retentionPeriodDays: number;
-  applicableCategories: string[];
+  applicableCategories: string;,
   complianceFramework: string;
-}
-interface UserDataPreviewProps {
-  userId: string;
+  interface UserDataPreviewProps {
+  userId: string;,
   userName: string;
-  onRetentionAction?: (action: 'delete' | 'archive' | 'export', categories: string[]) => void;
-}
-const UserDataPreview: React.FC<UserDataPreviewProps> = ({ )
-  userId, 
+  onRetentionAction?: (action: 'delete' | 'archive' | 'export', categories: string) => void;
+  const UserDataPreview: React.FC<UserDataPreviewProps> = ({ ),
+  userId,
   userName,
-  onRetentionAction 
+  onRetentionAction
 }) => {
-  const [dataCategories, setDataCategories] = useState<UserDataCategory[]>([]);
+  const [dataCategories, setDataCategories] = useState<UserDataCategory>([]);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
-  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy[]>([]);
+  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sensitivityFilter, setSensitivityFilter] = useState<string>('ALL');
   const [showRetentionActions, setShowRetentionActions] = useState(false);
   // Mock data for demonstration - wrapped in useMemo to prevent recreation
-  const mockDataCategories: UserDataCategory[] = useMemo(() => [
+  const mockDataCategories: UserDataCategory = useMemo(() => [
+  {
+  category: 'profile_data',
+  displayName: 'Profile Information',
+  itemCount: 15,
+  dataVolume: 2048,
+  dataSensitivity: 'HIGH',
+  retentionPeriod: 2555, // 7 years,
+  affectedSystems: ['user_service', 'auth_service'],
+  items: [,
+  {
+  id: 'profile_1',
+  type: 'Personal Info',
+  description: 'Name, email, phone number',
+  createdAt: '2022-01-15T00:00:00Z',
+  lastModified: '2024-03-15T00:00:00Z',
+  dataSize: 512,
+  systemSource: 'user_service',
+  hasPersonalData: true,
+}
+        {
+  id: 'profile_2',
+  type: 'Employment Data',
+  description: 'Job title, department, manager',
+  createdAt: '2022-01-15T00:00:00Z',
+  lastModified: '2024-01-10T00:00:00Z',
+  dataSize: 256,
+  systemSource: 'hr_system',
+  hasPersonalData: true];
+  }
     {
-      category: 'profile_data',
-      displayName: 'Profile Information',
-      itemCount: 15,
-      dataVolume: 2048,
-      dataSensitivity: 'HIGH',
-      retentionPeriod: 2555, // 7 years
-      affectedSystems: ['user_service', 'auth_service'],
-      items: [,
+  category: 'activity_logs',
+  displayName: 'Activity & Access Logs',
+  itemCount: 1247,
+  dataVolume: 15360,
+  dataSensitivity: 'MEDIUM',
+  retentionPeriod: 365,
+  affectedSystems: ['audit_service', 'analytics_service'],
+  items: [,
+  {
+  id: 'log_1',
+  type: 'Login Events',
+  description: '834 login/logout events',
+  createdAt: '2022-01-15T00:00:00Z',
+  lastModified: '2024-07-22T00:00:00Z',
+  dataSize: 8192,
+  systemSource: 'audit_service',
+  hasPersonalData: false,
+}
         {
-          id: 'profile_1',
-          type: 'Personal Info',
-          description: 'Name, email, phone number',
-          createdAt: '2022-01-15T00:00:00Z',
-          lastModified: '2024-03-15T00:00:00Z',
-          dataSize: 512,
-          systemSource: 'user_service',
-          hasPersonalData: true,
-        },
-        {
-          id: 'profile_2',
-          type: 'Employment Data',
-          description: 'Job title, department, manager',
-          createdAt: '2022-01-15T00:00:00Z',
-          lastModified: '2024-01-10T00:00:00Z',
-          dataSize: 256,
-          systemSource: 'hr_system',
-          hasPersonalData: true,
-        }
-      ]
-    },
+  id: 'log_2',
+  type: 'System Access',
+  description: '413 system access events',
+  createdAt: '2022-01-15T00:00:00Z',
+  lastModified: '2024-07-21T00:00:00Z',
+  dataSize: 7168,
+  systemSource: 'analytics_service',
+  hasPersonalData: false];
+  }
     {
-      category: 'activity_logs',
-      displayName: 'Activity & Access Logs',
-      itemCount: 1247,
-      dataVolume: 15360,
-      dataSensitivity: 'MEDIUM',
-      retentionPeriod: 365,
-      affectedSystems: ['audit_service', 'analytics_service'],
-      items: [,
+  category: 'content_data',
+  displayName: 'Created Content',
+  itemCount: 89,
+  dataVolume: 45056,
+  dataSensitivity: 'MEDIUM',
+  retentionPeriod: 1095, // 3 years,
+  affectedSystems: ['content_service', 'graph_service'],
+  items: [,
+  {
+  id: 'content_1',
+  type: 'Prompt Graphs',
+  description: '52 prompt generation graphs',
+  createdAt: '2022-02-01T00:00:00Z',
+  lastModified: '2024-07-20T00:00:00Z',
+  dataSize: 32768,
+  systemSource: 'graph_service',
+  hasPersonalData: false,
+}
         {
-          id: 'log_1',
-          type: 'Login Events',
-          description: '834 login/logout events',
-          createdAt: '2022-01-15T00:00:00Z',
-          lastModified: '2024-07-22T00:00:00Z',
-          dataSize: 8192,
-          systemSource: 'audit_service',
-          hasPersonalData: false,
-        },
-        {
-          id: 'log_2',
-          type: 'System Access',
-          description: '413 system access events',
-          createdAt: '2022-01-15T00:00:00Z',
-          lastModified: '2024-07-21T00:00:00Z',
-          dataSize: 7168,
-          systemSource: 'analytics_service',
-          hasPersonalData: false,
-        }
-      ]
-    },
+  id: 'content_2',
+  type: 'Generated Content',
+  description: '37 generated text outputs',
+  createdAt: '2022-02-15T00:00:00Z',
+  lastModified: '2024-07-19T00:00:00Z',
+  dataSize: 12288,
+  systemSource: 'content_service',
+  hasPersonalData: false];
+  }
     {
-      category: 'content_data',
-      displayName: 'Created Content',
-      itemCount: 89,
-      dataVolume: 45056,
-      dataSensitivity: 'MEDIUM',
-      retentionPeriod: 1095, // 3 years
-      affectedSystems: ['content_service', 'graph_service'],
-      items: [,
+  category: 'communication_data',
+  displayName: 'Communications',
+  itemCount: 23,
+  dataVolume: 3072,
+  dataSensitivity: 'HIGH',
+  retentionPeriod: 1825, // 5 years,
+  affectedSystems: ['notification_service', 'support_service'],
+  items: [,
+  {
+  id: 'comm_1',
+  type: 'Email Communications',
+  description: '18 system notification emails',
+  createdAt: '2022-01-15T00:00:00Z',
+  lastModified: '2024-07-15T00:00:00Z',
+  dataSize: 2048,
+  systemSource: 'notification_service',
+  hasPersonalData: true,
+}
         {
-          id: 'content_1',
-          type: 'Prompt Graphs',
-          description: '52 prompt generation graphs',
-          createdAt: '2022-02-01T00:00:00Z',
-          lastModified: '2024-07-20T00:00:00Z',
-          dataSize: 32768,
-          systemSource: 'graph_service',
-          hasPersonalData: false,
-        },
-        {
-          id: 'content_2',
-          type: 'Generated Content',
-          description: '37 generated text outputs',
-          createdAt: '2022-02-15T00:00:00Z',
-          lastModified: '2024-07-19T00:00:00Z',
-          dataSize: 12288,
-          systemSource: 'content_service',
-          hasPersonalData: false,
-        }
-      ]
-    },
-    {
-      category: 'communication_data',
-      displayName: 'Communications',
-      itemCount: 23,
-      dataVolume: 3072,
-      dataSensitivity: 'HIGH',
-      retentionPeriod: 1825, // 5 years
-      affectedSystems: ['notification_service', 'support_service'],
-      items: [,
-        {
-          id: 'comm_1',
-          type: 'Email Communications',
-          description: '18 system notification emails',
-          createdAt: '2022-01-15T00:00:00Z',
-          lastModified: '2024-07-15T00:00:00Z',
-          dataSize: 2048,
-          systemSource: 'notification_service',
-          hasPersonalData: true,
-        },
-        {
-          id: 'comm_2',
-          type: 'Support Tickets',
-          description: '5 support interactions',
-          createdAt: '2022-03-10T00:00:00Z',
-          lastModified: '2024-06-30T00:00:00Z',
-          dataSize: 1024,
-          systemSource: 'support_service',
-          hasPersonalData: true,
-        }
-      ]
-    }
+  id: 'comm_2',
+  type: 'Support Tickets',
+  description: '5 support interactions',
+  createdAt: '2022-03-10T00:00:00Z',
+  lastModified: '2024-06-30T00:00:00Z',
+  dataSize: 1024,
+  systemSource: 'support_service',
+  hasPersonalData: true],
   ], []); // Empty dependency array since this is static mock data
-  const mockRetentionPolicies: RetentionPolicy[] = useMemo(() => [
+  const mockRetentionPolicies: RetentionPolicy = useMemo(() => [
+  {
+  id: 'policy_1',
+  name: 'Standard User Data Retention',
+  description: 'Standard retention for user profile and activity data',
+  retentionPeriodDays: 2555, // 7 years,
+  applicableCategories: ['profile_data', 'communication_data'],
+  complianceFramework: 'GDPR',
+}
     {
-      id: 'policy_1',
-      name: 'Standard User Data Retention',
-      description: 'Standard retention for user profile and activity data',
-      retentionPeriodDays: 2555, // 7 years
-      applicableCategories: ['profile_data', 'communication_data'],
-      complianceFramework: 'GDPR',
-    },
+  id: 'policy_2',
+  name: 'Activity Log Retention',
+  description: 'Short-term retention for system activity logs',
+  retentionPeriodDays: 365, // 1 year,
+  applicableCategories: ['activity_logs'],
+  complianceFramework: 'SOX',
+}
     {
-      id: 'policy_2',
-      name: 'Activity Log Retention',
-      description: 'Short-term retention for system activity logs',
-      retentionPeriodDays: 365, // 1 year
-      applicableCategories: ['activity_logs'],
-      complianceFramework: 'SOX',
-    },
-    {
-      id: 'policy_3',
-      name: 'Content Retention Policy',
-      description: 'Medium-term retention for user-generated content',
-      retentionPeriodDays: 1095, // 3 years
-      applicableCategories: ['content_data'],
-      complianceFramework: 'Internal',
-    }
-  ], []); // Empty dependency array since this is static mock data
+  id: 'policy_3',
+  name: 'Content Retention Policy',
+  description: 'Medium-term retention for user-generated content',
+  retentionPeriodDays: 1095, // 3 years,
+  applicableCategories: ['content_data'],
+  complianceFramework: 'Internal'], []); // Empty dependency array since this is static mock data
   useEffect(() => {
-    // Simulate loading user data
-    setLoading(true);
-    setTimeout(() => {
-      setDataCategories(mockDataCategories);
-      setRetentionPolicies(mockRetentionPolicies);
-      setLoading(false);
-    }, 1000);
+  // Simulate loading user data
+  setLoading(true);
+  setTimeout(() => {
+  setDataCategories(mockDataCategories);
+  setRetentionPolicies(mockRetentionPolicies);
+  setLoading(false);
+}, 1000);
   }, [userId, mockDataCategories, mockRetentionPolicies]);
   const toggleCategoryExpansion = (category: string) => {
     setExpandedCategories(prev => {)
-      const newSet = new Set(prev);
+  const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
       } else {
         newSet.add(category);
-      }
       return newSet;
     });
   };
   const toggleCategorySelection = (category: string) => {
     setSelectedCategories(prev => {)
-      const newSet = new Set(prev);
+  const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
       } else {
         newSet.add(category);
-      }
       return newSet;
     });
   };
@@ -261,24 +244,22 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({ )
     return new Date(dateStr).toLocaleDateString();
   };
   const getSensitivityColor = (sensitivity: string): string => {
-    switch (sensitivity) {
-    case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
-    case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
-    case 'MEDIUM': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-    case 'LOW': return 'text-green-600 bg-green-50 border-green-200';
-    default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
+  switch (sensitivity) {
+  case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
+  case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
+  case 'MEDIUM': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+  case 'LOW': return 'text-green-600 bg-green-50 border-green-200';
+  default: return 'text-gray-600 bg-gray-50 border-gray-200';
+};
   const handleRetentionAction = (action: 'delete' | 'archive' | 'export') => {
     if (selectedCategories.size === 0) {
       alert('Please select at least one data category.');
       return;
-    }
     const selectedCategoryArray = Array.from(selectedCategories);
     onRetentionAction?.(action, selectedCategoryArray);
   };
   const filteredCategories = dataCategories.filter(category => {)
-    const matchesSearch = category.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||;
+  const matchesSearch = category.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                          category.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSensitivity = sensitivityFilter === 'ALL' || category.dataSensitivity === sensitivityFilter;
     return matchesSearch && matchesSensitivity;
@@ -292,14 +273,13 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({ )
     return sum + (category?.dataVolume || 0);
   }, 0);
   if (loading) {
-    return ()
+    return;
       <div className="p-6 text-center">
         <RefreshCw className="w-8 h-8 mx-auto mb-4 animate-spin text-blue-500" />
         <p>Loading user data preview...</p>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border p-6">

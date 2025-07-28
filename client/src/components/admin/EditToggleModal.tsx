@@ -5,24 +5,21 @@ import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 interface EditToggleModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  toggleId: string;
+  toggleId: string;,
   onSave: () => void;
-}
-interface ToggleData {
-  id: string;
+  interface ToggleData {
+  id: string;,
   key: string;
   name: string;
   description?: string;
-  type: string;
+  type: string;,
   value: unknown;
-  claudeImpact: string;
+  claudeImpact: string;,
   enabled: boolean;
   version: number;
-}
-
-export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
+  export const EditToggleModal: React.FC<EditToggleModalProps> = ({,)
   isOpen,
   onClose,
   toggleId,
@@ -37,94 +34,86 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
   useEffect(() => {
     if (isOpen && toggleId) {
       fetchToggle();
-    }
   }, [isOpen, toggleId, fetchToggle]);
   const fetchToggle = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (!response.ok) {
-        throw new Error('Failed to load toggle');
-      }
-      const data = await response.json();
-      setToggle(data);
-      setFormData({)
-        name: data.name,
-        description: data.description,
-        value: data.value,
-        claudeImpact: data.claudeImpact,
-        enabled: data.enabled,
-      });
+  throw new Error('Failed to load toggle');
+  const data = await response.json();
+  setToggle(data);
+  setFormData({)
+  name: data.name,
+  description: data.description,
+  value: data.value,
+  claudeImpact: data.claudeImpact,
+  enabled: data.enabled,
+});
     } catch (error) {
       setErrors({ fetch: error instanceof Error ? error.message : 'Failed to load toggle' });
     } finally {
       setLoading(false);
-    }
   }, [toggleId]);
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     if (!formData.name?.trim()) {
       newErrors.name = 'Name is required';
-    }
     if (!reason.trim()) {
       newErrors.reason = 'Reason for change is required';
-    }
     // Validate type-specific values
     if (toggle?.type === 'percentage_rollout') {
       if (typeof formData.value?.percentage !== 'number' || )
           formData.value.percentage < 0 || 
           formData.value.percentage > 100) {
         newErrors.value = 'Percentage must be between 0 and 100';
-      }
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSave = async () => {
     if (!validateForm()) {
       return;
-    }
     setSaving(true);
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
+  },
+  body: JSON.stringify({),
           ...formData,
           reason
-        })
+  }
       });
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to update toggle');
-      }
       onSave();
       onClose();
     } catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Failed to update toggle' });
     } finally {
       setSaving(false);
-    }
   };
   const renderValueEditor = () => {
     if (!toggle) return null;
     switch (toggle.type) {
     case 'boolean':
-      return ()
+      return;
         <div className="form-group">
           <label>
             <input
               type="checkbox"
               checked={formData.value?.enabled || false}
               onChange={(e) => setFormData(prev => ({)
-                ...prev,
+  ...prev,
                 value: { enabled: e.target.checked }
               }))}
             />
@@ -133,7 +122,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
         </div>
       );
     case 'percentage_rollout':
-      return ()
+      return;
         <div className="form-group">
           <label>Rollout Percentage</label>
           <input
@@ -142,7 +131,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
             max="100"
             value={formData.value?.percentage || 0}
             onChange={(e) => setFormData(prev => ({)
-              ...prev,
+  ...prev,
               value: { ...prev.value, percentage: parseInt(e.target.value) || 0 }
             }))}
             className={errors.value ? 'error' : ''}
@@ -153,14 +142,13 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
         </div>
       );
     case 'multivariate':
-      return ()
+      return;
         <div className="form-group">
           <label>Variants</label>
           <div className="variants-editor">
             {formData.value?.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number,
-            ) => ()
+              index: number) => (),
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -170,7 +158,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, key: e.target.value };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
                   }}
@@ -183,7 +171,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, value: e.target.value };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
                   }}
@@ -198,7 +186,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
                   }}
@@ -209,7 +197,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                   onClick={() => {
                     const newVariants = (formData.value?.variants || []).filter((_: unknown, i: number) => i !== index);
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
                   }}
@@ -223,12 +211,13 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
               className="btn btn-secondary btn-sm"
               onClick={() => {
                 const newVariants = [...(formData.value?.variants || []), {
-                  key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`,}
-                  value: '',
-                  percentage: 0,
-                }];
+                  key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`}
+},
+  value: '',
+                  percentage: 0;
+  }];
                 setFormData(prev => ({)
-                  ...prev,
+  ...prev,
                   value: { ...prev.value, variants: newVariants }
                 }));
               }}
@@ -239,7 +228,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
         </div>
       );
     case 'scheduled':
-      return ()
+      return;
         <div className="form-group">
           <label>Schedule Configuration</label>
           <div className="schedule-editor">
@@ -248,7 +237,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                 type="checkbox"
                 checked={formData.value?.enabled || false}
                 onChange={(e) => setFormData(prev => ({)
-                  ...prev,
+  ...prev,
                   value: { ...prev.value, enabled: e.target.checked }
                 }))}
               />
@@ -261,7 +250,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                   type="datetime-local"
                   value={formData.value?.startTime || ''}
                   onChange={(e) => setFormData(prev => ({)
-                    ...prev,
+  ...prev,
                     value: { ...prev.value, startTime: e.target.value }
                   }))}
                 />
@@ -272,7 +261,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                   type="datetime-local"
                   value={formData.value?.endTime || ''}
                   onChange={(e) => setFormData(prev => ({)
-                    ...prev,
+  ...prev,
                     value: { ...prev.value, endTime: e.target.value }
                   }))}
                 />
@@ -282,7 +271,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
         </div>
       );
     default:
-      return ()
+      return;
         <div className="form-group">
           <label>Configuration</label>
           <textarea
@@ -293,7 +282,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                 setFormData(prev => ({ ...prev, value }));
               } catch {
                 // Invalid JSON, ignore
-              }
             }}
             rows={6}
             className="json-editor"
@@ -303,10 +291,9 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
           </div>
         </div>
       );
-    }
   };
   if (!isOpen) return null;
-  return ()
+  return;
     <div className="modal-overlay">
       <div className="modal-content edit-toggle-modal">
         <div className="modal-header">
@@ -397,8 +384,8 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
                   value={formData.claudeImpact || 'NONE'}
                   onChange={(e) => setFormData(prev => ({ )
                     ...prev, 
-                    claudeImpact: e.target.value ,
-                  }))}
+                    claudeImpact: e.target.value ;
+  }))}
                 >
                   <option value="NONE">None - No Claude impact</option>
                   <option value="PROMPT_COST">Prompt Cost - Affects token usage</option>

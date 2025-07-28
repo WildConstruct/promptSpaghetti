@@ -15,9 +15,10 @@ import { useConsent } from '../../hooks/useConsent';
 import { ConsentType } from '../../types/consent';
 
 // Example 1: Analytics Dashboard - requires analytics consent
+
 interface AnalyticsDashboardProps {
-  data?: unknown[];
-}
+  data?: unknown;
+
   const { promptForConsent } = useConsentPrompt();
   const [isLoading, setIsLoading] = useState(false);
   const handleViewAnalytics = async () => {
@@ -28,12 +29,12 @@ interface AnalyticsDashboardProps {
       if (!consentGranted) {
         alert('Analytics consent is required to view this dashboard.');
         return;
-      }
-    }
+
+
     // Proceed with analytics loading
     console.log('Loading analytics dashboard...');
   };
-  return ()
+  return;
     <div className="analytics-dashboard">
       <h2>Analytics Dashboard</h2>
       {hasConsent(ConsentType.ANALYTICS) ? ()
@@ -60,23 +61,23 @@ interface AnalyticsDashboardProps {
 export const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setIsSubmitting(true);
-    // Newsletter signup will automatically trigger JIT prompt via data attributes
-    // The form submission will be intercepted by the provider's click handler
-    try {
-      // Simulate newsletter signup
-      console.log('Subscribing to newsletter:', email);
-      alert('Subscribed successfully!');
-      setEmail('');
-    } catch (error) {
-      console.error('Newsletter signup failed:', error);
-    } finally {
+  e.preventDefault();
+  if (!email) return;
+  setIsSubmitting(true);
+  // Newsletter signup will automatically trigger JIT prompt via data attributes
+  // The form submission will be intercepted by the provider's click handler
+  try {
+  // Simulate newsletter signup
+  console.log('Subscribing to newsletter:', email);
+  alert('Subscribed successfully!');
+  setEmail('');
+} catch (error) {
+  console.error('Newsletter signup failed:', error);
+} finally {
       setIsSubmitting(false);
-    }
+
   };
-  return ()
+  return;
     <form onSubmit={handleSubmit} className="newsletter-signup">
       <h3>Stay Updated</h3>
       <p>Get the latest news and updates delivered to your inbox.</p>
@@ -111,7 +112,7 @@ export const { triggerPromptForElement } = useJustInTimeConsentContext();
     e.preventDefault();
     if (!hasConsent(ConsentType.SOCIAL_MEDIA)) {
       setIsSharing(true);
-      const consentGranted = await triggerPromptForElement(;)
+      const consentGranted = await triggerPromptForElement(;);
         'social_share', 
         'click', 
         e.currentTarget
@@ -119,8 +120,8 @@ export const { triggerPromptForElement } = useJustInTimeConsentContext();
       if (!consentGranted) {
         setIsSharing(false);
         return;
-      }
-    }
+
+
     // Proceed with social sharing
     try {
       if (navigator.share) {
@@ -129,14 +130,14 @@ export const { triggerPromptForElement } = useJustInTimeConsentContext();
         // Fallback to copying URL
         await navigator.clipboard.writeText(url);
         alert('Link copied to clipboard!');
-      }
+
     } catch (error) {
-      console.error('Share failed:', error);
-    } finally {
+  console.error('Share failed:', error);
+} finally {
       setIsSharing(false);
-    }
+
   };
-  return ()
+  return;
     <button
       className="social-share-button"
       onClick={handleShare}
@@ -150,7 +151,7 @@ export const { triggerPromptForElement } = useJustInTimeConsentContext();
 
 // Example 4: Personalized Recommendations - requires personalization consent
 export const { promptForConsent } = useConsentPrompt();
-  const [recommendations, setRecommendations] = useState<string[]>([]);
+  const [recommendations, setRecommendations] = useState<string>([]);
   const [isLoading, setIsLoading] = useState(false);
   const loadPersonalizedContent = useCallback(async () => {
     if (!hasConsent(ConsentType.PERSONALIZATION)) {
@@ -161,21 +162,21 @@ export const { promptForConsent } = useConsentPrompt();
         // Show generic content instead
         setRecommendations(['Generic Item 1', 'Generic Item 2', 'Generic Item 3']);
         return;
-      }
-    }
+
+
     // Load personalized recommendations
     setRecommendations(['Personalized Item 1', 'Your Favorite Item', 'Recommended for You']);
   }, [hasConsent, promptForConsent]);
   React.useEffect(() => {
     loadPersonalizedContent();
   }, [loadPersonalizedContent]);
-  return ()
+  return;
     <div className="recommendations">
       <h3>
         {hasConsent(ConsentType.PERSONALIZATION) 
           ? 'Recommended for You' 
           : 'Popular Items'
-        }
+
       </h3>
       {isLoading ? ()
         <p>Loading recommendations...</p>
@@ -211,10 +212,10 @@ export const { promptForConsent } = useConsentPrompt();
     setIsUnlocking(false);
     if (!consentGranted) {
       alert('Advanced analytics requires consent to track detailed user behavior.');
-    }
+
   };
   if (!hasConsent(ConsentType.ANALYTICS)) {
-    return ()
+    return;
       <div className="blocked-feature">
         <h3>🔒 Advanced Analytics</h3>
         <p>This feature requires analytics consent to track detailed metrics.</p>
@@ -227,8 +228,8 @@ export const { promptForConsent } = useConsentPrompt();
         </button>
       </div>
     );
-  }
-  return ()
+
+  return;
     <div className="advanced-analytics">
       <h3>🔓 Advanced Analytics</h3>
       <p>Advanced analytics features are now available!</p>

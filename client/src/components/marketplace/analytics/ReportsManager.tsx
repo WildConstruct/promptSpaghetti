@@ -8,13 +8,11 @@ import './ReportsManager.css';
 interface ReportsManagerProps {
   creatorId: string;
   className?: string;
-}
-
-export const ReportsManager: React.FC<ReportsManagerProps> = ({)
+  export const ReportsManager: React.FC<ReportsManagerProps> = ({,)
   creatorId,
   className = ''
 }) => {
-  const [reports, setReports] = useState<CustomReport[]>([]);
+  const [reports, setReports] = useState<CustomReport>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedReport, setSelectedReport] = useState<CustomReport | null>(null);
@@ -32,11 +30,10 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({)
       const reportsData = await analyticsService.getCustomReports(creatorId);
       setReports(reportsData);
     } catch (err) {
-      console.error('Failed to load reports:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load reports');
-    } finally {
+  console.error('Failed to load reports:', err);
+  setError(err instanceof Error ? err.message : 'Failed to load reports');
+} finally {
       setLoading(false);
-    }
   }, [creatorId]);
   // Load reports on mount
   useEffect(() => {
@@ -44,15 +41,13 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({)
   }, [loadReports]);
   // Handle report save
   const handleReportSave = (report: CustomReport) => {
-    if (selectedReport) {
-      // Update existing report
-      setReports(prev => )
-        prev.map(r => r.id === report.id ? report : r)
-      );
-    } else {
+  if (selectedReport) {
+  // Update existing report
+  setReports(prev => )
+  prev.map(r => r.id === report.id ? report : r));
+} else {
       // Add new report
       setReports(prev => [report, ...prev]);
-    }
     setShowBuilder(false);
     setSelectedReport(null);
   };
@@ -60,23 +55,21 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({)
   const handleReportDelete = async (reportId: string) => {
     if (!confirm('Are you sure you want to delete this report?')) {
       return;
-    }
     try {
       await analyticsService.deleteCustomReport(reportId);
       setReports(prev => prev.filter(r => r.id !== reportId));
     } catch (err) {
-      console.error('Failed to delete report:', err);
-      alert('Failed to delete report. Please try again.');
-    }
-  };
+  console.error('Failed to delete report:', err);
+  alert('Failed to delete report. Please try again.');
+};
   // Handle report generation
   const handleGenerateReport = async (reportId: string) => {
-    try {
-      const reportData = await analyticsService.generateReport(reportId);
-      // Create download link
-      const blob = new Blob([JSON.stringify(reportData, null, 2)], {
-        type: 'application/json',
-      });
+  try {
+  const reportData = await analyticsService.generateReport(reportId);
+  // Create download link
+  const blob = new Blob([JSON.stringify(reportData, null, 2)], {
+  type: 'application/json',
+});
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -84,41 +77,38 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({)
       link.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('Failed to generate report:', err);
-      alert('Failed to generate report. Please try again.');
-    }
-  };
+  console.error('Failed to generate report:', err);
+  alert('Failed to generate report. Please try again.');
+};
   // Filter and sort reports
   const filteredAndSortedReports = reports;
     .filter(report =>)
       report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (report.description && report.description.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) => {
-      let aValue: Error, bValue: Error;
-      switch (sortBy) {
-      case 'name':
-        aValue = a.name.toLowerCase();
-        bValue = b.name.toLowerCase();
-        break;
-      case 'created_at':
-        aValue = new Date(a.created_at).getTime();
-        bValue = new Date(b.created_at).getTime();
-        break;
-      case 'updated_at':
-        aValue = new Date(a.updated_at).getTime();
-        bValue = new Date(b.updated_at).getTime();
-        break;
-      default:
-        return 0;
-      }
-      if (sortOrder === 'asc') {
-        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-      } else {
-        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-      }
-    });
+  let aValue: Error, bValue: Error;
+  switch (sortBy) {
+  case 'name':,
+  aValue = a.name.toLowerCase();
+  bValue = b.name.toLowerCase();
+  break;
+  case 'created_at':,
+  aValue = new Date(a.created_at).getTime();
+  bValue = new Date(b.created_at).getTime();
+  break;
+  case 'updated_at':,
+  aValue = new Date(a.updated_at).getTime();
+  bValue = new Date(b.updated_at).getTime();
+  break;
+  default:,
+  return 0;
+  if (sortOrder === 'asc') {
+  return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+} else {
+  return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+});
   if (showBuilder) {
-    return ()
+    return;
       <ReportBuilder
         creatorId={creatorId}
         existingReport={selectedReport || undefined}
@@ -130,17 +120,15 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({)
         className={className}
       />
     );
-  }
   if (showExportManager) {
-    return ()
+    return;
       <ExportManager
         creatorId={creatorId}
         onClose={() => setShowExportManager(false)}
         className={className}
       />
     );
-  }
-  return ()
+  return;
     <div className={`reports-manager ${className}`}>}
       <div className="reports-header">
         <div className="header-content">

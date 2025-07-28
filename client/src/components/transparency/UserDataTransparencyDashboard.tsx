@@ -73,85 +73,83 @@ import {
   Search,
   BarChart3
 } from 'lucide-react';
+
 interface UserDataInventory {
-  userId: string;
+  userId: string;,
   generatedAt: Date;
-  dataCategories: DataCategory[];
+  dataCategories: DataCategory;,
   totalDataPoints: number;
-  sensitiveDataCount: number;
+  sensitiveDataCount: number;,
   retentionSummary: RetentionSummary;
-  thirdPartySharing: ThirdPartySharing[];
+  thirdPartySharing: ThirdPartySharing;,
   complianceStatus: ComplianceStatus;
   privacyScore: PrivacyScore;
-}
-interface DataCategory {
-  category: string;
+  interface DataCategory {
+  category: string;,
   description: string;
-  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
-  dataPoints: DataPoint[];
-  lawfulBasis: LawfulBasis[];
+  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';,
+  dataPoints: DataPoint;
+  lawfulBasis: LawfulBasis;,
   retentionPeriod: RetentionPeriod;
-  processingPurposes: ProcessingPurpose[];
+  processingPurposes: ProcessingPurpose;,
   thirdPartyAccess: boolean;
   userControl: 'none' | 'limited' | 'moderate' | 'full';
-}
-interface DataPoint {
-  id: string;
+  interface DataPoint {
+  id: string;,
   fieldName: string;
-  dataType: 'PERSONAL' | 'SENSITIVE' | 'FINANCIAL' | 'HEALTH' | 'BIOMETRIC' | 'BEHAVIORAL';
+  dataType: 'PERSONAL' | 'SENSITIVE' | 'FINANCIAL' | 'HEALTH' | 'BIOMETRIC' | 'BEHAVIORAL';,
   source: string;
-  collectedAt: Date;
+  collectedAt: Date;,
   lastAccessed: Date;
-  accessCount: number;
+  accessCount: number;,
   consentStatus: ConsentStatus;
-}
-interface UserAccessActivity {
-  timestamp: Date;
+  interface UserAccessActivity {
+  timestamp: Date;,
   activityType: string;
   actor: {,
-    type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';
-    name: string;
-    role?: string;
-  };
+  type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';,
+  name: string;
+  role?: string;
+};
   dataAccessed: {,
-    dataType: string;
-    classification: string;
-    operation: string;
-    recordCount: number;
-  }[];
-  purpose: string;
+  dataType: string;
+  classification: string;,
+  operation: string;
+  recordCount: number;
+}[];
+  purpose: string;,
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   location: {,
-    country: string;
-    withinEU: boolean;
-  };
-}
+  country: string;
+  withinEU: boolean;
+};
+
 interface PrivacyScore {
-  overall: number;
+  overall: number;,
   categories: {,
-    dataMinimization: number;
-    consentHealth: number;
-    securityPosture: number;
-    thirdPartyRisk: number;
-    retentionCompliance: number;
-    userControl: number;
-  };
+  dataMinimization: number;,
+  consentHealth: number;
+  securityPosture: number;,
+  thirdPartyRisk: number;
+  retentionCompliance: number;,
+  userControl: number;
+};
   trends: Array<{,
-    metric: string;
-    change: number;
-    direction: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-  }>;
+  metric: string;
+  change: number;,
+  direction: 'IMPROVING' | 'DEGRADING' | 'STABLE';
+}>;
   recommendations: Array<{,
-    category: string;
-    title: string;
-    description: string;
-    impact: 'LOW' | 'MEDIUM' | 'HIGH';
-    userAction: boolean;
-  }>;
-}
+  category: string;
+  title: string;,
+  description: string;
+  impact: 'LOW' | 'MEDIUM' | 'HIGH';,
+  userAction: boolean;
+}>;
+
 const UserDataTransparencyDashboard: React.FC = () => {
   const [inventory, setInventory] = useState<UserDataInventory | null>(null);
-  const [activities, setActivities] = useState<UserAccessActivity[]>([]);
+  const [activities, setActivities] = useState<UserAccessActivity>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [timeRange, setTimeRange] = useState('7d');
@@ -165,10 +163,10 @@ const UserDataTransparencyDashboard: React.FC = () => {
       const data = await response.json();
       setInventory(data);
     } catch (error) {
-      console.error('Failed to fetch inventory:', error);
-    } finally {
+  console.error('Failed to fetch inventory:', error);
+} finally {
       setLoading(false);
-    }
+
   }, []);
   // Fetch user access activities
   const fetchActivities = useCallback(async () => {
@@ -177,9 +175,8 @@ const UserDataTransparencyDashboard: React.FC = () => {
       const data = await response.json();
       setActivities(data);
     } catch (error) {
-      console.error('Failed to fetch activities:', error);
-    }
-  }, [timeRange, filterType, searchTerm]);
+  console.error('Failed to fetch activities:', error);
+}, [timeRange, filterType, searchTerm]);
   useEffect(() => {
     fetchInventory();
     fetchActivities();
@@ -195,51 +192,46 @@ const UserDataTransparencyDashboard: React.FC = () => {
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to download data:', error);
-    }
-  };
+  console.error('Failed to download data:', error);
+};
   const handleDeleteData = async (categoryId: string) => {
     try {
       await fetch(`/api/transparency/delete/${categoryId}`, { method: 'DELETE' });}
       fetchInventory(); // Refresh
     } catch (error) {
-      console.error('Failed to delete data:', error);
-    }
-  };
+  console.error('Failed to delete data:', error);
+};
   const getClassificationColor = (classification: string): string => {
-    switch (classification) {
-    case 'PUBLIC': return 'bg-green-100 text-green-800';
-    case 'INTERNAL': return 'bg-blue-100 text-blue-800';
-    case 'CONFIDENTIAL': return 'bg-yellow-100 text-yellow-800';
-    case 'RESTRICTED': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (classification) {
+  case 'PUBLIC': return 'bg-green-100 text-green-800';
+  case 'INTERNAL': return 'bg-blue-100 text-blue-800';
+  case 'CONFIDENTIAL': return 'bg-yellow-100 text-yellow-800';
+  case 'RESTRICTED': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getRiskColor = (level: string): string => {
-    switch (level) {
-    case 'LOW': return 'text-green-600';
-    case 'MEDIUM': return 'text-yellow-600';
-    case 'HIGH': return 'text-orange-600';
-    case 'CRITICAL': return 'text-red-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (level) {
+  case 'LOW': return 'text-green-600';
+  case 'MEDIUM': return 'text-yellow-600';
+  case 'HIGH': return 'text-orange-600';
+  case 'CRITICAL': return 'text-red-600';
+  default: return 'text-gray-600';
+};
   const getTrendIcon = (direction: string): React.ReactElement | null => {
-    switch (direction) {
-    case 'IMPROVING': return <TrendingUp className="h-4 w-4 text-green-600" />;
-    case 'DEGRADING': return <TrendingDown className="h-4 w-4 text-red-600" />;
-    case 'STABLE': return <Minus className="h-4 w-4 text-gray-600" />;
-    default: return null;
-    }
-  };
+  switch (direction) {
+  case 'IMPROVING': return <TrendingUp className="h-4 w-4 text-green-600" />;
+  case 'DEGRADING': return <TrendingDown className="h-4 w-4 text-red-600" />;
+  case 'STABLE': return <Minus className="h-4 w-4 text-gray-600" />;
+  default: return null;
+};
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+
+  return;
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>

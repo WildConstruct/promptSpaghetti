@@ -52,56 +52,52 @@ const { Search } = Input;
 
 // Types and interfaces
 interface PolicyStats {
-  total_policies: number;
+  total_policies: number;,
   active_policies: number;
-  pending_approvals: number;
+  pending_approvals: number;,
   total_violations: number;
-  open_violations: number;
+  open_violations: number;,
   appeal_rate: number;
-}
 interface PolicyDashboardData {
-  statistics: PolicyStats;
-  recent_activities: unknown[];
+  statistics: PolicyStats;,
+  recent_activities: unknown;
   policy_compliance_scores: Record<string, number>;
-  enforcement_metrics: unknown;
-  trending_violations: unknown[];
-}
+  enforcement_metrics: unknown;,
+  trending_violations: unknown;
 interface Policy {
-  id: string;
+  id: string;,
   title: string;
-  policy_type: string;
+  policy_type: string;,
   status: string;
-  version: string;
+  version: string;,
   created_at: string;
-  last_modified: string;
+  last_modified: string;,
   compliance_score: number;
-}
 interface Violation {
-  id: string;
+  id: string;,
   type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   status: string;
-  reported_at: string;
+  reported_at: string;,
   description: string;
   policy_id?: string;
   seller_id: string;
-}
 
 export const PolicyManagementDashboard: React.FC = () => {
   // State management
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<PolicyDashboardData | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [policies, setPolicies] = useState<Policy[]>([]);
-  const [violations, setViolations] = useState<Violation[]>([]);
+  const [policies, setPolicies] = useState<Policy>([]);
+  const [violations, setViolations] = useState<Violation>([]);
   const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(null);
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [, setFilters] = useState({)
-    dateRange: null as { start: Date; end: Date } | null,
+  const [ setFilters] = useState({)
+  dateRange: null as { start: Date; end: Date } | null,
     policyType: null as string | null,
-    violationStatus: null as string | null,
+    violationStatus: null as string | null;
   });
   // Data fetching
   const fetchDashboardData = useCallback(async () => {
@@ -117,11 +113,10 @@ export const PolicyManagementDashboard: React.FC = () => {
       setPolicies(policiesResponse.data || []);
       setViolations(violationsResponse.data || []);
     } catch (error) {
-      message.error('Failed to load dashboard data');
-      console.error('Dashboard loading error:', error);
-    } finally {
+  message.error('Failed to load dashboard data');
+  console.error('Dashboard loading error:', error);
+} finally {
       setLoading(false);
-    }
   }, []);
   useEffect(() => {
     fetchDashboardData();
@@ -143,7 +138,8 @@ export const PolicyManagementDashboard: React.FC = () => {
     try {
       // Mock API call
       await fetch(`/admin/policy-management/policies/${policyId}/status`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
@@ -151,12 +147,12 @@ export const PolicyManagementDashboard: React.FC = () => {
       fetchDashboardData();
     } catch {
       message.error('Failed to update policy status');
-    }
   };
   const handleViolationReview = async (violationId: string, action: string) => {
     try {
       await fetch(`/admin/policy-management/violations/${violationId}/review`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action })
       });
@@ -165,7 +161,6 @@ export const PolicyManagementDashboard: React.FC = () => {
       setViolationDrawerVisible(false);
     } catch {
       message.error('Failed to review violation');
-    }
   };
   // Column definitions
   const policyColumns = [;
@@ -180,7 +175,7 @@ export const PolicyManagementDashboard: React.FC = () => {
             {record.policy_type.replace('_', ' ').toUpperCase()}
           </Text>
         </Space>
-    },
+  }
     {
       title: 'Status',
       dataIndex: 'status',
@@ -193,19 +188,18 @@ export const PolicyManagementDashboard: React.FC = () => {
           archived: { color: 'gray', icon: <DeleteOutlined /> }
         };
         const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.draft;
-        return ()
+        return;
           <Tag color={config.color} icon={config.icon}>
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
         );
-      }
-    },
+  }
     {
       title: 'Version',
       dataIndex: 'version',
       key: 'version',
       render: (version: string) => <Tag>{version}</Tag>
-    },
+  }
     {
       title: 'Compliance Score',
       dataIndex: 'compliance_score',
@@ -216,13 +210,13 @@ export const PolicyManagementDashboard: React.FC = () => {
           size="small" 
           status={score > 80 ? 'success' : score > 60 ? 'normal' : 'exception'}
         />
-    },
+  }
     {
-      title: 'Last Modified',
-      dataIndex: 'last_modified',
-      key: 'last_modified',
-      render: (date: string) => new Date(date).toLocaleDateString(),
-    },
+  title: 'Last Modified',
+  dataIndex: 'last_modified',
+  key: 'last_modified',
+  render: (date: string) => new Date(date).toLocaleDateString(),
+}
     {
       title: 'Actions',
       key: 'actions',
@@ -240,7 +234,6 @@ export const PolicyManagementDashboard: React.FC = () => {
             </Button>
           )}
         </Space>
-    }
   ];
   const violationColumns = [;
     {
@@ -251,7 +244,7 @@ export const PolicyManagementDashboard: React.FC = () => {
         <Tag color="red">
           {type.replace('_', ' ').toUpperCase()}
         </Tag>
-    },
+  }
     {
       title: 'Severity',
       dataIndex: 'severity',
@@ -259,8 +252,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       render: (severity: string) => {,
         const colors = { low: 'green', medium: 'orange', high: 'red', critical: 'purple' };
         return <Tag color={colors[severity as keyof typeof colors]}>{severity.toUpperCase()}</Tag>;
-      }
-    },
+  }
     {
       title: 'Status',
       dataIndex: 'status',
@@ -278,20 +270,19 @@ export const PolicyManagementDashboard: React.FC = () => {
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
         ) : <Tag>{status}</Tag>;
-      }
-    },
+  }
     {
-      title: 'Reported Date',
-      dataIndex: 'reported_at',
-      key: 'reported_at',
-      render: (date: string) => new Date(date).toLocaleDateString(),
-    },
+  title: 'Reported Date',
+  dataIndex: 'reported_at',
+  key: 'reported_at',
+  render: (date: string) => new Date(date).toLocaleDateString(),
+}
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      ellipsis: true,
-    },
+  title: 'Description',
+  dataIndex: 'description',
+  key: 'description',
+  ellipsis: true,
+}
     {
       title: 'Actions',
       key: 'actions',
@@ -305,12 +296,10 @@ export const PolicyManagementDashboard: React.FC = () => {
             Review
           </Button>
         </Space>
-    }
   ];
   if (loading) {
     return <div style={{ padding: '50px', textAlign: 'center' }}>Loading...</div>;
-  }
-  return ()
+  return;
     <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
       <div style={{ marginBottom: '24px' }}>
         <Title level={2}>
@@ -395,7 +384,6 @@ export const PolicyManagementDashboard: React.FC = () => {
             >
               Refresh
             </Button>
-          }
         >
           <TabPane tab="Overview" key="overview">
             <Row gutter={[16, 16]}>

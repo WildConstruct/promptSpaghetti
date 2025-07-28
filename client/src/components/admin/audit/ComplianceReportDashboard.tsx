@@ -55,53 +55,50 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
 interface ComplianceReport {
-  id: string;
+  id: string;,
   reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';
-  standard: 'soc2' | 'iso27001' | 'gdpr' | 'hipaa' | 'pci_dss' | 'ccpa' | 'sox';
+  standard: 'soc2' | 'iso27001' | 'gdpr' | 'hipaa' | 'pci_dss' | 'ccpa' | 'sox';,
   startDate: Date;
-  endDate: Date;
+  endDate: Date;,
   summary: {,
-    totalEvents: number;
-    uniqueUsers: number;
-    criticalEvents: number;
-    securityIncidents: number;
-    complianceViolations: number;
-  };
+  totalEvents: number;,
+  uniqueUsers: number;
+  criticalEvents: number;,
+  securityIncidents: number;
+  complianceViolations: number;
+};
   violations: Array<{,
-    eventId: string;
-    violationType: string;
-    description: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    remediation?: string;
-  }>;
-  generatedBy: string;
-  generatedAt: Date;
-  format: 'json' | 'pdf' | 'csv' | 'xml';
-  status: 'pending' | 'generating' | 'completed' | 'failed';
-}
-interface ReportTemplate {
-  id: string;
-  name: string;
+  eventId: string;
+  violationType: string;,
   description: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  remediation?: string;
+}>;
+  generatedBy: string;,
+  generatedAt: Date;
+  format: 'json' | 'pdf' | 'csv' | 'xml';,
+  status: 'pending' | 'generating' | 'completed' | 'failed';
+interface ReportTemplate {
+  id: string;,
+  name: string;
+  description: string;,
   standard: string;
-  reportType: string;
-  defaultScope: Error;
-  schedule?: {
-    frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-    enabled: boolean;
-  };
-}
+  reportType: string;,
+  defaultScope: Record<string, unknown>;
+  schedule?: {,
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';,
+  enabled: boolean;
+};
 interface ComplianceMetrics {
-  complianceScore: number;
+  complianceScore: number;,
   totalReports: number;
-  violationsThisMonth: number;
+  violationsThisMonth: number;,
   averageResolutionTime: number;
-  byStandard: Record<string, {
-    score: number;
-    violations: number;
-    lastReport: Date;
-  }>;
-}
+  byStandard: Record<string, {,
+  score: number;,
+  violations: number;
+  lastReport: Date;
+}>;
 const COMPLIANCE_STANDARDS = [;
   { value: 'soc2', label: 'SOC 2', description: 'Service Organization Control 2' },
   { value: 'iso27001', label: 'ISO 27001', description: 'Information Security Management' },
@@ -124,7 +121,9 @@ const VIOLATION_SEVERITIES = {
   critical: { color: 'error', icon: SecurityIcon }
 };
 
-export const [, setTemplates] = useState<ReportTemplate[]>([]);
+export const ComplianceReportDashboard: React.FC = () => {
+  const [reports, setReports] = useState<ComplianceReport>([]);
+  const [templates, setTemplates] = useState<ReportTemplate>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -132,7 +131,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
   // Report Generation
   const [generateDialogOpen, setGenerateDialogOpen] = useState(false);
   const [newReport, setNewReport] = useState({)
-    reportType: 'access_report',
+  reportType: 'access_report',
     standard: 'soc2',
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
     endDate: new Date(),
@@ -143,136 +142,122 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
   const [selectedReport, setSelectedReport] = useState<ComplianceReport | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const loadReports = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Mock data - replace with actual API
-      const mockReports: ComplianceReport[] = [
+  setLoading(true);
+  try {
+  // Mock data - replace with actual API
+  const mockReports: ComplianceReport = [
+  {
+  id: 'report_1',
+  reportType: 'security_report',
+  standard: 'soc2',
+  startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+  endDate: new Date(),
+  summary: {,
+  totalEvents: 1543,
+  uniqueUsers: 45,
+  criticalEvents: 12,
+  securityIncidents: 3,
+  complianceViolations: 5,
+},
+  violations: [,
+            {
+  eventId: 'audit_123',
+  violationType: 'unauthorized_access',
+  description: 'User attempted to access restricted resource without proper authorization',
+  severity: 'high',
+  remediation: 'Review user permissions and access controls',
+}
+            {
+  eventId: 'audit_456',
+  violationType: 'failed_authentication',
+  description: 'Multiple failed login attempts from suspicious IP address',
+  severity: 'medium',
+  remediation: 'Monitor IP address and consider blocking if pattern continues'],
+  generatedBy: 'admin@example.com',
+  generatedAt: new Date(Date.now() - 60 * 60 * 1000),
+  format: 'pdf',
+  status: 'completed',
+}
         {
-          id: 'report_1',
-          reportType: 'security_report',
-          standard: 'soc2',
-          startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          endDate: new Date(),
-          summary: {,
-            totalEvents: 1543,
-            uniqueUsers: 45,
-            criticalEvents: 12,
-            securityIncidents: 3,
-            complianceViolations: 5,
-          },
-          violations: [,
+  id: 'report_2',
+  reportType: 'change_report',
+  standard: 'gdpr',
+  startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  endDate: new Date(),
+  summary: {,
+  totalEvents: 234,
+  uniqueUsers: 18,
+  criticalEvents: 2,
+  securityIncidents: 0,
+  complianceViolations: 1,
+},
+  violations: [,
             {
-              eventId: 'audit_123',
-              violationType: 'unauthorized_access',
-              description: 'User attempted to access restricted resource without proper authorization',
-              severity: 'high',
-              remediation: 'Review user permissions and access controls',
-            },
-            {
-              eventId: 'audit_456',
-              violationType: 'failed_authentication',
-              description: 'Multiple failed login attempts from suspicious IP address',
-              severity: 'medium',
-              remediation: 'Monitor IP address and consider blocking if pattern continues',
-            }
-          ],
-          generatedBy: 'admin@example.com',
-          generatedAt: new Date(Date.now() - 60 * 60 * 1000),
-          format: 'pdf',
-          status: 'completed',
-        },
-        {
-          id: 'report_2',
-          reportType: 'change_report',
-          standard: 'gdpr',
-          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          endDate: new Date(),
-          summary: {,
-            totalEvents: 234,
-            uniqueUsers: 18,
-            criticalEvents: 2,
-            securityIncidents: 0,
-            complianceViolations: 1,
-          },
-          violations: [,
-            {
-              eventId: 'audit_789',
-              violationType: 'data_retention_violation',
-              description: 'Personal data retained beyond specified retention period',
-              severity: 'medium',
-              remediation: 'Implement automated data purging for expired records',
-            }
-          ],
-          generatedBy: 'compliance@example.com',
-          generatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          format: 'pdf',
-          status: 'completed',
-        }
-      ];
-      setReports(mockReports);
-    } catch (error) {
-      console.error('Failed to load reports:', error);
-    } finally {
+  eventId: 'audit_789',
+  violationType: 'data_retention_violation',
+  description: 'Personal data retained beyond specified retention period',
+  severity: 'medium',
+  remediation: 'Implement automated data purging for expired records'],
+  generatedBy: 'compliance@example.com',
+  generatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  format: 'pdf',
+  status: 'completed'];
+  setReports(mockReports);
+} catch (error) {
+  console.error('Failed to load reports:', error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const loadTemplates = useCallback(async () => {
-    try {
-      // Mock templates
-      const mockTemplates: ReportTemplate[] = [
+  try {
+  // Mock templates
+  const mockTemplates: ReportTemplate = [
+  {
+  id: 'template_1',
+  name: 'Monthly SOC 2 Security Report',
+  description: 'Comprehensive security assessment for SOC 2 compliance',
+  standard: 'soc2',
+  reportType: 'security_report',
+  defaultScope: {,
+  eventTypes: ['login_failed', 'unauthorized_access', 'security_breach_detected'],
+},
+  schedule: {,
+  frequency: 'monthly',
+  enabled: true,
+}
         {
-          id: 'template_1',
-          name: 'Monthly SOC 2 Security Report',
-          description: 'Comprehensive security assessment for SOC 2 compliance',
-          standard: 'soc2',
-          reportType: 'security_report',
-          defaultScope: {,
-            eventTypes: ['login_failed', 'unauthorized_access', 'security_breach_detected']
-          },
-          schedule: {,
-            frequency: 'monthly',
-            enabled: true,
-          }
-        },
-        {
-          id: 'template_2',
-          name: 'Weekly GDPR Data Changes',
-          description: 'Data modification tracking for GDPR compliance',
-          standard: 'gdpr',
-          reportType: 'change_report',
-          defaultScope: {,
-            eventTypes: ['data_exported', 'data_purged', 'user_created', 'user_deleted']
-          },
-          schedule: {,
-            frequency: 'weekly',
-            enabled: true,
-          }
-        }
-      ];
-      setTemplates(mockTemplates);
-    } catch (error) {
-      console.error('Failed to load templates:', error);
-    }
-  }, []);
+  id: 'template_2',
+  name: 'Weekly GDPR Data Changes',
+  description: 'Data modification tracking for GDPR compliance',
+  standard: 'gdpr',
+  reportType: 'change_report',
+  defaultScope: {,
+  eventTypes: ['data_exported', 'data_purged', 'user_created', 'user_deleted'],
+},
+  schedule: {,
+  frequency: 'weekly',
+  enabled: true];
+  setTemplates(mockTemplates);
+} catch (error) {
+  console.error('Failed to load templates:', error);
+}, []);
   const loadMetrics = useCallback(async () => {
     try {
       // Mock metrics
-      const mockMetrics: ComplianceMetrics = {
-        complianceScore: 87.5,
+      const mockMetrics: ComplianceMetrics = {,
+  complianceScore: 87.5,
         totalReports: 42,
         violationsThisMonth: 8,
         averageResolutionTime: 2.5, // days
         byStandard: {,
-          soc2: { score: 92, violations: 3, lastReport: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+  soc2: { score: 92, violations: 3, lastReport: new Date(Date.now() - 24 * 60 * 60 * 1000) },
           gdpr: { score: 89, violations: 2, lastReport: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
           iso27001: { score: 85, violations: 3, lastReport: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) }
-        }
       };
       setMetrics(mockMetrics);
     } catch (error) {
-      console.error('Failed to load metrics:', error);
-    }
-  }, []);
+  console.error('Failed to load metrics:', error);
+}, []);
   const handleGenerateReport = useCallback(async () => {
     try {
       setLoading(true);
@@ -281,10 +266,9 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
       setGenerateDialogOpen(false);
       await loadReports();
     } catch (error) {
-      console.error('Failed to generate report:', error);
-    } finally {
+  console.error('Failed to generate report:', error);
+} finally {
       setLoading(false);
-    }
   }, [loadReports]);
   const handleViewReport = useCallback((report: ComplianceReport) => {
     setSelectedReport(report);
@@ -295,9 +279,8 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
     try {
       // Mock download
     } catch (error) {
-      console.error('Download failed:', error);
-    }
-  }, []);
+  console.error('Download failed:', error);
+}, []);
   const getComplianceScoreColor = useCallback((score: number): string => {
     if (score >= 90) return 'success';
     if (score >= 75) return 'warning';
@@ -310,7 +293,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
   }, [loadReports, loadTemplates, loadMetrics]);
   const renderMetricsCards = () => {
     if (!metrics) return null;
-    return ()
+    return;
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
@@ -383,7 +366,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
       </Grid>
     );
   };
-  const renderReportsTable = () => (;)
+  const renderReportsTable = () => (;);
     <Paper elevation={1}>
       <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Compliance Reports</Typography>
@@ -415,7 +398,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
               .map((report: ComplianceReport) => {
                 const reportType = REPORT_TYPES.find(rt => rt.value === report.reportType);
                 const standard = COMPLIANCE_STANDARDS.find(cs => cs.value === report.standard);
-                return ()
+                return;
                   <TableRow key={report.id}>
                     <TableCell>
                       <Box>
@@ -511,7 +494,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
       />
     </Paper>
   );
-  const renderGenerateReportDialog = () => (;)
+  const renderGenerateReportDialog = () => (;);
     <Dialog
       open={generateDialogOpen}
       onClose={() => setGenerateDialogOpen(false)}
@@ -612,7 +595,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
       </DialogActions>
     </Dialog>
   );
-  const renderReportDetails = () => (;)
+  const renderReportDetails = () => (;);
     <Dialog
       open={detailsDialogOpen}
       onClose={() => setDetailsDialogOpen(false)}
@@ -656,7 +639,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
                     {selectedReport.violations.map((violation, index) => {
                       const severityConfig = VIOLATION_SEVERITIES[violation.severity];
                       const SeverityIcon = severityConfig.icon;
-                      return ()
+                      return;
                         <React.Fragment key={index}>
                           <ListItem>
                             <ListItemIcon>
@@ -677,7 +660,6 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
                                     </Alert>
                                   )}
                                 </Box>
-                              }
                             />
                           </ListItem>
                           {index < selectedReport.violations.length - 1 && <Divider />}
@@ -705,7 +687,7 @@ export const [, setTemplates] = useState<ReportTemplate[]>([]);
       </DialogActions>
     </Dialog>
   );
-  return ()
+  return;
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}

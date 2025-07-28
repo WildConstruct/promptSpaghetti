@@ -28,164 +28,154 @@ import {
 
 // Types from our enhanced services
 interface EnhancedEvaluationResult {
-  enabled: boolean;
+  enabled: boolean;,
   value: Error;
-  reason: string;
+  reason: string;,
   evaluationTime: number;
   cacheHit: boolean;
   ruleName?: string;
-  dependencyStatus?: {
-    checked: boolean;
-    violations: unknown[];
-    warnings: unknown[];
-    blockers: string[];
-    requirements: string[];
-    canActivate: boolean;
-  };
-  cascadeEffects?: unknown[];
+  dependencyStatus?: {,
+  checked: boolean;,
+  violations: unknown;
+  warnings: unknown;,
+  blockers: string;
+  requirements: string;,
+  canActivate: boolean;
+};
+  cascadeEffects?: unknown;
   riskAssessment?: {
-    riskScore: number;
-    factors: unknown[];
-    mitigation: string[];
-    recommendation: 'proceed' | 'caution' | 'review' | 'block';
-  };
+  riskScore: number;,
+  factors: unknown;
+  mitigation: string;,
+  recommendation: 'proceed' | 'caution' | 'review' | 'block';
+};
   impactScore?: number;
   claudeMetadata?: {
-    costImpact: 'none' | 'low' | 'medium' | 'high';
-    qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
-    riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    modelRecommendation?: string;
-  };
-}
+  costImpact: 'none' | 'low' | 'medium' | 'high';,
+  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  modelRecommendation?: string;
+};
 interface OperationEnforcement {
-  allowed: boolean;
-  blockers: unknown[];
-  warnings: unknown[];
-  cascadeActions: unknown[];
-  impactAssessment: unknown;
+  allowed: boolean;,
+  blockers: unknown;
+  warnings: unknown;,
+  cascadeActions: unknown;
+  impactAssessment: unknown;,
   riskScore: number;
   recommendation: unknown;
   rollbackPlan?: unknown;
-}
-interface ImpactPreview {
-  operation: unknown;
-  directImpact: unknown[];
-  indirectImpact: unknown[];
-  cascadePreview: unknown[];
-  riskFactors: unknown[];
+  interface ImpactPreview {
+  operation: unknown;,
+  directImpact: unknown;
+  indirectImpact: unknown;,
+  cascadePreview: unknown;
+  riskFactors: unknown;,
   overallRiskScore: number;
-  estimatedAffectedUsers: number;
+  estimatedAffectedUsers: number;,
   estimatedExecutionTime: number;
-  recommendedApprovals: string[];
-  safetyChecks: string[];
-}
-
-// Custom hooks for enhanced toggle operations
-/**
- * Hook for enhanced toggle evaluation with dependency awareness
- */
-export const useEnhancedToggleEvaluation = () => {
+  recommendedApprovals: string;,
+  safetyChecks: string;
+  // Custom hooks for enhanced toggle operations
+  /**
+  * Hook for enhanced toggle evaluation with dependency awareness
+  */
+  export const useEnhancedToggleEvaluation = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const evaluateToggle = useCallback(async (;)
-    toggleKey: string,
-    context?: {
-      claudeContext?: {
-        modelVersion?: string;
-        promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
-        tokensUsed?: number;
-        riskLevel?: 'low' | 'medium' | 'high' | 'critical';
-        costImpact?: 'none' | 'low' | 'medium' | 'high';
-      };
+  const evaluateToggle = useCallback(async (;);
+  toggleKey: string,
+  context?: {,
+  claudeContext?: {,
+  modelVersion?: string;
+  promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
+  tokensUsed?: number;
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
+  costImpact?: 'none' | 'low' | 'medium' | 'high';
+};
       performanceHints?: {
-        priority?: 'low' | 'normal' | 'high' | 'critical';
-        maxEvaluationTime?: number;
-      };
+  priority?: 'low' | 'normal' | 'high' | 'critical';
+  maxEvaluationTime?: number;
+};
       dependencyContext?: {
-        enforceDependencies?: boolean;
-        cascadeEvaluation?: boolean;
-        impactAnalysis?: boolean;
-      };
+  enforceDependencies?: boolean;
+  cascadeEvaluation?: boolean;
+  impactAnalysis?: boolean;
+};
       traceEnabled?: boolean;
-    }
   ): Promise<EnhancedEvaluationResult | null> => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/enhanced-feature-toggles/enhanced-evaluation', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
+  },
+  body: JSON.stringify({),
           toggleKey,
           context
-        })
+  }
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Enhanced evaluation failed');
-      }
       const data = await response.json();
       return data.result;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      return null;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  return null;
+} finally {
       setLoading(false);
-    }
   }, []);
-  const evaluateBulkToggles = useCallback(async (;)
-    toggleKeys: string[],
+  const evaluateBulkToggles = useCallback(async (;);
+    toggleKeys: string,
     context?: {
-      claudeContext?: {
-        modelVersion?: string;
-        promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
-        tokensUsed?: number;
-        riskLevel?: 'low' | 'medium' | 'high' | 'critical';
-        costImpact?: 'none' | 'low' | 'medium' | 'high';
-      };
+  claudeContext?: {,
+  modelVersion?: string;
+  promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
+  tokensUsed?: number;
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
+  costImpact?: 'none' | 'low' | 'medium' | 'high';
+};
       performanceHints?: {
-        priority?: 'low' | 'normal' | 'high' | 'critical';
-        maxEvaluationTime?: number;
-      };
+  priority?: 'low' | 'normal' | 'high' | 'critical';
+  maxEvaluationTime?: number;
+};
       dependencyContext?: {
-        enforceDependencies?: boolean;
-        cascadeEvaluation?: boolean;
-        impactAnalysis?: boolean;
-      };
+  enforceDependencies?: boolean;
+  cascadeEvaluation?: boolean;
+  impactAnalysis?: boolean;
+};
       traceEnabled?: boolean;
-    }
   ): Promise<Record<string, EnhancedEvaluationResult> | null> => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/enhanced-feature-toggles/bulk-enhanced-evaluation', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
+  },
+  body: JSON.stringify({),
           toggleKeys,
           context
-        })
+  }
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Bulk evaluation failed');
-      }
       const data = await response.json();
       return data.results;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      return null;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  return null;
+} finally {
       setLoading(false);
-    }
   }, []);
   return {
     evaluateToggle,
@@ -200,85 +190,78 @@ export const useEnhancedToggleEvaluation = () => {
 export const useOperationEnforcement = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const enforceOperation = useCallback(async (;)
-    operation: {,
-      type: 'activate' | 'deactivate' | 'modify_value' | 'modify_config' | 'archive';
-      targetToggleId: string;
-      reason: string;
-      newState?: boolean;
-      newValue?: unknown;
-    },
-    context: {,
-      requestSource: 'admin_dashboard';
+  const enforceOperation = useCallback(async (;);
+  operation: {,
+  type: 'activate' | 'deactivate' | 'modify_value' | 'modify_config' | 'archive';,
+  targetToggleId: string;
+  reason: string;
+  newState?: boolean;
+  newValue?: unknown;
+},
+  context: {,
+  requestSource: 'admin_dashboard';
       urgencyLevel: 'low' | 'normal' | 'high' | 'emergency';
-      approvals?: unknown[];
+      approvals?: unknown;
       rolloutStrategy?: 'immediate' | 'gradual' | 'scheduled';
-    }
   ): Promise<OperationEnforcement | null> => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/enhanced-feature-toggles/enforce-operation', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
+  },
+  body: JSON.stringify({),
           operation,
           context
-        })
+  }
       });
       const data = await response.json();
       if (!response.ok) {
         if (response.status === 403) {
           // Operation blocked by enforcement
           return data.enforcement;
-        }
         throw new Error(data.error || 'Operation enforcement failed');
-      }
       return data.enforcement;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      return null;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  return null;
+} finally {
       setLoading(false);
-    }
   }, []);
-  const executeOperation = useCallback(async (;)
+  const executeOperation = useCallback(async (;);
     operation: unknown,
     enforcement: OperationEnforcement,
-    context: unknown,
-  ): Promise<boolean> => {
+    context: unknown): Promise<boolean> => {,
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/enhanced-feature-toggles/execute-operation', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
+  },
+  body: JSON.stringify({),
           operation,
           context,
           enforcement
-        })
+  }
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Operation execution failed');
-      }
       const data = await response.json();
       return data.success;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      return false;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  return false;
+} finally {
       setLoading(false);
-    }
   }, []);
   return {
     enforceOperation,
@@ -293,62 +276,58 @@ export const useOperationEnforcement = () => {
 export const useImpactPreview = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const getImpactPreview = useCallback(async (;)
-    operation: {,
-      type: string;
-      targetToggleId: string;
-      reason: string;
-    },
+  const getImpactPreview = useCallback(async (;);
+  operation: {,
+  type: string;,
+  targetToggleId: string;
+  reason: string;
+}
     context?: {
-      claudeContext?: {
-        modelVersion?: string;
-        promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
-        tokensUsed?: number;
-        riskLevel?: 'low' | 'medium' | 'high' | 'critical';
-        costImpact?: 'none' | 'low' | 'medium' | 'high';
-      };
+  claudeContext?: {,
+  modelVersion?: string;
+  promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
+  tokensUsed?: number;
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
+  costImpact?: 'none' | 'low' | 'medium' | 'high';
+};
       performanceHints?: {
-        priority?: 'low' | 'normal' | 'high' | 'critical';
-        maxEvaluationTime?: number;
-      };
+  priority?: 'low' | 'normal' | 'high' | 'critical';
+  maxEvaluationTime?: number;
+};
       dependencyContext?: {
-        enforceDependencies?: boolean;
-        cascadeEvaluation?: boolean;
-        impactAnalysis?: boolean;
-      };
+  enforceDependencies?: boolean;
+  cascadeEvaluation?: boolean;
+  impactAnalysis?: boolean;
+};
       traceEnabled?: boolean;
-    }
   ): Promise<ImpactPreview | null> => {
     setLoading(true);
     setError(null);
     try {
       const response = await fetch('/api/enhanced-feature-toggles/impact-preview', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
-          operation,
-          context: context || {,
-            requestSource: 'admin_dashboard',
-            urgencyLevel: 'normal',
-          }
-        })
+  },
+  body: JSON.stringify({),
+  operation,
+  context: context || {,
+  requestSource: 'admin_dashboard',
+  urgencyLevel: 'normal',
+}
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Impact preview failed');
-      }
       const data = await response.json();
       return data.preview;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      return null;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  return null;
+} finally {
       setLoading(false);
-    }
   }, []);
   return {
     getImpactPreview,
@@ -362,10 +341,10 @@ export const useImpactPreview = () => {
  * Risk Assessment Display Component
  */
 export const RiskAssessmentBadge: React.FC<{
-  riskAssessment?: {
-    riskScore: number;
-    recommendation: 'proceed' | 'caution' | 'review' | 'block';
-  };
+  riskAssessment?: {,
+  riskScore: number;,
+  recommendation: 'proceed' | 'caution' | 'review' | 'block';
+};
 }> = ({ riskAssessment }) => {
   if (!riskAssessment) return null;
   const { riskScore } = riskAssessment;
@@ -387,7 +366,7 @@ export const RiskAssessmentBadge: React.FC<{
     if (riskScore >= 0.3) return 'Low Risk';
     return 'Safe';
   };
-  return ()
+  return;
     <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium border ${getRiskColor()}`}>}
       {getRiskIcon()}
       {getRiskText()}
@@ -399,30 +378,28 @@ export const RiskAssessmentBadge: React.FC<{
  * Claude Impact Display Component
  */
 export const ClaudeImpactDisplay: React.FC<{
-  claudeMetadata?: {
-    costImpact: 'none' | 'low' | 'medium' | 'high';
-    qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
-    riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    modelRecommendation?: string;
-  };
+  claudeMetadata?: {,
+  costImpact: 'none' | 'low' | 'medium' | 'high';,
+  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  modelRecommendation?: string;
+};
 }> = ({ claudeMetadata }) => {
   if (!claudeMetadata || claudeMetadata.costImpact === 'none') return null;
   const getCostColor = () => {
-    switch (claudeMetadata.costImpact) {
-    case 'high': return 'text-red-600';
-    case 'medium': return 'text-orange-600';
-    case 'low': return 'text-yellow-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (claudeMetadata.costImpact) {
+  case 'high': return 'text-red-600';
+  case 'medium': return 'text-orange-600';
+  case 'low': return 'text-yellow-600';
+  default: return 'text-gray-600';
+};
   const getQualityIcon = () => {
     switch (claudeMetadata.qualityImpact) {
     case 'positive': return <TrendingUp size={12} className="text-green-600" />;
     case 'negative': return <AlertTriangle size={12} className="text-red-600" />;
     default: return <Activity size={12} className="text-gray-600" />;
-    }
   };
-  return ()
+  return;
     <div className="flex items-center gap-2 text-xs">
       <div className="flex items-center gap-1">
         <Zap size={12} className={getCostColor()} />
@@ -447,7 +424,7 @@ export const ClaudeImpactDisplay: React.FC<{
 /**
  * Performance Metrics Display Component
  */
-export const PerformanceMetrics: React.FC<{
+export const PerformanceMetrics: React.FC<{,
   evaluationTime: number;
   cacheHit: boolean;
 }> = ({ evaluationTime, cacheHit }) => {
@@ -456,7 +433,7 @@ export const PerformanceMetrics: React.FC<{
     if (evaluationTime > 50) return 'text-orange-600';
     return 'text-green-600';
   };
-  return ()
+  return;
     <div className="flex items-center gap-2 text-xs text-gray-500">
       <div className="flex items-center gap-1">
         <Clock size={12} className={getPerformanceColor()} />
@@ -477,28 +454,27 @@ export const PerformanceMetrics: React.FC<{
  * Dependency Status Indicator Component
  */
 export const DependencyStatusIndicator: React.FC<{
-  dependencyStatus?: {
-    checked: boolean;
-    violations: unknown[];
-    warnings: unknown[];
-    blockers: string[];
-    canActivate: boolean;
-  };
+  dependencyStatus?: {,
+  checked: boolean;,
+  violations: unknown;
+  warnings: unknown;,
+  blockers: string;
+  canActivate: boolean;
+};
 }> = ({ dependencyStatus }) => {
   if (!dependencyStatus || !dependencyStatus.checked) return null;
   const hasBlockers = dependencyStatus.blockers.length > 0;
   const hasWarnings = dependencyStatus.warnings.length > 0;
   const hasViolations = dependencyStatus.violations.length > 0;
   if (hasBlockers) {
-    return ()
+    return;
       <div className="flex items-center gap-1 text-red-600 text-xs">
         <XCircle size={12} />
         <span>Blocked ({dependencyStatus.blockers.length})</span>
       </div>
     );
-  }
   if (hasViolations || hasWarnings) {
-    return ()
+    return;
       <div className="flex items-center gap-1 text-orange-600 text-xs">
         <AlertTriangle size={12} />
         <span>
@@ -508,8 +484,7 @@ export const DependencyStatusIndicator: React.FC<{
         </span>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="flex items-center gap-1 text-green-600 text-xs">
       <CheckCircle size={12} />
       <span>Dependencies OK</span>
@@ -520,19 +495,18 @@ export const DependencyStatusIndicator: React.FC<{
  * Cascade Effects Preview Component
  */
 export const CascadeEffectsPreview: React.FC<{
-  cascadeEffects?: unknown[];
+  cascadeEffects?: unknown;
   compact?: boolean;
 }> = ({ cascadeEffects, compact = false }) => {
   if (!cascadeEffects || cascadeEffects.length === 0) return null;
   if (compact) {
-    return ()
+    return;
       <div className="flex items-center gap-1 text-blue-600 text-xs">
         <GitBranch size={12} />
         <span>{cascadeEffects.length} cascade effects</span>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded">
       <div className="flex items-center gap-1 text-blue-700 text-sm font-medium mb-1">
         <GitBranch size={14} />
@@ -556,14 +530,14 @@ export const CascadeEffectsPreview: React.FC<{
 /**
  * Impact Preview Modal Component
  */
-export const ImpactPreviewModal: React.FC<{
+export const ImpactPreviewModal: React.FC<{,
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void;,
   operation: {,
-    type: string;
-    targetToggleId: string;
-    reason: string;
-  };
+  type: string;,
+  targetToggleId: string;
+  reason: string;
+};
   onProceed: (enforcement: OperationEnforcement) => void;
 }> = ({ isOpen, onClose, operation, onProceed }) => {
   const { getImpactPreview, loading: previewLoading } = useImpactPreview();
@@ -573,26 +547,22 @@ export const ImpactPreviewModal: React.FC<{
   useEffect(() => {
     if (isOpen && operation) {
       getImpactPreview(operation).then(setPreview);
-    }
   }, [isOpen, operation, getImpactPreview]);
   const handleProceedClick = async () => {
-    if (!enforcement) {
-      const result = await enforceOperation(operation, {)
-        requestSource: 'admin_dashboard',
-        urgencyLevel: 'normal',
-      });
+  if (!enforcement) {
+  const result = await enforceOperation(operation, {)
+  requestSource: 'admin_dashboard',
+  urgencyLevel: 'normal',
+});
       if (result) {
         setEnforcement(result);
         if (result.allowed) {
           onProceed(result);
-        }
-      }
     } else {
       onProceed(enforcement);
-    }
   };
   if (!isOpen) return null;
-  return ()
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full m-4 max-h-screen overflow-y-auto">
         <div className="p-6">
@@ -625,11 +595,11 @@ export const ImpactPreviewModal: React.FC<{
                 <h3 className="font-medium text-gray-900 mb-2">Risk Assessment</h3>
                 <div className="flex items-center justify-between">
                   <RiskAssessmentBadge riskAssessment={{
-                    riskScore: preview.overallRiskScore,
-                    recommendation: preview.overallRiskScore >= 0.8 ? 'block' : ,
-                      preview.overallRiskScore >= 0.6 ? 'review' : 
-                        preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed'
-                  }} />
+  riskScore: preview.overallRiskScore,
+  recommendation: preview.overallRiskScore >= 0.8 ? 'block' : ,
+  preview.overallRiskScore >= 0.6 ? 'review' :,
+  preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed',
+}} />
                   <div className="text-sm text-gray-600">
                     {preview.estimatedAffectedUsers.toLocaleString()} users affected
                   </div>
@@ -705,14 +675,14 @@ export const ImpactPreviewModal: React.FC<{
                 onClick={handleProceedClick}
                 disabled={enforcementLoading || (enforcement && !enforcement.allowed)}
                 className={`px-4 py-2 rounded ${
-                  enforcement && !enforcement.allowed
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : preview.overallRiskScore >= 0.8
-                      ? 'bg-red-600 text-white hover:bg-red-700'
-                      : preview.overallRiskScore >= 0.6
-                        ? 'bg-orange-600 text-white hover:bg-orange-700'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
+  enforcement && !enforcement.allowed
+  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+  : preview.overallRiskScore >= 0.8,
+  ? 'bg-red-600 text-white hover:bg-red-700',
+  : preview.overallRiskScore >= 0.6,
+  ? 'bg-orange-600 text-white hover:bg-orange-700',
+  : 'bg-blue-600 text-white hover:bg-blue-700',
+}`}
               >
                 {enforcementLoading ? ()
                   <>

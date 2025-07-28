@@ -35,9 +35,7 @@ interface RevenueDashboardProps {
   exportEnabled?: boolean;
   /** Custom CSS class */
   className?: string;
-}
-
-export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
+  export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({,)
   scope,
   entityId,
   initialTimeRange = RevenueTimeRange.LAST_30D,
@@ -49,59 +47,59 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
   // State management
   const [timeRange, setTimeRange] = useState<RevenueTimeRange>(initialTimeRange);
   const [customDateRange, setCustomDateRange] = useState<{
-    start: Date | null;
-    end: Date | null;
-  }>({ start: null, end: null });
+  start: Date | null;,
+  end: Date | null;
+}>({ start: null, end: null });
   const [filters, setFilters] = useState<RevenueFilters>({)
-    paymentProviders: [],
-    licenseTypes: [],
-    countries: [],
-    templates: [],
-    creators: [],
-  });
+  paymentProviders: [],
+  licenseTypes: [],
+  countries: [],
+  templates: [],
+  creators: [],
+});
   const [activeTab, setActiveTab] = useState<'overview' | 'trends' | 'performers' | 'geography' | 'payouts'>('overview');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   // Custom hooks for data fetching
   const {
-    dashboardData,
-    metrics,
-    isLoading: analyticsLoading,
-    error: analyticsError,
-    refreshData,
-    exportData
-  } = useRevenueAnalytics({)
-    scope,
-    entityId,
-    timeRange,
-    customDateRange,
-    filters,
-    refreshInterval: realtimeEnabled ? 30000 : 0 // 30 seconds for real-time,
-  });
+  dashboardData,
+  metrics,
+  isLoading: analyticsLoading,
+  error: analyticsError,
+  refreshData,
+  exportData
+} = useRevenueAnalytics({)
+  scope,
+  entityId,
+  timeRange,
+  customDateRange,
+  filters,
+  refreshInterval: realtimeEnabled ? 30000 : 0 // 30 seconds for real-time,
+});
   // Real-time revenue stream
   const {
-    realtimeData,
-    isConnected: realtimeConnected,
-    connect: connectRealtime,
-    disconnect: disconnectRealtime,
-  } = useRealtimeRevenue({)
-    enabled: realtimeEnabled,
-    scope,
-    entityId,
-    filters
-  });
+  realtimeData,
+  isConnected: realtimeConnected,
+  connect: connectRealtime,
+  disconnect: disconnectRealtime,
+} = useRealtimeRevenue({)
+  enabled: realtimeEnabled,
+  scope,
+  entityId,
+  filters
+});
   // Revenue forecasting
   const {
-    forecast,
-    isLoading: forecastLoading,
-    generateForecast,
-    forecastAccuracy
-  } = useRevenueForecast({)
-    scope,
-    entityId,
-    historicalPeriod: 90 // 90 days of historical data,
-  });
+  forecast,
+  isLoading: forecastLoading,
+  generateForecast,
+  forecastAccuracy
+} = useRevenueForecast({)
+  scope,
+  entityId,
+  historicalPeriod: 90 // 90 days of historical data,
+});
   // Effects
   useEffect(() => {
     setLoading(analyticsLoading);
@@ -111,20 +109,17 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
     if (realtimeEnabled) {
       connectRealtime();
       return () => disconnectRealtime();
-    }
   }, [realtimeEnabled, connectRealtime, disconnectRealtime]);
   // Event handlers
   const handleTimeRangeChange = useCallback((newTimeRange: RevenueTimeRange) => {
     setTimeRange(newTimeRange);
     if (newTimeRange !== RevenueTimeRange.CUSTOM) {
       setCustomDateRange({ start: null, end: null });
-    }
   }, []);
   const handleCustomDateRangeChange = useCallback((start: Date | null, end: Date | null) => {
     setCustomDateRange({ start, end });
     if (start && end) {
       setTimeRange(RevenueTimeRange.CUSTOM);
-    }
   }, []);
   const handleFiltersChange = useCallback((newFilters: RevenueFilters) => {
     setFilters(newFilters);
@@ -137,47 +132,43 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
       setError('Failed to refresh dashboard data');
     } finally {
       setRefreshing(false);
-    }
   }, [refreshData]);
   const handleExport = useCallback(async (format: 'csv' | 'xlsx' | 'pdf') => {
-    try {
-      await exportData(format, {)
-        scope,
-        entityId,
-        timeRange,
-        customDateRange,
-        filters,
-        includeForecast: !!forecast,
-      });
+  try {
+  await exportData(format, {)
+  scope,
+  entityId,
+  timeRange,
+  customDateRange,
+  filters,
+  includeForecast: !!forecast,
+});
     } catch {
       setError('Failed to export dashboard data');
-    }
   }, [exportData, scope, entityId, timeRange, customDateRange, filters, forecast]);
   const handleGenerateForecast = useCallback(async () => {
     try {
       await generateForecast();
     } catch {
       setError('Failed to generate revenue forecast');
-    }
   }, [generateForecast]);
   // Computed values
   const dashboardTitle = useMemo(() => {
-    switch (scope) {
-      case 'global':
-        return 'Global Revenue Analytics';
-      case 'creator':
-        return 'Creator Revenue Dashboard';
-      case 'template':
-        return 'Template Revenue Analytics';
-      default:
-        return 'Revenue Dashboard';
-    }
-  }, [scope]);
+  switch (scope) {
+  case 'global':,
+  return 'Global Revenue Analytics';
+  case 'creator':,
+  return 'Creator Revenue Dashboard';
+  case 'template':,
+  return 'Template Revenue Analytics';
+  default:,
+  return 'Revenue Dashboard';
+}, [scope]);
   const isCompactLayout = layout === 'compact';
   const isExecutiveLayout = layout === 'executive';
   // Loading state
   if (loading && !dashboardData) {
-    return ()
+    return;
       <div className={`revenue-dashboard revenue-dashboard--loading ${className}`}>}
         <div className="revenue-dashboard__loading">
           <div className="revenue-dashboard__spinner" />
@@ -185,10 +176,9 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   // Error state
   if (error && !dashboardData) {
-    return ()
+    return;
       <div className={`revenue-dashboard revenue-dashboard--error ${className}`}>}
         <div className="revenue-dashboard__error">
           <h3>Failed to Load Revenue Dashboard</h3>
@@ -199,8 +189,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`revenue-dashboard revenue-dashboard--${layout} ${className}`}>}
       {/* Dashboard Header */}
       <div className="revenue-dashboard__header">
@@ -398,7 +387,6 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
           Last updated: {dashboardData?.lastUpdated ? 
             new Date(dashboardData.lastUpdated).toLocaleString() : 
             'Never'
-          }
         </div>
         {dashboardData?.dataQuality && ()
           <div className="revenue-dashboard__data-quality">

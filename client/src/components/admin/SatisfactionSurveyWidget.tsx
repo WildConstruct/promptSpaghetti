@@ -16,27 +16,24 @@ import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { AlertTriangle, TrendingUp, TrendingDown, Users, MessageSquare, Star } from 'lucide-react';
 interface SatisfactionMetrics {
-  overallScore: number;
+  overallScore: number;,
   npsScore: number;
-  responseRate: number;
+  responseRate: number;,
   totalResponses: number;
   trendDirection: 'up' | 'down' | 'stable';
-}
 interface SatisfactionAlert {
-  alertId: string;
+  alertId: string;,
   alertType: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   title: string;
-  description: string;
+  description: string;,
   affectedUsers: number;
-  triggeredAt: Date;
+  triggeredAt: Date;,
   acknowledged: boolean;
-}
 interface RecentFeedback {
   positive: { text: string; user: string; timestamp: Date }[];
   negative: { text: string; user: string; timestamp: Date }[];
   suggestions: { text: string; user: string; timestamp: Date }[];
-}
 
 // Currently unused but may be needed for future dashboard integration
 // interface SatisfactionDashboardData {
@@ -44,6 +41,7 @@ interface RecentFeedback {
 //   realtime: {
 //     todayResponses: number;
 //     averageToday: number;
+
 //     hourlyTrend: { hour: number; score: number; responses: number }[];
 //   };
 //   segments: {
@@ -56,7 +54,7 @@ interface RecentFeedback {
 //     bottomRated: { feature: string; rating: number; responses: number }[];
 //     trending: { feature: string; change: number; current: number }[];
 //   };
-//   alerts: SatisfactionAlert[];
+//   alerts: SatisfactionAlert;
 //   recentFeedback: RecentFeedback;
 //   timestamp: Date;
 //   dataFreshness: number;
@@ -64,15 +62,19 @@ interface RecentFeedback {
 interface SatisfactionSurveyWidgetProps {
   className?: string;
   refreshInterval?: number;
-}
-
-export realtime: Record<string, unknown>;
-    segments: Record<string, unknown>;
-    features: Record<string, unknown>;
-    alerts: SatisfactionAlert[];
-    recentFeedback: RecentFeedback;
-    dataFreshness: number;
-  } | null>(null);
+  export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> = ({ ),
+  className,
+  refreshInterval = 30000
+}) => {
+  const [dashboardData, setDashboardData] = useState<{
+  summary: SatisfactionMetrics;,
+  realtime: Record<string, unknown>;
+  segments: Record<string, unknown>;
+  features: Record<string, unknown>;
+  alerts: SatisfactionAlert;,
+  recentFeedback: RecentFeedback;
+  dataFreshness: number;
+} | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -86,13 +88,11 @@ export realtime: Record<string, unknown>;
         setError(null);
       } else {
         setError(result.error || 'Failed to load satisfaction data');
-      }
     } catch (err) {
-      setError('Network error loading satisfaction data');
-      console.error('Error fetching satisfaction dashboard:', err);
-    } finally {
+  setError('Network error loading satisfaction data');
+  console.error('Error fetching satisfaction dashboard:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Setup periodic refresh
   useEffect(() => {
@@ -104,45 +104,41 @@ export realtime: Record<string, unknown>;
   const handleAcknowledgeAlert = async (alertId: string) => {
     try {
       const response = await fetch(`/api/admin/satisfaction/alerts/${alertId}/acknowledge`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
       if (response.ok) {
         // Refresh data to update alert status
         fetchDashboardData();
-      }
     } catch (err) {
-      console.error('Error acknowledging alert:', err);
-    }
-  };
+  console.error('Error acknowledging alert:', err);
+};
   // Create new survey
   const handleCreateSurvey = async (surveyType: string) => {
     try {
       const response = await fetch('/api/admin/satisfaction/surveys', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ surveyType })
       });
       const result = await response.json();
       if (result.success) {
-        // Handle successful survey creation
-        console.log('Survey created:', result.data);
-      }
-    } catch (err) {
-      console.error('Error creating survey:', err);
-    }
-  };
+  // Handle successful survey creation
+  console.log('Survey created:', result.data);
+} catch (err) {
+  console.error('Error creating survey:', err);
+};
   if (loading) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading satisfaction data...</div>
         </CardContent>
       </Card>
     );
-  }
   if (error) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="text-red-600">
@@ -152,18 +148,16 @@ export realtime: Record<string, unknown>;
         </CardContent>
       </Card>
     );
-  }
   if (!dashboardData) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div>No satisfaction data available</div>
         </CardContent>
       </Card>
     );
-  }
   const { summary, realtime, segments, features, alerts, recentFeedback } = dashboardData;
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -377,28 +371,28 @@ export realtime: Record<string, unknown>;
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
-                      alert.severity === 'critical' ? 'border-red-300 bg-red-50' :
-                        alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :
-                          alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
-                            'border-blue-300 bg-blue-50'
-                    }`}
+  alert.severity === 'critical' ? 'border-red-300 bg-red-50' :,
+  alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :,
+  alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :,
+  'border-blue-300 bg-blue-50'
+}`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <AlertTriangle className={`w-4 h-4 ${
-                            alert.severity === 'critical' ? 'text-red-600' :
-                              alert.severity === 'high' ? 'text-orange-600' :
-                                alert.severity === 'medium' ? 'text-yellow-600' :
-                                  'text-blue-600'
-                          }`} />
+  alert.severity === 'critical' ? 'text-red-600' :,
+  alert.severity === 'high' ? 'text-orange-600' :,
+  alert.severity === 'medium' ? 'text-yellow-600' :,
+  'text-blue-600'
+}`} />
                           <h4 className="font-medium">{alert.title}</h4>
                           <Badge variant={
-                            alert.severity === 'critical' ? 'destructive' :
-                              alert.severity === 'high' ? 'destructive' :
-                                alert.severity === 'medium' ? 'warning' :
-                                  'secondary'
-                          }>
+  alert.severity === 'critical' ? 'destructive' :,
+  alert.severity === 'high' ? 'destructive' :,
+  alert.severity === 'medium' ? 'warning' :,
+  'secondary'
+}>
                             {alert.severity}
                           </Badge>
                         </div>

@@ -13,9 +13,7 @@ interface TemplateSelectorProps {
   onTemplateSelect?: (template: GraphTemplate) => void;
   onNodeTemplateSelect?: (nodeTemplate: NodeTemplate) => void;
   className?: string;
-}
-
-export const TemplateSelector: React.FC<TemplateSelectorProps> = ({)
+  export const TemplateSelector: React.FC<TemplateSelectorProps> = ({,)
   onTemplateSelect,
   onNodeTemplateSelect,
   className = ""
@@ -23,23 +21,22 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({)
   const [activeTab, setActiveTab] = useState<'graphs' | 'nodes'>('graphs');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'logic' | 'transform'>('all');
   // Available graph templates (can be expanded)
-  const graphTemplates: GraphTemplate[] = [
-    retroGamingDemoTemplate
+  const graphTemplates: GraphTemplate = [
+  retroGamingDemoTemplate
   ];
   // Get node templates by category
   const getNodeTemplatesByCategory = () => {
-    if (selectedCategory === 'all') {
-      return Object.values(templateCategories).flat();
-    }
-    return templateCategories[selectedCategory] || [];
-  };
+  if (selectedCategory === 'all') {
+  return Object.values(templateCategories).flat();
+  return templateCategories[selectedCategory] || [];
+};
   const handleGraphTemplateSelect = (template: GraphTemplate) => {
     onTemplateSelect?.(template);
   };
   const handleNodeTemplateSelect = (template: NodeTemplate) => {
     onNodeTemplateSelect?.(template);
   };
-  return ()
+  return;
     <div className={`template-selector bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg ${className}`}>}
       {/* Header with tabs */}
       <div className="border-b border-gray-200 dark:border-gray-700">
@@ -47,20 +44,20 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({)
           <button
             onClick={() => setActiveTab('graphs')}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTab === 'graphs'
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
-                : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+  activeTab === 'graphs'
+  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
+  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+}`}
           >
             Graph Templates
           </button>
           <button
             onClick={() => setActiveTab('nodes')}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTab === 'nodes'
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
-                : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+  activeTab === 'nodes'
+  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
+  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+}`}
           >
             Node Templates
           </button>
@@ -132,12 +129,12 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({)
                       </p>
                     </div>
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      template.type === 'logic' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'
-                        : template.type === 'transform'
-                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
-                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'
-                    }`}>
+  template.type === 'logic'
+  ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+  : template.type === 'transform',
+  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
+  : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
+}`}>
                       {template.type}
                     </span>
                   </div>

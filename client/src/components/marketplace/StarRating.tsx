@@ -8,9 +8,7 @@ interface StarRatingProps {
   interactive?: boolean;
   onRatingChange?: (rating: number) => void;
   className?: string;
-}
-
-export const StarRating: React.FC<StarRatingProps> = ({)
+  export const StarRating: React.FC<StarRatingProps> = ({,)
   rating,
   maxRating = 5,
   size = 'medium',
@@ -19,36 +17,32 @@ export const StarRating: React.FC<StarRatingProps> = ({)
   className = ''
 }) => {
   const [hoveredRating, setHoveredRating] = React.useState<number | null>(null);
-  const handleStarClick = (starRating: number) => {
-    if (interactive && onRatingChange) {
-      onRatingChange(starRating);
-    }
-  };
+  const handleStarClick = (starRating: number) => {,
+  if (interactive && onRatingChange) {
+  onRatingChange(starRating);
+};
   const handleStarHover = (starRating: number) => {
     if (interactive) {
       setHoveredRating(starRating);
-    }
   };
   const handleMouseLeave = () => {
     if (interactive) {
       setHoveredRating(null);
-    }
   };
   const getStarFill = (starIndex: number): 'empty' | 'half' | 'full' => {
-    const effectiveRating = hoveredRating !== null ? hoveredRating : rating;
-    const starValue = starIndex + 1;
-    if (effectiveRating >= starValue) {
-      return 'full';
-    } else if (effectiveRating >= starValue - 0.5) {
+  const effectiveRating = hoveredRating !== null ? hoveredRating : rating;
+  const starValue = starIndex + 1;
+  if (effectiveRating >= starValue) {
+  return 'full';
+} else if (effectiveRating >= starValue - 0.5) {
       return 'half';
     } else {
       return 'empty';
-    }
   };
   const renderStar = (index: number) => {
     const fill = getStarFill(index);
     const starValue = index + 1;
-    return ()
+    return;
       <button
         key={index}
         type="button"
@@ -81,7 +75,6 @@ export const StarRating: React.FC<StarRatingProps> = ({)
                 : fill === 'half' 
                   ? `url(#half-fill-${index})` }
                   : 'var(--star-empty-color)'
-            }
             stroke="var(--star-stroke-color)"
             strokeWidth="0.5"
             strokeLinecap="round"
@@ -91,7 +84,7 @@ export const StarRating: React.FC<StarRatingProps> = ({)
       </button>
     );
   };
-  return ()
+  return;
     <div 
       className={`star-rating ${size} ${interactive ? 'interactive' : ''} ${className}`}
       onMouseLeave={handleMouseLeave}

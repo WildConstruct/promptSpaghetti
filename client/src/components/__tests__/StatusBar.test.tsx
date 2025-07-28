@@ -25,10 +25,10 @@ describe('StatusBar Component', () => {
     const { container } = render(<StatusBar errorCount={0} />);
     const statusBarDiv = container.firstChild as HTMLElement;
     expect(statusBarDiv).toHaveStyle({)
-      background: '#2a2a2a',
-      borderTop: '1px solid #444',
-      height: '32px',
-    });
+  background: '#2a2a2a',
+  borderTop: '1px solid #444',
+  height: '32px',
+});
   });
   /**
    * Test for snapshot comparison to detect unexpected UI changes

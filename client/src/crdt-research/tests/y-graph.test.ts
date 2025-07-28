@@ -14,14 +14,14 @@ describe('YGraph CRDT Implementation', () => {
   let graph1: YGraph;
   let graph2: YGraph;
   beforeEach(() => {
-    // Create two documents to simulate concurrent editing
-    doc1 = new Y.Doc();
-    doc2 = new Y.Doc();
-    graph1 = new YGraph();
-    graph2 = new YGraph();
-    doc1.getMap('graph').set('root', graph1);
-    doc2.getMap('graph').set('root', graph2);
-  });
+  // Create two documents to simulate concurrent editing
+  doc1 = new Y.Doc();
+  doc2 = new Y.Doc();
+  graph1 = new YGraph();
+  graph2 = new YGraph();
+  doc1.getMap('graph').set('root', graph1);
+  doc2.getMap('graph').set('root', graph2);
+});
   afterEach(() => {
     doc1.destroy();
     doc2.destroy();
@@ -34,11 +34,11 @@ describe('YGraph CRDT Implementation', () => {
     const state2 = Y.encodeStateAsUpdate(doc2);
     Y.applyUpdate(doc1, state2);
     Y.applyUpdate(doc2, state1);
-  }
+
   describe('Basic Node Operations', () => {
     test('should add nodes to the graph', () => {
-      const node: CRDTNode = {
-        id: 'node1',
+      const node: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: [] },
@@ -49,8 +49,8 @@ describe('YGraph CRDT Implementation', () => {
       expect(graph1.getNodes()).toHaveLength(1);
     });
     test('should update node properties', () => {
-      const node: CRDTNode = {
-        id: 'node1',
+      const node: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: [] },
@@ -62,22 +62,22 @@ describe('YGraph CRDT Implementation', () => {
       expect(updated?.position).toEqual({ x: 200, y: 200 });
     });
     test('should delete nodes and connected edges', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
         metadata: {}
       };
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -96,22 +96,22 @@ describe('YGraph CRDT Implementation', () => {
   });
   describe('Edge Operations', () => {
     test('should add edges between existing nodes', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
         metadata: {}
       };
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -124,8 +124,8 @@ describe('YGraph CRDT Implementation', () => {
       expect(graph1.getEdge('edge1')).toEqual(edge);
     });
     test('should not add edges to non-existent nodes', () => {
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -136,22 +136,22 @@ describe('YGraph CRDT Implementation', () => {
       expect(graph1.getEdges()).toHaveLength(0);
     });
     test('should update edge properties', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
         metadata: {}
       };
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -168,15 +168,15 @@ describe('YGraph CRDT Implementation', () => {
   });
   describe('Concurrent Editing and Conflict Resolution', () => {
     test('should merge concurrent node additions', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
@@ -197,8 +197,8 @@ describe('YGraph CRDT Implementation', () => {
       expect(graph2.getNode('node2')).toBeTruthy();
     });
     test('should resolve concurrent updates to same node', () => {
-      const node: CRDTNode = {
-        id: 'node1',
+      const node: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { label: 'Initial' },
@@ -222,15 +222,15 @@ describe('YGraph CRDT Implementation', () => {
       expect(result2?.data.label).toBe('Updated');
     });
     test('should handle concurrent edge creation and node deletion', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
@@ -241,8 +241,8 @@ describe('YGraph CRDT Implementation', () => {
       graph1.addNode(node2);
       syncDocs(doc1, doc2);
       // User 1 creates an edge
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -267,22 +267,22 @@ describe('YGraph CRDT Implementation', () => {
   });
   describe('Serialization and Deserialization', () => {
     test('should serialize and deserialize graph state', () => {
-      const node1: CRDTNode = {
-        id: 'node1',
+      const node1: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: ['A', 'B', 'C'] },
         metadata: {}
       };
-      const node2: CRDTNode = {
-        id: 'node2',
+      const node2: CRDTNode = {,
+  id: 'node2',
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
         metadata: {}
       };
-      const edge: CRDTEdge = {
-        id: 'edge1',
+      const edge: CRDTEdge = {,
+  id: 'edge1',
         source: 'node1',
         target: 'node2',
         sourceHandle: 'output',
@@ -312,15 +312,15 @@ describe('YGraph CRDT Implementation', () => {
         action: 'create' as const,
         targetId: 'node1',
         data: {,
-          id: 'node1',
+  id: 'node1',
           type: 'WeightedChoice' as const,
           position: { x: 100, y: 100 },
           data: {},
           metadata: {}
-        },
-        timestamp: Date.now(),
-        userId: 'user1',
-      };
+  },
+  timestamp: Date.now(),
+        userId: 'user1';
+  };
       graph1.applyOperation(createOp);
       expect(graph1.getNode('node1')).toBeTruthy();
       const updateOp = {
@@ -329,34 +329,33 @@ describe('YGraph CRDT Implementation', () => {
         targetId: 'node1',
         data: { position: { x: 200, y: 200 } },
         timestamp: Date.now(),
-        userId: 'user1',
-      };
+        userId: 'user1';
+  };
       graph1.applyOperation(updateOp);
       expect(graph1.getNode('node1')?.position).toEqual({ x: 200, y: 200 });
       const deleteOp = {
-        type: 'node' as const,
-        action: 'delete' as const,
-        targetId: 'node1',
-        timestamp: Date.now(),
-        userId: 'user1',
-      };
+  type: 'node' as const,
+  action: 'delete' as const,
+  targetId: 'node1',
+  timestamp: Date.now(),
+  userId: 'user1',
+};
       graph1.applyOperation(deleteOp);
       expect(graph1.getNode('node1')).toBeUndefined();
     });
   });
   describe('Observer Pattern', () => {
-    test('should notify observers of changes', (done) => {
-      let changeCount = 0;
-      const observer = (event: Y.YEvent<any>) => {
-        changeCount++;
-        if (changeCount === 2) {
-          graph1.unobserve(observer);
-          done();
-        }
-      };
+  test('should notify observers of changes', (done) => {
+  let changeCount = 0;
+  const observer = (event: Y.YEvent<any>) => {,
+  changeCount++;
+  if (changeCount === 2) {
+  graph1.unobserve(observer);
+  done();
+};
       graph1.observe(observer);
-      const node: CRDTNode = {
-        id: 'node1',
+      const node: CRDTNode = {,
+  id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},

@@ -20,104 +20,100 @@ import { useAuthStore } from '../../stores/authStore';
 
 // Types
 interface ContentItem {
-  id: string;
+  id: string;,
   title: string;
   description?: string;
-  type: 'template' | 'documentation' | 'user_content' | 'system_content' | 'announcement' | 'tutorial';
+  type: 'template' | 'documentation' | 'user_content' | 'system_content' | 'announcement' | 'tutorial';,
   status: 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured';
-  visibility: 'public' | 'private' | 'organization' | 'admin_only';
+  visibility: 'public' | 'private' | 'organization' | 'admin_only';,
   content: unknown;
   metadata: {,
-    tags: string[];
-    category: string;
-    version: number;
-    author: string;
-    authorId: string;
-    lastEditor?: string;
-    lastEditorId?: string;
-    featured: boolean;
-    priority: number;
-    expiresAt?: string;
-    publishedAt?: string;
-    customFields: Record<string, unknown>;
-  };
+  tags: string;,
+  category: string;
+  version: number;,
+  author: string;
+  authorId: string;
+  lastEditor?: string;
+  lastEditorId?: string;
+  featured: boolean;,
+  priority: number;
+  expiresAt?: string;
+  publishedAt?: string;
+  customFields: Record<string, unknown>;
+};
   organizationId?: string;
   parentId?: string;
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
-}
 interface ContentFilter {
-  searchTerm: string;
+  searchTerm: string;,
   typeFilter: string;
-  statusFilter: string;
+  statusFilter: string;,
   visibilityFilter: string;
-  authorFilter: string;
+  authorFilter: string;,
   categoryFilter: string;
   featuredFilter?: boolean;
-  dateRange?: {
-    start: string;
-    end: string;
-  };
-}
+  dateRange?: {,
+  start: string;,
+  end: string;
+};
 interface ContentStatistics {
-  totalItems: number;
+  totalItems: number;,
   byType: Record<string, number>;
   byStatus: Record<string, number>;
   byVisibility: Record<string, number>;
-  featuredCount: number;
+  featuredCount: number;,
   recentActivity: {,
-    created24h: number;
-    updated24h: number;
-    published24h: number;
-  };
+  created24h: number;,
+  updated24h: number;
+  published24h: number;
+};
   topCategories: Array<{,
-    category: string;
-    count: number;
-  }>;
+  category: string;
+  count: number;
+}>;
   topAuthors: Array<{,
-    authorId: string;
-    authorName: string;
-    count: number;
-  }>;
-}
+  authorId: string;
+  authorName: string;,
+  count: number;
+}>;
 interface DashboardState {
-  items: ContentItem[];
+  items: ContentItem;,
   loading: boolean;
-  error: string | null;
+  error: string | null;,
   filters: ContentFilter;
-  selectedItems: Set<string>;
+  selectedItems: Set<string>;,
   viewMode: 'table' | 'cards';
-  currentPage: number;
+  currentPage: number;,
   pageSize: number;
-  totalItems: number;
+  totalItems: number;,
   statistics: ContentStatistics | null;
-  showFilters: boolean;
+  showFilters: boolean;,
   showBulkActions: boolean;
-}
 const ContentManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   // State management
   const [state, setState] = useState<DashboardState>({)
-    items: [],
-    loading: true,
-    error: null,
-    filters: {,
-      searchTerm: '',
-      typeFilter: '',
-      statusFilter: '',
-      visibilityFilter: '',
-      authorFilter: '',
-      categoryFilter: '',
-    },
-    selectedItems: new Set<string>(),
+  items: [],
+  loading: true,
+  error: null,
+  filters: {,
+  searchTerm: '',
+  typeFilter: '',
+  statusFilter: '',
+  visibilityFilter: '',
+  authorFilter: '',
+  categoryFilter: '',
+},
+  selectedItems: new Set<string>(),
     viewMode: 'table',
     currentPage: 1,
     pageSize: 25,
     totalItems: 0,
     statistics: null,
     showFilters: false,
-    showBulkActions: false,
+    showBulkActions: false;
   });
   // Fetch content items
   const fetchContent = useCallback(async () => {
@@ -134,49 +130,45 @@ const ContentManagementDashboard: React.FC = () => {
       params.append('limit', state.pageSize.toString());
       params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
       const response = await fetch(`/api/content-management/content?${params}`, {)}
-        headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+  },
+  headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
-      }
       const data = await response.json();
       setState(prev => ({)
-        ...prev,
-        items: data.data,
-        totalItems: data.pagination.total,
-        loading: false,
-      }));
+  ...prev,
+  items: data.data,
+  totalItems: data.pagination.total,
+  loading: false,
+}));
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load content',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  loading: false,
+  error: error instanceof Error ? error.message : 'Failed to load content',
+}));
   }, [state.filters, state.currentPage, state.pageSize]);
   // Fetch statistics
   const fetchStatistics = useCallback(async () => {
     if (!user || !['admin', 'super_admin'].includes(user.role)) {
       return;
-    }
     try {
       const response = await fetch('/api/content-management/content/statistics', {)
-        headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+  headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setState(prev => ({ ...prev, statistics: data.data }));
-      }
     } catch (error) {
-      console.error('Failed to fetch statistics:', error);
-    }
-  }, [user]);
+  console.error('Failed to fetch statistics:', error);
+}, [user]);
   useEffect(() => {
     fetchContent();
     fetchStatistics();
@@ -208,110 +200,106 @@ const ContentManagementDashboard: React.FC = () => {
   const handlePublish = useCallback(async (contentId: string) => {
     try {
       const response = await fetch(`/api/content-management/content/${contentId}/publish`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to publish content');
-      }
       fetchContent();
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to publish content');
-    }
-  }, [fetchContent]);
+  alert(error instanceof Error ? error.message : 'Failed to publish content');
+}, [fetchContent]);
   const handleArchive = useCallback(async (contentId: string) => {
     try {
       const response = await fetch(`/api/content-management/content/${contentId}/archive`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to archive content');
-      }
       fetchContent();
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to archive content');
-    }
-  }, [fetchContent]);
+  alert(error instanceof Error ? error.message : 'Failed to archive content');
+}, [fetchContent]);
   const handleFeature = useCallback(async (contentId: string, featured: boolean) => {
     try {
       const response = await fetch(`/api/content-management/content/${contentId}/feature`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ featured })
+  },
+  body: JSON.stringify({ featured })
       });
       if (!response.ok) {
         throw new Error('Failed to update featured status');
-      }
       fetchContent();
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to update featured status');
-    }
-  }, [fetchContent]);
+  alert(error instanceof Error ? error.message : 'Failed to update featured status');
+}, [fetchContent]);
   const handleBulkStatusUpdate = useCallback(async (status: string) => {
     if (state.selectedItems.size === 0) return;
     try {
       const response = await fetch('/api/content-management/content/bulk/status', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
-          contentIds: Array.from(state.selectedItems),
-          status
-        })
+  },
+  body: JSON.stringify({,)
+  contentIds: Array.from(state.selectedItems),
+  status
+}
       });
       if (!response.ok) {
         throw new Error('Failed to perform bulk update');
-      }
       setState(prev => ({ ...prev, selectedItems: new Set() }));
       fetchContent();
     } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to perform bulk update');
-    }
-  }, [state.selectedItems, fetchContent]);
+  alert(error instanceof Error ? error.message : 'Failed to perform bulk update');
+}, [state.selectedItems, fetchContent]);
   // Filter and selection handlers
   const handleFilterChange = (newFilters: Partial<ContentFilter>) => {
     setState(prev => ({)
-      ...prev,
+  ...prev,
       filters: { ...prev.filters, ...newFilters },
-      currentPage: 1,
-    }));
+      currentPage: 1;
+  }));
   };
   const handleSelectItem = (itemId: string) => {
     setState(prev => {)
-      const newSelected = new Set(prev.selectedItems);
+  const newSelected = new Set(prev.selectedItems);
       if (newSelected.has(itemId)) {
         newSelected.delete(itemId);
       } else {
         newSelected.add(itemId);
-      }
       return { ...prev, selectedItems: newSelected };
     });
   };
   const handleSelectAll = () => {
-    setState(prev => ({)
-      ...prev,
-      selectedItems: prev.selectedItems.size === prev.items.length ,
-        ? new Set() 
-        : new Set(prev.items.map(item => item.id))
-    }));
+  setState(prev => ({)
+  ...prev,
+  selectedItems: prev.selectedItems.size === prev.items.length ,
+  ? new Set()
+  : new Set(prev.items.map(item => item.id)),
+}));
   };
   // Memoized filtered items for performance
   const displayItems = useMemo(() => {
     return state.items;
   }, [state.items]);
-  return ()
+  return;
     <div className="content-management-dashboard">
       {/* Header */}
       <div className="dashboard-header">
@@ -478,7 +466,7 @@ const ContentManagementDashboard: React.FC = () => {
               {displayItems.map((item) => {
                 const TypeIcon = contentTypeConfig[item.type]?.icon || FileText;
                 const VisibilityIcon = visibilityConfig[item.visibility]?.icon || Globe;
-                return ()
+                return;
                   <tr key={item.id}>
                     <td>
                       <input
@@ -604,198 +592,164 @@ const ContentManagementDashboard: React.FC = () => {
       <style /* jsx */>{`
         .content-management-dashboard {
           padding: 24px;
-          max-width: 1400px;
-          margin: 0 auto;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 32px;
-        }
         .dashboard-title {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin: 0 0 8px 0;
-        }
         .dashboard-subtitle {
-          color: #6b7280;
-          margin: 0;
-        }
+          color: #6b7280;,
+  margin: 0;
         .header-actions {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .btn {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 16px;
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          background: #ffffff;
+          align-items: center;,
+  gap: 8px;
+          padding: 8px 16px;,
+  border: 1px solid #d1d5db;
+          border-radius: 6px;,
+  background: #ffffff;
           color: #374151;
-          text-decoration: none;
-          cursor: pointer;
+          text-decoration: none;,
+  cursor: pointer;
           transition: all 0.2s ease;
-        }
-        .btn:hover {
-          background: #f3f4f6;
+        .btn:hover {,
+  background: #f3f4f6;
           border-color: #9ca3af;
-        }
         .btn-primary {
           background: #3b82f6;
-          border-color: #3b82f6;
-          color: #ffffff;
-        }
-        .btn-primary:hover {
-          background: #2563eb;
+          border-color: #3b82f6;,
+  color: #ffffff;
+        .btn-primary:hover {,
+  background: #2563eb;
           border-color: #2563eb;
-        }
         .dashboard-stats {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 20px;
           margin-bottom: 32px;
-        }
         .stat-card {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 20px;
           text-align: center;
-        }
         .stat-label {
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           margin-bottom: 8px;
-        }
         .stat-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .filters-panel {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
-          margin-bottom: 24px;
-          display: grid;
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 20px;
+          margin-bottom: 24px;,
+  display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
-        }
         .filter-group {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .filter-group label {
           font-size: 14px;
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .search-input {
-          position: relative;
-          display: flex;
+          position: relative;,
+  display: flex;
           align-items: center;
-        }
         .search-input svg {
-          position: absolute;
-          left: 12px;
+          position: absolute;,
+  left: 12px;
           color: #6b7280;
-        }
         .search-input input {
-          width: 100%;
-          padding: 8px 12px 8px 36px;
+          width: 100%;,
+  padding: 8px 12px 8px 36px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
-        }
         .filter-group select {
-          padding: 8px 12px;
-          border: 1px solid #d1d5db;
+          padding: 8px 12px;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
-        }
         .bulk-actions {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          background: #eff6ff;
+          align-items: center;,
+  background: #eff6ff;
           border: 1px solid #bfdbfe;
-          border-radius: 8px;
-          padding: 12px 20px;
+          border-radius: 8px;,
+  padding: 12px 20px;
           margin-bottom: 20px;
-        }
         .bulk-buttons {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .btn-sm {
           padding: 6px 12px;
           font-size: 14px;
-        }
         .content-table-container {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          overflow: hidden;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  overflow: hidden;
         .content-table {
           width: 100%;
           border-collapse: collapse;
-        }
         .content-table th {
-          background: #f9fafb;
-          padding: 12px;
+          background: #f9fafb;,
+  padding: 12px;
           text-align: left;
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           border-bottom: 1px solid #e5e7eb;
-        }
         .content-table td {
           padding: 12px;
           border-bottom: 1px solid #f3f4f6;
-        }
-        .content-table tbody tr:hover {
-          background: #f9fafb;
-        }
+        .content-table tbody tr:hover {,
+  background: #f9fafb;
         .content-title-cell {
           max-width: 300px;
-        }
         .content-title {
-          font-weight: 500;
-          color: #1f2937;
+          font-weight: 500;,
+  color: #1f2937;
           display: flex;
-          align-items: center;
-          gap: 6px;
-        }
+          align-items: center;,
+  gap: 6px;
         .featured-icon {
           color: #f59e0b;
-        }
         .content-description {
-          font-size: 12px;
-          color: #6b7280;
-          margin-top: 4px;
-          overflow: hidden;
+          font-size: 12px;,
+  color: #6b7280;
+          margin-top: 4px;,
+  overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-        }
         .type-badge, .visibility-badge, .author-cell, .date-cell {
           display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 14px;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 6px;
+          font-size: 14px;,
+  color: #6b7280;
         .status-badge {
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
           font-weight: 500;
-        }
         .status-draft { background: #f3f4f6; color: #374151; }
         .status-published { background: #d1fae5; color: #065f46; }
         .status-archived { background: #fee2e2; color: #991b1b; }
@@ -803,22 +757,19 @@ const ContentManagementDashboard: React.FC = () => {
         .status-rejected { background: #fee2e2; color: #991b1b; }
         .status-featured { background: #ede9fe; color: #5b21b6; }
         .action-buttons {
-          display: flex;
-          gap: 4px;
-        }
+          display: flex;,
+  gap: 4px;
         .btn-icon {
-          padding: 6px;
-          border: none;
+          padding: 6px;,
+  border: none;
           background: none;
-          border-radius: 4px;
-          cursor: pointer;
-          color: #6b7280;
-          transition: all 0.2s ease;
-        }
-        .btn-icon:hover {
-          background: #f3f4f6;
+          border-radius: 4px;,
+  cursor: pointer;
+          color: #6b7280;,
+  transition: all 0.2s ease;
+        .btn-icon:hover {,
+  background: #f3f4f6;
           color: #374151;
-        }
         .btn-success:hover { color: #059669; }
         .btn-warning:hover { color: #d97706; }
         .btn-danger:hover { color: #dc2626; }
@@ -826,60 +777,47 @@ const ContentManagementDashboard: React.FC = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          padding: 60px;
+          justify-content: center;,
+  padding: 60px;
           color: #6b7280;
-        }
         .spinner {
-          width: 32px;
-          height: 32px;
+          width: 32px;,
+  height: 32px;
           border: 3px solid #f3f4f6;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
           margin-bottom: 16px;
-        }
         .pagination {
           display: flex;
           justify-content: center;
-          align-items: center;
-          gap: 16px;
+          align-items: center;,
+  gap: 16px;
           margin-top: 24px;
-        }
         .page-info {
-          font-size: 14px;
-          color: #6b7280;
-        }
+          font-size: 14px;,
+  color: #6b7280;
         .animate-spin {
           animation: spin 1s linear infinite;
-        }
         @keyframes spin {
           to { transform: rotate(360deg); }
-        }
         @media (max-width: 768px) {
           .dashboard-header {
-            flex-direction: column;
-            gap: 16px;
-          }
+            flex-direction: column;,
+  gap: 16px;
           .header-actions {
             width: 100%;
             justify-content: space-between;
-          }
           .filters-panel {
             grid-template-columns: 1fr;
-          }
           .bulk-actions {
-            flex-direction: column;
-            gap: 12px;
+            flex-direction: column;,
+  gap: 12px;
             align-items: stretch;
-          }
           .content-table-container {
             overflow-x: auto;
-          }
           .content-table {
             min-width: 800px;
-          }
-        }
       `}</style>
     </div>
   );

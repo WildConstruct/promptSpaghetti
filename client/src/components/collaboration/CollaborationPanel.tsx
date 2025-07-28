@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
 interface CollaborationUser {
-  id: string;
+  id: string;,
   name: string;
-  email: string;
+  email: string;,
   status: 'online' | 'offline' | 'away';
   role: 'owner' | 'editor' | 'viewer';
   lastActive?: Date;
-}
-interface CollaborationActivity {
-  id: string;
+  interface CollaborationActivity {
+  id: string;,
   userId: string;
-  userName: string;
+  userName: string;,
   action: string;
   timestamp: Date;
   details?: string;
-}
-interface CollaborationPanelProps {
-  projectId: string;
+  interface CollaborationPanelProps {
+  projectId: string;,
   currentUserId: string;
-  users: CollaborationUser[];
-  activities: CollaborationActivity[];
+  users: CollaborationUser;,
+  activities: CollaborationActivity;
   onInviteUser?: (email: string, role: 'editor' | 'viewer') => void;
   onChangeUserRole?: (userId: string, role: 'owner' | 'editor' | 'viewer') => void;
   onRemoveUser?: (userId: string) => void;
-}
-
-export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({)
+  export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({,)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   projectId: _,
   currentUserId,
@@ -39,29 +35,26 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({)
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'editor' | 'viewer'>('editor');
   const [showInviteForm, setShowInviteForm] = useState(false);
-  const handleInvite = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inviteEmail.trim()) {
-      onInviteUser?.(inviteEmail.trim(), inviteRole);
-      setInviteEmail('');
-      setShowInviteForm(false);
-    }
-  };
+  const handleInvite = (e: React.FormEvent) => {,
+  e.preventDefault();
+  if (inviteEmail.trim()) {
+  onInviteUser?.(inviteEmail.trim(), inviteRole);
+  setInviteEmail('');
+  setShowInviteForm(false);
+};
   const getStatusIcon = (status: CollaborationUser['status']) => {
-    switch (status) {
-    case 'online': return '🟢';
-    case 'away': return '🟡';
-    case 'offline': return '⚫';
-    }
-  };
+  switch (status) {
+  case 'online': return '🟢';
+  case 'away': return '🟡';
+  case 'offline': return '⚫';
+};
   const getRoleColor = (role: CollaborationUser['role']) => {
-    switch (role) {
-    case 'owner': return '#dc3545';
-    case 'editor': return '#007bff';
-    case 'viewer': return '#6c757d';
-    }
-  };
-  return ()
+  switch (role) {
+  case 'owner': return '#dc3545';
+  case 'editor': return '#007bff';
+  case 'viewer': return '#6c757d';
+};
+  return;
     <div className="collaboration-panel">
       <div className="panel-header">
         <h3>Collaboration</h3>

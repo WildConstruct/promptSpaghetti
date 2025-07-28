@@ -6,7 +6,7 @@ import { z } from 'zod';
 // Recovery form validation schemas
 const unlockAccountSchema = z.object({)
   email: z.string().email('Please enter a valid email address'),
-  unlockToken: z.string().min(1, 'Unlock token is required')
+  unlockToken: z.string().min(1, 'Unlock token is required'),
 });
 const requestUnlockSchema = z.object({)
   email: z.string().email('Please enter a valid email address'),
@@ -18,10 +18,8 @@ interface AccountRecoveryProps {
   onError?: (error: string) => void;
   initialEmail?: string;
   unlockToken?: string;
-}
-type RecoveryMode = 'request' | 'unlock' | 'success';
-
-export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
+  type RecoveryMode = 'request' | 'unlock' | 'success';
+  export const AccountRecovery: React.FC<AccountRecoveryProps> = ({,)
   onSuccess,
   onError,
   initialEmail = '',
@@ -31,24 +29,23 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [requestData, setRequestData] = useState<RequestUnlockData>({)
-    email: initialEmail,
-  });
+  email: initialEmail,
+});
   const [unlockData, setUnlockData] = useState<UnlockAccountData>({)
-    email: initialEmail,
-    unlockToken: unlockToken,
-  });
+  email: initialEmail,
+  unlockToken: unlockToken,
+});
   const [errors, setErrors] = useState<{
-    request?: Partial<Record<keyof RequestUnlockData, string>>;
-    unlock?: Partial<Record<keyof UnlockAccountData, string>>;
-  }>({});
+  request?: Partial<Record<keyof RequestUnlockData, string>>;
+  unlock?: Partial<Record<keyof UnlockAccountData, string>>;
+}>({});
   // Handle countdown for resend button
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (countdown > 0) {
-      timer = setTimeout(() => setCountdown(prev => prev - 1), 1000);
-    }
-    return () => clearTimeout(timer);
-  }, [countdown]);
+  let timer: NodeJS.Timeout;
+  if (countdown > 0) {
+  timer = setTimeout(() => setCountdown(prev => prev - 1), 1000);
+  return () => clearTimeout(timer);
+}, [countdown]);
   const validateRequestForm = (): boolean => {
     try {
       requestUnlockSchema.parse(requestData);
@@ -58,14 +55,11 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof RequestUnlockData, string>> = {};
         error.errors.forEach(err => {)
-          if (err.path[0]) {
+  if (err.path[0]) {
             newErrors[err.path[0] as keyof RequestUnlockData] = err.message;
-          }
         });
         setErrors(prev => ({ ...prev, request: newErrors }));
-      }
       return false;
-    }
   };
   const validateUnlockForm = (): boolean => {
     try {
@@ -76,31 +70,26 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof UnlockAccountData, string>> = {};
         error.errors.forEach(err => {)
-          if (err.path[0]) {
+  if (err.path[0]) {
             newErrors[err.path[0] as keyof UnlockAccountData] = err.message;
-          }
         });
         setErrors(prev => ({ ...prev, unlock: newErrors }));
-      }
       return false;
-    }
   };
   const handleRequestUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateRequestForm()) {
       return;
-    }
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/request-unlock', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData),
-      });
+        body: JSON.stringify(requestData);
+  });
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result.message || 'Failed to request account unlock');
-      }
       setCountdown(300); // 5 minutes before allowing resend
       setMode('success');
       onSuccess?.('Account unlock instructions have been sent to your email address.');
@@ -108,31 +97,27 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
       onError?.(error.message || 'Failed to request account unlock');
     } finally {
       setIsLoading(false);
-    }
   };
   const handleUnlockAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateUnlockForm()) {
       return;
-    }
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/unlock-account', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(unlockData),
-      });
+        body: JSON.stringify(unlockData);
+  });
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result.message || 'Failed to unlock account');
-      }
       setMode('success');
       onSuccess?.('Your account has been successfully unlocked. You can now sign in.');
     } catch (error: Error) {
       onError?.(error.message || 'Failed to unlock account');
     } finally {
       setIsLoading(false);
-    }
   };
   const formatCountdown = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -140,7 +125,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;}
   };
   if (mode === 'success') {
-    return ()
+    return;
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
         <div className="text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
@@ -182,9 +167,8 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
         </div>
       </div>
     );
-  }
   if (mode === 'unlock') {
-    return ()
+    return;
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Unlock Account</h2>
@@ -202,8 +186,8 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
               value={unlockData.email}
               onChange={(e) => setUnlockData(prev => ({ ...prev, email: e.target.value }))}
               className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.unlock?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300'
-              }`}
+  errors.unlock?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
+}`}
               placeholder="Enter your email address"
               disabled={isLoading}
               required
@@ -223,8 +207,8 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
               value={unlockData.unlockToken}
               onChange={(e) => setUnlockData(prev => ({ ...prev, unlockToken: e.target.value }))}
               className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.unlock?.unlockToken ? 'border-red-300 focus:border-red-500' : 'border-gray-300'
-              }`}
+  errors.unlock?.unlockToken ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
+}`}
               placeholder="Enter the unlock token from your email"
               disabled={isLoading}
               required
@@ -238,10 +222,10 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
             type="submit"
             disabled={isLoading}
             className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-              isLoading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+  isLoading
+  ? 'bg-gray-400 cursor-not-allowed'
+  : 'bg-blue-600 hover:bg-blue-700',
+}`}
           >
             {isLoading ? ()
               <div className="flex items-center justify-center">
@@ -266,9 +250,8 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
         </div>
       </div>
     );
-  }
   // Request unlock mode
-  return ()
+  return;
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Account Recovery</h2>
@@ -302,8 +285,8 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
             value={requestData.email}
             onChange={(e) => setRequestData(prev => ({ ...prev, email: e.target.value }))}
             className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.request?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300'
-            }`}
+  errors.request?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
+}`}
             placeholder="Enter your email address"
             disabled={isLoading}
             required
@@ -317,10 +300,10 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
           type="submit"
           disabled={isLoading || countdown > 0}
           className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-            isLoading || countdown > 0
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700'
-          }`}
+  isLoading || countdown > 0
+  ? 'bg-gray-400 cursor-not-allowed'
+  : 'bg-blue-600 hover:bg-blue-700',
+}`}
         >
           {isLoading ? ()
             <div className="flex items-center justify-center">

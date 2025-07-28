@@ -31,65 +31,62 @@ import {
   BarChart3
 } from 'lucide-react';
 interface RetentionPolicy {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   dataType: string;
-  dataCategory: 'user_data' | 'system_data' | 'log_data' | 'analytics_data' | 'backup_data';
+  dataCategory: 'user_data' | 'system_data' | 'log_data' | 'analytics_data' | 'backup_data';,
   retentionPeriod: number;
-  retentionUnit: 'days' | 'months' | 'years';
+  retentionUnit: 'days' | 'months' | 'years';,
   autoDelete: boolean;
-  status: 'active' | 'inactive' | 'expired' | 'draft';
-  complianceFrameworks: string[];
+  status: 'active' | 'inactive' | 'expired' | 'draft';,
+  complianceFrameworks: string;
   // Scheduling
   scheduleType: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'custom';
   cronExpression?: string;
   nextExecution: string;
   lastExecution?: string;
   // Metrics
-  affectedRecords: number;
+  affectedRecords: number;,
   totalSizeBytes: number;
-  deletedRecords: number;
+  deletedRecords: number;,
   executionCount: number;
   // Metadata
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
-  createdBy: string;
-  tags: string[];
+  createdBy: string;,
+  tags: string;
   // Configuration
-  notifyBeforeExpiry: boolean;
+  notifyBeforeExpiry: boolean;,
   notificationDays: number;
-  exemptionRules: string[];
+  exemptionRules: string;,
   cascadeDelete: boolean;
   backupBeforeDelete: boolean;
-}
-interface PolicyTemplate {
-  id: string;
+  interface PolicyTemplate {
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: string;
-  retentionPeriod: number;
+  retentionPeriod: number;,
   retentionUnit: 'days' | 'months' | 'years';
-  complianceFrameworks: string[];
+  complianceFrameworks: string;,
   recommended: boolean;
   config: Partial<RetentionPolicy>;
-}
-interface PolicyExecutionResult {
-  id: string;
+  interface PolicyExecutionResult {
+  id: string;,
   policyId: string;
-  status: 'success' | 'partial' | 'failed';
+  status: 'success' | 'partial' | 'failed';,
   executedAt: string;
-  recordsProcessed: number;
+  recordsProcessed: number;,
   recordsDeleted: number;
-  recordsSkipped: number;
+  recordsSkipped: number;,
   executionTimeMs: number;
-  errors: string[];
-  warnings: string[];
-}
-const DataRetentionManager: React.FC = () => {
-  const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
-  const [, setTemplates] = useState<PolicyTemplate[]>([]);
-  const [, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
+  errors: string;,
+  warnings: string;
+  const DataRetentionManager: React.FC = () => {,
+  const [policies, setPolicies] = useState<RetentionPolicy>([]);
+  const [ setTemplates] = useState<PolicyTemplate>([]);
+  const [ setExecutionResults] = useState<PolicyExecutionResult>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // View and filter states
@@ -100,31 +97,31 @@ const DataRetentionManager: React.FC = () => {
   const [sortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
   const [sortOrder] = useState<'asc' | 'desc'>('asc');
   // Modal states
-  const [, setShowCreateModal] = useState(false);
-  const [, setShowTemplateModal] = useState(false);
-  const [, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [,] = useState<PolicyTemplate | null>(null);
-  const [,] = useState(false);
-  const [,] = useState<Set<string>>(new Set());
+  const [ setShowCreateModal] = useState(false);
+  const [ setShowTemplateModal] = useState(false);
+  const [ setSelectedPolicy] = useState<RetentionPolicy | null>(null);
+  const [] = useState<PolicyTemplate | null>(null);
+  const [] = useState(false);
+  const [] = useState<Set<string>>(new Set());
   // Form state for policy creation/editing
-  const [, ] = useState<Partial<RetentionPolicy>>({)
-    name: '',
-    description: '',
-    dataType: '',
-    dataCategory: 'user_data',
-    retentionPeriod: 30,
-    retentionUnit: 'days',
-    autoDelete: false,
-    status: 'draft',
-    complianceFrameworks: [],
-    scheduleType: 'daily',
-    notifyBeforeExpiry: true,
-    notificationDays: 7,
-    exemptionRules: [],
-    cascadeDelete: false,
-    backupBeforeDelete: true,
-    tags: [],
-  });
+  const [ ] = useState<Partial<RetentionPolicy>>({)
+  name: '',
+  description: '',
+  dataType: '',
+  dataCategory: 'user_data',
+  retentionPeriod: 30,
+  retentionUnit: 'days',
+  autoDelete: false,
+  status: 'draft',
+  complianceFrameworks: [],
+  scheduleType: 'daily',
+  notifyBeforeExpiry: true,
+  notificationDays: 7,
+  exemptionRules: [],
+  cascadeDelete: false,
+  backupBeforeDelete: true,
+  tags: [],
+});
   // Load data
   useEffect(() => {
     loadRetentionData();
@@ -134,32 +131,28 @@ const DataRetentionManager: React.FC = () => {
       setLoading(true);
       const [policiesRes, templatesRes, executionsRes] = await Promise.all([)
         fetch('/api/data-retention/policies', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-retention/templates', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-retention/executions', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  }
       ]);
       if (policiesRes.ok) {
         const policiesData = await policiesRes.json();
         setPolicies(policiesData.policies || []);
-      }
       if (templatesRes.ok) {
         const templatesData = await templatesRes.json();
         setTemplates(templatesData.templates || []);
-      }
       if (executionsRes.ok) {
         const executionsData = await executionsRes.json();
         setExecutionResults(executionsData.executions || []);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load retention data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load retention data');
+} finally {
       setLoading(false);
-    }
   };
   // Helper functions
   const formatBytes = (bytes: number): string => {
@@ -169,73 +162,65 @@ const DataRetentionManager: React.FC = () => {
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
-    }
     return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
   const formatRetentionPeriod = (period: number, unit: string): string => {
     return `${period} ${unit}${period !== 1 ? '' : ''}`;}
   };
   const getStatusBadgeClass = (status: string): string => {
-    switch (status) {
-    case 'active': return 'bg-green-100 text-green-800';
-    case 'inactive': return 'bg-yellow-100 text-yellow-800';
-    case 'expired': return 'bg-red-100 text-red-800';
-    case 'draft': return 'bg-gray-100 text-gray-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'active': return 'bg-green-100 text-green-800';
+  case 'inactive': return 'bg-yellow-100 text-yellow-800';
+  case 'expired': return 'bg-red-100 text-red-800';
+  case 'draft': return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'user_data': return <Shield className="w-4 h-4" />;
-    case 'system_data': return <Settings className="w-4 h-4" />;
-    case 'log_data': return <FileText className="w-4 h-4" />;
-    case 'analytics_data': return <BarChart3 className="w-4 h-4" />;
-    case 'backup_data': return <Database className="w-4 h-4" />;
-    default: return <Database className="w-4 h-4" />;
-    }
-  };
+  switch (category) {
+  case 'user_data': return <Shield className="w-4 h-4" />;
+  case 'system_data': return <Settings className="w-4 h-4" />;
+  case 'log_data': return <FileText className="w-4 h-4" />;
+  case 'analytics_data': return <BarChart3 className="w-4 h-4" />;
+  case 'backup_data': return <Database className="w-4 h-4" />;
+  default: return <Database className="w-4 h-4" />;
+};
   const filteredPolicies = policies;
     .filter(policy => {)
-      if (searchTerm && !policy.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
+  if (searchTerm && !policy.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !policy.description.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
-      }
       if (statusFilter !== 'all' && policy.status !== statusFilter) {
         return false;
-      }
       if (frameworkFilter !== 'all' && !policy.complianceFrameworks.includes(frameworkFilter)) {
         return false;
-      }
       return true;
-    })
+  }
     .sort((a, b) => {
-      let aValue, bValue;
-      switch (sortBy) {
-      case 'name':
-        aValue = a.name;
-        bValue = b.name;
-        break;
-      case 'created':
-        aValue = a.createdAt;
-        bValue = b.createdAt;
-        break;
-      case 'execution':
-        aValue = a.nextExecution;
-        bValue = b.nextExecution;
-        break;
-      case 'affected':
-        aValue = a.affectedRecords;
-        bValue = b.affectedRecords;
-        break;
-      default:
-        return 0;
-      }
-      if (sortOrder === 'asc') {
-        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-      } else {
-        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-      }
-    });
+  let aValue, bValue;
+  switch (sortBy) {
+  case 'name':,
+  aValue = a.name;
+  bValue = b.name;
+  break;
+  case 'created':,
+  aValue = a.createdAt;
+  bValue = b.createdAt;
+  break;
+  case 'execution':,
+  aValue = a.nextExecution;
+  bValue = b.nextExecution;
+  break;
+  case 'affected':,
+  aValue = a.affectedRecords;
+  bValue = b.affectedRecords;
+  break;
+  default:,
+  return 0;
+  if (sortOrder === 'asc') {
+  return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+} else {
+  return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+});
   // TODO: Connect this function to the create policy modal
   // 
   //     if (response.ok) {
@@ -259,52 +244,49 @@ const DataRetentionManager: React.FC = () => {
   const handleDeletePolicy = async (policyId: string) => {
     if (!confirm('Are you sure you want to delete this retention policy?')) {
       return;
-    }
     try {
       const response = await fetch(`/api/data-retention/policies/${policyId}`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (response.ok) {
         await loadRetentionData();
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete policy');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to delete policy');
+};
   const handleTogglePolicy = async (policyId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
     try {
       const response = await fetch(`/api/data-retention/policies/${policyId}/status`, {)}
-        method: 'PATCH',
+  },
+  method: 'PATCH',
         headers: {,
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: newStatus })
+  },
+  body: JSON.stringify({ status: newStatus })
       });
       if (response.ok) {
         await loadRetentionData();
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update policy status');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to update policy status');
+};
   const handleExecutePolicy = async (policyId: string) => {
     try {
       const response = await fetch(`/api/data-retention/policies/${policyId}/execute`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (response.ok) {
         await loadRetentionData();
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to execute policy');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to execute policy');
+};
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -312,8 +294,7 @@ const DataRetentionManager: React.FC = () => {
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="data-retention-manager space-y-6">
       {/* Header and Controls */}
       <div className="flex items-center justify-between">

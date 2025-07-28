@@ -32,69 +32,60 @@ export enum ToggleType {
   MULTIVARIATE = 'multivariate',
   SCHEDULED = 'scheduled',
   SEGMENTATION = 'segmentation'
-}
-interface ToggleParametersProps {
-  toggleId: string;
+  interface ToggleParametersProps {
+  toggleId: string;,
   toggleType: ToggleType;
   currentValue: Record<string, unknown>;
   onParametersChange: (value: Record<string, unknown>) => void;
   onSave?: () => void;
   readonly?: boolean;
-}
-interface PercentageRolloutParams {
+  interface PercentageRolloutParams {
   percentage: number;
   saltKey?: string;
-  gradualRollout?: {
-    enabled: boolean;
-    startPercentage: number;
-    endPercentage: number;
-    durationHours: number;
-    incrementSize: number;
-  };
-}
+  gradualRollout?: {,
+  enabled: boolean;,
+  startPercentage: number;
+  endPercentage: number;,
+  durationHours: number;
+  incrementSize: number;
+};
 interface MultivariateVariant {
-  key: string;
+  key: string;,
   value: Error;
   percentage: number;
   description?: string;
   enabled: boolean;
-}
-interface MultivariateParams {
-  variants: MultivariateVariant[];
+  interface MultivariateParams {
+  variants: MultivariateVariant;
   saltKey?: string;
   defaultVariant?: string;
   trafficAllocation: number;
-}
-interface ScheduledParams {
+  interface ScheduledParams {
   enabled: boolean;
   startTime?: string;
   endTime?: string;
   timezone: string;
-  recurrence?: {
-    type: 'none' | 'daily' | 'weekly' | 'monthly';
-    interval: number;
-    daysOfWeek?: number[];
-    dayOfMonth?: number;
-  };
+  recurrence?: {,
+  type: 'none' | 'daily' | 'weekly' | 'monthly';,
+  interval: number;
+  daysOfWeek?: number;
+  dayOfMonth?: number;
+};
   overrideOnHolidays?: boolean;
-}
 interface SegmentationRule {
-  id: string;
+  id: string;,
   attribute: string;
-  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'starts_with' | 'ends_with';
+  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'starts_with' | 'ends_with';,
   value: Error;
-  logicalOperator: 'AND' | 'OR';
+  logicalOperator: 'AND' | 'OR';,
   enabled: boolean;
-}
-interface SegmentationParams {
-  rules: SegmentationRule[];
+  interface SegmentationParams {
+  rules: SegmentationRule;,
   defaultValue: Error;
-  evaluationMode: 'first_match' | 'all_rules' | 'weighted';
+  evaluationMode: 'first_match' | 'all_rules' | 'weighted';,
   fallbackBehavior: 'default' | 'disable' | 'error';
-}
-
-export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
-  toggleId: _toggleId, // eslint-disable-line @typescript-eslint/no-unused-vars
+  export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({,)
+  toggleId: _toggleId, // eslint-disable-line @typescript-eslint/no-unused-vars,
   toggleType,
   currentValue,
   onParametersChange,
@@ -102,7 +93,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
   readonly = false
 }) => {
   const [parameters, setParameters] = useState<Record<string, unknown>>(currentValue);
-  const [validation, setValidation] = useState<{ isValid: boolean; errors: string[] }>({ isValid: true, errors: [] });
+  const [validation, setValidation] = useState<{ isValid: boolean; errors: string }>({ isValid: true, errors: [] });
   const [previewMode, setPreviewMode] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   useEffect(() => {
@@ -110,7 +101,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
     validateParameters(currentValue);
   }, [currentValue, toggleType, validateParameters]);
   const validateParameters = useCallback((params: Record<string, unknown>) => {
-    const errors: string[] = [];
+    const errors: string = [];
     let isValid = true;
     try {
       switch (toggleType) {
@@ -119,54 +110,40 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
         if (percentageParams.percentage < 0 || percentageParams.percentage > 100) {
           errors.push('Percentage must be between 0 and 100');
           isValid = false;
-        }
         if (percentageParams.gradualRollout?.enabled) {
           if (percentageParams.gradualRollout.startPercentage >= percentageParams.gradualRollout.endPercentage) {
             errors.push('Start percentage must be less than end percentage');
             isValid = false;
-          }
-        }
         break;
-      }
       case ToggleType.MULTIVARIATE: {
         const multivariateParams = params as MultivariateParams;
-        const totalPercentage = multivariateParams.variants?.reduce(;)
-          (sum,)
+        const totalPercentage = multivariateParams.variants?.reduce(;);
+          (sum)
           v
         ) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
         if (Math.abs(totalPercentage - 100) > 0.01) {
           errors.push(`Total variant percentages must equal 100% (currently ${totalPercentage.toFixed(1)}%)`);}
           isValid = false;
-        }
         if (!multivariateParams.variants?.length) {
-          errors.push('At least one variant is required');
-          isValid = false;
-        }
-        break;
-      }
-      case ToggleType.SCHEDULED: {
-        const scheduledParams = params as ScheduledParams;
-        if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
-          if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
-            errors.push('Start time must be before end time');
-            isValid = false;
-          }
-        }
-        break;
-      }
-      case ToggleType.SEGMENTATION: {
-        const segmentationParams = params as SegmentationParams;
-        if (!segmentationParams.rules?.length) {
-          errors.push('At least one segmentation rule is required');
-          isValid = false;
-        }
-        break;
-      }
-      }
-    } catch {
+  errors.push('At least one variant is required');
+  isValid = false;
+  break;
+  case ToggleType.SCHEDULED: {,
+  const scheduledParams = params as ScheduledParams;
+  if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
+  if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
+  errors.push('Start time must be before end time');
+  isValid = false;
+  break;
+  case ToggleType.SEGMENTATION: {,
+  const segmentationParams = params as SegmentationParams;
+  if (!segmentationParams.rules?.length) {
+  errors.push('At least one segmentation rule is required');
+  isValid = false;
+  break;
+} catch {
       errors.push('Invalid parameter configuration');
       isValid = false;
-    }
     setValidation({ isValid, errors });
     return { isValid, errors };
   }, [toggleType]);
@@ -175,11 +152,10 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
     const validation = validateParameters(newParams);
     if (validation.isValid) {
       onParametersChange(newParams);
-    }
   }, [onParametersChange, validateParameters]);
   const renderPercentageRolloutEditor = () => {
     const params = parameters as PercentageRolloutParams;
-    return ()
+    return;
       <div className="parameters-editor percentage-rollout">
         <div className="parameter-section">
           <div className="section-header">
@@ -197,9 +173,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                   step="0.1"
                   value={params.percentage || 0}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    percentage: parseFloat(e.target.value),
-                  })}
+  ...params,
+  percentage: parseFloat(e.target.value),
+})}
                   disabled={readonly}
                   className="percentage-slider"
                 />
@@ -210,9 +186,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                   step="0.1"
                   value={params.percentage || 0}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    percentage: parseFloat(e.target.value) || 0,
-                  })}
+  ...params,
+  percentage: parseFloat(e.target.value) || 0,
+})}
                   disabled={readonly}
                   className="percentage-number"
                 />
@@ -225,9 +201,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 type="text"
                 value={params.saltKey || ''}
                 onChange={(e) => handleParametersUpdate({)
-                  ...params,
-                  saltKey: e.target.value,
-                })}
+  ...params,
+  saltKey: e.target.value,
+})}
                 placeholder="Custom salt for consistent user assignment"
                 disabled={readonly}
                 className="form-control"
@@ -250,16 +226,15 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                   type="checkbox"
                   checked={params.gradualRollout?.enabled || false}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    gradualRollout: {,
-                      ...params.gradualRollout,
-                      enabled: e.target.checked,
-                      startPercentage: params.gradualRollout?.startPercentage || 0,
-                      endPercentage: params.gradualRollout?.endPercentage || params.percentage || 100,
-                      durationHours: params.gradualRollout?.durationHours || 24,
-                      incrementSize: params.gradualRollout?.incrementSize || 10,
-                    }
-                  })}
+  ...params,
+  gradualRollout: {,
+  ...params.gradualRollout,
+  enabled: e.target.checked,
+  startPercentage: params.gradualRollout?.startPercentage || 0,
+  endPercentage: params.gradualRollout?.endPercentage || params.percentage || 100,
+  durationHours: params.gradualRollout?.durationHours || 24,
+  incrementSize: params.gradualRollout?.incrementSize || 10,
+})}
                   disabled={readonly}
                 />
                 Enable Gradual Rollout
@@ -276,12 +251,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       max="100"
                       value={params.gradualRollout?.startPercentage || 0}
                       onChange={(e) => handleParametersUpdate({)
-                        ...params,
-                        gradualRollout: {,
-                          ...params.gradualRollout!,
-                          startPercentage: parseFloat(e.target.value) || 0,
-                        }
-                      })}
+  ...params,
+  gradualRollout: {,
+  ...params.gradualRollout!,
+  startPercentage: parseFloat(e.target.value) || 0,
+})}
                       disabled={readonly}
                       className="form-control"
                     />
@@ -294,12 +268,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       max="100"
                       value={params.gradualRollout?.endPercentage || 100}
                       onChange={(e) => handleParametersUpdate({)
-                        ...params,
-                        gradualRollout: {,
-                          ...params.gradualRollout!,
-                          endPercentage: parseFloat(e.target.value) || 100,
-                        }
-                      })}
+  ...params,
+  gradualRollout: {,
+  ...params.gradualRollout!,
+  endPercentage: parseFloat(e.target.value) || 100,
+})}
                       disabled={readonly}
                       className="form-control"
                     />
@@ -313,12 +286,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       min="1"
                       value={params.gradualRollout?.durationHours || 24}
                       onChange={(e) => handleParametersUpdate({)
-                        ...params,
-                        gradualRollout: {,
-                          ...params.gradualRollout!,
-                          durationHours: parseInt(e.target.value) || 24,
-                        }
-                      })}
+  ...params,
+  gradualRollout: {,
+  ...params.gradualRollout!,
+  durationHours: parseInt(e.target.value) || 24,
+})}
                       disabled={readonly}
                       className="form-control"
                     />
@@ -331,12 +303,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       max="100"
                       value={params.gradualRollout?.incrementSize || 10}
                       onChange={(e) => handleParametersUpdate({)
-                        ...params,
-                        gradualRollout: {,
-                          ...params.gradualRollout!,
-                          incrementSize: parseInt(e.target.value) || 10,
-                        }
-                      })}
+  ...params,
+  gradualRollout: {,
+  ...params.gradualRollout!,
+  incrementSize: parseInt(e.target.value) || 10,
+})}
                       disabled={readonly}
                       className="form-control"
                     />
@@ -352,35 +323,36 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
   const renderMultivariateEditor = () => {
     const params = parameters as MultivariateParams;
     const addVariant = () => {
-      const newVariant: MultivariateVariant = {
-        key: `variant_${(params.variants?.length || 0) + 1}`,}
-        value: '',
+      const newVariant: MultivariateVariant = {,
+  key: `variant_${(params.variants?.length || 0) + 1}`}
+},
+  value: '',
         percentage: 0,
-        enabled: true,
-      };
+        enabled: true;
+  };
       handleParametersUpdate({)
-        ...params,
-        variants: [...(params.variants || []), newVariant]
-      });
+  ...params,
+  variants: [...(params.variants || []), newVariant],
+});
     };
     const updateVariant = (index: number, updatedVariant: MultivariateVariant) => {
-      const newVariants = [...(params.variants || [])];
-      newVariants[index] = updatedVariant;
-      handleParametersUpdate({)
-        ...params,
-        variants: newVariants,
-      });
+  const newVariants = [...(params.variants || [])];
+  newVariants[index] = updatedVariant;
+  handleParametersUpdate({)
+  ...params,
+  variants: newVariants,
+});
     };
     const removeVariant = (index: number) => {
-      const newVariants = [...(params.variants || [])];
-      newVariants.splice(index, 1);
-      handleParametersUpdate({)
-        ...params,
-        variants: newVariants,
-      });
+  const newVariants = [...(params.variants || [])];
+  newVariants.splice(index, 1);
+  handleParametersUpdate({)
+  ...params,
+  variants: newVariants,
+});
     };
     const totalPercentage = params.variants?.reduce((sum, v) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
-    return ()
+    return;
       <div className="parameters-editor multivariate">
         <div className="parameter-section">
           <div className="section-header">
@@ -401,9 +373,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       type="checkbox"
                       checked={variant.enabled}
                       onChange={(e) => updateVariant(index, {)
-                        ...variant,
-                        enabled: e.target.checked,
-                      })}
+  ...variant,
+  enabled: e.target.checked,
+})}
                       disabled={readonly}
                     />
                   </div>
@@ -412,9 +384,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       type="text"
                       value={variant.key}
                       onChange={(e) => updateVariant(index, {)
-                        ...variant,
-                        key: e.target.value,
-                      })}
+  ...variant,
+  key: e.target.value,
+})}
                       placeholder="Variant key"
                       disabled={readonly}
                       className="form-control"
@@ -428,9 +400,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       step="0.1"
                       value={variant.percentage}
                       onChange={(e) => updateVariant(index, {)
-                        ...variant,
-                        percentage: parseFloat(e.target.value) || 0,
-                      })}
+  ...variant,
+  percentage: parseFloat(e.target.value) || 0,
+})}
                       disabled={readonly || !variant.enabled}
                       className="form-control"
                     />
@@ -457,7 +429,6 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                           value = JSON.parse(e.target.value);
                         } catch {
                           // Keep as string if not valid JSON
-                        }
                         updateVariant(index, { ...variant, value });
                       }}
                       placeholder="Variant value (JSON or string)"
@@ -472,9 +443,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       type="text"
                       value={variant.description || ''}
                       onChange={(e) => updateVariant(index, {)
-                        ...variant,
-                        description: e.target.value,
-                      })}
+  ...variant,
+  description: e.target.value,
+})}
                       placeholder="Variant description"
                       disabled={readonly || !variant.enabled}
                       className="form-control"
@@ -499,9 +470,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
               <select
                 value={params.defaultVariant || ''}
                 onChange={(e) => handleParametersUpdate({)
-                  ...params,
-                  defaultVariant: e.target.value,
-                })}
+  ...params,
+  defaultVariant: e.target.value,
+})}
                 disabled={readonly}
                 className="form-control"
               >
@@ -521,9 +492,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 max="100"
                 value={params.trafficAllocation || 100}
                 onChange={(e) => handleParametersUpdate({)
-                  ...params,
-                  trafficAllocation: parseFloat(e.target.value) || 100,
-                })}
+  ...params,
+  trafficAllocation: parseFloat(e.target.value) || 100,
+})}
                 disabled={readonly}
                 className="form-control"
               />
@@ -538,7 +509,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
   };
   const renderScheduledEditor = () => {
     const params = parameters as ScheduledParams;
-    return ()
+    return;
       <div className="parameters-editor scheduled">
         <div className="parameter-section">
           <div className="section-header">
@@ -551,9 +522,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 type="checkbox"
                 checked={params.enabled || false}
                 onChange={(e) => handleParametersUpdate({)
-                  ...params,
-                  enabled: e.target.checked,
-                })}
+  ...params,
+  enabled: e.target.checked,
+})}
                 disabled={readonly}
               />
               Enable Scheduled Activation
@@ -568,9 +539,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                     type="datetime-local"
                     value={params.startTime || ''}
                     onChange={(e) => handleParametersUpdate({)
-                      ...params,
-                      startTime: e.target.value,
-                    })}
+  ...params,
+  startTime: e.target.value,
+})}
                     disabled={readonly}
                     className="form-control"
                   />
@@ -581,9 +552,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                     type="datetime-local"
                     value={params.endTime || ''}
                     onChange={(e) => handleParametersUpdate({)
-                      ...params,
-                      endTime: e.target.value,
-                    })}
+  ...params,
+  endTime: e.target.value,
+})}
                     disabled={readonly}
                     className="form-control"
                   />
@@ -594,9 +565,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 <select
                   value={params.timezone || 'UTC'}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    timezone: e.target.value,
-                  })}
+  ...params,
+  timezone: e.target.value,
+})}
                   disabled={readonly}
                   className="form-control"
                 >
@@ -618,13 +589,12 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                   <select
                     value={params.recurrence?.type || 'none'}
                     onChange={(e) => handleParametersUpdate({)
-                      ...params,
-                      recurrence: {,
-                        ...params.recurrence,
-                        type: e.target.value as 'none' | 'daily' | 'weekly' | 'monthly',
-                        interval: params.recurrence?.interval || 1,
-                      }
-                    })}
+  ...params,
+  recurrence: {,
+  ...params.recurrence,
+  type: e.target.value as 'none' | 'daily' | 'weekly' | 'monthly',
+  interval: params.recurrence?.interval || 1,
+})}
                     disabled={readonly}
                     className="form-control"
                   >
@@ -642,12 +612,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       min="1"
                       value={params.recurrence?.interval || 1}
                       onChange={(e) => handleParametersUpdate({)
-                        ...params,
-                        recurrence: {,
-                          ...params.recurrence!,
-                          interval: parseInt(e.target.value) || 1,
-                        }
-                      })}
+  ...params,
+  recurrence: {,
+  ...params.recurrence!,
+  interval: parseInt(e.target.value) || 1,
+})}
                       disabled={readonly}
                       className="form-control"
                     />
@@ -666,36 +635,37 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
   const renderSegmentationEditor = () => {
     const params = parameters as SegmentationParams;
     const addRule = () => {
-      const newRule: SegmentationRule = {
-        id: `rule_${Date.now()}`,}
-        attribute: '',
+      const newRule: SegmentationRule = {,
+  id: `rule_${Date.now()}`}
+},
+  attribute: '',
         operator: 'equals',
         value: '',
         logicalOperator: 'AND',
-        enabled: true,
-      };
+        enabled: true;
+  };
       handleParametersUpdate({)
-        ...params,
-        rules: [...(params.rules || []), newRule]
-      });
+  ...params,
+  rules: [...(params.rules || []), newRule],
+});
     };
     const updateRule = (index: number, updatedRule: SegmentationRule) => {
-      const newRules = [...(params.rules || [])];
-      newRules[index] = updatedRule;
-      handleParametersUpdate({)
-        ...params,
-        rules: newRules,
-      });
+  const newRules = [...(params.rules || [])];
+  newRules[index] = updatedRule;
+  handleParametersUpdate({)
+  ...params,
+  rules: newRules,
+});
     };
     const removeRule = (index: number) => {
-      const newRules = [...(params.rules || [])];
-      newRules.splice(index, 1);
-      handleParametersUpdate({)
-        ...params,
-        rules: newRules,
-      });
+  const newRules = [...(params.rules || [])];
+  newRules.splice(index, 1);
+  handleParametersUpdate({)
+  ...params,
+  rules: newRules,
+});
     };
-    return ()
+    return;
       <div className="parameters-editor segmentation">
         <div className="parameter-section">
           <div className="section-header">
@@ -709,9 +679,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 <select
                   value={params.evaluationMode || 'first_match'}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    evaluationMode: e.target.value as 'first_match' | 'all_rules' | 'weighted',
-                  })}
+  ...params,
+  evaluationMode: e.target.value as 'first_match' | 'all_rules' | 'weighted',
+})}
                   disabled={readonly}
                   className="form-control"
                 >
@@ -725,9 +695,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                 <select
                   value={params.fallbackBehavior || 'default'}
                   onChange={(e) => handleParametersUpdate({)
-                    ...params,
-                    fallbackBehavior: e.target.value as 'default' | 'disable' | 'error',
-                  })}
+  ...params,
+  fallbackBehavior: e.target.value as 'default' | 'disable' | 'error',
+})}
                   disabled={readonly}
                   className="form-control"
                 >
@@ -747,12 +717,11 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                   try {
                     value = JSON.parse(e.target.value);
                   } catch {
-                    // Keep as string
-                  }
-                  handleParametersUpdate({)
-                    ...params,
-                    defaultValue: value,
-                  });
+  // Keep as string
+  handleParametersUpdate({)
+  ...params,
+  defaultValue: value,
+});
                 }}
                 placeholder="Default value when no rules match"
                 disabled={readonly}
@@ -770,9 +739,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       type="checkbox"
                       checked={rule.enabled}
                       onChange={(e) => updateRule(index, {)
-                        ...rule,
-                        enabled: e.target.checked,
-                      })}
+  ...rule,
+  enabled: e.target.checked,
+})}
                       disabled={readonly}
                     />
                   </div>
@@ -781,9 +750,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       <select
                         value={rule.logicalOperator}
                         onChange={(e) => updateRule(index, {)
-                          ...rule,
-                          logicalOperator: e.target.value as 'AND' | 'OR',
-                        })}
+  ...rule,
+  logicalOperator: e.target.value as 'AND' | 'OR',
+})}
                         disabled={readonly || !rule.enabled}
                         className="form-control small"
                       >
@@ -809,9 +778,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                         type="text"
                         value={rule.attribute}
                         onChange={(e) => updateRule(index, {)
-                          ...rule,
-                          attribute: e.target.value,
-                        })}
+  ...rule,
+  attribute: e.target.value,
+})}
                         placeholder="user.id, organization.plan, etc."
                         disabled={readonly || !rule.enabled}
                         className="form-control"
@@ -822,9 +791,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                       <select
                         value={rule.operator}
                         onChange={(e) => updateRule(index, {)
-                          ...rule,
-                          operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'greater_equal' | 'less_equal',
-                        })}
+  ...rule,
+  operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'greater_equal' | 'less_equal',
+})}
                         disabled={readonly || !rule.enabled}
                         className="form-control"
                       >
@@ -850,7 +819,6 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
                             value = JSON.parse(e.target.value);
                           } catch {
                             // Keep as string
-                          }
                           updateRule(index, { ...rule, value });
                         }}
                         placeholder="Comparison value"
@@ -885,9 +853,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
     case ToggleType.SCHEDULED:
       return renderScheduledEditor();
     case ToggleType.SEGMENTATION:
-      return renderSegmentationEditor();
-    default:
-      return ()
+      return renderSegmentationEditor();,
+  default:
+      return;
         <div className="parameters-editor boolean">
           <div className="parameter-section">
             <div className="section-header">
@@ -901,9 +869,8 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({)
           </div>
         </div>
       );
-    }
   };
-  return ()
+  return;
     <div className="toggle-parameters-manager">
       <div className="parameters-header">
         <div className="header-info">

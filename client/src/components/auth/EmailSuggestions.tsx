@@ -2,20 +2,17 @@
 // Smart email suggestions for typo correction
 import React from 'react';
 interface EmailSuggestionsProps {
-  suggestion: string;
+  suggestion: string;,
   onAccept: (suggestion: string) => void;
   className?: string;
-}
-
-export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({)
+  export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({,)
   suggestion,
   onAccept,
   className = ''
 }) => {
   if (!suggestion) {
     return null;
-  }
-  return ()
+  return;
     <div className={`mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md ${className}`}>}
       <div className="flex items-center justify-between">
         <div className="flex items-center">

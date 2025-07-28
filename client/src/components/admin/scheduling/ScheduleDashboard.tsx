@@ -48,7 +48,7 @@ import {
   Pending as PendingIcon,
   History as HistoryIcon,
   CalendarToday as CalendarIcon,
-  Timeline as TimelineIcon,
+  Timeline as TimelineIcon
 } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -58,31 +58,29 @@ import { ScheduleCalendar } from './ScheduleCalendar';
 import { ScheduleTimeline } from './ScheduleTimeline';
 import { ExecutionHistory } from './ExecutionHistory';
 interface Schedule {
-  id: string;
+  id: string;,
   toggleId: string;
-  toggleName: string;
+  toggleName: string;,
   name: string;
   description?: string;
-  type: 'one_time' | 'recurring' | 'conditional';
+  type: 'one_time' | 'recurring' | 'conditional';,
   action: string;
   startTime: Date;
   endTime?: Date;
-  timezone: string;
+  timezone: string;,
   status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';
   enabled: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
-  executionCount: number;
+  executionCount: number;,
   failureCount: number;
-  priority: number;
+  priority: number;,
   createdBy: string;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
-}
 interface ScheduleDashboardProps {
   toggleId?: string;
   onScheduleChange?: () => void;
-}
 const STATUS_CONFIG = {
   pending: { color: 'warning', icon: PendingIcon, label: 'Pending' },
   active: { color: 'success', icon: CheckCircleIcon, label: 'Active' },
@@ -108,7 +106,7 @@ export const [loading, setLoading] = useState(true);
   // Table state
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [selectedSchedules, setSelectedSchedules] = useState<string[]>([]);
+  const [selectedSchedules, setSelectedSchedules] = useState<string>([]);
   // Modal states
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
@@ -128,68 +126,63 @@ export const [loading, setLoading] = useState(true);
     applyFilters();
   }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, applyFilters]);
   const loadSchedules = async () => {
-    setLoading(true);
-    try {
-      // Simulate API call
-      const mockSchedules: Schedule[] = [
+  setLoading(true);
+  try {
+  // Simulate API call
+  const mockSchedules: Schedule = [
+  {
+  id: 'sched_1',
+  toggleId: 'toggle_1',
+  toggleName: 'New UI Features',
+  name: 'Weekend Rollout',
+  description: 'Enable new features during weekend maintenance',
+  type: 'one_time',
+  action: 'enable',
+  startTime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+  timezone: 'America/New_York',
+  status: 'pending',
+  enabled: true,
+  executionCount: 0,
+  failureCount: 0,
+  priority: 1,
+  createdBy: 'admin@example.com',
+  createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+  updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+}
         {
-          id: 'sched_1',
-          toggleId: 'toggle_1',
-          toggleName: 'New UI Features',
-          name: 'Weekend Rollout',
-          description: 'Enable new features during weekend maintenance',
-          type: 'one_time',
-          action: 'enable',
-          startTime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-          timezone: 'America/New_York',
-          status: 'pending',
-          enabled: true,
-          executionCount: 0,
-          failureCount: 0,
-          priority: 1,
-          createdBy: 'admin@example.com',
-          createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        },
-        {
-          id: 'sched_2',
-          toggleId: 'toggle_2',
-          toggleName: 'Beta Features',
-          name: 'Gradual Beta Rollout',
-          description: 'Progressive rollout of beta features',
-          type: 'recurring',
-          action: 'modify_percentage',
-          startTime: new Date(Date.now() + 60 * 60 * 1000),
-          timezone: 'UTC',
-          status: 'active',
-          enabled: true,
-          nextExecution: new Date(Date.now() + 60 * 60 * 1000),
-          lastExecution: new Date(Date.now() - 60 * 60 * 1000),
-          executionCount: 5,
-          failureCount: 0,
-          priority: 2,
-          createdBy: 'devops@example.com',
-          createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 60 * 60 * 1000),
-        }
-      ];
-      setSchedules(mockSchedules);
-    } catch (error) {
-      console.error('Failed to load schedules:', error);
-    } finally {
+  id: 'sched_2',
+  toggleId: 'toggle_2',
+  toggleName: 'Beta Features',
+  name: 'Gradual Beta Rollout',
+  description: 'Progressive rollout of beta features',
+  type: 'recurring',
+  action: 'modify_percentage',
+  startTime: new Date(Date.now() + 60 * 60 * 1000),
+  timezone: 'UTC',
+  status: 'active',
+  enabled: true,
+  nextExecution: new Date(Date.now() + 60 * 60 * 1000),
+  lastExecution: new Date(Date.now() - 60 * 60 * 1000),
+  executionCount: 5,
+  failureCount: 0,
+  priority: 2,
+  createdBy: 'devops@example.com',
+  createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  updatedAt: new Date(Date.now() - 60 * 60 * 1000)];
+  setSchedules(mockSchedules);
+} catch (error) {
+  console.error('Failed to load schedules:', error);
+} finally {
       setLoading(false);
-    }
   };
   const applyFilters = useCallback(() => {
     let filtered = [...schedules];
     // Status filter
     if (statusFilter !== 'all') {
       filtered = filtered.filter(schedule => schedule.status === statusFilter);
-    }
     // Type filter
     if (typeFilter !== 'all') {
       filtered = filtered.filter(schedule => schedule.type === typeFilter);
-    }
     // Search filter
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
@@ -199,18 +192,14 @@ export const [loading, setLoading] = useState(true);
         schedule.description?.toLowerCase().includes(searchLower) ||
         schedule.action.toLowerCase().includes(searchLower)
       );
-    }
     // Date range filter
     if (dateRangeStart) {
       filtered = filtered.filter(schedule => schedule.startTime >= dateRangeStart);
-    }
     if (dateRangeEnd) {
       filtered = filtered.filter(schedule => schedule.startTime <= dateRangeEnd);
-    }
     // Filter by toggleId if provided
     if (toggleId) {
       filtered = filtered.filter(schedule => schedule.toggleId === toggleId);
-    }
     setFilteredSchedules(filtered);
     setPage(0); // Reset to first page when filters change
   }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, toggleId]);
@@ -224,73 +213,68 @@ export const [loading, setLoading] = useState(true);
     setAnchorEl(null);
   };
   const handleSaveSchedule = async (formData: ScheduleFormData) => {
-    try {
-      if (editingSchedule) {
-        // Update existing schedule
-        // TODO: Replace with actual API call
-        // await updateSchedule(editingSchedule.id, formData);
-        console.log('Updating schedule:', editingSchedule.id, formData);
-      } else {
-        // Create new schedule
-        // TODO: Replace with actual API call
-        // await createSchedule(formData);
-        console.log('Creating schedule:', formData);
-      }
-      await loadSchedules();
-      onScheduleChange?.();
-    } catch (error) {
-      // TODO: Add proper error notification system
-      console.error('Failed to save schedule:', error);
-      throw error;
-    }
-  };
+  try {
+  if (editingSchedule) {
+  // Update existing schedule
+  // TODO: Replace with actual API call,
+  // await updateSchedule(editingSchedule.id, formData);
+  console.log('Updating schedule:', editingSchedule.id, formData);
+} else {
+  // Create new schedule
+  // TODO: Replace with actual API call,
+  // await createSchedule(formData);
+  console.log('Creating schedule:', formData);
+  await loadSchedules();
+  onScheduleChange?.();
+} catch (error) {
+  // TODO: Add proper error notification system,
+  console.error('Failed to save schedule:', error);
+  throw error;
+};
   const handleDeleteSchedule = async (schedule: Schedule) => {
     setScheduleToDelete(schedule);
     setDeleteDialogOpen(true);
     setAnchorEl(null);
   };
   const confirmDeleteSchedule = async () => {
-    if (!scheduleToDelete) return;
-    try {
-      // TODO: Replace with actual API call
-      // await deleteSchedule(scheduleToDelete.id);
-      await loadSchedules();
-      onScheduleChange?.();
-    } catch (error) {
-      // TODO: Add proper error notification system
-      console.error('Failed to delete schedule:', error);
-    } finally {
+  if (!scheduleToDelete) return;
+  try {
+  // TODO: Replace with actual API call,
+  // await deleteSchedule(scheduleToDelete.id);
+  await loadSchedules();
+  onScheduleChange?.();
+} catch (error) {
+  // TODO: Add proper error notification system,
+  console.error('Failed to delete schedule:', error);
+} finally {
       setDeleteDialogOpen(false);
       setScheduleToDelete(null);
-    }
   };
   const handleBulkAction = async (action: string) => {
-    if (selectedSchedules.length === 0) return;
-    try {
-      // TODO: Replace with actual API call
-      // await performBulkAction(action, selectedSchedules);
-      console.log('Performing bulk action:', action, 'on schedules:', selectedSchedules);
-      await loadSchedules();
-      setSelectedSchedules([]);
-      onScheduleChange?.();
-    } catch (error) {
-      // TODO: Add proper error notification system
-      console.error('Failed to perform bulk action:', error);
-    }
-  };
+  if (selectedSchedules.length === 0) return;
+  try {
+  // TODO: Replace with actual API call,
+  // await performBulkAction(action, selectedSchedules);
+  console.log('Performing bulk action:', action, 'on schedules:', selectedSchedules);
+  await loadSchedules();
+  setSelectedSchedules([]);
+  onScheduleChange?.();
+} catch (error) {
+  // TODO: Add proper error notification system,
+  console.error('Failed to perform bulk action:', error);
+};
   const handleManualExecution = async (schedule: Schedule) => {
-    try {
-      // TODO: Replace with actual API call
-      // await executeSchedule(schedule.id);
-      console.log('Executing schedule:', schedule.id);
-      await loadSchedules();
-      onScheduleChange?.();
-    } catch (error) {
-      // TODO: Add proper error notification system
-      console.error('Failed to execute schedule:', error);
-    }
-    setAnchorEl(null);
-  };
+  try {
+  // TODO: Replace with actual API call,
+  // await executeSchedule(schedule.id);
+  console.log('Executing schedule:', schedule.id);
+  await loadSchedules();
+  onScheduleChange?.();
+} catch (error) {
+  // TODO: Add proper error notification system,
+  console.error('Failed to execute schedule:', error);
+  setAnchorEl(null);
+};
   const handleViewHistory = (schedule: Schedule) => {
     setHistoryScheduleId(schedule.id);
     setHistoryOpen(true);
@@ -318,7 +302,7 @@ export const [loading, setLoading] = useState(true);
     return { total, active, pending, failed };
   };
   const stats = getScheduleStats();
-  const renderStatsCards = () => (;)
+  const renderStatsCards = () => (;);
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
         <Card>
@@ -390,7 +374,7 @@ export const [loading, setLoading] = useState(true);
       </Grid>
     </Grid>
   );
-  const renderFilters = () => (;)
+  const renderFilters = () => (;);
     <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={3}>
@@ -476,7 +460,7 @@ export const [loading, setLoading] = useState(true);
       </Grid>
     </Paper>
   );
-  const renderTableView = () => (;)
+  const renderTableView = () => (;);
     <Paper elevation={1}>
       <Box p={2} display="flex" justifyContent="between" alignItems="center">
         <Typography variant="h6">Schedules</Typography>
@@ -522,7 +506,6 @@ export const [loading, setLoading] = useState(true);
                       setSelectedSchedules(filteredSchedules.map(s => s.id));
                     } else {
                       setSelectedSchedules([]);
-                    }
                   }}
                 />
               </TableCell>
@@ -542,7 +525,7 @@ export const [loading, setLoading] = useState(true);
               .map((schedule) => {
                 const statusConfig = STATUS_CONFIG[schedule.status];
                 const StatusIcon = statusConfig.icon;
-                return ()
+                return;
                   <TableRow key={schedule.id}>
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -552,7 +535,6 @@ export const [loading, setLoading] = useState(true);
                             setSelectedSchedules([...selectedSchedules, schedule.id]);
                           } else {
                             setSelectedSchedules(selectedSchedules.filter(id => id !== schedule.id));
-                          }
                         }}
                       />
                     </TableCell>
@@ -641,7 +623,7 @@ export const [loading, setLoading] = useState(true);
       />
     </Paper>
   );
-  return ()
+  return;
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}
@@ -700,17 +682,17 @@ export const [loading, setLoading] = useState(true);
             actionConfig: {},
             priority: editingSchedule.priority,
             conflictResolution: 'skip',
-            enabled: editingSchedule.enabled,
-          } : undefined}
+            enabled: editingSchedule.enabled;
+  } : undefined}
           toggleId={toggleId || ''}
           toggleName={editingSchedule?.toggleName}
           existingSchedules={schedules.map(s => ({)
-            id: s.id,
-            name: s.name,
-            startTime: s.startTime,
-            endTime: s.endTime,
-            action: s.action,
-          }))}
+  id: s.id,
+  name: s.name,
+  startTime: s.startTime,
+  endTime: s.endTime,
+  action: s.action,
+}))}
         />
         {/* Execution History Modal */}
         <ExecutionHistory

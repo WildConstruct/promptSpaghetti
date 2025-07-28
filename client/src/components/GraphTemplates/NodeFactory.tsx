@@ -12,88 +12,70 @@ import {
 interface NodeFactoryProps {
   onNodeCreate?: (node: NodeTemplate) => void;
   onTemplateSelect?: (template: NodeTemplate) => void;
-  availableTemplates?: NodeTemplate[];
-}
+  availableTemplates?: NodeTemplate;
 interface NodeCreationOptions {
   position?: { x: number; y: number };
   customId?: string;
   overrides?: Partial<NodeTemplate['data']>;
-}
 
 export class NodeFactory {
   private static instance: NodeFactory;
   private templates: Map<string, NodeTemplate> = new Map();
   private constructor() {
-    this.loadDefaultTemplates();
-  }
-  public static getInstance(): NodeFactory {
-    if (!NodeFactory.instance) {
-      NodeFactory.instance = new NodeFactory();
-    }
-    return NodeFactory.instance;
-  }
-  private loadDefaultTemplates(): void {
-    allNodeTemplates.forEach(template => {)
-      if (validateTemplate(template)) {
-        this.templates.set(template.id, template);
-      } else {
+  this.loadDefaultTemplates();
+  public static getInstance(): NodeFactory {,
+  if (!NodeFactory.instance) {
+  NodeFactory.instance = new NodeFactory();
+  return NodeFactory.instance;
+  private loadDefaultTemplates(): void {,
+  allNodeTemplates.forEach(template => {)
+  if (validateTemplate(template)) {
+  this.templates.set(template.id, template);
+} else {
         console.warn(`Invalid template skipped: ${template.id}`);}
-      }
     });
-  }
   public registerTemplate(template: NodeTemplate): boolean {
     if (!validateTemplate(template)) {
       console.error(`Cannot register invalid template: ${template.id}`);}
       return false;
-    }
     this.templates.set(template.id, template);
     return true;
-  }
-  public createNode()
-    templateId: string, 
+  public createNode(()
+    templateId: string,
     options: NodeCreationOptions = {}
   ): NodeTemplate | null {
     const template = this.templates.get(templateId);
     if (!template) {
       console.error(`Template not found: ${templateId}`);}
       return null;
-    }
     const newNode: NodeTemplate = {
       ...template,
-      id: options.customId || `${template.id}-${Date.now()}`,}
-      position: options.position || template.position,
+      id: options.customId || `${template.id}-${Date.now()}`}
+},
+  position: options.position || template.position,
       data: {,
         ...template.data,
         ...options.overrides
-      }
     };
     return newNode;
-  }
   public getTemplate(id: string): NodeTemplate | undefined {
-    return this.templates.get(id);
-  }
-  public getAllTemplates(): NodeTemplate[] {
-    return Array.from(this.templates.values());
-  }
-  public getTemplatesByType(type: 'logic' | 'transform' | 'output'): NodeTemplate[] {
-    return Array.from(this.templates.values()).filter(template => template.type === type);
-  }
-  public cloneTemplate(templateId: string, newId: string): NodeTemplate | null {
-    const template = this.templates.get(templateId);
-    if (!template) {
-      return null;
-    }
-    const cloned: NodeTemplate = {
-      ...template,
-      id: newId,
-      data: {,
-        ...template.data,
-        options: [...template.data.options],
-      }
-    };
+  return this.templates.get(id);
+  public getAllTemplates(): NodeTemplate {,
+  return Array.from(this.templates.values());
+  public getTemplatesByType(type: 'logic' | 'transform' | 'output'): NodeTemplate {,
+  return Array.from(this.templates.values()).filter(template => template.type === type);
+  public cloneTemplate(templateId: string, newId: string): NodeTemplate | null {,
+  const template = this.templates.get(templateId);
+  if (!template) {
+  return null;
+  const cloned: NodeTemplate = {,
+  ...template,
+  id: newId,
+  data: {,
+  ...template.data,
+  options: [...template.data.options],
+};
     return cloned;
-  }
-}
 
 // React component for template selection UI
 export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
@@ -105,25 +87,21 @@ export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
   const handleTemplateClick = (template: NodeTemplate) => {
     if (onTemplateSelect) {
       onTemplateSelect(template);
-    }
     if (onNodeCreate) {
       const newNode = factory.createNode(template.id, {)
-        position: { x: Math.random() * 400, y: Math.random() * 300 }
+  position: { x: Math.random() * 400, y: Math.random() * 300 }
       });
       if (newNode) {
         onNodeCreate(newNode);
-      }
-    }
   };
   const groupedTemplates = availableTemplates.reduce((groups, template) => {
     const type = template.type;
     if (!groups[type]) {
       groups[type] = [];
-    }
     groups[type].push(template);
     return groups;
-  }, {} as Record<string, NodeTemplate[]>);
-  return ()
+  }, {} as Record<string, NodeTemplate>);
+  return;
     <div className="node-template-selector">
       <h3 className="text-lg font-semibold mb-4">Node Templates</h3>
       {Object.entries(groupedTemplates).map(([type, templates]) => ()
@@ -158,16 +136,15 @@ export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
 // Hook for using NodeFactory in React components
 export const useNodeFactory = () => {
   const factory = React.useMemo(() => NodeFactory.getInstance(), []);
-  const createNode = React.useCallback((;)
-    templateId: string, 
-    options?: NodeCreationOptions
-  ): NodeTemplate | null => {
-    return factory.createNode(templateId, options);
-  }, [factory]);
+  const createNode = React.useCallback((;);
+  templateId: string,
+  options?: NodeCreationOptions): NodeTemplate | null => {,
+  return factory.createNode(templateId, options);
+}, [factory]);
   const getTemplate = React.useCallback((id: string): NodeTemplate | undefined => {
     return factory.getTemplate(id);
   }, [factory]);
-  const getAllTemplates = React.useCallback((): NodeTemplate[] => {
+  const getAllTemplates = React.useCallback((): NodeTemplate => {
     return factory.getAllTemplates();
   }, [factory]);
   return {

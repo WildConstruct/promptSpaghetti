@@ -18,112 +18,105 @@ import {
   RefreshCw
 } from 'lucide-react';
 interface ThreatData {
-  id: string;
+  id: string;,
   type: 'malware' | 'phishing' | 'brute_force' | 'ddos' | 'injection' | 'data_breach';
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: 'critical' | 'high' | 'medium' | 'low';,
   confidence: number;
-  source_ip: string;
+  source_ip: string;,
   target: string;
-  detected_at: Date;
+  detected_at: Date;,
   status: 'active' | 'blocked' | 'investigating';
   description: string;
-}
 interface ThreatStats {
-  total_threats: number;
+  total_threats: number;,
   active_threats: number;
-  blocked_threats: number;
+  blocked_threats: number;,
   threat_types: Record<string, number>;
   severity_distribution: Record<string, number>;
   hourly_detection_rate: Array<{ hour: number; count: number }>;
-}
 interface ThreatDetectionVisualizerProps {
   onThreatClick?: (threat: ThreatData) => void;
   refreshInterval?: number;
-}
-
-export const [stats, setStats] = useState<ThreatStats | null>(null);
+  export const [stats, setStats] = useState<ThreatStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'realtime' | 'trends' | 'geo'>('realtime');
   const [autoRefresh, setAutoRefresh] = useState(true);
   useEffect(() => {
-    loadThreatData();
-    if (autoRefresh) {
-      const interval = setInterval(loadThreatData, refreshInterval);
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, refreshInterval]);
+  loadThreatData();
+  if (autoRefresh) {
+  const interval = setInterval(loadThreatData, refreshInterval);
+  return () => clearInterval(interval);
+}, [autoRefresh, refreshInterval]);
   const loadThreatData = async () => {
-    setIsLoading(true);
-    // Mock data - replace with actual API calls
-    setTimeout(() => {
-      const mockThreats: ThreatData[] = [
+  setIsLoading(true);
+  // Mock data - replace with actual API calls
+  setTimeout(() => {
+  const mockThreats: ThreatData = [
+  {
+  id: 'threat-1',
+  type: 'brute_force',
+  severity: 'critical',
+  confidence: 0.95,
+  source_ip: '192.168.1.100',
+  target: 'auth.company.com',
+  detected_at: new Date(Date.now() - 2 * 60 * 1000),
+  status: 'active',
+  description: 'Coordinated brute force attack against authentication service',
+}
         {
-          id: 'threat-1',
-          type: 'brute_force',
-          severity: 'critical',
-          confidence: 0.95,
-          source_ip: '192.168.1.100',
-          target: 'auth.company.com',
-          detected_at: new Date(Date.now() - 2 * 60 * 1000),
-          status: 'active',
-          description: 'Coordinated brute force attack against authentication service',
-        },
+  id: 'threat-2',
+  type: 'injection',
+  severity: 'high',
+  confidence: 0.87,
+  source_ip: '10.0.0.45',
+  target: 'api.company.com',
+  detected_at: new Date(Date.now() - 5 * 60 * 1000),
+  status: 'blocked',
+  description: 'SQL injection attempt detected in API parameters',
+}
         {
-          id: 'threat-2',
-          type: 'injection',
-          severity: 'high',
-          confidence: 0.87,
-          source_ip: '10.0.0.45',
-          target: 'api.company.com',
-          detected_at: new Date(Date.now() - 5 * 60 * 1000),
-          status: 'blocked',
-          description: 'SQL injection attempt detected in API parameters',
-        },
+  id: 'threat-3',
+  type: 'phishing',
+  severity: 'medium',
+  confidence: 0.72,
+  source_ip: '203.0.113.50',
+  target: 'users',
+  detected_at: new Date(Date.now() - 8 * 60 * 1000),
+  status: 'investigating',
+  description: 'Suspicious email campaign targeting user credentials',
+}
         {
-          id: 'threat-3',
-          type: 'phishing',
-          severity: 'medium',
-          confidence: 0.72,
-          source_ip: '203.0.113.50',
-          target: 'users',
-          detected_at: new Date(Date.now() - 8 * 60 * 1000),
-          status: 'investigating',
-          description: 'Suspicious email campaign targeting user credentials',
-        },
-        {
-          id: 'threat-4',
-          type: 'ddos',
-          severity: 'high',
-          confidence: 0.91,
-          source_ip: '198.51.100.0/24',
-          target: 'api.company.com',
-          detected_at: new Date(Date.now() - 12 * 60 * 1000),
-          status: 'blocked',
-          description: 'Distributed denial of service attack from botnet',
-        }
-      ];
-      const mockStats: ThreatStats = {
-        total_threats: 47,
-        active_threats: 3,
-        blocked_threats: 41,
-        threat_types: {,
-          brute_force: 15,
-          injection: 12,
-          phishing: 8,
-          ddos: 7,
-          malware: 3,
-          data_breach: 2,
-        },
-        severity_distribution: {,
-          critical: 5,
-          high: 18,
-          medium: 19,
-          low: 5,
-        },
-        hourly_detection_rate: Array.from({ length: 24 }, (_, i) => ({)
-          hour: i,
-          count: Math.floor(Math.random() * 10) + 1,
-        }))
+  id: 'threat-4',
+  type: 'ddos',
+  severity: 'high',
+  confidence: 0.91,
+  source_ip: '198.51.100.0/24',
+  target: 'api.company.com',
+  detected_at: new Date(Date.now() - 12 * 60 * 1000),
+  status: 'blocked',
+  description: 'Distributed denial of service attack from botnet'];
+  const mockStats: ThreatStats = {,
+  total_threats: 47,
+  active_threats: 3,
+  blocked_threats: 41,
+  threat_types: {,
+  brute_force: 15,
+  injection: 12,
+  phishing: 8,
+  ddos: 7,
+  malware: 3,
+  data_breach: 2,
+},
+  severity_distribution: {,
+  critical: 5,
+  high: 18,
+  medium: 19,
+  low: 5,
+},
+  hourly_detection_rate: Array.from({ length: 24 }, (_, i) => ({)
+  hour: i,
+  count: Math.floor(Math.random() * 10) + 1,
+}))
       };
       setThreats(mockThreats);
       setStats(mockStats);
@@ -131,38 +124,35 @@ export const [stats, setStats] = useState<ThreatStats | null>(null);
     }, 1000);
   };
   const getThreatTypeIcon = (type: string) => {
-    switch (type) {
-    case 'brute_force': return <Target className="h-4 w-4" />;
-    case 'injection': return <Zap className="h-4 w-4" />;
-    case 'phishing': return <User className="h-4 w-4" />;
-    case 'ddos': return <Globe className="h-4 w-4" />;
-    case 'malware': return <AlertTriangle className="h-4 w-4" />;
-    case 'data_breach': return <Shield className="h-4 w-4" />;
-    default: return <Eye className="h-4 w-4" />;
-    }
-  };
+  switch (type) {
+  case 'brute_force': return <Target className="h-4 w-4" />;
+  case 'injection': return <Zap className="h-4 w-4" />;
+  case 'phishing': return <User className="h-4 w-4" />;
+  case 'ddos': return <Globe className="h-4 w-4" />;
+  case 'malware': return <AlertTriangle className="h-4 w-4" />;
+  case 'data_breach': return <Shield className="h-4 w-4" />;
+  default: return <Eye className="h-4 w-4" />;
+};
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case 'critical': return 'text-red-600 bg-red-100 border-red-200';
-    case 'high': return 'text-orange-600 bg-orange-100 border-orange-200';
-    case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200';
-    case 'low': return 'text-blue-600 bg-blue-100 border-blue-200';
-    default: return 'text-gray-600 bg-gray-100 border-gray-200';
-    }
-  };
+  switch (severity) {
+  case 'critical': return 'text-red-600 bg-red-100 border-red-200';
+  case 'high': return 'text-orange-600 bg-orange-100 border-orange-200';
+  case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+  case 'low': return 'text-blue-600 bg-blue-100 border-blue-200';
+  default: return 'text-gray-600 bg-gray-100 border-gray-200';
+};
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'active': return 'text-red-600';
-    case 'blocked': return 'text-green-600';
-    case 'investigating': return 'text-yellow-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (status) {
+  case 'active': return 'text-red-600';
+  case 'blocked': return 'text-green-600';
+  case 'investigating': return 'text-yellow-600';
+  default: return 'text-gray-600';
+};
   const getMaxHourlyCount = () => {
     return Math.max(...(stats?.hourly_detection_rate.map(h => h.count) || [1]));
   };
   if (isLoading && !stats) {
-    return ()
+    return;
       <div className="threat-detection-visualizer loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -170,8 +160,7 @@ export const [stats, setStats] = useState<ThreatStats | null>(null);
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="threat-detection-visualizer">
       {/* Header */}
       <div className="visualizer-header">

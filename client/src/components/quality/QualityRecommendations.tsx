@@ -38,12 +38,11 @@ import { QualityRecommendation } from '../../hooks/useQualityMetrics';
 // =============================================================================
 
 export interface QualityRecommendationsProps {
-  recommendations: QualityRecommendation[];
+  recommendations: QualityRecommendation;
   onRecommendationAction?: (recommendationId: string, action: 'acknowledge' | 'start' | 'complete' | 'dismiss') => void;
   compact?: boolean;
   className?: string;
 }
-
 export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
   recommendations,
   onRecommendationAction,
@@ -56,87 +55,82 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
   const [sortBy, setSortBy] = useState<'priority' | 'impact' | 'effort' | 'createdAt'>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // Helper function to get priority color
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-    case 'critical':
-      return 'destructive';
-    case 'high':
-      return 'default';
-    case 'medium':
-      return 'secondary';
-    case 'low':
-      return 'outline';
-    default:
-      return 'outline';
-    }
-  };
+  const getPriorityColor = (priority: string) => {,
+  switch (priority) {
+  case 'critical':,
+  return 'destructive';
+  case 'high':,
+  return 'default';
+  case 'medium':,
+  return 'secondary';
+  case 'low':,
+  return 'outline';
+  default:,
+  return 'outline';
+};
   // Helper function to get priority icon
   const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-    case 'critical':
-      return <Zap className="w-4 h-4 text-red-600" />;
-    case 'high':
-      return <TrendingUp className="w-4 h-4 text-orange-600" />;
-    case 'medium':
-      return <Clock className="w-4 h-4 text-yellow-600" />;
-    case 'low':
-      return <Lightbulb className="w-4 h-4 text-blue-600" />;
-    default:
-      return <Lightbulb className="w-4 h-4 text-gray-600" />;
-    }
-  };
+  switch (priority) {
+  case 'critical':,
+  return <Zap className="w-4 h-4 text-red-600" />;
+  case 'high':,
+  return <TrendingUp className="w-4 h-4 text-orange-600" />;
+  case 'medium':,
+  return <Clock className="w-4 h-4 text-yellow-600" />;
+  case 'low':,
+  return <Lightbulb className="w-4 h-4 text-blue-600" />;
+  default:,
+  return <Lightbulb className="w-4 h-4 text-gray-600" />;
+};
   // Helper function to get status icon
   const getStatusIcon = (status: string) => {
-    switch (status) {
-    case 'new':
-      return <Lightbulb className="w-4 h-4 text-blue-500" />;
-    case 'acknowledged':
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
-    case 'in_progress':
-      return <PlayCircle className="w-4 h-4 text-yellow-500" />;
-    case 'completed':
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case 'dismissed':
-      return <XCircle className="w-4 h-4 text-gray-500" />;
-    default:
-      return <PauseCircle className="w-4 h-4 text-gray-500" />;
-    }
-  };
+  switch (status) {
+  case 'new':,
+  return <Lightbulb className="w-4 h-4 text-blue-500" />;
+  case 'acknowledged':,
+  return <CheckCircle className="w-4 h-4 text-green-500" />;
+  case 'in_progress':,
+  return <PlayCircle className="w-4 h-4 text-yellow-500" />;
+  case 'completed':,
+  return <CheckCircle className="w-4 h-4 text-green-600" />;
+  case 'dismissed':,
+  return <XCircle className="w-4 h-4 text-gray-500" />;
+  default:,
+  return <PauseCircle className="w-4 h-4 text-gray-500" />;
+};
   // Helper function to get category icon
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'testCoverage':
-      return '🧪';
-    case 'codeQuality':
-      return '💎';
-    case 'performance':
-      return '⚡';
-    case 'security':
-      return '🔒';
-    case 'documentation':
-      return '📖';
-    case 'buildHealth':
-      return '🔧';
-    default:
-      return '💡';
-    }
-  };
+  switch (category) {
+  case 'testCoverage':,
+  return '🧪';
+  case 'codeQuality':,
+  return '💎';
+  case 'performance':,
+  return '⚡';
+  case 'security':,
+  return '🔒';
+  case 'documentation':,
+  return '📖';
+  case 'buildHealth':,
+  return '🔧';
+  default:,
+  return '💡';
+};
   // Helper function to get impact/effort indicator
   const getEffortColor = (effort: string) => {
-    switch (effort) {
-    case 'high':
-      return 'bg-red-500';
-    case 'medium':
-      return 'bg-yellow-500';
-    case 'low':
-      return 'bg-green-500';
-    default:
-      return 'bg-gray-500';
-    }
-  };
+  switch (effort) {
+  case 'high':,
+  return 'bg-red-500';
+  case 'medium':,
+  return 'bg-yellow-500';
+  case 'low':,
+  return 'bg-green-500';
+  default:,
+  return 'bg-gray-500';
+};
   // Filter recommendations
   const filteredRecommendations = recommendations.filter(rec => {)
-    const categoryMatch = categoryFilter === 'all' || rec.category === categoryFilter;
+  const categoryMatch = categoryFilter === 'all' || rec.category === categoryFilter;
     const priorityMatch = priorityFilter === 'all' || rec.priority === priorityFilter;
     const statusMatch = statusFilter === 'all' || rec.status === statusFilter;
     return categoryMatch && priorityMatch && statusMatch;
@@ -150,42 +144,36 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
       comparison = (priorityOrder[a.priority as keyof typeof priorityOrder] || 0) - 
                     (priorityOrder[b.priority as keyof typeof priorityOrder] || 0);
       break;
-    }
     case 'impact': {
       const impactOrder = { high: 3, medium: 2, low: 1 };
       comparison = (impactOrder[a.impact as keyof typeof impactOrder] || 0) - 
                     (impactOrder[b.impact as keyof typeof impactOrder] || 0);
       break;
-    }
     case 'effort': {
       const effortOrder = { low: 3, medium: 2, high: 1 };
       comparison = (effortOrder[a.effort as keyof typeof effortOrder] || 0) - 
                     (effortOrder[b.effort as keyof typeof effortOrder] || 0);
       break;
-    }
     case 'createdAt':
       comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       break;
     default:
       comparison = 0;
-    }
     return sortOrder === 'asc' ? comparison : -comparison;
   });
   // Handle recommendation actions
-  const handleRecommendationAction = (;)
+  const handleRecommendationAction = (;);
     recommendationId: string,
-    action: 'acknowledge' | 'start' | 'complete' | 'dismiss',
-  ) => {
+    action: 'acknowledge' | 'start' | 'complete' | 'dismiss') => {,
     if (onRecommendationAction) {
       onRecommendationAction(recommendationId, action);
-    }
   };
   // Toggle sort order
   const toggleSort = () => {
-    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
-  };
+  setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+};
   if (compact) {
-    return ()
+    return;
       <div className={`quality-recommendations-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
@@ -244,8 +232,7 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`quality-recommendations ${className}`}>}
       <Card>
         <CardHeader>

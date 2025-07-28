@@ -11,10 +11,9 @@ const NODE_TYPES = [;
 function onDragStart(event: React.DragEvent, nodeType: string): void {
   event.dataTransfer.setData('application/reactflow', nodeType);
   event.dataTransfer.effectAllowed = 'move';
-}
 
 export default function NodePalette(): React.ReactElement {
-  return ()
+  return;
     <aside className="node-palette">
       <h4>Node Library</h4>
       {NODE_TYPES.map((type) => ()
@@ -34,4 +33,3 @@ export default function NodePalette(): React.ReactElement {
       ))}
     </aside>
   );
-}

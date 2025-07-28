@@ -8,28 +8,25 @@ import { TemplateSelector } from './TemplateSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './DetailedAnalytics.css';
 interface DetailedAnalyticsProps {
-  creatorId: string;
+  creatorId: string;,
   timeRange: TimeRange;
   startDate?: Date;
   endDate?: Date;
-}
-interface Template {
-  id: string;
+  interface Template {
+  id: string;,
   title: string;
-  status: string;
+  status: string;,
   created_at: Date;
-}
-
-export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
+  export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({,)
   creatorId,
   timeRange,
   startDate,
   endDate
 }) => {
-  const [templates, setTemplates] = useState<Template[]>([]);
+  const [templates, setTemplates] = useState<Template>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
   const [templateMetrics, setTemplateMetrics] = useState<TemplateMetrics | null>(null);
-  const [selectedMetrics, setSelectedMetrics] = useState<string[]>(['views', 'downloads', 'revenue']);
+  const [selectedMetrics, setSelectedMetrics] = useState<string>(['views', 'downloads', 'revenue']);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'demographics' | 'trends'>('overview');
@@ -43,18 +40,16 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
       setTemplates(templatesData);
       if (templatesData.length > 0 && !selectedTemplateId) {
         setSelectedTemplateId(templatesData[0].id);
-      }
     } catch (err) {
-      console.error('Failed to load templates:', err);
-    }
-  }, [creatorId, selectedTemplateId]);
+  console.error('Failed to load templates:', err);
+}, [creatorId, selectedTemplateId]);
   // Load template metrics
   const loadTemplateMetrics = useCallback(async (templateId: string) => {
     if (!templateId) return;
     try {
       setLoading(true);
       setError(null);
-      const metrics = await analyticsService.getTemplateMetrics(;)
+      const metrics = await analyticsService.getTemplateMetrics(;);
         templateId,
         timeRange,
         startDate,
@@ -62,11 +57,10 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
       );
       setTemplateMetrics(metrics);
     } catch (err) {
-      console.error('Failed to load template metrics:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load template metrics');
-    } finally {
+  console.error('Failed to load template metrics:', err);
+  setError(err instanceof Error ? err.message : 'Failed to load template metrics');
+} finally {
       setLoading(false);
-    }
   }, [timeRange, startDate, endDate]);
   // Load data on mount and when dependencies change
   useEffect(() => {
@@ -75,7 +69,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
   useEffect(() => {
     if (selectedTemplateId) {
       loadTemplateMetrics(selectedTemplateId);
-    }
   }, [selectedTemplateId, loadTemplateMetrics]);
   // Handle template selection
   const handleTemplateChange = (templateId: string) => {
@@ -83,14 +76,13 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
   };
   // Handle metric selection
   const handleMetricToggle = (metric: string) => {
-    setSelectedMetrics(prev =>)
-      prev.includes(metric)
-        ? prev.filter(m => m !== metric)
-        : [...prev, metric]
-    );
-  };
+  setSelectedMetrics(prev =>)
+  prev.includes(metric)
+  ? prev.filter(m => m !== metric)
+  : [...prev, metric]);
+};
   if (loading) {
-    return ()
+    return;
       <div className="detailed-analytics loading">
         <div className="loading-header">
           <div className="skeleton-title"></div>
@@ -107,9 +99,8 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="detailed-analytics error">
         <div className="error-message">
           <h3>Failed to Load Analytics</h3>
@@ -123,9 +114,8 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
         </div>
       </div>
     );
-  }
   if (templates.length === 0) {
-    return ()
+    return;
       <div className="detailed-analytics empty">
         <div className="empty-state">
           <div className="empty-icon">📊</div>
@@ -134,8 +124,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="detailed-analytics">
       <div className="analytics-header">
         <div className="header-content">
@@ -295,7 +284,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
                       <strong>Top Market:</strong> {
                         templateMetrics.demographics.top_countries[0]?.country || 'Unknown'
                       } ({)
-                        templateMetrics.demographics.top_countries[0]?.percentage.toFixed(1) || '0'
+  templateMetrics.demographics.top_countries[0]?.percentage.toFixed(1) || '0'
                       }%)
                     </div>
                   </div>
@@ -305,7 +294,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
                       <strong>Primary Device:</strong> {
                         templateMetrics.demographics.device_breakdown[0]?.device || 'Unknown'
                       } ({)
-                        templateMetrics.demographics.device_breakdown[0]?.percentage.toFixed(1) || '0'
+  templateMetrics.demographics.device_breakdown[0]?.percentage.toFixed(1) || '0'
                       }%)
                     </div>
                   </div>
@@ -386,11 +375,11 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
                   <h4>Best Performing Day</h4>
                   <div className="analysis-content">
                     {(() => {
-                      const bestDay = templateMetrics.trends.daily_metrics.reduce(;)
+                      const bestDay = templateMetrics.trends.daily_metrics.reduce(;);
                         (best, current) => current.views > best.views ? current : best,
                         templateMetrics.trends.daily_metrics[0] || { date: new Date(), views: 0 }
                       );
-                      return ()
+                      return;
                         <>
                           <div className="metric-date">
                             {bestDay.date.toLocaleDateString()}

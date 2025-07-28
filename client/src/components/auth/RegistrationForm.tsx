@@ -13,7 +13,7 @@ import { OAuthProviderButtons } from './OAuthProviderButtons';
 // Registration form schema - commented out as only used for type inference
 // 
 type RegistrationFormData = {
-  email: string;
+  email: string;,
   password: string;
   confirmPassword: string;
   firstName?: string;
@@ -27,18 +27,17 @@ interface RegistrationFormProps {
   onSuccess?: (user: unknown) => void;
   onCancel?: () => void;
   className?: string;
-}
 
 export const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const {
-    register,
-    isLoading,
-    error: registrationError,
-    validationResult,
-    validateField
-  } = useRegistration();
+  register,
+  isLoading,
+  error: registrationError,
+  validationResult,
+  validateField
+} = useRegistration();
   const { trackFieldEvent, trackFormStep } = useFormAnalytics();
   // Track form step changes
   useEffect(() => {
@@ -54,18 +53,15 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
     // Clear field error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
-    }
     // Track field interaction
     if (typeof value === 'string') {
       trackFieldEvent(field, 'change', value.length);
-    }
   };
   const handleFieldBlur = async (field: string) => {
     trackFieldEvent(field, 'blur');
     // Validate individual field
     if (formData[field as keyof RegistrationFormData]) {
       await validateField(field, formData[field as keyof RegistrationFormData]);
-    }
   };
   const handleFieldFocus = (field: string) => {
     trackFieldEvent(field, 'focus');
@@ -81,46 +77,34 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
           z.string().email().parse(formData.email);
         } catch {
           stepErrors.email = 'Please enter a valid email address';
-        }
-      }
       // Password validation
       if (!formData.password) {
         stepErrors.password = 'Password is required';
       } else if (formData.password.length < 12) {
         stepErrors.password = 'Password must be at least 12 characters';
-      }
       // Confirm password validation
       if (!formData.confirmPassword) {
         stepErrors.confirmPassword = 'Please confirm your password';
       } else if (formData.password !== formData.confirmPassword) {
         stepErrors.confirmPassword = 'Passwords don\'t match';
-      }
-    }
     if (currentStep === 2) {
       // Optional validation for personal details
       if (formData.firstName && formData.firstName.length < 2) {
         stepErrors.firstName = 'First name must be at least 2 characters';
-      }
       if (formData.lastName && formData.lastName.length < 2) {
         stepErrors.lastName = 'Last name must be at least 2 characters';
-      }
       if (formData.displayName && formData.displayName.length < 2) {
         stepErrors.displayName = 'Display name must be at least 2 characters';
-      }
-    }
     if (currentStep === 3) {
       // Terms acceptance validation
       if (!formData.acceptTerms) {
         stepErrors.acceptTerms = 'You must accept the terms and conditions';
-      }
-    }
     setErrors(stepErrors);
     return Object.keys(stepErrors).length === 0;
   };
   const handleNextStep = () => {
     if (validateCurrentStep()) {
       setCurrentStep(prev => Math.min(prev + 1, steps.length));
-    }
   };
   const handlePrevStep = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
@@ -129,35 +113,33 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
     e.preventDefault();
     if (!validateCurrentStep()) {
       return;
-    }
     try {
       const registrationData = {
         email: formData.email!,
         password: formData.password!,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        displayName: formData.displayName ?? `${formData.firstName ?? ''} ${formData.lastName ?? ''}`.trim(),}
+        displayName: formData.displayName ?? `${formData.firstName ?? ''} ${formData.lastName ?? ''}`.trim()}
+}
         invitationToken
       };
       const result = await register(registrationData);
       if (onSuccess) {
         onSuccess(result.user);
-      }
     } catch (error) {
-      console.error('Registration failed:', error);
-    }
-  };
-  const renderStepIndicator = () => (;)
+  console.error('Registration failed:', error);
+};
+  const renderStepIndicator = () => (;);
     <div className="flex items-center justify-center mb-8">
       {steps.map((step, index) => ()
         <React.Fragment key={step.number}>
           <div className="flex flex-col items-center">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
-                currentStep >= step.number
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-500'
-              }`}
+  currentStep >= step.number
+  ? 'bg-blue-600 text-white'
+  : 'bg-gray-200 text-gray-500',
+}`}
             >
               {step.number}
             </div>
@@ -169,15 +151,15 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
           {index < steps.length - 1 && ()
             <div
               className={`flex-1 h-0.5 mx-4 ${
-                currentStep > step.number ? 'bg-blue-600' : 'bg-gray-200'
-              }`}
+  currentStep > step.number ? 'bg-blue-600' : 'bg-gray-200',
+}`}
             />
           )}
         </React.Fragment>
       ))}
     </div>
   );
-  const renderStep1 = () => (;)
+  const renderStep1 = () => (;);
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900 text-center">Create Your Account</h2>
       <div>
@@ -193,8 +175,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onBlur={() => handleFieldBlur('email')}
             onFocus={() => handleFieldFocus('email')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
-              errors.email ? 'border-red-500' : ''
-            }`}
+  errors.email ? 'border-red-500' : '',
+}`}
             placeholder="you@example.com"
           />
           {errors.email && <ValidationMessage message={errors.email} type="error" />}
@@ -219,8 +201,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onBlur={() => handleFieldBlur('password')}
             onFocus={() => handleFieldFocus('password')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 pr-10 ${
-              errors.password ? 'border-red-500' : ''
-            }`}
+  errors.password ? 'border-red-500' : '',
+}`}
             placeholder="Choose a strong password"
           />
           <button
@@ -261,8 +243,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onBlur={() => handleFieldBlur('confirmPassword')}
             onFocus={() => handleFieldFocus('confirmPassword')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
-              errors.confirmPassword ? 'border-red-500' : ''
-            }`}
+  errors.confirmPassword ? 'border-red-500' : '',
+}`}
             placeholder="Confirm your password"
           />
           {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} type="error" />}
@@ -270,7 +252,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
       </div>
     </div>
   );
-  const renderStep2 = () => (;)
+  const renderStep2 = () => (;);
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900 text-center">Personal Information</h2>
       <p className="text-center text-gray-600">These details are optional but help personalize your experience</p>
@@ -288,8 +270,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
               onBlur={() => handleFieldBlur('firstName')}
               onFocus={() => handleFieldFocus('firstName')}
               className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
-                errors.firstName ? 'border-red-500' : ''
-              }`}
+  errors.firstName ? 'border-red-500' : '',
+}`}
               placeholder="John"
             />
             {errors.firstName && <ValidationMessage message={errors.firstName} type="error" />}
@@ -308,8 +290,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
               onBlur={() => handleFieldBlur('lastName')}
               onFocus={() => handleFieldFocus('lastName')}
               className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
-                errors.lastName ? 'border-red-500' : ''
-              }`}
+  errors.lastName ? 'border-red-500' : '',
+}`}
               placeholder="Doe"
             />
             {errors.lastName && <ValidationMessage message={errors.lastName} type="error" />}
@@ -329,8 +311,8 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onBlur={() => handleFieldBlur('displayName')}
             onFocus={() => handleFieldFocus('displayName')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
-              errors.displayName ? 'border-red-500' : ''
-            }`}
+  errors.displayName ? 'border-red-500' : '',
+}`}
             placeholder="This is how others will see your name"
           />
           {errors.displayName && <ValidationMessage message={errors.displayName} type="error" />}
@@ -341,7 +323,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
       </div>
     </div>
   );
-  const renderStep3 = () => (;)
+  const renderStep3 = () => (;);
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900 text-center">Almost Done!</h2>
       <p className="text-center text-gray-600">Review your information and accept our terms</p>
@@ -414,7 +396,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
       </div>
     </div>
   );
-  return ()
+  return;
     <div className={`max-w-2xl mx-auto ${className}`}>}
       {/* OAuth Provider Buttons */}
       <div style={{ marginBottom: '20px' }}>

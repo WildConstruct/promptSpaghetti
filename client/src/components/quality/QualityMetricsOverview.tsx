@@ -38,20 +38,19 @@ export interface QualityMetricsOverviewProps {
   compact?: boolean;
   className?: string;
 }
-
 export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   metrics,
   compact = false,
   className = ''
 }) => {
   // Helper function to get score color
-  const getScoreColor = (score: number): string => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 80) return 'text-blue-600';
-    if (score >= 70) return 'text-yellow-600';
-    if (score >= 60) return 'text-orange-600';
-    return 'text-red-600';
-  };
+  const getScoreColor = (score: number): string => {,
+  if (score >= 90) return 'text-green-600';
+  if (score >= 80) return 'text-blue-600';
+  if (score >= 70) return 'text-yellow-600';
+  if (score >= 60) return 'text-orange-600';
+  return 'text-red-600';
+};
   // Helper function to get progress color - commented out as unused
   //   //   if (score >= 80) return 'bg-blue-500';
   //   if (score >= 70) return 'bg-yellow-500';
@@ -66,17 +65,17 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
     return 'destructive';
   };
   // Helper function to get trend icon
-  const getTrendIcon = (current: number, trend?: number[]) => {
-    if (!trend || trend.length < 2) return null;
-    const lastValue = trend[trend.length - 2];
-    const change = current - lastValue;
-    if (Math.abs(change) < 1) return null;
-    return change > 0 ? ()
-      <TrendingUp className="w-4 h-4 text-green-500" />
-    ) : ()
-      <TrendingDown className="w-4 h-4 text-red-500" />
-    );
-  };
+  const getTrendIcon = (current: number, trend?: number) => {
+  if (!trend || trend.length < 2) return null;
+  const lastValue = trend[trend.length - 2];
+  const change = current - lastValue;
+  if (Math.abs(change) < 1) return null;
+  return change > 0 ? ()
+  <TrendingUp className="w-4 h-4 text-green-500" />
+  ) : (),
+  <TrendingDown className="w-4 h-4 text-red-500" />
+  );
+};
   // Quality metric card data
   const qualityCards = [;
     {
@@ -84,81 +83,91 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
       title: 'Test Coverage',
       icon: TestTube,
       score: metrics.overall.componentScores.testCoverage,
-      value: `${metrics.testCoverage.overall.percentage}%`,}
-      target: 80,
-      description: `${metrics.testCoverage.overall.linesCovered} / ${metrics.testCoverage.overall.linesTotal} lines covered`,}
-      trend: metrics.testCoverage.trends.last7Days,
+      value: `${metrics.testCoverage.overall.percentage}%`}
+},
+  target: 80,
+      description: `${metrics.testCoverage.overall.linesCovered} / ${metrics.testCoverage.overall.linesTotal} lines covered`}
+},
+  trend: metrics.testCoverage.trends.last7Days,
       alerts: metrics.testCoverage.overall.percentage < 70 ? 1 : 0,
-      color: 'blue',
-    },
+      color: 'blue';
+  }
     {
       id: 'codeQuality',
       title: 'Code Quality',
       icon: Code,
       score: metrics.overall.componentScores.codeQuality,
-      value: `${metrics.codeQuality.maintainability.index}/100`,}
-      target: 85,
-      description: `${metrics.codeQuality.linting.totalIssues} issues found`,}
-      trend: metrics.codeQuality.maintainability.trends,
+      value: `${metrics.codeQuality.maintainability.index}/100`}
+},
+  target: 85,
+      description: `${metrics.codeQuality.linting.totalIssues} issues found`}
+},
+  trend: metrics.codeQuality.maintainability.trends,
       alerts: metrics.codeQuality.linting.errorCount,
-      color: 'purple',
-    },
+      color: 'purple';
+  }
     {
       id: 'performance',
       title: 'Performance',
       icon: Zap,
       score: metrics.overall.componentScores.performance,
-      value: `${Math.round(metrics.performance.responseTime.average)}ms`,}
-      target: 90,
-      description: `${Math.round(metrics.performance.throughput.requestsPerSecond)} req/s`,}
-      trend: metrics.performance.responseTime.average ? [metrics.performance.responseTime.average] : [],
+      value: `${Math.round(metrics.performance.responseTime.average)}ms`}
+},
+  target: 90,
+      description: `${Math.round(metrics.performance.throughput.requestsPerSecond)} req/s`}
+},
+  trend: metrics.performance.responseTime.average ? [metrics.performance.responseTime.average] : [],
       alerts: metrics.performance.errorRates.overall > 5 ? 1 : 0,
-      color: 'green',
-    },
+      color: 'green';
+  }
     {
       id: 'security',
       title: 'Security',
       icon: Shield,
       score: metrics.overall.componentScores.security,
-      value: `${metrics.security.vulnerabilities.total} issues`,}
-      target: 95,
-      description: `${metrics.security.vulnerabilities.critical} critical`,}
-      trend: metrics.security.vulnerabilities.trends,
+      value: `${metrics.security.vulnerabilities.total} issues`}
+},
+  target: 95,
+      description: `${metrics.security.vulnerabilities.critical} critical`}
+},
+  trend: metrics.security.vulnerabilities.trends,
       alerts: metrics.security.vulnerabilities.critical + metrics.security.vulnerabilities.high,
-      color: 'red',
-    },
+      color: 'red';
+  }
     {
       id: 'documentation',
       title: 'Documentation',
       icon: FileText,
       score: metrics.overall.componentScores.documentation,
-      value: `${metrics.documentation.coverage.overall}%`,}
-      target: 75,
-      description: `${metrics.documentation.accuracy.brokenLinks} broken links`,}
-      trend: [],
+      value: `${metrics.documentation.coverage.overall}%`}
+},
+  target: 75,
+      description: `${metrics.documentation.accuracy.brokenLinks} broken links`}
+},
+  trend: [],
       alerts: metrics.documentation.accuracy.brokenLinks > 5 ? 1 : 0,
-      color: 'indigo',
-    },
+      color: 'indigo';
+  }
     {
       id: 'buildHealth',
       title: 'Build Health',
       icon: Wrench,
       score: metrics.overall.componentScores.buildHealth,
-      value: `${metrics.buildHealth.builds.successRate}%`,}
-      target: 95,
-      description: `${Math.round(metrics.buildHealth.builds.averageDuration)}min avg`,}
-      trend: metrics.buildHealth.builds.trends,
+      value: `${metrics.buildHealth.builds.successRate}%`}
+},
+  target: 95,
+      description: `${Math.round(metrics.buildHealth.builds.averageDuration)}min avg`}
+},
+  trend: metrics.buildHealth.builds.trends,
       alerts: metrics.buildHealth.builds.successRate < 90 ? 1 : 0,
-      color: 'orange',
-    }
-  ];
+      color: 'orange'];
   if (compact) {
-    return ()
+    return;
       <div className={`quality-metrics-overview-compact ${className}`}>}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {qualityCards.map((card) => {
             const IconComponent = card.icon;
-            return ()
+            return;
               <Card key={card.id} className="relative">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -181,8 +190,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`quality-metrics-overview ${className}`}>}
       <Card>
         <CardHeader>
@@ -198,7 +206,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
             {qualityCards.map((card) => {
               const IconComponent = card.icon;
               const trendIcon = getTrendIcon(card.score, card.trend);
-              return ()
+              return;
                 <div key={card.id} className="space-y-4">
                   {/* Header */}
                   <div className="flex items-center justify-between">

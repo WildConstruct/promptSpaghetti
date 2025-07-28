@@ -4,71 +4,66 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
 interface Author {
-  id: string;
+  id: string;,
   display_name: string;
   avatar_url?: string;
   creator_tier?: string;
   verification_status?: string;
-}
-interface KnowledgeArticle {
-  id: string;
+  interface KnowledgeArticle {
+  id: string;,
   title: string;
   content: string;
   summary?: string;
-  slug: string;
+  slug: string;,
   category: string;
-  tags: string[];
+  tags: string;,
   author: Author;
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
   estimated_read_time: number;
-  views_count: number;
+  views_count: number;,
   likes_count: number;
-  helpful_count: number;
+  helpful_count: number;,
   is_featured: boolean;
-  is_community_contributed: boolean;
+  is_community_contributed: boolean;,
   created_at: string;
   last_updated_at: string;
-}
-interface Tutorial {
-  id: string;
+  interface Tutorial {
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   slug: string;
-  category: string;
-  tags: string[];
-  author: Author;
+  category: string;,
+  tags: string;
+  author: Author;,
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  estimated_duration: number;
+  estimated_duration: number;,
   completion_count: number;
-  rating: number;
+  rating: number;,
   review_count: number;
-  is_interactive: boolean;
+  is_interactive: boolean;,
   created_at: string;
-}
-interface CaseStudy {
-  id: string;
+  interface CaseStudy {
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   slug: string;
-  category: string;
-  tags: string[];
-  author: Author;
+  category: string;,
+  tags: string;
+  author: Author;,
   industry: string;
-  use_case: string;
+  use_case: string;,
   views_count: number;
-  likes_count: number;
+  likes_count: number;,
   is_featured: boolean;
   created_at: string;
-}
-interface SearchFilters {
+  interface SearchFilters {
   category?: string;
   difficulty_level?: string;
   content_type?: 'article' | 'tutorial' | 'case_study';
   is_featured?: boolean;
-}
-const DIFFICULTY_COLORS = {
+  const DIFFICULTY_COLORS = {
   beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-yellow-100 text-yellow-800', 
+  intermediate: 'bg-yellow-100 text-yellow-800',
   advanced: 'bg-orange-100 text-orange-800',
   expert: 'bg-red-100 text-red-800',
 };
@@ -79,14 +74,14 @@ const DIFFICULTY_LABELS = {
   expert: 'Expert',
 };
 
-export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+export const [tutorials, setTutorials] = useState<Tutorial>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy>([]);
   const [searchResults, setSearchResults] = useState<(KnowledgeArticle | Tutorial | CaseStudy)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>({});
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string>([]);
   const navigate = useNavigate();
   const getAuthHeaders = () => {
     const token = localStorage.getItem('auth_token');
@@ -101,18 +96,20 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
       setError(null);
       const [articlesRes, tutorialsRes, caseStudiesRes] = await Promise.all([)
         fetch(`${API_URL}/api/marketplace/knowledge/articles?limit=12`, {)}
-          headers: getAuthHeaders(),
-        }),
+  },
+  headers: getAuthHeaders();
+  }),
         fetch(`${API_URL}/api/marketplace/knowledge/tutorials?limit=8`, {)}
-          headers: getAuthHeaders(),
-        }),
+  },
+  headers: getAuthHeaders();
+  }),
         fetch(`${API_URL}/api/marketplace/knowledge/case-studies?limit=6`, {)}
-          headers: getAuthHeaders(),
-        })
+  },
+  headers: getAuthHeaders();
+  }
       ]);
       if (!articlesRes.ok || !tutorialsRes.ok || !caseStudiesRes.ok) {
         throw new Error('Failed to fetch knowledge base content');
-      }
       const [articlesData, tutorialsData, caseStudiesData] = await Promise.all([)
         articlesRes.json(),
         tutorialsRes.json(),
@@ -127,73 +124,68 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
         .forEach(item => allCategories.add(item.category));
       setCategories(Array.from(allCategories).sort());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load knowledge base');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load knowledge base');
+} finally {
       setLoading(false);
-    }
   }, []);
   const handleSearch = useCallback(async () => {
     if (!searchQuery.trim()) return;
     try {
       setLoading(true);
       const queryParams = new URLSearchParams({)
-        q: searchQuery,
+  q: searchQuery,
         ...(filters.category && { category: filters.category }),
         ...(filters.difficulty_level && { difficulty_level: filters.difficulty_level }),
         ...(filters.content_type && { content_type: filters.content_type })
       });
       const response = await fetch(`${API_URL}/api/marketplace/knowledge/search?${queryParams}`, {)}
-        headers: getAuthHeaders(),
-      });
+  },
+  headers: getAuthHeaders();
+  });
       if (!response.ok) {
         throw new Error('Search failed');
-      }
       const data = await response.json();
       setSearchResults(data.results || []);
       setActiveTab('search');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Search failed');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Search failed');
+} finally {
       setLoading(false);
-    }
   }, [searchQuery, filters.category, filters.difficulty_level, filters.content_type]);
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
-    }
   };
-  const rateContent = useCallback(;)
-    async (type: 'articles' | 'tutorials' | 'case-studies',)
-    id: string,
-    isHelpful: boolean,
-  ) => {
+  const rateContent = useCallback(;);
+    async (type: 'articles' | 'tutorials' | 'case-studies');
+  id: string,
+    isHelpful: boolean) => {,
     try {
       const response = await fetch(`${API_URL}/api/marketplace/knowledge/${type}/${id}/rate`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ is_helpful: isHelpful })
       });
       if (response.ok) {
         // Optionally update local state to reflect the rating
         console.log('Content rated successfully');
-      }
     } catch (error: unknown) {
-      console.error('Failed to rate content:', error);
-    }
-  }, []);
-  const getDifficultyBadge = (level: string) => (;)
+  console.error('Failed to rate content:', error);
+}, []);
+  const getDifficultyBadge = (level: string) => (;);
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${DIFFICULTY_COLORS[level as keyof typeof DIFFICULTY_COLORS]}`}>}
       {DIFFICULTY_LABELS[level as keyof typeof DIFFICULTY_LABELS]}
     </span>
   );
-  const getTierBadge = (tier: string, verified: string) => (;)
+  const getTierBadge = (tier: string, verified: string) => (;);
     <div className="flex items-center space-x-1">
       <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-        tier === 'platinum' ? 'bg-purple-100 text-purple-800' :
-        tier === 'gold' ? 'bg-yellow-100 text-yellow-800' :
-        tier === 'silver' ? 'bg-gray-100 text-gray-800' :
-        'bg-amber-100 text-amber-800'
-      }`}>
+  tier === 'platinum' ? 'bg-purple-100 text-purple-800' :,
+  tier === 'gold' ? 'bg-yellow-100 text-yellow-800' :,
+  tier === 'silver' ? 'bg-gray-100 text-gray-800' :,
+  'bg-amber-100 text-amber-800'
+}`}>
         {tier.charAt(0).toUpperCase() + tier.slice(1)}
       </span>
       {verified === 'verified' && ()
@@ -204,7 +196,7 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   useEffect(() => {
     fetchKnowledgeContent();
   }, [fetchKnowledgeContent]);
-  const renderArticleCard = (article: KnowledgeArticle) => (;)
+  const renderArticleCard = (article: KnowledgeArticle) => (;);
     <div key={article.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
       <div className="flex items-start justify-between mb-3">
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{article.title}</h3>
@@ -270,7 +262,7 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
       </div>
     </div>
   );
-  const renderTutorialCard = (tutorial: Tutorial) => (;)
+  const renderTutorialCard = (tutorial: Tutorial) => (;);
     <div key={tutorial.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
       <div className="flex items-start justify-between mb-3">
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{tutorial.title}</h3>
@@ -325,7 +317,7 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
       </div>
     </div>
   );
-  const renderCaseStudyCard = (caseStudy: CaseStudy) => (;)
+  const renderCaseStudyCard = (caseStudy: CaseStudy) => (;);
     <div key={caseStudy.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
       <div className="flex items-start justify-between mb-3">
         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{caseStudy.title}</h3>
@@ -380,7 +372,7 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
     </div>
   );
   if (loading && articles.length === 0) {
-    return ()
+    return;
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -390,9 +382,8 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -407,8 +398,7 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -490,10 +480,10 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as 'all' | 'articles' | 'tutorials' | 'case-studies' | 'search')}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  activeTab === tab.key
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                }`}
+  activeTab === tab.key
+  ? 'bg-blue-600 text-white'
+  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50',
+}`}
               >
                 {tab.label} ({tab.count})
               </button>
@@ -532,7 +522,6 @@ export const [tutorials, setTutorials] = useState<Tutorial[]>([]);
               {activeTab === 'search' 
                 ? 'Try adjusting your search terms or filters'
                 : 'Content is being added regularly. Check back soon!'
-              }
             </p>
           </div>
         )}

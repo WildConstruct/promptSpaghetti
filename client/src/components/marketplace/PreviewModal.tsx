@@ -4,32 +4,29 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import { Badge } from '../common/Badge';
 import './PreviewModal.css';
 interface PreviewModalProps {
-  templateId: string;
+  templateId: string;,
   template: Error;
   onClose: () => void;
   className?: string;
-}
-interface PreviewMetadata {
-  template_id: string;
+  interface PreviewMetadata {
+  template_id: string;,
   version_id: string;
-  claude_model: string;
+  claude_model: string;,
   estimated_tokens: number;
-  estimated_cost: number;
+  estimated_cost: number;,
   safety_score: number;
-  can_preview: boolean;
-  preview_limitations: string[];
-}
-interface PreviewResponse {
-  output: string;
+  can_preview: boolean;,
+  preview_limitations: string;
+  interface PreviewResponse {
+  output: string;,
   cost_estimate: number;
-  quality_score: number;
+  quality_score: number;,
   token_usage: {,
-    input_tokens: number;
-    output_tokens: number;
-  };
-  cached: boolean;
-  redacted_sections: string[];
-}
+  input_tokens: number;,
+  output_tokens: number;
+};
+  cached: boolean;,
+  redacted_sections: string;
 
 export const PreviewModal: React.FC<PreviewModalProps> = ({)
   templateId,
@@ -56,13 +53,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
         setSelectedModel(data.claude_model);
       } else {
         setError('Failed to load preview information');
-      }
     } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.debug('Preview metadata error:', err);
-      setError('Failed to load preview information');
-    }
-  }, [templateId]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.debug('Preview metadata error:', err);
+  setError('Failed to load preview information');
+}, [templateId]);
   const generatePreview = async () => {
     if (!metadata) return;
     setLoading(true);
@@ -70,16 +65,17 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(`/api/marketplace/templates/${templateId}/preview`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
-        },
-        body: JSON.stringify({),
-          version_id: metadata.version_id,
-          user_input: Object.keys(userInput).length > 0 ? userInput : undefined,
-          claude_model_override: selectedModel !== metadata.claude_model ? selectedModel : undefined,
-        })
+  },
+  body: JSON.stringify({,)
+  version_id: metadata.version_id,
+  user_input: Object.keys(userInput).length > 0 ? userInput : undefined,
+  claude_model_override: selectedModel !== metadata.claude_model ? selectedModel : undefined,
+}
       });
       if (response.ok) {
         const data = await response.json();
@@ -87,39 +83,36 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to generate preview');
-      }
     } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.debug('Preview generation error:', err);
-      setError('Failed to generate preview');
-    } finally {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.debug('Preview generation error:', err);
+  setError('Failed to generate preview');
+} finally {
       setLoading(false);
-    }
   };
   const handleInputChange = (key: string, value: string) => {
-    setUserInput(prev => ({)
-      ...prev,
-      [key]: value
-    }));
+  setUserInput(prev => ({)
+  ...prev,
+  [key]: value,
+}));
   };
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
-    }
   };
   const formatCost = (cost: number) => {
-    return new Intl.NumberFormat('en-US', {)
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 4,
-    }).format(cost);
+  return new Intl.NumberFormat('en-US', {)
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 4,
+}).format(cost);
   };
   const getQualityBadgeVariant = (score: number) => {
     if (score >= 4.5) return 'success';
     if (score >= 3.5) return 'warning';
     return 'default';
   };
-  return ()
+  return;
     <div className={`preview-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>}
       <div className="preview-modal" onClick={(e) => e.stopPropagation()}>
         <header className="modal-header">
@@ -352,9 +345,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
           </button>
           <button 
             onClick={() => {
-              // TODO: Integrate with purchase flow
-              console.log('Purchase template:', templateId);
-            }}
+  // TODO: Integrate with purchase flow,
+  console.log('Purchase template:', templateId);
+}}
             className="purchase-button"
           >
             {template.price_cents === 0 ? 'Get Free Template' : `Purchase for ${(template.price_cents / 100).toFixed(2)}`}

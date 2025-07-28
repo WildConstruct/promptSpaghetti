@@ -4,51 +4,46 @@
  */
 
 export interface OptionConfig {
-  label: string;
+  label: string;,
   value: string;
   weight: number;
   description?: string;
 }
-
 export interface NodeData {
-  label: string;
+  label: string;,
   description: string;
-  category: 'logic' | 'transform' | 'output';
-  options: OptionConfig[];
+  category: 'logic' | 'transform' | 'output';,
+  options: OptionConfig;
 }
-
 export interface NodeTemplate {
-  id: string;
+  id: string;,
   type: 'logic' | 'transform' | 'output';
+
   position: { x: number; y: number };
   data: NodeData;
 }
-
 export interface GraphTemplate {
-  name: string;
+  name: string;,
   description: string;
-  nodes: NodeTemplate[];
-  edges: EdgeTemplate[];
+  nodes: NodeTemplate;,
+  edges: EdgeTemplate;
 }
-
 export interface EdgeTemplate {
-  id: string;
+  id: string;,
   source: string;
   target: string;
   sourceHandle?: string;
   targetHandle?: string;
 }
-
 export interface TemplateCategory {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
-  templates: NodeTemplate[];
+  description: string;,
+  templates: NodeTemplate;
+  // Template configuration for different domains
 }
-
-// Template configuration for different domains
 export interface DomainTemplate {
-  domain: string;
-  categories: TemplateCategory[];
-  presets: GraphTemplate[];
+  domain: string;,
+  categories: TemplateCategory;
+  presets: GraphTemplate;
 }

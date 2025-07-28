@@ -10,55 +10,52 @@ import { PaymentProviderMetrics, PaymentMethodMetrics, PaymentFailureAnalysis } 
 import './PaymentOptimizationTools.css';
 
 export interface PaymentOptimizationRecommendation {
-  id: string;
+  id: string;,
   type: 'routing' | 'retry' | 'method' | 'provider' | 'performance';
-  title: string;
+  title: string;,
   description: string;
-  impact: 'high' | 'medium' | 'low';
+  impact: 'high' | 'medium' | 'low';,
   effort: 'high' | 'medium' | 'low';
-  priority: number;
+  priority: number;,
   estimatedImprovement: {,
-    successRate?: number;
-    processingTime?: number;
-    cost?: number;
-  };
+  successRate?: number;
+  processingTime?: number;
+  cost?: number;
+};
   actionItems: Array<{,
-    task: string;
-    owner: string;
-    timeline: string;
-  }>;
+  task: string;
+  owner: string;,
+  timeline: string;
+}>;
   status: 'pending' | 'in_progress' | 'completed' | 'dismissed';
 }
-
 export interface PaymentRoutingRule {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   conditions: Array<{,
-    field: string;
-    operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
-    value: string | number;
-  }>;
+  field: string;,
+  operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
+  value: string | number;
+}>;
   actions: Array<{,
-    type: 'route_to_provider' | 'use_method' | 'apply_retry_logic';
-    provider?: PaymentProvider;
-    method?: PaymentMethodType;
-    retryCount?: number;
-    retryDelay?: number;
-  }>;
-  isActive: boolean;
+  type: 'route_to_provider' | 'use_method' | 'apply_retry_logic';
+  provider?: PaymentProvider;
+  method?: PaymentMethodType;
+  retryCount?: number;
+  retryDelay?: number;
+}>;
+  isActive: boolean;,
   priority: number;
-  createdAt: Date;
+  createdAt: Date;,
   lastModified: Date;
 }
-
 export interface PaymentOptimizationToolsProps {
-  providerMetrics: PaymentProviderMetrics[];
-  methodMetrics: PaymentMethodMetrics[];
-  failureAnalysis: PaymentFailureAnalysis[];
+  providerMetrics: PaymentProviderMetrics;,
+  methodMetrics: PaymentMethodMetrics;
+  failureAnalysis: PaymentFailureAnalysis;
   className?: string;
 }
-
 export const PaymentOptimizationTools: React.FC<PaymentOptimizationToolsProps> = ({)
   providerMetrics,
   methodMetrics,
@@ -66,39 +63,37 @@ export const PaymentOptimizationTools: React.FC<PaymentOptimizationToolsProps> =
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState<'recommendations' | 'routing' | 'monitoring'>('recommendations');
-  const [recommendations, setRecommendations] = useState<PaymentOptimizationRecommendation[]>()
-    generateRecommendations(providerMetrics, methodMetrics, failureAnalysis)
+  const [recommendations, setRecommendations] = useState<PaymentOptimizationRecommendation>()
+  generateRecommendations(providerMetrics, methodMetrics, failureAnalysis)
   );
-  const [routingRules, setRoutingRules] = useState<PaymentRoutingRule[]>([]);
+  const [routingRules, setRoutingRules] = useState<PaymentRoutingRule>([]);
   const [isCreatingRule, setIsCreatingRule] = useState(false);
-  const handleRecommendationAction = useCallback((;)
-    recommendationId: string, 
-    action: 'implement' | 'dismiss' | 'in_progress',
-  ) => {
-    setRecommendations(prev => prev.map(rec => )
-      rec.id === recommendationId 
-        ? { 
-            ...rec, 
-            status: action === 'implement' ? 'in_progress' : ,
-                   action === 'dismiss' ? 'dismissed' : 'in_progress'
-          }
-        : rec
-    ));
-  }, []);
+  const handleRecommendationAction = useCallback((;);
+  recommendationId: string,
+  action: 'implement' | 'dismiss' | 'in_progress') => {,
+  setRecommendations(prev => prev.map(rec => )
+  rec.id === recommendationId
+  ? {
+  ...rec,
+  status: action === 'implement' ? 'in_progress' : ,
+  action === 'dismiss' ? 'dismissed' : 'in_progress',
+  : rec));
+}, []);
   const handleCreateRoutingRule = useCallback(() => {
     setIsCreatingRule(true);
   }, []);
   const handleSaveRoutingRule = useCallback((rule: Omit<PaymentRoutingRule, 'id' | 'createdAt' | 'lastModified'>) => {
     const newRule: PaymentRoutingRule = {
       ...rule,
-      id: `rule_${Date.now()}`,}
-      createdAt: new Date(),
-      lastModified: new Date(),
-    };
+      id: `rule_${Date.now()}`}
+},
+  createdAt: new Date(),
+      lastModified: new Date();
+  };
     setRoutingRules(prev => [...prev, newRule]);
     setIsCreatingRule(false);
   }, []);
-  return ()
+  return;
     <div className={`payment-optimization-tools ${className}`}>}
       {/* Header */}
       <div className="optimization-header">
@@ -157,14 +152,14 @@ export const PaymentOptimizationTools: React.FC<PaymentOptimizationToolsProps> =
 };
 
 // Recommendations Panel Component
-const RecommendationsPanel: React.FC<{
-  recommendations: PaymentOptimizationRecommendation[];
+const RecommendationsPanel: React.FC<{,
+  recommendations: PaymentOptimizationRecommendation;
   onAction: (id: string, action: 'implement' | 'dismiss' | 'in_progress') => void;
 }> = ({ recommendations, onAction }) => {
   const pendingRecommendations = recommendations;
     .filter(rec => rec.status === 'pending')
     .sort((a, b) => b.priority - a.priority);
-  return ()
+  return;
     <div className="recommendations-panel">
       <div className="panel-header">
         <h3>AI-Powered Recommendations</h3>
@@ -272,15 +267,15 @@ const RecommendationsPanel: React.FC<{
 };
 
 // Routing Panel Component
-const RoutingPanel: React.FC<{
-  rules: PaymentRoutingRule[];
-  providerMetrics: PaymentProviderMetrics[];
+const RoutingPanel: React.FC<{,
+  rules: PaymentRoutingRule;
+  providerMetrics: PaymentProviderMetrics;,
   onCreateRule: () => void;
   onSaveRule: (rule: Omit<PaymentRoutingRule, 'id' | 'createdAt' | 'lastModified'>) => void;
-  isCreating: boolean;
+  isCreating: boolean;,
   onCancelCreate: () => void;
 }> = ({ rules, providerMetrics, onCreateRule, onSaveRule, isCreating, onCancelCreate }) => {
-  return ()
+  return;
     <div className="routing-panel">
       <div className="panel-header">
         <h3>Smart Payment Routing</h3>
@@ -372,17 +367,17 @@ const RoutingPanel: React.FC<{
 };
 
 // Monitoring Panel Component
-const MonitoringPanel: React.FC<{
-  providerMetrics: PaymentProviderMetrics[];
-  methodMetrics: PaymentMethodMetrics[];
-  failureAnalysis: PaymentFailureAnalysis[];
+const MonitoringPanel: React.FC<{,
+  providerMetrics: PaymentProviderMetrics;
+  methodMetrics: PaymentMethodMetrics;,
+  failureAnalysis: PaymentFailureAnalysis;
 }> = ({ providerMetrics }) => {
   const [alertThresholds, setAlertThresholds] = useState({)
-    successRate: 90,
-    processingTime: 1000,
-    failureRate: 10,
-  });
-  return ()
+  successRate: 90,
+  processingTime: 1000,
+  failureRate: 10,
+});
+  return;
     <div className="monitoring-panel">
       <div className="panel-header">
         <h3>Real-time Payment Monitoring</h3>
@@ -397,9 +392,9 @@ const MonitoringPanel: React.FC<{
               type="number"
               value={alertThresholds.successRate}
               onChange={(e) => setAlertThresholds(prev => ({)
-                ...prev,
-                successRate: parseFloat(e.target.value),
-              }))}
+  ...prev,
+  successRate: parseFloat(e.target.value),
+}))}
               min="0"
               max="100"
               step="0.1"
@@ -412,9 +407,9 @@ const MonitoringPanel: React.FC<{
               type="number"
               value={alertThresholds.processingTime}
               onChange={(e) => setAlertThresholds(prev => ({)
-                ...prev,
-                processingTime: parseInt(e.target.value),
-              }))}
+  ...prev,
+  processingTime: parseInt(e.target.value),
+}))}
               min="0"
               step="100"
             />
@@ -426,9 +421,9 @@ const MonitoringPanel: React.FC<{
               type="number"
               value={alertThresholds.failureRate}
               onChange={(e) => setAlertThresholds(prev => ({)
-                ...prev,
-                failureRate: parseFloat(e.target.value),
-              }))}
+  ...prev,
+  failureRate: parseFloat(e.target.value),
+}))}
               min="0"
               max="100"
               step="0.1"
@@ -442,26 +437,23 @@ const MonitoringPanel: React.FC<{
         <h4>Current Alerts</h4>
         <div className="alerts-list">
           {providerMetrics.map(provider => {)
-            const alerts = [];
+  const alerts = [];
             if (provider.successRate < alertThresholds.successRate) {
               alerts.push({)
-                type: 'warning',
+  type: 'warning',
                 message: `${provider.provider} success rate (${provider.successRate.toFixed(1)}%) below threshold`}
               });
-            }
             if (provider.averageProcessingTime > alertThresholds.processingTime) {
               alerts.push({)
-                type: 'warning',
+  type: 'warning',
                 message: `${provider.provider} processing time (${provider.averageProcessingTime}ms) above threshold`}
               });
-            }
             const failureRate = (provider.failedPayments / provider.totalAttempts) * 100;
             if (failureRate > alertThresholds.failureRate) {
               alerts.push({)
-                type: 'error',
+  type: 'error',
                 message: `${provider.provider} failure rate (${failureRate.toFixed(1)}%) above threshold`}
               });
-            }
             return alerts.map((alert, index) => ()
               <div key={`${provider.provider}-${index}`} className={`alert ${alert.type}`}>}
                 <span className="alert-icon">⚠️</span>
@@ -487,8 +479,9 @@ const MonitoringPanel: React.FC<{
                       key={index}
                       className="trend-point"
                       style={{
-                        height: `${(hour.successRate / 100) * 40}px`,}
-                        backgroundColor: hour.successRate >= 95 ? '#10b981' : ,
+                        height: `${(hour.successRate / 100) * 40}px`}
+},
+  backgroundColor: hour.successRate >= 95 ? '#10b981' : ,
                                        hour.successRate >= 90 ? '#f59e0b' : '#ef4444'
                       }}
                       title={`Hour ${hour.hour}: ${hour.successRate.toFixed(1)}%`}
@@ -505,23 +498,23 @@ const MonitoringPanel: React.FC<{
 };
 
 // Routing Rule Creator Component
-const RoutingRuleCreator: React.FC<{
+const RoutingRuleCreator: React.FC<{,
   onSave: (rule: Omit<PaymentRoutingRule, 'id' | 'createdAt' | 'lastModified'>) => void;
-  onCancel: () => void;
-  providerMetrics: PaymentProviderMetrics[];
+  onCancel: () => void;,
+  providerMetrics: PaymentProviderMetrics;
 }> = ({ onSave, onCancel }) => {
   const [rule, setRule] = useState({)
-    name: '',
+  name: '',
     description: '',
     conditions: [{ field: 'amount', operator: 'greater_than' as const, value: 0 }],
     actions: [{ type: 'route_to_provider' as const, provider: PaymentProvider.STRIPE }],
     isActive: true,
-    priority: 1,
+    priority: 1;
   });
   const handleSave = () => {
     onSave(rule);
   };
-  return ()
+  return;
     <div className="rule-creator-modal">
       <div className="modal-content">
         <div className="modal-header">
@@ -572,78 +565,81 @@ const RoutingRuleCreator: React.FC<{
 };
 
 // Helper function to generate recommendations
-function generateRecommendations()
-  providerMetrics: PaymentProviderMetrics[],
-  methodMetrics: PaymentMethodMetrics[],
-  failureAnalysis: PaymentFailureAnalysis[],
-): PaymentOptimizationRecommendation[] {
-  const recommendations: PaymentOptimizationRecommendation[] = [];
+function generateRecommendations(providerMetrics: PaymentProviderMetrics,)
+  methodMetrics: PaymentMethodMetrics,
+  failureAnalysis: PaymentFailureAnalysis): PaymentOptimizationRecommendation {,
+  const recommendations: PaymentOptimizationRecommendation = [];
   // Analyze success rates
   providerMetrics.forEach((provider, index) => {
     if (provider.successRate < 95) {
       recommendations.push({)
-        id: `success_rate_${provider.provider}`,}
-        type: 'provider',
-        title: `Improve ${provider.provider} Success Rate`,}
-        description: `${provider.provider} has a success rate of ${provider.successRate.toFixed(1)}%, ` +}
+  id: `success_rate_${provider.provider}`}
+},
+  type: 'provider',
+        title: `Improve ${provider.provider} Success Rate`}
+},
+  description: `${provider.provider} has a success rate of ${provider.successRate.toFixed(1)}%, ` +}
           `which is below the recommended 95% threshold. Consider implementing retry logic and payment method fallbacks.`,
         impact: provider.successRate < 90 ? 'high' : 'medium',
         effort: 'medium',
         priority: 10 - index,
         estimatedImprovement: {,
-          successRate: 95 - provider.successRate,
-        },
-        actionItems: [,
+  successRate: 95 - provider.successRate,
+},
+  actionItems: [,
           { task: 'Implement intelligent retry logic', owner: 'Engineering Team', timeline: '2 weeks' },
           { task: 'Add payment method fallbacks', owner: 'Product Team', timeline: '3 weeks' },
           { task: 'Monitor and analyze retry performance', owner: 'Analytics Team', timeline: '1 week' }
         ],
-        status: 'pending',
-      });
-    }
+        status: 'pending';
+  });
     if (provider.averageProcessingTime > 1000) {
       recommendations.push({)
-        id: `processing_time_${provider.provider}`,}
-        type: 'performance',
-        title: `Optimize ${provider.provider} Processing Time`,}
-        description: `${provider.provider} average processing time is ${provider.averageProcessingTime}ms, which impacts user experience. Consider API optimizations and caching strategies.`,}
-        impact: 'medium',
+  id: `processing_time_${provider.provider}`}
+},
+  type: 'performance',
+        title: `Optimize ${provider.provider} Processing Time`}
+},
+  description: `${provider.provider} average processing time is ${provider.averageProcessingTime}ms, which impacts user experience. Consider API optimizations and caching strategies.`}
+},
+  impact: 'medium',
         effort: 'high',
         priority: 7 - index,
         estimatedImprovement: {,
-          processingTime: Math.max(200, provider.averageProcessingTime - 500),
-        },
-        actionItems: [,
+  processingTime: Math.max(200, provider.averageProcessingTime - 500),
+},
+  actionItems: [,
           { task: 'Optimize API call patterns', owner: 'Engineering Team', timeline: '4 weeks' },
           { task: 'Implement response caching', owner: 'DevOps Team', timeline: '2 weeks' },
           { task: 'Add performance monitoring', owner: 'SRE Team', timeline: '1 week' }
         ],
-        status: 'pending',
-      });
-    }
+        status: 'pending';
+  });
   });
   // Analyze failure patterns
   failureAnalysis.forEach((failure, index) => {
     if (failure.percentage > 20) {
       recommendations.push({)
-        id: `failure_${failure.provider}_${failure.failureCode}`,}
-        type: 'retry',
-        title: `Address High-Frequency ${failure.failureCode} Failures`,}
-        description: `${failure.failureCode} represents ${failure.percentage.toFixed(1)}% of failures for ${failure.provider}. Focus on this error type for maximum impact.`,}
-        impact: 'high',
+  id: `failure_${failure.provider}_${failure.failureCode}`}
+},
+  type: 'retry',
+        title: `Address High-Frequency ${failure.failureCode} Failures`}
+},
+  description: `${failure.failureCode} represents ${failure.percentage.toFixed(1)}% of failures for ${failure.provider}. Focus on this error type for maximum impact.`}
+},
+  impact: 'high',
         effort: 'low',
         priority: 15 - index,
         estimatedImprovement: {,
-          successRate: failure.percentage * 0.3, // Assume 30% improvement
-        },
-        actionItems: [,
+  successRate: failure.percentage * 0.3, // Assume 30% improvement,
+},
+  actionItems: [,
           { task: 'Analyze failure root causes', owner: 'Engineering Team', timeline: '1 week' },
           { task: 'Implement targeted retry logic', owner: 'Engineering Team', timeline: '2 weeks' },
           { task: 'Add user-friendly error messaging', owner: 'UX Team', timeline: '1 week' }
         ],
-        status: 'pending',
-      });
-    }
+        status: 'pending';
+  });
   });
   // Smart routing recommendations
   if (providerMetrics.length > 1) {
@@ -651,26 +647,25 @@ function generateRecommendations()
       current.successRate > best.successRate ? current : best
     );
     recommendations.push({)
-      id: 'smart_routing',
+  id: 'smart_routing',
       type: 'routing',
       title: 'Implement Smart Payment Routing',
-      description: `Route payments intelligently based on transaction characteristics. ${bestProvider.provider} shows the best performance with ${bestProvider.successRate.toFixed(1)}% success rate.`,}
-      impact: 'high',
+      description: `Route payments intelligently based on transaction characteristics. ${bestProvider.provider} shows the best performance with ${bestProvider.successRate.toFixed(1)}% success rate.`}
+},
+  impact: 'high',
       effort: 'medium',
       priority: 20,
       estimatedImprovement: {,
-        successRate: 2.5,
-        cost: 0.5,
-      },
-      actionItems: [,
+  successRate: 2.5,
+  cost: 0.5,
+},
+  actionItems: [,
         { task: 'Design routing algorithm', owner: 'Engineering Team', timeline: '3 weeks' },
         { task: 'Implement A/B testing framework', owner: 'Data Team', timeline: '2 weeks' },
         { task: 'Create routing configuration UI', owner: 'Frontend Team', timeline: '4 weeks' }
       ],
-      status: 'pending',
-    });
-  }
+      status: 'pending';
+  });
   return recommendations.sort((a, b) => b.priority - a.priority);
-}
 
 export default PaymentOptimizationTools;

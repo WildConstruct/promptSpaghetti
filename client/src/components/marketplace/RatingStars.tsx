@@ -17,9 +17,7 @@ interface RatingStarsProps {
   className?: string;
   disabled?: boolean;
   showTooltip?: boolean;
-}
-
-export const RatingStars: React.FC<RatingStarsProps> = ({)
+  export const RatingStars: React.FC<RatingStarsProps> = ({,)
   rating,
   maxRating = 5,
   size = 'md',
@@ -37,17 +35,16 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const displayRating = hoverRating ?? rating;
-  const handleStarClick = (starIndex: number, event: React.MouseEvent) => {
-    if (!interactive || disabled || !onChange) return;
-    let newRating = starIndex + 1;
-    if (precision === 'half') {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const starWidth = rect.width;
-      if (clickX < starWidth / 2) {
-        newRating = starIndex + 0.5;
-      }
-    } else if (precision === 'quarter') {
+  const handleStarClick = (starIndex: number, event: React.MouseEvent) => {,
+  if (!interactive || disabled || !onChange) return;
+  let newRating = starIndex + 1;
+  if (precision === 'half') {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const clickX = event.clientX - rect.left;
+  const starWidth = rect.width;
+  if (clickX < starWidth / 2) {
+  newRating = starIndex + 0.5;
+} else if (precision === 'quarter') {
       const rect = event.currentTarget.getBoundingClientRect();
       const clickX = event.clientX - rect.left;
       const starWidth = rect.width;
@@ -58,8 +55,6 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
         newRating = starIndex + 0.5;
       } else if (clickX < quarter * 3) {
         newRating = starIndex + 0.75;
-      }
-    }
     onChange(newRating);
   };
   const handleStarHover = (starIndex: number, event: React.MouseEvent) => {
@@ -71,8 +66,6 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
       const starWidth = rect.width;
       if (hoverX < starWidth / 2) {
         hoverValue = starIndex + 0.5;
-      }
-    }
     setHoverRating(hoverValue);
     onHover?.(hoverValue);
   };
@@ -85,13 +78,12 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
   const handleMouseEnter = () => {
     if (showTooltip) {
       setTooltipVisible(true);
-    }
   };
   const renderStar = (index: number) => {
     const filled = displayRating > index;
     const partialFill = displayRating > index && displayRating < index + 1;
     const fillPercentage = partialFill ? (displayRating - index) * 100 : 100;
-    return ()
+    return;
       <div
         key={index}
         className={`star-container ${size} ${interactive ? 'interactive' : ''} ${disabled ? 'disabled' : ''}`}
@@ -116,22 +108,21 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
     );
   };
   const getRatingLabel = (value: number): string => {
-    const labels = {
-      1: 'Poor',
-      2: 'Fair',
-      3: 'Good',
-      4: 'Very Good',
-      5: 'Excellent',
-    };
+  const labels = {
+  1: 'Poor',
+  2: 'Fair',
+  3: 'Good',
+  4: 'Very Good',
+  5: 'Excellent',
+};
     return labels[value] || `${value} stars`;}
   };
   const formatRating = (value: number): string => {
     if (value % 1 === 0) {
       return value.toString();
-    }
     return value.toFixed(1);
   };
-  return ()
+  return;
     <div 
       className={`rating-stars ${className}`}
       onMouseLeave={handleMouseLeave}
@@ -157,15 +148,14 @@ export const RatingStars: React.FC<RatingStarsProps> = ({)
 // Rating Distribution Component
 interface RatingDistributionProps {
   distribution: {,
-    five_star: number;
-    four_star: number;
-    three_star: number;
-    two_star: number;
-    one_star: number;
-  };
+  five_star: number;,
+  four_star: number;
+  three_star: number;,
+  two_star: number;
+  one_star: number;
+};
   totalReviews: number;
   onFilterByRating?: (rating: number) => void;
-}
 
 export const RatingDistribution: React.FC<RatingDistributionProps> = ({)
   distribution,
@@ -174,16 +164,16 @@ export const RatingDistribution: React.FC<RatingDistributionProps> = ({)
 }) => {
   const ratings = [5, 4, 3, 2, 1];
   const ratingKeys = ['five_star', 'four_star', 'three_star', 'two_star', 'one_star'] as const;
-  const handleBarClick = (rating: number) => {
-    onFilterByRating?.(rating);
-  };
-  return ()
+  const handleBarClick = (rating: number) => {,
+  onFilterByRating?.(rating);
+};
+  return;
     <div className="rating-distribution">
       <h3>Rating Breakdown</h3>
       {ratings.map((rating, index) => {
         const count = distribution[ratingKeys[index]];
         const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
-        return ()
+        return;
           <div
             key={rating}
             className={`rating-bar ${onFilterByRating ? 'clickable' : ''}`}
@@ -213,19 +203,18 @@ export const RatingDistribution: React.FC<RatingDistributionProps> = ({)
 
 // Rating Summary Component
 interface RatingSummaryProps {
-  averageRating: number;
+  averageRating: number;,
   totalReviews: number;
   distribution: {,
-    five_star: number;
-    four_star: number;
-    three_star: number;
-    two_star: number;
-    one_star: number;
-  };
+  five_star: number;,
+  four_star: number;
+  three_star: number;,
+  two_star: number;
+  one_star: number;
+};
   verifiedPercentage?: number;
   onFilterByRating?: (rating: number) => void;
   className?: string;
-}
 
 export const RatingSummary: React.FC<RatingSummaryProps> = ({)
   averageRating,
@@ -235,7 +224,7 @@ export const RatingSummary: React.FC<RatingSummaryProps> = ({)
   onFilterByRating,
   className = ''
 }) => {
-  return ()
+  return;
     <div className={`rating-summary ${className}`}>}
       <div className="rating-overview">
         <div className="average-rating">

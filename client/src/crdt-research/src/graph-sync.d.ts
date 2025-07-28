@@ -95,5 +95,5 @@ export declare class GraphSyncHandler {
      * Destroy the sync handler
      */
     destroy(): void;
-}
+
 //# sourceMappingURL=graph-sync.d.ts.map

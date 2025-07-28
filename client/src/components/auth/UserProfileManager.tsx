@@ -13,19 +13,15 @@ interface UserProfile {
   locale?: string;
   createdAt?: string;
   updatedAt?: string;
-}
-interface ProfileCompleteness {
-  percentage: number;
-  completedFields: string[];
-  missingFields: string[];
-}
-interface UserProfileManagerProps {
+  interface ProfileCompleteness {
+  percentage: number;,
+  completedFields: string;
+  missingFields: string;
+  interface UserProfileManagerProps {
   onProfileUpdate?: (profile: UserProfile) => void;
   showCompleteness?: boolean;
   allowImageUpload?: boolean;
-}
-
-export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
+  export const UserProfileManager: React.FC<UserProfileManagerProps> = ({,)
   onProfileUpdate,
   showCompleteness = true,
   allowImageUpload = true
@@ -58,58 +54,50 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
     try {
       setLoading(true);
       const response = await fetch('/api/auth/profile', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch profile');
-      }
       const data = await response.json();
       setProfile(data.profile);
       if (showCompleteness) {
         setCompleteness(data.completeness);
-      }
     } catch (error) {
-      console.error('Error fetching profile:', error);
-      setError('Failed to load profile');
-    } finally {
+  console.error('Error fetching profile:', error);
+  setError('Failed to load profile');
+} finally {
       setLoading(false);
-    }
   }, [showCompleteness]);
   useEffect(() => {
     if (user) {
       fetchProfile();
-    }
   }, [user, fetchProfile]);
   const updateProfile = async (updates: Partial<UserProfile>) => {
     try {
       setSaving(true);
       setError(null);
       const response = await fetch('/api/auth/profile', {)
-        method: 'PUT',
+  method: 'PUT',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify(updates),
-      });
+  },
+  body: JSON.stringify(updates);
+  });
       if (!response.ok) {
         throw new Error('Failed to update profile');
-      }
       const data = await response.json();
       setProfile(data.profile);
       // Refresh completeness if showing
       if (showCompleteness) {
         await fetchProfile();
-      }
       onProfileUpdate?.(data.profile);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setError('Failed to update profile');
-    } finally {
+  console.error('Error updating profile:', error);
+  setError('Failed to update profile');
+} finally {
       setSaving(false);
-    }
   };
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -120,45 +108,40 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
       const formData = new FormData();
       formData.append('file', file);
       const response = await fetch('/api/auth/profile/avatar', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: formData,
-      });
+  },
+  body: formData;
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to upload image');
-      }
       const data = await response.json();
       setProfile(prev => prev ? { ...prev, avatarUrl: data.avatarUrl } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: data.avatarUrl } : {});
     } catch (error) {
-      console.error('Error uploading image:', error);
-      setError(error.message || 'Failed to upload image');
-    } finally {
+  console.error('Error uploading image:', error);
+  setError(error.message || 'Failed to upload image');
+} finally {
       setUploadingImage(false);
-    }
   };
   const handleDeleteImage = async () => {
     try {
       setError(null);
       const response = await fetch('/api/auth/profile/avatar', {)
-        method: 'DELETE',
+  method: 'DELETE',
         headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to delete image');
-      }
       setProfile(prev => prev ? { ...prev, avatarUrl: null } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: null } : {});
     } catch (error) {
-      console.error('Error deleting image:', error);
-      setError('Failed to delete image');
-    }
-  };
+  console.error('Error deleting image:', error);
+  setError('Failed to delete image');
+};
   const startEdit = (field: string, currentValue: Error) => {
     setEditMode(field);
     setTempValues({ [field]: currentValue });
@@ -170,7 +153,6 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
   const saveEdit = async (field: string) => {
     if (tempValues[field] !== undefined) {
       await updateProfile({ [field]: tempValues[field] });
-    }
     setEditMode(null);
     setTempValues({});
   };
@@ -183,13 +165,12 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
     return 'text-red-600';
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Profile Header */}
       <div className="bg-white rounded-lg shadow-md p-6">

@@ -24,44 +24,40 @@ import {
 } from 'lucide-react';
 
 export interface QRCodeData {
-  uri: string;
+  uri: string;,
   secret: string;
-  issuer: string;
+  issuer: string;,
   accountName: string;
-  algorithm: string;
+  algorithm: string;,
   digits: number;
   period: number;
 }
-
 export interface QRCodeStyle {
-  size: number;
+  size: number;,
   margin: number;
-  errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H';
+  errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H';,
   includeMargin: boolean;
-  backgroundColor: string;
+  backgroundColor: string;,
   foregroundColor: string;
   logoImage?: string;
   logoSize?: number;
   borderRadius?: number;
-}
-interface QRCodeGeneratorProps {
+  interface QRCodeGeneratorProps {
   qrData: QRCodeData;
   onRegenerateSecret?: () => Promise<QRCodeData>;
   showCustomization?: boolean;
   showSecretDetails?: boolean;
   className?: string;
-}
-interface GeneratorState {
-  style: QRCodeStyle;
+  interface GeneratorState {
+  style: QRCodeStyle;,
   showAdvanced: boolean;
-  showSecret: boolean;
+  showSecret: boolean;,
   copying: boolean;
-  downloading: boolean;
+  downloading: boolean;,
   regenerating: boolean;
-  error: string | null;
+  error: string | null;,
   validationPassed: boolean;
-}
-const DEFAULT_STYLE: QRCodeStyle = {
+  const DEFAULT_STYLE: QRCodeStyle = {,
   size: 256,
   margin: 4,
   errorCorrectionLevel: 'H',
@@ -77,27 +73,26 @@ const ERROR_CORRECTION_LEVELS = {
 };
 const PRESET_STYLES = {
   standard: {,
-    name: 'Standard',
+  name: 'Standard',
     style: { ...DEFAULT_STYLE }
   },
   large: {,
-    name: 'Large',
+  name: 'Large',
     style: { ...DEFAULT_STYLE, size: 384, margin: 6 }
   },
   minimal: {,
-    name: 'Minimal',
+  name: 'Minimal',
     style: { ...DEFAULT_STYLE, size: 200, margin: 2 }
   },
   highContrast: {,
-    name: 'High Contrast',
+  name: 'High Contrast',
     style: { ...DEFAULT_STYLE, foregroundColor: '#000000', backgroundColor: '#FFFFFF' }
   },
   darkMode: {,
-    name: 'Dark Mode',
+  name: 'Dark Mode',
     style: { ...DEFAULT_STYLE, foregroundColor: '#FFFFFF', backgroundColor: '#1a1a1a' }
-  }
 };
-
+}
 export function QRCodeGenerator({ )
   qrData, 
   onRegenerateSecret,
@@ -105,36 +100,32 @@ export function QRCodeGenerator({ )
   showSecretDetails = true,
   className = ''
 }: QRCodeGeneratorProps) {
-    const [state, setState] = useState<GeneratorState>({)
-    style: DEFAULT_STYLE,
-    showAdvanced: false,
-    showSecret: false,
-    copying: false,
-    downloading: false,
-    regenerating: false,
-    error: null,
-    validationPassed: false,
-  });
+  const [state, setState] = useState<GeneratorState>({)
+  style: DEFAULT_STYLE,
+  showAdvanced: false,
+  showSecret: false,
+  copying: false,
+  downloading: false,
+  regenerating: false,
+  error: null,
+  validationPassed: false,
+});
   const validateQRData = useCallback(() => {
-    const issues: string[] = [];
-    if (!qrData.uri || !qrData.uri.startsWith('otpauth://totp/')) {
-      issues.push('Invalid TOTP URI format');
-    }
-    if (!qrData.secret || qrData.secret.length < 16) {
-      issues.push('Secret too short (minimum 16 characters)');
-    }
-    if (qrData.digits !== 6 && qrData.digits !== 8) {
-      issues.push('Digits must be 6 or 8');
-    }
-    if (qrData.period < 15 || qrData.period > 300) {
-      issues.push('Period must be between 15 and 300 seconds');
-    }
-    const isValid = issues.length === 0;
-    setState(prev => ({)
-      ...prev,
-      validationPassed: isValid,
-      error: isValid ? null : issues.join('; ')
-    }));
+  const issues: string = [];
+  if (!qrData.uri || !qrData.uri.startsWith('otpauth://totp/')) {,
+  issues.push('Invalid TOTP URI format');
+  if (!qrData.secret || qrData.secret.length < 16) {
+  issues.push('Secret too short (minimum 16 characters)');
+  if (qrData.digits !== 6 && qrData.digits !== 8) {
+  issues.push('Digits must be 6 or 8');
+  if (qrData.period < 15 || qrData.period > 300) {
+  issues.push('Period must be between 15 and 300 seconds');
+  const isValid = issues.length === 0;
+  setState(prev => ({)
+  ...prev,
+  validationPassed: isValid,
+  error: isValid ? null : issues.join('; '),
+}));
   }, [qrData]);
   // Validate QR data on mount and when it changes
   useEffect(() => {
@@ -142,7 +133,7 @@ export function QRCodeGenerator({ )
   }, [validateQRData]);
   const updateStyle = (updates: Partial<QRCodeStyle>) => {
     setState(prev => ({)
-      ...prev,
+  ...prev,
       style: { ...prev.style, ...updates }
     }));
   };
@@ -158,14 +149,13 @@ export function QRCodeGenerator({ )
         setState(prev => ({ ...prev, copying: false }));
       }, 2000);
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.error('Copy failed:', error);
-      setState(prev => ({ )
-        ...prev, 
-        copying: false,
-        error: 'Failed to copy to clipboard',
-      }));
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.error('Copy failed:', error);
+  setState(prev => ({ )
+  ...prev,
+  copying: false,
+  error: 'Failed to copy to clipboard',
+}));
   };
   const downloadQRCode = (format: 'png' | 'svg' = 'png') => {
     setState(prev => ({ ...prev, downloading: true }));
@@ -190,7 +180,6 @@ export function QRCodeGenerator({ )
             a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.png`;}
             a.click();
             URL.revokeObjectURL(url);
-          }
         });
       } else {
         // SVG download
@@ -204,8 +193,6 @@ export function QRCodeGenerator({ )
           a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.svg`;}
           a.click();
           URL.revokeObjectURL(url);
-        }
-      }
     } catch (error) {
       setState(prev => ({ )
         ...prev, 
@@ -213,7 +200,6 @@ export function QRCodeGenerator({ )
       }));
     } finally {
       setState(prev => ({ ...prev, downloading: false }));
-    }
   };
   const regenerateSecret = async () => {
     if (!onRegenerateSecret) return;
@@ -227,7 +213,6 @@ export function QRCodeGenerator({ )
       }));
     } finally {
       setState(prev => ({ ...prev, regenerating: false }));
-    }
   };
   const formatSecret = (secret: string): string => {
     return secret.replace(/(.{4})/g, '$1 ').trim();
@@ -239,10 +224,9 @@ export function QRCodeGenerator({ )
       return { level: 'Good', color: 'blue', description: 'Good security' };
     } else {
       return { level: 'Basic', color: 'yellow', description: 'Meets minimum requirements' };
-    }
   };
   const security = getSecurityLevel();
-  return ()
+  return;
     <div className={`space-y-6 ${className}`}>}
       {/* Main QR Code Display */}
       <Card>
@@ -507,4 +491,3 @@ export function QRCodeGenerator({ )
       </Alert>
     </div>
   );
-}

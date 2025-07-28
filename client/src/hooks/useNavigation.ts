@@ -12,20 +12,19 @@ import { useAuthStore } from '../stores/authStore';
 import { useCallback, useMemo } from 'react';
 interface NavigationOptions {
   requireAuth?: boolean;
-  requiredRoles?: string[];
+  requiredRoles?: string;
   fallbackUrl?: string;
-}
 
 export const useNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated } = useAuthStore();
   // Check if user has required role
-  const hasRole = useCallback((roles: string | string[]): boolean => {
-    if (!user || !user.roles) return false;
-    const rolesToCheck = Array.isArray(roles) ? roles : [roles];
-    return rolesToCheck.some(role => user.roles.includes(role));
-  }, [user]);
+  const hasRole = useCallback((roles: string | string): boolean => {
+  if (!user || !user.roles) return false;
+  const rolesToCheck = Array.isArray(roles) ? roles : [roles];
+  return rolesToCheck.some(role => user.roles.includes(role));
+}, [user]);
   // Check if user can access a route
   const canAccess = useCallback((options: NavigationOptions = {}): boolean => {
     const { requireAuth = true, requiredRoles = [] } = options;
@@ -34,7 +33,7 @@ export const useNavigation = () => {
     return true;
   }, [isAuthenticated, hasRole]);
   // Navigate with authentication checks
-  const navigateTo = useCallback((;)
+  const navigateTo = useCallback((;);
     path: string, 
     options: NavigationOptions = {}
   ): boolean => {
@@ -42,7 +41,6 @@ export const useNavigation = () => {
     if (!canAccess(options)) {
       navigate(fallbackUrl);
       return false;
-    }
     navigate(path);
     return true;
   }, [navigate, canAccess]);
@@ -50,9 +48,9 @@ export const useNavigation = () => {
   const navigateToAdmin = useCallback((section?: string): boolean => {
     const adminPath = section ? `/admin/${section}` : '/admin';}
     return navigateTo(adminPath, {)
-      requiredRoles: ['admin', 'administrator'],
-      fallbackUrl: '/unauthorized',
-    });
+  requiredRoles: ['admin', 'administrator'],
+  fallbackUrl: '/unauthorized',
+});
   }, [navigateTo]);
   // Navigate back to main app
   const navigateToMain = useCallback((): void => {
@@ -60,48 +58,46 @@ export const useNavigation = () => {
   }, [navigate]);
   // Get available admin sections for current user
   const getAvailableAdminSections = useMemo(() => {
-    if (!user || !user.roles) return [];
-    const adminSections = [;
+  if (!user || !user.roles) return [];
+  const adminSections = [;
+  {
+  id: 'feature-toggles',
+  label: 'Feature Toggles',
+  requiredRoles: ['admin', 'administrator', 'feature-admin'],
+}
       {
-        id: 'feature-toggles',
-        label: 'Feature Toggles',
-        requiredRoles: ['admin', 'administrator', 'feature-admin']
-      },
+  id: 'users',
+  label: 'User Management',
+  requiredRoles: ['admin', 'administrator', 'user-admin'],
+}
       {
-        id: 'users',
-        label: 'User Management',
-        requiredRoles: ['admin', 'administrator', 'user-admin']
-      },
+  id: 'content',
+  label: 'Content Management',
+  requiredRoles: ['admin', 'administrator', 'content-moderator'],
+}
       {
-        id: 'content',
-        label: 'Content Management',
-        requiredRoles: ['admin', 'administrator', 'content-moderator']
-      },
+  id: 'api-management',
+  label: 'API Management',
+  requiredRoles: ['admin', 'administrator', 'api-admin'],
+}
       {
-        id: 'api-management',
-        label: 'API Management',
-        requiredRoles: ['admin', 'administrator', 'api-admin']
-      },
+  id: 'marketplace',
+  label: 'Marketplace Admin',
+  requiredRoles: ['admin', 'administrator', 'marketplace-admin'],
+}
       {
-        id: 'marketplace',
-        label: 'Marketplace Admin',
-        requiredRoles: ['admin', 'administrator', 'marketplace-admin']
-      },
+  id: 'analytics',
+  label: 'Analytics & Monitoring',
+  requiredRoles: ['admin', 'administrator', 'analyst'],
+}
       {
-        id: 'analytics',
-        label: 'Analytics & Monitoring',
-        requiredRoles: ['admin', 'administrator', 'analyst']
-      },
-      {
-        id: 'system',
-        label: 'System Configuration',
-        requiredRoles: ['admin', 'administrator']
-      }
-    ];
-    return adminSections.filter(section => )
-      section.requiredRoles.some(role => user.roles.includes(role))
-    );
-  }, [user]);
+  id: 'system',
+  label: 'System Configuration',
+  requiredRoles: ['admin', 'administrator']];
+  return adminSections.filter(section => )
+  section.requiredRoles.some(role => user.roles.includes(role))
+  );
+}, [user]);
   // Get navigation breadcrumbs
   const getBreadcrumbs = useMemo(() => {
     const path = location.pathname;
@@ -112,19 +108,18 @@ export const useNavigation = () => {
       currentPath += `/${segment}`;}
       // Map common routes
       const routeMap: Record<string, string> = {
-        admin: 'Admin Panel',
-        profile: 'Profile',
-        settings: 'Settings',
-        marketplace: 'Marketplace',
-        'feature-toggles': 'Feature Toggles',
-        users: 'User Management',
-        analytics: 'Analytics',
-      };
+  admin: 'Admin Panel',
+  profile: 'Profile',
+  settings: 'Settings',
+  marketplace: 'Marketplace',
+  'feature-toggles': 'Feature Toggles',
+  users: 'User Management',
+  analytics: 'Analytics',
+};
       breadcrumbs.push({)
-        label: routeMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1),
-        path: currentPath,
-      });
-    }
+  label: routeMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1),
+  path: currentPath,
+});
     return breadcrumbs;
   }, [location.pathname]);
   // Check if current route is active
@@ -140,25 +135,24 @@ export const useNavigation = () => {
     // Add Epic Status tab for all authenticated users
     if (isAuthenticated) {
       baseTabs.push({ id: 'epic-status', label: 'Epic Status', path: '/epic-status' });
-    }
     return baseTabs;
   }, [isAuthenticated]);
   return {
-    // Navigation functions
-    navigateTo,
-    navigateToAdmin,
-    navigateToMain,
-    // Permission checks
-    hasRole,
-    canAccess,
-    isActiveRoute,
-    // User-specific data
-    getAvailableAdminSections,
-    getAvailableTabs,
-    getBreadcrumbs,
-    // Current state
-    currentPath: location.pathname,
-    isAuthenticated,
-    user
-  };
+  // Navigation functions
+  navigateTo,
+  navigateToAdmin,
+  navigateToMain,
+  // Permission checks
+  hasRole,
+  canAccess,
+  isActiveRoute,
+  // User-specific data
+  getAvailableAdminSections,
+  getAvailableTabs,
+  getBreadcrumbs,
+  // Current state
+  currentPath: location.pathname,
+  isAuthenticated,
+  user
+};
 };

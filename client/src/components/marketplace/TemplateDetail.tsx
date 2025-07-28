@@ -13,27 +13,25 @@ import './TemplateDetail.css';
 interface TemplateDetailProps {
   templateId: string;
   className?: string;
-}
-
-export const TemplateDetail: React.FC<TemplateDetailProps> = ({)
+  export const TemplateDetail: React.FC<TemplateDetailProps> = ({,)
   templateId,
   className = ''
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
   const [similarTemplates, setSimilarTemplates] = useState<Array<{
-    id: string;
-    name: string;
-    description: string;
-    rating: number;
-    price: number;
-  }>>([]);
+  id: string;,
+  name: string;
+  description: string;,
+  rating: number;
+  price: number;
+}>>([]);
   const [reviews, setReviews] = useState<Array<{
-    id: string;
-    rating: number;
-    comment: string;
-    author: string;
-    date: string;
-  }>>([]);
+  id: string;,
+  rating: number;
+  comment: string;,
+  author: string;
+  date: string;
+}>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
@@ -56,18 +54,15 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({)
       if (similarResponse.ok) {
         const similarData = await similarResponse.json();
         setSimilarTemplates(similarData.templates || []);
-      }
       // Load reviews
       const reviewsResponse = await fetch(`/api/marketplace/templates/${templateId}/reviews`);}
       if (reviewsResponse.ok) {
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData || []);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load template');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load template');
+} finally {
       setLoading(false);
-    }
   }, [templateId, getTemplate]);
   const handlePreview = () => {
     setShowPreview(true);
@@ -80,21 +75,19 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({)
     if (success) {
       // Refresh template data to update purchase status
       loadTemplateData();
-    }
   };
   const handleSimilarTemplateClick = (id: string) => {
     // Navigate to similar template
     window.location.href = `/marketplace/templates/${id}`;}
   };
   if (loading) {
-    return ()
+    return;
       <div className={`template-detail loading ${className}`}>}
         <LoadingSpinner size="large" message="Loading template..." />
       </div>
     );
-  }
   if (error || !template) {
-    return ()
+    return;
       <div className={`template-detail error ${className}`}>}
         <div className="error-message">
           <h2>Template not found</h2>
@@ -105,8 +98,7 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`template-detail ${className}`}>}
       {/* Header */}
       <header className="template-header">

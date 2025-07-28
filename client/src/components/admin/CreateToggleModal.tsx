@@ -6,32 +6,30 @@ import { ValidationMessage } from '../common/ValidationMessage';
 import { TargetingRuleBuilder } from './targeting/TargetingRuleBuilder';
 import './targeting/TargetingRuleBuilder.css';
 interface CreateToggleModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onSubmit: (toggleData: CreateToggleData) => Promise<void>;
-}
 interface CreateToggleData {
-  key: string;
+  key: string;,
   name: string;
   description?: string;
-  type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';
+  type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';,
   value: unknown;
-  claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';
+  claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';,
   enabled: boolean;
-}
 
 export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<CreateToggleData>({)
-    key: '',
-    name: '',
-    description: '',
-    type: 'boolean',
-    value: false,
-    claudeImpact: 'NONE',
-    enabled: true,
-  });
+  key: '',
+  name: '',
+  description: '',
+  type: 'boolean',
+  value: false,
+  claudeImpact: 'NONE',
+  enabled: true,
+});
   if (!isOpen) return null;
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -39,68 +37,59 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
     if (!formData.key.trim()) {
       newErrors.key = 'Key is required';
     } else if (!/^[a-z0-9_.-]+$/.test(formData.key)) {
-      newErrors.key = 'Key must contain only lowercase letters, numbers, underscores, dots, and hyphens';
-    }
-    // Validate name
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    // Validate type-specific values
-    switch (formData.type) {
-    case 'percentage_rollout':
-      if (typeof formData.value.percentage !== 'number' || )
-            formData.value.percentage < 0 || 
-            formData.value.percentage > 100) {
-        newErrors.value = 'Percentage must be between 0 and 100';
-      }
-      break;
-    case 'multivariate':
-      if (!Array.isArray(formData.value.variants) || formData.value.variants.length === 0) {
-        newErrors.value = 'At least one variant is required';
-      } else {
-        const totalPercentage = formData.value.variants.reduce(;)
+  newErrors.key = 'Key must contain only lowercase letters, numbers, underscores, dots, and hyphens';
+  // Validate name
+  if (!formData.name.trim()) {
+  newErrors.name = 'Name is required';
+  // Validate type-specific values
+  switch (formData.type) {
+  case 'percentage_rollout':,
+  if (typeof formData.value.percentage !== 'number' || )
+  formData.value.percentage < 0 ||
+  formData.value.percentage > 100) {
+  newErrors.value = 'Percentage must be between 0 and 100';
+  break;
+  case 'multivariate':,
+  if (!Array.isArray(formData.value.variants) || formData.value.variants.length === 0) {
+  newErrors.value = 'At least one variant is required';
+} else {
+        const totalPercentage = formData.value.variants.reduce(;);
           (sum: number, v: { percentage?: number }) => sum + (v.percentage || 0), 
           0
         );
         if (totalPercentage > 100) {
-          newErrors.value = 'Total variant percentages cannot exceed 100%';
-        }
-      }
-      break;
-    case 'segmentation':
-      if (!Array.isArray(formData.value.rules) || formData.value.rules.length === 0) {
-        newErrors.value = 'At least one segmentation rule is required';
-      }
-      break;
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  newErrors.value = 'Total variant percentages cannot exceed 100%';
+  break;
+  case 'segmentation':,
+  if (!Array.isArray(formData.value.rules) || formData.value.rules.length === 0) {
+  newErrors.value = 'At least one segmentation rule is required';
+  break;
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
       return;
-    }
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
       onClose();
       // Reset form
       setFormData({)
-        key: '',
+  key: '',
         name: '',
         description: '',
         type: 'boolean',
         value: { enabled: false },
         claudeImpact: 'NONE',
-        enabled: false,
-      });
+        enabled: false;
+  });
       setErrors({});
     } catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Failed to create toggle' });
     } finally {
       setIsSubmitting(false);
-    }
   };
   const handleTypeChange = (type: CreateToggleData['type']) => {
     let defaultValue: unknown;
@@ -122,20 +111,19 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
       break;
     default:
       defaultValue = {};
-    }
     setFormData(prev => ({ ...prev, type, value: defaultValue }));
   };
   const renderValueEditor = () => {
     switch (formData.type) {
     case 'boolean':
-      return ()
+      return;
         <div className="form-group">
           <label>
             <input
               type="checkbox"
               checked={formData.value.enabled}
               onChange={(e) => setFormData(prev => ({)
-                ...prev,
+  ...prev,
                 value: { enabled: e.target.checked }
               }))}
             />
@@ -144,7 +132,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
         </div>
       );
     case 'percentage_rollout':
-      return ()
+      return;
         <div className="form-group">
           <label>Rollout Percentage</label>
           <input
@@ -153,7 +141,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
             max="100"
             value={formData.value.percentage || 0}
             onChange={(e) => setFormData(prev => ({)
-              ...prev,
+  ...prev,
               value: { percentage: parseInt(e.target.value) || 0 }
             }))}
             className={errors.value ? 'error' : ''}
@@ -164,14 +152,13 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
         </div>
       );
     case 'multivariate':
-      return ()
+      return;
         <div className="form-group">
           <label>Variants</label>
           <div className="variants-editor">
             {formData.value.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number,
-            ) => ()
+              index: number) => (),
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -181,7 +168,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, key: e.target.value };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { variants: newVariants }
                     }));
                   }}
@@ -194,7 +181,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, value: e.target.value };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { variants: newVariants }
                     }));
                   }}
@@ -209,7 +196,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
                     setFormData(prev => ({)
-                      ...prev,
+  ...prev,
                       value: { variants: newVariants }
                     }));
                   }}
@@ -221,12 +208,13 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
               className="btn btn-secondary btn-sm"
               onClick={() => {
                 const newVariants = [...(formData.value.variants || []), {
-                  key: `variant_${String.fromCharCode(65 + formData.value.variants.length)}`,}
-                  value: '',
-                  percentage: 0,
-                }];
+                  key: `variant_${String.fromCharCode(65 + formData.value.variants.length)}`}
+},
+  value: '',
+                  percentage: 0;
+  }];
                 setFormData(prev => ({)
-                  ...prev,
+  ...prev,
                   value: { variants: newVariants }
                 }));
               }}
@@ -237,7 +225,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
         </div>
       );
     case 'scheduled':
-      return ()
+      return;
         <div className="form-group">
           <label>Schedule Configuration</label>
           <div className="schedule-editor">
@@ -246,7 +234,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                 type="checkbox"
                 checked={formData.value.enabled}
                 onChange={(e) => setFormData(prev => ({)
-                  ...prev,
+  ...prev,
                   value: { ...prev.value, enabled: e.target.checked }
                 }))}
               />
@@ -259,7 +247,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                   type="datetime-local"
                   value={formData.value.startTime || ''}
                   onChange={(e) => setFormData(prev => ({)
-                    ...prev,
+  ...prev,
                     value: { ...prev.value, startTime: e.target.value }
                   }))}
                 />
@@ -270,7 +258,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                   type="datetime-local"
                   value={formData.value.endTime || ''}
                   onChange={(e) => setFormData(prev => ({)
-                    ...prev,
+  ...prev,
                     value: { ...prev.value, endTime: e.target.value }
                   }))}
                 />
@@ -280,23 +268,23 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
         </div>
       );
     case 'segmentation':
-      return ()
+      return;
         <div className="form-group">
           <label>Targeting Rules</label>
           <div className="segmentation-editor">
             <TargetingRuleBuilder
               initialRules={formData.value.rules || []}
               onRulesChange={(rules) => setFormData(prev => ({)
-                ...prev,
+  ...prev,
                 value: { ...prev.value, rules }
               }))}
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               onTestRule={async (_rules) => {
-                // Mock test implementation
-                return {
-                  matches: true,
-                  userCount: Math.floor(Math.random() * 5000) + 100,
-                };
+  // Mock test implementation
+  return {
+  matches: true,
+  userCount: Math.floor(Math.random() * 5000) + 100,
+};
               }}
             />
             <div className="default-value-section">
@@ -306,7 +294,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                 placeholder="Value when no rules match (e.g., false, disabled)"
                 value={formData.value.defaultValue || ''}
                 onChange={(e) => setFormData(prev => ({)
-                  ...prev,
+  ...prev,
                   value: { ...prev.value, defaultValue: e.target.value }
                 }))}
               />
@@ -319,9 +307,8 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
       );
     default:
       return null;
-    }
   };
-  return ()
+  return;
     <div className="modal-overlay">
       <div className="modal-content create-toggle-modal">
         <div className="modal-header">
@@ -389,8 +376,8 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
               value={formData.claudeImpact}
               onChange={(e) => setFormData(prev => ({ )
                 ...prev, 
-                claudeImpact: e.target.value as CreateToggleData['claudeImpact'] ,
-              }))}
+                claudeImpact: e.target.value as CreateToggleData['claudeImpact'] ;
+  }))}
             >
               <option value="NONE">None - No Claude impact</option>
               <option value="PROMPT_COST">Prompt Cost - Affects token usage</option>

@@ -26,74 +26,72 @@ import {
   AlertCount
 } from './AlertIndicators';
 interface AdminLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode;,
   currentSection: string;
   onSectionChange: (section: string) => void;
+  const adminSections = [;
+  {
+  id: 'feature-toggles',
+  label: 'Feature Toggles',
+  icon: ToggleLeft,
+  description: 'Manage feature flags and rollouts',
+  requiredRoles: ['admin', 'administrator', 'feature-admin'],
 }
-const adminSections = [;
   {
-    id: 'feature-toggles',
-    label: 'Feature Toggles',
-    icon: ToggleLeft,
-    description: 'Manage feature flags and rollouts',
-    requiredRoles: ['admin', 'administrator', 'feature-admin']
-  },
+  id: 'users',
+  label: 'User Management',
+  icon: Users,
+  description: 'Manage users and permissions',
+  requiredRoles: ['admin', 'administrator', 'user-admin'],
+}
   {
-    id: 'users',
-    label: 'User Management',
-    icon: Users,
-    description: 'Manage users and permissions',
-    requiredRoles: ['admin', 'administrator', 'user-admin']
-  },
+  id: 'content',
+  label: 'Content Management',
+  icon: FileText,
+  description: 'Moderate and manage content',
+  requiredRoles: ['admin', 'administrator', 'content-moderator'],
+}
   {
-    id: 'content',
-    label: 'Content Management',
-    icon: FileText,
-    description: 'Moderate and manage content',
-    requiredRoles: ['admin', 'administrator', 'content-moderator']
-  },
+  id: 'api-management',
+  label: 'API Management',
+  icon: Key,
+  description: 'Manage API keys and access control',
+  requiredRoles: ['admin', 'administrator', 'api-admin'],
+}
   {
-    id: 'api-management',
-    label: 'API Management',
-    icon: Key,
-    description: 'Manage API keys and access control',
-    requiredRoles: ['admin', 'administrator', 'api-admin']
-  },
+  id: 'marketplace',
+  label: 'Marketplace Admin',
+  icon: ShoppingCart,
+  description: 'Review templates and transactions',
+  requiredRoles: ['admin', 'administrator', 'marketplace-admin'],
+}
   {
-    id: 'marketplace',
-    label: 'Marketplace Admin',
-    icon: ShoppingCart,
-    description: 'Review templates and transactions',
-    requiredRoles: ['admin', 'administrator', 'marketplace-admin']
-  },
+  id: 'analytics',
+  label: 'Analytics & Monitoring',
+  icon: BarChart3,
+  description: 'View system metrics and health',
+  requiredRoles: ['admin', 'administrator', 'analyst'],
+}
   {
-    id: 'analytics',
-    label: 'Analytics & Monitoring',
-    icon: BarChart3,
-    description: 'View system metrics and health',
-    requiredRoles: ['admin', 'administrator', 'analyst']
-  },
+  id: 'system',
+  label: 'System Configuration',
+  icon: Settings,
+  description: 'Configure system settings',
+  requiredRoles: ['admin', 'administrator'],
+}
   {
-    id: 'system',
-    label: 'System Configuration',
-    icon: Settings,
-    description: 'Configure system settings',
-    requiredRoles: ['admin', 'administrator']
-  },
-  {
-    id: 'audit-logs',
-    label: 'Audit Logs',
-    icon: ScrollText,
-    description: 'View system audit trail and security logs',
-    requiredRoles: ['admin', 'administrator', 'security-admin']
-  },
+  id: 'audit-logs',
+  label: 'Audit Logs',
+  icon: ScrollText,
+  description: 'View system audit trail and security logs',
+  requiredRoles: ['admin', 'administrator', 'security-admin'],
+}
   {
     id: 'data-protection',
     label: 'Data Protection',
     icon: Shield,
     description: 'Manage data retention, deletion workflows, and compliance',
     requiredRoles: ['admin', 'administrator', 'privacy-officer', 'compliance-admin']
-  }
 ];
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onSectionChange }) => {
   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
@@ -103,13 +101,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   const { user, logout } = useAuthStore();
   // Mock alert data - in real implementation, this would come from API
   useEffect(() => {
-    const mockAlertData: AlertCount = {
-      critical: 2,
-      high: 5,
-      medium: 8,
-      low: 3,
-      info: 1,
-    };
+  const mockAlertData: AlertCount = {,
+  critical: 2,
+  high: 5,
+  medium: 8,
+  low: 3,
+  info: 1,
+};
     setAlertCounts(mockAlertData);
     setLastAlertUpdate(new Date());
     // Simulate real-time updates
@@ -140,10 +138,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
     : (displayName.slice(0, 2));
   // Filter sections based on user roles
   const availableSections = adminSections.filter(section => {)
-    if (!user || !user.roles) return false;
+  if (!user || !user.roles) return false;
     return section.requiredRoles.some(role => user.roles.includes(role));
   });
-  return ()
+  return;
     <div className="admin-layout">
       {/* Skip Navigation Link */}
       <a 
@@ -221,16 +219,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             onClick={handleBackToApp}
             aria-label="Return to main application"
             style={{
-              padding: '6px',
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: '#6b7280',
-              cursor: 'pointer',
-              borderRadius: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+  padding: '6px',
+  border: 'none',
+  backgroundColor: 'transparent',
+  color: '#6b7280',
+  cursor: 'pointer',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}
           >
             <ArrowLeft size={18} aria-hidden="true" />
           </button>
@@ -253,7 +251,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             };
             const sectionAlerts = getSectionAlertCounts(section.id);
             const hasSectionAlerts = Object.values(sectionAlerts).some(count => count > 0);
-            return ()
+            return;
               <button
                 key={section.id}
                 className={`nav-item ${isActive ? 'active' : ''}`}
@@ -294,13 +292,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
               role="img"
               aria-label={`User avatar for ${displayName}`}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                fontWeight: '600',
-              }}
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#3b82f6',
+  color: 'white',
+  fontWeight: '600',
+}}
             >
               {userInitials.toUpperCase()}
             </div>
@@ -310,7 +308,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
                 {user?.roles?.includes('admin') || user?.roles?.includes('administrator') 
                   ? 'Administrator' 
                   : user?.roles?.[0] || 'User'
-                }
               </div>
             </div>
           </div>
@@ -332,7 +329,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
               setSidebarOpen(false);
-            }
           }}
           aria-hidden="true"
           role="presentation"

@@ -13,12 +13,10 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from './Badge';
 import './ShoppingCart.css';
 interface ShoppingCartProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onCheckout: () => void;
-}
-
-export const ShoppingCart: React.FC<ShoppingCartProps> = ({)
+  export const ShoppingCart: React.FC<ShoppingCartProps> = ({,)
   isOpen,
   onClose,
   onCheckout
@@ -30,7 +28,6 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({)
       await removeFromCart(itemId);
     } else {
       await updateCartItem(itemId, { quantity: newQuantity });
-    }
   };
   const handleLicenseChange = async (itemId: string, licenseType: LicenseType) => {
     await updateCartItem(itemId, { license_type: licenseType });
@@ -41,7 +38,6 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({)
       await clearCart();
     } finally {
       setIsClearing(false);
-    }
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _formatLicenseType = (licenseType: LicenseType): string => {
@@ -54,7 +50,7 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({)
     sum + (item.unit_price_cents * item.quantity), 0
   ) || 0;
   if (!isOpen) return null;
-  return ()
+  return;
     <div className="shopping-cart-overlay">
       <div className="shopping-cart-panel">
         {/* Header */}
@@ -141,13 +137,12 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({)
   );
 };
 interface CartItemComponentProps {
-  item: CartItem;
-  onQuantityChange: (itemId: string, quantity: number) => void;
-  onLicenseChange: (itemId: string, licenseType: LicenseType) => void;
+  item: CartItem;,
+  onQuantityChange: (itemId: string, quantity: number) => void;,
+  onLicenseChange: (itemId: string, licenseType: LicenseType) => void;,
   onRemove: () => void;
   disabled: boolean;
-}
-const CartItemComponent: React.FC<CartItemComponentProps> = ({)
+  const CartItemComponent: React.FC<CartItemComponentProps> = ({,)
   item,
   onQuantityChange,
   onLicenseChange,
@@ -159,9 +154,10 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({)
     // Fetch template details - in a real app, this would come from a context or service
     // For now, we'll use placeholder data
     setTemplate({)
-      id: item.template_id,
-      title: `Template ${item.template_id.slice(0, 8)}`,}
-      description: 'A powerful prompt template for various use cases',
+  id: item.template_id,
+      title: `Template ${item.template_id.slice(0, 8)}`}
+},
+  description: 'A powerful prompt template for various use cases',
       owner: { name: 'Creator Name' }
     });
   }, [item.template_id]);
@@ -173,33 +169,31 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({)
       .join(' ');
   };
   const getLicenseOptions = (): { value: LicenseType; label: string; description: string }[] => [
-    { 
-      value: LicenseType.PERSONAL, 
-      label: 'Personal', 
-      description: 'For personal use only' ,
-    },
-    { 
-      value: LicenseType.COMMERCIAL, 
-      label: 'Commercial', 
-      description: 'For commercial projects' ,
-    },
-    { 
-      value: LicenseType.ENTERPRISE, 
-      label: 'Enterprise', 
-      description: 'For large organizations' ,
-    },
-    { 
-      value: LicenseType.EDUCATIONAL, 
-      label: 'Educational', 
-      description: 'For educational institutions' ,
-    },
+    {
+  value: LicenseType.PERSONAL,
+  label: 'Personal',
+  description: 'For personal use only',
+}
+    {
+  value: LicenseType.COMMERCIAL,
+  label: 'Commercial',
+  description: 'For commercial projects',
+}
+    {
+  value: LicenseType.ENTERPRISE,
+  label: 'Enterprise',
+  description: 'For large organizations',
+}
+    {
+  value: LicenseType.EDUCATIONAL,
+  label: 'Educational',
+  description: 'For educational institutions',
+}
     { 
       value: LicenseType.UNLIMITED, 
       label: 'Unlimited', 
-      description: 'No usage restrictions' ,
-    }
-  ];
-  return ()
+      description: 'No usage restrictions' ];
+  return;
     <div className="cart-item">
       <div className="item-info">
         <h4 className="item-title">

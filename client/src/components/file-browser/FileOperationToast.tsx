@@ -11,13 +11,12 @@ import React, { useEffect, useState } from 'react';
 import { FileOperation, FileUploadProgress } from './types';
 
 export interface FileOperationToastProps {
-  operations: FileOperation[];
-  uploads?: FileUploadProgress[];
+  operations: FileOperation;
+  uploads?: FileUploadProgress;
   onClose: (operationId: string) => void;
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   className?: string;
 }
-
 export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   operations,
   uploads = [],
@@ -29,25 +28,24 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   // Auto-dismiss successful operations after 3 seconds
   useEffect(() => {
     operations.forEach(operation => {)
-      if (operation.status === 'success' && !visibleToasts.has(operation.id)) {
+  if (operation.status === 'success' && !visibleToasts.has(operation.id)) {
         setVisibleToasts(prev => new Set([...prev, operation.id]));
         setTimeout(() => {
           onClose(operation.id);
           setVisibleToasts(prev => {)
-            const newSet = new Set(prev);
+  const newSet = new Set(prev);
             newSet.delete(operation.id);
             return newSet;
           });
         }, 3000);
-      }
     });
   }, [operations, onClose, visibleToasts]);
   const getPositionStyles = () => {
-    const baseStyles = {
-      position: 'fixed' as const,
-      zIndex: 1001,
-      pointerEvents: 'none' as const,
-    };
+  const baseStyles = {
+  position: 'fixed' as const,
+  zIndex: 1001,
+  pointerEvents: 'none' as const,
+};
     switch (position) {
     case 'top-right':
       return { ...baseStyles, top: '20px', right: '20px' };
@@ -58,26 +56,23 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
     case 'bottom-right':
     default:
       return { ...baseStyles, bottom: '20px', right: '20px' };
-    }
   };
   const getOperationIcon = (operation: FileOperation) => {
-    switch (operation.type) {
-    case 'create': return '📄';
-    case 'move': return '🔀';
-    case 'copy': return '📋';
-    case 'delete': return '🗑️';
-    case 'update': return '✏️';
-    default: return '📁';
-    }
-  };
+  switch (operation.type) {
+  case 'create': return '📄';
+  case 'move': return '🔀';
+  case 'copy': return '📋';
+  case 'delete': return '🗑️';
+  case 'update': return '✏️';
+  default: return '📁';
+};
   const getStatusIcon = (status: FileOperation['status']) => {
-    switch (status) {
-    case 'pending': return '⏳';
-    case 'success': return '✅';
-    case 'error': return '❌';
-    default: return '⏳';
-    }
-  };
+  switch (status) {
+  case 'pending': return '⏳';
+  case 'success': return '✅';
+  case 'error': return '❌';
+  default: return '⏳';
+};
   const getOperationText = (operation: FileOperation) => {
     const filename = operation.sourcePath.split('/').pop() || 'file';
     switch (operation.type) {
@@ -85,49 +80,50 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
     case 'move': return `Moving ${filename}`;}
     case 'copy': return `Copying ${filename}`;}
     case 'delete': return `Deleting ${filename}`;}
-    case 'update': return `Updating ${filename}`;}
-    default: return `Processing ${filename}`;}
-    }
+    case 'update': return `Updating ${filename}`;},}
+  default: return `Processing ${filename}`;}
   };
-  const renderProgressBar = (progress: number) => (;)
+  const renderProgressBar = (progress: number) => (;);
     <div
       style={{
-        width: '100%',
-        height: '4px',
-        backgroundColor: '#e0e0e0',
-        borderRadius: '2px',
-        overflow: 'hidden',
-        marginTop: '8px',
-      }}
+  width: '100%',
+  height: '4px',
+  backgroundColor: '#e0e0e0',
+  borderRadius: '2px',
+  overflow: 'hidden',
+  marginTop: '8px',
+}}
     >
       <div
         style={{
-          width: `${progress}%`,}
-          height: '100%',
+          width: `${progress}%`}
+},
+  height: '100%',
           backgroundColor: '#007bff',
-          transition: 'width 0.3s ease',
-        }}
+          transition: 'width 0.3s ease';
+  }}
       />
     </div>
   );
   const renderOperationToast = (operation: FileOperation) => {
     const isError = operation.status === 'error';
     const isSuccess = operation.status === 'success';
-    return ()
+    return;
       <div
         key={operation.id}
         style={{
           backgroundColor: '#fff',
-          border: `1px solid ${isError ? '#dc3545' : isSuccess ? '#28a745' : '#007bff'}`,}
-          borderRadius: '6px',
+          border: `1px solid ${isError ? '#dc3545' : isSuccess ? '#28a745' : '#007bff'}`}
+},
+  borderRadius: '6px',
           padding: '12px',
           marginBottom: '8px',
           minWidth: '300px',
           maxWidth: '400px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           pointerEvents: 'auto',
-          animation: 'slideIn 0.3s ease-out',
-        }}
+          animation: 'slideIn 0.3s ease-out';
+  }}
       >
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
           <div style={{ fontSize: '16px' }}>
@@ -135,19 +131,19 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
           </div>
           <div style={{ flex: 1 }}>
             <div style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#333',
-              marginBottom: '4px',
-            }}>
+  fontSize: '14px',
+  fontWeight: '500',
+  color: '#333',
+  marginBottom: '4px',
+}}>
               {getOperationText(operation)}
             </div>
             {operation.status === 'error' && operation.error && ()
               <div style={{
-                fontSize: '12px',
-                color: '#dc3545',
-                marginTop: '4px',
-              }}>
+  fontSize: '12px',
+  color: '#dc3545',
+  marginTop: '4px',
+}}>
                 {operation.error}
               </div>
             )}
@@ -161,18 +157,18 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
               <button
                 onClick={() => onClose(operation.id)}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  color: '#999',
-                  padding: '0',
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: '16px',
+  color: '#999',
+  padding: '0',
+  width: '20px',
+  height: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}
                 title="Dismiss"
               >
                 ✕
@@ -183,46 +179,46 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
       </div>
     );
   };
-  const renderUploadToast = (upload: FileUploadProgress) => (;)
+  const renderUploadToast = (upload: FileUploadProgress) => (;);
     <div
       key={upload.fileId}
       style={{
-        backgroundColor: '#fff',
-        border: '1px solid #007bff',
-        borderRadius: '6px',
-        padding: '12px',
-        marginBottom: '8px',
-        minWidth: '300px',
-        maxWidth: '400px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-        pointerEvents: 'auto',
-      }}
+  backgroundColor: '#fff',
+  border: '1px solid #007bff',
+  borderRadius: '6px',
+  padding: '12px',
+  marginBottom: '8px',
+  minWidth: '300px',
+  maxWidth: '400px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  pointerEvents: 'auto',
+}}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div style={{ fontSize: '16px' }}>⬆️</div>
         <div style={{ flex: 1 }}>
           <div style={{
-            fontSize: '14px',
-            fontWeight: '500',
-            color: '#333',
-            marginBottom: '4px',
-          }}>
+  fontSize: '14px',
+  fontWeight: '500',
+  color: '#333',
+  marginBottom: '4px',
+}}>
             Uploading {upload.filename}
           </div>
           <div style={{
-            fontSize: '12px',
-            color: '#666',
-            marginBottom: '6px',
-          }}>
+  fontSize: '12px',
+  color: '#666',
+  marginBottom: '6px',
+}}>
             {upload.progress}% complete
           </div>
           {renderProgressBar(upload.progress)}
           {upload.status === 'error' && upload.error && ()
             <div style={{
-              fontSize: '12px',
-              color: '#dc3545',
-              marginTop: '4px',
-            }}>
+  fontSize: '12px',
+  color: '#dc3545',
+  marginTop: '4px',
+}}>
               {upload.error}
             </div>
           )}
@@ -232,8 +228,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   );
   if (operations.length === 0 && uploads.length === 0) {
     return null;
-  }
-  return ()
+  return;
     <div
       className={`file-operation-toast ${className}`}
       style={getPositionStyles()}
@@ -242,14 +237,11 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
         {`
           @keyframes slideIn {
             from {
-              transform: translateX(100%);
-              opacity: 0;
-            }
+              transform: translateX(100%);,
+  opacity: 0;
             to {
-              transform: translateX(0);
-              opacity: 1;
-            }
-          }
+              transform: translateX(0);,
+  opacity: 1;
         `}
       </style>
       {operations.map(renderOperationToast)}

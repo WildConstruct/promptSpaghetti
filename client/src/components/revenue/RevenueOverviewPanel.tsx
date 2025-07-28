@@ -8,20 +8,18 @@ import React from 'react';
 import { RevenueMetrics, RevenueDashboardData } from '../../types/revenue';
 import './RevenueOverviewPanel.css';
 interface RevenueOverviewPanelProps {
-  metrics: RevenueMetrics | null;
+  metrics: RevenueMetrics | null;,
   dashboardData: RevenueDashboardData | null;
   layout?: 'compact' | 'detailed' | 'executive';
   className?: string;
-}
-
-export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({)
+  export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({,)
   metrics,
   dashboardData,
   layout = 'detailed',
   className = ''
 }) => {
   if (!metrics) {
-    return ()
+    return;
       <div className={`revenue-overview revenue-overview--loading ${className}`}>}
         <div className="revenue-overview__skeleton">
           <div className="skeleton-metric" />
@@ -31,14 +29,13 @@ export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({)
         </div>
       </div>
     );
-  }
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {)
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount / 100); // Convert cents to dollars
+  return new Intl.NumberFormat('en-US', {)
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+}).format(amount / 100); // Convert cents to dollars
   };
   const formatPercentage = (value: number): string => {
     const sign = value > 0 ? '+' : '';
@@ -54,7 +51,7 @@ export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({)
   };
   const isCompact = layout === 'compact';
   const isExecutive = layout === 'executive';
-  return ()
+  return;
     <div className={`revenue-overview revenue-overview--${layout} ${className}`}>}
       {/* Primary Metrics Row */}
       <div className="revenue-overview__primary">

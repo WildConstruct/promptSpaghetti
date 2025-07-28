@@ -36,11 +36,10 @@ import { useQualityMetrics } from '../../hooks/useQualityMetrics';
 // =============================================================================
 
 export interface QualityDashboardProps {
-  refreshInterval?: number; // milliseconds
+  refreshInterval?: number; // milliseconds,
   compact?: boolean;
   className?: string;
 }
-
 export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
   refreshInterval = 60000, // 1 minute default
   compact = false,
@@ -67,22 +66,20 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
       await refreshMetrics();
       setLastRefresh(new Date());
     } catch (error) {
-      console.error('Failed to refresh quality metrics:', error);
-    } finally {
+  console.error('Failed to refresh quality metrics:', error);
+} finally {
       setIsRefreshing(false);
-    }
   }, [refreshMetrics]);
   // Get overall status styling
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'excellent': return 'text-green-600 bg-green-50';
-    case 'good': return 'text-blue-600 bg-blue-50';
-    case 'fair': return 'text-yellow-600 bg-yellow-50';
-    case 'poor': return 'text-orange-600 bg-orange-50';
-    case 'critical': return 'text-red-600 bg-red-50';
-    default: return 'text-gray-600 bg-gray-50';
-    }
-  };
+  switch (status) {
+  case 'excellent': return 'text-green-600 bg-green-50';
+  case 'good': return 'text-blue-600 bg-blue-50';
+  case 'fair': return 'text-yellow-600 bg-yellow-50';
+  case 'poor': return 'text-orange-600 bg-orange-50';
+  case 'critical': return 'text-red-600 bg-red-50';
+  default: return 'text-gray-600 bg-gray-50';
+};
   const getGradeColor = (grade: string) => {
     if (grade.startsWith('A')) return 'text-green-600';
     if (grade.startsWith('B')) return 'text-blue-600';
@@ -91,15 +88,14 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
     return 'text-red-600';
   };
   const getTrendIcon = (direction: 'improving' | 'stable' | 'degrading') => {
-    switch (direction) {
-    case 'improving': return <TrendingUp className="w-4 h-4 text-green-500" />;
-    case 'degrading': return <TrendingDown className="w-4 h-4 text-red-500" />;
-    default: return <TrendingUp className="w-4 h-4 text-gray-500" />;
-    }
-  };
+  switch (direction) {
+  case 'improving': return <TrendingUp className="w-4 h-4 text-green-500" />;
+  case 'degrading': return <TrendingDown className="w-4 h-4 text-red-500" />;
+  default: return <TrendingUp className="w-4 h-4 text-gray-500" />;
+};
   // Loading state
   if (isLoading && !metrics) {
-    return ()
+    return;
       <div className={`quality-dashboard ${className} p-6`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -107,10 +103,9 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   // Error state
   if (error && !metrics) {
-    return ()
+    return;
       <div className={`quality-dashboard ${className} p-6`}>}
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
@@ -130,10 +125,9 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
         </Alert>
       </div>
     );
-  }
   // No data state
   if (!metrics) {
-    return ()
+    return;
       <div className={`quality-dashboard ${className} p-6`}>}
         <Card>
           <CardContent className="flex items-center justify-center h-64">
@@ -153,11 +147,10 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
         </Card>
       </div>
     );
-  }
   const activeAlerts = alerts?.filter(alert => alert.status === 'active') || [];
   const criticalAlerts = activeAlerts.filter(alert => alert.severity === 'critical');
   const highPriorityRecommendations = recommendations?.filter(rec => rec.priority === 'high' || rec.priority === 'critical') || [];
-  return ()
+  return;
     <div className={`quality-dashboard ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -233,8 +226,8 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
                     <div className="flex items-center space-x-2">
                       {getTrendIcon(metrics.overall.improvement > 0 ? 'improving' : 'degrading')}
                       <span className={`text-sm font-medium ${
-                        metrics.overall.improvement > 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
+  metrics.overall.improvement > 0 ? 'text-green-600' : 'text-red-600',
+}`}>
                         {Math.abs(metrics.overall.improvement)}% {metrics.overall.improvement > 0 ? 'improved' : 'declined'}
                       </span>
                     </div>
@@ -307,15 +300,15 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
             <QualityAlertsPanel 
               alerts={activeAlerts} 
               onAlertAction={(alertId, action) => {
-                console.log('Alert action:', alertId, action);
-              }}
+  console.log('Alert action:', alertId, action);
+}}
               compact={compact}
             />
             <QualityRecommendations 
               recommendations={highPriorityRecommendations}
               onRecommendationAction={(recId, action) => {
-                console.log('Recommendation action:', recId, action);
-              }}
+  console.log('Recommendation action:', recId, action);
+}}
               compact={compact}
             />
           </div>

@@ -15,9 +15,7 @@ interface SearchBarProps {
   showSuggestions?: boolean;
   onSearch?: (query: string) => void;
   className?: string;
-}
-
-export const SearchBar: React.FC<SearchBarProps> = ({)
+  export const SearchBar: React.FC<SearchBarProps> = ({,)
   placeholder = 'Search...',
   autoFocus = false,
   showHistory = true,
@@ -35,7 +33,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
     resetQuery
   } = useSearch();
   const [isOpen, setIsOpen] = useState(false);
-  const [suggestions] = useState<string[]>([)
+  const [suggestions] = useState<string>([)
     'name:',
     'type:',
     'modified:',
@@ -58,7 +56,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
       onSearch?.(query.text);
       setIsOpen(false);
       inputRef.current?.blur();
-    }
   };
   // Handle history item click
   const handleHistoryClick = (historyQuery: unknown) => {
@@ -68,15 +65,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
   };
   // Handle suggestion click
   const handleSuggestionClick = (suggestion: string) => {
-    const currentText = query.text;
-    const lastSpaceIndex = currentText.lastIndexOf(' ');
-    const newText = lastSpaceIndex >= 0 ;
-      ? currentText.substring(0, lastSpaceIndex + 1) + suggestion
-      : suggestion;
-    setText(newText);
-    inputRef.current?.focus();
-    setIsOpen(false);
-  };
+  const currentText = query.text;
+  const lastSpaceIndex = currentText.lastIndexOf(' ');
+  const newText = lastSpaceIndex >= 0 ;
+  ? currentText.substring(0, lastSpaceIndex + 1) + suggestion
+  : suggestion;
+  setText(newText);
+  inputRef.current?.focus();
+  setIsOpen(false);
+};
   // Handle clear
   const handleClear = () => {
     resetQuery();
@@ -88,18 +85,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
     if (e.key === 'Escape') {
       setIsOpen(false);
       inputRef.current?.blur();
-    }
   };
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if ()
-        dropdownRef.current && 
-        !dropdownRef.current.contains(event.target as Node) &&
-        !inputRef.current?.contains(event.target as Node)
-        setIsOpen(false);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  if ();
+  dropdownRef.current &&
+  !dropdownRef.current.contains(event.target as Node) &&
+  !inputRef.current?.contains(event.target as Node)
+  setIsOpen(false);
+};
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -107,84 +102,84 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
-    }
   }, [autoFocus]);
-  const searchBarStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-  };
-  const inputContainerStyle: React.CSSProperties = {
-    position: 'relative',
+  const searchBarStyle: React.CSSProperties = {,
+  position: 'relative',
+  width: '100%',
+};
+  const inputContainerStyle: React.CSSProperties = {,
+  position: 'relative',
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    border: `2px solid ${error ? '#dc2626' : hasActiveFilters ? '#3b82f6' : '#e5e7eb'}`,}
-    borderRadius: '8px',
+    border: `2px solid ${error ? '#dc2626' : hasActiveFilters ? '#3b82f6' : '#e5e7eb'}`}
+},
+  borderRadius: '8px',
     transition: 'border-color 0.2s, box-shadow 0.2s',
     boxShadow: isOpen ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
   };
-  const inputStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '12px 16px',
-    border: 'none',
-    borderRadius: '6px',
-    fontSize: '14px',
-    outline: 'none',
-    backgroundColor: 'transparent',
-    color: '#1f2937',
-  };
-  const iconButtonStyle: React.CSSProperties = {
-    padding: '8px',
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
-    color: '#6b7280',
-    fontSize: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-  const dropdownStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    backgroundColor: '#FFFFFF',
-    border: '1px solid #e5e7eb',
-    borderRadius: '8px',
-    marginTop: '4px',
-    zIndex: 1000,
-    maxHeight: '300px',
-    overflowY: 'auto',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-  };
-  const sectionStyle: React.CSSProperties = {
-    padding: '8px 0',
-  };
-  const sectionHeaderStyle: React.CSSProperties = {
-    padding: '8px 16px',
-    fontSize: '12px',
-    fontWeight: '500',
-    color: '#6b7280',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    borderBottom: '1px solid #f3f4f6',
-  };
-  const itemStyle: React.CSSProperties = {
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    color: '#374151',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    transition: 'background-color 0.1s',
-  };
-  const filteredSuggestions = suggestions.filter(s => ;)
+  const inputStyle: React.CSSProperties = {,
+  flex: 1,
+  padding: '12px 16px',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '14px',
+  outline: 'none',
+  backgroundColor: 'transparent',
+  color: '#1f2937',
+};
+  const iconButtonStyle: React.CSSProperties = {,
+  padding: '8px',
+  border: 'none',
+  background: 'none',
+  cursor: 'pointer',
+  color: '#6b7280',
+  fontSize: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+  const dropdownStyle: React.CSSProperties = {,
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  right: 0,
+  backgroundColor: '#FFFFFF',
+  border: '1px solid #e5e7eb',
+  borderRadius: '8px',
+  marginTop: '4px',
+  zIndex: 1000,
+  maxHeight: '300px',
+  overflowY: 'auto',
+  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+};
+  const sectionStyle: React.CSSProperties = {,
+  padding: '8px 0',
+};
+  const sectionHeaderStyle: React.CSSProperties = {,
+  padding: '8px 16px',
+  fontSize: '12px',
+  fontWeight: '500',
+  color: '#6b7280',
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  borderBottom: '1px solid #f3f4f6',
+};
+  const itemStyle: React.CSSProperties = {,
+  padding: '8px 16px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  color: '#374151',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  transition: 'background-color 0.1s',
+};
+  const filteredSuggestions = suggestions.filter(s => ;);
     query.text.toLowerCase().includes(s.toLowerCase())
   );
   const recentHistory = searchHistory.slice(0, 5);
-  return ()
+  return;
     <div className={`search-bar ${className}`} style={searchBarStyle}>}
       <form onSubmit={handleSubmit}>
         <div style={inputContainerStyle}>
@@ -203,13 +198,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
           {isLoading && ()
             <div style={iconButtonStyle}>
               <div style={{
-                width: '16px',
-                height: '16px',
-                border: '2px solid #e5e7eb',
-                borderTopColor: '#3b82f6',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-              }} />
+  width: '16px',
+  height: '16px',
+  border: '2px solid #e5e7eb',
+  borderTopColor: '#3b82f6',
+  borderRadius: '50%',
+  animation: 'spin 1s linear infinite',
+}} />
             </div>
           )}
           {/* Clear button */}
@@ -227,12 +222,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
           <button
             type="submit"
             style={{
-              ...iconButtonStyle,
-              backgroundColor: '#3b82f6',
-              color: '#FFFFFF',
-              borderRadius: '6px',
-              margin: '4px',
-            }}
+  ...iconButtonStyle,
+  backgroundColor: '#3b82f6',
+  color: '#FFFFFF',
+  borderRadius: '6px',
+  margin: '4px',
+}}
             disabled={isLoading || !query.text.trim()}
             title="Search"
           >
@@ -243,42 +238,42 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
       {/* Error message */}
       {error && ()
         <div style={{
-          marginTop: '4px',
-          padding: '6px 12px',
-          backgroundColor: '#fef2f2',
-          border: '1px solid #fecaca',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#dc2626',
-        }}>
+  marginTop: '4px',
+  padding: '6px 12px',
+  backgroundColor: '#fef2f2',
+  border: '1px solid #fecaca',
+  borderRadius: '4px',
+  fontSize: '12px',
+  color: '#dc2626',
+}}>
           {error}
         </div>
       )}
       {/* Active filters indicator */}
       {hasActiveFilters && ()
         <div style={{
-          marginTop: '4px',
-          padding: '4px 8px',
-          backgroundColor: '#dbeafe',
-          border: '1px solid #93c5fd',
-          borderRadius: '4px',
-          fontSize: '11px',
-          color: '#1d4ed8',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-        }}>
+  marginTop: '4px',
+  padding: '4px 8px',
+  backgroundColor: '#dbeafe',
+  border: '1px solid #93c5fd',
+  borderRadius: '4px',
+  fontSize: '11px',
+  color: '#1d4ed8',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+}}>
           <span>🔽 Filters active</span>
           <button
             onClick={resetQuery}
             style={{
-              background: 'none',
-              border: 'none',
-              color: '#1d4ed8',
-              cursor: 'pointer',
-              fontSize: '11px',
-              textDecoration: 'underline',
-            }}
+  background: 'none',
+  border: 'none',
+  color: '#1d4ed8',
+  cursor: 'pointer',
+  fontSize: '11px',
+  textDecoration: 'underline',
+}}
           >
             Clear all
           </button>
@@ -337,12 +332,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
                   <span>{historyItem.text}</span>
                   {historyItem.filters.length > 0 && ()
                     <span style={{
-                      fontSize: '11px',
-                      color: '#3b82f6',
-                      backgroundColor: '#dbeafe',
-                      padding: '2px 6px',
-                      borderRadius: '10px',
-                    }}>
+  fontSize: '11px',
+  color: '#3b82f6',
+  backgroundColor: '#dbeafe',
+  padding: '2px 6px',
+  borderRadius: '10px',
+}}>
                       +{historyItem.filters.length} filters
                     </span>
                   )}
@@ -354,11 +349,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
           {(!showHistory || recentHistory.length === 0) && 
            (!showSuggestions || filteredSuggestions.length === 0) && ()
             <div style={{
-              padding: '20px',
-              textAlign: 'center',
-              color: '#9ca3af',
-              fontSize: '14px',
-            }}>
+  padding: '20px',
+  textAlign: 'center',
+  color: '#9ca3af',
+  fontSize: '14px',
+}}>
               Start typing to search...
             </div>
           )}
@@ -368,8 +363,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
         @keyframes spin {
           to {
             transform: rotate(360deg);
-          }
-        }
       `}</style>
     </div>
   );

@@ -14,15 +14,15 @@ import FilterPanel from './FilterPanel';
 import SearchResults from './SearchResults';
 interface UnifiedSearchSystemProps<T = unknown> {
   // Data and search
-  searchFunction?: (query: unknown) => Promise<{ items: T[], totalCount: number, facets?: Record<string, Array<{ value: string; count: number }>> }>;
-  initialData?: T[];
+  searchFunction?: (query: unknown) => Promise<{ items: T, totalCount: number, facets?: Record<string, Array<{ value: string; count: number }>> }>;
+  initialData?: T;
   // Field configuration
-  availableFields?: Array<{ 
-    key: string; 
-    label: string; 
-    type: 'text' | 'number' | 'date' | 'boolean' | 'select'; 
-    options?: string[] 
-  }>;
+  availableFields?: Array<{
+  key: string;,
+  label: string;
+  type: 'text' | 'number' | 'date' | 'boolean' | 'select';
+  options?: string,
+}>;
   // UI customization
   placeholder?: string;
   showFilterPanel?: boolean;
@@ -38,7 +38,6 @@ interface UnifiedSearchSystemProps<T = unknown> {
   renderItem?: (item: T, index: number) => React.ReactNode;
   renderEmptyState?: () => React.ReactNode;
   className?: string;
-}
 
 // Internal component that has access to search context
 const SearchSystemInternal = <T = unknown,>({)
@@ -73,22 +72,21 @@ const SearchSystemInternal = <T = unknown,>({)
   const [hasSearched, setHasSearched] = useState(false);
   // Perform search
   const performSearch = useCallback(async (searchQuery = query) => {
-    if (!searchFunction) {
-      // If no search function provided, filter initial data locally
-      const filtered = initialData.filter(item => {)
-        // Simple text search on stringified object
-        const itemStr = JSON.stringify(item).toLowerCase();
-        const textMatch = !searchQuery.text || itemStr.includes(searchQuery.text.toLowerCase());
-        // TODO: Implement local filtering for filters and sorts
-        return textMatch;
-      });
+  if (!searchFunction) {
+  // If no search function provided, filter initial data locally
+  const filtered = initialData.filter(item => {)
+  // Simple text search on stringified object
+  const itemStr = JSON.stringify(item).toLowerCase();
+  const textMatch = !searchQuery.text || itemStr.includes(searchQuery.text.toLowerCase());
+  // TODO: Implement local filtering for filters and sorts,
+  return textMatch;
+});
       setResults({)
-        items: filtered,
-        totalCount: filtered.length,
-        executionTime: 0,
-      });
+  items: filtered,
+  totalCount: filtered.length,
+  executionTime: 0,
+});
       return;
-    }
     setLoading(true);
     setError(null);
     try {
@@ -104,14 +102,12 @@ const SearchSystemInternal = <T = unknown,>({)
       // Add to history if there's a meaningful query
       if (searchQuery.text || searchQuery.filters.length > 0 || searchQuery.sorts.length > 0) {
         addToHistory(searchQuery);
-      }
       setHasSearched(true);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Search failed';
-      setError(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Search failed';
+  setError(errorMessage);
+} finally {
       setLoading(false);
-    }
   }, [searchFunction, initialData, setResults, setLoading, setError, onSearchComplete, addToHistory, query]);
   // Handle search trigger
   const handleSearch = useCallback((searchText?: string) => {
@@ -128,27 +124,26 @@ const SearchSystemInternal = <T = unknown,>({)
   }, [query, performSearch, isQueryEmpty, hasSearched]);
   // Initial data load
   useEffect(() => {
-    if (initialData.length > 0 && !hasSearched && !searchFunction) {
-      setResults({)
-        items: initialData,
-        totalCount: initialData.length,
-        executionTime: 0,
-      });
-    }
+  if (initialData.length > 0 && !hasSearched && !searchFunction) {
+  setResults({)
+  items: initialData,
+  totalCount: initialData.length,
+  executionTime: 0,
+});
   }, [initialData, hasSearched, searchFunction, setResults]);
-  return ()
-    <div className={`unified-search-system ${className}`} style={{}
-      width: '100%',
+  return;
+    <div className={`unified-search-system ${className}`} style={{},}
+  width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
-    }}>
+      gap: '16px';
+  }}>
       {/* Search Header */}
       <div style={{
-        display: 'flex',
-        gap: '12px',
-        alignItems: 'flex-start',
-      }}>
+  display: 'flex',
+  gap: '12px',
+  alignItems: 'flex-start',
+}}>
         {/* Search Bar */}
         <div style={{ flex: 1 }}>
           <SearchBar
@@ -186,7 +181,7 @@ const SearchSystemInternal = <T = unknown,>({)
 
 // Main component that provides search context
 export const UnifiedSearchSystem = <T = unknown,>(props: UnifiedSearchSystemProps<T>) => {
-  return ()
+  return;
     <SearchProvider>
       <SearchSystemInternal {...props} />
     </SearchProvider>

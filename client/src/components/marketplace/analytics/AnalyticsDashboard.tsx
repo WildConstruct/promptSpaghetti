@@ -11,14 +11,12 @@ import './AnalyticsDashboard.css';
 interface AnalyticsDashboardProps {
   creatorId: string;
   className?: string;
-}
-
-export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
+  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
   creatorId,
   className = ''
 }) => {
   const [dashboard, setDashboard] = useState<CreatorDashboard | null>(null);
-  const [insights, setInsights] = useState<AnalyticsInsight[]>([]);
+  const [insights, setInsights] = useState<AnalyticsInsight>([]);
   const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.LAST_30D);
   const [customStartDate, setCustomStartDate] = useState<Date | undefined>();
   const [customEndDate, setCustomEndDate] = useState<Date | undefined>();
@@ -43,11 +41,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       setDashboard(dashboardData);
       setInsights(insightsData);
     } catch (err) {
-      console.error('Failed to load dashboard:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-    } finally {
+  console.error('Failed to load dashboard:', err);
+  setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+} finally {
       setLoading(false);
-    }
   }, [creatorId, timeRange, customStartDate, customEndDate]);
   // Refresh dashboard data
   const refreshDashboard = useCallback(async () => {
@@ -56,10 +53,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       await loadDashboard();
     } finally {
       setRefreshing(false);
-    }
   }, [loadDashboard]);
   // Handle time range change
-  const handleTimeRangeChange = (;)
+  const handleTimeRangeChange = (;);
     newTimeRange: TimeRange,
     startDate?: Date,
     endDate?: Date
@@ -77,12 +73,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
     const interval = setInterval(() => {
       if (!loading && !refreshing) {
         refreshDashboard();
-      }
     }, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [loading, refreshing, refreshDashboard]);
   if (loading) {
-    return ()
+    return;
       <div className={`analytics-dashboard loading ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
@@ -111,9 +106,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className={`analytics-dashboard error ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
@@ -137,9 +131,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (!dashboard) {
-    return ()
+    return;
       <div className={`analytics-dashboard empty ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
@@ -157,8 +150,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`analytics-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-content">

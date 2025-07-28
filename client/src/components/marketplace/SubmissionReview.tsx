@@ -3,60 +3,56 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './SubmissionReview.css';
 interface SubmissionData {
-  title: string;
+  title: string;,
   description: string;
-  tags: string[];
-  categories: string[];
-  price_cents: number;
+  tags: string;,
+  categories: string;
+  price_cents: number;,
   is_ai_generated: boolean;
-  claude_compat: string[];
+  claude_compat: string;,
   claude_model: string;
   graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   changelog_md?: string;
-  token_per_run_estimate: number;
-  intended_use_cases: string[];
-  technical_requirements: string[];
-  example_outputs: string[];
+  token_per_run_estimate: number;,
+  intended_use_cases: string;
+  technical_requirements: string;,
+  example_outputs: string;
   documentation_md?: string;
   moderation_notes?: string;
   is_first_submission: boolean;
   previous_version_id?: string;
-}
-interface ValidationResult {
-  id: string;
+  interface ValidationResult {
+  id: string;,
   rule_id: string;
-  severity: 'error' | 'warning' | 'info';
+  severity: 'error' | 'warning' | 'info';,
   message: string;
   details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
-  location?: {
-    field?: string;
-  };
-}
+  location?: {,
+  field?: string;
+};
 interface SubmissionDetails {
-  id: string;
+  id: string;,
   template_id: string;
-  submitter_id: string;
+  submitter_id: string;,
   version_number: number;
-  status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
+  status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';,
   submission_data: SubmissionData;
-  validation_results: ValidationResult[];
+  validation_results: ValidationResult;
   reviewer_id?: string;
   review_comments?: string;
   review_score?: number;
   submitted_at?: string;
   reviewed_at?: string;
-  created_at: string;
+  created_at: string;,
   updated_at: string;
-}
 interface ReviewFeedback {
-  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
+  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';,
   rating: number;
-  comments: string;
-  suggestions: string[];
-}
+  comments: string;,
+  suggestions: string;
 const FEEDBACK_CATEGORIES = [;
   { id: 'content', label: 'Content Quality', description: 'Originality, usefulness, and relevance' },
   { id: 'quality', label: 'Technical Quality', description: 'Code structure, performance, and reliability' },
@@ -74,38 +70,35 @@ export const SubmissionReview: React.FC = () => {
   const [decision, setDecision] = useState<'approved' | 'rejected' | 'changes_requested' | ''>('');
   const [overallScore, setOverallScore] = useState(75);
   const [comments, setComments] = useState('');
-  const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback[]>()
+  const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback>()
     FEEDBACK_CATEGORIES.map(cat => ({)
-      category: cat.id as 'content' | 'quality' | 'compliance' | 'usability' | 'technical',
-      rating: 3,
-      comments: '',
-      suggestions: [],
-    }))
+  category: cat.id as 'content' | 'quality' | 'compliance' | 'usability' | 'technical',
+  rating: 3,
+  comments: '',
+  suggestions: [],
+}))
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (id) {
       fetchSubmission(id);
-    }
   }, [id]);
   const fetchSubmission = async (submissionId: string) => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch submission');
-      }
       const data = await response.json();
       setSubmission(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch submission');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch submission');
+} finally {
       setIsLoading(false);
-    }
   };
   const handleFeedbackChange = (index: number, field: keyof ReviewFeedback, value: Error) => {
     const updated = [...detailedFeedback];
@@ -131,61 +124,58 @@ export const SubmissionReview: React.FC = () => {
     if (!decision || !comments.trim()) {
       alert('Please provide a decision and comments');
       return;
-    }
     if (!submission) return;
     try {
       setIsSubmitting(true);
       const response = await fetch(`/api/marketplace/submissions/${submission.id}/review`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
-          decision,
-          score: overallScore,
-          comments,
-          detailed_feedback: detailedFeedback.filter(f => f.comments.trim()),
-        })
+  },
+  body: JSON.stringify({),
+  decision,
+  score: overallScore,
+  comments,
+  detailed_feedback: detailedFeedback.filter(f => f.comments.trim()),
+}
       });
       if (!response.ok) {
         throw new Error('Failed to submit review');
-      }
       navigate('/marketplace/admin/review-queue');
     } catch (err) {
-      console.error('Review submission failed:', err);
-      alert('Failed to submit review. Please try again.');
-    } finally {
+  console.error('Review submission failed:', err);
+  alert('Failed to submit review. Please try again.');
+} finally {
       setIsSubmitting(false);
-    }
   };
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {)
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
   };
   const formatPrice = (cents: number) => {
     return cents === 0 ? 'Free' : `$${(cents / 100).toFixed(2)}`;}
   };
-  const getValidationSummary = (validation: ValidationResult[]) => {
+  const getValidationSummary = (validation: ValidationResult) => {
     const errors = validation.filter(v => v.severity === 'error').length;
     const warnings = validation.filter(v => v.severity === 'warning').length;
     const info = validation.filter(v => v.severity === 'info').length;
     return { errors, warnings, info };
   };
   if (isLoading) {
-    return ()
+    return;
       <div className="submission-review loading">
         <div className="loading-spinner">Loading submission...</div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="submission-review error">
         <div className="error-message">
           <h3>Error loading submission</h3>
@@ -196,9 +186,8 @@ export const SubmissionReview: React.FC = () => {
         </div>
       </div>
     );
-  }
   if (!submission) {
-    return ()
+    return;
       <div className="submission-review error">
         <div className="error-message">
           <h3>Submission not found</h3>
@@ -208,10 +197,9 @@ export const SubmissionReview: React.FC = () => {
         </div>
       </div>
     );
-  }
   const validation = getValidationSummary(submission.validation_results);
   const data = submission.submission_data;
-  return ()
+  return;
     <div className="submission-review">
       <div className="review-header">
         <div className="submission-info">

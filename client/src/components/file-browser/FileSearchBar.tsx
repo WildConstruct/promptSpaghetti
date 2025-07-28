@@ -10,15 +10,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 export interface FileSearchOptions {
-  includeContents: boolean;
+  includeContents: boolean;,
   caseSensitive: boolean;
-  useRegex: boolean;
+  useRegex: boolean;,
   includeFolders: boolean;
-  fileTypes: string[];
+  fileTypes: string;
 }
-
 export interface FileSearchBarProps {
-  value: string;
+  value: string;,
   onChange: (value: string) => void;
   placeholder?: string;
   debounceMs?: number;
@@ -27,7 +26,6 @@ export interface FileSearchBarProps {
   onTagFilter?: (tag: string) => void;
   className?: string;
 }
-
 export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   value,
   onChange,
@@ -42,14 +40,14 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   const [isFocused, setIsFocused] = useState(false);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [searchOptions, setSearchOptions] = useState<FileSearchOptions>({)
-    includeContents: false,
-    caseSensitive: false,
-    useRegex: false,
-    includeFolders: true,
-    fileTypes: ['.psg', '.txt', '.md', '.json']
-  });
+  includeContents: false,
+  caseSensitive: false,
+  useRegex: false,
+  includeFolders: true,
+  fileTypes: ['.psg', '.txt', '.md', '.json'],
+});
   // Debounced search
-  const debouncedOnChange = useMemo(;)
+  const debouncedOnChange = useMemo(;);
     () => debounce((searchValue: string) => {
       onChange(searchValue);
     }, debounceMs),
@@ -73,7 +71,6 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
     if (e.key === 'Escape') {
       handleClear();
       (e.target as HTMLInputElement).blur();
-    }
   };
   const handleAdvancedOptionChange = (option: keyof FileSearchOptions, value: boolean) => {
     const newOptions = { ...searchOptions, [option]: value };
@@ -88,16 +85,16 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
     setSearchOptions(newOptions);
     onAdvancedSearch?.(newOptions);
   };
-    return ()
+    return;
     <div 
       className={`file-search-bar ${className}`}
       style={{
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        flex: 1,
-        maxWidth: '400px',
-      }}
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  flex: 1,
+  maxWidth: '400px',
+}}
     >
       {/* Main search input */}
       <div
@@ -106,20 +103,21 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
           display: 'flex',
           alignItems: 'center',
           flex: 1,
-          border: `1px solid ${isFocused ? '#007bff' : '#ddd'}`,}
-          borderRadius: '4px',
+          border: `1px solid ${isFocused ? '#007bff' : '#ddd'}`}
+},
+  borderRadius: '4px',
           backgroundColor: '#fff',
-          transition: 'border-color 0.2s ease',
-        }}
+          transition: 'border-color 0.2s ease';
+  }}
       >
         {/* Search icon */}
         <div
           style={{
-            padding: '0 8px',
-            color: '#666',
-            fontSize: '16px',
-            pointerEvents: 'none',
-          }}
+  padding: '0 8px',
+  color: '#666',
+  fontSize: '16px',
+  pointerEvents: 'none',
+}}
         >
           🔍
         </div>
@@ -133,29 +131,29 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           style={{
-            flex: 1,
-            padding: '8px 4px',
-            border: 'none',
-            outline: 'none',
-            fontSize: '14px',
-            backgroundColor: 'transparent',
-          }}
+  flex: 1,
+  padding: '8px 4px',
+  border: 'none',
+  outline: 'none',
+  fontSize: '14px',
+  backgroundColor: 'transparent',
+}}
         />
         {/* Clear button */}
         {localValue && ()
           <button
             onClick={handleClear}
             style={{
-              padding: '4px 8px',
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: '#666',
-              cursor: 'pointer',
-              fontSize: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+  padding: '4px 8px',
+  border: 'none',
+  backgroundColor: 'transparent',
+  color: '#666',
+  cursor: 'pointer',
+  fontSize: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}
             onMouseEnter={(e) => {
               (e.target as HTMLElement).style.backgroundColor = '#f0f0f0';
             }}
@@ -173,15 +171,15 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
         <button
           onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
           style={{
-            marginLeft: '8px',
-            padding: '6px 8px',
-            border: '1px solid #ddd',
-            backgroundColor: showAdvancedOptions ? '#e3f2fd' : '#fff',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '12px',
-            color: showAdvancedOptions ? '#1976d2' : '#666',
-          }}
+  marginLeft: '8px',
+  padding: '6px 8px',
+  border: '1px solid #ddd',
+  backgroundColor: showAdvancedOptions ? '#e3f2fd' : '#fff',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  color: showAdvancedOptions ? '#1976d2' : '#666',
+}}
           title="Advanced search options"
         >
           ⚙️
@@ -191,18 +189,18 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
       {showAdvancedOptions && ()
         <div
           style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: '#fff',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            padding: '12px',
-            zIndex: 100,
-            marginTop: '4px',
-          }}
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  right: 0,
+  backgroundColor: '#fff',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  padding: '12px',
+  zIndex: 100,
+  marginTop: '4px',
+}}
         >
           <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>
             Search Options
@@ -270,15 +268,14 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
 };
 
 // Debounce utility function
-function debounce<T extends (...args: unknown[]) => unknown>()
+function debounce<T extends (...args: unknown) => unknown>((;)
   func: T,
-  wait: number,
-): (...args: Parameters<T>) => void {
+    wait: number,
+  ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
+  return (...args: Parameters<T>) => {,
+  clearTimeout(timeout);
+  timeout = setTimeout(() => func(...args), wait);
+};
 
 export default FileSearchBar;

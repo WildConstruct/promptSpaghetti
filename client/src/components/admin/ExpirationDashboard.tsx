@@ -13,62 +13,57 @@ import { useAuthStore } from '../../stores/authStore';
 
 // Types for expiration management
 interface ExpirationStats {
-  total: number;
+  total: number;,
   active: number;
-  warning: number;
+  warning: number;,
   expired: number;
-  gracePeriod: number;
+  gracePeriod: number;,
   renewed: number;
-  revoked: number;
+  revoked: number;,
   byResourceType: Record<string, number>;
   upcomingExpirations: {,
-    next24Hours: number;
-    next7Days: number;
-    next30Days: number;
-  };
-}
+  next24Hours: number;,
+  next7Days: number;
+  next30Days: number;
+};
 interface ExpirationWarning {
-  resourceId: string;
+  resourceId: string;,
   resourceType: string;
-  expiresAt: Date;
+  expiresAt: Date;,
   timeRemaining: number;
-  warningLevel: 'info' | 'warning' | 'critical';
+  warningLevel: 'info' | 'warning' | 'critical';,
   canRenew: boolean;
   renewalUrl?: string;
   userId?: string;
   organizationId?: string;
-}
-interface ExpirationPolicy {
-  id: string;
+  interface ExpirationPolicy {
+  id: string;,
   name: string;
-  resourceType: string;
+  resourceType: string;,
   defaultTtl: number;
   maxTtl?: number;
   minTtl?: number;
   gracePeriod?: number;
-  warningThreshold: number;
+  warningThreshold: number;,
   autoRenewal: boolean;
   renewalWindow: number;
   organizationId?: string;
-  isActive: boolean;
+  isActive: boolean;,
   createdAt: Date;
   updatedAt: Date;
-}
-interface ExpirationDashboardProps {
+  interface ExpirationDashboardProps {
   className?: string;
-}
-interface ExpirationDashboardState {
-  stats: ExpirationStats | null;
-  warnings: ExpirationWarning[];
-  policies: ExpirationPolicy[];
+  interface ExpirationDashboardState {
+  stats: ExpirationStats | null;,
+  warnings: ExpirationWarning;
+  policies: ExpirationPolicy;,
   isLoading: boolean;
-  error: string | null;
+  error: string | null;,
   selectedResourceType: string;
-  refreshInterval: number;
+  refreshInterval: number;,
   autoRefresh: boolean;
   showCreatePolicy: boolean;
-}
-const resourceTypeLabels = {
+  const resourceTypeLabels = {
   jwt_token: 'JWT Tokens',
   api_key: 'API Keys',
   session: 'Sessions',
@@ -79,7 +74,7 @@ const resourceTypeLabels = {
 };
 const warningLevelColors = {
   info: '#17a2b8',
-  warning: '#ffc107', 
+  warning: '#ffc107',
   critical: '#dc3545',
 };
 
@@ -88,42 +83,40 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
 }) => {
   const { isAuthenticated } = useAuthStore();
   const [state, setState] = useState<ExpirationDashboardState>({)
-    stats: null,
-    warnings: [],
-    policies: [],
-    isLoading: true,
-    error: null,
-    selectedResourceType: '',
-    refreshInterval: 30000, // 30 seconds
-    autoRefresh: true,
-    showCreatePolicy: false,
-  });
+  stats: null,
+  warnings: [],
+  policies: [],
+  isLoading: true,
+  error: null,
+  selectedResourceType: '',
+  refreshInterval: 30000, // 30 seconds,
+  autoRefresh: true,
+  showCreatePolicy: false,
+});
   // Load initial data
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
-    }
   }, [isAuthenticated, loadData]);
   // Auto-refresh
   useEffect(() => {
     if (state.autoRefresh && state.refreshInterval > 0) {
       const interval = setInterval(loadData, state.refreshInterval);
       return () => clearInterval(interval);
-    }
   }, [state.autoRefresh, state.refreshInterval, loadData]);
   const loadData = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
       const [statsResponse, warningsResponse, policiesResponse] = await Promise.all([)
         fetch('/api/expiration/stats', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/expiration/warnings?limit=50', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/expiration/policies', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  }
       ]);
       const [stats, warnings, policies] = await Promise.all([)
         statsResponse.json(),
@@ -131,34 +124,34 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
         policiesResponse.json()
       ]);
       setState(prev => ({)
-        ...prev,
-        stats: stats.success ? stats.stats : null,
-        warnings: warnings.success ? warnings.warnings.map((w: unknown) => ({),
-          ...w,
-          expiresAt: new Date(w.expiresAt),
-        })) : [],
+  ...prev,
+  stats: stats.success ? stats.stats : null,
+  warnings: warnings.success ? warnings.warnings.map((w: unknown) => ({,)
+  ...w,
+  expiresAt: new Date(w.expiresAt),
+})) : [],
         policies: policies.success ? policies.policies : [],
-        isLoading: false,
-      }));
+        isLoading: false;
+  }));
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to load data',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  isLoading: false,
+  error: error instanceof Error ? error.message : 'Failed to load data',
+}));
   }, []);
   const handleRenewResource = async (resourceId: string, resourceType: string) => {
     try {
       const response = await fetch(`/api/expiration/renew/${resourceType}/${resourceId}`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
-          reason: 'Manual renewal from dashboard',
-        })
+  },
+  body: JSON.stringify({,)
+  reason: 'Manual renewal from dashboard',
+}
       });
       const result = await response.json();
       if (result.success) {
@@ -166,52 +159,46 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
         await loadData();
       } else {
         setState(prev => ({ ...prev, error: result.error }));
-      }
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        error: error instanceof Error ? error.message : 'Failed to renew resource',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  error: error instanceof Error ? error.message : 'Failed to renew resource',
+}));
   };
   const handleRevokeResource = async (resourceId: string, resourceType: string) => {
     if (!confirm(`Are you sure you want to revoke ${resourceType} ${resourceId}? This action cannot be undone.`)) {}
       return;
-    }
     try {
       const response = await fetch(`/api/expiration/revoke/${resourceType}/${resourceId}`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify({),
-          reason: 'Manual revocation from dashboard',
-        })
+  },
+  body: JSON.stringify({,)
+  reason: 'Manual revocation from dashboard',
+}
       });
       const result = await response.json();
       if (result.success) {
         await loadData();
       } else {
         setState(prev => ({ ...prev, error: result.error }));
-      }
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        error: error instanceof Error ? error.message : 'Failed to revoke resource',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  error: error instanceof Error ? error.message : 'Failed to revoke resource',
+}));
   };
   const handleCleanupExpired = async () => {
     if (!confirm('This will clean up all expired resources. Are you sure?')) {
       return;
-    }
     try {
       const response = await fetch('/api/expiration/cleanup', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       const result = await response.json();
       if (result.success) {
@@ -219,13 +206,11 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
         await loadData();
       } else {
         setState(prev => ({ ...prev, error: result.error }));
-      }
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        error: error instanceof Error ? error.message : 'Failed to cleanup expired resources',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  error: error instanceof Error ? error.message : 'Failed to cleanup expired resources',
+}));
   };
   const formatTimeRemaining = (seconds: number): string => {
     if (seconds <= 0) return 'Expired';
@@ -244,33 +229,32 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
     return `${Math.floor(seconds / 60)} minutes`;}
   };
   if (!isAuthenticated) {
-    return ()
-      <div className={`expiration-dashboard ${className}`} style={{ }
-        padding: '20px', 
+    return;
+      <div className={`expiration-dashboard ${className}`} style={{ },}
+  padding: '20px', 
         textAlign: 'center',
-        color: '#666',
-      }}>
+        color: '#666';
+  }}>
         Please log in to access the expiration dashboard.
       </div>
     );
-  }
-  return ()
-    <div className={`expiration-dashboard ${className}`} style={{}
-      padding: '20px',
+  return;
+    <div className={`expiration-dashboard ${className}`} style={{},}
+  padding: '20px',
       backgroundColor: '#f8f9fa',
-      minHeight: '100vh',
-    }}>
+      minHeight: '100vh';
+  }}>
       {/* Header */}
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '24px',
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '24px',
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
         <div>
           <h1 style={{ margin: '0 0 8px 0', fontSize: '28px', fontWeight: 'bold' }}>
             Expiration Management
@@ -292,11 +276,11 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
             value={state.refreshInterval}
             onChange={(e) => setState(prev => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
             style={{
-              padding: '6px 12px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '14px',
-            }}
+  padding: '6px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
           >
             <option value={10000}>10s</option>
             <option value={30000}>30s</option>
@@ -306,28 +290,28 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
           <button
             onClick={loadData}
             style={{
-              padding: '6px 12px',
-              border: '1px solid #007bff',
-              backgroundColor: '#007bff',
-              color: 'white',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+  padding: '6px 12px',
+  border: '1px solid #007bff',
+  backgroundColor: '#007bff',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '14px',
+}}
           >
             🔄 Refresh
           </button>
           <button
             onClick={handleCleanupExpired}
             style={{
-              padding: '6px 12px',
-              border: '1px solid #ffc107',
-              backgroundColor: '#ffc107',
-              color: '#212529',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+  padding: '6px 12px',
+  border: '1px solid #ffc107',
+  backgroundColor: '#ffc107',
+  color: '#212529',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '14px',
+}}
           >
             🧹 Cleanup
           </button>
@@ -336,30 +320,30 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       {/* Error Display */}
       {state.error && ()
         <div style={{
-          padding: '12px',
-          backgroundColor: '#f8d7da',
-          border: '1px solid #f5c6cb',
-          borderRadius: '4px',
-          color: '#721c24',
-          marginBottom: '16px',
-        }}>
+  padding: '12px',
+  backgroundColor: '#f8d7da',
+  border: '1px solid #f5c6cb',
+  borderRadius: '4px',
+  color: '#721c24',
+  marginBottom: '16px',
+}}>
           {state.error}
         </div>
       )}
       {/* Statistics Cards */}
       {state.stats && ()
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '20px',
-          marginBottom: '24px',
-        }}>
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '20px',
+  marginBottom: '24px',
+}}>
           <div style={{
-            backgroundColor: '#fff',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 'bold' }}>
               Overview
             </h3>
@@ -391,11 +375,11 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
             </div>
           </div>
           <div style={{
-            backgroundColor: '#fff',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 'bold' }}>
               Upcoming Expirations
             </h3>
@@ -421,11 +405,11 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
             </div>
           </div>
           <div style={{
-            backgroundColor: '#fff',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
             <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 'bold' }}>
               By Resource Type
             </h3>
@@ -444,18 +428,18 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       )}
       {/* Warnings Table */}
       <div style={{
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        marginBottom: '24px',
-      }}>
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  marginBottom: '24px',
+}}>
         <div style={{
-          padding: '20px',
-          borderBottom: '1px solid #eee',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+  padding: '20px',
+  borderBottom: '1px solid #eee',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}}>
           <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
             Expiration Warnings ({state.warnings.length})
           </h3>
@@ -464,11 +448,11 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
               value={state.selectedResourceType}
               onChange={(e) => setState(prev => ({ ...prev, selectedResourceType: e.target.value }))}
               style={{
-                padding: '6px 12px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '14px',
-              }}
+  padding: '6px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
             >
               <option value="">All Types</option>
               {Object.entries(resourceTypeLabels).map(([type, label]) => ()
@@ -522,13 +506,13 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
                     </td>
                     <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
                       <span style={{
-                        padding: '4px 8px',
-                        borderRadius: '12px',
-                        fontSize: '12px',
-                        fontWeight: 'bold',
-                        backgroundColor: warningLevelColors[warning.warningLevel] + '20',
-                        color: warningLevelColors[warning.warningLevel],
-                      }}>
+  padding: '4px 8px',
+  borderRadius: '12px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  backgroundColor: warningLevelColors[warning.warningLevel] + '20',
+  color: warningLevelColors[warning.warningLevel],
+}}>
                         {warning.warningLevel.toUpperCase()}
                       </span>
                     </td>
@@ -538,14 +522,14 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
                           <button
                             onClick={() => handleRenewResource(warning.resourceId, warning.resourceType)}
                             style={{
-                              padding: '4px 8px',
-                              border: '1px solid #28a745',
-                              backgroundColor: '#28a745',
-                              color: 'white',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                              fontSize: '12px',
-                            }}
+  padding: '4px 8px',
+  border: '1px solid #28a745',
+  backgroundColor: '#28a745',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                           >
                             Renew
                           </button>
@@ -553,14 +537,14 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
                         <button
                           onClick={() => handleRevokeResource(warning.resourceId, warning.resourceType)}
                           style={{
-                            padding: '4px 8px',
-                            border: '1px solid #dc3545',
-                            backgroundColor: '#dc3545',
-                            color: 'white',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                          }}
+  padding: '4px 8px',
+  border: '1px solid #dc3545',
+  backgroundColor: '#dc3545',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                         >
                           Revoke
                         </button>
@@ -572,10 +556,10 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
           </table>
           {state.warnings.length === 0 && ()
             <div style={{
-              padding: '40px',
-              textAlign: 'center',
-              color: '#666',
-            }}>
+  padding: '40px',
+  textAlign: 'center',
+  color: '#666',
+}}>
               No expiration warnings at this time.
             </div>
           )}
@@ -583,31 +567,31 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       </div>
       {/* Policies Section */}
       <div style={{
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
         <div style={{
-          padding: '20px',
-          borderBottom: '1px solid #eee',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+  padding: '20px',
+  borderBottom: '1px solid #eee',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}}>
           <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
             Expiration Policies ({state.policies.length})
           </h3>
           <button
             onClick={() => setState(prev => ({ ...prev, showCreatePolicy: true }))}
             style={{
-              padding: '6px 12px',
-              border: '1px solid #007bff',
-              backgroundColor: '#007bff',
-              color: 'white',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
+  padding: '6px 12px',
+  border: '1px solid #007bff',
+  backgroundColor: '#007bff',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '14px',
+}}
           >
             + Create Policy
           </button>
@@ -660,23 +644,23 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
                   </td>
                   <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
                     <span style={{
-                      padding: '2px 6px',
-                      borderRadius: '12px',
-                      fontSize: '12px',
-                      backgroundColor: policy.autoRenewal ? '#d4edda' : '#f8d7da',
-                      color: policy.autoRenewal ? '#155724' : '#721c24',
-                    }}>
+  padding: '2px 6px',
+  borderRadius: '12px',
+  fontSize: '12px',
+  backgroundColor: policy.autoRenewal ? '#d4edda' : '#f8d7da',
+  color: policy.autoRenewal ? '#155724' : '#721c24',
+}}>
                       {policy.autoRenewal ? 'Enabled' : 'Disabled'}
                     </span>
                   </td>
                   <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
                     <span style={{
-                      padding: '2px 6px',
-                      borderRadius: '12px',
-                      fontSize: '12px',
-                      backgroundColor: policy.isActive ? '#d4edda' : '#f8d7da',
-                      color: policy.isActive ? '#155724' : '#721c24',
-                    }}>
+  padding: '2px 6px',
+  borderRadius: '12px',
+  fontSize: '12px',
+  backgroundColor: policy.isActive ? '#d4edda' : '#f8d7da',
+  color: policy.isActive ? '#155724' : '#721c24',
+}}>
                       {policy.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
@@ -689,33 +673,33 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       {/* Loading Overlay */}
       {state.isLoading && ()
         <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-        }}>
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1000,
+}}>
           <div style={{
-            backgroundColor: '#fff',
-            padding: '20px',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-          }}>
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+}}>
             <div style={{
-              width: '20px',
-              height: '20px',
-              border: '2px solid #f3f3f3',
-              borderTop: '2px solid #007bff',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-            }} />
+  width: '20px',
+  height: '20px',
+  border: '2px solid #f3f3f3',
+  borderTop: '2px solid #007bff',
+  borderRadius: '50%',
+  animation: 'spin 1s linear infinite',
+}} />
             Loading...
           </div>
         </div>

@@ -29,23 +29,21 @@ import {
 export interface ActionConfig {
   targetValue?: unknown;
   rolloutPercentage?: number;
-  conditions?: Array<{
-    attribute: string;
-    operator: string;
-    value: Error;
-  }>;
+  conditions?: Array<{,
+  attribute: string;,
+  operator: string;
+  value: Error;
+}>;
   gradualRollout?: {
-    startPercentage: number;
-    endPercentage: number;
-    incrementMinutes: number;
-  };
-}
+  startPercentage: number;,
+  endPercentage: number;
+  incrementMinutes: number;
+};
 interface ActionConfigEditorProps {
-  action: string;
+  action: string;,
   value: ActionConfig;
   onChange: (config: ActionConfig) => void;
   error?: string;
-}
 const CONDITION_OPERATORS = [;
   { value: 'equals', label: 'Equals', symbol: '=' },
   { value: 'not_equals', label: 'Not Equals', symbol: '≠' },
@@ -79,7 +77,7 @@ const COMMON_ATTRIBUTES = [;
   { value: 'feature.usageCount', label: 'Feature Usage Count', type: 'number' },
   { value: 'custom.attribute', label: 'Custom Attribute', type: 'string' }
 ];
-
+}
 export const [showAdvanced, setShowAdvanced] = useState(false);
   useEffect(() => {
     setConfig(value);
@@ -95,12 +93,12 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
     handleConfigChange({ conditions });
   };
   const addCondition = () => {
-    const conditions = config.conditions || [];
-    conditions.push({)
-      attribute: 'user.id',
-      operator: 'equals',
-      value: '',
-    });
+  const conditions = config.conditions || [];
+  conditions.push({)
+  attribute: 'user.id',
+  operator: 'equals',
+  value: '',
+});
     handleConfigChange({ conditions });
   };
   const removeCondition = (index: number) => {
@@ -110,12 +108,12 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
   };
   const handleGradualRolloutChange = (field: string, newValue: number) => {
     const gradualRollout = { ...config.gradualRollout } || {
-      startPercentage: 0,
-      endPercentage: 100,
-      incrementMinutes: 60,
-    };
+  startPercentage: 0,
+  endPercentage: 100,
+  incrementMinutes: 60,
+};
     handleConfigChange({)
-      gradualRollout: { ...gradualRollout, [field]: newValue }
+  gradualRollout: { ...gradualRollout, [field]: newValue }
     });
   };
   const renderValueInput = (condition: unknown, index: number) => {
@@ -123,19 +121,18 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
     const type = attribute?.type || 'string';
     switch (type) {
     case 'boolean':
-      return ()
+      return;
         <FormControlLabel
           control={
             <Switch
               checked={Boolean(condition.value)}
               onChange={(e) => handleConditionChange(index, 'value', e.target.checked)}
             />
-          }
           label={condition.value ? 'True' : 'False'}
         />
       );
     case 'number':
-      return ()
+      return;
         <TextField
           type="number"
           value={condition.value || ''}
@@ -145,7 +142,7 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
         />
       );
     case 'date':
-      return ()
+      return;
         <TextField
           type="datetime-local"
           value={condition.value || ''}
@@ -156,7 +153,7 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
       );
     default:
       if (['in', 'not_in'].includes(condition.operator)) {
-        return ()
+        return;
           <TextField
             value={Array.isArray(condition.value) ? condition.value.join(', ') : condition.value || ''}
             onChange={(e) => {
@@ -169,8 +166,7 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
             helperText="Comma-separated values"
           />
         );
-      }
-      return ()
+      return;
         <TextField
           value={condition.value || ''}
           onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
@@ -178,24 +174,22 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
           fullWidth
         />
       );
-    }
   };
   const getActionConfigHelp = () => {
-    switch (action) {
-    case 'enable':
-    case 'disable':
-      return 'This action requires no additional configuration.';
-    case 'update_value':
-      return 'Specify the new value for the feature toggle.';
-    case 'modify_percentage':
-      return 'Set the rollout percentage (0-100%).';
-    case 'activate_rollout':
-      return 'Configure gradual rollout settings.';
-    default:
-      return 'Configure action-specific settings.';
-    }
-  };
-  return ()
+  switch (action) {
+  case 'enable':,
+  case 'disable':,
+  return 'This action requires no additional configuration.';
+  case 'update_value':,
+  return 'Specify the new value for the feature toggle.';
+  case 'modify_percentage':,
+  return 'Set the rollout percentage (0-100%).';
+  case 'activate_rollout':,
+  return 'Configure gradual rollout settings.';
+  default:,
+  return 'Configure action-specific settings.';
+};
+  return;
     <Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Alert severity="info" sx={{ mb: 2 }}>
@@ -220,7 +214,6 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
                   handleConfigChange({ targetValue: parsed });
                 } catch {
                   handleConfigChange({ targetValue: e.target.value });
-                }
               }}
               placeholder='{"enabled": true} or "simple string value"'
               helperText="Enter JSON object or simple value"
@@ -324,7 +317,6 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
                   checked={showAdvanced}
                   onChange={(e) => setShowAdvanced(e.target.checked)}
                 />
-              }
               label="Advanced Configuration"
             />
             <SettingsIcon color="action" />

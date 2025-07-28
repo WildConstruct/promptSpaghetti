@@ -49,91 +49,84 @@ export const MFAVerificationResult = {
 } as const;
 
 // Frontend-specific interfaces
+
 export interface BaseMFAConfiguration {
-  id: string;
+  id: string;,
   userId: string;
-  methodType: MFAMethodType;
+  methodType: MFAMethodType;,
   status: MFAMethodStatus;
-  isPrimary: boolean;
+  isPrimary: boolean;,
   displayName: string;
-  createdAt: string; // ISO string for frontend
+  createdAt: string; // ISO string for frontend,
   updatedAt: string;
   lastUsedAt?: string;
   failedAttempts: number;
   lockedUntil?: string;
 }
-
 export interface TOTPSecret {
-  secret: string;
+  secret: string;,
   qrCodeDataUrl: string;
-  manualEntryKey: string;
+  manualEntryKey: string;,
   issuer: string;
   accountName: string;
 }
-
 export interface TOTPEnrollmentData {
-  configurationId: string;
+  configurationId: string;,
   secret: TOTPSecret;
-  backupCodes: string[];
-  expiresAt: string; // ISO string
+  backupCodes: string;,
+  expiresAt: string; // ISO string,
 }
-
 export interface MFAEnrollmentRequest {
-  methodType: MFAMethodType;
+  methodType: MFAMethodType;,
   displayName: string;
   emailAddress?: string;
   phoneNumber?: string;
 }
-
 export interface MFAEnrollmentResponse {
-  configurationId: string;
+  configurationId: string;,
   methodType: MFAMethodType;
   enrollmentData?: TOTPEnrollmentData;
-  requiresVerification: boolean;
+  requiresVerification: boolean;,
   expiresAt: string;
 }
-
 export interface MFAVerificationRequest {
-  configurationId: string;
+  configurationId: string;,
   code: string;
   backupCode?: boolean;
 }
-
 export interface MFAVerificationResponse {
-  success: boolean;
+  success: boolean;,
   result: MFAVerificationResult;
   remainingAttempts?: number;
   lockoutDuration?: number;
   nextMethodSuggested?: MFAMethodType;
 }
-
 export interface UserMFAProfile {
-  userId: string;
+  userId: string;,
   isEnabled: boolean;
   hasAnyMethodConfigured: boolean;
   primaryMethod?: MFAMethodType;
-  configuredMethods: MFAMethodType[];
-  lastUsed?: {
-    methodType: MFAMethodType;
-    timestamp: string;
-  };
+  configuredMethods: MFAMethodType;
+  lastUsed?: {,
+  methodType: MFAMethodType;,
+  timestamp: string;
+};
   securityMetrics: {,
-    totalAttempts: number;
-    successfulAttempts: number;
-    failedAttempts: number;
-    lastFailedAttempt?: string;
-    accountLocked: boolean;
-    lockedUntil?: string;
-  };
+  totalAttempts: number;
+  successfulAttempts: number;,
+  failedAttempts: number;
+  lastFailedAttempt?: string;
+  accountLocked: boolean;
+  lockedUntil?: string;
+};
   preferences: {,
-    defaultMethod: MFAMethodType;
-    backupMethodEnabled: boolean;
-    securityNotifications: boolean;
-  };
+  defaultMethod: MFAMethodType;
+  backupMethodEnabled: boolean;,
+  securityNotifications: boolean;
+};
 }
-
 export interface MFAListResponse {
-  configurations: BaseMFAConfiguration[];
+  configurations: BaseMFAConfiguration;,
   profile: UserMFAProfile;
   availableBackupCodes: number;
 }

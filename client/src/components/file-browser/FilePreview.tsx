@@ -16,17 +16,15 @@ interface FilePreviewProps {
   onFavorite?: (file: FileItem, isFavorite: boolean) => void;
   onClose?: () => void;
   className?: string;
-}
-interface PreviewData {
+  interface PreviewData {
   thumbnail?: string;
   metadata?: FileMetadata;
-  content?: {
-    nodeCount: number;
-    edgeCount: number;
-    lastModified: Date;
-    size: number;
-  };
-}
+  content?: {,
+  nodeCount: number;,
+  edgeCount: number;
+  lastModified: Date;,
+  size: number;
+};
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 B';
   const k = 1024;
@@ -46,7 +44,6 @@ const formatDate = (date: Date): string => {
     return `${diffDays} days ago`;}
   } else {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
 };
 
 export const FilePreview: React.FC<FilePreviewProps> = ({)
@@ -71,24 +68,22 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       // const response = await fetch(`/api/files/preview/${fileItem.id}`);}
       // const data = await response.json();
       // Mock preview data for development
-      const mockData: PreviewData = {
-        thumbnail: generateMockThumbnail(fileItem),
-        metadata: fileItem.metadata,
-        content: {,
-          nodeCount: fileItem.metadata?.nodeCount || 0,
-          edgeCount: fileItem.metadata?.edgeCount || 0,
-          lastModified: fileItem.lastModified,
-          size: fileItem.size || 0,
-        }
-      };
+      const mockData: PreviewData = {,
+  thumbnail: generateMockThumbnail(fileItem),
+  metadata: fileItem.metadata,
+  content: {,
+  nodeCount: fileItem.metadata?.nodeCount || 0,
+  edgeCount: fileItem.metadata?.edgeCount || 0,
+  lastModified: fileItem.lastModified,
+  size: fileItem.size || 0,
+};
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500));
       setPreviewData(mockData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load preview');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load preview');
+} finally {
       setIsLoading(false);
-    }
   }, [isAuthenticated]);
   // Generate mock thumbnail for development
   const generateMockThumbnail = (fileItem: FileItem): string => {
@@ -114,34 +109,32 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   };
   // Load favorites status
   useEffect(() => {
-    if (file) {
-      // TODO: Load from API or localStorage
-      const favorites = JSON.parse(localStorage.getItem('fileBrowserFavorites') || '[]');
-      setIsFavorited(favorites.includes(file.id));
-      loadPreviewData(file);
-    }
-  }, [file, loadPreviewData]);
+  if (file) {
+  // TODO: Load from API or localStorage,
+  const favorites = JSON.parse(localStorage.getItem('fileBrowserFavorites') || '[]');
+  setIsFavorited(favorites.includes(file.id));
+  loadPreviewData(file);
+}, [file, loadPreviewData]);
   const handleFavoriteToggle = useCallback(() => {
-    if (!file) return;
-    const newFavoriteState = !isFavorited;
-    setIsFavorited(newFavoriteState);
-    // Update localStorage
-    const favorites = JSON.parse(localStorage.getItem('fileBrowserFavorites') || '[]');
-    const updatedFavorites = newFavoriteState;
-      ? [...favorites, file.id]
-      : favorites.filter((id: string) => id !== file.id);
-    localStorage.setItem('fileBrowserFavorites', JSON.stringify(updatedFavorites));
-    onFavorite?.(file, newFavoriteState);
-  }, [file, isFavorited, onFavorite]);
+  if (!file) return;
+  const newFavoriteState = !isFavorited;
+  setIsFavorited(newFavoriteState);
+  // Update localStorage
+  const favorites = JSON.parse(localStorage.getItem('fileBrowserFavorites') || '[]');
+  const updatedFavorites = newFavoriteState;
+  ? [...favorites, file.id]
+  : favorites.filter((id: string) => id !== file.id);
+  localStorage.setItem('fileBrowserFavorites', JSON.stringify(updatedFavorites));
+  onFavorite?.(file, newFavoriteState);
+}, [file, isFavorited, onFavorite]);
   const handleOpen = useCallback(() => {
     if (file) {
       onOpen?.(file);
-    }
   }, [file, onOpen]);
   if (!file) {
-    return ()
-      <div className={`file-preview-empty ${className}`} style={{}
-        padding: '40px 20px',
+    return;
+      <div className={`file-preview-empty ${className}`} style={{},}
+  padding: '40px 20px',
         textAlign: 'center',
         color: '#6c757d',
         borderLeft: '1px solid #dee2e6',
@@ -149,8 +142,8 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f8f9fa',
-      }}>
+        backgroundColor: '#f8f9fa';
+  }}>
         <div>
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
           <div style={{ fontSize: '16px', fontWeight: 500 }}>No file selected</div>
@@ -160,38 +153,37 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
-    <div className={`file-preview ${className}`} style={{}
-      borderLeft: '1px solid #dee2e6',
+  return;
+    <div className={`file-preview ${className}`} style={{},}
+  borderLeft: '1px solid #dee2e6',
       backgroundColor: '#fff',
       display: 'flex',
       flexDirection: 'column',
-      minHeight: '400px',
-    }}>
+      minHeight: '400px';
+  }}>
       {/* Header */}
       <div style={{
-        padding: '16px 20px',
-        borderBottom: '1px solid #eee',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
+  padding: '16px 20px',
+  borderBottom: '1px solid #eee',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 style={{
-            margin: 0,
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#212529',
-            wordBreak: 'break-word',
-          }}>
+  margin: 0,
+  fontSize: '16px',
+  fontWeight: 600,
+  color: '#212529',
+  wordBreak: 'break-word',
+}}>
             {file.name}
           </h3>
           <div style={{
-            fontSize: '12px',
-            color: '#6c757d',
-            marginTop: '2px',
-          }}>
+  fontSize: '12px',
+  color: '#6c757d',
+  marginTop: '2px',
+}}>
             Modified {formatDate(file.lastModified)}
           </div>
         </div>
@@ -199,13 +191,13 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
           <button
             onClick={handleFavoriteToggle}
             style={{
-              padding: '6px',
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              fontSize: '16px',
-              borderRadius: '4px',
-            }}
+  padding: '6px',
+  border: 'none',
+  background: 'transparent',
+  cursor: 'pointer',
+  fontSize: '16px',
+  borderRadius: '4px',
+}}
             title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
           >
             {isFavorited ? '⭐' : '☆'}
@@ -214,13 +206,13 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
             <button
               onClick={onClose}
               style={{
-                padding: '6px',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                fontSize: '16px',
-                borderRadius: '4px',
-              }}
+  padding: '6px',
+  border: 'none',
+  background: 'transparent',
+  cursor: 'pointer',
+  fontSize: '16px',
+  borderRadius: '4px',
+}}
               title="Close preview"
             >
               ✕
@@ -232,23 +224,23 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       <div style={{ flex: 1, padding: '20px' }}>
         {isLoading ? ()
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '200px',
-            color: '#6c757d',
-          }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '200px',
+  color: '#6c757d',
+}}>
             <div>Loading preview...</div>
           </div>
         ) : error ? ()
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '200px',
-            color: '#dc3545',
-            textAlign: 'center',
-          }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '200px',
+  color: '#dc3545',
+  textAlign: 'center',
+}}>
             <div>
               <div style={{ fontSize: '24px', marginBottom: '8px' }}>⚠️</div>
               <div>Failed to load preview</div>
@@ -260,30 +252,30 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
             {/* Thumbnail */}
             {previewData.thumbnail && ()
               <div style={{
-                marginBottom: '20px',
-                textAlign: 'center',
-              }}>
+  marginBottom: '20px',
+  textAlign: 'center',
+}}>
                 <img
                   src={previewData.thumbnail}
                   alt={`Preview of ${file.name}`}
                   style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                    border: '1px solid #dee2e6',
-                    borderRadius: '4px',
-                    backgroundColor: '#f8f9fa',
-                  }}
+  maxWidth: '100%',
+  height: 'auto',
+  border: '1px solid #dee2e6',
+  borderRadius: '4px',
+  backgroundColor: '#f8f9fa',
+}}
                 />
               </div>
             )}
             {/* File Information */}
             <div style={{ marginBottom: '20px' }}>
               <h4 style={{
-                fontSize: '14px',
-                fontWeight: 600,
-                margin: '0 0 12px 0',
-                color: '#495057',
-              }}>
+  fontSize: '14px',
+  fontWeight: 600,
+  margin: '0 0 12px 0',
+  color: '#495057',
+}}>
                 File Information
               </h4>
               <div style={{ display: 'grid', gap: '8px' }}>
@@ -315,12 +307,12 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
                         <span
                           key={index}
                           style={{
-                            padding: '2px 6px',
-                            backgroundColor: '#e9ecef',
-                            borderRadius: '3px',
-                            fontSize: '11px',
-                            color: '#495057',
-                          }}
+  padding: '2px 6px',
+  backgroundColor: '#e9ecef',
+  borderRadius: '3px',
+  fontSize: '11px',
+  color: '#495057',
+}}
                         >
                           {tag}
                         </span>
@@ -334,11 +326,11 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
             {previewData.metadata && ()
               <div>
                 <h4 style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  margin: '0 0 12px 0',
-                  color: '#495057',
-                }}>
+  fontSize: '14px',
+  fontWeight: 600,
+  margin: '0 0 12px 0',
+  color: '#495057',
+}}>
                   Details
                 </h4>
                 {previewData.metadata.description && ()
@@ -378,23 +370,23 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       </div>
       {/* Actions */}
       <div style={{
-        padding: '16px 20px',
-        borderTop: '1px solid #eee',
-        backgroundColor: '#f8f9fa',
-      }}>
+  padding: '16px 20px',
+  borderTop: '1px solid #eee',
+  backgroundColor: '#f8f9fa',
+}}>
         <button
           onClick={handleOpen}
           style={{
-            width: '100%',
-            padding: '10px 16px',
-            border: 'none',
-            backgroundColor: '#007bff',
-            color: '#fff',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: 500,
-          }}
+  width: '100%',
+  padding: '10px 16px',
+  border: 'none',
+  backgroundColor: '#007bff',
+  color: '#fff',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: 500,
+}}
         >
           Open File
         </button>

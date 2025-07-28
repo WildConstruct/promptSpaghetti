@@ -4,45 +4,42 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 interface NotificationPreferences {
   email: {,
-    enabled: boolean;
-    frequency: 'immediate' | 'daily' | 'weekly' | 'never';
-    types: {,
-      security: boolean;
-      system: boolean;
-      updates: boolean;
-      marketing: boolean;
-    };
+  enabled: boolean;,
+  frequency: 'immediate' | 'daily' | 'weekly' | 'never';
+  types: {,
+  security: boolean;,
+  system: boolean;
+  updates: boolean;,
+  marketing: boolean;
+};
   };
   inApp: {,
-    enabled: boolean;
-    types: {,
-      security: boolean;
-      system: boolean;
-      updates: boolean;
-      mentions: boolean;
-    };
+  enabled: boolean;
+  types: {,
+  security: boolean;,
+  system: boolean;
+  updates: boolean;,
+  mentions: boolean;
+};
   };
   push: {,
-    enabled: boolean;
-    types: {,
-      security: boolean;
-      system: boolean;
-      updates: boolean;
-      mentions: boolean;
-    };
+  enabled: boolean;
+  types: {,
+  security: boolean;,
+  system: boolean;
+  updates: boolean;,
+  mentions: boolean;
+};
   };
   quietHours: {,
-    enabled: boolean;
-    start: string;
-    end: string;
-    timezone: string;
-  };
-}
+  enabled: boolean;
+  start: string;,
+  end: string;
+  timezone: string;
+};
 interface NotificationPreferencesProps {
   onPreferencesUpdate?: (preferences: NotificationPreferences) => void;
-}
-
-export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({)
+  export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({,)
   onPreferencesUpdate
 }) => {
   const { user } = useAuth();
@@ -66,27 +63,23 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   useEffect(() => {
     if (user) {
       fetchPreferences();
-    }
   }, [user]);
   const fetchPreferences = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/preferences/notifications', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch notification preferences');
-      }
       const data = await response.json();
       setPreferences(data.preferences);
     } catch (error) {
-      console.error('Error fetching notification preferences:', error);
-      setError('Failed to load notification preferences');
-    } finally {
+  console.error('Error fetching notification preferences:', error);
+  setError('Failed to load notification preferences');
+} finally {
       setLoading(false);
-    }
   };
   const updatePreferences = async (updates: Partial<NotificationPreferences>) => {
     if (!preferences) return;
@@ -95,93 +88,82 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       setError(null);
       const newPreferences = { ...preferences, ...updates };
       const response = await fetch('/api/auth/preferences/notifications', {)
-        method: 'PUT',
+  method: 'PUT',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify(newPreferences),
-      });
+  },
+  body: JSON.stringify(newPreferences);
+  });
       if (!response.ok) {
         throw new Error('Failed to update notification preferences');
-      }
       const data = await response.json();
       setPreferences(data.preferences);
       onPreferencesUpdate?.(data.preferences);
     } catch (error) {
-      console.error('Error updating notification preferences:', error);
-      setError('Failed to update notification preferences');
-    } finally {
+  console.error('Error updating notification preferences:', error);
+  setError('Failed to update notification preferences');
+} finally {
       setSaving(false);
-    }
   };
   const handleChannelToggle = (channel: keyof NotificationPreferences, enabled: boolean) => {
-    if (!preferences) return;
-    updatePreferences({)
-      [channel]: {
-        ...preferences[channel],
-        enabled
-      }
-    });
+  if (!preferences) return;
+  updatePreferences({)
+  [channel]: {,
+  ...preferences[channel],
+  enabled
+});
   };
-  const handleTypeToggle = (;)
+  const handleTypeToggle = (;);
     channel: keyof NotificationPreferences,
     type: string,
-    enabled: boolean,
-  ) => {
-    if (!preferences) return;
-    updatePreferences({)
-      [channel]: {
-        ...preferences[channel],
-        types: {,
-          ...preferences[channel].types,
-          [type]: enabled
-        }
-      }
-    });
+    enabled: boolean) => {,
+  if (!preferences) return;
+  updatePreferences({)
+  [channel]: {,
+  ...preferences[channel],
+  types: {,
+  ...preferences[channel].types,
+  [type]: enabled,
+});
   };
   const handleFrequencyChange = (frequency: 'immediate' | 'daily' | 'weekly' | 'never') => {
-    if (!preferences) return;
-    updatePreferences({)
-      email: {,
-        ...preferences.email,
-        frequency
-      }
-    });
+  if (!preferences) return;
+  updatePreferences({)
+  email: {,
+  ...preferences.email,
+  frequency
+});
   };
   const handleQuietHoursToggle = (enabled: boolean) => {
-    if (!preferences) return;
-    updatePreferences({)
-      quietHours: {,
-        ...preferences.quietHours,
-        enabled
-      }
-    });
+  if (!preferences) return;
+  updatePreferences({)
+  quietHours: {,
+  ...preferences.quietHours,
+  enabled
+});
   };
   const handleQuietHoursChange = (field: string, value: string) => {
-    if (!preferences) return;
-    updatePreferences({)
-      quietHours: {,
-        ...preferences.quietHours,
-        [field]: value
-      }
-    });
+  if (!preferences) return;
+  updatePreferences({)
+  quietHours: {,
+  ...preferences.quietHours,
+  [field]: value,
+});
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (!preferences) {
-    return ()
+    return;
       <div className="text-center py-8">
         <div className="text-gray-600">Failed to load notification preferences</div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-6">

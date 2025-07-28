@@ -26,19 +26,18 @@ interface AuthMiddlewareConfig {
   /** Session timeout in milliseconds (for inactivity detection) */
   sessionTimeout?: number;
   /** Routes that don't require authentication */
-  publicRoutes?: string[];
+  publicRoutes?: string;
   /** Enable debug logging */
   debug?: boolean;
-}
-/**
- * Default configuration
- */
-const DEFAULT_CONFIG: Required<AuthMiddlewareConfig> = {
+  /**
+  * Default configuration
+  */
+  const DEFAULT_CONFIG: Required<AuthMiddlewareConfig> = {,
   autoRefresh: true,
-  refreshInterval: 60000, // 1 minute
-  refreshThreshold: 300000, // 5 minutes before expiry
+  refreshInterval: 60000, // 1 minute,
+  refreshThreshold: 300000, // 5 minutes before expiry,
   sessionMonitoring: true,
-  sessionTimeout: 1800000, // 30 minutes
+  sessionTimeout: 1800000, // 30 minutes,
   publicRoutes: ['/login', '/register', '/reset-password', '/verify-email', '/unauthorized', '/auth/callback'],
   debug: process.env.NODE_ENV === 'development',
 };
@@ -54,19 +53,17 @@ class SessionActivityTracker {
   private activityListeners: (() => void)[] = [];
   private isListening: boolean = false;
   constructor() {
-    this.updateActivity = this.updateActivity.bind(this);
-  }
+  this.updateActivity = this.updateActivity.bind(this);
   /**
-   * Start tracking user activity
-   */
-  startTracking(): void {
-    if (this.isListening) return;
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    events.forEach(event => {)
-      document.addEventListener(event, this.updateActivity, true);
-    });
+  * Start tracking user activity
+  */
+  startTracking(): void {,
+  if (this.isListening) return;
+  const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+  events.forEach(event => {)
+  document.addEventListener(event, this.updateActivity, true);
+});
     this.isListening = true;
-  }
   /**
    * Stop tracking user activity
    */
@@ -74,42 +71,35 @@ class SessionActivityTracker {
     if (!this.isListening) return;
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
     events.forEach(event => {)
-      document.removeEventListener(event, this.updateActivity, true);
+  document.removeEventListener(event, this.updateActivity, true);
     });
     this.isListening = false;
-  }
   /**
    * Update last activity timestamp
    */
   private updateActivity(): void {
-    this.lastActivity = Date.now();
-    this.activityListeners.forEach(listener => listener());
-  }
+  this.lastActivity = Date.now();
+  this.activityListeners.forEach(listener => listener());
   /**
-   * Get time since last activity
-   */
-  getTimeSinceLastActivity(): number {
-    return Date.now() - this.lastActivity;
-  }
+  * Get time since last activity
+  */
+  getTimeSinceLastActivity(): number {,
+  return Date.now() - this.lastActivity;
   /**
-   * Add activity listener
-   */
-  onActivity(listener: () => void): () => void {
-    this.activityListeners.push(listener);
-    return () => {
-      const index = this.activityListeners.indexOf(listener);
-      if (index > -1) {
-        this.activityListeners.splice(index, 1);
-      }
-    };
-  }
+  * Add activity listener
+  */
+  onActivity(listener: () => void): () => void {,
+  this.activityListeners.push(listener);
+  return () => {
+  const index = this.activityListeners.indexOf(listener);
+  if (index > -1) {
+  this.activityListeners.splice(index, 1);
+};
   /**
    * Reset activity tracking
    */
   reset(): void {
     this.lastActivity = Date.now();
-  }
-}
 
 // =============================================================================
 // Authentication Middleware Component
@@ -120,7 +110,6 @@ class SessionActivityTracker {
 interface AuthenticationMiddlewareProps {
   children: React.ReactNode;
   config?: AuthMiddlewareConfig;
-}
 /**
  * Global authentication middleware component
  */
@@ -146,15 +135,13 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
   const log = useCallback((message: string, data?: unknown) => {
     if (fullConfig.debug) {
       console.log(`[AuthMiddleware] ${message}`, data);}
-    }
   }, [fullConfig.debug]);
   // Check if current route is public
   const isPublicRoute = useCallback((pathname: string): boolean => {
     return fullConfig.publicRoutes.some(route => {)
-      if (route.includes('*')) {
+  if (route.includes('*')) {
         const pattern = route.replace('*', '.*');
         return new RegExp(`^${pattern}$`).test(pathname);}
-      }
       return pathname === route || pathname.startsWith(route);
     });
   }, [fullConfig.publicRoutes]);
@@ -163,36 +150,31 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
     if (fullConfig.sessionMonitoring && !activityTrackerRef.current) {
       activityTrackerRef.current = new SessionActivityTracker();
       log('Activity tracker initialized');
-    }
     return () => {
       if (activityTrackerRef.current) {
         activityTrackerRef.current.stopTracking();
         activityTrackerRef.current = null;
-      }
     };
   }, [fullConfig.sessionMonitoring, log]);
   // Handle authentication state changes
   useEffect(() => {
-    const isCurrentRoutePublic = isPublicRoute(location.pathname);
-    if (isAuthenticated && !isCurrentRoutePublic) {
-      // User is authenticated and on protected route - start monitoring
-      log('Starting authentication monitoring', { )
-        route: location.pathname,
-        tokenExpiration 
-      });
+  const isCurrentRoutePublic = isPublicRoute(location.pathname);
+  if (isAuthenticated && !isCurrentRoutePublic) {
+  // User is authenticated and on protected route - start monitoring
+  log('Starting authentication monitoring', { )
+  route: location.pathname,
+  tokenExpiration
+});
       // Start activity tracking
       if (fullConfig.sessionMonitoring && activityTrackerRef.current) {
         activityTrackerRef.current.startTracking();
         activityTrackerRef.current.reset();
-      }
       // Start token refresh monitoring
       if (fullConfig.autoRefresh) {
         startTokenRefreshMonitoring();
-      }
       // Start session timeout monitoring
       if (fullConfig.sessionMonitoring) {
         startSessionTimeoutMonitoring();
-      }
     } else if (!isAuthenticated && !isCurrentRoutePublic) {
       // User is not authenticated but trying to access protected route
       log('Unauthenticated access attempt', { route: location.pathname });
@@ -201,7 +183,6 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
         if (!restored) {
           log('Authentication restoration failed, redirecting to login');
           navigate('/login');
-        }
       });
     } else if (isAuthenticated && isCurrentRoutePublic) {
       // Authenticated user on public route - stop monitoring but don't logout
@@ -211,24 +192,21 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       // Unauthenticated user on public route - normal state
       log('Public route access', { route: location.pathname });
       stopMonitoring();
-    }
   }, [isAuthenticated, location.pathname, tokenExpiration, fullConfig, log, navigate, checkAuthStatus, isPublicRoute, startSessionTimeoutMonitoring, startTokenRefreshMonitoring, stopMonitoring]);
   /**
    * Start token refresh monitoring
    */
   const startTokenRefreshMonitoring = useCallback(() => {
-    if (refreshIntervalRef.current) {
-      clearInterval(refreshIntervalRef.current);
-    }
-    refreshIntervalRef.current = setInterval(async () => {
-      if (!tokenExpiration || !isAuthenticated) {
-        return;
-      }
-      const timeUntilExpiry = tokenExpiration - Date.now();
-      log('Token refresh check', { )
-        timeUntilExpiry,
-        threshold: fullConfig.refreshThreshold ,
-      });
+  if (refreshIntervalRef.current) {
+  clearInterval(refreshIntervalRef.current);
+  refreshIntervalRef.current = setInterval(async () => {
+  if (!tokenExpiration || !isAuthenticated) {
+  return;
+  const timeUntilExpiry = tokenExpiration - Date.now();
+  log('Token refresh check', { )
+  timeUntilExpiry,
+  threshold: fullConfig.refreshThreshold,
+});
       if (timeUntilExpiry <= fullConfig.refreshThreshold) {
         log('Token refresh triggered');
         try {
@@ -238,37 +216,30 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
             handleForceLogout('Token refresh failed');
           } else {
             log('Token refresh successful');
-          }
         } catch (error) {
           log('Token refresh error', error);
           handleForceLogout('Token refresh error');
-        }
-      }
     }, fullConfig.refreshInterval);
   }, [tokenExpiration, isAuthenticated, fullConfig, refreshTokens, log, handleForceLogout]);
   /**
    * Start session timeout monitoring
    */
   const startSessionTimeoutMonitoring = useCallback(() => {
-    if (sessionCheckIntervalRef.current) {
-      clearInterval(sessionCheckIntervalRef.current);
-    }
-    if (!activityTrackerRef.current) {
-      return;
-    }
-    sessionCheckIntervalRef.current = setInterval(() => {
-      if (!activityTrackerRef.current || !isAuthenticated) {
-        return;
-      }
-      const timeSinceActivity = activityTrackerRef.current.getTimeSinceLastActivity();
-      log('Session timeout check', { )
-        timeSinceActivity,
-        timeout: fullConfig.sessionTimeout ,
-      });
+  if (sessionCheckIntervalRef.current) {
+  clearInterval(sessionCheckIntervalRef.current);
+  if (!activityTrackerRef.current) {
+  return;
+  sessionCheckIntervalRef.current = setInterval(() => {
+  if (!activityTrackerRef.current || !isAuthenticated) {
+  return;
+  const timeSinceActivity = activityTrackerRef.current.getTimeSinceLastActivity();
+  log('Session timeout check', { )
+  timeSinceActivity,
+  timeout: fullConfig.sessionTimeout,
+});
       if (timeSinceActivity >= fullConfig.sessionTimeout) {
         log('Session timeout triggered');
         handleForceLogout('Session timed out due to inactivity');
-      }
     }, 30000); // Check every 30 seconds
   }, [isAuthenticated, fullConfig, log, handleForceLogout]);
   /**
@@ -279,14 +250,11 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
     if (refreshIntervalRef.current) {
       clearInterval(refreshIntervalRef.current);
       refreshIntervalRef.current = null;
-    }
     if (sessionCheckIntervalRef.current) {
       clearInterval(sessionCheckIntervalRef.current);
       sessionCheckIntervalRef.current = null;
-    }
     if (activityTrackerRef.current) {
       activityTrackerRef.current.stopTracking();
-    }
   }, [log]);
   /**
    * Handle forced logout scenarios
@@ -303,7 +271,6 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       alert('Your session has expired due to inactivity. Please log in again.');
     } else if (reason.includes('refresh')) {
       alert('Your session has expired. Please log in again.');
-    }
     // Navigate to login
     navigate('/login');
   }, [log, stopMonitoring, logout, navigate]);
@@ -323,12 +290,9 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
         // Reset activity tracker when page becomes visible
         if (activityTrackerRef.current && isAuthenticated) {
           activityTrackerRef.current.reset();
-        }
         // Check authentication status when returning to page
         if (isAuthenticated && !isPublicRoute(location.pathname)) {
           checkAuthStatus();
-        }
-      }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
@@ -356,7 +320,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
  * Hook to get authentication middleware status
  */
 export function useAuthMiddlewareStatus(): {
-  isMonitoring: boolean;
+  isMonitoring: boolean;,
   lastActivity: number;
   timeSinceLastActivity: number;
   const [lastActivity, setLastActivity] = React.useState(Date.now());
@@ -369,20 +333,18 @@ export function useAuthMiddlewareStatus(): {
     if (isAuthenticated) {
       const events = ['mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
       events.forEach(event => {)
-        document.addEventListener(event, updateActivity, true);
+  document.addEventListener(event, updateActivity, true);
       });
       return () => {
         events.forEach(event => {)
-          document.removeEventListener(event, updateActivity, true);
+  document.removeEventListener(event, updateActivity, true);
         });
       };
-    }
   }, [isAuthenticated]);
   return {
-    isMonitoring,
-    lastActivity,
-    timeSinceLastActivity: Date.now() - lastActivity,
-  };
-}
+  isMonitoring,
+  lastActivity,
+  timeSinceLastActivity: Date.now() - lastActivity,
+};
 
 export default AuthenticationMiddleware;

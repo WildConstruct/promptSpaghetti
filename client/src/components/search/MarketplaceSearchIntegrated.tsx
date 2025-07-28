@@ -25,11 +25,10 @@ interface MarketplaceSearchProps {
   renderTemplate?: (template: Template, index: number) => React.ReactNode;
   renderEmptyState?: () => React.ReactNode;
   className?: string;
-}
 
 // Default template renderer
 const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
-  template: Template;
+  template: Template;,
   index: number;
   onClick?: (template: Template, index: number) => void;
   onDoubleClick?: (template: Template, index: number) => void;
@@ -40,23 +39,22 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
     // Track click for analytics
     if (searchQuery) {
       searchApiService.trackClick(template.id, searchQuery, index + 1);
-    }
   };
   const handleDoubleClick = () => {
     onDoubleClick?.(template, index);
   };
-  return ()
+  return;
     <div 
       style={{
-        border: '1px solid #e2e8f0',
-        borderRadius: '8px',
-        padding: '16px',
-        margin: '8px 0',
-        backgroundColor: '#ffffff',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-      }}
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  padding: '16px',
+  margin: '8px 0',
+  backgroundColor: '#ffffff',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onMouseEnter={(e) => {
@@ -71,13 +69,13 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
         <div style={{ flex: 1 }}>
-          <h3 style={{ 
-            margin: '0 0 4px 0', 
-            fontSize: '18px', 
-            fontWeight: '600', 
-            color: '#1a202c',
-            lineHeight: '1.3',
-          }}>
+          <h3 style={{
+  margin: '0 0 4px 0',
+  fontSize: '18px',
+  fontWeight: '600',
+  color: '#1a202c',
+  lineHeight: '1.3',
+}}>
             {template.title}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#718096' }}>
@@ -86,14 +84,14 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
               <span style={{ color: '#38a169', fontSize: '12px' }}>✓ Verified</span>
             )}
             {template.is_ai_generated && ()
-              <span style={{ 
-                backgroundColor: '#e6fffa', 
-                color: '#00a693', 
-                padding: '2px 6px', 
-                borderRadius: '4px', 
-                fontSize: '11px',
-                fontWeight: '500',
-              }}>
+              <span style={{
+  backgroundColor: '#e6fffa',
+  color: '#00a693',
+  padding: '2px 6px',
+  borderRadius: '4px',
+  fontSize: '11px',
+  fontWeight: '500',
+}}>
                 AI Generated
               </span>
             )}
@@ -110,15 +108,15 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
             </div>
           )}
           {template.featured_at && ()
-            <div style={{ 
-              backgroundColor: '#fef5e7', 
-              color: '#d69e2e', 
-              padding: '2px 6px', 
-              borderRadius: '4px', 
-              fontSize: '11px',
-              fontWeight: '500',
-              marginTop: '4px',
-            }}>
+            <div style={{
+  backgroundColor: '#fef5e7',
+  color: '#d69e2e',
+  padding: '2px 6px',
+  borderRadius: '4px',
+  fontSize: '11px',
+  fontWeight: '500',
+  marginTop: '4px',
+}}>
               Featured
             </div>
           )}
@@ -126,15 +124,15 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
       </div>
       {/* Description */}
       <p style={{
-        margin: '0 0 12px 0',
-        fontSize: '14px',
-        color: '#4a5568',
-        lineHeight: '1.5',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-      }}>
+  margin: '0 0 12px 0',
+  fontSize: '14px',
+  color: '#4a5568',
+  lineHeight: '1.5',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+}}>
         {template.description}
       </p>
       {/* Tags */}
@@ -144,15 +142,15 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
             <span
               key={idx}
               style={{
-                display: 'inline-block',
-                backgroundColor: '#edf2f7',
-                color: '#4a5568',
-                padding: '4px 8px',
-                borderRadius: '12px',
-                fontSize: '12px',
-                marginRight: '6px',
-                marginBottom: '4px',
-              }}
+  display: 'inline-block',
+  backgroundColor: '#edf2f7',
+  color: '#4a5568',
+  padding: '4px 8px',
+  borderRadius: '12px',
+  fontSize: '12px',
+  marginRight: '6px',
+  marginBottom: '4px',
+}}
             >
               {tag}
             </span>
@@ -193,13 +191,13 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
               <span
                 key={idx}
                 style={{
-                  backgroundColor: '#e6fffa',
-                  color: '#00a693',
-                  padding: '2px 6px',
-                  borderRadius: '4px',
-                  fontSize: '11px',
-                  fontWeight: '500',
-                }}
+  backgroundColor: '#e6fffa',
+  color: '#00a693',
+  padding: '2px 6px',
+  borderRadius: '4px',
+  fontSize: '11px',
+  fontWeight: '500',
+}}
               >
                 {model}
               </span>
@@ -217,12 +215,12 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
 };
 
 // Default empty state renderer
-const DefaultEmptyStateRenderer = () => (;)
+const DefaultEmptyStateRenderer = () => (;);
   <div style={{
-    textAlign: 'center',
-    padding: '48px 24px',
-    color: '#718096',
-  }}>
+  textAlign: 'center',
+  padding: '48px 24px',
+  color: '#718096',
+}}>
     <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
     <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#4a5568' }}>
       No templates found
@@ -248,13 +246,13 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({)
   className = ''
 }) => {
   // Search function that connects to the backend API
-  const searchFunction = useCallback(async (searchQuery: SearchQuery) => {
-    const result = await searchApiService.searchTemplates(searchQuery, 1, itemsPerPage);
-    return {
-      items: result.items,
-      totalCount: result.totalCount,
-      facets: result.facets,
-    };
+  const searchFunction = useCallback(async (searchQuery: SearchQuery) => {,
+  const result = await searchApiService.searchTemplates(searchQuery, 1, itemsPerPage);
+  return {
+  items: result.items,
+  totalCount: result.totalCount,
+  facets: result.facets,
+};
   }, [itemsPerPage]);
   // Available fields for filtering
   const availableFields = [;
@@ -271,8 +269,7 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({)
   const templateRenderer = useCallback((template: Template, index: number) => {
     if (renderTemplate) {
       return renderTemplate(template, index);
-    }
-    return ()
+    return;
       <DefaultTemplateRenderer
         template={template}
         index={index}
@@ -285,10 +282,9 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({)
   const emptyStateRenderer = useCallback(() => {
     if (renderEmptyState) {
       return renderEmptyState();
-    }
     return <DefaultEmptyStateRenderer />;
   }, [renderEmptyState]);
-  return ()
+  return;
     <div className={`marketplace-search-integrated ${className}`}>}
       <UnifiedSearchSystem<Template>
         searchFunction={searchFunction}

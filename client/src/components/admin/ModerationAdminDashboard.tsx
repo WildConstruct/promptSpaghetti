@@ -3,37 +3,35 @@ import { ModerationManagement } from '../moderation/ModerationManagement';
 import { ApprovalWorkflow } from '../approval/ApprovalWorkflow';
 import './ModerationAdminDashboard.css';
 interface ModerationStats {
-  pending: number;
+  pending: number;,
   approved: number;
-  rejected: number;
+  rejected: number;,
   flagged: number;
-  totalToday: number;
+  totalToday: number;,
   averageProcessingTime: number;
-  moderatorCount: number;
+  moderatorCount: number;,
   queueBacklog: number;
-}
-interface ModerationItem {
-  id: string;
+  interface ModerationItem {
+  id: string;,
   type: 'content' | 'user' | 'template' | 'comment';
-  content: string;
+  content: string;,
   author: string;
   reportedBy?: string;
-  status: 'pending' | 'approved' | 'rejected' | 'flagged';
+  status: 'pending' | 'approved' | 'rejected' | 'flagged';,
   priority: 'low' | 'medium' | 'high' | 'critical';
   reason?: string;
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
   metadata?: Record<string, unknown>;
-}
-interface ApprovalRequest {
-  id: string;
+  interface ApprovalRequest {
+  id: string;,
   type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';
-  title: string;
+  title: string;,
   description: string;
-  requestedBy: string;
+  requestedBy: string;,
   requestedAt: Date;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'approved' | 'rejected' | 'escalated';
   approvedBy?: string;
   approvedAt?: Date;
@@ -42,43 +40,41 @@ interface ApprovalRequest {
   reason?: string;
   metadata?: Record<string, unknown>;
   requiredApprovals?: number;
-  currentApprovals?: string[];
-}
-
-export const ModerationAdminDashboard: React.FC = () => {
+  currentApprovals?: string;
+  export const ModerationAdminDashboard: React.FC = () => {,
   const [activeTab, setActiveTab] = useState<'overview' | 'queue' | 'approvals' | 'reports'>('overview');
   const [stats, setStats] = useState<ModerationStats>({)
-    pending: 0,
-    approved: 0,
-    rejected: 0,
-    flagged: 0,
-    totalToday: 0,
-    averageProcessingTime: 0,
-    moderatorCount: 0,
-    queueBacklog: 0,
-  });
-  const [moderationItems, setModerationItems] = useState<ModerationItem[]>([]);
-  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>([]);
+  pending: 0,
+  approved: 0,
+  rejected: 0,
+  flagged: 0,
+  totalToday: 0,
+  averageProcessingTime: 0,
+  moderatorCount: 0,
+  queueBacklog: 0,
+});
+  const [moderationItems, setModerationItems] = useState<ModerationItem>([]);
+  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchModerationData();
   }, []);
   const fetchModerationData = async () => {
-    try {
-      setIsLoading(true);
-      // Simulate API calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Mock data for demonstration
-      setStats({)
-        pending: 23,
-        approved: 156,
-        rejected: 12,
-        flagged: 8,
-        totalToday: 45,
-        averageProcessingTime: 12.5,
-        moderatorCount: 6,
-        queueBacklog: 31,
-      });
+  try {
+  setIsLoading(true);
+  // Simulate API calls
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Mock data for demonstration
+  setStats({)
+  pending: 23,
+  approved: 156,
+  rejected: 12,
+  flagged: 8,
+  totalToday: 45,
+  averageProcessingTime: 12.5,
+  moderatorCount: 6,
+  queueBacklog: 31,
+});
       setModerationItems([)
         {
           id: '1',
@@ -90,7 +86,7 @@ export const ModerationAdminDashboard: React.FC = () => {
           priority: 'high',
           createdAt: new Date(),
           metadata: { category: 'user_generated' }
-        },
+  }
         {
           id: '2',
           type: 'comment',
@@ -100,76 +96,67 @@ export const ModerationAdminDashboard: React.FC = () => {
           priority: 'medium',
           createdAt: new Date(),
           metadata: { post_id: 'post123' }
-        }
       ]);
       setApprovalRequests([)
         {
-          id: '1',
-          type: 'content',
-          title: 'New Template Submission',
-          description: 'Review new template submission for marketplace',
-          requestedBy: 'creator123',
-          requestedAt: new Date(),
-          priority: 'medium',
-          status: 'pending',
-          requiredApprovals: 2,
-          currentApprovals: ['moderator1'],
-        },
+  id: '1',
+  type: 'content',
+  title: 'New Template Submission',
+  description: 'Review new template submission for marketplace',
+  requestedBy: 'creator123',
+  requestedAt: new Date(),
+  priority: 'medium',
+  status: 'pending',
+  requiredApprovals: 2,
+  currentApprovals: ['moderator1'],
+}
         {
-          id: '2',
-          type: 'user_access',
-          title: 'Premium Access Request',
-          description: 'User requesting premium access privileges',
-          requestedBy: 'user456',
-          requestedAt: new Date(),
-          priority: 'low',
-          status: 'pending',
-        }
-      ]);
-    } catch (error) {
-      console.error('Failed to fetch moderation data:', error);
-    } finally {
+  id: '2',
+  type: 'user_access',
+  title: 'Premium Access Request',
+  description: 'User requesting premium access privileges',
+  requestedBy: 'user456',
+  requestedAt: new Date(),
+  priority: 'low',
+  status: 'pending']);
+} catch (error) {
+  console.error('Failed to fetch moderation data:', error);
+} finally {
       setIsLoading(false);
-    }
   };
   const handleModerationAction = (itemId: string, action: 'approve' | 'reject' | 'flag' | 'delete', reason: string) => {
-    setModerationItems(prev => )
-      prev.map(item => )
-        item.id === itemId 
-          ? { 
-            ...item, 
-            status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'flagged',
-            reviewedBy: 'current-moderator',
-            reviewedAt: new Date(),
-            reason
-          }
-          : item
-    );
-  };
+  setModerationItems(prev => )
+  prev.map(item => )
+  item.id === itemId
+  ? {
+  ...item,
+  status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'flagged',
+  reviewedBy: 'current-moderator',
+  reviewedAt: new Date(),
+  reason
+  : item);
+};
   const handleApprovalAction = (requestId: string, action: 'approve' | 'reject' | 'escalate', reason: string) => {
-    setApprovalRequests(prev =>)
-      prev.map(request =>)
-        request.id === requestId
-          ? {
-            ...request,
-            status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'escalated',
-            approvedBy: action === 'approve' ? 'current-moderator' : undefined,
-            approvedAt: action === 'approve' ? new Date() : undefined,
-            rejectedBy: action === 'reject' ? 'current-moderator' : undefined,
-            rejectedAt: action === 'reject' ? new Date() : undefined,
-            reason
-          }
-          : request
-    );
-  };
+  setApprovalRequests(prev =>)
+  prev.map(request =>)
+  request.id === requestId
+  ? {
+  ...request,
+  status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'escalated',
+  approvedBy: action === 'approve' ? 'current-moderator' : undefined,
+  approvedAt: action === 'approve' ? new Date() : undefined,
+  rejectedBy: action === 'reject' ? 'current-moderator' : undefined,
+  rejectedAt: action === 'reject' ? new Date() : undefined,
+  reason
+  : request);
+};
   if (isLoading) {
-    return ()
+    return;
       <div className="moderation-admin-dashboard loading">
         <div className="loading-spinner">Loading moderation dashboard...</div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="moderation-admin-dashboard">
       <div className="dashboard-header">
         <h2>Moderation & Content Review Dashboard</h2>

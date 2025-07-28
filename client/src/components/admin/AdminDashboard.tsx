@@ -35,32 +35,31 @@ const SystemConfigurationDashboard: React.FC = () => ()
   </div>
 );
 
-export 
+
   const renderCurrentSection = () => {
-    switch (currentSection) {
-    case 'feature-toggles':
-      return <FeatureToggleDashboard />;
-    case 'users':
-      return <UserManagementDashboard />;
-    case 'content':
-      return <ContentManagementDashboard />;
-    case 'api-management':
-      return <ApiManagementDashboard />;
-    case 'marketplace':
-      return <MarketplaceAdminDashboard />;
-    case 'analytics':
-      return <AnalyticsMonitoringDashboard />;
-    case 'system':
-      return <SystemConfigurationDashboard />;
-    case 'audit-logs':
-      return <AuditLogViewer />;
-    case 'data-protection':
-      return <DataProtectionDashboard />;
-    default:
-      return <FeatureToggleDashboard />;
-    }
-  };
-  return ()
+  switch (currentSection) {
+  case 'feature-toggles':,
+  return <FeatureToggleDashboard />;
+  case 'users':,
+  return <UserManagementDashboard />;
+  case 'content':,
+  return <ContentManagementDashboard />;
+  case 'api-management':,
+  return <ApiManagementDashboard />;
+  case 'marketplace':,
+  return <MarketplaceAdminDashboard />;
+  case 'analytics':,
+  return <AnalyticsMonitoringDashboard />;
+  case 'system':,
+  return <SystemConfigurationDashboard />;
+  case 'audit-logs':,
+  return <AuditLogViewer />;
+  case 'data-protection':,
+  return <DataProtectionDashboard />;
+  default:,
+  return <FeatureToggleDashboard />;
+};
+  return;
     <AdminLayout 
       currentSection={currentSection}
       onSectionChange={setCurrentSection}

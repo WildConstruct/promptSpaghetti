@@ -15,49 +15,43 @@ export type FilterOperator = 'equals' | 'contains' | 'startsWith' | 'endsWith' |
 export type SortDirection = 'asc' | 'desc';
 
 export interface FilterCondition {
-  field: string;
+  field: string;,
   operator: FilterOperator;
   value: unknown;
-  values?: unknown[]; // For 'in' and 'between' operators
+  values?: unknown; // For 'in' and 'between' operators,
 }
-
 export interface SortCondition {
-  field: string;
+  field: string;,
   direction: SortDirection;
 }
-
 export interface SearchQuery {
-  text: string;
-  filters: FilterCondition[];
-  sorts: SortCondition[];
-  facets?: string[];
+  text: string;,
+  filters: FilterCondition;
+  sorts: SortCondition;
+  facets?: string;
 }
-
 export interface SearchResult<T = unknown> {
-  items: T[];
+  items: T;,
   totalCount: number;
   facets?: Record<string, Array<{ value: string; count: number }>>;
   executionTime?: number;
-}
 
 export interface SavedSearch {
-  id: string;
+  id: string;,
   name: string;
-  query: SearchQuery;
+  query: SearchQuery;,
   createdAt: string;
   lastUsedAt: string;
-}
 
 // Search State
 interface SearchState {
-  currentQuery: SearchQuery;
+  currentQuery: SearchQuery;,
   results: SearchResult | null;
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
-  searchHistory: SearchQuery[];
-  savedSearches: SavedSearch[];
-  quickFilters: Record<string, FilterCondition[]>;
-}
+  searchHistory: SearchQuery;,
+  savedSearches: SavedSearch;
+  quickFilters: Record<string, FilterCondition>;
 
 // Search Actions
 type SearchAction =
@@ -66,10 +60,10 @@ type SearchAction =
   | { type: 'ADD_FILTER'; payload: FilterCondition }
   | { type: 'REMOVE_FILTER'; payload: number }
   | { type: 'UPDATE_FILTER'; payload: { index: number; filter: FilterCondition } }
-  | { type: 'SET_FILTERS'; payload: FilterCondition[] }
+  | { type: 'SET_FILTERS'; payload: FilterCondition }
   | { type: 'ADD_SORT'; payload: SortCondition }
   | { type: 'REMOVE_SORT'; payload: number }
-  | { type: 'SET_SORTS'; payload: SortCondition[] }
+  | { type: 'SET_SORTS'; payload: SortCondition }
   | { type: 'SET_RESULTS'; payload: SearchResult }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
@@ -80,13 +74,13 @@ type SearchAction =
   | { type: 'RESET_QUERY' };
 
 // Initial state
-const initialState: SearchState = {
+const initialState: SearchState = {,
   currentQuery: {,
-    text: '',
-    filters: [],
-    sorts: [],
-    facets: [],
-  },
+  text: '',
+  filters: [],
+  sorts: [],
+  facets: [],
+},
   results: null,
   isLoading: false,
   error: null,
@@ -110,53 +104,47 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
     };
   case 'ADD_FILTER':
     return {
-      ...state,
-      currentQuery: {,
-        ...state.currentQuery,
-        filters: [...state.currentQuery.filters, action.payload]
-      }
-    };
+  ...state,
+  currentQuery: {,
+  ...state.currentQuery,
+  filters: [...state.currentQuery.filters, action.payload],
+};
   case 'REMOVE_FILTER':
     return {
-      ...state,
-      currentQuery: {,
-        ...state.currentQuery,
-        filters: state.currentQuery.filters.filter((_, index) => index !== action.payload)
-      }
-    };
+  ...state,
+  currentQuery: {,
+  ...state.currentQuery,
+  filters: state.currentQuery.filters.filter((_, index) => index !== action.payload),
+};
   case 'UPDATE_FILTER':
     return {
-      ...state,
-      currentQuery: {,
-        ...state.currentQuery,
-        filters: state.currentQuery.filters.map((filter, index) =>
-          index === action.payload.index ? action.payload.filter : filter
-      }
-    };
+  ...state,
+  currentQuery: {,
+  ...state.currentQuery,
+  filters: state.currentQuery.filters.map((filter, index) =>,
+  index === action.payload.index ? action.payload.filter : filter,
+};
   case 'SET_FILTERS':
     return {
       ...state,
       currentQuery: { ...state.currentQuery, filters: action.payload }
     };
   case 'ADD_SORT': {
-    // Remove existing sort for same field, then add new one
-    const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
-    return {
-      ...state,
-      currentQuery: {,
-        ...state.currentQuery,
-        sorts: [...existingSorts, action.payload]
-      }
-    };
-  }
+  // Remove existing sort for same field, then add new one
+  const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
+  return {
+  ...state,
+  currentQuery: {,
+  ...state.currentQuery,
+  sorts: [...existingSorts, action.payload],
+};
   case 'REMOVE_SORT':
     return {
-      ...state,
-      currentQuery: {,
-        ...state.currentQuery,
-        sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload)
-      }
-    };
+  ...state,
+  currentQuery: {,
+  ...state.currentQuery,
+  sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload),
+};
   case 'SET_SORTS':
     return {
       ...state,
@@ -164,100 +152,95 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
     };
   case 'SET_RESULTS':
     return {
-      ...state,
-      results: action.payload,
-      isLoading: false,
-      error: null,
-    };
+  ...state,
+  results: action.payload,
+  isLoading: false,
+  error: null,
+};
   case 'SET_LOADING':
     return {
-      ...state,
-      isLoading: action.payload,
-    };
+  ...state,
+  isLoading: action.payload,
+};
   case 'SET_ERROR':
     return {
-      ...state,
-      error: action.payload,
-      isLoading: false,
-    };
+  ...state,
+  error: action.payload,
+  isLoading: false,
+};
   case 'ADD_TO_HISTORY': {
-    const newHistory = [action.payload, ...state.searchHistory.filter(;)
-      h => JSON.stringify(h) !== JSON.stringify(action.payload)
-    )].slice(0, 10); // Keep last 10 searches
-    return {
-      ...state,
-      searchHistory: newHistory,
-    };
-  }
+  const newHistory = [action.payload, ...state.searchHistory.filter(;);
+  h => JSON.stringify(h) !== JSON.stringify(action.payload)
+  )].slice(0, 10); // Keep last 10 searches
+  return {
+  ...state,
+  searchHistory: newHistory,
+};
   case 'SAVE_SEARCH':
     return {
-      ...state,
-      savedSearches: [...state.savedSearches.filter(s => s.id !== action.payload.id), action.payload]
-    };
+  ...state,
+  savedSearches: [...state.savedSearches.filter(s => s.id !== action.payload.id), action.payload],
+};
   case 'REMOVE_SAVED_SEARCH':
     return {
-      ...state,
-      savedSearches: state.savedSearches.filter(s => s.id !== action.payload),
-    };
+  ...state,
+  savedSearches: state.savedSearches.filter(s => s.id !== action.payload),
+};
   case 'CLEAR_RESULTS':
     return {
-      ...state,
-      results: null,
-      error: null,
-    };
+  ...state,
+  results: null,
+  error: null,
+};
   case 'RESET_QUERY':
     return {
-      ...state,
-      currentQuery: initialState.currentQuery,
-      results: null,
-      error: null,
-    };
+  ...state,
+  currentQuery: initialState.currentQuery,
+  results: null,
+  error: null,
+};
   default:
     return state;
-  }
 };
 
 // Context
 interface SearchContextValue {
   // State
-  query: SearchQuery;
+  query: SearchQuery;,
   results: SearchResult | null;
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
-  searchHistory: SearchQuery[];
-  savedSearches: SavedSearch[];
+  searchHistory: SearchQuery;,
+  savedSearches: SavedSearch;
   // Actions
-  setQuery: (query: Partial<SearchQuery>) => void;
-  setText: (text: string) => void;
-  addFilter: (filter: FilterCondition) => void;
-  removeFilter: (index: number) => void;
-  updateFilter: (index: number, filter: FilterCondition) => void;
-  setFilters: (filters: FilterCondition[]) => void;
-  addSort: (sort: SortCondition) => void;
-  removeSort: (index: number) => void;
-  setSorts: (sorts: SortCondition[]) => void;
-  setResults: (results: SearchResult) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  addToHistory: (query: SearchQuery) => void;
-  saveSearch: (name: string) => void;
-  removeSavedSearch: (id: string) => void;
-  loadSavedSearch: (search: SavedSearch) => void;
+  setQuery: (query: Partial<SearchQuery>) => void;,
+  setText: (text: string) => void;,
+  addFilter: (filter: FilterCondition) => void;,
+  removeFilter: (index: number) => void;,
+  updateFilter: (index: number, filter: FilterCondition) => void;,
+  setFilters: (filters: FilterCondition) => void;,
+  addSort: (sort: SortCondition) => void;,
+  removeSort: (index: number) => void;,
+  setSorts: (sorts: SortCondition) => void;,
+  setResults: (results: SearchResult) => void;,
+  setLoading: (loading: boolean) => void;,
+  setError: (error: string | null) => void;,
+  addToHistory: (query: SearchQuery) => void;,
+  saveSearch: (name: string) => void;,
+  removeSavedSearch: (id: string) => void;,
+  loadSavedSearch: (search: SavedSearch) => void;,
   clearResults: () => void;
   resetQuery: () => void;
   // Computed values
-  hasActiveFilters: boolean;
+  hasActiveFilters: boolean;,
   hasActiveSorts: boolean;
   isQueryEmpty: boolean;
-}
-const SearchContext = createContext<SearchContextValue | undefined>(undefined);
-
-// Provider Props
-interface SearchProviderProps {
+  const SearchContext = createContext<SearchContextValue | undefined>(undefined);
+  // Provider Props
+  interface SearchProviderProps {
   children: React.ReactNode;
+  // Provider Component
 }
-
-// Provider Component
 export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);
   // Actions
@@ -276,7 +259,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
   const updateFilter = useCallback((index: number, filter: FilterCondition) => {
     dispatch({ type: 'UPDATE_FILTER', payload: { index, filter } });
   }, []);
-  const setFilters = useCallback((filters: FilterCondition[]) => {
+  const setFilters = useCallback((filters: FilterCondition) => {
     dispatch({ type: 'SET_FILTERS', payload: filters });
   }, []);
   const addSort = useCallback((sort: SortCondition) => {
@@ -285,7 +268,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
   const removeSort = useCallback((index: number) => {
     dispatch({ type: 'REMOVE_SORT', payload: index });
   }, []);
-  const setSorts = useCallback((sorts: SortCondition[]) => {
+  const setSorts = useCallback((sorts: SortCondition) => {
     dispatch({ type: 'SET_SORTS', payload: sorts });
   }, []);
   const setResults = useCallback((results: SearchResult) => {
@@ -301,13 +284,14 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
     dispatch({ type: 'ADD_TO_HISTORY', payload: query });
   }, []);
   const saveSearch = useCallback((name: string) => {
-    const savedSearch: SavedSearch = {
-      id: `search_${Date.now()}`,}
+    const savedSearch: SavedSearch = {,
+  id: `search_${Date.now()}`}
+}
       name,
       query: state.currentQuery,
       createdAt: new Date().toISOString(),
-      lastUsedAt: new Date().toISOString(),
-    };
+      lastUsedAt: new Date().toISOString();
+  };
     dispatch({ type: 'SAVE_SEARCH', payload: savedSearch });
   }, [state.currentQuery]);
   const removeSavedSearch = useCallback((id: string) => {
@@ -335,38 +319,38 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
   [state.currentQuery]
   );
   const contextValue: SearchContextValue = {
-    // State
-    query: state.currentQuery,
-    results: state.results,
-    isLoading: state.isLoading,
-    error: state.error,
-    searchHistory: state.searchHistory,
-    savedSearches: state.savedSearches,
-    // Actions
-    setQuery,
-    setText,
-    addFilter,
-    removeFilter,
-    updateFilter,
-    setFilters,
-    addSort,
-    removeSort,
-    setSorts,
-    setResults,
-    setLoading,
-    setError,
-    addToHistory,
-    saveSearch,
-    removeSavedSearch,
-    loadSavedSearch,
-    clearResults,
-    resetQuery,
-    // Computed values
-    hasActiveFilters,
-    hasActiveSorts,
-    isQueryEmpty
-  };
-  return ()
+  // State
+  query: state.currentQuery,
+  results: state.results,
+  isLoading: state.isLoading,
+  error: state.error,
+  searchHistory: state.searchHistory,
+  savedSearches: state.savedSearches,
+  // Actions
+  setQuery,
+  setText,
+  addFilter,
+  removeFilter,
+  updateFilter,
+  setFilters,
+  addSort,
+  removeSort,
+  setSorts,
+  setResults,
+  setLoading,
+  setError,
+  addToHistory,
+  saveSearch,
+  removeSavedSearch,
+  loadSavedSearch,
+  clearResults,
+  resetQuery,
+  // Computed values
+  hasActiveFilters,
+  hasActiveSorts,
+  isQueryEmpty
+};
+  return;
     <SearchContext.Provider value={contextValue}>
       {children}
     </SearchContext.Provider>
@@ -378,6 +362,5 @@ export const useSearch = (): SearchContextValue => {
   const context = useContext(SearchContext);
   if (context === undefined) {
     throw new Error('useSearch must be used within a SearchProvider');
-  }
   return context;
 };

@@ -10,76 +10,72 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 interface DashboardMetrics {
   summary: {,
-    today: {,
-      operations: number;
-      users: number;
-      downloads: number;
-      errorRate: number;
-    };
+  today: {,
+  operations: number;,
+  users: number;
+  downloads: number;,
+  errorRate: number;
+};
     thisWeek: {,
-      operations: number;
-      users: number;
-      downloads: number;
-      errorRate: number;
-    };
+  operations: number;
+  users: number;,
+  downloads: number;
+  errorRate: number;
+};
     thisMonth: {,
-      operations: number;
-      users: number;
-      downloads: number;
-      errorRate: number;
-    };
+  operations: number;
+  users: number;,
+  downloads: number;
+  errorRate: number;
+};
   };
   topOperations: Record<string, number>;
   topFileTypes: Record<string, number>;
   performanceMetrics: {,
-    averageLoadTime: number;
-    averageOperationTime: number;
-  };
+  averageLoadTime: number;
+  averageOperationTime: number;
+};
   searchMetrics: {,
-    totalSearches: number;
-    uniqueSearchTerms: number;
-    averageResultsClicked: number;
-  };
+  totalSearches: number;
+  uniqueSearchTerms: number;,
+  averageResultsClicked: number;
+};
   generatedAt: string;
-}
 interface DeveloperInsights {
   systemHealth: {,
-    overallScore: number;
-    reliability: number;
-    performance: number;
-    usability: number;
-  };
+  overallScore: number;,
+  reliability: number;
+  performance: number;,
+  usability: number;
+};
   recommendations: Array<{,
-    category: 'performance' | 'usability' | 'features' | 'security';
-    priority: 'high' | 'medium' | 'low';
-    title: string;
-    description: string;
-    impact: string;
-    effort: 'low' | 'medium' | 'high';
-    metrics: Record<string, number>;
-  }>;
+  category: 'performance' | 'usability' | 'features' | 'security';
+  priority: 'high' | 'medium' | 'low';,
+  title: string;
+  description: string;,
+  impact: string;
+  effort: 'low' | 'medium' | 'high';,
+  metrics: Record<string, number>;
+}>;
   alerts: Array<{,
-    severity: 'critical' | 'warning' | 'info';
-    category: string;
-    message: string;
-    timestamp: string;
-    affectedUsers: number;
-    suggestedAction: string;
-  }>;
+  severity: 'critical' | 'warning' | 'info';
+  category: string;,
+  message: string;
+  timestamp: string;,
+  affectedUsers: number;
+  suggestedAction: string;
+}>;
   trends: {,
-    usageGrowth: number;
-    errorRateChange: number;
-    performanceChange: number;
-    userSatisfactionTrend: number;
-  };
-}
+  usageGrowth: number;
+  errorRateChange: number;,
+  performanceChange: number;
+  userSatisfactionTrend: number;
+};
 interface AnalyticsDashboardProps {
   className?: string;
   showInsights?: boolean;
-}
-const REFRESH_INTERVAL = 300000; // 5 minutes;
-
-export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
+  const REFRESH_INTERVAL = 300000; // 5 minutes;
+  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
   className = '',
   showInsights = false
 }) => {
@@ -98,42 +94,38 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
   const fetchDashboardData = useCallback(async () => {
     try {
       const response = await fetch('/api/file-browser/analytics/dashboard', {)
-        method: 'GET',
+  method: 'GET',
         headers: {,
-          'Authorization': `Bearer ${user?.token}`,}
+          'Authorization': `Bearer ${user?.token}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (!response.ok) {
         throw new Error(`Failed to fetch dashboard data: ${response.statusText}`);}
-      }
       const result = await response.json();
       setDashboardData(result.data);
       setLastRefresh(new Date());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-    }
-  }, [user]);
+  setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+}, [user]);
   // Fetch developer insights
   const fetchInsights = useCallback(async () => {
     if (!hasAdminAccess || !showInsights) return;
     try {
       const response = await fetch('/api/file-browser/analytics/insights', {)
-        method: 'GET',
+  method: 'GET',
         headers: {,
-          'Authorization': `Bearer ${user?.token}`,}
+          'Authorization': `Bearer ${user?.token}`}
+}
           'Content-Type': 'application/json'
-        }
       });
       if (!response.ok) {
         throw new Error(`Failed to fetch insights: ${response.statusText}`);}
-      }
       const result = await response.json();
       setInsights(result.data);
     } catch (err) {
-      console.warn('Failed to load developer insights:', err);
-    }
-  }, [hasAdminAccess, showInsights, user]);
+  console.warn('Failed to load developer insights:', err);
+}, [hasAdminAccess, showInsights, user]);
   // Initial data load
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -176,37 +168,33 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
     return '#ef4444'; // red
   };
   const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-    case 'high': return '#ef4444';
-    case 'medium': return '#f59e0b';
-    case 'low': return '#10b981';
-    default: return '#6b7280';
-    }
-  };
+  switch (priority) {
+  case 'high': return '#ef4444';
+  case 'medium': return '#f59e0b';
+  case 'low': return '#10b981';
+  default: return '#6b7280';
+};
   const getSeverityColor = (severity: string): string => {
-    switch (severity) {
-    case 'critical': return '#dc2626';
-    case 'warning': return '#d97706';
-    case 'info': return '#2563eb';
-    default: return '#6b7280';
-    }
-  };
+  switch (severity) {
+  case 'critical': return '#dc2626';
+  case 'warning': return '#d97706';
+  case 'info': return '#2563eb';
+  default: return '#6b7280';
+};
   if (!isAuthenticated) {
-    return ()
+    return;
       <div className={`analytics-dashboard ${className}`} style={{ padding: '20px', textAlign: 'center' }}>}
         <p>Please log in to view analytics dashboard.</p>
       </div>
     );
-  }
   if (isLoading) {
-    return ()
+    return;
       <div className={`analytics-dashboard ${className}`} style={{ padding: '20px', textAlign: 'center' }}>}
         <p>Loading analytics dashboard...</p>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className={`analytics-dashboard ${className}`} style={{ padding: '20px', textAlign: 'center', color: '#ef4444' }}>}
         <p>Error: {error}</p>
         <button
@@ -216,54 +204,52 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
             fetchInsights();
           }}
           style={{
-            marginTop: '10px',
-            padding: '8px 16px',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+  marginTop: '10px',
+  padding: '8px 16px',
+  backgroundColor: '#3b82f6',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+}}
         >
           Retry
         </button>
       </div>
     );
-  }
   if (!dashboardData) {
-    return ()
+    return;
       <div className={`analytics-dashboard ${className}`} style={{ padding: '20px', textAlign: 'center' }}>}
         <p>No analytics data available.</p>
       </div>
     );
-  }
-  return ()
-    <div className={`analytics-dashboard ${className}`} style={{}
-      padding: '20px',
+  return;
+    <div className={`analytics-dashboard ${className}`} style={{},}
+  padding: '20px',
       backgroundColor: '#f8f9fa',
       borderRadius: '8px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       {/* Header */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: '20px',
-        borderBottom: '1px solid #e5e7eb',
-        paddingBottom: '15px',
-      }}>
+      <div style={{
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '20px',
+  borderBottom: '1px solid #e5e7eb',
+  paddingBottom: '15px',
+}}>
         <h2 style={{ margin: 0, color: '#1f2937' }}>File Browser Analytics</h2>
         <div style={{ fontSize: '12px', color: '#6b7280' }}>
           Last updated: {lastRefresh ? lastRefresh.toLocaleTimeString() : 'Never'}
         </div>
       </div>
       {/* Navigation Tabs */}
-      <div style={{ 
-        display: 'flex', 
-        marginBottom: '20px',
-        borderBottom: '1px solid #e5e7eb',
-      }}>
+      <div style={{
+  display: 'flex',
+  marginBottom: '20px',
+  borderBottom: '1px solid #e5e7eb',
+}}>
         {[
           { id: 'overview', label: 'Overview' },
           { id: 'operations', label: 'Operations' },
@@ -274,15 +260,15 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
             key={tab.id}
             onClick={() => setActiveTab(tab.id as 'overview' | 'operations' | 'performance' | 'insights')}
             style={{
-              padding: '8px 16px',
-              border: 'none',
-              background: 'none',
-              borderBottom: activeTab === tab.id ? '2px solid #3b82f6' : '2px solid transparent',
-              color: activeTab === tab.id ? '#3b82f6' : '#6b7280',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: activeTab === tab.id ? '600' : '400',
-            }}
+  padding: '8px 16px',
+  border: 'none',
+  background: 'none',
+  borderBottom: activeTab === tab.id ? '2px solid #3b82f6' : '2px solid transparent',
+  color: activeTab === tab.id ? '#3b82f6' : '#6b7280',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: activeTab === tab.id ? '600' : '400',
+}}
           >
             {tab.label}
           </button>
@@ -292,18 +278,18 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       {activeTab === 'overview' && ()
         <div>
           {/* Summary Cards */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '15px', 
-            marginBottom: '30px' ,
-          }}>
+          <div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: '15px',
+  marginBottom: '30px',
+}}>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Today&apos;s Operations
               </h3>
@@ -315,11 +301,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
               </p>
             </div>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Downloads Today
               </h3>
@@ -328,55 +314,55 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
               </p>
             </div>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Error Rate
               </h3>
-              <p style={{ 
-                margin: 0, 
-                fontSize: '24px', 
-                fontWeight: '700', 
-                color: dashboardData.summary.today.errorRate > 5 ? '#ef4444' : '#22c55e' ,
-              }}>
+              <p style={{
+  margin: 0,
+  fontSize: '24px',
+  fontWeight: '700',
+  color: dashboardData.summary.today.errorRate > 5 ? '#ef4444' : '#22c55e',
+}}>
                 {formatPercentage(dashboardData.summary.today.errorRate)}
               </p>
             </div>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Avg Load Time
               </h3>
-              <p style={{ 
-                margin: 0, 
-                fontSize: '24px', 
-                fontWeight: '700', 
-                color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e' ,
-              }}>
+              <p style={{
+  margin: 0,
+  fontSize: '24px',
+  fontWeight: '700',
+  color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e',
+}}>
                 {formatTime(dashboardData.performanceMetrics.averageLoadTime)}
               </p>
             </div>
           </div>
           {/* Week vs Month Comparison */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 1fr', 
-            gap: '20px', 
-            marginBottom: '30px' ,
-          }}>
+          <div style={{
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '20px',
+  marginBottom: '30px',
+}}>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 This Week
               </h3>
@@ -401,23 +387,23 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
                 </div>
                 <div>
                   <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#6b7280' }}>Error Rate</p>
-                  <p style={{ 
-                    margin: 0, 
-                    fontSize: '18px', 
-                    fontWeight: '600',
-                    color: dashboardData.summary.thisWeek.errorRate > 5 ? '#ef4444' : '#22c55e' ,
-                  }}>
+                  <p style={{
+  margin: 0,
+  fontSize: '18px',
+  fontWeight: '600',
+  color: dashboardData.summary.thisWeek.errorRate > 5 ? '#ef4444' : '#22c55e',
+}}>
                     {formatPercentage(dashboardData.summary.thisWeek.errorRate)}
                   </p>
                 </div>
               </div>
             </div>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 This Month
               </h3>
@@ -442,12 +428,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
                 </div>
                 <div>
                   <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#6b7280' }}>Error Rate</p>
-                  <p style={{ 
-                    margin: 0, 
-                    fontSize: '18px', 
-                    fontWeight: '600',
-                    color: dashboardData.summary.thisMonth.errorRate > 5 ? '#ef4444' : '#22c55e' ,
-                  }}>
+                  <p style={{
+  margin: 0,
+  fontSize: '18px',
+  fontWeight: '600',
+  color: dashboardData.summary.thisMonth.errorRate > 5 ? '#ef4444' : '#22c55e',
+}}>
                     {formatPercentage(dashboardData.summary.thisMonth.errorRate)}
                   </p>
                 </div>
@@ -460,25 +446,25 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       {activeTab === 'operations' && ()
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-          }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               Most Used Operations
             </h3>
             {Object.entries(dashboardData.topOperations)
-              .sort(([,a], [,b]) => b - a)
+              .sort(([a], [b]) => b - a)
               .slice(0, 8)
               .map(([operation, count]) => ()
                 <div key={operation} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '8px 0',
-                  borderBottom: '1px solid #f3f4f6',
-                }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '8px 0',
+  borderBottom: '1px solid #f3f4f6',
+}}>
                   <span style={{ fontSize: '14px', color: '#374151', textTransform: 'capitalize' }}>
                     {operation.replace('_', ' ')}
                   </span>
@@ -489,25 +475,25 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
               ))}
           </div>
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-          }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               Popular File Types
             </h3>
             {Object.entries(dashboardData.topFileTypes)
-              .sort(([,a], [,b]) => b - a)
+              .sort(([a], [b]) => b - a)
               .slice(0, 8)
               .map(([fileType, count]) => ()
                 <div key={fileType} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '8px 0',
-                  borderBottom: '1px solid #f3f4f6',
-                }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '8px 0',
+  borderBottom: '1px solid #f3f4f6',
+}}>
                   <span style={{ fontSize: '14px', color: '#374151', textTransform: 'uppercase' }}>
                     .{fileType}
                   </span>
@@ -524,43 +510,43 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Load Time Metrics
               </h3>
               <div style={{ marginBottom: '15px' }}>
                 <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#6b7280' }}>Average Load Time</p>
-                <p style={{ 
-                  margin: 0, 
-                  fontSize: '24px', 
-                  fontWeight: '700', 
-                  color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e' ,
-                }}>
+                <p style={{
+  margin: 0,
+  fontSize: '24px',
+  fontWeight: '700',
+  color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e',
+}}>
                   {formatTime(dashboardData.performanceMetrics.averageLoadTime)}
                 </p>
               </div>
               <div>
                 <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#6b7280' }}>Average Operation Time</p>
-                <p style={{ 
-                  margin: 0, 
-                  fontSize: '24px', 
-                  fontWeight: '700', 
-                  color: dashboardData.performanceMetrics.averageOperationTime > 1000 ? '#ef4444' : '#22c55e' ,
-                }}>
+                <p style={{
+  margin: 0,
+  fontSize: '24px',
+  fontWeight: '700',
+  color: dashboardData.performanceMetrics.averageOperationTime > 1000 ? '#ef4444' : '#22c55e',
+}}>
                   {formatTime(dashboardData.performanceMetrics.averageOperationTime)}
                 </p>
               </div>
             </div>
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Search Analytics
               </h3>
@@ -591,12 +577,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         <div>
           {/* System Health Score */}
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-            marginBottom: '20px',
-          }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+  marginBottom: '20px',
+}}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               System Health Score
             </h3>
@@ -609,18 +595,18 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
               ].map(item => ()
                 <div key={item.label} style={{ textAlign: 'center' }}>
                   <div style={{
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '50%',
-                    backgroundColor: getHealthColor(item.score),
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 8px auto',
-                    color: 'white',
-                    fontSize: '18px',
-                    fontWeight: '700',
-                  }}>
+  width: '60px',
+  height: '60px',
+  borderRadius: '50%',
+  backgroundColor: getHealthColor(item.score),
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '0 auto 8px auto',
+  color: 'white',
+  fontSize: '18px',
+  fontWeight: '700',
+}}>
                     {item.score}
                   </div>
                   <p style={{ margin: 0, fontSize: '12px', color: '#6b7280', fontWeight: '500' }}>
@@ -633,12 +619,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
           {/* Alerts */}
           {insights.alerts.length > 0 && ()
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-              marginBottom: '20px',
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+  marginBottom: '20px',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Active Alerts
               </h3>
@@ -646,17 +632,18 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
                 <div key={index} style={{
                   padding: '12px',
                   margin: '8px 0',
-                  border: `1px solid ${getSeverityColor(alert.severity)}`,}
-                  borderRadius: '6px',
+                  border: `1px solid ${getSeverityColor(alert.severity)}`}
+},
+  borderRadius: '6px',
                   backgroundColor: `${getSeverityColor(alert.severity)}10`}
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ 
-                      fontSize: '12px', 
-                      fontWeight: '600', 
-                      color: getSeverityColor(alert.severity),
-                      textTransform: 'uppercase',
-                    }}>
+                    <span style={{
+  fontSize: '12px',
+  fontWeight: '600',
+  color: getSeverityColor(alert.severity),
+  textTransform: 'uppercase',
+}}>
                       {alert.severity} • {alert.category}
                     </span>
                     <span style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -676,47 +663,47 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
           {/* Recommendations */}
           {insights.recommendations.length > 0 && ()
             <div style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
+  backgroundColor: 'white',
+  padding: '20px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+}}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Recommendations
               </h3>
               {insights.recommendations.map((rec, index) => ()
                 <div key={index} style={{
-                  padding: '15px',
-                  margin: '10px 0',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '6px',
-                  backgroundColor: '#f9fafb',
-                }}>
+  padding: '15px',
+  margin: '10px 0',
+  border: '1px solid #e5e7eb',
+  borderRadius: '6px',
+  backgroundColor: '#f9fafb',
+}}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
                       {rec.title}
                     </h4>
                     <div style={{ display: 'flex', gap: '8px' }}>
-                      <span style={{ 
-                        fontSize: '10px', 
-                        padding: '2px 6px',
-                        borderRadius: '12px',
-                        backgroundColor: getPriorityColor(rec.priority),
-                        color: 'white',
-                        fontWeight: '500',
-                        textTransform: 'uppercase',
-                      }}>
+                      <span style={{
+  fontSize: '10px',
+  padding: '2px 6px',
+  borderRadius: '12px',
+  backgroundColor: getPriorityColor(rec.priority),
+  color: 'white',
+  fontWeight: '500',
+  textTransform: 'uppercase',
+}}>
                         {rec.priority}
                       </span>
-                      <span style={{ 
-                        fontSize: '10px', 
-                        padding: '2px 6px',
-                        borderRadius: '12px',
-                        backgroundColor: '#6b7280',
-                        color: 'white',
-                        fontWeight: '500',
-                        textTransform: 'uppercase',
-                      }}>
+                      <span style={{
+  fontSize: '10px',
+  padding: '2px 6px',
+  borderRadius: '12px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  fontWeight: '500',
+  textTransform: 'uppercase',
+}}>
                         {rec.effort} effort
                       </span>
                     </div>

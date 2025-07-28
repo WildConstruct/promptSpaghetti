@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 export interface ApprovalRequest {
-  id: string;
+  id: string;,
   type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';
-  title: string;
+  title: string;,
   description: string;
-  requestedBy: string;
+  requestedBy: string;,
   requestedAt: Date;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'approved' | 'rejected' | 'escalated';
   approvedBy?: string;
   approvedAt?: Date;
@@ -16,10 +16,9 @@ export interface ApprovalRequest {
   reason?: string;
   metadata?: Record<string, unknown>;
   requiredApprovals?: number;
-  currentApprovals?: string[];
-}
-interface ApprovalWorkflowProps {
-  requests: ApprovalRequest[];
+  currentApprovals?: string;
+  interface ApprovalWorkflowProps {
+  requests: ApprovalRequest;,
   currentUserId: string;
   userRole: 'admin' | 'moderator' | 'reviewer';
   onApprove?: (requestId: string, reason: string) => void;
@@ -27,7 +26,6 @@ interface ApprovalWorkflowProps {
   onEscalate?: (requestId: string, reason: string) => void;
   onRequestDetails?: (requestId: string) => void;
 }
-
 export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
   requests,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,7 +43,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
   const [filterStatus, setFilterStatus] = useState<string>('pending');
   const [filterType, setFilterType] = useState<string>('all');
   const filteredRequests = requests.filter(request => {)
-    if (filterStatus !== 'all' && request.status !== filterStatus) return false;
+  if (filterStatus !== 'all' && request.status !== filterStatus) return false;
     if (filterType !== 'all' && request.type !== filterType) return false;
     return true;
   });
@@ -55,47 +53,44 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
     setShowActionModal(true);
   };
   const confirmAction = () => {
-    if (!selectedRequest || !pendingAction || !actionReason.trim()) return;
-    const reason = actionReason.trim();
-    switch (pendingAction) {
-    case 'approve':
-      onApprove?.(selectedRequest.id, reason);
-      break;
-    case 'reject':
-      onReject?.(selectedRequest.id, reason);
-      break;
-    case 'escalate':
-      onEscalate?.(selectedRequest.id, reason);
-      break;
-    }
-    setActionReason('');
-    setSelectedRequest(null);
-    setPendingAction(null);
-    setShowActionModal(false);
-  };
+  if (!selectedRequest || !pendingAction || !actionReason.trim()) return;
+  const reason = actionReason.trim();
+  switch (pendingAction) {
+  case 'approve':,
+  onApprove?.(selectedRequest.id, reason);
+  break;
+  case 'reject':,
+  onReject?.(selectedRequest.id, reason);
+  break;
+  case 'escalate':,
+  onEscalate?.(selectedRequest.id, reason);
+  break;
+  setActionReason('');
+  setSelectedRequest(null);
+  setPendingAction(null);
+  setShowActionModal(false);
+};
   const getPriorityColor = (priority: ApprovalRequest['priority']) => {
-    switch (priority) {
-    case 'critical': return '#dc3545';
-    case 'high': return '#fd7e14';
-    case 'medium': return '#ffc107';
-    case 'low': return '#28a745';
-    }
-  };
+  switch (priority) {
+  case 'critical': return '#dc3545';
+  case 'high': return '#fd7e14';
+  case 'medium': return '#ffc107';
+  case 'low': return '#28a745';
+};
   const getStatusColor = (status: ApprovalRequest['status']) => {
-    switch (status) {
-    case 'pending': return '#ffc107';
-    case 'approved': return '#28a745';
-    case 'rejected': return '#dc3545';
-    case 'escalated': return '#fd7e14';
-    }
-  };
+  switch (status) {
+  case 'pending': return '#ffc107';
+  case 'approved': return '#28a745';
+  case 'rejected': return '#dc3545';
+  case 'escalated': return '#fd7e14';
+};
   const canApprove = (request: ApprovalRequest) => {
     return request.status === 'pending' && userRole !== 'reviewer';
   };
   const needsMultipleApprovals = (request: ApprovalRequest) => {
     return request.requiredApprovals && request.requiredApprovals > 1;
   };
-  return ()
+  return;
     <div className="approval-workflow">
       <div className="approval-header">
         <h2>Approval Workflow</h2>

@@ -52,7 +52,6 @@ export interface TestCoverageChartProps {
   compact?: boolean;
   className?: string;
 }
-
 export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   metrics,
   compact = false,
@@ -61,40 +60,39 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   const [activeTab, setActiveTab] = useState('overview');
   // Color scheme for charts
   const chartColors = {
-    covered: '#10b981',
-    uncovered: '#ef4444',
-    partial: '#f59e0b',
-    primary: '#3b82f6',
-  };
+  covered: '#10b981',
+  uncovered: '#ef4444',
+  partial: '#f59e0b',
+  primary: '#3b82f6',
+};
   // Prepare pie chart data for overall coverage
   const overallCoverageData = [;
     {
-      name: 'Covered',
-      value: metrics.overall.linesCovered,
-      color: chartColors.covered,
-    },
+  name: 'Covered',
+  value: metrics.overall.linesCovered,
+  color: chartColors.covered,
+}
     {
-      name: 'Uncovered', 
-      value: metrics.overall.linesTotal - metrics.overall.linesCovered,
-      color: chartColors.uncovered,
-    }
-  ];
+  name: 'Uncovered',
+  value: metrics.overall.linesTotal - metrics.overall.linesCovered,
+  color: chartColors.uncovered];
   // Prepare bar chart data for packages
   const packageData = metrics.byPackage;
-    .sort((a, b) => b.percentage - a.percentage)
-    .slice(0, 10);
+  .sort((a, b) => b.percentage - a.percentage)
+  .slice(0, 10);
   // Prepare component data with criticality
   const componentData = metrics.byComponent;
-    .map(comp => ({)
-      ...comp,
-      criticalityScore: comp.criticalPaths / (comp.criticalPaths + comp.uncoveredPaths) * 100,
-    }))
+  .map(comp => ({)
+  ...comp,
+  criticalityScore: comp.criticalPaths / (comp.criticalPaths + comp.uncoveredPaths) * 100,
+}))
     .sort((a, b) => b.criticalityScore - a.criticalityScore)
     .slice(0, 15);
   // Prepare trend data
   const trendData = metrics.trends.last7Days.map((percentage, index) => ({)
-    day: `Day ${index + 1}`,}
-    percentage: Math.round(percentage),
+  day: `Day ${index + 1}`}
+},
+  percentage: Math.round(percentage);
   }));
   // Get coverage status
   const getCoverageStatus = (percentage: number) => {
@@ -106,30 +104,28 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   };
   // Get component type icon
   const getComponentTypeIcon = (type: string) => {
-    switch (type) {
-    case 'component':
-      return '🧩';
-    case 'service':
-      return '⚙️';
-    case 'utility':
-      return '🔧';
-    default:
-      return '📄';
-    }
-  };
+  switch (type) {
+  case 'component':,
+  return '🧩';
+  case 'service':,
+  return '⚙️';
+  case 'utility':,
+  return '🔧';
+  default:,
+  return '📄';
+};
   // Custom tooltip for charts
   interface TooltipEntry {
     name?: string;
     value?: number | string;
     color?: string;
-  }
-  const CustomTooltip = (;)
+  const CustomTooltip = (;);
     { active,
     payload,
-    label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
+    label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {
-      return ()
+      return;
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
           {payload.map((entry: TooltipEntry, index: number) => ()
@@ -148,11 +144,10 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
           ))}
         </div>
       );
-    }
     return null;
   };
   if (compact) {
-    return ()
+    return;
       <div className={`test-coverage-chart-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
@@ -200,8 +195,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`test-coverage-chart ${className}`}>}
       {/* Header */}
       <div className="mb-6">
@@ -250,8 +244,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
                     <TrendingDown className="w-5 h-5 text-red-500" />
                   )}
                   <span className={`font-medium ${
-                    metrics.trends.changeFromLastWeek > 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
+  metrics.trends.changeFromLastWeek > 0 ? 'text-green-600' : 'text-red-600',
+}`}>
                     {Math.abs(metrics.trends.changeFromLastWeek).toFixed(1)}%
                   </span>
                 </div>
@@ -363,7 +357,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
               <div className="space-y-4">
                 {componentData.map((component, index) => {
                   const { status, color } = getCoverageStatus(component.percentage);
-                  return ()
+                  return;
                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
@@ -427,7 +421,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
                             hotspot.importance === 'critical' ? 'destructive' :
                               hotspot.importance === 'high' ? 'default' :
                                 hotspot.importance === 'medium' ? 'secondary' : 'outline'
-                          }
                           size="sm"
                         >
                           {hotspot.importance}

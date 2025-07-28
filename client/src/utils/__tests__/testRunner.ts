@@ -7,98 +7,90 @@ import { performanceMonitor } from '../performanceMonitor';
 import { validateUrl, validateInput, generateCSRFToken, ClientRateLimiter } from '../securityUtils';
 import { memoryUtils, WeakCache } from '../memoryOptimization';
 interface TestResult {
-  name: string;
+  name: string;,
   category: 'security' | 'performance' | 'memory' | 'integration';
-  passed: boolean;
+  passed: boolean;,
   duration: number;
   error?: string;
   details?: Record<string, unknown>;
-}
 interface TestSuiteResult {
-  totalTests: number;
+  totalTests: number;,
   passedTests: number;
-  failedTests: number;
+  failedTests: number;,
   totalDuration: number;
   categories: Record<string, { passed: number; failed: number; duration: number }>;
-  results: TestResult[];
+  results: TestResult;
   coverage?: {
-    security: number;
-    performance: number;
-    memory: number;
-    integration: number;
-  };
-}
+  security: number;,
+  performance: number;
+  memory: number;,
+  integration: number;
+};
 class QualityTestRunner {
-  private results: TestResult[] = [];
+  private results: TestResult = [];
   /**
-   * Run all quality improvement tests
-   */
-  async runAllTests(): Promise<TestSuiteResult> {
-    console.log('🧪 Starting comprehensive quality improvement tests...');
-    this.results = [];
-    // Run test categories in parallel for efficiency
-    const testPromises = [;
-      this.runSecurityTests(),
-      this.runPerformanceTests(),
-      this.runMemoryTests(),
-      this.runIntegrationTests()
-    ];
-    await Promise.all(testPromises);
-    return this.generateReport();
+  * Run all quality improvement tests
+  */
+  async runAllTests(): Promise<TestSuiteResult> {,
+  console.log('🧪 Starting comprehensive quality improvement tests...');
+  this.results = [];
+  // Run test categories in parallel for efficiency
+  const testPromises = [;
+  this.runSecurityTests(),
+  this.runPerformanceTests(),
+  this.runMemoryTests(),
+  this.runIntegrationTests()
+  ];
+  await Promise.all(testPromises);
+  return this.generateReport();
+  /**
+  * Security utilities tests
+  */
+  private async runSecurityTests(): Promise<void> {,
+  const tests = [;
+  {
+  name: 'URL Validation - Safe URLs',
+  test: () => {,
+  const safeUrls = [;
+  '/dashboard',
+  'https://example.com/api',
+  '/api/users?id=123'
+  ];
+  return safeUrls.every(url => validateUrl(url) !== null);
+}
+      {
+  name: 'URL Validation - Dangerous URLs',
+  test: () => {,
+  const dangerousUrls = [;
+  'javascript:alert(1)',
+  'data:text/html,<script>alert(1)</script>',
+  'vbscript:msgbox(1)'];
+  return dangerousUrls.every(url => validateUrl(url) === null);
+}
+      {
+  name: 'Input Validation - XSS Prevention',
+  test: () => {,
+  const maliciousInputs = [;
+  '<script>alert(1)</script>',
+  'javascript:alert(1)',
+  'onload=alert(1)',
+  'eval(maliciousCode)'
+  ];
+  return maliciousInputs.every(input => {)
+  const result = validateInput(input);
+  return !result.isValid && result.errors.some(e => e.includes('dangerous'));
+});
   }
-  /**
-   * Security utilities tests
-   */
-  private async runSecurityTests(): Promise<void> {
-    const tests = [;
       {
-        name: 'URL Validation - Safe URLs',
-        test: () => {,
-          const safeUrls = [;
-            '/dashboard',
-            'https://example.com/api',
-            '/api/users?id=123'
-          ];
-          return safeUrls.every(url => validateUrl(url) !== null);
-        }
-      },
-      {
-        name: 'URL Validation - Dangerous URLs',
-        test: () => {,
-          const dangerousUrls = [;
-            'javascript:alert(1)',
-            'data:text/html,<script>alert(1)</script>',
-            'vbscript:msgbox(1)'
-          ];
-          return dangerousUrls.every(url => validateUrl(url) === null);
-        }
-      },
-      {
-        name: 'Input Validation - XSS Prevention',
-        test: () => {,
-          const maliciousInputs = [;
-            '<script>alert(1)</script>',
-            'javascript:alert(1)',
-            'onload=alert(1)',
-            'eval(maliciousCode)'
-          ];
-          return maliciousInputs.every(input => {)
-            const result = validateInput(input);
-            return !result.isValid && result.errors.some(e => e.includes('dangerous'));
-          });
-        }
-      },
-      {
-        name: 'CSRF Token Generation',
-        test: () => {,
-          const token1 = generateCSRFToken();
-          const token2 = generateCSRFToken();
-          return token1.length === 64 && 
-                 token2.length === 64 && 
-                 token1 !== token2 &&
-                 /^[a-f0-9]+$/.test(token1);
-        }
-      },
+  name: 'CSRF Token Generation',
+  test: () => {,
+  const token1 = generateCSRFToken();
+  const token2 = generateCSRFToken();
+  return token1.length === 64 &&
+  token2.length === 64 &&
+  token1 !== token2 &&
+  /^[a-f0-9]+$/.test(token1);
+}
       {
         name: 'Rate Limiting Functionality',
         test: () => {,
@@ -106,82 +98,68 @@ class QualityTestRunner {
           // Should allow 3 requests
           for (let i = 0; i < 3; i++) {
             if (!limiter.canMakeRequest('test-user')) return false;
-          }
           // 4th request should be blocked
           return !limiter.canMakeRequest('test-user');
-        }
-      }
     ];
     for (const { name, test } of tests) {
-      await this.runTest(name, 'security', test);
-    }
-  }
+  await this.runTest(name, 'security', test);
   /**
-   * Performance monitoring tests
-   */
-  private async runPerformanceTests(): Promise<void> {
-    const tests = [;
+  * Performance monitoring tests
+  */
+  private async runPerformanceTests(): Promise<void> {,
+  const tests = [;
+  {
+  name: 'Performance Measurement',
+  test: () => {,
+  let executed = false;
+  const result = performanceMonitor.measureExecution(;);
+  'test-function',
+  () => {
+  executed = true;
+  return 'success';
+  );
+  return executed && result === 'success';
+}
       {
-        name: 'Performance Measurement',
-        test: () => {,
-          let executed = false;
-          const result = performanceMonitor.measureExecution(;)
-            'test-function',
-            () => {
-              executed = true;
-              return 'success';
-            }
-          );
-          return executed && result === 'success';
-        }
-      },
-      {
-        name: 'Async Performance Measurement',
-        test: async () => {,
-          let executed = false;
-          const result = await performanceMonitor.measureExecution(;)
-            'test-async-function',
-            async () => {
-              executed = true;
-              await new Promise(resolve => setTimeout(resolve, 10));
-              return 'async-success';
-            }
-          );
-          return executed && result === 'async-success';
-        }
-      },
+  name: 'Async Performance Measurement',
+  test: async () => {,
+  let executed = false;
+  const result = await performanceMonitor.measureExecution(;);
+  'test-async-function',
+  async () => {
+  executed = true;
+  await new Promise(resolve => setTimeout(resolve, 10));
+  return 'async-success';
+  );
+  return executed && result === 'async-success';
+}
       {
         name: 'API Call Tracking',
         test: async () => {,
           const mockApiCall = () => Promise.resolve({ data: 'test' });
-          const result = await performanceMonitor.trackApiCall(;)
+          const result = await performanceMonitor.trackApiCall(;);
             '/api/test',
             'GET',
             mockApiCall
           );
           return result.data === 'test';
-        }
-      },
+  }
       {
-        name: 'Performance Statistics',
-        test: () => {,
-          // Add some test metrics
-          performanceMonitor.addMetric({)
-            name: 'test-metric',
-            duration: 100,
-            type: 'custom',
-          });
+  name: 'Performance Statistics',
+  test: () => {,
+  // Add some test metrics
+  performanceMonitor.addMetric({)
+  name: 'test-metric',
+  duration: 100,
+  type: 'custom',
+});
           const stats = performanceMonitor.getStats();
           return stats.total > 0 && 
                  typeof stats.averages === 'object' &&
                  Array.isArray(stats.slowest);
-        }
-      }
     ];
     for (const { name, test } of tests) {
       await this.runTest(name, 'performance', test);
-    }
-  }
   /**
    * Memory optimization tests
    */
@@ -195,8 +173,7 @@ class QualityTestRunner {
           cache.set(key, 'test-value');
           return cache.get(key) === 'test-value' &&
                  cache.has(key) === true;
-        }
-      },
+  }
       {
         name: 'Deep Equality Check',
         test: () => {,
@@ -205,8 +182,7 @@ class QualityTestRunner {
           const obj3 = { a: 1, b: { c: 3 } };
           return memoryUtils.deepEqual(obj1, obj2) &&
                  !memoryUtils.deepEqual(obj1, obj3);
-        }
-      },
+  }
       {
         name: 'Shallow Equality Check',
         test: () => {,
@@ -215,8 +191,7 @@ class QualityTestRunner {
           const obj3 = { a: 1, b: 3 };
           return memoryUtils.shallowEqual(obj1, obj2) &&
                  !memoryUtils.shallowEqual(obj1, obj3);
-        }
-      },
+  }
       {
         name: 'Stable Reference Creation',
         test: () => {,
@@ -226,13 +201,9 @@ class QualityTestRunner {
           const ref1 = memoryUtils.createStableRef(obj1, cache);
           const ref2 = memoryUtils.createStableRef(obj2, cache);
           return ref1 === obj1 && ref2 === ref1; // Should return cached reference
-        }
-      }
     ];
     for (const { name, test } of tests) {
       await this.runTest(name, 'memory', test);
-    }
-  }
   /**
    * Integration tests
    */
@@ -246,11 +217,9 @@ class QualityTestRunner {
           for (let i = 0; i < 100; i++) {
             validateInput(`test-input-${i}`);}
             validateUrl(`/test-url-${i}`);}
-          }
           const duration = performance.now() - startTime;
           return duration < 100; // Should complete in under 100ms
-        }
-      },
+  }
       {
         name: 'Memory + Performance Integration',
         test: () => {,
@@ -259,26 +228,23 @@ class QualityTestRunner {
           const objects = Array.from({ length: 1000 }, (_, i) => ({ id: i }));
           const startTime = performance.now();
           objects.forEach(obj => {)
-            memoryUtils.createStableRef(obj, cache);
+  memoryUtils.createStableRef(obj, cache);
           });
           const duration = performance.now() - startTime;
           return duration < 50; // Should be fast due to caching
-        }
-      },
+  }
       {
-        name: 'Cross-Utility Error Handling',
-        test: () => {,
-          // Test that utilities handle edge cases gracefully
-          try {
-            validateInput(null as any);
-            validateUrl(undefined as any);
-            memoryUtils.deepEqual(null, undefined);
-            return true;
-          } catch (error) {
+  name: 'Cross-Utility Error Handling',
+  test: () => {,
+  // Test that utilities handle edge cases gracefully
+  try {
+  validateInput(null as any);
+  validateUrl(undefined as any);
+  memoryUtils.deepEqual(null, undefined);
+  return true;
+} catch (error) {
             return false; // Should not throw
-          }
-        }
-      },
+  }
       {
         name: 'Resource Cleanup Integration',
         test: () => {,
@@ -287,27 +253,22 @@ class QualityTestRunner {
           limiter.reset(); // Should not throw
           performanceMonitor.flush(); // Should not throw
           return true;
-        }
-      }
     ];
     for (const { name, test } of tests) {
       await this.runTest(name, 'integration', test);
-    }
-  }
   /**
    * Run individual test with error handling and timing
    */
   private async runTest()
     name: string, 
     category: TestResult['category'], 
-    testFn: () => boolean | Promise<boolean>,
-  ): Promise<void> {
+    testFn: () => boolean | Promise<boolean>): Promise<void> {,
     const startTime = performance.now();
     try {
       const result = await testFn();
       const duration = performance.now() - startTime;
       this.results.push({)
-        name,
+  name,
         category,
         passed: result,
         duration,
@@ -318,7 +279,7 @@ class QualityTestRunner {
       const duration = performance.now() - startTime;
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.results.push({)
-        name,
+  name,
         category,
         passed: false,
         duration,
@@ -326,8 +287,6 @@ class QualityTestRunner {
         details: { executionTime: duration, errorType: typeof error }
       });
       console.log(`❌ ${name} - Error: ${errorMessage} (${duration.toFixed(2)}ms)`);}
-    }
-  }
   /**
    * Generate comprehensive test report
    */
@@ -339,35 +298,32 @@ class QualityTestRunner {
     // Calculate category statistics
     const categories: Record<string, { passed: number; failed: number; duration: number }> = {};
     this.results.forEach(result => {)
-      if (!categories[result.category]) {
+  if (!categories[result.category]) {
         categories[result.category] = { passed: 0, failed: 0, duration: 0 };
-      }
       if (result.passed) {
         categories[result.category].passed++;
       } else {
         categories[result.category].failed++;
-      }
       categories[result.category].duration += result.duration;
     });
     // Calculate coverage percentages
     const coverage = {
-      security: this.calculateCoverage('security'),
-      performance: this.calculateCoverage('performance'),
-      memory: this.calculateCoverage('memory'),
-      integration: this.calculateCoverage('integration'),
-    };
+  security: this.calculateCoverage('security'),
+  performance: this.calculateCoverage('performance'),
+  memory: this.calculateCoverage('memory'),
+  integration: this.calculateCoverage('integration'),
+};
     const report: TestSuiteResult = {
-      totalTests,
-      passedTests,
-      failedTests,
-      totalDuration,
-      categories,
-      results: this.results,
-      coverage
-    };
+  totalTests,
+  passedTests,
+  failedTests,
+  totalDuration,
+  categories,
+  results: this.results,
+  coverage
+};
     this.printReport(report);
     return report;
-  }
   /**
    * Calculate test coverage for a category
    */
@@ -376,7 +332,6 @@ class QualityTestRunner {
     if (categoryTests.length === 0) return 0;
     const passed = categoryTests.filter(r => r.passed).length;
     return Math.round((passed / categoryTests.length) * 100);
-  }
   /**
    * Print formatted test report
    */
@@ -404,22 +359,16 @@ class QualityTestRunner {
       report.results
         .filter(r => !r.passed)
         .forEach(result => {)
-          console.log(`   - ${result.name}: ${result.error || 'Test assertion failed'}`);}
+  console.log(`   - ${result.name}: ${result.error || 'Test assertion failed'}`);}
         });
-    }
     console.log('\n' + '='.repeat(60));
     // Performance recommendations
     if (report.totalDuration > 1000) {
       console.log('⚠️  Performance Warning: Tests took longer than 1 second');
-    }
     if (report.coverage!.security < 90) {
       console.log('🔒 Security: Consider adding more security tests');
-    }
     if (report.coverage!.performance < 90) {
       console.log('⚡ Performance: Consider adding more performance tests');
-    }
-  }
-}
 
 // Export singleton instance
 export const qualityTestRunner = new QualityTestRunner();
@@ -427,7 +376,6 @@ export const qualityTestRunner = new QualityTestRunner();
 // Export for use in CI/CD
 export async function runQualityTests(): Promise<TestSuiteResult> {
   return qualityTestRunner.runAllTests();
-}
 
 // CLI-friendly test runner
 export async function runTestsWithExitCode(): Promise<void> {
@@ -438,8 +386,6 @@ export async function runTestsWithExitCode(): Promise<void> {
   } else {
     console.log(`\n✅ All ${report.totalTests} tests passed!`);}
     process.exit(0);
-  }
-}
 
 // Performance baseline for CI
 export function checkPerformanceBaseline(report: TestSuiteResult): boolean {
@@ -449,4 +395,3 @@ export function checkPerformanceBaseline(report: TestSuiteResult): boolean {
   return report.totalDuration <= maxAllowedDuration && 
          avgCoverage >= minCoverage &&
          report.failedTests === 0;
-}

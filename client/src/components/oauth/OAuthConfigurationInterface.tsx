@@ -12,95 +12,84 @@ import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
 interface OAuthProvider {
-  id: string;
+  id: string;,
   name: string;
-  displayName: string;
+  displayName: string;,
   description: string;
-  iconUrl: string;
-  supportedScopes: string[];
-  requiredScopes: string[];
+  iconUrl: string;,
+  supportedScopes: string;
+  requiredScopes: string;,
   endpoints: {,
-    authorization: string;
-    token: string;
-    userInfo: string;
-  };
+  authorization: string;,
+  token: string;
+  userInfo: string;
+};
   configuration?: OAuthConfiguration;
-}
 interface OAuthConfiguration {
-  id: string;
+  id: string;,
   providerId: string;
-  clientId: string;
+  clientId: string;,
   clientSecret: string;
-  scopes: string[];
+  scopes: string;,
   redirectUri: string;
   additionalParams: Record<string, string>;
-  securitySettings: SecuritySettings;
+  securitySettings: SecuritySettings;,
   complianceSettings: ComplianceSettings;
-  status: 'draft' | 'active' | 'inactive' | 'testing';
+  status: 'draft' | 'active' | 'inactive' | 'testing';,
   createdAt: Date;
   updatedAt: Date;
-}
-interface SecuritySettings {
-  enablePKCE: boolean;
+  interface SecuritySettings {
+  enablePKCE: boolean;,
   enableCertificatePinning: boolean;
-  enableMTLS: boolean;
+  enableMTLS: boolean;,
   stateParameterLength: number;
-  tokenBindingRequired: boolean;
-  allowedRedirectDomains: string[];
+  tokenBindingRequired: boolean;,
+  allowedRedirectDomains: string;
   sessionTimeout: number;
-}
-interface ComplianceSettings {
-  gdprCompliant: boolean;
+  interface ComplianceSettings {
+  gdprCompliant: boolean;,
   ccpaCompliant: boolean;
-  soxCompliant: boolean;
+  soxCompliant: boolean;,
   hipaaCompliant: boolean;
-  retentionPeriodDays: number;
+  retentionPeriodDays: number;,
   auditLevel: 'basic' | 'standard' | 'enhanced';
-}
-interface SecurityAssessment {
-  score: number;
+  interface SecurityAssessment {
+  score: number;,
   level: 'low' | 'medium' | 'high' | 'maximum';
-  findings: SecurityFinding[];
-  recommendations: string[];
+  findings: SecurityFinding;,
+  recommendations: string;
   complianceStatus: ComplianceStatus;
-}
-interface SecurityFinding {
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  interface SecurityFinding {
+  severity: 'info' | 'warning' | 'error' | 'critical';,
   category: string;
-  message: string;
+  message: string;,
   recommendation: string;
-}
-interface ComplianceStatus {
-  overall: boolean;
+  interface ComplianceStatus {
+  overall: boolean;,
   frameworks: {,
-    gdpr: boolean;
-    ccpa: boolean;
-    sox: boolean;
-    hipaa: boolean;
-  };
-  issues: ComplianceIssue[];
-}
+  gdpr: boolean;,
+  ccpa: boolean;
+  sox: boolean;,
+  hipaa: boolean;
+};
+  issues: ComplianceIssue;
 interface ComplianceIssue {
-  framework: string;
+  framework: string;,
   issue: string;
-  severity: 'low' | 'medium' | 'high';
+  severity: 'low' | 'medium' | 'high';,
   remediation: string;
-}
 interface ValidationResult {
-  valid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationWarning[];
-}
+  valid: boolean;,
+  errors: ValidationError;
+  warnings: ValidationWarning;
 interface ValidationError {
-  field: string;
+  field: string;,
   message: string;
   code: string;
-}
 interface ValidationWarning {
-  field: string;
+  field: string;,
   message: string;
   recommendation: string;
-}
 
 // OAuth Configuration Interface Component
 export const OAuthConfigurationInterface: React.FC = () => {
@@ -108,9 +97,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [configuration, setConfiguration] = useState<Partial<OAuthConfiguration>>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_providers, _setProviders] = useState<OAuthProvider[]>([]);
+  const [_providers, _setProviders] = useState<OAuthProvider>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
+  const [_configurations, setConfigurations] = useState<OAuthConfiguration>([]);
   const [securityAssessment, setSecurityAssessment] = useState<SecurityAssessment | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -120,62 +109,55 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // Auth store for API calls
   const { authenticatedFetch } = useAuthStore();
   // Available OAuth providers
-  const availableProviders: OAuthProvider[] = useMemo(() => [
+  const availableProviders: OAuthProvider = useMemo(() => [
     {
-      id: 'google',
-      name: 'google',
-      displayName: 'Google',
-      description: 'Google OAuth 2.0 with OpenID Connect',
-      iconUrl: '/icons/google.svg',
-      supportedScopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/drive.readonly'],
-      requiredScopes: ['openid', 'email', 'profile'],
-      endpoints: {,
-        authorization: 'https://accounts.google.com/o/oauth2/v2/auth',
-        token: 'https://oauth2.googleapis.com/token',
-        userInfo: 'https://www.googleapis.com/oauth2/v2/userinfo',
-      }
-    },
+  id: 'google',
+  name: 'google',
+  displayName: 'Google',
+  description: 'Google OAuth 2.0 with OpenID Connect',
+  iconUrl: '/icons/google.svg',
+  supportedScopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/drive.readonly'],
+  requiredScopes: ['openid', 'email', 'profile'],
+  endpoints: {,
+  authorization: 'https://accounts.google.com/o/oauth2/v2/auth',
+  token: 'https://oauth2.googleapis.com/token',
+  userInfo: 'https://www.googleapis.com/oauth2/v2/userinfo',
+}
     {
-      id: 'github',
-      name: 'github',
-      displayName: 'GitHub',
-      description: 'GitHub OAuth 2.0 for developer workflows',
-      iconUrl: '/icons/github.svg',
-      supportedScopes: ['read:user', 'user:email', 'repo', 'admin:org'],
-      requiredScopes: ['read:user', 'user:email'],
-      endpoints: {,
-        authorization: 'https://github.com/login/oauth/authorize',
-        token: 'https://github.com/login/oauth/access_token',
-        userInfo: 'https://api.github.com/user',
-      }
-    },
+  id: 'github',
+  name: 'github',
+  displayName: 'GitHub',
+  description: 'GitHub OAuth 2.0 for developer workflows',
+  iconUrl: '/icons/github.svg',
+  supportedScopes: ['read:user', 'user:email', 'repo', 'admin:org'],
+  requiredScopes: ['read:user', 'user:email'],
+  endpoints: {,
+  authorization: 'https://github.com/login/oauth/authorize',
+  token: 'https://github.com/login/oauth/access_token',
+  userInfo: 'https://api.github.com/user',
+}
     {
-      id: 'microsoft',
-      name: 'microsoft',
-      displayName: 'Microsoft',
-      description: 'Microsoft OAuth 2.0 with Azure AD integration',
-      iconUrl: '/icons/microsoft.svg',
-      supportedScopes: ['openid', 'email', 'profile', 'offline_access', 'https://graph.microsoft.com/User.Read'],
-      requiredScopes: ['openid', 'email', 'profile'],
-      endpoints: {,
-        authorization: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-        token: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        userInfo: 'https://graph.microsoft.com/v1.0/me',
-      }
-    }
-  ], []);
+  id: 'microsoft',
+  name: 'microsoft',
+  displayName: 'Microsoft',
+  description: 'Microsoft OAuth 2.0 with Azure AD integration',
+  iconUrl: '/icons/microsoft.svg',
+  supportedScopes: ['openid', 'email', 'profile', 'offline_access', 'https://graph.microsoft.com/User.Read'],
+  requiredScopes: ['openid', 'email', 'profile'],
+  endpoints: {,
+  authorization: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+  token: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+  userInfo: 'https://graph.microsoft.com/v1.0/me'], []);
   // Load existing configurations on mount
   useEffect(() => {
-    loadConfigurations();
-  }, [loadConfigurations]);
+  loadConfigurations();
+}, [loadConfigurations]);
   // Initialize default configuration when provider is selected
   useEffect(() => {
     if (selectedProvider) {
       const provider = availableProviders.find(p => p.id === selectedProvider);
       if (provider) {
         initializeConfiguration(provider);
-      }
-    }
   }, [selectedProvider, availableProviders]);
   // API functions
   const loadConfigurations = useCallback(async () => {
@@ -185,44 +167,43 @@ export const OAuthConfigurationInterface: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         setConfigurations(data.data.configurations || []);
-      }
     } catch (error) {
-      console.error('Failed to load OAuth configurations:', error);
-    } finally {
+  console.error('Failed to load OAuth configurations:', error);
+} finally {
       setLoading(false);
-    }
   }, [authenticatedFetch]);
   const initializeConfiguration = (provider: OAuthProvider) => {
-    const defaultConfig: Partial<OAuthConfiguration> = {
-      providerId: provider.id,
+    const defaultConfig: Partial<OAuthConfiguration> = {,
+  providerId: provider.id,
       scopes: provider.requiredScopes,
-      redirectUri: `${window.location.origin}/auth/oauth/callback/${provider.id}`,}
-      additionalParams: {},
+      redirectUri: `${window.location.origin}/auth/oauth/callback/${provider.id}`}
+},
+  additionalParams: {},
       securitySettings: {,
-        enablePKCE: true,
-        enableCertificatePinning: true,
-        enableMTLS: false,
-        stateParameterLength: 32,
-        tokenBindingRequired: false,
-        allowedRedirectDomains: [window.location.hostname],
-        sessionTimeout: 3600 // 1 hour,
-      },
-      complianceSettings: {,
-        gdprCompliant: true,
-        ccpaCompliant: true,
-        soxCompliant: false,
-        hipaaCompliant: false,
-        retentionPeriodDays: 90,
-        auditLevel: 'standard',
-      },
-      status: 'draft',
-    };
+  enablePKCE: true,
+  enableCertificatePinning: true,
+  enableMTLS: false,
+  stateParameterLength: 32,
+  tokenBindingRequired: false,
+  allowedRedirectDomains: [window.location.hostname],
+  sessionTimeout: 3600 // 1 hour,
+},
+  complianceSettings: {,
+  gdprCompliant: true,
+  ccpaCompliant: true,
+  soxCompliant: false,
+  hipaaCompliant: false,
+  retentionPeriodDays: 90,
+  auditLevel: 'standard',
+},
+  status: 'draft';
+  };
     setConfiguration(defaultConfig);
   };
   const validateConfiguration = async (config: Partial<OAuthConfiguration>): Promise<ValidationResult> => {
     try {
       const response = await authenticatedFetch('/api/oauth-guidance/validate-configuration', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
       });
@@ -232,14 +213,13 @@ export const OAuthConfigurationInterface: React.FC = () => {
       return {
         valid: false,
         errors: [{ field: 'general', message: 'Validation failed', code: 'VALIDATION_ERROR' }],
-        warnings: [],
-      };
-    }
+        warnings: [];
+  };
   };
   const runSecurityAssessment = async (config: Partial<OAuthConfiguration>): Promise<SecurityAssessment> => {
     try {
       const response = await authenticatedFetch('/api/oauth-guidance/security-assessment', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
       });
@@ -252,18 +232,16 @@ export const OAuthConfigurationInterface: React.FC = () => {
         findings: [{ severity: 'error', category: 'Assessment', message: 'Security assessment failed', recommendation: 'Check configuration and try again' }],
         recommendations: ['Review configuration and try again'],
         complianceStatus: {,
-          overall: false,
+  overall: false,
           frameworks: { gdpr: false, ccpa: false, sox: false, hipaa: false },
-          issues: [],
-        }
-      };
-    }
+          issues: [];
+  };
   };
   const testConfiguration = async (config: Partial<OAuthConfiguration>): Promise<boolean> => {
     setTesting(true);
     try {
       const response = await authenticatedFetch('/api/oauth-guidance/test-configuration', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
       });
@@ -273,7 +251,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
       return false;
     } finally {
       setTesting(false);
-    }
   };
   const saveConfiguration = async () => {
     setSaving(true);
@@ -284,7 +261,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
       if (!validationResult.valid) {
         setSaving(false);
         return;
-      }
       // Run security assessment
       const assessment = await runSecurityAssessment(configuration);
       setSecurityAssessment(assessment);
@@ -294,17 +270,16 @@ export const OAuthConfigurationInterface: React.FC = () => {
         ? `/api/oauth-guidance/configuration/${configuration.id}`}
         : '/api/oauth-guidance/generate-configuration';
       const response = await authenticatedFetch(url, {)
-        method,
+  method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({),
-          provider: selectedProvider,
-          configuration,
-          requirements: {,
-            security_level: 'high',
-            compliance_frameworks: getSelectedFrameworks(),
-            custom_requirements: [],
-          }
-        })
+        body: JSON.stringify({,)
+  provider: selectedProvider,
+  configuration,
+  requirements: {,
+  security_level: 'high',
+  compliance_frameworks: getSelectedFrameworks(),
+  custom_requirements: [],
+}
       });
       const data = await response.json();
       if (data.success) {
@@ -312,61 +287,56 @@ export const OAuthConfigurationInterface: React.FC = () => {
         // Update current configuration with saved data
         if (data.data.configuration) {
           setConfiguration(data.data.configuration);
-        }
-      }
     } catch (error) {
-      console.error('Failed to save OAuth configuration:', error);
-    } finally {
+  console.error('Failed to save OAuth configuration:', error);
+} finally {
       setSaving(false);
-    }
   };
-  const getSelectedFrameworks = (): string[] => {
-    const frameworks: string[] = [];
-    if (configuration.complianceSettings?.gdprCompliant) frameworks.push('GDPR');
-    if (configuration.complianceSettings?.ccpaCompliant) frameworks.push('CCPA');
-    if (configuration.complianceSettings?.soxCompliant) frameworks.push('SOX');
-    if (configuration.complianceSettings?.hipaaCompliant) frameworks.push('HIPAA');
-    return frameworks;
-  };
+  const getSelectedFrameworks = (): string => {
+  const frameworks: string = [];
+  if (configuration.complianceSettings?.gdprCompliant) frameworks.push('GDPR');
+  if (configuration.complianceSettings?.ccpaCompliant) frameworks.push('CCPA');
+  if (configuration.complianceSettings?.soxCompliant) frameworks.push('SOX');
+  if (configuration.complianceSettings?.hipaaCompliant) frameworks.push('HIPAA');
+  return frameworks;
+};
   // Update configuration helper
   const updateConfiguration = (updates: Partial<OAuthConfiguration>) => {
     setConfiguration(prev => ({ ...prev, ...updates }));
   };
   const updateSecuritySettings = (updates: Partial<SecuritySettings>) => {
     setConfiguration(prev => ({)
-      ...prev,
+  ...prev,
       securitySettings: { ...prev.securitySettings!, ...updates }
     }));
   };
   const updateComplianceSettings = (updates: Partial<ComplianceSettings>) => {
     setConfiguration(prev => ({)
-      ...prev,
+  ...prev,
       complianceSettings: { ...prev.complianceSettings!, ...updates }
     }));
   };
   // Get security level color
   const getSecurityLevelColor = (level: string): string => {
-    switch (level) {
-    case 'low': return 'text-red-600';
-    case 'medium': return 'text-yellow-600';
-    case 'high': return 'text-blue-600';
-    case 'maximum': return 'text-green-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (level) {
+  case 'low': return 'text-red-600';
+  case 'medium': return 'text-yellow-600';
+  case 'high': return 'text-blue-600';
+  case 'maximum': return 'text-green-600';
+  default: return 'text-gray-600';
+};
   // Get compliance status color
   const getComplianceColor = (compliant: boolean): string => {
-    return compliant ? 'text-green-600' : 'text-red-600';
-  };
+  return compliant ? 'text-green-600' : 'text-red-600';
+};
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2">Loading OAuth configurations...</span>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">OAuth Configuration</h1>
@@ -382,10 +352,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
             <div
               key={provider.id}
               className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                selectedProvider === provider.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
+  selectedProvider === provider.id
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
               onClick={() => setSelectedProvider(provider.id)}
             >
               <div className="flex items-center mb-2">
@@ -425,10 +395,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
                 >
                   <span className="mr-2">{tab.icon}</span>
                   {tab.label}
@@ -631,11 +601,11 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <div className="space-y-2">
                         {securityAssessment.findings.map((finding, index) => ()
                           <div key={index} className={`p-2 rounded text-sm ${
-                            finding.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                              finding.severity === 'error' ? 'bg-orange-100 text-orange-800' :
-                                finding.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-blue-100 text-blue-800'
-                          }`}>
+  finding.severity === 'critical' ? 'bg-red-100 text-red-800' :,
+  finding.severity === 'error' ? 'bg-orange-100 text-orange-800' :,
+  finding.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-blue-100 text-blue-800'
+}`}>
                             <div className="font-medium">{finding.category}: {finding.message}</div>
                             <div className="text-xs mt-1">{finding.recommendation}</div>
                           </div>
@@ -758,10 +728,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         <h5 className="font-medium text-gray-900">Compliance Issues:</h5>
                         {securityAssessment.complianceStatus.issues.map((issue, index) => ()
                           <div key={index} className={`p-2 rounded text-sm ${
-                            issue.severity === 'high' ? 'bg-red-100 text-red-800' :
-                              issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-blue-100 text-blue-800'
-                          }`}>
+  issue.severity === 'high' ? 'bg-red-100 text-red-800' :,
+  issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-blue-100 text-blue-800'
+}`}>
                             <div className="font-medium">{issue.framework}: {issue.issue}</div>
                             <div className="text-xs mt-1">{issue.remediation}</div>
                           </div>
@@ -887,11 +857,11 @@ export const OAuthConfigurationInterface: React.FC = () => {
             <div className="text-sm text-gray-500">
               {configuration.status && ()
                 <span className={`px-2 py-1 rounded text-xs font-medium ${
-                  configuration.status === 'active' ? 'bg-green-100 text-green-800' :
-                    configuration.status === 'testing' ? 'bg-blue-100 text-blue-800' :
-                      configuration.status === 'inactive' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                }`}>
+  configuration.status === 'active' ? 'bg-green-100 text-green-800' :,
+  configuration.status === 'testing' ? 'bg-blue-100 text-blue-800' :,
+  configuration.status === 'inactive' ? 'bg-red-100 text-red-800' :,
+  'bg-gray-100 text-gray-800'
+}`}>
                   {configuration.status.toUpperCase()}
                 </span>
               )}

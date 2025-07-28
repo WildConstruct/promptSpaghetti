@@ -2,26 +2,24 @@
 import React, { useState } from 'react';
 import './SearchBar.css';
 interface FilterOptions {
-  categories: string[];
-  tags: string[];
+  categories: string;,
+  tags: string;
   priceRange: {,
-    min?: number;
-    max?: number;
-  };
-  rating: number;
+  min?: number;
+  max?: number;
+};
+  rating: number;,
   complexity: 'beginner' | 'intermediate' | 'advanced' | 'all';
-  compatibility: string[];
+  compatibility: string;,
   isFree: boolean | null;
-  isAiGenerated: boolean | null;
+  isAiGenerated: boolean | null;,
   sortBy: 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest';
-}
 interface AdvancedFiltersProps {
-  filters: FilterOptions;
-  onFiltersChange: (filters: FilterOptions) => void;
+  filters: FilterOptions;,
+  onFiltersChange: (filters: FilterOptions) => void;,
   availableCategories: Array<{ id: string; name: string }>;
-  availableTags: string[];
+  availableTags: string;
   className?: string;
-}
 
 export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
   filters,
@@ -31,33 +29,33 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
   className = ''
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const updateFilter = (key: keyof FilterOptions, value: Error) => {
-    onFiltersChange({)
-      ...filters,
-      [key]: value
-    });
+  const updateFilter = (key: keyof FilterOptions, value: Error) => {,
+  onFiltersChange({)
+  ...filters,
+  [key]: value,
+});
   };
   const toggleCategory = (categoryId: string) => {
-    const newCategories = filters.categories.includes(categoryId);
-      ? filters.categories.filter(id => id !== categoryId)
-      : [...filters.categories, categoryId];
-    updateFilter('categories', newCategories);
-  };
+  const newCategories = filters.categories.includes(categoryId);
+  ? filters.categories.filter(id => id !== categoryId)
+  : [...filters.categories, categoryId];
+  updateFilter('categories', newCategories);
+};
   const toggleTag = (tag: string) => {
-    const newTags = filters.tags.includes(tag);
-      ? filters.tags.filter(t => t !== tag)
-      : [...filters.tags, tag];
-    updateFilter('tags', newTags);
-  };
+  const newTags = filters.tags.includes(tag);
+  ? filters.tags.filter(t => t !== tag)
+  : [...filters.tags, tag];
+  updateFilter('tags', newTags);
+};
   const toggleCompatibility = (compat: string) => {
-    const newCompat = filters.compatibility.includes(compat);
-      ? filters.compatibility.filter(c => c !== compat)
-      : [...filters.compatibility, compat];
-    updateFilter('compatibility', newCompat);
-  };
+  const newCompat = filters.compatibility.includes(compat);
+  ? filters.compatibility.filter(c => c !== compat)
+  : [...filters.compatibility, compat];
+  updateFilter('compatibility', newCompat);
+};
   const clearAllFilters = () => {
     onFiltersChange({)
-      categories: [],
+  categories: [],
       tags: [],
       priceRange: {},
       rating: 0,
@@ -65,8 +63,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
       compatibility: [],
       isFree: null,
       isAiGenerated: null,
-      sortBy: 'relevance',
-    });
+      sortBy: 'relevance';
+  });
   };
   const hasActiveFilters = () => {
     return filters.categories.length > 0 ||
@@ -80,7 +78,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
            filters.isAiGenerated !== null ||
            filters.sortBy !== 'relevance';
   };
-  return ()
+  return;
     <div className={`advanced-filters-container ${className}`}>}
       {/* Filter Toggle */}
       <div className="filter-toggle">
@@ -131,8 +129,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   key={category.id}
                   onClick={() => toggleCategory(category.id)}
                   className={`filter-chip ${
-                    filters.categories.includes(category.id) ? 'active' : ''
-                  }`}
+  filters.categories.includes(category.id) ? 'active' : '',
+}`}
                 >
                   {category.name}
                 </button>
@@ -148,8 +146,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   key={tag}
                   onClick={() => toggleTag(tag)}
                   className={`filter-chip ${
-                    filters.tags.includes(tag) ? 'active' : ''
-                  }`}
+  filters.tags.includes(tag) ? 'active' : '',
+}`}
                 >
                   #{tag}
                 </button>
@@ -165,9 +163,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                 placeholder="Min ($)"
                 value={filters.priceRange.min || ''}
                 onChange={(e) => updateFilter('priceRange', {)
-                  ...filters.priceRange,
-                  min: e.target.value ? parseFloat(e.target.value) : undefined,
-                })}
+  ...filters.priceRange,
+  min: e.target.value ? parseFloat(e.target.value) : undefined,
+})}
                 className="price-input"
               />
               <span className="price-separator">to</span>
@@ -176,9 +174,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                 placeholder="Max ($)"
                 value={filters.priceRange.max || ''}
                 onChange={(e) => updateFilter('priceRange', {)
-                  ...filters.priceRange,
-                  max: e.target.value ? parseFloat(e.target.value) : undefined,
-                })}
+  ...filters.priceRange,
+  max: e.target.value ? parseFloat(e.target.value) : undefined,
+})}
                 className="price-input"
               />
             </div>
@@ -192,8 +190,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   key={rating}
                   onClick={() => updateFilter('rating', rating === filters.rating ? 0 : rating)}
                   className={`rating-button ${
-                    filters.rating >= rating ? 'active' : ''
-                  }`}
+  filters.rating >= rating ? 'active' : '',
+}`}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
@@ -224,8 +222,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   key={level.value}
                   onClick={() => updateFilter('complexity', level.value)}
                   className={`filter-chip ${
-                    filters.complexity === level.value ? 'active' : ''
-                  }`}
+  filters.complexity === level.value ? 'active' : '',
+}`}
                 >
                   {level.label}
                 </button>
@@ -246,8 +244,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   key={model}
                   onClick={() => toggleCompatibility(model)}
                   className={`filter-chip ${
-                    filters.compatibility.includes(model) ? 'active' : ''
-                  }`}
+  filters.compatibility.includes(model) ? 'active' : '',
+}`}
                 >
                   {model.replace('claude-', 'Claude ')}
                 </button>

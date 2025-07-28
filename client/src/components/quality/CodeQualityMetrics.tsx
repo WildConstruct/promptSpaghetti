@@ -54,7 +54,6 @@ export interface CodeQualityMetricsProps {
   compact?: boolean;
   className?: string;
 }
-
 export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   metrics,
   compact = false,
@@ -63,13 +62,13 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   const [activeTab, setActiveTab] = useState('overview');
   // Color scheme for charts
   const chartColors = {
-    excellent: '#10b981',
-    good: '#3b82f6',
-    fair: '#f59e0b',
-    poor: '#ef4444',
-    critical: '#dc2626',
-    primary: '#6366f1',
-  };
+  excellent: '#10b981',
+  good: '#3b82f6',
+  fair: '#f59e0b',
+  poor: '#ef4444',
+  critical: '#dc2626',
+  primary: '#6366f1',
+};
   // Prepare complexity distribution data
   const complexityData = [;
     { range: '1-5 (Simple)', count: metrics.complexity.distribution['1-5'], color: chartColors.excellent },
@@ -80,22 +79,24 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   ];
   // Prepare maintainability trend data
   const maintainabilityTrendData = metrics.maintainability.trends.map((index, day) => ({)
-    day: `Day ${day + 1}`,}
-    index: Math.round(index),
+  day: `Day ${day + 1}`}
+},
+  index: Math.round(index);
   }));
   // Prepare linting data
   const lintingTrendData = metrics.linting.trends.map((issues, day) => ({)
-    day: `Day ${day + 1}`,}
-    issues: issues,
+  day: `Day ${day + 1}`}
+},
+  issues: issues;
   }));
   // Prepare rule breakdown data
   const ruleBreakdownData = metrics.linting.ruleBreakdowns;
     .sort((a, b) => b.count - a.count)
     .slice(0, 10)
     .map(rule => ({)
-      ...rule,
-      color: rule.severity === 'error' ? chartColors.poor : chartColors.fair,
-    }));
+  ...rule,
+  color: rule.severity === 'error' ? chartColors.poor : chartColors.fair,
+}));
   // Get maintainability status
   const getMaintainabilityStatus = (index: number) => {
     if (index >= 90) return { status: 'excellent', color: 'text-green-600' };
@@ -106,23 +107,22 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   };
   // Get technical debt priority color
   const getTechnicalDebtColor = (priority: string) => {
-    switch (priority) {
-    case 'critical':
-      return 'destructive';
-    case 'high':
-      return 'default';
-    case 'medium':
-      return 'secondary';
-    case 'low':
-      return 'outline';
-    default:
-      return 'outline';
-    }
-  };
+  switch (priority) {
+  case 'critical':,
+  return 'destructive';
+  case 'high':,
+  return 'default';
+  case 'medium':,
+  return 'secondary';
+  case 'low':,
+  return 'outline';
+  default:,
+  return 'outline';
+};
   // Custom tooltip for charts
-  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: unknown[]; label?: string }) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: unknown; label?: string }) => {
     if (active && payload && payload.length) {
-      return ()
+      return;
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
           {payload.map((entry: unknown, index: number) => ()
@@ -139,11 +139,10 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
           ))}
         </div>
       );
-    }
     return null;
   };
   if (compact) {
-    return ()
+    return;
       <div className={`code-quality-metrics-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
@@ -175,9 +174,8 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
         </Card>
       </div>
     );
-  }
   const maintainabilityStatus = getMaintainabilityStatus(metrics.maintainability.index);
-  return ()
+  return;
     <div className={`code-quality-metrics ${className}`}>}
       {/* Header */}
       <div className="mb-6">
@@ -662,7 +660,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
                       </div>
                     </div>
                   ))
-                }
                 {metrics.technicalDebt.breakdown.length === 0 && ()
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />

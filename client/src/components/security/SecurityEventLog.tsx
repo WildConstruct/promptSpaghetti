@@ -19,37 +19,35 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 interface SecurityEvent {
-  id: string;
+  id: string;,
   timestamp: Date;
-  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
+  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';,
   category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';
-  event_type: string;
+  event_type: string;,
   description: string;
   source_ip?: string;
   user_id?: string;
   user_email?: string;
-  resource: string;
+  resource: string;,
   action: string;
   outcome: 'success' | 'failure' | 'blocked';
   metadata?: Record<string, unknown>;
-}
-interface SecurityEventLogProps {
+  interface SecurityEventLogProps {
   onEventClick?: (event: SecurityEvent) => void;
-  initialFilters?: {
-    severity?: string[];
-    category?: string[];
-    dateRange?: [Date, Date];
-  };
-}
+  initialFilters?: {,
+  severity?: string;
+  category?: string;
+  dateRange?: [Date, Date];
+};
 const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   onEventClick, 
   initialFilters 
 }) => {
-  const [events, setEvents] = useState<SecurityEvent[]>([]);
+  const [events, setEvents] = useState<SecurityEvent>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSeverity, setSelectedSeverity] = useState<string[]>(initialFilters?.severity || []);
-  const [selectedCategory, setSelectedCategory] = useState<string[]>(initialFilters?.category || []);
+  const [selectedSeverity, setSelectedSeverity] = useState<string>(initialFilters?.severity || []);
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialFilters?.category || []);
   const [sortField, setSortField] = useState<keyof SecurityEvent>('timestamp');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
@@ -57,65 +55,65 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
     loadSecurityEvents();
   }, []);
   const loadSecurityEvents = async () => {
-    setIsLoading(true);
-    // Mock data - replace with actual API call
-    setTimeout(() => {
-      const mockEvents: SecurityEvent[] = [
+  setIsLoading(true);
+  // Mock data - replace with actual API call
+  setTimeout(() => {
+  const mockEvents: SecurityEvent = [
+  {
+  id: 'evt-001',
+  timestamp: new Date(Date.now() - 5 * 60 * 1000),
+  severity: 'critical',
+  category: 'authentication',
+  event_type: 'LOGIN_FAILED_MULTIPLE',
+  description: 'Multiple failed login attempts detected',
+  source_ip: '192.168.1.100',
+  user_email: 'suspicious@domain.com',
+  resource: '/auth/login',
+  action: 'LOGIN_ATTEMPT',
+  outcome: 'blocked',
+}
         {
-          id: 'evt-001',
-          timestamp: new Date(Date.now() - 5 * 60 * 1000),
-          severity: 'critical',
-          category: 'authentication',
-          event_type: 'LOGIN_FAILED_MULTIPLE',
-          description: 'Multiple failed login attempts detected',
-          source_ip: '192.168.1.100',
-          user_email: 'suspicious@domain.com',
-          resource: '/auth/login',
-          action: 'LOGIN_ATTEMPT',
-          outcome: 'blocked',
-        },
+  id: 'evt-002',
+  timestamp: new Date(Date.now() - 10 * 60 * 1000),
+  severity: 'high',
+  category: 'api',
+  event_type: 'RATE_LIMIT_EXCEEDED',
+  description: 'API rate limit exceeded by 200%',
+  source_ip: '10.0.0.45',
+  user_id: 'user-123',
+  user_email: 'developer@company.com',
+  resource: '/api/templates',
+  action: 'GET_TEMPLATES',
+  outcome: 'blocked',
+}
         {
-          id: 'evt-002',
-          timestamp: new Date(Date.now() - 10 * 60 * 1000),
-          severity: 'high',
-          category: 'api',
-          event_type: 'RATE_LIMIT_EXCEEDED',
-          description: 'API rate limit exceeded by 200%',
-          source_ip: '10.0.0.45',
-          user_id: 'user-123',
-          user_email: 'developer@company.com',
-          resource: '/api/templates',
-          action: 'GET_TEMPLATES',
-          outcome: 'blocked',
-        },
+  id: 'evt-003',
+  timestamp: new Date(Date.now() - 15 * 60 * 1000),
+  severity: 'medium',
+  category: 'authorization',
+  event_type: 'PERMISSION_DENIED',
+  description: 'User attempted to access restricted resource',
+  source_ip: '172.16.0.12',
+  user_id: 'user-456',
+  user_email: 'testuser@example.com',
+  resource: '/admin/users',
+  action: 'ACCESS_ADMIN_PANEL',
+  outcome: 'blocked',
+}
         {
-          id: 'evt-003',
-          timestamp: new Date(Date.now() - 15 * 60 * 1000),
-          severity: 'medium',
-          category: 'authorization',
-          event_type: 'PERMISSION_DENIED',
-          description: 'User attempted to access restricted resource',
-          source_ip: '172.16.0.12',
-          user_id: 'user-456',
-          user_email: 'testuser@example.com',
-          resource: '/admin/users',
-          action: 'ACCESS_ADMIN_PANEL',
-          outcome: 'blocked',
-        },
-        {
-          id: 'evt-004',
-          timestamp: new Date(Date.now() - 20 * 60 * 1000),
-          severity: 'info',
-          category: 'authentication',
-          event_type: 'LOGIN_SUCCESS',
-          description: 'Successful user login',
-          source_ip: '203.0.113.1',
-          user_id: 'user-789',
-          user_email: 'admin@company.com',
-          resource: '/auth/login',
-          action: 'LOGIN',
-          outcome: 'success',
-        },
+  id: 'evt-004',
+  timestamp: new Date(Date.now() - 20 * 60 * 1000),
+  severity: 'info',
+  category: 'authentication',
+  event_type: 'LOGIN_SUCCESS',
+  description: 'Successful user login',
+  source_ip: '203.0.113.1',
+  user_id: 'user-789',
+  user_email: 'admin@company.com',
+  resource: '/auth/login',
+  action: 'LOGIN',
+  outcome: 'success',
+}
         {
           id: 'evt-005',
           timestamp: new Date(Date.now() - 25 * 60 * 1000),
@@ -130,7 +128,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
           action: 'EXPORT_DATA',
           outcome: 'success',
           metadata: { records_exported: 15000, file_size: '2.4MB' }
-        }
       ];
       setEvents(mockEvents);
       setIsLoading(false);
@@ -138,7 +135,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   };
   const filteredAndSortedEvents = useMemo(() => {
     const filtered = events.filter(event => {)
-      const matchesSearch = !searchTerm || ;
+  const matchesSearch = !searchTerm || ;
         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -151,59 +148,53 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
     });
     // Sort events
     filtered.sort((a, b) => {
-      let aValue = a[sortField];
-      let bValue = b[sortField];
-      if (aValue instanceof Date && bValue instanceof Date) {
-        aValue = aValue.getTime();
-        bValue = bValue.getTime();
-      }
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
-      }
-      if (sortDirection === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
+  let aValue = a[sortField];
+  let bValue = b[sortField];
+  if (aValue instanceof Date && bValue instanceof Date) {
+  aValue = aValue.getTime();
+  bValue = bValue.getTime();
+  if (typeof aValue === 'string' && typeof bValue === 'string') {
+  aValue = aValue.toLowerCase();
+  bValue = bValue.toLowerCase();
+  if (sortDirection === 'asc') {
+  return aValue > bValue ? 1 : -1;
+} else {
+  return aValue < bValue ? 1 : -1;
+});
     return filtered;
   }, [events, searchTerm, selectedSeverity, selectedCategory, sortField, sortDirection]);
   const getSeverityIcon = (severity: SecurityEvent['severity']) => {
-    switch (severity) {
-    case 'critical':
-      return <XCircle className="h-4 w-4 text-red-600" />;
-    case 'high':
-      return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-    case 'medium':
-      return <Shield className="h-4 w-4 text-yellow-600" />;
-    case 'low':
-      return <Info className="h-4 w-4 text-blue-600" />;
-    case 'info':
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
-    default:
-      return <Info className="h-4 w-4 text-gray-600" />;
-    }
-  };
+  switch (severity) {
+  case 'critical':,
+  return <XCircle className="h-4 w-4 text-red-600" />;
+  case 'high':,
+  return <AlertTriangle className="h-4 w-4 text-orange-600" />;
+  case 'medium':,
+  return <Shield className="h-4 w-4 text-yellow-600" />;
+  case 'low':,
+  return <Info className="h-4 w-4 text-blue-600" />;
+  case 'info':,
+  return <CheckCircle className="h-4 w-4 text-green-600" />;
+  default:,
+  return <Info className="h-4 w-4 text-gray-600" />;
+};
   const getOutcomeColor = (outcome: SecurityEvent['outcome']) => {
-    switch (outcome) {
-    case 'success':
-      return 'text-green-600 bg-green-50';
-    case 'failure':
-      return 'text-red-600 bg-red-50';
-    case 'blocked':
-      return 'text-orange-600 bg-orange-50';
-    default:
-      return 'text-gray-600 bg-gray-50';
-    }
-  };
+  switch (outcome) {
+  case 'success':,
+  return 'text-green-600 bg-green-50';
+  case 'failure':,
+  return 'text-red-600 bg-red-50';
+  case 'blocked':,
+  return 'text-orange-600 bg-orange-50';
+  default:,
+  return 'text-gray-600 bg-gray-50';
+};
   const handleSort = (field: keyof SecurityEvent) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
+  if (sortField === field) {
+  setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+} else {
       setSortField(field);
       setSortDirection('desc');
-    }
   };
   const handleExport = () => {
     const csvContent = [;
@@ -213,7 +204,8 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
         event.severity,
         event.category,
         event.event_type,
-        `"${event.description}"`,}
+        `"${event.description}"`}
+}
         event.source_ip || '',
         event.user_email || '',
         event.resource,
@@ -228,7 +220,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
     link.click();
   };
   if (isLoading) {
-    return ()
+    return;
       <div className="security-event-log loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -236,8 +228,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="security-event-log">
       {/* Header */}
       <div className="event-log-header">
@@ -289,7 +280,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
                           setSelectedSeverity([...selectedSeverity, severity]);
                         } else {
                           setSelectedSeverity(selectedSeverity.filter(s => s !== severity));
-                        }
                       }}
                     />
                     <span className="capitalize">{severity}</span>
@@ -310,7 +300,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
                           setSelectedCategory([...selectedCategory, category]);
                         } else {
                           setSelectedCategory(selectedCategory.filter(c => c !== category));
-                        }
                       }}
                     />
                     <span className="capitalize">{category.replace('_', ' ')}</span>

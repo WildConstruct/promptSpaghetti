@@ -5,45 +5,40 @@ import { usePasswordStrength } from '../../hooks/useRegistration';
 interface PasswordStrengthIndicatorProps {
   password: string;
   className?: string;
-}
-
-export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({)
+  export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({,)
   password,
   className = ''
 }) => {
   const { score, feedback, strength } = usePasswordStrength(password);
   const getStrengthColor = (strength: string) => {
-    switch (strength) {
-    case 'weak':
-      return 'bg-red-500';
-    case 'fair':
-      return 'bg-yellow-500';
-    case 'good':
-      return 'bg-blue-500';
-    case 'strong':
-      return 'bg-green-500';
-    default:
-      return 'bg-gray-300';
-    }
-  };
+  switch (strength) {
+  case 'weak':,
+  return 'bg-red-500';
+  case 'fair':,
+  return 'bg-yellow-500';
+  case 'good':,
+  return 'bg-blue-500';
+  case 'strong':,
+  return 'bg-green-500';
+  default:,
+  return 'bg-gray-300';
+};
   const getStrengthTextColor = (strength: string) => {
-    switch (strength) {
-    case 'weak':
-      return 'text-red-700';
-    case 'fair':
-      return 'text-yellow-700';
-    case 'good':
-      return 'text-blue-700';
-    case 'strong':
-      return 'text-green-700';
-    default:
-      return 'text-gray-700';
-    }
-  };
+  switch (strength) {
+  case 'weak':,
+  return 'text-red-700';
+  case 'fair':,
+  return 'text-yellow-700';
+  case 'good':,
+  return 'text-blue-700';
+  case 'strong':,
+  return 'text-green-700';
+  default:,
+  return 'text-gray-700';
+};
   if (!password) {
     return null;
-  }
-  return ()
+  return;
     <div className={`${className}`}>}
       {/* Strength bar */}
       <div className="flex items-center space-x-2 mb-2">

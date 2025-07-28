@@ -22,9 +22,7 @@ type SecurityView = 'dashboard' | 'events' | 'threats' | 'incidents' | 'alerts';
 interface SecurityMonitoringLayoutProps {
   initialView?: SecurityView;
   compactMode?: boolean;
-}
-
-export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({)
+  export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({,)
   initialView = 'dashboard',
   compactMode = false
 }) => {
@@ -33,66 +31,64 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const navigationItems = [;
+  {
+  id: 'dashboard' as SecurityView,
+  label: 'Dashboard',
+  icon: Activity,
+  description: 'Security overview and metrics',
+}
     {
-      id: 'dashboard' as SecurityView,
-      label: 'Dashboard',
-      icon: Activity,
-      description: 'Security overview and metrics',
-    },
+  id: 'threats' as SecurityView,
+  label: 'Threat Detection',
+  icon: Shield,
+  description: 'Real-time threat monitoring',
+}
     {
-      id: 'threats' as SecurityView,
-      label: 'Threat Detection',
-      icon: Shield,
-      description: 'Real-time threat monitoring',
-    },
+  id: 'events' as SecurityView,
+  label: 'Event Log',
+  icon: Eye,
+  description: 'Security event history',
+}
     {
-      id: 'events' as SecurityView,
-      label: 'Event Log',
-      icon: Eye,
-      description: 'Security event history',
-    },
+  id: 'incidents' as SecurityView,
+  label: 'Incidents',
+  icon: AlertTriangle,
+  description: 'Incident response management',
+}
     {
-      id: 'incidents' as SecurityView,
-      label: 'Incidents',
-      icon: AlertTriangle,
-      description: 'Incident response management',
-    },
-    {
-      id: 'alerts' as SecurityView,
-      label: 'Alerts',
-      icon: Bell,
-      description: 'Security notifications',
-    }
-  ];
-  const handleIncidentClick = (incidentId: string) => {
-    setSelectedIncidentId(incidentId);
-    setCurrentView('incidents');
-  };
+  id: 'alerts' as SecurityView,
+  label: 'Alerts',
+  icon: Bell,
+  description: 'Security notifications'];
+  const handleIncidentClick = (incidentId: string) => {,
+  setSelectedIncidentId(incidentId);
+  setCurrentView('incidents');
+};
   const handleThreatClick = (threatId: string) => {
-    console.log('Threat clicked:', threatId);
-    // Could navigate to threat details or show modal
-  };
+  console.log('Threat clicked:', threatId);
+  // Could navigate to threat details or show modal
+};
   const handleAlertAction = (alertId: string, action: string) => {
-    console.log('Alert action:', action, 'on alert:', alertId);
-    // Handle alert actions like blocking IPs, escalating, etc.
-  };
+  console.log('Alert action:', action, 'on alert:', alertId);
+  // Handle alert actions like blocking IPs, escalating, etc.
+};
   const renderCurrentView = () => {
     switch (currentView) {
     case 'dashboard':
-      return ()
+      return;
         <SecurityDashboard 
           onIncidentClick={handleIncidentClick}
           onThreatClick={handleThreatClick}
         />
       );
     case 'events':
-      return ()
+      return;
         <SecurityEventLog 
           onEventClick={(event) => console.log('Event clicked:', event)}
         />
       );
     case 'threats':
-      return ()
+      return;
         <ThreatDetectionVisualizer 
           onThreatClick={handleThreatClick}
           refreshInterval={30000}
@@ -100,15 +96,14 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
       );
     case 'incidents':
       if (selectedIncidentId) {
-        return ()
+        return;
           <IncidentResponsePanel 
             incidentId={selectedIncidentId}
             onIncidentUpdate={(incident) => console.log('Incident updated:', incident)}
             onClose={() => setSelectedIncidentId(null)}
           />
         );
-      }
-      return ()
+      return;
         <div className="incident-list-placeholder">
           <AlertTriangle className="h-12 w-12 text-gray-400" />
           <h3>Incident Management</h3>
@@ -116,7 +111,7 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
         </div>
       );
     case 'alerts':
-      return ()
+      return;
         <SecurityAlerts 
           onAlertAction={handleAlertAction}
           maxVisible={100}
@@ -125,13 +120,12 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
       );
     default:
       return <SecurityDashboard />;
-    }
   };
   const getCurrentViewTitle = () => {
     const item = navigationItems.find(item => item.id === currentView);
     return item?.label || 'Security Monitoring';
   };
-  return ()
+  return;
     <div className={`security-monitoring-layout ${isFullscreen ? 'fullscreen' : ''} ${compactMode ? 'compact' : ''}`}>}
       {/* Sidebar Navigation */}
       <aside className={`security-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>}
@@ -157,7 +151,7 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = item.id === currentView;
-            return ()
+            return;
               <button
                 key={item.id}
                 className={`nav-item ${isActive ? 'active' : ''}`}

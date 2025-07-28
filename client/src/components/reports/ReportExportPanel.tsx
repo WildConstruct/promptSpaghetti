@@ -32,39 +32,39 @@ import {
 // Sample report data generator
 const generateSampleReportData = () => ({)
   metadata: {,
-    title: 'Performance Analysis Report',
-    description: 'Comprehensive analysis of system performance metrics',
-    generatedAt: new Date(),
-    generatedBy: 'System Administrator',
-    version: '1.0.0',
-  },
+  title: 'Performance Analysis Report',
+  description: 'Comprehensive analysis of system performance metrics',
+  generatedAt: new Date(),
+  generatedBy: 'System Administrator',
+  version: '1.0.0',
+},
   summary: {,
-    totalRequests: 156789,
-    averageResponseTime: 245.7,
-    successRate: 98.3,
-    errorCount: 2674,
-    peakConcurrency: 342,
-    dataProcessed: '1.2TB',
-  },
+  totalRequests: 156789,
+  averageResponseTime: 245.7,
+  successRate: 98.3,
+  errorCount: 2674,
+  peakConcurrency: 342,
+  dataProcessed: '1.2TB',
+},
   data: Array.from({ length: 100 }, (_, i) => ({)
-    id: i + 1,
-    timestamp: new Date(Date.now() - (100 - i) * 3600000).toISOString(),
-    requests: Math.floor(Math.random() * 1000) + 500,
-    responseTime: Math.floor(Math.random() * 500) + 100,
-    errorRate: Math.random() * 5,
-    cpuUsage: Math.random() * 100,
-    memoryUsage: Math.random() * 100,
-    status: Math.random() > 0.1 ? 'healthy' : 'warning',
-  })),
+  id: i + 1,
+  timestamp: new Date(Date.now() - (100 - i) * 3600000).toISOString(),
+  requests: Math.floor(Math.random() * 1000) + 500,
+  responseTime: Math.floor(Math.random() * 500) + 100,
+  errorRate: Math.random() * 5,
+  cpuUsage: Math.random() * 100,
+  memoryUsage: Math.random() * 100,
+  status: Math.random() > 0.1 ? 'healthy' : 'warning',
+})),
   charts: [,
     {
       type: 'line' as const,
       title: 'Response Time Trend',
       data: Array.from({ length: 24 }, (_, i) => ({)
-        hour: i,
-        responseTime: Math.floor(Math.random() * 300) + 100,
-      }))
-    },
+  hour: i,
+  responseTime: Math.floor(Math.random() * 300) + 100,
+}))
+  }
     {
       type: 'bar' as const,
       title: 'Error Distribution',
@@ -74,21 +74,18 @@ const generateSampleReportData = () => ({)
         { category: 'Timeouts', count: 45 },
         { category: 'Connection Errors', count: 12 }
       ]
-    }
   ],
   customSections: [,
     {
-      title: 'Executive Summary',
-      content: 'System performance remains stable with 98.3% success rate. Minor increase in response time during peak hours requires attention.',
-      type: 'text' as const,
-    },
+  title: 'Executive Summary',
+  content: 'System performance remains stable with 98.3% success rate. Minor increase in response time during peak hours requires attention.',
+  type: 'text' as const,
+}
     {
-      title: 'Recommendations',
-      content: '<ul><li>Scale up server resources during 2-4 PM peak hours</li><li>Optimize database queries showing slow performance</li><li>Implement caching for frequently accessed endpoints</li></ul>',
-      type: 'html' as const,
-    }
-  ]
-});
+  title: 'Recommendations',
+  content: '<ul><li>Scale up server resources during 2-4 PM peak hours</li><li>Optimize database queries showing slow performance</li><li>Implement caching for frequently accessed endpoints</li></ul>',
+  type: 'html' as const];
+  });
 interface ReportExportPanelProps {
   // Optional props for customization
   title?: string;
@@ -96,9 +93,7 @@ interface ReportExportPanelProps {
   showSampleData?: boolean;
   allowScheduling?: boolean;
   customReportData?: unknown;
-}
-
-export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({)
+  export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({,)
   title = 'Report Export System',
   showQuickExport = true,
   showSampleData = true,
@@ -129,9 +124,8 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({)
         loadStatistics();
       ]);
     } catch (error) {
-      console.error('Failed to load initial data:', error);
-    }
-  }, [loadExportHistory, loadScheduledExports, loadExportFormats, loadStatistics]);
+  console.error('Failed to load initial data:', error);
+}, [loadExportHistory, loadScheduledExports, loadExportFormats, loadStatistics]);
   // Load initial data
   useEffect(() => {
     loadInitialData();
@@ -152,13 +146,12 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({)
       await testExport(format, 'file');
       await loadExportHistory(20); // Refresh history
     } catch (error) {
-      console.error('Test export failed:', error);
-    }
-  };
+  console.error('Test export failed:', error);
+};
   // Get recent export stats
   const recentExports = exportHistory.slice(0, 5);
   const recentSchedules = scheduledExports.filter(s => s.enabled).slice(0, 3);
-  return ()
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

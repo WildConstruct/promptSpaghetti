@@ -20,37 +20,35 @@ export interface UseRevenueAnalyticsParams {
   scope: 'global' | 'creator' | 'template';
   entityId?: string;
   timeRange: RevenueTimeRange;
-  customDateRange?: {
-    start: Date | null;
-    end: Date | null;
-  };
+  customDateRange?: {,
+  start: Date | null;,
+  end: Date | null;
+};
   filters: RevenueFilters;
   refreshInterval?: number; // milliseconds, 0 to disable
   autoRefresh?: boolean;
   cacheEnabled?: boolean;
 }
-
 export interface UseRevenueAnalyticsReturn {
   // Data
-  dashboardData: RevenueDashboardData | null;
+  dashboardData: RevenueDashboardData | null;,
   metrics: RevenueMetrics | null;
   // Loading states
-  isLoading: boolean;
+  isLoading: boolean;,
   isRefreshing: boolean;
   isExporting: boolean;
   // Error handling
-  error: string | null;
+  error: string | null;,
   lastError: RevenueError | null;
   // Actions
-  refreshData: () => Promise<void>;
+  refreshData: () => Promise<void>;,
   exportData: (format: 'csv' | 'xlsx' | 'pdf', options?: Partial<RevenueExportOptions>) => Promise<void>;
   clearError: () => void;
   // Metadata
-  lastUpdated: Date | null;
+  lastUpdated: Date | null;,
   cacheHit: boolean;
   executionTime: number | null;
 }
-
 export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseRevenueAnalyticsReturn => {
   // State
   const [dashboardData, setDashboardData] = useState<RevenueDashboardData | null>(null);
@@ -73,10 +71,8 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
       mountedRef.current = false;
       if (refreshIntervalRef.current) {
         clearInterval(refreshIntervalRef.current);
-      }
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
-      }
     };
   }, []);
   // Fetch dashboard data
@@ -85,25 +81,23 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
       // Cancel any ongoing request
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
-      }
       // Create new abort controller
       abortControllerRef.current = new AbortController();
       if (!isRefresh) {
         setIsLoading(true);
       } else {
-        setIsRefreshing(true);
-      }
-      setError(null);
-      setLastError(null);
-      // Prepare request parameters
-      const requestParams = {
-        scope: params.scope,
-        entityId: params.entityId,
-        timeRange: params.timeRange,
-        customDateRange: params.customDateRange,
-        filters: params.filters,
-        cacheEnabled: params.cacheEnabled !== false,
-      };
+  setIsRefreshing(true);
+  setError(null);
+  setLastError(null);
+  // Prepare request parameters
+  const requestParams = {
+  scope: params.scope,
+  entityId: params.entityId,
+  timeRange: params.timeRange,
+  customDateRange: params.customDateRange,
+  filters: params.filters,
+  cacheEnabled: params.cacheEnabled !== false,
+};
       // Fetch data from service
       const startTime = performance.now();
       const response: RevenueAPIResponse<RevenueDashboardData> = await revenueService.getDashboardData()
@@ -114,56 +108,50 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
       // Only update state if component is still mounted
       if (!mountedRef.current) return;
       if (response.success && response.data) {
-        setDashboardData(response.data);
-        setMetrics(response.data.metrics);
-        setLastUpdated(new Date());
-        setCacheHit(response.metadata?.cacheHit || false);
-        setExecutionTime(endTime - startTime);
-        // Track analytics event
-        await revenueService.trackEvent({)
-          eventType: 'view_dashboard',
-          timestamp: new Date(),
-          userId: 'current-user', // Would come from auth context
-          dashboardScope: params.scope,
-          entityId: params.entityId,
-          metadata: {,
-            timeRange: params.timeRange,
-            filtersApplied: Object.keys(params.filters).length > 0,
-            cacheHit: response.metadata?.cacheHit,
-            executionTime: endTime - startTime,
-          }
-        });
+  setDashboardData(response.data);
+  setMetrics(response.data.metrics);
+  setLastUpdated(new Date());
+  setCacheHit(response.metadata?.cacheHit || false);
+  setExecutionTime(endTime - startTime);
+  // Track analytics event
+  await revenueService.trackEvent({)
+  eventType: 'view_dashboard',
+  timestamp: new Date(),
+  userId: 'current-user', // Would come from auth context,
+  dashboardScope: params.scope,
+  entityId: params.entityId,
+  metadata: {,
+  timeRange: params.timeRange,
+  filtersApplied: Object.keys(params.filters).length > 0,
+  cacheHit: response.metadata?.cacheHit,
+  executionTime: endTime - startTime,
+});
       } else {
         throw new Error(response.error || 'Failed to fetch dashboard data');
-      }
     } catch (err) {
-      if (!mountedRef.current) return;
-      if (err instanceof Error) {
-        if (err.name === 'AbortError') {
-          return; // Request was cancelled, don't treat as error
-        }
-        setError(err.message);
-        setLastError({)
-          code: 'FETCH_DASHBOARD_ERROR',
-          message: err.message,
-          timestamp: new Date(),
-          retryable: true,
-        });
+  if (!mountedRef.current) return;
+  if (err instanceof Error) {
+  if (err.name === 'AbortError') {
+  return; // Request was cancelled, don't treat as error
+  setError(err.message);
+  setLastError({)
+  code: 'FETCH_DASHBOARD_ERROR',
+  message: err.message,
+  timestamp: new Date(),
+  retryable: true,
+});
       } else {
-        setError('An unexpected error occurred');
-        setLastError({)
-          code: 'UNKNOWN_ERROR',
-          message: 'An unexpected error occurred',
-          timestamp: new Date(),
-          retryable: true,
-        });
-      }
+  setError('An unexpected error occurred');
+  setLastError({)
+  code: 'UNKNOWN_ERROR',
+  message: 'An unexpected error occurred',
+  timestamp: new Date(),
+  retryable: true,
+});
     } finally {
       if (mountedRef.current) {
         setIsLoading(false);
         setIsRefreshing(false);
-      }
-    }
   }, [
     params.scope,
     params.entityId,
@@ -177,52 +165,49 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
     await fetchDashboardData(true);
   }, [fetchDashboardData]);
   // Export data
-  const exportData = useCallback(async (;)
+  const exportData = useCallback(async (;);
     format: 'csv' | 'xlsx' | 'pdf', 
     options: Partial<RevenueExportOptions> = {}
   ) => {
-    try {
-      setIsExporting(true);
-      setError(null);
-      const exportOptions: RevenueExportOptions = {
-        format,
-        scope: params.scope,
-        entityId: params.entityId,
-        timeRange: params.timeRange,
-        customDateRange: params.customDateRange,
-        filters: params.filters,
-        includeForecast: false,
-        includeCharts: false,
-        includeRawData: false,
-        ...options
-      };
+  try {
+  setIsExporting(true);
+  setError(null);
+  const exportOptions: RevenueExportOptions = {,
+  format,
+  scope: params.scope,
+  entityId: params.entityId,
+  timeRange: params.timeRange,
+  customDateRange: params.customDateRange,
+  filters: params.filters,
+  includeForecast: false,
+  includeCharts: false,
+  includeRawData: false,
+  ...options
+};
       await revenueService.exportData(exportOptions);
       // Track export event
       await revenueService.trackEvent({)
-        eventType: 'export_data',
-        timestamp: new Date(),
-        userId: 'current-user',
-        dashboardScope: params.scope,
-        entityId: params.entityId,
-        metadata: {,
-          format,
-          timeRange: params.timeRange,
-          filtersApplied: Object.keys(params.filters).length > 0,
-        }
-      });
+  eventType: 'export_data',
+  timestamp: new Date(),
+  userId: 'current-user',
+  dashboardScope: params.scope,
+  entityId: params.entityId,
+  metadata: {,
+  format,
+  timeRange: params.timeRange,
+  filtersApplied: Object.keys(params.filters).length > 0,
+});
     } catch (err) {
       if (err instanceof Error) {
         setError(`Export failed: ${err.message}`);}
         setLastError({)
-          code: 'EXPORT_ERROR',
-          message: err.message,
-          timestamp: new Date(),
-          retryable: true,
-        });
-      }
+  code: 'EXPORT_ERROR',
+  message: err.message,
+  timestamp: new Date(),
+  retryable: true,
+});
     } finally {
       setIsExporting(false);
-    }
   }, [
     params.scope,
     params.entityId,
@@ -248,9 +233,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
       return () => {
         if (refreshIntervalRef.current) {
           clearInterval(refreshIntervalRef.current);
-        }
       };
-    }
   }, [params.refreshInterval, params.autoRefresh, fetchDashboardData]);
   return {
     // Data
@@ -277,68 +260,67 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
 // Specialized hook for template revenue analytics
 export const useTemplateRevenueAnalytics = (templateId: string, timeRange: RevenueTimeRange = RevenueTimeRange.LAST_30D) => {
   return useRevenueAnalytics({)
-    scope: 'template',
+  scope: 'template',
     entityId: templateId,
     timeRange,
     filters: {},
     refreshInterval: 60000, // 1 minute
-    autoRefresh: true,
+    autoRefresh: true;
   });
 };
 
 // Specialized hook for creator revenue analytics
 export const useCreatorRevenueAnalytics = (creatorId: string, timeRange: RevenueTimeRange = RevenueTimeRange.LAST_30D) => {
   return useRevenueAnalytics({)
-    scope: 'creator',
+  scope: 'creator',
     entityId: creatorId,
     timeRange,
     filters: {},
     refreshInterval: 60000, // 1 minute
-    autoRefresh: true,
+    autoRefresh: true;
   });
 };
 
 // Specialized hook for global revenue analytics
 export const useGlobalRevenueAnalytics = (timeRange: RevenueTimeRange = RevenueTimeRange.LAST_30D) => {
   return useRevenueAnalytics({)
-    scope: 'global',
+  scope: 'global',
     timeRange,
     filters: {},
     refreshInterval: 30000, // 30 seconds for global dashboard
-    autoRefresh: true,
+    autoRefresh: true;
   });
 };
 
 // Hook for revenue metrics comparison
 export const useRevenueComparison = ()
   primaryParams: UseRevenueAnalyticsParams,
-  comparisonParams: UseRevenueAnalyticsParams,
-) => {
+  comparisonParams: UseRevenueAnalyticsParams) => {,
   const primary = useRevenueAnalytics(primaryParams);
   const comparison = useRevenueAnalytics(comparisonParams);
-  const percentageChange = useCallback((current: number, previous: number) => {
-    if (previous === 0) return current > 0 ? 100 : 0;
-    return ((current - previous) / previous) * 100;
-  }, []);
+  const percentageChange = useCallback((current: number, previous: number) => {,
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return ((current - previous) / previous) * 100;
+}, []);
   const comparison_metrics = {
-    revenueChange: primary.metrics && comparison.metrics ,
-      ? percentageChange(primary.metrics.totalRevenue, comparison.metrics.totalRevenue)
-      : null,
-    transactionChange: primary.metrics && comparison.metrics,
-      ? percentageChange(primary.metrics.transactionCount, comparison.metrics.transactionCount)
-      : null,
-    customerChange: primary.metrics && comparison.metrics,
-      ? percentageChange(primary.metrics.uniqueCustomers, comparison.metrics.uniqueCustomers)
-      : null,
-    aovChange: primary.metrics && comparison.metrics,
-      ? percentageChange(primary.metrics.averageOrderValue, comparison.metrics.averageOrderValue)
-      : null
-  };
+  revenueChange: primary.metrics && comparison.metrics ,
+  ? percentageChange(primary.metrics.totalRevenue, comparison.metrics.totalRevenue)
+  : null,
+  transactionChange: primary.metrics && comparison.metrics,
+  ? percentageChange(primary.metrics.transactionCount, comparison.metrics.transactionCount)
+  : null,
+  customerChange: primary.metrics && comparison.metrics,
+  ? percentageChange(primary.metrics.uniqueCustomers, comparison.metrics.uniqueCustomers)
+  : null,
+  aovChange: primary.metrics && comparison.metrics,
+  ? percentageChange(primary.metrics.averageOrderValue, comparison.metrics.averageOrderValue)
+  : null,
+};
   return {
-    primary,
-    comparison,
-    comparison_metrics,
-    isLoading: primary.isLoading || comparison.isLoading,
-    error: primary.error || comparison.error,
-  };
+  primary,
+  comparison,
+  comparison_metrics,
+  isLoading: primary.isLoading || comparison.isLoading,
+  error: primary.error || comparison.error,
+};
 };

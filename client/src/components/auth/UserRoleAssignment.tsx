@@ -3,52 +3,47 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
 interface User {
-  id: string;
+  id: string;,
   email: string;
   displayName?: string;
   firstName?: string;
   lastName?: string;
   createdAt: string;
-}
-interface Role {
-  id: string;
+  interface Role {
+  id: string;,
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-}
-interface UserRole {
-  id: string;
+  interface UserRole {
+  id: string;,
   userId: string;
-  roleId: string;
+  roleId: string;,
   roleName: string;
-  roleScope: string;
+  roleScope: string;,
   grantedBy: string;
   grantedAt: string;
   expiresAt?: string;
   scopeContext?: Record<string, unknown>;
-}
-interface AssignRoleData {
-  userId: string;
+  interface AssignRoleData {
+  userId: string;,
   roleId: string;
   expiresAt?: string;
   scopeContext?: Record<string, unknown>;
-}
-
-export const UserRoleAssignment: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [roles, setRoles] = useState<Role[]>([]);
+  export const UserRoleAssignment: React.FC = () => {,
+  const [users, setUsers] = useState<User>([]);
+  const [roles, setRoles] = useState<Role>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
+  const [userRoles, setUserRoles] = useState<UserRole>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
   // Assignment form state
   const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({)
-    userId: '',
-    roleId: '',
-  });
+  userId: '',
+  roleId: '',
+});
   const [assignmentExpiry, setAssignmentExpiry] = useState('');
   const [assignmentContext, setAssignmentContext] = useState('');
   useEffect(() => {
@@ -59,93 +54,85 @@ export const UserRoleAssignment: React.FC = () => {
     setLoading(true);
     try {
       const response = await fetch('/api/auth/users?' + new URLSearchParams({)
-        ...(searchQuery && { search: searchQuery }),
-        limit: '50',
-      }), {
-        credentials: 'include',
-      });
+  ...(searchQuery && { search: searchQuery }),
+        limit: '50';
+  }), {
+  credentials: 'include',
+});
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
-      }
     } catch (error) {
-      console.error('Failed to load users:', error);
-    } finally {
+  console.error('Failed to load users:', error);
+} finally {
       setLoading(false);
-    }
   }, [searchQuery]);
   const loadRoles = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/rbac/roles?' + new URLSearchParams({)
-        ...(roleFilter && { scope: roleFilter })
+  ...(roleFilter && { scope: roleFilter })
       }), {
-        credentials: 'include',
-      });
+  credentials: 'include',
+});
       if (response.ok) {
         const data = await response.json();
         setRoles(data.roles || []);
-      }
     } catch (error) {
-      console.error('Failed to load roles:', error);
-    }
-  }, [roleFilter]);
+  console.error('Failed to load roles:', error);
+}, [roleFilter]);
   const loadUserRoles = async (userId: string) => {
     try {
       const response = await fetch(`/api/auth/rbac/users/${userId}/roles`, {)}
-        credentials: 'include',
-      });
+  },
+  credentials: 'include';
+  });
       if (response.ok) {
-        const data = await response.json();
-        // Transform roles to include assignment details
-        const userRolesWithDetails = data.roles.map((role: Error) => ({)
-          id: role.assignmentId || role.id,
-          userId,
-          roleId: role.id,
-          roleName: role.name,
-          roleScope: role.scope,
-          grantedBy: role.grantedBy,
-          grantedAt: role.grantedAt,
-          expiresAt: role.expiresAt,
-          scopeContext: role.scopeContext,
-        }));
+  const data = await response.json();
+  // Transform roles to include assignment details
+  const userRolesWithDetails = data.roles.map((role: Error) => ({,)
+  id: role.assignmentId || role.id,
+  userId,
+  roleId: role.id,
+  roleName: role.name,
+  roleScope: role.scope,
+  grantedBy: role.grantedBy,
+  grantedAt: role.grantedAt,
+  expiresAt: role.expiresAt,
+  scopeContext: role.scopeContext,
+}));
         setUserRoles(userRolesWithDetails);
-      }
     } catch (error) {
-      console.error('Failed to load user roles:', error);
-    }
-  };
+  console.error('Failed to load user roles:', error);
+};
   const handleUserSelect = (user: User) => {
     setSelectedUser(user);
     loadUserRoles(user.id);
   };
   const handleAssignRole = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedUser) return;
-    setLoading(true);
-    try {
-      const assignmentData: AssignRoleData = {
-        userId: selectedUser.id,
-        roleId: assignmentForm.roleId,
-      };
+  e.preventDefault();
+  if (!selectedUser) return;
+  setLoading(true);
+  try {
+  const assignmentData: AssignRoleData = {,
+  userId: selectedUser.id,
+  roleId: assignmentForm.roleId,
+};
       if (assignmentExpiry) {
         assignmentData.expiresAt = new Date(assignmentExpiry).toISOString();
-      }
       if (assignmentContext) {
         try {
           assignmentData.scopeContext = JSON.parse(assignmentContext);
         } catch {
-          alert('Invalid JSON in scope context');
-          return;
-        }
-      }
-      const response = await fetch('/api/auth/rbac/assign-role', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(assignmentData),
-      });
+  alert('Invalid JSON in scope context');
+  return;
+  const response = await fetch('/api/auth/rbac/assign-role', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
+        body: JSON.stringify(assignmentData);
+  });
       if (response.ok) {
         setShowAssignModal(false);
         setAssignmentForm({ userId: '', roleId: '' });
@@ -155,42 +142,37 @@ export const UserRoleAssignment: React.FC = () => {
       } else {
         const error = await response.json();
         alert(error.message || 'Failed to assign role');
-      }
     } catch (error) {
-      console.error('Failed to assign role:', error);
-      alert('Failed to assign role');
-    } finally {
+  console.error('Failed to assign role:', error);
+  alert('Failed to assign role');
+} finally {
       setLoading(false);
-    }
   };
   const handleRemoveRole = async (roleId: string) => {
-    if (!selectedUser) return;
-    if (!confirm('Are you sure you want to remove this role from the user?')) {
-      return;
-    }
-    try {
-      const response = await fetch('/api/auth/rbac/remove-role', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({),
-          userId: selectedUser.id,
-          roleId
-        })
+  if (!selectedUser) return;
+  if (!confirm('Are you sure you want to remove this role from the user?')) {
+  return;
+  try {
+  const response = await fetch('/api/auth/rbac/remove-role', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
+        body: JSON.stringify({,)
+  userId: selectedUser.id,
+  roleId
+}
       });
       if (response.ok) {
         loadUserRoles(selectedUser.id);
       } else {
         const error = await response.json();
         alert(error.message || 'Failed to remove role');
-      }
     } catch (error) {
-      console.error('Failed to remove role:', error);
-      alert('Failed to remove role');
-    }
-  };
+  console.error('Failed to remove role:', error);
+  alert('Failed to remove role');
+};
   const isRoleExpired = (expiresAt?: string) => {
     return expiresAt && new Date(expiresAt) < new Date();
   };
@@ -201,7 +183,7 @@ export const UserRoleAssignment: React.FC = () => {
     const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     return expiry > now && expiry < sevenDaysFromNow;
   };
-  return ()
+  return;
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -243,10 +225,10 @@ export const UserRoleAssignment: React.FC = () => {
                   key={user.id}
                   onClick={() => handleUserSelect(user)}
                   className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedUser?.id === user.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
+  selectedUser?.id === user.id
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:bg-gray-50',
+}`}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium">
@@ -318,10 +300,10 @@ export const UserRoleAssignment: React.FC = () => {
                               <h4 className="font-medium text-gray-900">{userRole.roleName}</h4>
                               <div className="flex items-center space-x-2 mt-1">
                                 <span className={`px-2 py-1 text-xs rounded-full ${
-                                  userRole.roleScope === 'global' ? 'bg-blue-100 text-blue-800' :
-                                    userRole.roleScope === 'organization' ? 'bg-green-100 text-green-800' :
-                                      'bg-yellow-100 text-yellow-800'
-                                }`}>
+  userRole.roleScope === 'global' ? 'bg-blue-100 text-blue-800' :,
+  userRole.roleScope === 'organization' ? 'bg-green-100 text-green-800' :,
+  'bg-yellow-100 text-yellow-800'
+}`}>
                                   {userRole.roleScope}
                                 </span>
                                 <span className="text-xs text-gray-500">
@@ -337,10 +319,10 @@ export const UserRoleAssignment: React.FC = () => {
                                       <Calendar className="w-3 h-3 text-gray-400" />
                                     )}
                                     <span className={`text-xs ${
-                                      isRoleExpired(userRole.expiresAt) ? 'text-red-600' :
-                                        isRoleExpiringSoon(userRole.expiresAt) ? 'text-yellow-600' :
-                                          'text-gray-500'
-                                    }`}>
+  isRoleExpired(userRole.expiresAt) ? 'text-red-600' :,
+  isRoleExpiringSoon(userRole.expiresAt) ? 'text-yellow-600' :,
+  'text-gray-500'
+}`}>
                                       {isRoleExpired(userRole.expiresAt) ? 'Expired' : 'Expires'}{' '}
                                       {new Date(userRole.expiresAt).toLocaleDateString()}
                                     </span>

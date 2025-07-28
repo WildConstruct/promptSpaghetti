@@ -29,30 +29,27 @@ const formatDate = (date: Date): string => {
     return `${diffDays} days ago`;}
   } else {
     return date.toLocaleDateString();
-  }
 };
 const getFileIcon = (item: unknown) => {
   if (item.type === 'folder') {
-    return item.isExpanded ? '📂' : '📁';
-  }
+  return item.isExpanded ? '📂' : '📁';
   const extension = item.extension?.toLowerCase();
   switch (extension) {
-  case 'psg':
-    return '🔗'; // Prompt graph file
-  case 'txt':
-    return '📄';
-  case 'md':
-    return '📝';
-  case 'json':
-    return '📋';
-  case 'png':
-  case 'jpg':
-  case 'jpeg':
-  case 'gif':
-    return '🖼️';
-  default:
-    return '📄';
-  }
+  case 'psg':,
+  return '🔗'; // Prompt graph file
+  case 'txt':,
+  return '📄';
+  case 'md':,
+  return '📝';
+  case 'json':,
+  return '📋';
+  case 'png':,
+  case 'jpg':,
+  case 'jpeg':,
+  case 'gif':,
+  return '🖼️';
+  default:,
+  return '📄';
 };
 
 export const FileItem: React.FC<FileItemProps> = ({)
@@ -70,11 +67,11 @@ export const FileItem: React.FC<FileItemProps> = ({)
   className = ''
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const isMultiSelect = e.ctrlKey || e.metaKey;
-    onSelect(item.id, isMultiSelect);
-  };
+  const handleClick = (e: React.MouseEvent) => {,
+  e.stopPropagation();
+  const isMultiSelect = e.ctrlKey || e.metaKey;
+  onSelect(item.id, isMultiSelect);
+};
   const handleDoubleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDoubleClick(item);
@@ -88,17 +85,16 @@ export const FileItem: React.FC<FileItemProps> = ({)
     e.stopPropagation();
     if (item.type === 'folder' && onToggleExpand) {
       onToggleExpand(item.id);
-    }
   };
   const handleDragStart = (e: React.DragEvent) => {
-    setIsDragging(true);
-    onDragStart?.(item);
-    // Set drag data
-    const dragData: DragDropData = {
-      sourceItems: [item],
-      targetPath: '',
-      operation: 'move',
-    };
+  setIsDragging(true);
+  onDragStart?.(item);
+  // Set drag data
+  const dragData: DragDropData = {,
+  sourceItems: [item],
+  targetPath: '',
+  operation: 'move',
+};
     e.dataTransfer.setData('application/json', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setDragImage(e.currentTarget, 0, 0);
@@ -109,36 +105,34 @@ export const FileItem: React.FC<FileItemProps> = ({)
   const handleDragOver = (e: React.DragEvent) => {
     if (item.type === 'folder') {
       onDragOver?.(item, e);
-    }
   };
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const dragDataStr = e.dataTransfer.getData('application/json');
-      if (dragDataStr) {
-        const dragData: DragDropData = JSON.parse(dragDataStr);
-        onDrop?.(item, dragData);
-      }
-    } catch (error) {
-      console.error('Failed to parse drag data:', error);
-    }
-  };
+  e.preventDefault();
+  e.stopPropagation();
+  try {
+  const dragDataStr = e.dataTransfer.getData('application/json');
+  if (dragDataStr) {
+  const dragData: DragDropData = JSON.parse(dragDataStr);
+  onDrop?.(item, dragData);
+} catch (error) {
+  console.error('Failed to parse drag data:', error);
+};
   const paddingLeft = level * 20 + 8;
-  return ()
+  return;
     <div
       className={`file-item ${isSelected ? 'selected' : ''} ${isDragging ? 'dragging' : ''} ${className}`}
       style={{
         display: 'flex',
         alignItems: 'center',
         padding: '4px 8px 4px 0',
-        paddingLeft: `${paddingLeft}px`,}
-        cursor: 'pointer',
+        paddingLeft: `${paddingLeft}px`}
+},
+  cursor: 'pointer',
         borderRadius: '4px',
         margin: '1px 4px',
         minHeight: '24px',
-        opacity: isDragging ? 0.5 : 1,
-      }}
+        opacity: isDragging ? 0.5 : 1;
+  }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
@@ -154,17 +148,17 @@ export const FileItem: React.FC<FileItemProps> = ({)
           className="expand-toggle"
           onClick={handleExpandToggle}
           style={{
-            width: '16px',
-            height: '16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: '4px',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            color: '#666',
-            userSelect: 'none',
-          }}
+  width: '16px',
+  height: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginRight: '4px',
+  fontSize: '12px',
+  fontWeight: 'bold',
+  color: '#666',
+  userSelect: 'none',
+}}
         >
           {isExpanded ? '▼' : '▶'}
         </div>
@@ -175,31 +169,31 @@ export const FileItem: React.FC<FileItemProps> = ({)
       <div
         className="file-item-icon"
         style={{
-          fontSize: '16px',
-          marginRight: '6px',
-          userSelect: 'none',
-        }}
+  fontSize: '16px',
+  marginRight: '6px',
+  userSelect: 'none',
+}}
       >
         {getFileIcon(item)}
       </div>
       {/* File Name */}
       <div className="file-item-text" style={{
-        flex: 1,
-        fontSize: '14px',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }}>
+  flex: 1,
+  fontSize: '14px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}}>
         {item.name}
       </div>
       {/* Metadata */}
       <div className="file-item-metadata" style={{
-        display: 'flex',
-        gap: '12px',
-        fontSize: '12px',
-        color: '#666',
-        marginLeft: '8px',
-      }}>
+  display: 'flex',
+  gap: '12px',
+  fontSize: '12px',
+  color: '#666',
+  marginLeft: '8px',
+}}>
         {/* Node count for .psg files */}
         {item.type === 'file' && item.metadata?.nodeCount && ()
           <div style={{ minWidth: '40px', textAlign: 'right' }}>
@@ -225,22 +219,22 @@ export const FileItem: React.FC<FileItemProps> = ({)
       </div>
       {/* Tags indicator */}
       {item.tags && item.tags.length > 0 && ()
-        <div style={{ 
-          marginLeft: '8px',
-          fontSize: '10px',
-          color: '#007bff',
-          opacity: 0.7,
-        }}>
+        <div style={{
+  marginLeft: '8px',
+  fontSize: '10px',
+  color: '#007bff',
+  opacity: 0.7,
+}}>
           {item.tags.length}🏷️
         </div>
       )}
       {/* Shared indicator */}
       {item.isShared && ()
         <div style={{
-          marginLeft: '4px',
-          fontSize: '12px',
-          color: '#28a745',
-        }}>
+  marginLeft: '4px',
+  fontSize: '12px',
+  color: '#28a745',
+}}>
           👥
         </div>
       )}

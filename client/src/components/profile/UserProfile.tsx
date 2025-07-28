@@ -5,9 +5,7 @@ interface UserProfileProps {
   onUpdateProfile?: (updates: Partial<User>) => void;
   onDeleteAccount?: () => void;
   readOnly?: boolean;
-}
-
-export const UserProfile: React.FC<UserProfileProps> = ({)
+  export const UserProfile: React.FC<UserProfileProps> = ({,)
   user,
   onUpdateProfile,
   onDeleteAccount,
@@ -15,23 +13,23 @@ export const UserProfile: React.FC<UserProfileProps> = ({)
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({)
-    name: user.name || '',
-    email: user.email || '',
-    bio: user.bio || '',
-  });
+  name: user.name || '',
+  email: user.email || '',
+  bio: user.bio || '',
+});
   const handleSave = () => {
     onUpdateProfile?.(formData);
     setIsEditing(false);
   };
   const handleCancel = () => {
-    setFormData({)
-      name: user.name || '',
-      email: user.email || '',
-      bio: user.bio || '',
-    });
+  setFormData({)
+  name: user.name || '',
+  email: user.email || '',
+  bio: user.bio || '',
+});
     setIsEditing(false);
   };
-  return ()
+  return;
     <div className="user-profile">
       <div className="profile-header">
         <h2>User Profile</h2>

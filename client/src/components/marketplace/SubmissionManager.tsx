@@ -3,36 +3,33 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './SubmissionManager.css';
 interface Submission {
-  id: string;
+  id: string;,
   template_id: string;
-  status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
+  status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';,
   version_number: number;
   submission_data: {,
-    title: string;
-    description: string;
-    price_cents: number;
-  };
-  validation_results: ValidationResult[];
+  title: string;,
+  description: string;
+  price_cents: number;
+};
+  validation_results: ValidationResult;
   review_comments?: string;
   review_score?: number;
   submitted_at?: string;
   reviewed_at?: string;
-  created_at: string;
+  created_at: string;,
   updated_at: string;
-}
 interface ValidationResult {
-  severity: 'error' | 'warning' | 'info';
+  severity: 'error' | 'warning' | 'info';,
   message: string;
-}
-interface SubmissionStats {
-  total_submissions: number;
+  interface SubmissionStats {
+  total_submissions: number;,
   approved_submissions: number;
-  rejected_submissions: number;
+  rejected_submissions: number;,
   pending_submissions: number;
-  avg_review_score: number;
+  avg_review_score: number;,
   avg_review_time_hours: number;
-}
-const STATUS_COLORS = {
+  const STATUS_COLORS = {
   draft: '#6b7280',
   submitted: '#3b82f6',
   under_review: '#f59e0b',
@@ -50,7 +47,7 @@ const STATUS_LABELS = {
 };
 
 export const SubmissionManager: React.FC = () => {
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [submissions, setSubmissions] = useState<Submission>([]);
   const [stats, setStats] = useState<SubmissionStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,109 +59,96 @@ export const SubmissionManager: React.FC = () => {
   const fetchSubmissions = async () => {
     try {
       const response = await fetch('/api/marketplace/submissions', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch submissions');
-      }
       const data = await response.json();
       setSubmissions(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch submissions');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch submissions');
+} finally {
       setIsLoading(false);
-    }
   };
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/marketplace/submissions/stats', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setStats(data);
-      }
     } catch (err) {
-      console.error('Failed to fetch stats:', err);
-    }
-  };
+  console.error('Failed to fetch stats:', err);
+};
   const handleDeleteSubmission = async (id: string) => {
     if (!confirm('Are you sure you want to delete this submission?')) {
       return;
-    }
     try {
       const response = await fetch(`/api/marketplace/submissions/${id}`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (response.ok) {
         setSubmissions(submissions.filter(s => s.id !== id));
-      }
     } catch (err) {
-      console.error('Failed to delete submission:', err);
-    }
-  };
+  console.error('Failed to delete submission:', err);
+};
   const handleResubmit = async (id: string) => {
     try {
       const response = await fetch(`/api/marketplace/submissions/${id}/submit`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (response.ok) {
         fetchSubmissions();
-      }
     } catch (err) {
-      console.error('Failed to resubmit:', err);
-    }
-  };
+  console.error('Failed to resubmit:', err);
+};
   const getFilteredSubmissions = () => {
-    switch (selectedTab) {
-    case 'drafts':
-      return submissions.filter(s => s.status === 'draft');
-    case 'submitted':
-      return submissions.filter(s => s.status === 'submitted' || s.status === 'under_review');
-    case 'approved':
-      return submissions.filter(s => s.status === 'approved');
-    case 'rejected':
-      return submissions.filter(s => s.status === 'rejected' || s.status === 'changes_requested');
-    default:
-      return submissions;
-    }
-  };
-  const getValidationSummary = (validation: ValidationResult[]) => {
+  switch (selectedTab) {
+  case 'drafts':,
+  return submissions.filter(s => s.status === 'draft');
+  case 'submitted':,
+  return submissions.filter(s => s.status === 'submitted' || s.status === 'under_review');
+  case 'approved':,
+  return submissions.filter(s => s.status === 'approved');
+  case 'rejected':,
+  return submissions.filter(s => s.status === 'rejected' || s.status === 'changes_requested');
+  default:,
+  return submissions;
+};
+  const getValidationSummary = (validation: ValidationResult) => {
     const errors = validation.filter(v => v.severity === 'error').length;
     const warnings = validation.filter(v => v.severity === 'warning').length;
     return { errors, warnings };
   };
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {)
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
   };
   const formatPrice = (cents: number) => {
     return cents === 0 ? 'Free' : `$${(cents / 100).toFixed(2)}`;}
   };
   if (isLoading) {
-    return ()
+    return;
       <div className="submission-manager loading">
         <div className="loading-spinner">Loading submissions...</div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="submission-manager error">
         <div className="error-message">
           <h3>Error loading submissions</h3>
@@ -173,9 +157,8 @@ export const SubmissionManager: React.FC = () => {
         </div>
       </div>
     );
-  }
   const filteredSubmissions = getFilteredSubmissions();
-  return ()
+  return;
     <div className="submission-manager">
       <div className="manager-header">
         <h2>My Template Submissions</h2>
@@ -250,7 +233,6 @@ export const SubmissionManager: React.FC = () => {
             {selectedTab === 'all' 
               ? 'You haven\'t submitted any templates yet.' 
               : `No ${selectedTab} submissions found.`}
-            }
           </p>
           <Link to="/marketplace/submit" className="btn-primary">
             Submit Your First Template
@@ -259,8 +241,8 @@ export const SubmissionManager: React.FC = () => {
       ) : ()
         <div className="submissions-list">
           {filteredSubmissions.map(submission => {)
-            const validation = getValidationSummary(submission.validation_results);
-            return ()
+  const validation = getValidationSummary(submission.validation_results);
+            return;
               <div key={submission.id} className="submission-card">
                 <div className="submission-header">
                   <div className="submission-info">

@@ -41,7 +41,6 @@ export interface QualityTrendsChartProps {
   className?: string;
   onTimeRangeChange?: (timeRange: string) => void;
 }
-
 export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   trends,
   compact = false,
@@ -54,20 +53,19 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   // Transform trends data for chart
   const chartData = useMemo(() => {
     if (!trends) return [];
-    const getDataForRange = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }) => {
-      switch (selectedTimeRange) {
-      case 'daily':
-        return trendData.daily || [];
-      case 'weekly':
-        return trendData.weekly || [];
-      case 'monthly':
-        return trendData.monthly || [];
-      default:
-        return trendData.daily || [];
-      }
-    };
+    const getDataForRange = (trendData: { daily?: number; weekly?: number; monthly?: number }) => {
+  switch (selectedTimeRange) {
+  case 'daily':,
+  return trendData.daily || [];
+  case 'weekly':,
+  return trendData.weekly || [];
+  case 'monthly':,
+  return trendData.monthly || [];
+  default:,
+  return trendData.daily || [];
+};
     // Get the maximum length to ensure all series have the same number of points
-    const maxLength = Math.max(;)
+    const maxLength = Math.max(;);
       getDataForRange(trends.overall).length,
       getDataForRange(trends.testCoverage).length,
       getDataForRange(trends.codeQuality).length,
@@ -77,7 +75,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
       getDataForRange(trends.buildHealth).length
     );
     return Array.from({ length: maxLength }, (_, index) => {
-      const getValueAtIndex = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }, idx: number) => {
+      const getValueAtIndex = (trendData: { daily?: number; weekly?: number; monthly?: number }, idx: number) => {
         const data = getDataForRange(trendData);
         return data[idx] || data[data.length - 1] || 0;
       };
@@ -89,60 +87,55 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
           const daysAgo = maxLength - idx - 1;
           const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
           return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
         case 'weekly': {
           const weeksAgo = maxLength - idx - 1;
           const weekDate = new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000);
           return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;}
-        }
         case 'monthly': {
           const monthsAgo = maxLength - idx - 1;
           const monthDate = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
           return monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-        }
         default:
           return `Point ${idx + 1}`;}
-        }
       };
       return {
-        date: getDateLabel(index),
-        overall: Math.round(getValueAtIndex(trends.overall, index)),
-        testCoverage: Math.round(getValueAtIndex(trends.testCoverage, index)),
-        codeQuality: Math.round(getValueAtIndex(trends.codeQuality, index)),
-        performance: Math.round(getValueAtIndex(trends.performance, index)),
-        security: Math.round(getValueAtIndex(trends.security, index)),
-        documentation: Math.round(getValueAtIndex(trends.documentation, index)),
-        buildHealth: Math.round(getValueAtIndex(trends.buildHealth, index))
-      };
+  date: getDateLabel(index),
+  overall: Math.round(getValueAtIndex(trends.overall, index)),
+  testCoverage: Math.round(getValueAtIndex(trends.testCoverage, index)),
+  codeQuality: Math.round(getValueAtIndex(trends.codeQuality, index)),
+  performance: Math.round(getValueAtIndex(trends.performance, index)),
+  security: Math.round(getValueAtIndex(trends.security, index)),
+  documentation: Math.round(getValueAtIndex(trends.documentation, index)),
+  buildHealth: Math.round(getValueAtIndex(trends.buildHealth, index)),
+};
     });
   }, [trends, selectedTimeRange]);
   // Chart color configuration
   const chartColors = {
-    overall: '#3b82f6',
-    testCoverage: '#06b6d4',
-    codeQuality: '#8b5cf6',
-    performance: '#10b981',
-    security: '#ef4444',
-    documentation: '#6366f1',
-    buildHealth: '#f59e0b',
-  };
+  overall: '#3b82f6',
+  testCoverage: '#06b6d4',
+  codeQuality: '#8b5cf6',
+  performance: '#10b981',
+  security: '#ef4444',
+  documentation: '#6366f1',
+  buildHealth: '#f59e0b',
+};
   // Get chart lines based on selected metric
   const getChartLines = () => {
-    if (selectedMetric === 'all') {
-      return Object.entries(chartColors).map(([key, color]) => ({)
-        key,
-        color,
-        name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')
-      }));
+  if (selectedMetric === 'all') {
+  return Object.entries(chartColors).map(([key, color]) => ({)
+  key,
+  color,
+  name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1'),
+}));
     } else if (selectedMetric === 'overall') {
       return [{ key: 'overall', color: chartColors.overall, name: 'Overall' }];
     } else {
-      return [{ 
-        key: selectedMetric, 
-        color: chartColors[selectedMetric as keyof typeof chartColors], 
-        name: selectedMetric.charAt(0).toUpperCase() + selectedMetric.slice(1).replace(/([A-Z])/g, ' $1')
-      }];
-    }
+  return [{
+  key: selectedMetric,
+  color: chartColors[selectedMetric as keyof typeof chartColors],
+  name: selectedMetric.charAt(0).toUpperCase() + selectedMetric.slice(1).replace(/([A-Z])/g, ' $1'),
+}];
   };
   // Get trend direction for a metric
   const getTrendDirection = (metricKey: string) => {
@@ -159,21 +152,19 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
     setSelectedTimeRange(timeRange as 'daily' | 'weekly' | 'monthly');
     if (onTimeRangeChange) {
       onTimeRangeChange(timeRange);
-    }
   };
   // Custom tooltip
   interface TooltipEntry {
     name?: string;
     value?: number | string;
     color?: string;
-  }
-  const CustomTooltip = (;)
+  const CustomTooltip = (;);
     { active,
     payload,
-    label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
+    label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {
-      return ()
+      return;
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
           {payload.map((entry: TooltipEntry, index: number) => ()
@@ -190,11 +181,10 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
           ))}
         </div>
       );
-    }
     return null;
   };
   if (!trends || chartData.length === 0) {
-    return ()
+    return;
       <div className={`quality-trends-chart ${className}`}>}
         <Card>
           <CardContent className="flex items-center justify-center h-64">
@@ -211,9 +201,8 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
         </Card>
       </div>
     );
-  }
   if (compact) {
-    return ()
+    return;
       <div className={`quality-trends-chart-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-2">
@@ -244,8 +233,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`quality-trends-chart ${className}`}>}
       <Card>
         <CardHeader>
@@ -308,7 +296,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
             {Object.entries(chartColors).map(([key, color]) => {
               const direction = getTrendDirection(key);
               const velocity = getTrendVelocity(key);
-              return ()
+              return;
                 <div key={key} className="text-center">
                   <div className="flex items-center justify-center space-x-1 mb-1">
                     <div 

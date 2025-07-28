@@ -2,13 +2,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './SearchBar.css';
+
 interface EnhancedSearchBarProps {
-  value: string;
+  value: string;,
   onChange: (value: string) => void;
   onSubmit?: () => void;
   placeholder?: string;
   className?: string;
-}
 
 export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
@@ -21,30 +21,29 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       setSuggestions([]);
       setShowSuggestions(false);
       return;
-    }
+
     setLoading(true);
     try {
       const newSuggestions = await getSearchSuggestions(query);
       setSuggestions(newSuggestions);
       setShowSuggestions(newSuggestions.length > 0);
     } catch (error) {
-      console.error('Failed to fetch suggestions:', error);
-      setSuggestions([]);
-      setShowSuggestions(false);
-    } finally {
+  console.error('Failed to fetch suggestions:', error);
+  setSuggestions([]);
+  setShowSuggestions(false);
+} finally {
       setLoading(false);
-    }
+
   }, [getSearchSuggestions]);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if ()
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target as Node) &&
-        !inputRef.current?.contains(event.target as Node)
-        setShowSuggestions(false);
-        setSelectedSuggestion(-1);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  if ();
+  suggestionsRef.current &&
+  !suggestionsRef.current.contains(event.target as Node) &&
+  !inputRef.current?.contains(event.target as Node)
+  setShowSuggestions(false);
+  setSelectedSuggestion(-1);
+};
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -63,43 +62,37 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const handleInputFocus = () => {
     if (suggestions.length > 0 && value.length >= 2) {
       setShowSuggestions(true);
-    }
+
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions) {
-      if (e.key === 'Enter') {
-        handleSubmit();
-      }
-      return;
-    }
-    switch (e.key) {
-    case 'ArrowDown':
-      e.preventDefault();
-      setSelectedSuggestion(prev => )
-        prev < suggestions.length - 1 ? prev + 1 : 0
-      );
-      break;
-    case 'ArrowUp':
-      e.preventDefault();
-      setSelectedSuggestion(prev => )
-        prev > 0 ? prev - 1 : suggestions.length - 1
-      );
-      break;
-    case 'Enter':
-      e.preventDefault();
-      if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
-        handleSuggestionSelect(suggestions[selectedSuggestion]);
-      } else {
-        handleSubmit();
-      }
-      break;
-    case 'Escape':
-      setShowSuggestions(false);
-      setSelectedSuggestion(-1);
-      inputRef.current?.blur();
-      break;
-    }
-  };
+  if (!showSuggestions) {
+  if (e.key === 'Enter') {
+  handleSubmit();
+  return;
+  switch (e.key) {
+  case 'ArrowDown':,
+  e.preventDefault();
+  setSelectedSuggestion(prev => )
+  prev < suggestions.length - 1 ? prev + 1 : 0);
+  break;
+  case 'ArrowUp':,
+  e.preventDefault();
+  setSelectedSuggestion(prev => )
+  prev > 0 ? prev - 1 : suggestions.length - 1);
+  break;
+  case 'Enter':,
+  e.preventDefault();
+  if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
+  handleSuggestionSelect(suggestions[selectedSuggestion]);
+} else {
+  handleSubmit();
+  break;
+  case 'Escape':,
+  setShowSuggestions(false);
+  setSelectedSuggestion(-1);
+  inputRef.current?.blur();
+  break;
+};
   const handleSuggestionSelect = (suggestion: string) => {
     onChange(suggestion);
     setShowSuggestions(false);
@@ -118,7 +111,7 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
     setSuggestions([]);
     inputRef.current?.focus();
   };
-  return ()
+  return;
     <div className={`search-bar enhanced-search-bar ${className}`}>}
       <div className="search-input-container">
         <div className="search-icon">
@@ -191,8 +184,8 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
               key={suggestion}
               onClick={() => handleSuggestionSelect(suggestion)}
               className={`suggestion-item ${
-                index === selectedSuggestion ? 'selected' : ''
-              }`}
+  index === selectedSuggestion ? 'selected' : '',
+}`}
               type="button"
               role="option"
               aria-selected={index === selectedSuggestion}
@@ -232,7 +225,7 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
 };
 
 // Debounce utility function - commented out as unused
-// function debounce<T extends (...args: unknown[]) => unknown>(
+// function debounce<T extends (...args: unknown) => unknown>(
 //   func: T,
 //   wait: number
 // ): (...args: Parameters<T>) => void {

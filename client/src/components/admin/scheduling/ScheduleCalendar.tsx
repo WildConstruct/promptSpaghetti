@@ -24,33 +24,31 @@ import {
   Add as AddIcon
 } from '@mui/icons-material';
 interface Schedule {
-  id: string;
+  id: string;,
   toggleId: string;
-  toggleName: string;
+  toggleName: string;,
   name: string;
   description?: string;
-  type: 'one_time' | 'recurring' | 'conditional';
+  type: 'one_time' | 'recurring' | 'conditional';,
   action: string;
   startTime: Date;
   endTime?: Date;
-  timezone: string;
+  timezone: string;,
   status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';
   enabled: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
-  executionCount: number;
+  executionCount: number;,
   failureCount: number;
-  priority: number;
+  priority: number;,
   createdBy: string;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
-}
-interface ScheduleCalendarProps {
-  schedules: Schedule[];
-  onScheduleClick: (schedule: Schedule) => void;
+  interface ScheduleCalendarProps {
+  schedules: Schedule;,
+  onScheduleClick: (schedule: Schedule) => void;,
   onCreateSchedule: () => void;
-}
-const STATUS_COLORS = {
+  const STATUS_COLORS = {
   pending: '#ff9800',
   active: '#4caf50',
   completed: '#2196f3',
@@ -64,7 +62,7 @@ const MONTHS = [;
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
+export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   // Get first day of the month and calculate calendar grid
@@ -72,28 +70,26 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
   const startDate = new Date(firstDayOfMonth);
   startDate.setDate(startDate.getDate() - firstDayOfMonth.getDay());
   // Generate calendar days
-  const calendarDays: Date[] = [];
+  const calendarDays: Date = [];
   const currentCalendarDate = new Date(startDate);
   for (let i = 0; i < 42; i++) { // 6 weeks × 7 days
     calendarDays.push(new Date(currentCalendarDate));
     currentCalendarDate.setDate(currentCalendarDate.getDate() + 1);
-  }
   const navigateMonth = useCallback((direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate);
     if (direction === 'prev') {
       newDate.setMonth(newDate.getMonth() - 1);
     } else {
       newDate.setMonth(newDate.getMonth() + 1);
-    }
     setCurrentDate(newDate);
   }, [currentDate]);
   const goToToday = useCallback(() => {
     setCurrentDate(new Date());
   }, []);
-  const getSchedulesForDate = useCallback((date: Date): Schedule[] => {
+  const getSchedulesForDate = useCallback((date: Date): Schedule => {
     return schedules.filter(schedule => {)
-      const scheduleDate = new Date(schedule.startTime);
-      return ()
+  const scheduleDate = new Date(schedule.startTime);
+      return;
         scheduleDate.getDate() === date.getDate() &&
         scheduleDate.getMonth() === date.getMonth() &&
         scheduleDate.getFullYear() === date.getFullYear()
@@ -105,11 +101,10 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
       );
     });
   }, [schedules]);
-  const handleDayClick = (date: Date, daySchedules: Schedule[]) => {
+  const handleDayClick = (date: Date, daySchedules: Schedule) => {
     if (daySchedules.length === 0) {
       // No schedules, potentially create new one
       return;
-    }
     if (daySchedules.length === 1) {
       onScheduleClick(daySchedules[0]);
     } else {
@@ -119,7 +114,6 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
       // Find the day cell to anchor popover
       const dayElement = document.querySelector(`[data-date="${date.toISOString().split('T')[0]}"]`);}
       setAnchorEl(dayElement as HTMLElement);
-    }
   };
   const handleClosePopover = () => {
     setAnchorEl(null);
@@ -128,7 +122,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
   };
   const isToday = (date: Date): boolean => {
     const today = new Date();
-    return ()
+    return;
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear()
@@ -141,22 +135,21 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
     const daySchedules = getSchedulesForDate(date);
     const isCurrentMonthDay = isCurrentMonth(date);
     const isTodayDate = isToday(date);
-    return ()
+    return;
       <Box
         key={date.toISOString()}
         data-date={date.toISOString().split('T')[0]}
         sx={{
-          minHeight: 120,
-          p: 1,
-          border: '1px solid',
-          borderColor: 'divider',
-          cursor: 'pointer',
-          bgcolor: isTodayDate ? 'primary.50' : 'background.paper',
-          opacity: isCurrentMonthDay ? 1 : 0.5,
-          '&:hover': {
-            bgcolor: isTodayDate ? 'primary.100' : 'action.hover',
-          }
-        }}
+  minHeight: 120,
+  p: 1,
+  border: '1px solid',
+  borderColor: 'divider',
+  cursor: 'pointer',
+  bgcolor: isTodayDate ? 'primary.50' : 'background.paper',
+  opacity: isCurrentMonthDay ? 1 : 0.5,
+  '&:hover': {,
+  bgcolor: isTodayDate ? 'primary.100' : 'action.hover',
+}}
         onClick={() => handleDayClick(date, daySchedules)}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
@@ -184,14 +177,13 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
                 label={schedule.name}
                 size="small"
                 sx={{
-                  fontSize: '0.7rem',
-                  height: 18,
-                  bgcolor: STATUS_COLORS[schedule.status],
-                  color: 'white',
-                  '& .MuiChip-label': {
-                    px: 1,
-                  }
-                }}
+  fontSize: '0.7rem',
+  height: 18,
+  bgcolor: STATUS_COLORS[schedule.status],
+  color: 'white',
+  '& .MuiChip-label': {,
+  px: 1,
+}}
               />
             </Tooltip>
           ))}
@@ -204,7 +196,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
       </Box>
     );
   };
-  return ()
+  return;
     <Box>
       {/* Calendar Header */}
       <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
@@ -266,13 +258,13 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
         anchorEl={anchorEl}
         onClose={handleClosePopover}
         anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'center',
-        }}
+  vertical: 'center',
+  horizontal: 'center',
+}}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
+  vertical: 'top',
+  horizontal: 'center',
+}}
       >
         <Card sx={{ minWidth: 300, maxWidth: 400 }}>
           <CardContent>
@@ -289,12 +281,12 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
                     handleClosePopover();
                   }}
                   sx={{
-                    borderLeft: 4,
-                    borderLeftColor: STATUS_COLORS[schedule.status],
-                    mb: 1,
-                    borderRadius: 1,
-                    bgcolor: 'grey.50',
-                  }}
+  borderLeft: 4,
+  borderLeftColor: STATUS_COLORS[schedule.status],
+  mb: 1,
+  borderRadius: 1,
+  bgcolor: 'grey.50',
+}}
                 >
                   <ListItemText
                     primary={schedule.name}
@@ -307,7 +299,6 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
                           {schedule.startTime.toLocaleTimeString()} • {schedule.status}
                         </Typography>
                       </Box>
-                    }
                   />
                 </ListItem>
               ))}

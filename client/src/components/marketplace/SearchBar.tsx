@@ -2,16 +2,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
 interface SearchBarProps {
-  value: string;
+  value: string;,
   onChange: (value: string) => void;
   onSubmit?: () => void;
   placeholder?: string;
-  suggestions?: string[];
+  suggestions?: string;
   loading?: boolean;
   className?: string;
-}
-
-export const SearchBar: React.FC<SearchBarProps> = ({)
+  export const SearchBar: React.FC<SearchBarProps> = ({,)
   value,
   onChange,
   onSubmit,
@@ -25,15 +23,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if ()
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target as Node) &&
-        !inputRef.current?.contains(event.target as Node)
-        setShowSuggestions(false);
-        setSelectedSuggestion(-1);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  if ();
+  suggestionsRef.current &&
+  !suggestionsRef.current.contains(event.target as Node) &&
+  !inputRef.current?.contains(event.target as Node)
+  setShowSuggestions(false);
+  setSelectedSuggestion(-1);
+};
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -46,43 +43,36 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
   const handleInputFocus = () => {
     if (suggestions.length > 0 && value.length > 0) {
       setShowSuggestions(true);
-    }
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions) {
-      if (e.key === 'Enter') {
-        handleSubmit();
-      }
-      return;
-    }
-    switch (e.key) {
-    case 'ArrowDown':
-      e.preventDefault();
-      setSelectedSuggestion(prev => )
-        prev < suggestions.length - 1 ? prev + 1 : 0
-      );
-      break;
-    case 'ArrowUp':
-      e.preventDefault();
-      setSelectedSuggestion(prev => )
-        prev > 0 ? prev - 1 : suggestions.length - 1
-      );
-      break;
-    case 'Enter':
-      e.preventDefault();
-      if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
-        handleSuggestionSelect(suggestions[selectedSuggestion]);
-      } else {
-        handleSubmit();
-      }
-      break;
-    case 'Escape':
-      setShowSuggestions(false);
-      setSelectedSuggestion(-1);
-      inputRef.current?.blur();
-      break;
-    }
-  };
+  if (!showSuggestions) {
+  if (e.key === 'Enter') {
+  handleSubmit();
+  return;
+  switch (e.key) {
+  case 'ArrowDown':,
+  e.preventDefault();
+  setSelectedSuggestion(prev => )
+  prev < suggestions.length - 1 ? prev + 1 : 0);
+  break;
+  case 'ArrowUp':,
+  e.preventDefault();
+  setSelectedSuggestion(prev => )
+  prev > 0 ? prev - 1 : suggestions.length - 1);
+  break;
+  case 'Enter':,
+  e.preventDefault();
+  if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
+  handleSuggestionSelect(suggestions[selectedSuggestion]);
+} else {
+  handleSubmit();
+  break;
+  case 'Escape':,
+  setShowSuggestions(false);
+  setSelectedSuggestion(-1);
+  inputRef.current?.blur();
+  break;
+};
   const handleSuggestionSelect = (suggestion: string) => {
     onChange(suggestion);
     setShowSuggestions(false);
@@ -100,7 +90,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
     setSelectedSuggestion(-1);
     inputRef.current?.focus();
   };
-  return ()
+  return;
     <div className={`search-bar ${className}`}>}
       <div className="search-input-container">
         <div className="search-icon">
@@ -166,8 +156,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({)
               key={suggestion}
               onClick={() => handleSuggestionSelect(suggestion)}
               className={`suggestion-item ${
-                index === selectedSuggestion ? 'selected' : ''
-              }`}
+  index === selectedSuggestion ? 'selected' : '',
+}`}
               type="button"
             >
               <div className="suggestion-icon">

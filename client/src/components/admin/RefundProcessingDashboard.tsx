@@ -35,56 +35,53 @@ import {
   MessageCircle
 } from 'lucide-react';
 interface RefundRequest {
-  refundId: string;
+  refundId: string;,
   purchaseId: string;
-  requesterId: string;
+  requesterId: string;,
   requesterType: 'customer' | 'admin' | 'system';
-  reason: string;
+  reason: string;,
   amount: number;
   refundType: 'full' | 'partial';
   description?: string;
-  status: string;
+  status: string;,
   priority: 'low' | 'medium' | 'high' | 'urgent';
   assignedTo?: string;
   originalPurchase: {,
-    customerId: string;
-    creatorId: string;
-    templateId: string;
-    originalAmount: number;
-    purchaseDate: Date;
-  };
-  createdAt: Date;
+  customerId: string;,
+  creatorId: string;
+  templateId: string;,
+  originalAmount: number;
+  purchaseDate: Date;
+};
+  createdAt: Date;,
   updatedAt: Date;
   dueDate?: Date;
   approvedBy?: string;
-  workflowHistory: unknown[];
-  notes: unknown[];
-}
+  workflowHistory: unknown;,
+  notes: unknown;
 interface RefundStats {
-  totalRequests: number;
+  totalRequests: number;,
   pendingRequests: number;
-  approvedToday: number;
+  approvedToday: number;,
   totalRefunded: number;
-  averageProcessingTime: number;
+  averageProcessingTime: number;,
   byReason: Record<string, number>;
   byStatus: Record<string, number>;
   creatorImpact: {,
-    creatorsAffected: number;
-    totalCreatorDeductions: number;
-    avgDeductionAmount: number;
-  };
+  creatorsAffected: number;,
+  totalCreatorDeductions: number;
+  avgDeductionAmount: number;
+};
   performance: {,
-    approvalRate: number;
-    avgResolutionTime: number;
-    escalationRate: number;
-    customerSatisfaction: number;
-  };
-}
+  approvalRate: number;
+  avgResolutionTime: number;,
+  escalationRate: number;
+  customerSatisfaction: number;
+};
 
 export interface RefundProcessingDashboardProps {
   className?: string;
 }
-
 export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({)
   className
 }) => {
@@ -92,23 +89,23 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   const [error, setError] = useState<string | null>(null);
   // Data state
   const [stats, setStats] = useState<RefundStats | null>(null);
-  const [refunds, setRefunds] = useState<RefundRequest[]>([]);
-  const [pendingApprovals, setPendingApprovals] = useState<RefundRequest[]>([]);
+  const [refunds, setRefunds] = useState<RefundRequest>([]);
+  const [pendingApprovals, setPendingApprovals] = useState<RefundRequest>([]);
   // UI state
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
-  const [, setSelectedReason] = useState('');
+  const [ setSelectedReason] = useState('');
   const [dateRange, setDateRange] = useState('7d');
   // Manual refund state
   const [manualRefundData, setManualRefundData] = useState({)
-    purchaseId: '',
-    reason: '',
-    amount: '',
-    description: '',
-    priority: 'medium',
-  });
+  purchaseId: '',
+  reason: '',
+  amount: '',
+  description: '',
+  priority: 'medium',
+});
   // Bulk operations
   const [selectedRefunds, setSelectedRefunds] = useState<Set<string>>(new Set());
   const [bulkAction, setBulkAction] = useState('');
@@ -117,7 +114,8 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
     try {
       setLoading(true);
       const [statsResponse, refundsResponse, approvalsResponse] = await Promise.all([)
-        fetch(`/api/admin/refunds/stats?dateRange=${dateRange}`),}
+        fetch(`/api/admin/refunds/stats?dateRange=${dateRange}`)}
+}
         fetch('/api/admin/refunds?limit=50'),
         fetch('/api/admin/refunds?status=pending&status=reviewing&limit=20')
       ]);
@@ -128,17 +126,17 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       if (refundsResult.success) setRefunds(refundsResult.data);
       if (approvalsResult.success) setPendingApprovals(approvalsResult.data);
     } catch (err) {
-      setError('Failed to load refund data');
-      console.error('Error loading refund data:', err);
-    } finally {
+  setError('Failed to load refund data');
+  console.error('Error loading refund data:', err);
+} finally {
       setLoading(false);
-    }
   }, [dateRange, setLoading, setStats, setRefunds, setPendingApprovals, setError]);
   // Approve refund
   const approveRefund = async (refundId: string, notes?: string) => {
     try {
       const response = await fetch(`/api/admin/refunds/${refundId}/approve`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes })
       });
@@ -147,17 +145,16 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       } else {
         const error = await response.json();
         setError(error.error || 'Failed to approve refund');
-      }
     } catch (err) {
-      setError('Error approving refund');
-      console.error('Error approving refund:', err);
-    }
-  };
+  setError('Error approving refund');
+  console.error('Error approving refund:', err);
+};
   // Reject refund
   const rejectRefund = async (refundId: string, reason: string) => {
     try {
       const response = await fetch(`/api/admin/refunds/${refundId}/reject`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
@@ -166,47 +163,42 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       } else {
         const error = await response.json();
         setError(error.error || 'Failed to reject refund');
-      }
     } catch (err) {
-      setError('Error rejecting refund');
-      console.error('Error rejecting refund:', err);
-    }
-  };
+  setError('Error rejecting refund');
+  console.error('Error rejecting refund:', err);
+};
   // Create manual refund
   const createManualRefund = async () => {
     try {
       if (!manualRefundData.purchaseId || !manualRefundData.reason) {
         setError('Purchase ID and reason are required');
         return;
-      }
       const response = await fetch('/api/admin/refunds', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({),
-          ...manualRefundData,
-          amount: manualRefundData.amount ? parseInt(manualRefundData.amount) : undefined,
-          requesterType: 'admin',
-        })
+  ...manualRefundData,
+  amount: manualRefundData.amount ? parseInt(manualRefundData.amount) : undefined,
+  requesterType: 'admin',
+}
       });
       if (response.ok) {
-        // Clear form
-        setManualRefundData({)
-          purchaseId: '',
-          reason: '',
-          amount: '',
-          description: '',
-          priority: 'medium',
-        });
+  // Clear form
+  setManualRefundData({)
+  purchaseId: '',
+  reason: '',
+  amount: '',
+  description: '',
+  priority: 'medium',
+});
         await loadRefundData();
       } else {
         const error = await response.json();
         setError(error.error || 'Failed to create refund');
-      }
     } catch (err) {
-      setError('Error creating refund');
-      console.error('Error creating refund:', err);
-    }
-  };
+  setError('Error creating refund');
+  console.error('Error creating refund:', err);
+};
   // Bulk operations
   const executeBulkAction = async () => {
     if (selectedRefunds.size === 0 || !bulkAction) return;
@@ -214,23 +206,22 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       const refundIds = Array.from(selectedRefunds);
       const endpoint = bulkAction === 'approve' ? 'bulk-approve' : 'bulk-reject';
       const response = await fetch(`/api/admin/refunds/${endpoint}`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ),
           refundIds,
-          reason: bulkAction === 'reject' ? 'Bulk rejection' : undefined,
-        })
+          reason: bulkAction === 'reject' ? 'Bulk rejection' : undefined;
+  }
       });
       if (response.ok) {
         setSelectedRefunds(new Set());
         setBulkAction('');
         await loadRefundData();
-      }
     } catch (err) {
-      setError('Error executing bulk action');
-      console.error('Error with bulk action:', err);
-    }
-  };
+  setError('Error executing bulk action');
+  console.error('Error with bulk action:', err);
+};
   useEffect(() => {
     loadRefundData();
     // Auto-refresh every 30 seconds
@@ -240,34 +231,31 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   // Helper functions
   const formatAmount = (cents: number) => `$${(cents / 100).toFixed(2)}`;}
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'completed': return 'bg-green-100 text-green-800';
-    case 'approved': return 'bg-blue-100 text-blue-800';
-    case 'pending': return 'bg-yellow-100 text-yellow-800';
-    case 'rejected': return 'bg-red-100 text-red-800';
-    case 'failed': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'completed': return 'bg-green-100 text-green-800';
+  case 'approved': return 'bg-blue-100 text-blue-800';
+  case 'pending': return 'bg-yellow-100 text-yellow-800';
+  case 'rejected': return 'bg-red-100 text-red-800';
+  case 'failed': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getPriorityColor = (priority: string) => {
-    switch (priority) {
-    case 'urgent': return 'bg-red-100 text-red-800';
-    case 'high': return 'bg-orange-100 text-orange-800';
-    case 'medium': return 'bg-blue-100 text-blue-800';
-    case 'low': return 'bg-gray-100 text-gray-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (priority) {
+  case 'urgent': return 'bg-red-100 text-red-800';
+  case 'high': return 'bg-orange-100 text-orange-800';
+  case 'medium': return 'bg-blue-100 text-blue-800';
+  case 'low': return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   if (loading && !stats) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading refund processing dashboard...</div>
         </CardContent>
       </Card>
     );
-  }
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -446,7 +434,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                               newSelected.add(refund.refundId);
                             } else {
                               newSelected.delete(refund.refundId);
-                            }
                             setSelectedRefunds(newSelected);
                           }}
                           className="mt-1"
@@ -490,9 +477,9 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                         <Button 
                           size="sm" 
                           onClick={() => {
-                            const notes = prompt('Enter approval notes (optional):');
-                            approveRefund(refund.refundId, notes || undefined);
-                          }}
+  const notes = prompt('Enter approval notes (optional):');
+  approveRefund(refund.refundId, notes || undefined);
+}}
                         >
                           <CheckCircle className="w-4 h-4 mr-1" />
                           Approve
@@ -501,9 +488,9 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                           size="sm" 
                           variant="outline"
                           onClick={() => {
-                            const reason = prompt('Enter rejection reason:');
-                            if (reason) rejectRefund(refund.refundId, reason);
-                          }}
+  const reason = prompt('Enter rejection reason:');
+  if (reason) rejectRefund(refund.refundId, reason);
+}}
                         >
                           <XCircle className="w-4 h-4 mr-1" />
                           Reject
@@ -764,12 +751,12 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                   <Button 
                     variant="outline" 
                     onClick={() => setManualRefundData({)
-                      purchaseId: '',
-                      reason: '',
-                      amount: '',
-                      description: '',
-                      priority: 'medium',
-                    })}
+  purchaseId: '',
+  reason: '',
+  amount: '',
+  description: '',
+  priority: 'medium',
+})}
                   >
                     Clear Form
                   </Button>

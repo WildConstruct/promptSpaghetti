@@ -14,70 +14,65 @@ import { useAuthStore } from '../../stores/authStore';
 
 // Types for role cloning operations
 interface Role {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
-  permissions: string[];
+  description: string;,
+  permissions: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
-  metadata?: {
-    clonedFrom?: string;
-    cloneCount: number;
-    templateVersion?: string;
-  };
-}
+  metadata?: {,
+  clonedFrom?: string;
+  cloneCount: number;
+  templateVersion?: string;
+};
 interface Permission {
-  id: string;
+  id: string;,
   name: string;
-  resource: string;
+  resource: string;,
   action: string;
-  scope: 'global' | 'organization' | 'team' | 'own';
+  scope: 'global' | 'organization' | 'team' | 'own';,
   description: string;
   category: string;
-}
 interface CloneOperation {
-  id: string;
+  id: string;,
   sourceRoleId: string;
-  targetRoleName: string;
+  targetRoleName: string;,
   targetDescription: string;
-  targetScope: Role['scope'];
-  includePermissions: string[];
-  excludePermissions: string[];
+  targetScope: Role['scope'];,
+  includePermissions: string;
+  excludePermissions: string;,
   timestamp: Date;
   status: 'pending' | 'success' | 'failed';
   error?: string;
-}
 interface RoleCloneManagerProps {
   onRoleCloned?: (clonedRole: Role) => void;
   onClose?: () => void;
   className?: string;
-}
 interface RoleCloneState {
-  availableRoles: Role[];
-  availablePermissions: Permission[];
+  availableRoles: Role;,
+  availablePermissions: Permission;
   selectedSourceRole?: Role;
-  cloneOperations: CloneOperation[];
+  cloneOperations: CloneOperation;
   // Clone configuration
-  targetName: string;
+  targetName: string;,
   targetDescription: string;
-  targetScope: Role['scope'];
+  targetScope: Role['scope'];,
   selectedPermissions: Set<string>;
   excludedPermissions: Set<string>;
   // UI state
-  searchTerm: string;
+  searchTerm: string;,
   filterScope: string;
-  showAdvancedOptions: boolean;
+  showAdvancedOptions: boolean;,
   isLoading: boolean;
   error: string | null;
   // Validation
-  nameExists: boolean;
-  validationErrors: string[];
-}
+  nameExists: boolean;,
+  validationErrors: string;
 
 // Mock data for development
-const mockRoles: Role[] = [
+const mockRoles: Role = [
   {
     id: 'role_admin',
     name: 'Administrator',
@@ -91,7 +86,7 @@ const mockRoles: Role[] = [
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-15'),
     metadata: { cloneCount: 3 }
-  },
+  }
   {
     id: 'role_editor',
     name: 'Editor',
@@ -101,7 +96,7 @@ const mockRoles: Role[] = [
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-10'),
     metadata: { cloneCount: 1 }
-  },
+  }
   {
     id: 'role_viewer',
     name: 'Viewer',
@@ -111,106 +106,102 @@ const mockRoles: Role[] = [
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-05'),
     metadata: { cloneCount: 0 }
-  }
 ];
-const mockPermissions: Permission[] = [
+const mockPermissions: Permission = [
   {
-    id: 'perm_read_projects',
-    name: 'Read Projects',
-    resource: 'projects',
-    action: 'read',
-    scope: 'own',
-    description: 'View project details and contents',
-    category: 'Projects',
-  },
+  id: 'perm_read_projects',
+  name: 'Read Projects',
+  resource: 'projects',
+  action: 'read',
+  scope: 'own',
+  description: 'View project details and contents',
+  category: 'Projects',
+}
   {
-    id: 'perm_edit_projects',
-    name: 'Edit Projects',
-    resource: 'projects',
-    action: 'write',
-    scope: 'own',
-    description: 'Create and modify project files',
-    category: 'Projects',
-  },
+  id: 'perm_edit_projects',
+  name: 'Edit Projects',
+  resource: 'projects',
+  action: 'write',
+  scope: 'own',
+  description: 'Create and modify project files',
+  category: 'Projects',
+}
   {
-    id: 'perm_delete_projects',
-    name: 'Delete Projects',
-    resource: 'projects',
-    action: 'delete',
-    scope: 'own',
-    description: 'Delete project files and folders',
-    category: 'Projects',
-  },
+  id: 'perm_delete_projects',
+  name: 'Delete Projects',
+  resource: 'projects',
+  action: 'delete',
+  scope: 'own',
+  description: 'Delete project files and folders',
+  category: 'Projects',
+}
   {
-    id: 'perm_share_projects',
-    name: 'Share Projects',
-    resource: 'projects',
-    action: 'share',
-    scope: 'team',
-    description: 'Share projects with team members',
-    category: 'Projects',
-  },
+  id: 'perm_share_projects',
+  name: 'Share Projects',
+  resource: 'projects',
+  action: 'share',
+  scope: 'team',
+  description: 'Share projects with team members',
+  category: 'Projects',
+}
   {
-    id: 'perm_admin_users',
-    name: 'Manage Users',
-    resource: 'users',
-    action: 'manage',
-    scope: 'organization',
-    description: 'Create, edit, and deactivate user accounts',
-    category: 'Administration',
-  },
+  id: 'perm_admin_users',
+  name: 'Manage Users',
+  resource: 'users',
+  action: 'manage',
+  scope: 'organization',
+  description: 'Create, edit, and deactivate user accounts',
+  category: 'Administration',
+}
   {
-    id: 'perm_admin_roles',
-    name: 'Manage Roles',
-    resource: 'roles',
-    action: 'manage',
-    scope: 'organization',
-    description: 'Create and modify roles and permissions',
-    category: 'Administration',
-  },
+  id: 'perm_admin_roles',
+  name: 'Manage Roles',
+  resource: 'roles',
+  action: 'manage',
+  scope: 'organization',
+  description: 'Create and modify roles and permissions',
+  category: 'Administration',
+}
   {
-    id: 'perm_view_analytics',
-    name: 'View Analytics',
-    resource: 'analytics',
-    action: 'read',
-    scope: 'team',
-    description: 'Access usage and performance analytics',
-    category: 'Analytics',
-  },
+  id: 'perm_view_analytics',
+  name: 'View Analytics',
+  resource: 'analytics',
+  action: 'read',
+  scope: 'team',
+  description: 'Access usage and performance analytics',
+  category: 'Analytics',
+}
   {
-    id: 'perm_export_data',
-    name: 'Export Data',
-    resource: 'data',
-    action: 'export',
-    scope: 'organization',
-    description: 'Export system data and reports',
-    category: 'Data Management',
-  }
-];
-
-export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
+  id: 'perm_export_data',
+  name: 'Export Data',
+  resource: 'data',
+  action: 'export',
+  scope: 'organization',
+  description: 'Export system data and reports',
+  category: 'Data Management'];
+  export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({,)
   onRoleCloned,
   onClose,
   className = ''
 }) => {
   useAuthStore(); // Hook for potential future use
   const [state, setState] = useState<RoleCloneState>({)
-    availableRoles: mockRoles,
-    availablePermissions: mockPermissions,
-    cloneOperations: [],
-    targetName: '',
-    targetDescription: '',
-    targetScope: 'organization',
-    selectedPermissions: new Set(),
-    excludedPermissions: new Set(),
-    searchTerm: '',
-    filterScope: '',
-    showAdvancedOptions: false,
-    isLoading: false,
-    error: null,
-    nameExists: false,
-    validationErrors: [],
-  });
+  availableRoles: mockRoles,
+  availablePermissions: mockPermissions,
+  cloneOperations: [],
+  targetName: '',
+  targetDescription: '',
+  targetScope: 'organization',
+  selectedPermissions: new Set(),
+  excludedPermissions: new Set(),
+  searchTerm: '',
+  filterScope: '',
+  showAdvancedOptions: false,
+  isLoading: false,
+  error: null,
+  nameExists: false,
+  validationErrors: [],
+});
   // Load initial data
   useEffect(() => {
     loadData();
@@ -218,28 +209,24 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
   // Validate target role name
   useEffect(() => {
     if (state.targetName.trim()) {
-      const exists = state.availableRoles.some(role => ;)
+      const exists = state.availableRoles.some(role => ;);
         role.name.toLowerCase() === state.targetName.toLowerCase()
       );
       setState(prev => ({ ...prev, nameExists: exists }));
     } else {
       setState(prev => ({ ...prev, nameExists: false }));
-    }
   }, [state.targetName, state.availableRoles]);
   // Validation
   useEffect(() => {
-    const errors: string[] = [];
-    if (!state.targetName.trim()) {
-      errors.push('Role name is required');
-    } else if (state.nameExists) {
+  const errors: string = [];
+  if (!state.targetName.trim()) {
+  errors.push('Role name is required');
+} else if (state.nameExists) {
       errors.push('Role name already exists');
-    }
     if (!state.targetDescription.trim()) {
       errors.push('Role description is required');
-    }
     if (state.selectedPermissions.size === 0 && state.selectedSourceRole) {
       errors.push('At least one permission must be selected');
-    }
     setState(prev => ({ ...prev, validationErrors: errors }));
   }, [state.targetName, state.targetDescription, state.selectedPermissions, state.nameExists, state.selectedSourceRole]);
   const loadData = async () => {
@@ -249,93 +236,91 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
       await new Promise(resolve => setTimeout(resolve, 500));
       setState(prev => ({ ...prev, isLoading: false }));
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to load data',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  isLoading: false,
+  error: error instanceof Error ? error.message : 'Failed to load data',
+}));
   };
   const handleSourceRoleSelect = useCallback((role: Role) => {
     setState(prev => ({)
-      ...prev,
+  ...prev,
       selectedSourceRole: role,
-      targetName: `${role.name} Copy`,}
-      targetDescription: `Cloned from ${role.name}: ${role.description}`,}
-      targetScope: role.scope,
+      targetName: `${role.name} Copy`}
+},
+  targetDescription: `Cloned from ${role.name}: ${role.description}`}
+},
+  targetScope: role.scope,
       selectedPermissions: new Set(role.permissions),
-      excludedPermissions: new Set(),
-    }));
+      excludedPermissions: new Set();
+  }));
   }, []);
   const handlePermissionToggle = useCallback((permissionId: string, include: boolean) => {
     setState(prev => {)
-      const newSelected = new Set(prev.selectedPermissions);
+  const newSelected = new Set(prev.selectedPermissions);
       const newExcluded = new Set(prev.excludedPermissions);
       if (include) {
         newSelected.add(permissionId);
         newExcluded.delete(permissionId);
       } else {
-        newSelected.delete(permissionId);
-        newExcluded.add(permissionId);
-      }
-      return {
-        ...prev,
-        selectedPermissions: newSelected,
-        excludedPermissions: newExcluded,
-      };
+  newSelected.delete(permissionId);
+  newExcluded.add(permissionId);
+  return {
+  ...prev,
+  selectedPermissions: newSelected,
+  excludedPermissions: newExcluded,
+};
     });
   }, []);
   const handleCloneRole = async () => {
     if (state.validationErrors.length > 0) return;
     if (!state.selectedSourceRole) return;
     const operationId = `clone-${Date.now()}`;}
-    const operation: CloneOperation = {
-      id: operationId,
-      sourceRoleId: state.selectedSourceRole.id,
-      targetRoleName: state.targetName,
-      targetDescription: state.targetDescription,
-      targetScope: state.targetScope,
-      includePermissions: Array.from(state.selectedPermissions),
-      excludePermissions: Array.from(state.excludedPermissions),
-      timestamp: new Date(),
-      status: 'pending',
-    };
+    const operation: CloneOperation = {,
+  id: operationId,
+  sourceRoleId: state.selectedSourceRole.id,
+  targetRoleName: state.targetName,
+  targetDescription: state.targetDescription,
+  targetScope: state.targetScope,
+  includePermissions: Array.from(state.selectedPermissions),
+  excludePermissions: Array.from(state.excludedPermissions),
+  timestamp: new Date(),
+  status: 'pending',
+};
     setState(prev => ({)
-      ...prev,
-      cloneOperations: [...prev.cloneOperations, operation],
-      isLoading: true,
-      error: null,
-    }));
+  ...prev,
+  cloneOperations: [...prev.cloneOperations, operation],
+  isLoading: true,
+  error: null,
+}));
     try {
       // TODO: Make actual API call to clone role
       await new Promise(resolve => setTimeout(resolve, 1500));
-      const clonedRole: Role = {
-        id: `role_${Date.now()}`,}
-        name: state.targetName,
+      const clonedRole: Role = {,
+  id: `role_${Date.now()}`}
+},
+  name: state.targetName,
         description: state.targetDescription,
         permissions: Array.from(state.selectedPermissions),
         scope: state.targetScope,
         createdAt: new Date(),
         updatedAt: new Date(),
         metadata: {,
-          clonedFrom: state.selectedSourceRole.id,
-          cloneCount: 0,
-        }
-      };
+  clonedFrom: state.selectedSourceRole.id,
+  cloneCount: 0,
+};
       // Update source role clone count
-      const updatedRoles = state.availableRoles.map(role =>;)
+      const updatedRoles = state.availableRoles.map(role =>;);
         role.id === state.selectedSourceRole?.id
           ? {
             ...role,
             metadata: {,
               ...role.metadata,
               cloneCount: (role.metadata?.cloneCount || 0) + 1,
-            }
-          }
           : role
       );
       setState(prev => ({)
-        ...prev,
+  ...prev,
         availableRoles: [...updatedRoles, clonedRole],
         cloneOperations: prev.cloneOperations.map(op =>),
           op.id === operationId
@@ -348,45 +333,42 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
         targetName: '',
         targetDescription: '',
         selectedPermissions: new Set(),
-        excludedPermissions: new Set(),
-      }));
+        excludedPermissions: new Set();
+  }));
       onRoleCloned?.(clonedRole);
     } catch (error) {
-      setState(prev => ({)
-        ...prev,
-        cloneOperations: prev.cloneOperations.map(op =>),
-          op.id === operationId
-            ? {
-              ...op,
-              status: 'failed' as const,
-              error: error instanceof Error ? error.message : 'Clone operation failed',
-            }
-            : op
-        ),
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to clone role',
-      }));
-    }
+  setState(prev => ({)
+  ...prev,
+  cloneOperations: prev.cloneOperations.map(op =>),
+  op.id === operationId
+  ? {
+  ...op,
+  status: 'failed' as const,
+  error: error instanceof Error ? error.message : 'Clone operation failed',
+  : op),
+  isLoading: false,
+  error: error instanceof Error ? error.message : 'Failed to clone role',
+}));
   };
   const handlePresetClone = (presetType: 'minimal' | 'standard' | 'extended') => {
-    if (!state.selectedSourceRole) return;
-    const sourcePermissions = new Set(state.selectedSourceRole.permissions);
-    let selectedPermissions: Set<string>;
-    switch (presetType) {
-    case 'minimal':
-      // Only basic read permissions
-      selectedPermissions = new Set()
-        Array.from(sourcePermissions).filter(id =>)
-          mockPermissions.find(p => p.id === id)?.action === 'read'
-      );
-      break;
-    case 'standard':
-      // Read and basic write permissions
-      selectedPermissions = new Set()
-        Array.from(sourcePermissions).filter(id => {)
-          const permission = mockPermissions.find(p => p.id === id);
-          return permission && ['read', 'write'].includes(permission.action);
-        })
+  if (!state.selectedSourceRole) return;
+  const sourcePermissions = new Set(state.selectedSourceRole.permissions);
+  let selectedPermissions: Set<string>;
+  switch (presetType) {
+  case 'minimal':,
+  // Only basic read permissions
+  selectedPermissions = new Set()
+  Array.from(sourcePermissions).filter(id =>)
+  mockPermissions.find(p => p.id === id)?.action === 'read'
+  );
+  break;
+  case 'standard':,
+  // Read and basic write permissions
+  selectedPermissions = new Set()
+  Array.from(sourcePermissions).filter(id => {)
+  const permission = mockPermissions.find(p => p.id === id);
+  return permission && ['read', 'write'].includes(permission.action);
+}
       );
       break;
     case 'extended':
@@ -395,15 +377,14 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
       break;
     default:
       selectedPermissions = new Set();
-    }
     setState(prev => ({)
-      ...prev,
-      selectedPermissions,
-      excludedPermissions: new Set(),
-    }));
+  ...prev,
+  selectedPermissions,
+  excludedPermissions: new Set(),
+}));
   };
   const filteredRoles = state.availableRoles.filter(role => {)
-    const matchesSearch = !state.searchTerm || ;
+  const matchesSearch = !state.searchTerm || ;
       role.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
       role.description.toLowerCase().includes(state.searchTerm.toLowerCase());
     const matchesScope = !state.filterScope || role.scope === state.filterScope;
@@ -412,27 +393,25 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
   const permissionsByCategory = mockPermissions.reduce((acc, permission) => {
     if (!acc[permission.category]) {
       acc[permission.category] = [];
-    }
     acc[permission.category].push(permission);
     return acc;
-  }, {} as Record<string, Permission[]>);
+  }, {} as Record<string, Permission>);
   const scopes = ['global', 'organization', 'team'];
   if (state.isLoading && !state.selectedSourceRole) {
-    return ()
+    return;
       <div className={`role-clone-manager ${className}`} style={{ padding: '20px', textAlign: 'center' }}>}
         Loading roles...
       </div>
     );
-  }
-  return ()
-    <div className={`role-clone-manager ${className}`} style={{}
-      padding: '20px',
+  return;
+    <div className={`role-clone-manager ${className}`} style={{},}
+  padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '8px',
       border: '1px solid #ddd',
       maxWidth: '1200px',
-      margin: '0 auto',
-    }}>
+      margin: '0 auto';
+  }}>
       {/* Header */}
       <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
@@ -447,12 +426,12 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
           <button
             onClick={onClose}
             style={{
-              padding: '6px 12px',
-              border: '1px solid #ddd',
-              backgroundColor: '#fff',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
+  padding: '6px 12px',
+  border: '1px solid #ddd',
+  backgroundColor: '#fff',
+  borderRadius: '4px',
+  cursor: 'pointer',
+}}
           >
             ✕
           </button>
@@ -461,13 +440,13 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
       {/* Error Display */}
       {state.error && ()
         <div style={{
-          padding: '12px',
-          backgroundColor: '#fee',
-          border: '1px solid #fcc',
-          borderRadius: '4px',
-          color: '#c33',
-          marginBottom: '16px',
-        }}>
+  padding: '12px',
+  backgroundColor: '#fee',
+  border: '1px solid #fcc',
+  borderRadius: '4px',
+  color: '#c33',
+  marginBottom: '16px',
+}}>
           {state.error}
         </div>
       )}
@@ -485,20 +464,20 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
               value={state.searchTerm}
               onChange={(e) => setState(prev => ({ ...prev, searchTerm: e.target.value }))}
               style={{
-                flex: 1,
-                padding: '8px 12px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-              }}
+  flex: 1,
+  padding: '8px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+}}
             />
             <select
               value={state.filterScope}
               onChange={(e) => setState(prev => ({ ...prev, filterScope: e.target.value }))}
               style={{
-                padding: '8px 12px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-              }}
+  padding: '8px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+}}
             >
               <option value="">All Scopes</option>
               {scopes.map(scope => ()
@@ -515,24 +494,25 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                 key={role.id}
                 style={{
                   padding: '16px',
-                  border: `2px solid ${state.selectedSourceRole?.id === role.id ? '#007bff' : '#eee'}`,}
-                  borderRadius: '8px',
+                  border: `2px solid ${state.selectedSourceRole?.id === role.id ? '#007bff' : '#eee'}`}
+},
+  borderRadius: '8px',
                   marginBottom: '8px',
                   cursor: 'pointer',
                   backgroundColor: state.selectedSourceRole?.id === role.id ? '#f0f8ff' : '#fff',
-                  transition: 'all 0.2s ease',
-                }}
+                  transition: 'all 0.2s ease';
+  }}
                 onClick={() => handleSourceRoleSelect(role)}
               >
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                   <strong style={{ marginRight: '8px' }}>{role.name}</strong>
                   <span style={{
-                    padding: '2px 8px',
-                    backgroundColor: role.scope === 'global' ? '#ffc107' : role.scope === 'organization' ? '#28a745' : '#6c757d',
-                    color: 'white',
-                    borderRadius: '12px',
-                    fontSize: '10px',
-                  }}>
+  padding: '2px 8px',
+  backgroundColor: role.scope === 'global' ? '#ffc107' : role.scope === 'organization' ? '#28a745' : '#6c757d',
+  color: 'white',
+  borderRadius: '12px',
+  fontSize: '10px',
+}}>
                     {role.scope}
                   </span>
                   {role.metadata?.cloneCount !== undefined && ()
@@ -558,13 +538,13 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
           </h3>
           {!state.selectedSourceRole ? ()
             <div style={{
-              padding: '40px',
-              textAlign: 'center',
-              color: '#666',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px',
-              border: '2px dashed #ddd',
-            }}>
+  padding: '40px',
+  textAlign: 'center',
+  color: '#666',
+  backgroundColor: '#f8f9fa',
+  borderRadius: '8px',
+  border: '2px dashed #ddd',
+}}>
               Select a source role to begin cloning
             </div>
           ) : ()
@@ -582,9 +562,10 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                     style={{
                       width: '100%',
                       padding: '8px 12px',
-                      border: `1px solid ${state.nameExists ? '#dc3545' : '#ddd'}`,}
-                      borderRadius: '4px',
-                    }}
+                      border: `1px solid ${state.nameExists ? '#dc3545' : '#ddd'}`}
+},
+  borderRadius: '4px';
+  }}
                     placeholder="Enter new role name"
                   />
                   {state.nameExists && ()
@@ -601,13 +582,13 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                     value={state.targetDescription}
                     onChange={(e) => setState(prev => ({ ...prev, targetDescription: e.target.value }))}
                     style={{
-                      width: '100%',
-                      height: '60px',
-                      padding: '8px 12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      resize: 'vertical',
-                    }}
+  width: '100%',
+  height: '60px',
+  padding: '8px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+  resize: 'vertical',
+}}
                     placeholder="Describe the new role"
                   />
                 </div>
@@ -619,11 +600,11 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                     value={state.targetScope}
                     onChange={(e) => setState(prev => ({ ...prev, targetScope: e.target.value as Role['scope'] }))}
                     style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                    }}
+  width: '100%',
+  padding: '8px 12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+}}
                   >
                     {scopes.map(scope => ()
                       <option key={scope} value={scope}>
@@ -642,42 +623,42 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                   <button
                     onClick={() => handlePresetClone('minimal')}
                     style={{
-                      padding: '6px 12px',
-                      border: '1px solid #6c757d',
-                      backgroundColor: '#6c757d',
-                      color: 'white',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '12px',
-                    }}
+  padding: '6px 12px',
+  border: '1px solid #6c757d',
+  backgroundColor: '#6c757d',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                   >
                     Minimal
                   </button>
                   <button
                     onClick={() => handlePresetClone('standard')}
                     style={{
-                      padding: '6px 12px',
-                      border: '1px solid #17a2b8',
-                      backgroundColor: '#17a2b8',
-                      color: 'white',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '12px',
-                    }}
+  padding: '6px 12px',
+  border: '1px solid #17a2b8',
+  backgroundColor: '#17a2b8',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                   >
                     Standard
                   </button>
                   <button
                     onClick={() => handlePresetClone('extended')}
                     style={{
-                      padding: '6px 12px',
-                      border: '1px solid #28a745',
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '12px',
-                    }}
+  padding: '6px 12px',
+  border: '1px solid #28a745',
+  backgroundColor: '#28a745',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                   >
                     Extended
                   </button>
@@ -692,26 +673,26 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                   {Object.entries(permissionsByCategory).map(([category, permissions]) => ()
                     <div key={category} style={{ borderBottom: '1px solid #eee' }}>
                       <div style={{
-                        padding: '8px 12px',
-                        backgroundColor: '#f8f9fa',
-                        fontWeight: 'bold',
-                        fontSize: '14px',
-                      }}>
+  padding: '8px 12px',
+  backgroundColor: '#f8f9fa',
+  fontWeight: 'bold',
+  fontSize: '14px',
+}}>
                         {category}
                       </div>
                       {permissions.map(permission => {)
-                        const isSelected = state.selectedPermissions.has(permission.id);
+  const isSelected = state.selectedPermissions.has(permission.id);
                         const wasInSource = state.selectedSourceRole?.permissions.includes(permission.id) ?? false;
-                        return ()
+                        return;
                           <div
                             key={permission.id}
                             style={{
-                              padding: '8px 12px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              backgroundColor: isSelected ? '#f0f8ff' : '#fff',
-                              borderLeft: wasInSource ? '3px solid #007bff' : '3px solid transparent',
-                            }}
+  padding: '8px 12px',
+  display: 'flex',
+  alignItems: 'center',
+  backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+  borderLeft: wasInSource ? '3px solid #007bff' : '3px solid transparent',
+}}
                           >
                             <input
                               type="checkbox"
@@ -724,10 +705,10 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                                 {permission.name}
                                 {wasInSource && ()
                                   <span style={{
-                                    marginLeft: '8px',
-                                    fontSize: '10px',
-                                    color: '#007bff',
-                                  }}>
+  marginLeft: '8px',
+  fontSize: '10px',
+  color: '#007bff',
+}}>
                                     (from source)
                                   </span>
                                 )}
@@ -746,12 +727,12 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
               {/* Validation errors */}
               {state.validationErrors.length > 0 && ()
                 <div style={{
-                  padding: '12px',
-                  backgroundColor: '#fee',
-                  border: '1px solid #fcc',
-                  borderRadius: '4px',
-                  marginBottom: '16px',
-                }}>
+  padding: '12px',
+  backgroundColor: '#fee',
+  border: '1px solid #fcc',
+  borderRadius: '4px',
+  marginBottom: '16px',
+}}>
                   <strong style={{ color: '#c33' }}>Please fix the following errors:</strong>
                   <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px', color: '#c33' }}>
                     {state.validationErrors.map((error, index) => ()
@@ -769,15 +750,15 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                     targetName: '',
                     targetDescription: '',
                     selectedPermissions: new Set(),
-                    excludedPermissions: new Set(),
-                  }))}
+                    excludedPermissions: new Set();
+  }))}
                   style={{
-                    padding: '8px 16px',
-                    border: '1px solid #ddd',
-                    backgroundColor: '#fff',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+  padding: '8px 16px',
+  border: '1px solid #ddd',
+  backgroundColor: '#fff',
+  borderRadius: '4px',
+  cursor: 'pointer',
+}}
                 >
                   Cancel
                 </button>
@@ -785,13 +766,13 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
                   onClick={handleCloneRole}
                   disabled={state.validationErrors.length > 0 || state.isLoading}
                   style={{
-                    padding: '8px 16px',
-                    border: '1px solid #28a745',
-                    backgroundColor: state.validationErrors.length === 0 && !state.isLoading ? '#28a745' : '#6c757d',
-                    color: 'white',
-                    borderRadius: '4px',
-                    cursor: state.validationErrors.length === 0 && !state.isLoading ? 'pointer' : 'not-allowed',
-                  }}
+  padding: '8px 16px',
+  border: '1px solid #28a745',
+  backgroundColor: state.validationErrors.length === 0 && !state.isLoading ? '#28a745' : '#6c757d',
+  color: 'white',
+  borderRadius: '4px',
+  cursor: state.validationErrors.length === 0 && !state.isLoading ? 'pointer' : 'not-allowed',
+}}
                 >
                   {state.isLoading ? 'Cloning Role...' : 'Clone Role'}
                 </button>
@@ -811,26 +792,26 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({)
               <div
                 key={operation.id}
                 style={{
-                  padding: '12px',
-                  border: '1px solid #eee',
-                  borderRadius: '4px',
-                  marginBottom: '8px',
-                  backgroundColor: operation.status === 'success' ? '#d4edda' : ,
-                    operation.status === 'failed' ? '#f8d7da' : '#fff3cd'
-                }}
+  padding: '12px',
+  border: '1px solid #eee',
+  borderRadius: '4px',
+  marginBottom: '8px',
+  backgroundColor: operation.status === 'success' ? '#d4edda' : ,
+  operation.status === 'failed' ? '#f8d7da' : '#fff3cd',
+}}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <span style={{ fontWeight: 'bold' }}>
                     {operation.targetRoleName}
                   </span>
                   <span style={{
-                    padding: '2px 8px',
-                    borderRadius: '12px',
-                    fontSize: '10px',
-                    backgroundColor: operation.status === 'success' ? '#28a745' :,
-                      operation.status === 'failed' ? '#dc3545' : '#ffc107',
-                    color: 'white',
-                  }}>
+  padding: '2px 8px',
+  borderRadius: '12px',
+  fontSize: '10px',
+  backgroundColor: operation.status === 'success' ? '#28a745' :,
+  operation.status === 'failed' ? '#dc3545' : '#ffc107',
+  color: 'white',
+}}>
                     {operation.status}
                   </span>
                 </div>

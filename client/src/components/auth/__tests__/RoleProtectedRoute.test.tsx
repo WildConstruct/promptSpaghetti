@@ -35,25 +35,25 @@ describe('RoleProtectedRoute', () => {
     jest.clearAllMocks();
   });
   it('redirects to login when user is not authenticated', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: false,
-      isLoading: false,
-      user: null,
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
-      accessToken: null,
-      refreshToken: null,
-      tokenExpiration: null,
-      error: null,
-      returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
-    });
-    renderWithRouter()
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  isLoading: false,
+  user: null,
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+  setReturnUrl: jest.fn<unknown, unknown>(),
+  accessToken: null,
+  refreshToken: null,
+  tokenExpiration: null,
+  error: null,
+  returnUrl: null,
+  login: jest.fn<unknown, unknown>(),
+  register: jest.fn<unknown, unknown>(),
+  logout: jest.fn<unknown, unknown>(),
+  refreshTokens: jest.fn<unknown, unknown>(),
+  clearError: jest.fn<unknown, unknown>(),
+  updateUser: jest.fn<unknown, unknown>(),
+});
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin']}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -63,32 +63,32 @@ describe('RoleProtectedRoute', () => {
     expect(navigate).toHaveAttribute('data-to', '/login');
   });
   it('renders content when user has required role', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'admin@example.com', 
-        firstName: 'Admin', 
-        lastName: 'User',
-        isEmailVerified: true,
-        roles: ['admin', 'user'] 
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'admin@example.com',
+  firstName: 'Admin',
+  lastName: 'User',
+  isEmailVerified: true,
+  roles: ['admin', 'user'],
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin']}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -97,32 +97,32 @@ describe('RoleProtectedRoute', () => {
     expect(screen.getByText('Admin Content')).toBeInTheDocument();
   });
   it('redirects when user lacks required role', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'user@example.com', 
-        firstName: 'Regular', 
-        lastName: 'User',
-        isEmailVerified: true,
-        roles: ['user'] // Missing 'admin' role,
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'user@example.com',
+  firstName: 'Regular',
+  lastName: 'User',
+  isEmailVerified: true,
+  roles: ['user'] // Missing 'admin' role,
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin']}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -133,32 +133,32 @@ describe('RoleProtectedRoute', () => {
     expect(state.reason).toBe('insufficient_permissions');
   });
   it('shows fallback component when user lacks required role', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'user@example.com', 
-        firstName: 'Regular', 
-        lastName: 'User',
-        isEmailVerified: true,
-        roles: ['user'] ,
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'user@example.com',
+  firstName: 'Regular',
+  lastName: 'User',
+  isEmailVerified: true,
+  roles: ['user'],
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin']} fallback={<FallbackComponent />}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -167,32 +167,32 @@ describe('RoleProtectedRoute', () => {
     expect(screen.getByText('Access Denied')).toBeInTheDocument();
   });
   it('handles requireAll=true correctly', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'user@example.com', 
-        firstName: 'User', 
-        lastName: 'Name',
-        isEmailVerified: true,
-        roles: ['admin'] // Has admin but not 'moderator',
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'Name',
+  isEmailVerified: true,
+  roles: ['admin'] // Has admin but not 'moderator',
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin', 'moderator']} requireAll={true}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -202,32 +202,32 @@ describe('RoleProtectedRoute', () => {
     expect(navigate).toHaveAttribute('data-to', '/unauthorized');
   });
   it('handles requireAll=false correctly (default)', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'user@example.com', 
-        firstName: 'User', 
-        lastName: 'Name',
-        isEmailVerified: true,
-        roles: ['admin'] // Has admin, missing 'moderator', but requireAll=false
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'Name',
+  isEmailVerified: true,
+  roles: ['admin'] // Has admin, missing 'moderator', but requireAll=false,
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={['admin', 'moderator']} requireAll={false}>
         <TestComponent />
       </RoleProtectedRoute>
@@ -236,32 +236,32 @@ describe('RoleProtectedRoute', () => {
     expect(screen.getByTestId('role-protected-content')).toBeInTheDocument();
   });
   it('handles empty roles array', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
-      isLoading: false,
-      user: { ,
-        id: '1', 
-        email: 'user@example.com', 
-        firstName: 'User', 
-        lastName: 'Name',
-        isEmailVerified: true,
-        roles: ['user'] // User has basic role,
-      },
-      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-      setReturnUrl: jest.fn<unknown[], unknown>(),
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: true,
+  isLoading: false,
+  user: {,
+  id: '1',
+  email: 'user@example.com',
+  firstName: 'User',
+  lastName: 'Name',
+  isEmailVerified: true,
+  roles: ['user'] // User has basic role,
+},
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+      setReturnUrl: jest.fn<unknown, unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
       tokenExpiration: Date.now() + 3600000,
       error: null,
       returnUrl: null,
-      login: jest.fn<unknown[], unknown>(),
-      register: jest.fn<unknown[], unknown>(),
-      logout: jest.fn<unknown[], unknown>(),
-      refreshTokens: jest.fn<unknown[], unknown>(),
-      clearError: jest.fn<unknown[], unknown>(),
-      updateUser: jest.fn<unknown[], unknown>()
+      login: jest.fn<unknown, unknown>(),
+      register: jest.fn<unknown, unknown>(),
+      logout: jest.fn<unknown, unknown>(),
+      refreshTokens: jest.fn<unknown, unknown>(),
+      clearError: jest.fn<unknown, unknown>(),
+      updateUser: jest.fn<unknown, unknown>()
     });
-    renderWithRouter()
+    renderWithRouter();
       <RoleProtectedRoute requiredRoles={[]}>
         <TestComponent />
       </RoleProtectedRoute>

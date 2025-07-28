@@ -13,22 +13,18 @@ import {
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentConflictResolver.css';
 interface AssignmentConflictResolverProps {
-  conflicts: PolicyConflict[];
+  conflicts: PolicyConflict;,
   onResolve: () => void;
-}
-interface ConflictResolution {
-  conflictId: string;
+  interface ConflictResolution {
+  conflictId: string;,
   strategy: ConflictResolutionStrategy;
   selectedAssignmentId?: string;
   manualOverride?: boolean;
   notes?: string;
-}
-interface ConflictGroup {
-  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
-  conflicts: PolicyConflict[];
-}
-
-export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({)
+  interface ConflictGroup {
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';,
+  conflicts: PolicyConflict;
+  export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({,)
   conflicts,
   onResolve
 }) => {
@@ -36,69 +32,65 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
   const [isResolving, setIsResolving] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({)
-    CRITICAL: true,
-    HIGH: true,
-    MEDIUM: false,
-    LOW: false,
-  });
+  CRITICAL: true,
+  HIGH: true,
+  MEDIUM: false,
+  LOW: false,
+});
   useEffect(() => {
     // Initialize resolutions for all conflicts
     const initialResolutions: Record<string, ConflictResolution> = {};
     conflicts.forEach(conflict => {)
-      initialResolutions[conflict.conflictId] = {
-        conflictId: conflict.conflictId,
-        strategy: ConflictResolutionStrategy.MOST_RESTRICTIVE,
-        manualOverride: false,
-      };
+  initialResolutions[conflict.conflictId] = {
+  conflictId: conflict.conflictId,
+  strategy: ConflictResolutionStrategy.MOST_RESTRICTIVE,
+  manualOverride: false,
+};
     });
     setResolutions(initialResolutions);
   }, [conflicts]);
-  const groupConflictsBySeverity = (): ConflictGroup[] => {
-    const groups: ConflictGroup[] = [
+  const groupConflictsBySeverity = (): ConflictGroup => {
+    const groups: ConflictGroup = [
       { severity: 'CRITICAL', conflicts: [] },
       { severity: 'HIGH', conflicts: [] },
       { severity: 'MEDIUM', conflicts: [] },
       { severity: 'LOW', conflicts: [] }
     ];
     conflicts.forEach(conflict => {)
-      const group = groups.find(g => g.severity === conflict.severity);
+  const group = groups.find(g => g.severity === conflict.severity);
       if (group) {
         group.conflicts.push(conflict);
-      }
     });
     return groups.filter(group => group.conflicts.length > 0);
   };
   const updateResolution = (conflictId: string, updates: Partial<ConflictResolution>) => {
-    setResolutions(prev => ({)
-      ...prev,
-      [conflictId]: {
-        ...prev[conflictId],
-        ...updates
-      }
-    }));
+  setResolutions(prev => ({)
+  ...prev,
+  [conflictId]: {,
+  ...prev[conflictId],
+  ...updates
+}));
   };
   const handleResolveAll = async () => {
     setIsResolving(true);
     try {
       // In a real implementation, this would send the resolutions to the backend
       const response = await fetch('/api/policy-assignments/conflicts/resolve', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resolutions: Object.values(resolutions) })
       });
       if (response.ok) {
         onResolve();
-      }
     } catch (error) {
-      console.error('Error resolving conflicts:', error);
-    } finally {
+  console.error('Error resolving conflicts:', error);
+} finally {
       setIsResolving(false);
-    }
   };
   const handleBulkStrategy = (strategy: ConflictResolutionStrategy) => {
     const updates: Record<string, ConflictResolution> = {};
     conflicts.forEach(conflict => {)
-      updates[conflict.conflictId] = {
+  updates[conflict.conflictId] = {
         ...resolutions[conflict.conflictId],
         strategy
       };
@@ -106,39 +98,37 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
     setResolutions(prev => ({ ...prev, ...updates }));
   };
   const toggleGroup = (severity: string) => {
-    setExpandedGroups(prev => ({)
-      ...prev,
-      [severity]: !prev[severity]
-    }));
+  setExpandedGroups(prev => ({)
+  ...prev,
+  [severity]: !prev[severity],
+}));
   };
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case 'CRITICAL': return '#c53030';
-    case 'HIGH': return '#e53e3e';
-    case 'MEDIUM': return '#ed8936';
-    case 'LOW': return '#f6ad55';
-    default: return '#718096';
-    }
-  };
+  switch (severity) {
+  case 'CRITICAL': return '#c53030';
+  case 'HIGH': return '#e53e3e';
+  case 'MEDIUM': return '#ed8936';
+  case 'LOW': return '#f6ad55';
+  default: return '#718096';
+};
   const getStrategyDescription = (strategy: ConflictResolutionStrategy) => {
-    switch (strategy) {
-    case ConflictResolutionStrategy.MOST_RESTRICTIVE:
-      return 'Apply the most restrictive policy among the conflicting ones';
-    case ConflictResolutionStrategy.LEAST_RESTRICTIVE:
-      return 'Apply the least restrictive policy among the conflicting ones';
-    case ConflictResolutionStrategy.HIGHEST_PRIORITY:
-      return 'Apply the policy with the highest priority value';
-    case ConflictResolutionStrategy.EXPLICIT_OVERRIDE:
-      return 'Manually select which policy to apply';
-    case ConflictResolutionStrategy.MANUAL_REVIEW:
-      return 'Flag for manual review by an administrator';
-    default:
-      return 'Unknown strategy';
-    }
-  };
+  switch (strategy) {
+  case ConflictResolutionStrategy.MOST_RESTRICTIVE:,
+  return 'Apply the most restrictive policy among the conflicting ones';
+  case ConflictResolutionStrategy.LEAST_RESTRICTIVE:,
+  return 'Apply the least restrictive policy among the conflicting ones';
+  case ConflictResolutionStrategy.HIGHEST_PRIORITY:,
+  return 'Apply the policy with the highest priority value';
+  case ConflictResolutionStrategy.EXPLICIT_OVERRIDE:,
+  return 'Manually select which policy to apply';
+  case ConflictResolutionStrategy.MANUAL_REVIEW:,
+  return 'Flag for manual review by an administrator';
+  default:,
+  return 'Unknown strategy';
+};
   const renderConflictDetails = (conflict: PolicyConflict) => {
     const resolution = resolutions[conflict.conflictId];
-    return ()
+    return;
       <div key={conflict.conflictId} className="conflict-item">
         <div className="conflict-header">
           <div className="conflict-info">
@@ -170,8 +160,8 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
             <select
               value={resolution.strategy}
               onChange={(e) => updateResolution(conflict.conflictId, {)
-                strategy: e.target.value as ConflictResolutionStrategy,
-              })}
+  strategy: e.target.value as ConflictResolutionStrategy,
+})}
             >
               <option value={ConflictResolutionStrategy.MOST_RESTRICTIVE}>Most Restrictive</option>
               <option value={ConflictResolutionStrategy.LEAST_RESTRICTIVE}>Least Restrictive</option>
@@ -186,8 +176,8 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
               <select
                 value={resolution.selectedAssignmentId || ''}
                 onChange={(e) => updateResolution(conflict.conflictId, {)
-                  selectedAssignmentId: e.target.value,
-                })}
+  selectedAssignmentId: e.target.value,
+})}
               >
                 <option value="">Choose assignment...</option>
                 {conflict.conflictingAssignments.map((assignmentId: string) => ()
@@ -203,8 +193,8 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
             <textarea
               value={resolution.notes || ''}
               onChange={(e) => updateResolution(conflict.conflictId, {)
-                notes: e.target.value,
-              })}
+  notes: e.target.value,
+})}
               placeholder="Add notes about this resolution decision..."
               rows={2}
             />
@@ -223,7 +213,7 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
   };
   const renderConflictModal = () => {
     if (!selectedConflict) return null;
-    return ()
+    return;
       <div className="modal-overlay">
         <div className="conflict-modal">
           <div className="modal-header">
@@ -278,7 +268,7 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
     );
   };
   if (conflicts.length === 0) {
-    return ()
+    return;
       <div className="conflict-resolver">
         <div className="no-conflicts">
           <div className="no-conflicts-icon">✅</div>
@@ -287,12 +277,11 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
         </div>
       </div>
     );
-  }
   const conflictGroups = groupConflictsBySeverity();
-  const totalUnresolved = Object.values(resolutions).filter(r => ;)
+  const totalUnresolved = Object.values(resolutions).filter(r => ;);
     r.strategy === ConflictResolutionStrategy.MANUAL_REVIEW
   ).length;
-  return ()
+  return;
     <div className="conflict-resolver">
       <div className="resolver-header">
         <div className="header-info">

@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 
 export interface GraphVersion {
-  id: string;
+  id: string;,
   version: number;
   createdAt: Date;
   description?: string;
   graphData: any;
 }
-
 export const useGraphVersions = (graphId: string) => {
-  const [versions, setVersions] = useState<GraphVersion[]>([]);
+  const [versions, setVersions] = useState<GraphVersion>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,10 +24,9 @@ export const useGraphVersions = (graphId: string) => {
       // Would normally save to API
       setLoading(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save version');
-      setLoading(false);
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to save version');
+  setLoading(false);
+};
 
   const loadVersion = async (versionId: string) => {
     // Stub implementation

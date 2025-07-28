@@ -20,7 +20,7 @@ import { LoadingSpinner, EmptyState } from './LoadingStates';
 import './AdminTable.css';
 
 export interface TableColumn<T = any> {
-  key: string;
+  key: string;,
   title: string;
   dataIndex?: keyof T;
   render?: (value: any, record: T, index: number) => React.ReactNode;
@@ -31,39 +31,37 @@ export interface TableColumn<T = any> {
   width?: string | number;
   align?: 'left' | 'center' | 'right';
   fixed?: 'left' | 'right';
-}
 
 export interface TableAction<T = any> {
-  key: string;
+  key: string;,
   label: string;
   icon?: React.ComponentType<{ size?: number }>;
   onClick: (record: T) => void;
   disabled?: (record: T) => boolean;
   danger?: boolean;
   confirmation?: {
-    title: string;
-    description: string;
-  };
-}
+  title: string;,
+  description: string;
+};
 interface AdminTableProps<T = any> {
-  columns: TableColumn<T>[];
-  data: T[];
+  columns: TableColumn<T>[];,
+  data: T;
   loading?: boolean;
   error?: string | null;
   rowKey?: keyof T | ((record: T) => string);
   // Selection
   selectable?: boolean;
-  selectedRows?: T[];
-  onSelectionChange?: (selectedRows: T[]) => void;
+  selectedRows?: T;
+  onSelectionChange?: (selectedRows: T) => void;
   // Pagination
-  pagination?: {
-    current: number;
-    pageSize: number;
-    total: number;
-    onChange: (page: number, pageSize: number) => void;
-    showSizeChanger?: boolean;
-    pageSizeOptions?: number[];
-  };
+  pagination?: {,
+  current: number;,
+  pageSize: number;
+  total: number;,
+  onChange: (page: number, pageSize: number) => void;
+  showSizeChanger?: boolean;
+  pageSizeOptions?: number;
+};
   // Sorting
   sortable?: boolean;
   defaultSort?: { key: string; direction: 'asc' | 'desc' };
@@ -75,10 +73,10 @@ interface AdminTableProps<T = any> {
   // Actions
   actions?: TableAction<T>[];
   bulkActions?: Array<{
-    key: string;
-    label: string;
+    key: string;,
+  label: string;
     icon?: React.ComponentType<{ size?: number }>;
-    onClick: (selectedRows: T[]) => void;
+    onClick: (selectedRows: T) => void;
     danger?: boolean;
   }>;
   // Styling
@@ -89,11 +87,10 @@ interface AdminTableProps<T = any> {
   // Empty state
   emptyText?: string;
   emptyAction?: {
-    label: string;
-    onClick: () => void;
-  };
+  label: string;,
+  onClick: () => void;
+};
   className?: string;
-}
 
 export const AdminTable = <T extends Record<string, any> = any>({)
   columns,
@@ -130,7 +127,6 @@ export const AdminTable = <T extends Record<string, any> = any>({)
   const getRowKey = useCallback((record: T, index: number): string => {
     if (typeof rowKey === 'function') {
       return rowKey(record);
-    }
     return String(record[rowKey] || index);
   }, [rowKey]);
   // Handle sorting
@@ -142,7 +138,6 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     setLocalSort(newSort);
     if (onSort) {
       onSort(columnKey, newDirection);
-    }
   }, [sortable, localSort, onSort]);
   // Handle filter change
   const handleFilterChange = useCallback((columnKey: string, value: any) => {
@@ -150,18 +145,16 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     setLocalFilters(newFilters);
     if (onFilterChange) {
       onFilterChange(newFilters);
-    }
   }, [localFilters, onFilterChange]);
   // Handle selection
   const handleRowSelect = useCallback((record: T, selected: boolean) => {
-    if (!onSelectionChange) return;
-    const recordKey = getRowKey(record, 0);
-    let newSelection: T[];
-    if (selected) {
-      newSelection = [...selectedRows, record];
-    } else {
+  if (!onSelectionChange) return;
+  const recordKey = getRowKey(record, 0);
+  let newSelection: T;
+  if (selected) {
+  newSelection = [...selectedRows, record];
+} else {
       newSelection = selectedRows.filter(row => getRowKey(row, 0) !== recordKey);
-    }
     onSelectionChange(newSelection);
   }, [selectedRows, onSelectionChange, getRowKey]);
   // Handle select all
@@ -171,7 +164,6 @@ export const AdminTable = <T extends Record<string, any> = any>({)
       onSelectionChange(data);
     } else {
       onSelectionChange([]);
-    }
   }, [data, onSelectionChange]);
   // Check if row is selected
   const isRowSelected = useCallback((record: T): boolean => {
@@ -184,26 +176,23 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     // Apply filters if no external filter handler
     if (!onFilterChange && Object.keys(localFilters).length > 0) {
       result = result.filter(record => {)
-        return Object.entries(localFilters).every(([key, value]) => {
+  return Object.entries(localFilters).every(([key, value]) => {
           if (!value) return true;
           const recordValue = record[key];
           if (typeof value === 'string') {
             return String(recordValue).toLowerCase().includes(value.toLowerCase());
-          }
           return recordValue === value;
         });
       });
-    }
     // Apply sorting if no external sort handler
     if (!onSort && localSort) {
-      result.sort((a, b) => {
-        const aValue = a[localSort.key];
-        const bValue = b[localSort.key];
-        if (aValue < bValue) return localSort.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return localSort.direction === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
+  result.sort((a, b) => {
+  const aValue = a[localSort.key];
+  const bValue = b[localSort.key];
+  if (aValue < bValue) return localSort.direction === 'asc' ? -1 : 1;
+  if (aValue > bValue) return localSort.direction === 'asc' ? 1 : -1;
+  return 0;
+});
     return result;
   }, [data, localFilters, localSort, onFilterChange, onSort]);
   // Render sort icon
@@ -211,7 +200,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     if (!sortable) return null;
     const isActive = localSort?.key === columnKey;
     const direction = localSort?.direction;
-    return ()
+    return;
       <span className="sort-icon">
         {isActive ? ()
           direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
@@ -229,7 +218,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     if (!column.filterable) return null;
     const value = localFilters[column.key] || '';
     if (column.filterType === 'select' && column.filterOptions) {
-      return ()
+      return;
         <select
           value={value}
           onChange={(e) => handleFilterChange(column.key, e.target.value)}
@@ -243,8 +232,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
           ))}
         </select>
       );
-    }
-    return ()
+    return;
       <input
         type={column.filterType === 'date' ? 'date' : 'text'}
         value={value}
@@ -256,25 +244,23 @@ export const AdminTable = <T extends Record<string, any> = any>({)
   };
   // Loading state
   if (loading && data.length === 0) {
-    return ()
+    return;
       <div className={`admin-table-container ${className}`}>}
         <LoadingSpinner message="Loading data..." />
       </div>
     );
-  }
   // Error state
   if (error && data.length === 0) {
-    return ()
+    return;
       <div className={`admin-table-container ${className}`}>}
         <div className="table-error">
           <p>Error loading data: {error}</p>
         </div>
       </div>
     );
-  }
   // Empty state
   if (processedData.length === 0 && !loading) {
-    return ()
+    return;
       <div className={`admin-table-container ${className}`}>}
         <EmptyState
           title={emptyText}
@@ -283,11 +269,10 @@ export const AdminTable = <T extends Record<string, any> = any>({)
         />
       </div>
     );
-  }
   const hasSelection = selectable && selectedRows.length > 0;
   const allSelected = selectedRows.length === data.length;
   const indeterminate = selectedRows.length > 0 && selectedRows.length < data.length;
-  return ()
+  return;
     <div className={`admin-table-container ${className}`}>}
       {/* Bulk Actions */}
       {hasSelection && bulkActions.length > 0 && ()
@@ -396,7 +381,6 @@ export const AdminTable = <T extends Record<string, any> = any>({)
                       : column.dataIndex
                       ? String(record[column.dataIndex] || '')
                       : ''
-                    }
                   </td>
                 ))}
                 {actions.length > 0 && ()

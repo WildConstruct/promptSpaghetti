@@ -19,9 +19,9 @@ import {
 
 // Mock IntersectionObserver
 const mockIntersectionObserver = {
-  observe: jest.fn<unknown[], unknown>(),
-  disconnect: jest.fn<unknown[], unknown>(),
-  unobserve: jest.fn<unknown[], unknown>()
+  observe: jest.fn<unknown, unknown>(),
+  disconnect: jest.fn<unknown, unknown>(),
+  unobserve: jest.fn<unknown, unknown>(),
 };
 const MockIntersectionObserver = jest.fn(() => mockIntersectionObserver);
 Object.defineProperty(global, 'IntersectionObserver', {)
@@ -31,8 +31,8 @@ Object.defineProperty(global, 'IntersectionObserver', {)
 
 // Mock performance.memory
 const mockPerformanceMemory = {
-  usedJSHeapSize: 50 * 1024 * 1024, // 50MB
-  totalJSHeapSize: 100 * 1024 * 1024, // 100MB
+  usedJSHeapSize: 50 * 1024 * 1024, // 50MB,
+  totalJSHeapSize: 100 * 1024 * 1024, // 100MB,
   jsHeapSizeLimit: 1024 * 1024 * 1024 // 1GB,
 };
 Object.defineProperty(performance, 'memory', {)
@@ -106,7 +106,7 @@ describe('useResourceManager', () => {
     expect(result.current).toBe(firstInstance);
   });
   it('should cleanup resources on unmount', () => {
-    const cleanupSpy = jest.fn<unknown[], unknown>();
+    const cleanupSpy = jest.fn<unknown, unknown>();
     const { result, unmount } = renderHook(() => useResourceManager());
     result.current.addCleanup(cleanupSpy);
     unmount();
@@ -122,7 +122,7 @@ describe('useResourceManager', () => {
   });
   it('should manage observers', () => {
     const { result } = renderHook(() => useResourceManager());
-    const mockObserver = { disconnect: jest.fn<unknown[], unknown>() };
+    const mockObserver = { disconnect: jest.fn<unknown, unknown>() };
     const removeObserver = result.current.addObserver(mockObserver);
     expect(typeof removeObserver).toBe('function');
     // Should disconnect observer when removed
@@ -144,7 +144,7 @@ describe('useResourceManager', () => {
 });
 describe('useStableCallback', () => {
   it('should return a stable callback reference', () => {
-    const mockCallback = jest.fn<unknown[], unknown>();
+    const mockCallback = jest.fn<unknown, unknown>();
     const { result, rerender } = renderHook()
       ({ callback, deps }) => useStableCallback(callback, deps),
       { initialProps: { callback: mockCallback, deps: ['dep1'] } }
@@ -155,8 +155,8 @@ describe('useStableCallback', () => {
     expect(result.current).toBe(firstCallback);
   });
   it('should update callback when dependencies change', () => {
-    const mockCallback1 = jest.fn<unknown[], unknown>();
-    const mockCallback2 = jest.fn<unknown[], unknown>();
+    const mockCallback1 = jest.fn<unknown, unknown>();
+    const mockCallback2 = jest.fn<unknown, unknown>();
     const { result, rerender } = renderHook()
       ({ callback, deps }) => useStableCallback(callback, deps),
       { initialProps: { callback: mockCallback1, deps: ['dep1'] } }
@@ -218,7 +218,6 @@ describe('useLimitedMemo', () => {
     // Add more entries than the cache limit
     for (let i = 2; i <= 5; i++) {
       rerender({ deps: [`dep${i}`] });}
-    }
     // Cache should have evicted some entries
     expect(factory).toHaveBeenCalledTimes(5);
     // Accessing an old dependency should cause recomputation
@@ -299,21 +298,20 @@ describe('useLazyLoading', () => {
     const mockElement = document.createElement('div');
     // Simulate ref being set
     act(() => {
-      if (result.current.ref.current === null) {
-        Object.defineProperty(result.current.ref, 'current', {)
-          value: mockElement,
-          writable: true,
-        });
-      }
+  if (result.current.ref.current === null) {
+  Object.defineProperty(result.current.ref, 'current', {)
+  value: mockElement,
+  writable: true,
+});
     });
     expect(mockIntersectionObserver.observe).toHaveBeenCalled();
   });
   it('should handle intersection changes', () => {
-    let observerCallback: (entries: unknown[]) => void;
-    MockIntersectionObserver.mockImplementation((callback) => {
-      observerCallback = callback;
-      return mockIntersectionObserver;
-    });
+  let observerCallback: (entries: unknown) => void;
+  MockIntersectionObserver.mockImplementation((callback) => {
+  observerCallback = callback;
+  return mockIntersectionObserver;
+});
     const { result } = renderHook(() => useLazyLoading());
     expect(result.current.isVisible).toBe(false);
     // Simulate element becoming visible
@@ -404,7 +402,7 @@ describe('useBatchedUpdates', () => {
   it('should allow manual flushing', () => {
     const { result } = renderHook(() => useBatchedUpdates<number>());
     act(() => {
-      const [, addItem, flush] = result.current;
+      const [ addItem, flush] = result.current;
       addItem(1);
       addItem(2);
       flush(); // Manual flush
@@ -415,7 +413,7 @@ describe('useBatchedUpdates', () => {
     const { result } = renderHook(() => useBatchedUpdates<string>());
     // First batch
     act(() => {
-      const [, addItem] = result.current;
+      const [ addItem] = result.current;
       addItem('batch1-item1');
       addItem('batch1-item2');
     });
@@ -425,7 +423,7 @@ describe('useBatchedUpdates', () => {
     expect(result.current[0]).toEqual(['batch1-item1', 'batch1-item2']);
     // Second batch
     act(() => {
-      const [, addItem] = result.current;
+      const [ addItem] = result.current;
       addItem('batch2-item1');
     });
     act(() => {
@@ -486,10 +484,10 @@ describe('memoryUtils', () => {
     });
   });
   describe('createStableRef', () => {
-    let cache: WeakCache<object, object>;
-    beforeEach(() => {
-      cache = new WeakCache();
-    });
+  let cache: WeakCache<object, object>;
+  beforeEach(() => {
+  cache = new WeakCache();
+});
     it('should return cached reference for equal objects', () => {
       const obj1 = { a: 1, b: 2 };
       const obj2 = { a: 1, b: 2 };

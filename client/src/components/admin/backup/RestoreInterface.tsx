@@ -30,156 +30,152 @@ import {
 } from 'lucide-react';
 
 // Types extending Epic 19 restore infrastructure for admin use
+
 export interface AdminRestorePoint {
-  recovery_point_id: string;
+  recovery_point_id: string;,
   name: string;
   description?: string;
-  point_in_time: Date;
+  point_in_time: Date;,
   created_at: Date;
-  expires_at: Date;
+  expires_at: Date;,
   backup_type: 'full' | 'incremental' | 'differential';
-  backup_size_bytes: number;
+  backup_size_bytes: number;,
   compressed_size_bytes: number;
-  record_count: number;
+  record_count: number;,
   status: 'available' | 'restoring' | 'expired' | 'archived' | 'failed';
-  validation_status: 'pending' | 'valid' | 'invalid' | 'corrupted';
+  validation_status: 'pending' | 'valid' | 'invalid' | 'corrupted';,
   included_data_types: {,
-    admin_configs: boolean;
-    user_permissions: boolean;
-    system_settings: boolean;
-    audit_logs: boolean;
-    marketplace_data: boolean;
-  };
-  storage_location: string;
+  admin_configs: boolean;,
+  user_permissions: boolean;
+  system_settings: boolean;,
+  audit_logs: boolean;
+  marketplace_data: boolean;
+};
+  storage_location: string;,
   storage_provider: 'local' | 'aws_s3' | 'gcp_storage' | 'azure_blob';
-  encryption_enabled: boolean;
+  encryption_enabled: boolean;,
   created_by: string;
   restore_count: number;
   last_restored_at?: Date;
 }
-
 export interface RestoreRequest {
-  restore_id: string;
+  restore_id: string;,
   recovery_point_id: string;
-  restore_type: 'full_system' | 'admin_configs' | 'user_data' | 'selective';
+  restore_type: 'full_system' | 'admin_configs' | 'user_data' | 'selective';,
   restore_scope: 'replace_all' | 'merge_data' | 'preview_only' | 'dry_run';
   target_timestamp?: Date;
   data_selection: {,
-    include_admin_configs: boolean;
-    include_user_permissions: boolean;
-    include_system_settings: boolean;
-    include_audit_logs: boolean;
-    include_marketplace_data: boolean;
-    specific_tables?: string[];
-    where_conditions?: Record<string, unknown>;
-  };
+  include_admin_configs: boolean;,
+  include_user_permissions: boolean;
+  include_system_settings: boolean;,
+  include_audit_logs: boolean;
+  include_marketplace_data: boolean;
+  specific_tables?: string;
+  where_conditions?: Record<string, unknown>;
+};
   restore_options: {,
-    create_backup_first: boolean;
-    validate_before_restore: boolean;
-    validation_level: 'basic' | 'full' | 'compliance';
-    rollback_on_failure: boolean;
-    notify_admins: boolean;
-    maintenance_mode: boolean;
-  };
+  create_backup_first: boolean;
+  validate_before_restore: boolean;,
+  validation_level: 'basic' | 'full' | 'compliance';
+  rollback_on_failure: boolean;,
+  notify_admins: boolean;
+  maintenance_mode: boolean;
+};
   conflict_resolution: {,
-    duplicate_handling: 'skip' | 'replace' | 'merge';
-    permission_conflicts: 'preserve_current' | 'restore_backup' | 'manual_review';
-    config_conflicts: 'preserve_current' | 'restore_backup' | 'merge_smart';
-  };
-  requested_by: string;
+  duplicate_handling: 'skip' | 'replace' | 'merge';
+  permission_conflicts: 'preserve_current' | 'restore_backup' | 'manual_review';,
+  config_conflicts: 'preserve_current' | 'restore_backup' | 'merge_smart';
+};
+  requested_by: string;,
   reason: string;
   approval_required: boolean;
   approved_by?: string;
 }
-
 export interface RestoreExecution {
-  execution_id: string;
+  execution_id: string;,
   restore_request: RestoreRequest;
   status: 'pending_approval' | 'approved' | 'preparing' | 'restoring' | 'validating' | 'completed' | 'failed' | 'cancelled' | 'rolled_back';
   started_at?: Date;
   completed_at?: Date;
   estimated_completion?: Date;
   progress: {,
-    current_phase: string;
-    phases_completed: number;
-    total_phases: number;
-    percentage: number;
-    records_processed: number;
-    total_records: number;
-    current_table?: string;
-  };
+  current_phase: string;,
+  phases_completed: number;
+  total_phases: number;,
+  percentage: number;
+  records_processed: number;,
+  total_records: number;
+  current_table?: string;
+};
   pre_restore_backup_id?: string;
   validation_results?: {
-    pre_restore_valid: boolean;
-    post_restore_valid: boolean;
-    data_integrity_score: number;
-    issues_found: string[];
-  };
+  pre_restore_valid: boolean;,
+  post_restore_valid: boolean;
+  data_integrity_score: number;,
+  issues_found: string;
+};
   error_details?: {
-    error_phase: string;
-    error_message: string;
-    recovery_suggestions: string[];
-    rollback_available: boolean;
-  };
+  error_phase: string;,
+  error_message: string;
+  recovery_suggestions: string;,
+  rollback_available: boolean;
+};
   performance_metrics: {,
-    records_per_second: number;
-    data_transfer_rate_mbps: number;
-    cpu_usage_percent: number;
-    memory_usage_mb: number;
-  };
+  records_per_second: number;
+  data_transfer_rate_mbps: number;,
+  cpu_usage_percent: number;
+  memory_usage_mb: number;
+};
 }
-
 export interface RestorePreview {
-  recovery_point: AdminRestorePoint;
+  recovery_point: AdminRestorePoint;,
   affected_data: {,
-    table_name: string;
-    current_record_count: number;
-    restore_record_count: number;
-    estimated_changes: number;
-    conflict_count: number;
-    preview_records: unknown[];
-  }[];
+  table_name: string;,
+  current_record_count: number;
+  restore_record_count: number;,
+  estimated_changes: number;
+  conflict_count: number;,
+  preview_records: unknown;
+}[];
   impact_analysis: {,
-    users_affected: number;
-    configs_changed: number;
-    permissions_modified: number;
-    system_impact_level: 'low' | 'medium' | 'high' | 'critical';
-    estimated_downtime_minutes: number;
-  };
-  recommendations: string[];
-  warnings: string[];
-  blockers: string[];
+  users_affected: number;
+  configs_changed: number;,
+  permissions_modified: number;
+  system_impact_level: 'low' | 'medium' | 'high' | 'critical';,
+  estimated_downtime_minutes: number;
+};
+  recommendations: string;,
+  warnings: string;
+  blockers: string;
 }
-
 export const RestoreInterface: React.FC = () => {
   const [selectedPoint, setSelectedPoint] = useState<AdminRestorePoint | null>(null);
   const [restorePreview, setRestorePreview] = useState<RestorePreview | null>(null);
   const [restoreRequest, setRestoreRequest] = useState<Partial<RestoreRequest>>({)
-    restore_type: 'selective',
-    restore_scope: 'preview_only',
-    data_selection: {,
-      include_admin_configs: true,
-      include_user_permissions: false,
-      include_system_settings: false,
-      include_audit_logs: false,
-      include_marketplace_data: false,
-    },
-    restore_options: {,
-      create_backup_first: true,
-      validate_before_restore: true,
-      validation_level: 'full',
-      rollback_on_failure: true,
-      notify_admins: true,
-      maintenance_mode: false,
-    },
-    conflict_resolution: {,
-      duplicate_handling: 'skip',
-      permission_conflicts: 'manual_review',
-      config_conflicts: 'preserve_current',
-    }
-  });
-  const [activeExecutions, setActiveExecutions] = useState<RestoreExecution[]>([]);
-  const [recoveryPoints, setRecoveryPoints] = useState<AdminRestorePoint[]>([]);
+  restore_type: 'selective',
+  restore_scope: 'preview_only',
+  data_selection: {,
+  include_admin_configs: true,
+  include_user_permissions: false,
+  include_system_settings: false,
+  include_audit_logs: false,
+  include_marketplace_data: false,
+},
+  restore_options: {,
+  create_backup_first: true,
+  validate_before_restore: true,
+  validation_level: 'full',
+  rollback_on_failure: true,
+  notify_admins: true,
+  maintenance_mode: false,
+},
+  conflict_resolution: {,
+  duplicate_handling: 'skip',
+  permission_conflicts: 'manual_review',
+  config_conflicts: 'preserve_current',
+});
+  const [activeExecutions, setActiveExecutions] = useState<RestoreExecution>([]);
+  const [recoveryPoints, setRecoveryPoints] = useState<AdminRestorePoint>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('select');
   // Load recovery points
@@ -195,73 +191,66 @@ export const RestoreInterface: React.FC = () => {
     setLoading(true);
     try {
       const response = await fetch('/api/admin/backup/recovery-points', {)
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (response.ok) {
-        const points = await response.json();
-        setRecoveryPoints(points.filter((p: AdminRestorePoint) => 
-          p.status === 'available' && p.validation_status === 'valid'
-        ));
-      }
-    } catch (error) {
-      console.error('Failed to load recovery points:', error);
-    }
-    setLoading(false);
-  };
+  const points = await response.json();
+  setRecoveryPoints(points.filter((p: AdminRestorePoint) =>,
+  p.status === 'available' && p.validation_status === 'valid'
+  ));
+} catch (error) {
+  console.error('Failed to load recovery points:', error);
+  setLoading(false);
+};
   const loadActiveExecutions = async () => {
     try {
       const response = await fetch('/api/admin/restore/executions?status=active', {)
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (response.ok) {
         const executions = await response.json();
         setActiveExecutions(executions);
-      }
     } catch (error) {
-      console.error('Failed to load active executions:', error);
-    }
-  };
+  console.error('Failed to load active executions:', error);
+};
   const handleSelectRecoveryPoint = async (point: AdminRestorePoint) => {
     setSelectedPoint(point);
     setActiveTab('configure');
     // Generate preview
     try {
       const response = await fetch('/api/admin/restore/preview', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
-        },
-        body: JSON.stringify({),
-          recovery_point_id: point.recovery_point_id,
-          data_selection: restoreRequest.data_selection,
-        })
+  },
+  body: JSON.stringify({,)
+  recovery_point_id: point.recovery_point_id,
+  data_selection: restoreRequest.data_selection,
+}
       });
       if (response.ok) {
         const preview = await response.json();
         setRestorePreview(preview);
-      }
     } catch (error) {
-      console.error('Failed to generate preview:', error);
-    }
-  };
+  console.error('Failed to generate preview:', error);
+};
   const handleExecuteRestore = async () => {
     if (!selectedPoint || !restoreRequest.reason?.trim()) {
       alert('Please provide a reason for the restore operation.');
       return;
-    }
     try {
       const response = await fetch('/api/admin/restore/execute', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
-        },
-        body: JSON.stringify({),
-          ...restoreRequest,
-          recovery_point_id: selectedPoint.recovery_point_id,
-          requested_by: 'current-user' // Should come from auth context,
-        })
+  },
+  body: JSON.stringify({),
+  ...restoreRequest,
+  recovery_point_id: selectedPoint.recovery_point_id,
+  requested_by: 'current-user' // Should come from auth context,
+}
       });
       if (response.ok) {
         const execution = await response.json();
@@ -270,11 +259,9 @@ export const RestoreInterface: React.FC = () => {
         // Reset form
         setSelectedPoint(null);
         setRestorePreview(null);
-      }
     } catch (error) {
-      console.error('Failed to execute restore:', error);
-    }
-  };
+  console.error('Failed to execute restore:', error);
+};
   const formatBytes = (bytes: number) => {
     if (bytes === 0) return '0 B';
     const k = 1024;
@@ -294,18 +281,18 @@ export const RestoreInterface: React.FC = () => {
   };
   */
   const getStatusColor = (status: string) => {
-    const colors = {
-      available: 'bg-green-100 text-green-800',
-      restoring: 'bg-blue-100 text-blue-800',
-      expired: 'bg-gray-100 text-gray-800',
-      failed: 'bg-red-100 text-red-800',
-      completed: 'bg-green-100 text-green-800',
-      cancelled: 'bg-yellow-100 text-yellow-800',
-      pending_approval: 'bg-purple-100 text-purple-800',
-    };
+  const colors = {
+  available: 'bg-green-100 text-green-800',
+  restoring: 'bg-blue-100 text-blue-800',
+  expired: 'bg-gray-100 text-gray-800',
+  failed: 'bg-red-100 text-red-800',
+  completed: 'bg-green-100 text-green-800',
+  cancelled: 'bg-yellow-100 text-yellow-800',
+  pending_approval: 'bg-purple-100 text-purple-800',
+};
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
-  const renderSelectTab = () => (;)
+  const renderSelectTab = () => (;);
     <div className="select-content">
       <div className="search-filters">
         <div className="search-bar">
@@ -412,7 +399,7 @@ export const RestoreInterface: React.FC = () => {
       </div>
     </div>
   );
-  const renderConfigureTab = () => (;)
+  const renderConfigureTab = () => (;);
     <div className="configure-content">
       {selectedPoint && ()
         <>
@@ -449,8 +436,8 @@ export const RestoreInterface: React.FC = () => {
                         checked={restoreRequest.restore_type === option.value}
                         onChange={(e) => setRestoreRequest(prev => ({ )
                           ...prev, 
-                          restore_type: e.target.value as 'full_system' | 'admin_configs' | 'user_data' | 'selective' ,
-                        }))}
+                          restore_type: e.target.value as 'full_system' | 'admin_configs' | 'user_data' | 'selective' ;
+  }))}
                       />
                       <div className="radio-content">
                         <span className="radio-label">{option.label}</span>
@@ -481,12 +468,11 @@ export const RestoreInterface: React.FC = () => {
                           type="checkbox"
                           checked={restoreRequest.data_selection?.[option.key as keyof typeof restoreRequest.data_selection] || false}
                           onChange={(e) => setRestoreRequest(prev => ({)
-                            ...prev,
-                            data_selection: {,
-                              ...prev.data_selection!,
-                              [option.key]: e.target.checked
-                            }
-                          }))}
+  ...prev,
+  data_selection: {,
+  ...prev.data_selection!,
+  [option.key]: e.target.checked,
+}))}
                         />
                         <div className="checkbox-content">
                           <span className="checkbox-label">{option.label}</span>
@@ -510,12 +496,11 @@ export const RestoreInterface: React.FC = () => {
                       type="checkbox"
                       checked={restoreRequest.restore_options?.create_backup_first || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
-                        ...prev,
-                        restore_options: {,
-                          ...prev.restore_options!,
-                          create_backup_first: e.target.checked,
-                        }
-                      }))}
+  ...prev,
+  restore_options: {,
+  ...prev.restore_options!,
+  create_backup_first: e.target.checked,
+}))}
                     />
                     <span>Create backup before restore</span>
                   </label>
@@ -524,12 +509,11 @@ export const RestoreInterface: React.FC = () => {
                       type="checkbox"
                       checked={restoreRequest.restore_options?.validate_before_restore || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
-                        ...prev,
-                        restore_options: {,
-                          ...prev.restore_options!,
-                          validate_before_restore: e.target.checked,
-                        }
-                      }))}
+  ...prev,
+  restore_options: {,
+  ...prev.restore_options!,
+  validate_before_restore: e.target.checked,
+}))}
                     />
                     <span>Validate data before restore</span>
                   </label>
@@ -538,12 +522,11 @@ export const RestoreInterface: React.FC = () => {
                       type="checkbox"
                       checked={restoreRequest.restore_options?.rollback_on_failure || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
-                        ...prev,
-                        restore_options: {,
-                          ...prev.restore_options!,
-                          rollback_on_failure: e.target.checked,
-                        }
-                      }))}
+  ...prev,
+  restore_options: {,
+  ...prev.restore_options!,
+  rollback_on_failure: e.target.checked,
+}))}
                     />
                     <span>Rollback on failure</span>
                   </label>
@@ -552,12 +535,11 @@ export const RestoreInterface: React.FC = () => {
                       type="checkbox"
                       checked={restoreRequest.restore_options?.maintenance_mode || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
-                        ...prev,
-                        restore_options: {,
-                          ...prev.restore_options!,
-                          maintenance_mode: e.target.checked,
-                        }
-                      }))}
+  ...prev,
+  restore_options: {,
+  ...prev.restore_options!,
+  maintenance_mode: e.target.checked,
+}))}
                     />
                     <span>Enable maintenance mode during restore</span>
                   </label>
@@ -623,8 +605,8 @@ export const RestoreInterface: React.FC = () => {
                   value={restoreRequest.reason || ''}
                   onChange={(e) => setRestoreRequest(prev => ({ )
                     ...prev, 
-                    reason: e.target.value ,
-                  }))}
+                    reason: e.target.value ;
+  }))}
                   rows={4}
                   required
                 />
@@ -641,8 +623,8 @@ export const RestoreInterface: React.FC = () => {
                 variant="outline"
                 onClick={() => setRestoreRequest(prev => ({ )
                   ...prev, 
-                  restore_scope: 'preview_only' ,
-                }))}
+                  restore_scope: 'preview_only' ;
+  }))}
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Preview Only
@@ -661,7 +643,7 @@ export const RestoreInterface: React.FC = () => {
       )}
     </div>
   );
-  const renderMonitorTab = () => (;)
+  const renderMonitorTab = () => (;);
     <div className="monitor-content">
       <div className="monitor-header">
         <Button variant="outline" onClick={loadActiveExecutions}>
@@ -766,7 +748,7 @@ export const RestoreInterface: React.FC = () => {
       )}
     </div>
   );
-  return ()
+  return;
     <div className="restore-interface">
       <div className="restore-header">
         <div className="header-content">
@@ -797,382 +779,307 @@ export const RestoreInterface: React.FC = () => {
       </Tabs>
       <style>{`
         .restore-interface {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
-          background: #f8fafc;
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 24px;,
+  background: #f8fafc;
           min-height: 100vh;
-        }
         .restore-header {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 12px;,
+  padding: 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         .header-content {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-        }
         .title-section {
           display: flex;
-          align-items: center;
-          gap: 16px;
-        }
+          align-items: center;,
+  gap: 16px;
         .restore-tabs {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 12px;,
+  padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         /* Select Tab Styles */
         .select-content {
           space-y: 24px;
-        }
         .search-filters {
           display: flex;
-          flex-direction: column;
-          gap: 16px;
-          padding: 16px;
-          background: #f9fafb;
+          flex-direction: column;,
+  gap: 16px;
+          padding: 16px;,
+  background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 24px;
-        }
         .search-bar {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 12px;
-          background: white;
+          align-items: center;,
+  gap: 8px;
+          padding: 8px 12px;,
+  background: white;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .search-input {
-          flex: 1;
-          outline: none;
+          flex: 1;,
+  outline: none;
           border: none;
           font-size: 14px;
-        }
         .filter-controls {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .filter-select {
-          padding: 6px 12px;
-          border: 1px solid #e5e7eb;
-          border-radius: 4px;
-          background: white;
+          padding: 6px 12px;,
+  border: 1px solid #e5e7eb;
+          border-radius: 4px;,
+  background: white;
           font-size: 14px;
-        }
         .recovery-points-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
           gap: 16px;
-        }
         .recovery-point-card {
-          border: 1px solid #e5e7eb;
-          cursor: pointer;
+          border: 1px solid #e5e7eb;,
+  cursor: pointer;
           transition: all 0.2s;
-        }
         .recovery-point-card:hover {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           transform: translateY(-1px);
-        }
         .recovery-point-card.selected {
           border-color: #3b82f6;
           box-shadow: 0 0 0 1px #3b82f6;
-        }
         .point-header {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .point-info {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-        }
         .point-name {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
-        }
         .point-badges {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .point-timestamp {
           display: flex;
-          align-items: center;
-          gap: 4px;
-        }
+          align-items: center;,
+  gap: 4px;
         .point-details {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
+          flex-direction: column;,
+  gap: 8px;
           margin-bottom: 16px;
-        }
         .detail-item {
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .data-scope {
           border-top: 1px solid #f3f4f6;
           padding-top: 12px;
-        }
         .scope-title {
           font-size: 14px;
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           margin: 0 0 8px 0;
-        }
         .scope-items {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         /* Configure Tab Styles */
         .configure-content {
           space-y: 24px;
-        }
         .selected-point-info {
           border: 1px solid #e5e7eb;
           margin-bottom: 24px;
-        }
         .configuration-sections {
           space-y: 20px;
-        }
         .config-section {
           border: 1px solid #e5e7eb;
-        }
         .radio-group, .checkbox-group {
           space-y: 12px;
-        }
         .radio-option, .checkbox-option {
           display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          padding: 12px;
-          border: 1px solid #e5e7eb;
-          border-radius: 6px;
-          cursor: pointer;
+          align-items: flex-start;,
+  gap: 12px;
+          padding: 12px;,
+  border: 1px solid #e5e7eb;
+          border-radius: 6px;,
+  cursor: pointer;
           transition: all 0.2s;
-        }
-        .radio-option:hover, .checkbox-option:hover {
-          background: #f9fafb;
+        .radio-option:hover, .checkbox-option:hover {,
+  background: #f9fafb;
           border-color: #d1d5db;
-        }
         .radio-option input[type="radio"]:checked + .radio-content,
         .checkbox-option input[type="checkbox"]:checked + .checkbox-content {
           color: #1f2937;
-        }
         .radio-content, .checkbox-content {
           display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
+          flex-direction: column;,
+  gap: 4px;
         .radio-label, .checkbox-label {
-          font-weight: 600;
-          color: #374151;
-        }
+          font-weight: 600;,
+  color: #374151;
         .radio-desc, .checkbox-desc {
-          font-size: 14px;
-          color: #6b7280;
-        }
+          font-size: 14px;,
+  color: #6b7280;
         .options-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 12px;
-        }
         .option-checkbox {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           cursor: pointer;
-          font-size: 14px;
-          color: #374151;
-        }
+          font-size: 14px;,
+  color: #374151;
         .impact-summary {
           space-y: 16px;
-        }
         .impact-metrics {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 12px;
-        }
         .metric-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 8px 12px;
+          align-items: center;,
+  padding: 8px 12px;
           background: #f9fafb;
           border-radius: 4px;
-        }
         .metric-label {
-          font-size: 14px;
-          color: #6b7280;
-        }
+          font-size: 14px;,
+  color: #6b7280;
         .metric-value {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .warnings-section {
-          padding: 12px;
-          background: #fffbeb;
+          padding: 12px;,
+  background: #fffbeb;
           border: 1px solid #fed7aa;
           border-radius: 6px;
-        }
         .warnings-title {
           display: flex;
           align-items: center;
-          font-weight: 600;
-          color: #92400e;
+          font-weight: 600;,
+  color: #92400e;
           margin: 0 0 8px 0;
-        }
         .warnings-list {
           margin: 0;
-          padding-left: 20px;
-          color: #92400e;
-        }
+          padding-left: 20px;,
+  color: #92400e;
         .warnings-list li {
           margin-bottom: 4px;
-        }
         .action-buttons {
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding-top: 20px;
           border-top: 1px solid #f3f4f6;
-        }
         .primary-actions {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         /* Monitor Tab Styles */
         .monitor-content {
           space-y: 24px;
-        }
         .monitor-header {
           display: flex;
           justify-content: flex-end;
           margin-bottom: 24px;
-        }
         .empty-state {
           border: 1px solid #e5e7eb;
-        }
         .executions-list {
           space-y: 16px;
-        }
         .execution-card {
           border: 1px solid #e5e7eb;
-        }
         .execution-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-        }
         .execution-info {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .execution-title {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
-        }
         .execution-actions {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .execution-details {
           space-y: 16px;
-        }
         .progress-section {
           space-y: 8px;
-        }
         .progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .progress-label {
           font-size: 14px;
-          font-weight: 600;
-          color: #374151;
-        }
+          font-weight: 600;,
+  color: #374151;
         .progress-percentage {
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .progress-bar {
-          width: 100%;
-          height: 8px;
+          width: 100%;,
+  height: 8px;
           background: #f3f4f6;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .progress-fill {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s;
-        }
         .progress-details {
           display: flex;
           justify-content: space-between;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .metrics-section {
-          display: flex;
-          gap: 20px;
+          display: flex;,
+  gap: 20px;
           flex-wrap: wrap;
-        }
         .metric-item {
           display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 14px;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 4px;
+          font-size: 14px;,
+  color: #6b7280;
         .error-section {
-          padding: 12px;
-          background: #fef2f2;
+          padding: 12px;,
+  background: #fef2f2;
           border: 1px solid #fecaca;
           border-radius: 6px;
-        }
         .error-header {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           margin-bottom: 8px;
-        }
         .error-title {
-          font-weight: 600;
-          color: #dc2626;
-        }
+          font-weight: 600;,
+  color: #dc2626;
         .error-message {
-          color: #dc2626;
-          margin: 0 0 12px 0;
-        }
+          color: #dc2626;,
+  margin: 0 0 12px 0;
         .recovery-suggestions h5 {
-          font-weight: 600;
-          color: #dc2626;
+          font-weight: 600;,
+  color: #dc2626;
           margin: 0 0 8px 0;
-        }
         .recovery-suggestions ul {
           margin: 0;
-          padding-left: 20px;
-          color: #dc2626;
-        }
+          padding-left: 20px;,
+  color: #dc2626;
         .recovery-suggestions li {
           margin-bottom: 4px;
-        }
         /* Badge variants */
         .impact-low { background: #d1fae5; color: #065f46; }
         .impact-medium { background: #fef3c7; color: #92400e; }
@@ -1182,33 +1089,24 @@ export const RestoreInterface: React.FC = () => {
         @media (max-width: 768px) {
           .restore-interface {
             padding: 16px;
-          }
           .recovery-points-grid {
             grid-template-columns: 1fr;
-          }
           .point-info {
-            flex-direction: column;
-            gap: 8px;
-          }
+            flex-direction: column;,
+  gap: 8px;
           .impact-metrics {
             grid-template-columns: 1fr;
-          }
           .action-buttons {
-            flex-direction: column;
-            gap: 12px;
+            flex-direction: column;,
+  gap: 12px;
             align-items: stretch;
-          }
           .primary-actions {
             justify-content: stretch;
-          }
           .options-grid {
             grid-template-columns: 1fr;
-          }
           .metrics-section {
-            flex-direction: column;
-            gap: 8px;
-          }
-        }
+            flex-direction: column;,
+  gap: 8px;
       `}</style>
     </div>
   );

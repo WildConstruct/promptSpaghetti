@@ -16,13 +16,12 @@ const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore
 // Type for mock auth store data
 interface MockAuthStore {
   isAuthenticated?: boolean;
-  user?: { id: string; email: string; roles: string[] } | null;
+  user?: { id: string; email: string; roles: string } | null;
   checkAuthStatus?: jest.Mock;
   setReturnUrl?: jest.Mock;
-}
 
 // Mock navigation
-const mockNavigate = jest.fn<unknown[], unknown>();
+const mockNavigate = jest.fn<unknown, unknown>();
 jest.mock('react-router-dom', () => ({)
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
@@ -37,15 +36,15 @@ describe('RouteGuard', () => {
     jest.clearAllMocks();
   });
   describe('Basic Authentication', () => {
-    it('renders loading state while checking authentication', () => {
-      mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: false,
-        isLoading: true,
-        user: null,
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
-      } as MockAuthStore);
-      render()
+  it('renders loading state while checking authentication', () => {
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  isLoading: true,
+  user: null,
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+  setReturnUrl: jest.fn<unknown, unknown>(),
+} as MockAuthStore);
+      render();
         <BrowserRouter>
           <RouteGuard>
             <TestComponent />
@@ -56,14 +55,14 @@ describe('RouteGuard', () => {
       expect(screen.getByText('Checking access permissions...')).toBeInTheDocument();
     });
     it('renders custom loading component', () => {
-      mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: false,
-        isLoading: true,
-        user: null,
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
-      } as MockAuthStore);
-      render()
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  isLoading: true,
+  user: null,
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+  setReturnUrl: jest.fn<unknown, unknown>(),
+} as MockAuthStore);
+      render();
         <BrowserRouter>
           <RouteGuard loadingComponent={<LoadingComponent />}>
             <TestComponent />
@@ -73,14 +72,14 @@ describe('RouteGuard', () => {
       expect(screen.getByText('Custom Loading')).toBeInTheDocument();
     });
     it('redirects unauthenticated user to login', async () => {
-      mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: false,
-        isLoading: false,
-        user: null,
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
-      } as MockAuthStore);
-      render()
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  isLoading: false,
+  user: null,
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+  setReturnUrl: jest.fn<unknown, unknown>(),
+} as MockAuthStore);
+      render();
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<div>Login Page</div>} />
@@ -98,13 +97,13 @@ describe('RouteGuard', () => {
     });
     it('renders protected content for authenticated user', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'test@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <RouteGuard>
             <TestComponent />
@@ -119,13 +118,13 @@ describe('RouteGuard', () => {
   describe('Role-Based Access Control', () => {
     it('grants access to user with required role', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'admin@example.com', roles: ['admin'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <RouteGuard access={{ requireAuth: true, requiredRoles: ['admin'] }}>
             <TestComponent />
@@ -138,13 +137,13 @@ describe('RouteGuard', () => {
     });
     it('denies access to user without required role', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <RouteGuard access={{ requireAuth: true, requiredRoles: ['admin'] }}>
             <TestComponent />
@@ -152,19 +151,19 @@ describe('RouteGuard', () => {
         </BrowserRouter>
       );
       await waitFor(() => {
-        expect(screen.getByText('Access Denied')).toBeInTheDocument();
-        expect(screen.getByText('Required roles: admin')).toBeInTheDocument();
-      });
+  expect(screen.getByText('Access Denied')).toBeInTheDocument();
+  expect(screen.getByText('Required roles: admin')).toBeInTheDocument();
+});
     });
     it('grants access to user with any of multiple required roles', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'moderator@example.com', roles: ['moderator'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <RouteGuard access={{ requireAuth: true, requiredRoles: ['admin', 'moderator'] }}>
             <TestComponent />
@@ -179,18 +178,18 @@ describe('RouteGuard', () => {
   describe('Permission-Based Access Control', () => {
     it('grants access to user with required permissions', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
-          <RouteGuard access={{ 
-            requireAuth: true, 
-            requiredPermissions: ['graphs:read', 'graphs:write'] 
-          }}>
+          <RouteGuard access={{
+  requireAuth: true,
+  requiredPermissions: ['graphs:read', 'graphs:write'],
+}}>
             <TestComponent />
           </RouteGuard>
         </BrowserRouter>
@@ -201,72 +200,72 @@ describe('RouteGuard', () => {
     });
     it('denies access to user without required permissions', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'viewer@example.com', roles: ['viewer'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
-          <RouteGuard access={{ 
-            requireAuth: true, 
-            requiredPermissions: ['admin:users'] ,
-          }}>
+          <RouteGuard access={{
+  requireAuth: true,
+  requiredPermissions: ['admin:users'],
+}}>
             <TestComponent />
           </RouteGuard>
         </BrowserRouter>
       );
       await waitFor(() => {
-        expect(screen.getByText('Access Denied')).toBeInTheDocument();
-        expect(screen.getByText('Required permissions: admin:users')).toBeInTheDocument();
-      });
+  expect(screen.getByText('Access Denied')).toBeInTheDocument();
+  expect(screen.getByText('Required permissions: admin:users')).toBeInTheDocument();
+});
     });
   });
   describe('Custom Access Checks', () => {
     it('grants access when custom check returns true', async () => {
-      const customCheck = jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown as unknown);
+      const customCheck = jest.fn<unknown, unknown>().mockResolvedValue(true as unknown as unknown as unknown);
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
-          <RouteGuard access={{ 
-            requireAuth: true, 
-            customCheck 
-          }}>
+          <RouteGuard access={{
+  requireAuth: true,
+  customCheck
+}}>
             <TestComponent />
           </RouteGuard>
         </BrowserRouter>
       );
       await waitFor(() => {
-        expect(customCheck).toHaveBeenCalledWith({ )
-          id: '1', 
-          email: 'user@example.com', 
-          roles: ['user'] ,
-        });
+  expect(customCheck).toHaveBeenCalledWith({ )
+  id: '1',
+  email: 'user@example.com',
+  roles: ['user'],
+});
         expect(screen.getByText('Protected Content')).toBeInTheDocument();
       });
     });
     it('denies access when custom check returns false', async () => {
-      const customCheck = jest.fn<unknown[], unknown>().mockResolvedValue(false as unknown as unknown as unknown);
+      const customCheck = jest.fn<unknown, unknown>().mockResolvedValue(false as unknown as unknown as unknown);
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
-          <RouteGuard access={{ 
-            requireAuth: true, 
-            customCheck 
-          }}>
+          <RouteGuard access={{
+  requireAuth: true,
+  customCheck
+}}>
             <TestComponent />
           </RouteGuard>
         </BrowserRouter>
@@ -280,13 +279,13 @@ describe('RouteGuard', () => {
   describe('Custom Components', () => {
     it('renders custom unauthorized component', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <RouteGuard 
             access={{ requireAuth: true, requiredRoles: ['admin'] }}
@@ -302,23 +301,23 @@ describe('RouteGuard', () => {
     });
     it('redirects to custom unauthorized route', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <Routes>
             <Route path="/forbidden" element={<div>Forbidden Page</div>} />
             <Route path="/protected" element={
-              <RouteGuard 
-                access={{ 
-                  requireAuth: true, 
-                  requiredRoles: ['admin'],
-                  unauthorizedRedirect: '/forbidden',
-                }}
+  <RouteGuard
+  access={{
+  requireAuth: true,
+  requiredRoles: ['admin'],
+  unauthorizedRedirect: '/forbidden',
+}}
               >
                 <TestComponent />
               </RouteGuard>
@@ -334,13 +333,13 @@ describe('RouteGuard', () => {
   describe('Convenience Components', () => {
     it('AdminRoute allows admin access', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'admin@example.com', roles: ['admin'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <AdminRoute>
             <TestComponent />
@@ -353,13 +352,13 @@ describe('RouteGuard', () => {
     });
     it('AdminRoute denies non-admin access', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <Routes>
             <Route path="/unauthorized" element={<div>Unauthorized Page</div>} />
@@ -377,13 +376,13 @@ describe('RouteGuard', () => {
     });
     it('ModeratorRoute allows moderator and admin access', async () => {
       mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: true,
+  isAuthenticated: true,
         isLoading: false,
         user: { id: '1', email: 'moderator@example.com', roles: ['moderator'] },
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
+        checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+        setReturnUrl: jest.fn<unknown, unknown>()
       } as MockAuthStore);
-      render()
+      render();
         <BrowserRouter>
           <ModeratorRoute>
             <TestComponent />
@@ -396,15 +395,15 @@ describe('RouteGuard', () => {
     });
   });
   describe('Public Routes', () => {
-    it('allows access to public routes without authentication', async () => {
-      mockUseAuthStore.mockReturnValue({)
-        isAuthenticated: false,
-        isLoading: false,
-        user: null,
-        checkAuthStatus: jest.fn<unknown[], unknown>( as unknown as unknown),
-        setReturnUrl: jest.fn<unknown[], unknown>()
-      } as MockAuthStore);
-      render()
+  it('allows access to public routes without authentication', async () => {
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  isLoading: false,
+  user: null,
+  checkAuthStatus: jest.fn<unknown, unknown>( as unknown as unknown),
+  setReturnUrl: jest.fn<unknown, unknown>(),
+} as MockAuthStore);
+      render();
         <BrowserRouter>
           <RouteGuard access={{ requireAuth: false }}>
             <TestComponent />
@@ -422,7 +421,7 @@ describe('RouteGuard', () => {
 describe('usePermissions Hook', () => {
   const TestHookComponent = () => {
     const { hasPermission, hasRole, userRoles, userPermissions } = usePermissions();
-    return ()
+    return;
       <div>
         <div>Has graphs:read: {hasPermission('graphs:read').toString()}</div>
         <div>Has admin role: {hasRole('admin').toString()}</div>
@@ -433,7 +432,7 @@ describe('usePermissions Hook', () => {
   };
   it('correctly identifies user permissions', () => {
     mockUseAuthStore.mockReturnValue({)
-      user: { roles: ['user'] }
+  user: { roles: ['user'] }
     } as any as unknown as unknown as unknown);
     render(<TestHookComponent />);
     expect(screen.getByText('Has graphs:read: true')).toBeInTheDocument();
@@ -442,7 +441,7 @@ describe('usePermissions Hook', () => {
   });
   it('handles admin permissions', () => {
     mockUseAuthStore.mockReturnValue({)
-      user: { roles: ['admin'] }
+  user: { roles: ['admin'] }
     } as any as unknown as unknown as unknown);
     render(<TestHookComponent />);
     expect(screen.getByText('Has admin role: true')).toBeInTheDocument();
@@ -452,7 +451,7 @@ describe('usePermissions Hook', () => {
 describe('useRouteAccess Hook', () => {
   const TestRouteAccessComponent = ({ pathname }: { pathname?: string }) => {
     const { isAccessible, isLoading, requiresAuth } = useRouteAccess(pathname);
-    return ()
+    return;
       <div>
         <div>Accessible: {isAccessible.toString()}</div>
         <div>Loading: {isLoading.toString()}</div>
@@ -461,17 +460,17 @@ describe('useRouteAccess Hook', () => {
     );
   };
   it('correctly identifies public route access', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: false,
-      user: null,
-    } as any as unknown as unknown as unknown);
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  user: null,
+} as any as unknown as unknown as unknown);
     render(<TestRouteAccessComponent pathname="/login" />);
     expect(screen.getByText('Accessible: true')).toBeInTheDocument();
     expect(screen.getByText('Requires Auth: false')).toBeInTheDocument();
   });
   it('correctly identifies protected route access for authenticated user', () => {
     mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: true,
+  isAuthenticated: true,
       user: { roles: ['user'] }
     } as any as unknown as unknown as unknown);
     render(<TestRouteAccessComponent pathname="/" />);
@@ -479,10 +478,10 @@ describe('useRouteAccess Hook', () => {
     expect(screen.getByText('Requires Auth: true')).toBeInTheDocument();
   });
   it('correctly identifies access denial for unauthenticated user', () => {
-    mockUseAuthStore.mockReturnValue({)
-      isAuthenticated: false,
-      user: null,
-    } as any as unknown as unknown as unknown);
+  mockUseAuthStore.mockReturnValue({)
+  isAuthenticated: false,
+  user: null,
+} as any as unknown as unknown as unknown);
     render(<TestRouteAccessComponent pathname="/" />);
     expect(screen.getByText('Accessible: false')).toBeInTheDocument();
     expect(screen.getByText('Requires Auth: true')).toBeInTheDocument();

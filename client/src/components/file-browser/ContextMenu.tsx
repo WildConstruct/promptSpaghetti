@@ -17,15 +17,13 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+  onClose();
+};
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
-      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
@@ -44,49 +42,44 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
     // Adjust horizontal position
     if (x + menuWidth > viewportWidth) {
       adjustedX = viewportWidth - menuWidth - 10;
-    }
     // Adjust vertical position
     if (y + menuHeight > viewportHeight) {
       adjustedY = viewportHeight - menuHeight - 10;
-    }
     return { x: adjustedX, y: adjustedY };
   };
   const renderMenuItem = (item: ContextMenuItem) => {
     if (item.separator) {
-      return ()
+      return;
         <div
           key={item.id}
           style={{
-            height: '1px',
-            backgroundColor: '#e0e0e0',
-            margin: '4px 0',
-          }}
+  height: '1px',
+  backgroundColor: '#e0e0e0',
+  margin: '4px 0',
+}}
         />
       );
-    }
-    return ()
+    return;
       <div
         key={item.id}
         className={`context-menu-item ${item.disabled ? 'disabled' : ''}`}
         onClick={() => {
           if (!item.disabled) {
             onItemClick(item);
-          }
         }}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '8px 12px',
-          fontSize: '14px',
-          cursor: item.disabled ? 'not-allowed' : 'pointer',
-          backgroundColor: 'transparent',
-          color: item.disabled ? '#999' : '#333',
-          transition: 'background-color 0.1s ease',
-        }}
+  display: 'flex',
+  alignItems: 'center',
+  padding: '8px 12px',
+  fontSize: '14px',
+  cursor: item.disabled ? 'not-allowed' : 'pointer',
+  backgroundColor: 'transparent',
+  color: item.disabled ? '#999' : '#333',
+  transition: 'background-color 0.1s ease',
+}}
         onMouseEnter={(e) => {
           if (!item.disabled) {
             (e.target as HTMLElement).style.backgroundColor = '#f0f0f0';
-          }
         }}
         onMouseLeave={(e) => {
           (e.target as HTMLElement).style.backgroundColor = 'transparent';
@@ -95,10 +88,10 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
         {item.icon && ()
           <span
             style={{
-              marginRight: '8px',
-              fontSize: '16px',
-              opacity: item.disabled ? 0.5 : 1,
-            }}
+  marginRight: '8px',
+  fontSize: '16px',
+  opacity: item.disabled ? 0.5 : 1,
+}}
           >
             {item.icon}
           </span>
@@ -112,23 +105,23 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
   };
   if (!options) return null;
   const { x: adjustedX, y: adjustedY } = adjustPosition(options.x, options.y);
-  return ()
+  return;
     <div
       ref={menuRef}
       className="context-menu"
       style={{
-        position: 'fixed',
-        left: adjustedX,
-        top: adjustedY,
-        minWidth: '180px',
-        backgroundColor: '#fff',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-        zIndex: 1000,
-        padding: '4px 0',
-        userSelect: 'none',
-      }}
+  position: 'fixed',
+  left: adjustedX,
+  top: adjustedY,
+  minWidth: '180px',
+  backgroundColor: '#fff',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  zIndex: 1000,
+  padding: '4px 0',
+  userSelect: 'none',
+}}
     >
       {options.items.map(renderMenuItem)}
     </div>

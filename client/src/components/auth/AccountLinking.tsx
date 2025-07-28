@@ -3,32 +3,28 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 interface LinkedAccount {
-  provider: string;
+  provider: string;,
   email: string;
   name?: string;
   picture?: string;
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
-}
-interface OAuthProvider {
-  name: string;
+  interface OAuthProvider {
+  name: string;,
   displayName: string;
-  icon: string;
+  icon: string;,
   color: string;
-}
-interface AccountLinkingProps {
+  interface AccountLinkingProps {
   onAccountLinked?: (provider: string) => void;
   onAccountUnlinked?: (provider: string) => void;
-}
-
-export const AccountLinking: React.FC<AccountLinkingProps> = ({)
+  export const AccountLinking: React.FC<AccountLinkingProps> = ({,)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onAccountLinked,
   onAccountUnlinked
 }) => {
   const { user } = useAuth();
-  const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
-  const [availableProviders, setAvailableProviders] = useState<OAuthProvider[]>([]);
+  const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount>([]);
+  const [availableProviders, setAvailableProviders] = useState<OAuthProvider>([]);
   const [loading, setLoading] = useState(true);
   const [linking, setLinking] = useState<string | null>(null);
   const [unlinking, setUnlinking] = useState<string | null>(null);
@@ -37,38 +33,32 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
     if (user) {
       fetchLinkedAccounts();
       fetchAvailableProviders();
-    }
   }, [user]);
   const fetchLinkedAccounts = async () => {
     try {
       const response = await fetch('/api/auth/oauth/accounts', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch linked accounts');
-      }
       const data = await response.json();
       setLinkedAccounts(data.accounts);
     } catch (error) {
-      console.error('Error fetching linked accounts:', error);
-      setError('Failed to load linked accounts');
-    }
-  };
+  console.error('Error fetching linked accounts:', error);
+  setError('Failed to load linked accounts');
+};
   const fetchAvailableProviders = async () => {
     try {
       const response = await fetch('/api/auth/oauth/providers');
       if (!response.ok) {
         throw new Error('Failed to fetch available providers');
-      }
       const data = await response.json();
       setAvailableProviders(data.providers);
     } catch (error) {
-      console.error('Error fetching available providers:', error);
-    } finally {
+  console.error('Error fetching available providers:', error);
+} finally {
       setLoading(false);
-    }
   };
   const linkAccount = async (provider: string) => {
     try {
@@ -76,13 +66,12 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
       setError(null);
       // Generate OAuth authorization URL
       const authResponse = await fetch(`/api/auth/oauth/authorize?provider=${provider}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!authResponse.ok) {
         throw new Error('Failed to initialize OAuth flow');
-      }
       const authData = await authResponse.json();
       // Redirect to OAuth provider
       window.location.href = authData.url;
@@ -90,24 +79,22 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
       console.error('Error linking account:', error);
       setError(`Failed to link ${provider} account`);}
       setLinking(null);
-    }
   };
   const unlinkAccount = async (provider: string) => {
     try {
       setUnlinking(provider);
       setError(null);
       const response = await fetch('/api/auth/oauth/unlink', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ provider })
+  },
+  body: JSON.stringify({ provider })
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to unlink account');
-      }
       // Remove from local state
       setLinkedAccounts(prev => prev.filter(acc => acc.provider !== provider));
       onAccountUnlinked?.(provider);
@@ -116,22 +103,21 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
       setError(error.message || `Failed to unlink ${provider} account`);}
     } finally {
       setUnlinking(null);
-    }
   };
   const getProviderIcon = (provider: string) => {
-    const icons = {
-      google: '🔍',
-      github: '🐙',
-      microsoft: '🏢',
-    };
+  const icons = {
+  google: '🔍',
+  github: '🐙',
+  microsoft: '🏢',
+};
     return icons[provider as keyof typeof icons] || '🔗';
   };
   const getProviderColor = (provider: string) => {
-    const colors = {
-      google: 'bg-red-50 border-red-200 text-red-700',
-      github: 'bg-gray-50 border-gray-200 text-gray-700',
-      microsoft: 'bg-blue-50 border-blue-200 text-blue-700',
-    };
+  const colors = {
+  google: 'bg-red-50 border-red-200 text-red-700',
+  github: 'bg-gray-50 border-gray-200 text-gray-700',
+  microsoft: 'bg-blue-50 border-blue-200 text-blue-700',
+};
     return colors[provider as keyof typeof colors] || 'bg-gray-50 border-gray-200 text-gray-700';
   };
   const isLinked = (provider: string) => {
@@ -141,13 +127,12 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
     return linkedAccounts.find(acc => acc.provider === provider);
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -172,14 +157,14 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
           {availableProviders.map((provider) => {
             const linked = isLinked(provider.name);
             const linkedAccount = getLinkedAccount(provider.name);
-            return ()
+            return;
               <div
                 key={provider.name}
                 className={`border rounded-lg p-4 ${
-                  linked 
-                    ? 'border-green-200 bg-green-50' 
-                    : 'border-gray-200 bg-white'
-                }`}
+  linked
+  ? 'border-green-200 bg-green-50'
+  : 'border-gray-200 bg-white',
+}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -221,10 +206,10 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
                           onClick={() => unlinkAccount(provider.name)}
                           disabled={unlinking === provider.name}
                           className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            unlinking === provider.name
-                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                              : 'bg-red-50 text-red-700 hover:bg-red-100'
-                          }`}
+  unlinking === provider.name
+  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+  : 'bg-red-50 text-red-700 hover:bg-red-100',
+}`}
                         >
                           {unlinking === provider.name ? 'Unlinking...' : 'Unlink'}
                         </button>
@@ -234,10 +219,10 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({)
                         onClick={() => linkAccount(provider.name)}
                         disabled={linking === provider.name}
                         className={`px-4 py-2 text-sm font-medium rounded-md ${
-                          linking === provider.name
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                        }`}
+  linking === provider.name
+  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+  : 'bg-blue-600 text-white hover:bg-blue-700',
+}`}
                       >
                         {linking === provider.name ? 'Linking...' : 'Link Account'}
                       </button>

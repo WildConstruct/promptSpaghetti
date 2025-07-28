@@ -17,28 +17,27 @@ const LoginRequestSchema = z.object({)
   email: z.string().email(),
   password: z.string(),
   rememberMe: z.boolean().default(false),
-  deviceInfo: z.object({),
-    fingerprint: z.string().optional(),
-    userAgent: z.string().optional(),
-    language: z.string().optional(),
-    timezone: z.string().optional(),
-  }).optional()
+  deviceInfo: z.object({,)
+  fingerprint: z.string().optional(),
+  userAgent: z.string().optional(),
+  language: z.string().optional(),
+  timezone: z.string().optional(),
+}).optional()
 });
 type User = z.infer<typeof UserSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
 interface AuthContextType {
-  user: User | null;
+  user: User | null;,
   isLoading: boolean;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean;,
   error: string | null;
   login: (),
     credentials: LoginRequest,
     context?: { geoLocation?: { lat: number; lng: number } }
   ) => Promise<{ success: boolean; token?: string; error?: string }>;
-  logout: () => Promise<void>;
+  logout: () => Promise<void>;,
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
-}
 
 // Create authentication context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,7 +54,6 @@ export const useAuth = () => {
   if (context === undefined) {
     // If no context, create standalone hook
     return useStandaloneAuth();
-  }
   return context;
 };
 
@@ -79,15 +77,12 @@ const useStandaloneAuth = () => {
           } else {
             localStorage.removeItem(STORAGE_KEYS.USER);
             localStorage.removeItem(STORAGE_KEYS.SESSION);
-          }
-        }
       } catch (error) {
-        console.error('Failed to load user from storage:', error);
-        localStorage.removeItem(STORAGE_KEYS.USER);
-        localStorage.removeItem(STORAGE_KEYS.SESSION);
-      } finally {
+  console.error('Failed to load user from storage:', error);
+  localStorage.removeItem(STORAGE_KEYS.USER);
+  localStorage.removeItem(STORAGE_KEYS.SESSION);
+} finally {
         setIsLoading(false);
-      }
     };
     loadUser();
   }, []);
@@ -98,55 +93,50 @@ const useStandaloneAuth = () => {
       try {
         await refreshToken();
       } catch (error) {
-        console.error('Token refresh failed:', error);
-        // Don't automatically logout on refresh failure
-        // The user will be logged out when they make their next request
-      }
-    }, 10 * 60 * 1000); // 10 minutes
+  console.error('Token refresh failed:', error);
+  // Don't automatically logout on refresh failure
+  // The user will be logged out when they make their next request
+}, 10 * 60 * 1000); // 10 minutes
     return () => clearInterval(interval);
   }, [isAuthenticated]);
   const validateSession = async (): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/validate', {)
-        method: 'GET',
-        credentials: 'include',
-        headers: {,
-          'Content-Type': 'application/json'
-        }
-      });
+  try {
+  const response = await fetch('/api/auth/validate', {)
+  method: 'GET',
+  credentials: 'include',
+  headers: {,
+  'Content-Type': 'application/json',
+});
       return response.ok;
     } catch (error) {
-      console.error('Session validation failed:', error);
-      return false;
-    }
-  };
-  const login = useCallback(async (;)
+  console.error('Session validation failed:', error);
+  return false;
+};
+  const login = useCallback(async (;);
     credentials: LoginRequest,
     context?: { geoLocation?: { lat: number; lng: number } }
   ): Promise<{ success: boolean; token?: string; error?: string }> => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/auth/login', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+  setIsLoading(true);
+  setError(null);
+  try {
+  const response = await fetch('/api/auth/login', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
         body: JSON.stringify({),
-          ...credentials,
-          deviceInfo: {,
-            ...credentials.deviceInfo,
-            userAgent: navigator.userAgent,
-            language: navigator.language,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          }
-        })
+  ...credentials,
+  deviceInfo: {,
+  ...credentials.deviceInfo,
+  userAgent: navigator.userAgent,
+  language: navigator.language,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+}
       });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
-      }
       // Parse and store user data
       const validatedUser = UserSchema.parse(data.user);
       setUser(validatedUser);
@@ -159,7 +149,6 @@ const useStandaloneAuth = () => {
         // Store in sessionStorage for current session only
         sessionStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(validatedUser));
         sessionStorage.setItem(STORAGE_KEYS.SESSION, data.sessionId);
-      }
       return data;
     } catch (err: unknown) {
       const errorMessage = err.message || 'Login failed';
@@ -167,25 +156,24 @@ const useStandaloneAuth = () => {
       throw err;
     } finally {
       setIsLoading(false);
-    }
   }, []);
   const logout = useCallback(async (): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const sessionId = localStorage.getItem(STORAGE_KEYS.SESSION) || ;
-                       sessionStorage.getItem(STORAGE_KEYS.SESSION);
-      await fetch('/api/auth/logout', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+  setIsLoading(true);
+  try {
+  const sessionId = localStorage.getItem(STORAGE_KEYS.SESSION) || ;
+  sessionStorage.getItem(STORAGE_KEYS.SESSION);
+  await fetch('/api/auth/logout', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
         body: JSON.stringify({ sessionId })
       });
     } catch (error) {
-      console.error('Logout request failed:', error);
-      // Continue with local logout even if server request fails
-    } finally {
+  console.error('Logout request failed:', error);
+  // Continue with local logout even if server request fails
+} finally {
       // Clear local state and storage
       setUser(null);
       setError(null);
@@ -195,29 +183,26 @@ const useStandaloneAuth = () => {
       sessionStorage.removeItem(STORAGE_KEYS.USER);
       sessionStorage.removeItem(STORAGE_KEYS.SESSION);
       setIsLoading(false);
-    }
   }, []);
   const refreshToken = useCallback(async (): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/refresh', {)
-        method: 'POST',
-        credentials: 'include',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
-          refreshToken: '' // Token is in HTTP-only cookie,
-        })
+  try {
+  const response = await fetch('/api/auth/refresh', {)
+  method: 'POST',
+  credentials: 'include',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify({,)
+  refreshToken: '' // Token is in HTTP-only cookie,
+}
       });
       if (!response.ok) {
         throw new Error('Token refresh failed');
-      }
       return true;
     } catch (error) {
-      console.error('Token refresh failed:', error);
-      return false;
-    }
-  }, []);
+  console.error('Token refresh failed:', error);
+  return false;
+}, []);
   const clearError = useCallback(() => {
     setError(null);
   }, []);
@@ -234,7 +219,6 @@ const useStandaloneAuth = () => {
 };
 
 // Helper hook for checking permissions
-export 
   const hasPermission = useCallback((permission: string): boolean => {
     if (!user) return false;
     return user.permissions.includes(permission);
@@ -243,11 +227,11 @@ export
     if (!user) return false;
     return user.roles.includes(role);
   }, [user]);
-  const hasAnyRole = useCallback((roles: string[]): boolean => {
+  const hasAnyRole = useCallback((roles: string): boolean => {
     if (!user) return false;
     return roles.some(role => user.roles.includes(role));
   }, [user]);
-  const hasAllPermissions = useCallback((permissions: string[]): boolean => {
+  const hasAllPermissions = useCallback((permissions: string): boolean => {
     if (!user) return false;
     return permissions.every(permission => user.permissions.includes(permission));
   }, [user]);
@@ -267,62 +251,56 @@ export const url = returnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(retur
     window.location.href = '/dashboard';
   }, []);
   const redirectAfterLogin = useCallback(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const returnUrl = urlParams.get('returnUrl');
-    if (returnUrl) {
-      // SECURITY FIX: Validate returnUrl to prevent open redirect attacks
-      try {
-        const decodedUrl = decodeURIComponent(returnUrl);
-        const url = new URL(decodedUrl, window.location.origin);
-        // Only allow same-origin URLs to prevent open redirects
-        if (url.origin === window.location.origin) {
-          window.location.href = decodedUrl;
-        } else {
-          console.warn('Blocked redirect to external URL:', decodedUrl);
-          redirectToDashboard();
-        }
-      } catch {
-        console.warn('Invalid return URL blocked:', returnUrl);
-        redirectToDashboard();
-      }
-    } else {
+  const urlParams = new URLSearchParams(window.location.search);
+  const returnUrl = urlParams.get('returnUrl');
+  if (returnUrl) {
+  // SECURITY FIX: Validate returnUrl to prevent open redirect attacks,
+  try {
+  const decodedUrl = decodeURIComponent(returnUrl);
+  const url = new URL(decodedUrl, window.location.origin);
+  // Only allow same-origin URLs to prevent open redirects
+  if (url.origin === window.location.origin) {
+  window.location.href = decodedUrl;
+} else {
+  console.warn('Blocked redirect to external URL:', decodedUrl);
+  redirectToDashboard();
+} catch {
+  console.warn('Invalid return URL blocked:', returnUrl);
+  redirectToDashboard();
+} else {
       redirectToDashboard();
-    }
   }, [redirectToDashboard]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, isLoading, isAuthenticated } = useAuth();
   return {
-    redirectToLogin,
-    redirectToDashboard,
-    redirectAfterLogin,
-    shouldRedirectToLogin: !isAuthenticated && !isLoading,
-    shouldRedirectAfterLogin: isAuthenticated && !isLoading,
-  };
+  redirectToLogin,
+  redirectToDashboard,
+  redirectAfterLogin,
+  shouldRedirectToLogin: !isAuthenticated && !isLoading,
+  shouldRedirectAfterLogin: isAuthenticated && !isLoading,
+};
 };
 
 // Hook for authentication form validation
 export return null;
     } catch {
       return 'Please enter a valid email address';
-    }
   }, []);
   const validatePassword = useCallback((password: string): string | null => {
     if (password.length < 8) {
       return 'Password must be at least 8 characters long';
-    }
     if (password.length > 128) {
       return 'Password is too long (maximum 128 characters)';
-    }
     return null;
   }, []);
   const validateForm = useCallback((email: string, password: string) => {
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-    return {
-      email: emailError,
-      password: passwordError,
-      isValid: !emailError && !passwordError,
-    };
+  const emailError = validateEmail(email);
+  const passwordError = validatePassword(password);
+  return {
+  email: emailError,
+  password: passwordError,
+  isValid: !emailError && !passwordError,
+};
   }, [validateEmail, validatePassword]);
   return {
     validateEmail,

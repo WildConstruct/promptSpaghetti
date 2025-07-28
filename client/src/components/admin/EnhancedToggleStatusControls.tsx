@@ -14,9 +14,9 @@ import {
   RefreshCw, Pause, Play, CheckCircle
 } from 'lucide-react';
 interface FeatureToggle {
-  id: string;
+  id: string;,
   key: string;
-  name: string;
+  name: string;,
   enabled: boolean;
   type: 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION';
   value?: unknown;
@@ -27,16 +27,14 @@ interface FeatureToggle {
   targetPercentage?: number;
   currentPercentage?: number;
   claudeImpact?: string;
-}
-interface EnhancedToggleStatusControlsProps {
-  toggle: FeatureToggle;
+  interface EnhancedToggleStatusControlsProps {
+  toggle: FeatureToggle;,
   onToggleChange: (toggle: FeatureToggle) => void;
   onPercentageChange?: (toggleId: string, percentage: number) => void;
   onOverrideClick?: (toggleId: string) => void;
   onEmergencyDisable?: (toggleId: string, reason: string) => void;
   compact?: boolean;
-}
-const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({)
+  const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({,)
   toggle,
   onToggleChange,
   onPercentageChange,
@@ -63,7 +61,6 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
     if (!emergencyReason.trim()) {
       alert('Please provide a reason for emergency disable');
       return;
-    }
     onEmergencyDisable?.(toggle.id, emergencyReason);
     setShowEmergencyConfirm(false);
     setEmergencyReason('');
@@ -76,13 +73,12 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
   // Get status indicator based on toggle state and overrides
   const getStatusIndicator = () => {
     if (toggle.hasActiveOverride) {
-      return ()
+      return;
         <div className="flex items-center space-x-1">
           <Shield className="w-4 h-4 text-orange-500" />
           <span className="text-xs text-orange-600 font-medium">OVERRIDE</span>
         </div>
       );
-    }
     if (toggle.type === 'PERCENTAGE' && toggle.rolloutStatus) {
       const statusConfig = {
         'PAUSED': { icon: Pause, color: 'text-yellow-600', bg: 'bg-yellow-50' },
@@ -92,7 +88,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
       };
       const config = statusConfig[toggle.rolloutStatus];
       const Icon = config.icon;
-      return ()
+      return;
         <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${config.bg}`}>}
           <Icon className={`w-3 h-3 ${config.color}`} />}
           <span className={`text-xs font-medium ${config.color}`}>}
@@ -100,7 +96,6 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           </span>
         </div>
       );
-    }
     return toggle.enabled ? ()
       <span className="text-xs text-green-600 font-medium">ACTIVE</span>
     ) : ()
@@ -112,7 +107,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
     if (toggle.type !== 'PERCENTAGE') return null;
     const current = toggle.currentPercentage || toggle.percentage || 0;
     const target = toggle.targetPercentage || toggle.percentage || 0;
-    return ()
+    return;
       <div className="flex items-center space-x-2">
         <div className="flex items-center space-x-1">
           <Percent className="w-3 h-3 text-blue-500" />
@@ -128,7 +123,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
     );
   };
   if (compact) {
-    return ()
+    return;
       <div className="flex items-center space-x-2">
         {/* Basic Toggle */}
         <button
@@ -159,8 +154,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
         )}
       </div>
     );
-  }
-  return ()
+  return;
     <div className="bg-gray-50 rounded-lg p-4 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -177,10 +171,10 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           <button
             onClick={handleBasicToggle}
             className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-              toggle.enabled
-                ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+  toggle.enabled
+  ? 'bg-green-100 text-green-700 hover:bg-green-200',
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+}`}
             disabled={toggle.hasActiveOverride}
           >
             {toggle.enabled ? ()

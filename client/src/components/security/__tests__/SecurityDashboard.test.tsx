@@ -9,13 +9,13 @@ jest.mock('date-fns', () => ({)
   formatDistanceToNow: jest.fn(() => '5 minutes'),
 }));
 describe('SecurityDashboard', () => {
-  const mockOnIncidentClick = jest.fn<unknown[], unknown>();
-  const mockOnThreatClick = jest.fn<unknown[], unknown>();
+  const mockOnIncidentClick = jest.fn<unknown, unknown>();
+  const mockOnThreatClick = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
   it('renders security dashboard with metrics', async () => {
-    render()
+    render();
       <SecurityDashboard 
         onIncidentClick={mockOnIncidentClick}
         onThreatClick={mockOnThreatClick}
@@ -63,10 +63,10 @@ describe('SecurityDashboard', () => {
     expect(screen.getByText('Resolved')).toBeInTheDocument();
   });
   it('displays last scan time', async () => {
-    render(<SecurityDashboard />);
-    await waitFor(() => {
-      expect(screen.getByText(/Last scan:/)).toBeInTheDocument();
-    }, { timeout: 2000 });
+  render(<SecurityDashboard />);
+  await waitFor(() => {
+  expect(screen.getByText(/Last scan:/)).toBeInTheDocument();
+}, { timeout: 2000 });
   });
   it('shows quick actions section', async () => {
     render(<SecurityDashboard />);

@@ -16,21 +16,21 @@ import {
 
 // Types for status overrides
 interface StatusOverride {
-  id: string;
+  id: string;,
   toggleId: string;
-  toggleKey: string;
+  toggleKey: string;,
   toggleName: string;
-  overrideType: 'FORCE_ENABLE' | 'FORCE_DISABLE' | 'PERCENTAGE_OVERRIDE' | 'TARGETING_OVERRIDE' | 'EMERGENCY_DISABLE';
+  overrideType: 'FORCE_ENABLE' | 'FORCE_DISABLE' | 'PERCENTAGE_OVERRIDE' | 'TARGETING_OVERRIDE' | 'EMERGENCY_DISABLE';,
   status: 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'SCHEDULED';
   priority: 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY';
   // Override configuration
   overrideValue?: unknown;
   percentageOverride?: number;
-  targetingOverride?: string[];
+  targetingOverride?: string;
   // Override metadata
-  reason: string;
+  reason: string;,
   justification: string;
-  createdByUserId: string;
+  createdByUserId: string;,
   createdByUserName: string;
   createdAt: string;
   // Expiration and scheduling
@@ -38,7 +38,7 @@ interface StatusOverride {
   scheduledStartAt?: string;
   isTemporary: boolean;
   // Impact and approval
-  impactAssessment: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  impactAssessment: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
   requiresApproval: boolean;
   approvedBy?: string;
   approvedAt?: string;
@@ -46,148 +46,141 @@ interface StatusOverride {
   affectedUserCount?: number;
   performanceImpact?: string;
   monitoringEnabled: boolean;
-}
-interface ToggleStatusOverridePanelProps {
+  interface ToggleStatusOverridePanelProps {
   toggleId?: string;
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onOverrideCreated?: (override: StatusOverride) => void;
-}
-const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({)
+  const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({,)
   toggleId,
   isOpen,
   onClose,
   onOverrideCreated
 }) => {
-  const [activeOverrides, setActiveOverrides] = useState<StatusOverride[]>([]);
+  const [activeOverrides, setActiveOverrides] = useState<StatusOverride>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedOverrideType, _setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
   // Form state for creating new overrides
   const [newOverride, setNewOverride] = useState({)
-    overrideType: 'FORCE_ENABLE',
-    reason: '',
-    justification: '',
-    isTemporary: true,
-    expirationHours: 24,
-    percentageOverride: 50,
-    priority: 'NORMAL',
-    requiresApproval: false,
-    monitoringEnabled: true,
-  });
+  overrideType: 'FORCE_ENABLE',
+  reason: '',
+  justification: '',
+  isTemporary: true,
+  expirationHours: 24,
+  percentageOverride: 50,
+  priority: 'NORMAL',
+  requiresApproval: false,
+  monitoringEnabled: true,
+});
   // Mock data for demonstration - wrapped in useMemo to prevent recreation on every render
-  const mockOverrides: StatusOverride[] = useMemo(() => [
+  const mockOverrides: StatusOverride = useMemo(() => [
     {
-      id: 'override-1',
-      toggleId: 'toggle-123',
-      toggleKey: 'advanced_search_v2',
-      toggleName: 'Advanced Search V2',
-      overrideType: 'EMERGENCY_DISABLE',
-      status: 'ACTIVE',
-      priority: 'EMERGENCY',
-      reason: 'Performance degradation detected',
-      justification: 'Search response times increased by 300% after deployment',
-      createdByUserId: 'user-admin-1',
-      createdByUserName: 'Sarah Johnson',
-      createdAt: '2024-07-22T18:30:00Z',
-      expiresAt: '2024-07-22T22:30:00Z',
-      isTemporary: true,
-      impactAssessment: 'HIGH',
-      requiresApproval: false,
-      affectedUserCount: 1247,
-      performanceImpact: 'Search latency reduced by 85%',
-      monitoringEnabled: true,
-    },
+  id: 'override-1',
+  toggleId: 'toggle-123',
+  toggleKey: 'advanced_search_v2',
+  toggleName: 'Advanced Search V2',
+  overrideType: 'EMERGENCY_DISABLE',
+  status: 'ACTIVE',
+  priority: 'EMERGENCY',
+  reason: 'Performance degradation detected',
+  justification: 'Search response times increased by 300% after deployment',
+  createdByUserId: 'user-admin-1',
+  createdByUserName: 'Sarah Johnson',
+  createdAt: '2024-07-22T18:30:00Z',
+  expiresAt: '2024-07-22T22:30:00Z',
+  isTemporary: true,
+  impactAssessment: 'HIGH',
+  requiresApproval: false,
+  affectedUserCount: 1247,
+  performanceImpact: 'Search latency reduced by 85%',
+  monitoringEnabled: true,
+}
     {
-      id: 'override-2',
-      toggleId: 'toggle-456',
-      toggleKey: 'new_ui_components',
-      toggleName: 'New UI Components',
-      overrideType: 'PERCENTAGE_OVERRIDE',
-      status: 'ACTIVE',
-      priority: 'NORMAL',
-      percentageOverride: 25,
-      reason: 'Gradual rollout for A/B testing',
-      justification: 'Limiting exposure while monitoring user feedback',
-      createdByUserId: 'user-admin-2',
-      createdByUserName: 'Mike Chen',
-      createdAt: '2024-07-22T14:00:00Z',
-      isTemporary: false,
-      impactAssessment: 'MEDIUM',
-      requiresApproval: true,
-      approvedBy: 'Sarah Johnson',
-      approvedAt: '2024-07-22T14:15:00Z',
-      affectedUserCount: 312,
-      performanceImpact: 'No significant impact detected',
-      monitoringEnabled: true,
-    }
-  ], []); // Empty dependency array since this is static mock data
+  id: 'override-2',
+  toggleId: 'toggle-456',
+  toggleKey: 'new_ui_components',
+  toggleName: 'New UI Components',
+  overrideType: 'PERCENTAGE_OVERRIDE',
+  status: 'ACTIVE',
+  priority: 'NORMAL',
+  percentageOverride: 25,
+  reason: 'Gradual rollout for A/B testing',
+  justification: 'Limiting exposure while monitoring user feedback',
+  createdByUserId: 'user-admin-2',
+  createdByUserName: 'Mike Chen',
+  createdAt: '2024-07-22T14:00:00Z',
+  isTemporary: false,
+  impactAssessment: 'MEDIUM',
+  requiresApproval: true,
+  approvedBy: 'Sarah Johnson',
+  approvedAt: '2024-07-22T14:15:00Z',
+  affectedUserCount: 312,
+  performanceImpact: 'No significant impact detected',
+  monitoringEnabled: true], []); // Empty dependency array since this is static mock data
   const fetchActiveOverrides = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Simulate API call
-      setTimeout(() => {
-        const filteredOverrides = toggleId ;
-          ? mockOverrides.filter(override => override.toggleId === toggleId)
-          : mockOverrides;
-        setActiveOverrides(filteredOverrides);
-        setLoading(false);
-      }, 1000);
+  setLoading(true);
+  try {
+  // Simulate API call
+  setTimeout(() => {
+  const filteredOverrides = toggleId ;
+  ? mockOverrides.filter(override => override.toggleId === toggleId)
+  : mockOverrides;
+  setActiveOverrides(filteredOverrides);
+  setLoading(false);
+}, 1000);
     } catch (error) {
-      console.error('Failed to fetch overrides:', error);
-      setLoading(false);
-    }
-  }, [toggleId, mockOverrides]);
+  console.error('Failed to fetch overrides:', error);
+  setLoading(false);
+}, [toggleId, mockOverrides]);
   useEffect(() => {
     if (isOpen) {
       fetchActiveOverrides();
-    }
   }, [isOpen, fetchActiveOverrides]);
   const handleCreateOverride = async () => {
-    try {
-      const override: StatusOverride = {
-        id: crypto.randomUUID(),
-        toggleId: toggleId || 'selected-toggle',
-        toggleKey: 'example_toggle',
-        toggleName: 'Example Toggle',
-        overrideType: newOverride.overrideType as 'FORCE_ENABLE' | 'FORCE_DISABLE' | 'PERCENTAGE_OVERRIDE' | 'TARGETING_OVERRIDE' | 'EMERGENCY_DISABLE',
-        status: 'ACTIVE',
-        priority: newOverride.priority as 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY',
-        reason: newOverride.reason,
-        justification: newOverride.justification,
-        createdByUserId: 'current-user',
-        createdByUserName: 'Current User',
-        createdAt: new Date().toISOString(),
-        expiresAt: newOverride.isTemporary ,
-          ? new Date(Date.now() + newOverride.expirationHours * 60 * 60 * 1000).toISOString()
-          : undefined,
-        isTemporary: newOverride.isTemporary,
-        impactAssessment: 'MEDIUM',
-        requiresApproval: newOverride.requiresApproval,
-        monitoringEnabled: newOverride.monitoringEnabled,
-        percentageOverride: newOverride.overrideType === 'PERCENTAGE_OVERRIDE' ,
-          ? newOverride.percentageOverride 
-          : undefined
-      };
+  try {
+  const override: StatusOverride = {,
+  id: crypto.randomUUID(),
+  toggleId: toggleId || 'selected-toggle',
+  toggleKey: 'example_toggle',
+  toggleName: 'Example Toggle',
+  overrideType: newOverride.overrideType as 'FORCE_ENABLE' | 'FORCE_DISABLE' | 'PERCENTAGE_OVERRIDE' | 'TARGETING_OVERRIDE' | 'EMERGENCY_DISABLE',
+  status: 'ACTIVE',
+  priority: newOverride.priority as 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY',
+  reason: newOverride.reason,
+  justification: newOverride.justification,
+  createdByUserId: 'current-user',
+  createdByUserName: 'Current User',
+  createdAt: new Date().toISOString(),
+  expiresAt: newOverride.isTemporary ,
+  ? new Date(Date.now() + newOverride.expirationHours * 60 * 60 * 1000).toISOString()
+  : undefined,
+  isTemporary: newOverride.isTemporary,
+  impactAssessment: 'MEDIUM',
+  requiresApproval: newOverride.requiresApproval,
+  monitoringEnabled: newOverride.monitoringEnabled,
+  percentageOverride: newOverride.overrideType === 'PERCENTAGE_OVERRIDE' ,
+  ? newOverride.percentageOverride
+  : undefined,
+};
       // Simulate API call
       setActiveOverrides(prev => [override, ...prev]);
       setShowCreateForm(false);
       setNewOverride({)
-        overrideType: 'FORCE_ENABLE',
-        reason: '',
-        justification: '',
-        isTemporary: true,
-        expirationHours: 24,
-        percentageOverride: 50,
-        priority: 'NORMAL',
-        requiresApproval: false,
-        monitoringEnabled: true,
-      });
+  overrideType: 'FORCE_ENABLE',
+  reason: '',
+  justification: '',
+  isTemporary: true,
+  expirationHours: 24,
+  percentageOverride: 50,
+  priority: 'NORMAL',
+  requiresApproval: false,
+  monitoringEnabled: true,
+});
       onOverrideCreated?.(override);
     } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       alert('Failed to create override');
-    }
   };
   const handleCancelOverride = async (overrideId: string) => {
     try {
@@ -200,36 +193,32 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({)
       );
     } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       alert('Failed to cancel override');
-    }
   };
   const getOverrideTypeIcon = (type: string) => {
-    switch (type) {
-    case 'EMERGENCY_DISABLE': return <Zap className="text-red-500" />;
-    case 'FORCE_ENABLE': return <Unlock className="text-green-500" />;
-    case 'FORCE_DISABLE': return <Lock className="text-red-500" />;
-    case 'PERCENTAGE_OVERRIDE': return <Percent className="text-blue-500" />;
-    case 'TARGETING_OVERRIDE': return <Target className="text-purple-500" />;
-    default: return <Settings className="text-gray-500" />;
-    }
-  };
+  switch (type) {
+  case 'EMERGENCY_DISABLE': return <Zap className="text-red-500" />;
+  case 'FORCE_ENABLE': return <Unlock className="text-green-500" />;
+  case 'FORCE_DISABLE': return <Lock className="text-red-500" />;
+  case 'PERCENTAGE_OVERRIDE': return <Percent className="text-blue-500" />;
+  case 'TARGETING_OVERRIDE': return <Target className="text-purple-500" />;
+  default: return <Settings className="text-gray-500" />;
+};
   const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-    case 'EMERGENCY': return 'text-red-600 bg-red-50 border-red-200';
-    case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
-    case 'NORMAL': return 'text-blue-600 bg-blue-50 border-blue-200';
-    case 'LOW': return 'text-gray-600 bg-gray-50 border-gray-200';
-    default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
+  switch (priority) {
+  case 'EMERGENCY': return 'text-red-600 bg-red-50 border-red-200';
+  case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
+  case 'NORMAL': return 'text-blue-600 bg-blue-50 border-blue-200';
+  case 'LOW': return 'text-gray-600 bg-gray-50 border-gray-200';
+  default: return 'text-gray-600 bg-gray-50 border-gray-200';
+};
   const getStatusColor = (status: string): string => {
-    switch (status) {
-    case 'ACTIVE': return 'text-green-600 bg-green-50 border-green-200';
-    case 'EXPIRED': return 'text-gray-600 bg-gray-50 border-gray-200';
-    case 'CANCELLED': return 'text-red-600 bg-red-50 border-red-200';
-    case 'SCHEDULED': return 'text-blue-600 bg-blue-50 border-blue-200';
-    default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
+  switch (status) {
+  case 'ACTIVE': return 'text-green-600 bg-green-50 border-green-200';
+  case 'EXPIRED': return 'text-gray-600 bg-gray-50 border-gray-200';
+  case 'CANCELLED': return 'text-red-600 bg-red-50 border-red-200';
+  case 'SCHEDULED': return 'text-blue-600 bg-blue-50 border-blue-200';
+  default: return 'text-gray-600 bg-gray-50 border-gray-200';
+};
   const formatTimeRemaining = (expiresAt?: string): string => {
     if (!expiresAt) return 'No expiration';
     const now = new Date();
@@ -242,7 +231,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({)
     return `${minutes}m remaining`;}
   };
   if (!isOpen) return null;
-  return ()
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}

@@ -5,27 +5,24 @@ import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './PurchaseModal.css';
 interface PurchaseModalProps {
-  template: Error;
+  template: Error;,
   onClose: () => void;
   onComplete: (success: boolean) => void;
   className?: string;
-}
-interface PaymentMethod {
-  id: string;
+  interface PaymentMethod {
+  id: string;,
   type: 'card' | 'paypal';
   last4?: string;
   brand?: string;
   is_default: boolean;
-}
-
-export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
+  export const PurchaseModal: React.FC<PurchaseModalProps> = ({,)
   template,
   onClose,
   onComplete,
   className = ''
 }) => {
   const [step, setStep] = useState<'confirm' | 'payment' | 'processing' | 'success' | 'error'>('confirm');
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
   const [/*_loading*/, setLoading] = useState(false); // Commented out unused variable
   const [error, setError] = useState<string | null>(null);
@@ -33,31 +30,26 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
   useEffect(() => {
     if (template.price_cents > 0) {
       loadPaymentMethods();
-    }
   }, [template.price_cents]);
   const loadPaymentMethods = async () => {
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/payment/methods', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${token}`}
-        }
       });
       if (response.ok) {
-        const methods = await response.json();
-        setPaymentMethods(methods);
-        // Auto-select default payment method
-        const defaultMethod = methods.find((method: PaymentMethod) => method.is_default);
-        if (defaultMethod) {
-          setSelectedPaymentMethod(defaultMethod.id);
-        } else if (methods.length > 0) {
+  const methods = await response.json();
+  setPaymentMethods(methods);
+  // Auto-select default payment method
+  const defaultMethod = methods.find((method: PaymentMethod) => method.is_default);
+  if (defaultMethod) {
+  setSelectedPaymentMethod(defaultMethod.id);
+} else if (methods.length > 0) {
           setSelectedPaymentMethod(methods[0].id);
-        }
-      }
     } catch (error) {
-      console.error('Failed to load payment methods:', error);
-    }
-  };
+  console.error('Failed to load payment methods:', error);
+};
   const handleConfirm = () => {
     if (template.price_cents === 0) {
       // Free template, proceed directly to purchase
@@ -65,7 +57,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
     } else {
       // Paid template, show payment step
       setStep('payment');
-    }
   };
   const handlePurchase = async () => {
     setLoading(true);
@@ -74,16 +65,16 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/marketplace/purchases', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
-        },
-        body: JSON.stringify({),
-          template_id: template.id,
-          version_id: template.current_version_id,
-          payment_method_id: template.price_cents > 0 ? selectedPaymentMethod : undefined,
-        })
+  },
+  body: JSON.stringify({,)
+  template_id: template.id,
+  version_id: template.current_version_id,
+  payment_method_id: template.price_cents > 0 ? selectedPaymentMethod : undefined,
+}
       });
       if (response.ok) {
         const purchase = await response.json();
@@ -96,52 +87,46 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
         } else {
           // Handle payment processing for paid templates
           await processPayment(purchase);
-        }
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Purchase failed');
         setStep('error');
-      }
-    } catch (_err) { 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.debug('Purchase error:', _err);
-      setError('Purchase failed. Please try again.');
-      setStep('error');
-    } finally {
+    } catch (_err) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.debug('Purchase error:', _err);
+  setError('Purchase failed. Please try again.');
+  setStep('error');
+} finally {
       setLoading(false);
-    }
   };
-  const processPayment = async (_purchase: unknown) => { 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    console.debug('Processing payment for purchase:', _purchase);
-    // This would integrate with Stripe or other payment processor
-    // For now, we'll simulate payment processing
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
-      // In a real implementation, this would handle Stripe confirmation
-      setStep('success');
-      setTimeout(() => {
-        onComplete(true);
-      }, 2000);
+  const processPayment = async (_purchase: unknown) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.debug('Processing payment for purchase:', _purchase);
+  // This would integrate with Stripe or other payment processor
+  // For now, we'll simulate payment processing
+  try {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
+  // In a real implementation, this would handle Stripe confirmation
+  setStep('success');
+  setTimeout(() => {
+  onComplete(true);
+}, 2000);
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.error('Payment processing failed:', error);
-      setError('Payment processing failed');
-      setStep('error');
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.error('Payment processing failed:', error);
+  setError('Payment processing failed');
+  setStep('error');
+};
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
-    }
   };
   const formatCardInfo = (method: PaymentMethod) => {
     if (method.type === 'card') {
       return `•••• •••• •••• ${method.last4} (${method.brand?.toUpperCase()})`;}
-    }
     return 'PayPal';
   };
-  const renderConfirmStep = () => (;)
+  const renderConfirmStep = () => (;);
     <div className="purchase-step">
       <div className="step-header">
         <h3>Confirm Purchase</h3>
@@ -188,7 +173,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
       </div>
     </div>
   );
-  const renderPaymentStep = () => (;)
+  const renderPaymentStep = () => (;);
     <div className="purchase-step">
       <div className="step-header">
         <h3>Payment Information</h3>
@@ -263,7 +248,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
       </div>
     </div>
   );
-  const renderProcessingStep = () => (;)
+  const renderProcessingStep = () => (;);
     <div className="purchase-step processing">
       <div className="processing-content">
         <LoadingSpinner size="large" />
@@ -272,7 +257,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
       </div>
     </div>
   );
-  const renderSuccessStep = () => (;)
+  const renderSuccessStep = () => (;);
     <div className="purchase-step success">
       <div className="success-content">
         <div className="success-icon">
@@ -292,7 +277,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
           {template.price_cents === 0 
             ? 'You now have access to this free template.'
             : 'Your payment has been processed and you now own this template.'
-          }
         </p>
         <div className="next-steps">
           <h4>What&apos;s next?</h4>
@@ -305,7 +289,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
       </div>
     </div>
   );
-  const renderErrorStep = () => (;)
+  const renderErrorStep = () => (;);
     <div className="purchase-step error">
       <div className="error-content">
         <div className="error-icon">
@@ -332,7 +316,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return;
     <div className={`purchase-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>}
       <div className="purchase-modal" onClick={(e) => e.stopPropagation()}>
         <header className="modal-header">

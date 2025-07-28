@@ -18,63 +18,58 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
 interface CreatorStats {
-  total_templates: number;
+  total_templates: number;,
   active_templates: number;
-  total_revenue_cents: number;
+  total_revenue_cents: number;,
   total_purchases: number;
-  avg_rating: number;
+  avg_rating: number;,
   total_reviews: number;
-  total_views: number;
+  total_views: number;,
   conversion_rate: number;
-}
-interface Template {
-  id: string;
+  interface Template {
+  id: string;,
   title: string;
-  status: 'draft' | 'listed' | 'blocked' | 'archived';
+  status: 'draft' | 'listed' | 'blocked' | 'archived';,
   price_cents: number;
-  total_purchases: number;
+  total_purchases: number;,
   total_revenue: number;
-  avg_rating: number;
+  avg_rating: number;,
   total_reviews: number;
-  total_views: number;
+  total_views: number;,
   created_at: string;
   updated_at: string;
-}
-interface MonetizationSettings {
-  payout_threshold_cents: number;
+  interface MonetizationSettings {
+  payout_threshold_cents: number;,
   payout_schedule: 'weekly' | 'monthly';
-  payment_method: 'stripe' | 'paypal' | 'bank_transfer';
+  payment_method: 'stripe' | 'paypal' | 'bank_transfer';,
   tax_settings: {,
-    tax_id?: string;
-    business_name?: string;
-    address: string;
-    city: string;
-    country: string;
-    tax_exempt: boolean;
-  };
-}
+  tax_id?: string;
+  business_name?: string;
+  address: string;,
+  city: string;
+  country: string;,
+  tax_exempt: boolean;
+};
 interface CreatorProfile {
-  id: string;
+  id: string;,
   display_name: string;
   bio?: string;
   website?: string;
   social_links: Record<string, string>;
-  verification_status: 'unverified' | 'pending' | 'verified' | 'rejected';
+  verification_status: 'unverified' | 'pending' | 'verified' | 'rejected';,
   creator_tier: 'bronze' | 'silver' | 'gold' | 'platinum';
-  badges: string[];
+  badges: string;,
   public_profile: boolean;
-}
-
-export const [templates, setTemplates] = useState<Template[]>([]);
+  export const [templates, setTemplates] = useState<Template>([]);
   const [profile, setProfile] = useState<CreatorProfile | null>(null);
   const [monetization, setMonetization] = useState<MonetizationSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'analytics' | 'monetization' | 'profile'>('overview');
   const [dateRange, setDateRange] = useState({)
-    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0],
-  });
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+  end: new Date().toISOString().split('T')[0],
+});
   const navigate = useNavigate();
   const getAuthHeaders = useCallback(() => {
     const token = localStorage.getItem('auth_token');
@@ -89,21 +84,24 @@ export const [templates, setTemplates] = useState<Template[]>([]);
       setError(null);
       const [statsRes, templatesRes, profileRes, monetizationRes] = await Promise.all([)
         fetch(`${API_URL}/api/marketplace/creator/stats?start_date=${dateRange.start}&end_date=${dateRange.end}`, {)}
-          headers: getAuthHeaders(),
-        }),
+  },
+  headers: getAuthHeaders();
+  }),
         fetch(`${API_URL}/api/marketplace/creator/templates`, {)}
-          headers: getAuthHeaders(),
-        }),
+  },
+  headers: getAuthHeaders();
+  }),
         fetch(`${API_URL}/api/marketplace/creator/profile`, {)}
-          headers: getAuthHeaders(),
-        }),
+  },
+  headers: getAuthHeaders();
+  }),
         fetch(`${API_URL}/api/marketplace/creator/monetization`, {)}
-          headers: getAuthHeaders(),
-        })
+  },
+  headers: getAuthHeaders();
+  }
       ]);
       if (!statsRes.ok || !templatesRes.ok || !profileRes.ok || !monetizationRes.ok) {
         throw new Error('Failed to fetch creator data');
-      }
       const [statsData, templatesData, profileData, monetizationData] = await Promise.all([)
         statsRes.json(),
         templatesRes.json(),
@@ -115,10 +113,9 @@ export const [templates, setTemplates] = useState<Template[]>([]);
       setProfile(profileData);
       setMonetization(monetizationData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch creator data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch creator data');
+} finally {
       setLoading(false);
-    }
   }, [dateRange, getAuthHeaders]);
   useEffect(() => {
     fetchCreatorData();
@@ -130,33 +127,31 @@ export const [templates, setTemplates] = useState<Template[]>([]);
     return num.toString();
   };
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'listed': return '#22c55e';
-      case 'draft': return '#6b7280';
-      case 'blocked': return '#ef4444';
-      case 'archived': return '#9ca3af';
-      default: return '#6b7280';
-    }
-  };
+  switch (status) {
+  case 'listed': return '#22c55e';
+  case 'draft': return '#6b7280';
+  case 'blocked': return '#ef4444';
+  case 'archived': return '#9ca3af';
+  default: return '#6b7280';
+};
   const getVerificationBadge = (status: string) => {
-    switch (status) {
-      case 'verified': return '✅ Verified Creator';
-      case 'pending': return '🔄 Verification Pending';
-      case 'rejected': return '❌ Verification Rejected';
-      default: return '📋 Unverified';
-    }
-  };
+  switch (status) {
+  case 'verified': return '✅ Verified Creator';
+  case 'pending': return '🔄 Verification Pending';
+  case 'rejected': return '❌ Verification Rejected';
+  default: return '📋 Unverified';
+};
   const getTierBadge = (tier: string) => {
-    const tierMap = {
-      bronze: '🥉 Bronze Creator',
-      silver: '🥈 Silver Creator', 
-      gold: '🥇 Gold Creator',
-      platinum: '💎 Platinum Creator',
-    };
+  const tierMap = {
+  bronze: '🥉 Bronze Creator',
+  silver: '🥈 Silver Creator',
+  gold: '🥇 Gold Creator',
+  platinum: '💎 Platinum Creator',
+};
     return tierMap[tier as keyof typeof tierMap] || '📝 New Creator';
   };
   if (loading) {
-    return ()
+    return;
       <div className="creator-dashboard loading">
         <div className="loading-spinner">
           <div className="spinner"></div>
@@ -164,9 +159,8 @@ export const [templates, setTemplates] = useState<Template[]>([]);
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="creator-dashboard error">
         <div className="error-message">
           <h3>Failed to load dashboard</h3>
@@ -177,8 +171,7 @@ export const [templates, setTemplates] = useState<Template[]>([]);
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="creator-dashboard">
       {/* Header */}
       <div className="dashboard-header">
@@ -521,10 +514,9 @@ export const [templates, setTemplates] = useState<Template[]>([]);
       </div>
       <style>{`
         .creator-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 1400px;,
+  margin: 0 auto;
           padding: 20px;
-        }
         .dashboard-header {
           display: flex;
           justify-content: space-between;
@@ -532,318 +524,259 @@ export const [templates, setTemplates] = useState<Template[]>([]);
           margin-bottom: 30px;
           padding-bottom: 20px;
           border-bottom: 2px solid #e1e5e9;
-        }
         .creator-info h1 {
-          margin: 0 0 10px 0;
-          color: #1f2937;
-        }
+          margin: 0 0 10px 0;,
+  color: #1f2937;
         .creator-badges {
-          display: flex;
-          gap: 10px;
-        }
+          display: flex;,
+  gap: 10px;
         .verification-badge, .tier-badge {
-          background: #f3f4f6;
-          padding: 4px 8px;
+          background: #f3f4f6;,
+  padding: 4px 8px;
           border-radius: 12px;
           font-size: 12px;
           font-weight: 500;
-        }
         .header-actions {
           display: flex;
-          align-items: center;
-          gap: 15px;
-        }
+          align-items: center;,
+  gap: 15px;
         .create-template-btn {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 10px 20px;
+          background: #3b82f6;,
+  color: white;
+          border: none;,
+  padding: 10px 20px;
           border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-        }
-        .create-template-btn:hover {
-          background: #2563eb;
-        }
+          font-weight: 500;,
+  cursor: pointer;
+        .create-template-btn:hover {,
+  background: #2563eb;
         .date-range-selector {
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .date-range-selector input {
-          padding: 8px 12px;
-          border: 1px solid #d1d5db;
+          padding: 8px 12px;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
-        }
         .dashboard-tabs {
-          display: flex;
-          gap: 2px;
+          display: flex;,
+  gap: 2px;
           margin-bottom: 30px;
           border-bottom: 2px solid #e1e5e9;
-        }
         .tab {
-          background: none;
-          border: none;
-          padding: 12px 20px;
-          cursor: pointer;
+          background: none;,
+  border: none;
+          padding: 12px 20px;,
+  cursor: pointer;
           color: #6b7280;
           font-weight: 500;
           border-bottom: 2px solid transparent;
-        }
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
-        }
-        .tab:hover {
-          color: #1f2937;
-        }
+        .tab:hover {,
+  color: #1f2937;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 20px;
           margin-bottom: 30px;
-        }
         .metric-card {
-          background: white;
-          padding: 24px;
+          background: white;,
+  padding: 24px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           text-align: center;
-        }
         .metric-card h3 {
-          margin: 0 0 10px 0;
-          color: #6b7280;
+          margin: 0 0 10px 0;,
+  color: #6b7280;
           font-size: 14px;
           font-weight: 500;
-        }
         .metric-value {
           font-size: 32px;
-          font-weight: bold;
-          color: #1f2937;
+          font-weight: bold;,
+  color: #1f2937;
           margin-bottom: 5px;
-        }
         .metric-label {
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .recent-performance {
-          background: white;
-          padding: 20px;
+          background: white;,
+  padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .recent-performance h3 {
-          margin: 0 0 20px 0;
-          color: #1f2937;
-        }
+          margin: 0 0 20px 0;,
+  color: #1f2937;
         .templates-table {
           display: flex;
-          flex-direction: column;
-          gap: 1px;
-        }
+          flex-direction: column;,
+  gap: 1px;
         .table-header, .table-row {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
-          gap: 20px;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;,
+  gap: 20px;
           padding: 12px 0;
-        }
         .table-header {
-          font-weight: 600;
-          color: #6b7280;
+          font-weight: 600;,
+  color: #6b7280;
           border-bottom: 1px solid #e1e5e9;
-        }
         .table-row {
           border-bottom: 1px solid #f3f4f6;
-        }
         .template-info {
           display: flex;
           flex-direction: column;
-        }
         .template-title {
           font-weight: 500;
-        }
         .template-price {
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .status-badge {
-          display: inline-block;
-          padding: 2px 8px;
+          display: inline-block;,
+  padding: 2px 8px;
           border-radius: 12px;
           font-size: 11px;
           font-weight: 500;
-          text-transform: uppercase;
-          color: white;
-        }
+          text-transform: uppercase;,
+  color: white;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
-        }
         .templates-filters {
-          display: flex;
-          gap: 10px;
+          display: flex;,
+  gap: 10px;
           align-items: center;
-        }
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 20px;
-        }
         .template-card {
-          background: white;
-          padding: 20px;
+          background: white;,
+  padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .card-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 15px;
-        }
         .card-header h4 {
-          margin: 0;
-          color: #1f2937;
-        }
+          margin: 0;,
+  color: #1f2937;
         .card-metrics {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 15px;
           margin-bottom: 15px;
-        }
         .card-metrics .metric {
           text-align: center;
-        }
         .card-metrics .value {
           display: block;
           font-size: 18px;
-          font-weight: bold;
-          color: #1f2937;
-        }
+          font-weight: bold;,
+  color: #1f2937;
         .card-metrics .label {
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .card-actions {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .card-actions button {
-          flex: 1;
-          padding: 8px 12px;
-          border: 1px solid #d1d5db;
-          background: white;
-          border-radius: 6px;
-          cursor: pointer;
+          flex: 1;,
+  padding: 8px 12px;
+          border: 1px solid #d1d5db;,
+  background: white;
+          border-radius: 6px;,
+  cursor: pointer;
           font-size: 12px;
-        }
-        .card-actions button:hover {
-          background: #f9fafb;
-        }
+        .card-actions button:hover {,
+  background: #f9fafb;
         .analytics-charts {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
           gap: 30px;
-        }
         .chart-container {
-          background: white;
-          padding: 20px;
+          background: white;,
+  padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .chart-container h3 {
-          margin: 0 0 20px 0;
-          color: #1f2937;
-        }
+          margin: 0 0 20px 0;,
+  color: #1f2937;
         .monetization-settings, .profile-settings {
-          background: white;
-          padding: 30px;
+          background: white;,
+  padding: 30px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           max-width: 600px;
-        }
         .settings-section, .profile-section {
           margin-bottom: 30px;
-        }
         .settings-section h4, .profile-section h4 {
-          margin: 0 0 15px 0;
-          color: #1f2937;
+          margin: 0 0 15px 0;,
+  color: #1f2937;
           font-size: 16px;
-        }
         .setting-row {
           display: flex;
-          align-items: center;
-          gap: 15px;
+          align-items: center;,
+  gap: 15px;
           margin-bottom: 15px;
-        }
         .setting-row label {
           min-width: 120px;
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .setting-row input, .setting-row select, .setting-row textarea {
-          flex: 1;
-          padding: 8px 12px;
+          flex: 1;,
+  padding: 8px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
-        }
         .save-settings-btn, .save-profile-btn {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 12px 24px;
+          background: #3b82f6;,
+  color: white;
+          border: none;,
+  padding: 12px 24px;
           border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-        }
-        .save-settings-btn:hover, .save-profile-btn:hover {
-          background: #2563eb;
-        }
+          font-weight: 500;,
+  cursor: pointer;
+        .save-settings-btn:hover, .save-profile-btn:hover {,
+  background: #2563eb;
         .loading, .error {
           display: flex;
           justify-content: center;
           align-items: center;
           min-height: 400px;
-        }
         .loading-spinner {
           text-align: center;
-        }
         .spinner {
-          width: 40px;
-          height: 40px;
+          width: 40px;,
+  height: 40px;
           border: 4px solid #f3f4f6;
           border-top: 4px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
           margin: 0 auto 20px;
-        }
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         .error-message {
-          text-align: center;
-          padding: 40px;
+          text-align: center;,
+  padding: 40px;
           background: white;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .retry-button {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
+          background: #3b82f6;,
+  color: white;
+          border: none;,
+  padding: 10px 20px;
+          border-radius: 6px;,
+  cursor: pointer;
           margin-top: 15px;
-        }
-        .retry-button:hover {
-          background: #2563eb;
-        }
+        .retry-button:hover {,
+  background: #2563eb;
       `}</style>
     </div>
   );

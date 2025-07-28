@@ -24,49 +24,47 @@ import {
   ManualMode as ManualModeIcon,
   Block as BlockIcon
 } from '@mui/icons-material';
+
 interface Conflict {
-  description: string;
+  description: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-}
-interface ConflictPreviewProps {
-  conflicts: Conflict[];
+  interface ConflictPreviewProps {
+  conflicts: Conflict;,
   resolution: 'skip' | 'override' | 'merge';
-}
-const SEVERITY_CONFIG = {
+  const SEVERITY_CONFIG = {
   low: {,
-    icon: InfoIcon,
-    color: 'info' as const,
-    label: 'Low',
-    description: 'Minor scheduling overlap with minimal impact',
-  },
+  icon: InfoIcon,
+  color: 'info' as const,
+  label: 'Low',
+  description: 'Minor scheduling overlap with minimal impact',
+},
   medium: {,
-    icon: WarningIcon,
-    color: 'warning' as const,
-    label: 'Medium',
-    description: 'Moderate conflict that may cause unexpected behavior',
-  },
+  icon: WarningIcon,
+  color: 'warning' as const,
+  label: 'Medium',
+  description: 'Moderate conflict that may cause unexpected behavior',
+},
   high: {,
-    icon: ErrorIcon,
-    color: 'error' as const,
-    label: 'High',
-    description: 'Significant conflict that will likely cause issues',
-  },
+  icon: ErrorIcon,
+  color: 'error' as const,
+  label: 'High',
+  description: 'Significant conflict that will likely cause issues',
+},
   critical: {,
-    icon: ErrorIcon,
-    color: 'error' as const,
-    label: 'Critical',
-    description: 'Severe conflict that could break functionality',
-  }
+  icon: ErrorIcon,
+  color: 'error' as const,
+  label: 'Critical',
+  description: 'Severe conflict that could break functionality',
 };
 
-export 
+
   const conflictsByType = conflicts.reduce((acc, conflict) => {
     if (!acc[conflict.severity]) {
       acc[conflict.severity] = [];
-    }
+
     acc[conflict.severity].push(conflict);
     return acc;
-  }, {} as Record<string, Conflict[]>);
+  }, {} as Record<string, Conflict>);
   const getOverallSeverity = () => {
     if (conflicts.some(c => c.severity === 'critical')) return 'critical';
     if (conflicts.some(c => c.severity === 'high')) return 'high';
@@ -75,7 +73,7 @@ export
   };
   const overallSeverity = getOverallSeverity();
   const overallConfig = SEVERITY_CONFIG[overallSeverity];
-  return ()
+  return;
     <Paper elevation={1} sx={{ p: 2 }}>
       <Box display="flex" alignItems="center" gap={1} mb={2}>
         <overallConfig.icon color={overallConfig.color} />
@@ -108,7 +106,7 @@ export
           <List dense>
             {Object.entries(conflictsByType).map(([severity, severityConflicts]) => {
               const config = SEVERITY_CONFIG[severity as keyof typeof SEVERITY_CONFIG];
-              return ()
+              return;
                 <Box key={severity} mb={1}>
                   <Typography variant="subtitle2" color={`${config.color}.main`} gutterBottom>}
                     {config.label} Severity ({severityConflicts.length})

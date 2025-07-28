@@ -55,44 +55,39 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // Chart components (would need to install chart library)
 // For now, we'll create simple visual representations
 interface ChartData {
-  timestamp: Date;
+  timestamp: Date;,
   value: number;
   category?: string;
   severity?: string;
-}
 interface LogMetrics {
-  totalLogs: number;
+  totalLogs: number;,
   errorRate: number;
-  averageLatency: number;
+  averageLatency: number;,
   alertCount: number;
   sources: Record<string, number>;
   levels: Record<string, number>;
-  anomalies: number;
+  anomalies: number;,
   patterns: number;
-}
 interface LogSource {
-  name: string;
+  name: string;,
   status: 'healthy' | 'warning' | 'error';
-  lastSeen: Date;
+  lastSeen: Date;,
   messageCount: number;
   errorRate: number;
-}
 interface PatternAlert {
-  id: string;
+  id: string;,
   type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   title: string;
-  description: string;
+  description: string;,
   timestamp: Date;
-  affectedSources: string[];
+  affectedSources: string;,
   count: number;
-}
 interface TimeRangeOption {
-  label: string;
+  label: string;,
   value: string;
   hours: number;
-}
-const TIME_RANGES: TimeRangeOption[] = [
+const TIME_RANGES: TimeRangeOption = [
   { label: 'Last 15 minutes', value: '15m', hours: 0.25 },
   { label: 'Last hour', value: '1h', hours: 1 },
   { label: 'Last 6 hours', value: '6h', hours: 6 },
@@ -102,7 +97,7 @@ const TIME_RANGES: TimeRangeOption[] = [
 ];
 const SEVERITY_COLORS = {
   low: '#2196f3',
-  medium: '#ff9800', 
+  medium: '#ff9800',
   high: '#f44336',
   critical: '#d32f2f',
 };
@@ -112,13 +107,13 @@ const LOG_SOURCES = [;
 const LOG_LEVELS = ['debug', 'info', 'warn', 'error', 'fatal', 'trace'];
 
 // Simple chart component (placeholder for actual chart library)
-const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' | 'bar' }> = ({ )
+const SimpleChart: React.FC<{ data: ChartData; height?: number; type?: 'line' | 'bar' }> = ({)
   data, 
   height = 200, 
   type = 'line' 
 }) => {
   const maxValue = Math.max(...data.map(d => d.value), 1);
-  return ()
+  return ();
     <Box sx={{ height, position: 'relative', p: 2 }}>
       <svg width="100%" height="100%" viewBox="0 0 400 200">
         {/* Grid lines */}
@@ -130,7 +125,7 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
           const x = (index / (data.length - 1)) * 400;
           const y = 200 - (point.value / maxValue) * 180;
           if (type === 'bar') {
-            return ()
+            return ();
               <rect
                 key={index}
                 x={x - 5}
@@ -142,7 +137,7 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
               />
             );
           } else {
-            return ()
+            return ();
               <circle
                 key={index}
                 cx={x}
@@ -151,7 +146,6 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
                 fill="#2196f3"
               />
             );
-          }
         })}
         {/* Connect points for line chart */}
         {type === 'line' && data.length > 1 && ()
@@ -171,16 +165,18 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
   );
 };
 
-export const [timeRange, setTimeRange] = useState<string>('1h');
+export const LogVisualizationDashboard: React.FC = () => {
+  const [timeRange, setTimeRange] = useState<string>('1h');
+  const [autoRefresh, setAutoRefresh] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedSources, _setSelectedSources] = useState<string[]>(LOG_SOURCES);
+  const [selectedSources, _setSelectedSources] = useState<string>(LOG_SOURCES);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedLevels, _setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
+  const [_selectedLevels, _setSelectedLevels] = useState<string>(['warn', 'error', 'fatal']);
   const [loading, setLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<LogMetrics | null>(null);
-  const [sources, setSources] = useState<LogSource[]>([]);
-  const [alerts, setAlerts] = useState<PatternAlert[]>([]);
-  const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [sources, setSources] = useState<LogSource>([]);
+  const [alerts, setAlerts] = useState<PatternAlert>([]);
+  const [chartData, setChartData] = useState<ChartData>([]);
   const [customStartDate, setCustomStartDate] = useState<Date | null>(null);
   const [customEndDate, setCustomEndDate] = useState<Date | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -202,52 +198,51 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
       const healthResponse = await fetch('/api/log-analysis/health');
       const healthData = await healthResponse.json();
       if (analytics.success && alertsData.success && healthData.success) {
-        // Process analytics data
-        const analyticsResult = analytics.analytics;
-        // Generate chart data from analytics
-        const chartPoints: ChartData[] = [];
-        if (analyticsResult.hourly_log_counts) {
-          Object.entries(analyticsResult.hourly_log_counts).forEach(([hour, count]) => {
-            chartPoints.push({)
-              timestamp: new Date(hour),
-              value: count as number,
-              category: 'all',
-            });
+  // Process analytics data
+  const analyticsResult = analytics.analytics;
+  // Generate chart data from analytics
+  const chartPoints: ChartData = [];
+  if (analyticsResult.hourly_log_counts) {
+  Object.entries(analyticsResult.hourly_log_counts).forEach(([hour, count]) => {
+  chartPoints.push({)
+  timestamp: new Date(hour),
+  value: count as number,
+  category: 'all',
+});
           });
-        }
         // Process source status from health data
-        const sourcesStatus: LogSource[] = LOG_SOURCES.map(source => ({)
-          name: source,
-          status: 'healthy' as const,
-          lastSeen: new Date(),
-          messageCount: analyticsResult.logs_by_source?.[source] || 0,
-          errorRate: analyticsResult.error_rates_by_source?.[source] || 0,
-        }));
+        const sourcesStatus: LogSource = LOG_SOURCES.map(source => ({,)
+  name: source,
+  status: 'healthy' as const,
+  lastSeen: new Date(),
+  messageCount: analyticsResult.logs_by_source?.[source] || 0,
+  errorRate: analyticsResult.error_rates_by_source?.[source] || 0,
+}));
         // Process alerts data
-        const processedAlerts: PatternAlert[] = alertsData.alerts.map()
-          (alert: Record<string,)
+        const processedAlerts: PatternAlert = alertsData.alerts.map()
+          (alert: Record<string)
           unknown>
         ): PatternAlert => ({)
-          id: (alert.alert_id as string) || '',
-          type: (alert.anomaly_type as string) || '',
-          severity: (alert.severity as 'low' | 'medium' | 'high' | 'critical') || 'low',
-          title: (alert.title as string) || '',
-          description: (alert.description as string) || '',
-          timestamp: new Date((alert.first_detected as string) || Date.now()),
-          affectedSources: (alert.affected_sources as string[]) || [],
-          count: ((alert.trigger_conditions_met as Record<string, unknown>)?.occurrences as number) || 1
-        }));
+  id: (alert.alert_id as string) || '',
+  type: (alert.anomaly_type as string) || '',
+  severity: (alert.severity as 'low' | 'medium' | 'high' | 'critical') || 'low',
+  title: (alert.title as string) || '',
+  description: (alert.description as string) || '',
+  timestamp: new Date((alert.first_detected as string) || Date.now()),
+  affectedSources: (alert.affected_sources as string) || [],
+  count: ((alert.trigger_conditions_met as Record<string, unknown>)?.occurrences as number) || 1,
+}));
         // Build metrics object
-        const processedMetrics: LogMetrics = {
-          totalLogs: analyticsResult.total_logs || 0,
+        const processedMetrics: LogMetrics = {,
+  totalLogs: analyticsResult.total_logs || 0,
           errorRate: analyticsResult.overall_error_rate || 0,
           averageLatency: analyticsResult.average_processing_time || 0,
           alertCount: alertsData.pagination.total,
           sources: analyticsResult.logs_by_source || {},
           levels: analyticsResult.logs_by_level || {},
           anomalies: analyticsResult.anomaly_count || 0,
-          patterns: analyticsResult.pattern_count || 0,
-        };
+          patterns: analyticsResult.pattern_count || 0;
+  };
         setChartData(chartPoints);
         setSources(sourcesStatus);
         setAlerts(processedAlerts);
@@ -255,70 +250,69 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
       } else {
         // Fallback to mock data if API fails
         generateMockData();
-      }
     } catch (error) {
-      console.error('Failed to fetch analytics data:', error);
-      // Fallback to mock data
-      generateMockData();
-    }
-  }, [timeRange, generateMockData]);
+  console.error('Failed to fetch analytics data:', error);
+  // Fallback to mock data
+  generateMockData();
+}, [timeRange, generateMockData]);
   // Mock data generation for development/fallback
   const generateMockData = useCallback((): void => {
-    const now = new Date();
-    const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
-    const points = Math.min(50, Math.max(10, hours * 4)); // 4 points per hour, max 50;
-    const mockChartData: ChartData[] = [];
-    const mockSources: LogSource[] = [];
-    const mockAlerts: PatternAlert[] = [];
-    // Generate time series data
-    for (let i = 0; i < points; i++) {
-      const timestamp = new Date(now.getTime() - (hours * 60 * 60 * 1000) + (i * (hours * 60 * 60 * 1000) / points));
-      mockChartData.push({)
-        timestamp,
-        value: Math.random() * 100 + Math.sin(i * 0.5) * 20,
-        category: LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)],
-      });
-    }
+  const now = new Date();
+  const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
+  const points = Math.min(50, Math.max(10, hours * 4)); // 4 points per hour, max 50;
+  const mockChartData: ChartData = [];
+  const mockSources: LogSource = [];
+  const mockAlerts: PatternAlert = [];
+  // Generate time series data
+  for (let i = 0; i < points; i++) {
+  const timestamp = new Date(now.getTime() - (hours * 60 * 60 * 1000) + (i * (hours * 60 * 60 * 1000) / points));
+  mockChartData.push({)
+  timestamp,
+  value: Math.random() * 100 + Math.sin(i * 0.5) * 20,
+  category: LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)],
+});
     // Generate source status
     LOG_SOURCES.forEach(source => {)
-      mockSources.push({)
-        name: source,
-        status: Math.random() > 0.8 ? 'warning' : Math.random() > 0.95 ? 'error' : 'healthy',
-        lastSeen: new Date(now.getTime() - Math.random() * 5 * 60 * 1000),
-        messageCount: Math.floor(Math.random() * 10000),
-        errorRate: Math.random() * 5,
-      });
+  mockSources.push({)
+  name: source,
+  status: Math.random() > 0.8 ? 'warning' : Math.random() > 0.95 ? 'error' : 'healthy',
+  lastSeen: new Date(now.getTime() - Math.random() * 5 * 60 * 1000),
+  messageCount: Math.floor(Math.random() * 10000),
+  errorRate: Math.random() * 5,
+});
     });
     // Generate alerts
     const alertTypes = ['error_spike', 'performance_degradation', 'security_threat', 'unusual_activity'];
     for (let i = 0; i < Math.floor(Math.random() * 5) + 1; i++) {
       mockAlerts.push({)
-        id: `alert-${i}`,}
-        type: alertTypes[Math.floor(Math.random() * alertTypes.length)],
+  id: `alert-${i}`}
+},
+  type: alertTypes[Math.floor(Math.random() * alertTypes.length)],
         severity: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)] as 'low' | 'medium' | 'high' | 'critical',
-        title: `Alert ${i + 1}`,}
-        description: `Detected anomaly in ${LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]} logs`,}
-        timestamp: new Date(now.getTime() - Math.random() * 60 * 60 * 1000),
+        title: `Alert ${i + 1}`}
+},
+  description: `Detected anomaly in ${LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]} logs`}
+},
+  timestamp: new Date(now.getTime() - Math.random() * 60 * 60 * 1000),
         affectedSources: [LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]],
-        count: Math.floor(Math.random() * 100) + 1,
-      });
-    }
-    const mockMetrics: LogMetrics = {
-      totalLogs: Math.floor(Math.random() * 100000) + 50000,
-      errorRate: Math.random() * 5,
-      averageLatency: Math.random() * 500 + 100,
-      alertCount: mockAlerts.length,
-      sources: LOG_SOURCES.reduce((acc, source) => {
-        acc[source] = Math.floor(Math.random() * 10000);
-        return acc;
-      }, {} as Record<string, number>),
+        count: Math.floor(Math.random() * 100) + 1;
+  });
+    const mockMetrics: LogMetrics = {,
+  totalLogs: Math.floor(Math.random() * 100000) + 50000,
+  errorRate: Math.random() * 5,
+  averageLatency: Math.random() * 500 + 100,
+  alertCount: mockAlerts.length,
+  sources: LOG_SOURCES.reduce((acc, source) => {,
+  acc[source] = Math.floor(Math.random() * 10000);
+  return acc;
+}, {} as Record<string, number>),
       levels: LOG_LEVELS.reduce((acc, level) => {
         acc[level] = Math.floor(Math.random() * 20000);
         return acc;
       }, {} as Record<string, number>),
       anomalies: Math.floor(Math.random() * 10),
-      patterns: Math.floor(Math.random() * 25) + 5,
-    };
+      patterns: Math.floor(Math.random() * 25) + 5;
+  };
     setChartData(mockChartData);
     setSources(mockSources);
     setAlerts(mockMetrics);
@@ -330,19 +324,17 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
     try {
       await fetchAnalyticsData();
     } catch (error) {
-      console.error('Failed to load log data:', error);
-      // Fallback to mock data on error
-      generateMockData();
-    } finally {
+  console.error('Failed to load log data:', error);
+  // Fallback to mock data on error
+  generateMockData();
+} finally {
       setLoading(false);
-    }
   }, [fetchAnalyticsData, generateMockData]);
   // Auto refresh effect
   useEffect(() => {
     if (autoRefresh) {
       const interval = setInterval(loadData, 30000); // Refresh every 30 seconds;
-      return () => clearInterval(interval);
-    }
+      return ( => clearInterval(interval);
   }, [autoRefresh, loadData]);
   // Initial load
   useEffect(() => {
@@ -367,34 +359,31 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
           } else if (update.type === 'metrics_update') {
             setMetrics(prev => prev ? { ...prev, ...update.metrics } : null);
           } else if (update.type === 'log_volume_update') {
-            setChartData(prev => {)
-              const newPoint = {
-                timestamp: new Date(update.timestamp),
-                value: update.volume,
-                category: update.source || 'all',
-              };
+  setChartData(prev => {)
+  const newPoint = {
+  timestamp: new Date(update.timestamp),
+  value: update.volume,
+  category: update.source || 'all',
+};
               return [...prev.slice(-49), newPoint];
             });
-          }
         } catch (error) {
-          console.error('Failed to process WebSocket message:', error);
-        }
-      };
+  console.error('Failed to process WebSocket message:', error);
+};
       ws.onclose = () => {
         setIsConnected(false);
         console.log('Disconnected from log analysis WebSocket');
       };
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        setIsConnected(false);
-      };
-      return () => {
-        ws.close();
+  console.error('WebSocket error:', error);
+  setIsConnected(false);
+};
+      return ( => {)
+  ws.close();
       };
     } catch (error) {
-      console.error('Failed to establish WebSocket connection:', error);
-    }
-  }, [autoRefresh]);
+  console.error('Failed to establish WebSocket connection:', error);
+}, [autoRefresh]);
   // Filtered chart data
   const filteredChartData = useMemo(() => {
     return chartData.filter(point => )
@@ -402,13 +391,13 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
     );
   }, [chartData, selectedSources]);
   const handleExportData = (): void => {
-    // Export functionality
-    const data = {
-      timeRange,
-      metrics,
-      alerts,
-      exportedAt: new Date().toISOString(),
-    };
+  // Export functionality
+  const data = {
+  timeRange,
+  metrics,
+  alerts,
+  exportedAt: new Date().toISOString(),
+};
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -432,7 +421,7 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
     if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;}
     return `${ms.toFixed(0)}ms`;}
   };
-  return ()
+  return ();
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ p: 3, bgcolor: '#f5f5f5', minHeight: '100vh' }}>
         {/* Header */}
@@ -491,7 +480,6 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                     checked={autoRefresh}
                     onChange={(e) => setAutoRefresh(e.target.checked)}
                   />
-                }
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     Auto Refresh
@@ -504,7 +492,6 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                       />
                     )}
                   </Box>
-                }
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -612,7 +599,6 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                   <IconButton>
                     <ZoomInIcon />
                   </IconButton>
-                }
               />
               <CardContent>
                 <SimpleChart data={filteredChartData} height={300} type="line" />
@@ -647,13 +633,11 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                               <VisibilityIcon fontSize="small" color="action" />
                             </Tooltip>
                           </Box>
-                        }
                         secondary={
                           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span>{formatNumber(source.messageCount)} msgs</span>
                             <span>{source.errorRate.toFixed(1)}% errors</span>
                           </Box>
-                        }
                       />
                     </ListItem>
                   ))}
@@ -688,18 +672,17 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                                 <Chip 
                                   label={alert.severity.toUpperCase()} 
                                   size="small" 
-                                  sx={{ 
-                                    bgcolor: SEVERITY_COLORS[alert.severity] + '20',
-                                    color: SEVERITY_COLORS[alert.severity],
-                                    mr: 1,
-                                  }}
+                                  sx={{
+  bgcolor: SEVERITY_COLORS[alert.severity] + '20',
+  color: SEVERITY_COLORS[alert.severity],
+  mr: 1,
+}}
                                 />
                                 <Typography variant="caption" color="text.secondary">
                                   {alert.timestamp.toLocaleTimeString()}
                                 </Typography>
                               </Box>
                             </Box>
-                          }
                         />
                       </ListItem>
                     ))}
@@ -716,9 +699,9 @@ export const [timeRange, setTimeRange] = useState<string>('1h');
                 {metrics && ()
                   <Box>
                     {LOG_LEVELS.map(level => {)
-                      const count = metrics.levels[level] || 0;
+  const count = metrics.levels[level] || 0;
                       const percentage = count / Math.max(metrics.totalLogs, 1) * 100;
-                      return ()
+                      return ();
                         <Box key={level} sx={{ mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                             <Typography variant="body2" sx={{ textTransform: 'capitalize' }}>

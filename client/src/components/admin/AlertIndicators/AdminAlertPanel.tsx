@@ -16,22 +16,21 @@ import {
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
 import AlertStatusIndicator from './AlertStatusIndicator';
 interface AlertItem {
-  id: string;
+  id: string;,
   type: string;
-  severity: AlertSeverity;
+  severity: AlertSeverity;,
   title: string;
-  description: string;
+  description: string;,
   timestamp: Date;
-  source: string;
+  source: string;,
   status: 'active' | 'acknowledged' | 'resolved';
   affectedComponent?: string;
   userId?: string;
   userName?: string;
-}
-interface AdminAlertPanelProps {
-  title: string;
+  interface AdminAlertPanelProps {
+  title: string;,
   alertCounts: AlertCount;
-  recentAlerts: AlertItem[];
+  recentAlerts: AlertItem;
   isLoading?: boolean;
   isExpanded?: boolean;
   onToggleExpanded?: () => void;
@@ -40,8 +39,7 @@ interface AdminAlertPanelProps {
   onAcknowledgeAll?: () => void;
   className?: string;
   maxRecentAlerts?: number;
-}
-const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
+  const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({,)
   title,
   alertCounts,
   recentAlerts,
@@ -78,21 +76,21 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
     return `${diffDays}d ago`;}
   };
   const getSeverityIcon = (severity: AlertSeverity) => {
-    const icons = {
-      critical: Zap,
-      high: AlertTriangle,
-      medium: Shield,
-      low: Info,
-      info: Info,
-    };
+  const icons = {
+  critical: Zap,
+  high: AlertTriangle,
+  medium: Shield,
+  low: Info,
+  info: Info,
+};
     return icons[severity] || Info;
   };
   const getStatusIcon = (status: string) => {
-    const icons: Record<string, typeof AlertTriangle> = {
-      active: AlertTriangle,
-      acknowledged: CheckCircle,
-      resolved: CheckCircle,
-    };
+  const icons: Record<string, typeof AlertTriangle> = {,
+  active: AlertTriangle,
+  acknowledged: CheckCircle,
+  resolved: CheckCircle,
+};
     return icons[status] || AlertTriangle;
   };
   const panelClasses = [;
@@ -100,7 +98,7 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
     hasActiveAlerts ? 'border-l-4 border-l-yellow-400' : '',
     className
   ].filter(Boolean).join(' ');
-  return ()
+  return;
     <div className={panelClasses}>
       {/* Panel Header */}
       <div className="px-4 py-3 border-b border-gray-100">
@@ -205,7 +203,7 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
               {displayedAlerts.map((alert) => {
                 const SeverityIcon = getSeverityIcon(alert.severity);
                 const StatusIcon = getStatusIcon(alert.status);
-                return ()
+                return;
                   <div
                     key={alert.id}
                     className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -213,11 +211,11 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
                     {/* Severity Icon */}
                     <div className="flex-shrink-0 mt-0.5">
                       <SeverityIcon className={`w-4 h-4 ${
-                        alert.severity === 'critical' ? 'text-red-500' :
-                          alert.severity === 'high' ? 'text-orange-500' :
-                            alert.severity === 'medium' ? 'text-yellow-500' :
-                              'text-blue-500'
-                      }`} />
+  alert.severity === 'critical' ? 'text-red-500' :,
+  alert.severity === 'high' ? 'text-orange-500' :,
+  alert.severity === 'medium' ? 'text-yellow-500' :,
+  'text-blue-500'
+}`} />
                     </div>
                     {/* Alert Content */}
                     <div className="flex-1 min-w-0">
@@ -227,10 +225,10 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({)
                         </h4>
                         <div className="flex items-center space-x-2 ml-2 flex-shrink-0">
                           <StatusIcon className={`w-3 h-3 ${
-                            alert.status === 'resolved' ? 'text-green-500' :
-                              alert.status === 'acknowledged' ? 'text-blue-500' :
-                                'text-gray-400'
-                          }`} />
+  alert.status === 'resolved' ? 'text-green-500' :,
+  alert.status === 'acknowledged' ? 'text-blue-500' :,
+  'text-gray-400'
+}`} />
                           <span className="text-xs text-gray-500">
                             {formatTimeAgo(alert.timestamp)}
                           </span>

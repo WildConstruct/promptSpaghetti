@@ -3,51 +3,46 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 interface SessionInfo {
-  id: string;
+  id: string;,
   deviceInfo: {,
-    platform?: string;
-    browser?: string;
-    version?: string;
-    userAgent?: string;
-    fingerprint?: string;
-  };
+  platform?: string;
+  browser?: string;
+  version?: string;
+  userAgent?: string;
+  fingerprint?: string;
+};
   location: {,
-    ipAddress?: string;
-    country?: string;
-    city?: string;
-  };
-  lastAccessedAt: string;
+  ipAddress?: string;
+  country?: string;
+  city?: string;
+};
+  lastAccessedAt: string;,
   createdAt: string;
   current: boolean;
-}
 interface SessionStats {
-  totalSessions: number;
+  totalSessions: number;,
   activeSessions: number;
-  expiredSessions: number;
+  expiredSessions: number;,
   revokedSessions: number;
-}
-interface SecurityInsights {
+  interface SecurityInsights {
   suspiciousActivity: {,
-    multipleLocations: boolean;
-    unusualDevices: boolean;
-    suspiciousLocations: string[];
-    newDevices: unknown[];
-  };
-  recommendations: string[];
-}
+  multipleLocations: boolean;,
+  unusualDevices: boolean;
+  suspiciousLocations: string;,
+  newDevices: unknown;
+};
+  recommendations: string;
 interface SessionManagerProps {
   onSessionRevoked?: (sessionId: string) => void;
   onAllSessionsRevoked?: () => void;
   showSecurityInsights?: boolean;
-}
-
-export const SessionManager: React.FC<SessionManagerProps> = ({)
+  export const SessionManager: React.FC<SessionManagerProps> = ({,)
   onSessionRevoked,
   onAllSessionsRevoked,
   showSecurityInsights = true
 }) => {
   const { user } = useAuth();
-  const [sessions, setSessions] = useState<SessionInfo[]>([]);
+  const [sessions, setSessions] = useState<SessionInfo>([]);
   const [stats, setStats] = useState<SessionStats | null>(null);
   const [securityInsights, setSecurityInsights] = useState<SecurityInsights | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,126 +54,108 @@ export const SessionManager: React.FC<SessionManagerProps> = ({)
       fetchSessions();
       if (showSecurityInsights) {
         fetchSecurityInsights();
-      }
-    }
   }, [user, showSecurityInsights]);
   const fetchSessions = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/sessions', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch sessions');
-      }
       const data = await response.json();
       setSessions(data.sessions);
       setStats(data.stats);
     } catch (error) {
-      console.error('Error fetching sessions:', error);
-      setError('Failed to load sessions');
-    } finally {
+  console.error('Error fetching sessions:', error);
+  setError('Failed to load sessions');
+} finally {
       setLoading(false);
-    }
   };
   const fetchSecurityInsights = async () => {
     try {
       const response = await fetch('/api/auth/sessions/security', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch security insights');
-      }
       const data = await response.json();
       setSecurityInsights(data);
     } catch (error) {
-      console.error('Error fetching security insights:', error);
-    }
-  };
+  console.error('Error fetching security insights:', error);
+};
   const revokeSession = async (sessionId: string, reason?: string) => {
     try {
       setRevoking(sessionId);
       const response = await fetch('/api/auth/sessions/revoke', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ sessionId, reason })
+  },
+  body: JSON.stringify({ sessionId, reason })
       });
       if (!response.ok) {
-        throw new Error('Failed to revoke session');
-      }
-      // Remove session from local state
-      setSessions(sessions.filter(s => s.id !== sessionId));
-      // Update stats
-      if (stats) {
-        setStats({)
-          ...stats,
-          activeSessions: stats.activeSessions - 1,
-          revokedSessions: stats.revokedSessions + 1,
-        });
-      }
+  throw new Error('Failed to revoke session');
+  // Remove session from local state
+  setSessions(sessions.filter(s => s.id !== sessionId));
+  // Update stats
+  if (stats) {
+  setStats({)
+  ...stats,
+  activeSessions: stats.activeSessions - 1,
+  revokedSessions: stats.revokedSessions + 1,
+});
       onSessionRevoked?.(sessionId);
     } catch (error) {
-      console.error('Error revoking session:', error);
-      setError('Failed to revoke session');
-    } finally {
+  console.error('Error revoking session:', error);
+  setError('Failed to revoke session');
+} finally {
       setRevoking(null);
-    }
   };
   const revokeAllSessions = async (exceptCurrent: boolean = true) => {
     try {
       setBulkRevoking(true);
       const response = await fetch('/api/auth/sessions/revoke-all', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ exceptCurrent })
+  },
+  body: JSON.stringify({ exceptCurrent })
       });
       if (!response.ok) {
         throw new Error('Failed to revoke sessions');
-      }
       const data = await response.json();
       // Update local state
       if (exceptCurrent) {
         setSessions(sessions.filter(s => s.current));
       } else {
-        setSessions([]);
-      }
-      // Update stats
-      if (stats) {
-        setStats({)
-          ...stats,
-          activeSessions: exceptCurrent ? 1 : 0,
-          revokedSessions: stats.revokedSessions + data.revokedCount,
-        });
-      }
+  setSessions([]);
+  // Update stats
+  if (stats) {
+  setStats({)
+  ...stats,
+  activeSessions: exceptCurrent ? 1 : 0,
+  revokedSessions: stats.revokedSessions + data.revokedCount,
+});
       onAllSessionsRevoked?.();
     } catch (error) {
-      console.error('Error revoking all sessions:', error);
-      setError('Failed to revoke sessions');
-    } finally {
+  console.error('Error revoking all sessions:', error);
+  setError('Failed to revoke sessions');
+} finally {
       setBulkRevoking(false);
-    }
   };
   const getDeviceIcon = (deviceInfo: unknown) => {
     const platform = deviceInfo.platform?.toLowerCase();
     if (platform?.includes('mobile') || platform?.includes('android') || platform?.includes('ios')) {
       return '📱';
-    }
     if (platform?.includes('windows')) {
       return '💻';
-    }
     if (platform?.includes('mac')) {
       return '🖥️';
-    }
     return '💻';
   };
   const getDeviceDescription = (deviceInfo: unknown) => {
@@ -201,13 +178,12 @@ export const SessionManager: React.FC<SessionManagerProps> = ({)
     return date.toLocaleDateString();
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -216,10 +192,10 @@ export const SessionManager: React.FC<SessionManagerProps> = ({)
           onClick={() => revokeAllSessions(true)}
           disabled={bulkRevoking || sessions.length <= 1}
           className={`px-4 py-2 text-sm font-medium rounded-md ${
-            bulkRevoking || sessions.length <= 1
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-red-50 text-red-700 hover:bg-red-100'
-          }`}
+  bulkRevoking || sessions.length <= 1
+  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+  : 'bg-red-50 text-red-700 hover:bg-red-100',
+}`}
         >
           {bulkRevoking ? 'Revoking...' : 'Revoke All Others'}
         </button>
@@ -291,10 +267,10 @@ export const SessionManager: React.FC<SessionManagerProps> = ({)
           <div
             key={session.id}
             className={`border rounded-lg p-4 ${
-              session.current 
-                ? 'border-blue-200 bg-blue-50' 
-                : 'border-gray-200 bg-white'
-            }`}
+  session.current
+  ? 'border-blue-200 bg-blue-50'
+  : 'border-gray-200 bg-white',
+}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -330,10 +306,10 @@ export const SessionManager: React.FC<SessionManagerProps> = ({)
                   onClick={() => revokeSession(session.id)}
                   disabled={revoking === session.id}
                   className={`px-3 py-1 text-sm font-medium rounded-md ${
-                    revoking === session.id
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-red-50 text-red-700 hover:bg-red-100'
-                  }`}
+  revoking === session.id
+  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+  : 'bg-red-50 text-red-700 hover:bg-red-100',
+}`}
                 >
                   {revoking === session.id ? 'Revoking...' : 'Revoke'}
                 </button>

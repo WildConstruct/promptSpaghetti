@@ -19,7 +19,6 @@ interface StatusBadgeProps {
   variant?: 'solid' | 'outline' | 'soft';
   children?: React.ReactNode;
   className?: string;
-}
 const statusConfigs: Record<string, { color: string; icon?: string; label?: string }> = {
   // Boolean states
   active: { color: '#10b981', icon: '●', label: 'Active' },
@@ -46,20 +45,19 @@ const statusConfigs: Record<string, { color: string; icon?: string; label?: stri
 };
 const sizeConfigs = {
   small: {,
-    padding: '2px 6px',
-    fontSize: '11px',
-    gap: '4px',
-  },
+  padding: '2px 6px',
+  fontSize: '11px',
+  gap: '4px',
+},
   medium: {,
-    padding: '4px 8px',
-    fontSize: '12px',
-    gap: '6px',
-  },
+  padding: '4px 8px',
+  fontSize: '12px',
+  gap: '6px',
+},
   large: {,
-    padding: '6px 12px',
-    fontSize: '14px',
-    gap: '8px',
-  }
+  padding: '6px 12px',
+  fontSize: '14px',
+  gap: '8px',
 };
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({)
@@ -88,28 +86,28 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({)
         };
       case 'soft':
       default:
-        return {
-          backgroundColor: `${baseColor}15`,}
-          color: baseColor,
+        return {,
+  backgroundColor: `${baseColor}15`}
+},
+  color: baseColor,
           border: `1px solid ${baseColor}40`}
         };
-    }
   };
   const variantStyles = getVariantStyles();
-  return ()
+  return;
     <span
       className={`status-badge ${className}`}
       style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: sizeConfig.gap,
-        padding: sizeConfig.padding,
-        fontSize: sizeConfig.fontSize,
-        fontWeight: '500',
-        borderRadius: '12px',
-        whiteSpace: 'nowrap',
-        ...variantStyles
-      }}
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: sizeConfig.gap,
+  padding: sizeConfig.padding,
+  fontSize: sizeConfig.fontSize,
+  fontWeight: '500',
+  borderRadius: '12px',
+  whiteSpace: 'nowrap',
+  ...variantStyles
+}}
     >
       {config.icon && <span className="status-icon">{config.icon}</span>}
       <span className="status-text">

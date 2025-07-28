@@ -34,121 +34,113 @@ import {
 } from 'lucide-react';
 interface VerificationDisplayConfig {
   // Display Settings
-  showTrustScores: boolean;
+  showTrustScores: boolean;,
   showBadgeCount: boolean;
-  showVerificationLevel: boolean;
+  showVerificationLevel: boolean;,
   showReputation: boolean;
   // Style Configuration
-  badgeStyle: 'compact' | 'detailed' | 'minimal';
+  badgeStyle: 'compact' | 'detailed' | 'minimal';,
   trustIndicatorSize: 'small' | 'medium' | 'large';
-  colorScheme: 'default' | 'professional' | 'vibrant';
+  colorScheme: 'default' | 'professional' | 'vibrant';,
   animationsEnabled: boolean;
   // Visibility Rules
   publicDisplaySettings: {,
-    unverifiedUsers: boolean;
-    lowReputationUsers: boolean;
-    flaggedUsers: boolean;
-  };
+  unverifiedUsers: boolean;,
+  lowReputationUsers: boolean;
+  flaggedUsers: boolean;
+};
   // Thresholds
   displayThresholds: {,
-    minTrustScore: number;
-    minBadgeCount: number;
-    hideUnverified: boolean;
-  };
-}
+  minTrustScore: number;
+  minBadgeCount: number;,
+  hideUnverified: boolean;
+};
 interface TrustDisplayPreview {
-  userId: string;
+  userId: string;,
   username: string;
-  trustScore: number;
+  trustScore: number;,
   reputationLevel: string;
-  verificationLevel: string;
+  verificationLevel: string;,
   badges: Array<{,
-    badgeType: string;
-    name: string;
-    verified: boolean;
-    rarity: string;
-  }>;
+  badgeType: string;,
+  name: string;
+  verified: boolean;,
+  rarity: string;
+}>;
   flagged: boolean;
-}
 interface VerificationDisplayManagerProps {
   className?: string;
-}
 
 export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProps> = ({ className }) => {
-  const [previewData, setPreviewData] = useState<TrustDisplayPreview[]>([]);
+  const [previewData, setPreviewData] = useState<TrustDisplayPreview>([]);
   const [selectedDevice, setSelectedDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [activeTab, setActiveTab] = useState('display-config');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Configuration state
   const [config, setConfig] = useState<VerificationDisplayConfig>({)
-    showTrustScores: true,
-    showBadgeCount: true,
-    showVerificationLevel: true,
-    showReputation: true,
-    badgeStyle: 'compact',
-    trustIndicatorSize: 'medium',
-    colorScheme: 'default',
-    animationsEnabled: true,
-    publicDisplaySettings: {,
-      unverifiedUsers: true,
-      lowReputationUsers: true,
-      flaggedUsers: false,
-    },
-    displayThresholds: {,
-      minTrustScore: 0,
-      minBadgeCount: 0,
-      hideUnverified: false,
-    }
-  });
+  showTrustScores: true,
+  showBadgeCount: true,
+  showVerificationLevel: true,
+  showReputation: true,
+  badgeStyle: 'compact',
+  trustIndicatorSize: 'medium',
+  colorScheme: 'default',
+  animationsEnabled: true,
+  publicDisplaySettings: {,
+  unverifiedUsers: true,
+  lowReputationUsers: true,
+  flaggedUsers: false,
+},
+  displayThresholds: {,
+  minTrustScore: 0,
+  minBadgeCount: 0,
+  hideUnverified: false,
+});
   // Load preview data
   const loadPreviewData = async (): Promise<void> => {
-    try {
-      setLoading(true);
-      // Get sample users with different trust levels for preview
-      const response = await fetch('/api/admin/reputation/users?limit=6');
-      const result = await response.json();
-      if (result.success) {
-        const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({)
-          userId: (user.userId as string) || '',
-          username: (user.username as string) || '',
-          trustScore: (user.overallTrustScore as number) || 0,
-          reputationLevel: (user.reputationLevel as string) || 'bronze',
-          verificationLevel: (),
-            (user.verification as Record<string,)
-            unknown>
-          )?.verificationLevel as string) || 'unverified',
-          badges: [], // Would be populated from user reputation data
-          flagged: ((user.adminNotes as Record<string, unknown>)?.flagged as boolean) || false
-        }));
+  try {
+  setLoading(true);
+  // Get sample users with different trust levels for preview
+  const response = await fetch('/api/admin/reputation/users?limit=6');
+  const result = await response.json();
+  if (result.success) {
+  const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({,)
+  userId: (user.userId as string) || '',
+  username: (user.username as string) || '',
+  trustScore: (user.overallTrustScore as number) || 0,
+  reputationLevel: (user.reputationLevel as string) || 'bronze',
+  verificationLevel: (),
+  (user.verification as Record<string)
+  unknown>
+  )?.verificationLevel as string) || 'unverified',
+  badges: [], // Would be populated from user reputation data,
+  flagged: ((user.adminNotes as Record<string, unknown>)?.flagged as boolean) || false,
+}));
         setPreviewData(mappedData);
-      }
     } catch (err) {
-      setError('Failed to load preview data');
-      console.error('Error loading preview data:', err);
-    } finally {
+  setError('Failed to load preview data');
+  console.error('Error loading preview data:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Save configuration
   const saveConfiguration = async (): Promise<void> => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/verification-display/config', {)
-        method: 'PUT',
+  method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config),
-      });
+        body: JSON.stringify(config);
+  });
       if (response.ok) {
         // Configuration saved successfully
         console.log('Configuration saved');
-      }
     } catch (err) {
-      setError('Failed to save configuration');
-      console.error('Error saving configuration:', err);
-    } finally {
+  setError('Failed to save configuration');
+  console.error('Error saving configuration:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Export configuration
   const exportConfiguration = (): void => {
@@ -169,30 +161,28 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   }, []);
   // Mock trust indicator component based on configuration
   const TrustIndicatorPreview: React.FC<{ user: TrustDisplayPreview; size: string }> = ({ user, size }) => {
-    // eslint-disable-next-line react/prop-types
-    const getTrustIcon = (level: string): JSX.Element => {
-      switch (level) {
-      case 'diamond': return <Crown className="w-4 h-4 text-purple-600" />;
-      case 'platinum': return <Award className="w-4 h-4 text-blue-600" />;
-      case 'gold': return <Award className="w-4 h-4 text-yellow-600" />;
-      case 'silver': return <Shield className="w-4 h-4 text-gray-600" />;
-      case 'bronze': return <Shield className="w-4 h-4 text-orange-600" />;
-      default: return <CheckCircle className="w-4 h-4 text-gray-400" />;
-      }
-    };
+  // eslint-disable-next-line react/prop-types
+  const getTrustIcon = (level: string): JSX.Element => {,
+  switch (level) {
+  case 'diamond': return <Crown className="w-4 h-4 text-purple-600" />;
+  case 'platinum': return <Award className="w-4 h-4 text-blue-600" />;
+  case 'gold': return <Award className="w-4 h-4 text-yellow-600" />;
+  case 'silver': return <Shield className="w-4 h-4 text-gray-600" />;
+  case 'bronze': return <Shield className="w-4 h-4 text-orange-600" />;
+  default: return <CheckCircle className="w-4 h-4 text-gray-400" />;
+};
     const getTrustColor = (level: string): string => {
-      switch (level) {
-      case 'diamond': return 'border-purple-300 bg-purple-50';
-      case 'platinum': return 'border-blue-300 bg-blue-50';
-      case 'gold': return 'border-yellow-300 bg-yellow-50';
-      case 'silver': return 'border-gray-300 bg-gray-50';
-      case 'bronze': return 'border-orange-300 bg-orange-50';
-      default: return 'border-gray-200 bg-gray-50';
-      }
-    };
+  switch (level) {
+  case 'diamond': return 'border-purple-300 bg-purple-50';
+  case 'platinum': return 'border-blue-300 bg-blue-50';
+  case 'gold': return 'border-yellow-300 bg-yellow-50';
+  case 'silver': return 'border-gray-300 bg-gray-50';
+  case 'bronze': return 'border-orange-300 bg-orange-50';
+  default: return 'border-gray-200 bg-gray-50';
+};
     const sizeClass = size === 'small' ? 'text-xs p-2' : size === 'large' ? 'text-base p-4' : 'text-sm p-3';
     const containerClass = `border rounded-lg ${getTrustColor(user.reputationLevel)} ${sizeClass}`;}
-    return ()
+    return;
       <div className={containerClass}>
         <div className="flex items-center gap-2">
           {getTrustIcon(user.reputationLevel)}
@@ -221,7 +211,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       </div>
     );
   };
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -253,7 +243,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.showTrustScores}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({ ...prev, showTrustScores: checked }))
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -265,7 +254,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.showBadgeCount}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({ ...prev, showBadgeCount: checked }))
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -277,7 +265,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.showVerificationLevel}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({ ...prev, showVerificationLevel: checked }))
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -289,7 +276,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.showReputation}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({ ...prev, showReputation: checked }))
-                    }
                   />
                 </div>
               </CardContent>
@@ -310,7 +296,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     value={config.badgeStyle} 
                     onValueChange={(value: string) => 
                       setConfig(prev => ({ ...prev, badgeStyle: value as 'compact' | 'detailed' | 'minimal' }))
-                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -328,7 +313,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     value={config.trustIndicatorSize} 
                     onValueChange={(value: string) => 
                       setConfig(prev => ({ ...prev, trustIndicatorSize: value as 'small' | 'medium' | 'large' }))
-                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -346,7 +330,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     value={config.colorScheme} 
                     onValueChange={(value: string) => 
                       setConfig(prev => ({ ...prev, colorScheme: value as 'default' | 'professional' | 'vibrant' }))
-                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -367,7 +350,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.animationsEnabled}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({ ...prev, animationsEnabled: checked }))
-                    }
                   />
                 </div>
               </CardContent>
@@ -388,10 +370,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.publicDisplaySettings.unverifiedUsers}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, unverifiedUsers: checked }
                       }))
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -403,10 +384,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.publicDisplaySettings.lowReputationUsers}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, lowReputationUsers: checked }
                       }))
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -418,10 +398,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.publicDisplaySettings.flaggedUsers}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, flaggedUsers: checked }
                       }))
-                    }
                   />
                 </div>
               </CardContent>
@@ -439,10 +418,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     value={config.displayThresholds.minTrustScore}
                     onChange={(e) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         displayThresholds: { ...prev.displayThresholds, minTrustScore: parseInt(e.target.value) || 0 }
                       }))
-                    }
                     min="0"
                     max="1000"
                   />
@@ -455,10 +433,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     value={config.displayThresholds.minBadgeCount}
                     onChange={(e) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         displayThresholds: { ...prev.displayThresholds, minBadgeCount: parseInt(e.target.value) || 0 }
                       }))
-                    }
                     min="0"
                   />
                 </div>
@@ -471,10 +448,9 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     checked={config.displayThresholds.hideUnverified}
                     onCheckedChange={(checked) => 
                       setConfig(prev => ({)
-                        ...prev,
+  ...prev,
                         displayThresholds: { ...prev.displayThresholds, hideUnverified: checked }
                       }))
-                    }
                   />
                 </div>
               </CardContent>
@@ -537,10 +513,10 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   </div>
                 ) : ()
                   <div className={`grid gap-3 ${
-                    selectedDevice === 'mobile' ? 'grid-cols-1' :
-                      selectedDevice === 'tablet' ? 'grid-cols-2' :
-                        'grid-cols-3'
-                  }`}>
+  selectedDevice === 'mobile' ? 'grid-cols-1' :,
+  selectedDevice === 'tablet' ? 'grid-cols-2' :,
+  'grid-cols-3'
+}`}>
                     {previewData.map((user) => ()
                       /* eslint-disable-next-line react/prop-types */
                       <TrustIndicatorPreview 

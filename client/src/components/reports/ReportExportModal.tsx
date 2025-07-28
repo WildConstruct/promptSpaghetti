@@ -32,54 +32,49 @@ import {
 // Types
 interface ReportData {
   metadata: {,
-    title: string;
-    description: string;
-    generatedAt: Date;
-    generatedBy: string;
-    version: string;
-  };
+  title: string;,
+  description: string;
+  generatedAt: Date;,
+  generatedBy: string;
+  version: string;
+};
   summary: Record<string, unknown>;
   data: Array<Record<string, unknown>>;
-}
 interface ExportConfig {
-  format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';
+  format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';,
   delivery: 'file' | 'email' | 'webhook' | 'api';
   filename?: string;
-  options?: {
-    includeCharts?: boolean;
-    includeRawData?: boolean;
-    compression?: boolean;
-    encryption?: boolean;
-    password?: string;
-  };
+  options?: {,
+  includeCharts?: boolean;
+  includeRawData?: boolean;
+  compression?: boolean;
+  encryption?: boolean;
+  password?: string;
+};
   delivery_config?: {
-    email?: {
-      to: string[];
-      subject: string;
-      message?: string;
-    };
+  email?: {,
+  to: string;,
+  subject: string;
+  message?: string;
+};
     webhook?: {
-      url: string;
-      headers?: Record<string, string>;
-      method?: 'POST' | 'PUT';
-    };
+  url: string;
+  headers?: Record<string, string>;
+  method?: 'POST' | 'PUT';
+};
   };
-}
 interface ExportStatus {
-  id: string;
+  id: string;,
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress?: number;
   error?: string;
   downloadUrl?: string;
-}
-interface ReportExportModalProps {
-  isOpen: boolean;
+  interface ReportExportModalProps {
+  isOpen: boolean;,
   onClose: () => void;
   reportData: ReportData | null;
   title?: string;
-}
-
-export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
+  export const ReportExportModal: React.FC<ReportExportModalProps> = ({,)
   isOpen,
   onClose,
   reportData,
@@ -87,15 +82,14 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
 }) => {
   const [activeTab, setActiveTab] = useState('export');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({)
-    format: 'pdf',
-    delivery: 'file',
-    options: {,
-      includeCharts: true,
-      includeRawData: true,
-      compression: false,
-      encryption: false,
-    }
-  });
+  format: 'pdf',
+  delivery: 'file',
+  options: {,
+  includeCharts: true,
+  includeRawData: true,
+  compression: false,
+  encryption: false,
+});
   const [exportStatus, setExportStatus] = useState<ExportStatus | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [scheduleName, setScheduleName] = useState('');
@@ -109,25 +103,24 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
       setExportStatus(null);
       setIsExporting(false);
       setActiveTab('export');
-    }
   }, [isOpen]);
   // Handle export configuration changes
   const updateExportConfig = (updates: Partial<ExportConfig>) => {
     setExportConfig(prev => ({)
-      ...prev,
+  ...prev,
       ...updates,
       options: { ...prev.options, ...updates.options }
     }));
   };
   // Handle immediate export
   const handleExport = async () => {
-    if (!reportData) return;
-    setIsExporting(true);
-    setExportStatus({)
-      id: 'temp-' + Date.now(),
-      status: 'processing',
-      progress: 0,
-    });
+  if (!reportData) return;
+  setIsExporting(true);
+  setExportStatus({)
+  id: 'temp-' + Date.now(),
+  status: 'processing',
+  progress: 0,
+});
     try {
       // Simulate progress updates
       let progress = 0;
@@ -137,72 +130,67 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
         setExportStatus(prev => prev ? { ...prev, progress } : null);
       }, 500);
       const response = await fetch('/api/reports/export', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
-          reportData,
-          config: exportConfig,
-        })
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify({),
+  reportData,
+  config: exportConfig,
+}
       });
       clearInterval(progressInterval);
       if (!response.ok) {
         throw new Error(`Export failed: ${response.statusText}`);}
-      }
       const result = await response.json();
       setExportStatus({)
-        id: result.data.id,
-        status: 'completed',
-        progress: 100,
-        downloadUrl: result.data.downloadUrl,
-      });
+  id: result.data.id,
+  status: 'completed',
+  progress: 100,
+  downloadUrl: result.data.downloadUrl,
+});
     } catch (error) {
-      setExportStatus({)
-        id: 'error-' + Date.now(),
-        status: 'failed',
-        error: error instanceof Error ? error.message : 'Export failed',
-      });
+  setExportStatus({)
+  id: 'error-' + Date.now(),
+  status: 'failed',
+  error: error instanceof Error ? error.message : 'Export failed',
+});
     } finally {
       setIsExporting(false);
-    }
   };
   // Handle scheduled export
   const handleScheduleExport = async () => {
-    if (!reportData) return;
-    try {
-      const response = await fetch('/api/reports/schedule', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
-          name: scheduleName,
-          description: scheduleDescription,
-          reportQuery: 'dynamic', // Would be replaced with actual query
-          exportConfig,
-          schedule: {,
-            frequency: scheduleFrequency,
-            time: scheduleTime,
-            dayOfWeek: scheduleDayOfWeek,
-          },
-          enabled: true,
-        })
+  if (!reportData) return;
+  try {
+  const response = await fetch('/api/reports/schedule', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify({,)
+  name: scheduleName,
+  description: scheduleDescription,
+  reportQuery: 'dynamic', // Would be replaced with actual query,
+  exportConfig,
+  schedule: {,
+  frequency: scheduleFrequency,
+  time: scheduleTime,
+  dayOfWeek: scheduleDayOfWeek,
+},
+  enabled: true;
+  }
       });
       if (!response.ok) {
         throw new Error(`Scheduling failed: ${response.statusText}`);}
-      }
       // Show success and switch to export tab
       setActiveTab('export');
     } catch (error) {
-      console.error('Failed to schedule export:', error);
-    }
-  };
+  console.error('Failed to schedule export:', error);
+};
   // Handle download
   const handleDownload = () => {
     if (exportStatus?.downloadUrl) {
       window.open(exportStatus.downloadUrl, '_blank');
-    }
   };
   const formatOptions = [;
     { value: 'pdf', label: 'PDF Document', icon: FileText },
@@ -217,7 +205,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
     { value: 'email', label: 'Email Delivery', icon: Mail },
     { value: 'webhook', label: 'Webhook', icon: Webhook }
   ];
-  return ()
+  return;
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -284,7 +272,6 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                     checked={exportConfig.options?.includeCharts}
                     onCheckedChange={(checked) => 
                       updateExportConfig({ options: { includeCharts: !!checked } })
-                    }
                   />
                   <Label>Include Charts</Label>
                 </div>
@@ -293,7 +280,6 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                     checked={exportConfig.options?.includeRawData}
                     onCheckedChange={(checked) => 
                       updateExportConfig({ options: { includeRawData: !!checked } })
-                    }
                   />
                   <Label>Include Raw Data</Label>
                 </div>
@@ -302,7 +288,6 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                     checked={exportConfig.options?.compression}
                     onCheckedChange={(checked) => 
                       updateExportConfig({ options: { compression: !!checked } })
-                    }
                   />
                   <Label>Enable Compression</Label>
                 </div>
@@ -311,7 +296,6 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                     checked={exportConfig.options?.encryption}
                     onCheckedChange={(checked) => 
                       updateExportConfig({ options: { encryption: !!checked } })
-                    }
                   />
                   <Label>Enable Encryption</Label>
                 </div>
@@ -338,16 +322,14 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                       id="email-to"
                       placeholder="user@example.com, manager@example.com"
                       onChange={(e) => {
-                        const emails = e.target.value.split(',').map(email => email.trim());
-                        updateExportConfig({)
-                          delivery_config: {,
-                            ...exportConfig.delivery_config,
-                            email: {,
-                              ...exportConfig.delivery_config?.email,
-                              to: emails,
-                            }
-                          }
-                        });
+  const emails = e.target.value.split(',').map(email => email.trim());
+  updateExportConfig({)
+  delivery_config: {,
+  ...exportConfig.delivery_config,
+  email: {,
+  ...exportConfig.delivery_config?.email,
+  to: emails,
+});
                       }}
                     />
                   </div>
@@ -357,16 +339,14 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                       id="email-subject"
                       placeholder="Report Export"
                       onChange={(e) => {
-                        updateExportConfig({)
-                          delivery_config: {,
-                            ...exportConfig.delivery_config,
-                            email: {,
-                              ...exportConfig.delivery_config?.email,
-                              to: exportConfig.delivery_config?.email?.to || [],
-                              subject: e.target.value,
-                            }
-                          }
-                        });
+  updateExportConfig({)
+  delivery_config: {,
+  ...exportConfig.delivery_config,
+  email: {,
+  ...exportConfig.delivery_config?.email,
+  to: exportConfig.delivery_config?.email?.to || [],
+  subject: e.target.value,
+});
                       }}
                     />
                   </div>
@@ -377,17 +357,15 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({)
                     id="email-message"
                     placeholder="Please find the attached report..."
                     onChange={(e) => {
-                      updateExportConfig({)
-                        delivery_config: {,
-                          ...exportConfig.delivery_config,
-                          email: {,
-                            ...exportConfig.delivery_config?.email,
-                            to: exportConfig.delivery_config?.email?.to || [],
-                            subject: exportConfig.delivery_config?.email?.subject || '',
-                            message: e.target.value,
-                          }
-                        }
-                      });
+  updateExportConfig({)
+  delivery_config: {,
+  ...exportConfig.delivery_config,
+  email: {,
+  ...exportConfig.delivery_config?.email,
+  to: exportConfig.delivery_config?.email?.to || [],
+  subject: exportConfig.delivery_config?.email?.subject || '',
+  message: e.target.value,
+});
                     }}
                   />
                 </div>

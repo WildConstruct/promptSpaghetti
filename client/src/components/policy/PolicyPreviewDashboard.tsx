@@ -58,62 +58,56 @@ import {
   GitBranch
 } from 'lucide-react';
 interface PolicyPreview {
-  previewId: string;
+  previewId: string;,
   policyId: string;
-  title: string;
+  title: string;,
   description: string;
-  status: PreviewStatus;
+  status: PreviewStatus;,
   createdAt: string;
-  expiresAt: string;
+  expiresAt: string;,
   changes: number;
-  stagingDeployments: number;
+  stagingDeployments: number;,
   validationResults: number;
-}
-interface StagingDeployment {
-  deploymentId: string;
+  interface StagingDeployment {
+  deploymentId: string;,
   previewId: string;
-  environmentId: string;
+  environmentId: string;,
   status: StagingDeploymentStatus;
-  deployedAt: string;
+  deployedAt: string;,
   metrics: StagingMetrics;
-  issues: StagingIssue[];
-}
-interface StagingMetrics {
-  userInteractions: number;
+  issues: StagingIssue;
+  interface StagingMetrics {
+  userInteractions: number;,
   consentRates: number;
-  errorRates: number;
+  errorRates: number;,
   userSatisfactionScore: number;
-  complianceScore: number;
+  complianceScore: number;,
   accessibilityScore: number;
   securityScore: number;
-}
-interface StagingIssue {
-  issueId: string;
+  interface StagingIssue {
+  issueId: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  category: string;
+  category: string;,
   description: string;
-  detectedAt: string;
+  detectedAt: string;,
   status: string;
-}
-interface ValidationResult {
-  validationId: string;
+  interface ValidationResult {
+  validationId: string;,
   validationType: string;
-  status: 'PASS' | 'FAIL' | 'WARNING' | 'SKIP';
+  status: 'PASS' | 'FAIL' | 'WARNING' | 'SKIP';,
   score: number;
-  findings: number;
+  findings: number;,
   blockers: number;
-  warnings: number;
+  warnings: number;,
   validatedAt: string;
-}
-interface UserFeedback {
-  feedbackId: string;
+  interface UserFeedback {
+  feedbackId: string;,
   userId: string;
-  rating: number;
+  rating: number;,
   comments: string;
-  submittedAt: string;
+  submittedAt: string;,
   actionRequired: boolean;
-}
-enum PreviewStatus {
+  enum PreviewStatus {
   DRAFT = 'DRAFT',
   VALIDATING = 'VALIDATING',
   STAGED = 'STAGED',
@@ -121,8 +115,7 @@ enum PreviewStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   EXPIRED = 'EXPIRED'
-}
-enum StagingDeploymentStatus {
+  enum StagingDeploymentStatus {
   DEPLOYING = 'DEPLOYING',
   ACTIVE = 'ACTIVE',
   MONITORING = 'MONITORING',
@@ -131,27 +124,25 @@ enum StagingDeploymentStatus {
   ROLLED_BACK = 'ROLLED_BACK',
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED'
-}
-const PolicyPreviewDashboard: React.FC = () => {
-  const [previews, setPreviews] = useState<PolicyPreview[]>([]);
-  const [deployments, setDeployments] = useState<StagingDeployment[]>([]);
+  const PolicyPreviewDashboard: React.FC = () => {,
+  const [previews, setPreviews] = useState<PolicyPreview>([]);
+  const [deployments, setDeployments] = useState<StagingDeployment>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('previews');
-  const [, ] = useState<PolicyPreview | null>(null);
-  const [validationResults] = useState<ValidationResult[]>([]);
-  const [userFeedback] = useState<UserFeedback[]>([]);
+  const [ ] = useState<PolicyPreview | null>(null);
+  const [validationResults] = useState<ValidationResult>([]);
+  const [userFeedback] = useState<UserFeedback>([]);
   // Fetch data
   const fetchPreviews = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/policy-preview/previews');
-      const data = await response.json();
-      setPreviews(data.previews || []);
-    } catch (error) {
-      console.error('Failed to fetch previews:', error);
-    } finally {
+  try {
+  setLoading(true);
+  const response = await fetch('/api/policy-preview/previews');
+  const data = await response.json();
+  setPreviews(data.previews || []);
+} catch (error) {
+  console.error('Failed to fetch previews:', error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const fetchDeployments = useCallback(async () => {
     try {
@@ -159,97 +150,89 @@ const PolicyPreviewDashboard: React.FC = () => {
       const data = await response.json();
       setDeployments(data.deployments || []);
     } catch (error) {
-      console.error('Failed to fetch deployments:', error);
-    }
-  }, []);
+  console.error('Failed to fetch deployments:', error);
+}, []);
   useEffect(() => {
     fetchPreviews();
     fetchDeployments();
   }, [fetchPreviews, fetchDeployments]);
   const getStatusColor = (status: PreviewStatus) => {
-    switch (status) {
-    case PreviewStatus.DRAFT: return 'bg-gray-100 text-gray-800';
-    case PreviewStatus.VALIDATING: return 'bg-blue-100 text-blue-800';
-    case PreviewStatus.STAGED: return 'bg-green-100 text-green-800';
-    case PreviewStatus.TESTING: return 'bg-yellow-100 text-yellow-800';
-    case PreviewStatus.APPROVED: return 'bg-emerald-100 text-emerald-800';
-    case PreviewStatus.REJECTED: return 'bg-red-100 text-red-800';
-    case PreviewStatus.EXPIRED: return 'bg-orange-100 text-orange-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case PreviewStatus.DRAFT: return 'bg-gray-100 text-gray-800';
+  case PreviewStatus.VALIDATING: return 'bg-blue-100 text-blue-800';
+  case PreviewStatus.STAGED: return 'bg-green-100 text-green-800';
+  case PreviewStatus.TESTING: return 'bg-yellow-100 text-yellow-800';
+  case PreviewStatus.APPROVED: return 'bg-emerald-100 text-emerald-800';
+  case PreviewStatus.REJECTED: return 'bg-red-100 text-red-800';
+  case PreviewStatus.EXPIRED: return 'bg-orange-100 text-orange-800';,
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getDeploymentStatusColor = (status: StagingDeploymentStatus) => {
-    switch (status) {
-    case StagingDeploymentStatus.DEPLOYING: return 'bg-blue-100 text-blue-800';
-    case StagingDeploymentStatus.ACTIVE: return 'bg-green-100 text-green-800';
-    case StagingDeploymentStatus.MONITORING: return 'bg-yellow-100 text-yellow-800';
-    case StagingDeploymentStatus.ISSUE_DETECTED: return 'bg-orange-100 text-orange-800';
-    case StagingDeploymentStatus.ROLLING_BACK: return 'bg-red-100 text-red-800';
-    case StagingDeploymentStatus.ROLLED_BACK: return 'bg-gray-100 text-gray-800';
-    case StagingDeploymentStatus.COMPLETED: return 'bg-emerald-100 text-emerald-800';
-    case StagingDeploymentStatus.FAILED: return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case StagingDeploymentStatus.DEPLOYING: return 'bg-blue-100 text-blue-800';
+  case StagingDeploymentStatus.ACTIVE: return 'bg-green-100 text-green-800';
+  case StagingDeploymentStatus.MONITORING: return 'bg-yellow-100 text-yellow-800';
+  case StagingDeploymentStatus.ISSUE_DETECTED: return 'bg-orange-100 text-orange-800';
+  case StagingDeploymentStatus.ROLLING_BACK: return 'bg-red-100 text-red-800';
+  case StagingDeploymentStatus.ROLLED_BACK: return 'bg-gray-100 text-gray-800';
+  case StagingDeploymentStatus.COMPLETED: return 'bg-emerald-100 text-emerald-800';
+  case StagingDeploymentStatus.FAILED: return 'bg-red-100 text-red-800';,
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case 'low': return 'text-green-600';
-    case 'medium': return 'text-yellow-600';
-    case 'high': return 'text-orange-600';
-    case 'critical': return 'text-red-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (severity) {
+  case 'low': return 'text-green-600';
+  case 'medium': return 'text-yellow-600';
+  case 'high': return 'text-orange-600';
+  case 'critical': return 'text-red-600';
+  default: return 'text-gray-600';
+};
   const handleDeployToStaging = async (previewId: string, environmentId: string) => {
     try {
       const response = await fetch(`/api/policy-preview/previews/${previewId}/deploy`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ environmentId })
       });
       if (response.ok) {
         fetchDeployments();
         fetchPreviews();
-      }
     } catch (error) {
-      console.error('Failed to deploy to staging:', error);
-    }
-  };
+  console.error('Failed to deploy to staging:', error);
+};
   const handleRollback = async (deploymentId: string, reason: string) => {
     try {
       const response = await fetch(`/api/policy-preview/deployments/${deploymentId}/rollback`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
       if (response.ok) {
         fetchDeployments();
-      }
     } catch (error) {
-      console.error('Failed to rollback deployment:', error);
-    }
-  };
+  console.error('Failed to rollback deployment:', error);
+};
   const handlePromoteToProduction = async (previewId: string) => {
     try {
       const response = await fetch(`/api/policy-preview/previews/${previewId}/promote`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
       if (response.ok) {
         fetchPreviews();
-      }
     } catch (error) {
-      console.error('Failed to promote to production:', error);
-    }
-  };
+  console.error('Failed to promote to production:', error);
+};
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -561,7 +544,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                   {Object.values(PreviewStatus).map((status) => {
                     const count = previews.filter(p => p.status === status).length;
                     const percentage = previews.length > 0 ? (count / previews.length) * 100 : 0;
-                    return ()
+                    return;
                       <div key={status} className="flex items-center justify-between">
                         <Badge className={getStatusColor(status)} variant="outline">
                           {status}

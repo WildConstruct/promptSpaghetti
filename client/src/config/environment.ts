@@ -1,16 +1,14 @@
 // Environment configuration for the client application
 
 interface EnvironmentConfig {
-  API_URL: string;
+  API_URL: string;,
   PYTHON_EXECUTOR_URL: string;
-  WEBSOCKET_URL: string;
+  WEBSOCKET_URL: string;,
   ANALYTICS_ENABLED: boolean;
-  DEBUG_MODE: boolean;
+  DEBUG_MODE: boolean;,
   FEATURE_FLAGS_ENABLED: boolean;
-}
-
-// Helper function to get environment variable with fallback
-const getEnvVar = (key: string, fallback: string = ''): string => {
+  // Helper function to get environment variable with fallback
+  const getEnvVar = (key: string, fallback: string = ''): string => {,
   return import.meta.env[key] || fallback;
 };
 
@@ -27,11 +25,10 @@ export const env: EnvironmentConfig = {
   API_URL: getEnvVar('VITE_API_URL', ''),
   PYTHON_EXECUTOR_URL: getEnvVar('VITE_PYTHON_EXECUTOR_URL', ''),
   WEBSOCKET_URL: getEnvVar('VITE_WEBSOCKET_URL', ''),
-  
   // Feature flags
   ANALYTICS_ENABLED: getBoolEnvVar('VITE_ANALYTICS_ENABLED', true),
   DEBUG_MODE: getBoolEnvVar('VITE_DEBUG_MODE', false),
-  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true)
+  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true),
 };
 
 // Validate required environment variables in production
@@ -41,8 +38,7 @@ if (import.meta.env.PROD) {
   
   if (missingVars.length > 0) {
     console.error('Missing required environment variables:', missingVars);
-  }
-}
+
 
 // Export individual values for convenience
 export const API_URL = env.API_URL;

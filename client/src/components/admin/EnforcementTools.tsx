@@ -39,121 +39,116 @@ import {
   Download
 } from 'lucide-react';
 interface EnforcementAction {
-  actionId: string;
+  actionId: string;,
   entityType: 'user' | 'template' | 'transaction';
-  entityId: string;
+  entityId: string;,
   actionType: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   reason: string;
-  triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';
+  triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';,
   triggerDetails: unknown;
-  autoApplied: boolean;
+  autoApplied: boolean;,
   actionTaken: boolean;
   actionTimestamp?: Date;
   expiresAt?: Date;
   reviewRequired: boolean;
   adminNotes?: string;
-  reversal?: {
-    reversedAt: Date;
-    reversedBy: string;
-    reason: string;
-  };
-}
+  reversal?: {,
+  reversedAt: Date;,
+  reversedBy: string;
+  reason: string;
+};
 interface EnforcementPolicy {
-  policyId: string;
+  policyId: string;,
   name: string;
-  description: string;
+  description: string;,
   enabled: boolean;
   triggers: {,
-    trustScoreThresholds?: {
-      suspend: number;
-      restrict: number;
-      flag: number;
-    };
+  trustScoreThresholds?: {,
+  suspend: number;,
+  restrict: number;
+  flag: number;
+};
     riskFactorRules?: {
-      criticalRiskCount: number;
-      highRiskCount: number;
-      automaticSuspension: boolean;
-    };
+  criticalRiskCount: number;,
+  highRiskCount: number;
+  automaticSuspension: boolean;
+};
     fraudDetectionRules?: {
-      fraudScoreThreshold: number;
-      suspiciousIndicatorThreshold: number;
-    };
+  fraudScoreThreshold: number;,
+  suspiciousIndicatorThreshold: number;
+};
   };
   actions: {,
-    autoSuspension: boolean;
-    autoRestriction: boolean;
-    autoFlagging: boolean;
-    requireManualReview: boolean;
-    notifyAdmins: boolean;
-  };
+  autoSuspension: boolean;
+  autoRestriction: boolean;,
+  autoFlagging: boolean;
+  requireManualReview: boolean;,
+  notifyAdmins: boolean;
+};
   exemptions?: {
-    highTrustUsers: boolean;
-    verifiedUsers: boolean;
-    whitelistedEntities: string[];
-  };
-}
+  highTrustUsers: boolean;,
+  verifiedUsers: boolean;
+  whitelistedEntities: string;
+};
 interface ViolationReport {
-  reportId: string;
+  reportId: string;,
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'investigating' | 'resolved' | 'dismissed' | 'appealed';
   userId?: string;
   templateId?: string;
   transactionId?: string;
   reporterType: 'automated' | 'user' | 'admin';
   reporterId?: string;
-  evidence: string[];
+  evidence: string;,
   description: string;
   createdAt: Date;
   assignedTo?: string;
-  resolution?: {
-    action: string;
-    reason: string;
-    resolvedBy: string;
-    resolvedAt: Date;
-  };
-}
+  resolution?: {,
+  action: string;,
+  reason: string;
+  resolvedBy: string;,
+  resolvedAt: Date;
+};
 interface EnforcementStats {
-  totalActions: number;
+  totalActions: number;,
   pendingReviews: number;
-  todayActions: number;
+  todayActions: number;,
   appeals: number;
-  automatedActions: number;
+  automatedActions: number;,
   manualActions: number;
   actionBreakdown: {,
-    suspensions: number;
-    restrictions: number;
-    flags: number;
-    blocks: number;
-    quarantines: number;
-  };
+  suspensions: number;,
+  restrictions: number;
+  flags: number;,
+  blocks: number;
+  quarantines: number;
+};
   severityBreakdown: {,
-    low: number;
-    medium: number;
-    high: number;
-    critical: number;
-  };
+  low: number;
+  medium: number;,
+  high: number;
+  critical: number;
+};
   effectivenessMetrics: {,
-    successRate: number;
-    appealRate: number;
-    reversalRate: number;
-    avgResolutionTime: number;
-  };
-}
+  successRate: number;
+  appealRate: number;,
+  reversalRate: number;
+  avgResolutionTime: number;
+};
 
 export interface EnforcementToolsProps {
   className?: string;
 }
-
 export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);
   // Data state
   const [stats, setStats] = useState<EnforcementStats | null>(null);
-  const [recentActions, setRecentActions] = useState<EnforcementAction[]>([]);
-  const [pendingReviews, setPendingReviews] = useState<EnforcementAction[]>([]);
-  const [violationReports, setViolationReports] = useState<ViolationReport[]>([]);
-  const [policies, setPolicies] = useState<EnforcementPolicy[]>([]);
+  const [recentActions, setRecentActions] = useState<EnforcementAction>([]);
+  const [pendingReviews, setPendingReviews] = useState<EnforcementAction>([]);
+  const [violationReports, setViolationReports] = useState<ViolationReport>([]);
+  const [policies, setPolicies] = useState<EnforcementPolicy>([]);
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeverity, setSelectedSeverity] = useState('');
@@ -187,11 +182,10 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
       const reviewsResult = await reviewsResponse.json();
       if (reviewsResult.success) setPendingReviews(reviewsResult.data);
     } catch (err) {
-      setError('Failed to load enforcement data');
-      console.error('Error loading enforcement data:', err);
-    } finally {
+  setError('Failed to load enforcement data');
+  console.error('Error loading enforcement data:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Apply manual enforcement action
   const applyManualAction = async () => {
@@ -199,19 +193,18 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
       if (!manualActionTarget || !manualActionType || !manualActionReason) {
         setError('Please fill in all required fields for manual action');
         return;
-      }
       setLoading(true);
       const response = await fetch('/api/admin/enforcement/actions/manual', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({),
-          entityType: getEntityTypeFromTarget(manualActionTarget),
-          entityId: manualActionTarget,
-          actionType: manualActionType,
-          severity: manualActionSeverity,
-          reason: manualActionReason,
-          triggeredBy: 'manual_review',
-        })
+        body: JSON.stringify({,)
+  entityType: getEntityTypeFromTarget(manualActionTarget),
+  entityId: manualActionTarget,
+  actionType: manualActionType,
+  severity: manualActionSeverity,
+  reason: manualActionReason,
+  triggeredBy: 'manual_review',
+}
       });
       const result = await response.json();
       if (result.success) {
@@ -223,57 +216,52 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
         await loadEnforcementData();
       } else {
         setError(result.error || 'Failed to apply manual action');
-      }
     } catch (err) {
-      setError('Error applying manual action');
-      console.error('Error applying manual action:', err);
-    } finally {
+  setError('Error applying manual action');
+  console.error('Error applying manual action:', err);
+} finally {
       setLoading(false);
-    }
   };
   // Approve enforcement action
   const approveAction = async (actionId: string) => {
     try {
       const response = await fetch(`/api/admin/enforcement/actions/${actionId}/approve`, {)}
-        method: 'POST',
-      });
+  },
+  method: 'POST';
+  });
       if (response.ok) {
         await loadEnforcementData();
-      }
     } catch (err) {
-      console.error('Error approving action:', err);
-    }
-  };
+  console.error('Error approving action:', err);
+};
   // Reverse enforcement action
   const reverseAction = async (actionId: string, reason: string) => {
     try {
       const response = await fetch(`/api/admin/enforcement/actions/${actionId}/reverse`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
       if (response.ok) {
         await loadEnforcementData();
-      }
     } catch (err) {
-      console.error('Error reversing action:', err);
-    }
-  };
+  console.error('Error reversing action:', err);
+};
   // Update policy
   const updatePolicy = async (policy: EnforcementPolicy) => {
     try {
       const response = await fetch(`/api/admin/enforcement/policies/${policy.policyId}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(policy),
-      });
+        body: JSON.stringify(policy);
+  });
       if (response.ok) {
         await loadEnforcementData();
-      }
     } catch (err) {
-      console.error('Error updating policy:', err);
-    }
-  };
+  console.error('Error updating policy:', err);
+};
   useEffect(() => {
     loadEnforcementData();
     // Refresh data periodically
@@ -288,35 +276,32 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
     return 'user'; // default
   };
   const getActionIcon = (actionType: string) => {
-    switch (actionType) {
-    case 'suspend': return <Ban className="w-4 h-4" />;
-    case 'restrict': return <Shield className="w-4 h-4" />;
-    case 'flag': return <Flag className="w-4 h-4" />;
-    case 'require_verification': return <CheckCircle className="w-4 h-4" />;
-    case 'block_transaction': return <XCircle className="w-4 h-4" />;
-    case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />;
-    default: return <Info className="w-4 h-4" />;
-    }
-  };
+  switch (actionType) {
+  case 'suspend': return <Ban className="w-4 h-4" />;
+  case 'restrict': return <Shield className="w-4 h-4" />;
+  case 'flag': return <Flag className="w-4 h-4" />;
+  case 'require_verification': return <CheckCircle className="w-4 h-4" />;
+  case 'block_transaction': return <XCircle className="w-4 h-4" />;
+  case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />;
+  default: return <Info className="w-4 h-4" />;
+};
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case 'critical': return 'text-red-600 bg-red-100';
-    case 'high': return 'text-orange-600 bg-orange-100';
-    case 'medium': return 'text-yellow-600 bg-yellow-100';
-    case 'low': return 'text-blue-600 bg-blue-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (severity) {
+  case 'critical': return 'text-red-600 bg-red-100';
+  case 'high': return 'text-orange-600 bg-orange-100';
+  case 'medium': return 'text-yellow-600 bg-yellow-100';
+  case 'low': return 'text-blue-600 bg-blue-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   if (loading && !stats) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading enforcement tools...</div>
         </CardContent>
       </Card>
     );
-  }
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -563,9 +548,9 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                               Approve
                             </Button>
                             <Button size="sm" variant="outline" onClick={() => {
-                              const reason = prompt('Enter reason for reversal:');
-                              if (reason) reverseAction(action.actionId, reason);
-                            }}>
+  const reason = prompt('Enter reason for reversal:');
+  if (reason) reverseAction(action.actionId, reason);
+}}>
                               <XCircle className="w-4 h-4 mr-1" />
                               Reject
                             </Button>
@@ -573,9 +558,9 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                         )}
                         {action.actionTaken && !action.reversal && ()
                           <Button size="sm" variant="outline" onClick={() => {
-                            const reason = prompt('Enter reason for reversal:');
-                            if (reason) reverseAction(action.actionId, reason);
-                          }}>
+  const reason = prompt('Enter reason for reversal:');
+  if (reason) reverseAction(action.actionId, reason);
+}}>
                             <RotateCcw className="w-4 h-4 mr-1" />
                             Reverse
                           </Button>
@@ -619,9 +604,9 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                           Approve
                         </Button>
                         <Button size="sm" variant="outline" onClick={() => {
-                          const reason = prompt('Enter reason for rejection:');
-                          if (reason) reverseAction(action.actionId, reason);
-                        }}>
+  const reason = prompt('Enter reason for rejection:');
+  if (reason) reverseAction(action.actionId, reason);
+}}>
                           <XCircle className="w-4 h-4 mr-1" />
                           Reject
                         </Button>

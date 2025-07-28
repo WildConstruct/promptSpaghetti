@@ -16,7 +16,7 @@ describe('NodePalette', () => {
   it('renders all node types with tooltips', () => {
     render(<NodePalette />);
     NODE_TYPES.forEach(type => {)
-      const item = screen.getByTitle(type);
+  const item = screen.getByTitle(type);
       expect(item).toBeInTheDocument();
       expect(item).toHaveTextContent(type);
     });
@@ -33,12 +33,12 @@ describe('NodePalette', () => {
   });
   // 3. Test drag events are triggered correctly for each node type
   it('triggers drag events on drag start', () => {
-    render(<NodePalette />);
-    const item = screen.getByTitle(NODE_TYPES[0]);
-    const dataTransfer = {
-      setData: jest.fn(),
-      effectAllowed: '',
-    };
+  render(<NodePalette />);
+  const item = screen.getByTitle(NODE_TYPES[0]);
+  const dataTransfer = {
+  setData: jest.fn(),
+  effectAllowed: '',
+};
     fireEvent.dragStart(item, { dataTransfer });
     expect(dataTransfer.setData).toHaveBeenCalledWith('application/reactflow', NODE_TYPES[0]);
     expect(dataTransfer.effectAllowed).toBe('move');

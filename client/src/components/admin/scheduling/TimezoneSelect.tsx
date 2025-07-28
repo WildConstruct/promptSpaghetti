@@ -10,7 +10,7 @@ import {
 import { Autocomplete } from '@mui/material';
 import { Public as PublicIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
 interface TimezoneSelectProps {
-  value: string;
+  value: string;,
   onChange: (timezone: string) => void;
   label?: string;
   error?: boolean;
@@ -20,55 +20,53 @@ interface TimezoneSelectProps {
   placeholder?: string;
   searchTerm?: string;
   onSearchChange?: (term: string) => void;
-}
-
-// Common timezone groups
-const TIMEZONE_GROUPS = {
+  // Common timezone groups
+  const TIMEZONE_GROUPS = {
   'Americas': [
-    'America/New_York',
-    'America/Chicago',
-    'America/Denver',
-    'America/Los_Angeles',
-    'America/Toronto',
-    'America/Vancouver',
-    'America/Mexico_City',
-    'America/Sao_Paulo',
-    'America/Buenos_Aires'
+  'America/New_York',
+  'America/Chicago',
+  'America/Denver',
+  'America/Los_Angeles',
+  'America/Toronto',
+  'America/Vancouver',
+  'America/Mexico_City',
+  'America/Sao_Paulo',
+  'America/Buenos_Aires'
   ],
   'Europe': [
-    'Europe/London',
-    'Europe/Paris',
-    'Europe/Berlin',
-    'Europe/Rome',
-    'Europe/Madrid',
-    'Europe/Amsterdam',
-    'Europe/Stockholm',
-    'Europe/Moscow',
-    'Europe/Istanbul'
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Europe/Rome',
+  'Europe/Madrid',
+  'Europe/Amsterdam',
+  'Europe/Stockholm',
+  'Europe/Moscow',
+  'Europe/Istanbul'
   ],
   'Asia': [
-    'Asia/Tokyo',
-    'Asia/Shanghai',
-    'Asia/Hong_Kong',
-    'Asia/Singapore',
-    'Asia/Mumbai',
-    'Asia/Dubai',
-    'Asia/Seoul',
-    'Asia/Bangkok',
-    'Asia/Jakarta'
+  'Asia/Tokyo',
+  'Asia/Shanghai',
+  'Asia/Hong_Kong',
+  'Asia/Singapore',
+  'Asia/Mumbai',
+  'Asia/Dubai',
+  'Asia/Seoul',
+  'Asia/Bangkok',
+  'Asia/Jakarta'
   ],
   'Pacific': [
-    'Pacific/Auckland',
-    'Pacific/Sydney',
-    'Pacific/Melbourne',
-    'Pacific/Honolulu',
-    'Pacific/Fiji'
+  'Pacific/Auckland',
+  'Pacific/Sydney',
+  'Pacific/Melbourne',
+  'Pacific/Honolulu',
+  'Pacific/Fiji'
   ],
   'Africa': [
-    'Africa/Cairo',
-    'Africa/Johannesburg',
-    'Africa/Lagos',
-    'Africa/Casablanca'
+  'Africa/Cairo',
+  'Africa/Johannesburg',
+  'Africa/Lagos',
+  'Africa/Casablanca'
   ]
 };
 
@@ -81,15 +79,16 @@ const formatTimezone = (timezone: string): { label: string; offset: string; city
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // Get offset
   const offset = new Intl.DateTimeFormat('en', {)
-    timeZone: timezone,
-    timeZoneName: 'longOffset',
-  }).formatToParts(now).find(part => part.type === 'timeZoneName')?.value || '';
+  timeZone: timezone,
+  timeZoneName: 'longOffset',
+}).formatToParts(now).find(part => part.type === 'timeZoneName')?.value || '';
   // Extract city name
   const city = timezone.split('/').pop()?.replace(/_/g, ' ') || timezone;
   return {
-    label: `${city} (${offset})`,}
-    offset: offset,
-    city: city,
+    label: `${city} (${offset})`}
+},
+  offset: offset,
+    city: city;
   };
 };
 
@@ -109,40 +108,39 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   const searchTerm = externalSearchTerm ?? internalSearchTerm;
   // Create timezone options
   const timezoneOptions = useMemo(() => {
-    const options: Array<{
-      value: string;
-      label: string;
-      offset: string;
-      city: string;
-      group: string;
-    }> = [];
+  const options: Array<{,
+  value: string;,
+  label: string;
+  offset: string;,
+  city: string;
+  group: string;
+}> = [];
     // Add grouped timezones
     Object.entries(TIMEZONE_GROUPS).forEach(([group, timezones]) => {
-      timezones.forEach(timezone => {)
-        const formatted = formatTimezone(timezone);
-        options.push({)
-          value: timezone,
-          label: formatted.label,
-          offset: formatted.offset,
-          city: formatted.city,
-          group
-        });
+  timezones.forEach(timezone => {)
+  const formatted = formatTimezone(timezone);
+  options.push({)
+  value: timezone,
+  label: formatted.label,
+  offset: formatted.offset,
+  city: formatted.city,
+  group
+});
       });
     });
     // Add other timezones
     const groupedTimezones = new Set(Object.values(TIMEZONE_GROUPS).flat());
     ALL_TIMEZONES.forEach(timezone => {)
-      if (!groupedTimezones.has(timezone)) {
-        const formatted = formatTimezone(timezone);
-        const continent = timezone.split('/')[0];
-        options.push({)
-          value: timezone,
-          label: formatted.label,
-          offset: formatted.offset,
-          city: formatted.city,
-          group: continent,
-        });
-      }
+  if (!groupedTimezones.has(timezone)) {
+  const formatted = formatTimezone(timezone);
+  const continent = timezone.split('/')[0];
+  options.push({)
+  value: timezone,
+  label: formatted.label,
+  offset: formatted.offset,
+  city: formatted.city,
+  group: continent,
+});
     });
     return options.sort((a, b) => a.label.localeCompare(b.label));
   }, []);
@@ -160,9 +158,8 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   // Group filtered options
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
     filteredOptions.forEach(option => {)
-      if (!groups[option.group]) {
+  if (!groups[option.group]) {
         groups[option.group] = [];
-      }
       groups[option.group].push(option);
     });
     return groups;
@@ -177,9 +174,8 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
       onChange((newValue as { value: string }).value);
     } else if (typeof newValue === 'string') {
       onChange(newValue);
-    }
   };
-  return ()
+  return;
     <Box>
       <Autocomplete
         value={timezoneOptions.find(opt => opt.value === value) || null}

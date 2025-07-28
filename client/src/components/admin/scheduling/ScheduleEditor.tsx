@@ -36,57 +36,55 @@ import { ConflictPreview } from './ConflictPreview';
 
 export interface ScheduleFormData {
   id?: string;
-  toggleId: string;
+  toggleId: string;,
   name: string;
   description?: string;
-  type: 'one_time' | 'recurring' | 'conditional';
+  type: 'one_time' | 'recurring' | 'conditional';,
   action: 'enable' | 'disable' | 'update_value' | 'activate_rollout' | 'modify_percentage';
   startTime: Date;
   endTime?: Date;
   timezone: string;
-  recurrence?: {
-    type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
-    interval: number;
-    daysOfWeek?: number[];
-    daysOfMonth?: number[];
-    monthsOfYear?: number[];
-    cronExpression?: string;
-    maxOccurrences?: number;
-    endDate?: Date;
-  };
+  recurrence?: {,
+  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
+  interval: number;
+  daysOfWeek?: number;
+  daysOfMonth?: number;
+  monthsOfYear?: number;
+  cronExpression?: string;
+  maxOccurrences?: number;
+  endDate?: Date;
+};
   actionConfig: {,
-    targetValue?: unknown;
-    rolloutPercentage?: number;
-    conditions?: Array<{
-      attribute: string;
-      operator: string;
-      value: Error;
-    }>;
+  targetValue?: unknown;
+  rolloutPercentage?: number;
+  conditions?: Array<{,
+  attribute: string;,
+  operator: string;
+  value: Error;
+}>;
     gradualRollout?: {
-      startPercentage: number;
-      endPercentage: number;
-      incrementMinutes: number;
-    };
+  startPercentage: number;,
+  endPercentage: number;
+  incrementMinutes: number;
+};
   };
-  priority: number;
+  priority: number;,
   conflictResolution: 'skip' | 'override' | 'merge';
   enabled: boolean;
-}
 interface ScheduleEditorProps {
-  open: boolean;
+  open: boolean;,
   onClose: () => void;
   onSave: (schedule: ScheduleFormData) => Promise<void>;
   initialData?: Partial<ScheduleFormData>;
   toggleId: string;
   toggleName?: string;
-  existingSchedules?: Array<{
-    id: string;
-    name: string;
-    startTime: Date;
-    endTime?: Date;
-    action: string;
-  }>;
-}
+  existingSchedules?: Array<{,
+  id: string;,
+  name: string;
+  startTime: Date;
+  endTime?: Date;
+  action: string;
+}>;
 const SCHEDULE_TYPES = [;
   { value: 'one_time', label: 'One-time', description: 'Execute once at the specified time' },
   { value: 'recurring', label: 'Recurring', description: 'Execute repeatedly on a schedule' },
@@ -104,8 +102,6 @@ const CONFLICT_RESOLUTIONS = [;
   { value: 'override', label: 'Override', description: 'Execute anyway, overriding conflicts' },
   { value: 'merge', label: 'Merge', description: 'Try to merge with conflicting schedules' }
 ];
-
-export 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [conflicts, setConflicts] = useState<Array<{ description: string; severity: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -113,20 +109,18 @@ export
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
       setFormData(prev => ({ ...prev, ...initialData }));
-    }
   }, [initialData]);
   // Check for conflicts when timing or action changes
   useEffect(() => {
     if (formData.startTime && formData.action) {
       checkConflicts();
-    }
   }, [formData.startTime, formData.endTime, formData.action, formData.type, checkConflicts]);
   const checkConflicts = useCallback(() => {
     const potentialConflicts = [];
     for (const existing of existingSchedules) {
       if (existing.id === formData.id) continue; // Skip self when editing
       // Check time overlap
-      const hasTimeOverlap = checkTimeOverlap(;)
+      const hasTimeOverlap = checkTimeOverlap(;);
         formData.startTime,
         formData.endTime,
         existing.startTime,
@@ -137,17 +131,16 @@ export
         const hasActionConflict = checkActionConflict(formData.action, existing.action);
         if (hasActionConflict) {
           potentialConflicts.push({)
-            description: `Conflicts with "${existing.name}" - both schedules perform conflicting actions during overlapping time`,}
-            severity: 'high',
-          });
+  description: `Conflicts with "${existing.name}" - both schedules perform conflicting actions during overlapping time`}
+},
+  severity: 'high';
+  });
         } else {
           potentialConflicts.push({)
-            description: `Time overlap with "${existing.name}" - may cause unexpected behavior`,}
-            severity: 'medium',
-          });
-        }
-      }
-    }
+  description: `Time overlap with "${existing.name}" - may cause unexpected behavior`}
+},
+  severity: 'medium';
+  });
     setConflicts(potentialConflicts);
   }, [existingSchedules, formData, setConflicts]);
   const checkTimeOverlap = (start1: Date, end1: Date | undefined, start2: Date, end2: Date | undefined): boolean => {
@@ -168,27 +161,21 @@ export
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
       newErrors.name = 'Schedule name is required';
-    }
     if (!formData.startTime) {
       newErrors.startTime = 'Start time is required';
     } else if (formData.startTime <= new Date()) {
       newErrors.startTime = 'Start time must be in the future';
-    }
     if (formData.endTime && formData.endTime <= formData.startTime) {
       newErrors.endTime = 'End time must be after start time';
-    }
     if (formData.type === 'recurring' && !formData.recurrence) {
       newErrors.recurrence = 'Recurrence settings are required for recurring schedules';
-    }
     if (formData.action === 'update_value' && formData.actionConfig.targetValue === undefined) {
       newErrors.actionConfig = 'Target value is required for update_value action';
-    }
     if (formData.action === 'modify_percentage' && )
         (formData.actionConfig.rolloutPercentage === undefined || )
          formData.actionConfig.rolloutPercentage < 0 || 
          formData.actionConfig.rolloutPercentage > 100)) {
       newErrors.actionConfig = 'Valid rollout percentage (0-100) is required';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -199,18 +186,16 @@ export
       await onSave(formData);
       onClose();
     } catch (error) {
-      console.error('Failed to save schedule:', error);
-      // Handle error (could set an error state)
-    } finally {
+  console.error('Failed to save schedule:', error);
+  // Handle error (could set an error state)
+} finally {
       setIsLoading(false);
-    }
   };
   const handleFieldChange = (field: keyof ScheduleFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
-    }
   };
   const handleActionConfigChange = (config: ScheduleFormData['actionConfig']) => {
     handleFieldChange('actionConfig', config);
@@ -218,7 +203,7 @@ export
   const handleRecurrenceChange = (recurrence: ScheduleFormData['recurrence']) => {
     handleFieldChange('recurrence', recurrence);
   };
-  return ()
+  return;
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Dialog
         open={open}
@@ -339,12 +324,11 @@ export
                     value={formData.startTime}
                     onChange={(date) => handleFieldChange('startTime', date)}
                     slotProps={{
-                      textField: {,
-                        fullWidth: true,
-                        error: !!errors.startTime,
-                        helperText: errors.startTime,
-                      }
-                    }}
+  textField: {,
+  fullWidth: true,
+  error: !!errors.startTime,
+  helperText: errors.startTime,
+}}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -353,12 +337,11 @@ export
                     value={formData.endTime}
                     onChange={(date) => handleFieldChange('endTime', date)}
                     slotProps={{
-                      textField: {,
-                        fullWidth: true,
-                        error: !!errors.endTime,
-                        helperText: errors.endTime,
-                      }
-                    }}
+  textField: {,
+  fullWidth: true,
+  error: !!errors.endTime,
+  helperText: errors.endTime,
+}}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -439,7 +422,6 @@ export
                         checked={formData.enabled}
                         onChange={(e) => handleFieldChange('enabled', e.target.checked)}
                       />
-                    }
                     label="Enabled"
                   />
                 </Grid>
@@ -470,3 +452,4 @@ export
     </LocalizationProvider>
   );
 };
+}

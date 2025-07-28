@@ -44,7 +44,7 @@ describe('Position Utilities', () => {
   });
 });
 describe('Option Utilities', () => {
-  const testOptions: OptionConfig[] = [
+  const testOptions: OptionConfig = [
     { label: 'Option A', value: 'a', weight: 3 },
     { label: 'Option B', value: 'b', weight: 1 },
     { label: 'Option C', value: 'c', weight: 2 }
@@ -61,7 +61,6 @@ describe('Option Utilities', () => {
       for (let i = 0; i < iterations; i++) {
         const option = getRandomOption(testOptions);
         counts[option.value as keyof typeof counts]++;
-      }
       // Option A (weight 3) should be selected most often
       // Option B (weight 1) should be selected least often
       expect(counts.a).toBeGreaterThan(counts.b);
@@ -130,10 +129,9 @@ describe('Node Validation', () => {
     test('should detect invalid options', () => {
       const invalidNode = { 
         ...panelArchetypeTemplate, 
-        data: { ,
+        data: {,
           ...panelArchetypeTemplate.data, 
           options: [{ label: '', value: 'test', weight: -1 }]
-        }
       };
       const errors = validateNodeData(invalidNode);
       expect(errors.length).toBeGreaterThan(0);
@@ -178,7 +176,7 @@ describe('Node Transformation', () => {
   });
   describe('updateNodeOptions', () => {
     test('should update node options', () => {
-      const newOptions: OptionConfig[] = [
+      const newOptions: OptionConfig = [
         { label: 'New Option', value: 'new', weight: 1 }
       ];
       const updated = updateNodeOptions(panelArchetypeTemplate, newOptions);

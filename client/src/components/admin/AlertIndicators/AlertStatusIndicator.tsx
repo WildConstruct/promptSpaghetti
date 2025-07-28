@@ -23,8 +23,7 @@ interface AlertStatusIndicatorProps {
   showPulse?: boolean;
   onClick?: () => void;
   className?: string;
-}
-const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
+  const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({,)
   alertCounts,
   systemStatus = 'healthy',
   lastUpdated,
@@ -36,78 +35,76 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
 }) => {
   const [showTooltipState, setShowTooltipState] = useState(false);
   // Calculate system status based on alert counts if not provided
-  const calculateSystemStatus = (): AlertSystemStatus => {
-    if (systemStatus !== 'healthy') return systemStatus;
-    if (alertCounts.critical > 0) return 'critical';
-    if (alertCounts.high > 0) return 'warning';
-    if (alertCounts.medium > 0 || alertCounts.low > 0 || alertCounts.info > 0) return 'warning';
-    return 'healthy';
-  };
+  const calculateSystemStatus = (): AlertSystemStatus => {,
+  if (systemStatus !== 'healthy') return systemStatus;
+  if (alertCounts.critical > 0) return 'critical';
+  if (alertCounts.high > 0) return 'warning';
+  if (alertCounts.medium > 0 || alertCounts.low > 0 || alertCounts.info > 0) return 'warning';
+  return 'healthy';
+};
   // Get status configuration
   const getStatusConfig = (status: AlertSystemStatus) => {
-    const configs = {
-      healthy: {,
-        icon: CheckCircle,
-        color: 'text-green-500',
-        bgColor: 'bg-green-50',
-        borderColor: 'border-green-200',
-        label: 'System Healthy',
-        description: 'All systems operating normally',
-      },
-      warning: {,
-        icon: AlertTriangle,
-        color: 'text-yellow-500',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-200',
-        label: 'System Warning',
-        description: 'Some alerts require attention',
-      },
-      critical: {,
-        icon: AlertOctagon,
-        color: 'text-red-500',
-        bgColor: 'bg-red-50',
-        borderColor: 'border-red-200',
-        label: 'Critical Alerts',
-        description: 'Immediate attention required',
-      },
-      maintenance: {,
-        icon: Settings,
-        color: 'text-blue-500',
-        bgColor: 'bg-blue-50',
-        borderColor: 'border-blue-200',
-        label: 'Maintenance Mode',
-        description: 'System maintenance in progress',
-      },
-      unknown: {,
-        icon: AlertCircle,
-        color: 'text-gray-500',
-        bgColor: 'bg-gray-50',
-        borderColor: 'border-gray-200',
-        label: 'Status Unknown',
-        description: 'Unable to determine system status',
-      }
-    };
+  const configs = {
+  healthy: {,
+  icon: CheckCircle,
+  color: 'text-green-500',
+  bgColor: 'bg-green-50',
+  borderColor: 'border-green-200',
+  label: 'System Healthy',
+  description: 'All systems operating normally',
+},
+  warning: {,
+  icon: AlertTriangle,
+  color: 'text-yellow-500',
+  bgColor: 'bg-yellow-50',
+  borderColor: 'border-yellow-200',
+  label: 'System Warning',
+  description: 'Some alerts require attention',
+},
+  critical: {,
+  icon: AlertOctagon,
+  color: 'text-red-500',
+  bgColor: 'bg-red-50',
+  borderColor: 'border-red-200',
+  label: 'Critical Alerts',
+  description: 'Immediate attention required',
+},
+  maintenance: {,
+  icon: Settings,
+  color: 'text-blue-500',
+  bgColor: 'bg-blue-50',
+  borderColor: 'border-blue-200',
+  label: 'Maintenance Mode',
+  description: 'System maintenance in progress',
+},
+  unknown: {,
+  icon: AlertCircle,
+  color: 'text-gray-500',
+  bgColor: 'bg-gray-50',
+  borderColor: 'border-gray-200',
+  label: 'Status Unknown',
+  description: 'Unable to determine system status',
+};
     return configs[status];
   };
   // Get size configuration
   const getSizeConfig = (sz: string) => {
     const configs: Record<string, { icon: string; container: string; tooltip: string }> = {
-      sm: {,
-        icon: 'w-4 h-4',
-        container: 'p-1.5',
-        tooltip: 'text-xs',
-      },
-      md: {,
-        icon: 'w-5 h-5',
-        container: 'p-2',
-        tooltip: 'text-sm',
-      },
-      lg: {,
-        icon: 'w-6 h-6',
-        container: 'p-2.5',
-        tooltip: 'text-base',
-      }
-    };
+  sm: {,
+  icon: 'w-4 h-4',
+  container: 'p-1.5',
+  tooltip: 'text-xs',
+},
+  md: {,
+  icon: 'w-5 h-5',
+  container: 'p-2',
+  tooltip: 'text-sm',
+},
+  lg: {,
+  icon: 'w-6 h-6',
+  container: 'p-2.5',
+  tooltip: 'text-base',
+};
     return configs[sz];
   };
   // Generate tooltip content
@@ -116,7 +113,7 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
     const currentStatus = calculateSystemStatus();
     const statusConfig = getStatusConfig(currentStatus);
     const alertBreakdown = Object.entries(alertCounts);
-      .filter(([, count]) => count > 0)
+      .filter(([ count]) => count > 0)
       .map(([severity, count]) => `${count} ${severity}`)}
       .join(', ');
     const lastUpdatedStr = lastUpdated ;
@@ -127,8 +124,8 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
       description: totalAlerts > 0 ,
         ? `${totalAlerts} active alerts (${alertBreakdown})`}
         : statusConfig.description,
-      lastUpdated: lastUpdatedStr,
-    };
+      lastUpdated: lastUpdatedStr;
+  };
   };
   const currentStatus = calculateSystemStatus();
   const statusConfig = getStatusConfig(currentStatus);
@@ -150,7 +147,7 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
     sizeConfig.icon,
     'transition-colors duration-200'
   ].join(' ');
-  return ()
+  return;
     <div className="relative inline-block">
       <div
         className={indicatorClasses}
@@ -163,7 +160,6 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({)
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClick();
-          }
         } : undefined}
         aria-label={`System status: ${tooltipContent.title}`}
       >

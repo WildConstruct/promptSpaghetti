@@ -4,14 +4,12 @@ import { X, Play, Pause, Archive, AlertTriangle, CheckCircle } from 'lucide-reac
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
 interface BulkOperationsModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  selectedToggleIds: string[];
+  selectedToggleIds: string;,
   onComplete: () => void;
-}
-type BulkOperation = 'enable' | 'disable' | 'archive';
-
-export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({)
+  type BulkOperation = 'enable' | 'disable' | 'archive';
+  export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({,)
   isOpen,
   onClose,
   selectedToggleIds,
@@ -22,56 +20,52 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({)
   const [confirmText, setConfirmText] = useState('');
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState<{
-    success: string[];
-    failed: Array<{ id: string; error: string }>;
+    success: string;,
+  failed: Array<{ id: string; error: string }>;
   } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   if (!isOpen) return null;
   const operationConfig = {
     enable: {,
-      title: 'Enable Toggles',
+  title: 'Enable Toggles',
       description: 'Enable the selected feature toggles',
       icon: <Play size={16} />,
       color: 'green',
       confirmPhrase: 'ENABLE TOGGLES',
-      warning: 'This will immediately activate these toggles for users.',
-    },
-    disable: {,
-      title: 'Disable Toggles',
+      warning: 'This will immediately activate these toggles for users.';
+  },
+  disable: {,
+  title: 'Disable Toggles',
       description: 'Disable the selected feature toggles',
       icon: <Pause size={16} />,
       color: 'orange',
       confirmPhrase: 'DISABLE TOGGLES',
-      warning: 'This will immediately deactivate these toggles for users.',
-    },
-    archive: {,
-      title: 'Archive Toggles',
+      warning: 'This will immediately deactivate these toggles for users.';
+  },
+  archive: {,
+  title: 'Archive Toggles',
       description: 'Archive the selected feature toggles (cannot be undone)',
       icon: <Archive size={16} />,
       color: 'red',
       confirmPhrase: 'ARCHIVE TOGGLES',
-      warning: 'Archived toggles cannot be restored and will be permanently disabled.',
-    }
+      warning: 'Archived toggles cannot be restored and will be permanently disabled.';
   };
   const config = operationConfig[operation];
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     if (!reason.trim()) {
       newErrors.reason = 'Reason is required for bulk operations';
-    }
     if (confirmText !== config.confirmPhrase) {
       newErrors.confirm = `Please type "${config.confirmPhrase}" to confirm`;}
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const executeBulkOperation = async () => {
     if (!validateForm()) {
       return;
-    }
     setProcessing(true);
     setResults(null);
-    const success: string[] = [];
+    const success: string = [];
     const failed: Array<{ id: string; error: string }> = [];
     // Process toggles sequentially to avoid overwhelming the server
     for (const toggleId of selectedToggleIds) {
@@ -86,25 +80,23 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({)
             ? { enabled: false, reason }
             : undefined;
         const response = await fetch(endpoint, {)
-          method,
+  method,
           headers: {,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,}
+            'Authorization': `Bearer ${localStorage.getItem('token')}`}
+}
             'Content-Type': 'application/json'
-          },
-          body: body ? JSON.stringify(body) : undefined,
-        });
+  },
+  body: body ? JSON.stringify(body) : undefined;
+  });
         if (!response.ok) {
           const error = await response.json();
           throw new Error(error.error || `HTTP ${response.status}`);}
-        }
         success.push(toggleId);
       } catch (error) {
-        failed.push({)
-          id: toggleId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        });
-      }
-    }
+  failed.push({)
+  id: toggleId,
+  error: error instanceof Error ? error.message : 'Unknown error',
+});
     setResults({ success, failed });
     setProcessing(false);
   };
@@ -118,7 +110,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({)
     setResults(null);
     setErrors({});
   };
-  return ()
+  return;
     <div className="modal-overlay">
       <div className="modal-content bulk-operations-modal">
         <div className="modal-header">

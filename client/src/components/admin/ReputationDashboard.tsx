@@ -27,88 +27,82 @@ import {
   Eye
 } from 'lucide-react';
 interface ReputationMetrics {
-  totalUsers: number;
+  totalUsers: number;,
   reputationDistribution: {,
-    veryHigh: number;
-    high: number;
-    medium: number;
-    low: number;
-    veryLow: number;
-  };
+  veryHigh: number;,
+  high: number;
+  medium: number;,
+  low: number;
+  veryLow: number;
+};
   verificationStats: {,
-    identityVerified: number;
-    emailVerified: number;
-    phoneVerified: number;
-    fullyVerified: number;
-    verificationRate: number;
-  };
+  identityVerified: number;
+  emailVerified: number;,
+  phoneVerified: number;
+  fullyVerified: number;,
+  verificationRate: number;
+};
   trustTrends: {,
-    averageTrustScore: number;
-    trendDirection: 'improving' | 'stable' | 'declining';
-    monthlyChange: number;
+  averageTrustScore: number;
+    trendDirection: 'improving' | 'stable' | 'declining';,
+  monthlyChange: number;
     topReputationUsers: Array<{ userId: string; username: string; score: number }>;
   };
   riskAnalysis: {,
-    highRiskUsers: number;
-    flaggedUsers: number;
-    suspiciousActivity: number;
-    fraudPrevented: {,
-      estimatedValue: number;
-      incidentsBlocked: number;
-    };
+  highRiskUsers: number;
+  flaggedUsers: number;,
+  suspiciousActivity: number;
+  fraudPrevented: {,
+  estimatedValue: number;,
+  incidentsBlocked: number;
+};
   };
   badgeStats: {,
-    totalBadgesAwarded: number;
+  totalBadgesAwarded: number;
     mostPopularBadges: Array<{ badgeType: string; count: number }>;
   };
-}
 interface ReputationAlert {
-  alertId: string;
+  alertId: string;,
   userId: string;
-  alertType: string;
+  alertType: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  title: string;
+  title: string;,
   description: string;
-  triggerScore: number;
+  triggerScore: number;,
   currentScore: number;
-  riskFactors: string[];
-  suggestedActions: string[];
-  status: 'active' | 'investigating' | 'resolved' | 'dismissed';
+  riskFactors: string;,
+  suggestedActions: string;
+  status: 'active' | 'investigating' | 'resolved' | 'dismissed';,
   createdAt: Date;
   assignedTo?: string;
-  priority: number;
+  priority: number;,
   escalated: boolean;
-}
-interface UserReputationSummary {
-  userId: string;
+  interface UserReputationSummary {
+  userId: string;,
   username: string;
-  overallTrustScore: number;
+  overallTrustScore: number;,
   reputationLevel: string;
-  verificationLevel: string;
+  verificationLevel: string;,
   achievementCount: number;
-  flagged: boolean;
+  flagged: boolean;,
   lastCalculated: Date;
-}
-interface ReputationDashboardData {
+  interface ReputationDashboardData {
   overview: {,
-    totalUsers: number;
-    averageTrustScore: number;
-    verificationRate: number;
-    activeAlerts: number;
-    criticalAlerts: number;
-  };
-  metrics: ReputationMetrics;
-  alerts: ReputationAlert[];
-  recentActivity: unknown[];
+  totalUsers: number;,
+  averageTrustScore: number;
+  verificationRate: number;,
+  activeAlerts: number;
+  criticalAlerts: number;
+};
+  metrics: ReputationMetrics;,
+  alerts: ReputationAlert;
+  recentActivity: unknown;,
   systemHealth: unknown;
   lastUpdated: Date;
-}
 interface ReputationDashboardProps {
   className?: string;
   refreshInterval?: number;
-}
-
-export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
+  export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({,)
   className,
   refreshInterval = 60000
 }) => {
@@ -117,26 +111,26 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   // User search and filtering
-  const [userSearchResults, setUserSearchResults] = useState<UserReputationSummary[]>([]);
+  const [userSearchResults, setUserSearchResults] = useState<UserReputationSummary>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilters, setSearchFilters] = useState({)
-    reputationLevel: '',
-    verificationLevel: '',
-    riskLevel: '',
-    flagged: '',
-  });
+  reputationLevel: '',
+  verificationLevel: '',
+  riskLevel: '',
+  flagged: '',
+});
   // Selected user for detailed view
-  const [, setSelectedUser] = useState<string | null>(null);
+  const [ setSelectedUser] = useState<string | null>(null);
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState<Array<{
-    userId: string;
-    username: string;
-    rank: number;
-    reputationLevel: string;
-    achievementCount: number;
-    verificationLevel: string;
-    overallTrustScore: number;
-  }>>([]);
+  userId: string;,
+  username: string;
+  rank: number;,
+  reputationLevel: string;
+  achievementCount: number;,
+  verificationLevel: string;
+  overallTrustScore: number;
+}>>([]);
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -147,13 +141,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
         setError(null);
       } else {
         setError(result.error || 'Failed to load reputation data');
-      }
     } catch (err) {
-      setError('Network error loading reputation data');
-      console.error('Error fetching reputation dashboard:', err);
-    } finally {
+  setError('Network error loading reputation data');
+  console.error('Error fetching reputation dashboard:', err);
+} finally {
       setLoading(false);
-    }
   }, []);
   // Search users
   const searchUsers = useCallback(async () => {
@@ -168,11 +160,9 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
       const result = await response.json();
       if (result.success) {
         setUserSearchResults(result.data);
-      }
     } catch (err) {
-      console.error('Error searching users:', err);
-    }
-  }, [searchQuery, searchFilters]);
+  console.error('Error searching users:', err);
+}, [searchQuery, searchFilters]);
   // Fetch leaderboard
   const fetchLeaderboard = useCallback(async () => {
     try {
@@ -180,16 +170,15 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
       const result = await response.json();
       if (result.success) {
         setLeaderboard(result.data);
-      }
     } catch (err) {
-      console.error('Error fetching leaderboard:', err);
-    }
-  }, []);
+  console.error('Error fetching leaderboard:', err);
+}, []);
   // Handle user flag/unflag
   const handleFlagUser = useCallback(async (userId: string, reason: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/users/${userId}/flag`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason, restrictionLevel: 'limited' })
       });
@@ -197,41 +186,37 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
         // Refresh user search results
         searchUsers();
         fetchDashboardData();
-      }
     } catch (err) {
-      console.error('Error flagging user:', err);
-    }
-  }, [searchUsers, fetchDashboardData]);
+  console.error('Error flagging user:', err);
+}, [searchUsers, fetchDashboardData]);
   // Handle reputation recalculation
   const handleRecalculateReputation = useCallback(async (userId: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/users/${userId}/recalculate`, {)}
-        method: 'POST',
-      });
+  },
+  method: 'POST';
+  });
       if (response.ok) {
         // Refresh data
         searchUsers();
         fetchDashboardData();
-      }
     } catch (err) {
-      console.error('Error recalculating reputation:', err);
-    }
-  }, [searchUsers, fetchDashboardData]);
+  console.error('Error recalculating reputation:', err);
+}, [searchUsers, fetchDashboardData]);
   // Handle alert acknowledgment
   const handleAcknowledgeAlert = useCallback(async (alertId: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/alerts/${alertId}/assign`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ assignedTo: 'current_admin' })
       });
       if (response.ok) {
         fetchDashboardData();
-      }
     } catch (err) {
-      console.error('Error acknowledging alert:', err);
-    }
-  }, [fetchDashboardData]);
+  console.error('Error acknowledging alert:', err);
+}, [fetchDashboardData]);
   // Setup periodic refresh
   useEffect(() => {
     fetchDashboardData();
@@ -243,19 +228,17 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
   useEffect(() => {
     if (searchQuery || Object.values(searchFilters).some(v => v)) {
       searchUsers();
-    }
   }, [searchQuery, searchFilters, searchUsers]);
   if (loading) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading reputation dashboard...</div>
         </CardContent>
       </Card>
     );
-  }
   if (error) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="text-red-600">
@@ -265,18 +248,16 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
         </CardContent>
       </Card>
     );
-  }
   if (!dashboardData) {
-    return ()
+    return;
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div>No reputation data available</div>
         </CardContent>
       </Card>
     );
-  }
   const { overview, metrics, alerts } = dashboardData;
-  return ()
+  return;
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -358,20 +339,20 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
                   <div
                     key={alert.alertId}
                     className={`flex justify-between items-center p-2 rounded ${
-                      alert.severity === 'critical' ? 'bg-red-50 border-l-4 border-red-500' :
-                        alert.severity === 'high' ? 'bg-orange-50 border-l-4 border-orange-500' :
-                          alert.severity === 'medium' ? 'bg-yellow-50 border-l-4 border-yellow-500' :
-                            'bg-blue-50 border-l-4 border-blue-500'
-                    }`}
+  alert.severity === 'critical' ? 'bg-red-50 border-l-4 border-red-500' :,
+  alert.severity === 'high' ? 'bg-orange-50 border-l-4 border-orange-500' :,
+  alert.severity === 'medium' ? 'bg-yellow-50 border-l-4 border-yellow-500' :,
+  'bg-blue-50 border-l-4 border-blue-500'
+}`}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <AlertTriangle className={`w-4 h-4 ${
-                          alert.severity === 'critical' ? 'text-red-600' :
-                            alert.severity === 'high' ? 'text-orange-600' :
-                              alert.severity === 'medium' ? 'text-yellow-600' :
-                                'text-blue-600'
-                        }`} />
+  alert.severity === 'critical' ? 'text-red-600' :,
+  alert.severity === 'high' ? 'text-orange-600' :,
+  alert.severity === 'medium' ? 'text-yellow-600' :,
+  'text-blue-600'
+}`} />
                         <span className="font-medium text-sm">{alert.title}</span>
                         <Badge variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}>
                           {alert.severity}
@@ -477,11 +458,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
                       <div className="flex items-center gap-2 mb-2">
                         <h4 className="font-medium">{user.username}</h4>
                         <Badge variant={
-                          user.reputationLevel === 'diamond' ? 'default' :
-                            user.reputationLevel === 'platinum' ? 'secondary' :
-                              user.reputationLevel === 'gold' ? 'default' :
-                                'outline'
-                        }>
+  user.reputationLevel === 'diamond' ? 'default' :,
+  user.reputationLevel === 'platinum' ? 'secondary' :,
+  user.reputationLevel === 'gold' ? 'default' :,
+  'outline'
+}>
                           {user.reputationLevel}
                         </Badge>
                         {user.flagged && <Badge variant="destructive">Flagged</Badge>}
@@ -521,9 +502,9 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
                           size="sm" 
                           variant="destructive"
                           onClick={() => {
-                            const reason = prompt('Enter reason for flagging:');
-                            if (reason) handleFlagUser(user.userId, reason);
-                          }}
+  const reason = prompt('Enter reason for flagging:');
+  if (reason) handleFlagUser(user.userId, reason);
+}}
                         >
                           <Flag className="w-4 h-4" />
                         </Button>
@@ -577,28 +558,28 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
-                      alert.severity === 'critical' ? 'border-red-300 bg-red-50' :
-                        alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :
-                          alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
-                            'border-blue-300 bg-blue-50'
-                    }`}
+  alert.severity === 'critical' ? 'border-red-300 bg-red-50' :,
+  alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :,
+  alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :,
+  'border-blue-300 bg-blue-50'
+}`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <AlertTriangle className={`w-5 h-5 ${
-                            alert.severity === 'critical' ? 'text-red-600' :
-                              alert.severity === 'high' ? 'text-orange-600' :
-                                alert.severity === 'medium' ? 'text-yellow-600' :
-                                  'text-blue-600'
-                          }`} />
+  alert.severity === 'critical' ? 'text-red-600' :,
+  alert.severity === 'high' ? 'text-orange-600' :,
+  alert.severity === 'medium' ? 'text-yellow-600' :,
+  'text-blue-600'
+}`} />
                           <h4 className="font-medium">{alert.title}</h4>
                           <Badge variant={
-                            alert.severity === 'critical' ? 'destructive' :
-                              alert.severity === 'high' ? 'destructive' :
-                                alert.severity === 'medium' ? 'warning' :
-                                  'secondary'
-                          }>
+  alert.severity === 'critical' ? 'destructive' :,
+  alert.severity === 'high' ? 'destructive' :,
+  alert.severity === 'medium' ? 'warning' :,
+  'secondary'
+}>
                             {alert.severity}
                           </Badge>
                           {alert.escalated && <Badge variant="destructive">Escalated</Badge>}
@@ -660,10 +641,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{user.username}</span>
                         <Badge variant={
-                          user.reputationLevel === 'diamond' ? 'default' :
-                            user.reputationLevel === 'platinum' ? 'secondary' :
-                              'outline'
-                        }>
+  user.reputationLevel === 'diamond' ? 'default' :,
+  user.reputationLevel === 'platinum' ? 'secondary' :,
+  'outline'
+}>
                           {user.reputationLevel}
                         </Badge>
                       </div>

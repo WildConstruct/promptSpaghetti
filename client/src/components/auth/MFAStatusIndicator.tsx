@@ -44,66 +44,63 @@ interface MFAStatusIndicatorProps {
   showActions?: boolean;
   onSecurityAction?: (action: string) => void;
   className?: string;
-}
-interface SecurityStatus {
-  level: MFASecurityLevel;
+  interface SecurityStatus {
+  level: MFASecurityLevel;,
   profile: UserMFAProfile | null;
-  isLoading: boolean;
+  isLoading: boolean;,
   lastCheck: Date | null;
   recentActivity: {,
-    lastSuccess?: Date;
-    lastFailure?: Date;
-    suspiciousActivity: boolean;
-    breachDetected: boolean;
-  };
-  recommendations: string[];
-}
+  lastSuccess?: Date;
+  lastFailure?: Date;
+  suspiciousActivity: boolean;,
+  breachDetected: boolean;
+};
+  recommendations: string;
 const SECURITY_LEVEL_CONFIG = {
-  ['none']: {
-    icon: ShieldX,
-    color: 'red',
-    label: 'No Protection',
-    description: 'MFA is not enabled',
-    bgColor: 'bg-red-50',
-    borderColor: 'border-red-200',
-    textColor: 'text-red-700',
-  },
+  ['none']: {,
+  icon: ShieldX,
+  color: 'red',
+  label: 'No Protection',
+  description: 'MFA is not enabled',
+  bgColor: 'bg-red-50',
+  borderColor: 'border-red-200',
+  textColor: 'text-red-700',
+}
   ['basic']: {
-    icon: ShieldAlert,
-    color: 'yellow', 
-    label: 'Basic Protection',
-    description: 'Single MFA method configured',
-    bgColor: 'bg-yellow-50',
-    borderColor: 'border-yellow-200',
-    textColor: 'text-yellow-700',
-  },
+  icon: ShieldAlert,
+  color: 'yellow',
+  label: 'Basic Protection',
+  description: 'Single MFA method configured',
+  bgColor: 'bg-yellow-50',
+  borderColor: 'border-yellow-200',
+  textColor: 'text-yellow-700',
+}
   ['standard']: {
-    icon: Shield,
-    color: 'blue',
-    label: 'Standard Protection', 
-    description: 'Multiple methods with backup codes',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
-    textColor: 'text-blue-700',
-  },
+  icon: Shield,
+  color: 'blue',
+  label: 'Standard Protection',
+  description: 'Multiple methods with backup codes',
+  bgColor: 'bg-blue-50',
+  borderColor: 'border-blue-200',
+  textColor: 'text-blue-700',
+}
   ['high']: {
-    icon: ShieldCheck,
-    color: 'green',
-    label: 'High Protection',
-    description: 'TOTP primary with backup methods',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200',
-    textColor: 'text-green-700',
-  },
+  icon: ShieldCheck,
+  color: 'green',
+  label: 'High Protection',
+  description: 'TOTP primary with backup methods',
+  bgColor: 'bg-green-50',
+  borderColor: 'border-green-200',
+  textColor: 'text-green-700',
+}
   ['maximum']: {
-    icon: ShieldCheck,
-    color: 'purple',
-    label: 'Maximum Protection',
-    description: 'Hardware keys + multiple backup methods',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-200',
-    textColor: 'text-purple-700',
-  }
+  icon: ShieldCheck,
+  color: 'purple',
+  label: 'Maximum Protection',
+  description: 'Hardware keys + multiple backup methods',
+  bgColor: 'bg-purple-50',
+  borderColor: 'border-purple-200',
+  textColor: 'text-purple-700',
 };
 
 export function MFAStatusIndicator({ )
@@ -114,25 +111,27 @@ export function MFAStatusIndicator({ )
   className = ''
 }: MFAStatusIndicatorProps) {
   const [status, setStatus] = useState<SecurityStatus>({)
-    level: 'none',
-    profile: null,
-    isLoading: true,
-    lastCheck: null,
-    recentActivity: {,
-      suspiciousActivity: false,
-      breachDetected: false,
-    },
-    recommendations: [],
+  level: 'none',
+  profile: null,
+  isLoading: true,
+  lastCheck: null,
+  recentActivity: {,
+  suspiciousActivity: false,
+  breachDetected: false,
+},
+  recommendations: [];
   });
   const loadSecurityStatus = useCallback(async () => {
     try {
       const [profileResponse, activityResponse] = await Promise.all([)
         fetch(`/api/mfa/profile/${userId}`, {)}
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  },
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch(`/api/security/activity/${userId}`, {)}
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
+  },
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  }
       ]);
       if (!profileResponse.ok) throw new Error('Failed to load profile');
       const profile: UserMFAProfile = await profileResponse.json();
@@ -140,27 +139,26 @@ export function MFAStatusIndicator({ )
       const securityLevel = calculateSecurityLevel(profile);
       const recommendations = generateRecommendations(profile, activity);
       setStatus({)
-        level: securityLevel,
-        profile,
-        isLoading: false,
-        lastCheck: new Date(),
-        recentActivity: {,
-          lastSuccess: activity.lastSuccess ? new Date(activity.lastSuccess) : undefined,
-          lastFailure: activity.lastFailure ? new Date(activity.lastFailure) : undefined,
-          suspiciousActivity: activity.suspiciousActivity || false,
-          breachDetected: activity.breachDetected || false,
-        },
+  level: securityLevel,
+  profile,
+  isLoading: false,
+  lastCheck: new Date(),
+  recentActivity: {,
+  lastSuccess: activity.lastSuccess ? new Date(activity.lastSuccess) : undefined,
+  lastFailure: activity.lastFailure ? new Date(activity.lastFailure) : undefined,
+  suspiciousActivity: activity.suspiciousActivity || false,
+  breachDetected: activity.breachDetected || false,
+}
         recommendations
       });
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.error('MFA status check failed:', error);
-      setStatus(prev => ({ )
-        ...prev, 
-        isLoading: false,
-        lastCheck: new Date(),
-      }));
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.error('MFA status check failed:', error);
+  setStatus(prev => ({ )
+  ...prev,
+  isLoading: false,
+  lastCheck: new Date(),
+}));
   }, [userId]);
   useEffect(() => {
     loadSecurityStatus();
@@ -180,37 +178,30 @@ export function MFAStatusIndicator({ )
       return 'standard';
     } else if (methodCount >= 1) {
       return 'basic';
-    }
     return 'none';
   };
-  const generateRecommendations = (profile: UserMFAProfile, activity: unknown): string[] => {
-    const recommendations: string[] = [];
-    if (!profile.isEnabled) {
-      recommendations.push('Enable multi-factor authentication');
-    } else {
+  const generateRecommendations = (profile: UserMFAProfile, activity: unknown): string => {
+  const recommendations: string = [];
+  if (!profile.isEnabled) {
+  recommendations.push('Enable multi-factor authentication');
+} else {
       if (!profile.configuredMethods.includes(MFAMethodType.TOTP)) {
         recommendations.push('Add authenticator app for better security');
-      }
       if (profile.configuredMethods.length === 1) {
         recommendations.push('Add backup authentication method');
-      }
       if (!profile.preferences.backupMethodEnabled) {
         recommendations.push('Enable backup codes');
-      }
-    }
     if (activity.suspiciousActivity) {
       recommendations.push('Review recent security activity');
-    }
     if (activity.breachDetected) {
       recommendations.push('Change password and review account access');
-    }
     return recommendations;
   };
   const config = SECURITY_LEVEL_CONFIG[status.level];
   const Icon = config.icon;
   // Badge-only variant
   if (variant === 'badge') {
-    return ()
+    return;
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
@@ -233,10 +224,9 @@ export function MFAStatusIndicator({ )
         </Tooltip>
       </TooltipProvider>
     );
-  }
   // Compact variant
   if (variant === 'compact') {
-    return ()
+    return;
       <div className={`flex items-center gap-2 ${className}`}>}
         <div className={`flex items-center gap-2 px-2 py-1 rounded-md ${config.bgColor} ${config.borderColor} border`}>}
           <Icon className={`h-4 w-4 ${config.textColor}`} />}
@@ -262,10 +252,9 @@ export function MFAStatusIndicator({ )
         )}
       </div>
     );
-  }
   // Header variant
   if (variant === 'header') {
-    return ()
+    return;
       <div className={`flex items-center justify-between p-3 rounded-lg ${config.bgColor} ${config.borderColor} border ${className}`}>}
         <div className="flex items-center gap-3">
           <Icon className={`h-5 w-5 ${config.textColor}`} />}
@@ -303,9 +292,8 @@ export function MFAStatusIndicator({ )
         </div>
       </div>
     );
-  }
   // Detailed variant
-  return ()
+  return;
     <div className={`space-y-4 ${className}`}>}
       <div className={`p-4 rounded-lg ${config.bgColor} ${config.borderColor} border`}>}
         <div className="flex items-start justify-between">
@@ -386,17 +374,13 @@ export function MFAStatusIndicator({ )
       )}
     </div>
   );
-}
 
 // Export additional components for specific use cases
 export function MFAHeaderIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
   return <MFAStatusIndicator {...props} variant={'header'} />;
-}
 
 export function MFABadgeIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
   return <MFAStatusIndicator {...props} variant={'badge'} />;
-}
 
 export function MFACompactIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
   return <MFAStatusIndicator {...props} variant={'compact'} />;
-}

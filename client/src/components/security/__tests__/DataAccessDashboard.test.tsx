@@ -7,23 +7,23 @@ import DataAccessDashboard from '../DataAccessDashboard';
 
 // Mock the useDataAccess hook
 jest.mock('../../../hooks/useDataAccess', () => ({)
-  useDataAccess: jest.fn<unknown[], unknown>()
+  useDataAccess: jest.fn<unknown, unknown>(),
 }));
 import { useDataAccess } from '../../../hooks/useDataAccess';
 const mockUseDataAccess = useDataAccess as jest.MockedFunction<typeof useDataAccess>;
 describe('DataAccessDashboard', () => {
   const mockHookReturn = {
-    grants: [],
-    history: [],
-    loading: false,
-    error: null,
-    loadGrants: jest.fn<unknown[], unknown>(),
-    loadHistory: jest.fn<unknown[], unknown>(),
-    requestAccess: jest.fn<unknown[], unknown>(),
-    checkAccess: jest.fn<unknown[], unknown>(),
-    revokeAccess: jest.fn<unknown[], unknown>(),
-    clearError: jest.fn<unknown[], unknown>()
-  };
+  grants: [],
+  history: [],
+  loading: false,
+  error: null,
+  loadGrants: jest.fn<unknown, unknown>(),
+  loadHistory: jest.fn<unknown, unknown>(),
+  requestAccess: jest.fn<unknown, unknown>(),
+  checkAccess: jest.fn<unknown, unknown>(),
+  revokeAccess: jest.fn<unknown, unknown>(),
+  clearError: jest.fn<unknown, unknown>(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseDataAccess.mockReturnValue(mockHookReturn as unknown as unknown);
@@ -39,27 +39,27 @@ describe('DataAccessDashboard', () => {
     expect(screen.getByText('Access History')).toBeInTheDocument();
   });
   it('shows loading state', () => {
-    mockUseDataAccess.mockReturnValue({)
-      ...mockHookReturn,
-      loading: true,
-    } as unknown as unknown);
+  mockUseDataAccess.mockReturnValue({)
+  ...mockHookReturn,
+  loading: true,
+} as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
   it('displays error banner when error exists', () => {
-    mockUseDataAccess.mockReturnValue({)
-      ...mockHookReturn,
-      error: 'Failed to load data',
-    } as unknown as unknown);
+  mockUseDataAccess.mockReturnValue({)
+  ...mockHookReturn,
+  error: 'Failed to load data',
+} as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     expect(screen.getByText(/Failed to load data/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '×' })).toBeInTheDocument();
   });
   it('clears error when close button is clicked', () => {
-    mockUseDataAccess.mockReturnValue({)
-      ...mockHookReturn,
-      error: 'Test error',
-    } as unknown as unknown);
+  mockUseDataAccess.mockReturnValue({)
+  ...mockHookReturn,
+  error: 'Test error',
+} as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     const closeButton = screen.getByRole('button', { name: '×' });
     fireEvent.click(closeButton);
@@ -72,22 +72,22 @@ describe('DataAccessDashboard', () => {
       expect(screen.getByText('Request Your First Access')).toBeInTheDocument();
     });
     it('displays grants when they exist', () => {
-      const mockGrants = [{
-        id: 'grant-1',
-        resourceId: 'resource-123',
-        resourceType: 'customer_data',
-        operations: ['READ', 'WRITE'],
-        classification: 'CONFIDENTIAL',
-        grantedBy: 'admin@example.com',
-        grantedAt: new Date('2023-12-01'),
-        expiresAt: new Date('2024-01-01'),
-        reason: 'Business need',
-        restrictions: [],
-      }];
+  const mockGrants = [{
+  id: 'grant-1',
+  resourceId: 'resource-123',
+  resourceType: 'customer_data',
+  operations: ['READ', 'WRITE'],
+  classification: 'CONFIDENTIAL',
+  grantedBy: 'admin@example.com',
+  grantedAt: new Date('2023-12-01'),
+  expiresAt: new Date('2024-01-01'),
+  reason: 'Business need',
+  restrictions: [],
+}];
       mockUseDataAccess.mockReturnValue({)
-        ...mockHookReturn,
-        grants: mockGrants,
-      } as unknown as unknown);
+  ...mockHookReturn,
+  grants: mockGrants,
+} as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       expect(screen.getByText('resource-123')).toBeInTheDocument();
       expect(screen.getByText('customer_data')).toBeInTheDocument();
@@ -119,22 +119,22 @@ describe('DataAccessDashboard', () => {
       expect(screen.getByText('No access history found for the selected filters.')).toBeInTheDocument();
     });
     it('displays history table when history exists', () => {
-      const mockHistory = [{
-        id: 'history-1',
-        userId: 'user-123',
-        resourceId: 'resource-456',
-        operation: 'READ',
-        allowed: true,
-        reason: 'Access granted',
-        classification: 'INTERNAL',
-        accessLevel: 'GRANTED',
-        timestamp: new Date('2023-12-01'),
-        riskScore: 25,
-      }];
+  const mockHistory = [{
+  id: 'history-1',
+  userId: 'user-123',
+  resourceId: 'resource-456',
+  operation: 'READ',
+  allowed: true,
+  reason: 'Access granted',
+  classification: 'INTERNAL',
+  accessLevel: 'GRANTED',
+  timestamp: new Date('2023-12-01'),
+  riskScore: 25,
+}];
       mockUseDataAccess.mockReturnValue({)
-        ...mockHookReturn,
-        history: mockHistory,
-      } as unknown as unknown);
+  ...mockHookReturn,
+  history: mockHistory,
+} as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       const historyTab = screen.getByText('Access History');
       fireEvent.click(historyTab);
@@ -165,11 +165,11 @@ describe('DataAccessDashboard', () => {
       expect(submitButton).not.toBeDisabled();
     });
     it('submits form with correct data', async () => {
-      mockHookReturn.requestAccess.mockResolvedValue({)
-        requestId: 'req-123',
-        status: 'approved',
-        message: 'Request approved',
-      } as unknown as unknown);
+  mockHookReturn.requestAccess.mockResolvedValue({)
+  requestId: 'req-123',
+  status: 'approved',
+  message: 'Request approved',
+} as unknown as unknown);
       const resourceIdInput = screen.getByLabelText('Resource ID');
       const resourceTypeSelect = screen.getByLabelText('Resource Type');
       const operationSelect = screen.getByLabelText('Operation');
@@ -181,12 +181,12 @@ describe('DataAccessDashboard', () => {
       const submitButton = screen.getByText('Submit Request');
       fireEvent.click(submitButton);
       await waitFor(() => {
-        expect(mockHookReturn.requestAccess).toHaveBeenCalledWith({)
-          resourceId: 'resource-123',
-          resourceType: 'customer_data',
-          operation: 'READ',
-          reason: 'Business need for customer analysis',
-        });
+  expect(mockHookReturn.requestAccess).toHaveBeenCalledWith({)
+  resourceId: 'resource-123',
+  resourceType: 'customer_data',
+  operation: 'READ',
+  reason: 'Business need for customer analysis',
+});
       });
     });
     it('closes form when cancel button is clicked', () => {
@@ -213,37 +213,35 @@ describe('DataAccessDashboard', () => {
     });
   });
   describe('Classification colors', () => {
-    it('applies correct colors for different classifications', () => {
-      const mockGrants = [;
+  it('applies correct colors for different classifications', () => {
+  const mockGrants = [;
+  {
+  id: 'grant-1',
+  resourceId: 'resource-123',
+  resourceType: 'customer_data',
+  operations: ['READ'],
+  classification: 'PUBLIC',
+  grantedBy: 'admin',
+  grantedAt: new Date(),
+  expiresAt: new Date(),
+  reason: 'Test',
+  restrictions: [],
+}
         {
-          id: 'grant-1',
-          resourceId: 'resource-123',
-          resourceType: 'customer_data',
-          operations: ['READ'],
-          classification: 'PUBLIC',
-          grantedBy: 'admin',
-          grantedAt: new Date(),
-          expiresAt: new Date(),
-          reason: 'Test',
-          restrictions: [],
-        },
-        {
-          id: 'grant-2',
-          resourceId: 'resource-456',
-          resourceType: 'financial_data',
-          operations: ['READ'],
-          classification: 'RESTRICTED',
-          grantedBy: 'admin',
-          grantedAt: new Date(),
-          expiresAt: new Date(),
-          reason: 'Test',
-          restrictions: [],
-        }
-      ];
-      mockUseDataAccess.mockReturnValue({)
-        ...mockHookReturn,
-        grants: mockGrants,
-      } as unknown as unknown);
+  id: 'grant-2',
+  resourceId: 'resource-456',
+  resourceType: 'financial_data',
+  operations: ['READ'],
+  classification: 'RESTRICTED',
+  grantedBy: 'admin',
+  grantedAt: new Date(),
+  expiresAt: new Date(),
+  reason: 'Test',
+  restrictions: []];
+  mockUseDataAccess.mockReturnValue({)
+  ...mockHookReturn,
+  grants: mockGrants,
+} as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       const publicBadge = screen.getByText('PUBLIC');
       const restrictedBadge = screen.getByText('RESTRICTED');

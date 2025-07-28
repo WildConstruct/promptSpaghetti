@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 interface UserProfile {
-  id: string;
+  id: string;,
   userId: string;
   displayName?: string;
   firstName?: string;
@@ -37,39 +37,35 @@ interface UserProfile {
   avatarUrl?: string;
   phoneNumber?: string;
   profileCompleteness: number;
-}
-interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';
+  interface UserPreferences {
+  theme: 'light' | 'dark' | 'auto';,
   language: string;
-  timezone: string;
+  timezone: string;,
   dateFormat: string;
-  timeFormat: '12h' | '24h';
+  timeFormat: '12h' | '24h';,
   emailNotifications: {,
-    account: boolean;
-    security: boolean;
-    marketing: boolean;
-    product: boolean;
-    social: boolean;
-  };
+  account: boolean;,
+  security: boolean;
+  marketing: boolean;,
+  product: boolean;
+  social: boolean;
+};
   pushNotifications: {,
-    account: boolean;
-    security: boolean;
-    marketing: boolean;
-    product: boolean;
-    social: boolean;
-  };
+  account: boolean;
+  security: boolean;,
+  marketing: boolean;
+  product: boolean;,
+  social: boolean;
+};
   privacy: {,
-    profileVisibility: 'public' | 'private';
-    searchEngineIndexing: boolean;
-    activityStatus: boolean;
-    readReceipts: boolean;
-  };
-}
+  profileVisibility: 'public' | 'private';
+  searchEngineIndexing: boolean;,
+  activityStatus: boolean;
+  readReceipts: boolean;
+};
 interface ProfileSettingsProps {
   className?: string;
-}
-
-export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
+  export const ProfileSettings: React.FC<ProfileSettingsProps> = ({,)
   className = ''
 }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -85,7 +81,6 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
   useEffect(() => {
     if (user) {
       loadUserData();
-    }
   }, [user]);
   const loadUserData = async () => {
     try {
@@ -95,31 +90,31 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       const token = localStorage.getItem('access_token');
       const [profileResponse, preferencesResponse] = await Promise.all([)
         fetch(`${API_BASE_URL}/auth/profile`, {)}
-          headers: {,
-            'Authorization': `Bearer ${token}`,}
+  },
+  headers: {,
+            'Authorization': `Bearer ${token}`}
+}
             'Content-Type': 'application/json'
-          }
         }),
         fetch(`${API_BASE_URL}/auth/preferences`, {)}
-          headers: {,
-            'Authorization': `Bearer ${token}`,}
+  },
+  headers: {,
+            'Authorization': `Bearer ${token}`}
+}
             'Content-Type': 'application/json'
-          }
-        })
+  }
       ]);
       if (!profileResponse.ok || !preferencesResponse.ok) {
         throw new Error('Failed to load user data');
-      }
       const profileData = await profileResponse.json();
       const preferencesData = await preferencesResponse.json();
       setProfile(profileData.profile);
       setPreferences(preferencesData.preferences);
     } catch (error) {
-      console.error('Error loading user data:', error);
-      setError('Failed to load user data');
-    } finally {
+  console.error('Error loading user data:', error);
+  setError('Failed to load user data');
+} finally {
       setLoading(false);
-    }
   };
   const updateProfile = async (updates: Partial<UserProfile>) => {
     try {
@@ -128,27 +123,27 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const token = localStorage.getItem('access_token');
       const response = await fetch(`${API_BASE_URL}/auth/profile`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
-          'Authorization': `Bearer ${token}`,}
+          'Authorization': `Bearer ${token}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updates),
-      });
+  },
+  body: JSON.stringify(updates);
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to update profile');
-      }
       const data = await response.json();
       setProfile(data.profile);
       setSuccess('Profile updated successfully');
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setError(error instanceof Error ? error.message : 'Failed to update profile');
-    } finally {
+  console.error('Error updating profile:', error);
+  setError(error instanceof Error ? error.message : 'Failed to update profile');
+} finally {
       setSaving(false);
-    }
   };
   const updatePreferences = async (updates: Partial<UserPreferences>) => {
     try {
@@ -157,27 +152,27 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const token = localStorage.getItem('access_token');
       const response = await fetch(`${API_BASE_URL}/auth/preferences`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
-          'Authorization': `Bearer ${token}`,}
+          'Authorization': `Bearer ${token}`}
+}
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updates),
-      });
+  },
+  body: JSON.stringify(updates);
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to update preferences');
-      }
       const data = await response.json();
       setPreferences(data.preferences);
       setSuccess('Preferences updated successfully');
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error updating preferences:', error);
-      setError(error instanceof Error ? error.message : 'Failed to update preferences');
-    } finally {
+  console.error('Error updating preferences:', error);
+  setError(error instanceof Error ? error.message : 'Failed to update preferences');
+} finally {
       setSaving(false);
-    }
   };
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -186,12 +181,10 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
     if (file.size > 5 * 1024 * 1024) {
       setError('Avatar file must be less than 5MB');
       return;
-    }
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       setError('Avatar must be JPEG, PNG, GIF, or WebP');
       return;
-    }
     setAvatarFile(file);
     // Create preview
     const reader = new FileReader();
@@ -210,16 +203,16 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       const formData = new FormData();
       formData.append('avatar', avatarFile);
       const response = await fetch(`${API_BASE_URL}/auth/avatar`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Authorization': `Bearer ${token}`}
-        },
-        body: formData,
-      });
+  },
+  body: formData;
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to upload avatar');
-      }
       const data = await response.json();
       setProfile(prev => prev ? { ...prev, avatarUrl: data.avatarUrl } : null);
       setAvatarFile(null);
@@ -227,11 +220,10 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       setSuccess('Avatar updated successfully');
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error uploading avatar:', error);
-      setError(error instanceof Error ? error.message : 'Failed to upload avatar');
-    } finally {
+  console.error('Error uploading avatar:', error);
+  setError(error instanceof Error ? error.message : 'Failed to upload avatar');
+} finally {
       setSaving(false);
-    }
   };
   const deleteAvatar = async () => {
     if (!confirm('Are you sure you want to delete your avatar?')) return;
@@ -241,23 +233,21 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const token = localStorage.getItem('access_token');
       const response = await fetch(`${API_BASE_URL}/auth/avatar`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: {,
           'Authorization': `Bearer ${token}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to delete avatar');
-      }
       setProfile(prev => prev ? { ...prev, avatarUrl: undefined } : null);
       setSuccess('Avatar deleted successfully');
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error('Error deleting avatar:', error);
-      setError('Failed to delete avatar');
-    } finally {
+  console.error('Error deleting avatar:', error);
+  setError('Failed to delete avatar');
+} finally {
       setSaving(false);
-    }
   };
   const tabs = [;
     { id: 'profile', label: 'Profile', icon: User },
@@ -267,7 +257,7 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
     { id: 'danger', label: 'Danger Zone', icon: Trash2 }
   ];
   if (loading) {
-    return ()
+    return;
       <div className={`profile-settings ${className}`}>}
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -275,8 +265,7 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`profile-settings ${className}`}>}
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -307,15 +296,15 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
             <nav className="flex space-x-8 px-6" aria-label="Tabs">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
-                return ()
+                return;
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as 'profile' | 'preferences' | 'notifications' | 'privacy' | 'danger')}
                     className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                      activeTab === tab.id
-                        ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
@@ -369,29 +358,29 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({)
 };
 
 // Profile Tab Component
-const ProfileTab: React.FC<{
+const ProfileTab: React.FC<{,
   profile: UserProfile;
-  onUpdate: (updates: Partial<UserProfile>) => void;
-  onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUpdate: (updates: Partial<UserProfile>) => void;,
+  onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => void;,
   onAvatarUpload: () => void;
-  onAvatarDelete: () => void;
+  onAvatarDelete: () => void;,
   avatarPreview: string | null;
   saving: boolean;
 }> = ({ profile, onUpdate, onAvatarChange, onAvatarUpload, onAvatarDelete, avatarPreview, saving }) => {
   const [formData, setFormData] = useState({)
-    displayName: profile.displayName || '',
-    firstName: profile.firstName || '',
-    lastName: profile.lastName || '',
-    bio: profile.bio || '',
-    website: profile.website || '',
-    location: profile.location || '',
-    phoneNumber: profile.phoneNumber || '',
-  });
+  displayName: profile.displayName || '',
+  firstName: profile.firstName || '',
+  lastName: profile.lastName || '',
+  bio: profile.bio || '',
+  website: profile.website || '',
+  location: profile.location || '',
+  phoneNumber: profile.phoneNumber || '',
+});
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onUpdate(formData);
   };
-  return ()
+  return;
     <div className="space-y-6">
       {/* Avatar Section */}
       <div className="flex items-center space-x-6">
@@ -550,27 +539,27 @@ const ProfileTab: React.FC<{
 
 // Additional tab components would be implemented here...
 // PreferencesTab, NotificationsTab, PrivacyTab, DangerZoneTab
-const PreferencesTab: React.FC<{
+const PreferencesTab: React.FC<{,
   preferences: UserPreferences;
-  onUpdate: (updates: Partial<UserPreferences>) => void;
+  onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {
   // Implementation for preferences tab
   return <div>Preferences Tab - Coming Soon</div>;
 };
-const NotificationsTab: React.FC<{
+const NotificationsTab: React.FC<{,
   preferences: UserPreferences;
-  onUpdate: (updates: Partial<UserPreferences>) => void;
+  onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {
   // Implementation for notifications tab
   return <div>Notifications Tab - Coming Soon</div>;
 };
-const PrivacyTab: React.FC<{
+const PrivacyTab: React.FC<{,
   preferences: UserPreferences;
-  onUpdate: (updates: Partial<UserPreferences>) => void;
+  onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {

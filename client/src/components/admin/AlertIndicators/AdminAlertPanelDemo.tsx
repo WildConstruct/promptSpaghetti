@@ -13,93 +13,91 @@ import { AlertCount, AlertItem, createEmptyAlertCount } from './index';
 const AdminAlertPanelDemo: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   // Mock alert data for different admin sections
-  const featureToggleAlerts: AlertCount = {
-    critical: 1,
-    high: 2,
-    medium: 3,
-    low: 1,
-    info: 0,
-  };
-  const userManagementAlerts: AlertCount = {
-    critical: 0,
-    high: 1,
-    medium: 2,
-    low: 0,
-    info: 1,
-  };
-  const systemAlerts: AlertCount = {
-    critical: 2,
-    high: 3,
-    medium: 1,
-    low: 0,
-    info: 0,
-  };
-  const mockRecentAlerts: AlertItem[] = [
+  const featureToggleAlerts: AlertCount = {,
+  critical: 1,
+  high: 2,
+  medium: 3,
+  low: 1,
+  info: 0,
+};
+  const userManagementAlerts: AlertCount = {,
+  critical: 0,
+  high: 1,
+  medium: 2,
+  low: 0,
+  info: 1,
+};
+  const systemAlerts: AlertCount = {,
+  critical: 2,
+  high: 3,
+  medium: 1,
+  low: 0,
+  info: 0,
+};
+  const mockRecentAlerts: AlertItem = [
     {
-      id: 'alert-1',
-      type: 'performance',
-      severity: 'critical',
-      title: 'High Memory Usage Detected',
-      description: 'System memory usage has exceeded 85% threshold for more than 10 minutes',
-      timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
-      source: 'system-monitor',
-      status: 'active',
-      affectedComponent: 'API Gateway',
-    },
+  id: 'alert-1',
+  type: 'performance',
+  severity: 'critical',
+  title: 'High Memory Usage Detected',
+  description: 'System memory usage has exceeded 85% threshold for more than 10 minutes',
+  timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago,
+  source: 'system-monitor',
+  status: 'active',
+  affectedComponent: 'API Gateway',
+}
     {
-      id: 'alert-2',
-      type: 'security',
-      severity: 'high',
-      title: 'Multiple Failed Login Attempts',
-      description: '15 failed login attempts detected from IP 192.168.1.100',
-      timestamp: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-      source: 'auth-service',
-      status: 'active',
-      userId: 'user-123',
-      userName: 'john.doe@example.com',
-    },
+  id: 'alert-2',
+  type: 'security',
+  severity: 'high',
+  title: 'Multiple Failed Login Attempts',
+  description: '15 failed login attempts detected from IP 192.168.1.100',
+  timestamp: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago,
+  source: 'auth-service',
+  status: 'active',
+  userId: 'user-123',
+  userName: 'john.doe@example.com',
+}
     {
-      id: 'alert-3',
-      type: 'feature-toggle',
-      severity: 'medium',
-      title: 'Feature Toggle Dependency Conflict',
-      description: 'Toggle "advanced_search_v2" has conflicting dependencies with "search_filters"',
-      timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-      source: 'feature-toggle-service',
-      status: 'acknowledged',
-      affectedComponent: 'Search Service',
-    },
+  id: 'alert-3',
+  type: 'feature-toggle',
+  severity: 'medium',
+  title: 'Feature Toggle Dependency Conflict',
+  description: 'Toggle "advanced_search_v2" has conflicting dependencies with "search_filters"',
+  timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago,
+  source: 'feature-toggle-service',
+  status: 'acknowledged',
+  affectedComponent: 'Search Service',
+}
     {
-      id: 'alert-4',
-      type: 'user-action',
-      severity: 'high',
-      title: 'Bulk User Deletion Detected',
-      description: 'Administrator performed bulk deletion of 25 user accounts',
-      timestamp: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
-      source: 'user-management',
-      status: 'resolved',
-      userId: 'admin-456',
-      userName: 'admin@example.com',
-      affectedComponent: 'User Database',
-    },
+  id: 'alert-4',
+  type: 'user-action',
+  severity: 'high',
+  title: 'Bulk User Deletion Detected',
+  description: 'Administrator performed bulk deletion of 25 user accounts',
+  timestamp: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago,
+  source: 'user-management',
+  status: 'resolved',
+  userId: 'admin-456',
+  userName: 'admin@example.com',
+  affectedComponent: 'User Database',
+}
     {
-      id: 'alert-5',
-      type: 'system',
-      severity: 'info',
-      title: 'Scheduled Maintenance Completed',
-      description: 'Database maintenance window completed successfully',
-      timestamp: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
-      source: 'maintenance-scheduler',
-      status: 'resolved',
-      affectedComponent: 'Primary Database',
-    }
-  ];
+  id: 'alert-5',
+  type: 'system',
+  severity: 'info',
+  title: 'Scheduled Maintenance Completed',
+  description: 'Database maintenance window completed successfully',
+  timestamp: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago,
+  source: 'maintenance-scheduler',
+  status: 'resolved',
+  affectedComponent: 'Primary Database'];
   const handleRefresh = async () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+  setIsLoading(true);
+  // Simulate API call
+  setTimeout(() => {
+  setIsLoading(false);
+}, 1000);
   };
   const handleViewAll = () => {
     console.log('Navigate to full alerts dashboard');
@@ -107,7 +105,7 @@ const AdminAlertPanelDemo: React.FC = () => {
   const handleAcknowledgeAll = () => {
     console.log('Acknowledge all active alerts');
   };
-  return ()
+  return;
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Alert Indicators Demo</h1>

@@ -11,97 +11,93 @@ import { usePaymentAnalytics } from '../../hooks/usePaymentAnalytics';
 import './PaymentAnalyticsDashboard.css';
 
 // Payment Analytics Types
+
 export interface PaymentProviderMetrics {
-  provider: PaymentProvider;
+  provider: PaymentProvider;,
   totalAttempts: number;
-  successfulPayments: number;
+  successfulPayments: number;,
   failedPayments: number;
-  successRate: number;
+  successRate: number;,
   averageProcessingTime: number;
-  p95ProcessingTime: number;
+  p95ProcessingTime: number;,
   totalVolume: number;
-  totalFees: number;
+  totalFees: number;,
   averageFeeRate: number;
   failuresByReason: Record<string, number>;
-  retrySuccessRate: number;
+  retrySuccessRate: number;,
   performanceByCountry: Array<{,
-    countryCode: string;
-    successRate: number;
-    averageProcessingTime: number;
-  }>;
-  performanceByHour: Array<{,
-    hour: number;
-    successRate: number;
-    volume: number;
-  }>;
-}
-
-export interface PaymentMethodMetrics {
-  methodType: PaymentMethodType;
-  provider: PaymentProvider;
+  countryCode: string;,
   successRate: number;
   averageProcessingTime: number;
-  totalVolume: number;
-  userPreferenceRank: number;
-  conversionRate: number;
-  ageGroupPerformance: Array<{,
-    ageGroup: string;
-    successRate: number;
-    usage: number;
-  }>;
-  devicePerformance: Array<{,
-    deviceType: 'mobile' | 'desktop' | 'tablet';
-    successRate: number;
-    usage: number;
-  }>;
+}>;
+  performanceByHour: Array<{,
+  hour: number;
+  successRate: number;,
+  volume: number;
+}>;
 }
-
-export interface PaymentFailureAnalysis {
-  failureCode: string;
+export interface PaymentMethodMetrics {
+  methodType: PaymentMethodType;,
   provider: PaymentProvider;
-  frequency: number;
+  successRate: number;,
+  averageProcessingTime: number;
+  totalVolume: number;,
+  userPreferenceRank: number;
+  conversionRate: number;,
+  ageGroupPerformance: Array<{,
+  ageGroup: string;,
+  successRate: number;
+  usage: number;
+}>;
+  devicePerformance: Array<{,
+  deviceType: 'mobile' | 'desktop' | 'tablet';
+  successRate: number;,
+  usage: number;
+}>;
+}
+export interface PaymentFailureAnalysis {
+  failureCode: string;,
+  provider: PaymentProvider;
+  frequency: number;,
   percentage: number;
-  description: string;
+  description: string;,
   suggestedAction: string;
-  isRetryable: boolean;
+  isRetryable: boolean;,
   averageRetrySuccess: number;
   timePattern: Array<{,
-    hour: number;
-    frequency: number;
-  }>;
+  hour: number;,
+  frequency: number;
+}>;
   geographicPattern: Array<{,
-    countryCode: string;
-    frequency: number;
-  }>;
+  countryCode: string;
+  frequency: number;
+}>;
   amountPattern: Array<{,
-    amountRange: string;
-    frequency: number;
-  }>;
+  amountRange: string;
+  frequency: number;
+}>;
 }
-
 export interface PaymentAnalyticsData {
-  providerMetrics: PaymentProviderMetrics[];
-  methodMetrics: PaymentMethodMetrics[];
-  failureAnalysis: PaymentFailureAnalysis[];
+  providerMetrics: PaymentProviderMetrics;,
+  methodMetrics: PaymentMethodMetrics;
+  failureAnalysis: PaymentFailureAnalysis;,
   lastUpdated: Date;
   timeRange: {,
-    start: Date;
-    end: Date;
-  };
+  start: Date;,
+  end: Date;
+};
 }
-
 export interface PaymentAnalyticsDashboardProps {
   className?: string;
   timeRange?: RevenueTimeRange;
-  customDateRange?: {
-    start: Date | null;
-    end: Date | null;
-  };
-  providers?: PaymentProvider[];
+  customDateRange?: {,
+  start: Date | null;,
+  end: Date | null;
+};
+  providers?: PaymentProvider;
   autoRefresh?: boolean;
   refreshInterval?: number;
 }
-
 export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps> = ({)
   className = '',
   timeRange = RevenueTimeRange.LAST_30D,
@@ -119,24 +115,24 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
     error,
     refresh
   } = usePaymentAnalytics({)
-    timeRange,
+  timeRange,
     customDateRange,
     providers,
     autoRefresh,
     refreshInterval
   });
   const handleExport = useCallback(async () => {
-    setIsExporting(true);
-    try {
-      // Export payment analytics data
-      const exportData = {
-        providerMetrics: data?.providerMetrics || [],
-        timeRange: data?.timeRange,
-        exportedAt: new Date().toISOString(),
-      };
+  setIsExporting(true);
+  try {
+  // Export payment analytics data
+  const exportData = {
+  providerMetrics: data?.providerMetrics || [],
+  timeRange: data?.timeRange,
+  exportedAt: new Date().toISOString(),
+};
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-        type: 'application/json',
-      });
+  type: 'application/json',
+});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -146,22 +142,21 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Export failed:', error);
-    } finally {
+  console.error('Export failed:', error);
+} finally {
       setIsExporting(false);
-    }
   }, [data, selectedProvider]);
-  const selectedProviderMetrics = data?.providerMetrics.find(;)
+  const selectedProviderMetrics = data?.providerMetrics.find(;);
     m => m.provider === selectedProvider
   );
-  const selectedMethodMetrics = data?.methodMetrics.filter(;)
+  const selectedMethodMetrics = data?.methodMetrics.filter(;);
     m => m.provider === selectedProvider
   ) || [];
-  const selectedFailureAnalysis = data?.failureAnalysis.filter(;)
+  const selectedFailureAnalysis = data?.failureAnalysis.filter(;);
     f => f.provider === selectedProvider
   ) || [];
   if (loading) {
-    return ()
+    return;
       <div className={`payment-analytics-dashboard payment-analytics-dashboard--loading ${className}`}>}
         <div className="payment-analytics__skeleton">
           <div className="skeleton-header"></div>
@@ -170,9 +165,8 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className={`payment-analytics-dashboard payment-analytics-dashboard--error ${className}`}>}
         <div className="error-message">
           <h3>Failed to load payment analytics</h3>
@@ -183,8 +177,7 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className={`payment-analytics-dashboard ${className}`}>}
       {/* Header */}
       <div className="payment-analytics__header">
@@ -323,7 +316,7 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
 };
 
 // Sub-components for different tabs
-const PaymentOverviewPanel: React.FC<{
+const PaymentOverviewPanel: React.FC<{,
   metrics: PaymentProviderMetrics;
   timeRange: RevenueTimeRange;
 }> = ({ metrics }) => ()
@@ -358,8 +351,8 @@ const PaymentOverviewPanel: React.FC<{
     </div>
   </div>
 );
-const PaymentMethodsPanel: React.FC<{
-  methods: PaymentMethodMetrics[];
+const PaymentMethodsPanel: React.FC<{,
+  methods: PaymentMethodMetrics;
   provider: PaymentProvider;
 }> = ({ methods }) => ()
   <div className="payment-methods-panel">
@@ -399,8 +392,8 @@ const PaymentMethodsPanel: React.FC<{
     </div>
   </div>
 );
-const PaymentFailuresPanel: React.FC<{
-  failures: PaymentFailureAnalysis[];
+const PaymentFailuresPanel: React.FC<{,
+  failures: PaymentFailureAnalysis;
   provider: PaymentProvider;
 }> = ({ failures }) => ()
   <div className="payment-failures-panel">
@@ -466,13 +459,13 @@ const PaymentFailuresPanel: React.FC<{
     </div>
   </div>
 );
-const PaymentOptimizationPanel: React.FC<{
+const PaymentOptimizationPanel: React.FC<{,
   metrics: PaymentProviderMetrics;
-  methods: PaymentMethodMetrics[];
-  failures: PaymentFailureAnalysis[];
+  methods: PaymentMethodMetrics;,
+  failures: PaymentFailureAnalysis;
 }> = ({ metrics, methods, failures }) => {
   const recommendations = generateOptimizationRecommendations(metrics, methods, failures);
-  return ()
+  return;
     <div className="payment-optimization-panel">
       <div className="optimization-recommendations">
         <h3>Optimization Recommendations</h3>
@@ -518,14 +511,12 @@ const PaymentOptimizationPanel: React.FC<{
 };
 
 // Helper function to generate optimization recommendations
-function generateOptimizationRecommendations()
-  metrics: PaymentProviderMetrics,
-  methods: PaymentMethodMetrics[],
-  failures: PaymentFailureAnalysis[],
-): Array<{
-  title: string;
+function generateOptimizationRecommendations(metrics: PaymentProviderMetrics,)
+  methods: PaymentMethodMetrics,
+  failures: PaymentFailureAnalysis): Array<{;
+  title: string;,
   description: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'high' | 'medium' | 'low';,
   impact: string;
   effort: string;
 }> {
@@ -533,56 +524,55 @@ function generateOptimizationRecommendations()
   // Success rate analysis
   if (metrics.successRate < 95) {
     recommendations.push({)
-      title: 'Improve Payment Success Rate',
-      description: `Current success rate of ${metrics.successRate.toFixed(1)}% is below the 95% target. Consider implementing retry logic and payment method fallbacks.`,}
-      priority: 'high' as const,
+  title: 'Improve Payment Success Rate',
+      description: `Current success rate of ${metrics.successRate.toFixed(1)}% is below the 95% target. Consider implementing retry logic and payment method fallbacks.`}
+},
+  priority: 'high' as const,
       impact: 'High',
-      effort: 'Medium',
-    });
-  }
+      effort: 'Medium';
+  });
   // Processing time analysis
   if (metrics.averageProcessingTime > 1000) {
     recommendations.push({)
-      title: 'Optimize Payment Processing Time',
-      description: `Average processing time of ${metrics.averageProcessingTime}ms is above recommended threshold. Consider optimizing API calls and implementing caching.`,}
-      priority: 'medium' as const,
+  title: 'Optimize Payment Processing Time',
+      description: `Average processing time of ${metrics.averageProcessingTime}ms is above recommended threshold. Consider optimizing API calls and implementing caching.`}
+},
+  priority: 'medium' as const,
       impact: 'Medium',
-      effort: 'High',
-    });
-  }
+      effort: 'High';
+  });
   // Retry analysis
   if (metrics.retrySuccessRate < 60) {
     recommendations.push({)
-      title: 'Enhance Retry Strategy',
-      description: `Retry success rate of ${metrics.retrySuccessRate.toFixed(1)}% indicates room for improvement in retry logic and timing.`,}
-      priority: 'medium' as const,
+  title: 'Enhance Retry Strategy',
+      description: `Retry success rate of ${metrics.retrySuccessRate.toFixed(1)}% indicates room for improvement in retry logic and timing.`}
+},
+  priority: 'medium' as const,
       impact: 'Medium',
-      effort: 'Low',
-    });
-  }
+      effort: 'Low';
+  });
   // Method-specific recommendations
   const lowPerformingMethods = methods.filter(m => m.successRate < 90);
   if (lowPerformingMethods.length > 0) {
     recommendations.push({)
-      title: 'Address Low-Performing Payment Methods',
-      description: `The following payment methods have success rates below 90%: ${lowPerformingMethods.map(m => m.methodType).join(', ')}`,}
-      priority: 'high' as const,
+  title: 'Address Low-Performing Payment Methods',
+      description: `The following payment methods have success rates below 90%: ${lowPerformingMethods.map(m => m.methodType).join(', ')}`}
+},
+  priority: 'high' as const,
       impact: 'High',
-      effort: 'Medium',
-    });
-  }
+      effort: 'Medium';
+  });
   // Failure analysis
   const highFrequencyFailures = failures.filter(f => f.percentage > 10);
   if (highFrequencyFailures.length > 0) {
     recommendations.push({)
-      title: 'Address High-Frequency Payment Failures',
-      description: `Focus on resolving the top failure reasons: ${highFrequencyFailures.map(f => f.failureCode).join(', ')}`,}
-      priority: 'high' as const,
+  title: 'Address High-Frequency Payment Failures',
+      description: `Focus on resolving the top failure reasons: ${highFrequencyFailures.map(f => f.failureCode).join(', ')}`}
+},
+  priority: 'high' as const,
       impact: 'High',
-      effort: 'Medium',
-    });
-  }
+      effort: 'Medium';
+  });
   return recommendations;
-}
 
 export default PaymentAnalyticsDashboard;

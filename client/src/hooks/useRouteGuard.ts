@@ -9,13 +9,12 @@ import { useAuthStore } from '../stores/authStore';
 
 export interface RouteGuardOptions {
   requireAuth?: boolean;
-  requiredRoles?: string[];
+  requiredRoles?: string;
   requireAllRoles?: boolean;
   redirectTo?: string;
   onUnauthorized?: () => void;
   onForbidden?: () => void;
 }
-
 export const useRouteGuard = (options: RouteGuardOptions = {}) => {
   const {
     requireAuth = true,
@@ -30,28 +29,27 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
   const { isAuthenticated, user, isLoading, setReturnUrl } = useAuthStore();
   // Check if user has required roles
   const hasRequiredRoles = useCallback(() => {
-    if (!user || requiredRoles.length === 0) {
-      return true;
-    }
-    const userRoles = user.roles || [];
-    return requireAllRoles 
-      ? requiredRoles.every(role => userRoles.includes(role))
-      : requiredRoles.some(role => userRoles.includes(role));
-  }, [user, requiredRoles, requireAllRoles]);
+  if (!user || requiredRoles.length === 0) {
+  return true;
+  const userRoles = user.roles || [];
+  return requireAllRoles
+  ? requiredRoles.every(role => userRoles.includes(role))
+  : requiredRoles.some(role => userRoles.includes(role));
+}, [user, requiredRoles, requireAllRoles]);
   // Check authentication status
   const checkAccess = useCallback(() => {
     // Skip checks while loading
     if (isLoading) {
       return { canAccess: false, isLoading: true };
-    }
+
     // Check authentication requirement
     if (requireAuth && !isAuthenticated) {
       return { canAccess: false, reason: 'not_authenticated' };
-    }
+
     // Check role requirements
     if (isAuthenticated && !hasRequiredRoles()) {
       return { canAccess: false, reason: 'insufficient_permissions' };
-    }
+
     return { canAccess: true };
   }, [requireAuth, isAuthenticated, hasRequiredRoles, isLoading]);
   // Guard effect - runs on component mount and dependency changes
@@ -59,7 +57,7 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
     const accessResult = checkAccess();
     if (accessResult.isLoading) {
       return; // Wait for auth check to complete
-    }
+
     if (!accessResult.canAccess) {
       if (accessResult.reason === 'not_authenticated') {
         // Set return URL for post-login redirect
@@ -67,16 +65,16 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
         onUnauthorized?.();
         navigate(redirectTo, { replace: true });
       } else if (accessResult.reason === 'insufficient_permissions') {
-        onForbidden?.();
-        navigate('/unauthorized', { )
-          state: { ,
-            from: location, 
-            reason: 'insufficient_permissions' ,
-          }, 
-          replace: true ,
-        });
-      }
-    }
+  onForbidden?.();
+  navigate('/unauthorized', { )
+  state: {,
+  from: location,
+  reason: 'insufficient_permissions',
+},
+  replace: true ;
+  });
+
+
   }, [
     checkAccess,
     location.pathname,
@@ -92,40 +90,40 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
     const result = checkAccess();
     return result.canAccess;
   }, [checkAccess]);
-  const canAccessRole = useCallback((roles: string[], requireAll = false) => {
-    if (!user) return false;
-    const userRoles = user.roles || [];
-    return requireAll 
-      ? roles.every(role => userRoles.includes(role))
-      : roles.some(role => userRoles.includes(role));
-  }, [user]);
-  const requireRole = useCallback((roles: string[], requireAll = false) => {
-    if (!canAccessRole(roles, requireAll)) {
-      navigate('/unauthorized', { )
-        state: { ,
-          from: location, 
-          reason: 'insufficient_permissions' ,
-        }, 
-        replace: true ,
-      });
+  const canAccessRole = useCallback((roles: string, requireAll = false) => {
+  if (!user) return false;
+  const userRoles = user.roles || [];
+  return requireAll
+  ? roles.every(role => userRoles.includes(role))
+  : roles.some(role => userRoles.includes(role));
+}, [user]);
+  const requireRole = useCallback((roles: string, requireAll = false) => {
+  if (!canAccessRole(roles, requireAll)) {
+  navigate('/unauthorized', { )
+  state: {,
+  from: location,
+  reason: 'insufficient_permissions',
+},
+  replace: true ;
+  });
       return false;
-    }
+
     return true;
   }, [canAccessRole, navigate, location]);
   return {
-    // Status
-    isAuthenticated,
-    user,
-    isLoading,
-    // Access checks
-    canAccess,
-    canAccessRole,
-    hasRequiredRoles: hasRequiredRoles(),
-    // Actions
-    requireRole,
-    // Current check result
-    accessResult: checkAccess(),
-  };
+  // Status
+  isAuthenticated,
+  user,
+  isLoading,
+  // Access checks
+  canAccess,
+  canAccessRole,
+  hasRequiredRoles: hasRequiredRoles(),
+  // Actions
+  requireRole,
+  // Current check result
+  accessResult: checkAccess(),
+};
 };
 
 export default useRouteGuard;

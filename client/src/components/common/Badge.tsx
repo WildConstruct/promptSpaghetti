@@ -7,16 +7,14 @@ interface BadgeProps {
   size?: 'small' | 'medium' | 'large';
   icon?: React.ReactNode;
   className?: string;
-}
-
-export const Badge: React.FC<BadgeProps> = ({)
+  export const Badge: React.FC<BadgeProps> = ({,)
   children,
   variant = 'default',
   size = 'medium',
   icon,
   className = ''
 }) => {
-  return ()
+  return;
     <span className={`badge ${variant} ${size} ${className}`}>}
       {icon && <span className="badge-icon">{icon}</span>}
       <span className="badge-text">{children}</span>

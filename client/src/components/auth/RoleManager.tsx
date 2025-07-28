@@ -3,48 +3,42 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Edit, Trash2, Plus, Users, Shield, Settings, Filter, Search } from 'lucide-react';
 interface Permission {
-  id: string;
+  id: string;,
   roleId: string;
-  resource: string;
+  resource: string;,
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
   createdAt: string;
-}
-interface Role {
-  id: string;
+  interface Role {
+  id: string;,
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
-}
-interface RoleWithDetails extends Role {
-  permissions: Permission[];
-  assignedUsers: unknown[];
-}
-interface CreateRoleData {
+  interface RoleWithDetails extends Role {
+  permissions: Permission;,
+  assignedUsers: unknown;
+  interface CreateRoleData {
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
   permissions: {,
-    resource: string;
-    action: string;
-    scope: 'global' | 'organization' | 'team' | 'own';
-    conditions?: Record<string, unknown>;
-  }[];
-}
+  resource: string;,
+  action: string;
+  scope: 'global' | 'organization' | 'team' | 'own';
+  conditions?: Record<string, unknown>;
+}[];
 interface RoleStats {
-  totalRoles: number;
+  totalRoles: number;,
   rolesByScope: Record<string, number>;
-  totalAssignments: number;
+  totalAssignments: number;,
   recentAssignments: number;
-}
-
-export const RoleManager: React.FC = () => {
-  const [roles, setRoles] = useState<Role[]>([]);
+  export const RoleManager: React.FC = () => {,
+  const [roles, setRoles] = useState<Role>([]);
   const [selectedRole, setSelectedRole] = useState<RoleWithDetails | null>(null);
   const [stats, setStats] = useState<RoleStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,11 +51,11 @@ export const RoleManager: React.FC = () => {
   const [organizationFilter, setOrganizationFilter] = useState<string>('');
   // Form state
   const [formData, setFormData] = useState<CreateRoleData>({)
-    name: '',
-    description: '',
-    scope: 'global',
-    permissions: [],
-  });
+  name: '',
+  description: '',
+  scope: 'global',
+  permissions: [],
+});
   // Permission templates for common role types
   const permissionTemplates = {
     admin: [,
@@ -88,102 +82,93 @@ export const RoleManager: React.FC = () => {
     try {
       const [rolesResponse, statsResponse] = await Promise.all([)
         fetch('/api/auth/rbac/roles?' + new URLSearchParams({)
-          ...(scopeFilter && { scope: scopeFilter }),
+  ...(scopeFilter && { scope: scopeFilter }),
           ...(searchQuery && { search: searchQuery }),
           ...(organizationFilter && { organizationId: organizationFilter })
         }), {
-          credentials: 'include',
-        }),
+  credentials: 'include',
+}),
         fetch('/api/auth/rbac/stats', {)
-          credentials: 'include',
-        })
+  credentials: 'include',
+}
       ]);
       if (rolesResponse.ok) {
         const rolesData = await rolesResponse.json();
         setRoles(rolesData.roles);
-      }
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         setStats(statsData);
-      }
     } catch (error) {
-      console.error('Failed to load RBAC data:', error);
-    } finally {
+  console.error('Failed to load RBAC data:', error);
+} finally {
       setLoading(false);
-    }
   }, [scopeFilter, searchQuery, organizationFilter]);
   const loadRoleDetails = async (roleId: string) => {
     try {
       const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {)}
-        credentials: 'include',
-      });
+  },
+  credentials: 'include';
+  });
       if (response.ok) {
-        const data = await response.json();
-        setSelectedRole({)
-          ...data.role,
-          permissions: data.permissions,
-          assignedUsers: data.assignedUsers,
-        });
-      }
+  const data = await response.json();
+  setSelectedRole({)
+  ...data.role,
+  permissions: data.permissions,
+  assignedUsers: data.assignedUsers,
+});
     } catch (error) {
-      console.error('Failed to load role details:', error);
-    }
-  };
+  console.error('Failed to load role details:', error);
+};
   const handleCreateRole = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth/rbac/roles', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData),
-      });
+  e.preventDefault();
+  setLoading(true);
+  try {
+  const response = await fetch('/api/auth/rbac/roles', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
+        body: JSON.stringify(formData);
+  });
       if (response.ok) {
-        setCreating(false);
-        setFormData({)
-          name: '',
-          description: '',
-          scope: 'global',
-          permissions: [],
-        });
+  setCreating(false);
+  setFormData({)
+  name: '',
+  description: '',
+  scope: 'global',
+  permissions: [],
+});
         await loadData();
       } else {
         const error = await response.json();
         alert(error.message || 'Failed to create role');
-      }
     } catch (error) {
-      console.error('Failed to create role:', error);
-      alert('Failed to create role');
-    } finally {
+  console.error('Failed to create role:', error);
+  alert('Failed to create role');
+} finally {
       setLoading(false);
-    }
   };
   const handleDeleteRole = async (roleId: string) => {
     if (!confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
       return;
-    }
     try {
       const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {)}
-        method: 'DELETE',
-        credentials: 'include',
-      });
+  },
+  method: 'DELETE',
+        credentials: 'include';
+  });
       if (response.ok) {
         await loadData();
         if (selectedRole?.id === roleId) {
           setSelectedRole(null);
-        }
       } else {
         const error = await response.json();
         alert(error.message || 'Failed to delete role');
-      }
     } catch (error) {
-      console.error('Failed to delete role:', error);
-      alert('Failed to delete role');
-    }
-  };
+  console.error('Failed to delete role:', error);
+  alert('Failed to delete role');
+};
   const toggleRoleExpansion = (roleId: string) => {
     const newExpanded = new Set(expandedRoles);
     if (newExpanded.has(roleId)) {
@@ -191,18 +176,17 @@ export const RoleManager: React.FC = () => {
     } else {
       newExpanded.add(roleId);
       loadRoleDetails(roleId);
-    }
     setExpandedRoles(newExpanded);
   };
   const applyPermissionTemplate = (template: keyof typeof permissionTemplates) => {
-    setFormData({)
-      ...formData,
-      permissions: [...permissionTemplates[template]],
-    });
+  setFormData({)
+  ...formData,
+  permissions: [...permissionTemplates[template]],
+});
   };
   const addPermission = () => {
     setFormData({)
-      ...formData,
+  ...formData,
       permissions: [,
         ...formData.permissions,
         { resource: '', action: '', scope: 'global' }
@@ -215,19 +199,18 @@ export const RoleManager: React.FC = () => {
     setFormData({ ...formData, permissions: newPermissions });
   };
   const removePermission = (index: number) => {
-    setFormData({)
-      ...formData,
-      permissions: formData.permissions.filter((_, i) => i !== index)
-    });
+  setFormData({)
+  ...formData,
+  permissions: formData.permissions.filter((_, i) => i !== index),
+});
   };
   if (loading && !roles.length) {
-    return ()
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -354,10 +337,10 @@ export const RoleManager: React.FC = () => {
                           )}
                           <div className="flex items-center space-x-2 mt-1">
                             <span className={`px-2 py-1 text-xs rounded-full ${
-                              role.scope === 'global' ? 'bg-blue-100 text-blue-800' :
-                                role.scope === 'organization' ? 'bg-green-100 text-green-800' :
-                                  'bg-yellow-100 text-yellow-800'
-                            }`}>
+  role.scope === 'global' ? 'bg-blue-100 text-blue-800' :,
+  role.scope === 'organization' ? 'bg-green-100 text-green-800' :,
+  'bg-yellow-100 text-yellow-800'
+}`}>
                               {role.scope}
                             </span>
                             <span className="text-xs text-gray-500">
@@ -400,11 +383,11 @@ export const RoleManager: React.FC = () => {
                               >
                                 <span>{permission.resource}:{permission.action}</span>
                                 <span className={`px-2 py-1 text-xs rounded ${
-                                  permission.scope === 'global' ? 'bg-blue-100 text-blue-800' :
-                                    permission.scope === 'organization' ? 'bg-green-100 text-green-800' :
-                                      permission.scope === 'team' ? 'bg-yellow-100 text-yellow-800' :
-                                        'bg-purple-100 text-purple-800'
-                                }`}>
+  permission.scope === 'global' ? 'bg-blue-100 text-blue-800' :,
+  permission.scope === 'organization' ? 'bg-green-100 text-green-800' :,
+  permission.scope === 'team' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-purple-100 text-purple-800'
+}`}>
                                   {permission.scope}
                                 </span>
                               </div>
@@ -441,14 +424,14 @@ export const RoleManager: React.FC = () => {
               </h2>
               <button
                 onClick={() => {
-                  setCreating(false);
-                  setEditing(false);
-                  setFormData({)
-                    name: '',
-                    description: '',
-                    scope: 'global',
-                    permissions: [],
-                  });
+  setCreating(false);
+  setEditing(false);
+  setFormData({)
+  name: '',
+  description: '',
+  scope: 'global',
+  permissions: [],
+});
                 }}
                 className="text-gray-400 hover:text-gray-600"
               >
@@ -585,14 +568,14 @@ export const RoleManager: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setCreating(false);
-                    setEditing(false);
-                    setFormData({)
-                      name: '',
-                      description: '',
-                      scope: 'global',
-                      permissions: [],
-                    });
+  setCreating(false);
+  setEditing(false);
+  setFormData({)
+  name: '',
+  description: '',
+  scope: 'global',
+  permissions: [],
+});
                   }}
                   className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >

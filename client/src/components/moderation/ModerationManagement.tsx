@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 interface ModerationItem {
-  id: string;
+  id: string;,
   type: 'content' | 'user' | 'template' | 'comment';
-  content: string;
+  content: string;,
   author: string;
   reportedBy?: string;
-  status: 'pending' | 'approved' | 'rejected' | 'flagged';
+  status: 'pending' | 'approved' | 'rejected' | 'flagged';,
   priority: 'low' | 'medium' | 'high' | 'critical';
   reason?: string;
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
   metadata?: Record<string, unknown>;
-}
 
 // interface ModerationAction { // Commented out unused interface
 //   id: string;
@@ -20,17 +19,16 @@ interface ModerationItem {
 //   reason: string;
 //   moderatorId: string;
 //   timestamp: Date;
+
 // }
 interface ModerationManagementProps {
-  items: ModerationItem[];
+  items: ModerationItem;
   onApprove?: (itemId: string, reason: string) => void;
   onReject?: (itemId: string, reason: string) => void;
   onFlag?: (itemId: string, reason: string) => void;
-  onDelete?: (itemId: string, reason: string) => void;
+  onDelete?: (itemId: string, reason: string) => void;,
   currentModerator: string;
-}
-
-export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
+  export const ModerationManagement: React.FC<ModerationManagementProps> = ({,)
   items,
   onApprove,
   onReject,
@@ -38,17 +36,17 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
   onDelete,
   currentModerator
 }) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string>([]);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
   const [actionReason, setActionReason] = useState('');
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [pendingAction, setPendingAction] = useState<{
-    action: 'approve' | 'reject' | 'flag' | 'delete';
-    itemId: string;
-  } | null>(null);
+  action: 'approve' | 'reject' | 'flag' | 'delete';,
+  itemId: string;
+} | null>(null);
   const filteredItems = items.filter(item => {)
-    if (filterStatus !== 'all' && item.status !== filterStatus) return false;
+  if (filterStatus !== 'all' && item.status !== filterStatus) return false;
     if (filterType !== 'all' && item.type !== filterType) return false;
     return true;
   });
@@ -61,51 +59,47 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
     const { action, itemId } = pendingAction;
     const reason = actionReason.trim();
     switch (action) {
-    case 'approve':
-      onApprove?.(itemId, reason);
-      break;
-    case 'reject':
-      onReject?.(itemId, reason);
-      break;
-    case 'flag':
-      onFlag?.(itemId, reason);
-      break;
-    case 'delete':
-      onDelete?.(itemId, reason);
-      break;
-    }
-    setActionReason('');
-    setPendingAction(null);
-    setShowActionDialog(false);
-  };
+  case 'approve':,
+  onApprove?.(itemId, reason);
+  break;
+  case 'reject':,
+  onReject?.(itemId, reason);
+  break;
+  case 'flag':,
+  onFlag?.(itemId, reason);
+  break;
+  case 'delete':,
+  onDelete?.(itemId, reason);
+  break;
+  setActionReason('');
+  setPendingAction(null);
+  setShowActionDialog(false);
+};
   const bulkAction = (action: 'approve' | 'reject') => {
     selectedItems.forEach(itemId => {)
-      const reason = `Bulk ${action} by ${currentModerator}`;}
+  const reason = `Bulk ${action} by ${currentModerator}`;}
       if (action === 'approve') {
         onApprove?.(itemId, reason);
       } else {
         onReject?.(itemId, reason);
-      }
     });
     setSelectedItems([]);
   };
   const getPriorityColor = (priority: ModerationItem['priority']) => {
-    switch (priority) {
-    case 'critical': return '#dc3545';
-    case 'high': return '#fd7e14';
-    case 'medium': return '#ffc107';
-    case 'low': return '#28a745';
-    }
-  };
+  switch (priority) {
+  case 'critical': return '#dc3545';
+  case 'high': return '#fd7e14';
+  case 'medium': return '#ffc107';
+  case 'low': return '#28a745';
+};
   const getStatusColor = (status: ModerationItem['status']) => {
-    switch (status) {
-    case 'pending': return '#ffc107';
-    case 'approved': return '#28a745';
-    case 'rejected': return '#dc3545';
-    case 'flagged': return '#fd7e14';
-    }
-  };
-  return ()
+  switch (status) {
+  case 'pending': return '#ffc107';
+  case 'approved': return '#28a745';
+  case 'rejected': return '#dc3545';
+  case 'flagged': return '#fd7e14';
+};
+  return;
     <div className="moderation-management">
       <div className="moderation-header">
         <h2>Content Moderation</h2>
@@ -162,7 +156,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
                     setSelectedItems([...selectedItems, item.id]);
                   } else {
                     setSelectedItems(selectedItems.filter(id => id !== item.id));
-                  }
                 }}
               />
               <span 
@@ -187,7 +180,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
                 {item.content.length > 200 
                   ? `${item.content.substring(0, 200)}...`}
                   : item.content
-                }
               </div>
               <div className="item-meta">
                 <span>Author: {item.author}</span>

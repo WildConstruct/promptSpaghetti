@@ -8,17 +8,15 @@ import React from 'react';
 import { Eye, EyeOff, AlertCircle, HelpCircle } from 'lucide-react';
 import { FormFieldSchema } from './AdminFormBuilder';
 interface FormFieldProps {
-  field: FormFieldSchema;
+  field: FormFieldSchema;,
   value: any;
   error?: string;
-  onChange: (value: any) => void;
+  onChange: (value: any) => void;,
   onBlur: () => void;
   showPassword?: boolean;
   onTogglePassword?: () => void;
   disabled?: boolean;
-}
-
-export const FormField: React.FC<FormFieldProps> = ({)
+  export const FormField: React.FC<FormFieldProps> = ({,)
   field,
   value,
   error,
@@ -40,7 +38,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
     };
     switch (field.type) {
       case 'textarea':
-        return ()
+        return;
           <textarea
             {...baseProps}
             value={value || ''}
@@ -50,7 +48,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           />
         );
       case 'select':
-        return ()
+        return;
           <select
             {...baseProps}
             value={value || ''}
@@ -73,7 +71,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           </select>
         );
       case 'multiselect':
-        return ()
+        return;
           <select
             {...baseProps}
             multiple
@@ -95,7 +93,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           </select>
         );
       case 'checkbox':
-        return ()
+        return;
           <label className="checkbox-wrapper">
             <input
               type="checkbox"
@@ -108,7 +106,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           </label>
         );
       case 'radio':
-        return ()
+        return;
           <div className="radio-group">
             {field.options?.map((option) => ()
               <label key={option.value} className="radio-wrapper">
@@ -127,20 +125,20 @@ export const FormField: React.FC<FormFieldProps> = ({)
           </div>
         );
       case 'file':
-        return ()
+        return;
           <input
             {...baseProps}
             type="file"
             onChange={(e) => {
-              const files = e.target.files;
-              onChange(field.multiple ? Array.from(files || []) : files?.[0] || null);
-            }}
+  const files = e.target.files;
+  onChange(field.multiple ? Array.from(files || []) : files?.[0] || null);
+}}
             accept={field.accept}
             multiple={field.multiple}
           />
         );
       case 'password':
-        return ()
+        return;
           <div className="password-input-wrapper">
             <input
               {...baseProps}
@@ -162,7 +160,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           </div>
         );
       case 'number':
-        return ()
+        return;
           <input
             {...baseProps}
             type="number"
@@ -174,7 +172,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           />
         );
       case 'email':
-        return ()
+        return;
           <input
             {...baseProps}
             type="email"
@@ -185,7 +183,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
         );
       case 'date':
       case 'datetime-local':
-        return ()
+        return;
           <input
             {...baseProps}
             type={field.type}
@@ -194,7 +192,7 @@ export const FormField: React.FC<FormFieldProps> = ({)
           />
         );
       default:
-        return ()
+        return;
           <input
             {...baseProps}
             type="text"
@@ -203,11 +201,10 @@ export const FormField: React.FC<FormFieldProps> = ({)
             placeholder={field.placeholder}
           />
         );
-    }
   };
   // Don't render label for checkbox since it's handled in the input
   const shouldRenderLabel = field.type !== 'checkbox';
-  return ()
+  return;
     <div className={`form-field ${field.type === 'checkbox' ? 'checkbox-field' : ''}`}>}
       {shouldRenderLabel && ()
         <label htmlFor={fieldId} className="form-label">

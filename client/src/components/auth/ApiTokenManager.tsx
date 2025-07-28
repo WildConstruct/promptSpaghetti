@@ -3,39 +3,34 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 interface ApiToken {
-  id: string;
+  id: string;,
   name: string;
-  scopes: string[];
+  scopes: string;,
   expiresAt: string;
   createdAt: string;
   lastUsedAt?: string;
   revoked: boolean;
-}
-interface ApiTokenStats {
-  totalTokens: number;
+  interface ApiTokenStats {
+  totalTokens: number;,
   activeTokens: number;
-  revokedTokens: number;
+  revokedTokens: number;,
   expiredTokens: number;
-  recentlyUsed: unknown[];
-}
-interface Scope {
-  name: string;
+  recentlyUsed: unknown;
+  interface Scope {
+  name: string;,
   description: string;
   category: string;
-}
-interface ApiTokenManagerProps {
+  interface ApiTokenManagerProps {
   onTokenCreated?: (token: ApiToken) => void;
   onTokenRevoked?: (tokenId: string) => void;
-}
-
-export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
+  export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({,)
   onTokenCreated,
   onTokenRevoked
 }) => {
   const { user } = useAuth();
-  const [tokens, setTokens] = useState<ApiToken[]>([]);
+  const [tokens, setTokens] = useState<ApiToken>([]);
   const [stats, setStats] = useState<ApiTokenStats | null>(null);
-  const [availableScopes, setAvailableScopes] = useState<Scope[]>([]);
+  const [availableScopes, setAvailableScopes] = useState<Scope>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [revoking, setRevoking] = useState<string | null>(null);
@@ -44,84 +39,73 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
   const [error, setError] = useState<string | null>(null);
   // Form state
   const [tokenName, setTokenName] = useState('');
-  const [selectedScopes, setSelectedScopes] = useState<string[]>([]);
+  const [selectedScopes, setSelectedScopes] = useState<string>([]);
   const [expiresIn, setExpiresIn] = useState('90d');
   useEffect(() => {
     if (user) {
       fetchTokens();
       fetchStats();
       fetchAvailableScopes();
-    }
   }, [user]);
   const fetchTokens = async () => {
     try {
       const response = await fetch('/api/auth/api-tokens', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch tokens');
-      }
       const data = await response.json();
       setTokens(data.tokens);
     } catch (error) {
-      console.error('Error fetching tokens:', error);
-      setError('Failed to load API tokens');
-    } finally {
+  console.error('Error fetching tokens:', error);
+  setError('Failed to load API tokens');
+} finally {
       setLoading(false);
-    }
   };
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/auth/api-tokens/stats', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setStats(data);
-      }
     } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
+  console.error('Error fetching stats:', error);
+};
   const fetchAvailableScopes = async () => {
     try {
       const response = await fetch('/api/auth/api-tokens/scopes');
       if (response.ok) {
         const data = await response.json();
         setAvailableScopes(data.scopes);
-      }
     } catch (error) {
-      console.error('Error fetching scopes:', error);
-    }
-  };
+  console.error('Error fetching scopes:', error);
+};
   const createToken = async () => {
     if (!tokenName.trim() || selectedScopes.length === 0) {
       setError('Please provide a token name and select at least one scope');
       return;
-    }
     try {
       setCreating(true);
       setError(null);
       const response = await fetch('/api/auth/api-tokens', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({),
-          name: tokenName,
-          scopes: selectedScopes,
-          expiresIn
-        })
+  },
+  body: JSON.stringify({,)
+  name: tokenName,
+  scopes: selectedScopes,
+  expiresIn
+}
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create token');
-      }
       const data = await response.json();
       setNewToken({ token: data.token, tokenId: data.tokenId });
       // Refresh token list
@@ -133,26 +117,24 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
       setExpiresIn('90d');
       onTokenCreated?.(data);
     } catch (error) {
-      console.error('Error creating token:', error);
-      setError(error.message || 'Failed to create token');
-    } finally {
+  console.error('Error creating token:', error);
+  setError(error.message || 'Failed to create token');
+} finally {
       setCreating(false);
-    }
   };
   const revokeToken = async (tokenId: string) => {
     try {
       setRevoking(tokenId);
       const response = await fetch('/api/auth/api-tokens/revoke', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ tokenId })
+  },
+  body: JSON.stringify({ tokenId })
       });
       if (!response.ok) {
         throw new Error('Failed to revoke token');
-      }
       // Update local state
       setTokens(tokens.map(token => )
         token.id === tokenId ? { ...token, revoked: true } : token
@@ -160,19 +142,17 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
       await fetchStats();
       onTokenRevoked?.(tokenId);
     } catch (error) {
-      console.error('Error revoking token:', error);
-      setError('Failed to revoke token');
-    } finally {
+  console.error('Error revoking token:', error);
+  setError('Failed to revoke token');
+} finally {
       setRevoking(null);
-    }
   };
   const handleScopeToggle = (scope: string) => {
-    setSelectedScopes(prev => )
-      prev.includes(scope) 
-        ? prev.filter(s => s !== scope)
-        : [...prev, scope]
-    );
-  };
+  setSelectedScopes(prev => )
+  prev.includes(scope)
+  ? prev.filter(s => s !== scope)
+  : [...prev, scope]);
+};
   const formatExpiresAt = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -195,29 +175,27 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
     const categories = availableScopes.reduce((acc, scope) => {
       if (!acc[scope.category]) {
         acc[scope.category] = [];
-      }
       acc[scope.category].push(scope);
       return acc;
-    }, {} as Record<string, Scope[]>);
+    }, {} as Record<string, Scope>);
     return categories;
   };
   const getScopeBadgeColor = (scope: string) => {
-    if (scope === '*') return 'bg-red-100 text-red-800';
-    if (scope.startsWith('admin:')) return 'bg-purple-100 text-purple-800';
-    if (scope.startsWith('graphs:')) return 'bg-blue-100 text-blue-800';
-    if (scope.startsWith('user:')) return 'bg-green-100 text-green-800';
-    if (scope.startsWith('organizations:')) return 'bg-yellow-100 text-yellow-800';
-    if (scope.startsWith('teams:')) return 'bg-indigo-100 text-indigo-800';
-    return 'bg-gray-100 text-gray-800';
-  };
+  if (scope === '*') return 'bg-red-100 text-red-800';
+  if (scope.startsWith('admin:')) return 'bg-purple-100 text-purple-800';
+  if (scope.startsWith('graphs:')) return 'bg-blue-100 text-blue-800';
+  if (scope.startsWith('user:')) return 'bg-green-100 text-green-800';
+  if (scope.startsWith('organizations:')) return 'bg-yellow-100 text-yellow-800';
+  if (scope.startsWith('teams:')) return 'bg-indigo-100 text-indigo-800';
+  return 'bg-gray-100 text-gray-800';
+};
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -363,12 +341,12 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
           <div
             key={token.id}
             className={`border rounded-lg p-4 ${
-              token.revoked 
-                ? 'border-red-200 bg-red-50' 
-                : new Date(token.expiresAt) < new Date()
-                  ? 'border-yellow-200 bg-yellow-50'
-                  : 'border-gray-200 bg-white'
-            }`}
+  token.revoked
+  ? 'border-red-200 bg-red-50'
+  : new Date(token.expiresAt) < new Date(),
+  ? 'border-yellow-200 bg-yellow-50'
+  : 'border-gray-200 bg-white',
+}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -406,10 +384,10 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({)
                   onClick={() => revokeToken(token.id)}
                   disabled={revoking === token.id}
                   className={`ml-4 px-3 py-1 text-sm font-medium rounded-md ${
-                    revoking === token.id
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-red-50 text-red-700 hover:bg-red-100'
-                  }`}
+  revoking === token.id
+  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+  : 'bg-red-50 text-red-700 hover:bg-red-100',
+}`}
                 >
                   {revoking === token.id ? 'Revoking...' : 'Revoke'}
                 </button>

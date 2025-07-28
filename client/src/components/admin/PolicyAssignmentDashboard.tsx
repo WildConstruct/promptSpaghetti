@@ -26,28 +26,25 @@ interface DashboardFilters {
   policyType?: string;
   status?: AssignmentStatus;
   includeInherited?: boolean;
-}
-interface DashboardStats {
-  totalAssignments: number;
+  interface DashboardStats {
+  totalAssignments: number;,
   activeAssignments: number;
-  pendingApprovals: number;
+  pendingApprovals: number;,
   conflicts: number;
   inheritanceChains: number;
-}
-
-export const PolicyAssignmentDashboard: React.FC = () => {
-  const [assignments, setAssignments] = useState<PolicyAssignment[]>([]);
-  const [bulkAssignments, setBulkAssignments] = useState<BulkPolicyAssignment[]>([]);
-  const [conflicts, setConflicts] = useState<PolicyConflict[]>([]);
+  export const PolicyAssignmentDashboard: React.FC = () => {,
+  const [assignments, setAssignments] = useState<PolicyAssignment>([]);
+  const [bulkAssignments, setBulkAssignments] = useState<BulkPolicyAssignment>([]);
+  const [conflicts, setConflicts] = useState<PolicyConflict>([]);
   const [stats, setStats] = useState<DashboardStats>({)
-    totalAssignments: 0,
-    activeAssignments: 0,
-    pendingApprovals: 0,
-    conflicts: 0,
-    inheritanceChains: 0,
-  });
+  totalAssignments: 0,
+  activeAssignments: 0,
+  pendingApprovals: 0,
+  conflicts: 0,
+  inheritanceChains: 0,
+});
   const [filters, setFilters] = useState<DashboardFilters>({});
-  const [selectedAssignments, setSelectedAssignments] = useState<string[]>([]);
+  const [selectedAssignments, setSelectedAssignments] = useState<string>([]);
   const [activeTab, setActiveTab] = useState<'assignments' | 'bulk' | 'conflicts' | 'analytics' | 'inheritance'>('assignments');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showBulkWizard, setShowBulkWizard] = useState(false);
@@ -65,116 +62,104 @@ export const PolicyAssignmentDashboard: React.FC = () => {
         loadStats();
       ]);
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    } finally {
+  console.error('Error loading dashboard data:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [loadAssignments]);
   const loadAssignments = useCallback(async () => {
-    try {
-      const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({)
-        ...filters,
-        includeInherited: filters.includeInherited?.toString() || 'false',
-      }));
+  try {
+  const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({)
+  ...filters,
+  includeInherited: filters.includeInherited?.toString() || 'false',
+}));
       const data = await response.json();
       setAssignments(data.data?.assignments || []);
     } catch (error) {
-      console.error('Error loading assignments:', error);
-    }
-  }, [filters, setAssignments]);
+  console.error('Error loading assignments:', error);
+}, [filters, setAssignments]);
   const loadBulkAssignments = async () => {
     try {
       const response = await fetch('/api/policy-assignments/assignments/bulk');
       const data = await response.json();
       setBulkAssignments(data.data || []);
     } catch (error) {
-      console.error('Error loading bulk assignments:', error);
-    }
-  };
+  console.error('Error loading bulk assignments:', error);
+};
   const loadConflicts = async () => {
     try {
       const response = await fetch('/api/policy-assignments/conflicts');
       const data = await response.json();
       setConflicts(data.data || []);
     } catch (error) {
-      console.error('Error loading conflicts:', error);
-    }
-  };
+  console.error('Error loading conflicts:', error);
+};
   const loadStats = async () => {
-    try {
-      const response = await fetch('/api/policy-assignments/assignments/analytics');
-      const data = await response.json();
-      if (data.success) {
-        setStats({)
-          totalAssignments: data.data.totalAssignments,
-          activeAssignments: data.data.assignmentsByStatus?.ACTIVE || 0,
-          pendingApprovals: data.data.assignmentsByStatus?.PENDING_APPROVAL || 0,
-          conflicts: data.data.conflictsDetected?.length || 0,
-          inheritanceChains: data.data.inheritanceChains?.length || 0,
-        });
-      }
+  try {
+  const response = await fetch('/api/policy-assignments/assignments/analytics');
+  const data = await response.json();
+  if (data.success) {
+  setStats({)
+  totalAssignments: data.data.totalAssignments,
+  activeAssignments: data.data.assignmentsByStatus?.ACTIVE || 0,
+  pendingApprovals: data.data.assignmentsByStatus?.PENDING_APPROVAL || 0,
+  conflicts: data.data.conflictsDetected?.length || 0,
+  inheritanceChains: data.data.inheritanceChains?.length || 0,
+});
     } catch (error) {
-      console.error('Error loading stats:', error);
-    }
-  };
+  console.error('Error loading stats:', error);
+};
   const handleCreateAssignment = async (assignmentData: Partial<PolicyAssignment>) => {
     try {
       const response = await fetch('/api/policy-assignments/assignments', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(assignmentData),
-      });
+        body: JSON.stringify(assignmentData);
+  });
       if (response.ok) {
         setShowCreateForm(false);
         await loadDashboardData();
-      }
     } catch (error) {
-      console.error('Error creating assignment:', error);
-    }
-  };
+  console.error('Error creating assignment:', error);
+};
   const handleBulkAssignment = async (bulkData: unknown) => {
     try {
       const response = await fetch('/api/policy-assignments/assignments/bulk', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bulkData),
-      });
+        body: JSON.stringify(bulkData);
+  });
       if (response.ok) {
         setShowBulkWizard(false);
         await loadDashboardData();
-      }
     } catch (error) {
-      console.error('Error creating bulk assignment:', error);
-    }
-  };
+  console.error('Error creating bulk assignment:', error);
+};
   const handleRevokeAssignment = async (assignmentId: string, reason: string) => {
     try {
       const response = await fetch(`/api/policy-assignments/assignments/${assignmentId}`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
       if (response.ok) {
         await loadDashboardData();
-      }
     } catch (error) {
-      console.error('Error revoking assignment:', error);
-    }
-  };
+  console.error('Error revoking assignment:', error);
+};
   const handleBulkRevoke = async () => {
-    if (selectedAssignments.length === 0) return;
-    const reason = prompt('Enter reason for bulk revocation:');
-    if (!reason) return;
-    try {
-      await Promise.all()
-        selectedAssignments.map(id => handleRevokeAssignment(id, reason))
-      );
-      setSelectedAssignments([]);
-    } catch (error) {
-      console.error('Error bulk revoking assignments:', error);
-    }
-  };
-  const renderStatsCards = () => (;)
+  if (selectedAssignments.length === 0) return;
+  const reason = prompt('Enter reason for bulk revocation:');
+  if (!reason) return;
+  try {
+  await Promise.all()
+  selectedAssignments.map(id => handleRevokeAssignment(id, reason))
+  );
+  setSelectedAssignments([]);
+} catch (error) {
+  console.error('Error bulk revoking assignments:', error);
+};
+  const renderStatsCards = () => (;);
     <div className="stats-grid">
       <div className="stat-card">
         <div className="stat-value">{stats.totalAssignments}</div>
@@ -198,7 +183,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-  const renderFilters = () => (;)
+  const renderFilters = () => (;);
     <div className="dashboard-filters">
       <div className="filter-group">
         <label>Target Type:</label>
@@ -262,7 +247,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-  const renderAssignmentsList = () => (;)
+  const renderAssignmentsList = () => (;);
     <div className="assignments-section">
       <div className="section-header">
         <h3>Policy Assignments</h3>
@@ -293,7 +278,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
                       setSelectedAssignments(assignments.map(a => a.assignmentId));
                     } else {
                       setSelectedAssignments([]);
-                    }
                   }}
                 />
               </th>
@@ -319,7 +303,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
                         setSelectedAssignments([...selectedAssignments, assignment.assignmentId]);
                       } else {
                         setSelectedAssignments(selectedAssignments.filter(id => id !== assignment.assignmentId));
-                      }
                     }}
                   />
                 </td>
@@ -365,7 +348,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-  const renderBulkAssignments = () => (;)
+  const renderBulkAssignments = () => (;);
     <div className="bulk-assignments-section">
       <h3>Bulk Assignments</h3>
       <div className="bulk-assignments-list">
@@ -401,7 +384,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-  return ()
+  return;
     <div className="policy-assignment-dashboard">
       <div className="dashboard-header">
         <h1>Policy Assignment Management</h1>

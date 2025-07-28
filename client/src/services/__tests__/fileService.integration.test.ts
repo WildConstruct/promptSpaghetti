@@ -12,75 +12,58 @@ class MockHttpClient implements HttpClient {
   public requestLog: Array<{ url: string; options?: RequestInit }> = [];
   setResponse(url: string, response: unknown): void {
     this.responses.set(url, response);
-  }
   setFailure(url: string): void {
     this.shouldFail.add(url);
-  }
   async request<T>(url: string, options?: RequestInit): Promise<T> {
     this.requestLog.push({ url, options });
     if (this.shouldFail.has(url)) {
       throw new Error(`Network error for ${url}`);}
-    }
     if (this.responses.has(url)) {
       return this.responses.get(url);
-    }
     // Default success response
     return { success: true, message: 'Operation completed' } as T;
-  }
   clearLog(): void {
     this.requestLog = [];
-  }
   getLastRequest(): { url: string; options?: RequestInit } | undefined {
     return this.requestLog[this.requestLog.length - 1];
-  }
-}
 class MockAuthProvider implements AuthProvider {
   private token: string | null = null;
   setToken(token: string | null): void {
     this.token = token;
-  }
   getToken(): string | null {
     return this.token;
-  }
-}
 class MockLogger implements Logger {
   public logs: Array<{ level: string; message: string; context?: Record<string, unknown> }> = [];
   error(message: string, context?: Record<string, unknown>): void {
     this.logs.push({ level: 'error', message, context });
-  }
   info(message: string, context?: Record<string, unknown>): void {
     this.logs.push({ level: 'info', message, context });
-  }
   warn(message: string, context?: Record<string, unknown>): void {
     this.logs.push({ level: 'warn', message, context });
-  }
   clearLogs(): void {
     this.logs = [];
-  }
   getLastLog(): { level: string; message: string; context?: Record<string, unknown> } | undefined {
-    return this.logs[this.logs.length - 1];
-  }
-}
-describe('FileService Integration Tests', () => {
+  return this.logs[this.logs.length - 1];
+  describe('FileService Integration Tests', () => {
   let fileService: FileService;
   let mockHttpClient: MockHttpClient;
   let mockAuthProvider: MockAuthProvider;
   let mockLogger: MockLogger;
   let config: FileServiceConfig;
   beforeEach(() => {
-    mockHttpClient = new MockHttpClient();
-    mockAuthProvider = new MockAuthProvider();
-    mockLogger = new MockLogger();
-    config = {
-      baseUrl: 'https://api.example.com',
-      enableMockFallback: true,
-    };
+  mockHttpClient = new MockHttpClient();
+  mockAuthProvider = new MockAuthProvider();
+  mockLogger = new MockLogger();
+  config = {
+  baseUrl: 'https://api.example.com',
+  enableMockFallback: true,
+};
     fileService = new FileService({)
-      httpClient: mockHttpClient,
-      authProvider: mockAuthProvider,
-      logger: mockLogger,
-      config
-    });
+  httpClient: mockHttpClient,
+  authProvider: mockAuthProvider,
+  logger: mockLogger,
+  config
+});
     // Set up default auth token
     mockAuthProvider.setToken('test-token-123');
   });
@@ -93,9 +76,9 @@ describe('FileService Integration Tests', () => {
       await fileService.listDirectory('/');
       const lastRequest = mockHttpClient.getLastRequest();
       expect(lastRequest?.options?.headers).toEqual({)
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer test-token-123'
-      });
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer test-token-123',
+});
     });
     it('should handle missing auth token gracefully', async () => {
       mockAuthProvider.setToken(null);
@@ -106,18 +89,18 @@ describe('FileService Integration Tests', () => {
       await fileService.listDirectory('/');
       const lastRequest = mockHttpClient.getLastRequest();
       expect(lastRequest?.options?.headers).toEqual({)
-        'Content-Type': 'application/json',
-        'Authorization': ''
-      });
+  'Content-Type': 'application/json',
+  'Authorization': '',
+});
     });
     it('should update auth token dynamically', async () => {
-      // First request with initial token
-      mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', []);
-      await fileService.listDirectory('/');
-      let lastRequest = mockHttpClient.getLastRequest();
-      expect(lastRequest?.options?.headers).toMatchObject({)
-        'Authorization': 'Bearer test-token-123'
-      });
+  // First request with initial token
+  mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', []);
+  await fileService.listDirectory('/');
+  let lastRequest = mockHttpClient.getLastRequest();
+  expect(lastRequest?.options?.headers).toMatchObject({)
+  'Authorization': 'Bearer test-token-123',
+});
       // Update token
       mockAuthProvider.setToken('new-token-456');
       mockHttpClient.clearLog();
@@ -125,23 +108,23 @@ describe('FileService Integration Tests', () => {
       await fileService.listDirectory('/');
       lastRequest = mockHttpClient.getLastRequest();
       expect(lastRequest?.options?.headers).toMatchObject({)
-        'Authorization': 'Bearer new-token-456'
-      });
+  'Authorization': 'Bearer new-token-456',
+});
     });
   });
   describe('Error Handling and Logging Integration', () => {
-    it('should log errors and provide fallback when API fails', async () => {
-      mockHttpClient.setFailure('https://api.example.com/api/files/list?path=%2F');
-      const result = await fileService.listDirectory('/');
-      // Should log the error
-      const lastLog = mockLogger.getLastLog();
-      expect(lastLog?.level).toBe('error');
-      expect(lastLog?.message).toBe('Failed to list directory');
-      expect(lastLog?.context).toMatchObject({)
-        error: 'Network error for https://api.example.com/api/files/list?path=%2F',
-        path: '/',
-        timestamp: expect.any(String),
-      });
+  it('should log errors and provide fallback when API fails', async () => {
+  mockHttpClient.setFailure('https://api.example.com/api/files/list?path=%2F');
+  const result = await fileService.listDirectory('/');
+  // Should log the error
+  const lastLog = mockLogger.getLastLog();
+  expect(lastLog?.level).toBe('error');
+  expect(lastLog?.message).toBe('Failed to list directory');
+  expect(lastLog?.context).toMatchObject({)
+  error: 'Network error for https://api.example.com/api/files/list?path=%2F',
+  path: '/',
+  timestamp: expect.any(String),
+});
       // Should return mock data as fallback
       expect(result).toBeInstanceOf(Array);
       expect(result.length).toBeGreaterThan(0);
@@ -149,7 +132,7 @@ describe('FileService Integration Tests', () => {
     it('should throw errors when mock fallback is disabled', async () => {
       // Create service with mock fallback disabled
       const serviceNoFallback = new FileService({)
-        httpClient: mockHttpClient,
+  httpClient: mockHttpClient,
         authProvider: mockAuthProvider,
         logger: mockLogger,
         config: { ...config, enableMockFallback: false }
@@ -162,10 +145,10 @@ describe('FileService Integration Tests', () => {
       expect(lastLog?.message).toBe('Failed to list directory');
     });
     it('should log all file operations with context', async () => {
-      mockHttpClient.setResponse('https://api.example.com/api/files/move', {
-        success: true,
-        message: 'File moved successfully',
-      });
+  mockHttpClient.setResponse('https://api.example.com/api/files/move', {,
+  success: true,
+  message: 'File moved successfully',
+});
       await fileService.moveFile('/source.txt', '/target.txt');
       const logs = mockLogger.logs.filter(log => log.level === 'info' || log.level === 'error');
       // Should not log successful operations by default (only errors)
@@ -187,9 +170,9 @@ describe('FileService Integration Tests', () => {
       expect(lastRequest?.url).toBe('https://api.example.com/api/files/move');
       expect(lastRequest?.options?.method).toBe('POST');
       expect(lastRequest?.options?.body).toBe(JSON.stringify({)
-        sourcePath: '/old/file.txt',
-        targetPath: '/new/file.txt',
-      }));
+  sourcePath: '/old/file.txt',
+  targetPath: '/new/file.txt',
+}));
     });
     it('should handle file upload with FormData', async () => {
       const mockFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
@@ -199,45 +182,46 @@ describe('FileService Integration Tests', () => {
         data: { fileName: 'test.txt', size: 12 }
       };
       // Mock fetch for upload since it doesn't use the httpClient
-      global.fetch = jest.fn<unknown[], unknown>().mockResolvedValue({)
-        ok: true,
-        json: ( as unknown as unknown) => Promise.resolve(mockResponse),
-      });
+      global.fetch = jest.fn<unknown, unknown>().mockResolvedValue({)
+  ok: true,
+  json: ( as unknown as unknown) => Promise.resolve(mockResponse),
+});
       const result = await fileService.uploadFile('/uploads', mockFile);
       expect(result).toEqual(mockResponse);
       expect(fetch).toHaveBeenCalledWith()
         'https://api.example.com/api/files/upload',
         expect.objectContaining({)
-          method: 'POST',
-          headers: {,
-            'Authorization': 'Bearer test-token-123'
-          },
-          body: expect.any(FormData),
-        })
+  method: 'POST',
+  headers: {,
+  'Authorization': 'Bearer test-token-123',
+},
+  body: expect.any(FormData);
+  }
       );
     });
     it('should handle batch operations efficiently', async () => {
       const paths = ['/file1.txt', '/file2.txt', '/file3.txt'];
       const mockResponse = paths.map(path => ({)
-        success: true,
-        message: `Delete operation completed for ${path}`,}
-        data: { path, operation: 'delete' }
+  success: true,
+        message: `Delete operation completed for ${path}`}
+},
+  data: { path, operation: 'delete' }
       }));
       mockHttpClient.setResponse('https://api.example.com/api/files/batch', mockResponse);
       const result = await fileService.batchOperation('delete', paths);
       expect(result).toEqual(mockResponse);
       const lastRequest = mockHttpClient.getLastRequest();
       expect(JSON.parse(lastRequest?.options?.body as string)).toEqual({)
-        operation: 'delete',
-        paths,
-        targetPath: undefined,
-      });
+  operation: 'delete',
+  paths,
+  targetPath: undefined,
+});
     });
   });
   describe('Configuration and Environment Integration', () => {
     it('should use different base URLs based on configuration', async () => {
       const devService = new FileService({)
-        httpClient: mockHttpClient,
+  httpClient: mockHttpClient,
         authProvider: mockAuthProvider,
         logger: mockLogger,
         config: { baseUrl: 'https://dev-api.example.com', enableMockFallback: true }
@@ -249,7 +233,7 @@ describe('FileService Integration Tests', () => {
     });
     it('should handle different mock fallback configurations', async () => {
       const noFallbackService = new FileService({)
-        httpClient: mockHttpClient,
+  httpClient: mockHttpClient,
         authProvider: mockAuthProvider,
         logger: mockLogger,
         config: { baseUrl: 'https://api.example.com', enableMockFallback: false }
@@ -267,8 +251,9 @@ describe('FileService Integration Tests', () => {
       const paths = ['/path1', '/path2', '/path3'];
       // Set up responses for all paths
       paths.forEach(path => {)
-        mockHttpClient.setResponse()
-          `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`,}
+  mockHttpClient.setResponse()
+          `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`}
+}
           [{ id: path, name: path, type: 'folder', path, lastModified: new Date(), createdAt: new Date(), tags: [] }]
         );
       });
@@ -288,7 +273,8 @@ describe('FileService Integration Tests', () => {
       // Create delayed responses
       paths.forEach((path, index) => {
         mockHttpClient.setResponse()
-          `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`,}
+          `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`}
+}
           new Promise(resolve => )
             setTimeout(() => resolve([{ )
               id: path, 
@@ -297,8 +283,8 @@ describe('FileService Integration Tests', () => {
               path, 
               lastModified: new Date(), 
               createdAt: new Date(), 
-              tags: [] ,
-            }]), delays[index])
+              tags: [] ;
+  }]), delays[index])
         );
       });
       const startTime = Date.now();
@@ -330,12 +316,12 @@ describe('FileService Integration Tests', () => {
       expect(mockLogger.logs).toHaveLength(0); // No errors
     });
     it('should handle malformed responses gracefully', async () => {
-      mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', 'invalid-json');
-      const result = await fileService.listDirectory('/');
-      // Should fall back to mock data
-      expect(result).toBeInstanceOf(Array);
-      expect(mockLogger.getLastLog()?.level).toBe('error');
-    });
+  mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', 'invalid-json');
+  const result = await fileService.listDirectory('/');
+  // Should fall back to mock data
+  expect(result).toBeInstanceOf(Array);
+  expect(mockLogger.getLastLog()?.level).toBe('error');
+});
   });
   describe('Real-world Workflow Integration', () => {
     it('should handle complete file management workflow', async () => {

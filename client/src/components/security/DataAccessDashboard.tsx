@@ -5,96 +5,92 @@ import './DataAccessDashboard.css';
 
 // Types
 interface DataAccessGrant {
-  id: string;
+  id: string;,
   resourceId: string;
-  resourceType: string;
-  operations: string[];
-  classification: string;
+  resourceType: string;,
+  operations: string;
+  classification: string;,
   grantedBy: string;
-  grantedAt: Date;
+  grantedAt: Date;,
   expiresAt: Date;
-  reason: string;
-  restrictions: AccessRestriction[];
-}
+  reason: string;,
+  restrictions: AccessRestriction;
 interface AccessRestriction {
-  type: string;
+  type: string;,
   value: string;
   description: string;
-}
 interface AccessHistoryEvent {
-  id: string;
+  id: string;,
   userId: string;
-  resourceId: string;
+  resourceId: string;,
   operation: string;
-  allowed: boolean;
+  allowed: boolean;,
   reason: string;
-  classification: string;
+  classification: string;,
   accessLevel: string;
-  timestamp: Date;
+  timestamp: Date;,
   riskScore: number;
-}
 interface AccessRequest {
-  resourceId: string;
+  resourceId: string;,
   resourceType: string;
-  operation: string;
+  operation: string;,
   reason: string;
   expiresAt?: Date;
-}
 
 // interface AccessPermissions { // Commented out unused interface
 //   allowed: boolean;
 //   reason: string;
 //   classification: string;
 //   accessLevel: string;
-//   requiredPermissions: string[];
-//   actualPermissions: string[];
-//   restrictions: AccessRestriction[];
+//   requiredPermissions: string;
+//   actualPermissions: string;
+//   restrictions: AccessRestriction;
 //   auditId: string;
+
 // }
 interface DataAccessDashboardProps {
   userId: string;
   apiBaseUrl?: string;
-}
-const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
+  const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({,)
   userId,
   apiBaseUrl = '/api'
 }) => {
   // State
   const [activeTab, setActiveTab] = useState<'permissions' | 'requests' | 'history'>('permissions');
-  const [grants, setGrants] = useState<DataAccessGrant[]>([]);
-  const [history, setHistory] = useState<AccessHistoryEvent[]>([]);
+  const [grants, setGrants] = useState<DataAccessGrant>([]);
+  const [history, setHistory] = useState<AccessHistoryEvent>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Request form state
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [requestForm, setRequestForm] = useState<AccessRequest>({)
-    resourceId: '',
-    resourceType: '',
-    operation: 'READ',
-    reason: '',
-  });
+  resourceId: '',
+  resourceType: '',
+  operation: 'READ',
+  reason: '',
+});
   // Filters
   const [historyFilter, setHistoryFilter] = useState({)
-    operation: '',
-    allowed: '',
-    startDate: '',
-    endDate: '',
-  });
+  operation: '',
+  allowed: '',
+  startDate: '',
+  endDate: '',
+});
   // API helpers
   const apiRequest = useCallback(async (endpoint: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('authToken'); // Adjust based on your auth system;
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
+  }
       ...options,
       headers: {,
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,}
+        'Authorization': `Bearer ${token}`}
+}
         ...options.headers
-      }
     });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Request failed with status ${response.status}`);}
-    }
     return response.json();
   }, [apiBaseUrl]);
   // Load data
@@ -107,13 +103,12 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
       setError(`Failed to load access grants: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
-    }
   }, [userId, apiRequest]);
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams({)
-        limit: '50',
+  limit: '50',
         offset: '0',
         ...(historyFilter.operation && { operation: historyFilter.operation }),
         ...(historyFilter.allowed && { allowed: historyFilter.allowed }),
@@ -126,23 +121,22 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
       setError(`Failed to load access history: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
-    }
   }, [userId, historyFilter, apiRequest]);
   // Submit access request
   const submitAccessRequest = async () => {
-    try {
-      setLoading(true);
-      await apiRequest('/data-access/request', {)
-        method: 'POST',
-        body: JSON.stringify(requestForm),
-      });
+  try {
+  setLoading(true);
+  await apiRequest('/data-access/request', {)
+  method: 'POST',
+  body: JSON.stringify(requestForm),
+});
       setShowRequestForm(false);
       setRequestForm({)
-        resourceId: '',
-        resourceType: '',
-        operation: 'READ',
-        reason: '',
-      });
+  resourceId: '',
+  resourceType: '',
+  operation: 'READ',
+  reason: '',
+});
       // Reload grants to show any auto-approved requests
       await loadGrants();
       alert('Access request submitted successfully!');
@@ -150,7 +144,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
       setError(`Failed to submit access request: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
-    }
   };
   // Check specific resource access - commented out as unused
   //   //     if (!response.ok) throw new Error('Failed to check access');
@@ -167,32 +160,29 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
       loadGrants();
     } else if (activeTab === 'history') {
       loadHistory();
-    }
   }, [activeTab, historyFilter, loadGrants, loadHistory]);
   // Render helpers
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleString();
   };
   const getClassificationColor = (classification: string) => {
-    switch (classification) {
-    case 'PUBLIC': return '#28a745';
-    case 'INTERNAL': return '#ffc107';
-    case 'CONFIDENTIAL': return '#fd7e14';
-    case 'RESTRICTED': return '#dc3545';
-    default: return '#6c757d';
-    }
-  };
+  switch (classification) {
+  case 'PUBLIC': return '#28a745';
+  case 'INTERNAL': return '#ffc107';
+  case 'CONFIDENTIAL': return '#fd7e14';
+  case 'RESTRICTED': return '#dc3545';
+  default: return '#6c757d';
+};
   const getAccessLevelIcon = (level: string) => {
-    switch (level) {
-    case 'GRANTED': return '✅';
-    case 'DENIED': return '❌';
-    case 'PENDING': return '⏳';
-    case 'EXPIRED': return '⏰';
-    default: return '❓';
-    }
-  };
+  switch (level) {
+  case 'GRANTED': return '✅';
+  case 'DENIED': return '❌';
+  case 'PENDING': return '⏳';
+  case 'EXPIRED': return '⏰';
+  default: return '❓';
+};
   // Render current grants
-  const renderGrantsTab = () => (;)
+  const renderGrantsTab = () => (;);
     <div className="grants-tab">
       <div className="tab-header">
         <h3>Your Access Permissions</h3>
@@ -274,7 +264,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
     </div>
   );
   // Render access history
-  const renderHistoryTab = () => (;)
+  const renderHistoryTab = () => (;);
     <div className="history-tab">
       <div className="tab-header">
         <h3>Access History</h3>
@@ -363,7 +353,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
   // Render request form modal
   const renderRequestForm = () => {
     if (!showRequestForm) return null;
-    return ()
+    return;
       <div className="modal-overlay">
         <div className="modal-content">
           <div className="modal-header">
@@ -433,9 +423,9 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
                 type="datetime-local"
                 value={requestForm.expiresAt ? new Date(requestForm.expiresAt).toISOString().slice(0, 16) : ''}
                 onChange={e => setRequestForm({)
-                  ...requestForm, 
-                  expiresAt: e.target.value ? new Date(e.target.value) : undefined,
-                })}
+  ...requestForm,
+  expiresAt: e.target.value ? new Date(e.target.value) : undefined,
+})}
               />
               <small>Leave empty for standard duration</small>
             </div>
@@ -460,7 +450,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
       </div>
     );
   };
-  return ()
+  return;
     <div className="data-access-dashboard">
       <div className="dashboard-header">
         <h2>Data Access Dashboard</h2>

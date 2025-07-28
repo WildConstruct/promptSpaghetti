@@ -26,80 +26,74 @@ const { Option } = Select;
 // Type Definitions
 // =============================================================================
 interface RecoveryPoint {
-  id: string;
+  id: string;,
   backup_type: 'scheduled' | 'transaction' | 'manual' | 'compliance' | 'incident';
-  recovery_point_timestamp: string;
+  recovery_point_timestamp: string;,
   backup_size_bytes: number;
-  included_tables: string[];
-  excluded_tables: string[];
+  included_tables: string;,
+  excluded_tables: string;
   recovery_context: {,
-    description: string;
-    triggered_by: string;
-    retention_class: string;
-  };
-  validation_status: 'not_validated' | 'valid' | 'corrupted' | 'partially_valid';
-  storage_info: {,
-    storage_provider: string;
-    location: string;
-    encryption_status: string;
-  };
-}
+  description: string;,
+  triggered_by: string;
+  retention_class: string;
+};
+  validation_status: 'not_validated' | 'valid' | 'corrupted' | 'partially_valid';,
+  storage_info: {;
+  storage_provider: string;,
+  location: string;
+  encryption_status: string;
+};
 interface RestoreRequest {
-  recovery_point_id: string;
+  recovery_point_id: string;,
   operation_type: 'selective_restore';
-  restore_scope: 'full_database' | 'table_level' | 'record_level' | 'schema_only' | 'data_only';
+  restore_scope: 'full_database' | 'table_level' | 'record_level' | 'schema_only' | 'data_only';,
   restore_strategy: 'replace' | 'merge' | 'append' | 'compare_first' | 'backup_first';
   target_database?: string;
   table_filters: {,
-    include_tables: string[];
-    exclude_tables: string[];
-    where_conditions: Record<string, string>;
-    limit_records?: number;
-  };
-  validation_level: 'none' | 'basic' | 'full' | 'business_rules' | 'compliance';
-  notification_config: {,
-    on_completion: boolean;
-    on_error: boolean;
-    notification_channels: string[];
-  };
-}
+  include_tables: string;,
+  exclude_tables: string;
+  where_conditions: Record<string, string>;
+  limit_records?: number;
+};
+  validation_level: 'none' | 'basic' | 'full' | 'business_rules' | 'compliance';,
+  notification_config: {;
+  on_completion: boolean;,
+  on_error: boolean;
+  notification_channels: string;
+};
 interface RestoreProgress {
-  request_id: string;
+  request_id: string;,
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
-  progress_percentage: number;
+  progress_percentage: number;,
   current_operation: string;
-  tables_processed: number;
+  tables_processed: number;,
   total_tables: number;
-  records_restored: number;
+  records_restored: number;,
   conflicts_resolved: number;
   started_at: string;
   estimated_completion?: string;
   errors: Array<{,
-    table: string;
-    error_type: string;
-    message: string;
-    severity: 'error' | 'warning';
-  }>;
-}
+  table: string;,
+  error_type: string;
+  message: string;,
+  severity: 'error' | 'warning';
+}>;
 interface SelectiveRestoreWidgetProps {
   onRestoreComplete?: (requestId: string) => void;
   onError?: (error: string) => void;
-}
-
-// =============================================================================
-// Main Component
-// =============================================================================
-
-export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
+  // =============================================================================
+  // Main Component
+  // =============================================================================
+  export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({,)
   onRestoreComplete,
   onError
 }) => {
   // State Management
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('configure');
-  const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint[]>([]);
-  const [availableTables, setAvailableTables] = useState<string[]>([]);
-  const [activeRestores, setActiveRestores] = useState<RestoreProgress[]>([]);
+  const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint>([]);
+  const [availableTables, setAvailableTables] = useState<string>([]);
+  const [activeRestores, setActiveRestores] = useState<RestoreProgress>([]);
   const [loading, setLoading] = useState(false);
   const [previewData, setPreviewData] = useState<unknown>(null);
   const loadRecoveryPoints = useCallback(async () => {
@@ -111,12 +105,10 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
         setRecoveryPoints(data.data);
       } else {
         onError?.(data.error || 'Failed to load recovery points');
-      }
     } catch {
       onError?.('Failed to load recovery points');
     } finally {
       setLoading(false);
-    }
   }, [onError]);
   const loadAvailableTables = useCallback(async (recoveryPointId: string) => {
     try {
@@ -124,22 +116,18 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
       const data = await response.json();
       if (data.success) {
         setAvailableTables(data.tables);
-      }
     } catch (error) {
-      console.error('Failed to load available tables:', error);
-    }
-  }, []);
+  console.error('Failed to load available tables:', error);
+}, []);
   const loadActiveRestores = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/backup/restore/active');
       const data = await response.json();
       if (data.success) {
         setActiveRestores(data.data);
-      }
     } catch (error) {
-      console.error('Failed to load active restores:', error);
-    }
-  }, []);
+  console.error('Failed to load active restores:', error);
+}, []);
   // Load initial data
   useEffect(() => {
     loadRecoveryPoints();
@@ -149,28 +137,27 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
   // Restore Configuration Handlers
   // =============================================================================
   const handleRecoveryPointChange = useCallback((recoveryPointId: string) => {
-    const point = recoveryPoints.find(p => p.id === recoveryPointId);
-    if (point) {
-      loadAvailableTables(recoveryPointId);
-      // Auto-populate table filters from recovery point
-      form.setFieldsValue({)
-        'table_filters.include_tables': point.included_tables,
-        'table_filters.exclude_tables': point.excluded_tables
-      });
-    }
+  const point = recoveryPoints.find(p => p.id === recoveryPointId);
+  if (point) {
+  loadAvailableTables(recoveryPointId);
+  // Auto-populate table filters from recovery point
+  form.setFieldsValue({)
+  'table_filters.include_tables': point.included_tables,
+  'table_filters.exclude_tables': point.excluded_tables,
+});
   }, [recoveryPoints, form, loadAvailableTables]);
   const generateRestorePreview = async () => {
     try {
       setLoading(true);
       const values = form.getFieldsValue();
       const response = await fetch('/api/admin/backup/restore/preview', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({),
-          recovery_point_id: values.recovery_point_id,
+        body: JSON.stringify({,)
+  recovery_point_id: values.recovery_point_id,
           table_filters: values.table_filters || {},
-          restore_scope: values.restore_scope,
-        })
+          restore_scope: values.restore_scope;
+  }
       });
       const data = await response.json();
       if (data.success) {
@@ -178,41 +165,38 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
         setActiveTab('preview');
       } else {
         onError?.(data.error || 'Failed to generate preview');
-      }
     } catch {
       onError?.('Failed to generate preview');
     } finally {
       setLoading(false);
-    }
   };
   const executeSelectiveRestore = async () => {
     try {
       setLoading(true);
       const values = form.getFieldsValue();
-      const restoreConfig: RestoreRequest = {
-        recovery_point_id: values.recovery_point_id,
+      const restoreConfig: RestoreRequest = {,
+  recovery_point_id: values.recovery_point_id,
         operation_type: 'selective_restore',
         restore_scope: values.restore_scope || 'table_level',
         restore_strategy: values.restore_strategy || 'backup_first',
         target_database: values.target_database,
         table_filters: {,
-          include_tables: values.table_filters?.include_tables || [],
+  include_tables: values.table_filters?.include_tables || [],
           exclude_tables: values.table_filters?.exclude_tables || [],
           where_conditions: values.table_filters?.where_conditions || {},
-          limit_records: values.table_filters?.limit_records,
-        },
-        validation_level: values.validation_level || 'business_rules',
+          limit_records: values.table_filters?.limit_records;
+  },
+  validation_level: values.validation_level || 'business_rules',
         notification_config: {,
-          on_completion: values.notification_config?.on_completion ?? true,
-          on_error: values.notification_config?.on_error ?? true,
-          notification_channels: values.notification_config?.notification_channels || ['email'],
-        }
-      };
+  on_completion: values.notification_config?.on_completion ?? true,
+  on_error: values.notification_config?.on_error ?? true,
+  notification_channels: values.notification_config?.notification_channels || ['email'],
+};
       const response = await fetch('/api/admin/backup/restore/execute', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(restoreConfig),
-      });
+        body: JSON.stringify(restoreConfig);
+  });
       const data = await response.json();
       if (data.success) {
         setActiveTab('monitor');
@@ -221,12 +205,10 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
         onRestoreComplete?.(data.request_id);
       } else {
         onError?.(data.error || 'Failed to start restore');
-      }
     } catch {
       onError?.('Failed to start restore operation');
     } finally {
       setLoading(false);
-    }
   };
   // =============================================================================
   // Progress Monitoring
@@ -236,22 +218,20 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
       await fetch(`/api/admin/backup/restore/${requestId}/cancel`, { method: 'POST' });}
       loadActiveRestores();
     } catch (error) {
-      console.error('Failed to cancel restore:', error);
-    }
-  };
+  console.error('Failed to cancel restore:', error);
+};
   const getRestoreStatusColor = (status: string) => {
-    switch (status) {
-    case 'completed': return 'green';
-    case 'failed': return 'red';
-    case 'in_progress': return 'blue';
-    case 'cancelled': return 'orange';
-    default: return 'default';
-    }
-  };
+  switch (status) {
+  case 'completed': return 'green';
+  case 'failed': return 'red';
+  case 'in_progress': return 'blue';
+  case 'cancelled': return 'orange';
+  default: return 'default';
+};
   // =============================================================================
   // Render Functions
   // =============================================================================
-  const renderConfigurationTab = () => (;)
+  const renderConfigurationTab = () => (;);
     <Card title="Selective Restore Configuration" extra={<DatabaseOutlined />}>
       <Form form={form} layout="vertical" onFinish={executeSelectiveRestore}>
         {/* Recovery Point Selection */}
@@ -377,7 +357,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
       </Form>
     </Card>
   );
-  const renderPreviewTab = () => (;)
+  const renderPreviewTab = () => (;);
     <Card title="Restore Preview" extra={<FilterOutlined />}>
       {previewData ? ()
         <div>
@@ -399,7 +379,6 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
                 dataIndex: 'potential_conflicts', 
                 key: 'conflicts',
                 render: (conflicts: number) => conflicts > 0 ? <Tag color="orange">{conflicts}</Tag> : <Tag color="green">None</Tag>
-              }
             ]}
             pagination={false}
             size="small"
@@ -413,7 +392,6 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
                     <li key={idx}>{warning}</li>
                   ))}
                 </ul>
-              }
               type="warning"
               showIcon
               style={{ marginTop: 16 }}
@@ -432,7 +410,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
       )}
     </Card>
   );
-  const renderMonitoringTab = () => (;)
+  const renderMonitoringTab = () => (;);
     <Card title="Active Restore Operations" extra={<HistoryOutlined />}>
       {activeRestores.length === 0 ? ()
         <div style={{ textAlign: 'center', padding: 32 }}>
@@ -452,7 +430,6 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
                     {restore.status.toUpperCase()}
                   </Tag>
                 </Space>
-              }
               extra={
                 restore.status === 'in_progress' && ()
                   <Button 
@@ -462,7 +439,6 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
                   >
                     Cancel
                   </Button>
-              }
             >
               <div>
                 <Progress 
@@ -499,7 +475,6 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
                             <li>... and {restore.errors.length - 3} more</li>
                           )}
                         </ul>
-                      }
                       type={restore.errors.some(e => e.severity === 'error') ? 'error' : 'warning'}
                       showIcon
                     />
@@ -520,7 +495,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({)
   // =============================================================================
   // Main Render
   // =============================================================================
-  return ()
+  return;
     <div className="selective-restore-widget">
       <Tabs activeKey={activeTab} onChange={setActiveTab}>
         <TabPane tab="Configure" key="configure">

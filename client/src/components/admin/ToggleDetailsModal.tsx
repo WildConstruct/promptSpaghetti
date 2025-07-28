@@ -24,53 +24,51 @@ import { UserPreviewTool } from './targeting/UserPreviewTool';
 import './targeting/UserPreviewTool.css';
 import './targeting/TargetingModalExtensions.css';
 interface ToggleDetailsModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  toggleId: string;
+  toggleId: string;,
   onEdit: (toggleId: string) => void;
-}
-interface ToggleDetails {
-  id: string;
+  interface ToggleDetails {
+  id: string;,
   key: string;
   name: string;
   description?: string;
-  type: string;
+  type: string;,
   value: unknown;
-  enabled: boolean;
+  enabled: boolean;,
   claudeImpact: string;
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
   version: number;
   createdBy?: string;
   updatedBy?: string;
   scopes: Array<{,
-    id: string;
-    rule: unknown;
-    priority: number;
-    createdAt: string;
-  }>;
+  id: string;,
+  rule: unknown;
+  priority: number;,
+  createdAt: string;
+}>;
   recentAudit: Array<{,
-    id: string;
-    action: string;
-    actorId?: string;
-    reason?: string;
-    createdAt: string;
-    isEmergency: boolean;
-  }>;
+  id: string;
+  action: string;
+  actorId?: string;
+  reason?: string;
+  createdAt: string;,
+  isEmergency: boolean;
+}>;
   dependencies: {,
-    dependencies: {,
-      requires: string[];
-      conflicts: string[];
-      suggests: string[];
-    };
+  dependencies: {,
+  requires: string;,
+  conflicts: string;
+  suggests: string;
+};
     dependents: {,
-      requiredBy: string[];
-      conflictsWith: string[];
-      suggestedBy: string[];
-    };
+  requiredBy: string;
+  conflictsWith: string;,
+  suggestedBy: string;
+};
     impactRadius: number;
   };
-}
 
 export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
   isOpen,
@@ -90,25 +88,22 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
     setError(null);
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
-      }
       const data = await response.json();
       setToggle(data);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to load toggle details');
-    } finally {
+  setError(error instanceof Error ? error.message : 'Failed to load toggle details');
+} finally {
       setLoading(false);
-    }
   }, [toggleId]);
   useEffect(() => {
     if (isOpen && toggleId) {
       fetchToggleDetails();
-    }
   }, [isOpen, toggleId, fetchToggleDetails]);
   const getClaudeImpactDisplay = (impact: string) => {
     switch (impact) {
@@ -124,12 +119,11 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
       return { color: 'red', icon: <AlertTriangle size={14} />, text: 'Hallucination Risk' };
     default:
       return { color: 'gray', icon: <Info size={14} />, text: impact };
-    }
   };
   const formatToggleValue = (toggle: ToggleDetails): JSX.Element => {
     switch (toggle.type) {
     case 'boolean':
-      return ()
+      return;
         <div className="toggle-value-display">
           <span className={`boolean-indicator ${toggle.value.enabled ? 'enabled' : 'disabled'}`}>}
             {toggle.value.enabled ? <CheckCircle size={16} /> : <XCircle size={16} />}
@@ -138,7 +132,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
         </div>
       );
     case 'percentage_rollout':
-      return ()
+      return;
         <div className="toggle-value-display">
           <div className="percentage-display">
             <div className="percentage-bar">
@@ -152,13 +146,12 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
         </div>
       );
     case 'multivariate':
-      return ()
+      return;
         <div className="toggle-value-display">
           <div className="variants-display">
             {toggle.value.variants?.map(()
               variant: { key?: string; value?: unknown; percentage?: number }, 
-              index: number,
-            ) => ()
+              index: number) => (),
               <div key={index} className="variant-item">
                 <span className="variant-key">{variant.key}</span>
                 <span className="variant-percentage">{variant.percentage}%</span>
@@ -169,12 +162,11 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
         </div>
       );
     default:
-      return ()
+      return;
         <div className="toggle-value-display">
           <code className="raw-value">{JSON.stringify(toggle.value, null, 2)}</code>
         </div>
       );
-    }
   };
   const formatAuditAction = (action: string) => {
     const actionMap: Record<string, { label: string; color: string; icon: JSX.Element }> = {
@@ -189,7 +181,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
     return actionMap[action] || { label: action, color: 'gray', icon: <Info size={14} /> };
   };
   if (!isOpen) return null;
-  return ()
+  return;
     <div className="modal-overlay">
       <div className="modal-content toggle-details-modal">
         <div className="modal-header">
@@ -297,7 +289,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                           <label>Claude Impact</label>
                           {(() => {
                             const claudeDisplay = getClaudeImpactDisplay(toggle.claudeImpact);
-                            return ()
+                            return;
                               <Badge color={claudeDisplay.color}>
                                 {claudeDisplay.icon}
                                 {claudeDisplay.text}
@@ -368,11 +360,11 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                       <h3>Raw Configuration</h3>
                       <code className="raw-config">
                         {JSON.stringify({)
-                          type: toggle.type,
-                          value: toggle.value,
-                          enabled: toggle.enabled,
-                          claudeImpact: toggle.claudeImpact,
-                        }, null, 2)}
+  type: toggle.type,
+  value: toggle.value,
+  enabled: toggle.enabled,
+  claudeImpact: toggle.claudeImpact,
+}, null, 2)}
                       </code>
                     </div>
                   </div>
@@ -385,7 +377,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                         <div className="audit-list">
                           {toggle.recentAudit.map((audit) => {
                             const actionDisplay = formatAuditAction(audit.action);
-                            return ()
+                            return;
                               <div key={audit.id} className="audit-item">
                                 <div className="audit-icon">
                                   {actionDisplay.icon}

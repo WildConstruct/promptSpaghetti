@@ -31,80 +31,76 @@ import {
 } from 'lucide-react';
 interface DataProtectionMetrics {
   retentionPolicies: {,
-    total: number;
-    active: number;
-    expired: number;
-    violations: number;
-  };
+  total: number;,
+  active: number;
+  expired: number;,
+  violations: number;
+};
   deletionWorkflows: {,
-    total: number;
-    running: number;
-    completed: number;
-    failed: number;
-    scheduled: number;
-  };
+  total: number;
+  running: number;,
+  completed: number;
+  failed: number;,
+  scheduled: number;
+};
   dataVolume: {,
-    totalSize: number;
-    archivedSize: number;
-    pendingDeletion: number;
-    recentlyDeleted: number;
-  };
+  totalSize: number;
+  archivedSize: number;,
+  pendingDeletion: number;
+  recentlyDeleted: number;
+};
   compliance: {,
-    gdprScore: number;
-    hipaaScore: number;
-    soxScore: number;
-    overallScore: number;
-    violations: number;
-    lastAudit: string;
-  };
-}
+  gdprScore: number;
+  hipaaScore: number;,
+  soxScore: number;
+  overallScore: number;,
+  violations: number;
+  lastAudit: string;
+};
 interface RetentionPolicy {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   dataType: string;
-  retentionPeriod: number;
+  retentionPeriod: number;,
   retentionUnit: 'days' | 'months' | 'years';
-  status: 'active' | 'inactive' | 'expired';
+  status: 'active' | 'inactive' | 'expired';,
   autoDelete: boolean;
-  complianceFrameworks: string[];
+  complianceFrameworks: string;,
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string;,
   nextExecution: string;
   affectedRecords: number;
-}
 interface DeletionWorkflow {
-  id: string;
+  id: string;,
   name: string;
-  status: 'running' | 'completed' | 'failed' | 'scheduled' | 'paused';
+  status: 'running' | 'completed' | 'failed' | 'scheduled' | 'paused';,
   progress: number;
   startedAt?: string;
   completedAt?: string;
-  recordsProcessed: number;
+  recordsProcessed: number;,
   recordsDeleted: number;
   recordsSkipped: number;
   estimatedCompletion?: string;
-  policyId: string;
-  errors: string[];
-}
+  policyId: string;,
+  errors: string;
 interface ComplianceViolation {
-  id: string;
+  id: string;,
   type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   description: string;
-  affectedRecords: number;
+  affectedRecords: number;,
   detectedAt: string;
-  status: 'open' | 'investigating' | 'resolved' | 'dismissed';
+  status: 'open' | 'investigating' | 'resolved' | 'dismissed';,
   framework: string;
   remediation?: string;
-}
 type DashboardTab = 'overview' | 'policies' | 'workflows' | 'compliance' | 'analytics' | 'audit';
 const DataProtectionDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const [metrics, setMetrics] = useState<DataProtectionMetrics | null>(null);
-  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy[]>([]);
-  const [deletionWorkflows, setDeletionWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [complianceViolations, setComplianceViolations] = useState<ComplianceViolation[]>([]);
+  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy>([]);
+  const [deletionWorkflows, setDeletionWorkflows] = useState<DeletionWorkflow>([]);
+  const [complianceViolations, setComplianceViolations] = useState<ComplianceViolation>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
@@ -117,9 +113,9 @@ const DataProtectionDashboard: React.FC = () => {
   const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
-    start: '',
-    end: '',
-  });
+  start: '',
+  end: '',
+});
   // Modal states
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_showCreatePolicy, _setShowCreatePolicy] = useState(false);
@@ -136,21 +132,20 @@ const DataProtectionDashboard: React.FC = () => {
       setError(null);
       const [metricsRes, policiesRes, workflowsRes, violationsRes] = await Promise.all([)
         fetch('/api/data-protection/metrics', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/policies', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/workflows', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/violations', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  }
       ]);
       if (!metricsRes.ok || !policiesRes.ok || !workflowsRes.ok || !violationsRes.ok) {
         throw new Error('Failed to fetch dashboard data');
-      }
       const [metricsData, policiesData, workflowsData, violationsData] = await Promise.all([)
         metricsRes.json(),
         policiesRes.json(),
@@ -163,10 +158,9 @@ const DataProtectionDashboard: React.FC = () => {
       setComplianceViolations(violationsData.violations || []);
       setLastRefresh(new Date());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+} finally {
       setLoading(false);
-    }
   }, []);
   useEffect(() => {
     fetchDashboardData();
@@ -182,7 +176,6 @@ const DataProtectionDashboard: React.FC = () => {
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
-    }
     return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
   const formatTimeAgo = (dateString: string): string => {
@@ -204,34 +197,32 @@ const DataProtectionDashboard: React.FC = () => {
     return 'text-red-600';
   };
   const getSeverityBadgeClass = (severity: string): string => {
-    switch (severity) {
-    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+  switch (severity) {
+  case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+  case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+  case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
+  default: return 'bg-gray-100 text-gray-800 border-gray-200';
+};
   const getStatusBadgeClass = (status: string): string => {
-    switch (status) {
-    case 'active':
-    case 'running':
-    case 'completed':
-      return 'bg-green-100 text-green-800';
-    case 'failed':
-    case 'expired':
-      return 'bg-red-100 text-red-800';
-    case 'scheduled':
-    case 'inactive':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'paused':
-      return 'bg-orange-100 text-orange-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'active':,
+  case 'running':,
+  case 'completed':,
+  return 'bg-green-100 text-green-800';
+  case 'failed':,
+  case 'expired':,
+  return 'bg-red-100 text-red-800';
+  case 'scheduled':,
+  case 'inactive':,
+  return 'bg-yellow-100 text-yellow-800';
+  case 'paused':,
+  return 'bg-orange-100 text-orange-800';
+  default:,
+  return 'bg-gray-100 text-gray-800';
+};
   if (loading && !metrics) {
-    return ()
+    return;
       <div className="flex items-center justify-center min-h-96">
         <div className="flex flex-col items-center space-y-4">
           <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
@@ -239,9 +230,8 @@ const DataProtectionDashboard: React.FC = () => {
         </div>
       </div>
     );
-  }
   if (error) {
-    return ()
+    return;
       <div className="flex items-center justify-center min-h-96">
         <div className="flex flex-col items-center space-y-4 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-red-500" />
@@ -257,8 +247,7 @@ const DataProtectionDashboard: React.FC = () => {
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="data-protection-dashboard space-y-6">
       {/* Dashboard Header */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -363,10 +352,10 @@ const DataProtectionDashboard: React.FC = () => {
                 key={key}
                 onClick={() => setActiveTab(key as DashboardTab)}
                 className={`${
-                  activeTab === key
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                } whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
+  activeTab === key
+  ? 'border-blue-500 text-blue-600 bg-blue-50'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+} whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>

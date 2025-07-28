@@ -16,42 +16,39 @@ import {
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 interface UserPreview {
-  id: string;
+  id: string;,
   email: string;
   name?: string;
-  userType: 'admin' | 'user' | 'beta_tester' | 'premium';
+  userType: 'admin' | 'user' | 'beta_tester' | 'premium';,
   subscriptionTier: 'free' | 'pro' | 'enterprise';
-  country: string;
+  country: string;,
   language: string;
-  registrationDate: string;
+  registrationDate: string;,
   lastLogin: string;
-  loginCount: number;
+  loginCount: number;,
   featureUsage: number;
   experimentGroup?: string;
   customAttributes: Record<string, unknown>;
   orgId?: string;
-}
-interface TogglePreview {
-  key: string;
+  interface TogglePreview {
+  key: string;,
   name: string;
-  enabled: boolean;
+  enabled: boolean;,
   value: Error;
   reason: string;
   segmentMatched?: string;
-}
-interface UserPreviewToolProps {
-  isOpen: boolean;
+  interface UserPreviewToolProps {
+  isOpen: boolean;,
   onClose: () => void;
   toggleId?: string;
-  rules?: Array<{
-    attribute: string;
-    operator: string;
-    value: Error;
-    logicalOperator?: 'AND' | 'OR';
-  }>;
-}
+  rules?: Array<{,
+  attribute: string;,
+  operator: string;
+  value: Error;
+  logicalOperator?: 'AND' | 'OR';
+}>;
 
-export const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
+export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
@@ -62,10 +59,11 @@ export const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
     try {
       // Mock implementation - replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      const mockUser: UserPreview = {
-        id: 'user_123',
-        email: query.includes('@') ? query : `${query}@example.com`,}
-        name: 'John Doe',
+      const mockUser: UserPreview = {,
+  id: 'user_123',
+        email: query.includes('@') ? query : `${query}@example.com`}
+},
+  name: 'John Doe',
         userType: 'beta_tester',
         subscriptionTier: 'pro',
         country: 'US',
@@ -76,64 +74,60 @@ export const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
         featureUsage: 89,
         experimentGroup: 'variant_a',
         customAttributes: {,
-          department: 'engineering',
-          seniority: 'senior',
-          team_size: 8,
-        },
-        orgId: 'org_456',
-      };
+  department: 'engineering',
+  seniority: 'senior',
+  team_size: 8,
+},
+  orgId: 'org_456';
+  };
       setSelectedUser(mockUser);
       await evaluateUserToggles(mockUser);
     } catch (error) {
-      console.error('Failed to search user:', error);
-    } finally {
+  console.error('Failed to search user:', error);
+} finally {
       setSearching(false);
-    }
   };
   const evaluateUserToggles = async (user: UserPreview) => {
-    setEvaluating(true);
-    try {
-      // Mock implementation - replace with actual API call
-      console.log('Evaluating toggles for user:', user.id);
-      await new Promise(resolve => setTimeout(resolve, 600));
-      const mockToggles: TogglePreview[] = [
+  setEvaluating(true);
+  try {
+  // Mock implementation - replace with actual API call
+  console.log('Evaluating toggles for user:', user.id);
+  await new Promise(resolve => setTimeout(resolve, 600));
+  const mockToggles: TogglePreview = [
+  {
+  key: 'new_ui_design',
+  name: 'New UI Design',
+  enabled: true,
+  value: true,
+  reason: 'User is in beta_tester segment',
+  segmentMatched: 'Beta Users',
+}
         {
-          key: 'new_ui_design',
-          name: 'New UI Design',
-          enabled: true,
-          value: true,
-          reason: 'User is in beta_tester segment',
-          segmentMatched: 'Beta Users',
-        },
+  key: 'advanced_features',
+  name: 'Advanced Features',
+  enabled: true,
+  value: true,
+  reason: 'User has pro subscription',
+  segmentMatched: 'Premium Users',
+}
         {
-          key: 'advanced_features',
-          name: 'Advanced Features',
-          enabled: true,
-          value: true,
-          reason: 'User has pro subscription',
-          segmentMatched: 'Premium Users',
-        },
+  key: 'experimental_ai',
+  name: 'Experimental AI Features',
+  enabled: false,
+  value: false,
+  reason: 'Feature disabled for user type',
+}
         {
-          key: 'experimental_ai',
-          name: 'Experimental AI Features',
-          enabled: false,
-          value: false,
-          reason: 'Feature disabled for user type',
-        },
-        {
-          key: 'claude_model_v2',
-          name: 'Claude Model V2',
-          enabled: true,
-          value: 'sonnet-4',
-          reason: 'Percentage rollout (user in 25%)',
-        }
-      ];
-      setUserToggles(mockToggles);
-    } catch (error) {
-      console.error('Failed to evaluate toggles:', error);
-    } finally {
+  key: 'claude_model_v2',
+  name: 'Claude Model V2',
+  enabled: true,
+  value: 'sonnet-4',
+  reason: 'Percentage rollout (user in 25%)'];
+  setUserToggles(mockToggles);
+} catch (error) {
+  console.error('Failed to evaluate toggles:', error);
+} finally {
       setEvaluating(false);
-    }
   };
   const refreshUserData = async () => {
     if (!selectedUser) return;
@@ -141,33 +135,30 @@ export const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
     try {
       await evaluateUserToggles(selectedUser);
     } catch (error) {
-      console.error('Failed to refresh user data:', error);
-    } finally {
+  console.error('Failed to refresh user data:', error);
+} finally {
       setLoading(false);
-    }
   };
   const formatAttributeValue = (value: Error): string => {
-    if (value === null || value === undefined) return 'N/A';
-    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-    if (typeof value === 'object') return JSON.stringify(value);
-    return String(value);
-  };
+  if (value === null || value === undefined) return 'N/A';
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+};
   const getUserTypeColor = (userType: string): string => {
-    switch (userType) {
-    case 'admin': return 'red';
-    case 'beta_tester': return 'purple';
-    case 'premium': return 'gold';
-    default: return 'blue';
-    }
-  };
+  switch (userType) {
+  case 'admin': return 'red';
+  case 'beta_tester': return 'purple';
+  case 'premium': return 'gold';
+  default: return 'blue';
+};
   const getSubscriptionColor = (tier: string): string => {
-    switch (tier) {
-    case 'enterprise': return 'purple';
-    case 'pro': return 'blue';
-    default: return 'gray';
-    }
-  };
-  return ()
+  switch (tier) {
+  case 'enterprise': return 'purple';
+  case 'pro': return 'blue';
+  default: return 'gray';
+};
+  return;
     <div className="modal-overlay">
       <div className="modal-content user-preview-modal">
         <div className="modal-header">

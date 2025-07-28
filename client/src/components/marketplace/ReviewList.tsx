@@ -4,27 +4,23 @@ import { StarRating } from './StarRating';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ReviewList.css';
 interface Review {
-  id: string;
+  id: string;,
   buyer_id: string;
-  buyer_name: string;
+  buyer_name: string;,
   stars: number;
   comment?: string;
-  created_at: string;
+  created_at: string;,
   helpful_count: number;
   verified_purchase: boolean;
-}
-interface ReviewListProps {
-  reviews: Review[];
+  interface ReviewListProps {
+  reviews: Review;,
   templateId: string;
   onReviewAdded?: () => void;
   className?: string;
-}
-interface NewReview {
-  stars: number;
+  interface NewReview {
+  stars: number;,
   comment: string;
-}
-
-export const ReviewList: React.FC<ReviewListProps> = ({)
+  export const ReviewList: React.FC<ReviewListProps> = ({,)
   reviews,
   templateId,
   onReviewAdded,
@@ -39,26 +35,24 @@ export const ReviewList: React.FC<ReviewListProps> = ({)
     if (newReview.stars < 1 || newReview.stars > 5) {
       setError('Please select a rating between 1 and 5 stars');
       return;
-    }
     if (newReview.comment.trim().length < 10) {
       setError('Please write a review with at least 10 characters');
       return;
-    }
     setSubmitting(true);
     setError(null);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/marketplace/reviews', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
-        },
-        body: JSON.stringify({),
-          template_id: templateId,
-          stars: newReview.stars,
-          comment: newReview.comment.trim(),
-        })
+  },
+  body: JSON.stringify({,)
+  template_id: templateId,
+  stars: newReview.stars,
+  comment: newReview.comment.trim(),
+}
       });
       if (response.ok) {
         setNewReview({ stars: 5, comment: '' });
@@ -67,35 +61,32 @@ export const ReviewList: React.FC<ReviewListProps> = ({)
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to submit review');
-      }
-    } catch (_err) { 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.debug('Review submission error:', _err);
-      setError('Failed to submit review');
-    } finally {
+    } catch (_err) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  console.debug('Review submission error:', _err);
+  setError('Failed to submit review');
+} finally {
       setSubmitting(false);
-    }
   };
   const sortedReviews = [...reviews].sort((a, b) => {
-    switch (sortBy) {
-    case 'newest':
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    case 'oldest':
-      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-    case 'highest':
-      return b.stars - a.stars;
-    case 'lowest':
-      return a.stars - b.stars;
-    default:
-      return 0;
-    }
-  });
+  switch (sortBy) {
+  case 'newest':,
+  return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  case 'oldest':,
+  return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  case 'highest':,
+  return b.stars - a.stars;
+  case 'lowest':,
+  return a.stars - b.stars;
+  default:,
+  return 0;
+});
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {)
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+  return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
   };
   const calculateAverageRating = () => {
     if (reviews.length === 0) return 0;
@@ -105,11 +96,11 @@ export const ReviewList: React.FC<ReviewListProps> = ({)
   const getRatingDistribution = () => {
     const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     reviews.forEach(review => {)
-      distribution[review.stars as keyof typeof distribution]++;
+  distribution[review.stars as keyof typeof distribution]++;
     });
     return distribution;
   };
-  return ()
+  return;
     <div className={`review-list ${className}`}>}
       {/* Review Summary */}
       <div className="review-summary">
@@ -138,7 +129,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({)
                 .reverse()
                 .map(([stars, count]) => {
                   const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
-                  return ()
+                  return;
                     <div key={stars} className="rating-bar">
                       <span className="bar-label">{stars}★</span>
                       <div className="bar-container">

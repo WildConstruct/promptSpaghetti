@@ -12,89 +12,85 @@ import { useAuth } from '../../hooks/useAuth';
 
 // TypeScript interfaces for API management data structures
 interface GlobalApiKeyStats {
-  totalKeys: number;
+  totalKeys: number;,
   activeKeys: number;
-  expiredKeys: number;
+  expiredKeys: number;,
   revokedKeys: number;
-  suspendedKeys: number;
+  suspendedKeys: number;,
   keysUsedLast24Hours: number;
-  keysUsedLast7Days: number;
+  keysUsedLast7Days: number;,
   keysUsedLast30Days: number;
   topScopes: Array<{,
-    scope: string;
-    count: number;
-    percentage: number;
-  }>;
-  averageKeyAge: number;
+  scope: string;,
+  count: number;
+  percentage: number;
+}>;
+  averageKeyAge: number;,
   keysByEnvironment: Record<string, number>;
-  apiCallsLast24Hours: number;
+  apiCallsLast24Hours: number;,
   apiCallsLast7Days: number;
-  totalApiCalls: number;
+  totalApiCalls: number;,
   averageCallsPerKey: number;
-  errorRate: number;
+  errorRate: number;,
   rateLimitViolations: number;
-}
 interface ApiKeyDetail {
-  keyId: string;
+  keyId: string;,
   userId: string;
-  userName: string;
+  userName: string;,
   userEmail: string;
-  keyPrefix: string;
+  keyPrefix: string;,
   name: string;
   description?: string;
-  scopes: string[];
+  scopes: string;,
   status: 'active' | 'revoked' | 'expired' | 'suspended';
   createdAt: Date;
   expiresAt?: Date;
   lastUsedAt?: Date;
   rateLimits: {,
-    requestsPerMinute: number;
-    requestsPerHour: number;
-    requestsPerDay: number;
-  };
-  ipWhitelist?: string[];
-  metadata: {,
-    createdBy: string;
-    environment: string;
-    rotationCount: number;
-    totalCalls: number;
-    lastMonth: number;
-    errorCount: number;
-    revokedBy?: string;
-    revokedAt?: Date;
-    revocationReason?: string;
-  };
-  recentActivity: Array<{,
-    timestamp: Date;
-    action: 'call' | 'error' | 'rate_limit' | 'creation' | 'rotation' | 'revocation';
-    details: string;
-    ipAddress?: string;
-    endpoint?: string;
-  }>;
-}
-interface UsageMetrics {
-  keyId: string;
-  callsLast1Hour: number;
-  callsLast24Hours: number;
-  callsLast7Days: number;
-  callsLast30Days: number;
-  errorRate: number;
-  averageResponseTime: number;
-  rateLimitHits: number;
-  topEndpoints: Array<{,
-    endpoint: string;
-    calls: number;
-    errorRate: number;
-  }>;
-}
-interface RateLimitConfiguration {
-  keyId: string;
-  requestsPerMinute: number;
+  requestsPerMinute: number;,
   requestsPerHour: number;
   requestsPerDay: number;
-  burstLimit: number;
+};
+  ipWhitelist?: string;
+  metadata: {,
+  createdBy: string;
+  environment: string;,
+  rotationCount: number;
+  totalCalls: number;,
+  lastMonth: number;
+  errorCount: number;
+  revokedBy?: string;
+  revokedAt?: Date;
+  revocationReason?: string;
+};
+  recentActivity: Array<{,
+  timestamp: Date;
+  action: 'call' | 'error' | 'rate_limit' | 'creation' | 'rotation' | 'revocation';,
+  details: string;
+  ipAddress?: string;
+  endpoint?: string;
+}>;
+interface UsageMetrics {
+  keyId: string;,
+  callsLast1Hour: number;
+  callsLast24Hours: number;,
+  callsLast7Days: number;
+  callsLast30Days: number;,
+  errorRate: number;
+  averageResponseTime: number;,
+  rateLimitHits: number;
+  topEndpoints: Array<{,
+  endpoint: string;,
+  calls: number;
+  errorRate: number;
+}>;
+interface RateLimitConfiguration {
+  keyId: string;,
+  requestsPerMinute: number;
+  requestsPerHour: number;,
+  requestsPerDay: number;
+  burstLimit: number;,
   windowSize: number;
-}
 
 export const ApiManagementDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -104,7 +100,7 @@ export const ApiManagementDashboard: React.FC = () => {
   // State for overview data
   const [globalStats, setGlobalStats] = useState<GlobalApiKeyStats | null>(null);
   // State for keys management
-  const [apiKeys, setApiKeys] = useState<ApiKeyDetail[]>([]);
+  const [apiKeys, setApiKeys] = useState<ApiKeyDetail>([]);
   const [selectedKey, setSelectedKey] = useState<ApiKeyDetail | null>(null);
   const [keyFilter, setKeyFilter] = useState<'all' | 'active' | 'expired' | 'revoked' | 'suspended'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -113,18 +109,18 @@ export const ApiManagementDashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
   // State for monitoring
   const [realTimeAlerts, setRealTimeAlerts] = useState<Array<{
-    id: string;
-    type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat';
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    message: string;
-    timestamp: Date;
-    keyId?: string;
-    resolved: boolean;
-  }>>([]);
+  id: string;,
+  type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
+  message: string;
+  timestamp: Date;
+  keyId?: string;
+  resolved: boolean;
+}>>([]);
   // State for configuration
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_rateLimitConfig, _setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
   // State for Epic 31 optimization integration
@@ -136,89 +132,76 @@ export const ApiManagementDashboard: React.FC = () => {
   const fetchGlobalStats = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/statistics', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch global statistics');
-      }
       const data = await response.json();
       setGlobalStats(data.globalStatistics);
     } catch (error) {
-      console.error('Error fetching global stats:', error);
-      setError('Failed to load global statistics');
-    }
-  }, []);
+  console.error('Error fetching global stats:', error);
+  setError('Failed to load global statistics');
+}, []);
   const fetchApiKeys = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/all', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch API keys');
-      }
       const data = await response.json();
       setApiKeys(data.apiKeys);
     } catch (error) {
-      console.error('Error fetching API keys:', error);
-      setError('Failed to load API keys');
-    } finally {
+  console.error('Error fetching API keys:', error);
+  setError('Failed to load API keys');
+} finally {
       setLoading(false);
-    }
   }, []);
   const fetchUsageMetrics = useCallback(async () => {
     try {
       const response = await fetch(`/api/auth/api-keys/admin/metrics?timeRange=${timeRange}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setUsageMetrics(data.metrics);
-      }
     } catch (error) {
-      console.error('Error fetching usage metrics:', error);
-    }
-  }, [timeRange]);
+  console.error('Error fetching usage metrics:', error);
+}, [timeRange]);
   const fetchRealTimeAlerts = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/alerts', {)
-        headers: {,
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setRealTimeAlerts(data.alerts);
-      }
     } catch (error) {
-      console.error('Error fetching alerts:', error);
-    }
-  }, []);
+  console.error('Error fetching alerts:', error);
+}, []);
   // Epic 31: Fetch API optimization insights
   const fetchOptimizationInsights = useCallback(async () => {
     setOptimizationLoading(true);
     try {
       const response = await fetch(`/admin/api-optimization/insights?timeWindow=${optimizationTimeRange}&focusAreas=performance,security,cost,reliability&includeBenchmarks=true`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        }
       });
       if (response.ok) {
         const data = await response.json();
         setOptimizationInsights(data.data);
       } else {
-        console.error('Failed to fetch optimization insights:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching optimization insights:', error);
-    } finally {
+  console.error('Failed to fetch optimization insights:', response.status);
+} catch (error) {
+  console.error('Error fetching optimization insights:', error);
+} finally {
       setOptimizationLoading(false);
-    }
   }, [optimizationTimeRange]);
   useEffect(() => {
     if (user && isAdmin) {
@@ -234,79 +217,72 @@ export const ApiManagementDashboard: React.FC = () => {
         // Only refresh optimization data occasionally since it's more expensive
         if (Math.random() < 0.1) { // 10% chance per update cycle
           fetchOptimizationInsights();
-        }
       }, 30000); // Update every 30 seconds
       return () => clearInterval(interval);
-    }
   }, [user, isAdmin, fetchGlobalStats, fetchApiKeys, fetchUsageMetrics, fetchRealTimeAlerts, fetchOptimizationInsights]);
   const adminRevokeKey = async (keyId: string, reason: string) => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/revoke', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ keyId, reason })
+  },
+  body: JSON.stringify({ keyId, reason })
       });
       if (!response.ok) {
         throw new Error('Failed to revoke API key');
-      }
       // Refresh data
       await fetchApiKeys();
       await fetchGlobalStats();
       setSelectedKey(null);
     } catch (error) {
-      console.error('Error revoking API key:', error);
-      setError('Failed to revoke API key');
-    }
-  };
+  console.error('Error revoking API key:', error);
+  setError('Failed to revoke API key');
+};
   const suspendKey = async (keyId: string, reason: string, duration?: string) => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/suspend', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        },
-        body: JSON.stringify({ keyId, reason, duration })
+  },
+  body: JSON.stringify({ keyId, reason, duration })
       });
       if (!response.ok) {
         throw new Error('Failed to suspend API key');
-      }
       await fetchApiKeys();
       await fetchGlobalStats();
     } catch (error) {
-      console.error('Error suspending API key:', error);
-      setError('Failed to suspend API key');
-    }
-  };
+  console.error('Error suspending API key:', error);
+  setError('Failed to suspend API key');
+};
   const handleUpdateRateLimits = async (keyId: string, limits: any) => {
     try {
       const response = await fetch(`/api/admin/api-keys/${keyId}/rate-limits`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(limits),
-      });
+        body: JSON.stringify(limits);
+  });
       if (!response.ok) {
         throw new Error('Failed to update rate limits');
-      }
       await fetchApiKeys();
     } catch (error) {
-      console.error('Error updating rate limits:', error);
-      setError('Failed to update rate limits');
-    }
-  };
-  const handleBulkOperation = async (operation: string, keyIds: string[]) => {
+  console.error('Error updating rate limits:', error);
+  setError('Failed to update rate limits');
+};
+  const handleBulkOperation = async (operation: string, keyIds: string) => {
     try {
       const response = await fetch(`/api/admin/api-keys/bulk/${operation}`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keyIds })
       });
       if (!response.ok) {
         throw new Error(`Failed to perform bulk ${operation}`);}
-      }
       await fetchApiKeys();
       await fetchGlobalStats();
       setSelectedKeys([]);
@@ -314,13 +290,11 @@ export const ApiManagementDashboard: React.FC = () => {
     } catch (error) {
       console.error(`Error performing bulk ${operation}:`, error);}
       setError(`Failed to perform bulk ${operation}`);}
-    }
   };
   const filteredKeys = useMemo(() => {
     let filtered = apiKeys;
     if (keyFilter !== 'all') {
       filtered = filtered.filter(key => key.status === keyFilter);
-    }
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(key =>)
@@ -329,28 +303,25 @@ export const ApiManagementDashboard: React.FC = () => {
         key.keyPrefix.toLowerCase().includes(query) ||
         key.scopes.some(scope => scope.toLowerCase().includes(query))
       );
-    }
     return filtered;
   }, [apiKeys, keyFilter, searchQuery]);
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    default: return 'bg-blue-100 text-blue-800 border-blue-200';
-    }
-  };
+  switch (severity) {
+  case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+  case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+  case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  default: return 'bg-blue-100 text-blue-800 border-blue-200';
+};
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'active': return 'bg-green-100 text-green-800';
-    case 'expired': return 'bg-yellow-100 text-yellow-800';
-    case 'revoked': return 'bg-red-100 text-red-800';
-    case 'suspended': return 'bg-orange-100 text-orange-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'active': return 'bg-green-100 text-green-800';
+  case 'expired': return 'bg-yellow-100 text-yellow-800';
+  case 'revoked': return 'bg-red-100 text-red-800';
+  case 'suspended': return 'bg-orange-100 text-orange-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   if (!isAdmin) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="text-6xl mb-4">🔒</div>
@@ -359,15 +330,13 @@ export const ApiManagementDashboard: React.FC = () => {
         </div>
       </div>
     );
-  }
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -410,10 +379,10 @@ export const ApiManagementDashboard: React.FC = () => {
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration')}
               className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                activeTab === tab.key
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.key
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
@@ -626,7 +595,6 @@ export const ApiManagementDashboard: React.FC = () => {
                             setSelectedKeys(filteredKeys.map(key => key.keyId));
                           } else {
                             setSelectedKeys([]);
-                          }
                         }}
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
@@ -660,7 +628,6 @@ export const ApiManagementDashboard: React.FC = () => {
                               setSelectedKeys([...selectedKeys, key.keyId]);
                             } else {
                               setSelectedKeys(selectedKeys.filter(id => id !== key.keyId));
-                            }
                           }}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
@@ -752,10 +719,10 @@ export const ApiManagementDashboard: React.FC = () => {
                     key={range}
                     onClick={() => setTimeRange(range)}
                     className={`px-3 py-1 text-sm rounded-md ${
-                      timeRange === range
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+  timeRange === range
+  ? 'bg-blue-100 text-blue-700'
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+}`}
                   >
                     {range}
                   </button>
@@ -764,8 +731,7 @@ export const ApiManagementDashboard: React.FC = () => {
             </div>
             {Object.keys(usageMetrics).length > 0 ? ()
               <div className="space-y-4">
-                {Object.entries(usageMetrics).map(([keyId, metrics]) => ()
-                  <div key={keyId} className="border-l-4 border-blue-500 pl-4">
+                {Object.entries(usageMetrics).map(([keyId, metrics]) => (<div key={keyId} className="border-l-4 border-blue-500 pl-4">)
                     <div className="text-sm font-medium text-gray-900">{keyId}</div>
                     <div className="text-sm text-gray-600">
                       Requests (24h): {metrics.callsLast24Hours.toLocaleString()} | 
@@ -791,12 +757,12 @@ export const ApiManagementDashboard: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Real-time Security Alerts</h3>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                realTimeAlerts.filter(alert => !alert.resolved).length === 0
-                  ? 'bg-green-100 text-green-800'
-                  : realTimeAlerts.some(alert => alert.severity === 'critical' && !alert.resolved)
-                    ? 'bg-red-100 text-red-800'
-                    : 'bg-yellow-100 text-yellow-800'
-              }`}>
+  realTimeAlerts.filter(alert => !alert.resolved).length === 0
+  ? 'bg-green-100 text-green-800'
+  : realTimeAlerts.some(alert => alert.severity === 'critical' && !alert.resolved),
+  ? 'bg-red-100 text-red-800'
+  : 'bg-yellow-100 text-yellow-800',
+}`}>
                 {realTimeAlerts.filter(alert => !alert.resolved).length} Active
               </span>
             </div>
@@ -883,10 +849,10 @@ export const ApiManagementDashboard: React.FC = () => {
                         fetchOptimizationInsights();
                       }}
                       className={`px-3 py-1 text-sm rounded-md ${
-                        optimizationTimeRange === days
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
+  optimizationTimeRange === days
+  ? 'bg-blue-100 text-blue-700'
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+}`}
                     >
                       {days} days
                     </button>
@@ -958,29 +924,29 @@ export const ApiManagementDashboard: React.FC = () => {
                         <div
                           key={(rec as any)?.id || index}
                           className={`border rounded-lg p-4 ${
-                            (rec as any)?.severity === 'critical' ? 'border-red-200 bg-red-50' :
-                            (rec as any)?.severity === 'high' ? 'border-orange-200 bg-orange-50' :
-                            (rec as any)?.severity === 'medium' ? 'border-yellow-200 bg-yellow-50' :
-                            'border-blue-200 bg-blue-50'
-                          }`}
+  (rec as any)?.severity === 'critical' ? 'border-red-200 bg-red-50' :,
+  (rec as any)?.severity === 'high' ? 'border-orange-200 bg-orange-50' :,
+  (rec as any)?.severity === 'medium' ? 'border-yellow-200 bg-yellow-50' :,
+  'border-blue-200 bg-blue-50'
+}`}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                  (rec as any)?.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                                  (rec as any)?.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                                  (rec as any)?.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-blue-100 text-blue-800'
-                                }`}>
+  (rec as any)?.severity === 'critical' ? 'bg-red-100 text-red-800' :,
+  (rec as any)?.severity === 'high' ? 'bg-orange-100 text-orange-800' :,
+  (rec as any)?.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-blue-100 text-blue-800'
+}`}>
                                   {(rec as any)?.severity?.toUpperCase()}
                                 </span>
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                  (rec as any)?.type === 'performance' ? 'bg-green-100 text-green-800' :
-                                  (rec as any)?.type === 'security' ? 'bg-purple-100 text-purple-800' :
-                                  (rec as any)?.type === 'cost' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-gray-100 text-gray-800'
-                                }`}>
+  (rec as any)?.type === 'performance' ? 'bg-green-100 text-green-800' :,
+  (rec as any)?.type === 'security' ? 'bg-purple-100 text-purple-800' :,
+  (rec as any)?.type === 'cost' ? 'bg-blue-100 text-blue-800' :,
+  'bg-gray-100 text-gray-800'
+}`}>
                                   {(rec as any)?.type?.toUpperCase()}
                                 </span>
                                 <span className="text-xs text-gray-500">
@@ -1049,10 +1015,10 @@ export const ApiManagementDashboard: React.FC = () => {
                       <h5 className="font-medium text-gray-900 mb-2">Performance Trend</h5>
                       <div className="flex items-center">
                         <span className={`text-2xl ${
-                          optimizationInsights.trends.performanceTrend === 'improving' ? 'text-green-500' :
-                          optimizationInsights.trends.performanceTrend === 'declining' ? 'text-red-500' :
-                          'text-gray-500'
-                        }`}>
+  optimizationInsights.trends.performanceTrend === 'improving' ? 'text-green-500' :,
+  optimizationInsights.trends.performanceTrend === 'declining' ? 'text-red-500' :,
+  'text-gray-500'
+}`}>
                           {optimizationInsights.trends.performanceTrend === 'improving' ? '📈' :
                            optimizationInsights.trends.performanceTrend === 'declining' ? '📉' : '➡️'}
                         </span>
@@ -1065,10 +1031,10 @@ export const ApiManagementDashboard: React.FC = () => {
                       <h5 className="font-medium text-gray-900 mb-2">Usage Trend</h5>
                       <div className="flex items-center">
                         <span className={`text-2xl ${
-                          optimizationInsights.trends.usageTrend === 'increasing' ? 'text-blue-500' :
-                          optimizationInsights.trends.usageTrend === 'decreasing' ? 'text-orange-500' :
-                          'text-gray-500'
-                        }`}>
+  optimizationInsights.trends.usageTrend === 'increasing' ? 'text-blue-500' :,
+  optimizationInsights.trends.usageTrend === 'decreasing' ? 'text-orange-500' :,
+  'text-gray-500'
+}`}>
                           {optimizationInsights.trends.usageTrend === 'increasing' ? '📊' :
                            optimizationInsights.trends.usageTrend === 'decreasing' ? '📉' : '➡️'}
                         </span>
@@ -1081,10 +1047,10 @@ export const ApiManagementDashboard: React.FC = () => {
                       <h5 className="font-medium text-gray-900 mb-2">Error Trend</h5>
                       <div className="flex items-center">
                         <span className={`text-2xl ${
-                          optimizationInsights.trends.errorTrend === 'improving' ? 'text-green-500' :
-                          optimizationInsights.trends.errorTrend === 'worsening' ? 'text-red-500' :
-                          'text-gray-500'
-                        }`}>
+  optimizationInsights.trends.errorTrend === 'improving' ? 'text-green-500' :,
+  optimizationInsights.trends.errorTrend === 'worsening' ? 'text-red-500' :,
+  'text-gray-500'
+}`}>
                           {optimizationInsights.trends.errorTrend === 'improving' ? '✅' :
                            optimizationInsights.trends.errorTrend === 'worsening' ? '❌' : '➡️'}
                         </span>
@@ -1328,10 +1294,10 @@ export const ApiManagementDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span className="text-gray-500">{activity.timestamp.toLocaleString()}</span>
                             <span className={`font-medium ${
-                              activity.action === 'error' ? 'text-red-600' :
-                                activity.action === 'rate_limit' ? 'text-orange-600' :
-                                  'text-blue-600'
-                            }`}>
+  activity.action === 'error' ? 'text-red-600' :,
+  activity.action === 'rate_limit' ? 'text-orange-600' :,
+  'text-blue-600'
+}`}>
                               {activity.action.toUpperCase()}
                             </span>
                           </div>

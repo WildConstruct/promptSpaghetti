@@ -15,44 +15,40 @@ import {
 } from '../../types/PolicyAssignmentTypes';
 import './InheritanceVisualization.css';
 interface InheritanceVisualizationProps {
-  assignments: PolicyAssignment[];
-}
-interface InheritanceNode {
-  id: string;
+  assignments: PolicyAssignment;
+  interface InheritanceNode {
+  id: string;,
   assignmentId: string;
-  targetType: AssignmentTargetType;
+  targetType: AssignmentTargetType;,
   targetId: string;
-  targetDisplayName: string;
+  targetDisplayName: string;,
   policyType: string;
-  inheritanceType: InheritanceType;
+  inheritanceType: InheritanceType;,
   inheritanceDepth: number;
-  level: number;
-  children: InheritanceNode[];
+  level: number;,
+  children: InheritanceNode;
   parent?: InheritanceNode;
-  x: number;
+  x: number;,
   y: number;
-}
-interface VisualizationOptions {
-  showInactive: boolean;
+  interface VisualizationOptions {
+  showInactive: boolean;,
   filterByPolicyType: string;
-  filterByTargetType: AssignmentTargetType | '';
+  filterByTargetType: AssignmentTargetType | '';,
   maxDepth: number;
   layout: 'tree' | 'radial' | 'force';
-}
-
-export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> = ({)
+  export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> = ({,)
   assignments
 }) => {
-  const [inheritanceTree, setInheritanceTree] = useState<InheritanceNode[]>([]);
+  const [inheritanceTree, setInheritanceTree] = useState<InheritanceNode>([]);
   const [selectedNode, setSelectedNode] = useState<InheritanceNode | null>(null);
   const [hoveredNode, setHoveredNode] = useState<InheritanceNode | null>(null);
   const [options, setOptions] = useState<VisualizationOptions>({)
-    showInactive: false,
-    filterByPolicyType: '',
-    filterByTargetType: '',
-    maxDepth: 5,
-    layout: 'tree',
-  });
+  showInactive: false,
+  filterByPolicyType: '',
+  filterByTargetType: '',
+  maxDepth: 5,
+  layout: 'tree',
+});
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   useEffect(() => {
@@ -63,7 +59,6 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
       if (svgRef.current) {
         const rect = svgRef.current.getBoundingClientRect();
         setDimensions({ width: rect.width, height: rect.height });
-      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -71,25 +66,23 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
   }, []);
   const buildInheritanceTree = useCallback(() => {
     const filteredAssignments = assignments.filter(assignment => {)
-      if (!options.showInactive && assignment.status !== AssignmentStatus.ACTIVE) {
+  if (!options.showInactive && assignment.status !== AssignmentStatus.ACTIVE) {
         return false;
-      }
       if (options.filterByPolicyType && assignment.policyType !== options.filterByPolicyType) {
         return false;
-      }
       if (options.filterByTargetType && assignment.targetType !== options.filterByTargetType) {
         return false;
-      }
       return true;
     });
     // Build inheritance hierarchy
     const nodeMap = new Map<string, InheritanceNode>();
-    const rootNodes: InheritanceNode[] = [];
+    const rootNodes: InheritanceNode = [];
     // Create nodes for all assignments
     filteredAssignments.forEach(assignment => {)
-      const node: InheritanceNode = {
-        id: `${assignment.targetType}:${assignment.targetId}`,}
-        assignmentId: assignment.assignmentId,
+  const node: InheritanceNode = {,
+  id: `${assignment.targetType}:${assignment.targetId}`}
+},
+  assignmentId: assignment.assignmentId,
         targetType: assignment.targetType,
         targetId: assignment.targetId,
         targetDisplayName: assignment.targetDisplayName,
@@ -99,37 +92,36 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
         level: 0,
         children: [],
         x: 0,
-        y: 0,
-      };
+        y: 0;
+  };
       nodeMap.set(node.id, node);
     });
     // Build parent-child relationships (simplified logic)
     nodeMap.forEach(node => {)
-      const potentialParents = Array.from(nodeMap.values()).filter(other => {)
-        return other !== node && 
+  const potentialParents = Array.from(nodeMap.values()).filter(other => {)
+  return other !== node && 
                other.inheritanceType !== InheritanceType.NONE &&
                isChildOf(node, other);
       });
       if (potentialParents.length > 0) {
-        // Take the most specific parent
-        const parent = potentialParents.reduce((closest, current) => {
-          return getSpecificityScore(current, node) > getSpecificityScore(closest, node) 
-            ? current 
-            : closest;
-        });
+  // Take the most specific parent
+  const parent = potentialParents.reduce((closest, current) => {
+  return getSpecificityScore(current, node) > getSpecificityScore(closest, node)
+  ? current
+  : closest;
+});
         node.parent = parent;
         parent.children.push(node);
         node.level = parent.level + 1;
       } else {
         rootNodes.push(node);
-      }
     });
     // Filter by max depth
-    const filterByDepth = (nodes: InheritanceNode[]): InheritanceNode[] => {
-      return nodes.filter(node => node.level <= options.maxDepth).map(node => ({)
-        ...node,
-        children: filterByDepth(node.children),
-      }));
+    const filterByDepth = (nodes: InheritanceNode): InheritanceNode => {
+  return nodes.filter(node => node.level <= options.maxDepth).map(node => ({)
+  ...node,
+  children: filterByDepth(node.children),
+}));
     };
     const finalTree = filterByDepth(rootNodes);
     // Calculate positions
@@ -141,15 +133,12 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     if (parent.targetType === AssignmentTargetType.ORG_UNIT && )
         child.targetType === AssignmentTargetType.DEPARTMENT) {
       return child.targetId.startsWith(parent.targetId);
-    }
     if (parent.targetType === AssignmentTargetType.DEPARTMENT && )
         child.targetType === AssignmentTargetType.TEAM) {
       return child.targetId.startsWith(parent.targetId);
-    }
     if (parent.targetType === AssignmentTargetType.TEAM && )
         child.targetType === AssignmentTargetType.USER) {
       return child.targetId.startsWith(parent.targetId);
-    }
     return false;
   };
   const getSpecificityScore = (node: InheritanceNode, target: InheritanceNode): number => {
@@ -166,30 +155,28 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     const targetIndex = typeHierarchy.indexOf(target.targetType);
     return Math.max(0, targetIndex - nodeIndex);
   };
-  const calculateLayout = useCallback((nodes: InheritanceNode[]) => {
+  const calculateLayout = useCallback((nodes: InheritanceNode) => {
     if (options.layout === 'tree') {
       calculateTreeLayout(nodes);
     } else if (options.layout === 'radial') {
       calculateRadialLayout(nodes);
     } else {
       calculateForceLayout(nodes);
-    }
   }, [options.layout, calculateTreeLayout, calculateRadialLayout, calculateForceLayout]);
-  const calculateTreeLayout = useCallback((nodes: InheritanceNode[]) => {
-    const levelHeight = dimensions.height / (options.maxDepth + 2);
-    const positionLevel = (levelNodes: InheritanceNode[], level: number) => {
-      const levelWidth = dimensions.width / (levelNodes.length + 1);
-      levelNodes.forEach((node, index) => {
-        node.x = (index + 1) * levelWidth;
-        node.y = level * levelHeight + 50;
-      });
+  const calculateTreeLayout = useCallback((nodes: InheritanceNode) => {
+  const levelHeight = dimensions.height / (options.maxDepth + 2);
+  const positionLevel = (levelNodes: InheritanceNode, level: number) => {,
+  const levelWidth = dimensions.width / (levelNodes.length + 1);
+  levelNodes.forEach((node, index) => {
+  node.x = (index + 1) * levelWidth;
+  node.y = level * levelHeight + 50;
+});
     };
     // Group nodes by level
-    const nodesByLevel: InheritanceNode[][] = [];
+    const nodesByLevel: InheritanceNode = [];
     const processNode = (node: InheritanceNode) => {
       if (!nodesByLevel[node.level]) {
         nodesByLevel[node.level] = [];
-      }
       nodesByLevel[node.level].push(node);
       node.children.forEach(processNode);
     };
@@ -198,19 +185,19 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
       positionLevel(levelNodes, level);
     });
   }, [dimensions.height, dimensions.width, options.maxDepth]);
-  const calculateRadialLayout = useCallback((nodes: InheritanceNode[]) => {
-    const centerX = dimensions.width / 2;
-    const centerY = dimensions.height / 2;
-    const maxRadius = Math.min(centerX, centerY) - 50;
-    const positionRadially = (node: InheritanceNode, angle: number, radius: number) => {
-      node.x = centerX + radius * Math.cos(angle);
-      node.y = centerY + radius * Math.sin(angle);
-      const childAngleStep = (2 * Math.PI) / Math.max(node.children.length, 1);
-      const childRadius = radius + 80;
-      node.children.forEach((child, index) => {
-        const childAngle = angle + (index - (node.children.length - 1) / 2) * childAngleStep;
-        positionRadially(child, childAngle, Math.min(childRadius, maxRadius));
-      });
+  const calculateRadialLayout = useCallback((nodes: InheritanceNode) => {
+  const centerX = dimensions.width / 2;
+  const centerY = dimensions.height / 2;
+  const maxRadius = Math.min(centerX, centerY) - 50;
+  const positionRadially = (node: InheritanceNode, angle: number, radius: number) => {,
+  node.x = centerX + radius * Math.cos(angle);
+  node.y = centerY + radius * Math.sin(angle);
+  const childAngleStep = (2 * Math.PI) / Math.max(node.children.length, 1);
+  const childRadius = radius + 80;
+  node.children.forEach((child, index) => {
+  const childAngle = angle + (index - (node.children.length - 1) / 2) * childAngleStep;
+  positionRadially(child, childAngle, Math.min(childRadius, maxRadius));
+});
     };
     const rootAngleStep = (2 * Math.PI) / nodes.length;
     nodes.forEach((root, index) => {
@@ -218,28 +205,28 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
       positionRadially(root, angle, 100);
     });
   }, [dimensions.width, dimensions.height]);
-  const calculateForceLayout = useCallback((nodes: InheritanceNode[]) => {
-    // Simplified force-directed layout
-    const allNodes: InheritanceNode[] = [];
-    const collectNodes = (nodeList: InheritanceNode[]) => {
-      nodeList.forEach(node => {)
-        allNodes.push(node);
-        collectNodes(node.children);
-      });
+  const calculateForceLayout = useCallback((nodes: InheritanceNode) => {
+  // Simplified force-directed layout
+  const allNodes: InheritanceNode = [];
+  const collectNodes = (nodeList: InheritanceNode) => {,
+  nodeList.forEach(node => {)
+  allNodes.push(node);
+  collectNodes(node.children);
+});
     };
     collectNodes(nodes);
     // Initialize positions randomly
     allNodes.forEach(node => {)
-      node.x = Math.random() * (dimensions.width - 100) + 50;
+  node.x = Math.random() * (dimensions.width - 100) + 50;
       node.y = Math.random() * (dimensions.height - 100) + 50;
     });
     // Simple force simulation (simplified)
     for (let iteration = 0; iteration < 50; iteration++) {
       allNodes.forEach(node => {)
-        let fx = 0, fy = 0;
+  let fx = 0, fy = 0;
         // Repulsion from other nodes
         allNodes.forEach(other => {)
-          if (other !== node) {
+  if (other !== node) {
             const dx = node.x - other.x;
             const dy = node.y - other.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -247,8 +234,6 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
               const force = 500 / (distance * distance);
               fx += (dx / distance) * force;
               fy += (dy / distance) * force;
-            }
-          }
         });
         // Attraction to parent
         if (node.parent) {
@@ -256,7 +241,6 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
           const dy = node.parent.y - node.y;
           fx += dx * 0.01;
           fy += dy * 0.01;
-        }
         // Update position
         node.x += fx * 0.1;
         node.y += fy * 0.1;
@@ -264,14 +248,13 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
         node.x = Math.max(50, Math.min(dimensions.width - 50, node.x));
         node.y = Math.max(50, Math.min(dimensions.height - 50, node.y));
       });
-    }
   }, [dimensions.width, dimensions.height]);
   const renderConnections = () => {
-    const connections: JSX.Element[] = [];
-    const renderNodeConnections = (nodes: InheritanceNode[]) => {
+    const connections: JSX.Element = [];
+    const renderNodeConnections = (nodes: InheritanceNode) => {
       nodes.forEach(node => {)
-        node.children.forEach(child => {)
-          const strokeColor = getInheritanceColor(child.inheritanceType);
+  node.children.forEach(child => {)
+  const strokeColor = getInheritanceColor(child.inheritanceType);
           connections.push()
             <line
               key={`${node.id}-${child.id}`}
@@ -293,10 +276,10 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     return connections;
   };
   const renderNodes = () => {
-    const nodes: JSX.Element[] = [];
-    const renderNodeGroup = (nodeList: InheritanceNode[]) => {
+    const nodes: JSX.Element = [];
+    const renderNodeGroup = (nodeList: InheritanceNode) => {
       nodeList.forEach(node => {)
-        const isSelected = selectedNode === node;
+  const isSelected = selectedNode === node;
         const isHovered = hoveredNode === node;
         const nodeColor = getTargetTypeColor(node.targetType);
         nodes.push()
@@ -333,28 +316,26 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     return nodes;
   };
   const getInheritanceColor = (type: InheritanceType): string => {
-    switch (type) {
-    case InheritanceType.DIRECT: return '#22543d';
-    case InheritanceType.CASCADING: return '#3182ce';
-    case InheritanceType.CONDITIONAL: return '#ed8936';
-    default: return '#718096';
-    }
-  };
+  switch (type) {
+  case InheritanceType.DIRECT: return '#22543d';
+  case InheritanceType.CASCADING: return '#3182ce';
+  case InheritanceType.CONDITIONAL: return '#ed8936';,
+  default: return '#718096';
+};
   const getTargetTypeColor = (type: AssignmentTargetType): string => {
-    switch (type) {
-    case AssignmentTargetType.USER: return '#3182ce';
-    case AssignmentTargetType.ROLE: return '#38a169';
-    case AssignmentTargetType.TEAM: return '#ed8936';
-    case AssignmentTargetType.ORG_UNIT: return '#e53e3e';
-    case AssignmentTargetType.DEPARTMENT: return '#9f7aea';
-    case AssignmentTargetType.LOCATION: return '#0bc5ea';
-    case AssignmentTargetType.DATA_TYPE: return '#f56565';
-    case AssignmentTargetType.SYSTEM: return '#4a5568';
-    default: return '#718096';
-    }
-  };
+  switch (type) {
+  case AssignmentTargetType.USER: return '#3182ce';
+  case AssignmentTargetType.ROLE: return '#38a169';
+  case AssignmentTargetType.TEAM: return '#ed8936';
+  case AssignmentTargetType.ORG_UNIT: return '#e53e3e';
+  case AssignmentTargetType.DEPARTMENT: return '#9f7aea';
+  case AssignmentTargetType.LOCATION: return '#0bc5ea';
+  case AssignmentTargetType.DATA_TYPE: return '#f56565';
+  case AssignmentTargetType.SYSTEM: return '#4a5568';,
+  default: return '#718096';
+};
   const uniquePolicyTypes = Array.from(new Set(assignments.map(a => a.policyType)));
-  return ()
+  return;
     <div className="inheritance-visualization">
       <div className="visualization-controls">
         <div className="controls-section">

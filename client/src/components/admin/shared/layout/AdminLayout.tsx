@@ -18,7 +18,6 @@ interface AdminLayoutProps {
   sidebarCollapsed?: boolean;
   onSidebarToggle?: () => void;
   className?: string;
-}
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({)
   children,
@@ -31,7 +30,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({)
   onSidebarToggle,
   className = ''
 }) => {
-  return ()
+  return;
     <div className={`admin-layout ${className} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>}
       {/* Admin Header */}
       <AdminHeader

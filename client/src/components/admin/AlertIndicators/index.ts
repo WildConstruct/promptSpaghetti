@@ -17,30 +17,31 @@ export { default as AdminAlertPanel } from './AdminAlertPanel';
 
 // Define types locally for use in this file
 type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
+
 type AlertCount = {
-  critical: number;
+  critical: number;,
   high: number;
-  medium: number;
+  medium: number;,
   low: number;
   info: number;
 };
 
 // Re-export common types for convenience
+
 export interface AlertItem {
-  id: string;
+  id: string;,
   type: string;
-  severity: AlertSeverity;
+  severity: AlertSeverity;,
   title: string;
-  description: string;
+  description: string;,
   timestamp: Date;
-  source: string;
+  source: string;,
   status: 'active' | 'acknowledged' | 'resolved';
   affectedComponent?: string;
   userId?: string;
   userName?: string;
+  // Utility functions
 }
-
-// Utility functions
 export const getHighestAlertLevel = (alertCounts: { high: number; medium: number; low: number; info: number }) => {
   if (alertCounts.high > 0) return 'high';
   if (alertCounts.medium > 0) return 'medium';

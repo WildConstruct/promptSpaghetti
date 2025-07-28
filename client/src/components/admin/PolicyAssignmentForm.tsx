@@ -20,36 +20,34 @@ import {
 import './PolicyAssignmentForm.css';
 interface PolicyAssignmentFormProps {
   assignment?: PolicyAssignment;
-  onSubmit: (data: Partial<PolicyAssignment>) => Promise<void>;
+  onSubmit: (data: Partial<PolicyAssignment>) => Promise<void>;,
   onCancel: () => void;
-}
-interface FormData {
-  policyId: string;
+  interface FormData {
+  policyId: string;,
   policyType: string;
-  policyVersion: string;
+  policyVersion: string;,
   targetType: AssignmentTargetType;
-  targetId: string;
+  targetId: string;,
   targetDisplayName: string;
-  effectiveDate: string;
+  effectiveDate: string;,
   expirationDate: string;
-  priority: number;
-  conditions: AssignmentCondition[];
+  priority: number;,
+  conditions: AssignmentCondition;
   inheritance: {,
-    type: InheritanceType;
-    inheritanceDepth: number;
-    blockInheritance: boolean;
-  };
+  type: InheritanceType;,
+  inheritanceDepth: number;
+  blockInheritance: boolean;
+};
   metadata: {,
-    reason: string;
-    businessJustification: string;
-    riskLevel: RiskLevel;
-    reviewRequired: boolean;
-    reviewFrequencyDays?: number;
-    tags: string[];
-    complianceFrameworks: string[];
-  };
-}
-const INITIAL_FORM_DATA: FormData = {
+  reason: string;
+  businessJustification: string;,
+  riskLevel: RiskLevel;
+  reviewRequired: boolean;
+  reviewFrequencyDays?: number;
+  tags: string;,
+  complianceFrameworks: string;
+};
+const INITIAL_FORM_DATA: FormData = {,
   policyId: '',
   policyType: '',
   policyVersion: '1.0',
@@ -61,18 +59,17 @@ const INITIAL_FORM_DATA: FormData = {
   priority: 100,
   conditions: [],
   inheritance: {,
-    type: InheritanceType.NONE,
-    inheritanceDepth: 0,
-    blockInheritance: false,
-  },
+  type: InheritanceType.NONE,
+  inheritanceDepth: 0,
+  blockInheritance: false,
+},
   metadata: {,
-    reason: '',
-    businessJustification: '',
-    riskLevel: RiskLevel.MEDIUM,
-    reviewRequired: false,
-    tags: [],
-    complianceFrameworks: [],
-  }
+  reason: '',
+  businessJustification: '',
+  riskLevel: RiskLevel.MEDIUM,
+  reviewRequired: false,
+  tags: [],
+  complianceFrameworks: [],
 };
 
 export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
@@ -85,132 +82,119 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'basic' | 'conditions' | 'inheritance' | 'metadata'>('basic');
   useEffect(() => {
-    if (assignment) {
-      setFormData({)
-        policyId: assignment.policyId,
-        policyType: assignment.policyType,
-        policyVersion: assignment.policyVersion,
-        targetType: assignment.targetType,
-        targetId: assignment.targetId,
-        targetDisplayName: assignment.targetDisplayName,
-        effectiveDate: assignment.effectiveDate.toISOString().split('T')[0],
-        expirationDate: assignment.expirationDate?.toISOString().split('T')[0] || '',
-        priority: assignment.priority,
-        conditions: assignment.conditions,
-        inheritance: assignment.inheritance,
-        metadata: assignment.metadata,
-      });
-    }
+  if (assignment) {
+  setFormData({)
+  policyId: assignment.policyId,
+  policyType: assignment.policyType,
+  policyVersion: assignment.policyVersion,
+  targetType: assignment.targetType,
+  targetId: assignment.targetId,
+  targetDisplayName: assignment.targetDisplayName,
+  effectiveDate: assignment.effectiveDate.toISOString().split('T')[0],
+  expirationDate: assignment.expirationDate?.toISOString().split('T')[0] || '',
+  priority: assignment.priority,
+  conditions: assignment.conditions,
+  inheritance: assignment.inheritance,
+  metadata: assignment.metadata,
+});
   }, [assignment]);
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     if (!formData.policyId.trim()) {
       newErrors.policyId = 'Policy ID is required';
-    }
     if (!formData.policyType.trim()) {
       newErrors.policyType = 'Policy type is required';
-    }
     if (!formData.targetId.trim()) {
       newErrors.targetId = 'Target ID is required';
-    }
     if (!formData.targetDisplayName.trim()) {
       newErrors.targetDisplayName = 'Target display name is required';
-    }
     if (formData.priority < 1 || formData.priority > 1000) {
       newErrors.priority = 'Priority must be between 1 and 1000';
-    }
     if (formData.expirationDate && formData.expirationDate <= formData.effectiveDate) {
       newErrors.expirationDate = 'Expiration date must be after effective date';
-    }
     if (!formData.metadata.businessJustification.trim()) {
       newErrors.businessJustification = 'Business justification is required';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const submitData: Partial<PolicyAssignment> = {
-        ...formData,
-        effectiveDate: new Date(formData.effectiveDate),
-        expirationDate: formData.expirationDate ? new Date(formData.expirationDate) : undefined,
-        metadata: {,
-          ...formData.metadata,
-          source: AssignmentSource.MANUAL,
-        }
-      };
+  e.preventDefault();
+  if (!validateForm()) {
+  return;
+  setIsSubmitting(true);
+  try {
+  const submitData: Partial<PolicyAssignment> = {,
+  ...formData,
+  effectiveDate: new Date(formData.effectiveDate),
+  expirationDate: formData.expirationDate ? new Date(formData.expirationDate) : undefined,
+  metadata: {,
+  ...formData.metadata,
+  source: AssignmentSource.MANUAL,
+};
       await onSubmit(submitData);
     } catch (error) {
-      console.error('Error submitting form:', error);
-    } finally {
+  console.error('Error submitting form:', error);
+} finally {
       setIsSubmitting(false);
-    }
   };
   const updateFormData = (field: string, value: Error) => {
-    setFormData(prev => ({)
-      ...prev,
-      [field]: value
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  [field]: value,
+}));
     // Clear error for this field
     if (errors[field]) {
-      setErrors(prev => ({)
-        ...prev,
-        [field]: undefined
-      }));
-    }
+  setErrors(prev => ({)
+  ...prev,
+  [field]: undefined,
+}));
   };
   const updateNestedFormData = (section: string, field: string, value: Error) => {
-    setFormData(prev => ({)
-      ...prev,
-      [section]: {
-        ...prev[section as keyof FormData],
-        [field]: value
-      }
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  [section]: {,
+  ...prev[section as keyof FormData],
+  [field]: value,
+}));
   };
   const addCondition = () => {
-    const newCondition: AssignmentCondition = {
-      conditionId: `cond_${Date.now()}`,}
-      type: ConditionType.CONTEXTUAL,
+    const newCondition: AssignmentCondition = {,
+  conditionId: `cond_${Date.now()}`}
+},
+  type: ConditionType.CONTEXTUAL,
       operator: ConditionOperator.EQUALS,
       field: '',
       value: '',
-      description: '',
-    };
+      description: '';
+  };
     setFormData(prev => ({)
-      ...prev,
-      conditions: [...prev.conditions, newCondition]
-    }));
+  ...prev,
+  conditions: [...prev.conditions, newCondition],
+}));
   };
   const updateCondition = (index: number, field: keyof AssignmentCondition, value: Error) => {
     setFormData(prev => ({)
-      ...prev,
+  ...prev,
       conditions: prev.conditions.map((condition, i) => 
         i === index ? { ...condition, [field]: value } : condition
     }));
   };
   const removeCondition = (index: number) => {
-    setFormData(prev => ({)
-      ...prev,
-      conditions: prev.conditions.filter((_, i) => i !== index)
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  conditions: prev.conditions.filter((_, i) => i !== index),
+}));
   };
   const addTag = (tag: string) => {
     if (tag.trim() && !formData.metadata.tags.includes(tag.trim())) {
       updateNestedFormData('metadata', 'tags', [...formData.metadata.tags, tag.trim()]);
-    }
   };
   const removeTag = (tagToRemove: string) => {
-    updateNestedFormData('metadata', 'tags', )
+    updateNestedFormData('metadata', 'tags')
       formData.metadata.tags.filter(tag => tag !== tagToRemove)
     );
   };
-  const renderBasicTab = () => (;)
+  const renderBasicTab = () => (;);
     <div className="form-tab">
       <div className="form-section">
         <h3>Policy Information</h3>
@@ -337,7 +321,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       </div>
     </div>
   );
-  const renderConditionsTab = () => (;)
+  const renderConditionsTab = () => (;);
     <div className="form-tab">
       <div className="form-section">
         <div className="section-header">
@@ -431,7 +415,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       </div>
     </div>
   );
-  const renderInheritanceTab = () => (;)
+  const renderInheritanceTab = () => (;);
     <div className="form-tab">
       <div className="form-section">
         <h3>Inheritance Configuration</h3>
@@ -488,7 +472,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       </div>
     </div>
   );
-  const renderMetadataTab = () => (;)
+  const renderMetadataTab = () => (;);
     <div className="form-tab">
       <div className="form-section">
         <h3>Assignment Metadata</h3>
@@ -546,7 +530,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
                 type="number"
                 min="1"
                 value={formData.metadata.reviewFrequencyDays || ''}
-                onChange={(e) => updateNestedFormData('metadata', 'reviewFrequencyDays', )
+                onChange={(e) => updateNestedFormData('metadata', 'reviewFrequencyDays')
                   e.target.value ? parseInt(e.target.value) : undefined)}
               />
             </div>
@@ -577,7 +561,6 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
                   e.preventDefault();
                   addTag((e.target as HTMLInputElement).value);
                   (e.target as HTMLInputElement).value = '';
-                }
               }}
             />
           </div>
@@ -585,7 +568,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return;
     <div className="modal-overlay">
       <div className="policy-assignment-form">
         <div className="form-header">

@@ -19,9 +19,7 @@ interface ReportBuilderProps {
   onSave?: (report: CustomReport) => void;
   onCancel?: () => void;
   className?: string;
-}
-
-export const ReportBuilder: React.FC<ReportBuilderProps> = ({)
+  export const ReportBuilder: React.FC<ReportBuilderProps> = ({,)
   creatorId,
   existingReport,
   onSave,
@@ -32,32 +30,27 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({)
   const [reportName, setReportName] = useState(existingReport?.name || '');
   const [reportDescription, setReportDescription] = useState(existingReport?.description || '');
   const [query, setQuery] = useState<AnalyticsQuery>()
-    existingReport?.configuration.query || {
-      metric_types: [MetricType.VIEWS],
-      time_range: TimeRange.LAST_30D,
-      aggregation: AggregationType.COUNT,
-      limit: 100,
-      offset: 0,
-    }
-  );
+  existingReport?.configuration.query || {
+  metric_types: [MetricType.VIEWS],
+  time_range: TimeRange.LAST_30D,
+  aggregation: AggregationType.COUNT,
+  limit: 100,
+  offset: 0);
   const [visualization, setVisualization] = useState()
-    existingReport?.configuration.visualization || {
-      chart_type: 'line',
-      layout: DashboardLayout.GRID,
-      show_legend: true,
-      show_grid: true,
-      color_scheme: 'default',
-    }
-  );
+  existingReport?.configuration.visualization || {
+  chart_type: 'line',
+  layout: DashboardLayout.GRID,
+  show_legend: true,
+  show_grid: true,
+  color_scheme: 'default');
   const [scheduling, setScheduling] = useState({)
-    is_scheduled: existingReport?.is_scheduled || false,
-    schedule: existingReport?.schedule || {,
-      frequency: 'weekly' as const,
-      time: '09:00',
-      recipients: [],
-    }
-  });
-  const [previewData, setPreviewData] = useState<unknown[]>([]);
+  is_scheduled: existingReport?.is_scheduled || false,
+  schedule: existingReport?.schedule || {,
+  frequency: 'weekly' as const,
+  time: '09:00',
+  recipients: [],
+});
+  const [previewData, setPreviewData] = useState<unknown>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -65,66 +58,55 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   // Load preview data when query changes
   const loadPreviewData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await analyticsService.queryAnalytics({)
-        ...query,
-        creator_id: creatorId,
-        limit: 10 // Limit preview data,
-      });
+  try {
+  setLoading(true);
+  setError(null);
+  const data = await analyticsService.queryAnalytics({)
+  ...query,
+  creator_id: creatorId,
+  limit: 10 // Limit preview data,
+});
       setPreviewData(data);
     } catch (err) {
-      console.error('Failed to load preview data:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load preview data');
-    } finally {
+  console.error('Failed to load preview data:', err);
+  setError(err instanceof Error ? err.message : 'Failed to load preview data');
+} finally {
       setLoading(false);
-    }
   }, [query, creatorId]);
   // Load preview data when entering preview step
   useEffect(() => {
     if (step === 'preview') {
       loadPreviewData();
-    }
   }, [step, loadPreviewData]);
   // Validate current step
   const validateStep = (): boolean => {
     const errors: Record<string, string> = {};
     switch (step) {
-    case 'query':
-      if (!reportName.trim()) {
-        errors.reportName = 'Report name is required';
-      }
-      if (reportName.length > 255) {
-        errors.reportName = 'Report name must be less than 255 characters';
-      }
-      if (reportDescription && reportDescription.length > 1000) {
-        errors.reportDescription = 'Description must be less than 1000 characters';
-      }
-      if (query.metric_types.length === 0) {
-        errors.metrics = 'At least one metric must be selected';
-      }
-      break;
-    case 'visualization':
-      // Visualization validation if needed
-      break;
-    case 'schedule':
-      if (scheduling.is_scheduled) {
-        if (!scheduling.schedule.frequency) {
-          errors.frequency = 'Frequency is required for scheduled reports';
-        }
-        if (!scheduling.schedule.time) {
-          errors.time = 'Time is required for scheduled reports';
-        }
-        if (scheduling.schedule.recipients.length === 0) {
-          errors.recipients = 'At least one recipient is required for scheduled reports';
-        }
-      }
-      break;
-    }
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  case 'query':,
+  if (!reportName.trim()) {
+  errors.reportName = 'Report name is required';
+  if (reportName.length > 255) {
+  errors.reportName = 'Report name must be less than 255 characters';
+  if (reportDescription && reportDescription.length > 1000) {
+  errors.reportDescription = 'Description must be less than 1000 characters';
+  if (query.metric_types.length === 0) {
+  errors.metrics = 'At least one metric must be selected';
+  break;
+  case 'visualization':,
+  // Visualization validation if needed
+  break;
+  case 'schedule':,
+  if (scheduling.is_scheduled) {
+  if (!scheduling.schedule.frequency) {
+  errors.frequency = 'Frequency is required for scheduled reports';
+  if (!scheduling.schedule.time) {
+  errors.time = 'Time is required for scheduled reports';
+  if (scheduling.schedule.recipients.length === 0) {
+  errors.recipients = 'At least one recipient is required for scheduled reports';
+  break;
+  setValidationErrors(errors);
+  return Object.keys(errors).length === 0;
+};
   // Handle step navigation
   const handleNext = () => {
     if (!validateStep()) return;
@@ -132,60 +114,55 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({)
     const currentIndex = steps.indexOf(step);
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
-    }
   };
   const handlePrevious = () => {
     const steps = ['query', 'visualization', 'schedule', 'preview'] as const;
     const currentIndex = steps.indexOf(step);
     if (currentIndex > 0) {
       setStep(steps[currentIndex - 1]);
-    }
   };
   // Handle save report
   const handleSave = async () => {
-    if (!validateStep()) return;
-    try {
-      setSaving(true);
-      setError(null);
-      const reportData: Partial<CustomReport> = {
-        name: reportName,
-        description: reportDescription || undefined,
-        configuration: {,
-          query: {,
-            ...query,
-            creator_id: creatorId,
-          },
+  if (!validateStep()) return;
+  try {
+  setSaving(true);
+  setError(null);
+  const reportData: Partial<CustomReport> = {,
+  name: reportName,
+  description: reportDescription || undefined,
+  configuration: {,
+  query: {,
+  ...query,
+  creator_id: creatorId,
+}
           visualization,
-          refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes,
-        },
-        is_scheduled: scheduling.is_scheduled,
-        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined,
-      };
+          refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes;
+  },
+  is_scheduled: scheduling.is_scheduled,
+        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined;
+  };
       let savedReport: CustomReport;
       if (existingReport) {
         savedReport = await analyticsService.updateCustomReport(existingReport.id, reportData);
       } else {
         savedReport = await analyticsService.createCustomReport(reportData);
-      }
       onSave?.(savedReport);
     } catch (err) {
-      console.error('Failed to save report:', err);
-      setError(err instanceof Error ? err.message : 'Failed to save report');
-    } finally {
+  console.error('Failed to save report:', err);
+  setError(err instanceof Error ? err.message : 'Failed to save report');
+} finally {
       setSaving(false);
-    }
   };
   // Get step title
   const getStepTitle = () => {
-    switch (step) {
-    case 'query': return 'Configure Data Query';
-    case 'visualization': return 'Choose Visualization';
-    case 'schedule': return 'Set Schedule';
-    case 'preview': return 'Preview Report';
-    default: return 'Build Report';
-    }
-  };
-  return ()
+  switch (step) {
+  case 'query': return 'Configure Data Query';
+  case 'visualization': return 'Choose Visualization';
+  case 'schedule': return 'Set Schedule';
+  case 'preview': return 'Preview Report';
+  default: return 'Build Report';
+};
+  return;
     <div className={`report-builder ${className}`}>}
       <div className="report-builder-header">
         <div className="header-content">

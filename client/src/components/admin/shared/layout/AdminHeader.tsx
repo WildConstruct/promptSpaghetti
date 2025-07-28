@@ -14,7 +14,6 @@ interface AdminHeaderProps {
   showSidebarToggle?: boolean;
   sidebarCollapsed?: boolean;
   onSidebarToggle?: () => void;
-}
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({)
   title,
@@ -25,7 +24,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({)
   sidebarCollapsed = false,
   onSidebarToggle
 }) => {
-  return ()
+  return;
     <header className="admin-header">
       <div className="admin-header-left">
         {/* Sidebar Toggle */}

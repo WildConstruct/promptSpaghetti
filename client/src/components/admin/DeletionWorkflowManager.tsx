@@ -34,9 +34,9 @@ import {
   Plus
 } from 'lucide-react';
 interface DeletionWorkflow {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
   priority: 'low' | 'normal' | 'high' | 'critical';
   // Execution details
@@ -46,73 +46,69 @@ interface DeletionWorkflow {
   estimatedCompletion?: string;
   executionTimeMs?: number;
   // Data processing
-  recordsTotal: number;
+  recordsTotal: number;,
   recordsProcessed: number;
-  recordsDeleted: number;
+  recordsDeleted: number;,
   recordsSkipped: number;
-  recordsErrored: number;
+  recordsErrored: number;,
   dataSizeBytes: number;
   deletedSizeBytes: number;
   // Configuration
-  retentionPolicyId: string;
+  retentionPolicyId: string;,
   retentionPolicyName: string;
-  dataTypes: string[];
+  dataTypes: string;,
   sourceLocation: string;
-  deletionCriteria: string;
+  deletionCriteria: string;,
   batchSize: number;
   maxRetries: number;
   // Safety and compliance
-  dryRunMode: boolean;
+  dryRunMode: boolean;,
   requireConfirmation: boolean;
-  backupBeforeDelete: boolean;
-  complianceFrameworks: string[];
+  backupBeforeDelete: boolean;,
+  complianceFrameworks: string;
   auditLevel: 'basic' | 'detailed' | 'verbose';
   // Scheduling
   scheduleType: 'immediate' | 'delayed' | 'recurring' | 'conditional';
   scheduledAt?: string;
   cronExpression?: string;
-  conditions?: string[];
+  conditions?: string;
   // Errors and warnings
-  errors: WorkflowError[];
-  warnings: string[];
+  errors: WorkflowError;,
+  warnings: string;
   // Metadata
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
-  createdBy: string;
+  createdBy: string;,
   lastModifiedBy: string;
-  tags: string[];
-}
+  tags: string;
 interface WorkflowError {
-  id: string;
+  id: string;,
   timestamp: string;
-  severity: 'warning' | 'error' | 'critical';
+  severity: 'warning' | 'error' | 'critical';,
   message: string;
   recordId?: string;
   stackTrace?: string;
   resolution?: string;
   resolved: boolean;
-}
 interface WorkflowTemplate {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: 'user_data' | 'system_cleanup' | 'log_rotation' | 'compliance' | 'backup_cleanup';
-  recommended: boolean;
+  recommended: boolean;,
   config: Partial<DeletionWorkflow>;
-}
 interface WorkflowMetrics {
-  totalWorkflows: number;
+  totalWorkflows: number;,
   activeWorkflows: number;
-  completedToday: number;
+  completedToday: number;,
   failedToday: number;
-  totalRecordsDeleted: number;
+  totalRecordsDeleted: number;,
   totalDataDeleted: number;
-  averageExecutionTime: number;
+  averageExecutionTime: number;,
   successRate: number;
-}
 const DeletionWorkflowManager: React.FC = () => {
-  const [workflows, setWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [, setTemplates] = useState<WorkflowTemplate[]>([]);
+  const [workflows, setWorkflows] = useState<DeletionWorkflow>([]);
+  const [ setTemplates] = useState<WorkflowTemplate>([]);
   const [metrics, setMetrics] = useState<WorkflowMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -123,9 +119,9 @@ const DeletionWorkflowManager: React.FC = () => {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'created' | 'progress' | 'priority'>('created');
   // Modal and selection states
-  const [, setShowCreateModal] = useState(false);
-  const [, setShowTemplateModal] = useState(false);
-  const [, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
+  const [ setShowCreateModal] = useState(false);
+  const [ setShowTemplateModal] = useState(false);
+  const [ setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
   const [selectedWorkflows, setSelectedWorkflows] = useState<Set<string>>(new Set());
   // Real-time updates
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -136,32 +132,28 @@ const DeletionWorkflowManager: React.FC = () => {
       setError(null);
       const [workflowsRes, templatesRes, metricsRes] = await Promise.all([)
         fetch('/api/data-protection/workflows', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/workflow-templates', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/workflow-metrics', {)
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  }
       ]);
       if (workflowsRes.ok) {
         const workflowsData = await workflowsRes.json();
         setWorkflows(workflowsData.workflows || []);
-      }
       if (templatesRes.ok) {
         const templatesData = await templatesRes.json();
         setTemplates(templatesData.templates || []);
-      }
       if (metricsRes.ok) {
         const metricsData = await metricsRes.json();
         setMetrics(metricsData);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load workflow data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load workflow data');
+} finally {
       setLoading(false);
-    }
   }, []);
   useEffect(() => {
     loadWorkflowData();
@@ -182,7 +174,6 @@ const DeletionWorkflowManager: React.FC = () => {
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
-    }
     return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
   const formatDuration = (ms: number): string => {
@@ -194,93 +185,88 @@ const DeletionWorkflowManager: React.FC = () => {
     return `${seconds}s`;}
   };
   const getStatusBadgeClass = (status: string): string => {
-    switch (status) {
-    case 'running': return 'bg-blue-100 text-blue-800 animate-pulse';
-    case 'completed': return 'bg-green-100 text-green-800';
-    case 'failed': return 'bg-red-100 text-red-800';
-    case 'scheduled': return 'bg-yellow-100 text-yellow-800';
-    case 'paused': return 'bg-orange-100 text-orange-800';
-    case 'cancelled': return 'bg-gray-100 text-gray-800';
-    case 'draft': return 'bg-purple-100 text-purple-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'running': return 'bg-blue-100 text-blue-800 animate-pulse';
+  case 'completed': return 'bg-green-100 text-green-800';
+  case 'failed': return 'bg-red-100 text-red-800';
+  case 'scheduled': return 'bg-yellow-100 text-yellow-800';
+  case 'paused': return 'bg-orange-100 text-orange-800';
+  case 'cancelled': return 'bg-gray-100 text-gray-800';
+  case 'draft': return 'bg-purple-100 text-purple-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getPriorityBadgeClass = (priority: string): string => {
-    switch (priority) {
-    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'normal': return 'bg-blue-100 text-blue-800 border-blue-200';
-    case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+  switch (priority) {
+  case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+  case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+  case 'normal': return 'bg-blue-100 text-blue-800 border-blue-200';
+  case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
+  default: return 'bg-gray-100 text-gray-800 border-gray-200';
+};
   const getStatusIcon = (status: string) => {
-    switch (status) {
-    case 'running': return <Activity className="w-4 h-4 text-blue-600 animate-pulse" />;
-    case 'completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case 'failed': return <XCircle className="w-4 h-4 text-red-600" />;
-    case 'scheduled': return <Clock className="w-4 h-4 text-yellow-600" />;
-    case 'paused': return <Pause className="w-4 h-4 text-orange-600" />;
-    case 'cancelled': return <Square className="w-4 h-4 text-gray-600" />;
-    case 'draft': return <FileText className="w-4 h-4 text-purple-600" />;
-    default: return <Activity className="w-4 h-4 text-gray-600" />;
-    }
-  };
+  switch (status) {
+  case 'running': return <Activity className="w-4 h-4 text-blue-600 animate-pulse" />;
+  case 'completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
+  case 'failed': return <XCircle className="w-4 h-4 text-red-600" />;
+  case 'scheduled': return <Clock className="w-4 h-4 text-yellow-600" />;
+  case 'paused': return <Pause className="w-4 h-4 text-orange-600" />;
+  case 'cancelled': return <Square className="w-4 h-4 text-gray-600" />;
+  case 'draft': return <FileText className="w-4 h-4 text-purple-600" />;
+  default: return <Activity className="w-4 h-4 text-gray-600" />;
+};
   // Workflow control actions
   const handleStartWorkflow = async (workflowId: string) => {
     try {
       await fetch(`/api/data-protection/workflows/${workflowId}/start`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to start workflow');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to start workflow');
+};
   const handlePauseWorkflow = async (workflowId: string) => {
     try {
       await fetch(`/api/data-protection/workflows/${workflowId}/pause`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to pause workflow');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to pause workflow');
+};
   const handleStopWorkflow = async (workflowId: string) => {
     if (!confirm('Are you sure you want to stop this workflow? This action cannot be undone.')) {
       return;
-    }
     try {
       await fetch(`/api/data-protection/workflows/${workflowId}/stop`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to stop workflow');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to stop workflow');
+};
   const handleDeleteWorkflow = async (workflowId: string) => {
     if (!confirm('Are you sure you want to delete this workflow?')) {
       return;
-    }
     try {
       await fetch(`/api/data-protection/workflows/${workflowId}`, {)}
-        method: 'DELETE',
+  },
+  method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete workflow');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to delete workflow');
+};
   // Filter workflows based on current view and filters
   const filteredWorkflows = workflows;
     .filter(workflow => {)
-      // View filter
+  // View filter
       if (view === 'active' && !['running', 'scheduled'].includes(workflow.status)) return false;
       if (view === 'scheduled' && workflow.status !== 'scheduled') return false;
       if (view === 'completed' && !['completed', 'failed', 'cancelled'].includes(workflow.status)) return false;
@@ -288,13 +274,12 @@ const DeletionWorkflowManager: React.FC = () => {
       if (searchTerm && !workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !workflow.description.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
-      }
       // Status filter
       if (statusFilter !== 'all' && workflow.status !== statusFilter) return false;
       // Priority filter
       if (priorityFilter !== 'all' && workflow.priority !== priorityFilter) return false;
       return true;
-    })
+  }
     .sort((a, b) => {
       switch (sortBy) {
       case 'name':
@@ -306,13 +291,11 @@ const DeletionWorkflowManager: React.FC = () => {
       case 'priority': {
         const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
-      }
       default:
         return 0;
-      }
     });
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
@@ -320,8 +303,7 @@ const DeletionWorkflowManager: React.FC = () => {
         </div>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="deletion-workflow-manager space-y-6">
       {/* Header and Metrics */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -341,13 +323,13 @@ const DeletionWorkflowManager: React.FC = () => {
               <button
                 onClick={() => setAutoRefresh(!autoRefresh)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  autoRefresh ? 'bg-blue-600' : 'bg-gray-200'
-                }`}
+  autoRefresh ? 'bg-blue-600' : 'bg-gray-200',
+}`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    autoRefresh ? 'translate-x-6' : 'translate-x-1'
-                  }`}
+  autoRefresh ? 'translate-x-6' : 'translate-x-1',
+}`}
                 />
               </button>
             </div>
@@ -444,10 +426,10 @@ const DeletionWorkflowManager: React.FC = () => {
                 key={key}
                 onClick={() => setView(key as 'active' | 'scheduled' | 'completed' | 'all')}
                 className={`${
-                  view === key
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                } whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
+  view === key
+  ? 'border-blue-500 text-blue-600 bg-blue-50'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+} whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <span>{label}</span>
                 <span className="bg-gray-200 text-gray-700 rounded-full px-2 py-0.5 text-xs">
@@ -528,7 +510,6 @@ const DeletionWorkflowManager: React.FC = () => {
                           newSelected.add(workflow.id);
                         } else {
                           newSelected.delete(workflow.id);
-                        }
                         setSelectedWorkflows(newSelected);
                       }}
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"

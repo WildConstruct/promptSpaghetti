@@ -10,20 +10,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ConsentCategory, ConsentOption, ConsentPreference } from '../../types/consent';
 interface GranularConsentInterfaceProps {
-  userId: string;
-  onSave: (preferences: ConsentPreference[]) => Promise<void>;
+  userId: string;,
+  onSave: (preferences: ConsentPreference) => Promise<void>;
   onCancel?: () => void;
-  initialPreferences?: ConsentPreference[];
+  initialPreferences?: ConsentPreference;
   readOnly?: boolean;
   complianceMode?: 'GDPR' | 'CCPA' | 'LGPD' | 'PIPEDA';
-}
 interface CategoryState {
-  expanded: boolean;
+  expanded: boolean;,
   allEnabled: boolean;
   someEnabled: boolean;
-}
 
-export const [categories, setCategories] = useState<ConsentCategory[]>([]);
+export const [categories, setCategories] = useState<ConsentCategory>([]);
   const [categoryStates, setCategoryStates] = useState<Record<string, CategoryState>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -44,44 +42,42 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
       setCategories(data.categories);
       // Initialize preferences if empty
       if (preferences.length === 0) {
-        const defaultPreferences = data.categories.flatMap((cat: ConsentCategory) =>;
-          cat.options.map((opt: ConsentOption) => ({)
-            userId,
-            optionId: opt.id,
-            categoryId: cat.id,
-            granted: opt.required || opt.defaultValue,
-            timestamp: new Date(),
-            source: 'user_interface',
-            ipAddress: '',
-            userAgent: navigator.userAgent,
-          }))
+  const defaultPreferences = data.categories.flatMap((cat: ConsentCategory) =>;
+  cat.options.map((opt: ConsentOption) => ({,)
+  userId,
+  optionId: opt.id,
+  categoryId: cat.id,
+  granted: opt.required || opt.defaultValue,
+  timestamp: new Date(),
+  source: 'user_interface',
+  ipAddress: '',
+  userAgent: navigator.userAgent,
+}))
         );
         setPreferences(defaultPreferences);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load categories');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load categories');
+} finally {
       setLoading(false);
-    }
   }, [complianceMode, userId, preferences]);
   const updateCategoryStates = useCallback(() => {
     const newStates: Record<string, CategoryState> = {};
     categories.forEach(category => {)
-      const categoryPrefs = preferences.filter(p => p.categoryId === category.id);
-      const enabledCount = categoryPrefs.filter(p => p.granted).length;
-      const totalCount = category.options.length;
-      newStates[category.id] = {
-        expanded: categoryStates[category.id]?.expanded ?? false,
-        allEnabled: enabledCount === totalCount && totalCount > 0,
-        someEnabled: enabledCount > 0 && enabledCount < totalCount,
-      };
+  const categoryPrefs = preferences.filter(p => p.categoryId === category.id);
+  const enabledCount = categoryPrefs.filter(p => p.granted).length;
+  const totalCount = category.options.length;
+  newStates[category.id] = {
+  expanded: categoryStates[category.id]?.expanded ?? false,
+  allEnabled: enabledCount === totalCount && totalCount > 0,
+  someEnabled: enabledCount > 0 && enabledCount < totalCount,
+};
     });
     setCategoryStates(newStates);
   }, [categories, preferences, categoryStates]);
   const handleOptionChange = (optionId: string, categoryId: string, granted: boolean) => {
     if (readOnly) return;
     setPreferences(prev => {)
-      const existing = prev.find(p => p.optionId === optionId);
+  const existing = prev.find(p => p.optionId === optionId);
       if (existing) {
         return prev.map(p => )
           p.optionId === optionId 
@@ -89,17 +85,16 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
             : p
         );
       } else {
-        return [...prev, {
-          userId,
-          optionId,
-          categoryId,
-          granted,
-          timestamp: new Date(),
-          source: 'user_interface',
-          ipAddress: '',
-          userAgent: navigator.userAgent,
-        }];
-      }
+  return [...prev, {
+  userId,
+  optionId,
+  categoryId,
+  granted,
+  timestamp: new Date(),
+  source: 'user_interface',
+  ipAddress: '',
+  userAgent: navigator.userAgent,
+}];
     });
     setHasChanges(true);
   };
@@ -108,19 +103,17 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
     const category = categories.find(c => c.id === categoryId);
     if (!category) return;
     category.options.forEach(option => {)
-      if (!option.required) { // Don't change required options
+  if (!option.required) { // Don't change required options
         handleOptionChange(option.id, categoryId, enable);
-      }
     });
   };
   const toggleCategoryExpansion = (categoryId: string) => {
-    setCategoryStates(prev => ({)
-      ...prev,
-      [categoryId]: {
-        ...prev[categoryId],
-        expanded: !prev[categoryId]?.expanded,
-      }
-    }));
+  setCategoryStates(prev => ({)
+  ...prev,
+  [categoryId]: {,
+  ...prev[categoryId],
+  expanded: !prev[categoryId]?.expanded,
+}));
   };
   const handleSave = async () => {
     try {
@@ -129,58 +122,55 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
       await onSave(preferences);
       setHasChanges(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save preferences');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to save preferences');
+} finally {
       setSaving(false);
-    }
   };
   const getPreferenceForOption = (optionId: string): boolean => {
     return preferences.find(p => p.optionId === optionId)?.granted ?? false;
   };
   const getComplianceInfo = () => {
-    switch (complianceMode) {
-    case 'GDPR':
-      return {
-        title: 'GDPR Compliance',
-        description: 'Under GDPR, you have the right to withdraw consent at any time.',
-        legalBasis: 'Article 6(1)(a) and Article 7',
-      };
+  switch (complianceMode) {
+  case 'GDPR':,
+  return {
+  title: 'GDPR Compliance',
+  description: 'Under GDPR, you have the right to withdraw consent at any time.',
+  legalBasis: 'Article 6(1)(a) and Article 7',
+};
     case 'CCPA':
       return {
-        title: 'CCPA Compliance',
-        description: 'You have the right to opt-out of the sale of your personal information.',
-        legalBasis: 'California Civil Code Section 1798.120',
-      };
+  title: 'CCPA Compliance',
+  description: 'You have the right to opt-out of the sale of your personal information.',
+  legalBasis: 'California Civil Code Section 1798.120',
+};
     case 'LGPD':
       return {
-        title: 'LGPD Compliance',
-        description: 'You may revoke consent at any time.',
-        legalBasis: 'Article 8, Lei Geral de Proteção de Dados'
-      };
+  title: 'LGPD Compliance',
+  description: 'You may revoke consent at any time.',
+  legalBasis: 'Article 8, Lei Geral de Proteção de Dados',
+};
     case 'PIPEDA':
       return {
-        title: 'PIPEDA Compliance',
-        description: 'You may withdraw consent for collection, use or disclosure.',
-        legalBasis: 'Personal Information Protection and Electronic Documents Act',
-      };
+  title: 'PIPEDA Compliance',
+  description: 'You may withdraw consent for collection, use or disclosure.',
+  legalBasis: 'Personal Information Protection and Electronic Documents Act',
+};
     default:
-      return {
-        title: 'Privacy Compliance',
-        description: 'You can control how your data is used.',
-        legalBasis: 'Privacy Policy',
-      };
-    }
+      return {,
+  title: 'Privacy Compliance',
+  description: 'You can control how your data is used.',
+  legalBasis: 'Privacy Policy',
+};
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2">Loading consent options...</span>
       </div>
     );
-  }
   const complianceInfo = getComplianceInfo();
-  return ()
+  return;
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="mb-6 border-b pb-4">
@@ -209,8 +199,8 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
       {/* Consent Categories */}
       <div className="space-y-6">
         {categories.map(category => {)
-          const categoryState = categoryStates[category.id] || { expanded: false, allEnabled: false, someEnabled: false };
-          return ()
+  const categoryState = categoryStates[category.id] || { expanded: false, allEnabled: false, someEnabled: false };
+          return;
             <div key={category.id} className="border border-gray-200 rounded-lg overflow-hidden">
               {/* Category Header */}
               <div className="bg-gray-50 p-4">
@@ -260,7 +250,6 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
                       : categoryState.someEnabled 
                         ? 'bg-yellow-400' 
                         : 'bg-gray-300'
-                    }
                         `}>
                           <div className={`
                             absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out
@@ -280,9 +269,9 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
               {categoryState.expanded && ()
                 <div className="p-4 space-y-4">
                   {category.options.map(option => {)
-                    const isGranted = getPreferenceForOption(option.id);
+  const isGranted = getPreferenceForOption(option.id);
                     const isDisabled = readOnly || option.required;
-                    return ()
+                    return;
                       <div key={option.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
                         <div className="flex-shrink-0 mt-1">
                           <label className="flex items-center cursor-pointer">
@@ -298,7 +287,6 @@ export const [categories, setCategories] = useState<ConsentCategory[]>([]);
                               ${isGranted }
                         ? 'bg-blue-600 border-blue-600' 
                         : 'bg-white border-gray-300'
-                      }
                               ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                             `}>
                               {isGranted && ()

@@ -12,72 +12,68 @@ import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
 interface LinkedOAuthAccount {
-  id: string;
+  id: string;,
   providerId: string;
-  providerName: string;
+  providerName: string;,
   providerDisplayName: string;
-  accountId: string;
+  accountId: string;,
   accountEmail: string;
   accountName: string;
   avatarUrl?: string;
-  scopes: string[];
-  permissions: Permission[];
-  status: 'active' | 'inactive' | 'error' | 'expired';
+  scopes: string;,
+  permissions: Permission;
+  status: 'active' | 'inactive' | 'error' | 'expired';,
   linkedAt: Date;
   lastUsedAt?: Date;
   expiresAt?: Date;
   metadata: AccountMetadata;
-}
-interface Permission {
-  scope: string;
+  interface Permission {
+  scope: string;,
   description: string;
-  granted: boolean;
+  granted: boolean;,
   required: boolean;
   category: 'profile' | 'email' | 'calendar' | 'files' | 'repositories' | 'custom';
-}
-interface AccountMetadata {
-  tokenType: string;
+  interface AccountMetadata {
+  tokenType: string;,
   hasRefreshToken: boolean;
-  loginCount: number;
+  loginCount: number;,
   securityLevel: 'basic' | 'standard' | 'high';
   complianceFlags: {,
-    gdprConsent: boolean;
-    ccpaConsent: boolean;
-    dataProcessingConsent: boolean;
-  };
-}
+  gdprConsent: boolean;,
+  ccpaConsent: boolean;
+  dataProcessingConsent: boolean;
+};
 interface AvailableProvider {
-  id: string;
+  id: string;,
   name: string;
-  displayName: string;
+  displayName: string;,
   description: string;
-  iconUrl: string;
-  scopes: ProviderScope[];
-  features: string[];
+  iconUrl: string;,
+  scopes: ProviderScope;
+  features: string;,
   status: 'available' | 'configured' | 'maintenance';
   complianceLevel: 'basic' | 'standard' | 'enterprise';
-}
 interface ProviderScope {
-  scope: string;
+  scope: string;,
   displayName: string;
-  description: string;
+  description: string;,
   required: boolean;
-  sensitive: boolean;
+  sensitive: boolean;,
   category: 'profile' | 'email' | 'calendar' | 'files' | 'repositories' | 'custom';
-}
 /* interface LinkingResult {
    success: boolean;
    accountId?: string; */
 //   error?: string;
-//   warnings?: string[];
+//   warnings?: string;
 //   requiresConsent?: boolean;
 //   consentUrl?: string;
+
 // }
 
 export const OAuthUserAccountManager: React.FC = () => {
   // State management
-  const [linkedAccounts, setLinkedAccounts] = useState<LinkedOAuthAccount[]>([]);
-  const [availableProviders, setAvailableProviders] = useState<AvailableProvider[]>([]);
+  const [linkedAccounts, setLinkedAccounts] = useState<LinkedOAuthAccount>([]);
+  const [availableProviders, setAvailableProviders] = useState<AvailableProvider>([]);
   const [selectedAccount, setSelectedAccount] = useState<LinkedOAuthAccount | null>(null);
   const [showLinkProvider, setShowLinkProvider] = useState(false);
   const [linking, setLinking] = useState<Record<string, boolean>>({});
@@ -101,13 +97,11 @@ export const OAuthUserAccountManager: React.FC = () => {
         setLinkedAccounts(data.data.accounts || []);
       } else {
         setError('Failed to load linked accounts');
-      }
     } catch (err) {
-      setError('Failed to load linked accounts');
-      console.error('Failed to load linked accounts:', err);
-    } finally {
+  setError('Failed to load linked accounts');
+  console.error('Failed to load linked accounts:', err);
+} finally {
       setLoading(false);
-    }
   }, [authenticatedFetch]);
   const loadAvailableProviders = useCallback(async () => {
     try {
@@ -115,22 +109,20 @@ export const OAuthUserAccountManager: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         setAvailableProviders(data.data.providers || []);
-      }
     } catch (err) {
-      console.error('Failed to load available providers:', err);
-    }
-  }, [authenticatedFetch]);
+  console.error('Failed to load available providers:', err);
+}, [authenticatedFetch]);
   const initiateOAuthLink = async (providerId: string) => {
     setLinking(prev => ({ ...prev, [providerId]: true }));
     setError(null);
     try {
       const response = await authenticatedFetch('/auth/oauth/link', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ),
           provider: providerId,
-          returnUrl: window.location.href,
-        })
+          returnUrl: window.location.href;
+  }
       });
       const data = await response.json();
       if (data.success && data.data.authorizationUrl) {
@@ -138,22 +130,19 @@ export const OAuthUserAccountManager: React.FC = () => {
         window.location.href = data.data.authorizationUrl;
       } else {
         setError(`Failed to initiate OAuth linking: ${data.message}`);}
-      }
     } catch (err) {
       setError(`Failed to initiate OAuth linking: ${err.message}`);}
     } finally {
       setLinking(prev => ({ ...prev, [providerId]: false }));
-    }
   };
   const unlinkAccount = async (accountId: string) => {
     if (!confirm('Are you sure you want to unlink this OAuth account? This will revoke access to your data from this provider.')) {
       return;
-    }
     setUnlinking(prev => ({ ...prev, [accountId]: true }));
     setError(null);
     try {
       const response = await authenticatedFetch('/auth/oauth/unlink', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountId })
       });
@@ -162,76 +151,69 @@ export const OAuthUserAccountManager: React.FC = () => {
         await loadLinkedAccounts(); // Reload accounts
         if (selectedAccount?.id === accountId) {
           setSelectedAccount(null);
-        }
       } else {
         setError(`Failed to unlink account: ${data.message}`);}
-      }
     } catch (err) {
       setError(`Failed to unlink account: ${err.message}`);}
     } finally {
       setUnlinking(prev => ({ ...prev, [accountId]: false }));
-    }
   };
   const refreshAccount = async (accountId: string) => {
     setRefreshing(prev => ({ ...prev, [accountId]: true }));
     setError(null);
     try {
       const response = await authenticatedFetch(`/auth/oauth/refresh/${accountId}`, {)}
-        method: 'POST',
-      });
+  },
+  method: 'POST';
+  });
       const data = await response.json();
       if (data.success) {
         await loadLinkedAccounts(); // Reload accounts
       } else {
         setError(`Failed to refresh account: ${data.message}`);}
-      }
     } catch (err) {
       setError(`Failed to refresh account: ${err.message}`);}
     } finally {
       setRefreshing(prev => ({ ...prev, [accountId]: false }));
-    }
   };
   // Utility functions
   const getStatusColor = (status: string): string => {
-    switch (status) {
-    case 'active': return 'text-green-600 bg-green-100';
-    case 'inactive': return 'text-gray-600 bg-gray-100';
-    case 'error': return 'text-red-600 bg-red-100';
-    case 'expired': return 'text-orange-600 bg-orange-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'active': return 'text-green-600 bg-green-100';
+  case 'inactive': return 'text-gray-600 bg-gray-100';
+  case 'error': return 'text-red-600 bg-red-100';
+  case 'expired': return 'text-orange-600 bg-orange-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getScopeIcon = (category: string): string => {
-    switch (category) {
-    case 'profile': return '👤';
-    case 'email': return '📧';
-    case 'calendar': return '📅';
-    case 'files': return '📁';
-    case 'repositories': return '🔀';
-    default: return '⚙️';
-    }
-  };
+  switch (category) {
+  case 'profile': return '👤';
+  case 'email': return '📧';
+  case 'calendar': return '📅';
+  case 'files': return '📁';
+  case 'repositories': return '🔀';
+  default: return '⚙️';
+};
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-US', {)
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(date);
   };
   const isAccountLinked = (providerId: string): boolean => {
     return linkedAccounts.some(account => account.providerId === providerId);
   };
   if (loading) {
-    return ()
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2">Loading OAuth accounts...</span>
       </div>
     );
-  }
-  return ()
+  return;
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="mb-6">
@@ -308,10 +290,10 @@ export const OAuthUserAccountManager: React.FC = () => {
                     <div
                       key={account.id}
                       className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                        selectedAccount?.id === account.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
+  selectedAccount?.id === account.id
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
                       onClick={() => setSelectedAccount(account)}
                     >
                       <div className="flex items-center justify-between">
@@ -496,8 +478,8 @@ export const OAuthUserAccountManager: React.FC = () => {
                             <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Required</span>
                           )}
                           <span className={`w-2 h-2 rounded-full ${
-                            permission.granted ? 'bg-green-400' : 'bg-red-400'
-                          }`}></span>
+  permission.granted ? 'bg-green-400' : 'bg-red-400',
+}`}></span>
                         </div>
                       </div>
                     ))}
@@ -510,10 +492,10 @@ export const OAuthUserAccountManager: React.FC = () => {
                     <div className="flex justify-between">
                       <span className="text-gray-500">Security Level:</span>
                       <span className={`font-medium ${
-                        selectedAccount.metadata.securityLevel === 'high' ? 'text-green-600' :
-                          selectedAccount.metadata.securityLevel === 'standard' ? 'text-blue-600' :
-                            'text-gray-600'
-                      }`}>
+  selectedAccount.metadata.securityLevel === 'high' ? 'text-green-600' :,
+  selectedAccount.metadata.securityLevel === 'standard' ? 'text-blue-600' :,
+  'text-gray-600'
+}`}>
                         {selectedAccount.metadata.securityLevel.toUpperCase()}
                       </span>
                     </div>
@@ -628,22 +610,21 @@ export const OAuthUserAccountManager: React.FC = () => {
                   .filter(provider => provider.status === 'available' || provider.status === 'configured')
                   .map((provider) => {
                     const isLinked = isAccountLinked(provider.id);
-                    return ()
+                    return;
                       <button
                         key={provider.id}
                         onClick={() => {
                           if (!isLinked) {
                             initiateOAuthLink(provider.id);
-                          }
                         }}
                         disabled={linking[provider.id] || isLinked}
                         className={`w-full p-3 border rounded-lg flex items-center transition-all ${
-                          isLinked
-                            ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
-                            : linking[provider.id]
-                              ? 'bg-gray-50 border-gray-200 cursor-wait'
-                              : 'hover:bg-gray-50 border-gray-200'
-                        }`}
+  isLinked
+  ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
+  : linking[provider.id],
+  ? 'bg-gray-50 border-gray-200 cursor-wait'
+  : 'hover:bg-gray-50 border-gray-200',
+}`}
                       >
                         <img
                           src={provider.iconUrl}
