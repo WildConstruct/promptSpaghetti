@@ -571,12 +571,12 @@ function MainApp(): React.ReactElement {
       </div>
       {/* Main Content */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        {activeTab === 'editor' ? ()
+        {activeTab === 'editor' ? (
           <GraphEditor 
             initialNodes={(generatedGraph as { nodes?: unknown })?.nodes || []}
             initialEdges={(generatedGraph as { edges?: unknown })?.edges || []}
           />
-        ) : activeTab === 'randomizer' ? ()
+        ) : activeTab === 'randomizer' ? (
           <div style={{
   padding: '20px',
   height: '100%',
@@ -589,9 +589,9 @@ function MainApp(): React.ReactElement {
               className="randomizer-main"
             />
           </div>
-        ) : activeTab === 'prototype' ? ()
+        ) : activeTab === 'prototype' ? (
           <NodePrototypePage />
-        ) : ()
+        ) : (
           <IntegratedFileBrowser
             theme={theme}
             height="100%"
