@@ -46,13 +46,13 @@ export interface SaveProjectResult {
   warnings?: string;
 }
 export interface PSGFile {
-  id: string;,
+  id: string;
   name: string;
-  path: string;,
+  path: string;
   size: number;
-  lastModified: Date;,
+  lastModified: Date;
   nodeCount: number;
-  metadata: {,
+  metadata: {
   title?: string;
   description?: string;
   tags: string;
@@ -64,12 +64,12 @@ export interface PSGFile {
   isFavorite: boolean;
 }
 export interface ProjectFolder {
-  id: string;,
+  id: string;
   name: string;
   path: string;
   parentId?: string;
   children: (ProjectFolder | PSGFile)[];,
-  metadata: {,
+  metadata: {
   description?: string;
   tags: string;,
   created: Date;
@@ -77,7 +77,7 @@ export interface ProjectFolder {
 };
 }
 export interface Project {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
   rootFolder: ProjectFolder;,
@@ -179,7 +179,7 @@ export class ProjectManager {
   size: Math.floor(Math.random() * 1024 * 100), // 0-100KB
       lastModified: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000), // Last 30 days
       nodeCount: Math.floor(Math.random() * 50) + 5,
-      metadata: {,
+      metadata: {
   title: name,
         description: `Generated PSG file: ${name}`}
 },

@@ -169,7 +169,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     return extensions[format] || 'json';
   };
   if (!open) return null;
-  return;
+  return (
     <div role="dialog" aria-modal="true" style={{
   position: 'fixed',
   top: 0,
@@ -353,7 +353,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
                   {selectedForComparison.map(index => {
   const result = results[index];
-                    return;
+                    return (
                       <div key={index} style={{
   padding: 8,
   background: '#fff',
@@ -400,7 +400,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 const locked = isResultLocked(i);
                 const regenerating = isResultRegenerating(i);
                 const selected = isResultSelected(i);
-                return;
+                return (
                   <li key={i} onMouseEnter={() => onResultHover?.(i)} style={{
   marginBottom: 16,
   padding: 12,
@@ -598,9 +598,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     )}
                     {/* Result content */}
                     <div style={{ marginTop: 20, marginBottom: 8 }}>
-                      {res.error ? ()
+                      {res.error ? (
                         <div style={{ color: '#dc2626', fontSize: 14 }}>⚠️ {res.error}</div>
-                      ) : ()
+                      ) : (
                         <div style={{
   fontFamily: 'monospace',
   whiteSpace:'pre-wrap',
@@ -685,7 +685,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           const probabilityPercent = (probability * 100).toFixed(1);
                           const isHighProbability = probability > 0.5;
                           const isMediumProbability = probability > 0.2;
-                          return;
+                          return (
                             <div key={idx} style={{
                               fontSize: 10,
                               color: '#374151',
@@ -694,12 +694,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                               padding: '4px 6px',
                               background: 'rgba(255, 255, 255, 0.6)',
                               borderRadius: 3,
-                              border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`}
-},
-  display: 'flex',
+                              border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`,
+                              display: 'flex',
                               justifyContent: 'space-between',
-                              alignItems: 'center';
-  }}>
+                              alignItems: 'center'
+                            }}>
                               <div>
                                 <span style={{ fontWeight: 600, color: '#1f2937' }}>
                                   {choice.nodeId.slice(0, 12)}...
@@ -722,12 +721,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   overflow: 'hidden',
 }}>
                                     <div style={{
-                                      width: `${probability * 100}%`}
-},
-  height: '100%',
+                                      width: `${probability * 100}%`,
+                                      height: '100%',
                                       background: isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280',
-                                      transition: 'width 0.3s ease';
-  }} />
+                                      transition: 'width 0.3s ease'
+                                    }} />
                                   </div>
                                   <span style={{
   color: isHighProbability ? '#065f46' : isMediumProbability ? '#92400e' : '#4b5563',

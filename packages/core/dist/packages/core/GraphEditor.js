@@ -8,6 +8,7 @@ import { StatusBar } from './components/StatusBar';
 import { RestorePrompt } from './components/RestorePrompt';
 import { nodeSchemas } from './nodeSchemas';
 import { TabbedPalette } from './palette/TabbedPalette';
+import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
 import { useGraphStore } from './graphStore';
 import { PreviewModal } from './PreviewModal';
 import { usePreviewSeeds } from './usePreviewSeeds';
@@ -49,13 +50,13 @@ import '../../client/src/professional-theme.css';
 const ANIMATION_CSS = `;
   @keyframes nodeCreatePulse {
   0% {
-  opacity: 0;,
+  opacity: 0;
   transform: scale(0.5);
   50% {
-  opacity: 1;,
+  opacity: 1;
   transform: scale(1.2);
   100% {
-  opacity: 0;,
+  opacity: 0;
   transform: scale(1);
   .animate-node-create-overlay {
   animation: nodeCreatePulse 0.6s ease-out;
@@ -72,130 +73,229 @@ const injectSafeStyles = () => {
     ;
     // Inject styles safely on module load
     injectSafeStyles();
-    import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
-};
-{
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
-    const [statusMessage, setStatusMessage] = useState('');
-    const [selectedNodeId, setSelectedNodeId] = useState(null);
-    const [paletteCollapsed, setPaletteCollapsed] = useState(false);
-    const [correctionsOpen, setCorrectionsOpen] = useState(false);
-    const [statsOpen, setStatsOpen] = useState(false);
-    const [extensionsOpen, setExtensionsOpen] = useState(false);
-    const [showControls, setShowControls] = useState(false);
-    const [setDragPreview] = useState(null);
-    // Canvas optimization and smooth animations
-    const [isCreatingNode, setIsCreatingNode] = useState(false);
-    const [nodeCreationAnimation, setNodeCreationAnimation] = useState(null);
-    const canvasRef = useRef(null);
-    const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({});
-    maxVisibleNodes: 150,
-        animationFrameThrottle;
-    16,
-    ;
-}
-;
-// Project dialog states
-const [saveDialogOpen, setSaveDialogOpen] = useState(false);
-const [loadDialogOpen, setLoadDialogOpen] = useState(false);
-const [exportDialogOpen, setExportDialogOpen] = useState(false);
-// Template dialog states
-const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
-const [templateBrowserOpen, setTemplateBrowserOpen] = useState(false);
-// Settings modal state
-const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-// Epic 8.5 Preview panel states
-const [realTimePreviewOpen, setRealTimePreviewOpen] = useState(false);
-const [resultManagerOpen, setResultManagerOpen] = useState(false);
-// Optimization panel states
-const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
-const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
-const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
-const [optimizationMenuOpen, setOptimizationMenuOpen] = useState(false);
-const [optimizationSettings, setOptimizationSettings] = useState({});
-deadCodeElimination: true,
-    constantPropagation;
-true,
-    resultCaching;
-true,
-    parallelExecution;
-false,
-    memoryOptimization;
-true,
-    precompilation;
-false,
-    performanceMonitoring;
-true,
-    debugMode;
-false,
-;
-;
-// Graph store for project management
-const { currentProject, hasUnsavedChanges, newProject, 
-// markProjectModified,
-saveAsTemplate, applyTemplate } = useGraphStore();
-// Demo encryption state - in a real implementation, this would be managed by a security service
-const [encryptionState, setEncryptionState] = useState({});
-status: 'not_encrypted',
-    dataSize;
-1024 * 512; // 512KB demo graph,
-;
-const correctionsEnabled = useCorrectionsEnabled();
-const reactFlowInstance = useReactFlow();
-const viewport = useViewport();
-// Custom hooks
-const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
-const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
-// Unsaved changes management (Story 6.1)
-const { showUnsavedDialog, dialogAction, confirmNavigation, handleSave: handleUnsavedSave, handleDontSave: handleUnsavedDontSave, handleCancel: handleUnsavedCancel, } = useUnsavedChanges({});
-hasUnsavedChanges,
-    projectName;
-currentProject?.name,
-    onSave;
-async () => {
-    // Trigger save dialog and wait for result
-    return new Promise((resolve) => {
-        setSaveDialogOpen(true);
-        // Note: This is a simplified implementation,
-        // In practice, you'd need to wire this up with the actual save dialog result
-        resolve(true);
-    });
-};
-;
-// Highlighted nodes & edges from preview result hover
-const [highlightNodeIds, setHighlightNodeIds] = useState(new Set());
-const [highlightEdgeIds, setHighlightEdgeIds] = useState(new Set());
-const { errors, styledEdges, styledNodes } = useValidation({});
-edges,
-    nodes,
-    highlightNodeIds,
-    highlightEdgeIds,
-    validateConnection;
-;
-// Optimized node rendering with smooth animations
-const NodeRender = useMemo(() => {
-    const NodeRenderComponent = (props) => {
-        // Check if node has template fields that would benefit from variable ports
-        const hasTemplate = props.data?.template || props.data?.text || props.data?.content;
-        const shouldUseVariablePorts = typeof hasTemplate === 'string' && hasTemplate.length > 0;
-        // Wrap with smooth animations if performance is good
-        if (isPerformanceGood) {
-            const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
-            return;
-            _jsx(SmoothNodeWrapper, { id: props.id, data: props.data, selected: selectedNodeId === props.id, nodeType: props.data?.nodeType || 'default', isSelected: selectedNodeId === props.id, onNodeClick: setSelectedNodeId, children: _jsx(InnerNode, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor }) });
+    const NODE_TYPES = [
+        // Content Building Blocks
+        {
+            id: 'Subject',
+            label: 'Character',
+            icon: '👤',
+            tooltip: 'Define characters, people, or entities in your content',
+            category: 'content',
+        },
+        {
+            id: 'Connector',
+            label: 'Link Words',
+            icon: '🔗',
+            tooltip: 'Connect different parts of your content naturally',
+            category: 'content',
+        },
+        {
+            id: 'Attribute',
+            label: 'Descriptors',
+            icon: '🏷️',
+            tooltip: 'Add qualities, colors, styles, or characteristics',
+            category: 'content',
+        },
+        {
+            id: 'Action',
+            label: 'Actions',
+            icon: '⚡',
+            tooltip: 'Verbs and activities that bring scenes to life',
+            category: 'content',
+        },
+        // Content Flow Tools
+        {
+            id: 'WeightedChoice',
+            label: 'Random Selection',
+            icon: WeightedChoiceIcon,
+            tooltip: 'Choose randomly from multiple options with different likelihood',
+            category: 'flow',
+        },
+        {
+            id: 'Concat',
+            label: 'Combine',
+            icon: ConcatIcon,
+            tooltip: 'Join multiple text elements together seamlessly',
+            category: 'flow',
+        },
+        {
+            id: 'Output',
+            label: 'Result',
+            icon: OutputIcon,
+            tooltip: 'Final generated content ready for use',
+            category: 'output',
+        },
+        {
+            id: 'Include',
+            label: 'Reference',
+            icon: IncludeIcon,
+            tooltip: 'Include content from another template or package',
+            category: 'flow',
+        },
+        {
+            id: 'SetVariable',
+            label: 'Store Value',
+            icon: SetVariableIcon,
+            tooltip: 'Save a value to use later in your workflow',
+            category: 'memory',
+        },
+        {
+            id: 'GetVariable',
+            label: 'Retrieve Value',
+            icon: GetVariableIcon,
+            tooltip: 'Get a previously saved value from memory',
+            category: 'memory',
+        },
+        // Advanced Nodes
+        {
+            id: 'WeightedAdvanced',
+            label: 'Smart Random',
+            icon: '🎲',
+            tooltip: 'Advanced random selection with custom distribution patterns',
+            category: 'advanced',
+        },
+        {
+            id: 'Conditional',
+            label: 'If/Then',
+            icon: '🔀',
+            tooltip: 'Choose different creative paths based on conditions',
+            category: 'advanced',
+        },
+        // Transform & Logic
+        {
+            id: 'Sequential',
+            label: 'Step by Step',
+            icon: '🔄',
+            tooltip: 'Process content in a specific creative sequence',
+            category: 'transform',
+        },
+        {
+            id: 'Markov',
+            label: 'Chain Process',
+            icon: '🕸️',
+            tooltip: 'Generate content based on probability patterns and transitions',
+            category: 'transform',
+        },
+        {
+            id: 'PythonTransform',
+            label: 'Custom Script',
+            icon: '🐍',
+            tooltip: 'Apply custom processing logic to transform content',
+            category: 'process'
         }
+    ];
+    // Inner component that has access to React Flow instance
+    const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) => {
+        const [nodes, setNodes] = useState(initialNodes);
+        const [edges, setEdges] = useState(initialEdges);
+        const [statusMessage, setStatusMessage] = useState('');
+        const [selectedNodeId, setSelectedNodeId] = useState(null);
+        const [paletteCollapsed, setPaletteCollapsed] = useState(false);
+        const [correctionsOpen, setCorrectionsOpen] = useState(false);
+        const [statsOpen, setStatsOpen] = useState(false);
+        const [extensionsOpen, setExtensionsOpen] = useState(false);
+        const [showControls, setShowControls] = useState(false);
+        const [setDragPreview] = useState(null);
+        // Canvas optimization and smooth animations
+        const [isCreatingNode, setIsCreatingNode] = useState(false);
+        const [nodeCreationAnimation, setNodeCreationAnimation] = useState(null);
+        const canvasRef = useRef(null);
+        const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({
+            maxVisibleNodes: 150,
+            animationFrameThrottle: 16,
+        });
+        // Project dialog states
+        const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+        const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+        const [exportDialogOpen, setExportDialogOpen] = useState(false);
+        // Template dialog states
+        const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
+        const [templateBrowserOpen, setTemplateBrowserOpen] = useState(false);
+        // Settings modal state
+        const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+        // Epic 8.5 Preview panel states
+        const [realTimePreviewOpen, setRealTimePreviewOpen] = useState(false);
+        const [resultManagerOpen, setResultManagerOpen] = useState(false);
+        // Optimization panel states
+        const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
+        const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
+        const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
+        const [optimizationMenuOpen, setOptimizationMenuOpen] = useState(false);
+        const [optimizationSettings, setOptimizationSettings] = useState({
+            deadCodeElimination: true,
+            constantPropagation: true,
+            resultCaching: true,
+            parallelExecution: false,
+            memoryOptimization: true,
+            precompilation: false,
+            performanceMonitoring: true,
+            debugMode: false,
+        });
+        // Graph store for project management
+        const { currentProject, hasUnsavedChanges, newProject, 
+        // markProjectModified,
+        saveAsTemplate, applyTemplate } = useGraphStore();
+        // Demo encryption state - in a real implementation, this would be managed by a security service
+        const [encryptionState, setEncryptionState] = useState({
+            status: 'not_encrypted',
+            dataSize: 1024 * 512 // 512KB demo graph,
+        });
+        const correctionsEnabled = useCorrectionsEnabled();
+        const reactFlowInstance = useReactFlow();
+        const viewport = useViewport();
+        // Custom hooks
+        const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
+        const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
+        // Unsaved changes management (Story 6.1)
+        const { showUnsavedDialog, dialogAction, confirmNavigation, handleSave: handleUnsavedSave, handleDontSave: handleUnsavedDontSave, handleCancel: handleUnsavedCancel, } = useUnsavedChanges({
+            hasUnsavedChanges,
+            projectName: currentProject?.name,
+            onSave: async () => {
+                // Trigger save dialog and wait for result
+                return new Promise((resolve) => {
+                    setSaveDialogOpen(true);
+                    // Note: This is a simplified implementation,
+                    // In practice, you'd need to wire this up with the actual save dialog result
+                    resolve(true);
+                });
+            }
+            // Highlighted nodes & edges from preview result hover
+            ,
+            // Highlighted nodes & edges from preview result hover
+            const: [highlightNodeIds, setHighlightNodeIds] = useState(new Set()),
+            const: [highlightEdgeIds, setHighlightEdgeIds] = useState(new Set()),
+            const: { errors, styledEdges, styledNodes } = useValidation({
+                edges,
+                nodes,
+                highlightNodeIds,
+                highlightEdgeIds,
+                validateConnection
+            }),
+            // Optimized node rendering with smooth animations
+            const: NodeRender = useMemo(() => {
+                const NodeRenderComponent = (props) => {
+                    // Check if node has template fields that would benefit from variable ports
+                    const hasTemplate = props.data?.template || props.data?.text || props.data?.content;
+                    const shouldUseVariablePorts = typeof hasTemplate === 'string' && hasTemplate.length > 0;
+                    // Wrap with smooth animations if performance is good
+                    if (isPerformanceGood) {
+                        const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
+                        return;
+                        _jsx(SmoothNodeWrapper, { id: props.id, data: props.data, selected: selectedNodeId === props.id, nodeType: props.data?.nodeType || 'default', isSelected: selectedNodeId === props.id, onNodeClick: setSelectedNodeId, children: _jsx(InnerNode, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor }) });
+                    }
+                };
+            }),
+            // Fallback to standard rendering for performance
+            if(shouldUseVariablePorts) {
+                return;
+                _jsx(VariablePortNodeRenderer, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor });
+            }
+        });
+        return;
+        _jsx(NodeRenderer, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor });
     };
-});
-// Fallback to standard rendering for performance
-if (shouldUseVariablePorts) {
-    return;
-    _jsx(VariablePortNodeRenderer, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor });
-    ;
-    return;
-    _jsx(NodeRenderer, { id: props.id, data: props.data, selected: selectedNodeId === props.id, onSelect: setSelectedNodeId, getNodeMeta: getNodeMeta, getCategoryColor: getCategoryColor });
-    ;
-}
+};
+;
 ;
 NodeRenderComponent.displayName = 'NodeRenderComponent';
 return NodeRenderComponent;
@@ -279,218 +379,223 @@ async (event) => {
                 try {
                     const content = await file.text();
                     const { deserializeProject } = await import('./utils/projectSerialization');
-                    const result = deserializeProject(content, {});
-                    skipValidation: false,
-                        autoMigrate;
-                    true,
-                        preserveIds;
-                    true,
-                    ;
+                    const result = deserializeProject(content, {
+                        skipValidation: false,
+                        autoMigrate: true,
+                        preserveIds: true,
+                    });
+                    if (result.success && result.data) {
+                        // Load the project data
+                        setNodes(result.data.graph.nodes);
+                        setEdges(result.data.graph.edges);
+                        // Update project state
+                        const { setCurrentProject, updateProjectSettings, markProjectSaved } = useGraphStore.getState();
+                        setCurrentProject(result.data.metadata);
+                        updateProjectSettings(result.data.settings);
+                        markProjectSaved();
+                        setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);
+                    }
+                    setTimeout(() => setStatusMessage(''), 3000);
+                    if (result.warnings && result.warnings.length > 0) {
+                        console.warn('Project load warnings:', result.warnings);
+                    }
+                    else {
+                        setStatusMessage(`Failed to load project: ${result.error}`);
+                    }
+                    setTimeout(() => setStatusMessage(''), 5000);
                 }
-                finally { }
-                ;
-                if (result.success && result.data) {
-                    // Load the project data
-                    setNodes(result.data.graph.nodes);
-                    setEdges(result.data.graph.edges);
-                    // Update project state
-                    const { setCurrentProject, updateProjectSettings, markProjectSaved } = useGraphStore.getState();
-                    setCurrentProject(result.data.metadata);
-                    updateProjectSettings(result.data.settings);
-                    markProjectSaved();
-                    setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);
-                }
-                setTimeout(() => setStatusMessage(''), 3000);
-                if (result.warnings && result.warnings.length > 0) {
-                    console.warn('Project load warnings:', result.warnings);
-                }
-                else {
-                    setStatusMessage(`Failed to load project: ${result.error}`);
+                catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                    setStatusMessage(`Failed to load project: ${errorMessage}`);
                 }
                 setTimeout(() => setStatusMessage(''), 5000);
+                return; // Exit early for file drops
             }
-            try { }
-            catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                setStatusMessage(`Failed to load project: ${errorMessage}`);
-            }
-            setTimeout(() => setStatusMessage(''), 5000);
-            return; // Exit early for file drops
-        }
-        else {
-            setStatusMessage('Only .psg files are supported for drag and drop');
-            setTimeout(() => setStatusMessage(''), 3000);
-            return;
-            // Handle node type drops from palette (existing functionality)
-            const nodeType = event.dataTransfer.getData('application/node-type');
-            if (!nodeType || !(nodeType in nodeSchemas))
+            else {
+                setStatusMessage('Only .psg files are supported for drag and drop');
+                setTimeout(() => setStatusMessage(''), 3000);
                 return;
-            // Use React Flow's screenToFlowPosition for accurate positioning
-            const position = reactFlowInstance.screenToFlowPosition({});
-            x: event.clientX,
-                y;
-            event.clientY,
-            ;
+                // Handle node type drops from palette (existing functionality)
+                const nodeType = event.dataTransfer.getData('application/node-type');
+                if (!nodeType || !(nodeType in nodeSchemas))
+                    return;
+                // Use React Flow's screenToFlowPosition for accurate positioning
+                const position = reactFlowInstance.screenToFlowPosition({
+                    x: event.clientX,
+                    y: event.clientY,
+                });
+                // Smooth node creation animation
+                setIsCreatingNode(true);
+                const nodeId = `${nodeType}-${Date.now()}`;
+            }
+            setNodeCreationAnimation(nodeId);
+            // Use Zod schema to get default params
+            const schema = nodeSchemas[nodeType];
+            const params = schema.parse({});
+            const newNode = {
+                id: nodeId,
+                type: 'default',
+                position,
+                data: { ...params, nodeType: nodeType },
+                selected: false
+            };
+            // Add with animation
+            globalAnimationManager.scheduleAnimation(() => {
+                addNode(newNode);
+                setNodes((prev) => [...prev, newNode]);
+                // Track progress for contextual help system
+                helpContentManager.updateProgress('nodesCreated', 1);
+                setTimeout(() => {
+                    setIsCreatingNode(false);
+                    setNodeCreationAnimation(null);
+                }, 600);
+            });
         }
+        [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage];
         ;
-        // Smooth node creation animation
-        setIsCreatingNode(true);
-        const nodeId = `${nodeType}-${Date.now()}`;
+        // Allow drop on canvas
+        const handleDragOver = useCallback((event) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }, []);
+        // Node click handler
+        const onNodeClick = useCallback((event, node) => {
+            setSelectedNodeId(node.id);
+        }, []);
+        // Autosave and restore logic handled by useAutosave hook
+        // Enhanced nodes change handler with canvas optimization
+        const onNodesChange = useCallback()(changes, NodeChange);
+        {
+            // Get canvas size for optimization
+            const canvasSize = canvasRef.current ? {
+                width: canvasRef.current.offsetWidth,
+                height: canvasRef.current.offsetHeight,
+            } : { width: 1920, height: 1080 };
+            setNodes((nds) => {
+                let updatedNodes = nds.map((node) => {
+                    const change = changes.find((c) => 'id' in c && c.id === node.id);
+                    // Show drag preview for drag operations
+                    if (change && 'position' in change && change.dragging) {
+                        setDragPreview({ node: { ...node, ...change }, position: change.position || node.position });
+                    }
+                    else if (change && 'dragging' in change && !change.dragging) {
+                        setDragPreview(null);
+                        return change ? { ...node, ...change } : node;
+                    }
+                });
+                // Apply canvas optimization for performance
+                if (updatedNodes.length > 100) {
+                    updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
+                    return updatedNodes;
+                }
+            });
+        }
+        [optimizer, viewport];
+        ;
+        // Enhanced edges change handler with optimization
+        const onEdgesChange = useCallback()(changes, EdgeChange);
+        {
+            setEdges((eds) => {
+                let updatedEdges = eds.map((edge) => {
+                    const change = changes.find((c) => 'id' in c && c.id === edge.id);
+                    return change ? { ...edge, ...change } : edge;
+                });
+                // Apply edge optimization for performance
+                if (updatedEdges.length > 200) {
+                    updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
+                    return updatedEdges;
+                }
+            });
+        }
+        [optimizer, nodes, viewport];
+        ;
+        // Demo encryption handlers - in a real implementation, these would call actual encryption services
+        const handleEncrypt = useCallback(() => {
+            setEncryptionState(prev => ({ ...prev, status: 'encrypting' }));
+            // Simulate encryption process
+            setTimeout(() => {
+                setEncryptionState(prev => ({
+                    ...prev,
+                    status: 'encrypted',
+                    algorithm: 'AES-256-GCM',
+                    keyId: 'demo-key-' + Date.now().toString(36),
+                    lastEncrypted: Date.now(),
+                    encryptionTime: 180,
+                    strength: 'strong',
+                }));
+                setStatusMessage('Graph data encrypted successfully');
+                setTimeout(() => setStatusMessage(''), 3000);
+            }, 2000);
+        }, []);
+        const handleDecrypt = useCallback(() => {
+            setEncryptionState(prev => ({ ...prev, status: 'decrypting' }));
+            // Simulate decryption process
+            setTimeout(() => {
+                setEncryptionState(prev => ({
+                    ...prev,
+                    status: 'not_encrypted',
+                    algorithm: undefined,
+                    keyId: undefined,
+                    lastDecrypted: Date.now(),
+                    encryptionTime: 120,
+                    strength: undefined,
+                }));
+                setStatusMessage('Graph data decrypted successfully');
+                setTimeout(() => setStatusMessage(''), 3000);
+            }, 1500);
+        }, []);
+        const handleChangeAlgorithm = useCallback((algorithm) => {
+            setEncryptionState(prev => ({
+                ...prev,
+                algorithm: algorithm,
+                strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' : ,
+                algorithm, : .includes('128') || algorithm.includes('2048') ? 'medium' : 'weak',
+            }));
+            setStatusMessage(`Encryption algorithm changed to ${algorithm}`);
+        }, setTimeout(() => setStatusMessage(''), 3000));
     }
-    setNodeCreationAnimation(nodeId);
-    // Use Zod schema to get default params
-    const schema = nodeSchemas[nodeType];
-    const params = schema.parse({});
-    const newNode = {
-        id: nodeId,
-        type: 'default',
-        position,
-        data: { ...params, nodeType: nodeType },
-        selected: false
-    };
-    // Add with animation
-    globalAnimationManager.scheduleAnimation(() => {
-        addNode(newNode);
-        setNodes((prev) => [...prev, newNode]);
-        // Track progress for contextual help system
-        helpContentManager.updateProgress('nodesCreated', 1);
-        setTimeout(() => {
-            setIsCreatingNode(false);
-            setNodeCreationAnimation(null);
-        }, 600);
+    [];
+    ;
+    // Project management handlers
+    const handleNewProject = useCallback(() => {
+        confirmNavigation('creating a new project', () => {
+            newProject();
+            setNodes([]);
+            setEdges([]);
+        });
+    }, [confirmNavigation, newProject]);
+    const handleSaveProject = useCallback(() => {
+        setSaveDialogOpen(true);
+    }, []);
+    const handleLoadProject = useCallback(() => {
+        confirmNavigation('loading a project', () => {
+            setLoadDialogOpen(true);
+        });
+    }, [confirmNavigation]);
+    const handleLoadRecentProject = useCallback(async (entry) => {
+        confirmNavigation('loading a recent project', () => {
+            try {
+                // For now, we'll show a message since we don't have the actual file content
+                // In a full implementation, we would store the file content or use file handles API
+                setStatusMessage(`Loading recent project: ${entry.name}...`);
+            }
+            // Note: This is a simplified implementation
+            // A full implementation would need to store file content or use file handles API
+            finally {
+            }
+            // Note: This is a simplified implementation
+            // A full implementation would need to store file content or use file handles API
+            console.log('Loading recent project:', entry);
+            setStatusMessage(`Recent project "${entry.name}" selected. Please use the Load Project button to select the file.`);
+        }, setTimeout(() => setStatusMessage(''), 5000));
     });
+    try { }
+    catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        setStatusMessage(`Failed to load recent project: ${errorMessage}`);
+    }
+    setTimeout(() => setStatusMessage(''), 5000);
 };
-[reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage];
-;
-// Allow drop on canvas
-const handleDragOver = useCallback((event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
-}, []);
-// Node click handler
-const onNodeClick = useCallback((event, node) => {
-    setSelectedNodeId(node.id);
-}, []);
-// Autosave and restore logic handled by useAutosave hook
-// Enhanced nodes change handler with canvas optimization
-const onNodesChange = useCallback()(changes, NodeChange);
-{
-    // Get canvas size for optimization
-    const canvasSize = canvasRef.current ? {
-        width: canvasRef.current.offsetWidth,
-        height: canvasRef.current.offsetHeight,
-    } : { width: 1920, height: 1080 };
-    setNodes((nds) => {
-        let updatedNodes = nds.map((node) => {
-            const change = changes.find((c) => 'id' in c && c.id === node.id);
-            // Show drag preview for drag operations
-            if (change && 'position' in change && change.dragging) {
-                setDragPreview({ node: { ...node, ...change }, position: change.position || node.position });
-            }
-            else if (change && 'dragging' in change && !change.dragging) {
-                setDragPreview(null);
-                return change ? { ...node, ...change } : node;
-            }
-        });
-        // Apply canvas optimization for performance
-        if (updatedNodes.length > 100) {
-            updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
-            return updatedNodes;
-        }
-    });
-}
-[optimizer, viewport];
-;
-// Enhanced edges change handler with optimization
-const onEdgesChange = useCallback()(changes, EdgeChange);
-{
-    setEdges((eds) => {
-        let updatedEdges = eds.map((edge) => {
-            const change = changes.find((c) => 'id' in c && c.id === edge.id);
-            return change ? { ...edge, ...change } : edge;
-        });
-        // Apply edge optimization for performance
-        if (updatedEdges.length > 200) {
-            updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
-            return updatedEdges;
-        }
-    });
-}
-[optimizer, nodes, viewport];
-;
-// Demo encryption handlers - in a real implementation, these would call actual encryption services
-const handleEncrypt = useCallback(() => {
-    setEncryptionState(prev => ({ ...prev, status: 'encrypting' }));
-    // Simulate encryption process
-    setTimeout(() => {
-        setEncryptionState(prev => ({}), ...prev, status, 'encrypted', algorithm, 'AES-256-GCM', keyId, 'demo-key-' + Date.now().toString(36), lastEncrypted, Date.now(), encryptionTime, 180, strength, 'strong');
-    });
-});
-setStatusMessage('Graph data encrypted successfully');
-setTimeout(() => setStatusMessage(''), 3000);
-2000;
-;
-[];
-;
-const handleDecrypt = useCallback(() => {
-    setEncryptionState(prev => ({ ...prev, status: 'decrypting' }));
-    // Simulate decryption process
-    setTimeout(() => {
-        setEncryptionState(prev => ({}), ...prev, status, 'not_encrypted', algorithm, undefined, keyId, undefined, lastDecrypted, Date.now(), encryptionTime, 120, strength, undefined);
-    });
-});
-setStatusMessage('Graph data decrypted successfully');
-setTimeout(() => setStatusMessage(''), 3000);
-1500;
-;
-[];
-;
-const handleChangeAlgorithm = useCallback((algorithm) => {
-    setEncryptionState(prev => ({}), ...prev, algorithm, algorithm, strength, algorithm.includes('256') || algorithm.includes('4096') ? 'strong' : , algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak');
-});
-setStatusMessage(`Encryption algorithm changed to ${algorithm}`);
-setTimeout(() => setStatusMessage(''), 3000);
-[];
-;
-// Project management handlers
-const handleNewProject = useCallback(() => {
-    confirmNavigation('creating a new project', () => {
-        newProject();
-        setNodes([]);
-        setEdges([]);
-    });
-}, [confirmNavigation, newProject]);
-const handleSaveProject = useCallback(() => {
-    setSaveDialogOpen(true);
-}, []);
-const handleLoadProject = useCallback(() => {
-    confirmNavigation('loading a project', () => {
-        setLoadDialogOpen(true);
-    });
-}, [confirmNavigation]);
-const handleLoadRecentProject = useCallback(async (entry) => {
-    confirmNavigation('loading a recent project', () => {
-        try {
-            // For now, we'll show a message since we don't have the actual file content
-            // In a full implementation, we would store the file content or use file handles API
-            setStatusMessage(`Loading recent project: ${entry.name}...`);
-        }
-        // Note: This is a simplified implementation
-        // A full implementation would need to store file content or use file handles API
-        finally {
-        }
-        // Note: This is a simplified implementation
-        // A full implementation would need to store file content or use file handles API
-        console.log('Loading recent project:', entry);
-        setStatusMessage(`Recent project "${entry.name}" selected. Please use the Load Project button to select the file.`);
-    }, setTimeout(() => setStatusMessage(''), 5000));
-});
-try { }
-catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    setStatusMessage(`Failed to load recent project: ${errorMessage}`);
-}
-setTimeout(() => setStatusMessage(''), 5000);
 ;
 [confirmNavigation];
 ;
@@ -690,122 +795,141 @@ useEffect(() => {
     };
 });
 return;
-_jsxs(DemoModeManager, { initialConfig: {
+_jsx(DemoModeManager, { initialConfig: {
         brandingVisible: true,
         debugElementsHidden: false,
     }, onModeChange: (config) => {
         console.log('Demo mode changed:', config);
-    }, children: [_jsxs("div", { style: { position: 'relative', width: '100%', height: '100%' }, children: [_jsx(RestorePrompt, { show: showRestorePrompt, draft: restoreDraft, onRestore: (nodes, edges) => {
-                        setNodes(nodes);
-                        setEdges(edges);
-                        setShowRestorePrompt(false);
-                        setStatusMessage('Draft Restored');
-                        setTimeout(() => setStatusMessage(''), 3000);
-                    }, onDismiss: () => {
-                        setShowRestorePrompt(false);
-                        localStorage.removeItem('graphDraft');
-                    } }), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(TabbedPalette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: handlePaletteDragStart, showSearch: true, showFavorites: true, maxSearchResults: 15, defaultActiveTab: "content" }), _jsxs("div", { ref: canvasRef, style: { flex: 1, position: 'relative', overflow: 'visible' }, "data-testid": "react-flow-canvas-wrapper", children: [_jsx(ReactFlow, { nodes: styledNodes, edges: styledEdges, "data-testid": "react-flow-canvas", onNodesChange: (changes) => {
-                                        lastChangeRef.current = Date.now();
-                                        onNodesChange(changes);
-                                    }, onEdgesChange: (changes) => {
-                                        lastChangeRef.current = Date.now();
-                                        onEdgesChange(changes);
-                                    }, onConnect: onConnect, onNodeClick: onNodeClick, fitView: true, style: { background: 'var(--color-bg-primary, #2c2c2c)', height: '100%' }, nodeTypes: nodeTypes, onDrop: handleDrop, onDragOver: handleDragOver, 
-                                    // Node interaction
-                                    elementsSelectable: true, 
-                                    // Professional 3D-style mouse controls with performance optimization
-                                    panOnScroll: false, zoomOnScroll: true, panOnDrag: [1, 2], selectionOnDrag: nodes.length < 100, zoomOnDoubleClick: false, 
-                                    // Performance optimizations
-                                    nodesDraggable: nodes.length < 150, nodesConnectable: nodes.length < 200, snapToGrid: viewport.zoom > 0.6, snapGrid: [16, 16], 
-                                    // Keyboard shortcuts - completely disable all keyboard handling
-                                    deleteKeyCode: null, multiSelectionKeyCode: null, zoomActivationKeyCode: null, 
-                                    // Disable all keyboard event capturing
-                                    onKeyDown: (e) => {
-                                        // Check if the event target is inside an input or textarea
-                                        const target = e.target;
-                                        const isFormElement = target.tagName === 'INPUT' || ;
-                                        target.tagName === 'TEXTAREA' ||
-                                            target.tagName === 'SELECT';
-                                        const isInInspector = target.closest('aside') !== null;
-                                        if (isFormElement || isInInspector) {
-                                            // Don't capture keyboard events for form elements or inspector
-                                            return;
-                                            // Only handle keyboard events for canvas interaction
-                                            e.stopPropagation();
-                                        }
-                                    }, 
-                                    // Professional connection styling with performance optimization
-                                    connectionLineStyle: {
-                                        stroke: isPerformanceGood ? '#ff7c00' : '#4a5568',
-                                        strokeWidth: isPerformanceGood ? 3 : 2,
-                                        filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none',
-                                    }, connectionLineType: viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight, 
-                                    // Dynamic edge options based on performance
-                                    defaultEdgeOptions: ({
-                                        type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
-                                        style: {},
+    }, children: _jsxs("div", { style: { position: 'relative', width: '100%', height: '100%' }, children: [_jsx(RestorePrompt, { show: showRestorePrompt, draft: restoreDraft, onRestore: (nodes, edges) => {
+                    setNodes(nodes);
+                    setEdges(edges);
+                    setShowRestorePrompt(false);
+                    setStatusMessage('Draft Restored');
+                    setTimeout(() => setStatusMessage(''), 3000);
+                }, onDismiss: () => {
+                    setShowRestorePrompt(false);
+                    localStorage.removeItem('graphDraft');
+                } }), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(TabbedPalette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: handlePaletteDragStart, showSearch: true, showFavorites: true, maxSearchResults: 15, defaultActiveTab: "content" }), _jsxs("div", { ref: canvasRef, style: { flex: 1, position: 'relative', overflow: 'visible' }, "data-testid": "react-flow-canvas-wrapper", children: [_jsxs(ReactFlow, { nodes: styledNodes, edges: styledEdges, "data-testid": "react-flow-canvas", onNodesChange: (changes) => {
+                                    lastChangeRef.current = Date.now();
+                                    onNodesChange(changes);
+                                }, onEdgesChange: (changes) => {
+                                    lastChangeRef.current = Date.now();
+                                    onEdgesChange(changes);
+                                }, onConnect: onConnect, onNodeClick: onNodeClick, fitView: true, style: { background: 'var(--color-bg-primary, #2c2c2c)', height: '100%' }, nodeTypes: nodeTypes, onDrop: handleDrop, onDragOver: handleDragOver, 
+                                // Node interaction
+                                elementsSelectable: true, 
+                                // Professional 3D-style mouse controls with performance optimization
+                                panOnScroll: false, zoomOnScroll: true, panOnDrag: [1, 2], selectionOnDrag: nodes.length < 100, zoomOnDoubleClick: false, 
+                                // Performance optimizations
+                                nodesDraggable: nodes.length < 150, nodesConnectable: nodes.length < 200, snapToGrid: viewport.zoom > 0.6, snapGrid: [16, 16], 
+                                // Keyboard shortcuts - completely disable all keyboard handling
+                                deleteKeyCode: null, multiSelectionKeyCode: null, zoomActivationKeyCode: null, 
+                                // Disable all keyboard event capturing
+                                onKeyDown: (e) => {
+                                    // Check if the event target is inside an input or textarea
+                                    const target = e.target;
+                                    const isFormElement = target.tagName === 'INPUT' || ;
+                                    target.tagName === 'TEXTAREA' ||
+                                        target.tagName === 'SELECT';
+                                    const isInInspector = target.closest('aside') !== null;
+                                    if (isFormElement || isInInspector) {
+                                        // Don't capture keyboard events for form elements or inspector
+                                        return;
+                                        // Only handle keyboard events for canvas interaction
+                                        e.stopPropagation();
+                                    }
+                                }, 
+                                // Professional connection styling with performance optimization
+                                connectionLineStyle: {
+                                    stroke: isPerformanceGood ? '#ff7c00' : '#4a5568',
+                                    strokeWidth: isPerformanceGood ? 3 : 2,
+                                    filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none',
+                                }, connectionLineType: viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight, 
+                                // Dynamic edge options based on performance
+                                defaultEdgeOptions: {
+                                    type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
+                                    style: {
                                         stroke: isPerformanceGood ? '#ff7c00' : '#666',
                                         strokeWidth: isPerformanceGood ? 2.5 : 2,
                                         filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none',
                                     },
-                                        markerEnd) }), ": ", (,
-                                    type), ": 'arrow', color: isPerformanceGood ? '#ff7c00' : '#666', width: isPerformanceGood ? 16 : 12, height: isPerformanceGood ? 16 : 12, }} // Professional zoom/pan settings with smooth transitions minZoom=", 0.05, "maxZoom=", 6, "defaultViewport=", { x: 0, y: 0, zoom: 1 }, "// Smooth zoom and pan transitions translateExtent=", [[-2000, -2000], [4000, 4000]], "nodeExtent=", [[-1500, -1500], [3000, 3000]], "// Performance-aware rendering", ...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom), ">", _jsx(Background, { color: "#2d3748", gap: viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32, size: viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2 }), nodes.length < 200 && ()
-                                    < MiniMap, "nodeColor=", () => isPerformanceGood ? '#ff7c00' : '#363a45', "maskColor=\"#181b21BB\" style=", {
-                                    backgroundColor: 'rgba(31, 41, 55, 0.8)',
-                                    border: '1px solid rgba(55, 65, 81, 0.6)',
-                                }, "/> )}", _jsx(Controls, { style: {
-                                        button: {},
-                                        backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                                    markerEnd: {
+                                        type: 'arrow',
+                                        color: isPerformanceGood ? '#ff7c00' : '#666',
+                                        width: isPerformanceGood ? 16 : 12,
+                                        height: isPerformanceGood ? 16 : 12,
+                                    }
+                                }, 
+                                // Professional zoom/pan settings with smooth transitions
+                                minZoom: 0.05, maxZoom: 6, defaultViewport: { x: 0, y: 0, zoom: 1 }, 
+                                // Smooth zoom and pan transitions
+                                translateExtent: [[-2000, -2000], [4000, 4000]], nodeExtent: [[-1500, -1500], [3000, 3000]], ...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom), children: [_jsx(Background, { color: "#2d3748", gap: viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32, size: viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2 }), nodes.length < 200 && ()
+                                        < MiniMap, "nodeColor=", () => isPerformanceGood ? '#ff7c00' : '#363a45', "maskColor=\"#181b21BB\" style=", {
+                                        backgroundColor: 'rgba(31, 41, 55, 0.8)',
                                         border: '1px solid rgba(55, 65, 81, 0.6)',
-                                        color: '#e5e7eb',
-                                    } })] }), _jsx(ProfessionalIntegration, { nodes: nodes, edges: edges, selectedNodes: nodes.filter(n => n.selected), selectedEdges: edges.filter(e => e.selected), onNodesChange: (newNodes) => setNodes(newNodes), onEdgesChange: (newEdges) => setEdges(newEdges), onNodesSelect: (selectedNodes) => {
-                                setNodes(prevNodes => );
-                                prevNodes.map(node => ({}), ...node, selected);
-                            } }), ": selectedNodes.some(s => s.id === node.id), })) ); }} onEdgesSelect=", (selectedEdges) => {
-                            setEdges(prevEdges => );
-                            prevEdges.map(edge => ({}), ...edge, selected);
-                        }, ": selectedEdges.some(s => s.id === edge.id), })) ); }} onNodeCreate=", (nodeType, position, data) => {
-                            const newNode = {}, id;
-                            ();
-                        }, "-$", Math.random().toString(36).substr(2, 9), "`} }, type: nodeType, position, data: data || ", ", draggable: true; }; setNodes(prevNodes => [...prevNodes, newNode]); }} onNodeDelete=", (nodeIds) => {
-                            setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
-                            setEdges(prevEdges => prevEdges.filter(e => ), !nodeIds.includes(e.source) && !nodeIds.includes(e.target));
-                        }, "); }} onExport=", (format) => {
-                            console.log(`Exporting in format: ${format}`);
-                        }
-                        // Export functionality would be implemented here
-                        , "} onSave=", () => handleSaveProject(), "onLoad=", () => handleLoadProject(), "theme=\"cinema\" />", _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsx(NodeLabelsManager, { disabled: false, readonly: false, selectedNodeId: selectedNodeId }), _jsx(RegionGroupsManager, { disabled: false, readonly: false }), _jsx(ConnectionAnnotationsLayer, { canEdit: true, showTooltips: true, visible: true }), _jsxs("div", { style: {
-                                position: 'absolute',
-                                bottom: 10,
-                                right: 10,
-                                background: 'rgba(42, 42, 42, 0.9)',
-                                border: '1px solid #444',
-                                borderRadius: 4,
-                                padding: 8,
-                                fontSize: 11,
-                                color: '#a0aec0',
-                                cursor: 'pointer',
-                                userSelect: 'none',
-                            }, onClick: () => setShowControls(!showControls), children: [_jsxs("div", { style: { fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }, children: ["\uD83D\uDDB1\uFE0F Controls ", showControls ? '▼' : '▶'] }), showControls && ()
-                                    < div, " style=", { marginTop: 8, lineHeight: 1.6 }, ">", _jsxs("div", { children: [_jsx("b", { children: "Pan:" }), " Left-click + drag on canvas"] }), _jsxs("div", { children: [_jsx("b", { children: "Zoom:" }), " Mouse wheel / trackpad scroll"] }), _jsxs("div", { children: [_jsx("b", { children: "Select:" }), " Click node"] }), _jsxs("div", { children: [_jsx("b", { children: "Multi-select:" }), " Shift/Ctrl + Click"] }), _jsxs("div", { children: [_jsx("b", { children: "Connect:" }), " Drag from output port"] }), _jsxs("div", { children: [_jsx("b", { children: "Delete:" }), " Select + Delete/Backspace"] }), _jsxs("div", { children: [_jsx("b", { children: "Alternative Pan:" }), " Middle-click + drag"] })] }), ")}"] })] }), _jsxs("div", { style: {
-                transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
-                width: selectedNode ? 320 : 0,
-                opacity: selectedNode ? 1 : 0,
-                overflow: 'hidden',
-                borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
-            }, children: [selectedNode && ()
-                    < div, "style=", {
-                    transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
-                    transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                    width: 320,
-                    height: '100%',
-                }, ">", isPerformanceGood ? ()
-                    < SmoothInspectorPanel
-                    :
-                , "node=", selectedNode, "schema=", selectedSchema, "onChange=", handleInspectorChange, "onGlobalPreviewRequest=", handleGlobalPreviewRequest, "/> ) : ()", _jsx(InspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange, onGlobalPreviewRequest: handleGlobalPreviewRequest }), ")}"] }), ")}"] });
-div >
-    { /* Professional CSS Transitions and Animations - Enhanced */}
-    < style > {} `
+                                    }, "/> )}", _jsx(Controls, { style: {
+                                            button: {
+                                                backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                                                border: '1px solid rgba(55, 65, 81, 0.6)',
+                                                color: '#e5e7eb',
+                                            }
+                                        }
+                                            /  >
+                                     })] }), _jsx(ProfessionalIntegration, { nodes: nodes, edges: edges, selectedNodes: nodes.filter(n => n.selected), selectedEdges: edges.filter(e => e.selected), onNodesChange: (newNodes) => setNodes(newNodes), onEdgesChange: (newEdges) => setEdges(newEdges), onNodesSelect: (selectedNodes) => {
+                                    setNodes(prevNodes => );
+                                    prevNodes.map(node => ({
+                                        ...node,
+                                        selected: selectedNodes.some(s => s.id === node.id),
+                                    }));
+                                } }), "); }} onEdgesSelect=", (selectedEdges) => {
+                                setEdges(prevEdges => );
+                                prevEdges.map(edge => ({
+                                    ...edge,
+                                    selected: selectedEdges.some(s => s.id === edge.id),
+                                }));
+                            }, "); }} onNodeCreate=", ((nodeType, position, data) => {
+                                const newNode = {
+                                    id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                                };
+                            },
+                                type), ": nodeType, position, data: data || ", ", draggable: true; }; setNodes(prevNodes => [...prevNodes, newNode]); }} onNodeDelete=", (nodeIds) => {
+                                setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
+                                setEdges(prevEdges => prevEdges.filter(e => ), !nodeIds.includes(e.source) && !nodeIds.includes(e.target));
+                            }, "); }} onExport=", (format) => {
+                                console.log(`Exporting in format: ${format}`);
+                            }
+                            // Export functionality would be implemented here
+                            , "} onSave=", () => handleSaveProject(), "onLoad=", () => handleLoadProject(), "theme=\"cinema\" />", _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsx(NodeLabelsManager, { disabled: false, readonly: false, selectedNodeId: selectedNodeId }), _jsx(RegionGroupsManager, { disabled: false, readonly: false }), _jsx(ConnectionAnnotationsLayer, { canEdit: true, showTooltips: true, visible: true }), _jsxs("div", { style: {
+                                    position: 'absolute',
+                                    bottom: 10,
+                                    right: 10,
+                                    background: 'rgba(42, 42, 42, 0.9)',
+                                    border: '1px solid #444',
+                                    borderRadius: 4,
+                                    padding: 8,
+                                    fontSize: 11,
+                                    color: '#a0aec0',
+                                    cursor: 'pointer',
+                                    userSelect: 'none',
+                                }, onClick: () => setShowControls(!showControls), children: [_jsxs("div", { style: { fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }, children: ["\uD83D\uDDB1\uFE0F Controls ", showControls ? '▼' : '▶'] }), showControls && ()
+                                        < div, " style=", { marginTop: 8, lineHeight: 1.6 }, ">", _jsxs("div", { children: [_jsx("b", { children: "Pan:" }), " Left-click + drag on canvas"] }), _jsxs("div", { children: [_jsx("b", { children: "Zoom:" }), " Mouse wheel / trackpad scroll"] }), _jsxs("div", { children: [_jsx("b", { children: "Select:" }), " Click node"] }), _jsxs("div", { children: [_jsx("b", { children: "Multi-select:" }), " Shift/Ctrl + Click"] }), _jsxs("div", { children: [_jsx("b", { children: "Connect:" }), " Drag from output port"] }), _jsxs("div", { children: [_jsx("b", { children: "Delete:" }), " Select + Delete/Backspace"] }), _jsxs("div", { children: [_jsx("b", { children: "Alternative Pan:" }), " Middle-click + drag"] })] }), ")}"] })] }), _jsxs("div", { style: {
+                    transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                    width: selectedNode ? 320 : 0,
+                    opacity: selectedNode ? 1 : 0,
+                    overflow: 'hidden',
+                    borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
+                }, children: [selectedNode && ()
+                        < div, "style=", {
+                        transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
+                        transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        width: 320,
+                        height: '100%',
+                    }, ">", isPerformanceGood ? ()
+                        < SmoothInspectorPanel
+                        :
+                    , "node=", selectedNode, "schema=", selectedSchema, "onChange=", handleInspectorChange, "onGlobalPreviewRequest=", handleGlobalPreviewRequest, "/> ) : ()", _jsx(InspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange, onGlobalPreviewRequest: handleGlobalPreviewRequest }), ")}"] }), ")}"] }) });
+{ /* Professional CSS Transitions and Animations - Enhanced */ }
+_jsx("style", { children: `
         /* Professional Node Styling */
         .react-flow__node {
           background: linear-gradient(),
@@ -819,7 +943,7 @@ div >
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
-        .react-flow__node:hover {,
+        .react-flow__node:hover {
   transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
           background: linear-gradient(),
@@ -841,24 +965,24 @@ div >
         /* Professional Edge Styling */
         .react-flow__edge path {
           stroke: var(--color-ui-border-light, #525252) !important;
-          stroke-width: 2px !important;,
+          stroke-width: 2px !important;
   transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        .react-flow__edge:hover path {,
+        .react-flow__edge:hover path {
   stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;,
+          stroke-width: 4px !important;
   filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
         .react-flow__edge.selected path {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 3px !important;,
+          stroke-width: 3px !important;
   filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Handle Styling */
         .react-flow__handle {
           background: var(--color-bg-secondary, #383838) !important;
           border: 2px solid var(--color-ui-border, #4a4a4a) !important;
-          width: 12px !important;,
+          width: 12px !important;
   height: 12px !important;
           transition: all var(--transition-fast, 0.15s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        .react-flow__handle:hover {,
+        .react-flow__handle:hover {
   transform: scale(1.6) !important;
           box-shadow: 0 0 20px rgba(255, 120, 0, 0.8) !important;
           background: var(--color-accent-orange, #ff7800) !important;
@@ -868,7 +992,7 @@ div >
         /* Professional Connection Line */
         .react-flow__connection-line {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;,
+          stroke-width: 4px !important;
   filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Controls */
         .react-flow__controls button {
@@ -883,7 +1007,7 @@ div >
           backdrop-filter: blur(8px) !important;
           border-radius: 6px !important;
           box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3)) !important;
-        .react-flow__controls button:hover {,
+        .react-flow__controls button:hover {
   background: linear-gradient(),
             145deg,
             var(--color-bg-quaternary)
@@ -920,44 +1044,37 @@ div >
             opacity: 0;
           to {
             opacity: 1;
-      `;
-style >
-    { /* Epic 8.3 - Director Preview Toolbar Integration */}
-    < DirectorPreviewToolbar;
-nodes = { nodes };
-edges = { edges };
-isPreviewOpen = { previewOpen };
-onPreviewToggle = {}();
-{
-    if (previewOpen) {
-        setPreviewOpen(false);
-    }
-    else {
-        const now = Date.now();
-        const sinceChange = now - lastChangeRef.current;
-        const run = () => {
-            runPreview({ nodes, edges });
-            setPreviewOpen(true);
-            // Track progress for contextual help system
-            helpContentManager.updateProgress('previewsGenerated', 1);
-        };
-        if (sinceChange < 500) {
-            if (previewTimeoutRef.current)
-                clearTimeout(previewTimeoutRef.current);
-            previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+      ` });
+{ /* Epic 8.3 - Director Preview Toolbar Integration */ }
+_jsx(DirectorPreviewToolbar, { nodes: nodes, edges: edges, isPreviewOpen: previewOpen, onPreviewToggle: () => {
+        if (previewOpen) {
+            setPreviewOpen(false);
         }
         else {
-            run();
+            const now = Date.now();
+            const sinceChange = now - lastChangeRef.current;
+            const run = () => {
+                runPreview({ nodes, edges });
+                setPreviewOpen(true);
+                // Track progress for contextual help system
+                helpContentManager.updateProgress('previewsGenerated', 1);
+            };
+            if (sinceChange < 500) {
+                if (previewTimeoutRef.current)
+                    clearTimeout(previewTimeoutRef.current);
+                previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+            }
+            else {
+                run();
+            }
         }
-    }
-    onHighlightPath = {}(nodeIds, edgeIds);
-    {
-        // Highlight execution path on the canvas
-        setHighlightNodeIds(new Set(nodeIds));
-        setHighlightEdgeIds(new Set(edgeIds));
-    }
-}
-/>;
+        onHighlightPath = {}(nodeIds, edgeIds);
+        {
+            // Highlight execution path on the canvas
+            setHighlightNodeIds(new Set(nodeIds));
+            setHighlightEdgeIds(new Set(edgeIds));
+        }
+    } });
 { /* Epic 8.4 - Contextual Help System Integration */ }
 _jsx(ContextualHelpSystem, { nodes: nodes, edges: edges, selectedNodeId: selectedNodeId, selectedEdgeId: selectedEdgeId, userLevel: "beginner" // This could be dynamic based on user profile
     , enabled: true, autoTrigger: true, showProgressiveHints: true, onHelpContentViewed: (contentId) => {

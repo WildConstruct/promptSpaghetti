@@ -1,19 +1,5 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-{
-    success: boolean;
-    data ?  : Blob;
-    error ?  : string;
-    filename ?  : string;
-}
- > ;
-importRules: (),
-    content;
-string,
-    filename;
-string,
-    options ?  : ImportOptions;
-Promise;
 export const useCorrectionsStore = create()();
 devtools();
 persist();

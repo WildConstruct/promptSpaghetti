@@ -34,6 +34,6 @@ export interface KeyboardShortcutsManagerProps {
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;
 }
-export declare const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps>, shortcuts: any, disabled: any;
+export declare const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps>;
 export default KeyboardShortcutsManager;
 //# sourceMappingURL=KeyboardShortcutsManager.d.ts.map

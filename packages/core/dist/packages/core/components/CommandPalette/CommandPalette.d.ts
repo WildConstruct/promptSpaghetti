@@ -74,6 +74,9 @@ export interface CommandPaletteProps {
     recentCommands?: string[];
     customActions?: CommandPaletteAction[];
 }
+/**
+ * Professional command palette for graph editor with generation flow integration
+ */
 export declare const CommandPalette: React.FC<CommandPaletteProps>;
 export default CommandPalette;
 //# sourceMappingURL=CommandPalette.d.ts.map

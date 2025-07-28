@@ -1,3 +1,10 @@
+/**
+ * Professional Desktop Application Menu Bar
+ * Epic 2 Story 2.1: Menu Bar Architecture Implementation
+ *
+ * Cinema 4D-inspired menu bar with File, Edit, View, Debug, Help sections
+ */
+import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { PSGFile } from '../../projectManager';
 export interface MenuBarProps {
@@ -46,4 +53,6 @@ export interface MenuBarProps {
     inspectorVisible?: boolean;
     recentFiles?: PSGFile[];
 }
+export declare const ProfessionalMenuBar: React.FC<MenuBarProps>;
+export default ProfessionalMenuBar;
 //# sourceMappingURL=ProfessionalMenuBar.d.ts.map

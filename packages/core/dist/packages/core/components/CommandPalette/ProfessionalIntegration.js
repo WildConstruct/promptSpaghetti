@@ -12,23 +12,7 @@ import { UndoRedoManager, UndoRedoSystem } from './UndoRedoManager';
 import { MultiSelectionManager } from './MultiSelectionManager';
 import { AutosaveManager } from './AutosaveManager';
 import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
-export const ProfessionalIntegration = ({
-    nodes,
-    edges,
-    selectedNodes,
-    selectedEdges,
-    onNodesChange,
-    onEdgesChange,
-    onNodesSelect,
-    onEdgesSelect,
-    onNodeCreate,
-    onNodeDelete,
-    onExport,
-    onSave,
-    onLoad,
-    theme = 'cinema'
-});
-{
+export const ProfessionalIntegration = ({ nodes, edges, selectedNodes, selectedEdges, onNodesChange, onEdgesChange, onNodesSelect, onEdgesSelect, onNodeCreate, onNodeDelete, onExport, onSave, onLoad, theme = 'cinema' }) => {
     // Command Palette State
     const [showCommandPalette, setShowCommandPalette] = useState(false);
     // Professional Feature Managers
@@ -39,8 +23,7 @@ export const ProfessionalIntegration = ({
         if (!undoRedoRef.current) {
             undoRedoRef.current = new UndoRedoSystem(50);
         }
-        [];
-    });
+    }, []);
     // Track changes for undo/redo
     useEffect(() => {
         if (undoRedoRef.current && (nodes.length > 0 || edges.length > 0)) {
@@ -55,25 +38,25 @@ export const ProfessionalIntegration = ({
     ;
     async (flow) => params;
     Record;
-    {
-        console.log('Starting generation flow:', flow.name, params);
-        // Implementation would go here - this is a demo
-        // Simulate graph generation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        // Example: Create a character generation chain
-        if (flow.id === 'character-development') {
-            const characterName = params['character-name'] || 'Generated Character';
-            const characterRole = params['character-role'] || 'protagonist';
-            const viewport = reactFlowInstance?.getViewport();
-            const centerX = viewport ? -viewport.x + 400 : 400;
-            const centerY = viewport ? -viewport.y + 200 : 200;
-            // Create character profile node
-            onNodeCreate('text', { x: centerX, y: centerY }, {});
-            label: `${characterName} Profile`;
-        }
+};
+{
+    console.log('Starting generation flow:', flow.name, params);
+    // Implementation would go here - this is a demo
+    // Simulate graph generation
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Example: Create a character generation chain
+    if (flow.id === 'character-development') {
+        const characterName = params['character-name'] || 'Generated Character';
+        const characterRole = params['character-role'] || 'protagonist';
+        const viewport = reactFlowInstance?.getViewport();
+        const centerX = viewport ? -viewport.x + 400 : 400;
+        const centerY = viewport ? -viewport.y + 200 : 200;
+        // Create character profile node
+        onNodeCreate('text', { x: centerX, y: centerY }, {});
+        label: `${characterName} Profile`;
     }
-    description: `${characterRole} character profile with traits and background`;
 }
+description: `${characterRole} character profile with traits and background`;
 category: 'character';
 ;
 // Create traits node

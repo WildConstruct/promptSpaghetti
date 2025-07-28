@@ -34,10 +34,17 @@ interface CorrectionsState {
     applyCorrections: (text: string) => string;
     getActiveRules: () => CorrectionRule;
     getDraftRules: () => CorrectionRule;
-    exportRules: () => ;
-    format: 'json' | 'yaml' | 'csv';
-    options?: ExportOptions;
-    Promise(): any;
+    exportRules: (format: 'json' | 'yaml' | 'csv', options?: ExportOptions) => Promise<{
+        success: boolean;
+        data?: Blob;
+        error?: string;
+        filename?: string;
+    }>;
+    importRules: (content: string, filename: string, options?: ImportOptions) => Promise<{
+        success: boolean;
+        importedCount?: number;
+        error?: string;
+    }>;
 }
 export declare const useCorrectionsStore: import("zustand").UseBoundStore<import("zustand").StoreApi<CorrectionsState>>;
 export {};
