@@ -29,17 +29,19 @@ const professionalColors = {
   transform: '#f59e0b',
 },
   ui: {
-  border: '#404040',
-  borderHover: '#5a5a5a',
-  borderActive: '#ff7c00',
-  hover: '#2d2d2d',
-  selection: '#ff7c0040',
+    border: '#404040',
+    borderHover: '#5a5a5a',
+    borderActive: '#ff7c00',
+    hover: '#2d2d2d',
+    selection: '#ff7c0040',
+  }
 };
 const professionalShadows = {
   node: {
-  default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
-  hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
-  selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
+    default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
+    hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
+    selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
+  }
 };
 
 // Sample data for different node types
