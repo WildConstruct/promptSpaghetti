@@ -690,10 +690,13 @@ const NODE_TYPES: NodeMeta[] = [
           //   fileSize
           // });
         } catch (error) {
-  console.warn('Failed to add project to recent list:', error);
-} else {
-      setStatusMessage(`Save failed: ${result.error}`);}
-      setTimeout(() => setStatusMessage(''), 5000);
+          console.warn('Failed to add project to recent list:', error);
+        }
+      }
+    } else {
+      setStatusMessage(`Save failed: ${result.error}`);
+    }
+    setTimeout(() => setStatusMessage(''), 5000);
   }, []);
   const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string; projectName?: string; metadata?: unknown }) => {
     if (result.success) {
@@ -725,10 +728,13 @@ const NODE_TYPES: NodeMeta[] = [
           //   fileSize
           // });
         } catch (error) {
-  console.warn('Failed to add project to recent list:', error);
-} else {
-      setStatusMessage(`Load failed: ${result.error}`);}
-      setTimeout(() => setStatusMessage(''), 5000);
+          console.warn('Failed to add project to recent list:', error);
+        }
+      }
+    } else {
+      setStatusMessage(`Load failed: ${result.error}`);
+    }
+    setTimeout(() => setStatusMessage(''), 5000);
   }, []);
   const handleExportBundle = useCallback(() => {
     setExportDialogOpen(true);
