@@ -622,3 +622,4 @@ export default function App(): React.ReactElement {
       </Routes>
     </BrowserRouter>
   );
+}
