@@ -8,31 +8,32 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
 export interface KeyboardShortcut {
-  id: string;,
+  id: string;
   key: string;
-  modifiers: ('ctrl' | 'meta' | 'shift' | 'alt')[];,
+  modifiers: ('ctrl' | 'meta' | 'shift' | 'alt')[];
   action: () => void | Promise<void>;
-  description: string;,
+  description: string;
   category: 'editing' | 'navigation' | 'selection' | 'view' | 'file' | 'generation';
   enabled: boolean;
-  global?: boolean; // Whether shortcut works globally or only when editor is focused,
+  global?: boolean; // Whether shortcut works globally or only when editor is focused
 }
+
 export interface KeyboardShortcutsManagerProps {
-  onCommandPalette: () => void;,
+  onCommandPalette: () => void;
   onUndo: () => void;
-  onRedo: () => void;,
+  onRedo: () => void;
   onSave: () => void;
-  onLoad: () => void;,
+  onLoad: () => void;
   onExport: () => void;
-  onSelectAll: () => void;,
+  onSelectAll: () => void;
   onDelete: () => void;
-  onDuplicate: () => void;,
+  onDuplicate: () => void;
   onFitView: () => void;
-  onZoomIn: () => void;,
+  onZoomIn: () => void;
   onZoomOut: () => void;
-  onGenerateCharacter: () => void;,
+  onGenerateCharacter: () => void;
   onToggleFullscreen: () => void;
-  customShortcuts?: KeyboardShortcut;
+  customShortcuts?: KeyboardShortcut[];
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
 }
