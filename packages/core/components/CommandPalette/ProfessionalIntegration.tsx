@@ -118,6 +118,8 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       if (state) {
         onNodesChange(state.nodes);
         onEdgesChange(state.edges);
+      }
+    }
   }, [onNodesChange, onEdgesChange]);
   // Selection Actions
   const handleSelectAll = useCallback(() => {
@@ -127,9 +129,10 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   const handleDelete = useCallback(() => {
     if (selectedNodes.length > 0) {
       onNodeDelete(selectedNodes.map(n => n.id));
+    }
   }, [selectedNodes, onNodeDelete]);
   const handleDuplicate = useCallback(() => {
-    selectedNodes.forEach(node => {)
+    selectedNodes.forEach(node => {
   const position = { x: node.position.x + 50, y: node.position.y + 50 };
       onNodeCreate(node.type || 'text', position, {)
   ...node.data,

@@ -526,7 +526,8 @@ const NODE_TYPES: NodeMeta[] = [
           setNodeCreationAnimation(null);
         }, 600);
       });
-    },
+    }
+  },
     [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]
   );
   // Allow drop on canvas
