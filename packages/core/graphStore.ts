@@ -184,7 +184,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   nodes: reorderVariationsInNode(state.nodes, nodeId, fromIndex, toIndex),
   hasUnsavedChanges: true,
 })),
-  duplicateNode: (nodeId: string) =>,
+  duplicateNode: (nodeId: string) =>
     set((state) => {
       const nodeToClone = state.nodes.find((n) => n.id === nodeId);
       if (!nodeToClone) return state;
@@ -202,14 +202,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       };
       return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
     }),
-      deleteNode: (nodeId: string) =>,
+      deleteNode: (nodeId: string) =>
     set((state) => ({
   nodes: state.nodes.filter((n) => n.id !== nodeId),
   edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
   hasUnsavedChanges: true,
 })),
   // Sticky notes operations (Epic 8.7)
-  setStickyNotes: (notes: StickyNote) =>,
+  setStickyNotes: (notes: StickyNote) =>
     set((state) => ({
   stickyNotes: notes,
   annotations: {
@@ -221,7 +221,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  addStickyNote: (note: StickyNote) =>,
+  addStickyNote: (note: StickyNote) =>
     set((state) => ({
   stickyNotes: [...state.stickyNotes, note],
   annotations: {
@@ -250,7 +250,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  deleteStickyNote: (noteId: string) =>,
+  deleteStickyNote: (noteId: string) =>
     set((state) => {
   const filteredNotes = state.stickyNotes.filter(note => note.id !== noteId);
   return {
@@ -277,7 +277,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  addNodeLabelConfig: (config: NodeLabelConfig) =>,
+  addNodeLabelConfig: (config: NodeLabelConfig) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -312,7 +312,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  deleteNodeLabelConfig: (labelId: string) =>,
+  deleteNodeLabelConfig: (labelId: string) =>
     set((state) => {
       const { [labelId]: deleted, ...remainingConfigs } = state.annotations.nodeLabelConfigs;
       return {
@@ -326,7 +326,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  setLabelPreferences: (preferences: NodeLabelPreferences) =>,
+  setLabelPreferences: (preferences: NodeLabelPreferences) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -341,7 +341,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   })),
   // Region groups operations (Epic 8.7 Task 3)
-  setRegionGroups: (groups: RegionGroup) =>,
+  setRegionGroups: (groups: RegionGroup) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -352,7 +352,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  addRegionGroup: (group: RegionGroup) =>,
+  addRegionGroup: (group: RegionGroup) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -382,7 +382,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  deleteRegionGroup: (groupId: string) =>,
+  deleteRegionGroup: (groupId: string) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -393,7 +393,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  setRegionGroupPreferences: (preferences: RegionGroupPreferences) =>,
+  setRegionGroupPreferences: (preferences: RegionGroupPreferences) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -408,7 +408,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   })),
   // Connection annotations operations (Epic 8.7 Task 4)
-  setConnectionLabels: (labels: ConnectionLabel) =>,
+  setConnectionLabels: (labels: ConnectionLabel) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -419,7 +419,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  addConnectionLabel: (label) =>,
+  addConnectionLabel: (label) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -446,7 +446,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  removeConnectionLabel: (labelId) =>,
+  removeConnectionLabel: (labelId) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -459,7 +459,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  setConnectionAnnotations: (annotations) =>,
+  setConnectionAnnotations: (annotations) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -470,7 +470,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  addConnectionAnnotation: (annotation) =>,
+  addConnectionAnnotation: (annotation) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -497,7 +497,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: true;
   };
     }),
-  removeConnectionAnnotation: (annotationId: string) =>,
+  removeConnectionAnnotation: (annotationId: string) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
@@ -510,7 +510,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 },
   hasUnsavedChanges: true;
   })),
-  setConnectionAnnotationPreferences: (preferences: ConnectionAnnotationPreferences) =>,
+  setConnectionAnnotationPreferences: (preferences: ConnectionAnnotationPreferences) =>
     set((state) => ({
   connectionAnnotationPreferences: {
   ...state.connectionAnnotationPreferences,

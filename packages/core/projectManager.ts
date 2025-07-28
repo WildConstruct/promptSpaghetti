@@ -33,7 +33,7 @@ export interface LoadProjectResult {
   success: boolean;
   data?: {
     graph: { nodes: Node; edges: Edge };
-    metadata: ProjectMetadata;,
+    metadata: ProjectMetadata;
   settings: ProjectSettings;
   };
   error?: string;

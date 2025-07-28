@@ -2,3 +2,39 @@
 > client@0.1.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/client
 > node build-standalone.js
 
+Creating standalone build for deployment...
+Environment: undefined
+NETLIFY: undefined
+Current working directory: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client
+Core package copying disabled - using minimal inline components for deployment
+Running production build...
+vite v7.0.5 building for production...
+transforming...
+✓ 41 modules transformed.
+✗ Build failed in 361ms
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:318:2: ERROR: Expected "}" but found "const"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:318:2
+
+Expected "}" but found "const"
+316|  }
+317|    // Highlighted nodes & edges from preview result hover
+318|    const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
+   |    ^
+319|    const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
+320|    const { errors, styledEdges, styledNodes } = useValidation({
+
+    at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
+    at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
+    at responseCallbacks.<computed> (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:601:9)
+    at handleIncomingPacket (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:656:12)
+    at Socket.readFromStdout (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:579:7)
+    at Socket.emit (node:events:507:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+Safe config failed, trying regular config...
+vite v7.0.5 building for production...
+transforming...
