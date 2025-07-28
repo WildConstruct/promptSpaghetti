@@ -84,7 +84,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   category: 'character'
   });
       // Create traits node
-      onNodeCreate('logic', { x: centerX + 300, y: centerY }, {)
+      onNodeCreate('logic', { x: centerX + 300, y: centerY }, {
   label: 'Character Traits',
         description: 'Personality traits and characteristics',
         category: 'character',
@@ -95,7 +95,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         ]
       });
       // Create dialogue node
-      onNodeCreate('output', { x: centerX + 600, y: centerY }, {)
+      onNodeCreate('output', { x: centerX + 600, y: centerY }, {
   label: 'Character Dialogue',
   description: 'Generated dialogue samples',
   category: 'character',

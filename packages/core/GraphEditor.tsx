@@ -491,7 +491,9 @@ const NODE_TYPES: NodeMeta[] = [
   setStatusMessage('Only .psg files are supported for drag and drop');
   setTimeout(() => setStatusMessage(''), 3000);
   return;
-  // Handle node type drops from palette (existing functionality)
+        }
+        
+        // Handle node type drops from palette (existing functionality)
   const nodeType = event.dataTransfer.getData('application/node-type');
   if (!nodeType || !(nodeType in nodeSchemas)) return;
   // Use React Flow's screenToFlowPosition for accurate positioning
@@ -501,7 +503,7 @@ const NODE_TYPES: NodeMeta[] = [
 });
       // Smooth node creation animation
       setIsCreatingNode(true);
-      const nodeId = `${nodeType}-${Date.now()}`;}
+      const nodeId = `${nodeType}-${Date.now()}`;
       setNodeCreationAnimation(nodeId);
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];

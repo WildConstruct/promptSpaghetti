@@ -51,16 +51,16 @@ export class AutosaveSystem {
   hash = hash & hash; // Convert to 32bit integer
   return hash.toString(36);
   // Save current state
-  save(nodes: Node, edges: Edge): AutosaveState {,
+  save(nodes: Node, edges: Edge): AutosaveState {
   const timestamp = Date.now();
   const checksum = this.generateChecksum(nodes, edges);
-  const state: AutosaveState = {,
-  nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone,
-  edges: JSON.parse(JSON.stringify(edges)), // Deep clone,
+  const state: AutosaveState = {
+  nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone
+  edges: JSON.parse(JSON.stringify(edges)), // Deep clone
   timestamp,
   version: this.getNextVersion(),
   checksum,
-  metadata: {,
+  metadata: {
   nodeCount: nodes.length,
   edgeCount: edges.length,
   lastModified: new Date().toISOString(),
