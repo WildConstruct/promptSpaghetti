@@ -17,7 +17,9 @@ type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | '
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
 
-export 
+export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onClose }) => {
+  const { rules, isEnabled, addRule, updateRule, deleteRule, toggleRule, reorderRules, clearAllRules, applyCorrections } = useCorrectionsStore();
+
   // UI State
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
   const [selectedRules, setSelectedRules] = useState<Set<string>>(new Set());
@@ -229,12 +231,10 @@ export
     return applyCorrections(testText);
   }, [testText, applyCorrections]);
 
-  if (!isOpen) return null;
-
   const panelWidth = isMobile ? '100%' : isCollapsed ? '60px' : '500px';
 
-  // Don't render if corrections are not enabled
-  if (!isEnabled) return null;
+  // Don't render if panel is closed or corrections are not enabled
+  if (!isOpen || !isEnabled) return null;
 
   return (
     <div
