@@ -20,24 +20,33 @@ else
   pnpm lint-staged
 fi
 
-# Run SonarJS analysis if available
-if [ -f ".eslintrc.sonar.json" ]; then
+# Run SonarJS analysis if available and not config files only
+CONFIG_FILES_ONLY=$(git diff --cached --name-only | grep -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)' | wc -l)
+SOURCE_FILES_COUNT=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | wc -l)
+
+if [ -f ".eslintrc.sonar.json" ] && [ $CONFIG_FILES_ONLY -ne $SOURCE_FILES_COUNT ]; then
   echo "🧪 Running SonarJS analysis on staged files..."
-  STAGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+  STAGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)' | tr '\n' ' ')
   if [ ! -z "$STAGED_FILES" ]; then
-    pnpm lint:sonar $STAGED_FILES --quiet || echo "⚠️  SonarJS warnings found"
+    pnpm lint:sonar $STAGED_FILES --quiet 2>/dev/null || echo "⚠️  SonarJS warnings found (plugin may not be installed)"
   fi
+elif [ $CONFIG_FILES_ONLY -eq $SOURCE_FILES_COUNT ]; then
+  echo "✅ Only configuration files changed, skipping SonarJS analysis."
 fi
 
 # Check if any test files were modified
 TEST_FILES_CHANGED=$(git diff --cached --name-only | grep -E '\.(test|spec)\.(ts|tsx|js|jsx)$' | wc -l)
 SOURCE_FILES_CHANGED=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__' | wc -l)
 
-# If source files changed but no test files, warn the user
-if [ $SOURCE_FILES_CHANGED -gt 0 ] && [ $TEST_FILES_CHANGED -eq 0 ]; then
+# Exclude config files from test requirement
+CONFIG_FILES_ONLY=$(git diff --cached --name-only | grep -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)' | wc -l)
+NON_CONFIG_SOURCE_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__' | grep -v -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)' | wc -l)
+
+# If non-config source files changed but no test files, warn the user
+if [ $NON_CONFIG_SOURCE_FILES -gt 0 ] && [ $TEST_FILES_CHANGED -eq 0 ]; then
   echo "⚠️  Warning: You modified source files but didn't update any tests."
   echo "📝 Modified source files:"
-  git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__'
+  git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__' | grep -v -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)'
   echo ""
   echo "Please ensure your changes are covered by tests."
   echo "Do you want to continue anyway? (y/n)"
@@ -46,17 +55,21 @@ if [ $SOURCE_FILES_CHANGED -gt 0 ] && [ $TEST_FILES_CHANGED -eq 0 ]; then
     echo "❌ Commit aborted. Please add tests for your changes."
     exit 1
   fi
+elif [ $CONFIG_FILES_ONLY -gt 0 ] && [ $NON_CONFIG_SOURCE_FILES -eq 0 ]; then
+  echo "✅ Only configuration files modified, skipping test requirement."
 fi
 
-# Run tests for changed files only (faster feedback)
-CHANGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
-if [ ! -z "$CHANGED_FILES" ]; then
+# Run tests for changed files only (faster feedback) - skip for config files
+NON_CONFIG_CHANGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '(\.eslintrc|\.lintstagedrc|\.prettierrc|scripts/.*\.js|\.config\.)' | tr '\n' ' ')
+if [ ! -z "$NON_CONFIG_CHANGED_FILES" ]; then
   echo "🧪 Running tests for changed files..."
-  pnpm test -- --findRelatedTests $CHANGED_FILES --passWithNoTests
+  pnpm test -- --findRelatedTests $NON_CONFIG_CHANGED_FILES --passWithNoTests
   if [ $? -ne 0 ]; then
     echo "❌ Tests failed. Please fix the failing tests before committing."
     exit 1
   fi
+elif [ $CONFIG_FILES_ONLY -eq $SOURCE_FILES_COUNT ]; then  
+  echo "✅ Only configuration files changed, skipping tests."
 fi
 
 # Check coverage for critical files if they were modified

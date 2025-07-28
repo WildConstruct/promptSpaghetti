@@ -1,11 +1,6 @@
 {
-  "extends": [
-    "./.eslintrc.json",
-    "plugin:sonarjs/recommended"
-  ],
-  "plugins": [
-    "sonarjs"
-  ],
+  "extends": ["./.eslintrc.js", "plugin:sonarjs/recommended"],
+  "plugins": ["sonarjs"],
   "rules": {
     // SonarJS code quality rules
     "sonarjs/cognitive-complexity": ["warn", 15],
