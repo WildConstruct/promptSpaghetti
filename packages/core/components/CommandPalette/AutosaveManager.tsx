@@ -89,12 +89,15 @@ export class AutosaveSystem {
 
   // Get all stored autosave states
   getStoredData(): AutosaveState[] {
-  try {
-  const data = localStorage.getItem(this.storageKey);
-  return data ? JSON.parse(data) : [];
-} catch (error) {
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
       console.error('Failed to load autosave data:', error);
       return [];
+    }
+  }
+
   // Get the latest autosave
   getLatest(): AutosaveState | null {
     const data = this.getStoredData();

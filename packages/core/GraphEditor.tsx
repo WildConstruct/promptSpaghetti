@@ -558,18 +558,20 @@ const NODE_TYPES: NodeMeta[] = [
             setDragPreview({ node: {...node, ...change}, position: change.position || node.position });
           } else if (change && 'dragging' in change && !change.dragging) {
             setDragPreview(null);
+          }
           return change ? { ...node, ...change } : node;
         });
         // Apply canvas optimization for performance
         if (updatedNodes.length > 100) {
           updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
+        }
         return updatedNodes;
       });
-  }
+    },
     [optimizer, viewport]
   );
   // Enhanced edges change handler with optimization
-  const onEdgesChange: OnEdgesChange = useCallback()
+  const onEdgesChange: OnEdgesChange = useCallback(
     (changes: EdgeChange) => {
       setEdges((eds) => {
         let updatedEdges = eds.map((edge) => {
@@ -579,9 +581,10 @@ const NODE_TYPES: NodeMeta[] = [
         // Apply edge optimization for performance
         if (updatedEdges.length > 200) {
           updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
+        }
         return updatedEdges;
       });
-  }
+    },
     [optimizer, nodes, viewport]
   );
   // Demo encryption handlers - in a real implementation, these would call actual encryption services
@@ -621,12 +624,12 @@ const NODE_TYPES: NodeMeta[] = [
   }, []);
   const handleChangeAlgorithm = useCallback((algorithm: string) => {
   setEncryptionState(prev => ({
-  ...prev,
-  algorithm: algorithm as EncryptionAlgorithm,
-  strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :,
-  algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak',
-}));
-    setStatusMessage(`Encryption algorithm changed to ${algorithm}`);}
+    ...prev,
+    algorithm: algorithm as EncryptionAlgorithm,
+    strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :
+      algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak',
+  }));
+    setStatusMessage(`Encryption algorithm changed to ${algorithm}`);
     setTimeout(() => setStatusMessage(''), 3000);
   }, []);
   // Project management handlers
@@ -650,16 +653,17 @@ const NODE_TYPES: NodeMeta[] = [
       try {
         // For now, we'll show a message since we don't have the actual file content
         // In a full implementation, we would store the file content or use file handles API
-        setStatusMessage(`Loading recent project: ${entry.name}...`);}
+        setStatusMessage(`Loading recent project: ${entry.name}...`);
         // Note: This is a simplified implementation
         // A full implementation would need to store file content or use file handles API
         console.log('Loading recent project:', entry);
-        setStatusMessage(`Recent project "${entry.name}" selected. Please use the Load Project button to select the file.`);}
+        setStatusMessage(`Recent project "${entry.name}" selected. Please use the Load Project button to select the file.`);
         setTimeout(() => setStatusMessage(''), 5000);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setStatusMessage(`Failed to load recent project: ${errorMessage}`);}
+        setStatusMessage(`Failed to load recent project: ${errorMessage}`);
         setTimeout(() => setStatusMessage(''), 5000);
+      }
     });
   }, [confirmNavigation]);
   const handleSaveSuccess = useCallback((result: { success: boolean; error?: string; projectName?: string; metadata?: unknown }) => {

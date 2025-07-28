@@ -44,8 +44,8 @@ export interface GraphState {
   hasUnsavedChanges: boolean;
   isAutoSaveEnabled: boolean;
   // Graph operations
-  setNodes: (nodes: Node) => void;
-  setEdges: (edges: Edge) => void;
+  setNodes: (nodes: Node[]) => void;
+  setEdges: (edges: Edge[]) => void;
   addNode: (node: Node) => void;
   addEdge: (edge: Edge) => void;
   updateNode: (nodeId: string, partial: Record<string, unknown>) => void;
@@ -56,7 +56,7 @@ export interface GraphState {
   duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
   // Sticky notes operations (Epic 8.7)
-  setStickyNotes: (notes: StickyNote) => void;
+  setStickyNotes: (notes: StickyNote[]) => void;
   addStickyNote: (note: StickyNote) => void;
   updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;
   deleteStickyNote: (noteId: string) => void;
@@ -73,11 +73,11 @@ export interface GraphState {
   deleteRegionGroup: (groupId: string) => void;
   setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
   // Connection annotations operations (Epic 8.7 Task 4)
-  setConnectionLabels: (labels: ConnectionLabel) => void;
+  setConnectionLabels: (labels: ConnectionLabel[]) => void;
   addConnectionLabel: (label: ConnectionLabel) => void;
   updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;
   removeConnectionLabel: (labelId: string) => void;
-  setConnectionAnnotations: (annotations: ConnectionAnnotation) => void;
+  setConnectionAnnotations: (annotations: ConnectionAnnotation[]) => void;
   addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;
   updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;
   removeConnectionAnnotation: (annotationId: string) => void;
@@ -106,8 +106,8 @@ export interface GraphState {
   markProjectSaved: () => void;
   markProjectModified: () => void;
   // Graph state operations
-  getGraphData: () => { nodes: Node; edges: Edge };
-  loadGraphData: (nodes: Node, edges: Edge) => void;
+  getGraphData: () => { nodes: Node[]; edges: Edge[] };
+  loadGraphData: (nodes: Node[], edges: Edge[]) => void;
   // Template operations
   saveAsTemplate: (
     templateData: TemplateSaveData,
@@ -148,8 +148,8 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hasUnsavedChanges: false,
   isAutoSaveEnabled: true,
   // Graph operations
-  setNodes: (nodes: Node) => set({ nodes, hasUnsavedChanges: true }),
-  setEdges: (edges: Edge) => set({ edges, hasUnsavedChanges: true }),
+  setNodes: (nodes: Node[]) => set({ nodes, hasUnsavedChanges: true }),
+  setEdges: (edges: Edge[]) => set({ edges, hasUnsavedChanges: true }),
   addNode: (node: Node) => set((state) => ({
     nodes: [...state.nodes, node], 
     hasUnsavedChanges: true
@@ -335,7 +335,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         hasUnsavedChanges: true
       };
     }),
-  setLabelPreferences: (preferences: NodeLabelPreferences) =>
+  setLabelPreferences: (preferences) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -354,15 +354,16 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   // Region groups operations (Epic 8.7 Task 3)
   setRegionGroups: (groups) =>
     set((state) => ({
-  annotations: {
-  ...state.annotations,
-  regionGroups: groups,
-  metadata: {
-  ...state.annotations.metadata,
-  modified: new Date().toISOString(),
-},
-  hasUnsavedChanges: true
-  })),
+      annotations: {
+        ...state.annotations,
+        regionGroups: groups,
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString(),
+        },
+      },
+      hasUnsavedChanges: true
+    })),
   addRegionGroup: (group: RegionGroup) =>
     set((state) => ({
   annotations: {
