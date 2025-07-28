@@ -318,6 +318,7 @@ function MainApp(): React.ReactElement {
   setShowCommandPalette(false);
   menuBarHandlers.onNew();
 }
+    },
     {
   id: 'file-open',
   title: 'Open Graph',
