@@ -2,7 +2,7 @@ import React from 'react';
 import { professionalColors } from './styles/professional-design-system';
 
 export interface NodeMeta {
-  id: string;,
+  id: string;
   label: string;
   icon: React.ReactNode;
   category?: string;

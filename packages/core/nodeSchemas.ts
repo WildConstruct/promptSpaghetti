@@ -12,8 +12,8 @@ const baseNodeSchema = z.object({
 
 // Enhanced schemas for each node type
 export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
-  Subject: baseNodeSchema.extend({,)
-  type: z.literal('Subject').default('Subject'),
+  Subject: baseNodeSchema.extend({
+    type: z.literal('Subject').default('Subject'),
   subjects: z.array(z.string()).default(['subject']),
   singularForm: z.string().default('subject'),
   pluralForm: z.string().default('subjects'),
