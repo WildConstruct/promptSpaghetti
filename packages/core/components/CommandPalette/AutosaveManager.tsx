@@ -83,9 +83,12 @@ export class AutosaveSystem {
     } catch (error) {
       console.error('Failed to save autosave data:', error);
       this.notifyListeners({ type: 'error', error: 'Failed to save' });
+    }
     return state;
+  }
+
   // Get all stored autosave states
-  getStoredData(): AutosaveState {
+  getStoredData(): AutosaveState[] {
   try {
   const data = localStorage.getItem(this.storageKey);
   return data ? JSON.parse(data) : [];
