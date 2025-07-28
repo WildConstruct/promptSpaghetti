@@ -33,15 +33,15 @@ export interface PreviewModalProps {
   open: boolean;
   loading: boolean;
   error: string | null;
-  results: PreviewResult | PreviewResultWithPath;
+  results: PreviewResult[] | PreviewResultWithPath[];
   onClose: () => void;
   onCancel?: () => void;
   onResultHover?: (index: number) => void;
   onNodeHighlight?: (nodeIds: string) => void;
-  // Epic 8.5 Task 3: Individual result management,
+  // Epic 8.5 Task 3: Individual result management
   onResultAction?: (action: ResultAction) => void;
-  lockedResults?: LockedResult;
-  regeneratingResults?: number;
+  lockedResults?: LockedResult[];
+  regeneratingResults?: number[];
   // Epic 8.5 Task 5: Creative variance analysis
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
 }
@@ -63,7 +63,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   const [showExecutionPaths, setShowExecutionPaths] = useState(false);
   const [showVarianceAnalysis, setShowVarianceAnalysis] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
-  const [selectedForComparison, setSelectedForComparison] = useState<number>([]);
+  const [selectedForComparison, setSelectedForComparison] = useState<number[]>([]);
   const [exportDialog, setExportDialog] = useState<{
   open: boolean;
   type: 'individual' | 'batch' | 'comparison';
@@ -77,13 +77,14 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   const isResultRegenerating = (index: number) => regeneratingResults.includes(index);
   const isResultSelected = (index: number) => selectedForComparison.includes(index);
   const handleResultAction = (type: ResultAction['type'], index: number, data?: Record<string, unknown>) => {
-  if (type === 'export') {
-  setExportDialog({
-  open: true,
-  type: 'individual',
-  individualIndex: index,
-});
+    if (type === 'export') {
+      setExportDialog({
+        open: true,
+        type: 'individual',
+        individualIndex: index,
+      });
       return;
+    }
     onResultAction?.({ type, resultIndex: index, data });
   };
   const toggleComparisonSelection = (index: number) => {
@@ -91,6 +92,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       setSelectedForComparison(prev => prev.filter(i => i !== index));
     } else if (selectedForComparison.length < 3) { // Limit to 3 results for comparison
       setSelectedForComparison(prev => [...prev, index]);
+    }
   };
   const clearComparison = () => {
     setSelectedForComparison([]);
@@ -109,13 +111,14 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         );
       } else if (exportDialog.type === 'batch') {
         exportResult = await resultExportService.exportBatchResults(
-          results as PreviewResultWithPath,
+          results as PreviewResultWithPath[],
           selectedForComparison,
           options
         );
       } else {
         exportResult = await resultExportService.exportComparison(
-          results as PreviewResultWithPath,
+          results as PreviewResultWithPath[],
+          selectedForComparison,
           options
         );
       }
@@ -141,6 +144,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;
     } else if (exportDialog.type === 'batch') {
       filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;
+    }
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -321,7 +325,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             {showExecutionPaths && hasExecutionPaths && (
               <div style={{ marginBottom: 20 }}>
                 <ExecutionPathVisualization 
-                  results={results as PreviewResultWithPath}
+                  results={results as PreviewResultWithPath[]}
                   onNodeHighlight={onNodeHighlight}
                   config={{
   showExecutionOrder: true,
@@ -335,7 +339,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             {showVarianceAnalysis && results.length >= 2 && (
               <div style={{ marginBottom: 20 }}>
                 <VarianceAnalysis 
-                  results={results as PreviewResultWithPath}
+                  results={results as PreviewResultWithPath[]}
                   onSuggestionClick={onVarianceSuggestion}
                 />
               </div>
@@ -813,7 +817,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         <ExportOptionsDialog
           open={exportDialog.open}
           onClose={() => setExportDialog({ open: false, type: 'individual' })}
-          results={results as PreviewResultWithPath}
+          results={results as PreviewResultWithPath[]}
           selectedIndices={exportDialog.type === 'batch' ? selectedForComparison : []}
           exportType={exportDialog.type}
           individualIndex={exportDialog.individualIndex}
