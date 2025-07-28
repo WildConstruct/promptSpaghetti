@@ -304,7 +304,7 @@ function MainApp(): React.ReactElement {
 }, [])
 };
   // Custom actions for command palette that integrate with menu bar
-  const customCommandPaletteActions = [;
+  const customCommandPaletteActions = [
     // File operations
     {
   id: 'file-new',
