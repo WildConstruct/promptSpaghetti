@@ -129,7 +129,7 @@ function MainApp(): React.ReactElement {
   }, [navigate]);
   const handleRandomizerError = useCallback((error: Error) => {
     console.error('Randomizer error:', error);
-    alert(`Generation failed: ${error.message}`);}
+    alert(`Generation failed: ${error.message}`);
   }, []);
   // Menu bar handlers
   const menuBarHandlers = {
