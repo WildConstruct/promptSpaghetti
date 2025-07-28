@@ -81,6 +81,7 @@ const sampleNodeData = {
       { label: "Heavily Used / Jury-Rigged (Damage, patches, makeshift repairs)", value: "Heavily Used", weight: 2 },
       { label: "Battle-Scarred / Field Repaired (Impact marks, welds)", value: "Battle-Scarred", weight: 1.5 }
     ]
+  }
 };
 
 // Node prototype components

@@ -14,22 +14,22 @@ import ReactFlow, {
   Handle,
   Position,
   useReactFlow,
-  ReactFlowProvider,
+  ReactFlowProvider
 } from 'reactflow';
 
 // Professional Design System
 interface ProfessionalColors {
-  background: {,
+  background: {
     primary: string;
     secondary: string;
     tertiary: string;
   };
-  text: {,
+  text: {
     primary: string;
     secondary: string;
     accent: string;
   };
-  accent: {,
+  accent: {
     orange: string;
     blue: string;
     cyan: string;
@@ -37,7 +37,7 @@ interface ProfessionalColors {
     green: string;
     red: string;
   };
-  nodes: {,
+  nodes: {
     text: string;
     logic: string;
     output: string;
@@ -45,7 +45,7 @@ interface ProfessionalColors {
     advanced: string;
     transform: string;
   };
-  ui: {,
+  ui: {
     border: string;
     borderHover: string;
     borderActive: string;
@@ -53,18 +53,19 @@ interface ProfessionalColors {
     selection: string;
   };
 }
+
 const professionalColors: ProfessionalColors = {
-  background: {,
+  background: {
     primary: '#1e1e1e',
     secondary: '#2a2a2a',
     tertiary: '#353535',
   },
-  text: {,
+  text: {
     primary: '#e8e8e8',
     secondary: '#b8b8b8',
     accent: '#ff7c00',
   },
-  accent: {,
+  accent: {
     orange: '#ff7c00',
     blue: '#4a9eff',
     cyan: '#00d4ff',
@@ -72,7 +73,7 @@ const professionalColors: ProfessionalColors = {
     green: '#4ade80',
     red: '#ef4444',
   },
-  nodes: {,
+  nodes: {
     text: '#4f46e5',
     logic: '#059669',
     output: '#dc2626',
@@ -80,7 +81,7 @@ const professionalColors: ProfessionalColors = {
     advanced: '#6366f1',
     transform: '#f59e0b',
   },
-  ui: {,
+  ui: {
     border: '#404040',
     borderHover: '#5a5a5a',
     borderActive: '#ff7c00',
@@ -88,17 +89,20 @@ const professionalColors: ProfessionalColors = {
     selection: '#ff7c0040',
   }
 };
+
 const professionalShadows = {
-  node: {,
+  node: {
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
     selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
   }
 };
+
 interface EnhancedGraphEditorProps {
-  initialNodes?: unknown[];
-  initialEdges?: unknown[];
+  initialNodes?: unknown;
+  initialEdges?: unknown;
 }
+
 interface NodeData {
   label?: string;
   description?: string;
@@ -112,10 +116,10 @@ interface NodeData {
 }
 
 // Professional Node Components
-const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => ()
+const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.text}15, ${professionalColors.nodes.text}25)`,}
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.text}`,}
+    background: `linear-gradient(135deg, ${professionalColors.nodes.text}15, ${professionalColors.nodes.text}25)`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.text}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -123,21 +127,21 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
-    position: 'relative',
+    position: 'relative'
   }}>
     <Handle
       type="target"
       position={Position.Left}
       style={{
         background: professionalColors.nodes.text,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
@@ -146,8 +150,8 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
       <span style={{ marginRight: '8px', fontSize: '16px' }}>📝</span>
       {data.label || 'Text Node'}
     </div>
-    <div style={{ 
-      fontSize: '12px', 
+    <div style={{
+      fontSize: '12px',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
     }}>
@@ -158,17 +162,18 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
       position={Position.Right}
       style={{
         background: professionalColors.nodes.text,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
   </div>
 );
-const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) => ()
+
+const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
+    background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -176,21 +181,21 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
-    position: 'relative',
+    position: 'relative'
   }}>
     <Handle
       type="target"
       position={Position.Left}
       style={{
         background: professionalColors.nodes.logic,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
@@ -199,8 +204,8 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
       <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
       {data.label || 'Logic Node'}
     </div>
-    <div style={{ 
-      fontSize: '12px', 
+    <div style={{
+      fontSize: '12px',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
     }}>
@@ -211,17 +216,18 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
       position={Position.Right}
       style={{
         background: professionalColors.nodes.logic,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
   </div>
 );
-const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) => ()
+
+const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.output}15, ${professionalColors.nodes.output}25)`,}
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.output}`,}
+    background: `linear-gradient(135deg, ${professionalColors.nodes.output}15, ${professionalColors.nodes.output}25)`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.output}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -229,21 +235,21 @@ const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) =
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
-    position: 'relative',
+    position: 'relative'
   }}>
     <Handle
       type="target"
       position={Position.Left}
       style={{
         background: professionalColors.nodes.output,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
@@ -252,8 +258,8 @@ const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) =
       <span style={{ marginRight: '8px', fontSize: '16px' }}>📤</span>
       {data.label || 'Output Node'}
     </div>
-    <div style={{ 
-      fontSize: '12px', 
+    <div style={{
+      fontSize: '12px',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
     }}>
@@ -261,14 +267,11 @@ const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) =
     </div>
   </div>
 );
-const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean }) => ()
+
+const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(),
-      135deg,
-      ${professionalColors.nodes.variable}15,}
-      ${professionalColors.nodes.variable}25}
-    )`,
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.variable}`,}
+    background: `linear-gradient(135deg, ${professionalColors.nodes.variable}15, ${professionalColors.nodes.variable}25)`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.variable}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -276,21 +279,21 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
-    position: 'relative',
+    position: 'relative'
   }}>
     <Handle
       type="target"
       position={Position.Left}
       style={{
         background: professionalColors.nodes.variable,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
@@ -299,8 +302,8 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
       <span style={{ marginRight: '8px', fontSize: '16px' }}>🔗</span>
       {data.label || 'Variable Node'}
     </div>
-    <div style={{ 
-      fontSize: '12px', 
+    <div style={{
+      fontSize: '12px',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
     }}>
@@ -311,21 +314,18 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
       position={Position.Right}
       style={{
         background: professionalColors.nodes.variable,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
   </div>
 );
-const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }) => ()
+
+const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(),
-      135deg,
-      ${professionalColors.nodes.transform}15,}
-      ${professionalColors.nodes.transform}25}
-    )`,
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.transform}`,}
+    background: `linear-gradient(135deg, ${professionalColors.nodes.transform}15, ${professionalColors.nodes.transform}25)`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.transform}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -333,21 +333,21 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
-    position: 'relative',
+    position: 'relative'
   }}>
     <Handle
       type="target"
       position={Position.Left}
       style={{
         background: professionalColors.nodes.transform,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
@@ -356,8 +356,8 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
       <span style={{ marginRight: '8px', fontSize: '16px' }}>🔄</span>
       {data.label || 'Transform Node'}
     </div>
-    <div style={{ 
-      fontSize: '12px', 
+    <div style={{
+      fontSize: '12px',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
     }}>
@@ -368,9 +368,9 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
       position={Position.Right}
       style={{
         background: professionalColors.nodes.transform,
-        border: `2px solid ${professionalColors.background.primary}`,}
+        border: `2px solid ${professionalColors.background.primary}`,
         width: '12px',
-        height: '12px',
+        height: '12px'
       }}
     />
   </div>
@@ -389,14 +389,14 @@ const nodeTypes: NodeTypes = {
 const nodeCategories = {
   'Content': [
     { id: 'text', label: 'Text Node', icon: '📝', description: 'Text manipulation and processing' },
-    { id: 'output', label: 'Output Node', icon: '📤', description: 'Final output generation' },
+    { id: 'output', label: 'Output Node', icon: '📤', description: 'Final output generation' }
   ],
   'Logic': [
     { id: 'logic', label: 'Logic Node', icon: '⚡', description: 'Logic and flow control' },
-    { id: 'variable', label: 'Variable Node', icon: '🔗', description: 'Variable storage and retrieval' },
+    { id: 'variable', label: 'Variable Node', icon: '🔗', description: 'Variable storage and retrieval' }
   ],
   'Transform': [
-    { id: 'transform', label: 'Transform Node', icon: '🔄', description: 'Data transformation and processing' },
+    { id: 'transform', label: 'Transform Node', icon: '🔄', description: 'Data transformation and processing' }
   ]
 };
 
@@ -409,30 +409,30 @@ const ProfessionalPalette: React.FC<{
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
-  return ()
+  return (
     <aside style={{
-    width: collapsed ? 56 : 240,
-    background: professionalColors.background.secondary,
-    borderRight: `1px solid ${professionalColors.ui.border}`,}
-    height: '100%',
-    transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: '2px 0 8px rgba(0, 0, 0, 0.3)',
-  }}>
+      width: collapsed ? 56 : 240,
+      background: professionalColors.background.secondary,
+      borderRight: `1px solid ${professionalColors.ui.border}`,
+      height: '100%',
+      transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      boxShadow: '2px 0 8px rgba(0, 0, 0, 0.3)'
+    }}>
     <button
       onClick={onToggle}
       style={{
         background: professionalColors.ui.hover,
-        border: `1px solid ${professionalColors.ui.border}`,}
+        border: `1px solid ${professionalColors.ui.border}`,
         color: professionalColors.text.primary,
         fontSize: '18px',
         width: '100%',
         padding: '12px 0',
         cursor: 'pointer',
         outline: 'none',
-        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
     >
       {collapsed ? '»' : '«'}
@@ -442,11 +442,11 @@ const ProfessionalPalette: React.FC<{
       overflowY: 'auto', 
       padding: collapsed ? '8px 4px' : '16px 12px',
       scrollbarWidth: 'thin',
-      scrollbarColor: `${professionalColors.ui.border} transparent`,}
+      scrollbarColor: `${professionalColors.ui.border} transparent`
     }}>
-      {collapsed ? ()
+      {collapsed ? (
         // Collapsed view - icons only
-        Object.values(nodeCategories).flat().map((node) => ()
+        Object.values(nodeCategories).flat().map((node) => (
           <div
             key={node.id}
             draggable
@@ -473,9 +473,9 @@ const ProfessionalPalette: React.FC<{
             {node.icon}
           </div>
         ))
-      ) : ()
+      ) : (
         // Expanded view - categories
-        Object.entries(nodeCategories).map(([category, nodes]) => ()
+        Object.entries(nodeCategories).map(([category, nodes]) => (
           <div key={category} style={{ marginBottom: '20px' }}>
             <h3 style={{
               color: professionalColors.text.accent,
@@ -487,7 +487,7 @@ const ProfessionalPalette: React.FC<{
             }}>
               {category}
             </h3>
-            {nodes.map((node) => ()
+            {nodes.map((node) => (
               <div
                 key={node.id}
                 draggable
@@ -548,40 +548,46 @@ const InspectorPanel: React.FC<{
   const [label, setLabel] = useState(selectedNode?.data?.label || '');
   const [description, setDescription] = useState(selectedNode?.data?.description || '');
   const [options, setOptions] = useState<Array<{label: string, value: string, weight?: number}>>(selectedNode?.data?.options || []);
+  
   React.useEffect(() => {
     setLabel(selectedNode?.data?.label || '');
     setDescription(selectedNode?.data?.description || '');
     setOptions(selectedNode?.data?.options || []);
   }, [selectedNode]);
+  
   const handleSave = useCallback(() => {
     if (selectedNode) {
       onUpdateNode(selectedNode.id, { label, description, options });
     }
   }, [selectedNode, label, description, options, onUpdateNode]);
+  
   const addOption = useCallback(() => {
     setOptions(prev => [...prev, { label: 'New Option', value: 'new-option', weight: 1 }]);
   }, []);
+  
   const updateOption = useCallback((index: number, field: 'label' | 'value' | 'weight', value: string | number) => {
     setOptions(prev => prev.map((opt, i) => 
       i === index ? { ...opt, [field]: value } : opt
     ));
   }, []);
+  
   const removeOption = useCallback((index: number) => {
     setOptions(prev => prev.filter((_, i) => i !== index));
   }, []);
+  
   if (!selectedNode) {
-    return ()
+    return (
       <div style={{
         width: '300px',
         background: professionalColors.background.secondary,
-        borderLeft: `1px solid ${professionalColors.ui.border}`,}
+        borderLeft: `1px solid ${professionalColors.ui.border}`,
         padding: '20px',
         color: professionalColors.text.secondary,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        fontSize: '14px',
+        fontSize: '14px'
       }}>
         <div style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.3 }}>🔍</div>
         <div style={{ textAlign: 'center', lineHeight: 1.5 }}>
@@ -590,21 +596,22 @@ const InspectorPanel: React.FC<{
       </div>
     );
   }
-  return ()
+  
+  return (
     <div style={{
       width: '300px',
       background: professionalColors.background.secondary,
-      borderLeft: `1px solid ${professionalColors.ui.border}`,}
+      borderLeft: `1px solid ${professionalColors.ui.border}`,
       padding: '20px',
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: '20px',
         paddingBottom: '16px',
-        borderBottom: `1px solid ${professionalColors.ui.border}`,}
+        borderBottom: `1px solid ${professionalColors.ui.border}`
       }}>
         <div style={{
           width: '12px',
@@ -630,6 +637,7 @@ const InspectorPanel: React.FC<{
           </div>
         </div>
       </div>
+      
       <div style={{ marginBottom: '20px' }}>
         <label style={{
           display: 'block',
@@ -649,12 +657,12 @@ const InspectorPanel: React.FC<{
             width: '100%',
             padding: '8px 12px',
             background: professionalColors.background.primary,
-            border: `1px solid ${professionalColors.ui.border}`,}
+            border: `1px solid ${professionalColors.ui.border}`,
             borderRadius: '6px',
             color: professionalColors.text.primary,
             fontSize: '14px',
             outline: 'none',
-            transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
           onFocus={(e) => {
             e.target.style.borderColor = professionalColors.ui.borderActive;
@@ -665,6 +673,7 @@ const InspectorPanel: React.FC<{
           }}
         />
       </div>
+      
       <div style={{ marginBottom: '20px' }}>
         <label style={{
           display: 'block',
@@ -684,7 +693,7 @@ const InspectorPanel: React.FC<{
             width: '100%',
             padding: '8px 12px',
             background: professionalColors.background.primary,
-            border: `1px solid ${professionalColors.ui.border}`,}
+            border: `1px solid ${professionalColors.ui.border}`,
             borderRadius: '6px',
             color: professionalColors.text.primary,
             fontSize: '14px',
@@ -692,7 +701,7 @@ const InspectorPanel: React.FC<{
             resize: 'vertical',
             minHeight: '80px',
             fontFamily: 'inherit',
-            transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
           onFocus={(e) => {
             e.target.style.borderColor = professionalColors.ui.borderActive;
@@ -703,6 +712,7 @@ const InspectorPanel: React.FC<{
           }}
         />
       </div>
+      
       <div style={{ marginBottom: '20px' }}>
         <label style={{
           display: 'block',
@@ -729,11 +739,11 @@ const InspectorPanel: React.FC<{
             <div style={{
               padding: '8px 12px',
               background: professionalColors.background.primary,
-              border: `1px solid ${professionalColors.ui.border}`,}
+              border: `1px solid ${professionalColors.ui.border}`,
               borderRadius: '6px',
               color: professionalColors.text.secondary,
               fontSize: '14px',
-              textAlign: 'center',
+              textAlign: 'center'
             }}>
               {Math.round(selectedNode.position.x)}
             </div>
@@ -749,19 +759,20 @@ const InspectorPanel: React.FC<{
             <div style={{
               padding: '8px 12px',
               background: professionalColors.background.primary,
-              border: `1px solid ${professionalColors.ui.border}`,}
+              border: `1px solid ${professionalColors.ui.border}`,
               borderRadius: '6px',
               color: professionalColors.text.secondary,
               fontSize: '14px',
-              textAlign: 'center',
+              textAlign: 'center'
             }}>
               {Math.round(selectedNode.position.y)}
             </div>
           </div>
         </div>
       </div>
+      
       {/* Variable Options Editor for Logic/Transform/Variable nodes */}
-      {(selectedNode.type === 'logic' || selectedNode.type === 'transform' || selectedNode.type === 'variable') && ()
+      {(selectedNode.type === 'logic' || selectedNode.type === 'transform' || selectedNode.type === 'variable') && (
         <div style={{ marginBottom: '20px' }}>
           <div style={{
             display: 'flex',
@@ -781,12 +792,12 @@ const InspectorPanel: React.FC<{
               style={{
                 padding: '4px 8px',
                 background: professionalColors.accent.blue + '20',
-                border: `1px solid ${professionalColors.accent.blue}`,}
+                border: `1px solid ${professionalColors.accent.blue}`,
                 borderRadius: '4px',
                 color: professionalColors.accent.blue,
                 fontSize: '12px',
                 cursor: 'pointer',
-                outline: 'none',
+                outline: 'none'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = professionalColors.accent.blue + '30';
@@ -799,24 +810,24 @@ const InspectorPanel: React.FC<{
             </button>
           </div>
           <div style={{ 
-            border: `1px solid ${professionalColors.ui.border}`,}
+            border: `1px solid ${professionalColors.ui.border}`,
             borderRadius: '6px',
-            background: professionalColors.background.primary,
+            background: professionalColors.background.primary
           }}>
-            {options.length === 0 ? ()
+            {options.length === 0 ? (
               <div style={{
                 padding: '20px',
                 textAlign: 'center',
                 color: professionalColors.text.secondary,
                 fontSize: '13px',
               }}>
-                No options defined. Click &quot;Add&quot; to create options.
+                No options defined. Click "Add" to create options.
               </div>
-            ) : ()
-              options.map((option, index) => ()
+            ) : (
+              options.map((option, index) => (
                 <div key={index} style={{
                   padding: '12px',
-                  borderBottom: index < options.length - 1 ? `1px solid ${professionalColors.ui.border}` : 'none',}
+                  borderBottom: index < options.length - 1 ? `1px solid ${professionalColors.ui.border}` : 'none'
                 }}>
                   <div style={{ marginBottom: '8px' }}>
                     <input
@@ -833,11 +844,11 @@ const InspectorPanel: React.FC<{
                         width: '100%',
                         padding: '8px 12px',
                         background: professionalColors.background.secondary,
-                        border: `1px solid ${professionalColors.ui.border}`,}
+                        border: `1px solid ${professionalColors.ui.border}`,
                         borderRadius: '4px',
                         color: professionalColors.text.primary,
                         fontSize: '14px',
-                        outline: 'none',
+                        outline: 'none'
                       }}
                     />
                   </div>
@@ -862,11 +873,11 @@ const InspectorPanel: React.FC<{
                           width: '100%',
                           padding: '4px 6px',
                           background: professionalColors.background.secondary,
-                          border: `1px solid ${professionalColors.ui.border}`,}
+                          border: `1px solid ${professionalColors.ui.border}`,
                           borderRadius: '4px',
                           color: professionalColors.text.primary,
                           fontSize: '12px',
-                          outline: 'none',
+                          outline: 'none'
                         }}
                       />
                     </div>
@@ -875,12 +886,12 @@ const InspectorPanel: React.FC<{
                       style={{
                         padding: '4px 6px',
                         background: 'transparent',
-                        border: `1px solid ${professionalColors.accent.red}`,}
+                        border: `1px solid ${professionalColors.accent.red}`,
                         borderRadius: '4px',
                         color: professionalColors.accent.red,
                         fontSize: '11px',
                         cursor: 'pointer',
-                        marginTop: '16px',
+                        marginTop: '16px'
                       }}
                       title="Remove option"
                     >
@@ -893,6 +904,7 @@ const InspectorPanel: React.FC<{
           </div>
         </div>
       )}
+      
       <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
         <button
           onClick={() => onDeleteNode(selectedNode.id)}
@@ -900,14 +912,14 @@ const InspectorPanel: React.FC<{
             width: '100%',
             padding: '10px 16px',
             background: professionalColors.accent.red + '20',
-            border: `1px solid ${professionalColors.accent.red}`,}
+            border: `1px solid ${professionalColors.accent.red}`,
             borderRadius: '6px',
             color: professionalColors.accent.red,
             fontSize: '14px',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-            outline: 'none',
+            outline: 'none'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = professionalColors.accent.red + '30';
@@ -931,17 +943,17 @@ const StatusBar: React.FC<{
   onLoad: () => void;
   onClear: () => void;
   onRun: () => void;
-}> = ({ nodeCount, edgeCount, onSave, onLoad, onClear, onRun }) => ()
+}> = ({ nodeCount, edgeCount, onSave, onLoad, onClear, onRun }) => (
   <div style={{
     height: '40px',
     background: professionalColors.background.tertiary,
-    borderTop: `1px solid ${professionalColors.ui.border}`,}
+    borderTop: `1px solid ${professionalColors.ui.border}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 16px',
     fontSize: '12px',
-    color: professionalColors.text.secondary,
+    color: professionalColors.text.secondary
   }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
       <span>Nodes: {nodeCount}</span>
@@ -953,13 +965,13 @@ const StatusBar: React.FC<{
         onClick={onSave}
         style={{
           background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`,}
+          border: `1px solid ${professionalColors.ui.border}`,
           color: professionalColors.text.primary,
           padding: '4px 8px',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '11px',
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         💾 Save
@@ -968,13 +980,13 @@ const StatusBar: React.FC<{
         onClick={onLoad}
         style={{
           background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`,}
+          border: `1px solid ${professionalColors.ui.border}`,
           color: professionalColors.text.primary,
           padding: '4px 8px',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '11px',
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         📁 Load
@@ -983,13 +995,13 @@ const StatusBar: React.FC<{
         onClick={onClear}
         style={{
           background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`,}
+          border: `1px solid ${professionalColors.ui.border}`,
           color: professionalColors.text.primary,
           padding: '4px 8px',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '11px',
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         🗑️ Clear
@@ -998,14 +1010,14 @@ const StatusBar: React.FC<{
         onClick={onRun}
         style={{
           background: professionalColors.accent.green + '20',
-          border: `1px solid ${professionalColors.accent.green}`,}
+          border: `1px solid ${professionalColors.accent.green}`,
           color: professionalColors.accent.green,
           padding: '4px 12px',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '11px',
           fontWeight: 600,
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = professionalColors.accent.green + '30';
@@ -1026,7 +1038,7 @@ const defaultNodes: Node[] = [
     id: "start-1",
     type: "text",
     position: { x: 200, y: 100 },
-    data: {,
+    data: {
       label: "Tech Panel Generator",
       description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
       category: "content",
@@ -1036,11 +1048,11 @@ const defaultNodes: Node[] = [
     id: "archetype-2", 
     type: "logic",
     position: { x: 500, y: 50 },
-    data: {,
+    data: {
       label: "Panel Archetype",
       description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
       category: "logic",
-      options: [,
+      options: [
         { label: "Cockpit Control Surface (Fighter, Shuttle)", value: "Cockpit Control Surface", weight: 1 },
         { label: "Bridge/Command Console (Capital Ship, Ops)", value: "Bridge/Command Center Console", weight: 1 },
         { label: "Machinery/Engineering Panel (Engine Room, Reactor)", value: "Machinery/Engineering Panel", weight: 1 },
@@ -1056,11 +1068,11 @@ const defaultNodes: Node[] = [
     id: "aesthetic-3",
     type: "logic", 
     position: { x: 500, y: 200 },
-    data: {,
+    data: {
       label: "Aesthetic Influence",
       description: "Style: Star Wars, Cassette Futurism, Dieselpunk, Atompunk, etc.",
       category: "logic",
-      options: [,
+      options: [
         { label: "Star Wars Core (Used Future, 70s Analog)", value: "Star Wars Core", weight: 1 },
         { label: "Cassette Futurism (Alien, Blade Runner - 70s/80s CRTs)", value: "Cassette Futurism", weight: 1 },
         { label: "Dieselpunk (Fallout, Sky Captain - Interwar/WWII, Gritty)", value: "Dieselpunk", weight: 1 },
@@ -1076,8 +1088,8 @@ const defaultNodes: Node[] = [
     id: "faction-4",
     type: "logic",
     position: { x: 800, y: 50 },
-    data: {,
-      label: "Faction Alignment", 
+    data: {
+      label: "Faction Alignment",
       description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
       category: "logic",
     }
@@ -1086,11 +1098,11 @@ const defaultNodes: Node[] = [
     id: "wear-5",
     type: "transform",
     position: { x: 800, y: 200 },
-    data: {,
+    data: {
       label: "Wear Level",
       description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
       category: "transform",
-      options: [,
+      options: [
         { label: "Pristine (New Old Stock - retro design, mint condition)", value: "Pristine (New Old Stock)", weight: 1 },
         { label: "Lightly Used (Minor scuffs, dust, fingerprints)", value: "Lightly Used", weight: 2 },
         { label: "Moderately Worn (Visible scratches, grime, faded labels)", value: "Moderately Worn", weight: 3 },
@@ -1104,7 +1116,7 @@ const defaultNodes: Node[] = [
     id: "colors-6",
     type: "transform",
     position: { x: 500, y: 350 },
-    data: {,
+    data: {
       label: "Color Palette",
       description: "Dark Grays & Blues, Military Greens, Chrome & Pastels, etc.",
       category: "transform",
@@ -1114,7 +1126,7 @@ const defaultNodes: Node[] = [
     id: "materials-7",
     type: "transform",
     position: { x: 800, y: 350 },
-    data: {,
+    data: {
       label: "Key Materials",
       description: "Painted Metal, Bakelite, Aged Plastic, Cast Iron, etc.",
       category: "transform",
@@ -1124,7 +1136,7 @@ const defaultNodes: Node[] = [
     id: "screen-8",
     type: "logic",
     position: { x: 200, y: 250 },
-    data: {,
+    data: {
       label: "Screen Type",
       description: "CRT, Vector Display, Nixie Tubes, LED Segments, etc.",
       category: "logic",
@@ -1134,7 +1146,7 @@ const defaultNodes: Node[] = [
     id: "controls-9",
     type: "logic",
     position: { x: 200, y: 400 },
-    data: {,
+    data: {
       label: "Controls",
       description: "Toggle Switches, Chunky Buttons, Rotary Dials, etc.",
       category: "logic",
@@ -1144,7 +1156,7 @@ const defaultNodes: Node[] = [
     id: "greeble-10",
     type: "transform",
     position: { x: 500, y: 500 },
-    data: {,
+    data: {
       label: "Detail Density",
       description: "Greeble level: None, Low, Medium, High, Extreme",
       category: "transform",
@@ -1154,7 +1166,7 @@ const defaultNodes: Node[] = [
     id: "labeling-11",
     type: "variable",
     position: { x: 800, y: 500 },
-    data: {,
+    data: {
       label: "Labeling Style",
       description: "Stenciled, Engraved, Dymo Tape, Alien Glyphs, etc.",
       category: "variable",
@@ -1164,7 +1176,7 @@ const defaultNodes: Node[] = [
     id: "lighting-12",
     type: "variable",
     position: { x: 200, y: 550 },
-    data: {,
+    data: {
       label: "Panel Lighting",
       description: "Dimly Lit, Harsh Industrial, Soft Glow, Flickering, etc.",
       category: "variable",
@@ -1174,7 +1186,7 @@ const defaultNodes: Node[] = [
     id: "function-13",
     type: "variable",
     position: { x: 500, y: 650 },
-    data: {,
+    data: {
       label: "Tech Function",
       description: "Navigation Computer, Weapons Control, Life Support, etc.",
       category: "variable",
@@ -1184,13 +1196,14 @@ const defaultNodes: Node[] = [
     id: "output-final",
     type: "output",
     position: { x: 800, y: 700 },
-    data: {,
+    data: {
       label: "Generated Prompt",
       description: "Final detailed prompt for retro-futuristic tech panel",
-      category: "content",
+      category: "content"
     }
   }
 ];
+
 const defaultEdges: Edge[] = [
   { id: "e1-2", source: "start-1", target: "archetype-2", type: "smoothstep" },
   { id: "e1-3", source: "start-1", target: "aesthetic-3", type: "smoothstep" },
@@ -1213,6 +1226,7 @@ const defaultEdges: Edge[] = [
 // Graph execution engine
 function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
   const results: { [key: string]: string } = {};
+  
   // Helper function to get weighted random choice
   const getWeightedChoice = (options: Array<{label: string, value: string, weight?: number}>): string => {
     if (options.length === 0) return "No options defined";
@@ -1226,8 +1240,9 @@ function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
     }
     return options[0].value; // Fallback
   };
+  
   // Execute nodes based on their type
-  nodes.forEach(node => {)
+  nodes.forEach(node => {
     const nodeData = node.data as NodeData;
     switch (node.type) {
       case 'text':
@@ -1244,11 +1259,11 @@ function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
         break;
       case 'output': {
         // Combine all inputs for the output
-        const inputNodes = edges;
+        const inputNodes = edges
           .filter(edge => edge.target === node.id)
           .map(edge => edge.source);
         if (inputNodes.length > 0) {
-          const inputValues = inputNodes;
+          const inputValues = inputNodes
             .map(nodeId => results[nodeId])
             .filter(val => val && val !== 'Start')
             .join(', ');
@@ -1262,17 +1277,19 @@ function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
         results[node.id] = nodeData.label || 'Unknown';
     }
   });
+  
   return results;
 }
-const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
+
+const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   initialNodes = [],
   initialEdges = []
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState()
-    initialNodes.length > 0 ? (initialNodes as Node[]) : defaultNodes
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    initialNodes && Array.isArray(initialNodes) && initialNodes.length > 0 ? (initialNodes as Node[]) : defaultNodes
   );
-  const [edges, setEdges, onEdgesChange] = useEdgesState()
-    initialEdges.length > 0 ? (initialEdges as Edge[]) : defaultEdges
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    initialEdges && Array.isArray(initialEdges) && initialEdges.length > 0 ? (initialEdges as Edge[]) : defaultEdges
   );
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -1280,70 +1297,80 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
   const [showOutput, setShowOutput] = useState(false);
   const [showAnnotations, setShowAnnotations] = useState(false);
   const [stickyNotesVisible, setStickyNotesVisible] = useState(false);
+  
   // Professional Features State
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [dragSelection, setDragSelection] = useState(false);
+  
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
+  
   const handleRunGraph = useCallback(() => {
     const results = executeGraph(nodes, edges);
     setExecutionResults(results);
     setShowOutput(true);
   }, [nodes, edges]);
-  const onConnect = useCallback(;)
-    (params: Connection) => setEdges((eds) => addEdge({)
+  
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge({
       ...params,
       type: 'smoothstep',
       style: { stroke: professionalColors.accent.cyan, strokeWidth: 2 }
     }, eds)),
     [setEdges]
   );
-  const onNodeClick = useCallback(;)
+  
+  const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
       setSelectedNode(node);
     },
     []
   );
+  
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+  
   const onDrop = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     const type = event.dataTransfer.getData('application/reactflow');
     if (typeof type === 'undefined' || !type) {
       return;
     }
-    const position = screenToFlowPosition({)
+    const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
     });
+
     const nodeConfig = Object.values(nodeCategories).flat().find(n => n.id === type);
     const newNode: Node = {
-      id: `node_${Date.now()}`,}
+      id: `node_${Date.now()}`,
       type,
       position,
-      data: { ,
-        label: nodeConfig?.label || `New ${type}`,}
-        description: nodeConfig?.description || `${type} node created ${new Date().toLocaleTimeString()}`,}
-        category: type,
-      },
+      data: {
+        label: nodeConfig?.label || `New ${type}`,
+        description: nodeConfig?.description || `${type} node created ${new Date().toLocaleTimeString()}`,
+        category: type
+      }
     };
     setNodes((nds) => [...nds, newNode]);
   }, [screenToFlowPosition, setNodes]);
+  
   const saveGraph = useCallback(() => {
     const graphData = { nodes, edges, timestamp: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(graphData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `graph-${Date.now()}.json`;}
+    a.download = `graph-${Date.now()}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }, [nodes, edges]);
+  
   const loadGraph = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -1366,6 +1393,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
     };
     input.click();
   }, [setNodes, setEdges]);
+  
   // Professional Features: Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -1398,7 +1426,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
       } else if (e.key === 'Delete' || e.key === 'Backspace') {
         if (selectedNodes.length > 0) {
           setNodes(nds => nds.filter(n => !selectedNodes.includes(n.id)));
-          setEdges(eds => eds.filter(e => )
+          setEdges(eds => eds.filter(e => 
             !selectedNodes.includes(e.source) && !selectedNodes.includes(e.target)
           ));
           setSelectedNodes([]);
@@ -1408,6 +1436,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedNodes, nodes, saveGraph, loadGraph, setNodes, setEdges]);
+  
   const clearGraph = useCallback(() => {
     if (confirm('Clear all nodes and edges?')) {
       setNodes([]);
@@ -1415,6 +1444,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
       setSelectedNode(null);
     }
   }, [setNodes, setEdges]);
+  
   const updateNode = useCallback((nodeId: string, updates: Partial<NodeData>) => {
     setNodes((nds) => nds.map((node) => 
       node.id === nodeId 
@@ -1422,6 +1452,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
         : node
     ));
   }, [setNodes]);
+  
   const deleteNode = useCallback((nodeId: string) => {
     setNodes((nds) => nds.filter((node) => node.id !== nodeId));
     setEdges((eds) => eds.filter((edge) => 
@@ -1429,10 +1460,11 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
     ));
     setSelectedNode(null);
   }, [setNodes, setEdges]);
-  return ()
-    <div style={{ 
-      width: '100%', 
-      height: '100%', 
+  
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       background: professionalColors.background.primary,
@@ -1452,8 +1484,9 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           outline: none !important;
         }
       `}</style>
+      
       {/* Professional Command Palette */}
-      {showCommandPalette && ()
+      {showCommandPalette && (
         <div style={{
           position: 'absolute',
           top: '50px',
@@ -1461,16 +1494,16 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           transform: 'translateX(-50%)',
           width: '600px',
           background: professionalColors.background.secondary,
-          border: `1px solid ${professionalColors.ui.border}`,}
+          border: `1px solid ${professionalColors.ui.border}`,
           borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
           zIndex: 1000,
-          overflow: 'hidden',
+          overflow: 'hidden'
         }}>
           <div style={{
             padding: '16px 20px',
-            borderBottom: `1px solid ${professionalColors.ui.border}`,}
-            background: professionalColors.background.tertiary,
+            borderBottom: `1px solid ${professionalColors.ui.border}`,
+            background: professionalColors.background.tertiary
           }}>
             <div style={{
               fontSize: '16px',
@@ -1537,8 +1570,8 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           <div style={{
             padding: '12px 20px',
             background: professionalColors.background.primary,
-            borderTop: `1px solid ${professionalColors.ui.border}`,}
-            textAlign: 'center',
+            borderTop: `1px solid ${professionalColors.ui.border}`,
+            textAlign: 'center'
           }}>
             <button
               onClick={() => setShowCommandPalette(false)}
@@ -1558,8 +1591,9 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           </div>
         </div>
       )}
+      
       {/* Command Palette Backdrop */}
-      {showCommandPalette && ()
+      {showCommandPalette && (
         <div
           style={{
             position: 'absolute',
@@ -1573,15 +1607,16 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           onClick={() => setShowCommandPalette(false)}
         />
       )}
+      
       {/* Professional Toolbar */}
       <div style={{
         height: '48px',
         background: professionalColors.background.secondary,
-        borderBottom: `1px solid ${professionalColors.ui.border}`,}
+        borderBottom: `1px solid ${professionalColors.ui.border}`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 16px',
+        padding: '0 16px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -1597,7 +1632,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
             padding: '4px 8px',
             background: professionalColors.accent.orange + '20',
             borderRadius: '4px',
-            border: `1px solid ${professionalColors.accent.orange}40`,}
+            border: `1px solid ${professionalColors.accent.orange}40`
           }}>
             Cinema 4D Design
           </div>
@@ -1608,7 +1643,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
             title="Command Palette (⌘K)"
             style={{
               background: professionalColors.background.primary,
-              border: `1px solid ${professionalColors.ui.border}`,}
+              border: `1px solid ${professionalColors.ui.border}`,
               color: professionalColors.text.primary,
               padding: '6px 12px',
               borderRadius: '6px',
@@ -1617,7 +1652,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               fontWeight: 500,
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '6px'
             }}
           >
             ⌘K
@@ -1627,7 +1662,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
             title="Execute Graph (⌘Enter)"
             style={{
               background: professionalColors.accent.blue + '20',
-              border: `1px solid ${professionalColors.accent.blue}`,}
+              border: `1px solid ${professionalColors.accent.blue}`,
               color: professionalColors.accent.blue,
               padding: '6px 12px',
               borderRadius: '6px',
@@ -1636,7 +1671,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               fontWeight: 500,
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '6px'
             }}
           >
             🎲 Execute
@@ -1649,6 +1684,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
           </div>
         </div>
       </div>
+      
       <div style={{ display: 'flex', flex: 1 }}>
         <ProfessionalPalette
           collapsed={paletteCollapsed}
@@ -1668,7 +1704,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               onClick={handleRunGraph}
               style={{
                 background: professionalColors.accent.green + '20',
-                border: `1px solid ${professionalColors.accent.green}`,}
+                border: `1px solid ${professionalColors.accent.green}`,
                 color: professionalColors.accent.green,
                 padding: '8px 16px',
                 borderRadius: '6px',
@@ -1678,7 +1714,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: professionalShadows.node.default,
+                boxShadow: professionalShadows.node.default
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = professionalColors.accent.green + '30';
@@ -1693,7 +1729,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               onClick={() => setStickyNotesVisible(!stickyNotesVisible)}
               style={{
                 background: stickyNotesVisible ? professionalColors.accent.orange + '30' : professionalColors.background.secondary,
-                border: `1px solid ${stickyNotesVisible ? professionalColors.accent.orange : professionalColors.ui.border}`,}
+                border: `1px solid ${stickyNotesVisible ? professionalColors.accent.orange : professionalColors.ui.border}`,
                 color: stickyNotesVisible ? professionalColors.accent.orange : professionalColors.text.primary,
                 padding: '8px 16px',
                 borderRadius: '6px',
@@ -1703,7 +1739,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: professionalShadows.node.default,
+                boxShadow: professionalShadows.node.default
               }}
               title="Toggle Sticky Notes"
             >
@@ -1713,7 +1749,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               onClick={() => setShowAnnotations(!showAnnotations)}
               style={{
                 background: showAnnotations ? professionalColors.accent.purple + '30' : professionalColors.background.secondary,
-                border: `1px solid ${showAnnotations ? professionalColors.accent.purple : professionalColors.ui.border}`,}
+                border: `1px solid ${showAnnotations ? professionalColors.accent.purple : professionalColors.ui.border}`,
                 color: showAnnotations ? professionalColors.accent.purple : professionalColors.text.primary,
                 padding: '8px 16px',
                 borderRadius: '6px',
@@ -1723,13 +1759,14 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: professionalShadows.node.default,
+                boxShadow: professionalShadows.node.default
               }}
               title="Toggle Annotations"
             >
               💬 Annotations
             </button>
           </div>
+          
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -1745,20 +1782,20 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
             connectionLineStyle={{ stroke: professionalColors.accent.cyan, strokeWidth: 2 }}
             defaultEdgeOptions={{
               style: { stroke: professionalColors.accent.cyan, strokeWidth: 2 },
-              type: 'smoothstep',
+              type: 'smoothstep'
             }}
             className="professional-reactflow"
           >
             <Controls 
               style={{ 
                 background: professionalColors.background.secondary,
-                border: `1px solid ${professionalColors.ui.border}`,}
-              }} 
+                border: `1px solid ${professionalColors.ui.border}`
+              }}
             />
             <MiniMap 
               style={{ 
                 background: professionalColors.background.secondary,
-                border: `1px solid ${professionalColors.ui.border}`,}
+                border: `1px solid ${professionalColors.ui.border}`
               }}
               nodeColor={(node) => {
                 const colorMap: Record<string, string> = {
@@ -1778,8 +1815,9 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               color={professionalColors.ui.border}
             />
           </ReactFlow>
+          
           {/* Sticky Notes Overlay */}
-          {stickyNotesVisible && ()
+          {stickyNotesVisible && (
             <div style={{
               position: 'absolute',
               top: 0,
@@ -1798,7 +1836,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   width: '200px',
                   height: '150px',
                   background: professionalColors.accent.orange + '20',
-                  border: `1px solid ${professionalColors.accent.orange}`,}
+                  border: `1px solid ${professionalColors.accent.orange}`,
                   borderRadius: '8px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                   padding: '12px',
@@ -1808,7 +1846,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   pointerEvents: 'auto',
                   cursor: 'move',
                   backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.2s ease'
                 }}
                 onDoubleClick={(e) => {
                   const target = e.target as HTMLElement;
@@ -1871,7 +1909,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   width: '180px',
                   height: '120px',
                   background: professionalColors.accent.green + '20',
-                  border: `1px solid ${professionalColors.accent.green}`,}
+                  border: `1px solid ${professionalColors.accent.green}`,
                   borderRadius: '8px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                   padding: '12px',
@@ -1881,7 +1919,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   pointerEvents: 'auto',
                   cursor: 'move',
                   backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.2s ease'
                 }}
                 onDoubleClick={(e) => {
                   const target = e.target as HTMLElement;
@@ -1938,8 +1976,9 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               </div>
             </div>
           )}
+          
           {/* Node Annotations Panel */}
-          {showAnnotations && selectedNode && ()
+          {showAnnotations && selectedNode && (
             <div style={{
               position: 'absolute',
               top: '60px',
@@ -1947,16 +1986,16 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               width: '300px',
               maxHeight: '400px',
               background: professionalColors.background.secondary,
-              border: `1px solid ${professionalColors.ui.border}`,}
+              border: `1px solid ${professionalColors.ui.border}`,
               borderRadius: '8px',
               boxShadow: professionalShadows.node.default,
               zIndex: 1001,
-              overflow: 'hidden',
+              overflow: 'hidden'
             }}>
               <div style={{
                 padding: '12px 16px',
-                borderBottom: `1px solid ${professionalColors.ui.border}`,}
-                background: professionalColors.background.tertiary,
+                borderBottom: `1px solid ${professionalColors.ui.border}`,
+                background: professionalColors.background.tertiary
               }}>
                 <div style={{
                   color: professionalColors.text.primary,
@@ -2012,12 +2051,12 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                       height: '80px',
                       padding: '8px',
                       background: professionalColors.background.primary,
-                      border: `1px solid ${professionalColors.ui.border}`,}
+                      border: `1px solid ${professionalColors.ui.border}`,
                       borderRadius: '4px',
                       color: professionalColors.text.primary,
                       fontSize: '13px',
                       resize: 'vertical',
-                      outline: 'none',
+                      outline: 'none'
                     }}
                   />
                   <button
@@ -2025,11 +2064,11 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                       marginTop: '8px',
                       padding: '6px 12px',
                       background: professionalColors.accent.blue + '20',
-                      border: `1px solid ${professionalColors.accent.blue}`,}
+                      border: `1px solid ${professionalColors.accent.blue}`,
                       color: professionalColors.accent.blue,
                       borderRadius: '4px',
                       cursor: 'pointer',
-                      fontSize: '12px',
+                      fontSize: '12px'
                     }}
                   >
                     Add Note
@@ -2048,12 +2087,14 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
             </div>
           )}
         </div>
+        
         <InspectorPanel
           selectedNode={selectedNode}
           onUpdateNode={updateNode}
           onDeleteNode={deleteNode}
         />
       </div>
+      
       <StatusBar
         nodeCount={nodes.length}
         edgeCount={edges.length}
@@ -2062,8 +2103,9 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
         onClear={clearGraph}
         onRun={handleRunGraph}
       />
+      
       {/* Output Modal */}
-      {showOutput && executionResults && ()
+      {showOutput && executionResults && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -2078,21 +2120,21 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
         }}>
           <div style={{
             background: professionalColors.background.secondary,
-            border: `1px solid ${professionalColors.ui.border}`,}
+            border: `1px solid ${professionalColors.ui.border}`,
             borderRadius: '8px',
             width: '90%',
             maxWidth: '800px',
             maxHeight: '80%',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)'
           }}>
             <div style={{
               padding: '20px',
-              borderBottom: `1px solid ${professionalColors.ui.border}`,}
+              borderBottom: `1px solid ${professionalColors.ui.border}`,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}>
               <h2 style={{
                 color: professionalColors.text.primary,
@@ -2122,13 +2164,13 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
               flex: 1,
             }}>
               {/* Final Output */}
-              {executionResults['output-final'] && ()
+              {executionResults['output-final'] && (
                 <div style={{
                   background: professionalColors.accent.green + '10',
-                  border: `1px solid ${professionalColors.accent.green}`,}
+                  border: `1px solid ${professionalColors.accent.green}`,
                   borderRadius: '6px',
                   padding: '16px',
-                  marginBottom: '24px',
+                  marginBottom: '24px'
                 }}>
                   <h3 style={{
                     color: professionalColors.accent.green,
@@ -2150,6 +2192,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   </div>
                 </div>
               )}
+              
               {/* Individual Node Results */}
               <div style={{
                 display: 'grid',
@@ -2162,14 +2205,14 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                     const node = nodes.find(n => n.id === nodeId);
                     const nodeType = node?.type || 'unknown';
                     const nodeLabel = node?.data?.label || nodeId;
-                    return ()
+                    return (
                       <div
                         key={nodeId}
                         style={{
                           background: professionalColors.background.primary,
-                          border: `1px solid ${professionalColors.ui.border}`,}
+                          border: `1px solid ${professionalColors.ui.border}`,
                           borderRadius: '6px',
-                          padding: '12px',
+                          padding: '12px'
                         }}
                       >
                         <div style={{
@@ -2203,15 +2246,16 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                     );
                   })}
               </div>
+              
               <div style={{
                 marginTop: '24px',
                 padding: '16px',
                 background: professionalColors.background.primary,
-                border: `1px solid ${professionalColors.ui.border}`,}
+                border: `1px solid ${professionalColors.ui.border}`,
                 borderRadius: '6px',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: 'center'
               }}>
                 <div style={{
                   color: professionalColors.text.secondary,
@@ -2223,13 +2267,13 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
                   onClick={handleRunGraph}
                   style={{
                     background: professionalColors.accent.blue + '20',
-                    border: `1px solid ${professionalColors.accent.blue}`,}
+                    border: `1px solid ${professionalColors.accent.blue}`,
                     color: professionalColors.accent.blue,
                     padding: '6px 12px',
                     borderRadius: '4px',
                     cursor: 'pointer',
                     fontSize: '12px',
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   🎲 Generate Again
@@ -2244,7 +2288,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({)
 };
 
 // Wrapper with ReactFlowProvider
-export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = (props) => ()
+export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = (props) => (
   <ReactFlowProvider>
     <EnhancedGraphEditorInner {...props} />
   </ReactFlowProvider>
