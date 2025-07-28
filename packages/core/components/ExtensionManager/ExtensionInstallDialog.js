@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Dialog for installing extensions from files or URLs
  */
 import { useState, useRef } from 'react';
-import { parseExtensionManifest } from '../../extensions/ExtensionManifest-simple';
+import { extensionManifestParser } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 export const ExtensionInstallDialog = ({ onInstall, onCancel }) => {
     const [installMethod, setInstallMethod] = useState('file');
@@ -115,7 +115,7 @@ export const ExtensionInstallDialog = ({ onInstall, onCancel }) => {
         setError(null);
         try {
             // Parse and validate manifest
-            const manifest = parseExtensionManifest(content);
+            const manifest = extensionManifestParser.parse(content);
             setParsedManifest(manifest);
             // Check compatibility
             const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility(manifest, {
