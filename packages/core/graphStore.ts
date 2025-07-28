@@ -219,6 +219,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     ...state.annotations.metadata,
     modified: new Date().toISOString(),
   },
+  },
   hasUnsavedChanges: true
 })),
   addStickyNote: (note: StickyNote) =>

@@ -8,16 +8,16 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 
 export interface SelectionRect {
-  startX: number;,
+  startX: number;
   startY: number;
-  currentX: number;,
+  currentX: number;
   currentY: number;
   active: boolean;
 }
 export interface MultiSelectionManagerProps {
-  nodes: Node;,
-  edges: Edge;
-  selectedNodes: Node;,
+  nodes: Node[];
+  edges: Edge[];
+  selectedNodes: Node[];
   selectedEdges: Edge;
   onNodesSelect: (nodes: Node) => void;,
   onEdgesSelect: (edges: Edge) => void;,
@@ -276,7 +276,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
 
 // Selection Info Panel Component
 interface SelectionInfoPanelProps {
-  selectedNodes: Node;,
+  selectedNodes: Node[];
   selectedEdges: Edge;
   onClearSelection: () => void;,
   onSelectAll: () => void;

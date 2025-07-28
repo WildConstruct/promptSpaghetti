@@ -335,7 +335,7 @@ const NODE_TYPES: NodeMeta[] = [
       // Wrap with smooth animations if performance is good
       if (isPerformanceGood) {
         const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
-        return;
+        return (
           <SmoothNodeWrapper
             id={props.id}
             data={props.data}
@@ -354,9 +354,10 @@ const NODE_TYPES: NodeMeta[] = [
             />
           </SmoothNodeWrapper>
         );
+      }
       // Fallback to standard rendering for performance
       if (shouldUseVariablePorts) {
-        return;
+        return (
           <VariablePortNodeRenderer
             id={props.id}
             data={props.data}
@@ -366,7 +367,8 @@ const NODE_TYPES: NodeMeta[] = [
             getCategoryColor={getCategoryColor}
           />
         );
-      return;
+      }
+      return (
         <NodeRenderer
           id={props.id}
           data={props.data}
