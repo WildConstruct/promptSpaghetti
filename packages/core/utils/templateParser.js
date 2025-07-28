@@ -844,9 +844,9 @@ export const getVariableSuggestions = (partialName, context, includeHistory = tr
 export const substituteVariables = (template, values) => templateParser.substituteVariables(template, values);
 export const getPreviewWithSamples = (template) => templateParser.getPreviewWithSamples(template);
 // Context management functions
-export export const trackVariableUsage = (variableName) => templateParser.trackVariableUsage(variableName);
+export const trackVariableUsage = (variableName) => templateParser.trackVariableUsage(variableName);
 // Clear cache utility
-export // Variable categories for UI filtering
+// Variable categories for UI filtering
  export const VARIABLE_CATEGORIES = [
     'character', 'setting', 'action', 'mood', 'object',
     'cinematic', 'temporal', 'descriptive', 'narrative', 'custom'
