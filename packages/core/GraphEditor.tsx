@@ -804,14 +804,17 @@ const NODE_TYPES: NodeMeta[] = [
   const isOptimizationEnabled = Object.values(optimizationSettings).some(value => value);
   // Close optimization menu when clicking outside
   useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
-  setOptimizationMenuOpen(false);
-};
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
+        setOptimizationMenuOpen(false);
+      }
+    };
+    
     if (optimizationMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {

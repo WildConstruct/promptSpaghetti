@@ -127,9 +127,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         downloadExportResult(exportResult, format);
       }
     } catch (error) {
-  console.error('Export failed:', error);
-  throw error;
-};
+      console.error('Export failed:', error);
+      throw error;
+    }
+  };
   const downloadExportResult = (exportResult: { data: string; mimeType: string }, format: ExportFormat) => {
     const blob = new Blob([exportResult.data], { type: exportResult.mimeType });
     const url = URL.createObjectURL(blob);
