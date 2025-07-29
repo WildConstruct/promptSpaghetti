@@ -14,20 +14,26 @@ export enum ExtensionPointCategory {
   VALIDATION = 'validation',
   VISUALIZATION = 'visualization',
   STORAGE = 'storage'
-  // Extension Point Lifecycle
-  export enum ExtensionPointLifecycle {
+}
+
+// Extension Point Lifecycle
+export enum ExtensionPointLifecycle {
   EXPERIMENTAL = 'experimental',
   STABLE = 'stable',
   DEPRECATED = 'deprecated',
   REMOVED = 'removed'
-  // Extension Point Priority
-  export enum ExtensionPointPriority {
+}
+
+// Extension Point Priority
+export enum ExtensionPointPriority {
   CRITICAL = 'critical',
   HIGH = 'high',
   MEDIUM = 'medium',
   LOW = 'low'
-  // Extension Point Definition Schema
-  export const ExtensionPointSchema = z.object({)
+}
+
+// Extension Point Definition Schema
+export const ExtensionPointSchema = z.object({)
   id: z.string(),
   name: z.string(),
   description: z.string(),

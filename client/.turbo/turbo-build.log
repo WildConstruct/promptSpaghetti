@@ -10,20 +10,20 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 60 modules transformed.
-✗ Build failed in 425ms
+✓ 51 modules transformed.
+✗ Build failed in 321ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14: ERROR: Expected "=>" but found "<"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/IntegratedFileBrowser.tsx:351:1: ERROR: Expected ">" but found ","
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/IntegratedFileBrowser.tsx:351:1
 
-Expected "=>" but found "<"
-256|            <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
-257|              {(['list', 'grid'] as const).map(mode => ()
-258|                <button
-   |                ^
-259|                  key={mode}
-260|                  onClick={() => setViewMode(mode)}
+Expected ">" but found ","
+349|                backgroundColor: styles.tertiary,
+350|                border: `1px solid ${styles.border}`}
+351|  },
+   |   ^
+352|    borderRadius: '4px',
+353|                color: styles.text,
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -38,20 +38,20 @@ Expected "=>" but found "<"
 Safe config failed, trying regular config...
 vite v7.0.5 building for production...
 transforming...
-✓ 58 modules transformed.
-✗ Build failed in 583ms
+✓ 55 modules transformed.
+✗ Build failed in 625ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14: ERROR: Expected "=>" but found "<"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/WorkspaceManager.tsx:283:11: ERROR: Expected "}" but found ")"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/WorkspaceManager.tsx:283:11
 
-Expected "=>" but found "<"
-256|            <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
-257|              {(['list', 'grid'] as const).map(mode => ()
-258|                <button
-   |                ^
-259|                  key={mode}
-260|                  onClick={() => setViewMode(mode)}
+Expected "}" but found ")"
+281|                {currentSession.description}
+282|              </div>
+283|            ))
+   |             ^
+284|            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: styles.textSecondary }}>
+285|              <span>{currentSession.openFiles.length} files open</span>
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -79,7 +79,7 @@ Error: Command failed: vite build --config vite.config.production.ts
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 37727,
+  pid: 58476,
   stdout: null,
   stderr: null
 }

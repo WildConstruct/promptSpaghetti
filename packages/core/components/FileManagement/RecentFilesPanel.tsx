@@ -279,13 +279,12 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
               style={{
                 padding: '6px 12px',
                 backgroundColor: 'transparent',
-                border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
+                border: `1px solid ${styles.border}`,
+                borderRadius: '4px',
                 color: styles.textSecondary,
                 fontSize: '12px',
                 cursor: 'pointer'
-  }}
+              }}
             >
               Clear All
             </button>
@@ -295,7 +294,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
       {/* Content */}
       <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
         {/* Favorites Section */}
-        {showFavorites && favoriteFiles.length > 0 && ()
+        {showFavorites && favoriteFiles.length > 0 && (
           <div style={{ marginBottom: '24px' }}>
             <h3 style={{
   margin: '0 0 12px 0',
@@ -313,7 +312,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
   flexDirection: 'column',
   gap: '4px',
 }}>
-              {favoriteFiles.slice(0, 5).map(file => ()
+              {favoriteFiles.slice(0, 5).map(file => (
                 <FileItem key={file.id} file={file} compact={true} />
               ))}
             </div>
@@ -332,7 +331,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
 }}>
             <span>🕐</span> Recent Files ({recentFiles.length})
           </h3>
-          {recentFiles.length === 0 ? ()
+          {recentFiles.length === 0 ? (
             <div style={{
   textAlign: 'center',
   padding: '40px 20px',
@@ -344,14 +343,14 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
                 Open some projects to see them here
               </div>
             </div>
-          ) : ()
+          ) : (
             <div style={{
   display: viewMode === 'grid' ? 'grid' : 'flex',
   gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(200px, 1fr))' : undefined,
   flexDirection: viewMode === 'list' ? 'column' : undefined,
   gap: viewMode === 'grid' ? '12px' : '4px',
 }}>
-              {recentFiles.map(file => ()
+              {recentFiles.map(file => (
                 <FileItem key={file.id} file={file} compact={viewMode === 'list'} />
               ))}
             </div>

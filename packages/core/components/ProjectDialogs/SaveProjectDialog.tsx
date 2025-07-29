@@ -37,7 +37,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
   setIsLoading(true);
   setError(null);
   try {
-  const result = await saveProject({)
+  const result = await saveProject({
   name: formData.name.trim(),
   description: formData.description.trim() || undefined,
   author: formData.author.trim() || undefined,

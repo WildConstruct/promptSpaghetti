@@ -280,7 +280,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
             <div style={{ color: styles.textSecondary, fontSize: '12px', marginBottom: '8px' }}>
               {currentSession.description}
             </div>
-          ))
+          )}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: styles.textSecondary }}>
             <span>{currentSession.openFiles.length} files open</span>
             <span>Last updated: {formatDate(currentSession.timestamp)}</span>
@@ -420,7 +420,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
         )}
       </div>
       {/* Create Session Dialog */}
-      {showCreateDialog && ()
+      {showCreateDialog && (
         <div style={{
   position: 'fixed',
   top: 0,

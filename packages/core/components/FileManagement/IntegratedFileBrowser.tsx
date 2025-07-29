@@ -347,12 +347,11 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
             style={{
               padding: '6px 8px',
               backgroundColor: styles.tertiary,
-              border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
+              border: `1px solid ${styles.border}`,
+              borderRadius: '4px',
               color: styles.text,
               fontSize: '12px'
-  }}
+            }}
           >
             <option value="name-asc">Name A-Z</option>
             <option value="name-desc">Name Z-A</option>
@@ -363,7 +362,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
           </select>
           {/* View Mode */}
           <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
-            {(['list', 'grid', 'details'] as const).map(mode => ()
+            {(['list', 'grid', 'details'] as const).map(mode => (
               <button
                 key={mode}
                 onClick={() => setViewState(prev => ({ ...prev, viewMode: mode }))}
@@ -383,7 +382,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
             ))}
           </div>
           {/* New Project Button */}
-          {showCreateControls && ()
+          {showCreateControls && (
             <button
               onClick={onNewProject}
               style={{
@@ -415,13 +414,12 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
         <div style={{
           width: '200px',
           backgroundColor: styles.secondary,
-          borderRight: `1px solid ${styles.border}`}
-},
-  padding: '16px 0',
+          borderRight: `1px solid ${styles.border}`,
+          padding: '16px 0',
           display: 'flex',
           flexDirection: 'column',
           gap: '8px'
-  }}>
+        }}>
           {/* Quick Access */}
           <div style={{ padding: '0 16px' }}>
             <h3 style={{
@@ -495,7 +493,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
             </div>
           </div>
           {/* Recent Files */}
-          {recentFiles.length > 0 && ()
+          {recentFiles.length > 0 && (
             <div style={{ padding: '0 16px', marginTop: '16px' }}>
               <h3 style={{
   margin: '0 0 8px 0',
@@ -508,7 +506,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
                 Recent Files
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {recentFiles.slice(0, 5).map(file => ()
+                {recentFiles.slice(0, 5).map(file => (
                   <button
                     key={file.id}
                     onClick={() => handleFileDoubleClick(file)}
@@ -552,9 +550,9 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
             alignItems: 'center',
             gap: '8px',
             fontSize: '13px',
-            color: styles.textSecondary;
+            color: styles.textSecondary
   }}>
-            {breadcrumbs.map((crumb, index) => ()
+            {breadcrumbs.map((crumb, index) => (
               <React.Fragment key={crumb.path}>
                 {index > 0 && <span>{'>'}</span>}
                 <button
@@ -579,7 +577,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
   padding: '16px',
   overflow: 'auto',
 }}>
-            {loading ? ()
+            {loading ? (
               <div style={{
   display: 'flex',
   alignItems: 'center',
@@ -589,7 +587,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
 }}>
                 Loading projects...
               </div>
-            ) : filteredAndSortedFiles.length === 0 ? ()
+            ) : filteredAndSortedFiles.length === 0 ? (
               <div style={{
   display: 'flex',
   flexDirection: 'column',

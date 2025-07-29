@@ -35,10 +35,12 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
         onClose();
       } else {
         setError(result.error || 'Failed to load project');
+      }
     } catch (err) {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
+    }
   };
   const handleConfirmLoad = () => {
     performLoad();
