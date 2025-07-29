@@ -929,7 +929,8 @@ Promise < void  > {
                                                                                                                 export: 
                                                                                                             };
                                                                                                             export default FlexibleEventSchemaManager;
-                                                                                                        } }
+                                                                                                        }
+                                                                                                    }
                                                                                                 })]: 
                                                                                             };
                                                                                         } };

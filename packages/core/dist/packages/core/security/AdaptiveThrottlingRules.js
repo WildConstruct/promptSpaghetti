@@ -482,7 +482,8 @@ if (analyticsConfig) {
                                                                             adjustmentFactor: 1.5,
                                                                             reason: 'Burst pattern detected, increase throttling to prevent overload',
                                                                             expectedImpact: 'Reduce load spikes by 30%',
-                                                                            validityPeriod: 30, },
+                                                                            validityPeriod: 30,
+                                                                        },
                                                                         insights, : .push({}),
                                                                         insightId: `pattern-${ruleId}-${Date.now()}`
                                                                     };

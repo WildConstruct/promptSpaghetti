@@ -11,45 +11,45 @@ import { globalEventBus } from '../../shared/services/EventBus';
 // Domain state coordination types
 
 export interface DomainEvent {
-  domain: string;,
+  domain: string;
   type: string;
-  payload: any;,
+  payload: any;
   timestamp: number;
   userId?: string;
   source: 'local' | 'remote' | 'system';
   correlationId?: string;
 }
 export interface CrossDomainChange {
-  id: string;,
+  id: string;
   sourceDomain: string;
-  targetDomains: string;,
+  targetDomains: string;
   changes: DomainStateChange;
   timestamp: number;
   transactionId?: string;
 }
 export interface DomainStateChange {
-  domain: string;,
+  domain: string;
   path: string;
-  value: any;,
+  value: any;
   operation: 'create' | 'update' | 'delete';
   metadata?: Record<string, any>;
 }
 export interface TransactionContext {
-  id: string;,
+  id: string;
   initiator: string;
-  participants: string;,
+  participants: string;
   status: 'pending' | 'committed' | 'aborted';
-  changes: CrossDomainChange;,
+  changes: CrossDomainChange;
   startTime: number;
   timeout: number;
 }
 export interface StateCoordinationRule {
-  name: string;,
+  name: string;
   sourceDomain: string;
-  targetDomains: string;,
+  targetDomains: string;
   eventTypes: string;
   transform?: (event: DomainEvent) => DomainEvent;
-  condition?: (event: DomainEvent) => boolean;,
+  condition?: (event: DomainEvent) => boolean;
   priority: number;
 }
 export interface DomainStateContainer extends BaseStateContainer<any> {
@@ -129,7 +129,7 @@ export class StateOrchestrator extends EventEmitter {
   // Transform event if transformer provided
   const eventsToApply = rule.transform ? rule.transform(event) : [event];
   // Create cross-domain changes
-  const changes: DomainStateChange = eventsToApply.map(e => ({,)
+  const changes: DomainStateChange = eventsToApply.map(e => ({)
   domain: e.domain,
   path: e.payload.path || '',
   value: e.payload.value,
@@ -230,13 +230,13 @@ export class StateOrchestrator extends EventEmitter {
   const domainEvent: DomainEvent = {,
   domain: event.domain,
   type: 'STATE_CHANGED',
-  payload: {,
+  payload: {
   state: event.state,
   prevState: event.prevState,
   change: event.change,
 },
   timestamp: Date.now(),
-      source: 'local';
+      source: 'local'
   };
     // Emit to global event bus for other listeners
     globalEventBus.emit('domain:stateChanged', domainEvent);
@@ -256,13 +256,13 @@ export class StateOrchestrator extends EventEmitter {
   ...event,
   domain: 'admin-dashboard',
   type: 'UPDATE_METRICS',
-  payload: {,
+  payload: {
   path: 'metrics.graphActivity',
-  value: {,
+  value: {
   lastModified: event.timestamp,
   executionCount: 1,
 },
-  operation: 'update';
+  operation: 'update'
   }],
       priority: 100;
   });
@@ -277,7 +277,7 @@ export class StateOrchestrator extends EventEmitter {
   ...event,
   domain,
   type: 'SECURITY_UPDATE',
-  payload: {,
+  payload: {
   path: 'security.status',
   value: event.payload,
   operation: 'update',
@@ -295,7 +295,7 @@ export class StateOrchestrator extends EventEmitter {
   ...event,
   domain: 'graph-editor',
   type: 'UPDATE_EXECUTION_STATE',
-  payload: {,
+  payload: {
   path: 'execution.status',
   value: event.payload,
   operation: 'update',

@@ -78,7 +78,7 @@ export declare class ImageProcessor {
     generateVariations(imageData: string, options: ImageVariationOptions): Promise<string[]>;
     compareImages(image1: string, image2: string): Promise<{
         similarity: number;
-        differences: {,
+        differences: {
             colorDifference: number;
             structuralDifference: number;
             pixelDifference: number;

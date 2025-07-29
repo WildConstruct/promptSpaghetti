@@ -8,56 +8,56 @@ import { useState, useCallback, useEffect } from 'react';
 import { IdentityValidationType, IdentityValidationData, ValidationStatus } from '../auth/IdentityValidation';
 interface VerificationRequestsHook {
   // State
-  isLoading: boolean;,
+  isLoading: boolean;
   isSubmitting: boolean;
   error: string | null;
   // Data
-  verifications: VerificationSummary | null;,
+  verifications: VerificationSummary | null;
   trustScore: TrustScore | null;
   // Actions
   submitVerificationRequest: (),
     type: IdentityValidationType,
     data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
-  refreshStatus: () => Promise<void>;,
-  uploadDocuments: (requestId: string, files: File) => Promise<void>;,
+  refreshStatus: () => Promise<void>;
+  uploadDocuments: (requestId: string, files: File) => Promise<void>;
   getVerificationTypes: () => Promise<VerificationType>;
 interface VerificationSummary {
-  totalRequests: number;,
+  totalRequests: number;
   approvedCount: number;
-  pendingCount: number;,
+  pendingCount: number;
   rejectedCount: number;
-  trustScore: TrustScore | null;,
+  trustScore: TrustScore | null;
   completedValidations: IdentityValidationType;
-  missingValidations: IdentityValidationType;,
+  missingValidations: IdentityValidationType;
   requests: VerificationRequest;
   interface VerificationRequest {
-  requestId: string;,
+  requestId: string;
   type: IdentityValidationType;
-  status: ValidationStatus;,
+  status: ValidationStatus;
   timestamp: number;
-  metadata: {,
-  ipAddress: string;,
+  metadata: {
+  ipAddress: string;
   userAgent: string;
-  sessionId: string;,
+  sessionId: string;
   requestSource: string;
 };
 interface TrustScore {
-  overall: number;,
-  components: {,
-  identity: number;,
+  overall: number;
+  components: {
+  identity: number;
   professional: number;
-  community: number;,
+  community: number;
   activity: number;
 };
-  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';,
+  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
   badges: string;
   lastUpdated: number;
 interface VerificationType {
-  type: IdentityValidationType;,
+  type: IdentityValidationType;
   title: string;
-  description: string;,
+  description: string;
   required: boolean;
-  estimatedTime: string;,
+  estimatedTime: string;
   requirements: string;
   fields: string;
   acceptedDocuments?: string;
@@ -83,7 +83,7 @@ interface VerificationType {
       const response = await fetch(`${API_BASE_URL}/status/${userId}`, {)}
   },
   method: 'GET',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {
@@ -110,7 +110,7 @@ interface VerificationType {
         userId,
         verificationType: type,
         data,
-        metadata: {,
+        metadata: {
   requestSource: 'manual_request',
           sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -120,7 +120,7 @@ interface VerificationType {
       const response = await fetch(`${API_BASE_URL}/submit`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(requestBody);
@@ -170,7 +170,7 @@ interface VerificationType {
       const response = await fetch(`${API_BASE_URL}/upload/${requestId}`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ files: uploadFiles })
@@ -196,7 +196,7 @@ interface VerificationType {
       const response = await fetch(`${API_BASE_URL}/types`, {)}
   },
   method: 'GET',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {

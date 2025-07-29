@@ -17,7 +17,7 @@ describe('VFX Reproducibility System', () => {
           id: 'node1',
           type: 'weightedChoice',
           position: { x: 100, y: 100 },
-          data: {,
+          data: {
   name: 'Subject Choice',
             choices: [,
               { text: 'warrior', weight: 3 },
@@ -29,7 +29,7 @@ describe('VFX Reproducibility System', () => {
           id: 'node2',
           type: 'concat',
           position: { x: 300, y: 100 },
-          data: {,
+          data: {
   name: 'Final Prompt',
             template: 'A {{subject}} in {{setting}}'
   }
@@ -37,7 +37,7 @@ describe('VFX Reproducibility System', () => {
           id: 'node3',
           type: 'output',
           position: { x: 500, y: 100 },
-          data: {,
+          data: {
   name: 'Result',
             template: '{{final_prompt}}'
       ],
@@ -58,18 +58,18 @@ describe('VFX Reproducibility System', () => {
   };
     mockExecutionResults = {
   finalPrompt: 'A warrior in ancient temple',
-  variables: {,
+  variables: {
   subject: 'warrior',
   setting: 'ancient temple',
 },
   executionTime: 150,
       seed: 12345,
-      nodeSeeds: {,
+      nodeSeeds: {
   node1: 12346,
   node2: 12347,
   node3: 12348,
 },
-  nodePerformance: {,
+  nodePerformance: {
   node1: 50,
   node2: 30,
   node3: 20,
@@ -80,7 +80,7 @@ describe('VFX Reproducibility System', () => {
   seed: 12345,
   prompt: 'A warrior in ancient temple',
   confidence: 0.85,
-  metadata: {,
+  metadata: {
   generationTime: 150,
   nodesExecuted: 3,
   variablesUsed: ['subject', 'setting']]
@@ -372,7 +372,7 @@ describe('VFX Reproducibility System', () => {
       // Test validation with corrupted data
       const corruptedData = {
   ...exportData,
-  metadata: {,
+  metadata: {
   ...exportData.metadata,
   exportId: undefined as any // Remove required field,
 };

@@ -132,11 +132,11 @@ export const createRateLimitMiddleware = (options: {)
     whitelist = []
   } = options;
   const eventCounts = new Map<string, {
-  secondCount: number;,
+  secondCount: number;
   minuteCount: number;
-  hourCount: number;,
+  hourCount: number;
   secondReset: number;
-  minuteReset: number;,
+  minuteReset: number;
   hourReset: number;
 }>();
   return (event: BaseEvent, next: () => void) => {
@@ -193,9 +193,9 @@ export const createRateLimitMiddleware = (options: {)
 /**
  * Event transformation middleware
  */
-export const createTransformMiddleware = (options: {,)
+export const createTransformMiddleware = (options: {)
   transforms: Array<{,
-  condition: (event: BaseEvent) => boolean;,
+  condition: (event: BaseEvent) => boolean;
   transform: (event: BaseEvent) => BaseEvent;
 }>;
 }): EventMiddleware => {
@@ -285,11 +285,11 @@ export const createPerformanceMiddleware = (options?: {)
     // Add performance metadata
     event.metadata = {
   ...event.metadata,
-  performance: {,
+  performance: {
   processingTime: duration,
   timestamp: endTime,
   ...(startMemory && trackMemoryUsage && {)
-  memoryUsage: {,
+  memoryUsage: {
   before: startMemory,
   after: typeof process !== 'undefined' ? process.memoryUsage() : null,
 }
@@ -299,18 +299,18 @@ export const createPerformanceMiddleware = (options?: {)
 /**
  * Event deduplication middleware
  */
-export const createDeduplicationMiddleware = (options: {,)
-  keyGenerator: (event: BaseEvent) => string;,
+export const createDeduplicationMiddleware = (options: {)
+  keyGenerator: (event: BaseEvent) => string;
   windowMs: number;
-  strategy?: 'drop' | 'merge' | 'latest';
-}): EventMiddleware => {
+  strategy?: 'drop' | 'merge' | 'latest'
+  }): EventMiddleware => {
   const {
     keyGenerator,
     windowMs,
     strategy = 'drop'
   } = options;
   const recentEvents = new Map<string, {
-  event: BaseEvent;,
+  event: BaseEvent;
   timestamp: number;
 }>();
   return (event: BaseEvent, next: () => void) => {
@@ -346,9 +346,9 @@ export const createDeduplicationMiddleware = (options: {,)
 /**
  * Circuit breaker middleware
  */
-export const createCircuitBreakerMiddleware = (options: {,)
+export const createCircuitBreakerMiddleware = (options: {)
   failureThreshold: number;
-  resetTimeoutMs: number;,
+  resetTimeoutMs: number;
   monitorWindowMs: number;
 }): EventMiddleware => {
   const { failureThreshold, resetTimeoutMs, monitorWindowMs } = options;

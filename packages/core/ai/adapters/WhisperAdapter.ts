@@ -43,42 +43,42 @@ export interface WhisperTranscriptionResult {
   language?: string;
   duration?: number;
   segments?: Array<{,
-  id: number;,
+  id: number;
   seek: number;
-  start: number;,
+  start: number;
   end: number;
-  text: string;,
+  text: string;
   tokens: number;
-  temperature: number;,
+  temperature: number;
   avg_logprob: number;
-  compression_ratio: number;,
+  compression_ratio: number;
   no_speech_prob: number;
   words?: Array<{,
-  word: string;,
+  word: string;
   start: number;
   end: number;
 }>;
   }>;
   words?: Array<{
-  word: string;,
+  word: string;
   start: number;
   end: number;
 }>;
-  metadata: {,
+  metadata: {
   model: string;
-  task: string;,
+  task: string;
   language: string;
-  duration: number;,
+  duration: number;
   processing_time: number;
   confidence_score?: number;
 };
-  usage: {,
+  usage: {
   audio_duration: number; // Duration in seconds,
   cost: number;
 };
 }
 export interface AudioFileInfo {
-  name: string;,
+  name: string;
   size: number;
   type: string;
   duration?: number;
@@ -103,7 +103,7 @@ export class WhisperAdapter extends BaseAIModel {
   costPerRequest: 0.006 / 60, // $0.006 per minute,
   averageLatency: 5000,
   maxConcurrency: 10,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 50,
   tokensPerMinute: 10000,
 },
@@ -118,18 +118,18 @@ export class WhisperAdapter extends BaseAIModel {
   supportsBatch: false,
   supportsStreaming: false,
   supportsAsync: true,
-  customParameters: {,
-  language: {,
+  customParameters: {
+  language: {
   type: 'string',
   description: 'ISO-639-1 language code (auto-detected if not specified)',
 },
   temperature: { type: 'number', min: 0, max: 1, default: 0 },
-        response_format: {,
+        response_format: {
   type: 'string',
   options: ['json', 'text', 'srt', 'verbose_json', 'vtt'],
   default: 'verbose_json',
 },
-  task: {,
+  task: {
   type: 'string',
   options: ['transcribe', 'translate'],
   default: 'transcribe',
@@ -148,7 +148,7 @@ export class WhisperAdapter extends BaseAIModel {
     } catch (error) {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
-  async process(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer },)
+  async process(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
   ): Promise<WhisperTranscriptionResult> {
   try {
@@ -174,7 +174,7 @@ export class WhisperAdapter extends BaseAIModel {
   duration: transcriptionData.duration,
   segments: transcriptionData.segments,
   words: transcriptionData.words,
-  metadata: {,
+  metadata: {
   model: processedOptions.model!,
   task: processedOptions.task!,
   language: transcriptionData.language || 'auto',
@@ -182,7 +182,7 @@ export class WhisperAdapter extends BaseAIModel {
   processing_time: processingTime,
   confidence_score: this._calculateConfidenceScore(transcriptionData),
 },
-  usage: {,
+  usage: {
   audio_duration: audioDuration,
   cost: this._calculateCost(audioDuration),
 };
@@ -194,7 +194,7 @@ export class WhisperAdapter extends BaseAIModel {
     this._status = AIModelStatus.OFFLINE;
     this._activeRequests.clear();
     this._requestQueue = [];
-  async estimate(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer },)
+  async estimate(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
   ): Promise<CostEstimate> {
     const audioFile = this._extractAudioFile(input);
@@ -210,13 +210,13 @@ export class WhisperAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.9,
-  breakdown: {,
+  breakdown: {
   inputCost: estimatedCost,
   outputCost: 0,
   processingCost: 0,
 };
   // Whisper-specific methods
-  async transcribeFile(file: File,)
+  async transcribeFile(file: File)
     language?: string,
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
@@ -227,7 +227,7 @@ export class WhisperAdapter extends BaseAIModel {
   ...options
 };
     return this.process(file, whisperOptions);
-  async translateToEnglish(file: File,)
+  async translateToEnglish(file: File)
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
   const whisperOptions: WhisperRequestOptions = {,
@@ -236,7 +236,7 @@ export class WhisperAdapter extends BaseAIModel {
   ...options
 };
     return this.process(file, whisperOptions);
-  async transcribeWithTimestamps(file: File,)
+  async transcribeWithTimestamps(file: File)
     granularity: 'word' | 'segment' | 'both' = 'segment',
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
@@ -249,7 +249,7 @@ export class WhisperAdapter extends BaseAIModel {
   ...options
 };
     return this.process(file, whisperOptions);
-  async batchTranscribe(files: File,)
+  async batchTranscribe(files: File)
     options?: WhisperRequestOptions
   ): Promise<WhisperTranscriptionResult> {
   const results: WhisperTranscriptionResult = [];
@@ -311,7 +311,7 @@ export class WhisperAdapter extends BaseAIModel {
       formData.append('response_format', 'json');
       const response = await fetch(`${this.config.baseURL || 'https://api.openai.com'}/v1/audio/transcriptions`, {},}
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
 }
           ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
@@ -387,7 +387,7 @@ export class WhisperAdapter extends BaseAIModel {
     // Validate temperature
     processed.temperature = Math.max(0, Math.min(1, processed.temperature));
     return processed;
-  private async _transcribeAudio(file: File | Blob | ArrayBuffer,)
+  private async _transcribeAudio(file: File | Blob | ArrayBuffer)
     options: Omit<WhisperRequestOptions,
     'file'>
   ): Promise<any> {

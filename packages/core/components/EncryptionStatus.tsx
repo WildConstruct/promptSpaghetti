@@ -88,8 +88,8 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
   return 'Encryption Error';
   case 'unknown':,
   default:,
-  return 'Unknown';
-};
+  return 'Unknown'
+  };
   const getStrengthColor = (strength?: string): string => {
   switch (strength) {
   case 'strong':,

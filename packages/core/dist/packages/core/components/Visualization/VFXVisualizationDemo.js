@@ -109,7 +109,7 @@ _jsxs("div", { className: selectedVisualizationMode === 'compact' ? 'max-w-4xl' 
 }
 _jsx("style", { children: `
         .vfx-visualization-demo {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         .compact-mode {

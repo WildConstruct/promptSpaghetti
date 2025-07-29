@@ -411,7 +411,7 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
     });
     it('should handle complex object returns', async () => {
       const complexFunction = () => ({)
-  nested: {,
+  nested: {
   array: [1, 2, 3],
           object: { key: 'value' }
   },

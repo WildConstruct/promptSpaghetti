@@ -12,17 +12,17 @@ import {
 } from './PerformanceBaselines';
 import { measureExecution } from '../utils';
 interface SystemInfo {
-  nodeVersion: string;,
+  nodeVersion: string;
   platform: string;
-  arch: string;,
+  arch: string;
   memory: NodeJS.MemoryUsage;
   cpuUsage: NodeJS.CpuUsage;
   interface PerformanceBenchmark {
-  name: string;,
+  name: string;
   category: BaselineCategory;
-  type: MeasurementType;,
+  type: MeasurementType;
   unit: string;
-  measurement: () => Promise<number>;,
+  measurement: () => Promise<number>;
   tags: string;
   /**
   * Collects baseline performance measurements from the actual system
@@ -361,7 +361,7 @@ interface SystemInfo {
   export async function collectSystemBaselines(()
   environment: TestEnvironment = TestEnvironment.DEVELOPMENT,
   iterations: number = 5): Promise<{,
-  report: any;,
+  report: any;
   collection: any;
   systemInfo: SystemInfo;
 }> {

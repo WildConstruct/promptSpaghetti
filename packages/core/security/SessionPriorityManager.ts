@@ -38,12 +38,12 @@ export enum SessionPriority {
   MERGE_SESSIONS = 'merge_sessions'    // Combine session data
   // Session Priority Configuration
   export interface SessionPriorityConfig {
-  maxSessionsPerUser: number;,
+  maxSessionsPerUser: number;
   maxSessionsPerDevice: number;
-  maxTotalSessions: number;,
+  maxTotalSessions: number;
   evictionPolicy: EvictionPolicy;
-  conflictResolution: ConflictResolution;,
-  priorityWeights: {,
+  conflictResolution: ConflictResolution;
+  priorityWeights: {
   userRole: number;           // Weight for user role,
   deviceTrust: number;        // Weight for device trust level,
   location: number;           // Weight for location familiarity,
@@ -52,13 +52,13 @@ export enum SessionPriority {
   activityLevel: number;      // Weight for recent activity,
   securityLevel: number;      // Weight for security requirements,
 };
-  emergencyOverride: boolean;,
+  emergencyOverride: boolean;
   gracePeriodMinutes: number;
 
 // Priority Factors
 }
 export interface PriorityFactors {
-  userRole: 'admin' | 'moderator' | 'user' | 'guest';,
+  userRole: 'admin' | 'moderator' | 'user' | 'guest';
   deviceTrustLevel: number;     // 0-100,
   locationFamiliarity: number;  // 0-100,
   timeOfDayScore: number;       // 0-100 based on typical usage,
@@ -69,58 +69,58 @@ export interface PriorityFactors {
   // Session Metadata for Priority Calculations
 }
 export interface PrioritySessionData {
-  sessionId: string;,
+  sessionId: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   priority: SessionPriority;
-  score: number;,
+  score: number;
   createdAt: Date;
-  lastActivity: Date;,
+  lastActivity: Date;
   accessCount: number;
-  factors: PriorityFactors;,
+  factors: PriorityFactors;
   conflicts: string;
-  evictionProtection: boolean;,
+  evictionProtection: boolean;
   emergencySession: boolean;
   gracePeriodEnd?: Date;
   // Eviction Decision
 }
 export interface EvictionDecision {
-  sessionId: string;,
+  sessionId: string;
   reason: string;
-  evictionPolicy: EvictionPolicy;,
+  evictionPolicy: EvictionPolicy;
   confidence: number;
-  alternativeSessions: string;,
+  alternativeSessions: string;
   gracePeriodOffered: boolean;
   userNotificationRequired: boolean;
   // Session Conflict
 }
 export interface SessionConflict {
-  id: string;,
+  id: string;
   type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
-  affectedSessions: string;,
-  newSessionRequest: {,
-  userId: string;,
+  affectedSessions: string;
+  newSessionRequest: {
+  userId: string;
   deviceId: string;
-  priority: SessionPriority;,
+  priority: SessionPriority;
   factors: PriorityFactors;
 };
-  resolutionOptions: ConflictResolution;,
+  resolutionOptions: ConflictResolution;
   recommendedResolution: ConflictResolution;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   autoResolvable: boolean;
   timeoutMinutes: number;
 
 // Priority Metrics
 }
 export interface PriorityMetrics {
-  totalSessions: number;,
+  totalSessions: number;
   sessionsByPriority: Record<SessionPriority, number>;
-  evictionRate: number;,
+  evictionRate: number;
   conflictRate: number;
-  averageSessionScore: number;,
+  averageSessionScore: number;
   utilizationPercentage: number;
   topEvictionReasons: Array<{ reason: string; count: number }>;
-  emergencyOverrides: number;,
+  emergencyOverrides: number;
   gracePeriodUsage: number;
 /**
  * Comprehensive session priority and eviction management service
@@ -141,7 +141,7 @@ export class SessionPriorityManager extends EventEmitter {
   /**
    * Register a new session with priority management
    */
-  public registerSession(sessionId: string,)
+  public registerSession(sessionId: string)
     userId: string,
     deviceId: string,
     priority: SessionPriority,
@@ -194,7 +194,7 @@ export class SessionPriorityManager extends EventEmitter {
   /**
    * Update session activity and recalculate priority
    */
-  public updateSessionActivity(sessionId: string,)
+  public updateSessionActivity(sessionId: string)
     activityLevel: number,
     newFactors?: Partial<PriorityFactors>
   ): void {
@@ -211,7 +211,7 @@ export class SessionPriorityManager extends EventEmitter {
   /**
    * Detect conflicts for a new session request
    */
-  public detectConflicts(userId: string,)
+  public detectConflicts(userId: string)
     deviceId: string,
     priority: SessionPriority): SessionConflict {,
     const conflicts: SessionConflict = [];
@@ -250,14 +250,13 @@ export class SessionPriorityManager extends EventEmitter {
       return this.evictOldestSession(conflict.affectedSessions);
     case ConflictResolution.EVICT_LOWEST_PRIORITY:
       return this.evictLowestPrioritySession(conflict.affectedSessions);
-    case ConflictResolution.PROMPT_USER:
-      return this.offerUserChoice(conflict);,
+    case ConflictResolution.PROMPT_USER: return this.offerUserChoice(conflict);
   default:
       return this.applyEvictionPolicy(conflict.affectedSessions);
   /**
    * Force evict a session with specified reason
    */
-  public evictSession(sessionId: string,)
+  public evictSession(sessionId: string)
     reason: string,
     gracePeriodMinutes?: number
   ): boolean {
@@ -289,7 +288,7 @@ export class SessionPriorityManager extends EventEmitter {
   /**
    * Create emergency override session
    */
-  public createEmergencySession(sessionId: string,)
+  public createEmergencySession(sessionId: string)
     userId: string,
     deviceId: string,
     factors: PriorityFactors): { created: boolean; evicted?: string } {
@@ -394,7 +393,7 @@ export class SessionPriorityManager extends EventEmitter {
   maxTotalSessions: 1000,
   evictionPolicy: EvictionPolicy.HYBRID,
   conflictResolution: ConflictResolution.EVICT_OLDEST,
-  priorityWeights: {,
+  priorityWeights: {
   userRole: 0.25,
   deviceTrust: 0.15,
   location: 0.1,
@@ -435,9 +434,9 @@ export class SessionPriorityManager extends EventEmitter {
     case SessionPriority.HIGH: return 80;
     case SessionPriority.MEDIUM: return 60;
     case SessionPriority.LOW: return 40;
-    case SessionPriority.MINIMAL: return 20;,
+    case SessionPriority.MINIMAL: return 20;
   default: return 50;
-  private createConflict(type: SessionConflict['type'],)
+  private createConflict(type: SessionConflict['type'])
     affectedSessions: string,
     newRequest: { userId: string; deviceId: string; priority: SessionPriority }
   ): SessionConflict {
@@ -446,9 +445,9 @@ export class SessionPriorityManager extends EventEmitter {
   id: conflictId,
   type,
   affectedSessions,
-  newSessionRequest: {,
+  newSessionRequest: {
   ...newRequest,
-  factors: {,
+  factors: {
   userRole: 'user',
   deviceTrustLevel: 50,
   locationFamiliarity: 50,

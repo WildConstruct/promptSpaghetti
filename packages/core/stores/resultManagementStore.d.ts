@@ -18,16 +18,16 @@ export interface SavedResult extends EnhancedPreviewResult {
         assignee?: string;
         reviewer?: string;
         deadline?: Date;
-        priority: 'low' | 'medium' | 'high' | 'urgent';
-    };
+        priority: 'low' | 'medium' | 'high' | 'urgent'
+  };
     creative?: {
         genre?: string;
         tone?: string;
         style?: string;
         characterCount?: number;
         sceneType?: 'interior' | 'exterior' | 'mixed';
-        timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night';
-    };
+        timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night'
+  };
 
 export interface ResultCollection {
     id: string;
@@ -118,7 +118,7 @@ interface ResultManagementState {
     getTopRatedResults: (limit?: number) => SavedResult[];
 
 export declare const useResultManagementStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ResultManagementState>, "persist"> & {
-    persist: {,
+    persist: {
         setOptions: (options: Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>) => void;
         clearStorage: () => void;
         rehydrate: () => Promise<void> | void;

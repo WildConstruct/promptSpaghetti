@@ -13,7 +13,7 @@ const FAVORITES_STORAGE_KEY = 'prompt-spaghetti-node-favorites';
  */
 
 export interface FavoritesData {
-  nodeIds: string;,
+  nodeIds: string;
   lastModified: string;
   version: string;
   /**

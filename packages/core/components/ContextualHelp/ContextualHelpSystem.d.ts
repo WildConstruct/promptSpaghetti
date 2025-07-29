@@ -24,7 +24,7 @@ export interface HelpContent {
     actionItems?: string[];
     relatedFeatures?: string[];
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
-    context: {,
+    context: {
         triggerElements?: string[];
         nodeTypes?: string[];
         actions?: string[];

@@ -8,51 +8,51 @@ import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
 export interface SecurityConfig {
-  hsts: {,
-  enabled: boolean;,
+  hsts: {
+  enabled: boolean;
   maxAge: number;
-  includeSubDomains: boolean;,
+  includeSubDomains: boolean;
   preload: boolean;
 };
-  csp: {,
+  csp: {
   enabled: boolean;
   directives: Record<string, string | string>;
   reportUri?: string;
-  reportOnly: boolean;,
+  reportOnly: boolean;
   useNonces: boolean;
 };
-  frameOptions: {,
+  frameOptions: {
   enabled: boolean;
   policy: 'DENY' | 'SAMEORIGIN' | 'ALLOW-FROM';
   allowFrom?: string;
 };
-  contentTypeOptions: {,
+  contentTypeOptions: {
   enabled: boolean;
 };
-  xssProtection: {,
+  xssProtection: {
   enabled: boolean;
-  mode: 'filter' | 'block';
-};
-  referrerPolicy: {,
+  mode: 'filter' | 'block'
+  };
+  referrerPolicy: {
   enabled: boolean;
   policy: string;
 };
-  permissionsPolicy: {,
+  permissionsPolicy: {
   enabled: boolean;
   directives: Record<string, string>;
 };
 const DEFAULT_CONFIG: SecurityConfig = {,
-  hsts: {,
+  hsts: {
   enabled: true,
   maxAge: 31536000, // 1 year,
   includeSubDomains: true,
   preload: true,
 },
-  csp: {,
+  csp: {
   enabled: true,
   reportOnly: false,
   useNonces: true,
-  directives: {,
+  directives: {
   'default-src': '\'self\'',
   'script-src': '\'self\'',
   'style-src': '\'self\' \'unsafe-inline\' https://fonts.googleapis.com',
@@ -65,24 +65,24 @@ const DEFAULT_CONFIG: SecurityConfig = {,
   'object-src': '\'none\'',
   'upgrade-insecure-requests': '',
 },
-  frameOptions: {,
+  frameOptions: {
   enabled: true,
   policy: 'DENY',
 },
-  contentTypeOptions: {,
+  contentTypeOptions: {
   enabled: true,
 },
-  xssProtection: {,
+  xssProtection: {
   enabled: true,
   mode: 'block',
 },
-  referrerPolicy: {,
+  referrerPolicy: {
   enabled: true,
   policy: 'strict-origin-when-cross-origin',
 },
-  permissionsPolicy: {,
+  permissionsPolicy: {
   enabled: true,
-  directives: {,
+  directives: {
   camera: '()',
   microphone: '()',
   geolocation: '()',
@@ -222,15 +222,15 @@ export const SecurityPresets = {
   /**
   * Development preset - relaxed security for easier debugging
   */
-  development: {,
-  hsts: {,
+  development: {
+  hsts: {
   enabled: false, // HSTS only works over HTTPS,
   maxAge: 300     // Short max-age for testing,
 },
-  csp: {,
+  csp: {
   enabled: true,
   reportOnly: true, // Use report-only mode in development,
-  directives: {,
+  directives: {
   'default-src': '\'self\'',
   'script-src': '\'self\' \'unsafe-inline\' \'unsafe-eval\'', // Allow inline scripts for dev tools,
   'style-src': '\'self\' \'unsafe-inline\'',
@@ -242,25 +242,25 @@ export const SecurityPresets = {
   'base-uri': '\'self\'',
   'object-src': '\'none\'',
 },
-  xssProtection: {,
+  xssProtection: {
   enabled: false // Modern browsers don't need this and it can interfere with debugging,
 } as Partial<SecurityConfig>,
   /**
    * Production preset - strict security
    */
-  production: {,
-  hsts: {,
+  production: {
+  hsts: {
   enabled: true,
   maxAge: 63072000, // 2 years,
   includeSubDomains: true,
   preload: true,
 },
-  csp: {,
+  csp: {
   enabled: true,
   reportOnly: false,
   useNonces: true,
   reportUri: '/csp-report',
-  directives: {,
+  directives: {
   'default-src': '\'self\'',
   'script-src': '\'self\'',
   'style-src': '\'self\' https://fonts.googleapis.com',
@@ -276,9 +276,9 @@ export const SecurityPresets = {
   /**
    * MFA-specific preset - optimized for authentication flows
    */
-  mfa: {,
-  csp: {,
-  directives: {,
+  mfa: {
+  csp: {
+  directives: {
   'default-src': '\'self\'',
   'script-src': '\'self\'', // No inline scripts for security,
   'style-src': '\'self\' \'unsafe-inline\'', // Allow inline styles for dynamic UI,
@@ -291,8 +291,8 @@ export const SecurityPresets = {
   'upgrade-insecure-requests': '',
   'block-all-mixed-content': '' // Block mixed content,
 },
-  permissionsPolicy: {,
-  directives: {,
+  permissionsPolicy: {
+  directives: {
   camera: '()', // Block camera access unless explicitly needed for QR scanning,
   microphone: '()',
   geolocation: '()',
@@ -336,8 +336,8 @@ export function createCSPReportHandler() {
  * Security headers validation utility
  */
 export class SecurityHeaderValidator {
-  static validate(headers: Record<string, string>): {,
-  valid: boolean;,
+  static validate(headers: Record<string, string>): {
+  valid: boolean;
   warnings: string;
   score: number;
   const warnings: string = [];

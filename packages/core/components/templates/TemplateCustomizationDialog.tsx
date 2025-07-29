@@ -5,9 +5,9 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from '../../templates/ProjectTemplateManager';
 interface TemplateCustomizationDialogProps {
-  template: ProjectTemplate;,
+  template: ProjectTemplate;
   isOpen: boolean;
-  onClose: () => void;,
+  onClose: () => void;
   onConfirm: (customizations: Record<string, any>) => void;
   onPreview: (customizations: Record<string, any>) => void;
   export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps> = ({,)
@@ -204,7 +204,7 @@ interface TemplateCustomizationDialogProps {
   );
 };
 interface VariableEditorProps {
-  variable: TemplateVariable;,
+  variable: TemplateVariable;
   value: Error;
   error?: string;
   onChange: (value: Error) => void;
@@ -296,7 +296,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
   );
 };
 interface CustomizationPointEditorProps {
-  point: CustomizationPoint;,
+  point: CustomizationPoint;
   value: Error;
   onChange: (value: Error) => void;
 const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ point, value, onChange }) => {

@@ -393,475 +393,459 @@ export class AttributionTracker extends EventEmitter {
                                                                                                                                                         type: 'first_touch',
                                                                                                                                                         description: 'Gives 100% credit to the first touchpoint',
                                                                                                                                                         configuration: { parameters: {} },
-                                                                                                                                                        weights: {},
-                                                                                                                                                        byPosition: [{ position: 'first', weight: 1.0 }],
-                                                                                                                                                        byChannel: [],
-                                                                                                                                                        byTouchType: [],
-                                                                                                                                                        byTimeDecay: [],
-                                                                                                                                                        byCustom: []
-                                                                                                                                                    },
-                                                                                                                                                    rules, [],
-                                                                                                                                                    isDefault, false,
-                                                                                                                                                    isActive, true,
-                                                                                                                                                    version, '1.0',
-                                                                                                                                                    created, new Date(),
-                                                                                                                                                    updated, new Date()
-                                                                                                                                                ];
-                                                                                                                                            }
-                                                                                                                                        };
-                                                                                                                                        {
-                                                                                                                                            id: 'last_touch',
-                                                                                                                                                name;
-                                                                                                                                            'Last Touch',
-                                                                                                                                                type;
-                                                                                                                                            'last_touch',
-                                                                                                                                                description;
-                                                                                                                                            'Gives 100% credit to the last touchpoint',
-                                                                                                                                                configuration;
-                                                                                                                                            {
-                                                                                                                                                parameters: { }
-                                                                                                                                            }
-                                                                                                                                            weights: {
-                                                                                                                                                byPosition: [{ position: 'last', weight: 1.0 }],
-                                                                                                                                                    byChannel;
-                                                                                                                                                [],
-                                                                                                                                                    byTouchType;
-                                                                                                                                                [],
-                                                                                                                                                    byTimeDecay;
-                                                                                                                                                [],
-                                                                                                                                                    byCustom;
-                                                                                                                                                [];
-                                                                                                                                            }
-                                                                                                                                            rules: [],
-                                                                                                                                                isDefault;
-                                                                                                                                            true,
-                                                                                                                                                isActive;
-                                                                                                                                            true,
-                                                                                                                                                version;
-                                                                                                                                            '1.0',
-                                                                                                                                                created;
-                                                                                                                                            new Date(),
-                                                                                                                                                updated;
-                                                                                                                                            new Date();
-                                                                                                                                        }
-                                                                                                                                        {
-                                                                                                                                            id: 'linear',
-                                                                                                                                                name;
-                                                                                                                                            'Linear',
-                                                                                                                                                type;
-                                                                                                                                            'linear',
-                                                                                                                                                description;
-                                                                                                                                            'Distributes credit equally across all touchpoints',
-                                                                                                                                                configuration;
-                                                                                                                                            {
-                                                                                                                                                parameters: { }
-                                                                                                                                            }
-                                                                                                                                            weights: {
-                                                                                                                                                byPosition: [],
-                                                                                                                                                    byChannel;
-                                                                                                                                                [],
-                                                                                                                                                    byTouchType;
-                                                                                                                                                [],
-                                                                                                                                                    byTimeDecay;
-                                                                                                                                                [],
-                                                                                                                                                    byCustom;
-                                                                                                                                                [],
-                                                                                                                                                ;
-                                                                                                                                            }
-                                                                                                                                            rules: [],
-                                                                                                                                                isDefault;
-                                                                                                                                            false,
-                                                                                                                                                isActive;
-                                                                                                                                            true,
-                                                                                                                                                version;
-                                                                                                                                            '1.0',
-                                                                                                                                                created;
-                                                                                                                                            new Date(),
-                                                                                                                                                updated;
-                                                                                                                                            new Date();
-                                                                                                                                            ;
-                                                                                                                                            for (const model of defaultModels) {
-                                                                                                                                                this.models.set(model.id, model);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    },
-                                                                                                                                    initializeChannels() { 
-                                                                                                                                        // Default channel configurations would be loaded here
-                                                                                                                                    }
-                                                                                                                                    // Default channel configurations would be loaded here
-                                                                                                                                    ,
-                                                                                                                                    // Default channel configurations would be loaded here
-                                                                                                                                    startProcessing() {
-                                                                                                                                        if (!this.isProcessing) {
-                                                                                                                                            this.isProcessing = true;
-                                                                                                                                            this.processingTimer = setInterval(() => {
-                                                                                                                                                this.processQueues();
-                                                                                                                                            }, this.config.reporting.batchInterval * 60 * 1000);
-                                                                                                                                        }
-                                                                                                                                    },
-                                                                                                                                    stopProcessing() {
-                                                                                                                                        this.isProcessing = false;
-                                                                                                                                        if (this.processingTimer) {
-                                                                                                                                            clearInterval(this.processingTimer);
-                                                                                                                                            this.processingTimer = undefined;
-                                                                                                                                        }
-                                                                                                                                    },
-                                                                                                                                    async processQueues() {
-                                                                                                                                        // Process touchpoint queue
-                                                                                                                                        while (this.touchPointQueue.length > 0) {
-                                                                                                                                            const touchPoint = this.touchPointQueue.shift();
-                                                                                                                                            await this.processTouchPoint(touchPoint);
-                                                                                                                                            // Process conversion queue
-                                                                                                                                            while (this.conversionQueue.length > 0) {
-                                                                                                                                                const conversion = this.conversionQueue.shift();
-                                                                                                                                                await this.processConversion(conversion);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    },
-                                                                                                                                    createTouchPoint(data) {
-                                                                                                                                        const touchPointId = this.generateTouchPointId();
-                                                                                                                                        return {
-                                                                                                                                            id: touchPointId,
-                                                                                                                                            journeyId: data.journeyId || this.findOrCreateJourney(data),
-                                                                                                                                            sessionId: data.sessionId || this.generateSessionId(),
-                                                                                                                                            type: data.type || 'view',
-                                                                                                                                            channel: data.channel || 'direct',
-                                                                                                                                            source: data.source || 'direct',
-                                                                                                                                            medium: data.medium || 'none',
-                                                                                                                                            campaign: data.campaign,
-                                                                                                                                            content: data.content,
-                                                                                                                                            term: data.term,
-                                                                                                                                            timestamp: data.timestamp || new Date(),
-                                                                                                                                            data: data.data || {
-                                                                                                                                                url: '',
-                                                                                                                                                page: { title: '', path: '', tags: [] },
-                                                                                                                                                user: { behavior: { sessionCount: 0, pageViews: 0, timeOnSite: 0, bounceRate: 0, previousVisits: [], interactionHistory: [] }, preferences: {} },
-                                                                                                                                                device: { type: 'desktop', os: '', browser: '', resolution: '', userAgent: '' },
-                                                                                                                                                location: {},
-                                                                                                                                                custom: {}
-                                                                                                                                            },
-                                                                                                                                            context: data.context || {
-                                                                                                                                                timeContext: {
-                                                                                                                                                    dayOfWeek: new Date().toLocaleDateString('en', { weekday: 'long' }),
-                                                                                                                                                    hourOfDay: new Date().getHours(),
-                                                                                                                                                    isWeekend: [0, 6].includes(new Date().getDay()),
-                                                                                                                                                    isHoliday: false,
-                                                                                                                                                    season: this.getSeason(new Date()),
-                                                                                                                                                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                                                                                                                                                },
-                                                                                                                                                attribution: {
-                                                                                                                                                    credit: 0,
-                                                                                                                                                    weight: 0,
-                                                                                                                                                    models: {},
-                                                                                                                                                    rank: 0,
-                                                                                                                                                    influence: 0,
-                                                                                                                                                    decay: 0
-                                                                                                                                                },
-                                                                                                                                                createConversion(data) {
-                                                                                                                                                    const conversionId = this.generateConversionId();
-                                                                                                                                                    return {
-                                                                                                                                                        id: conversionId,
-                                                                                                                                                        journeyId: data.journeyId || '',
-                                                                                                                                                        type: data.type || 'custom',
-                                                                                                                                                        value: data.value || { custom: {} },
-                                                                                                                                                        attribution: data.attribution || {
-                                                                                                                                                            touchPoints: [],
-                                                                                                                                                            models: {},
-                                                                                                                                                            primary: { model: '', credit: [], confidence: 0, methodology: '' },
-                                                                                                                                                            assisted: { model: '', credit: [], confidence: 0, methodology: '' },
-                                                                                                                                                            incrementality: { baseline: 0, incremental: 0, lift: 0, confidence: 0, methodology: '' }
+                                                                                                                                                        weights: {
+                                                                                                                                                            byPosition: [{ position: 'first', weight: 1.0 }],
+                                                                                                                                                            byChannel: [],
+                                                                                                                                                            byTouchType: [],
+                                                                                                                                                            byTimeDecay: [],
+                                                                                                                                                            byCustom: []
                                                                                                                                                         },
-                                                                                                                                                        funnel: data.funnel || { stage: '', position: 0, completion: true, micro_conversions: [] },
-                                                                                                                                                        timestamp: data.timestamp || new Date(),
-                                                                                                                                                        data: data.data || { custom: {} }
-                                                                                                                                                    };
-                                                                                                                                                },
-                                                                                                                                                async processTouchPoint(touchPoint) {
-                                                                                                                                                    // Find or create journey
-                                                                                                                                                    let journey = this.journeys.get(touchPoint.journeyId);
-                                                                                                                                                    if (!journey) {
-                                                                                                                                                        journey = this.createJourney(touchPoint);
-                                                                                                                                                        this.journeys.set(journey.id, journey);
-                                                                                                                                                        // Add touchpoint to journey
-                                                                                                                                                        journey.touchPoints.push(touchPoint);
-                                                                                                                                                        journey.updated = new Date();
-                                                                                                                                                        // Update journey timeline
-                                                                                                                                                        this.updateJourneyTimeline(journey, touchPoint);
-                                                                                                                                                        this.emit('touchPointProcessed', { touchPoint, journey });
+                                                                                                                                                        rules: [],
+                                                                                                                                                        isDefault: false,
+                                                                                                                                                        isActive: true,
+                                                                                                                                                        version: '1.0',
+                                                                                                                                                        created: new Date(),
+                                                                                                                                                        updated: new Date()
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        id: 'last_touch',
+                                                                                                                                                        name: 'Last Touch',
+                                                                                                                                                        type: 'last_touch',
+                                                                                                                                                        description: 'Gives 100% credit to the last touchpoint',
+                                                                                                                                                        configuration: { parameters: {} },
+                                                                                                                                                        weights: {
+                                                                                                                                                            byPosition: [{ position: 'last', weight: 1.0 }],
+                                                                                                                                                            byChannel: [],
+                                                                                                                                                            byTouchType: [],
+                                                                                                                                                            byTimeDecay: [],
+                                                                                                                                                            byCustom: []
+                                                                                                                                                        },
+                                                                                                                                                        rules: [],
+                                                                                                                                                        isDefault: true,
+                                                                                                                                                        isActive: true,
+                                                                                                                                                        version: '1.0',
+                                                                                                                                                        created: new Date(),
+                                                                                                                                                        updated: new Date()
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        id: 'linear',
+                                                                                                                                                        name: 'Linear',
+                                                                                                                                                        type: 'linear',
+                                                                                                                                                        description: 'Distributes credit equally across all touchpoints',
+                                                                                                                                                        configuration: { parameters: {} },
+                                                                                                                                                        weights: {
+                                                                                                                                                            byPosition: [],
+                                                                                                                                                            byChannel: [],
+                                                                                                                                                            byTouchType: [],
+                                                                                                                                                            byTimeDecay: [],
+                                                                                                                                                            byCustom: [],
+                                                                                                                                                        },
+                                                                                                                                                        rules: [],
+                                                                                                                                                        isDefault: false,
+                                                                                                                                                        isActive: true,
+                                                                                                                                                        version: '1.0',
+                                                                                                                                                        created: new Date(),
+                                                                                                                                                        updated: new Date()
                                                                                                                                                     }
-                                                                                                                                                },
-                                                                                                                                                async processConversion(conversion) {
-                                                                                                                                                    // Find journey
-                                                                                                                                                    const journey = this.journeys.get(conversion.journeyId);
-                                                                                                                                                    if (!journey) {
-                                                                                                                                                        throw new Error(`Journey ${conversion.journeyId} not found for conversion`);
+                                                                                                                                                ];
+                                                                                                                                                for (const model of defaultModels) {
+                                                                                                                                                    this.models.set(model.id, model);
+                                                                                                                                                }
+                                                                                                                                            },
+                                                                                                                                            initializeChannels() { 
+                                                                                                                                                // Default channel configurations would be loaded here
+                                                                                                                                            }
+                                                                                                                                            // Default channel configurations would be loaded here
+                                                                                                                                            ,
+                                                                                                                                            // Default channel configurations would be loaded here
+                                                                                                                                            startProcessing() {
+                                                                                                                                                if (!this.isProcessing) {
+                                                                                                                                                    this.isProcessing = true;
+                                                                                                                                                    this.processingTimer = setInterval(() => {
+                                                                                                                                                        this.processQueues();
+                                                                                                                                                    }, this.config.reporting.batchInterval * 60 * 1000);
+                                                                                                                                                }
+                                                                                                                                            },
+                                                                                                                                            stopProcessing() {
+                                                                                                                                                this.isProcessing = false;
+                                                                                                                                                if (this.processingTimer) {
+                                                                                                                                                    clearInterval(this.processingTimer);
+                                                                                                                                                    this.processingTimer = undefined;
+                                                                                                                                                }
+                                                                                                                                            },
+                                                                                                                                            async processQueues() {
+                                                                                                                                                // Process touchpoint queue
+                                                                                                                                                while (this.touchPointQueue.length > 0) {
+                                                                                                                                                    const touchPoint = this.touchPointQueue.shift();
+                                                                                                                                                    await this.processTouchPoint(touchPoint);
+                                                                                                                                                    // Process conversion queue
+                                                                                                                                                    while (this.conversionQueue.length > 0) {
+                                                                                                                                                        const conversion = this.conversionQueue.shift();
+                                                                                                                                                        await this.processConversion(conversion);
                                                                                                                                                     }
-                                                                                                                                                    // Add conversion to journey
-                                                                                                                                                    journey.conversions.push(conversion);
-                                                                                                                                                    journey.updated = new Date();
-                                                                                                                                                    // Calculate attribution for all models
-                                                                                                                                                    for (const [modelId, model] of this.models) {
-                                                                                                                                                        if (model.isActive) {
-                                                                                                                                                            const attribution = this.computeAttribution(journey, conversion, model);
-                                                                                                                                                            conversion.attribution.models[modelId] = attribution.models[modelId];
-                                                                                                                                                            this.emit('conversionProcessed', { conversion, journey });
-                                                                                                                                                        }
+                                                                                                                                                }
+                                                                                                                                            },
+                                                                                                                                            createTouchPoint(data) {
+                                                                                                                                                const touchPointId = this.generateTouchPointId();
+                                                                                                                                                return {
+                                                                                                                                                    id: touchPointId,
+                                                                                                                                                    journeyId: data.journeyId || this.findOrCreateJourney(data),
+                                                                                                                                                    sessionId: data.sessionId || this.generateSessionId(),
+                                                                                                                                                    type: data.type || 'view',
+                                                                                                                                                    channel: data.channel || 'direct',
+                                                                                                                                                    source: data.source || 'direct',
+                                                                                                                                                    medium: data.medium || 'none',
+                                                                                                                                                    campaign: data.campaign,
+                                                                                                                                                    content: data.content,
+                                                                                                                                                    term: data.term,
+                                                                                                                                                    timestamp: data.timestamp || new Date(),
+                                                                                                                                                    data: data.data || {
+                                                                                                                                                        url: '',
+                                                                                                                                                        page: { title: '', path: '', tags: [] },
+                                                                                                                                                        user: { behavior: { sessionCount: 0, pageViews: 0, timeOnSite: 0, bounceRate: 0, previousVisits: [], interactionHistory: [] }, preferences: {} },
+                                                                                                                                                        device: { type: 'desktop', os: '', browser: '', resolution: '', userAgent: '' },
+                                                                                                                                                        location: {},
+                                                                                                                                                        custom: {}
+                                                                                                                                                    },
+                                                                                                                                                    context: data.context || {
+                                                                                                                                                        timeContext: {
+                                                                                                                                                            dayOfWeek: new Date().toLocaleDateString('en', { weekday: 'long' }),
+                                                                                                                                                            hourOfDay: new Date().getHours(),
+                                                                                                                                                            isWeekend: [0, 6].includes(new Date().getDay()),
+                                                                                                                                                            isHoliday: false,
+                                                                                                                                                            season: this.getSeason(new Date()),
+                                                                                                                                                            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                                                                                                                                                        },
+                                                                                                                                                        attribution: {
+                                                                                                                                                            credit: 0,
+                                                                                                                                                            weight: 0,
+                                                                                                                                                            models: {},
+                                                                                                                                                            rank: 0,
+                                                                                                                                                            influence: 0,
+                                                                                                                                                            decay: 0
+                                                                                                                                                        },
+                                                                                                                                                        createConversion(data) {
+                                                                                                                                                            const conversionId = this.generateConversionId();
+                                                                                                                                                            return {
+                                                                                                                                                                id: conversionId,
+                                                                                                                                                                journeyId: data.journeyId || '',
+                                                                                                                                                                type: data.type || 'custom',
+                                                                                                                                                                value: data.value || { custom: {} },
+                                                                                                                                                                attribution: data.attribution || {
+                                                                                                                                                                    touchPoints: [],
+                                                                                                                                                                    models: {},
+                                                                                                                                                                    primary: { model: '', credit: [], confidence: 0, methodology: '' },
+                                                                                                                                                                    assisted: { model: '', credit: [], confidence: 0, methodology: '' },
+                                                                                                                                                                    incrementality: { baseline: 0, incremental: 0, lift: 0, confidence: 0, methodology: '' }
+                                                                                                                                                                },
+                                                                                                                                                                funnel: data.funnel || { stage: '', position: 0, completion: true, micro_conversions: [] },
+                                                                                                                                                                timestamp: data.timestamp || new Date(),
+                                                                                                                                                                data: data.data || { custom: {} }
+                                                                                                                                                            };
+                                                                                                                                                        },
+                                                                                                                                                        async processTouchPoint(touchPoint) {
+                                                                                                                                                            // Find or create journey
+                                                                                                                                                            let journey = this.journeys.get(touchPoint.journeyId);
+                                                                                                                                                            if (!journey) {
+                                                                                                                                                                journey = this.createJourney(touchPoint);
+                                                                                                                                                                this.journeys.set(journey.id, journey);
+                                                                                                                                                                // Add touchpoint to journey
+                                                                                                                                                                journey.touchPoints.push(touchPoint);
+                                                                                                                                                                journey.updated = new Date();
+                                                                                                                                                                // Update journey timeline
+                                                                                                                                                                this.updateJourneyTimeline(journey, touchPoint);
+                                                                                                                                                                this.emit('touchPointProcessed', { touchPoint, journey });
+                                                                                                                                                            }
+                                                                                                                                                        },
+                                                                                                                                                        async processConversion(conversion) {
+                                                                                                                                                            // Find journey
+                                                                                                                                                            const journey = this.journeys.get(conversion.journeyId);
+                                                                                                                                                            if (!journey) {
+                                                                                                                                                                throw new Error(`Journey ${conversion.journeyId} not found for conversion`);
+                                                                                                                                                            }
+                                                                                                                                                            // Add conversion to journey
+                                                                                                                                                            journey.conversions.push(conversion);
+                                                                                                                                                            journey.updated = new Date();
+                                                                                                                                                            // Calculate attribution for all models
+                                                                                                                                                            for (const [modelId, model] of this.models) {
+                                                                                                                                                                if (model.isActive) {
+                                                                                                                                                                    const attribution = this.computeAttribution(journey, conversion, model);
+                                                                                                                                                                    conversion.attribution.models[modelId] = attribution.models[modelId];
+                                                                                                                                                                    this.emit('conversionProcessed', { conversion, journey });
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        },
+                                                                                                                                                        conversion: Conversion,
+                                                                                                                                                        model: AttributionModel, ConversionAttribution }
+                                                                                                                                                };
+                                                                                                                                                {
+                                                                                                                                                    const relevantTouchPoints = this.getRelevantTouchPoints(journey, conversion);
+                                                                                                                                                    switch (model.type) {
+                                                                                                                                                        case 'first_touch':
+                                                                                                                                                            return this.computeFirstTouchAttribution(relevantTouchPoints, model);
+                                                                                                                                                        case 'last_touch':
+                                                                                                                                                            return this.computeLastTouchAttribution(relevantTouchPoints, model);
+                                                                                                                                                        case 'linear':
+                                                                                                                                                            return this.computeLinearAttribution(relevantTouchPoints, model);
+                                                                                                                                                        case 'time_decay':
+                                                                                                                                                            return this.computeTimeDecayAttribution(relevantTouchPoints, model, conversion);
+                                                                                                                                                        case 'position_based':
+                                                                                                                                                            return this.computePositionBasedAttribution(relevantTouchPoints, model);
+                                                                                                                                                        default:
+                                                                                                                                                            return this.computeCustomAttribution(relevantTouchPoints, model, conversion);
+                                                                                                                                                        // Attribution computation methods (simplified implementations)
                                                                                                                                                     }
-                                                                                                                                                },
-                                                                                                                                                conversion: Conversion,
-                                                                                                                                                model: AttributionModel, ConversionAttribution }
-                                                                                                                                        };
-                                                                                                                                        {
-                                                                                                                                            const relevantTouchPoints = this.getRelevantTouchPoints(journey, conversion);
-                                                                                                                                            switch (model.type) {
-                                                                                                                                                case 'first_touch':
-                                                                                                                                                    return this.computeFirstTouchAttribution(relevantTouchPoints, model);
-                                                                                                                                                case 'last_touch':
-                                                                                                                                                    return this.computeLastTouchAttribution(relevantTouchPoints, model);
-                                                                                                                                                case 'linear':
-                                                                                                                                                    return this.computeLinearAttribution(relevantTouchPoints, model);
-                                                                                                                                                case 'time_decay':
-                                                                                                                                                    return this.computeTimeDecayAttribution(relevantTouchPoints, model, conversion);
-                                                                                                                                                case 'position_based':
-                                                                                                                                                    return this.computePositionBasedAttribution(relevantTouchPoints, model);
-                                                                                                                                                default:
-                                                                                                                                                    return this.computeCustomAttribution(relevantTouchPoints, model, conversion);
+                                                                                                                                                    // Attribution computation methods (simplified implementations)
+                                                                                                                                                }
                                                                                                                                                 // Attribution computation methods (simplified implementations)
                                                                                                                                             }
                                                                                                                                             // Attribution computation methods (simplified implementations)
+                                                                                                                                            ,
+                                                                                                                                            // Attribution computation methods (simplified implementations)
+                                                                                                                                            computeFirstTouchAttribution(touchPoints, model) {
+                                                                                                                                                const firstTouchPoint = touchPoints[0];
+                                                                                                                                                return {
+                                                                                                                                                    touchPoints: [{},
+                                                                                                                                                        credit, 1.0,
+                                                                                                                                                        weight, 1.0,
+                                                                                                                                                        models, { [model.id]: 1.0 },
+                                                                                                                                                        rank, 1,
+                                                                                                                                                        influence, 1.0,
+                                                                                                                                                        decay, 1.0]
+                                                                                                                                                };
+                                                                                                                                                models: {
+                                                                                                                                                    [model.id];
+                                                                                                                                                    {
+                                                                                                                                                        model: model.id,
+                                                                                                                                                            credit;
+                                                                                                                                                        [{},
+                                                                                                                                                            touchPointId, firstTouchPoint.id,
+                                                                                                                                                            credit, 1.0,
+                                                                                                                                                            percentage, 100,
+                                                                                                                                                            channel, firstTouchPoint.channel,
+                                                                                                                                                            position, 1,];
+                                                                                                                                                    }
+                                                                                                                                                    confidence: 1.0,
+                                                                                                                                                        methodology;
+                                                                                                                                                    'first_touch';
+                                                                                                                                                }
+                                                                                                                                                primary: {
+                                                                                                                                                    model: model.id,
+                                                                                                                                                        credit;
+                                                                                                                                                    [{},
+                                                                                                                                                        touchPointId, firstTouchPoint.id,
+                                                                                                                                                        credit, 1.0,
+                                                                                                                                                        percentage, 100,
+                                                                                                                                                        channel, firstTouchPoint.channel,
+                                                                                                                                                        position, 1,];
+                                                                                                                                                }
+                                                                                                                                                confidence: 1.0,
+                                                                                                                                                    methodology;
+                                                                                                                                                'first_touch';
+                                                                                                                                            },
+                                                                                                                                            assisted: {
+                                                                                                                                                model: model.id,
+                                                                                                                                                credit: [],
+                                                                                                                                                confidence: 0,
+                                                                                                                                                methodology: 'none',
+                                                                                                                                            },
+                                                                                                                                            incrementality: {
+                                                                                                                                                baseline: 0,
+                                                                                                                                                incremental: 1.0,
+                                                                                                                                                lift: 1.0,
+                                                                                                                                                confidence: 0.8,
+                                                                                                                                                methodology: 'estimated',
+                                                                                                                                            },
+                                                                                                                                            computeLastTouchAttribution(touchPoints, model) {
+                                                                                                                                                const lastTouchPoint = touchPoints[touchPoints.length - 1];
+                                                                                                                                                return {
+                                                                                                                                                    touchPoints: [{},
+                                                                                                                                                        credit, 1.0,
+                                                                                                                                                        weight, 1.0,
+                                                                                                                                                        models, { [model.id]: 1.0 },
+                                                                                                                                                        rank, touchPoints.length,
+                                                                                                                                                        influence, 1.0,
+                                                                                                                                                        decay, 1.0]
+                                                                                                                                                };
+                                                                                                                                                models: {
+                                                                                                                                                    [model.id];
+                                                                                                                                                    {
+                                                                                                                                                        model: model.id,
+                                                                                                                                                            credit;
+                                                                                                                                                        [{},
+                                                                                                                                                            touchPointId, lastTouchPoint.id,
+                                                                                                                                                            credit, 1.0,
+                                                                                                                                                            percentage, 100,
+                                                                                                                                                            channel, lastTouchPoint.channel,
+                                                                                                                                                            position, touchPoints.length,];
+                                                                                                                                                    }
+                                                                                                                                                    confidence: 1.0,
+                                                                                                                                                        methodology;
+                                                                                                                                                    'last_touch';
+                                                                                                                                                }
+                                                                                                                                                primary: {
+                                                                                                                                                    model: model.id,
+                                                                                                                                                        credit;
+                                                                                                                                                    [{},
+                                                                                                                                                        touchPointId, lastTouchPoint.id,
+                                                                                                                                                        credit, 1.0,
+                                                                                                                                                        percentage, 100,
+                                                                                                                                                        channel, lastTouchPoint.channel,
+                                                                                                                                                        position, touchPoints.length,];
+                                                                                                                                                }
+                                                                                                                                                confidence: 1.0,
+                                                                                                                                                    methodology;
+                                                                                                                                                'last_touch';
+                                                                                                                                            },
+                                                                                                                                            assisted: {
+                                                                                                                                                model: model.id,
+                                                                                                                                                credit: [],
+                                                                                                                                                confidence: 0,
+                                                                                                                                                methodology: 'none',
+                                                                                                                                            },
+                                                                                                                                            incrementality: {
+                                                                                                                                                baseline: 0,
+                                                                                                                                                incremental: 1.0,
+                                                                                                                                                lift: 1.0,
+                                                                                                                                                confidence: 0.8,
+                                                                                                                                                methodology: 'estimated',
+                                                                                                                                            },
+                                                                                                                                            computeLinearAttribution(touchPoints, model) {
+                                                                                                                                                const creditPerTouchPoint = 1.0 / touchPoints.length;
+                                                                                                                                                const credits = touchPoints.map((tp, index) => ({}), touchPointId, tp.id, credit, creditPerTouchPoint, percentage, (creditPerTouchPoint * 100), channel, tp.channel, position, index + 1);
+                                                                                                                                            },
+                                                                                                                                            return: {
+                                                                                                                                                touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, 1.0)
+                                                                                                                                            },
+                                                                                                                                            models: {
+                                                                                                                                                [model.id]: {
+                                                                                                                                                    model: model.id,
+                                                                                                                                                    credit: credits,
+                                                                                                                                                    confidence: 0.9,
+                                                                                                                                                    methodology: 'linear',
+                                                                                                                                                },
+                                                                                                                                                primary: {
+                                                                                                                                                    model: model.id,
+                                                                                                                                                    credit: credits,
+                                                                                                                                                    confidence: 0.9,
+                                                                                                                                                    methodology: 'linear',
+                                                                                                                                                },
+                                                                                                                                                assisted: {
+                                                                                                                                                    model: model.id,
+                                                                                                                                                    credit: [],
+                                                                                                                                                    confidence: 0,
+                                                                                                                                                    methodology: 'none',
+                                                                                                                                                },
+                                                                                                                                                incrementality: {
+                                                                                                                                                    baseline: 0,
+                                                                                                                                                    incremental: 1.0,
+                                                                                                                                                    lift: 1.0,
+                                                                                                                                                    confidence: 0.7,
+                                                                                                                                                    methodology: 'estimated',
+                                                                                                                                                },
+                                                                                                                                                model: AttributionModel,
+                                                                                                                                                conversion: Conversion, ConversionAttribution
+                                                                                                                                            }
+                                                                                                                                        };
+                                                                                                                                        {
+                                                                                                                                            const halfLife = model.configuration.halfLife || 7; // days;
+                                                                                                                                            const conversionTime = conversion.timestamp.getTime();
+                                                                                                                                            const credits = touchPoints.map((tp, index) => {
+                                                                                                                                                const daysDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
+                                                                                                                                                const decay = Math.pow(0.5, daysDiff / halfLife);
+                                                                                                                                                return {
+                                                                                                                                                    touchPointId: tp.id,
+                                                                                                                                                    credit: decay,
+                                                                                                                                                    percentage: 0, // Will be calculated after normalization,
+                                                                                                                                                    channel: tp.channel,
+                                                                                                                                                    position: index + 1,
+                                                                                                                                                };
+                                                                                                                                            });
+                                                                                                                                            // Normalize credits to sum to 1.0
+                                                                                                                                            const totalCredit = credits.reduce((sum, c) => sum + c.credit, 0);
+                                                                                                                                            credits.forEach(c => { });
+                                                                                                                                            c.credit = c.credit / totalCredit;
+                                                                                                                                            c.percentage = c.credit * 100;
                                                                                                                                         }
-                                                                                                                                        // Attribution computation methods (simplified implementations)
-                                                                                                                                    }
-                                                                                                                                    // Attribution computation methods (simplified implementations)
-                                                                                                                                    ,
-                                                                                                                                    // Attribution computation methods (simplified implementations)
-                                                                                                                                    computeFirstTouchAttribution(touchPoints, model) {
-                                                                                                                                        const firstTouchPoint = touchPoints[0];
+                                                                                                                                        ;
                                                                                                                                         return {
-                                                                                                                                            touchPoints: [{},
-                                                                                                                                                credit, 1.0,
-                                                                                                                                                weight, 1.0,
-                                                                                                                                                models, { [model.id]: 1.0 },
-                                                                                                                                                rank, 1,
-                                                                                                                                                influence, 1.0,
-                                                                                                                                                decay, 1.0]
+                                                                                                                                            touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, c.credit)
                                                                                                                                         };
                                                                                                                                         models: {
                                                                                                                                             [model.id];
                                                                                                                                             {
                                                                                                                                                 model: model.id,
                                                                                                                                                     credit;
-                                                                                                                                                [{},
-                                                                                                                                                    touchPointId, firstTouchPoint.id,
-                                                                                                                                                    credit, 1.0,
-                                                                                                                                                    percentage, 100,
-                                                                                                                                                    channel, firstTouchPoint.channel,
-                                                                                                                                                    position, 1,];
+                                                                                                                                                credits,
+                                                                                                                                                    confidence;
+                                                                                                                                                0.85,
+                                                                                                                                                    methodology;
+                                                                                                                                                'time_decay',
+                                                                                                                                                ;
                                                                                                                                             }
-                                                                                                                                            confidence: 1.0,
-                                                                                                                                                methodology;
-                                                                                                                                            'first_touch';
-                                                                                                                                        }
-                                                                                                                                        primary: {
-                                                                                                                                            model: model.id,
-                                                                                                                                                credit;
-                                                                                                                                            [{},
-                                                                                                                                                touchPointId, firstTouchPoint.id,
-                                                                                                                                                credit, 1.0,
-                                                                                                                                                percentage, 100,
-                                                                                                                                                channel, firstTouchPoint.channel,
-                                                                                                                                                position, 1,];
-                                                                                                                                        }
-                                                                                                                                        confidence: 1.0,
-                                                                                                                                            methodology;
-                                                                                                                                        'first_touch';
-                                                                                                                                    },
-                                                                                                                                    assisted: {
-                                                                                                                                        model: model.id,
-                                                                                                                                        credit: [],
-                                                                                                                                        confidence: 0,
-                                                                                                                                        methodology: 'none',
-                                                                                                                                    },
-                                                                                                                                    incrementality: {
-                                                                                                                                        baseline: 0,
-                                                                                                                                        incremental: 1.0,
-                                                                                                                                        lift: 1.0,
-                                                                                                                                        confidence: 0.8,
-                                                                                                                                        methodology: 'estimated',
-                                                                                                                                    },
-                                                                                                                                    computeLastTouchAttribution(touchPoints, model) {
-                                                                                                                                        const lastTouchPoint = touchPoints[touchPoints.length - 1];
-                                                                                                                                        return {
-                                                                                                                                            touchPoints: [{},
-                                                                                                                                                credit, 1.0,
-                                                                                                                                                weight, 1.0,
-                                                                                                                                                models, { [model.id]: 1.0 },
-                                                                                                                                                rank, touchPoints.length,
-                                                                                                                                                influence, 1.0,
-                                                                                                                                                decay, 1.0]
-                                                                                                                                        };
-                                                                                                                                        models: {
-                                                                                                                                            [model.id];
-                                                                                                                                            {
+                                                                                                                                            primary: {
                                                                                                                                                 model: model.id,
                                                                                                                                                     credit;
-                                                                                                                                                [{},
-                                                                                                                                                    touchPointId, lastTouchPoint.id,
-                                                                                                                                                    credit, 1.0,
-                                                                                                                                                    percentage, 100,
-                                                                                                                                                    channel, lastTouchPoint.channel,
-                                                                                                                                                    position, touchPoints.length,];
+                                                                                                                                                credits,
+                                                                                                                                                    confidence;
+                                                                                                                                                0.85,
+                                                                                                                                                    methodology;
+                                                                                                                                                'time_decay',
+                                                                                                                                                ;
                                                                                                                                             }
-                                                                                                                                            confidence: 1.0,
-                                                                                                                                                methodology;
-                                                                                                                                            'last_touch';
+                                                                                                                                            assisted: {
+                                                                                                                                                model: model.id,
+                                                                                                                                                    credit;
+                                                                                                                                                [],
+                                                                                                                                                    confidence;
+                                                                                                                                                0,
+                                                                                                                                                    methodology;
+                                                                                                                                                'none',
+                                                                                                                                                ;
+                                                                                                                                            }
+                                                                                                                                            incrementality: {
+                                                                                                                                                baseline: 0,
+                                                                                                                                                    incremental;
+                                                                                                                                                1.0,
+                                                                                                                                                    lift;
+                                                                                                                                                1.0,
+                                                                                                                                                    confidence;
+                                                                                                                                                0.75,
+                                                                                                                                                    methodology;
+                                                                                                                                                'estimated',
+                                                                                                                                                ;
+                                                                                                                                            }
+                                                                                                                                            ;
                                                                                                                                         }
-                                                                                                                                        primary: {
-                                                                                                                                            model: model.id,
+                                                                                                                                    },
+                                                                                                                                    computePositionBasedAttribution(touchPoints, model) {
+                                                                                                                                        const firstWeight = model.configuration.firstTouchWeight || 0.4;
+                                                                                                                                        const lastWeight = model.configuration.lastTouchWeight || 0.4;
+                                                                                                                                        const middleWeight = model.configuration.middleTouchWeight || 0.2;
+                                                                                                                                        const credits = [];
+                                                                                                                                        if (touchPoints.length === 1) {
+                                                                                                                                            credits.push({});
+                                                                                                                                            touchPointId: touchPoints[0].id,
                                                                                                                                                 credit;
-                                                                                                                                            [{},
-                                                                                                                                                touchPointId, lastTouchPoint.id,
-                                                                                                                                                credit, 1.0,
-                                                                                                                                                percentage, 100,
-                                                                                                                                                channel, lastTouchPoint.channel,
-                                                                                                                                                position, touchPoints.length,];
+                                                                                                                                            1.0,
+                                                                                                                                                percentage;
+                                                                                                                                            100,
+                                                                                                                                                channel;
+                                                                                                                                            touchPoints[0].channel,
+                                                                                                                                                position;
+                                                                                                                                            1,
+                                                                                                                                            ;
                                                                                                                                         }
-                                                                                                                                        confidence: 1.0,
-                                                                                                                                            methodology;
-                                                                                                                                        'last_touch';
-                                                                                                                                    },
-                                                                                                                                    assisted: {
-                                                                                                                                        model: model.id,
-                                                                                                                                        credit: [],
-                                                                                                                                        confidence: 0,
-                                                                                                                                        methodology: 'none',
-                                                                                                                                    },
-                                                                                                                                    incrementality: {
-                                                                                                                                        baseline: 0,
-                                                                                                                                        incremental: 1.0,
-                                                                                                                                        lift: 1.0,
-                                                                                                                                        confidence: 0.8,
-                                                                                                                                        methodology: 'estimated',
-                                                                                                                                    },
-                                                                                                                                    computeLinearAttribution(touchPoints, model) {
-                                                                                                                                        const creditPerTouchPoint = 1.0 / touchPoints.length;
-                                                                                                                                        const credits = touchPoints.map((tp, index) => ({}), touchPointId, tp.id, credit, creditPerTouchPoint, percentage, (creditPerTouchPoint * 100), channel, tp.channel, position, index + 1);
-                                                                                                                                    },
-                                                                                                                                    return: {
-                                                                                                                                        touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, 1.0)
-                                                                                                                                    },
-                                                                                                                                    models: {
-                                                                                                                                        [model.id]: {
-                                                                                                                                            model: model.id,
-                                                                                                                                            credit: credits,
-                                                                                                                                            confidence: 0.9,
-                                                                                                                                            methodology: 'linear',
-                                                                                                                                        },
-                                                                                                                                        primary: {
-                                                                                                                                            model: model.id,
-                                                                                                                                            credit: credits,
-                                                                                                                                            confidence: 0.9,
-                                                                                                                                            methodology: 'linear',
-                                                                                                                                        },
-                                                                                                                                        assisted: {
-                                                                                                                                            model: model.id,
-                                                                                                                                            credit: [],
-                                                                                                                                            confidence: 0,
-                                                                                                                                            methodology: 'none',
-                                                                                                                                        },
-                                                                                                                                        incrementality: {
-                                                                                                                                            baseline: 0,
-                                                                                                                                            incremental: 1.0,
-                                                                                                                                            lift: 1.0,
-                                                                                                                                            confidence: 0.7,
-                                                                                                                                            methodology: 'estimated',
-                                                                                                                                        },
-                                                                                                                                        model: AttributionModel,
-                                                                                                                                        conversion: Conversion, ConversionAttribution }
+                                                                                                                                        ;
+                                                                                                                                    }, else: , if(touchPoints) { }, : .length === 2
                                                                                                                                 };
                                                                                                                                 {
-                                                                                                                                    const halfLife = model.configuration.halfLife || 7; // days;
-                                                                                                                                    const conversionTime = conversion.timestamp.getTime();
-                                                                                                                                    const credits = touchPoints.map((tp, index) => {
-                                                                                                                                        const daysDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
-                                                                                                                                        const decay = Math.pow(0.5, daysDiff / halfLife);
-                                                                                                                                        return {
-                                                                                                                                            touchPointId: tp.id,
-                                                                                                                                            credit: decay,
-                                                                                                                                            percentage: 0, // Will be calculated after normalization,
-                                                                                                                                            channel: tp.channel,
-                                                                                                                                            position: index + 1,
-                                                                                                                                        };
-                                                                                                                                    });
-                                                                                                                                    // Normalize credits to sum to 1.0
-                                                                                                                                    const totalCredit = credits.reduce((sum, c) => sum + c.credit, 0);
-                                                                                                                                    credits.forEach(c => { });
-                                                                                                                                    c.credit = c.credit / totalCredit;
-                                                                                                                                    c.percentage = c.credit * 100;
-                                                                                                                                }
-                                                                                                                                ;
-                                                                                                                                return {
-                                                                                                                                    touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, c.credit)
-                                                                                                                                };
-                                                                                                                                models: {
-                                                                                                                                    [model.id];
-                                                                                                                                    {
-                                                                                                                                        model: model.id,
-                                                                                                                                            credit;
-                                                                                                                                        credits,
-                                                                                                                                            confidence;
-                                                                                                                                        0.85,
-                                                                                                                                            methodology;
-                                                                                                                                        'time_decay',
-                                                                                                                                        ;
-                                                                                                                                    }
-                                                                                                                                    primary: {
-                                                                                                                                        model: model.id,
-                                                                                                                                            credit;
-                                                                                                                                        credits,
-                                                                                                                                            confidence;
-                                                                                                                                        0.85,
-                                                                                                                                            methodology;
-                                                                                                                                        'time_decay',
-                                                                                                                                        ;
-                                                                                                                                    }
-                                                                                                                                    assisted: {
-                                                                                                                                        model: model.id,
-                                                                                                                                            credit;
-                                                                                                                                        [],
-                                                                                                                                            confidence;
-                                                                                                                                        0,
-                                                                                                                                            methodology;
-                                                                                                                                        'none',
-                                                                                                                                        ;
-                                                                                                                                    }
-                                                                                                                                    incrementality: {
-                                                                                                                                        baseline: 0,
-                                                                                                                                            incremental;
-                                                                                                                                        1.0,
-                                                                                                                                            lift;
-                                                                                                                                        1.0,
-                                                                                                                                            confidence;
-                                                                                                                                        0.75,
-                                                                                                                                            methodology;
-                                                                                                                                        'estimated',
-                                                                                                                                        ;
-                                                                                                                                    }
-                                                                                                                                    ;
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            computePositionBasedAttribution(touchPoints, model) {
-                                                                                                                                const firstWeight = model.configuration.firstTouchWeight || 0.4;
-                                                                                                                                const lastWeight = model.configuration.lastTouchWeight || 0.4;
-                                                                                                                                const middleWeight = model.configuration.middleTouchWeight || 0.2;
-                                                                                                                                const credits = [];
-                                                                                                                                if (touchPoints.length === 1) {
                                                                                                                                     credits.push({});
                                                                                                                                     touchPointId: touchPoints[0].id,
                                                                                                                                         credit;
-                                                                                                                                    1.0,
+                                                                                                                                    firstWeight,
                                                                                                                                         percentage;
-                                                                                                                                    100,
+                                                                                                                                    firstWeight * 100,
                                                                                                                                         channel;
                                                                                                                                     touchPoints[0].channel,
                                                                                                                                         position;
@@ -869,330 +853,338 @@ export class AttributionTracker extends EventEmitter {
                                                                                                                                     ;
                                                                                                                                 }
                                                                                                                                 ;
-                                                                                                                            }, else: , if(touchPoints) { }, : .length === 2
+                                                                                                                                credits.push({});
+                                                                                                                                touchPointId: touchPoints[1].id,
+                                                                                                                                    credit;
+                                                                                                                                lastWeight,
+                                                                                                                                    percentage;
+                                                                                                                                lastWeight * 100,
+                                                                                                                                    channel;
+                                                                                                                                touchPoints[1].channel,
+                                                                                                                                    position;
+                                                                                                                                2,
+                                                                                                                                ;
+                                                                                                                            }
                                                                                                                         };
-                                                                                                                        {
-                                                                                                                            credits.push({});
-                                                                                                                            touchPointId: touchPoints[0].id,
-                                                                                                                                credit;
-                                                                                                                            firstWeight,
-                                                                                                                                percentage;
-                                                                                                                            firstWeight * 100,
-                                                                                                                                channel;
-                                                                                                                            touchPoints[0].channel,
-                                                                                                                                position;
-                                                                                                                            1,
-                                                                                                                            ;
-                                                                                                                        }
-                                                                                                                        ;
-                                                                                                                        credits.push({});
-                                                                                                                        touchPointId: touchPoints[1].id,
-                                                                                                                            credit;
-                                                                                                                        lastWeight,
-                                                                                                                            percentage;
-                                                                                                                        lastWeight * 100,
-                                                                                                                            channel;
-                                                                                                                        touchPoints[1].channel,
-                                                                                                                            position;
-                                                                                                                        2,
-                                                                                                                        ;
-                                                                                                                    }
+                                                                                                                    }, else: {
+                                                                                                                        // First touch
+                                                                                                                        credits, : .push({}),
+                                                                                                                        touchPointId: touchPoints[0].id,
+                                                                                                                        credit: firstWeight,
+                                                                                                                        percentage: firstWeight * 100,
+                                                                                                                        channel: touchPoints[0].channel,
+                                                                                                                        position: 1,
+                                                                                                                    },
+                                                                                                                    // Last touch
+                                                                                                                    credits, : .push({}),
+                                                                                                                    touchPointId: touchPoints[touchPoints.length - 1].id,
+                                                                                                                    credit: lastWeight,
+                                                                                                                    percentage: lastWeight * 100,
+                                                                                                                    channel: touchPoints[touchPoints.length - 1].channel,
+                                                                                                                    position: touchPoints.length,
                                                                                                                 };
+                                                                                                                ;
+                                                                                                                // Middle touches
+                                                                                                                const middleTouchPoints = touchPoints.slice(1, -1);
+                                                                                                                const creditPerMiddle = middleWeight / middleTouchPoints.length;
+                                                                                                                middleTouchPoints.forEach((tp, index) => {
+                                                                                                                    credits.push({});
+                                                                                                                    touchPointId: tp.id,
+                                                                                                                        credit;
+                                                                                                                    creditPerMiddle,
+                                                                                                                        percentage;
+                                                                                                                    creditPerMiddle * 100,
+                                                                                                                        channel;
+                                                                                                                    tp.channel,
+                                                                                                                        position;
+                                                                                                                    index + 2,
+                                                                                                                    ;
+                                                                                                                });
                                                                                                             }
-                                                                                                        }, else: {
-                                                                                                            // First touch
-                                                                                                            credits, : .push({}),
-                                                                                                            touchPointId: touchPoints[0].id,
-                                                                                                            credit: firstWeight,
-                                                                                                            percentage: firstWeight * 100,
-                                                                                                            channel: touchPoints[0].channel,
-                                                                                                            position: 1,
+                                                                                                            ;
+                                                                                                            return {
+                                                                                                                touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, 1.0)
+                                                                                                            };
+                                                                                                            models: {
+                                                                                                                [model.id];
+                                                                                                                {
+                                                                                                                    model: model.id,
+                                                                                                                        credit;
+                                                                                                                    credits,
+                                                                                                                        confidence;
+                                                                                                                    0.8,
+                                                                                                                        methodology;
+                                                                                                                    'position_based',
+                                                                                                                    ;
+                                                                                                                }
+                                                                                                                primary: {
+                                                                                                                    model: model.id,
+                                                                                                                        credit;
+                                                                                                                    credits,
+                                                                                                                        confidence;
+                                                                                                                    0.8,
+                                                                                                                        methodology;
+                                                                                                                    'position_based',
+                                                                                                                    ;
+                                                                                                                }
+                                                                                                                assisted: {
+                                                                                                                    model: model.id,
+                                                                                                                        credit;
+                                                                                                                    [],
+                                                                                                                        confidence;
+                                                                                                                    0,
+                                                                                                                        methodology;
+                                                                                                                    'none',
+                                                                                                                    ;
+                                                                                                                }
+                                                                                                                incrementality: {
+                                                                                                                    baseline: 0,
+                                                                                                                        incremental;
+                                                                                                                    1.0,
+                                                                                                                        lift;
+                                                                                                                    1.0,
+                                                                                                                        confidence;
+                                                                                                                    0.7,
+                                                                                                                        methodology;
+                                                                                                                    'estimated',
+                                                                                                                    ;
+                                                                                                                }
+                                                                                                                ;
+                                                                                                            }
                                                                                                         },
-                                                                                                        // Last touch
-                                                                                                        credits, : .push({}),
-                                                                                                        touchPointId: touchPoints[touchPoints.length - 1].id,
-                                                                                                        credit: lastWeight,
-                                                                                                        percentage: lastWeight * 100,
-                                                                                                        channel: touchPoints[touchPoints.length - 1].channel,
-                                                                                                        position: touchPoints.length,
+                                                                                                        model: AttributionModel,
+                                                                                                        conversion: Conversion, ConversionAttribution
                                                                                                     };
-                                                                                                    ;
-                                                                                                    // Middle touches
-                                                                                                    const middleTouchPoints = touchPoints.slice(1, -1);
-                                                                                                    const creditPerMiddle = middleWeight / middleTouchPoints.length;
-                                                                                                    middleTouchPoints.forEach((tp, index) => {
-                                                                                                        credits.push({});
-                                                                                                        touchPointId: tp.id,
-                                                                                                            credit;
-                                                                                                        creditPerMiddle,
-                                                                                                            percentage;
-                                                                                                        creditPerMiddle * 100,
-                                                                                                            channel;
-                                                                                                        tp.channel,
-                                                                                                            position;
-                                                                                                        index + 2,
-                                                                                                        ;
-                                                                                                    });
-                                                                                                },
-                                                                                                return: {
-                                                                                                    touchPoints: credits.map(c => ({}), credit, c.credit, weight, c.credit, models, { [model.id]: c.credit }, rank, c.position, influence, c.credit, decay, 1.0)
-                                                                                                },
-                                                                                                models: {
-                                                                                                    [model.id]: {
-                                                                                                        model: model.id,
-                                                                                                        credit: credits,
-                                                                                                        confidence: 0.8,
-                                                                                                        methodology: 'position_based',
-                                                                                                    },
-                                                                                                    primary: {
-                                                                                                        model: model.id,
-                                                                                                        credit: credits,
-                                                                                                        confidence: 0.8,
-                                                                                                        methodology: 'position_based',
-                                                                                                    },
-                                                                                                    assisted: {
-                                                                                                        model: model.id,
-                                                                                                        credit: [],
-                                                                                                        confidence: 0,
-                                                                                                        methodology: 'none',
-                                                                                                    },
-                                                                                                    incrementality: {
-                                                                                                        baseline: 0,
-                                                                                                        incremental: 1.0,
-                                                                                                        lift: 1.0,
-                                                                                                        confidence: 0.7,
-                                                                                                        methodology: 'estimated',
-                                                                                                    },
-                                                                                                    model: AttributionModel,
-                                                                                                    conversion: Conversion, ConversionAttribution }
-                                                                                            };
-                                                                                            {
-                                                                                                // Implement custom attribution logic based on model configuration
-                                                                                                // This is a simplified placeholder
-                                                                                                return this.computeLinearAttribution(touchPoints, model);
-                                                                                                // Helper methods (simplified implementations)
-                                                                                            }
-                                                                                            // Helper methods (simplified implementations)
-                                                                                        }
-                                                                                        // Helper methods (simplified implementations)
-                                                                                        ,
-                                                                                        // Helper methods (simplified implementations)
-                                                                                        findOrCreateJourney(data) {
-                                                                                            // Logic to find existing journey or create new one
-                                                                                            return this.generateJourneyId();
-                                                                                        },
-                                                                                        createJourney(touchPoint) {
-                                                                                            const journeyId = this.generateJourneyId();
-                                                                                            return {
-                                                                                                id: journeyId,
-                                                                                                anonymousId: this.generateAnonymousId(),
-                                                                                                sessionIds: [touchPoint.sessionId],
-                                                                                                touchPoints: [],
-                                                                                                conversions: [],
-                                                                                                attribution: {
-                                                                                                    models: {},
-                                                                                                    primary: '',
-                                                                                                    touchPointCount: 0,
-                                                                                                    conversionPath: [],
-                                                                                                    timeToConversion: 0,
-                                                                                                    assist_interactions: 0,
-                                                                                                    direct_interactions: 0
-                                                                                                },
-                                                                                                timeline: {
-                                                                                                    firstTouch: touchPoint.timestamp,
-                                                                                                    lastTouch: touchPoint.timestamp,
-                                                                                                    duration: 0,
-                                                                                                    touchPointsByDay: {},
-                                                                                                    conversionsByDay: {},
-                                                                                                    engagementPeaks: []
-                                                                                                },
-                                                                                                metadata: {
-                                                                                                    source: 'web',
-                                                                                                    quality: {
-                                                                                                        overall: 1.0,
-                                                                                                        dataCompleteness: 1.0,
-                                                                                                        attribution_confidence: 1.0,
-                                                                                                        cross_device_matching: 0,
-                                                                                                        deduplication: 1.0,
-                                                                                                    },
-                                                                                                    completeness: {
-                                                                                                        touchPoints: 1.0,
-                                                                                                        conversions: 0,
-                                                                                                        user_data: 0.5,
-                                                                                                        context_data: 0.7,
-                                                                                                        overall: 0.55,
-                                                                                                    },
-                                                                                                    anomalies: [],
-                                                                                                    tags: []
-                                                                                                },
-                                                                                                created: new Date(),
-                                                                                                updated: new Date()
-                                                                                            };
-                                                                                        },
-                                                                                        updateJourneyTimeline(journey, touchPoint) {
-                                                                                            // Update timeline with new touchpoint
-                                                                                            journey.timeline.lastTouch = touchPoint.timestamp;
-                                                                                            journey.timeline.duration = journey.timeline.lastTouch.getTime() - journey.timeline.firstTouch.getTime();
-                                                                                            const dayKey = touchPoint.timestamp.toISOString().split('T')[0];
-                                                                                            journey.timeline.touchPointsByDay[dayKey] = (journey.timeline.touchPointsByDay[dayKey] || 0) + 1;
-                                                                                        },
-                                                                                        getRelevantTouchPoints(journey, conversion) {
-                                                                                            const lookbackWindow = this.config.attribution.lookbackWindow;
-                                                                                            const conversionTime = conversion.timestamp.getTime();
-                                                                                            return journey.touchPoints.filter(tp => { });
-                                                                                            const timeDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
-                                                                                            const window = lookbackWindow[tp.type] || lookbackWindow.custom[tp.type] || lookbackWindow.click;
-                                                                                            return timeDiff <= window;
-                                                                                        },
-                                                                                        getJourneysInRange(timeRange) {
-                                                                                            return Array.from(this.journeys.values()).filter(journey => );
-                                                                                            journey.timeline.firstTouch >= timeRange.start &&
-                                                                                                journey.timeline.firstTouch <= timeRange.end;
-                                                                                            ;
-                                                                                        },
-                                                                                        getConversionsInRange(timeRange) {
-                                                                                            const conversions = [];
-                                                                                            for (const journey of this.journeys.values()) {
-                                                                                                for (const conversion of journey.conversions) {
-                                                                                                    if (conversion.timestamp >= timeRange.start && conversion.timestamp <= timeRange.end) {
-                                                                                                        conversions.push(conversion);
-                                                                                                        return conversions;
+                                                                                                    {
+                                                                                                        // Implement custom attribution logic based on model configuration
+                                                                                                        // This is a simplified placeholder
+                                                                                                        return this.computeLinearAttribution(touchPoints, model);
+                                                                                                        // Helper methods (simplified implementations)
                                                                                                     }
+                                                                                                    // Helper methods (simplified implementations)
                                                                                                 }
-                                                                                            }
-                                                                                        },
-                                                                                        async findConversion(conversionId) {
-                                                                                            for (const journey of this.journeys.values()) {
-                                                                                                const conversion = journey.conversions.find(c => c.id === conversionId);
-                                                                                                if (conversion) {
-                                                                                                    return conversion;
-                                                                                                    return null;
+                                                                                                // Helper methods (simplified implementations)
+                                                                                                ,
+                                                                                                // Helper methods (simplified implementations)
+                                                                                                findOrCreateJourney(data) {
+                                                                                                    // Logic to find existing journey or create new one
+                                                                                                    return this.generateJourneyId();
+                                                                                                },
+                                                                                                createJourney(touchPoint) {
+                                                                                                    const journeyId = this.generateJourneyId();
+                                                                                                    return {
+                                                                                                        id: journeyId,
+                                                                                                        anonymousId: this.generateAnonymousId(),
+                                                                                                        sessionIds: [touchPoint.sessionId],
+                                                                                                        touchPoints: [],
+                                                                                                        conversions: [],
+                                                                                                        attribution: {
+                                                                                                            models: {},
+                                                                                                            primary: '',
+                                                                                                            touchPointCount: 0,
+                                                                                                            conversionPath: [],
+                                                                                                            timeToConversion: 0,
+                                                                                                            assist_interactions: 0,
+                                                                                                            direct_interactions: 0
+                                                                                                        },
+                                                                                                        timeline: {
+                                                                                                            firstTouch: touchPoint.timestamp,
+                                                                                                            lastTouch: touchPoint.timestamp,
+                                                                                                            duration: 0,
+                                                                                                            touchPointsByDay: {},
+                                                                                                            conversionsByDay: {},
+                                                                                                            engagementPeaks: []
+                                                                                                        },
+                                                                                                        metadata: {
+                                                                                                            source: 'web',
+                                                                                                            quality: {
+                                                                                                                overall: 1.0,
+                                                                                                                dataCompleteness: 1.0,
+                                                                                                                attribution_confidence: 1.0,
+                                                                                                                cross_device_matching: 0,
+                                                                                                                deduplication: 1.0,
+                                                                                                            },
+                                                                                                            completeness: {
+                                                                                                                touchPoints: 1.0,
+                                                                                                                conversions: 0,
+                                                                                                                user_data: 0.5,
+                                                                                                                context_data: 0.7,
+                                                                                                                overall: 0.55,
+                                                                                                            },
+                                                                                                            anomalies: [],
+                                                                                                            tags: []
+                                                                                                        },
+                                                                                                        created: new Date(),
+                                                                                                        updated: new Date()
+                                                                                                    };
+                                                                                                },
+                                                                                                updateJourneyTimeline(journey, touchPoint) {
+                                                                                                    // Update timeline with new touchpoint
+                                                                                                    journey.timeline.lastTouch = touchPoint.timestamp;
+                                                                                                    journey.timeline.duration = journey.timeline.lastTouch.getTime() - journey.timeline.firstTouch.getTime();
+                                                                                                    const dayKey = touchPoint.timestamp.toISOString().split('T')[0];
+                                                                                                    journey.timeline.touchPointsByDay[dayKey] = (journey.timeline.touchPointsByDay[dayKey] || 0) + 1;
+                                                                                                },
+                                                                                                getRelevantTouchPoints(journey, conversion) {
+                                                                                                    const lookbackWindow = this.config.attribution.lookbackWindow;
+                                                                                                    const conversionTime = conversion.timestamp.getTime();
+                                                                                                    return journey.touchPoints.filter(tp => { });
+                                                                                                    const timeDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
+                                                                                                    const window = lookbackWindow[tp.type] || lookbackWindow.custom[tp.type] || lookbackWindow.click;
+                                                                                                    return timeDiff <= window;
+                                                                                                },
+                                                                                                getJourneysInRange(timeRange) {
+                                                                                                    return Array.from(this.journeys.values()).filter(journey => );
+                                                                                                    journey.timeline.firstTouch >= timeRange.start &&
+                                                                                                        journey.timeline.firstTouch <= timeRange.end;
+                                                                                                    ;
+                                                                                                },
+                                                                                                getConversionsInRange(timeRange) {
+                                                                                                    const conversions = [];
+                                                                                                    for (const journey of this.journeys.values()) {
+                                                                                                        for (const conversion of journey.conversions) {
+                                                                                                            if (conversion.timestamp >= timeRange.start && conversion.timestamp <= timeRange.end) {
+                                                                                                                conversions.push(conversion);
+                                                                                                                return conversions;
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
+                                                                                                async findConversion(conversionId) {
+                                                                                                    for (const journey of this.journeys.values()) {
+                                                                                                        const conversion = journey.conversions.find(c => c.id === conversionId);
+                                                                                                        if (conversion) {
+                                                                                                            return conversion;
+                                                                                                            return null;
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
+                                                                                                performJourneyMerge(source, target) {
+                                                                                                    // Merge touchpoints and sort by timestamp
+                                                                                                    const allTouchPoints = [...source.touchPoints, ...target.touchPoints];
+                                                                                                },
+                                                                                                : 
+                                                                                                    .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()),
+                                                                                                // Merge conversions
+                                                                                                const: allConversions = [...source.conversions, ...target.conversions],
+                                                                                                : 
+                                                                                                    .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()),
+                                                                                                // Update target journey
+                                                                                                target, : .touchPoints = allTouchPoints,
+                                                                                                target, : .conversions = allConversions,
+                                                                                                target, : .sessionIds = [...new Set([...source.sessionIds, ...target.sessionIds])],
+                                                                                                target, : .timeline.firstTouch = allTouchPoints[0]?.timestamp || target.timeline.firstTouch,
+                                                                                                target, : .timeline.lastTouch = allTouchPoints[allTouchPoints.length - 1]?.timestamp || target.timeline.lastTouch,
+                                                                                                target, : .timeline.duration = target.timeline.lastTouch.getTime() - target.timeline.firstTouch.getTime(),
+                                                                                                target, : .updated = new Date(),
+                                                                                                return: target,
+                                                                                                async mergeDeviceJourneys(deviceJourneys, userId) {
+                                                                                                    // Implementation for cross-device journey merging
                                                                                                 }
-                                                                                            }
+                                                                                                // Implementation for cross-device journey merging
+                                                                                                ,
+                                                                                                // Implementation for cross-device journey merging
+                                                                                                generateJourneyId() {
+                                                                                                    return `journey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateTouchPointId() {
+                                                                                                    return `tp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateConversionId() {
+                                                                                                    return `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateModelId() {
+                                                                                                    return `model_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateChannelId() {
+                                                                                                    return `channel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateSessionId() {
+                                                                                                    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                generateAnonymousId() {
+                                                                                                    return `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                                                                },
+                                                                                                getSeason(date) {
+                                                                                                    const month = date.getMonth();
+                                                                                                    if (month >= 2 && month <= 4)
+                                                                                                        return 'spring';
+                                                                                                    if (month >= 5 && month <= 7)
+                                                                                                        return 'summer';
+                                                                                                    if (month >= 8 && month <= 10)
+                                                                                                        return 'autumn';
+                                                                                                    return 'winter';
+                                                                                                },
+                                                                                                cleanup() {
+                                                                                                    this.journeys.clear();
+                                                                                                    this.models.clear();
+                                                                                                    this.channels.clear();
+                                                                                                    this.touchPointQueue = [];
+                                                                                                    this.conversionQueue = [];
+                                                                                                    this.removeAllListeners();
+                                                                                                    // Placeholder methods for report generation
+                                                                                                }
+                                                                                                // Placeholder methods for report generation
+                                                                                                ,
+                                                                                                conversions: Conversion,
+                                                                                                options: any, Promise() {
+                                                                                                    return {
+                                                                                                        id: 'report_' + Date.now(),
+                                                                                                        timeRange: { start: new Date(), end: new Date() },
+                                                                                                        summary: {
+                                                                                                            totalJourneys: journeys.length,
+                                                                                                            totalConversions: conversions.length,
+                                                                                                            totalTouchPoints: journeys.reduce((sum, j) => sum + j.touchPoints.length, 0),
+                                                                                                            averageJourneyLength: journeys.length > 0 ? journeys.reduce() : ,
+                                                                                                        }(sum),
+                                                                                                        j,
+                                                                                                        sum
+                                                                                                    } + j.touchPoints.length, 0;
+                                                                                                    / journeys.length : 0,;
+                                                                                                    conversionRate: journeys.length > 0 ? conversions.length / journeys.length : 0,
+                                                                                                    ;
+                                                                                                },
+                                                                                                models: [],
+                                                                                                channels: [],
+                                                                                                paths: [],
+                                                                                                insights: [],
+                                                                                                generatedAt: new Date()
+                                                                                            };
                                                                                         },
-                                                                                        performJourneyMerge(source, target) {
-                                                                                            // Merge touchpoints and sort by timestamp
-                                                                                            const allTouchPoints = [...source.touchPoints, ...target.touchPoints];
-                                                                                        },
-                                                                                        : 
-                                                                                            .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()),
-                                                                                        // Merge conversions
-                                                                                        const: allConversions = [...source.conversions, ...target.conversions],
-                                                                                        : 
-                                                                                            .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()),
-                                                                                        // Update target journey
-                                                                                        target, : .touchPoints = allTouchPoints,
-                                                                                        target, : .conversions = allConversions,
-                                                                                        target, : .sessionIds = [...new Set([...source.sessionIds, ...target.sessionIds])],
-                                                                                        target, : .timeline.firstTouch = allTouchPoints[0]?.timestamp || target.timeline.firstTouch,
-                                                                                        target, : .timeline.lastTouch = allTouchPoints[allTouchPoints.length - 1]?.timestamp || target.timeline.lastTouch,
-                                                                                        target, : .timeline.duration = target.timeline.lastTouch.getTime() - target.timeline.firstTouch.getTime(),
-                                                                                        target, : .updated = new Date(),
-                                                                                        return: target,
-                                                                                        async mergeDeviceJourneys(deviceJourneys, userId) {
-                                                                                            // Implementation for cross-device journey merging
-                                                                                        }
-                                                                                        // Implementation for cross-device journey merging
-                                                                                        ,
-                                                                                        // Implementation for cross-device journey merging
-                                                                                        generateJourneyId() {
-                                                                                            return `journey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateTouchPointId() {
-                                                                                            return `tp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateConversionId() {
-                                                                                            return `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateModelId() {
-                                                                                            return `model_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateChannelId() {
-                                                                                            return `channel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateSessionId() {
-                                                                                            return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        generateAnonymousId() {
-                                                                                            return `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                        },
-                                                                                        getSeason(date) {
-                                                                                            const month = date.getMonth();
-                                                                                            if (month >= 2 && month <= 4)
-                                                                                                return 'spring';
-                                                                                            if (month >= 5 && month <= 7)
-                                                                                                return 'summer';
-                                                                                            if (month >= 8 && month <= 10)
-                                                                                                return 'autumn';
-                                                                                            return 'winter';
-                                                                                        },
-                                                                                        cleanup() {
-                                                                                            this.journeys.clear();
-                                                                                            this.models.clear();
-                                                                                            this.channels.clear();
-                                                                                            this.touchPointQueue = [];
-                                                                                            this.conversionQueue = [];
-                                                                                            this.removeAllListeners();
-                                                                                            // Placeholder methods for report generation
-                                                                                        }
-                                                                                        // Placeholder methods for report generation
-                                                                                        ,
-                                                                                        conversions: Conversion,
-                                                                                        options: any, Promise() {
+                                                                                        async calculateChannelPerformance(journeys) {
                                                                                             return {
-                                                                                                id: 'report_' + Date.now(),
-                                                                                                timeRange: { start: new Date(), end: new Date() },
+                                                                                                channels: [],
                                                                                                 summary: {
-                                                                                                    totalJourneys: journeys.length,
-                                                                                                    totalConversions: conversions.length,
-                                                                                                    totalTouchPoints: journeys.reduce((sum, j) => sum + j.touchPoints.length, 0),
-                                                                                                    averageJourneyLength: journeys.length > 0 ? journeys.reduce() : , }(sum),
-                                                                                                j,
-                                                                                                sum
-                                                                                            } + j.touchPoints.length, 0;
-                                                                                            / journeys.length : 0,;
-                                                                                            conversionRate: journeys.length > 0 ? conversions.length / journeys.length : 0,
-                                                                                            ;
+                                                                                                    totalChannels: 0,
+                                                                                                    totalTouchPoints: 0,
+                                                                                                    totalConversions: 0,
+                                                                                                    averageCPA: 0,
+                                                                                                    averageROAS: 0,
+                                                                                                },
+                                                                                                timeRange: { start: new Date(), end: new Date() },
+                                                                                                generatedAt: new Date()
+                                                                                            };
                                                                                         },
-                                                                                        models: [],
-                                                                                        channels: [],
-                                                                                        paths: [],
-                                                                                        insights: [],
-                                                                                        generatedAt: new Date()
+                                                                                        async analyzeConversionPaths(journeys, options) {
+                                                                                            return [];
+                                                                                        },
+                                                                                        async generateInsights(journeys, conversions) {
+                                                                                            return {
+                                                                                                trends: [],
+                                                                                                anomalies: [],
+                                                                                                opportunities: [],
+                                                                                                recommendations: [],
+                                                                                                confidence: 0.8,
+                                                                                                generatedAt: new Date(),
+                                                                                            };
+                                                                                            export default {
+                                                                                                AttributionTracker
+                                                                                            };
+                                                                                        }
                                                                                     };
                                                                                 }
                                                                             }
                                                                         }
-                                                                    },
-                                                                    async calculateChannelPerformance(journeys) {
-                                                                        return {
-                                                                            channels: [],
-                                                                            summary: {
-                                                                                totalChannels: 0,
-                                                                                totalTouchPoints: 0,
-                                                                                totalConversions: 0,
-                                                                                averageCPA: 0,
-                                                                                averageROAS: 0,
-                                                                            },
-                                                                            timeRange: { start: new Date(), end: new Date() },
-                                                                            generatedAt: new Date()
-                                                                        };
-                                                                    },
-                                                                    async analyzeConversionPaths(journeys, options) {
-                                                                        return [];
-                                                                    },
-                                                                    async generateInsights(journeys, conversions) {
-                                                                        return {
-                                                                            trends: [],
-                                                                            anomalies: [],
-                                                                            opportunities: [],
-                                                                            recommendations: [],
-                                                                            confidence: 0.8,
-                                                                            generatedAt: new Date(),
-                                                                        };
-                                                                        export default {
-                                                                            AttributionTracker
-                                                                        };
                                                                     }
                                                                 };
                                                             }

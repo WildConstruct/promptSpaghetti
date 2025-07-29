@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Comment, PaginatedResponse } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 interface UseCommentRepliesOptions {
-  commentId: string;,
+  commentId: string;
   userId: string;
   limit?: number;
   sortOrder?: 'asc' | 'desc';
@@ -45,7 +45,7 @@ interface UseCommentRepliesOptions {
 });
       const response = await fetch(`${API_BASE}/comments/${commentId}/replies?${params}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });

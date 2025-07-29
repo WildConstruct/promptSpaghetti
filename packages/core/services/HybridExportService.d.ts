@@ -12,18 +12,18 @@ import { VFXExportFormat, VFXPromptVariant } from '../types/VFXExport.js';
 import { Node, Edge } from 'reactflow';
 
 export interface HybridExportFormat extends VFXExportFormat {
-    hybridPrompting: {,
-        mars: {,
+    hybridPrompting: {
+        mars: {
             framework: 'MARS-v1.0';
             tags: MARSFrameworkTags;
             structured: MARSStructuredPrompt;
         };
-        zada: {,
+        zada: {
             approach: 'screenplay-style';
             variants: ZadaNaturalLanguageVariant[];
             director_friendly: DirectorAccessiblePrompt;
         };
-        hollywood: {,
+        hollywood: {
             protocol: 'reproducibility-v1';
             seeds: HollywoodSeedProtocol;
             iteration_tracking: IterationHistory[];
@@ -31,43 +31,43 @@ export interface HybridExportFormat extends VFXExportFormat {
     };
 
 export interface MARSFrameworkTags {
-    CAM: {,
+    CAM: {
         shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';
         angle: 'high' | 'eye' | 'low' | 'dutch' | 'aerial';
         movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';
         lens: string;
         depth_of_field: 'shallow' | 'deep' | 'rack-focus';
     };
-    SUBJ: {,
+    SUBJ: {
         primary: string;
         secondary?: string;
         interaction: string;
         emotion: string;
         blocking: string;
     };
-    FX: {,
+    FX: {
         lighting: 'natural' | 'dramatic' | 'soft' | 'harsh' | 'practical' | 'motivated';
         color_grade: 'neutral' | 'warm' | 'cool' | 'desaturated' | 'cinematic';
         atmosphere: 'clear' | 'hazy' | 'smoky' | 'foggy' | 'dusty';
         special_fx?: string[];
         post_processing?: string[];
     };
-    FOCAL: {,
+    FOCAL: {
         primary_focus: string;
         secondary_focus?: string;
         background_treatment: 'blur' | 'sharp' | 'silhouette' | 'bokeh';
-        visual_hierarchy: 'foreground' | 'midground' | 'background';
-    };
+        visual_hierarchy: 'foreground' | 'midground' | 'background'
+  };
 
 export interface MARSStructuredPrompt {
     raw_mars: string;
-    parsed_structure: {,
+    parsed_structure: {
         camera_section: string;
         subject_section: string;
         effects_section: string;
         focal_section: string;
     };
-    controlnet_mapping: {,
+    controlnet_mapping: {
         pose_guidance: string;
         depth_hints: string;
         edge_conditions: string;
@@ -86,7 +86,7 @@ export interface DirectorAccessiblePrompt {
     shot_description: string;
     mood_direction: string;
     reference_notes: string;
-    crew_notes: {,
+    crew_notes: {
         cinematographer: string;
         lighting_director: string;
         vfx_supervisor: string;
@@ -97,7 +97,7 @@ export interface HollywoodSeedProtocol {
     component_seeds: Record<string, number>;
     iteration_seeds: number[];
     reproducibility_checksum: string;
-    version_compatibility: {,
+    version_compatibility: {
         generator_version: string;
         node_version_map: Record<string, string>;
         schema_version: string;
@@ -134,8 +134,8 @@ export declare class HybridPromptExportService {
         includeZada: boolean;
         includeHollywoodProtocol: boolean;
         quality: 'production' | 'preview' | 'debug';
-        targetAudience: 'director' | 'vfx_professional' | 'mixed_crew';
-    }): Promise<HybridExportFormat>;
+        targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
+  }): Promise<HybridExportFormat>;
     private buildHybridExtensions;
 declare class MARSFrameworkExtractor {
     extractMARSTags(prompt: string, variables: Record<string, string>): Promise<MARSFrameworkTags>;

@@ -306,7 +306,7 @@ export interface CampaignChannel {
     channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
     enabled: boolean;
     channel_config: Record<string, any>;
-    channel_metrics: {,
+    channel_metrics: {
         impressions: number;
         clicks: number;
         conversions: number;
@@ -541,7 +541,7 @@ export interface PromotionSearchResult {
     promotions: BasePromotion[];
     total_count: number;
     has_more: boolean;
-    aggregates: {,
+    aggregates: {
         total_active: number;
         total_scheduled: number;
         total_expired: number;
@@ -602,7 +602,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     end_date: Date;
     timezone: string;
     application_type: PromotionApplicationType;
-    targeting_rules: {,
+    targeting_rules: {
         type: PromotionTargetType;
         operator: "AND" | "OR";
         conditions: any[];
@@ -620,7 +620,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     end_date: Date;
     timezone: string;
     application_type: PromotionApplicationType;
-    targeting_rules: {,
+    targeting_rules: {
         type: PromotionTargetType;
         operator: "AND" | "OR";
         conditions: any[];

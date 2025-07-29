@@ -198,7 +198,8 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
                                                                     ,
                                                                     // Update suggestion based on feedback
                                                                     if(feedback) { }, : .implemented
-                                                                } }
+                                                                }
+                                                            }
                                                         }
                                                     };
                                                     {

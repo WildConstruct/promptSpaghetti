@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 
 export interface ConflictData {
-  id: string;,
+  id: string;
   type: string;
-  description: string;,
+  description: string;
   operations: Array<{,
-  id: string;,
+  id: string;
   userId: string;
   userName?: string;
-  timestamp: number;,
+  timestamp: number;
   oldValue: Error;
   newValue: Error;
 }>;
   nodeId?: string;
   edgeId?: string;
   property?: string;
-  detectedAt: number;,
+  detectedAt: number;
   autoResolved: boolean;
 }
 export interface ConflictPanelProps {
-  conflicts: ConflictData;,
+  conflicts: ConflictData;
   onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
-  onViewConflict: (conflictId: string) => void;,
+  onViewConflict: (conflictId: string) => void;
   currentUserId: string;
   className?: string;
 }
@@ -286,8 +286,8 @@ export default ConflictPanel;
 
 // Notification component for conflict alerts
 interface ConflictNotificationProps {
-  conflict: ConflictData;,
-  onResolve: (conflict: ConflictData) => void;,
+  conflict: ConflictData;
+  onResolve: (conflict: ConflictData) => void;
   onDismiss: () => void;
 
 export };

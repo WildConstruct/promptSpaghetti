@@ -4,11 +4,11 @@
  */
 
 export interface NodeExecutionStep {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
-  stepIndex: number;,
+  stepIndex: number;
   timestamp: number;
-  executionTimeMs: number;,
+  executionTimeMs: number;
   inputs: ExecutionInput;
   output: unknown;
   randomChoice?: RandomChoiceInfo;
@@ -16,48 +16,48 @@ export interface NodeExecutionStep {
 }
 export interface ExecutionInput {
   sourceNodeId?: string;
-  value: unknown;,
+  value: unknown;
   inputIndex: number;
 }
 export interface RandomChoiceInfo {
-  choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';,
+  choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
   availableOptions: string;
-  selectedOption: string;,
+  selectedOption: string;
   selectionReason: string;
   probability?: number;
   weight?: number;
   conditionMet?: boolean;
 }
 export interface ExecutionPath {
-  id: string;,
+  id: string;
   seed: number;
-  startTime: number;,
+  startTime: number;
   endTime: number;
-  totalExecutionTime: number;,
+  totalExecutionTime: number;
   steps: NodeExecutionStep;
-  finalOutput: string;,
+  finalOutput: string;
   nodeExecutionOrder: string;
   randomizationPoints: RandomChoiceInfo;
   error?: string;
 }
 export interface PathVisualizationData {
-  executionPath: ExecutionPath;,
+  executionPath: ExecutionPath;
   pathColor: string;
-  highlightedNodes: string;,
+  highlightedNodes: string;
   executionFlow: ExecutionFlowEdge;
-  variance: number;,
+  variance: number;
   creativityScore: number;
 }
 export interface ExecutionFlowEdge {
-  from: string;,
+  from: string;
   to: string;
-  stepIndex: number;,
+  stepIndex: number;
   dataFlow: unknown;
-  executionTimeMs: number;,
+  executionTimeMs: number;
   isRandomChoice: boolean;
 }
 export interface PreviewResultWithPath {
-  seed: number;,
+  seed: number;
   output: string;
   error?: string;
   usedNodeIds?: string;
@@ -67,35 +67,35 @@ export interface PreviewResultWithPath {
   executionPath?: ExecutionPath;
   pathVisualization?: PathVisualizationData;
   // Enhanced debugging information
-  debugInfo?: {,
-  nodeExecutionOrder: string;,
+  debugInfo?: {
+  nodeExecutionOrder: string;
   randomChoices: RandomChoiceInfo;
   performanceBreakdown: Record<string, number>;
   memoryUsage?: number;
 };
 }
 export interface MultiSeedPreviewResult {
-  results: PreviewResultWithPath;,
-  aggregateStats: {,
-  totalTime: number;,
+  results: PreviewResultWithPath;
+  aggregateStats: {
+  totalTime: number;
   averageTime: number;
-  variance: number;,
+  variance: number;
   uniquePaths: number;
-  commonNodes: string;,
+  commonNodes: string;
   divergencePoints: string;
 };
   pathComparison: PathComparisonData;
 }
 export interface PathComparisonData {
-  sharedSteps: NodeExecutionStep;,
-  divergentPaths: {,
-  resultId: string;,
+  sharedSteps: NodeExecutionStep;
+  divergentPaths: {
+  resultId: string;
   divergencePoint: string;
   uniqueSteps: NodeExecutionStep;
 }[];
-  varianceAnalysis: {,
+  varianceAnalysis: {
   highVarianceNodes: string;
-  consistentNodes: string;,
+  consistentNodes: string;
   randomizationImpact: number;
 };
 }
@@ -126,7 +126,7 @@ export type ExecutionPathColor = typeof EXECUTION_PATH_COLORS[number];
 // Node highlighting styles
 
 export interface NodeHighlightStyle {
-  color: ExecutionPathColor;,
+  color: ExecutionPathColor;
   opacity: number;
   strokeWidth: number;
   animation?: 'pulse' | 'glow' | 'none';
@@ -134,11 +134,11 @@ export interface NodeHighlightStyle {
   // Execution visualization configuration
 }
 export interface ExecutionVisualizationConfig {
-  showExecutionOrder: boolean;,
+  showExecutionOrder: boolean;
   showRandomChoices: boolean;
-  showPerformanceMetrics: boolean;,
+  showPerformanceMetrics: boolean;
   animateExecution: boolean;
-  highlightCommonPaths: boolean;,
+  highlightCommonPaths: boolean;
   colorByVariance: boolean;
   showDebugInfo: boolean;
   // Default visualization configuration

@@ -6,7 +6,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 
 export interface CostAnalysisProps {
     analyticsClient: AnalyticsClient;
-    timeRange: {,
+    timeRange: {
         startTime: number;
         endTime: number;
     };

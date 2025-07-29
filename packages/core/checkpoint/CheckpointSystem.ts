@@ -21,90 +21,90 @@ import { EventEmitter } from 'events';
 // Core checkpoint interfaces
 
 export interface CheckpointMetadata {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  timestamp: Date;,
+  timestamp: Date;
   version: string;
   parentCheckpointId?: string;
-  tags: string;,
+  tags: string;
   size: number;
-  compressionRatio: number;,
+  compressionRatio: number;
   isAutomated: boolean;
   creator: string;
-  executionContext?: {,
-  nodeId: string;,
+  executionContext?: {
+  nodeId: string;
   stepNumber: number;
-  totalSteps: number;,
+  totalSteps: number;
   elapsedTime: number;
 };
 }
 export interface CheckpointData {
-  metadata: CheckpointMetadata;,
-  state: {,
-  graphState: any;,
+  metadata: CheckpointMetadata;
+  state: {
+  graphState: any;
   variables: Record<string, any>;
-  executionHistory: any;,
+  executionHistory: any;
   nodeStates: Record<string, any>;
   settings: Record<string, any>;
 };
-  validation: {,
+  validation: {
   checksum: string;
-  stateHash: string;,
+  stateHash: string;
   integrityScore: number;
-  isValid: boolean;,
+  isValid: boolean;
   validationErrors: string;
 };
 }
 export interface CheckpointPolicy {
-  autoSave: {,
-  enabled: boolean;,
+  autoSave: {
+  enabled: boolean;
   interval: number; // milliseconds,
-  maxAutoSaves: number;,
+  maxAutoSaves: number;
   triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
 };
-  retention: {,
+  retention: {
   maxCheckpoints: number;
   maxAge: number; // days,
   compressionThreshold: number; // bytes,
   archiveAfter: number; // days,
 };
-  recovery: {,
+  recovery: {
   autoRecovery: boolean;
   recoveryTimeout: number; // milliseconds,
-  maxRecoveryAttempts: number;,
-  fallbackStrategy: 'latest' | 'stable' | 'manual';
-};
+  maxRecoveryAttempts: number;
+  fallbackStrategy: 'latest' | 'stable' | 'manual'
+  };
 }
 export interface CheckpointDiff {
-  checkpointId: string;,
+  checkpointId: string;
   previousCheckpointId: string | null;
-  changes: {,
-  type: 'added' | 'modified' | 'deleted';,
+  changes: {
+  type: 'added' | 'modified' | 'deleted';
   path: string;
   oldValue?: any;
   newValue?: any;
   size: number;
 }[];
-  summary: {,
+  summary: {
   additions: number;
-  modifications: number;,
+  modifications: number;
   deletions: number;
-  totalChanges: number;,
+  totalChanges: number;
   impactScore: number;
 };
 }
 export interface RecoveryOptions {
-  checkpointId: string;,
+  checkpointId: string;
   preserveCurrentState: boolean;
-  createBackup: boolean;,
+  createBackup: boolean;
   validateBeforeRestore: boolean;
   progressCallback?: (progress: number, step: string) => void;
 }
 export interface CheckpointCompressionResult {
-  originalSize: number;,
+  originalSize: number;
   compressedSize: number;
-  compressionRatio: number;,
+  compressionRatio: number;
   algorithm: string;
   processingTime: number;
   // Main Checkpoint System Class
@@ -125,19 +125,19 @@ export class CheckpointSystem extends EventEmitter {
   constructor(policy?: Partial<CheckpointPolicy>) {
   super();
   this.policy = {
-  autoSave: {,
+  autoSave: {
   enabled: true,
   interval: 30000, // 30 seconds,
   maxAutoSaves: 10,
   triggerEvents: ['node_complete', 'variable_change', 'error'],
 },
-  retention: {,
+  retention: {
   maxCheckpoints: 50,
   maxAge: 30, // 30 days,
   compressionThreshold: 1024 * 1024, // 1MB,
   archiveAfter: 7 // 7 days,
 },
-  recovery: {,
+  recovery: {
   autoRecovery: true,
   recoveryTimeout: 5000,
   maxRecoveryAttempts: 3,
@@ -173,14 +173,14 @@ export class CheckpointSystem extends EventEmitter {
       // Prepare checkpoint data
       const checkpointData: CheckpointData = {,
   metadata: fullMetadata,
-        state: {,
+        state: {
   graphState: this.deepClone(state.graphState || {}),
           variables: this.deepClone(state.variables || {}),
           executionHistory: this.deepClone(state.executionHistory || []),
           nodeStates: this.deepClone(state.nodeStates || {}),
           settings: this.deepClone(state.settings || {})
   },
-  validation: {,
+  validation: {
   checksum: '',
   stateHash: '',
   integrityScore: 0,

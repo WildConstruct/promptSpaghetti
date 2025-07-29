@@ -41,23 +41,23 @@ import {
 // Types extending existing submission system
 
 export interface QueueSubmission {
-  id: string;,
+  id: string;
   template_id: string;
-  submitter_id: string;,
+  submitter_id: string;
   submitter_name: string;
-  submitter_email: string;,
+  submitter_email: string;
   status: 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
-  version_number: number;,
-  submission_data: {,
-  title: string;,
+  version_number: number;
+  submission_data: {
+  title: string;
   description: string;
-  tags: string;,
+  tags: string;
   categories: string;
   price_cents: number;
   is_ai_generated?: boolean;
   intended_use_cases: string;
 };
-  validation_results: ValidationResult;,
+  validation_results: ValidationResult;
   submitted_at: Date;
   updated_at: Date;
   assigned_reviewer?: string;
@@ -66,25 +66,25 @@ export interface QueueSubmission {
   complexity_score?: number; // 1-10
 }
 export interface ValidationResult {
-  rule_id: string;,
+  rule_id: string;
   severity: 'error' | 'warning' | 'info';
-  category: string;,
+  category: string;
   message: string;
   field?: string;
   auto_fixable: boolean;
 }
 export interface QueueMetrics {
-  total_pending: number;,
+  total_pending: number;
   total_under_review: number;
-  total_changes_requested: number;,
+  total_changes_requested: number;
   average_wait_time_hours: number;
-  average_review_time_hours: number;,
+  average_review_time_hours: number;
   reviews_completed_today: number;
   queue_velocity: number; // submissions/day,
   reviewer_workload: Array<{,
-  reviewer_id: string;,
+  reviewer_id: string;
   reviewer_name: string;
-  active_reviews: number;,
+  active_reviews: number;
   completed_today: number;
   average_review_time: number;
 }>;
@@ -100,9 +100,9 @@ export interface QueueFilters {
   has_validation_errors?: boolean;
   complexity_min?: number;
   complexity_max?: number;
-  sort_by: 'submitted_at' | 'priority' | 'estimated_time' | 'complexity';,
+  sort_by: 'submitted_at' | 'priority' | 'estimated_time' | 'complexity';
   sort_order: 'asc' | 'desc';
-  page: number;,
+  page: number;
   limit: number;
   const SubmissionQueueDashboard: React.FC = () => {,
   // State management
@@ -160,7 +160,7 @@ export interface QueueFilters {
       const response = await fetch(`/api/submissions/${submissionId}/assign`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },
@@ -175,7 +175,7 @@ export interface QueueFilters {
     try {
       const response = await fetch('/api/submissions/bulk-assign', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },
@@ -195,7 +195,7 @@ export interface QueueFilters {
       const response = await fetch(`/api/submissions/${submissionId}/priority`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },
@@ -570,14 +570,14 @@ export interface QueueFilters {
       </Tabs>
       <style>{`
         .submission-queue-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 24px;,
+          padding: 24px;
   background: #f8fafc;
           min-height: 100vh;
         .queue-header {
           background: white;
-          border-radius: 12px;,
+          border-radius: 12px;
   padding: 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -588,10 +588,10 @@ export interface QueueFilters {
           margin-bottom: 24px;
         .title-section {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
         .header-actions {
-          display: flex;,
+          display: flex;
   gap: 12px;
         .metrics-grid {
           display: grid;
@@ -603,40 +603,40 @@ export interface QueueFilters {
           border-radius: 8px;
         .queue-tabs {
           background: white;
-          border-radius: 12px;,
+          border-radius: 12px;
   padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         .filter-card {
-          margin-bottom: 24px;,
+          margin-bottom: 24px;
   border: 1px solid #e2e8f0;
         .filter-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 16px;
         .search-bar {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
-          padding: 12px;,
+          padding: 12px;
   border: 1px solid #e2e8f0;
-          border-radius: 8px;,
+          border-radius: 8px;
   background: #f8fafc;
         .filter-controls {
-          display: flex;,
+          display: flex;
   gap: 12px;
           flex-wrap: wrap;
         .filter-select {
-          padding: 8px 12px;,
+          padding: 8px 12px;
   border: 1px solid #e2e8f0;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: white;
           min-width: 150px;
         .bulk-actions {
           display: flex;
           align-items: center;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 8px;
-          padding: 12px;,
+          padding: 12px;
   background: #f1f5f9;
           border-radius: 8px;
         .submissions-table {
@@ -645,23 +645,23 @@ export interface QueueFilters {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   padding: 64px;
           text-align: center;
         .submissions-list {
           divide-y: 1px solid #e2e8f0;
         .submission-row {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
-          padding: 16px;,
+          padding: 16px;
   transition: background-color 0.2s;
         .submission-row:hover {,
   background: #f8fafc;
         .row-checkbox {
           flex-shrink: 0;
         .checkbox {
-          width: 16px;,
+          width: 16px;
   height: 16px;
           accent-color: #3b82f6;
         .submission-info {
@@ -674,46 +674,46 @@ export interface QueueFilters {
           margin-bottom: 8px;
         .submission-title {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
           line-height: 1.4;
         .submission-badges {
-          display: flex;,
+          display: flex;
   gap: 8px;
           flex-shrink: 0;
         .submission-details {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 16px;
           margin-bottom: 8px;
         .detail-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .validation-warnings {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
           font-size: 14px;
         .submission-actions {
-          display: flex;,
+          display: flex;
   gap: 8px;
           align-items: center;
           flex-shrink: 0;
         .priority-select, .reviewer-select {
-          padding: 6px 10px;,
+          padding: 6px 10px;
   border: 1px solid #e2e8f0;
-          border-radius: 4px;,
+          border-radius: 4px;
   background: white;
           font-size: 14px;
           min-width: 120px;
         .reviewer-card {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 16px;
           border: 1px solid #e2e8f0;
           border-radius: 8px;
@@ -722,23 +722,23 @@ export interface QueueFilters {
           flex: 1;
         .reviewer-name {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 4px 0;
         .reviewer-stats {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
-          display: flex;,
+          display: flex;
   gap: 8px;
           align-items: center;
         .workload-bar {
-          width: 100px;,
+          width: 100px;
   height: 8px;
           background: #f3f4f6;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .workload-fill {
-          height: 100%;,
+          height: 100%;
   background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
           transition: width 0.3s;
         .analytics-grid {
@@ -747,27 +747,27 @@ export interface QueueFilters {
           gap: 16px;
         .trend-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 16px;
         .trend-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 12px;
           background: #f8fafc;
           border-radius: 6px;
         .trend-label {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .trend-value {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         @media (max-width: 768px) {
           .submission-queue-dashboard {
             padding: 16px;
           .header-content {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 16px;
             align-items: stretch;
           .metrics-grid {
@@ -778,10 +778,10 @@ export interface QueueFilters {
             min-width: auto;
           .submission-row {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 12px;
           .submission-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 8px;
           .submission-badges {
             flex-wrap: wrap;

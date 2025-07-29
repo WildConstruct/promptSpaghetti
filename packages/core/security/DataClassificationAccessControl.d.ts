@@ -35,13 +35,13 @@ export interface DataClassificationRole {
     constraints: RoleConstraint[];
     parentRoles: string[];
     isActive: boolean;
-    metadata: {,
+    metadata: {
         createdBy: string;
         createdAt: Date;
         lastModified: Date;
         approvalRequired: boolean;
-        riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    };
+        riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  };
 
 export interface DataClassificationPermission {
     id: string;
@@ -457,62 +457,62 @@ export declare const STANDARD_CLASSIFICATION_ROLES: {
         readonly name: "System Administrator";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "SYSTEM";
-        readonly riskLevel: "CRITICAL";
-    };
+        readonly riskLevel: "CRITICAL"
+  };
     readonly SECURITY_OFFICER: {
         readonly name: "Security Officer";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "ADMINISTRATIVE";
-        readonly riskLevel: "HIGH";
-    };
+        readonly riskLevel: "HIGH"
+  };
     readonly COMPLIANCE_OFFICER: {
         readonly name: "Compliance Officer";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "ADMINISTRATIVE";
-        readonly riskLevel: "MEDIUM";
-    };
+        readonly riskLevel: "MEDIUM"
+  };
     readonly DATA_OWNER: {
         readonly name: "Data Owner";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "DATA_OWNER";
-        readonly riskLevel: "HIGH";
-    };
+        readonly riskLevel: "HIGH"
+  };
     readonly DATA_STEWARD: {
         readonly name: "Data Steward";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "DATA_OWNER";
-        readonly riskLevel: "MEDIUM";
-    };
+        readonly riskLevel: "MEDIUM"
+  };
     readonly DATA_CUSTODIAN: {
         readonly name: "Data Custodian";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "FUNCTIONAL";
-        readonly riskLevel: "MEDIUM";
-    };
+        readonly riskLevel: "MEDIUM"
+  };
     readonly ANALYST: {
         readonly name: "Data Analyst";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "FUNCTIONAL";
-        readonly riskLevel: "MEDIUM";
-    };
+        readonly riskLevel: "MEDIUM"
+  };
     readonly DEVELOPER: {
         readonly name: "Developer";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "FUNCTIONAL";
-        readonly riskLevel: "LOW";
-    };
+        readonly riskLevel: "LOW"
+  };
     readonly USER: {
         readonly name: "Standard User";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "FUNCTIONAL";
-        readonly riskLevel: "LOW";
-    };
+        readonly riskLevel: "LOW"
+  };
     readonly VIEWER: {
         readonly name: "Read-Only User";
         readonly maxClassification: DataClassificationLevel;
         readonly category: "FUNCTIONAL";
-        readonly riskLevel: "LOW";
-    };
+        readonly riskLevel: "LOW"
+  };
 };
 /**
  * Standard Access Control Matrix

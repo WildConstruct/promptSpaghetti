@@ -129,7 +129,7 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
     confidenceScore: number;
     templateId: string;
     isVerified: boolean;
-    collaborators: {,
+    collaborators: {
         userId: string;
         userName: string;
         userEmail: string;
@@ -143,14 +143,14 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
     primaryCreatorName: string;
     primaryCreatorEmail: string;
     creationDate: Date;
-    revenueSharing: {,
+    revenueSharing: {
         primaryCreatorShare: number;
         collaboratorShares: Record<string, number>;
         platformFee: number;
         totalPercentage: number;
         originalCreatorShare?: number | undefined;
     };
-    attributionClaims: {,
+    attributionClaims: {
         status: "pending" | "approved" | "rejected" | "disputed";
         claimId: string;
         claimantId: string;
@@ -182,7 +182,7 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
     primaryCreatorName: string;
     primaryCreatorEmail: string;
     creationDate: Date;
-    revenueSharing: {,
+    revenueSharing: {
         primaryCreatorShare: number;
         collaboratorShares: Record<string, number>;
         platformFee: number;
@@ -283,7 +283,7 @@ export declare const RevenueAttributionSchema: z.ZodObject<{
     purchaseId: string;
     attributionMethod: "automated" | "manual_review" | "dispute_resolution";
     totalRevenue: number;
-    attributions: {,
+    attributions: {
         status: "pending" | "disputed" | "refunded" | "released" | "held";
         percentage: number;
         attribution: "collaborator" | "primary_creator" | "derived_from" | "platform_fee";
@@ -308,7 +308,7 @@ export declare const RevenueAttributionSchema: z.ZodObject<{
     purchaseId: string;
     attributionMethod: "automated" | "manual_review" | "dispute_resolution";
     totalRevenue: number;
-    attributions: {,
+    attributions: {
         status: "pending" | "disputed" | "refunded" | "released" | "held";
         percentage: number;
         attribution: "collaborator" | "primary_creator" | "derived_from" | "platform_fee";
@@ -398,7 +398,7 @@ export declare const CreatorAttributionProfileSchema: z.ZodObject<{
     collaborationScore: number;
     averageCollaborators: number;
     successfulCollaborations: number;
-    attributionSettings: {,
+    attributionSettings: {
         showRealName: boolean;
         showRevenue: boolean;
         showCollaborations: boolean;
@@ -406,7 +406,7 @@ export declare const CreatorAttributionProfileSchema: z.ZodObject<{
         requireAttribution: boolean;
         defaultRevenueShare: number;
     };
-    attributionReputation: {,
+    attributionReputation: {
         overallRating: number;
         totalRatings: number;
         collaborationScore: number;
@@ -421,7 +421,7 @@ export declare const CreatorAttributionProfileSchema: z.ZodObject<{
     updatedAt: Date;
     userId: string;
     displayName: string;
-    attributionSettings: {,
+    attributionSettings: {
         showRealName?: boolean | undefined;
         showRevenue?: boolean | undefined;
         showCollaborations?: boolean | undefined;
@@ -429,7 +429,7 @@ export declare const CreatorAttributionProfileSchema: z.ZodObject<{
         requireAttribution?: boolean | undefined;
         defaultRevenueShare?: number | undefined;
     };
-    attributionReputation: {,
+    attributionReputation: {
         overallRating?: number | undefined;
         totalRatings?: number | undefined;
         collaborationScore?: number | undefined;
@@ -522,7 +522,7 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
     expiresAt: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    metrics: {,
+    metrics: {
         averageRating: number;
         totalViews: number;
         templatesCreated: number;
@@ -536,7 +536,7 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
         disputedAttributions: number;
         verificationRate: number;
     };
-    insights: {,
+    insights: {
         description: string;
         type: "alert" | "recommendation" | "anomaly" | "trend";
         metadata: Record<string, unknown>;
@@ -554,7 +554,7 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
     creatorId?: string | undefined;
 }, {
     id: string;
-    metrics: {,
+    metrics: {
         averageRating?: number | undefined;
         totalViews?: number | undefined;
         templatesCreated?: number | undefined;
@@ -841,7 +841,7 @@ export declare const CreateTemplateAttributionRequestSchema: z.ZodObject<{
     sourceMetadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     templateId: string;
-    collaborators: {,
+    collaborators: {
         userId: string;
         contributionType: "editor" | "reviewer" | "contributor" | "co-creator" | "advisor";
         contributionPercentage: number;
@@ -1053,7 +1053,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         confidenceScore: number;
         templateId: string;
         isVerified: boolean;
-        collaborators: {,
+        collaborators: {
             userId: string;
             userName: string;
             userEmail: string;
@@ -1067,14 +1067,14 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         primaryCreatorName: string;
         primaryCreatorEmail: string;
         creationDate: Date;
-        revenueSharing: {,
+        revenueSharing: {
             primaryCreatorShare: number;
             collaboratorShares: Record<string, number>;
             platformFee: number;
             totalPercentage: number;
             originalCreatorShare?: number | undefined;
         };
-        attributionClaims: {,
+        attributionClaims: {
             status: "pending" | "approved" | "rejected" | "disputed";
             claimId: string;
             claimantId: string;
@@ -1106,7 +1106,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         primaryCreatorName: string;
         primaryCreatorEmail: string;
         creationDate: Date;
-        revenueSharing: {,
+        revenueSharing: {
             primaryCreatorShare: number;
             collaboratorShares: Record<string, number>;
             platformFee: number;
@@ -1182,14 +1182,14 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         averageRevenuePerSale: number;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    attribution: {,
+    attribution: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
         confidenceScore: number;
         templateId: string;
         isVerified: boolean;
-        collaborators: {,
+        collaborators: {
             userId: string;
             userName: string;
             userEmail: string;
@@ -1203,14 +1203,14 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         primaryCreatorName: string;
         primaryCreatorEmail: string;
         creationDate: Date;
-        revenueSharing: {,
+        revenueSharing: {
             primaryCreatorShare: number;
             collaboratorShares: Record<string, number>;
             platformFee: number;
             totalPercentage: number;
             originalCreatorShare?: number | undefined;
         };
-        attributionClaims: {,
+        attributionClaims: {
             status: "pending" | "approved" | "rejected" | "disputed";
             claimId: string;
             claimantId: string;
@@ -1234,7 +1234,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         verifiedBy?: string | undefined;
         templateVersionId?: string | undefined;
     };
-    relatedTemplates: {,
+    relatedTemplates: {
         title: string;
         templateId: string;
         relationship: "original" | "similar" | "derivative";
@@ -1247,7 +1247,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         averageRevenuePerSale: number;
     } | undefined;
 }, {
-    attribution: {,
+    attribution: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -1256,7 +1256,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         primaryCreatorName: string;
         primaryCreatorEmail: string;
         creationDate: Date;
-        revenueSharing: {,
+        revenueSharing: {
             primaryCreatorShare: number;
             collaboratorShares: Record<string, number>;
             platformFee: number;
@@ -1386,7 +1386,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         collaborationScore: number;
         averageCollaborators: number;
         successfulCollaborations: number;
-        attributionSettings: {,
+        attributionSettings: {
             showRealName: boolean;
             showRevenue: boolean;
             showCollaborations: boolean;
@@ -1394,7 +1394,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             requireAttribution: boolean;
             defaultRevenueShare: number;
         };
-        attributionReputation: {,
+        attributionReputation: {
             overallRating: number;
             totalRatings: number;
             collaborationScore: number;
@@ -1409,7 +1409,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         updatedAt: Date;
         userId: string;
         displayName: string;
-        attributionSettings: {,
+        attributionSettings: {
             showRealName?: boolean | undefined;
             showRevenue?: boolean | undefined;
             showCollaborations?: boolean | undefined;
@@ -1417,7 +1417,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             requireAttribution?: boolean | undefined;
             defaultRevenueShare?: number | undefined;
         };
-        attributionReputation: {,
+        attributionReputation: {
             overallRating?: number | undefined;
             totalRatings?: number | undefined;
             collaborationScore?: number | undefined;
@@ -1559,7 +1559,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             confidenceScore: number;
             templateId: string;
             isVerified: boolean;
-            collaborators: {,
+            collaborators: {
                 userId: string;
                 userName: string;
                 userEmail: string;
@@ -1573,14 +1573,14 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
                 totalPercentage: number;
                 originalCreatorShare?: number | undefined;
             };
-            attributionClaims: {,
+            attributionClaims: {
                 status: "pending" | "approved" | "rejected" | "disputed";
                 claimId: string;
                 claimantId: string;
@@ -1612,7 +1612,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
@@ -1685,26 +1685,26 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             derivatives: number;
         }>;
     }, "strip", z.ZodTypeAny, {
-        performance: {,
+        performance: {
             rating: number;
             views: number;
             purchases: number;
             derivatives: number;
         };
         title: string;
-        revenue: {,
+        revenue: {
             total: number;
             pending: number;
             released: number;
         };
-        attribution: {,
+        attribution: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             confidenceScore: number;
             templateId: string;
             isVerified: boolean;
-            collaborators: {,
+            collaborators: {
                 userId: string;
                 userName: string;
                 userEmail: string;
@@ -1718,14 +1718,14 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
                 totalPercentage: number;
                 originalCreatorShare?: number | undefined;
             };
-            attributionClaims: {,
+            attributionClaims: {
                 status: "pending" | "approved" | "rejected" | "disputed";
                 claimId: string;
                 claimantId: string;
@@ -1751,19 +1751,19 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         };
         templateId: string;
     }, {
-        performance: {,
+        performance: {
             rating: number;
             views: number;
             purchases: number;
             derivatives: number;
         };
         title: string;
-        revenue: {,
+        revenue: {
             total: number;
             pending: number;
             released: number;
         };
-        attribution: {,
+        attribution: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
@@ -1772,7 +1772,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
@@ -1913,7 +1913,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         expiresAt: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        metrics: {,
+        metrics: {
             averageRating: number;
             totalViews: number;
             templatesCreated: number;
@@ -1927,7 +1927,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             disputedAttributions: number;
             verificationRate: number;
         };
-        insights: {,
+        insights: {
             description: string;
             type: "alert" | "recommendation" | "anomaly" | "trend";
             metadata: Record<string, unknown>;
@@ -1945,7 +1945,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         creatorId?: string | undefined;
     }, {
         id: string;
-        metrics: {,
+        metrics: {
             averageRating?: number | undefined;
             totalViews?: number | undefined;
             templatesCreated?: number | undefined;
@@ -1977,27 +1977,27 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         creatorId?: string | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    templates: {,
-        performance: {,
+    templates: {
+        performance: {
             rating: number;
             views: number;
             purchases: number;
             derivatives: number;
         };
         title: string;
-        revenue: {,
+        revenue: {
             total: number;
             pending: number;
             released: number;
         };
-        attribution: {,
+        attribution: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             confidenceScore: number;
             templateId: string;
             isVerified: boolean;
-            collaborators: {,
+            collaborators: {
                 userId: string;
                 userName: string;
                 userEmail: string;
@@ -2011,14 +2011,14 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
                 totalPercentage: number;
                 originalCreatorShare?: number | undefined;
             };
-            attributionClaims: {,
+            attributionClaims: {
                 status: "pending" | "approved" | "rejected" | "disputed";
                 claimId: string;
                 claimantId: string;
@@ -2044,7 +2044,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         };
         templateId: string;
     }[];
-    profile: {,
+    profile: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -2059,7 +2059,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         collaborationScore: number;
         averageCollaborators: number;
         successfulCollaborations: number;
-        attributionSettings: {,
+        attributionSettings: {
             showRealName: boolean;
             showRevenue: boolean;
             showCollaborations: boolean;
@@ -2067,7 +2067,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             requireAttribution: boolean;
             defaultRevenueShare: number;
         };
-        attributionReputation: {,
+        attributionReputation: {
             overallRating: number;
             totalRatings: number;
             collaborationScore: number;
@@ -2077,7 +2077,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         profileUrl?: string | undefined;
         profileBio?: string | undefined;
     };
-    collaborations: {,
+    collaborations: {
         status: "active" | "completed" | "disputed";
         title: string;
         role: "editor" | "reviewer" | "contributor" | "co-creator" | "advisor";
@@ -2087,7 +2087,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
     }[];
     analytics?: {
         id: string;
-        metrics: {,
+        metrics: {
             averageRating: number;
             totalViews: number;
             templatesCreated: number;
@@ -2101,7 +2101,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             disputedAttributions: number;
             verificationRate: number;
         };
-        insights: {,
+        insights: {
             description: string;
             type: "alert" | "recommendation" | "anomaly" | "trend";
             metadata: Record<string, unknown>;
@@ -2119,20 +2119,20 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         creatorId?: string | undefined;
     } | undefined;
 }, {
-    templates: {,
-        performance: {,
+    templates: {
+        performance: {
             rating: number;
             views: number;
             purchases: number;
             derivatives: number;
         };
         title: string;
-        revenue: {,
+        revenue: {
             total: number;
             pending: number;
             released: number;
         };
-        attribution: {,
+        attribution: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
@@ -2141,7 +2141,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             primaryCreatorName: string;
             primaryCreatorEmail: string;
             creationDate: Date;
-            revenueSharing: {,
+            revenueSharing: {
                 primaryCreatorShare: number;
                 collaboratorShares: Record<string, number>;
                 platformFee: number;
@@ -2186,13 +2186,13 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         };
         templateId: string;
     }[];
-    profile: {,
+    profile: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
         displayName: string;
-        attributionSettings: {,
+        attributionSettings: {
             showRealName?: boolean | undefined;
             showRevenue?: boolean | undefined;
             showCollaborations?: boolean | undefined;
@@ -2200,7 +2200,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             requireAttribution?: boolean | undefined;
             defaultRevenueShare?: number | undefined;
         };
-        attributionReputation: {,
+        attributionReputation: {
             overallRating?: number | undefined;
             totalRatings?: number | undefined;
             collaborationScore?: number | undefined;
@@ -2219,7 +2219,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         averageCollaborators?: number | undefined;
         successfulCollaborations?: number | undefined;
     };
-    collaborations: {,
+    collaborations: {
         status: "active" | "completed" | "disputed";
         title: string;
         role: "editor" | "reviewer" | "contributor" | "co-creator" | "advisor";
@@ -2229,7 +2229,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
     }[];
     analytics?: {
         id: string;
-        metrics: {,
+        metrics: {
             averageRating?: number | undefined;
             totalViews?: number | undefined;
             templatesCreated?: number | undefined;

@@ -12,83 +12,83 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 
 export interface DataPartitionConfig {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   data_type: 'security_events' | 'audit_logs' | 'threat_intelligence' | 'compliance_data' | 'user_activity' | 'system_logs' | 'alert_history';
   // Partitioning strategy
-  partitioning: {,
+  partitioning: {
   strategy: 'time_based' | 'size_based' | 'content_based' | 'hybrid';
-  time_based?: {,
-  interval: 'hourly' | 'daily' | 'weekly' | 'monthly';,
+  time_based?: {
+  interval: 'hourly' | 'daily' | 'weekly' | 'monthly';
   retention_policy: RetentionPolicy;
   timezone: string;
 };
     size_based?: {
-  max_partition_size_gb: number;,
+  max_partition_size_gb: number;
   target_partition_size_gb: number;
   auto_split_threshold: number;
 };
     content_based?: {
-  partition_field: string;,
+  partition_field: string;
   partition_values: string;
   dynamic_partitioning: boolean;
 };
     hybrid?: {
-  primary_strategy: 'time_based' | 'size_based';,
+  primary_strategy: 'time_based' | 'size_based';
   secondary_strategy: 'content_based';
   partition_thresholds: Record<string, number>;
 };
   };
   // Storage configuration
-  storage: {,
+  storage: {
   hot_storage: StorageTier;
-  warm_storage: StorageTier;,
+  warm_storage: StorageTier;
   cold_storage: StorageTier;
-  archive_storage: StorageTier;,
+  archive_storage: StorageTier;
   compression_enabled: boolean;
-  encryption_enabled: boolean;,
+  encryption_enabled: boolean;
   replication_factor: number;
 };
   // Indexing and performance
-  indexing: {,
+  indexing: {
   primary_indices: string;
-  secondary_indices: string;,
+  secondary_indices: string;
   bloom_filters: boolean;
-  index_compression: boolean;,
+  index_compression: boolean;
   query_optimization: boolean;
 };
   // Lifecycle management
-  lifecycle: {,
+  lifecycle: {
   hot_duration_days: number;
-  warm_duration_days: number;,
+  warm_duration_days: number;
   cold_duration_days: number;
   archive_duration_years: number;
   deletion_after_years?: number;
   auto_transition: boolean;
 };
   // Compliance and governance
-  compliance: {,
+  compliance: {
   data_classification: 'public' | 'internal' | 'confidential' | 'restricted';
-  regulatory_requirements: string;,
+  regulatory_requirements: string;
   retention_legal_hold: boolean;
-  audit_trail_required: boolean;,
+  audit_trail_required: boolean;
   immutable_storage: boolean;
   geographic_restrictions: string;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   enabled: boolean;
 }
 export interface RetentionPolicy {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Retention rules
   rules: Array<{,
   condition: string; // SQL-like condition,
-  retention_days: number;,
+  retention_days: number;
   action: 'archive' | 'delete' | 'move_to_cold' | 'compress';
   priority: number;
 }>;
@@ -102,78 +102,78 @@ export interface RetentionPolicy {
   // Exception handling
   exceptions: Array<{,
   condition: string;
-  retention_extension_days: number;,
+  retention_extension_days: number;
   reason: string;
   approval_required: boolean;
 }>;
-  created_at: number;,
+  created_at: number;
   enabled: boolean;
 }
 export interface StorageTier {
-  tier_name: 'hot' | 'warm' | 'cold' | 'archive';,
+  tier_name: 'hot' | 'warm' | 'cold' | 'archive';
   storage_class: string;
-  availability: 'immediate' | 'minutes' | 'hours' | 'days';,
+  availability: 'immediate' | 'minutes' | 'hours' | 'days';
   cost_per_gb_month: number;
-  retrieval_cost_per_gb: number;,
+  retrieval_cost_per_gb: number;
   minimum_storage_duration_days: number;
   durability: number; // 9s (e.g., 99.999999999%),
   geographic_regions: string;
 }
 export interface ArchivalJob {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   partition_config_id: string;
   // Job configuration
-  config: {,
-  source_location: string;,
+  config: {
+  source_location: string;
   target_location: string;
-  batch_size: number;,
+  batch_size: number;
   max_concurrent_operations: number;
-  retry_attempts: number;,
+  retry_attempts: number;
   timeout_minutes: number;
 };
   // Scheduling
-  schedule: {,
+  schedule: {
   type: 'manual' | 'scheduled' | 'event_triggered';
   cron_expression?: string;
   trigger_events?: string;
   dependencies?: string; // Other job IDs,
 };
   // Processing options
-  processing: {,
+  processing: {
   validate_data_integrity: boolean;
-  create_checksums: boolean;,
+  create_checksums: boolean;
   compress_data: boolean;
-  encrypt_data: boolean;,
+  encrypt_data: boolean;
   deduplicate: boolean;
   index_data: boolean;
 };
   // Monitoring and alerts
-  monitoring: {,
+  monitoring: {
   progress_reporting: boolean;
-  error_threshold: number;,
+  error_threshold: number;
   alert_on_failure: boolean;
-  notification_recipients: string;,
+  notification_recipients: string;
   metrics_collection: boolean;
 };
   // Execution tracking
-  execution: {,
+  execution: {
   last_run?: number;
   next_scheduled_run?: number;
-  total_runs: number;,
+  total_runs: number;
   successful_runs: number;
-  failed_runs: number;,
+  failed_runs: number;
   average_duration_minutes: number;
   total_data_archived_gb: number;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   enabled: boolean;
 }
 export interface ArchivalExecution {
-  id: string;,
+  id: string;
   job_id: string;
   execution_type: 'manual' | 'scheduled' | 'triggered';
   // Execution details
@@ -182,60 +182,60 @@ export interface ArchivalExecution {
   duration_minutes?: number;
   status: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled' | 'paused';
   // Data processing statistics
-  statistics: {,
-  records_processed: number;,
+  statistics: {
+  records_processed: number;
   records_archived: number;
-  records_failed: number;,
+  records_failed: number;
   data_volume_gb: number;
-  compression_ratio: number;,
+  compression_ratio: number;
   dedupe_savings_percentage: number;
 };
   // Performance metrics
-  performance: {,
+  performance: {
   throughput_records_per_second: number;
-  throughput_gb_per_hour: number;,
+  throughput_gb_per_hour: number;
   cpu_utilization_percentage: number;
-  memory_utilization_percentage: number;,
+  memory_utilization_percentage: number;
   network_utilization_mbps: number;
   storage_io_operations: number;
 };
   // Error handling
   errors: Array<{,
   timestamp: number;
-  error_type: string;,
+  error_type: string;
   error_message: string;
   record_id?: string;
-  retry_count: number;,
+  retry_count: number;
   resolution: string;
 }>;
   // Quality assurance
   quality_checks: Array<{,
   check_name: string;
-  check_type: 'integrity' | 'completeness' | 'format' | 'compliance';,
+  check_type: 'integrity' | 'completeness' | 'format' | 'compliance';
   result: 'passed' | 'failed' | 'warning';
-  details: string;,
+  details: string;
   timestamp: number;
 }>;
   // Results and outputs
-  results: {,
+  results: {
   output_locations: string;
-  manifest_files: string;,
+  manifest_files: string;
   checksum_files: string;
-  index_files: string;,
+  index_files: string;
   metadata_files: string;
 };
-  triggered_by: string;,
+  triggered_by: string;
   created_at: number;
 }
 export interface DataRetrievalRequest {
-  id: string;,
+  id: string;
   requester: string;
   request_type: 'search' | 'restore' | 'export' | 'compliance_audit';
   // Request criteria
-  criteria: {,
-  data_types: string;,
-  time_range: {,
-  start: number;,
+  criteria: {
+  data_types: string;
+  time_range: {
+  start: number;
   end: number;
 };
     filters: Record<string, any>;
@@ -243,24 +243,24 @@ export interface DataRetrievalRequest {
     partition_ids?: string;
   };
   // Retrieval options
-  options: {,
+  options: {
   output_format: 'json' | 'csv' | 'parquet' | 'avro' | 'native';
-  compression: 'none' | 'gzip' | 'lz4' | 'snappy';,
+  compression: 'none' | 'gzip' | 'lz4' | 'snappy';
   encryption: boolean;
-  include_metadata: boolean;,
+  include_metadata: boolean;
   max_results: number;
   timeout_minutes: number;
 };
   // Business justification
-  justification: {,
+  justification: {
   business_purpose: string;
   legal_basis?: string;
   compliance_requirement?: string;
-  urgency: 'low' | 'medium' | 'high' | 'critical';,
+  urgency: 'low' | 'medium' | 'high' | 'critical';
   estimated_cost: number;
 };
   // Approval workflow
-  approval: {,
+  approval: {
   required: boolean;
   approvers: string;
   approved_by?: string;
@@ -268,7 +268,7 @@ export interface DataRetrievalRequest {
   approval_notes?: string;
 };
   // Execution tracking
-  execution: {,
+  execution: {
   status: 'pending_approval' | 'approved' | 'queued' | 'processing' | 'completed' | 'failed' | 'expired';
   started_at?: number;
   completed_at?: number;
@@ -276,107 +276,107 @@ export interface DataRetrievalRequest {
   progress_percentage: number;
 };
   // Cost tracking
-  cost_tracking: {,
+  cost_tracking: {
   estimated_cost: number;
   actual_cost?: number;
-  cost_breakdown: {,
-  retrieval_cost: number;,
+  cost_breakdown: {
+  retrieval_cost: number;
   processing_cost: number;
-  storage_cost: number;,
+  storage_cost: number;
   network_cost: number;
 };
   };
   // Results
   results?: {
-  records_retrieved: number;,
+  records_retrieved: number;
   data_volume_gb: number;
-  output_files: string;,
+  output_files: string;
   download_urls: string;
   expiry_date: number;
 };
-  created_at: number;,
+  created_at: number;
   last_updated: number;
 }
 export interface PartitionMetrics {
-  id: string;,
+  id: string;
   partition_config_id: string;
-  collection_period: {,
-  start: number;,
+  collection_period: {
+  start: number;
   end: number;
 };
   // Storage metrics
-  storage: {,
+  storage: {
   total_partitions: number;
-  hot_storage_gb: number;,
+  hot_storage_gb: number;
   warm_storage_gb: number;
-  cold_storage_gb: number;,
+  cold_storage_gb: number;
   archive_storage_gb: number;
-  compression_ratio: number;,
+  compression_ratio: number;
   deduplication_ratio: number;
 };
   // Performance metrics
-  performance: {,
+  performance: {
   write_throughput_records_per_second: number;
-  read_throughput_records_per_second: number;,
+  read_throughput_records_per_second: number;
   query_response_time_p95_ms: number;
-  index_efficiency_percentage: number;,
+  index_efficiency_percentage: number;
   cache_hit_ratio: number;
 };
   // Operational metrics
-  operations: {,
+  operations: {
   partitions_created: number;
-  partitions_archived: number;,
+  partitions_archived: number;
   partitions_deleted: number;
-  failed_operations: number;,
+  failed_operations: number;
   maintenance_operations: number;
 };
   // Cost metrics
-  costs: {,
+  costs: {
   storage_cost_hot: number;
-  storage_cost_warm: number;,
+  storage_cost_warm: number;
   storage_cost_cold: number;
-  storage_cost_archive: number;,
+  storage_cost_archive: number;
   retrieval_costs: number;
-  processing_costs: number;,
+  processing_costs: number;
   total_monthly_cost: number;
 };
   // Quality metrics
-  quality: {,
+  quality: {
   data_integrity_score: number;
-  completeness_percentage: number;,
+  completeness_percentage: number;
   availability_percentage: number;
   compliance_score: number;
 };
   collected_at: number;
 }
 export interface ArchivalEvent {
-  id: string;,
+  id: string;
   type: 'partition_created' | 'archival_completed' | 'retrieval_requested' | 'compliance_audit' | 'error_occurred' | 'maintenance_scheduled';
-  severity: 'info' | 'warning' | 'error' | 'critical';,
+  severity: 'info' | 'warning' | 'error' | 'critical';
   source: string;
   timestamp: number;
   // Event details
-  title: string;,
+  title: string;
   description: string;
   partition_config_id?: string;
   job_id?: string;
   execution_id?: string;
   // Data impact
-  data_impact: {,
-  records_affected: number;,
+  data_impact: {
+  records_affected: number;
   data_volume_gb: number;
   partitions_affected: string;
   estimated_recovery_time?: number;
 };
   // Context data
-  context: {,
+  context: {
   triggered_by: string;
-  related_events: string;,
+  related_events: string;
   system_state: Record<string, any>;
   performance_metrics: Record<string, number>;
 };
   // Response tracking
-  response: {,
+  response: {
   acknowledged: boolean;
   acknowledged_by?: string;
   acknowledged_at?: number;
@@ -385,9 +385,9 @@ export interface ArchivalEvent {
   resolved_at?: number;
 };
   // Follow-up requirements
-  follow_up: {,
+  follow_up: {
   monitoring_required: boolean;
-  escalation_required: boolean;,
+  escalation_required: boolean;
   compliance_reporting_required: boolean;
   review_date?: number;
 };
@@ -456,7 +456,7 @@ export class SecurityDataArchiver extends EventEmitter {
     const newJob: ArchivalJob = {
   ...job,
   id,
-  execution: {,
+  execution: {
   total_runs: 0,
   successful_runs: 0,
   failed_runs: 0,
@@ -494,7 +494,7 @@ export class SecurityDataArchiver extends EventEmitter {
   execution_type: triggeredBy === 'manual' ? 'manual' : job.schedule.type === 'scheduled' ? 'scheduled' : 'triggered',
   start_time: Date.now(),
   status: 'queued',
-  statistics: {,
+  statistics: {
   records_processed: 0,
   records_archived: 0,
   records_failed: 0,
@@ -502,7 +502,7 @@ export class SecurityDataArchiver extends EventEmitter {
   compression_ratio: 1,
   dedupe_savings_percentage: 0,
 },
-  performance: {,
+  performance: {
   throughput_records_per_second: 0,
   throughput_gb_per_hour: 0,
   cpu_utilization_percentage: 0,
@@ -512,7 +512,7 @@ export class SecurityDataArchiver extends EventEmitter {
 },
   errors: [],
       quality_checks: [],
-      results: {,
+      results: {
   output_locations: [],
   manifest_files: [],
   checksum_files: [],
@@ -624,7 +624,7 @@ export class SecurityDataArchiver extends EventEmitter {
     } catch (error) {
       console.error(`❌ ${phase} phase failed: ${error.message}`);}
       throw error;
-  private async discoverAndValidateData(execution: ArchivalExecution,)
+  private async discoverAndValidateData(execution: ArchivalExecution)
     job: ArchivalJob,
     config: DataPartitionConfig): Promise<void> {,
     // Simulate data discovery and validation
@@ -651,7 +651,7 @@ export class SecurityDataArchiver extends EventEmitter {
     const activeExecution = this.activeExecutions.get(execution.job_id);
     if (activeExecution) {
       activeExecution.progress = 20;
-  private async processAndTransformData(execution: ArchivalExecution,)
+  private async processAndTransformData(execution: ArchivalExecution)
     job: ArchivalJob,
     config: DataPartitionConfig): Promise<void> {,
     console.log(`⚙️ Processing and transforming data for archival`);
@@ -672,7 +672,7 @@ export class SecurityDataArchiver extends EventEmitter {
     const activeExecution = this.activeExecutions.get(execution.job_id);
     if (activeExecution) {
       activeExecution.progress = 50;
-  private async archiveAndStoreData(execution: ArchivalExecution,)
+  private async archiveAndStoreData(execution: ArchivalExecution)
     job: ArchivalJob,
     config: DataPartitionConfig): Promise<void> {,
     console.log(`💾 Archiving data to ${job.config.target_location}`);}
@@ -713,7 +713,7 @@ export class SecurityDataArchiver extends EventEmitter {
     const activeExecution = this.activeExecutions.get(execution.job_id);
     if (activeExecution) {
   activeExecution.progress = 80;
-  private async verifyDataIntegrity(execution: ArchivalExecution,)
+  private async verifyDataIntegrity(execution: ArchivalExecution)
   job: ArchivalJob,
   config: DataPartitionConfig): Promise<void> {,
   console.log(`🔍 Verifying data integrity and completeness`);
@@ -741,7 +741,7 @@ export class SecurityDataArchiver extends EventEmitter {
     const activeExecution = this.activeExecutions.get(execution.job_id);
     if (activeExecution) {
       activeExecution.progress = 95;
-  private async cleanupAndFinalize(execution: ArchivalExecution,)
+  private async cleanupAndFinalize(execution: ArchivalExecution)
     job: ArchivalJob,
     config: DataPartitionConfig): Promise<void> {,
     console.log(`🧹 Cleaning up and finalizing archival process`);
@@ -758,13 +758,13 @@ export class SecurityDataArchiver extends EventEmitter {
     const newRequest: DataRetrievalRequest = {
   ...request,
   id,
-  execution: {,
+  execution: {
   status: request.approval.required ? 'pending_approval' : 'queued',
   progress_percentage: 0,
 },
-  cost_tracking: {,
+  cost_tracking: {
   estimated_cost: request.justification.estimated_cost,
-  cost_breakdown: {,
+  cost_breakdown: {
   retrieval_cost: request.justification.estimated_cost * 0.4,
   processing_cost: request.justification.estimated_cost * 0.3,
   storage_cost: request.justification.estimated_cost * 0.2,
@@ -876,11 +876,11 @@ export class SecurityDataArchiver extends EventEmitter {
     const metrics: PartitionMetrics = {
   id,
   partition_config_id: configId,
-  collection_period: {,
+  collection_period: {
   start: Date.now() - 3600000, // Last hour,
   end: Date.now(),
 },
-  storage: {,
+  storage: {
   total_partitions: 50 + Math.floor(Math.random() * 200),
   hot_storage_gb: 100 + Math.random() * 500,
   warm_storage_gb: 500 + Math.random() * 1000,
@@ -889,21 +889,21 @@ export class SecurityDataArchiver extends EventEmitter {
   compression_ratio: 0.3 + Math.random() * 0.4,
   deduplication_ratio: 0.05 + Math.random() * 0.15,
 },
-  performance: {,
+  performance: {
   write_throughput_records_per_second: 1000 + Math.random() * 4000,
   read_throughput_records_per_second: 500 + Math.random() * 2000,
   query_response_time_p95_ms: 100 + Math.random() * 500,
   index_efficiency_percentage: 80 + Math.random() * 20,
   cache_hit_ratio: 0.7 + Math.random() * 0.3,
 },
-  operations: {,
+  operations: {
   partitions_created: Math.floor(Math.random() * 10),
   partitions_archived: Math.floor(Math.random() * 20),
   partitions_deleted: Math.floor(Math.random() * 5),
   failed_operations: Math.floor(Math.random() * 3),
   maintenance_operations: Math.floor(Math.random() * 5),
 },
-  costs: {,
+  costs: {
   storage_cost_hot: 0.023 * (100 + Math.random() * 500), // $0.023/GB/month for hot,
   storage_cost_warm: 0.0125 * (500 + Math.random() * 1000), // $0.0125/GB/month for warm,
   storage_cost_cold: 0.004 * (1000 + Math.random() * 5000), // $0.004/GB/month for cold,
@@ -912,7 +912,7 @@ export class SecurityDataArchiver extends EventEmitter {
   processing_costs: 20 + Math.random() * 80,
   total_monthly_cost: 0 // Will be calculated,
 },
-  quality: {,
+  quality: {
   data_integrity_score: 95 + Math.random() * 5,
   completeness_percentage: 98 + Math.random() * 2,
   availability_percentage: 99.5 + Math.random() * 0.5,
@@ -956,7 +956,7 @@ export class SecurityDataArchiver extends EventEmitter {
   status,
   recipients: job.monitoring.notification_recipients,
 });
-  private createExecutionNotificationMessage(execution: ArchivalExecution,)
+  private createExecutionNotificationMessage(execution: ArchivalExecution)
     job: ArchivalJob,
     status: 'completed' | 'failed'): string {,
     return `
@@ -1035,11 +1035,11 @@ If you have any questions, contact the data team at data-team@company.com
 });
   // System Status and Health
   getSystemStatus(): {
-  partition_configs: number;,
+  partition_configs: number;
   active_jobs: number;
-  running_executions: number;,
+  running_executions: number;
   pending_retrievals: number;
-  total_archived_data_gb: number;,
+  total_archived_data_gb: number;
   system_health_score: number;
   recent_events: ArchivalEvent;
   const activeConfigs = Array.from(this.partitionConfigs.values()).filter(c => c.enabled);
@@ -1084,7 +1084,7 @@ If you have any questions, contact the data team at data-team@company.com
   description: `Automated daily archival for ${config.data_type}`}
 },
   partition_config_id: configId,
-        config: {,
+        config: {
   source_location: `/data/hot/${config.data_type}`}
 },
   target_location: `/data/archive/${config.data_type}`}
@@ -1094,11 +1094,11 @@ If you have any questions, contact the data team at data-team@company.com
           retry_attempts: 3,
           timeout_minutes: 120;
   },
-  schedule: {,
+  schedule: {
   type: 'scheduled',
   cron_expression: '0 2 * * *' // 2 AM daily,
 },
-  processing: {,
+  processing: {
   validate_data_integrity: true,
   create_checksums: true,
   compress_data: config.storage.compression_enabled,
@@ -1106,7 +1106,7 @@ If you have any questions, contact the data team at data-team@company.com
   deduplicate: true,
   index_data: config.indexing.primary_indices.length > 0,
 },
-  monitoring: {,
+  monitoring: {
   progress_reporting: true,
   error_threshold: 5, // 5% error rate threshold,
   alert_on_failure: true,
@@ -1160,15 +1160,15 @@ If you have any questions, contact the data team at data-team@company.com
         name: 'Security Events Archival',
         description: 'Automated archival for security event data',
         data_type: 'security_events' as const,
-        partitioning: {,
+        partitioning: {
   strategy: 'time_based' as const,
-          time_based: {,
+          time_based: {
   interval: 'daily' as const,
             retention_policy: {} as RetentionPolicy,
-            timezone: 'UTC';
+            timezone: 'UTC'
   },
-  storage: {,
-  hot_storage: {,
+  storage: {
+  hot_storage: {
   tier_name: 'hot' as const,
   storage_class: 'standard',
   availability: 'immediate' as const,
@@ -1178,7 +1178,7 @@ If you have any questions, contact the data team at data-team@company.com
   durability: 99.999999999,
   geographic_regions: ['us-east-1', 'us-west-2'],
 },
-  warm_storage: {,
+  warm_storage: {
   tier_name: 'warm' as const,
   storage_class: 'standard-ia',
   availability: 'minutes' as const,
@@ -1188,7 +1188,7 @@ If you have any questions, contact the data team at data-team@company.com
   durability: 99.999999999,
   geographic_regions: ['us-east-1', 'us-west-2'],
 },
-  cold_storage: {,
+  cold_storage: {
   tier_name: 'cold' as const,
   storage_class: 'glacier',
   availability: 'hours' as const,
@@ -1198,7 +1198,7 @@ If you have any questions, contact the data team at data-team@company.com
   durability: 99.999999999,
   geographic_regions: ['us-east-1', 'us-west-2'],
 },
-  archive_storage: {,
+  archive_storage: {
   tier_name: 'archive' as const,
   storage_class: 'deep-archive',
   availability: 'days' as const,
@@ -1212,14 +1212,14 @@ If you have any questions, contact the data team at data-team@company.com
           encryption_enabled: true,
           replication_factor: 2;
   },
-  indexing: {,
+  indexing: {
   primary_indices: ['timestamp', 'event_type', 'source_ip'],
   secondary_indices: ['user_id', 'severity'],
   bloom_filters: true,
   index_compression: true,
   query_optimization: true,
 },
-  lifecycle: {,
+  lifecycle: {
   hot_duration_days: 30,
   warm_duration_days: 90,
   cold_duration_days: 365,
@@ -1227,7 +1227,7 @@ If you have any questions, contact the data team at data-team@company.com
   deletion_after_years: 10,
   auto_transition: true,
 },
-  compliance: {,
+  compliance: {
   data_classification: 'confidential' as const,
   regulatory_requirements: ['SOX', 'GDPR', 'HIPAA'],
   retention_legal_hold: false,
@@ -1322,7 +1322,7 @@ If you have any questions, contact the data team at data-team@company.com
   partition_configs: Array.from(this.partitionConfigs.values()),
   retention_policies: Array.from(this.retentionPolicies.values()),
   archival_jobs: Array.from(this.archivalJobs.values()),
-  metadata: {,
+  metadata: {
   exported_at: Date.now(),
   version: '1.0.0',
 };

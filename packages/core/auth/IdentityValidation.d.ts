@@ -19,12 +19,12 @@ export interface IdentityValidationRequest {
     type: IdentityValidationType;
     data: IdentityValidationData;
     status: ValidationStatus;
-    metadata: {,
+    metadata: {
         ipAddress: string;
         userAgent: string;
         sessionId: string;
-        requestSource: 'profile_setup' | 'manual_request' | 'system_triggered';
-    };
+        requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
+  };
 
 export type IdentityValidationType = 'basic_profile' | 'email_verification' | 'phone_verification' | 'government_id' | 'professional_credentials' | 'industry_affiliation' | 'portfolio_verification' | 'social_media_verification' | 'address_verification' | 'payment_method_verification';
 export type ValidationStatus = 'pending' | 'in_review' | 'approved' | 'rejected' | 'expired' | 'requires_update';
@@ -131,7 +131,7 @@ export interface ValidationFlag {
 
 export interface TrustScore {
     overall: number;
-    components: {,
+    components: {
         identity: number;
         professional: number;
         community: number;

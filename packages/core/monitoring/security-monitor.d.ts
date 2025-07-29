@@ -29,19 +29,19 @@ export interface SecurityEvent {
     source: string;
     userId?: string;
     sessionId?: string;
-    input: {,
+    input: {
         raw: string;
         sanitized?: string;
         size: number;
         type: string;
     };
-    analysis: {,
+    analysis: {
         riskScore: number;
         threatsDetected: string[];
         confidence: number;
         validationResult: boolean;
     };
-    context: {,
+    context: {
         userAgent?: string;
         ipAddress?: string;
         endpoint?: string;
@@ -52,7 +52,7 @@ export interface SecurityEvent {
 export interface AlertConfig {
     enabled: boolean;
     severityThreshold: SecurityEventSeverity;
-    rateThreshold: {,
+    rateThreshold: {
         events: number;
         timeWindowMs: number;
     };
@@ -72,7 +72,7 @@ export interface SecurityMonitoringStats {
         threat: string;
         count: number;
     }>;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };

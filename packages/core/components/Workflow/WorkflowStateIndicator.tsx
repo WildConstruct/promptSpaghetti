@@ -17,7 +17,7 @@ interface WorkflowStateIndicatorProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {,
-  draft: {,
+  draft: {
   id: 'draft',
   name: 'Draft',
   description: 'Work in progress',
@@ -27,7 +27,7 @@ interface WorkflowStateIndicatorProps {
   is_final: false,
   required_permissions: [],
 },
-  review: {,
+  review: {
   id: 'review',
   name: 'In Review',
   description: 'Under review',
@@ -37,7 +37,7 @@ interface WorkflowStateIndicatorProps {
   is_final: false,
   required_permissions: [],
 },
-  approved: {,
+  approved: {
   id: 'approved',
   name: 'Approved',
   description: 'Approved for publication',
@@ -47,7 +47,7 @@ interface WorkflowStateIndicatorProps {
   is_final: false,
   required_permissions: [],
 },
-  published: {,
+  published: {
   id: 'published',
   name: 'Published',
   description: 'Live and public',
@@ -57,7 +57,7 @@ interface WorkflowStateIndicatorProps {
   is_final: true,
   required_permissions: [],
 },
-  archived: {,
+  archived: {
   id: 'archived',
   name: 'Archived',
   description: 'No longer active',
@@ -67,7 +67,7 @@ interface WorkflowStateIndicatorProps {
   is_final: true,
   required_permissions: [],
 },
-  rejected: {,
+  rejected: {
   id: 'rejected',
   name: 'Rejected',
   description: 'Rejected during review',
@@ -202,7 +202,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
 
 // Workflow State Timeline Component
 interface WorkflowStateTimelineProps {
-  states: WorkflowStateConfig;,
+  states: WorkflowStateConfig;
   currentState: WorkflowState;
   completedStates?: WorkflowState;
   className?: string;

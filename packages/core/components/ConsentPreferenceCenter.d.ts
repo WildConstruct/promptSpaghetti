@@ -37,7 +37,7 @@ interface ChannelPreference {
     enabled: boolean;
     frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
     topics: string[];
-    quietHours: {,
+    quietHours: {
         enabled: boolean;
         start: string;
         end: string;

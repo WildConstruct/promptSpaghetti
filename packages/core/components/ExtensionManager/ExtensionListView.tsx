@@ -7,13 +7,13 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
 export interface ExtensionListViewProps {
-  extensions: ExtensionManifest;,
+  extensions: ExtensionManifest;
   selectedExtension: ExtensionManifest | null;
-  getExtensionStatus: (extensionId: string) => ExtensionStatus;,
-  onExtensionSelect: (extension: ExtensionManifest) => void;,
-  onToggleExtension: (extensionId: string) => void;,
-  onUninstallExtension: (extensionId: string) => void;,
-  onUpdateExtension: (extensionId: string) => void;,
+  getExtensionStatus: (extensionId: string) => ExtensionStatus;
+  onExtensionSelect: (extension: ExtensionManifest) => void;
+  onToggleExtension: (extensionId: string) => void;
+  onUninstallExtension: (extensionId: string) => void;
+  onUpdateExtension: (extensionId: string) => void;
   onConfigureExtension: (extension: ExtensionManifest) => void;
 }
 export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
@@ -44,7 +44,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
     if (status.hasErrors) return 'Error';
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
-    return 'Disabled';
+    return 'Disabled'
   };
   if (extensions.length === 0) {
     return;

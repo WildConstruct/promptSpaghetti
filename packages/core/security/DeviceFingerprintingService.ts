@@ -36,34 +36,34 @@ export enum FingerprintType {
   UNKNOWN = 'unknown'
   // Device Fingerprint Data
   export interface DeviceFingerprint {
-  id: string;,
+  id: string;
   type: FingerprintType;
   confidence: number; // 0-100,
-  createdAt: Date;,
+  createdAt: Date;
   lastSeen: Date;
   seenCount: number;
   // Basic fingerprint data
-  basic: {,
-  userAgent: string;,
+  basic: {
+  userAgent: string;
   language: string;
-  platform: string;,
+  platform: string;
   cookieEnabled: boolean;
-  doNotTrack: boolean;,
+  doNotTrack: boolean;
   timezone: string;
   timezoneOffset: number;
 };
   // Enhanced fingerprint data
-  enhanced: {,
-  screen: {,
-  width: number;,
+  enhanced: {
+  screen: {
+  width: number;
   height: number;
-  colorDepth: number;,
+  colorDepth: number;
   pixelRatio: number;
   orientation: string;
 };
-    browser: {,
+    browser: {
   name: string;
-  version: string;,
+  version: string;
   engine: string;
   engineVersion: string;
   buildId?: string;
@@ -74,74 +74,74 @@ export enum FingerprintType {
 };
     plugins: Array<{,
   name: string;
-  filename: string;,
+  filename: string;
   description: string;
   version?: string;
 }>;
-    fonts: string;,
+    fonts: string;
   webgl: {;
-  vendor: string;,
+  vendor: string;
   renderer: string;
-  version: string;,
+  version: string;
   shadingLanguageVersion: string;
-  extensions: string;,
+  extensions: string;
   parameters: Record<string, any>;
 };
-    canvas: {,
+    canvas: {
   fingerprint: string;
-  geometry: string;,
+  geometry: string;
   text: string;
 };
-    audio: {,
+    audio: {
   fingerprint: string;
-  sampleRate: number;,
+  sampleRate: number;
   channelCount: number;
   contextState: string;
 };
   };
   // Comprehensive fingerprint data
-  comprehensive: {,
-  hardware: {,
-  cpuCores: number;,
+  comprehensive: {
+  hardware: {
+  cpuCores: number;
   memory: number;
-  touchSupport: boolean;,
+  touchSupport: boolean;
   sensors: string;
-  bluetooth: boolean;,
+  bluetooth: boolean;
   usb: boolean;
-  webrtc: {,
-  supported: boolean;,
+  webrtc: {
+  supported: boolean;
   localCandidates: string;
   stunServers: string;
 };
     };
-    network: {,
+    network: {
   connectionType: string;
   downlink?: number;
   effectiveType?: string;
   rtt?: number;
   saveData?: boolean;
 };
-    permissions: {,
+    permissions: {
   camera: string;
-  microphone: string;,
+  microphone: string;
   location: string;
-  notifications: string;,
+  notifications: string;
   persistentStorage: string;
 };
-    storage: {,
+    storage: {
   localStorage: boolean;
-  sessionStorage: boolean;,
+  sessionStorage: boolean;
   indexedDB: boolean;
-  webSQL: boolean;,
+  webSQL: boolean;
   quota: number;
 };
-    features: {,
+    features: {
   webAssembly: boolean;
-  serviceWorker: boolean;,
+  serviceWorker: boolean;
   webWorker: boolean;
-  webRTC: boolean;,
+  webRTC: boolean;
   webGL: boolean;
-  webGL2: boolean;,
+  webGL2: boolean;
   webVR: boolean;
   webXR: boolean;
 };
@@ -150,13 +150,13 @@ export enum FingerprintType {
 // Location Data
 }
 export interface LocationData {
-  id: string;,
+  id: string;
   timestamp: Date;
-  source: 'ip' | 'gps' | 'wifi' | 'cell' | 'manual';,
+  source: 'ip' | 'gps' | 'wifi' | 'cell' | 'manual';
   accuracy: number; // meters,
   confidence: number; // 0-100,
-  coordinates: {,
-  latitude: number;,
+  coordinates: {
+  latitude: number;
   longitude: number;
   altitude?: number;
   accuracy?: number;
@@ -164,31 +164,31 @@ export interface LocationData {
   heading?: number;
   speed?: number;
 };
-  address: {,
+  address: {
   country: string;
-  countryCode: string;,
+  countryCode: string;
   region: string;
-  regionCode: string;,
+  regionCode: string;
   city: string;
   postalCode?: string;
   street?: string;
   district?: string;
 };
-  network: {,
+  network: {
   ipAddress: string;
   isp: string;
   organization?: string;
   asn?: string;
-  timezone: string;,
+  timezone: string;
   vpnDetected: boolean;
-  proxyDetected: boolean;,
+  proxyDetected: boolean;
   torDetected: boolean;
-  hostingProvider: boolean;,
+  hostingProvider: boolean;
   datacenter: boolean;
 };
-  metadata: {,
+  metadata: {
   language: string;
-  currency: string;,
+  currency: string;
   callingCode: string;
   flag?: string;
   population?: number;
@@ -198,23 +198,23 @@ export interface LocationData {
 // Risk Assessment
 }
 export interface RiskAssessment {
-  deviceId: string;,
+  deviceId: string;
   overallRisk: RiskLevel;
   riskScore: number; // 0-100,
   factors: Array<{,
-  category: string;,
+  category: string;
   factor: string;
   impact: number; // -100 to +100,
   confidence: number; // 0-100,
   description: string;
 }>;
-  recommendations: string;,
+  recommendations: string;
   timestamp: Date;
 
 // Fingerprint Collection Context
 }
 export interface FingerprintContext {
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   acceptLanguage?: string;
   acceptEncoding?: string;
@@ -226,7 +226,7 @@ export interface FingerprintContext {
   cfConnectingIp?: string;
   headers: Record<string, string>;
   // Client-side data (would be collected via JavaScript)
-  clientData?: {,
+  clientData?: {
   screen?: any;
   navigator?: any;
   plugins?: any;
@@ -312,7 +312,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   /**
    * Assess risk based on fingerprint and location
    */
-  public assessRisk(fingerprint: DeviceFingerprint,)
+  public assessRisk(fingerprint: DeviceFingerprint)
     location: LocationData,
     userId?: string
   ): RiskAssessment {
@@ -364,7 +364,7 @@ export class DeviceFingerprintingService extends EventEmitter {
    * Get fingerprint statistics
    */
   public getStatistics(): {
-    totalFingerprints: number;,
+    totalFingerprints: number;
   uniqueDevices: number;
     riskDistribution: Record<RiskLevel, number>;
     topCountries: Array<{ country: string; count: number }>;
@@ -443,14 +443,14 @@ export class DeviceFingerprintingService extends EventEmitter {
     const ua = this.parseUserAgent(context.userAgent);
     const clientData = context.clientData || {};
     return {
-  screen: {,
+  screen: {
   width: clientData.screen?.width || 1920,
   height: clientData.screen?.height || 1080,
   colorDepth: clientData.screen?.colorDepth || 24,
   pixelRatio: clientData.screen?.pixelRatio || 1,
   orientation: clientData.screen?.orientation || 'landscape-primary',
 },
-  browser: {,
+  browser: {
   name: ua.browser || 'unknown',
   version: ua.browserVersion || '1.0',
   engine: ua.engine || 'unknown',
@@ -485,40 +485,40 @@ export class DeviceFingerprintingService extends EventEmitter {
   private generateComprehensiveFingerprint(context: FingerprintContext): DeviceFingerprint['comprehensive'] {
     const clientData = context.clientData || {};
     return {
-  hardware: {,
+  hardware: {
   cpuCores: clientData.navigator?.hardwareConcurrency || 4,
   memory: clientData.navigator?.deviceMemory || 8,
   touchSupport: clientData.navigator?.maxTouchPoints > 0 || false,
   sensors: [],
   bluetooth: false,
   usb: false,
-  webrtc: {,
+  webrtc: {
   supported: false,
   localCandidates: [],
   stunServers: [],
 },
-  network: {,
+  network: {
   connectionType: clientData.network?.connection?.effectiveType || 'unknown',
   downlink: clientData.network?.connection?.downlink,
   effectiveType: clientData.network?.connection?.effectiveType,
   rtt: clientData.network?.connection?.rtt,
   saveData: clientData.network?.connection?.saveData,
 },
-  permissions: {,
+  permissions: {
   camera: 'prompt',
   microphone: 'prompt',
   location: 'prompt',
   notifications: 'prompt',
   persistentStorage: 'prompt',
 },
-  storage: {,
+  storage: {
   localStorage: true,
   sessionStorage: true,
   indexedDB: true,
   webSQL: false,
   quota: 0,
 },
-  features: {,
+  features: {
   webAssembly: true,
   serviceWorker: true,
   webWorker: true,
@@ -556,12 +556,12 @@ export class DeviceFingerprintingService extends EventEmitter {
   source: 'ip',
   accuracy: 50000, // 50km accuracy for IP-based location,
   confidence: 75,
-  coordinates: {,
+  coordinates: {
   latitude: this.mockLatitudeFromIp(ipAddress),
   longitude: this.mockLongitudeFromIp(ipAddress),
   accuracy: 50000,
 },
-  address: {,
+  address: {
   country: this.mockCountryFromIp(ipAddress),
   countryCode: this.mockCountryCodeFromIp(ipAddress),
   region: 'Unknown Region',
@@ -569,7 +569,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   city: 'Unknown City',
   postalCode: '00000',
 },
-  network: {,
+  network: {
   ipAddress,
   isp: 'Unknown ISP',
   timezone: 'UTC',
@@ -579,7 +579,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   hostingProvider: this.detectHostingProvider(ipAddress),
   datacenter: this.detectDatacenter(ipAddress),
 },
-  metadata: {,
+  metadata: {
   language: 'en',
   currency: 'USD',
   callingCode: '+1',
@@ -654,7 +654,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   description: 'IP address belongs to a datacenter',
 });
     return factors;
-  private analyzeBehavioralRisk(userId: string,)
+  private analyzeBehavioralRisk(userId: string)
     fingerprint: DeviceFingerprint,
     location: LocationData): RiskAssessment['factors'] {,
   const factors: RiskAssessment['factors'] = [];
@@ -734,13 +734,13 @@ export class DeviceFingerprintingService extends EventEmitter {
   browser = 'Chrome';
   const match = ua.match(/chrome\/([0-9.]+)/);
   browserVersion = match ? match[1] : '1.0';
-  engine = 'Blink';
-} else if (ua.includes('firefox')) {
+  engine = 'Blink'
+  } else if (ua.includes('firefox')) {
   browser = 'Firefox';
   const match = ua.match(/firefox\/([0-9.]+)/);
   browserVersion = match ? match[1] : '1.0';
-  engine = 'Gecko';
-} else if (ua.includes('safari')) {
+  engine = 'Gecko'
+  } else if (ua.includes('safari')) {
       browser = 'Safari';
       engine = 'WebKit';
     if (ua.includes('windows')) platform = 'Windows';

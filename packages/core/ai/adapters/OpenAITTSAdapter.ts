@@ -33,7 +33,7 @@ export interface TTSRequestOptions {
   response_format?: 'mp3' | 'opus' | 'aac' | 'flac' | 'wav' | 'pcm';
   speed?: number; // 0.25 to 4.0,
   // Advanced options
-  voice_settings?: {,
+  voice_settings?: {
   stability?: number; // 0-1,
   similarity_boost?: number; // 0-1,
   style?: number; // 0-1,
@@ -47,32 +47,32 @@ export interface TTSRequestOptions {
   normalize_audio?: boolean;
 }
 export interface TTSGenerationResult {
-  audio: {,
+  audio: {
   data: ArrayBuffer | string; // Audio data (binary or base64),
-  format: string;,
+  format: string;
   duration: number; // Duration in seconds,
-  sample_rate: number;,
+  sample_rate: number;
   channels: number;
   bitrate?: number;
 };
-  metadata: {,
+  metadata: {
   voice: string;
-  model: string;,
+  model: string;
   text_length: number;
-  audio_length: number;,
+  audio_length: number;
   speed: number;
-  response_format: string;,
+  response_format: string;
   generation_time: number;
 };
-  usage: {,
+  usage: {
   characters: number;
   cost: number;
 };
 }
 export interface VoiceInfo {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   gender: 'male' | 'female' | 'neutral';
   accent?: string;
   age?: 'young' | 'middle' | 'old';
@@ -92,7 +92,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   costPerRequest: OpenAITTSAdapter.getModelCostPerCharacter(model),
   averageLatency: 3000,
   maxConcurrency: 10,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 50,
   tokensPerMinute: 50000 // Character limit,
 },
@@ -107,14 +107,14 @@ export class OpenAITTSAdapter extends BaseAIModel {
   supportsBatch: false,
   supportsStreaming: true,
   supportsAsync: true,
-  customParameters: {,
-  voice: {,
+  customParameters: {
+  voice: {
   type: 'string',
   options: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'],
   default: 'alloy',
 },
   speed: { type: 'number', min: 0.25, max: 4.0, default: 1.0 },
-        response_format: {,
+        response_format: {
   type: 'string',
   options: ['mp3', 'opus', 'aac', 'flac', 'wav', 'pcm'],
   default: 'mp3',
@@ -152,7 +152,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   const generationTime = Date.now() - startTime;
   // Process and analyze audio data
   const result: TTSGenerationResult = {,
-  audio: {,
+  audio: {
   data: audioData,
   format: processedOptions.response_format!,
   duration: this._estimateAudioDuration(text, processedOptions.speed!),
@@ -160,7 +160,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   channels: 1, // OpenAI TTS is mono,
   bitrate: this._getBitrate(processedOptions.response_format!),
 },
-  metadata: {,
+  metadata: {
   voice: processedOptions.voice!,
   model: processedOptions.model!,
   text_length: text.length,
@@ -169,7 +169,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   response_format: processedOptions.response_format!,
   generation_time: generationTime,
 },
-  usage: {,
+  usage: {
   characters: text.length,
   cost: this._calculateCost(text.length, processedOptions.model!),
 };
@@ -190,7 +190,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.95,
-  breakdown: {,
+  breakdown: {
   inputCost: estimatedCost,
   outputCost: 0,
   processingCost: 0,
@@ -198,7 +198,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   // TTS-specific methods
   async getAvailableVoices(): Promise<VoiceInfo> {
   return [...this.availableVoices];
-  async generateWithCustomVoice(text: string,)
+  async generateWithCustomVoice(text: string)
   voiceId: string,
   options?: Partial<TTSRequestOptions>): Promise<TTSGenerationResult> {,
   const ttsOptions: TTSRequestOptions = {,
@@ -207,7 +207,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   ...options
 };
     return this.process(text, ttsOptions);
-  async generateSSML(ssmlText: string,)
+  async generateSSML(ssmlText: string)
     voice?: string,
     options?: Partial<TTSRequestOptions>
   ): Promise<TTSGenerationResult> {
@@ -218,7 +218,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   ...options
 };
     return this.process(ssmlText, ttsOptions);
-  async batchGenerate(texts: string,)
+  async batchGenerate(texts: string)
     options?: TTSRequestOptions
   ): Promise<TTSGenerationResult> {
   const results: TTSGenerationResult = [];
@@ -304,7 +304,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
       // Test with a minimal TTS request
       const response = await fetch('https://api.openai.com/v1/audio/speech', {
         method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
 }
           'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
       if (input.content) return input.content;
       if (input.message) return input.message;
     return JSON.stringify(input);
-  private _processOptions(options?: TTSRequestOptions,)
+  private _processOptions(options?: TTSRequestOptions)
     text?: string
   ): Required<Pick<TTSRequestOptions, 'voice' | 'model' | 'response_format' | 'speed' | 'text'>> & Omit<TTSRequestOptions, 'text'> & { text: string } {
   const defaults = {

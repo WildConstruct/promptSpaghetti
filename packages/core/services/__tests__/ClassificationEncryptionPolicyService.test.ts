@@ -306,7 +306,7 @@ describe('ClassificationEncryptionPolicyService', () => {
   describe('Policy Management', () => {
   it('should allow updating encryption policies', async () => {
   const updates: Partial<EncryptionPolicy> = {,
-  requirements: {,
+  requirements: {
   required: true,
   algorithm: 'AES-256-XTS',
   keyLength: 256,

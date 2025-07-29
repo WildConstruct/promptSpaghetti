@@ -14,7 +14,7 @@ import {
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 
 export interface TemplateEditorProps {
-  value: string;,
+  value: string;
   onChange: (value: string) => void;
   onVariablesChange?: (variables: string, extractedVariables?: ExtractedVariable) => void;
   variableValues?: Record<string, string>;
@@ -599,13 +599,13 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       <style>{`
         .template-variable {
           background: rgba(66, 153, 225, 0.2);
-          color: #63b3ed;,
+          color: #63b3ed;
   padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;
         .template-variable-error {
           background: rgba(245, 101, 101, 0.2);
-          color: #f56565;,
+          color: #f56565;
   padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;

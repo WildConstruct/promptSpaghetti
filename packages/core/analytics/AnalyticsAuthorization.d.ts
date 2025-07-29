@@ -66,7 +66,7 @@ export interface AuthorizationPolicy {
 
 export interface AuthorizationRule {
     id: string;
-    condition: {,
+    condition: {
         eventTypes?: string[];
         categories?: string[];
         sources?: string[];
@@ -181,7 +181,7 @@ export declare class AnalyticsAuthorizationService {
         organizationId?: string;
         roles: string[];
         permissions: string[];
-        capabilities: {,
+        capabilities: {
             canPublishEvents: boolean;
             canViewEvents: boolean;
             canViewAllEvents: boolean;

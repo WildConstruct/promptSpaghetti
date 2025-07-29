@@ -123,8 +123,7 @@ export const VerificationCenter = ({
     ;
     'professional_credentials';
     return;
-    _jsxs("div", { className: "verification-form", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Professional Role" }), _jsxs("select", { value: formData.role || '', onChange: (e) => setFormData({ ...formData, role: e.target.value }), className: "form-select", children: [_jsx("option", { value: "", children: "Select your primary role" }), _jsx("option", { value: "director", children: "Director" }), _jsx("option", { value: "producer", children: "Producer" }), _jsx("option", { value: "screenwriter", children: "Screenwriter" }), _jsx("option", { value: "cinematographer", children: "Cinematographer" }), _jsx("option", { value: "editor", children: "Editor" }), _jsx("option", { value: "other", children: "Other" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Experience Level" }), _jsxs("select", { value: formData.experience || '', onChange: (e) => setFormData({ ...formData, experience: e.target.value }), className: "form-select", children: [_jsx("option", { value: "", children: "Select experience level" }), _jsx("option", { value: "student", children: "Student" }), _jsx("option", { value: "emerging", children: "Emerging Professional" }), _jsx("option", { value: "professional", children: "Professional" }), _jsx("option", { value: "veteran", children: "Veteran" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Education/Training" }), _jsx("textarea", { value: formData.education || '', onChange: (e) => setFormData({ ...formData, education: e.target.value }), placeholder: "Describe your film education, training, or relevant experience...", className: "form-textarea", rows: 4 })] }), _jsxs("div", { className: "form-actions", children: [_jsx(Button, { onClick: () => handleVerificationSubmit(type, {}), "professionalCredentials:": true, ...(,
-                            role) }), ": formData.role, experience: formData.experience, credentials: [", (,
+    _jsxs("div", { className: "verification-form", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Professional Role" }), _jsxs("select", { value: formData.role || '', onChange: (e) => setFormData({ ...formData, role: e.target.value }), className: "form-select", children: [_jsx("option", { value: "", children: "Select your primary role" }), _jsx("option", { value: "director", children: "Director" }), _jsx("option", { value: "producer", children: "Producer" }), _jsx("option", { value: "screenwriter", children: "Screenwriter" }), _jsx("option", { value: "cinematographer", children: "Cinematographer" }), _jsx("option", { value: "editor", children: "Editor" }), _jsx("option", { value: "other", children: "Other" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Experience Level" }), _jsxs("select", { value: formData.experience || '', onChange: (e) => setFormData({ ...formData, experience: e.target.value }), className: "form-select", children: [_jsx("option", { value: "", children: "Select experience level" }), _jsx("option", { value: "student", children: "Student" }), _jsx("option", { value: "emerging", children: "Emerging Professional" }), _jsx("option", { value: "professional", children: "Professional" }), _jsx("option", { value: "veteran", children: "Veteran" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Education/Training" }), _jsx("textarea", { value: formData.education || '', onChange: (e) => setFormData({ ...formData, education: e.target.value }), placeholder: "Describe your film education, training, or relevant experience...", className: "form-textarea", rows: 4 })] }), _jsxs("div", { className: "form-actions", children: [_jsx(Button, { onClick: () => handleVerificationSubmit(type, {}), "professionalCredentials:": true, ...role }), ": formData.role, experience: formData.experience, credentials: [", (,
                         type), ": 'degree', title: formData.education, institution: 'User Provided', year: new Date().getFullYear(), verificationStatus: 'pending', }], portfolio: []; })}> Submit Credentials"] }), _jsx(Button, { variant: "outline", onClick: () => setActiveStep(null), children: "Cancel" })] });
     div >
     ;
@@ -161,7 +160,7 @@ if (isLoading) {
     return;
     _jsxs("div", { className: `verification-center ${className}`, children: ["}", _jsxs("div", { className: "verification-header", children: [_jsx("h2", { children: "Identity Verification" }), _jsx("p", { children: "Build trust and unlock premium features by verifying your identity and professional credentials." })] }), _jsxs(Tabs, { defaultValue: "overview", className: "verification-tabs", children: [_jsxs(TabsList, { className: "grid grid-cols-3 w-full", children: [_jsx(TabsTrigger, { value: "overview", children: "Overview" }), _jsx(TabsTrigger, { value: "verify", children: "Verify Identity" }), _jsx(TabsTrigger, { value: "history", children: "History" })] }), _jsx(TabsContent, { value: "overview", className: "tab-content", children: renderTrustScoreOverview() }), _jsx(TabsContent, { value: "verify", className: "tab-content", children: renderVerificationSteps() }), _jsx(TabsContent, { value: "history", className: "tab-content", children: renderValidationHistory() })] }), _jsx("style", { children: `
         .verification-center {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
           padding: 1rem;
         .verification-header {
@@ -169,7 +168,7 @@ if (isLoading) {
           margin-bottom: 2rem;
         .verification-header h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .verification-header p {
@@ -183,21 +182,21 @@ if (isLoading) {
           align-items: center;
         .trust-info {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .trust-tier {
           display: flex;
           align-items: center;
         .score-circle {
           display: flex;
-          align-items: baseline;,
+          align-items: baseline;
   gap: 0.25rem;
         .score-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .score-max {
-          font-size: 1rem;,
+          font-size: 1rem;
   color: #9ca3af;
         .verification-progress {
           margin: 1.5rem 0;
@@ -205,12 +204,12 @@ if (isLoading) {
           display: flex;
           justify-content: space-between;
           margin-bottom: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .trust-breakdown {
           margin: 1.5rem 0;
         .trust-breakdown h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
           margin-bottom: 0.75rem;
         .components-grid {
@@ -219,42 +218,42 @@ if (isLoading) {
           gap: 0.75rem;
         .component-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .component-score {
           margin-left: auto;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .trust-benefits h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
           margin-bottom: 0.75rem;
         .benefits-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .benefits-list li {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .steps-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .step-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   overflow: hidden;
         .step-item.active {
           border-color: #3b82f6;
         .step-header {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
           padding: 1rem;
         .step-icon {
@@ -262,33 +261,33 @@ if (isLoading) {
         .step-info {
           flex: 1;
         .step-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .step-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .step-actions {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .step-form {
-          border-top: 1px solid #e5e7eb;,
+          border-top: 1px solid #e5e7eb;
   padding: 1rem;
           background: #f9fafb;
         .verification-form {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .form-group label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .form-input, .form-select, .form-textarea {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -297,12 +296,12 @@ if (isLoading) {
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .form-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           justify-content: flex-end;
         .history-summary {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .summary-stats {
           display: grid;
@@ -311,24 +310,24 @@ if (isLoading) {
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
         .stat-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .stat-value {
           font-size: 1.5rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .earned-badges h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
           margin-bottom: 0.75rem;
         .badges-grid {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .badge-item {
           display: flex;
@@ -336,22 +335,22 @@ if (isLoading) {
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 4rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         @media (max-width: 768px) {
           .trust-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .components-grid {
@@ -359,7 +358,7 @@ if (isLoading) {
           .summary-stats {
             grid-template-columns: repeat(2, 1fr);
           .step-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
             align-items: stretch;
           .step-actions {

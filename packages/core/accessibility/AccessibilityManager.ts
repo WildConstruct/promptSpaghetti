@@ -214,72 +214,74 @@ export class AccessibilityManager extends EventEmitter {
   /**
   * Create or update user accessibility profile
   */
-  public async createAccessibilityProfile()
-  userId: string,
-  profileData: Partial<UserAccessibilityProfile>): Promise<UserAccessibilityProfile> {,
+  public async createAccessibilityProfile(
+    userId: string,
+    profileData: Partial<UserAccessibilityProfile>
+  ): Promise<UserAccessibilityProfile> {
   const existingProfile = this.userProfiles.get(userId);
-  const profile: UserAccessibilityProfile = {,
-  userId,
-  needs: profileData.needs || [],
-  severityLevels: profileData.severityLevels || {,
-  [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MILD,
-  [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.MILD,
-  [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.MILD,
-  [AccessibilityNeed.COGNITIVE_IMPAIRMENT]: SeverityLevel.MILD,
-  [AccessibilityNeed.SPEECH_IMPAIRMENT]: SeverityLevel.MILD,
-  [AccessibilityNeed.TEMPORARY_DISABILITY]: SeverityLevel.MILD,
-  [AccessibilityNeed.MULTIPLE_DISABILITIES]: SeverityLevel.MILD,
-},
+    const profile: UserAccessibilityProfile = {
+      userId,
+      needs: profileData.needs || [],
+      severityLevels: profileData.severityLevels || {
+        [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.COGNITIVE_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.SPEECH_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.TEMPORARY_DISABILITY]: SeverityLevel.MILD,
+        [AccessibilityNeed.MULTIPLE_DISABILITIES]: SeverityLevel.MILD
+      },
   assistiveTechnologies: profileData.assistiveTechnologies || [],
       preferredFallbacks: profileData.preferredFallbacks || [],
       interfaceAdaptations: profileData.interfaceAdaptations || [],
-      customSettings: {,
-  fontSize: 16,
-  contrastRatio: 4.5,
-  timeoutMultiplier: 1.0,
-  audioEnabled: true,
-  visualEnabled: true,
-  hapticEnabled: true,
-  animationsReduced: false,
-  ...profileData.customSettings
-},
-  verificationMethods: {,
-  primary: ['password', 'email'],
-  fallback: ['backup_codes', 'phone_verification'],
-  emergency: ['human_assistance'],
-  ...profileData.verificationMethods
-},
+      customSettings: {
+        fontSize: 16,
+        contrastRatio: 4.5,
+        timeoutMultiplier: 1.0,
+        audioEnabled: true,
+        visualEnabled: true,
+        hapticEnabled: true,
+        animationsReduced: false,
+        ...profileData.customSettings
+      },
+      verificationMethods: {
+        primary: ['password', 'email'],
+        fallback: ['backup_codes', 'phone_verification'],
+        emergency: ['human_assistance'],
+        ...profileData.verificationMethods
+      },
   emergencyContacts: profileData.emergencyContacts || [],
       documentation: profileData.documentation || {},
       lastUpdated: new Date(),
-      isActive: profileData.isActive !== false;
-  };
+      isActive: profileData.isActive !== false
+    };
     this.userProfiles.set(userId, profile);
     this.emit('profileUpdated', { userId, profile, isNew: !existingProfile });
     return profile;
   /**
    * Analyze user context and recommend accessibility accommodations
    */
-  public async analyzeAccessibilityNeeds()
+  public async analyzeAccessibilityNeeds(
     userId: string,
-    context: AccessibilityContext): Promise<{;
-  recommendedFallbacks: FallbackMethod;,
+    context: AccessibilityContext
+  ): Promise<{
+  recommendedFallbacks: FallbackMethod;
   requiredAdaptations: InterfaceAdaptation;
-  estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';,
-  alternatives: Array<{,
-  method: string;,
-  accessibility: number; // 0-100 score,
-  estimated_time: number; // seconds,
-  requirements: string;
-}>;
+  estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
+    alternatives: Array<{
+      method: string;
+      accessibility: number; // 0-100 score
+      estimated_time: number; // seconds
+      requirements: string[];
+    }>;
   }> {
   const profile = this.userProfiles.get(userId);
-  const fallbacks: FallbackMethod = [];
-  const adaptations: InterfaceAdaptation = [];
+    const fallbacks: FallbackMethod[] = [];
+    const adaptations: InterfaceAdaptation[] = [];
   // Analyze screen reader detection
   if (context.screenReaderDetected) {
-  adaptations.push()
-  InterfaceAdaptation.FOCUS_INDICATORS,
+      adaptations.push(
+        InterfaceAdaptation.FOCUS_INDICATORS,
   InterfaceAdaptation.ERROR_CLARIFICATION,
   InterfaceAdaptation.AUDIO_DESCRIPTIONS
   );
@@ -429,10 +431,10 @@ export class AccessibilityManager extends EventEmitter {
   // Determine compliance level
   let complianceLevel: AccessibilityValidationResult['complianceLevel'] = 'Non-compliant';
   if (score >= 95 && issues.filter(i => i.type === 'critical').length === 0) {
-  complianceLevel = 'AAA';
-} else if (score >= 85 && issues.filter(i => i.type === 'critical').length === 0) {
-      complianceLevel = 'AA';
-    } else if (score >= 70) {
+  complianceLevel = 'AAA'
+  } else if (score >= 85 && issues.filter(i => i.type === 'critical').length === 0) {
+      complianceLevel = 'AA'
+  } else if (score >= 70) {
   complianceLevel = 'A';
   return {
   isAccessible: score >= 70,
@@ -460,7 +462,7 @@ export class AccessibilityManager extends EventEmitter {
   expiresAt: new Date(Date.now() + durationHours * 60 * 60 * 1000),
   usageCount: 0,
   maxUsages,
-  conditions: {,
+  conditions: {
   requiresNotification: true,
   requiresFollowUp: true,
 },
@@ -476,7 +478,7 @@ export class AccessibilityManager extends EventEmitter {
   /**
    * Use emergency accessibility bypass
    */
-  public useEmergencyBypass(bypassId: string,)
+  public useEmergencyBypass(bypassId: string)
     context: Record<string, unknown>
   ): { allowed: boolean; reason?: string; remainingUses?: number } {
     const bypass = this.emergencyBypasses.get(bypassId);
@@ -506,9 +508,9 @@ export class AccessibilityManager extends EventEmitter {
     _currentInterface: unknown,
   ): {
   adaptations: Array<{,
-  type: InterfaceAdaptation;,
+  type: InterfaceAdaptation;
   priority: 'high' | 'medium' | 'low';
-  implementation: {,
+  implementation: {
   css?: Record<string, string>;
   js?: string;
   html?: string;
@@ -525,8 +527,8 @@ export class AccessibilityManager extends EventEmitter {
       adaptations.push({)
   type: InterfaceAdaptation.FONT_SIZE_INCREASE,
         priority: 'high' as const,
-        implementation: {,
-  css: {,
+        implementation: {
+  css: {
             'font-size': `${profile.customSettings.fontSize}px`}
 }
             'line-height': `${profile.customSettings.fontSize * 1.5}px`}
@@ -538,8 +540,8 @@ export class AccessibilityManager extends EventEmitter {
       adaptations.push({)
   type: InterfaceAdaptation.CONTRAST_ENHANCEMENT,
         priority: 'high' as const,
-        implementation: {,
-  css: {,
+        implementation: {
+  css: {
             'filter': `contrast(${profile.customSettings.contrastRatio / 4.5})`}
 }
             'background-color': '#000000',
@@ -552,8 +554,8 @@ export class AccessibilityManager extends EventEmitter {
   adaptations.push({)
   type: InterfaceAdaptation.MOTION_REDUCTION,
   priority: 'medium' as const,
-  implementation: {,
-  css: {,
+  implementation: {
+  css: {
   'animation': 'none',
   'transition': 'none',
   'transform': 'none',
@@ -565,7 +567,7 @@ export class AccessibilityManager extends EventEmitter {
       adaptations.push({)
   type: InterfaceAdaptation.TIMEOUT_EXTENSION,
         priority: 'high' as const,
-        implementation: {,
+        implementation: {
   js: `window.authTimeout *= ${profile.customSettings.timeoutMultiplier};`}
   },
   description: 'Extend timeout duration for authentication';
@@ -575,8 +577,8 @@ export class AccessibilityManager extends EventEmitter {
   adaptations.push({)
   type: InterfaceAdaptation.COLOR_ADJUSTMENT,
   priority: 'medium' as const,
-  implementation: {,
-  css: {,
+  implementation: {
+  css: {
   'filter': this.getColorBlindnessFilter(profile.customSettings.colorBlindnessType),
 },
   description: `Adjust colors for ${profile.customSettings.colorBlindnessType}`}
@@ -587,24 +589,24 @@ export class AccessibilityManager extends EventEmitter {
    * Get accessibility statistics and metrics
    */
   public getAccessibilityMetrics(): {
-  totalUsers: number;,
+  totalUsers: number;
   usersWithProfiles: number;
   accessibilityNeeds: Record<AccessibilityNeed, number>;
   fallbackUsage: Record<FallbackMethod, number>;
-  complianceScores: {,
-  average: number;,
+  complianceScores: {
+  average: number;
   distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number>;
 };
-    emergencyBypasses: {,
+    emergencyBypasses: {
   active: number;
-  used: number;,
+  used: number;
   expired: number;
 };
     topIssues: Array<{,
   issue: string;
-  frequency: number;,
-  severity: 'critical' | 'major' | 'minor';
-}>;
+  frequency: number;
+  severity: 'critical' | 'major' | 'minor'
+  }>;
     const profiles = Array.from(this.userProfiles.values());
     const activeProfiles = profiles.filter(p => p.isActive);
     // Count accessibility needs
@@ -625,15 +627,15 @@ export class AccessibilityManager extends EventEmitter {
   usersWithProfiles: activeProfiles.length,
   accessibilityNeeds: needsCounts,
   fallbackUsage,
-  complianceScores: {,
+  complianceScores: {
   average: 82, // Would be calculated from actual validations,
-  distribution: {,
+  distribution: {
   'AAA': 15,
   'AA': 45,
   'A': 25,
   'Non-compliant': 15,
 },
-  emergencyBypasses: {,
+  emergencyBypasses: {
   active: bypasses.filter(b => b.expiresAt > now).length,
   used: bypasses.filter(b => b.usageCount > 0).length,
   expired: bypasses.filter(b => b.expiresAt <= now).length,
@@ -647,7 +649,7 @@ export class AccessibilityManager extends EventEmitter {
       ]
     };
   // Private helper methods
-  private calculateDifficultyScore(context: AccessibilityContext,)
+  private calculateDifficultyScore(context: AccessibilityContext)
     profile?: UserAccessibilityProfile
   ): number {
   let score = 0;
@@ -674,11 +676,11 @@ export class AccessibilityManager extends EventEmitter {
   if (context.sessionContext.isEmergency) score += 25;
   if (context.sessionContext.attemptCount > 3) score += 15;
   return Math.min(100, score);
-  private generateAuthenticationAlternatives(context: AccessibilityContext,)
+  private generateAuthenticationAlternatives(context: AccessibilityContext)
   profile?: UserAccessibilityProfile): Array<{,
-  method: string;,
+  method: string;
   accessibility: number;
-  estimated_time: number;,
+  estimated_time: number;
   requirements: string;
 }> {
   const alternatives = [;
@@ -735,24 +737,24 @@ export class AccessibilityManager extends EventEmitter {
   method: FallbackMethod.AUDIO_CAPTCHA,
   enabled: true,
   priority: 1,
-  requirements: {,
+  requirements: {
   needsAudio: true,
   needsVisual: false,
   needsInteraction: true,
   minimumTime: 30,
   maximumTime: 300,
 },
-  accessibility: {,
+  accessibility: {
   supportedNeeds: [AccessibilityNeed.VISUAL_IMPAIRMENT],
   incompatibleWith: [AccessibilityNeed.HEARING_IMPAIRMENT],
   assistiveTechSupport: [AssistiveTechnology.SCREEN_READER],
 },
-  implementation: {,
+  implementation: {
   component: 'AudioCaptchaComponent',
         params: { volume: 0.8, speed: 'normal' },
         validationRules: ['audio_pattern_match'];
   },
-  compliance: {,
+  compliance: {
   wcagLevel: 'AA',
   section508: true,
   ada: true,
@@ -762,24 +764,24 @@ export class AccessibilityManager extends EventEmitter {
   method: FallbackMethod.LARGE_TEXT_DISPLAY,
   enabled: true,
   priority: 2,
-  requirements: {,
+  requirements: {
   needsAudio: false,
   needsVisual: true,
   needsInteraction: true,
   minimumTime: 15,
   maximumTime: 180,
 },
-  accessibility: {,
+  accessibility: {
   supportedNeeds: [AccessibilityNeed.VISUAL_IMPAIRMENT],
   incompatibleWith: [],
   assistiveTechSupport: [AssistiveTechnology.MAGNIFIER],
 },
-  implementation: {,
+  implementation: {
   component: 'LargeTextComponent',
         params: { fontSize: 24, contrast: 'high' },
         validationRules: ['text_input_validation'];
   },
-  compliance: {,
+  compliance: {
   wcagLevel: 'AA',
   section508: true,
   ada: true,

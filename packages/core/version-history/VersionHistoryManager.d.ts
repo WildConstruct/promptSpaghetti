@@ -34,7 +34,7 @@ export interface VersionDiff {
     diff_type: 'incremental' | 'full' | 'structural';
     diff_format: 'json' | 'binary' | 'text';
     diff_data: any;
-    diff_summary: {,
+    diff_summary: {
         total_changes: number;
         added: number;
         removed: number;
@@ -147,8 +147,8 @@ export declare class VersionHistoryManager {
         branch_type?: 'feature' | 'hotfix' | 'experiment';
         parent_branch_id?: string;
         base_snapshot_id?: string;
-        visibility?: 'private' | 'workspace' | 'public';
-    }): Promise<Branch>;
+        visibility?: 'private' | 'workspace' | 'public'
+  }): Promise<Branch>;
     getBranches(): Promise<Branch[]>;
     switchBranch(branchName: string): Promise<Branch>;
     mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {)

@@ -38,48 +38,48 @@ import {
 
 // Types for MFA management
 interface MFAMethod {
-  id: string;,
+  id: string;
   type: 'totp' | 'sms' | 'email' | 'backup_codes';
-  name: string;,
+  name: string;
   enabled: boolean;
-  primary: boolean;,
+  primary: boolean;
   configuredAt: Date;
   lastUsed?: Date;
-  configuration?: {,
+  configuration?: {
   phoneNumber?: string;
   email?: string;
   appName?: string;
   secretKey?: string;
 };
 interface BackupCode {
-  id: string;,
+  id: string;
   code: string;
   used: boolean;
   usedAt?: Date;
   interface TrustedDevice {
-  id: string;,
+  id: string;
   name: string;
-  type: 'desktop' | 'mobile' | 'tablet';,
+  type: 'desktop' | 'mobile' | 'tablet';
   browser: string;
-  location: string;,
+  location: string;
   addedAt: Date;
-  lastAccess: Date;,
+  lastAccess: Date;
   current: boolean;
   interface SecurityEvent {
-  id: string;,
+  id: string;
   type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
-  description: string;,
+  description: string;
   timestamp: Date;
-  ipAddress: string;,
+  ipAddress: string;
   location: string;
   riskLevel: 'low' | 'medium' | 'high';
   interface MFASettings {
-  requireMFA: boolean;,
+  requireMFA: boolean;
   allowBackupCodes: boolean;
   trustedDeviceExpiry: number; // days,
-  maxTrustedDevices: number;,
+  maxTrustedDevices: number;
   sessionTimeout: number; // minutes,
-  emailNotifications: boolean;,
+  emailNotifications: boolean;
   smsNotifications: boolean;
   interface MFAManagementProps {
   userId: string;
@@ -143,7 +143,7 @@ interface BackupCode {
   primary: true,
   configuredAt: new Date('2024-01-15'),
   lastUsed: new Date('2024-07-19'),
-  configuration: {,
+  configuration: {
   appName: 'Google Authenticator',
 }
       {
@@ -153,7 +153,7 @@ interface BackupCode {
   enabled: false,
   primary: false,
   configuredAt: new Date('2024-02-01'),
-  configuration: {,
+  configuration: {
   phoneNumber: '+1 (555) 123-4567',
 }
       {
@@ -164,7 +164,7 @@ interface BackupCode {
   primary: false,
   configuredAt: new Date('2024-01-10'),
   lastUsed: new Date('2024-07-18'),
-  configuration: {,
+  configuration: {
   email: 'user@example.com'];
   setMFAMethods(methods);
 };

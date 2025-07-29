@@ -79,7 +79,7 @@ export interface VerificationSession {
     userAgent: string;
     sessionContext: Record<string, any>;
     metadata: Record<string, any>;
-    flags: {,
+    flags: {
         suspiciousActivity: boolean;
         vpnDetected: boolean;
         proxyDetected: boolean;
@@ -96,7 +96,7 @@ export interface DeviceChallenge {
     createdAt: Date;
     expiresAt: Date;
     completedAt?: Date;
-    challengeData: {,
+    challengeData: {
         code?: string;
         question?: string;
         expectedResponse?: string;
@@ -125,13 +125,13 @@ export interface VerificationConfig {
     sessionTimeoutMinutes: number;
     maxAttemptsPerChallenge: number;
     maxVerificationAttempts: number;
-    riskThresholds: {,
+    riskThresholds: {
         lowRisk: number;
         mediumRisk: number;
         highRisk: number;
         requireManualReview: number;
     };
-    challengeRequirements: {,
+    challengeRequirements: {
         [key in RiskLevel]: ChallengeType[];
     };
     enableBehavioralAnalysis: boolean;

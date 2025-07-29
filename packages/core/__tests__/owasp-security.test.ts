@@ -30,7 +30,7 @@ describe('OWASP Security Test Suite', () => {
   describe('A01:2021 - Broken Access Control', () => {
     it('should prevent access to restricted properties', () => {
       const context = SafeExpressionEvaluator.createSafeContext({)
-  user: {,
+  user: {
   name: 'John',
           role: 'user',
           __admin: true,  // Hidden property

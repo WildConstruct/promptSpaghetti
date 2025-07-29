@@ -22,9 +22,9 @@ interface ShareManagerProps {
   projectId: string;
   className?: string;
   interface ShareStats {
-  totalShares: number;,
+  totalShares: number;
   activeShares: number;
-  totalDownloads: number;,
+  totalDownloads: number;
   totalAccesses: number;
   export const ShareManager: React.FC<ShareManagerProps> = ({,)
   projectId,
@@ -77,7 +77,7 @@ interface ShareManagerProps {
       const response = await fetch(`/api/export/shares/${shareId}`, {)}
   },
   method: 'PATCH',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ is_active: false })
@@ -93,7 +93,7 @@ interface ShareManagerProps {
     try {
       const response = await fetch(`/api/export/shares/${shareId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       if (!response.ok) {
         throw new Error('Failed to delete share');
@@ -121,7 +121,7 @@ interface ShareManagerProps {
   case 'password_protected':,
   return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
   case 'private':,
-  return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';,
+  return 'bg-red-100 text-red-800 dark: bg-red-900/20 dark:text-red-300';
   default:,
   return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
 };

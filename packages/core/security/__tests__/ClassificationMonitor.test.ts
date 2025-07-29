@@ -56,15 +56,15 @@ describe('ClassificationMonitor', () => {
   enableComplianceMonitoring: true,
   retentionPeriodDays: 30,
   aggregationIntervalMinutes: 5,
-  alertConfig: {,
+  alertConfig: {
   enabled: true,
-  thresholds: {,
+  thresholds: {
   errorRate: 5,
   responseTime: 100,
   violationCount: 10,
   anomalyConfidence: 80,
 },
-  channels: {,
+  channels: {
   email: true,
   webhook: true,
   syslog: false,
@@ -424,7 +424,7 @@ describe('ClassificationMonitor', () => {
         compliance: expect.objectContaining({,)
   totalViolations: 1,
 }),
-        healthStatus: 'healthy';
+        healthStatus: 'healthy'
   });
       expect(dashboard.recentAnomalies).toBeInstanceOf(Array);
       expect(dashboard.alerts).toBeInstanceOf(Array);

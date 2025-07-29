@@ -42,7 +42,7 @@ export declare enum NodeCategory {
     CUSTOM = "custom"
 
 export type NodeClass = ()
-  new (id: string,)
+  new (id: string)
   config: any,
 ) => RuntimeNode<any>) | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
 
@@ -191,21 +191,21 @@ export interface NodeFactory {
 
 export interface NodeExecutionContextExtensions {
     nodeExtensions: Map<string, any>;
-    performanceTracking: {,
+    performanceTracking: {
         startTime: number;
         endTime?: number;
         executionTime?: number;
         memoryUsage?: number;
     };
-    securityContext: {,
+    securityContext: {
         permissions: string[];
         sandboxed: boolean;
-        resourceLimits: {,
+        resourceLimits: {
             memory?: number;
             time?: number;
         };
     };
-    cachingContext: {,
+    cachingContext: {
         enabled: boolean;
         cacheKey?: string;
         cacheHit?: boolean;

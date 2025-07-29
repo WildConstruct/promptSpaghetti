@@ -109,7 +109,7 @@ const UserJourneyFlow: React.FC<{ journeyData: unknown }> = ({ journeyData }) =>
  */
 
 export interface UsagePatternsProps {
-  analyticsClient: AnalyticsClient;,
+  analyticsClient: AnalyticsClient;
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
@@ -117,13 +117,13 @@ export interface UsagePatternsProps {
  * Usage patterns state
  */
 interface UsagePatternsState {
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  heatMapData: unknown;,
+  heatMapData: unknown;
   hourlyPattern: unknown;
-  dailyPattern: unknown;,
+  dailyPattern: unknown;
   weeklyPattern: unknown;
-  journeyFlows: unknown;,
+  journeyFlows: unknown;
   selectedPattern: 'hourly' | 'daily' | 'weekly';
   /**
   * Usage patterns component

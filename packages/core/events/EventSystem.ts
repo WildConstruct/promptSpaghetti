@@ -15,9 +15,9 @@ import { z } from 'zod';
 // Base event interface that all events must extend
 
 export interface BaseEvent {
-  type: string;,
+  type: string;
   timestamp: Date;
-  id: string;,
+  id: string;
   source: string;
   userId?: string;
   sessionId?: string;
@@ -107,7 +107,7 @@ export interface EventFilter {
   sources?: string;
   userIds?: string;
   sessionIds?: string;
-  timeWindow?: {,
+  timeWindow?: {
   start?: Date;
   end?: Date;
 };
@@ -119,9 +119,9 @@ export type EventHandler<T extends BaseEvent = BaseEvent> = (event: T) => void |
 // Event subscription interface
 
 export interface EventSubscription {
-  id: string;,
+  id: string;
   filter: EventFilter;
-  handler: EventHandler;,
+  handler: EventHandler;
   priority: EventPriority;
   once?: boolean;
   // Event middleware for processing events before handlers
@@ -134,7 +134,7 @@ export class EventBus extends EventEmitter {
   private middleware: EventMiddleware = [];
   private eventHistory: BaseEvent = [];
   private maxHistorySize: number = 10000;
-  constructor(options?: {,)
+  constructor(options?: {)
   maxHistorySize?: number;
   enableHistory?: boolean;
 }) {
@@ -145,9 +145,9 @@ export class EventBus extends EventEmitter {
   /**
   * Subscribe to events with filtering
   */
-  subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter,)
+  subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter)
   handler: EventHandler<T>,
-  options?: {,
+  options?: {
   priority?: EventPriority;
   once?: boolean;
   ): string {,
@@ -239,10 +239,10 @@ export class EventBus extends EventEmitter {
   /**
   * Get subscription statistics
   */
-  getStats(): {,
-  subscriptions: number;,
+  getStats(): {
+  subscriptions: number;
   middleware: number;
-  historySize: number;,
+  historySize: number;
   eventTypes: string;
   const eventTypes = [...new Set(this.eventHistory.map(e => e.type))];
   return {
@@ -293,7 +293,7 @@ export class EventBus extends EventEmitter {
   case EventPriority.CRITICAL: return 1;
   case EventPriority.HIGH: return 2;
   case EventPriority.MEDIUM: return 3;
-  case EventPriority.LOW: return 4;,
+  case EventPriority.LOW: return 4;
   default: return 5;
   private addToHistory(event: BaseEvent): void {,
   this.eventHistory.push(event);

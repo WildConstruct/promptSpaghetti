@@ -379,7 +379,7 @@ describe('AuditLogger', () => {
   const anomalyHandler = jest.fn<unknown, unknown>();
   const anomalyLogger = new AuditLogger({)
   alertOnAnomaly: true,
-  alertThresholds: {,
+  alertThresholds: {
   failedAccessAttempts: 3,
   timeWindow: 5,
 });

@@ -53,5 +53,13 @@ export declare class ClassificationHandlingRulesService {
     * Initialize default handling requirements for each classification level
     */
     private initializeDefaultHandlingRequirements;
+    /**
+     * Validate storage requirements
+     */
+    private validateStorageRequirements;
+    /**
+     * Validate transmission requirements
+     */
+    private validateTransmissionRequirements;
 }
 //# sourceMappingURL=ClassificationHandlingRulesService.d.ts.map

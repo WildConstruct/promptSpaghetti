@@ -97,7 +97,7 @@ export declare class MarkovNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Markov nodes
  */
-export declare function createMarkovNode(id: string,)
+export declare function createMarkovNode(id: string)
   states: string[],
   transitions: Record<string,
   Record<string,

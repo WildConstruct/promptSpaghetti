@@ -21,7 +21,7 @@ export class ExtensionUpgradeAdvisor {
   /**
   * Get upgrade recommendations for an extension
   */
-  public getUpgradeRecommendations(currentExtension: ExtensionManifest,)
+  public getUpgradeRecommendations(currentExtension: ExtensionManifest)
   availableVersions: string,
   context: UpgradeContext): UpgradeRecommendation {,
   const currentVersion = new SemanticVersion(currentExtension.version);
@@ -61,7 +61,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Analyze upgrade path for specific target version
    */
-  public analyzeUpgradePath(currentExtension: ExtensionManifest,)
+  public analyzeUpgradePath(currentExtension: ExtensionManifest)
     targetVersion: string,
     availableVersions: string,
     context: UpgradeContext): UpgradeAnalysis {,
@@ -94,7 +94,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Generate migration plan for upgrade
    */
-  public generateMigrationPlan(currentExtension: ExtensionManifest,)
+  public generateMigrationPlan(currentExtension: ExtensionManifest)
     targetVersion: string,
     context: UpgradeContext): MigrationPlan {,
   const analysis = this.analyzeUpgradePath(;);
@@ -124,7 +124,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Check for breaking changes between versions
    */
-  public checkBreakingChanges(extensionId: string,)
+  public checkBreakingChanges(extensionId: string)
     fromVersion: string,
     toVersion: string): BreakingChangeAnalysis {,
     const fromVer = new SemanticVersion(fromVersion);
@@ -144,7 +144,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Validate upgrade compatibility
    */
-  public validateUpgradeCompatibility(currentExtension: ExtensionManifest,)
+  public validateUpgradeCompatibility(currentExtension: ExtensionManifest)
     targetExtension: ExtensionManifest,
     context: UpgradeContext): UpgradeCompatibilityResult {,
   const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;);
@@ -175,7 +175,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Determine upgrade strategy based on context
    */
-  private determineUpgradeStrategy(extension: ExtensionManifest,)
+  private determineUpgradeStrategy(extension: ExtensionManifest)
     availableVersions: SemanticVersion,
     context: UpgradeContext): UpgradeStrategyType {,
   const strategy = this.upgradeStrategies.get(extension.id);
@@ -192,7 +192,7 @@ export class ExtensionUpgradeAdvisor {
   /**
   * Get conservative upgrade recommendations
   */
-  private getConservativeRecommendations(currentVersion: SemanticVersion,)
+  private getConservativeRecommendations(currentVersion: SemanticVersion)
   availableVersions: SemanticVersion,
   context: UpgradeContext): VersionRecommendation {,
   const recommendations: VersionRecommendation = [];
@@ -226,7 +226,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Get moderate upgrade recommendations
    */
-  private getModerateRecommendations(currentVersion: SemanticVersion,)
+  private getModerateRecommendations(currentVersion: SemanticVersion)
     availableVersions: SemanticVersion,
     context: UpgradeContext): VersionRecommendation {,
   const recommendations: VersionRecommendation = [];
@@ -249,7 +249,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Get aggressive upgrade recommendations
    */
-  private getAggressiveRecommendations(currentVersion: SemanticVersion,)
+  private getAggressiveRecommendations(currentVersion: SemanticVersion)
     availableVersions: SemanticVersion,
     context: UpgradeContext): VersionRecommendation {,
   const recommendations: VersionRecommendation = [];
@@ -270,7 +270,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Get security-focused upgrade recommendations
    */
-  private getSecurityRecommendations(currentVersion: SemanticVersion,)
+  private getSecurityRecommendations(currentVersion: SemanticVersion)
     availableVersions: SemanticVersion,
     context: UpgradeContext): VersionRecommendation {,
   const recommendations: VersionRecommendation = [];
@@ -294,7 +294,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Generate migration tasks
    */
-  private generateMigrationTasks(currentExtension: ExtensionManifest,)
+  private generateMigrationTasks(currentExtension: ExtensionManifest)
     targetVersion: string,
     upgradePath: UpgradePath): MigrationTask {,
   const tasks: MigrationTask = [];
@@ -326,7 +326,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Assess upgrade risks
    */
-  private assessUpgradeRisks(currentExtension: ExtensionManifest,)
+  private assessUpgradeRisks(currentExtension: ExtensionManifest)
     targetVersion: string,
     upgradePath: UpgradePath,
     context: UpgradeContext): UpgradeRisk {,
@@ -344,7 +344,7 @@ export class ExtensionUpgradeAdvisor {
         description: `${breakingChanges.changes.length} breaking changes detected`}
 },
   mitigation: 'Review breaking changes and update extension code accordingly',
-        probability: 'high';
+        probability: 'high'
   });
     // Dependency conflicts risk
     risks.push({)
@@ -367,7 +367,7 @@ export class ExtensionUpgradeAdvisor {
   /**
    * Identify upgrade benefits
    */
-  private identifyUpgradeBenefits(currentExtension: ExtensionManifest,)
+  private identifyUpgradeBenefits(currentExtension: ExtensionManifest)
     targetVersion: string,
     context: UpgradeContext): UpgradeBenefit {,
   const benefits: UpgradeBenefit = [];
@@ -436,7 +436,7 @@ export class ExtensionUpgradeAdvisor {
     if (highImpactChanges > 0) return 'high';
     if (changes.length > 3) return 'high';
     return 'medium';
-  private checkDependencyConflicts(currentExtension: ExtensionManifest,)
+  private checkDependencyConflicts(currentExtension: ExtensionManifest)
     targetExtension: ExtensionManifest,
     context: UpgradeContext): DependencyConflict {,
     const conflicts: DependencyConflict = [];
@@ -534,7 +534,7 @@ export class ExtensionUpgradeAdvisor {
   return prerequisites;
   // Types and Interfaces
   export interface UpgradeContext {
-  systemVersion: string;,
+  systemVersion: string;
   platform: string;
   availableExtensions: Map<string, ExtensionManifest>;
   grantedPermissions: string;
@@ -544,25 +544,25 @@ export class ExtensionUpgradeAdvisor {
   featurePriority?: boolean;
 }
 export interface UpgradeRecommendation {
-  hasUpdates: boolean;,
+  hasUpdates: boolean;
   currentVersion: string;
-  recommendations: VersionRecommendation;,
+  recommendations: VersionRecommendation;
   strategy: UpgradeStrategyType;
 }
 export interface VersionRecommendation {
-  version: string;,
+  version: string;
   priority: 'low' | 'medium' | 'high';
-  reason: string;,
+  reason: string;
   risk: 'low' | 'medium' | 'high';
-  benefits: string;,
-  effort: 'minimal' | 'low' | 'medium' | 'high';
-}
+  benefits: string;
+  effort: 'minimal' | 'low' | 'medium' | 'high'
+  }
 export interface UpgradeAnalysis {
   feasible: boolean;
   reason?: string;
-  path: UpgradePath;,
+  path: UpgradePath;
   migrationTasks: MigrationTask;
-  risks: UpgradeRisk;,
+  risks: UpgradeRisk;
   benefits: UpgradeBenefit;
   estimatedEffort?: EffortEstimate;
   timeline?: UpgradeTimeline;
@@ -577,86 +577,86 @@ export interface MigrationPlan {
   riskLevel?: 'low' | 'medium' | 'high';
   prerequisites?: string;
   interface UpgradeStrategy {
-  type: UpgradeStrategyType;,
+  type: UpgradeStrategyType;
   name: string;
-  description: string;,
+  description: string;
   maxMajorVersionJump: number;
-  allowPrerelease: boolean;,
+  allowPrerelease: boolean;
   requiresManualApproval: boolean;
   interface MigrationRule {
-  appliesTo: (fromVersion: string, toVersion: string) => boolean;,
+  appliesTo: (fromVersion: string, toVersion: string) => boolean;
   generateTasks: (currentExtension: ExtensionManifest, targetVersion: string) => MigrationTask;
   interface BreakingChange {
-  introducedIn: string;,
+  introducedIn: string;
   type: 'api' | 'config' | 'behavior' | 'dependency';
-  description: string;,
+  description: string;
   impact: 'low' | 'medium' | 'high';
-  migrationRequired: boolean;,
+  migrationRequired: boolean;
   automatedMigration: boolean;
   migrationGuide?: string;
   interface BreakingChangeAnalysis {
-  hasBreakingChanges: boolean;,
+  hasBreakingChanges: boolean;
   changes: BreakingChange;
-  impactLevel: 'low' | 'medium' | 'high';,
+  impactLevel: 'low' | 'medium' | 'high';
   migrationRequired: boolean;
   automatedMigration: boolean;
   interface UpgradeCompatibilityResult {
-  compatible: boolean;,
+  compatible: boolean;
   compatibilityResult: ExtensionCompatibilityResult;
-  dependencyConflicts: DependencyConflict;,
+  dependencyConflicts: DependencyConflict;
   permissionChanges: PermissionChange;
-  requiresRestart: boolean;,
+  requiresRestart: boolean;
   dataBackupRequired: boolean;
   interface DependencyConflict {
-  dependencyId: string;,
+  dependencyId: string;
   conflictType: 'version' | 'missing' | 'incompatible';
-  description: string;,
+  description: string;
   resolution: string;
   interface PermissionChange {
-  permission: string;,
+  permission: string;
   changeType: 'added' | 'removed' | 'modified';
-  description: string;,
+  description: string;
   impact: 'low' | 'medium' | 'high';
   interface MigrationTask {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: 'preparation' | 'validation' | 'migration' | 'verification';
-  required: boolean;,
+  required: boolean;
   automated: boolean;
   estimatedDuration: string;
   interface UpgradeRisk {
-  type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';,
+  type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';
   severity: 'low' | 'medium' | 'high';
-  description: string;,
+  description: string;
   mitigation: string;
   probability: 'low' | 'medium' | 'high';
   interface UpgradeBenefit {
-  type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';,
+  type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';
   description: string;
   impact: 'low' | 'medium' | 'high';
   interface EffortEstimate {
-  level: 'low' | 'medium' | 'high';,
+  level: 'low' | 'medium' | 'high';
   duration: string;
   complexity: 'simple' | 'moderate' | 'complex';
   interface UpgradeTimeline {
   phases: Array<{,
-  name: string;,
+  name: string;
   duration: string;
   tasks: MigrationTask;
 }>;
   totalDuration: string;
 interface MigrationPhase {
-  name: string;,
+  name: string;
   description: string;
-  tasks: MigrationTask;,
+  tasks: MigrationTask;
   duration: string;
   interface RollbackPlan {
-  steps: string;,
+  steps: string;
   estimatedDuration: string;
   dataLossRisk: 'low' | 'medium' | 'high';
   interface TestingPlan {
-  preUpgradeTests: string;,
+  preUpgradeTests: string;
   postUpgradeTests: string;
   rollbackTests: string;
   type UpgradeStrategyType = 'conservative' | 'moderate' | 'aggressive' | 'security' | 'none';

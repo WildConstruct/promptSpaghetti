@@ -47,7 +47,7 @@ const DEFAULT_SECURITY_CONFIG: SecurityAlertingConfig = {,
   patternAnalysisWindow: 300000, // 5 minutes,
   threatIntelligenceUpdate: 3600000, // 1 hour,
   machinelearningEnabled: false,
-  escalationThresholds: {,
+  escalationThresholds: {
   criticalAlertCount: 5,
   highAlertCount: 20,
   correlatedAlertCount: 10,
@@ -58,7 +58,7 @@ const DEFAULT_SECURITY_CONFIG: SecurityAlertingConfig = {,
   riskScoreThreshold: 75,
 },
   correlationRules: [],
-  responseAutomation: {,
+  responseAutomation: {
   enabledActions: [],
   approvalRequired: true,
   maxAutomatedActions: 5,
@@ -66,7 +66,7 @@ const DEFAULT_SECURITY_CONFIG: SecurityAlertingConfig = {,
   emergencyOverride: false,
 };
 interface SecurityConfigurationPageProps {
-  userRole: 'admin' | 'security_admin' | 'security_analyst';,
+  userRole: 'admin' | 'security_admin' | 'security_analyst';
   userId: string;
   organizationId: string;
   theme?: 'light' | 'dark' | 'cinema';
@@ -146,12 +146,12 @@ interface SecurityConfigurationPageProps {
   const validation = await configService.validateConfiguration(config);
   return {
   isValid: validation.isValid,
-  errors: validation.errors.map(error => ({,)
+  errors: validation.errors.map(error => ({)
   field: error.field,
   message: error.message,
   severity: error.severity,
 })),
-        warnings: validation.warnings.map(warning => ({,)
+        warnings: validation.warnings.map(warning => ({)
   field: warning.field,
   message: warning.message,
   impact: warning.impact,
@@ -373,7 +373,7 @@ interface SecurityConfigurationPageProps {
         borderTop: `1px solid ${theme === 'light' ? '#e2e8f0' : '#334155'}`}
 },
   padding: '24px',
-        marginTop: '32px';
+        marginTop: '32px'
   }}>
         <div style={{
   maxWidth: '1200px',

@@ -16,7 +16,7 @@ import {
   DEFAULT_HANDLING_REQUIREMENTS
 } from '../../types/DataClassification';
 interface ClassificationTaggingUIProps {
-  dataElement: unknown;,
+  dataElement: unknown;
   dataId: string;
   existingClassification?: DataClassification;
   context?: ClassificationContext;
@@ -25,11 +25,11 @@ interface ClassificationTaggingUIProps {
   readonly?: boolean;
   showHandlingRequirements?: boolean;
   interface ClassificationFormData {
-  classification: DataClassificationLevel | '';,
+  classification: DataClassificationLevel | '';
   rationale: string;
-  dataOwner: string;,
+  dataOwner: string;
   businessJustification: string;
-  riskAssessment: string;,
+  riskAssessment: string;
   regulatoryRequirements: string;
   dataLineage: string;
   export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = ({,)
@@ -114,7 +114,7 @@ interface ClassificationTaggingUIProps {
       classificationDate: new Date(),
       reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
       approvals: [], // Will be populated by approval workflow
-      metadata: {,
+      metadata: {
   businessJustification: formData.businessJustification,
   riskAssessment: formData.riskAssessment,
   regulatoryRequirements: formData.regulatoryRequirements,

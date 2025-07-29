@@ -33,13 +33,13 @@ import {
 interface ExportWizardProps {
   projectId: string;
   template?: ExportTemplate | null;
-  onComplete: (exportData: CreateExportJob) => void;,
+  onComplete: (exportData: CreateExportJob) => void;
   onCancel: () => void;
   type WizardStep = 'format' | 'options' | 'filters' | 'review';
   const EXPORT_FORMATS: Array<{,
-  value: ExportFormat;,
+  value: ExportFormat;
   label: string;
-  description: string;,
+  description: string;
   icon: string;
 }> = [
   { value: 'vfx', label: 'VFX Pipeline', description: 'Wild Construct VFX export for film production', icon: '🎬' },
@@ -54,7 +54,7 @@ interface ExportWizardProps {
 ];
 const EXPORT_TYPES: Array<{,
   value: ExportType;
-  label: string;,
+  label: string;
   description: string;
 }> = [
   { value: 'version', label: 'Version Snapshot', description: 'Export a specific version of the project' },
@@ -244,7 +244,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   checked={exportData.export_options?.[option.key] || false}
                   onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   [option.key]: e.target.checked,
 }))}
@@ -268,7 +268,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     checked={exportData.export_options?.pretty || false}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   pretty: e.target.checked,
 }))}
@@ -282,7 +282,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     checked={exportData.export_options?.include_schema || false}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   include_schema: e.target.checked,
 }))}
@@ -302,7 +302,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     value={exportData.export_options?.delimiter || ','}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   delimiter: e.target.value,
 }))}
@@ -320,7 +320,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     checked={exportData.export_options?.include_headers || false}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   include_headers: e.target.checked,
 }))}
@@ -340,7 +340,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     value={exportData.export_options?.page_size || 'A4'}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   page_size: e.target.value,
 }))}
@@ -358,7 +358,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     checked={exportData.export_options?.include_images || false}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   include_images: e.target.checked,
 }))}
@@ -378,7 +378,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                     value={exportData.export_options?.quality || 'production'}
                     onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   quality: e.target.value,
 }))}
@@ -404,7 +404,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                         checked={exportData.export_options?.[option.key] ?? true}
                         onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   [option.key]: e.target.checked,
 }))}
@@ -430,7 +430,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                         checked={exportData.export_options?.[option.key] ?? true}
                         onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   [option.key]: e.target.checked,
 }))}
@@ -457,7 +457,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                         checked={exportData.export_options?.[option.key] ?? true}
                         onChange={(e) => setExportData(prev => ({)
   ...prev,
-  export_options: {,
+  export_options: {
   ...prev.export_options,
   [option.key]: e.target.checked,
 }))}
@@ -500,9 +500,9 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 value={exportData.custom_filters?.date_range?.start || ''}
                 onChange={(e) => setExportData(prev => ({)
   ...prev,
-  custom_filters: {,
+  custom_filters: {
   ...prev.custom_filters,
-  date_range: {,
+  date_range: {
   ...prev.custom_filters?.date_range,
   start: e.target.value,
 }))}
@@ -518,9 +518,9 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 value={exportData.custom_filters?.date_range?.end || ''}
                 onChange={(e) => setExportData(prev => ({)
   ...prev,
-  custom_filters: {,
+  custom_filters: {
   ...prev.custom_filters,
-  date_range: {,
+  date_range: {
   ...prev.custom_filters?.date_range,
   end: e.target.value,
 }))}
@@ -538,7 +538,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 checked={exportData.custom_filters?.compress_output || false}
                 onChange={(e) => setExportData(prev => ({)
   ...prev,
-  custom_filters: {,
+  custom_filters: {
   ...prev.custom_filters,
   compress_output: e.target.checked,
 }))}
@@ -552,7 +552,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 checked={exportData.custom_filters?.encrypt_output || false}
                 onChange={(e) => setExportData(prev => ({)
   ...prev,
-  custom_filters: {,
+  custom_filters: {
   ...prev.custom_filters,
   encrypt_output: e.target.checked,
 }))}

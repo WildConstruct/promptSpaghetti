@@ -11,10 +11,10 @@ import { ROICalculator } from './ROICalculator';
 import { SavingsEstimation } from './SavingsEstimation';
 interface BusinessValueDemoProps {
   className?: string;
-  templateExample?: {,
-  name: string;,
+  templateExample?: {
+  name: string;
   price: number;
-  description: string;,
+  description: string;
   category: string;
 };
 
@@ -47,7 +47,7 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
   template: templateExample,
   roi: roiResults,
   savings: savingsResults,
-  summary: {,
+  summary: {
   totalValue: roiResults.netSavings + savingsResults.totalSavings.totalProjectSavings,
   paybackTime: roiResults.timeToValue,
   efficiency: savingsResults.productivity.productivityGain,

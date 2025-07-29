@@ -41,7 +41,7 @@ export class ErrorFactory {
   /**
    * Create enhanced context by merging provided context with defaults
    */
-  private static createContext(operation: string,)
+  private static createContext(operation: string)
     options: ErrorFactoryOptions = {},
     additional: Partial<ErrorContext> = {}
   ): Partial<ErrorContext> {
@@ -71,7 +71,7 @@ export class ErrorFactory {
   /**
    * Create a graph execution error with node context
    */
-  static createGraphExecutionError(message: string,)
+  static createGraphExecutionError(message: string)
     cause?: Error,
     options: ErrorFactoryOptions = {}
   ): GraphExecutionError {
@@ -82,7 +82,7 @@ export class ErrorFactory {
   /**
    * Create a node execution error with specific node context
    */
-  static createNodeExecutionError(nodeId: string,)
+  static createNodeExecutionError(nodeId: string)
     operation: string,
     message: string,
     cause?: Error,
@@ -98,7 +98,7 @@ export class ErrorFactory {
   /**
    * Create a database connection error with retry logic
    */
-  static createDatabaseConnectionError(message: string,)
+  static createDatabaseConnectionError(message: string)
     cause?: Error,
     options: ErrorFactoryOptions = {}
   ): DatabaseConnectionError {
@@ -126,7 +126,7 @@ export class ErrorFactory {
   /**
    * Create MFA-specific errors with recovery guidance
    */
-  static createMFAError(message: string,)
+  static createMFAError(message: string)
     mfaType: string,
     options: ErrorFactoryOptions = {}
   ): MFAError {
@@ -135,7 +135,7 @@ export class ErrorFactory {
   /**
    * Create MFA configuration errors
    */
-  static createMFAConfigurationError(type: 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config',)
+  static createMFAConfigurationError(type: 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config')
     details?: string,
     options: ErrorFactoryOptions = {}
   ): MFAError {
@@ -166,7 +166,7 @@ export class ErrorFactory {
   /**
    * Create project locked error with lock context
    */
-  static createProjectLockedError(projectId?: string,)
+  static createProjectLockedError(projectId?: string)
     lockedBy?: string,
     options: ErrorFactoryOptions = {}
   ): ProjectLockedError {
@@ -177,7 +177,7 @@ export class ErrorFactory {
   /**
    * Create permission denied errors
    */
-  static createPermissionDeniedError(resource: string,)
+  static createPermissionDeniedError(resource: string)
     action: string,
     options: ErrorFactoryOptions = {}
   ): AuthenticationError {
@@ -193,7 +193,7 @@ export class ErrorFactory {
   /**
    * Create workflow state transition errors
    */
-  static createWorkflowStateError(message: string = 'Invalid workflow state transition',)
+  static createWorkflowStateError(message: string = 'Invalid workflow state transition')
     fromState?: string,
     toState?: string,
     options: ErrorFactoryOptions = {}
@@ -206,7 +206,7 @@ export class ErrorFactory {
   /**
    * Create API errors from HTTP responses
    */
-  static createAPIError(statusCode: number,)
+  static createAPIError(statusCode: number)
     message: string,
     endpoint?: string,
     responseBody?: any,
@@ -219,7 +219,7 @@ export class ErrorFactory {
   /**
    * Create network/fetch errors
    */
-  static createNetworkError(message: string,)
+  static createNetworkError(message: string)
     endpoint?: string,
     cause?: Error,
     options: ErrorFactoryOptions = {}
@@ -232,7 +232,7 @@ export class ErrorFactory {
   /**
    * Create validation errors for fields
    */
-  static createValidationError(field: string,)
+  static createValidationError(field: string)
     value: any,
     expected: string,
     options: ErrorFactoryOptions = {}
@@ -258,7 +258,7 @@ export class ErrorFactory {
   /**
    * Create configuration errors
    */
-  static createConfigurationError(message: string,)
+  static createConfigurationError(message: string)
     configKey?: string,
     options: ErrorFactoryOptions = {}
   ): ConfigurationError {
@@ -268,7 +268,7 @@ export class ErrorFactory {
   /**
    * Wrap unknown errors in structured format
    */
-  static wrapUnknownError(error: unknown,)
+  static wrapUnknownError(error: unknown)
     operation: string,
     options: ErrorFactoryOptions = {}
   ): BaseError {

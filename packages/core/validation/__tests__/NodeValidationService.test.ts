@@ -21,12 +21,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'test-node-1',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['Option A', 'Option B'],
   weights: [1, 1],
 };
@@ -39,12 +39,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'cached-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A', 'B'],
   weights: [1, 1],
 };
@@ -62,12 +62,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'event-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A'],
   weights: [1],
 };
@@ -207,12 +207,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'metrics-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A', 'B'],
   weights: [1, 1],
 };
@@ -228,12 +228,12 @@ describe('NodeValidationService', () => {
   const dangerousNode: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'Conditional',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   condition: 'eval("malicious")',
 };
       await service.validateNode(dangerousNode);
@@ -247,12 +247,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'cache-stats-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A'],
   weights: [1],
 };
@@ -267,12 +267,12 @@ describe('NodeValidationService', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'clear-cache-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A'],
   weights: [1],
 };
@@ -293,12 +293,12 @@ describe('NodeValidationService', () => {
       const nodeData: AdvancedNodeData = {,
   id: 'expire-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A'],
   weights: [1],
 };
@@ -333,12 +333,12 @@ describe('NodeValidationService', () => {
       const dangerousNode: AdvancedNodeData = {,
   id: 'config-test-node',
   type: 'Conditional',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   condition: 'eval("should be blocked but isn\'t")',
 };
       const result = await service.validateNode(dangerousNode);

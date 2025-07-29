@@ -1079,8 +1079,7 @@ boolean;
                             return this.selectLRUVictim();
                         case CacheEvictionPolicy.LFU:
                             return this.selectLFUVictim();
-                        case CacheEvictionPolicy.TTL_BASED:
-                            return this.selectTTLVictim();
+                        case CacheEvictionPolicy.TTL_BASED: return this.selectTTLVictim();
                         default:
                             return this.selectRandomVictim();
                     }
@@ -1470,7 +1469,8 @@ boolean;
                                                             const fullConfig = { ...this.createDefaultConfig(), ...config };
                                                             return new ApiPerformanceOptimizer(fullConfig);
                                                             export default ApiPerformanceOptimizer;
-                                                        } }
+                                                        }
+                                                    }
                                                 };
                                             }
                                         }

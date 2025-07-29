@@ -9,7 +9,7 @@ import { YGraph } from '../../crdt-research/src/y-graph';
 import { CRDTNode, CRDTEdge } from '../../crdt-research/src/types';
 
 export interface CollaborativeGraphOptions {
-  documentId: string;,
+  documentId: string;
   userId: string;
   onGraphChange?: (graph: Graph) => void;
   onUserPresence?: (users: Map<string, unknown>) => void;
@@ -44,7 +44,7 @@ export class GraphCRDTAdapter {
   type: node.type,
   position: this.extractPosition(node),
   data: this.extractNodeData(node),
-  metadata: {,
+  metadata: {
   originalType: node.type,
   inputs: (node as any).inputs || [],
   ...this.extractNodeMetadata(node)
@@ -59,7 +59,7 @@ export class GraphCRDTAdapter {
   target: edge.target,
   sourceHandle: edge.sourceHandle || 'output',
   targetHandle: edge.targetHandle || 'input',
-  metadata: {,
+  metadata: {
   sourceType: sourceNode.type,
   targetType: targetNode.type,
   ...this.extractEdgeMetadata(edge)
@@ -75,7 +75,7 @@ export class GraphCRDTAdapter {
 };
     // Add type-specific properties based on node type
     switch (crdtNode.type) {
-  case 'WeightedChoice':,
+  case 'WeightedChoice':
   return {
   ...baseNode,
   type: 'WeightedChoice',
@@ -229,7 +229,7 @@ export class GraphCRDTAdapter {
    */
   updateNode(nodeId: string, updates: Partial<Node>): void {
     const existingNode = this.yGraph.getNode(nodeId);
-    if (!existingNode) return;
+    if (!existingNode) return (
     const crdtUpdates: Partial<CRDTNode> = {,
   data: { ...existingNode.data, ...this.extractNodeData(updates as Node) },
       metadata: { ...existingNode.metadata, lastModified: Date.now() }
@@ -322,7 +322,7 @@ export class GraphCRDTAdapter {
 /**
  * Factory function to create collaborative graph adapter
  */
-export function createCollaborativeGraph(options: CollaborativeGraphOptions,)
+export function createCollaborativeGraph(options: CollaborativeGraphOptions)
   initialGraph?: Graph
 ): GraphCRDTAdapter {
   return new GraphCRDTAdapter(options, initialGraph);

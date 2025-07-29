@@ -39,7 +39,7 @@ describe('DataClassificationAccessControl', () => {
   constraints: [],
   parentRoles: [],
   isActive: true,
-  metadata: {,
+  metadata: {
   createdBy: 'system',
   createdAt: new Date(),
   lastModified: new Date(),
@@ -62,7 +62,7 @@ describe('DataClassificationAccessControl', () => {
           ],
           parentRoles: [],
           isActive: true,
-          metadata: {,
+          metadata: {
   createdBy: 'admin',
   createdAt: new Date(),
   lastModified: new Date(),
@@ -79,7 +79,7 @@ describe('DataClassificationAccessControl', () => {
   constraints: [],
   parentRoles: [],
   isActive: true,
-  metadata: {,
+  metadata: {
   createdBy: 'admin',
   createdAt: new Date(),
   lastModified: new Date(),
@@ -118,7 +118,7 @@ describe('DataClassificationAccessControl', () => {
   conditions: [],
   effect: 'ALLOW',
   priority: 50],
-  roleHierarchy: {,
+  roleHierarchy: {
   hierarchy: [,
   {
   level: 1,
@@ -167,20 +167,20 @@ describe('DataClassificationAccessControl', () => {
   };
     // Setup mock ABAC model
     mockABACModel = {
-  subjects: {,
+  subjects: {
   userId: 'user-test',
   roles: ['role-analyst'],
   clearanceLevel: 'CONFIDENTIAL',
   department: 'Analytics',
   jobTitle: 'Senior Analyst',
-  location: {,
+  location: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
   timezone: 'America/Los_Angeles',
   withinApprovedRegions: true,
 },
-  device: {,
+  device: {
   deviceId: 'device-123',
   deviceType: 'LAPTOP',
   operatingSystem: 'Windows 11',
@@ -191,13 +191,13 @@ describe('DataClassificationAccessControl', () => {
   registered: true,
   lastSeen: new Date(),
 },
-  behaviorProfile: {,
+  behaviorProfile: {
   normalAccessPatterns: [],
           anomalyScore: 5,
           typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           typicalLocations: ['office'],
           accessFrequency: 'MEDIUM',
-          dataAccessPatterns: {,
+          dataAccessPatterns: {
   PUBLIC: { operations: ['READ'], frequency: 10, timeRanges: [], locations: [], dataTypes: [] },
             INTERNAL: { operations: ['READ'], frequency: 8, timeRanges: [], locations: [], dataTypes: [] },
             CONFIDENTIAL: { operations: ['READ'], frequency: 3, timeRanges: [], locations: [], dataTypes: [] },
@@ -207,9 +207,9 @@ describe('DataClassificationAccessControl', () => {
         certifications: ['ISO27001'],
         lastActivity: new Date(),
         mfaVerified: true,
-        trustLevel: 'HIGH';
+        trustLevel: 'HIGH'
   },
-  objects: {,
+  objects: {
   dataId: 'data-123',
   classification: 'CONFIDENTIAL',
   dataOwner: 'data-owner-1',
@@ -224,7 +224,7 @@ describe('DataClassificationAccessControl', () => {
   sourceSystem: 'CRM',
   encryptionStatus: 'ENCRYPTED',
 },
-  actions: {,
+  actions: {
   operation: 'READ',
   purpose: 'analysis',
   urgency: 'ROUTINE',
@@ -234,16 +234,16 @@ describe('DataClassificationAccessControl', () => {
   delegated: false,
   riskLevel: 'MEDIUM',
 },
-  environment: {,
+  environment: {
   timestamp: new Date(),
-  location: {,
+  location: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
   timezone: 'America/Los_Angeles',
   withinApprovedRegions: true,
 },
-  network: {,
+  network: {
   ipAddress: '192.168.1.100',
   vpnConnection: true,
   corporateNetwork: true,
@@ -251,7 +251,7 @@ describe('DataClassificationAccessControl', () => {
   bandwidth: '1Gbps',
   connectionType: 'VPN',
 },
-  securityContext: {,
+  securityContext: {
   authenticationMethod: 'MFA',
   sessionAge: 30, // minutes,
   sessionRisk: 10,
@@ -267,7 +267,7 @@ describe('DataClassificationAccessControl', () => {
   id: 'policy-business-hours',
   name: 'Business Hours Access Policy',
   description: 'Restricts access to business hours for confidential data',
-  target: {,
+  target: {
   subjects: [{,
   attribute: 'clearanceLevel',
   operator: 'IN',
@@ -289,8 +289,8 @@ describe('DataClassificationAccessControl', () => {
   value: [8, 18],
 }]
   },
-  rule: {,
-  condition: {,
+  rule: {
+  condition: {
   type: 'SIMPLE',
   expression: 'business_hours_check',
 },
@@ -305,7 +305,7 @@ describe('DataClassificationAccessControl', () => {
           priority: 100,
           enabled: true,
           version: '1.0',
-          metadata: {,
+          metadata: {
   createdBy: 'security-team',
   createdAt: new Date(),
   lastModified: new Date(),
@@ -324,7 +324,7 @@ describe('DataClassificationAccessControl', () => {
           {
             id: 'rule-read-confidential',
             operation: 'READ',
-            subjects: {,
+            subjects: {
   roles: ['role-analyst', 'role-admin'],
               clearanceLevel: 'CONFIDENTIAL',
               departments: ['Analytics', 'Security'],
@@ -333,7 +333,7 @@ describe('DataClassificationAccessControl', () => {
   conditions: [,
               {
   type: 'TEMPORAL',
-  specification: {,
+  specification: {
   attribute: 'timestamp.hours',
   operator: 'BETWEEN',
   value: [8, 18],
@@ -343,14 +343,14 @@ describe('DataClassificationAccessControl', () => {
             requirements: [,
               {
                 type: 'MFA',
-                specification: {,
+                specification: {
   parameters: { method: 'TOTP' },
                   validation: [];
   },
   mandatory: true],
             priority: 100],
-        handlingRequirements: {,
-  storage: {,
+        handlingRequirements: {
+  storage: {
   encryptionRequired: true,
   encryptionAlgorithm: 'AES-256',
   keyRotationDays: 90,
@@ -360,7 +360,7 @@ describe('DataClassificationAccessControl', () => {
   approvedLocations: ['primary-dc', 'backup-dc'],
   redundancyLevel: 'HIGH',
 },
-  transmission: {,
+  transmission: {
   tlsVersion: 'TLS 1.3',
   certificatePinning: true,
   networkRestrictions: ['corporate-network'],
@@ -368,10 +368,10 @@ describe('DataClassificationAccessControl', () => {
   compressionAllowed: false,
   endToEndEncryption: true,
 },
-  processing: {,
+  processing: {
   approvedEnvironments: ['production', 'staging'],
   loggingRequired: true,
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: true,
   encryptionRequired: true,
   maxTtlSeconds: 300,
@@ -382,7 +382,7 @@ describe('DataClassificationAccessControl', () => {
             isolationRequired: true,
             auditTrailRequired: true;
   },
-  access: {,
+  access: {
   authenticationLevel: 'MFA',
   authorizationRequired: true,
   approvalWorkflow: false,
@@ -391,7 +391,7 @@ describe('DataClassificationAccessControl', () => {
   auditLogging: 'ENHANCED',
   exportRestrictions: true,
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: true,
   anomalyDetection: true,
   alertThreshold: 'MEDIUM',
@@ -403,7 +403,7 @@ describe('DataClassificationAccessControl', () => {
         approvalWorkflows: [],
         monitoringRequirements: [],
         violationActions: [],
-        metadata: {,
+        metadata: {
   createdBy: 'security-officer',
   createdAt: new Date(),
   lastModified: new Date(),
@@ -422,21 +422,21 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-001',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-analyst',
   clearanceLevel: 'CONFIDENTIAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'INTERNAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'read',
   userId: 'user-analyst',
   sessionId: 'session-123',
@@ -456,21 +456,21 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-002',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-viewer',
   clearanceLevel: 'INTERNAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'RESTRICTED',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'read',
   userId: 'user-viewer',
   sessionId: 'session-124',
@@ -491,24 +491,24 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-003',
   timestamp: lateNightTime,
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-analyst',
   clearanceLevel: 'CONFIDENTIAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'CONFIDENTIAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
-  environment: {,
+  environment: {
   ...mockABACModel.environment,
   timestamp: lateNightTime,
 },
-  context: {,
+  context: {
   operation: 'read',
   userId: 'user-analyst',
   sessionId: 'session-125',
@@ -528,21 +528,21 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-004',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-viewer',
   clearanceLevel: 'INTERNAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'CONFIDENTIAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'WRITE',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'write',
   userId: 'user-viewer',
   sessionId: 'session-126',
@@ -568,7 +568,7 @@ describe('DataClassificationAccessControl', () => {
   object: mockABACModel.objects,
   action: mockABACModel.actions,
   environment: mockABACModel.environment,
-  context: {,
+  context: {
   operation: 'read',
   userId: 'user-test',
   sessionId: 'session-127',
@@ -590,13 +590,13 @@ describe('DataClassificationAccessControl', () => {
   subject: mockABACModel.subjects,
   object: mockABACModel.objects,
   action: mockABACModel.actions,
-  environment: {,
+  environment: {
   ...mockABACModel.environment,
-  securityContext: {,
+  securityContext: {
   ...mockABACModel.environment.securityContext,
   complianceStatus: 'NON_COMPLIANT',
 },
-  context: {,
+  context: {
   operation: 'read',
   userId: 'user-test',
   sessionId: 'session-128',
@@ -614,20 +614,20 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-007',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   clearanceLevel: 'CONFIDENTIAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'CONFIDENTIAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'read',
   userId: 'user-test',
   sessionId: 'session-129',
@@ -648,24 +648,24 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-008',
   timestamp: businessHoursTime,
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-analyst',
   clearanceLevel: 'CONFIDENTIAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'CONFIDENTIAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
-  environment: {,
+  environment: {
   ...mockABACModel.environment,
   timestamp: businessHoursTime,
 },
-  context: {,
+  context: {
   operation: 'read',
   userId: 'user-analyst',
   sessionId: 'session-130',
@@ -686,21 +686,21 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-009',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-viewer',
   clearanceLevel: 'INTERNAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'RESTRICTED',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'WRITE',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'write',
   userId: 'user-viewer',
   sessionId: 'session-131',
@@ -719,22 +719,22 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-010',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-admin',
   clearanceLevel: 'RESTRICTED',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'RESTRICTED',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'DELETE',
   riskLevel: 'CRITICAL',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'delete',
   userId: 'user-admin',
   sessionId: 'session-132',
@@ -753,21 +753,21 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-011',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'user-analyst',
   clearanceLevel: 'CONFIDENTIAL',
 },
-  object: {,
+  object: {
   ...mockABACModel.objects,
   classification: 'INTERNAL',
 },
-  action: {,
+  action: {
   ...mockABACModel.actions,
   operation: 'READ',
 },
   environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'read',
   userId: 'user-analyst',
   sessionId: 'session-133',
@@ -840,7 +840,7 @@ describe('DataClassificationAccessControl', () => {
   const request: AccessRequest = {,
   requestId: 'req-012',
   timestamp: new Date(),
-  subject: {,
+  subject: {
   ...mockABACModel.subjects,
   userId: 'non-existent-user',
   clearanceLevel: 'PUBLIC',
@@ -848,7 +848,7 @@ describe('DataClassificationAccessControl', () => {
   object: mockABACModel.objects,
         action: mockABACModel.actions,
         environment: mockABACModel.environment,
-        context: {,
+        context: {
   operation: 'read',
   userId: 'non-existent-user',
   sessionId: 'session-134',
@@ -867,7 +867,7 @@ describe('DataClassificationAccessControl', () => {
   requestId: 'req-013',
   timestamp: new Date(),
   // Missing required fields
-  context: {,
+  context: {
   operation: 'read',
   userId: 'user-test',
   sessionId: 'session-135',

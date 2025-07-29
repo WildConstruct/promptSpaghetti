@@ -267,7 +267,8 @@ export class MultimodalAdapter extends BaseAIModel {
                                     content: imageData,
                                     metadata: {
                                         mime_type: typeof imageData === 'string' ? 'image/base64' : imageData.type,
-                                        description },
+                                        description
+                                    },
                                     static createAudioInput(audioData, description) {
                                         return {
                                             type: 'audio',
@@ -534,7 +535,8 @@ export class MultimodalAdapter extends BaseAIModel {
                                         source: {
                                             type: 'base64',
                                             media_type: 'image/jpeg',
-                                            data: typeof input.content === 'string' ? input.content.replace() : , }
+                                            data: typeof input.content === 'string' ? input.content.replace() : ,
+                                        }
                                             /  ^ data, image
                                     } / [ ^ ] + ;
                                     base64, /,;
@@ -571,7 +573,8 @@ export class MultimodalAdapter extends BaseAIModel {
                             return {
                                 inline_data: {
                                     mime_type: 'image/jpeg',
-                                    data: typeof input.content === 'string' ? input.content.replace() : , }
+                                    data: typeof input.content === 'string' ? input.content.replace() : ,
+                                }
                                     /  ^ data, image
                             } / [ ^ ] + ;
                             base64, /,;

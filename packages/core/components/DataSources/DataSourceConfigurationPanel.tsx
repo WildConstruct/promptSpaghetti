@@ -4,42 +4,42 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { DataSource, DataTransform } from '../../external-data/DataSourceManager';
 
 export interface DataSourceConfigurationPanelProps {
-  visible: boolean;,
+  visible: boolean;
   onClose: () => void;
   onSave: (dataSources: DataSource) => void;
   initialDataSources?: DataSource;
   interface DataSourceFormData {
-  id: string;,
+  id: string;
   name: string;
-  type: DataSource['type'];,
+  type: DataSource['type'];
   enabled: boolean;
   endpoint?: string;
-  authentication: {,
-  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';,
+  authentication: {
+  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
   credentials: Record<string, string>;
   headers: Record<string, string>;
 };
-  caching: {,
+  caching: {
   enabled: boolean;
-  ttl: number;,
+  ttl: number;
   strategy: 'memory' | 'disk' | 'hybrid';
   maxSize: number;
 };
   transforms: DataTransform;
   rateLimit?: {
-  requests: number;,
+  requests: number;
   window: number;
   burst?: number;
 };
-  reliability: {,
+  reliability: {
   timeout: number;
-  retries: number;,
+  retries: number;
   backoff: 'linear' | 'exponential';
   healthCheck?: string;
 };
-  metadata: {,
+  metadata: {
   description: string;
-  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';,
+  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
   tags: string;
   version: string;
 };
@@ -49,29 +49,29 @@ const defaultDataSourceForm: DataSourceFormData = {,
   type: 'api',
   enabled: true,
   endpoint: '',
-  authentication: {,
+  authentication: {
   type: 'none',
     credentials: {},
     headers: {}
   },
-  caching: {,
+  caching: {
   enabled: true,
   ttl: 3600,
   strategy: 'hybrid',
   maxSize: 50,
 },
   transforms: [],
-  rateLimit: {,
+  rateLimit: {
   requests: 100,
   window: 60,
   burst: 10,
 },
-  reliability: {,
+  reliability: {
   timeout: 10000,
   retries: 3,
   backoff: 'exponential',
 },
-  metadata: {,
+  metadata: {
   description: '',
   category: 'historical',
   tags: [],
@@ -101,7 +101,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   const handleEditSource = useCallback((source: DataSource) => {
     setEditingSource({)
   ...source,
-      authentication: {,
+      authentication: {
   type: source.authentication?.type || 'none',
         credentials: source.authentication?.credentials || {},
         headers: source.authentication?.headers || {}
@@ -139,7 +139,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   const addTag = useCallback((tag: string) => {
   if (!editingSource || editingSource.metadata.tags.includes(tag)) return;
   updateEditingSource({)
-  metadata: {,
+  metadata: {
   ...editingSource.metadata,
   tags: [...editingSource.metadata.tags, tag],
 });
@@ -147,7 +147,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   const removeTag = useCallback((tag: string) => {
   if (!editingSource) return;
   updateEditingSource({)
-  metadata: {,
+  metadata: {
   ...editingSource.metadata,
   tags: editingSource.metadata.tags.filter(t => t !== tag),
 });
@@ -220,7 +220,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                   border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`}
 },
   borderRadius: 6,
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
                 onClick={() => setSelectedSourceId(source.id)}
               >
@@ -416,10 +416,10 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
 // Data Source Form Component
 const DataSourceForm: React.FC<{,
   source: DataSourceFormData;
-  onUpdate: (updates: Partial<DataSourceFormData>) => void;,
+  onUpdate: (updates: Partial<DataSourceFormData>) => void;
   onSave: () => void;
-  onCancel: () => void;,
-  onAddTag: (tag: string) => void;,
+  onCancel: () => void;
+  onAddTag: (tag: string) => void;
   onRemoveTag: (tag: string) => void;
 }> = ({ source, onUpdate, onSave, onCancel, onAddTag, onRemoveTag }) => {
   const [newTag, setNewTag] = useState('');

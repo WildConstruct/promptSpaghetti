@@ -139,7 +139,7 @@ export interface PolicyVersionComparison {
     fromVersion: PolicyVersion;
     toVersion: PolicyVersion;
     changes: PolicyVersionDiff[];
-    summary: {,
+    summary: {
         addedSections: number;
         removedSections: number;
         modifiedSections: number;
@@ -159,7 +159,7 @@ export type DiffImpact = 'low' | 'medium' | 'high' | 'breaking';
 
 export interface PolicyVersionListResponse {
     versions: PolicyVersion[];
-    pagination: {,
+    pagination: {
         page: number;
         pageSize: number;
         total: number;

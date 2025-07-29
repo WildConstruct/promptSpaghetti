@@ -538,13 +538,23 @@ Promise < ContentSafetyResult > {
                                                                 trackSafetyEvent(request, result) { return Promise.resolve(); },
                                                                 executeIntegrationUpdates(result) { return Promise.resolve(); },
                                                                 determineFilteringCategories(request) { return []; },
-                                                                mapPriorityToFilteringPriority(priority) { return 'medium'; },
+                                                                mapPriorityToFilteringPriority(priority) {
+                                                                    return 'medium';
+                                                                },
                                                                 convertFilteringIssuesToFindings(result) { return []; },
-                                                                mapFilteringActionToSafetyDecision(action) { return 'approve'; },
-                                                                inferModerationContext(request) { return 'marketplace_template'; },
-                                                                determineWorkflowType(request) { return 'standard_review'; },
+                                                                mapFilteringActionToSafetyDecision(action) {
+                                                                    return 'approve';
+                                                                },
+                                                                inferModerationContext(request) {
+                                                                    return 'marketplace_template';
+                                                                },
+                                                                determineWorkflowType(request) {
+                                                                    return 'standard_review';
+                                                                },
                                                                 convertModerationResultToFindings(result) { return []; },
-                                                                mapModerationActionToSafetyDecision(action) { return 'approve'; }
+                                                                mapModerationActionToSafetyDecision(action) {
+                                                                    return 'approve';
+                                                                }
                                                             };
                                                         }
                                                     };

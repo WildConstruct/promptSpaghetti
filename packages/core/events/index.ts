@@ -94,7 +94,7 @@ export type {
 
 // Environment-specific configurations
 export const EventSystemConfigs = {
-  production: {,
+  production: {
   middleware: [,
       createValidationMiddleware({ strictMode: false }),
       createSecurityMiddleware(),
@@ -112,11 +112,11 @@ export const EventSystemConfigs = {
   filterPriorities: [EventPriority.HIGH, EventPriority.CRITICAL],
 }
     ],
-    eventBusOptions: {,
+    eventBusOptions: {
   maxHistorySize: 5000,
   enableHistory: true,
 },
-  development: {,
+  development: {
   middleware: [,
       createValidationMiddleware({ strictMode: true }),
       createPerformanceMiddleware({)
@@ -129,16 +129,16 @@ export const EventSystemConfigs = {
   includeMetadata: true,
 }
     ],
-    eventBusOptions: {,
+    eventBusOptions: {
   maxHistorySize: 1000,
   enableHistory: true,
 },
-  testing: {,
+  testing: {
   middleware: [,
       createValidationMiddleware({ strictMode: true }),
       createLoggingMiddleware({ logLevel: 'error' })
     ],
-    eventBusOptions: {,
+    eventBusOptions: {
   maxHistorySize: 100,
   enableHistory: false,
 };
@@ -212,7 +212,7 @@ export const collectEventSystemMetrics = () => {
     (history.length / ((Date.now() - history[0].timestamp.getTime()) / 60000)) : 0;
   return {
   ...stats,
-  metrics: {,
+  metrics: {
   avgEventsPerMinute,
   topEventTypes: Object.entries(eventsByType),
   .sort(([a], [b]) => b - a)
@@ -274,7 +274,7 @@ export const EventSystemPresets = {
   keyGenerator: (event) => `${event.source}-${event.type}`}
 },
   windowMs: 100,
-      strategy: 'drop';
+      strategy: 'drop'
   }));
     globalEventBus.use(createRateLimitMiddleware({)
   maxEventsPerSecond: 500,

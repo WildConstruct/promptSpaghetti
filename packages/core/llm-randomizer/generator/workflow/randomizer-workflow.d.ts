@@ -16,7 +16,7 @@ export interface WorkflowResult {
     llmOutput?: string;
     errors: WorkflowError[];
     warnings: WorkflowWarning[];
-    metadata: {,
+    metadata: {
         generationTime: number;
         llmProvider: string;
         llmAttempts: number;

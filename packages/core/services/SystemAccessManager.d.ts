@@ -203,14 +203,14 @@ export interface AccessStats {
     byStatus: Record<UserStatus, number>;
     byAccessLevel: Record<SystemAccessLevel, number>;
     bySecurityClearance: Record<SecurityClearance, number>;
-    recentActivity: {,
+    recentActivity: {
         newUsers: number;
         accessGranted: number;
         accessRevoked: number;
         loginAttempts: number;
         failedLogins: number;
     };
-    compliance: {,
+    compliance: {
         mfaEnabled: number;
         termsAccepted: number;
         overdueCertifications: number;

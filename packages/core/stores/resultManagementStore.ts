@@ -11,20 +11,20 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 
 export interface SavedResult extends EnhancedPreviewResult {
   // Additional persistence metadata
-  savedAt: Date;,
+  savedAt: Date;
   lastModified: Date;
   collection?: string; // Group results into collections,
   projectId?: string;
   graphId?: string;
   version?: number;
   // Professional workflow metadata
-  workflow?: {,
+  workflow?: {
   status: 'draft' | 'review' | 'approved' | 'rejected' | 'final';
   assignee?: string;
   reviewer?: string;
   deadline?: Date;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-};
+  priority: 'low' | 'medium' | 'high' | 'urgent'
+  };
   // Creative metadata for film industry
   creative?: {
   genre?: string;
@@ -32,19 +32,19 @@ export interface SavedResult extends EnhancedPreviewResult {
   style?: string;
   characterCount?: number;
   sceneType?: 'interior' | 'exterior' | 'mixed';
-  timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night';
-};
+  timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night'
+  };
 
 export interface ResultCollection {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  createdAt: Date;,
+  createdAt: Date;
   lastModified: Date;
-  resultIds: string;,
+  resultIds: string;
   tags: string;
   // Collection-level metadata
-  projectInfo?: {,
+  projectInfo?: {
   title?: string;
   director?: string;
   producer?: string;
@@ -63,15 +63,15 @@ export interface ResultFilter {
   searchText?: string;
 }
 export interface ResultStats {
-  totalResults: number;,
+  totalResults: number;
   averageRating: number;
-  averageWordCount: number;,
+  averageWordCount: number;
   totalExecutionTime: number;
   topTags: Array<{ tag: string; count: number }>;
   contentTypeDistribution: Record<string, number>;
   recentActivity: Array<{,
   type: 'save' | 'rate' | 'tag' | 'export' | 'note';
-  timestamp: Date;,
+  timestamp: Date;
   resultId: string;
   details?: string;
 }>;
@@ -80,48 +80,48 @@ interface ResultManagementState {
   savedResults: Record<string, SavedResult>;
   collections: Record<string, ResultCollection>;
   // UI state
-  selectedResultIds: Set<string>;,
+  selectedResultIds: Set<string>;
   currentFilter: ResultFilter;
-  sortBy: 'createdAt' | 'rating' | 'wordCount' | 'lastModified';,
+  sortBy: 'createdAt' | 'rating' | 'wordCount' | 'lastModified';
   sortOrder: 'asc' | 'desc';
   // Statistics
   stats: ResultStats;
   // Actions - Result Management
   saveResult: (result: EnhancedPreviewResult, metadata?: Partial<SavedResult>) => Promise<string>;
-  updateResult: (id: string, updates: Partial<SavedResult>) => void;,
-  deleteResult: (id: string) => void;,
+  updateResult: (id: string, updates: Partial<SavedResult>) => void;
+  deleteResult: (id: string) => void;
   duplicateResult: (id: string) => Promise<string>;
   // Actions - Selection
-  selectResult: (id: string) => void;,
-  deselectResult: (id: string) => void;,
+  selectResult: (id: string) => void;
+  deselectResult: (id: string) => void;
   selectAll: (filtered?: boolean) => void;
-  clearSelection: () => void;,
+  clearSelection: () => void;
   toggleResultSelection: (id: string) => void;
   // Actions - Metadata
-  rateResult: (id: string, rating: number) => void;,
-  tagResult: (id: string, tags: string) => void;,
-  addNote: (id: string, note: string) => void;,
+  rateResult: (id: string, rating: number) => void;
+  tagResult: (id: string, tags: string) => void;
+  addNote: (id: string, note: string) => void;
   updateWorkflowStatus: (id: string, workflow: Partial<SavedResult['workflow']>) => void;
   // Actions - Collections
   createCollection: (name: string, description?: string) => string;
-  updateCollection: (id: string, updates: Partial<ResultCollection>) => void;,
-  deleteCollection: (id: string) => void;,
-  addToCollection: (resultIds: string, collectionId: string) => void;,
+  updateCollection: (id: string, updates: Partial<ResultCollection>) => void;
+  deleteCollection: (id: string) => void;
+  addToCollection: (resultIds: string, collectionId: string) => void;
   removeFromCollection: (resultIds: string, collectionId: string) => void;
   // Actions - Filtering and Search
-  setFilter: (filter: ResultFilter) => void;,
+  setFilter: (filter: ResultFilter) => void;
   clearFilter: () => void;
-  setSorting: (sortBy: ResultManagementState['sortBy'], order: 'asc' | 'desc') => void;,
+  setSorting: (sortBy: ResultManagementState['sortBy'], order: 'asc' | 'desc') => void;
   searchResults: (query: string) => SavedResult;
   // Actions - Bulk Operations
-  bulkUpdateTags: (resultIds: string, tags: string) => void;,
-  bulkUpdateWorkflow: (resultIds: string, workflow: Partial<SavedResult['workflow']>) => void;,
-  bulkDelete: (resultIds: string) => void;,
+  bulkUpdateTags: (resultIds: string, tags: string) => void;
+  bulkUpdateWorkflow: (resultIds: string, workflow: Partial<SavedResult['workflow']>) => void;
+  bulkDelete: (resultIds: string) => void;
   bulkExport: (resultIds: string, format: string) => Promise<void>;
   // Actions - Analytics
-  refreshStats: () => void;,
+  refreshStats: () => void;
   getFilteredResults: () => SavedResult;
-  getResultsByCollection: (collectionId: string) => SavedResult;,
+  getResultsByCollection: (collectionId: string) => SavedResult;
   getRecentResults: (limit?: number) => SavedResult;
   getTopRatedResults: (limit?: number) => SavedResult;
 }
@@ -131,16 +131,16 @@ export const useResultManagementStore = create<ResultManagementState>()()
   // Initial state
       savedResults: {},
       collections: {},
-      filters: {,
+      filters: {
   searchQuery: '',
         dateRange: { start: null, end: null },
         ratingRange: { min: 1, max: 5 },
         tags: [],
         collections: [],
         sortBy: 'lastModified',
-        sortOrder: 'desc';
+        sortOrder: 'desc'
   },
-  stats: {,
+  stats: {
   totalResults: 0,
         averageRating: 0,
         totalStorage: 0,
@@ -163,11 +163,11 @@ export const useResultManagementStore = create<ResultManagementState>()()
   ...metadata
 };
         set((state) => ({)
-  savedResults: {,
+  savedResults: {
   ...state.savedResults,
   [id]: savedResult,
 },
-  stats: {,
+  stats: {
             ...state.stats,
             recentActivity: [,
               {
@@ -192,9 +192,9 @@ export const useResultManagementStore = create<ResultManagementState>()()
             { operation: 'update_result' }
           );
         set((state) => ({)
-  savedResults: {,
+  savedResults: {
   ...state.savedResults,
-  [id]: {,
+  [id]: {
   ...currentResult,
   ...updates,
   lastModified: new Date(),
@@ -207,7 +207,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         set((state) => ({)
   savedResults: remainingResults,
   selectedResultIds: new Set([...state.selectedResultIds].filter(rid => rid !== id)),
-  stats: {,
+  stats: {
   ...state.stats,
   recentActivity: [,
   {
@@ -244,7 +244,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
           savedAt: new Date(),
           lastModified: new Date(),
           version: 1,
-          metadata: {,
+          metadata: {
             ...original.metadata,
             notes: original.metadata?.notes ? `Copy of: ${original.metadata.notes}` : 'Duplicated result'}
         };
@@ -287,13 +287,13 @@ export const useResultManagementStore = create<ResultManagementState>()()
             { operation: 'rate_result' }
           );
         get().updateResult(id, {)
-  metadata: {,
+  metadata: {
   ...get().savedResults[id]?.metadata,
   rating: rating as 1 | 2 | 3 | 4 | 5,
 });
         const now = new Date();
         set((state) => ({)
-  stats: {,
+  stats: {
             ...state.stats,
             recentActivity: [,
               {
@@ -308,13 +308,13 @@ export const useResultManagementStore = create<ResultManagementState>()()
   },
   tagResult: (id: string, tags: string) => {
   get().updateResult(id, {)
-  metadata: {,
+  metadata: {
   ...get().savedResults[id]?.metadata,
   tags
 });
         const now = new Date();
         set((state) => ({)
-  stats: {,
+  stats: {
             ...state.stats,
             recentActivity: [,
               {
@@ -329,13 +329,13 @@ export const useResultManagementStore = create<ResultManagementState>()()
   },
   addNote: (id: string, note: string) => {
   get().updateResult(id, {)
-  metadata: {,
+  metadata: {
   ...get().savedResults[id]?.metadata,
   notes: note,
 });
         const now = new Date();
         set((state) => ({)
-  stats: {,
+  stats: {
   ...state.stats,
   recentActivity: [,
   {
@@ -368,7 +368,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
   tags: [],
 };
         set((state) => ({)
-  collections: {,
+  collections: {
   ...state.collections,
   [id]: collection,
 }));
@@ -384,9 +384,9 @@ export const useResultManagementStore = create<ResultManagementState>()()
             { operation: 'update_collection' }
           );
         set((state) => ({)
-  collections: {,
+  collections: {
   ...state.collections,
-  [id]: {,
+  [id]: {
   ...current,
   ...updates,
   lastModified: new Date(),
@@ -446,7 +446,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
   get().updateResult(id, { exported: true });
         });
         set((state) => ({)
-  stats: {,
+  stats: {
             ...state.stats,
             recentActivity: [,
               {
@@ -464,7 +464,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         const results = Object.values(get().savedResults);
         if (results.length === 0) {
           set((state) => ({)
-  stats: {,
+  stats: {
               ...state.stats,
               totalResults: 0,
               averageRating: 0,
@@ -499,7 +499,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
           contentTypeDistribution[type] = (contentTypeDistribution[type] || 0) + 1;
         });
         set((state) => ({)
-  stats: {,
+  stats: {
   ...state.stats,
   totalResults: results.length,
   averageRating: Math.round(averageRating * 10) / 10,
@@ -601,7 +601,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
                 ...result,
                 savedAt: new Date(result.savedAt),
                 lastModified: new Date(result.lastModified),
-                metadata: {,
+                metadata: {
                   ...result.metadata,
                   createdAt: result.metadata?.createdAt ? new Date(result.metadata.createdAt) : undefined]),
           ),

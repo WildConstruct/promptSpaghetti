@@ -22,14 +22,14 @@ export interface MarketplaceHelpContext {
   selectedCategory?: string;
   userRole: 'buyer' | 'seller' | 'admin';
   // User state
-  userId: string;,
+  userId: string;
   isFirstVisit: boolean;
   recentActivity: string;
   // Marketplace-specific data
-  marketplace: {,
-  templateCount: number;,
+  marketplace: {
+  templateCount: number;
   purchaseHistory: number;
-  favoriteCategories: string;,
+  favoriteCategories: string;
   searchHistory: string;
   currentFilters: Record<string, any>;
 };
@@ -47,8 +47,8 @@ export type MarketplaceView =
 
 export interface IntegratedHelpSystem {
   // Combined Epic 8 + Epic 16 help contexts
-  graphContext?: {,
-  nodes: any;,
+  graphContext?: {
+  nodes: any;
   edges: any;
   selectedNodeId?: string;
   isEditing: boolean;
@@ -60,20 +60,20 @@ export interface IntegratedHelpSystem {
   transitionContext?: TransitionContext;
 }
 export interface HelpSession {
-  id: string;,
+  id: string;
   userId: string;
-  startTime: Date;,
+  startTime: Date;
   currentStep: number;
-  totalSteps: number;,
+  totalSteps: number;
   sessionType: HelpSessionType;
   context: IntegratedHelpSystem;
   // Progress tracking
-  completedActions: string;,
+  completedActions: string;
   skippedContent: string;
   helpfulnessRatings: Record<string, number>;
   // Integration points
   supportTicketId?: string;
-  escalationLevel: number;,
+  escalationLevel: number;
   requiresHumanAssistance: boolean;
 }
 export type HelpSessionType = 
@@ -85,9 +85,9 @@ export type HelpSessionType =
   | 'marketplace-navigation';
 
 export interface TransitionContext {
-  fromSystem: 'graph-editor' | 'marketplace';,
+  fromSystem: 'graph-editor' | 'marketplace';
   toSystem: 'graph-editor' | 'marketplace';
-  transitionReason: string;,
+  transitionReason: string;
   preserveContext: boolean;
   continuousHelp: boolean;
   // =============================================================================
@@ -141,7 +141,7 @@ export class Epic16HelpIntegrationArchitecture {
   /**
   * Architecture for seamless transitions between graph editing and marketplace
   */
-  async handleSystemTransition(fromContext: 'graph-editor' | 'marketplace',)
+  async handleSystemTransition(fromContext: 'graph-editor' | 'marketplace')
   toContext: 'graph-editor' | 'marketplace',
   userId: string,
   preserveHelp: boolean = true): Promise<TransitionContext> {,
@@ -161,7 +161,7 @@ export class Epic16HelpIntegrationArchitecture {
   /**
    * Integration with Epic 16 support escalation system
    */
-  async escalateToSupport(helpSession: HelpSession,)
+  async escalateToSupport(helpSession: HelpSession)
     escalationReason: string,
     additionalContext?: Record<string, any>
   ): Promise<MarketplaceTicket> {
@@ -176,7 +176,7 @@ export class Epic16HelpIntegrationArchitecture {
       // Epic 16 specific fields
       buyerId: helpSession.userId,
       // Rich context for support agents
-      metadata: {,
+      metadata: {
   helpSessionId: helpSession.id,
   sessionType: helpSession.sessionType,
   currentStep: helpSession.currentStep,
@@ -243,7 +243,7 @@ export class Epic16HelpIntegrationArchitecture {
   title: 'Welcome to the Prompt Template Marketplace',
   content: 'Discover professional AI prompt templates created by the community',
   level: 'beginner',
-  context: {,
+  context: {
   triggerElements: ['marketplace-home'],
   actions: ['first-visit'],
 }
@@ -254,7 +254,7 @@ export class Epic16HelpIntegrationArchitecture {
   content: 'Use advanced search filters to find templates that match your specific needs',
   filmTerminology: 'Like finding the right script or storyboard template for your project',
   level: 'intermediate',
-  context: {,
+  context: {
   triggerElements: ['search-input', 'filter-panel'],
   actions: ['search-initiated'],
 }
@@ -269,7 +269,7 @@ export class Epic16HelpIntegrationArchitecture {
   'Import template directly into graph editor'
   ],
   level: 'intermediate',
-  context: {,
+  context: {
   triggerElements: ['purchase-button', 'checkout-form'],
   actions: ['purchase-initiated'],
 }
@@ -280,7 +280,7 @@ export class Epic16HelpIntegrationArchitecture {
   content: 'Publish your created templates to help the community and earn revenue',
   filmTerminology: 'Like sharing your production techniques with other filmmakers',
   level: 'advanced',
-  context: {,
+  context: {
   triggerElements: ['publish-template'],
   actions: ['export-to-marketplace']];
   // Index marketplace help content
@@ -325,7 +325,7 @@ export class Epic16HelpIntegrationArchitecture {
   if (content) {
   transitionContent.push(content);
   return transitionContent;
-  private prioritizeHelpContent(content: HelpContent,)
+  private prioritizeHelpContent(content: HelpContent)
   context: IntegratedHelpSystem,
   userProfile: UserProfile): HelpContent {,
   return content.sort((a, b) => {
@@ -369,7 +369,7 @@ export class Epic16HelpIntegrationArchitecture {
     if (from === 'graph-editor' && to === 'marketplace') {
       return 'template-publish-workflow';
     return 'user-navigation';
-  private generateEscalationDescription(session: HelpSession,)
+  private generateEscalationDescription(session: HelpSession)
     additionalContext?: Record<string, any>
   ): string {
     return `
@@ -403,11 +403,11 @@ export class Epic16HelpIntegrationArchitecture {
 // =============================================================================
 
 export interface IntegrationPoint {
-  id: string;,
+  id: string;
   fromSystem: 'graph-editor' | 'marketplace';
-  toSystem: 'graph-editor' | 'marketplace';,
+  toSystem: 'graph-editor' | 'marketplace';
   triggerCondition: string;
-  helpContent: string;,
+  helpContent: string;
   priority: 'low' | 'medium' | 'high';
   // =============================================================================
   // Export Integration Architecture

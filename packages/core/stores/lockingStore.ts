@@ -20,7 +20,7 @@ const initialState: LockingState = {,
   conflicts: [],
   queue: [],
   notifications: [],
-  statistics: {,
+  statistics: {
   total_locks: 0,
     active_locks: 0,
     expired_locks: 0,
@@ -234,7 +234,7 @@ export const useLockingStore = create<LockingStore>()()
         try {
           const response = await fetch(`${API_BASE}/api/locking/lock-notifications/${notificationId}/read`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
           const data = await response.json();
           if (!response.ok) {

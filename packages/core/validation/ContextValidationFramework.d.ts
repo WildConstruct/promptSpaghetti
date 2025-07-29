@@ -13,7 +13,7 @@ export interface ContextValidationResult {
     warnings: string[];
     score: number;
     recommendations: string[];
-    contextHealth: {,
+    contextHealth: {
         variableIntegrity: number;
         stateConsistency: number;
         cacheEfficiency: number;
@@ -112,7 +112,7 @@ export declare class ContextValidationUtils {
      */
     static estimateContextMemory(context: AdvancedExecutionContext): {
         totalBytes: number;
-        breakdown: {,
+        breakdown: {
             variables: number;
             nodeStates: number;
             cache: number;

@@ -55,17 +55,17 @@ import {
 } from '../../types/experiment';
 
 export interface ExperimentResultsProps {
-  experiment: Experiment;,
+  experiment: Experiment;
   results: ExperimentResultsType;
-  onRefresh: () => Promise<void>;,
-  onExport: (format: 'csv' | 'json' | 'pdf') => Promise<void>;,
+  onRefresh: () => Promise<void>;
+  onExport: (format: 'csv' | 'json' | 'pdf') => Promise<void>;
   onStopExperiment: () => Promise<void>;
   onImplementWinner: (variantId: string) => Promise<void>;
   className?: string;
   interface ResultsState {
-  selectedSegment: string;,
+  selectedSegment: string;
   selectedMetric: string;
-  timeRange: '1h' | '24h' | '7d' | '30d';,
+  timeRange: '1h' | '24h' | '7d' | '30d';
   refreshing: boolean;
   showDetails: boolean;
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];

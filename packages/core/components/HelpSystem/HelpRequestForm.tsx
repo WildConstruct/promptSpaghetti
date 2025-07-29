@@ -15,21 +15,21 @@ import {
   RequestContext
 } from '../../services/Epic16HelpRequestService';
 interface HelpRequestFormProps {
-  helpService: Epic16HelpRequestService;,
+  helpService: Epic16HelpRequestService;
   userId: string;
-  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';,
+  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   context?: Partial<RequestContext>;
   onSubmitted?: (request: HelpRequest) => void;
   onCancel?: () => void;
   interface FormData {
-  type: HelpRequestType;,
+  type: HelpRequestType;
   category: HelpCategory;
-  subcategory: string;,
+  subcategory: string;
   priority: HelpPriority;
-  title: string;,
+  title: string;
   description: string;
-  tags: string;,
+  tags: string;
   attachments: File;
   const categorySubcategories: Record<HelpCategory, string> = {,
   [HelpCategory.GETTING_STARTED]: ['account_setup', 'first_purchase', 'navigation', 'basic_features'],
@@ -160,7 +160,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   const requestContext: RequestContext = {,
   userAgent: navigator.userAgent,
   ipAddress: '0.0.0.0', // Would be filled by backend,
-  location: {,
+  location: {
   country: 'US', // Would be detected,
   region: 'CA',
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -174,7 +174,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
         section: context?.section || 'help_center',
         templateId: context?.templateId,
         marketplaceListingId: context?.marketplaceListingId,
-        browserInfo: {,
+        browserInfo: {
   name: 'Chrome', // Would be detected,
   version: '120.0',
   platform: navigator.platform,
@@ -199,7 +199,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   userId,
   userType,
   userTier,
-  routingDecision: {,
+  routingDecision: {
   strategy: 'support_agent',
   confidence: 0.5,
   reasoning: 'Initial submission',

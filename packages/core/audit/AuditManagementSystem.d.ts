@@ -353,7 +353,7 @@ export declare class AuditManagementSystem {
      * Real-time audit monitoring and alerting
      */
     setupRealTimeMonitoring(config: {)
-        alertThresholds: {,
+        alertThresholds: {
             criticalEventRate: number;
             highRiskEventRate: number;
             failedLoginRate: number;
@@ -371,7 +371,7 @@ export declare class AuditManagementSystem {
      */
     manageAuditRetention(policies: {)
         defaultRetentionDays: number;
-        complianceRetentionDays: {,
+        complianceRetentionDays: {
             [framework in ComplianceFramework]?: number;
         };
         archivalStorage: string;

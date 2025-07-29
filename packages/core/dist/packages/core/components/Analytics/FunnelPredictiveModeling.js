@@ -442,102 +442,105 @@ const generateChurnPredictions = () => {
     return [
         {
             timeHorizon: 30,
-            churnRate: {},
-            currentRate: 0.05,
-            predictedRate: 0.048,
-            confidence: { lower: 0.04, upper: 0.056, level: 0.95 },
-            factors: [,
+            churnRate: {
+                currentRate: 0.05,
+                predictedRate: 0.048,
+                confidence: { lower: 0.04, upper: 0.056, level: 0.95 },
+                factors: [,
+                    {
+                        factor: 'product_satisfaction',
+                        impact: -0.3,
+                        trend: 'increasing',
+                        controllable: true,
+                        prevention: [,
+                            { action: 'Improve onboarding', effectiveness: 0.25, cost: 5000, feasibility: 'high' }
+                        ]
+                    }
+                ],
+                seasonality: { detected: false, period: 0, amplitude: 0, phase: 0, strength: 0 }
+            },
+            riskSegments: [,
                 {
-                    factor: 'product_satisfaction',
-                    impact: -0.3,
-                    trend: 'increasing',
-                    controllable: true,
-                    prevention: [,
-                        { action: 'Improve onboarding', effectiveness: 0.25, cost: 5000, feasibility: 'high' }
+                    segmentId: 'new_users',
+                    segmentName: 'New Users',
+                    riskLevel: 'high',
+                    churnProbability: 0.15,
+                    size: 1000,
+                    value: 50000,
+                    characteristics: [,
+                        { characteristic: 'days_since_signup', value: 7, importance: 0.8 }
                     ]
                 }
             ],
-            seasonality: { detected: false, period: 0, amplitude: 0, phase: 0, strength: 0 }
-        },
-        riskSegments, [,
-            {
-                segmentId: 'new_users',
-                segmentName: 'New Users',
-                riskLevel: 'high',
-                churnProbability: 0.15,
-                size: 1000,
-                value: 50000,
-                characteristics: [,
-                    { characteristic: 'days_since_signup', value: 7, importance: 0.8 }
-                ]
+            preventionStrategies: [,
+                {
+                    strategyId: 'onboarding_improvement',
+                    name: 'Enhanced Onboarding',
+                    description: 'Improve new user onboarding experience',
+                    targetSegments: ['new_users'],
+                    effectiveness: 0.3,
+                    cost: 10000,
+                    timeline: 30,
+                    kpis: [,
+                        { metric: 'completion_rate', target: 0.8, current: 0.6, improvement: 0.2 }
+                    ]
+                }
+            ],
+            impactAnalysis: {
+                revenueImpact: 15000,
+                userImpact: 300,
+                retentionCost: 5000,
+                acquisitionCost: 20000,
+                netImpact: 10000,
+                timeSensitivity: 'high'
             }
-        ],
-        preventionStrategies, [,
-            {
-                strategyId: 'onboarding_improvement',
-                name: 'Enhanced Onboarding',
-                description: 'Improve new user onboarding experience',
-                targetSegments: ['new_users'],
-                effectiveness: 0.3,
-                cost: 10000,
-                timeline: 30,
-                kpis: [,
-                    { metric: 'completion_rate', target: 0.8, current: 0.6, improvement: 0.2 }
-                ]
-            }
-        ],
-        impactAnalysis, {},
-        revenueImpact, 15000,
-        userImpact, 300,
-        retentionCost, 5000,
-        acquisitionCost, 20000,
-        netImpact, 10000,
-        timeSensitivity, 'high'
+        }
     ];
 };
 // Generate seasonal analysis
 const generateSeasonalAnalysis = () => {
     return [
         {
-            pattern: {},
-            type: 'weekly',
-            strength: 0.6,
-            peaks: [,
-                { period: 'Tuesday', amplitude: 0.15, reliability: 0.8, duration: 1 }
+            pattern: {
+                type: 'weekly',
+                strength: 0.6,
+                peaks: [,
+                    { period: 'Tuesday', amplitude: 0.15, reliability: 0.8, duration: 1 }
+                ],
+                troughs: [,
+                    { period: 'Sunday', amplitude: -0.2, reliability: 0.85, duration: 1 }
+                ],
+                stability: 0.75
+            },
+            forecast: [,
+                {
+                    period: 'Next Week',
+                    expectedValue: 52000,
+                    confidence: { lower: 48000, upper: 56000, level: 0.95 },
+                    preparation: [,
+                        { action: 'Increase marketing spend on Monday', timing: 1, impact: 0.1, resources: ['Marketing'] }
+                    ]
+                }
             ],
-            troughs: [,
-                { period: 'Sunday', amplitude: -0.2, reliability: 0.85, duration: 1 }
-            ],
-            stability: 0.75
-        },
-        forecast, [,
-            {
-                period: 'Next Week',
-                expectedValue: 52000,
-                confidence: { lower: 48000, upper: 56000, level: 0.95 },
-                preparation: [,
-                    { action: 'Increase marketing spend on Monday', timing: 1, impact: 0.1, resources: ['Marketing'] }
-                ]
-            }
-        ],
-        anomalies, [,
-            {
-                period: 'Last Tuesday',
-                expectedValue: 55000,
-                actualValue: 45000,
-                deviation: -0.18,
-                significance: 'high',
-                explanation: 'System outage during peak hours'
-            }],
-        recommendations, [,
-            {
-                recommendation: 'Adjust marketing spend based on weekly patterns',
-                seasonality: 'weekly',
-                impact: 0.12,
-                implementation: 'Automated budget allocation',
-                timing: { startDate: Date.now(), endDate: Date.now() + 30 * 24 * 60 * 60 * 1000, preparation: 7, duration: 30 }
-            }
-        ]
+            anomalies: [,
+                {
+                    period: 'Last Tuesday',
+                    expectedValue: 55000,
+                    actualValue: 45000,
+                    deviation: -0.18,
+                    significance: 'high',
+                    explanation: 'System outage during peak hours'
+                }],
+            recommendations: [,
+                {
+                    recommendation: 'Adjust marketing spend based on weekly patterns',
+                    seasonality: 'weekly',
+                    impact: 0.12,
+                    implementation: 'Automated budget allocation',
+                    timing: { startDate: Date.now(), endDate: Date.now() + 30 * 24 * 60 * 60 * 1000, preparation: 7, duration: 30 }
+                }
+            ]
+        }
     ];
 };
 // Generate scenario analysis
@@ -555,22 +558,23 @@ const generateScenarioAnalysis = () => {
                 { metric: 'revenue', predictedValue: 65000, impact: 0.25, confidence: 0.75 }
             ],
             probability: 0.7,
-            impactAnalysis: {},
-            revenueImpact: 13000,
-            conversionImpact: 300,
-            userImpact: 500,
-            costImpact: 5000,
-            timeframe: 30,
-            confidence: 0.8,
-        },
-        recommendations, [,
-            {
-                action: 'Gradual budget increase with monitoring',
-                preparationTime: 7,
-                resources: ['Marketing Team', 'Data Analyst'],
-                expectedBenefit: 8000,
-                riskMitigation: 'Weekly performance reviews'
-            }],
+            impactAnalysis: {
+                revenueImpact: 13000,
+                conversionImpact: 300,
+                userImpact: 500,
+                costImpact: 5000,
+                timeframe: 30,
+                confidence: 0.8,
+            },
+            recommendations: [,
+                {
+                    action: 'Gradual budget increase with monitoring',
+                    preparationTime: 7,
+                    resources: ['Marketing Team', 'Data Analyst'],
+                    expectedBenefit: 8000,
+                    riskMitigation: 'Weekly performance reviews'
+                }],
+        }
     ];
 };
 // Generate cohort predictions
@@ -659,7 +663,8 @@ const generateModelPerformance = (models) => {
                 action: ['monitor', 'retrain', 'replace'][Math.floor(Math.random() * 3)]
             }],
         recommendation: 'Monitor feature drift and retrain if necessary',
-        lastCheck: Date.now() - Math.random() * 24 * 60 * 60 * 1000, }, lastUpdate, Date.now() - Math.random() * 24 * 60 * 60 * 1000);
+        lastCheck: Date.now() - Math.random() * 24 * 60 * 60 * 1000,
+    }, lastUpdate, Date.now() - Math.random() * 24 * 60 * 60 * 1000);
 };
 ;
 // Generate prediction history
@@ -671,20 +676,21 @@ const generatePredictionHistory = () => {
 const generateUncertaintyAnalysis = () => {
     return [
         {
-            source: {},
-            type: 'data_quality',
-            description: 'Missing data points in user behavior tracking',
-            quantification: 0.15,
-        },
-        impact, 0.08,
-        mitigation, [,
-            {
-                strategy: 'Improve data collection infrastructure',
-                effectiveness: 0.7,
-                cost: 15000,
-                timeline: 60
-            }],
-        confidence, 0.8
+            source: {
+                type: 'data_quality',
+                description: 'Missing data points in user behavior tracking',
+                quantification: 0.15,
+            },
+            impact: 0.08,
+            mitigation: [,
+                {
+                    strategy: 'Improve data collection infrastructure',
+                    effectiveness: 0.7,
+                    cost: 15000,
+                    timeline: 60
+                }],
+            confidence: 0.8
+        }
     ];
 };
 // Generate feature importance

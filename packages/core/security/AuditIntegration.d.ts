@@ -91,7 +91,7 @@ export declare class AuditIntegration {
  */
 
 export interface ComplianceReport {
-    period: {,
+    period: {
         start: Date;
         end: Date;
     };
@@ -102,7 +102,7 @@ export interface ComplianceReport {
     classificationBreakdown: Record<string, number>;
     operationBreakdown: Record<string, number>;
     anomalies: number;
-    riskMetrics: {,
+    riskMetrics: {
         averageRiskScore: number;
         highRiskOperations: number;
     };

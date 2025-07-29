@@ -8,10 +8,10 @@
 import { HistoricalConstraint, Era } from '../types/UTDG';
 
 export interface ConstraintOverride {
-  id: string;,
+  id: string;
   constraint_id: string;
   user_id?: string;
-  reason: string;,
+  reason: string;
   created_at: string;
   expires_at?: string;
   scope: 'global' | 'era' | 'project' | 'session';
@@ -24,7 +24,7 @@ export interface OverrideConditions {
   max_authenticity_impact?: number; // Maximum reduction in authenticity score,
 }
 export interface OverrideReason {
-  category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';,
+  category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';
   description: string;
   justification: string;
   alternative_considered?: string;
@@ -38,7 +38,7 @@ export class ConstraintOverrideManager {
   createOverride();
   constraintId: string,
   reason: OverrideReason,
-  options: {,
+  options: {
   userId?: string;
   duration?: number; // Duration in hours,
   scope?: 'global' | 'era' | 'project' | 'session';
@@ -68,7 +68,7 @@ export class ConstraintOverrideManager {
    */
   isConstraintOverridden();
     constraintId: string,
-    context: {,
+    context: {
   era?: Era;
   nodeTypes?: string;
   socialClasses?: string;
@@ -114,7 +114,7 @@ export class ConstraintOverrideManager {
   /**
   * Get override history for audit purposes
   */
-  getOverrideHistory(filters?: {,)
+  getOverrideHistory(filters?: {)
   constraintId?: string;
   userId?: string;
   fromDate?: string;
@@ -153,7 +153,7 @@ export class ConstraintOverrideManager {
    */
   getSuggestedOverrides();
     constraints: HistoricalConstraint,
-    context: {,
+    context: {
       era?: Era;
       creativeGoals?: string;
       narrativeNeeds?: string;
@@ -220,8 +220,8 @@ export class ConstraintOverrideManager {
   /**
    * Check if override conditions match the given context
    */
-  private matchesOverrideConditions(override: ConstraintOverride,)
-    context: {,
+  private matchesOverrideConditions(override: ConstraintOverride)
+    context: {
       era?: Era;
       nodeTypes?: string;
       socialClasses?: string;

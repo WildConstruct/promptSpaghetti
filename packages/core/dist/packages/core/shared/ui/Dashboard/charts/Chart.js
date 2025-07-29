@@ -47,12 +47,7 @@ export const Chart = ({
     className = ''
 });
 {
-    const [hoveredPoint, setHoveredPoint] = React.useState < {
-        point: ChartDataPoint,
-        series: ChartSeries,
-        x: number,
-        y: number
-    } | null > (null);
+    const [hoveredPoint, setHoveredPoint] = React.useState(null);
     const chartRef = React.useRef(null);
     const colors = defaultColors[colorScheme] || defaultColors.default;
     // Calculate chart dimensions and scales

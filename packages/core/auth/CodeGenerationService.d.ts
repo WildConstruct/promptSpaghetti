@@ -40,7 +40,7 @@ export interface GeneratedCode {
     type: CodeType;
     format: CodeFormat;
     expiresAt?: Date;
-    metadata: {,
+    metadata: {
         generatedAt: Date;
         userId?: string;
         ipAddress?: string;
@@ -125,7 +125,7 @@ export declare class CodeGenerationUtils {
     static analyzeCodeStrength(generatedCode: GeneratedCode): {
         entropy: number;
         strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
-        crackTime: {,
+        crackTime: {
             averageTime: number;
             worstCase: number;
             unit: string;

@@ -236,7 +236,8 @@ Promise < FlexibleConversionEvent > {
                                     return {
                                         id: templateId,
                                         metadata: {
-                                            name: `Template ${templateId}` }
+                                            name: `Template ${templateId}`
+                                        }
                                     },
                                         description;
                                     'Sample template',
@@ -381,8 +382,10 @@ Promise < FlexibleConversionEvent > {
                                     /**
                                      * Factory function to create ConversionDataRelationshipManager
                                      */
-                                    export:  },
-                                export: , default: ConversionDataRelationshipManager }
+                                    export: 
+                                },
+                                export: , default: ConversionDataRelationshipManager
+                            }
                         };
                     }
                 };

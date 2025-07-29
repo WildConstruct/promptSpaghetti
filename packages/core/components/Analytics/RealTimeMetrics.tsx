@@ -10,7 +10,7 @@ import { conversionTracker } from '../../analytics/ConversionTracker';
 import { performanceMonitor } from '../../utils/PerformanceMonitor';
 
 export interface RealTimeMetricsProps {
-  metrics: unknown;,
+  metrics: unknown;
   loading: boolean;
 }
 export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loading }) => {
@@ -67,7 +67,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
   const getHealthScoreColor = (score: number): string => {
     if (score >= 90) return 'success';
     if (score >= 70) return 'warning';
-    return 'destructive';
+    return 'destructive'
   };
   return;
     <div className="real-time-metrics">
@@ -146,56 +146,56 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
         .metrics-header h3 {
           margin: 0;
           font-size: 1.2rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         .metric-card {
-          position: relative;,
+          position: relative;
   transition: transform 0.2s ease;
         .metric-card:hover {,
   transform: translateY(-2px);
         .metric-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #6b7280;
         .live-indicator {
-          width: 8px;,
+          width: 8px;
   height: 8px;
           background: #10b981;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: pulse 2s infinite;
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin: 0.5rem 0;
         .funnel-name {
           font-size: 1.1rem;
           font-weight: 600;
         .metric-subtitle {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 2rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }

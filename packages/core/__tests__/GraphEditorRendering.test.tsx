@@ -47,7 +47,7 @@ jest.mock('reactflow', () => ({)
       {...props}
     />
   ),
-  Position: {,
+  Position: {
   Top: 'top',
   Right: 'right',
   Bottom: 'bottom',
@@ -60,7 +60,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
 },
   type: i % 2 === 0 ? 'WeightedChoice' : 'Output',
       position: { x: i * 200, y: i * 100 },
-      data: {,
+      data: {
   label: `Node ${i + 1}`}
 },
   nodeType: i % 2 === 0 ? 'WeightedChoice' : 'Output',
@@ -272,7 +272,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
     // Simulate drop event on canvas
     fireEvent.dragOver(reactFlowWrapper);
     fireEvent.drop(reactFlowWrapper, {)
-  dataTransfer: {,
+  dataTransfer: {
   getData: jest.fn(() => JSON.stringify({ nodeType: 'WeightedChoice' }))
     });
     // Canvas should handle the drop event

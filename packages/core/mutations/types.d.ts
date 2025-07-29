@@ -45,7 +45,7 @@ export interface GraphOperation {
 
 export interface NodeAddOperation extends GraphOperation {
     type: OperationType.NODE_ADD;
-    payload: {,
+    payload: {
         node: Node;
         position: XYPosition;
         sourceNodeId?: string;
@@ -57,7 +57,7 @@ export interface NodeAddOperation extends GraphOperation {
 
 export interface NodeDeleteOperation extends GraphOperation {
     type: OperationType.NODE_DELETE;
-    payload: {,
+    payload: {
         nodeId: string;
         preserveConnections?: boolean;
         snapshot: Node;
@@ -69,7 +69,7 @@ export interface NodeDeleteOperation extends GraphOperation {
 
 export interface NodeUpdateOperation extends GraphOperation {
     type: OperationType.NODE_UPDATE;
-    payload: {,
+    payload: {
         nodeId: string;
         updates: Record<string, unknown>;
         previousValues: Record<string, unknown>;
@@ -82,7 +82,7 @@ export interface NodeUpdateOperation extends GraphOperation {
 
 export interface NodeMoveOperation extends GraphOperation {
     type: OperationType.NODE_MOVE;
-    payload: {,
+    payload: {
         nodeId: string;
         newPosition: XYPosition;
         previousPosition: XYPosition;
@@ -93,7 +93,7 @@ export interface NodeMoveOperation extends GraphOperation {
 
 export interface NodeDuplicateOperation extends GraphOperation {
     type: OperationType.NODE_DUPLICATE;
-    payload: {,
+    payload: {
         sourceNodeId: string;
         newNode: Node;
         offset: XYPosition;
@@ -105,7 +105,7 @@ export interface NodeDuplicateOperation extends GraphOperation {
 
 export interface EdgeAddOperation extends GraphOperation {
     type: OperationType.EDGE_ADD;
-    payload: {,
+    payload: {
         edge: Edge;
         skipValidation?: boolean;
         replaceExisting?: boolean;
@@ -116,7 +116,7 @@ export interface EdgeAddOperation extends GraphOperation {
 
 export interface EdgeDeleteOperation extends GraphOperation {
     type: OperationType.EDGE_DELETE;
-    payload: {,
+    payload: {
         edgeId: string;
         snapshot: Edge;
     };
@@ -126,7 +126,7 @@ export interface EdgeDeleteOperation extends GraphOperation {
 
 export interface EdgeUpdateOperation extends GraphOperation {
     type: OperationType.EDGE_UPDATE;
-    payload: {,
+    payload: {
         edgeId: string;
         updates: Partial<Edge>;
         previousValues: Partial<Edge>;
@@ -137,7 +137,7 @@ export interface EdgeUpdateOperation extends GraphOperation {
 
 export interface VariationAddOperation extends GraphOperation {
     type: OperationType.VARIATION_ADD;
-    payload: {,
+    payload: {
         nodeId: string;
         variation: string;
         index?: number;
@@ -148,7 +148,7 @@ export interface VariationAddOperation extends GraphOperation {
 
 export interface VariationDeleteOperation extends GraphOperation {
     type: OperationType.VARIATION_DELETE;
-    payload: {,
+    payload: {
         nodeId: string;
         index: number;
         snapshot: string;
@@ -159,7 +159,7 @@ export interface VariationDeleteOperation extends GraphOperation {
 
 export interface VariationUpdateOperation extends GraphOperation {
     type: OperationType.VARIATION_UPDATE;
-    payload: {,
+    payload: {
         nodeId: string;
         index: number;
         newValue: string;
@@ -171,7 +171,7 @@ export interface VariationUpdateOperation extends GraphOperation {
 
 export interface VariationReorderOperation extends GraphOperation {
     type: OperationType.VARIATION_REORDER;
-    payload: {,
+    payload: {
         nodeId: string;
         fromIndex: number;
         toIndex: number;
@@ -183,7 +183,7 @@ export interface VariationReorderOperation extends GraphOperation {
 
 export interface BatchOperation extends GraphOperation {
     type: OperationType.BATCH_OPERATION;
-    payload: {,
+    payload: {
         operations: GraphOperation[];
         atomicity: 'all_or_nothing' | 'best_effort';
         rollbackOnFailure: boolean;
@@ -195,8 +195,8 @@ export interface BatchOperation extends GraphOperation {
 
 export interface GraphClearOperation extends GraphOperation {
     type: OperationType.GRAPH_CLEAR;
-    payload: {,
-        snapshot: {,
+    payload: {
+        snapshot: {
             nodes: Node[];
             edges: Edge[];
         };
@@ -208,19 +208,19 @@ export interface GraphClearOperation extends GraphOperation {
 
 export interface GraphImportOperation extends GraphOperation {
     type: OperationType.GRAPH_IMPORT;
-    payload: {,
+    payload: {
         nodes: Node[];
         edges: Edge[];
         merge?: boolean;
-        conflict_resolution?: 'skip' | 'replace' | 'merge';
-    };
+        conflict_resolution?: 'skip' | 'replace' | 'merge'
+  };
 /**
  * Merge graphs
  */
 
 export interface GraphMergeOperation extends GraphOperation {
     type: OperationType.GRAPH_MERGE;
-    payload: {,
+    payload: {
         sourceNodes: Node[];
         sourceEdges: Edge[];
         strategy: 'append' | 'merge' | 'overlay';
@@ -519,8 +519,8 @@ export interface MutationEngineEvents {
     };
     'snapshot_created': {
         snapshot: GraphSnapshot;
-        reason: 'operation' | 'interval' | 'manual';
-    };
+        reason: 'operation' | 'interval' | 'manual'
+  };
     'validation_error': {
         operation: GraphOperation;
         errors: ValidationError[];

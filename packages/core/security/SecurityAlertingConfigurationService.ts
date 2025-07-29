@@ -41,72 +41,72 @@ import { SecurityLogger, SecurityEventType, LogLevel } from './SecurityLogger';
 import { DataClassificationLevel } from './DataClassificationAccessControl';
 
 export interface SecurityAlertingConfigurationServiceOptions {
-  storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';,
+  storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
   enableCaching: boolean;
   cacheTimeout: number; // milliseconds,
-  enableValidation: boolean;,
+  enableValidation: boolean;
   enableAuditLogging: boolean;
-  enableBackups: boolean;,
+  enableBackups: boolean;
   backupInterval: number; // milliseconds,
-  maxBackups: number;,
+  maxBackups: number;
   encryptStorage: boolean;
   requireApproval: boolean;
 }
 export interface ConfigurationMetadata {
-  id: string;,
+  id: string;
   version: number;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   updatedBy: string;
   approvedBy?: string;
   approvedAt?: Date;
-  status: 'draft' | 'pending_approval' | 'approved' | 'deprecated';,
+  status: 'draft' | 'pending_approval' | 'approved' | 'deprecated';
   checksum: string;
-  size: number;,
+  size: number;
   tags: string;
   classification: DataClassificationLevel;
 }
 export interface ConfigurationChangeRequest {
-  configId: string;,
+  configId: string;
   changes: Partial<SecurityAlertingConfig>;
-  requestedBy: string;,
+  requestedBy: string;
   reason: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   scheduledAt?: Date;
   approvers?: string;
 }
 export interface ConfigurationValidationResult {
-  isValid: boolean;,
+  isValid: boolean;
   errors: ValidationError;
-  warnings: ValidationWarning;,
+  warnings: ValidationWarning;
   securityScore: number;
-  complianceIssues: ComplianceIssue;,
+  complianceIssues: ComplianceIssue;
   performanceImpact: PerformanceImpact;
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
-  severity: 'error' | 'critical';,
+  severity: 'error' | 'critical';
   code: string;
   suggestion?: string;
 }
 export interface ValidationWarning {
-  field: string;,
+  field: string;
   message: string;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   code: string;
   suggestion?: string;
 }
 export interface ComplianceIssue {
   framework: string; // 'SOC2', 'GDPR', 'HIPAA', etc.,
-  requirement: string;,
+  requirement: string;
   impact: 'minor' | 'major' | 'critical';
   description: string;
 }
 export interface PerformanceImpact {
-  cpuImpact: 'low' | 'medium' | 'high';,
+  cpuImpact: 'low' | 'medium' | 'high';
   memoryImpact: 'low' | 'medium' | 'high';
-  storageImpact: 'low' | 'medium' | 'high';,
+  storageImpact: 'low' | 'medium' | 'high';
   networkImpact: 'low' | 'medium' | 'high';
   estimatedCost: number; // USD per month,
   /**
@@ -156,7 +156,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Security alerting configuration service initialized',
-  details: {,
+  details: {
   storageBackend: this.options.storageBackend,
   enableValidation: this.options.enableValidation,
   requireApproval: this.options.requireApproval,
@@ -193,7 +193,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.ERROR,
   message: 'Failed to retrieve configuration',
-  details: {,
+  details: {
   configId,
   error: error instanceof Error ? error.message : 'Unknown error',
 });
@@ -241,7 +241,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Security alerting configuration saved',
-  details: {,
+  details: {
   configId,
   version: newMetadata.version,
   updatedBy: newMetadata.updatedBy,
@@ -259,7 +259,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.ERROR,
   message: 'Failed to save configuration',
-  details: {,
+  details: {
   configId,
   error: error instanceof Error ? error.message : 'Unknown error',
 });
@@ -356,7 +356,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
         warnings: [],
         securityScore: 0,
         complianceIssues: [],
-        performanceImpact: {,
+        performanceImpact: {
   cpuImpact: 'low',
   memoryImpact: 'low',
   storageImpact: 'low',
@@ -398,7 +398,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.WARN,
   message: 'Security alerting configuration deleted',
-  details: {,
+  details: {
   configId,
   deletedBy,
   version: metadata.version,
@@ -411,7 +411,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.ERROR,
   message: 'Failed to delete configuration',
-  details: {,
+  details: {
   configId,
   error: error instanceof Error ? error.message : 'Unknown error',
 });
@@ -439,7 +439,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Configuration backup created',
-  details: {,
+  details: {
   configCount: this.configs.size,
   backupSize: backupJson.length,
 });
@@ -460,7 +460,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   // For now, we'll initialize with empty collections
   private async loadConfiguration(configId: string): Promise<SecurityAlertingConfig | null> {,
   return this.configs.get(configId) || null;
-  private async storeConfiguration(configId: string,)
+  private async storeConfiguration(configId: string)
   config: SecurityAlertingConfig,
   metadata: ConfigurationMetadata): Promise<void> {,
   this.configs.set(configId, config);

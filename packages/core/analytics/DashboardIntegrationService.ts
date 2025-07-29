@@ -18,40 +18,40 @@ import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
 // Dashboard Integration Configuration
 interface DashboardIntegrationConfig {
-  enableLegacySupport: boolean;,
+  enableLegacySupport: boolean;
   migrationMode: 'gradual' | 'immediate' | 'parallel';
-  cacheEnabled: boolean;,
+  cacheEnabled: boolean;
   cacheTTL: number;
-  webhookEndpoints: string;,
+  webhookEndpoints: string;
   alertingEnabled: boolean;
 
 // Legacy Analytics System Info
 interface LegacyAnalyticsSystem {
-  name: string;,
+  name: string;
   routePath: string;
-  dataFormat: 'dao' | 'rest' | 'event';,
+  dataFormat: 'dao' | 'rest' | 'event';
   migrationStatus: 'pending' | 'in_progress' | 'completed' | 'failed';
-  lastSync: number;,
+  lastSync: number;
   eventCount: number;
   healthStatus: 'healthy' | 'degraded' | 'failing';
 
 // Dashboard Widget Performance Metrics
 interface WidgetPerformanceMetrics {
-  widgetId: string;,
+  widgetId: string;
   widgetType: string;
-  averageLoadTime: number;,
+  averageLoadTime: number;
   errorRate: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   queryCount: number;
   lastUpdate: number;
 
 // Integration Status
 interface IntegrationStatus {
-  totalSystems: number;,
+  totalSystems: number;
   integratedSystems: number;
-  migrationProgress: number;,
+  migrationProgress: number;
   activeConnections: number;
-  eventThroughput: number;,
+  eventThroughput: number;
   systemHealth: number;
   lastHealthCheck: number;
 
@@ -142,13 +142,13 @@ export class DashboardIntegrationService {
   /**
    * Get consolidated dashboard data from all integrated systems
    */
-  async getConsolidatedDashboardData(filter: EventFilter,)
+  async getConsolidatedDashboardData(filter: EventFilter)
     authContext: AuthContext,
     cacheKey?: string
   ): Promise<{
-  metrics: unknown;,
+  metrics: unknown;
   events: UnifiedAnalyticsEvent;
-  timeSeriesData: unknown;,
+  timeSeriesData: unknown;
   integrationStatus: IntegrationStatus;
 }> {
     const startTime = Date.now();
@@ -159,9 +159,9 @@ export class DashboardIntegrationService {
         if (cached) {
           console.log(`Dashboard data served from cache for key: ${cacheKey}`);}
           return cached as {
-  metrics: unknown;,
+  metrics: unknown;
   events: UnifiedAnalyticsEvent;
-  timeSeriesData: unknown;,
+  timeSeriesData: unknown;
   integrationStatus: IntegrationStatus;
 };
       // Authorize query filter
@@ -192,7 +192,7 @@ export class DashboardIntegrationService {
       const result = {
   metrics,
   events,
-  timeSeriesData: timeSeriesData.map(point => ({,)
+  timeSeriesData: timeSeriesData.map(point => ({)
   timestamp: point.timestamp,
   value: point.value,
   label: 'Events',
@@ -213,7 +213,7 @@ export class DashboardIntegrationService {
   /**
    * Calculate consolidated metrics from all systems
    */
-  private async calculateConsolidatedMetrics(events: UnifiedAnalyticsEvent,)
+  private async calculateConsolidatedMetrics(events: UnifiedAnalyticsEvent)
     statistics: EventStatistics,
     filter: EventFilter): Promise<any> {,
     const timeRange = (filter.endTime || Date.now()) - (filter.startTime || Date.now() - 86400000);
@@ -300,7 +300,7 @@ export class DashboardIntegrationService {
   const activeConnections = wsStats.activeConnections;
   // Calculate event throughput from recent events
   const recentEvents = await this.eventRepository.findMany({)
-  filter: {,
+  filter: {
   startTime: Date.now() - 300000, // Last 5 minutes,
   endTime: Date.now(),
 },
@@ -323,7 +323,7 @@ export class DashboardIntegrationService {
   /**
    * Get widget-specific performance data
    */
-  async getWidgetPerformanceData(widgetId: string,)
+  async getWidgetPerformanceData(widgetId: string)
     widgetType: string,
     filter: EventFilter,
     authContext: AuthContext): Promise<any> {,
@@ -370,7 +370,7 @@ export class DashboardIntegrationService {
   filter: { ...filter, categories: [EventCategory.PERFORMANCE] },
       limit: 1000,
       sortBy: 'timestamp',
-      sortOrder: 'desc';
+      sortOrder: 'desc'
   });
     const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
       'avg',
@@ -393,7 +393,7 @@ export class DashboardIntegrationService {
     return {
   averageExecutionTime: Math.round(avgExecutionTime * 100) / 100,
   averageMemoryUsage: Math.round(avgMemoryUsage / 1024 / 1024 * 100) / 100, // Convert to MB,
-  timeSeriesData: timeSeriesData.map(point => ({,)
+  timeSeriesData: timeSeriesData.map(point => ({)
   timestamp: point.timestamp,
   value: point.value,
   label: 'Performance',
@@ -442,7 +442,7 @@ export class DashboardIntegrationService {
     );
     return {
   ...metrics,
-  timeSeriesData: timeSeriesData.map(point => ({,)
+  timeSeriesData: timeSeriesData.map(point => ({)
   timestamp: point.timestamp,
   value: point.value,
   label: 'Business Events',
@@ -453,14 +453,14 @@ export class DashboardIntegrationService {
    */
   private async getSecurityWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
   const securityEvents = await this.eventRepository.findMany({)
-  filter: {,
+  filter: {
   ...filter,
   categories: [EventCategory.SECURITY],
   types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION, AnalyticsEventType.AUTH_EVENT],
 },
   limit: 100,
       sortBy: 'timestamp',
-      sortOrder: 'desc';
+      sortOrder: 'desc'
   });
     const riskLevels = { high: 0, medium: 0, low: 0 };
     securityEvents.forEach(event => {)
@@ -477,7 +477,7 @@ export class DashboardIntegrationService {
   /**
    * Get standard widget data using event repository
    */
-  private async getStandardWidgetData(widgetType: string,)
+  private async getStandardWidgetData(widgetType: string)
     filter: EventFilter,  
     authContext: AuthContext): Promise<any> {,
   // Authorize query
@@ -504,7 +504,7 @@ export class DashboardIntegrationService {
           authorizedFilter
         );
         return {
-  timeSeries: timeSeriesData.map(point => ({,)
+  timeSeries: timeSeriesData.map(point => ({)
   timestamp: point.timestamp,
   value: point.value,
   label: 'Events',
@@ -602,7 +602,7 @@ export class DashboardIntegrationService {
   for (const [key, cached] of this.integrationCache) {
   if (now - cached.timestamp > this.config.cacheTTL) {
   this.integrationCache.delete(key);
-  private updateWidgetPerformance(widgetId: string,)
+  private updateWidgetPerformance(widgetId: string)
   widgetType: string,
   loadTime: number,
   isError: boolean,
@@ -676,7 +676,7 @@ export class DashboardIntegrationService {
    * Get integration status summary
    */
   getIntegrationSummary(): {
-  legacySystems: LegacyAnalyticsSystem;,
+  legacySystems: LegacyAnalyticsSystem;
   performanceMetrics: WidgetPerformanceMetrics;
   integrationStatus: unknown;
   return {
@@ -698,8 +698,8 @@ export class DashboardIntegrationService {
   /**
   * Get cache statistics
   */
-  getCacheStats(): {,
-  totalEntries: number;,
+  getCacheStats(): {
+  totalEntries: number;
   hitRate: number;
   memoryUsage: number;
   const totalEntries = this.integrationCache.size;

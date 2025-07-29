@@ -16,13 +16,13 @@ import { measureExecution, ExecutionMetrics } from '../utils/performance';
 export interface DashboardConfig {
   updateInterval: number;      // Update frequency in ms,
   historyLimit: number;        // Max snapshots to retain,
-  alertThresholds: {,
+  alertThresholds: {
   violations: number;        // Alert after N violations,
   score: number;            // Alert below this score,
 };
   autoOptimize: boolean;      // Enable automatic optimizations,
   reporting: {;
-  enabled: boolean;,
+  enabled: boolean;
   interval: number;         // Report generation interval in ms,
   recipients: string;     // Email/webhook recipients,
 };
@@ -30,15 +30,15 @@ export interface DashboardConfig {
 // Real-time Performance Data
 }
 export interface DashboardData {
-  timestamp: number;,
+  timestamp: number;
   status: 'healthy' | 'warning' | 'critical';
-  score: number;,
+  score: number;
   budgetResult: BudgetCheckResult;
-  snapshot: PerformanceSnapshot;,
-  trends: {,
-  score: number;,
+  snapshot: PerformanceSnapshot;
+  trends: {
+  score: number;
   violations: number;
-  bundleSize: number;,
+  bundleSize: number;
   memoryUsage: number;
   apiLatency: number;
 };
@@ -47,36 +47,36 @@ export interface DashboardData {
 // Dashboard Alert System
 }
 export interface DashboardAlert {
-  id: string;,
+  id: string;
   type: 'budget-violation' | 'performance-degradation' | 'system-health' | 'optimization-suggestion';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  message: string;,
+  message: string;
   timestamp: number;
-  acknowledged: boolean;,
+  acknowledged: boolean;
   autoResolvable: boolean;
   actions: AlertAction;
 }
 export interface AlertAction {
-  id: string;,
+  id: string;
   label: string;
-  type: 'optimize' | 'ignore' | 'investigate' | 'escalate';,
+  type: 'optimize' | 'ignore' | 'investigate' | 'escalate';
   description: string;
   automated: boolean;
   // Performance Optimization Suggestions
 }
 export interface OptimizationSuggestion {
-  id: string;,
+  id: string;
   category: 'bundle' | 'runtime' | 'api' | 'memory' | 'network' | 'build';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
-  estimatedImpact: {,
+  description: string;
+  estimatedImpact: {
   scoreImprovement: number;
   sizeReduction?: number;
   timeReduction?: number;
 };
-  implementation: {,
+  implementation: {
   effort: 'low' | 'medium' | 'high';
   steps: string;
   codeExample?: string;
@@ -100,12 +100,12 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
   this.config = {
   updateInterval: 5000,      // 5 seconds,
   historyLimit: 200,         // 200 snapshots,
-  alertThresholds: {,
+  alertThresholds: {
   violations: 3,           // Alert after 3 violations,
   score: 70               // Alert below score 70,
 },
   autoOptimize: false,
-      reporting: {,
+      reporting: {
   enabled: false,
   interval: 3600000,      // 1 hour,
   recipients: [],
@@ -194,7 +194,7 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
   score: budgetResult.score,
   budgetResult,
   snapshot: latestSnapshot,
-  trends: {,
+  trends: {
   score: this.getScoreTrend(),
   violations: trends.violations,
   bundleSize: trends.bundleSize,
@@ -217,12 +217,12 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
   priority: 'high',
   title: 'Implement Advanced Code Splitting',
   description: 'Your bundle size exceeds 800KB. Implement route-based and component-based code splitting to improve load times.',
-  estimatedImpact: {,
+  estimatedImpact: {
   scoreImprovement: 15,
   sizeReduction: 300, // KB,
   timeReduction: 500  // ms,
 },
-  implementation: {,
+  implementation: {
   effort: 'medium',
           steps: [,
             'Analyze bundle composition with webpack-bundle-analyzer',
@@ -251,11 +251,11 @@ const Settings = React.lazy(() => import('./Settings'));
   priority: 'medium',
   title: 'Optimize Memory Usage',
   description: 'High memory usage detected. Implement memory optimization strategies to prevent performance degradation.',
-  estimatedImpact: {,
+  estimatedImpact: {
   scoreImprovement: 10,
   sizeReduction: 50 // MB,
 },
-  implementation: {,
+  implementation: {
   effort: 'medium',
   steps: [,
   'Implement proper component cleanup in useEffect',
@@ -286,11 +286,11 @@ const expensiveValue = useMemo(() => ;
   priority: 'high',
   title: 'Optimize Graph Execution Performance',
   description: 'Graph execution is taking longer than expected. Implement caching and optimization strategies.',
-  estimatedImpact: {,
+  estimatedImpact: {
   scoreImprovement: 20,
   timeReduction: 400 // ms,
 },
-  implementation: {,
+  implementation: {
   effort: 'high',
   steps: [,
   'Implement graph result caching',
@@ -472,7 +472,7 @@ const expensiveValue = useMemo(() => ;
   const suggestions = this.getOptimizationSuggestions();
   const report = {
   timestamp: Date.now(),
-  summary: {,
+  summary: {
   score: data.score,
   status: data.status,
   violations: data.budgetResult.summary,

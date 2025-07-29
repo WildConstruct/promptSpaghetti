@@ -46,7 +46,7 @@ export interface EnhancedSession {
     analyticsConsent: boolean;
     personalizationConsent: boolean;
     crossDeviceConsent: boolean;
-    viewport: {,
+    viewport: {
         width: number;
         height: number;
     };

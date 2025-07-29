@@ -42,31 +42,31 @@ interface AlertDashboardProps {
   * Severity configurations for UI styling
   */
   const SEVERITY_CONFIG = {
-  critical: {,
+  critical: {
   color: 'text-red-700 bg-red-50 border-red-200',
   badgeColor: 'bg-red-100 text-red-800',
   icon: AlertOctagon,
   priority: 5,
 },
-  high: {,
+  high: {
   color: 'text-orange-700 bg-orange-50 border-orange-200',
   badgeColor: 'bg-orange-100 text-orange-800',
   icon: AlertTriangle,
   priority: 4,
 },
-  medium: {,
+  medium: {
   color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
   badgeColor: 'bg-yellow-100 text-yellow-800',
   icon: Shield,
   priority: 3,
 },
-  low: {,
+  low: {
   color: 'text-blue-700 bg-blue-50 border-blue-200',
   badgeColor: 'bg-blue-100 text-blue-800',
   icon: Info,
   priority: 2,
 },
-  info: {,
+  info: {
   color: 'text-gray-700 bg-gray-50 border-gray-200',
   badgeColor: 'bg-gray-100 text-gray-800',
   icon: Info,
@@ -76,27 +76,27 @@ interface AlertDashboardProps {
  * Status configurations for UI styling
  */
 const STATUS_CONFIG = {
-  active: {,
+  active: {
   color: 'text-red-600 bg-red-50',
   badgeColor: 'bg-red-100 text-red-800',
   icon: Bell,
 },
-  acknowledged: {,
+  acknowledged: {
   color: 'text-yellow-600 bg-yellow-50',
   badgeColor: 'bg-yellow-100 text-yellow-800',
   icon: CheckCircle,
 },
-  resolved: {,
+  resolved: {
   color: 'text-green-600 bg-green-50',
   badgeColor: 'bg-green-100 text-green-800',
   icon: CheckCircle,
 },
-  suppressed: {,
+  suppressed: {
   color: 'text-purple-600 bg-purple-50',
   badgeColor: 'bg-purple-100 text-purple-800',
   icon: XCircle,
 },
-  expired: {,
+  expired: {
   color: 'text-gray-600 bg-gray-50',
   badgeColor: 'bg-gray-100 text-gray-800',
   icon: Clock,
@@ -381,10 +381,10 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
  * Alert Card Component
  */
 interface AlertCardProps {
-  alert: AlertType;,
-  onAcknowledge: (id: string) => void;,
-  onResolve: (id: string) => void;,
-  onSuppress: (id: string) => void;,
+  alert: AlertType;
+  onAcknowledge: (id: string) => void;
+  onResolve: (id: string) => void;
+  onSuppress: (id: string) => void;
   onClick: (alert: AlertType) => void;
   const AlertCard: React.FC<AlertCardProps> = ({,)
   alert,
@@ -451,10 +451,10 @@ interface AlertCardProps {
  * Alert List Component
  */
 interface AlertListProps {
-  alerts: AlertType;,
-  onAcknowledge: (id: string) => void;,
-  onResolve: (id: string) => void;,
-  onSuppress: (id: string) => void;,
+  alerts: AlertType;
+  onAcknowledge: (id: string) => void;
+  onResolve: (id: string) => void;
+  onSuppress: (id: string) => void;
   onSelectAlert: (alert: AlertType) => void;
   const AlertList: React.FC<AlertListProps> = ({,)
   alerts,
@@ -490,10 +490,10 @@ interface AlertListProps {
  * Alert Detail Modal Component
  */
 interface AlertDetailModalProps {
-  alert: AlertType;,
+  alert: AlertType;
   onClose: () => void;
-  onAcknowledge: (id: string) => void;,
-  onResolve: (id: string) => void;,
+  onAcknowledge: (id: string) => void;
+  onResolve: (id: string) => void;
   onSuppress: (id: string) => void;
   const AlertDetailModal: React.FC<AlertDetailModalProps> = ({,)
   alert,

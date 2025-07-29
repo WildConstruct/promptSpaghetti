@@ -78,7 +78,8 @@ export function useVerificationRequests(userId) {
                 data,
                 metadata: {
                     requestSource: 'manual_request',
-                    sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` }
+                    sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                }
             }, ipAddress, // Would be set by middleware in real app
             userAgent;
         }

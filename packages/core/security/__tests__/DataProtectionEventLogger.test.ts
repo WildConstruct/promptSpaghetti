@@ -157,7 +157,7 @@ describe('DataProtectionEventLogger', () => {
   scheduledTime: new Date('2024-01-01T08:00:00Z'),
   executionTime: new Date('2024-01-01T10:00:00Z'),
   deletionRule: 'auto-delete-gdpr',
-  affectedRecords: {,
+  affectedRecords: {
   expected: 100,
   processed: 95,
   successful: 90,
@@ -172,7 +172,7 @@ describe('DataProtectionEventLogger', () => {
   scheduledTime: '2024-01-01T08:00:00.000Z',
   executionTime: '2024-01-01T10:00:00.000Z',
   deletionRule: 'auto-delete-gdpr',
-  affectedRecords: {,
+  affectedRecords: {
   expected: 100,
   processed: 95,
   successful: 90,
@@ -317,21 +317,21 @@ describe('DataProtectionEventLogger', () => {
   {
   timestamp: '2024-01-01T10:00:00Z',
   action: DataProtectionEventType.DATA_SUBJECT_ACCESS,
-  details: {,
+  details: {
   complianceFrameworks: [ComplianceFramework.GDPR],
   dataSubject: 'subject-1',
 }
       {
   timestamp: '2024-01-02T10:00:00Z',
   action: DataProtectionEventType.POLICY_VIOLATION_DETECTED,
-  details: {,
+  details: {
   complianceFrameworks: [ComplianceFramework.GDPR],
   dataSubject: 'subject-2',
 }
       {
   timestamp: '2024-01-03T10:00:00Z',
   action: DataProtectionEventType.CONSENT_GRANTED,
-  details: {,
+  details: {
   complianceFrameworks: [ComplianceFramework.CCPA],
   dataSubject: 'subject-3'];
   beforeEach(() => {
@@ -349,11 +349,11 @@ describe('DataProtectionEventLogger', () => {
   framework: ComplianceFramework.GDPR,
         reportPeriod: { start: startDate, end: endDate },
         eventCount: 2, // Only GDPR events
-        eventTypes: {,
+        eventTypes: {
   [DataProtectionEventType.DATA_SUBJECT_ACCESS]: 1,
   [DataProtectionEventType.POLICY_VIOLATION_DETECTED]: 1,
 },
-  dataSubjects: {,
+  dataSubjects: {
   'subject-1': 1,
   'subject-2': 1,
 },
@@ -382,7 +382,7 @@ describe('DataProtectionEventLogger', () => {
   {
   timestamp: '2020-01-01T10:00:00Z', // Very old event,
   action: DataProtectionEventType.DATA_SUBJECT_ACCESS,
-  details: {,
+  details: {
   complianceFrameworks: [ComplianceFramework.GDPR],
   dataSubject: 'subject-old'];
   mockAuditLogger.getEventsByDateRange.mockResolvedValue(oldEvents);

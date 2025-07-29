@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
 import { ShareModal } from './ShareModal';
 interface ShareButtonProps {
-  resourceId: string;,
+  resourceId: string;
   resourceType: ShareableResourceType;
   resourceTitle: string;
   resourceDescription?: string;
@@ -58,14 +58,14 @@ interface ShareButtonProps {
       large: { padding: '12px 16px', fontSize: '16px' }
     };
     const variantStyles = {
-      primary: {,
+      primary: {
   backgroundColor: '#3b82f6',
         color: 'white',
         ...(!disabled && {)
   ':hover': { backgroundColor: '#2563eb' }
   }
   },
-  secondary: {,
+  secondary: {
   backgroundColor: 'white',
         color: '#374151',
         border: '1px solid #d1d5db',
@@ -73,7 +73,7 @@ interface ShareButtonProps {
   ':hover': { backgroundColor: '#f9fafb' }
   }
   },
-  icon: {,
+  icon: {
   backgroundColor: 'transparent',
         color: '#6b7280',
         padding: size === 'small' ? '4px' : '8px',
@@ -91,8 +91,8 @@ interface ShareButtonProps {
   switch (size) {
   case 'small': return '14px';
   case 'large': return '20px';
-  default: return '16px';
-};
+  default: return '16px'
+  };
   const ShareIcon = () => (;);
     <svg
       width={getIconSize()}

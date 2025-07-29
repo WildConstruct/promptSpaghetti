@@ -21,7 +21,7 @@ export interface Badge {
     prerequisites?: string[];
     isVisible: boolean;
     isActive: boolean;
-    metadata: {,
+    metadata: {
         createdAt: number;
         updatedAt: number;
         version: string;
@@ -57,7 +57,7 @@ export interface UserBadgeProgress {
     experience: number;
     streak: number;
     lastActivity: number;
-    statistics: {,
+    statistics: {
         templatesCreated: number;
         templatesDownloaded: number;
         projectsCompleted: number;
@@ -69,7 +69,7 @@ export interface UserBadgeProgress {
         mentoringSessions: number;
         workshopsAttended: number;
     };
-    achievements: {,
+    achievements: {
         firstTemplate: boolean;
         firstCollaboration: boolean;
         firstSale: boolean;

@@ -13,47 +13,47 @@ export interface StateSubscriber<T> {
   export interface StateUpdater<T> {
   (prevState: T): T;
   export interface StateChange<T> {
-  id: string;,
+  id: string;
   timestamp: number;
-  type: string;,
+  type: string;
   payload: Partial<T>;
   userId?: string;
   source: 'local' | 'remote' | 'system';
   export interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
   value?: any;
   code: string;
 }
 export interface ValidationWarning {
-  field: string;,
+  field: string;
   message: string;
   suggestion?: string;
 }
 export interface StateMiddleware<T> {
-  name: string;,
+  name: string;
   order: number;
   beforeUpdate?: (state: T, change: StateChange<T>) => Promise<T>;
   afterUpdate?: (state: T, prevState: T, change: StateChange<T>) => Promise<void>;
   onError?: (error: Error, state: T, change: StateChange<T>) => void;
   export interface StateContainerConfig {
-  enableValidation: boolean;,
+  enableValidation: boolean;
   enableHistory: boolean;
-  maxHistorySize: number;,
+  maxHistorySize: number;
   enablePersistence: boolean;
   persistenceKey?: string;
-  enableDebug: boolean;,
+  enableDebug: boolean;
   enableDevTools: boolean;
-  enableTimeTravel: boolean;,
+  enableTimeTravel: boolean;
   enablePerformanceProfiling: boolean;
 }
 export interface StateSnapshot<T> {
-  id: string;,
+  id: string;
   timestamp: number;
   state: T;
   change?: StateChange<T>;
@@ -142,7 +142,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
   public clearHistory(): void {
   this.history = [this.history[this.history.length - 1]]; // Keep current state
   // Protected methods for subclass use
-  protected async applyStateUpdate(newState: T,)
+  protected async applyStateUpdate(newState: T)
   prevState: T,
   change: StateChange<T>): Promise<void> {,
   try {
@@ -200,7 +200,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
   timestamp: Date.now(),
   state: this.cloneState(state),
   change,
-  metadata: {,
+  metadata: {
   historyIndex: this.history.length,
   domain: this.getDomainName(),
 };
@@ -223,7 +223,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
         stateData, 
         {
   key: this.config.persistenceKey || this.getDomainName(),
-  metadata: {,
+  metadata: {
   historyLength: this.history.length,
   subscriberCount: this.subscribers.size);
 } catch (error) {
@@ -269,7 +269,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
   protected generateSnapshotId(): string {
     return `snapshot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   // DevTools integration
-  protected async profileStateUpdate(newState: T,)
+  protected async profileStateUpdate(newState: T)
     prevState: T,
     change: StateChange<T>): Promise<void> {,
     try {
@@ -299,7 +299,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
   timestamp: change.timestamp,
   state: this.cloneState(state),
   change,
-  metadata: {,
+  metadata: {
   domain: this.getDomainName(),
   historyIndex: this.history.length,
 };
@@ -315,7 +315,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
     } catch (error) {
   console.warn('DevTools recording failed:', error);
   // DevTools configuration
-  public enableDevTools(options: {,)
+  public enableDevTools(options: {)
   enableTimeTravel?: boolean;
   enableProfiling?: boolean;
   enableValidation?: boolean;

@@ -262,7 +262,7 @@ describe('NodeLabel Component', () => {
   nodeId: 'node-1',
   labelId: mockConfig.id,
   customLabel: 'Updated Label',
-  config: {,
+  config: {
   customLabel: 'Updated Label',
   isEditing: false,
 });
@@ -303,7 +303,7 @@ describe('NodeLabel Component', () => {
   nodeId: 'node-1',
   labelId: mockConfig.id,
   customLabel: 'Blur Save',
-  config: {,
+  config: {
   customLabel: 'Blur Save',
   isEditing: false,
 });

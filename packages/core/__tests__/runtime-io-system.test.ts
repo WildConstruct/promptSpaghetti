@@ -202,7 +202,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   label: 'Pattern',
   dataType: 'string',
   required: true,
-  constraints: {,
+  constraints: {
   pattern: '^[A-Z]+$',
   minLength: 2,
   maxLength: 5],
@@ -238,7 +238,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   label: 'List',
   dataType: 'array',
   required: true,
-  constraints: {,
+  constraints: {
   minLength: 2,
   maxLength: 4],
   outputs: [],
@@ -266,7 +266,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   label: 'Enum',
   dataType: 'choice',
   required: true,
-  constraints: {,
+  constraints: {
   allowedValues: ['option1', 'option2', 'option3']],
   outputs: [],
 };
@@ -290,7 +290,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   label: 'Custom',
   dataType: 'string',
   required: true,
-  constraints: {,
+  constraints: {
   customValidator: (value) => {,
   if (value === 'forbidden') {
   return ValidationHelpers.createInvalidResult()
@@ -396,7 +396,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   label: 'Custom Input',
   dataType: 'object',
   required: true,
-  constraints: {,
+  constraints: {
   customValidator: (value) => {,
   if (!value.hasOwnProperty('required')) {
   return ValidationHelpers.createInvalidResult([)
@@ -581,10 +581,10 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   };
       const handler = new AdvancedIOHandler(spec);
       const deepObject = {
-  level1: {,
-  level2: {,
-  level3: {,
-  level4: {,
+  level1: {
+  level2: {
+  level3: {
+  level4: {
   value: 'deep',
 };
       const inputs = new Map([['deep', deepObject]]);

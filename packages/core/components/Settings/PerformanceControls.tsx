@@ -8,23 +8,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface PerformanceControlsProps {
-  settings: PerformanceSettings;,
+  settings: PerformanceSettings;
   onChange: (settings: PerformanceSettings) => void;
   /**
   * Performance Settings Controls Component
@@ -366,7 +366,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
         borderRadius: '6px',
         border: `1px solid ${uiColors.ui.border}`}
 },
-  marginTop: '16px';
+  marginTop: '16px'
   }}>
         <div style={{
   display: 'flex',

@@ -10,13 +10,13 @@ import { PreviewResultWithPath } from '../types/ExecutionPath';
 export interface VarianceMetrics {
     overallVariance: 'low' | 'medium' | 'high';
     varianceScore: number;
-    diversityMetrics: {,
+    diversityMetrics: {
         outputLengthVariance: number;
         vocabularyDiversity: number;
         structuralDiversity: number;
         executionPathDiversity: number;
     };
-    creativeRange: {,
+    creativeRange: {
         uniqueElements: string[];
         commonElements: string[];
         repetitionRate: number;

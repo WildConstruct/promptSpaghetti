@@ -47,10 +47,10 @@ interface OfflineIndicatorProps {
   };
   const getIndicatorType = () => {
   if (!status.isOnline) {
-  return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning';
-} else if (status.queueSize > 0) {
+  return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning'
+  } else if (status.queueSize > 0) {
       return 'info';
-    return 'info';
+    return 'info'
   };
   const getIndicatorColor = () => {
   const type = getIndicatorType();
@@ -152,8 +152,8 @@ interface OfflineIndicatorProps {
   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
-                    e.currentTarget.style.color = 'white';
-                  }}
+                    e.currentTarget.style.color = 'white'
+  }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
                     e.currentTarget.style.color = colors.button;
@@ -174,8 +174,8 @@ interface OfflineIndicatorProps {
   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
-                    e.currentTarget.style.color = 'white';
-                  }}
+                    e.currentTarget.style.color = 'white'
+  }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
                     e.currentTarget.style.color = colors.button;

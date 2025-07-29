@@ -28,51 +28,51 @@ interface PolicyConfigurationInterfaceProps {
   jurisdictions?: string;
   templates?: PolicyTemplate;
   interface PolicyTemplate {
-  templateId: string;,
+  templateId: string;
   name: string;
-  description: string;,
+  description: string;
   framework: string;
-  policyType: PolicyType;,
+  policyType: PolicyType;
   variables: TemplateVariable;
   interface TemplateVariable {
-  name: string;,
+  name: string;
   type: 'TEXT' | 'EMAIL' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST';
   required: boolean;
   defaultValue?: unknown;
   description?: string;
   interface PolicyFormData {
-  policyType: PolicyType;,
+  policyType: PolicyType;
   title: string;
-  description: string;,
+  description: string;
   jurisdiction: string;
-  complianceFrameworks: string;,
+  complianceFrameworks: string;
   audience: string;
   templateId?: string;
   variables: Record<string, any>;
   customizations: PolicyCustomization;
   interface PolicyCustomization {
-  customizationId: string;,
+  customizationId: string;
   type: 'BRANDING' | 'CONTENT' | 'STRUCTURE' | 'VARIABLES' | 'STYLING';
-  target: string;,
+  target: string;
   value: Error;
-  priority: number;,
+  priority: number;
   enabled: boolean;
   interface DeploymentConfig {
-  environment: 'STAGING' | 'PRODUCTION';,
+  environment: 'STAGING' | 'PRODUCTION';
   channels: string;
-  rolloutType: 'IMMEDIATE' | 'PHASED' | 'CANARY' | 'BLUE_GREEN';,
+  rolloutType: 'IMMEDIATE' | 'PHASED' | 'CANARY' | 'BLUE_GREEN';
   phases: RolloutPhase;
   notifications: NotificationConfig;
   interface RolloutPhase {
-  phaseId: string;,
+  phaseId: string;
   name: string;
-  percentage: number;,
+  percentage: number;
   audience: string;
   duration: number;
   interface NotificationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   channels: string;
-  template: string;,
+  template: string;
   immediate: boolean;
   scheduled?: Date;
   // Validation schemas
@@ -125,7 +125,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   channels: [],
   rolloutType: 'IMMEDIATE',
   phases: [],
-  notifications: {,
+  notifications: {
   enabled: true,
   channels: ['EMAIL'],
   template: 'default',
@@ -235,9 +235,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   version: initialPolicy.version,
   environment: deploymentConfig.environment,
   channels: deploymentConfig.channels,
-  rolloutStrategy: {,
+  rolloutStrategy: {
   type: deploymentConfig.rolloutType,
-  phases: deploymentConfig.phases.map(phase => ({,)
+  phases: deploymentConfig.phases.map(phase => ({)
   ...phase,
   startDate: new Date(),
   successCriteria: [],
@@ -246,16 +246,16 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
           rollbackCriteria: [],
           monitoringPeriod: 24;
   },
-  notificationSettings: {,
+  notificationSettings: {
   enabled: deploymentConfig.notifications.enabled,
-          channels: deploymentConfig.notifications.channels.map(channel => ({,)
+          channels: deploymentConfig.notifications.channels.map(channel => ({)
   type: channel,
             configuration: {},
             enabled: true;
   })),
           audiences: formData.audience,
           template: deploymentConfig.notifications.template,
-          scheduling: {,
+          scheduling: {
   immediate: deploymentConfig.notifications.immediate,
   scheduled: deploymentConfig.notifications.scheduled,
 };
@@ -786,14 +786,14 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   if (e.target.checked) {
   setDeploymentConfig(prev => ({)
   ...prev,
-  notifications: {,
+  notifications: {
   ...prev.notifications,
   channels: [...prev.notifications.channels, channel],
 }));
                               } else {
   setDeploymentConfig(prev => ({)
   ...prev,
-  notifications: {,
+  notifications: {
   ...prev.notifications,
   channels: prev.notifications.channels.filter(c => c !== channel),
 }));
@@ -828,7 +828,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         value={deploymentConfig.notifications.scheduled?.toISOString().slice(0, 16) || ''}
                         onChange={(e) => setDeploymentConfig(prev => ({)
   ...prev,
-  notifications: {,
+  notifications: {
   ...prev.notifications,
   scheduled: new Date(e.target.value),
 }))}

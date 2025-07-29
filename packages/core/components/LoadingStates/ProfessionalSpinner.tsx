@@ -37,22 +37,22 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
   };
   const getColors = () => {
   const colors = {
-  primary: {,
+  primary: {
   main: '#3b82f6',
   light: 'rgba(59, 130, 246, 0.3)',
   gradient: 'linear-gradient(45deg, #3b82f6, #1d4ed8)',
 },
-  secondary: {,
+  secondary: {
   main: '#6b7280',
   light: 'rgba(107, 114, 128, 0.3)',
   gradient: 'linear-gradient(45deg, #6b7280, #374151)',
 },
-  accent: {,
+  accent: {
   main: '#10b981',
   light: 'rgba(16, 185, 129, 0.3)',
   gradient: 'linear-gradient(45deg, #10b981, #047857)',
 },
-  cinema4d: {,
+  cinema4d: {
   main: '#ff6b35',
   light: 'rgba(255, 107, 53, 0.3)',
   gradient: 'linear-gradient(45deg, #ff6b35, #e55039)',
@@ -143,7 +143,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
                 animationDelay: `${i * 0.1}s`}
 },
   height: '100%',
-                transformOrigin: 'bottom';
+                transformOrigin: 'bottom'
   }}
             />
           ))}

@@ -73,12 +73,12 @@ export declare class SecurityDashboardFactory {
      * Get framework statistics
      */
     getStatistics(): {
-        framework: {,
+        framework: {
             dashboardCount: number;
             widgetCount: number;
             themeCount: number;
         };
-        registry: {,
+        registry: {
             dashboardCount: number;
             presetCount: number;
             widgetCount: number;

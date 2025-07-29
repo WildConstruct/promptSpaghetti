@@ -11,35 +11,35 @@ import { SecurityEvent, CrossSystemAlertingSystem } from './AlertingSystem';
 import { SecurityAnalyticsMonitor } from '../monitoring/SecurityAnalyticsMonitor';
 
 export interface SecurityIncident {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  category: 'data_breach' | 'system_compromise' | 'malware' | 'phishing' | 'ddos' | 'insider_threat' | 'compliance_violation' | 'operational';,
+  category: 'data_breach' | 'system_compromise' | 'malware' | 'phishing' | 'ddos' | 'insider_threat' | 'compliance_violation' | 'operational';
   status: 'detected' | 'triaged' | 'investigating' | 'containing' | 'eradicating' | 'recovering' | 'resolved' | 'closed';
   // Core incident data
-  createdAt: number;,
+  createdAt: number;
   updatedAt: number;
   detectedBy: string; // System or user who detected,
   assignedTo?: string;
   responderTeam: string;
   // Source events and context
-  triggeringEvents: SecurityEvent;,
+  triggeringEvents: SecurityEvent;
   relatedAlerts: string;
-  affectedSystems: string;,
+  affectedSystems: string;
   affectedUsers: string;
-  impactAssessment: {,
-  confidentiality: 'none' | 'low' | 'medium' | 'high' | 'critical';,
+  impactAssessment: {
+  confidentiality: 'none' | 'low' | 'medium' | 'high' | 'critical';
   integrity: 'none' | 'low' | 'medium' | 'high' | 'critical';
-  availability: 'none' | 'low' | 'medium' | 'high' | 'critical';,
+  availability: 'none' | 'low' | 'medium' | 'high' | 'critical';
   estimatedCost: number;
-  businessImpact: string;,
-  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
-};
+  businessImpact: string;
+  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted'
+  };
   // Response tracking
-  timeline: IncidentTimelineEntry;,
+  timeline: IncidentTimelineEntry;
   actions: IncidentAction;
-  evidence: Evidence;,
+  evidence: Evidence;
   communications: Communication;
   // Resolution data
   rootCause?: string;
@@ -48,20 +48,20 @@ export interface SecurityIncident {
   postIncidentReviewCompleted: boolean;
 }
 export interface IncidentTimelineEntry {
-  id: string;,
+  id: string;
   timestamp: number;
-  type: 'detection' | 'triage' | 'escalation' | 'action' | 'communication' | 'containment' | 'resolution';,
+  type: 'detection' | 'triage' | 'escalation' | 'action' | 'communication' | 'containment' | 'resolution';
   actor: string; // Who performed the action,
   description: string;
   details?: any;
   automated: boolean;
 }
 export interface IncidentAction {
-  id: string;,
+  id: string;
   type: 'containment' | 'eradication' | 'recovery' | 'investigation' | 'communication' | 'documentation';
-  title: string;,
+  title: string;
   description: string;
-  assignedTo: string;,
+  assignedTo: string;
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
   priority: 'low' | 'medium' | 'high' | 'critical';
   deadline?: number;
@@ -71,73 +71,73 @@ export interface IncidentAction {
   dependencies?: string; // IDs of actions that must complete first,
 }
 export interface Evidence {
-  id: string;,
+  id: string;
   type: 'log_file' | 'screenshot' | 'network_capture' | 'system_state' | 'forensic_image' | 'document' | 'artifact';
-  name: string;,
+  name: string;
   description: string;
-  collectedBy: string;,
+  collectedBy: string;
   collectedAt: number;
   location: string; // File path, URL, or location description,
   hash?: string; // For integrity verification,
   chainOfCustody: Array<{,
-  handler: string;,
+  handler: string;
   timestamp: number;
   action: 'collected' | 'analyzed' | 'transferred' | 'archived';
   notes?: string;
 }>;
 }
 export interface Communication {
-  id: string;,
+  id: string;
   type: 'internal' | 'external' | 'regulatory' | 'customer' | 'media' | 'law_enforcement';
-  audience: string;,
+  audience: string;
   subject: string;
-  content: string;,
+  content: string;
   sentBy: string;
-  sentAt: number;,
+  sentAt: number;
   channel: 'email' | 'phone' | 'meeting' | 'document' | 'portal' | 'other';
   acknowledged?: Array<{,
-  recipient: string;,
+  recipient: string;
   acknowledgedAt: number;
 }>;
 }
 export interface IncidentResponseProcedure {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: SecurityIncident['category'];
-  severity: SecurityIncident['severity'];,
-  triggerConditions: {,
-  eventTypes: SecurityEvent['type'][];,
+  severity: SecurityIncident['severity'];
+  triggerConditions: {
+  eventTypes: SecurityEvent['type'][];
   severityThreshold: SecurityEvent['severity'];
   customRules: string; // Rule IDs,
 };
   // Standardized response steps
-  phases: IncidentResponsePhase;,
+  phases: IncidentResponsePhase;
   automatedActions: AutomatedResponseAction;
   communicationTemplates: CommunicationTemplate;
   // Compliance and regulatory requirements
-  complianceRequirements: {,
+  complianceRequirements: {
   framework: string; // GDPR, HIPAA, SOX, etc.,
   reportingTimeline: number; // milliseconds,
-  requiredActions: string;,
+  requiredActions: string;
   documentationRequirements: string;
 }[];
-  createdBy: string;,
+  createdBy: string;
   createdAt: number;
-  lastUpdated: number;,
+  lastUpdated: number;
   version: string;
   approved: boolean;
   approvedBy?: string;
 }
 export interface IncidentResponsePhase {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   order: number;
   parallelizable: boolean; // Can this phase run in parallel with others?,
-  steps: ResponseStep;,
+  steps: ResponseStep;
   successCriteria: string;
-  timeBounds?: {,
+  timeBounds?: {
   minimum?: number; // milliseconds,
   maximum?: number;
   typical?: number;
@@ -147,14 +147,14 @@ export interface IncidentResponsePhase {
   triggers?: string; // Conditions that must be met to start this phase
 }
 export interface ResponseStep {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: 'manual' | 'automated' | 'decision' | 'verification';
-  order: number;,
+  order: number;
   mandatory: boolean;
   // Step execution details
-  instructions: string;,
+  instructions: string;
   checklistItems: string;
   tools: string; // Tools or systems needed,
   skills: string; // Required skills/certifications,
@@ -167,12 +167,12 @@ export interface ResponseStep {
   dependencies?: string; // Step IDs that must complete first,
 }
 export interface AutomatedResponseAction {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   type: 'containment' | 'isolation' | 'blocking' | 'notification' | 'data_collection' | 'analysis';
-  trigger: {,
-  automatic: boolean;,
+  trigger: {
+  automatic: boolean;
   requiresApproval: boolean;
   conditions: string;
 };
@@ -181,21 +181,21 @@ export interface AutomatedResponseAction {
   timeout: number; // milliseconds
   rollbackScript?: string;
   // Safety controls
-  safetyChecks: string;,
+  safetyChecks: string;
   approvalRequired: boolean;
   testMode: boolean; // Run in test mode first
 }
 export interface CommunicationTemplate {
-  id: string;,
+  id: string;
   name: string;
-  type: Communication['type'];,
+  type: Communication['type'];
   audience: string;
-  subject: string;,
+  subject: string;
   content: string;
   channel: Communication['channel'];
   // Template variables
   variables: Array<{,
-  name: string;,
+  name: string;
   description: string;
   required: boolean;
   defaultValue?: string;
@@ -206,48 +206,48 @@ export interface CommunicationTemplate {
   conditions?: string;
 }
 export interface TroubleshootingWorkflow {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: string;
   applicableIncidentTypes: SecurityIncident['category'][];
   // Diagnostic tree
-  diagnosticSteps: DiagnosticStep;,
+  diagnosticSteps: DiagnosticStep;
   decisionTree: DecisionNode;
   // Knowledge base integration
-  relatedKnowledgeArticles: string;,
+  relatedKnowledgeArticles: string;
   commonSolutions: Solution;
-  escalationCriteria: string;,
+  escalationCriteria: string;
   createdBy: string;
-  createdAt: number;,
+  createdAt: number;
   lastUpdated: number;
   successRate: number; // Tracked automatically,
   averageResolutionTime: number; // Tracked automatically,
 }
 export interface DiagnosticStep {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: 'check' | 'test' | 'query' | 'analysis' | 'measurement';
   order: number;
   // Step execution
-  instructions: string;,
+  instructions: string;
   expectedResults: string;
   tools: string;
   automationScript?: string;
   // Decision logic
   nextSteps: Array<{,
-  condition: string;,
+  condition: string;
   nextStepId: string;
   confidence: number; // 0-1,
 }>;
   // Success criteria
-  successIndicators: string;,
+  successIndicators: string;
   failureIndicators: string;
   timeoutSeconds: number;
 }
 export interface DecisionNode {
-  id: string;,
+  id: string;
   question: string;
   type: 'boolean' | 'multiple_choice' | 'numeric' | 'text';
   options?: string; // For multiple choice,
@@ -264,14 +264,14 @@ export interface DecisionNode {
   automationSupport?: boolean;
 }
 export interface Solution {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: string;
   severity: SecurityIncident['severity'];
   // Solution steps
   steps: Array<{,
-  order: number;,
+  order: number;
   description: string;
   type: 'action' | 'verification' | 'rollback';
   script?: string;
@@ -280,61 +280,61 @@ export interface Solution {
   // Solution metadata
   effectiveness: number; // 0-1 based on historical success,
   riskLevel: 'low' | 'medium' | 'high';
-  prerequisites: string;,
+  prerequisites: string;
   sideEffects: string;
   rollbackPlan: string;
   // Tracking
-  timesUsed: number;,
+  timesUsed: number;
   successRate: number;
   averageTimeToResolve: number;
   lastUsed?: number;
 }
 export interface IncidentResponseConfig {
   // Response team configuration
-  responseTeams: {,
-  primary: string;,
+  responseTeams: {
+  primary: string;
   secondary: string;
-  escalation: string;,
+  escalation: string;
   external: string;
 };
   // SLA and timing requirements
-  slaTargets: {,
+  slaTargets: {
   detection: number; // milliseconds,
-  acknowledgment: number;,
+  acknowledgment: number;
   triage: number;
-  containment: number;,
+  containment: number;
   resolution: number;
 };
   // Notification settings
-  notifications: {,
+  notifications: {
   immediate: string; // Always notify immediately,
   escalation: string; // Notify on escalation,
   resolution: string; // Notify on resolution,
   external: string; // External stakeholders,
 };
   // Integration settings
-  integrations: {,
-  ticketing: {,
-  enabled: boolean;,
+  integrations: {
+  ticketing: {
+  enabled: boolean;
   system: 'jira' | 'servicenow' | 'remedy';
-  autoCreate: boolean;,
+  autoCreate: boolean;
   syncUpdates: boolean;
 };
-    siem: {,
+    siem: {
   enabled: boolean;
-  endpoint: string;,
+  endpoint: string;
   autoEnrichment: boolean;
 };
-    chatOps: {,
+    chatOps: {
   enabled: boolean;
-  channels: string;,
-  platform: 'slack' | 'teams' | 'discord';
-};
+  channels: string;
+  platform: 'slack' | 'teams' | 'discord'
+  };
   };
   // Compliance and reporting
-  compliance: {,
+  compliance: {
   frameworks: string;
-  autoReporting: boolean;,
+  autoReporting: boolean;
   reportingChannels: string;
   retentionPeriod: number; // milliseconds,
 };
@@ -353,19 +353,19 @@ export class SecurityIncidentResponseService extends EventEmitter {
   private solutions: Map<string, Solution> = new Map();
   // Automation and orchestration
   private automationQueue: Array<{,
-  incidentId: string;,
+  incidentId: string;
   actionId: string;
-  timestamp: number;,
+  timestamp: number;
   approved: boolean;
 }> = [];
   // Performance tracking
-  private responseMetrics: {,
+  private responseMetrics: {
   totalIncidents: number;
-  averageDetectionTime: number;,
+  averageDetectionTime: number;
   averageResponseTime: number;
-  averageResolutionTime: number;,
+  averageResolutionTime: number;
   escalationRate: number;
-  falsePositiveRate: number;,
+  falsePositiveRate: number;
   procedureEffectiveness: Map<string, number>;
 };
   constructor();
@@ -384,7 +384,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Create a new security incident from security events
    */
-  async createIncident(events: SecurityEvent,)
+  async createIncident(events: SecurityEvent)
     severity: SecurityIncident['severity'],
     category: SecurityIncident['category'],
     assignedTo?: string
@@ -441,7 +441,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Update incident status and trigger appropriate workflows
    */
-  async updateIncidentStatus(incidentId: string,)
+  async updateIncidentStatus(incidentId: string)
     newStatus: SecurityIncident['status'],
     updatedBy: string,
     notes?: string
@@ -490,7 +490,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Add action to incident
    */
-  async addIncidentAction(incidentId: string,)
+  async addIncidentAction(incidentId: string)
     action: Omit<IncidentAction, 'id' | 'createdAt'>,
     createdBy: string): Promise<string> {,
     const incident = this.activeIncidents.get(incidentId);
@@ -517,7 +517,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Complete an incident action
    */
-  async completeIncidentAction(incidentId: string,)
+  async completeIncidentAction(incidentId: string)
     actionId: string,
     result: string,
     completedBy: string): Promise<boolean> {,
@@ -545,7 +545,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Add evidence to incident
    */
-  async addEvidence(incidentId: string,)
+  async addEvidence(incidentId: string)
     evidence: Omit<Evidence, 'id' | 'collectedAt' | 'chainOfCustody'>,
     collectedBy: string): Promise<string> {,
     const incident = this.activeIncidents.get(incidentId);
@@ -578,12 +578,12 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Execute troubleshooting workflow
    */
-  async executeTroubleshootingWorkflow(incidentId: string,)
+  async executeTroubleshootingWorkflow(incidentId: string)
     workflowId: string,
     executedBy: string): Promise<{;
   success: boolean;
   solutionId?: string;
-  nextSteps: string;,
+  nextSteps: string;
   recommendations: string;
 }> {
     const incident = this.activeIncidents.get(incidentId);
@@ -694,20 +694,20 @@ export class SecurityIncidentResponseService extends EventEmitter {
   generateIncidentReport();
     incidentId: string,
     reportType: 'executive' | 'technical' | 'compliance' | 'post_incident' = 'technical'): {;
-  incident: SecurityIncident;,
-  summary: {,
-  timeToDetection: number;,
+  incident: SecurityIncident;
+  summary: {
+  timeToDetection: number;
   timeToContainment: number;
-  timeToResolution: number;,
+  timeToResolution: number;
   actionsCompleted: number;
-  evidenceCollected: number;,
+  evidenceCollected: number;
   communicationsSent: number;
 };
-    timeline: IncidentTimelineEntry;,
+    timeline: IncidentTimelineEntry;
   recommendations: string;
-    complianceStatus: {,
+    complianceStatus: {
   framework: string;
-  compliant: boolean;,
+  compliant: boolean;
   gaps: string;
 }[];
     const incident = this.activeIncidents.get(incidentId);
@@ -740,12 +740,12 @@ export class SecurityIncidentResponseService extends EventEmitter {
    * Get response metrics and analytics
    */
   getResponseMetrics(): typeof this.responseMetrics & {
-  activeIncidents: number;,
+  activeIncidents: number;
   incidentsByStatus: Record<SecurityIncident['status'], number>;
   incidentsBySeverity: Record<SecurityIncident['severity'], number>;
   incidentsByCategory: Record<SecurityIncident['category'], number>;
-  averageMetrics: {,
-  detectionTime: number;,
+  averageMetrics: {
+  detectionTime: number;
   responseTime: number;
   resolutionTime: number;
 };
@@ -771,7 +771,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   incidentsByStatus,
   incidentsBySeverity,
   incidentsByCategory,
-  averageMetrics: {,
+  averageMetrics: {
   detectionTime: this.responseMetrics.averageDetectionTime,
   responseTime: this.responseMetrics.averageResponseTime,
   resolutionTime: this.responseMetrics.averageResolutionTime,
@@ -809,7 +809,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   timestamp: alert.timestamp || Date.now(),
   title: alert.message || 'Security Alert',
   description: alert.details?.description || alert.message || 'Automated security alert',
-  details: {,
+  details: {
   affected_systems: alert.affectedSystems || [],
   affected_users: alert.affectedUsers || [],
   ip_addresses: alert.details?.ip_addresses || [],
@@ -817,13 +817,13 @@ export class SecurityIncidentResponseService extends EventEmitter {
   request_patterns: alert.details?.request_patterns || [],
   data_accessed: alert.details?.data_accessed || [],
 },
-  metadata: {,
+  metadata: {
   threat_level: alert.threatLevel || 5,
   confidence_score: alert.confidence || 0.8,
   auto_detected: true,
   false_positive_likelihood: 0.1,
 },
-  status: 'active';
+  status: 'active'
   };
   private determineSeverityFromAlert(alert: any): SecurityIncident['severity'] {
     if (alert.severity === 'critical') return 'critical';
@@ -914,7 +914,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   businessImpact: this.assessBusinessImpact(category, severity),
   dataClassification: this.determineDataClassification(events),
 };
-  private estimateIncidentCost(severity: SecurityIncident['severity'],)
+  private estimateIncidentCost(severity: SecurityIncident['severity'])
     category: SecurityIncident['category'],
     eventCount: number): number {,
   const baseCosts = {
@@ -939,19 +939,19 @@ export class SecurityIncidentResponseService extends EventEmitter {
     severity: SecurityIncident['severity'],
   ): string {
   const impacts = {
-  data_breach: {,
+  data_breach: {
   critical: 'Major data breach with potential regulatory fines and customer impact',
   high: 'Significant data exposure requiring customer notification',
   medium: 'Limited data exposure with containment measures in place',
   low: 'Minor data access anomaly with no confirmed exposure',
 },
-  system_compromise: {,
+  system_compromise: {
   critical: 'Critical system compromise affecting core business operations',
   high: 'System compromise with potential data integrity issues',
   medium: 'System compromise contained to non-critical systems',
   low: 'Suspicious system activity under investigation',
 },
-  ddos: {,
+  ddos: {
   critical: 'Complete service outage affecting all customers',
   high: 'Significant service degradation impacting customer experience',
   medium: 'Intermittent service issues with workarounds available',
@@ -980,7 +980,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   if (category === 'data_breach' || category === 'compliance_violation') {
   team = [...team, ...this.config.responseTeams.external];
   return [...new Set(team)]; // Remove duplicates
-  private addTimelineEntry(incident: SecurityIncident,)
+  private addTimelineEntry(incident: SecurityIncident)
   entry: Omit<IncidentTimelineEntry, 'id' | 'timestamp'>): void {,
   incident.timeline.push({)
   id: this.generateTimelineId(),
@@ -1012,7 +1012,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
     // Execute phases in order
     for (const phase of procedure.phases.sort((a, b) => a.order - b.order)) {
   await this.executePhase(incident, procedure, phase);
-  private async executePhase(incident: SecurityIncident,)
+  private async executePhase(incident: SecurityIncident)
   procedure: IncidentResponseProcedure,
   phase: IncidentResponsePhase): Promise<void> {,
   // Create actions for each step in the phase
@@ -1042,7 +1042,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
       case 'high': return 'high';
       case 'medium': return 'medium';
       case 'low': return 'low';
-  private async executeAutomatedStep(incident: SecurityIncident,)
+  private async executeAutomatedStep(incident: SecurityIncident)
     step: ResponseStep,
     actionId: string): Promise<void> {,
     try {
@@ -1134,7 +1134,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   content: message,
       sentBy: 'automated_system',
       sentAt: Date.now(),
-      channel: 'email';
+      channel: 'email'
   });
   private determineNotificationRecipients(()
     incident: SecurityIncident,
@@ -1285,7 +1285,7 @@ Incident Dashboard: /incidents/${incident.id}
         return { value: 95.5, unit: 'percent', threshold: 90 };
       default:
         return { status: 'completed' };
-  private async navigateDecisionTree(incident: SecurityIncident,)
+  private async navigateDecisionTree(incident: SecurityIncident)
     workflow: TroubleshootingWorkflow,
     diagnosticResults: Map<string, any>
   ): Promise<{ solutionId?: string; nextSteps: string; escalate: boolean }> {
@@ -1327,7 +1327,7 @@ Incident Dashboard: /incidents/${incident.id}
   private evaluateDecisionCondition(condition: string, results: Map<string, any>): boolean {
     // Simple decision condition evaluation
     return true; // Simplified for demo
-  private async applySolution(incident: SecurityIncident,)
+  private async applySolution(incident: SecurityIncident)
     solution: Solution,
     appliedBy: string): Promise<boolean> {,
     try {
@@ -1368,7 +1368,7 @@ Incident Dashboard: /incidents/${incident.id}
         automated: false;
   });
       return false;
-  private generateTroubleshootingRecommendations(incident: SecurityIncident,)
+  private generateTroubleshootingRecommendations(incident: SecurityIncident)
     workflow: TroubleshootingWorkflow,
     diagnosticResults: Map<string, any>,
     decisionResults: any): string {,
@@ -1431,7 +1431,7 @@ Incident Dashboard: /incidents/${incident.id}
   break;
   return recommendations;
   private assessComplianceStatus(incident: SecurityIncident): Array<{,
-  framework: string;,
+  framework: string;
   compliant: boolean;
   gaps: string;
 }> {
@@ -1492,7 +1492,7 @@ Incident Dashboard: /incidents/${incident.id}
   description: 'Standard procedure for data breach incidents',
   category: 'data_breach',
   severity: 'high',
-  triggerConditions: {,
+  triggerConditions: {
   eventTypes: ['data_leak', 'unauthorized_access'],
   severityThreshold: 'medium',
   customRules: [],

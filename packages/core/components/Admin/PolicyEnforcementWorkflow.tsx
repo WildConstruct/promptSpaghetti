@@ -34,55 +34,55 @@ import {
 } from 'lucide-react';
 
 export interface EnforcementAction {
-  id: string;,
+  id: string;
   type: 'suspend_user' | 'restrict_access' | 'hide_template' | 'block_transaction' | 'send_warning' | 'require_verification';
-  name: string;,
+  name: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   automated: boolean;
-  requiresApproval: boolean;,
+  requiresApproval: boolean;
   reversible: boolean;
 }
 export interface EnforcementWorkflow {
-  workflowId: string;,
+  workflowId: string;
   name: string;
-  description: string;,
+  description: string;
   policyId: string;
-  policyName: string;,
-  trigger: {,
-  type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';,
+  policyName: string;
+  trigger: {
+  type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
   conditions: string;
 };
-  steps: EnforcementStep;,
+  steps: EnforcementStep;
   status: 'active' | 'paused' | 'disabled';
   executionCount: number;
   lastExecuted?: Date;
   successRate: number;
 }
 export interface EnforcementStep {
-  stepId: string;,
+  stepId: string;
   name: string;
-  type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';,
-  config: {,
+  type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';
+  config: {
   action?: EnforcementAction;
   approvers?: string;
   timeout?: number; // minutes,
   retryPolicy?: 'none' | 'linear' | 'exponential';
   notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[];
 };
-  order: number;,
+  order: number;
   enabled: boolean;
 }
 export interface WorkflowExecution {
-  executionId: string;,
+  executionId: string;
   workflowId: string;
-  workflowName: string;,
+  workflowName: string;
   triggeredBy: string;
-  triggeredAt: Date;,
+  triggeredAt: Date;
   status: 'running' | 'completed' | 'failed' | 'cancelled' | 'pending_approval';
-  currentStep: number;,
+  currentStep: number;
   totalSteps: number;
-  entityType: 'user' | 'template' | 'transaction';,
+  entityType: 'user' | 'template' | 'transaction';
   entityId: string;
   context: Record<string, any>;
 }
@@ -134,7 +134,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   description: 'Automated response to users with critically low trust scores',
   policyId: 'policy-trust-001',
   policyName: 'Trust Score Minimum Threshold',
-  trigger: {,
+  trigger: {
   type: 'violation_detected',
   conditions: ['user.trustScore < 50', 'user.trustTrend == "declining"'],
 },
@@ -151,7 +151,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   stepId: 'step-2',
   name: 'Send Warning Notification',
   type: 'enforcement_action',
-  config: {,
+  config: {
   action: enforcementActions[2],
   notificationChannels: ['email', 'in_app'],
 },
@@ -162,7 +162,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   stepId: 'step-3',
   name: 'Human Review Required',
   type: 'human_review',
-  config: {,
+  config: {
   approvers: ['admin-trust', 'admin-security'],
   timeout: 120 // 2 hours,
 },
@@ -173,7 +173,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   stepId: 'step-4',
   name: 'Restrict Access',
   type: 'enforcement_action',
-  config: {,
+  config: {
   action: enforcementActions[1],
 },
   order: 4,
@@ -189,7 +189,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   description: 'Immediate response to detected fraudulent activity',
   policyId: 'policy-fraud-001',
   policyName: 'Suspicious Transaction Detection',
-  trigger: {,
+  trigger: {
   type: 'violation_detected',
   conditions: ['fraud.confidence > 0.8'],
 },
@@ -198,7 +198,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           stepId: 'step-1',
           name: 'Block Transaction',
           type: 'enforcement_action',
-          config: {,
+          config: {
   action: { id: 'block-txn', type: 'block_transaction', name: 'Block Transaction', description: 'Immediately block suspicious transaction', severity: 'critical', automated: true, requiresApproval: false, reversible: true }
   },
   order: 1,
@@ -208,7 +208,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   stepId: 'step-2',
   name: 'Notify Security Team',
   type: 'notification',
-  config: {,
+  config: {
   notificationChannels: ['email', 'webhook'],
 },
   order: 2,
@@ -230,7 +230,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   totalSteps: 4,
   entityType: 'user',
   entityId: 'user-123',
-  context: {,
+  context: {
   trustScore: 42,
   previousScore: 58,
   violationCount: 3,
@@ -246,7 +246,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   totalSteps: 2,
   entityType: 'transaction',
   entityId: 'txn-456',
-  context: {,
+  context: {
   fraudScore: 0.92,
   suspiciousPatterns: ['multiple_cards', 'velocity_anomaly'],
   blockedAmount: 2500]);
@@ -603,11 +603,11 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       {selectedWorkflow && renderWorkflowDetails()}
       <style>{`
         .policy-enforcement-workflow {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .workflow-header {
           display: flex;
@@ -615,7 +615,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -624,18 +624,18 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .workflow-tabs {
           border-bottom: 1px solid #e5e7eb;
         .tab-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .tab-button {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          padding: 0.75rem 1rem;,
+          padding: 0.75rem 1rem;
   border: none;
-          background: none;,
+          background: none;
   color: #6b7280;
           cursor: pointer;
-          border-bottom: 2px solid transparent;,
+          border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
         .tab-button:hover {,
   color: #374151;
@@ -648,11 +648,11 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           align-items: center;
           margin-bottom: 1rem;
         .workflows-header h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .header-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .workflows-grid {
           display: grid;
@@ -663,21 +663,21 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .workflow-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .workflow-info h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .workflow-info p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .workflow-details {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 0.75rem;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
@@ -685,47 +685,47 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           display: flex;
           justify-content: space-between;
         .detail-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .detail-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 500;
         .workflow-steps-preview h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.75rem 0;
         .steps-flow {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           flex-wrap: wrap;
         .step-preview {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.375rem;
-          padding: 0.375rem 0.5rem;,
+          padding: 0.375rem 0.5rem;
   background: #f3f4f6;
           border-radius: 4px;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #374151;
         .more-steps {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-style: italic;
         .workflow-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           margin-top: 1rem;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         .executions-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .execution-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 1rem;
         .execution-main {
           display: flex;
@@ -736,38 +736,38 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           flex: 1;
         .execution-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .execution-meta {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .execution-progress {
           display: flex;
           flex-direction: column;
-          align-items: flex-end;,
+          align-items: flex-end;
   gap: 0.25rem;
           min-width: 120px;
         .progress-bar {
-          width: 100%;,
+          width: 100%;
   height: 6px;
           background: #e5e7eb;
-          border-radius: 3px;,
+          border-radius: 3px;
   overflow: hidden;
         .progress-fill {
-          height: 100%;,
+          height: 100%;
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .execution-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           margin-bottom: 0.75rem;
         .approve-btn {
@@ -783,15 +783,15 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   background: #dc2626;
           color: white;
         .execution-context h6 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .context-items {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .context-item {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           font-size: 0.875rem;
         .context-key {
@@ -800,16 +800,16 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .context-value {
           color: #1f2937;
         .workflow-details-overlay {
-          position: fixed;,
+          position: fixed;
   top: 0;
-          left: 0;,
+          left: 0;
   right: 0;
-          bottom: 0;,
+          bottom: 0;
   background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;,
+          z-index: 1000;
   padding: 1rem;
         .workflow-details-modal {
           width: 100%;
@@ -822,51 +822,51 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           align-items: center;
         .header-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .header-info h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .workflow-visualization h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 1rem 0;
         .steps-diagram {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
           overflow-x: auto;
         .step-node {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          min-width: 120px;,
+          min-width: 120px;
   padding: 1rem;
           border: 2px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   background: white;
         .step-node.enabled {
           border-color: #3b82f6;
         .step-node.disabled {
           opacity: 0.5;
         .step-icon {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   background: #eff6ff;
           border-radius: 50%;
         .step-content {
           text-align: center;
         .step-content h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
           font-size: 0.875rem;
         .step-content p {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           margin: 0 0 0.5rem 0;
         .step-connector {
@@ -875,7 +875,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .workflow-config {
           margin-top: 1.5rem;
         .workflow-config h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 1rem 0;
         .config-grid {
@@ -884,12 +884,12 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           gap: 1rem;
         .config-item {
           display: flex;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         .config-label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .config-value {
           color: #1f2937;
@@ -899,7 +899,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           gap: 1rem;
         .action-card {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 1rem;
         .action-header {
           display: flex;
@@ -907,19 +907,19 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           align-items: center;
           margin-bottom: 0.5rem;
         .action-header h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .action-card p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0 0 1rem 0;
         .action-properties {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .property-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
         @media (max-width: 1200px) {
           .workflows-grid {
@@ -931,11 +931,11 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         @media (max-width: 768px) {
           .workflow-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .workflows-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .tab-buttons {
             flex-direction: column;
@@ -946,7 +946,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
             transform: rotate(90deg);
             align-self: center;
           .execution-main {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .actions-grid {

@@ -32,8 +32,8 @@ export type MarketplaceHelpContentType =
 // Extended help content interface for marketplace features
 
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
-  type: HelpContentType | MarketplaceHelpContentType;,
-  marketplaceContext: {,
+  type: HelpContentType | MarketplaceHelpContentType;
+  marketplaceContext: {
   page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
   userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
   templateCategory?: string;
@@ -46,10 +46,10 @@ export interface MarketplaceHelpOverlayProps {
   currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
   userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
   // Template-specific context
-  selectedTemplate?: {,
-  id: string;,
+  selectedTemplate?: {
+  id: string;
   category: string;
-  type: string;,
+  type: string;
   isPremium: boolean;
 };
   // Purchase context
@@ -57,7 +57,7 @@ export interface MarketplaceHelpOverlayProps {
   purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
   // Community context
   forumContext?: {
-  category: string;,
+  category: string;
   hasPosted: boolean;
   reputation: number;
 };
@@ -114,10 +114,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       ],
       relatedFeatures: ['Template Search', 'Category Filters', 'Preview System', 'Rating System'],
       level: 'beginner',
-      context: {,
+      context: {
   conditions: { isFirstVisit: true }
   },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'marketplace',
   userRole: 'new-user',
 }
@@ -135,10 +135,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Advanced Search', 'Category Navigation', 'Sort Options', 'Wishlist'],
   level: 'beginner',
-  context: {,
+  context: {
   triggerElements: ['search-bar', 'category-filter', 'sort-dropdown'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'marketplace',
   purchaseStage: 'browsing',
 }
@@ -156,10 +156,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Template Preview', 'Example Outputs', 'Complexity Indicators'],
   level: 'beginner',
-  context: {,
+  context: {
   triggerElements: ['preview-button', 'template-card'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'template-details',
   purchaseStage: 'preview',
 }
@@ -177,10 +177,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Shopping Cart', 'Secure Checkout', 'License Management', 'Download System'],
   level: 'beginner',
-  context: {,
+  context: {
   triggerElements: ['add-to-cart', 'checkout-button'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'template-details',
   purchaseStage: 'cart',
 }
@@ -198,10 +198,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Rating System', 'Review Writing', 'Community Feedback'],
   level: 'intermediate',
-  context: {,
+  context: {
   triggerElements: ['rating-stars', 'write-review'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'template-details',
   userRole: 'buyer',
 }
@@ -219,10 +219,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       ],
       relatedFeatures: ['Template Upload', 'Analytics Dashboard', 'Revenue Tracking', 'Community Management'],
       level: 'advanced',
-      context: {,
+      context: {
   conditions: { hasCreatedTemplate: true }
   },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'creator-dashboard',
   userRole: 'creator',
 }
@@ -240,10 +240,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Community Forum', 'User Profiles', 'Following System', 'Creative Challenges'],
   level: 'intermediate',
-  context: {,
+  context: {
   triggerElements: ['forum-post', 'community-nav'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'community',
   userRole: 'community-member',
 }
@@ -261,10 +261,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   ],
   relatedFeatures: ['Profile Editor', 'Portfolio Gallery', 'Bio Management', 'Achievement System'],
   level: 'intermediate',
-  context: {,
+  context: {
   triggerElements: ['profile-edit', 'portfolio-section'],
 },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'profile',
   userRole: 'creator',
 }
@@ -282,10 +282,10 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       ],
       relatedFeatures: ['Pricing Tools', 'Analytics Dashboard', 'SEO Optimization', 'Marketing Resources'],
       level: 'advanced',
-      context: {,
+      context: {
   conditions: { isCreator: true, hasPublishedTemplates: true }
   },
-  marketplaceContext: {,
+  marketplaceContext: {
   page: 'creator-dashboard',
   userRole: 'creator'], []);
   // Calculate current marketplace context for smart help suggestions
@@ -611,7 +611,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
         .marketplace-help-tooltip {
           background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
           border: 2px solid #0f4c75;
-          border-radius: 12px;,
+          border-radius: 12px;
   color: #fff;
           min-width: 320px;
           max-width: 500px;
@@ -628,41 +628,41 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
           max-width: 600px;
         @keyframes marketplaceSlideIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translateY(-20px) scale(0.95);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translateY(0) scale(1);
         .overlay-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 16px 20px;
-          border-bottom: 1px solid #0f4c75;,
+          border-bottom: 1px solid #0f4c75;
   background: rgba(15, 76, 117, 0.2);
         .help-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 10px;
         .help-title h3 {
           margin: 0;
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #3bb3e0;
         .help-icon {
           font-size: 20px;
         .overlay-controls {
-          display: flex;,
+          display: flex;
   gap: 8px;
         .size-toggle,
         .feedback-button,
         .close-button {
           background: rgba(59, 179, 224, 0.2);
-          border: 1px solid #3bb3e0;,
+          border: 1px solid #3bb3e0;
   color: #3bb3e0;
-          cursor: pointer;,
+          cursor: pointer;
   padding: 6px 8px;
-          border-radius: 6px;,
+          border-radius: 6px;
   transition: all 0.2s ease;
           font-size: 12px;
         .size-toggle:hover,
@@ -675,17 +675,17 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
         .help-description {
           margin: 0 0 16px 0;
           line-height: 1.5;
-          font-size: 14px;,
+          font-size: 14px;
   color: #e0e7ff;
         .marketplace-terminology {
           background: linear-gradient(135deg, rgba(59, 179, 224, 0.1) 0%, rgba(15, 76, 117, 0.2) 100%);
-          border-left: 4px solid #3bb3e0;,
+          border-left: 4px solid #3bb3e0;
   padding: 12px 16px;
           margin: 16px 0;
           border-radius: 0 8px 8px 0;
         .marketplace-terminology p {
           margin: 0;
-          font-size: 13px;,
+          font-size: 13px;
   color: #3bb3e0;
           font-style: italic;
         .terminology-icon {
@@ -695,7 +695,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
           margin-top: 20px;
         .action-items h4 {
           margin: 0 0 12px 0;
-          font-size: 13px;,
+          font-size: 13px;
   color: #3bb3e0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -705,29 +705,29 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
         .action-items li {
           font-size: 13px;
           line-height: 1.4;
-          margin-bottom: 6px;,
+          margin-bottom: 6px;
   color: #cbd5e1;
         .related-features {
           margin-top: 20px;
         .related-features h4 {
           margin: 0 0 12px 0;
-          font-size: 13px;,
+          font-size: 13px;
   color: #3bb3e0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .feature-tags {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 6px;
         .feature-tag {
           background: rgba(59, 179, 224, 0.2);
-          color: #3bb3e0;,
+          color: #3bb3e0;
   padding: 4px 8px;
           border-radius: 4px;
-          font-size: 11px;,
+          font-size: 11px;
   border: 1px solid rgba(59, 179, 224, 0.3);
         .tour-navigation {
-          border-top: 1px solid #0f4c75;,
+          border-top: 1px solid #0f4c75;
   padding: 16px 20px;
           background: rgba(15, 76, 117, 0.1);
         .tour-progress {
@@ -736,87 +736,87 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
           background: rgba(59, 179, 224, 0.2);
           height: 4px;
           border-radius: 2px;
-          margin-bottom: 8px;,
+          margin-bottom: 8px;
   overflow: hidden;
         .progress-fill {
           background: linear-gradient(90deg, #3bb3e0 0%, #0f4c75 100%);
-          height: 100%;,
+          height: 100%;
   transition: width 0.3s ease;
         .step-text {
-          font-size: 12px;,
+          font-size: 12px;
   color: #3bb3e0;
         .tour-controls {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .tour-skip {
-          background: none;,
+          background: none;
   border: 1px solid rgba(255, 255, 255, 0.3);
-          color: #cbd5e1;,
+          color: #cbd5e1;
   padding: 8px 12px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-          font-size: 12px;,
+          font-size: 12px;
   transition: all 0.2s ease;
         .tour-skip:hover {
           border-color: rgba(255, 255, 255, 0.5);
         .tour-next {
           background: linear-gradient(135deg, #3bb3e0 0%, #0f4c75 100%);
-          color: #fff;,
+          color: #fff;
   border: none;
           padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           font-size: 12px;
-          font-weight: 600;,
+          font-weight: 600;
   transition: all 0.2s ease;
         .tour-next:hover {,
   transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(59, 179, 224, 0.3);
         .feedback-form {
-          border-top: 1px solid #0f4c75;,
+          border-top: 1px solid #0f4c75;
   padding: 16px 20px;
           background: rgba(15, 76, 117, 0.1);
         .feedback-form h4 {
           margin: 0 0 12px 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: #3bb3e0;
         .feedback-rating {
-          display: flex;,
+          display: flex;
   gap: 4px;
           margin-bottom: 12px;
         .rating-star {
-          background: none;,
+          background: none;
   border: none;
-          font-size: 18px;,
+          font-size: 18px;
   cursor: pointer;
           transition: transform 0.2s ease;
         .rating-star:hover {,
   transform: scale(1.2);
         .feedback-close {
-          background: none;,
+          background: none;
   border: 1px solid rgba(255, 255, 255, 0.3);
-          color: #cbd5e1;,
+          color: #cbd5e1;
   padding: 6px 12px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 11px;
         .marketplace-tour-launcher {
-          position: fixed;,
+          position: fixed;
   bottom: 30px;
           right: 30px;
           z-index: 9998;
         .start-marketplace-tour {
           background: linear-gradient(135deg, #3bb3e0 0%, #0f4c75 100%);
-          color: #fff;,
+          color: #fff;
   border: none;
           padding: 16px 24px;
-          border-radius: 12px;,
+          border-radius: 12px;
   cursor: pointer;
           font-weight: 600;
           font-size: 14px;
           box-shadow: 0 8px 24px rgba(59, 179, 224, 0.3);
-          transition: all 0.3s ease;,
+          transition: all 0.3s ease;
   animation: marketplaceTourPulse 4s ease-in-out infinite;
         .start-marketplace-tour:hover {,
   transform: translateY(-3px);
@@ -833,7 +833,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
           .overlay-content {
             padding: 16px;
           .marketplace-tour-launcher {
-            bottom: 20px;,
+            bottom: 20px;
   right: 20px;
           .start-marketplace-tour {
             padding: 12px 20px;

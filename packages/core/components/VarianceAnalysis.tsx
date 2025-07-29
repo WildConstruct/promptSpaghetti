@@ -55,7 +55,7 @@ export }, [results]);
         background: varianceInfo.background,
         border: `1px solid ${varianceInfo.border}`}
 },
-  borderBottom: 'none';
+  borderBottom: 'none'
   }}>
         <div style={{
   display: 'flex',

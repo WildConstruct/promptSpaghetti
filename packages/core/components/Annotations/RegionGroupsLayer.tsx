@@ -18,7 +18,7 @@ import {
   REGION_GROUP_COLORS
 } from '../../types/CollaborationTypes';
 interface RegionGroupsLayerProps {
-  nodes: Node;,
+  nodes: Node;
   regionGroups: RegionGroupType;
   onRegionGroupsChange: (groups: RegionGroupType) => void;
   groupPreferences?: RegionGroupPreferences;
@@ -162,7 +162,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
   if (groupIndex >= 0 && action.position) {
   updatedGroups[groupIndex] = {
   ...updatedGroups[groupIndex],
-  bounds: {,
+  bounds: {
   ...updatedGroups[groupIndex].bounds,
   x: action.position.x,
   y: action.position.y,
@@ -325,8 +325,8 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
   transition: 'opacity 0.3s ease',
 }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '1';
-            }}
+              e.currentTarget.style.opacity = '1'
+  }}
             onMouseLeave={(e) => {
               e.currentTarget.style.opacity = '0.7';
             }}
@@ -387,8 +387,8 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
               e.currentTarget.style.backgroundColor = '#f3f4f6';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+              e.currentTarget.style.backgroundColor = 'transparent'
+  }}
           >
             🎯 Create Region Group
           </button>

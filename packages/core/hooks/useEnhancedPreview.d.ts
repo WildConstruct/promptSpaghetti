@@ -15,7 +15,7 @@ export interface EnhancedPreviewConfig {
 
 export interface VarianceAnalysis {
     wordCountVariance: number;
-    lengthDistribution: {,
+    lengthDistribution: {
         min: number;
         max: number;
         avg: number;

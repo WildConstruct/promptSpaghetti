@@ -8,23 +8,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface TemperatureControlsProps {
-  settings: TemperatureSettings;,
+  settings: TemperatureSettings;
   onChange: (settings: TemperatureSettings) => void;
   /**
   * Temperature Settings Controls Component
@@ -242,7 +242,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
   borderRadius: '6px',
                     cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                    minWidth: '80px';
+                    minWidth: '80px'
   }}
                   title={preset.description}
                   onMouseEnter={(e) => {

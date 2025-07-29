@@ -65,7 +65,7 @@ export interface CircuitBreakerConfig {
     halfOpenMaxAttempts: number;
 
 export interface MFARetryConfig {
-    operationConfigs: {,
+    operationConfigs: {
         [key in MFAOperation]: RetryConfig;
     };
     circuitBreaker: CircuitBreakerConfig;
@@ -108,7 +108,7 @@ export interface RetryMetrics {
     averageAttempts: number;
     averageDuration: number;
     circuitBreakerTrips: number;
-    operationMetrics: {,
+    operationMetrics: {
         [key in MFAOperation]: {
             count: number;
             successRate: number;
@@ -116,7 +116,7 @@ export interface RetryMetrics {
             averageDuration: number;
         };
     };
-    errorMetrics: {,
+    errorMetrics: {
         [key in FailureType]: number;
     };
 /**

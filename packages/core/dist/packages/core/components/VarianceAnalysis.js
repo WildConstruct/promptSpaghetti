@@ -41,7 +41,7 @@ if (results.length < 2) {
                         padding: 16,
                         background: varianceInfo.background,
                         border: `1px solid ${varianceInfo.border}`
-                    } }), ", borderBottom: 'none'; }}>", _jsxs("div", { style: {
+                    } }), ", borderBottom: 'none' }}>", _jsxs("div", { style: {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',

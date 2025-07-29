@@ -902,8 +902,7 @@ export var KeyType;
                                                         case KeyAlgorithm.ECDH_P256:
                                                             return 256;
                                                         case KeyAlgorithm.ECDSA_P384:
-                                                        case KeyAlgorithm.ECDH_P384:
-                                                            return 384;
+                                                        case KeyAlgorithm.ECDH_P384: return 384;
                                                         default:
                                                             return 256;
                                                             async;

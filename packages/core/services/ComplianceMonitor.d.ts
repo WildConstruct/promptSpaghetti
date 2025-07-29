@@ -181,7 +181,7 @@ export declare class ComplianceMonitor {
     private checkRateLimiting;
 
 export interface EnhancedComplianceDashboard extends ComplianceDashboard {
-    baselineTracking: {,
+    baselineTracking: {
         overallBaselineHealth: number;
         baselinesMet: number;
         totalBaselines: number;
@@ -190,22 +190,22 @@ export interface EnhancedComplianceDashboard extends ComplianceDashboard {
             baselinesMet: number;
             totalBaselines: number;
             averagePerformance: number;
-            status: 'healthy' | 'warning' | 'critical';
-        }>;
+            status: 'healthy' | 'warning' | 'critical'
+  }>;
     };
-    historicalTrends: {,
+    historicalTrends: {
         improvingMetrics: number;
         decliningMetrics: number;
         stableMetrics: number;
-        forecastAlerts: {,
+        forecastAlerts: {
             metric: string;
             framework: string;
             predictedIssue: string;
             timeframe: string;
-            risk: 'low' | 'medium' | 'high';
-        }[];
+            risk: 'low' | 'medium' | 'high'
+  }[];
     };
-    auditReadiness: {,
+    auditReadiness: {
         overallReadiness: number;
         frameworkReadiness: Record<string, {
             score: number;

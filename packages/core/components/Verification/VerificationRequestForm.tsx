@@ -7,15 +7,15 @@
 import React, { useState, useCallback } from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
 interface VerificationRequestFormProps {
-  userId: string;,
+  userId: string;
   onSubmit: (),
     type: IdentityValidationType,
     data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
   onCancel?: () => void;
 interface FormStep {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   verificationType: IdentityValidationType;
   required: boolean;
   const VERIFICATION_STEPS: FormStep = [
@@ -147,9 +147,9 @@ interface FormStep {
       </div>
       <style>{`
         .verification-request-form {
-          max-width: 800px;,
+          max-width: 800px;
   margin: 0 auto;
-          padding: 24px;,
+          padding: 24px;
   background: white;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -158,39 +158,39 @@ interface FormStep {
           margin-bottom: 32px;
         .verification-header h2 {
           font-size: 28px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 8px 0;
         .verification-header p {
           color: #6b7280;
-          font-size: 16px;,
+          font-size: 16px;
   margin: 0;
         .verification-steps {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 40px;,
+          margin-bottom: 40px;
   padding: 0 20px;
         .step {
           display: flex;
-          align-items: center;,
+          align-items: center;
   cursor: pointer;
           padding: 12px;
-          border-radius: 8px;,
+          border-radius: 8px;
   transition: background-color 0.2s;
           min-width: 140px;
         .step:hover {
           background-color: #f3f4f6;
         .step.active {
-          background-color: #dbeafe;,
+          background-color: #dbeafe;
   border: 2px solid #3b82f6;
         .step.completed .step-number {
-          background-color: #10b981;,
+          background-color: #10b981;
   color: white;
         .step-number {
-          width: 32px;,
+          width: 32px;
   height: 32px;
           border-radius: 50%;
-          background-color: #e5e7eb;,
+          background-color: #e5e7eb;
   color: #6b7280;
           display: flex;
           align-items: center;
@@ -199,19 +199,19 @@ interface FormStep {
           margin-right: 12px;
           flex-shrink: 0;
         .step.active .step-number {
-          background-color: #3b82f6;,
+          background-color: #3b82f6;
   color: white;
         .step-info {
           flex: 1;
         .step-title {
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
           font-size: 14px;
           margin-bottom: 2px;
         .required {
-          background-color: #fef2f2;,
+          background-color: #fef2f2;
   color: #dc2626;
-          font-size: 11px;,
+          font-size: 11px;
   padding: 2px 6px;
           border-radius: 4px;
           font-weight: 500;
@@ -221,17 +221,17 @@ interface FormStep {
           margin-bottom: 24px;
         .step-header h3 {
           font-size: 20px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 8px 0;
         .step-header p {
           color: #6b7280;
-          font-size: 14px;,
+          font-size: 14px;
   margin: 0;
         .error-messages {
           margin-bottom: 20px;
         .error-message {
-          background-color: #fef2f2;,
+          background-color: #fef2f2;
   color: #dc2626;
           padding: 12px;
           border-radius: 6px;
@@ -250,12 +250,12 @@ interface FormStep {
         .btn {
           padding: 8px 16px;
           border-radius: 6px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
-          border: none;,
+          border: none;
   transition: all 0.2s;
         .btn-secondary {
-          background-color: #f3f4f6;,
+          background-color: #f3f4f6;
   color: #374151;
         .btn-secondary:hover:not(:disabled) {
           background-color: #e5e7eb;
@@ -263,14 +263,14 @@ interface FormStep {
   opacity: 0.5;
           cursor: not-allowed;
         .verification-error {
-          text-align: center;,
+          text-align: center;
   color: #dc2626;
           padding: 40px;
         @media (max-width: 768px) {
           .verification-request-form {
             padding: 16px;
           .verification-steps {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 8px;
           .step {
             width: 100%;
@@ -281,9 +281,9 @@ interface FormStep {
 
 // Step Content Component
 interface VerificationStepContentProps {
-  step: FormStep;,
+  step: FormStep;
   data: Partial<IdentityValidationData>;
-  onSubmit: (data: Partial<IdentityValidationData>) => Promise<void>;,
+  onSubmit: (data: Partial<IdentityValidationData>) => Promise<void>;
   isSubmitting: boolean;
   const VerificationStepContent: React.FC<VerificationStepContentProps> = ({,)
   step,
@@ -352,8 +352,8 @@ interface VerificationStepContentProps {
 // Individual Step Components (simplified for now - will be expanded)
 const EmailVerificationStep: React.FC<{,
   data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;,
-  onSubmit: (e: React.FormEvent) => Promise<void>;,
+  onUpdate: (data: Partial<IdentityValidationData>) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
   return;
@@ -380,25 +380,25 @@ const EmailVerificationStep: React.FC<{,
           margin-bottom: 20px;
         label {
           display: block;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           margin-bottom: 6px;
         input {
-          width: 100%;,
+          width: 100%;
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;,
+          font-size: 14px;
   input: focus {;
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         .form-help {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           margin-top: 4px;
         .btn-primary {
-          background-color: #3b82f6;,
+          background-color: #3b82f6;
   color: white;
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
@@ -408,8 +408,8 @@ const EmailVerificationStep: React.FC<{,
 };
 const PhoneVerificationStep: React.FC<{,
   data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;,
-  onSubmit: (e: React.FormEvent) => Promise<void>;,
+  onUpdate: (data: Partial<IdentityValidationData>) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
   return;
@@ -437,30 +437,30 @@ const PhoneVerificationStep: React.FC<{,
           margin-bottom: 20px;
         label {
           display: block;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           margin-bottom: 6px;
         input {
-          width: 100%;,
+          width: 100%;
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;,
+          font-size: 14px;
   input: focus {;
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         .form-help {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           margin-top: 4px;
         .btn-primary {
-          background-color: #3b82f6;,
+          background-color: #3b82f6;
   color: white;
-          padding: 10px 20px;,
+          padding: 10px 20px;
   border: none;
           border-radius: 6px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
@@ -475,8 +475,8 @@ const PhoneVerificationStep: React.FC<{,
 // Placeholder components for other steps
 const GovernmentIdStep: React.FC<{,
   data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;,
-  onSubmit: (e: React.FormEvent) => Promise<void>;,
+  onUpdate: (data: Partial<IdentityValidationData>) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ onSubmit, isSubmitting }) => ()
   <div>
@@ -488,8 +488,8 @@ const GovernmentIdStep: React.FC<{,
 );
 const ProfessionalCredentialsStep: React.FC<{,
   data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;,
-  onSubmit: (e: React.FormEvent) => Promise<void>;,
+  onUpdate: (data: Partial<IdentityValidationData>) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ onSubmit, isSubmitting }) => ()
   <div>
@@ -501,8 +501,8 @@ const ProfessionalCredentialsStep: React.FC<{,
 );
 const SocialMediaStep: React.FC<{,
   data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;,
-  onSubmit: (e: React.FormEvent) => Promise<void>;,
+  onUpdate: (data: Partial<IdentityValidationData>) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ onSubmit, isSubmitting }) => ()
   <div>

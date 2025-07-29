@@ -46,46 +46,46 @@ export enum RateLimitStrategy {
   BLOCKED = 'blocked',
   WARNING = 'warning'
   export interface RateLimitConfig {
-  strategy: RateLimitStrategy;,
+  strategy: RateLimitStrategy;
   windowSize: number; // seconds,
-  maxRequests: number;,
+  maxRequests: number;
   backoffStrategy: BackoffStrategy;
   burstAllowance?: number;
-  exemptionsEnabled: boolean;,
+  exemptionsEnabled: boolean;
   adaptiveEnabled: boolean;
   threatDetectionEnabled: boolean;
 }
 export interface EndpointLimits {
-  category: EndpointCategory;,
+  category: EndpointCategory;
   endpoint: string;
-  limits: {,
-  perSecond: number;,
+  limits: {
+  perSecond: number;
   perMinute: number;
-  perHour: number;,
+  perHour: number;
   perDay: number;
 };
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy;
   baseDelay: number; // seconds,
   maxDelay: number; // seconds,
   multiplier: number;
 };
-  burst: {,
+  burst: {
   enabled: boolean;
-  size: number;,
+  size: number;
   refillRate: number; // tokens per second,
 };
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: number;
   threatLevelAdjustments: Record<ThreatLevel, number>; // multipliers,
 };
 }
 export interface RateLimitAttempt {
   identifier: string; // IP, user ID, session ID,
-  endpoint: string;,
+  endpoint: string;
   timestamp: Date;
-  success: boolean;,
-  metadata: {,
+  success: boolean;
+  metadata: {
   userAgent?: string;
   location?: string;
   sessionId?: string;
@@ -94,37 +94,37 @@ export interface RateLimitAttempt {
 };
 }
 export interface RateLimitStatus {
-  identifier: string;,
+  identifier: string;
   endpoint: string;
-  result: RateLimitResult;,
+  result: RateLimitResult;
   remainingRequests: number;
   resetTime: Date;
   retryAfter?: number; // seconds,
-  backoffLevel: number;,
+  backoffLevel: number;
   threatLevel: ThreatLevel;
   adaptiveMultiplier: number;
 }
 export interface BackoffState {
-  identifier: string;,
+  identifier: string;
   endpoint: string;
-  level: number;,
+  level: number;
   nextAllowedTime: Date;
-  consecutiveFailures: number;,
+  consecutiveFailures: number;
   totalFailures: number;
   lastFailureTime: Date;
 }
 export interface ThreatContext {
-  identifier: string;,
+  identifier: string;
   threatLevel: ThreatLevel;
   indicators: string;
-  geolocation?: {,
-  country: string;,
+  geolocation?: {
+  country: string;
   region: string;
   suspicious: boolean;
 };
-  behaviorPattern: {,
+  behaviorPattern: {
   rapidRequests: boolean;
-  unusualTiming: boolean;,
+  unusualTiming: boolean;
   multipleEndpoints: boolean;
   newDevice: boolean;
 };
@@ -215,7 +215,7 @@ export class RateLimitingService extends EventEmitter {
   /**
    * Record an authentication attempt
    */
-  public recordAttempt(identifier: string,)
+  public recordAttempt(identifier: string)
     endpoint: string,
     success: boolean,
     metadata: Partial<RateLimitAttempt['metadata']> = {}
@@ -225,7 +225,7 @@ export class RateLimitingService extends EventEmitter {
   endpoint,
   timestamp: new Date(),
   success,
-  metadata: {,
+  metadata: {
   threatLevel: ThreatLevel.LOW,
   ...metadata
 };
@@ -306,9 +306,9 @@ export class RateLimitingService extends EventEmitter {
    * Get rate limiting statistics
    */
   public getStatistics(): {
-    totalAttempts: number;,
+    totalAttempts: number;
   blockedAttempts: number;
-    activeBackoffs: number;,
+    activeBackoffs: number;
   threatLevels: Record<ThreatLevel, number>;
     topEndpoints: Array<{ endpoint: string; attempts: number }>;
     let totalAttempts = 0;
@@ -343,26 +343,26 @@ export class RateLimitingService extends EventEmitter {
   this.endpointConfigs.set('/auth/login', {)
   category: EndpointCategory.AUTHENTICATION,
   endpoint: '/auth/login',
-  limits: {,
+  limits: {
   perSecond: 2,
   perMinute: 10,
   perHour: 50,
   perDay: 200,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.EXPONENTIAL,
   baseDelay: 5,
   maxDelay: 3600,
   multiplier: 2,
 },
-  burst: {,
+  burst: {
   enabled: true,
   size: 5,
   refillRate: 0.5,
 },
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: 5,
-  threatLevelAdjustments: {,
+  threatLevelAdjustments: {
   [ThreatLevel.LOW]: 1.0,
   [ThreatLevel.MEDIUM]: 0.5,
   [ThreatLevel.HIGH]: 0.25,
@@ -372,26 +372,26 @@ export class RateLimitingService extends EventEmitter {
     this.endpointConfigs.set('/auth/mfa/verify', {)
   category: EndpointCategory.MFA_VERIFICATION,
   endpoint: '/auth/mfa/verify',
-  limits: {,
+  limits: {
   perSecond: 1,
   perMinute: 5,
   perHour: 20,
   perDay: 100,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.FIBONACCI,
   baseDelay: 10,
   maxDelay: 1800,
   multiplier: 1,
 },
-  burst: {,
+  burst: {
   enabled: false,
   size: 0,
   refillRate: 0,
 },
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: 3,
-  threatLevelAdjustments: {,
+  threatLevelAdjustments: {
   [ThreatLevel.LOW]: 1.0,
   [ThreatLevel.MEDIUM]: 0.6,
   [ThreatLevel.HIGH]: 0.3,
@@ -401,26 +401,26 @@ export class RateLimitingService extends EventEmitter {
     this.endpointConfigs.set('/auth/password/reset', {)
   category: EndpointCategory.PASSWORD_RESET,
   endpoint: '/auth/password/reset',
-  limits: {,
+  limits: {
   perSecond: 1,
   perMinute: 3,
   perHour: 10,
   perDay: 25,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.LINEAR,
   baseDelay: 60,
   maxDelay: 3600,
   multiplier: 1.5,
 },
-  burst: {,
+  burst: {
   enabled: false,
   size: 0,
   refillRate: 0,
 },
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: 2,
-  threatLevelAdjustments: {,
+  threatLevelAdjustments: {
   [ThreatLevel.LOW]: 1.0,
   [ThreatLevel.MEDIUM]: 0.7,
   [ThreatLevel.HIGH]: 0.4,
@@ -430,26 +430,26 @@ export class RateLimitingService extends EventEmitter {
     this.endpointConfigs.set('/auth/register', {)
   category: EndpointCategory.REGISTRATION,
   endpoint: '/auth/register',
-  limits: {,
+  limits: {
   perSecond: 1,
   perMinute: 2,
   perHour: 5,
   perDay: 10,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.EXPONENTIAL,
   baseDelay: 30,
   maxDelay: 7200,
   multiplier: 3,
 },
-  burst: {,
+  burst: {
   enabled: false,
   size: 0,
   refillRate: 0,
 },
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: 1,
-  threatLevelAdjustments: {,
+  threatLevelAdjustments: {
   [ThreatLevel.LOW]: 1.0,
   [ThreatLevel.MEDIUM]: 0.5,
   [ThreatLevel.HIGH]: 0.2,
@@ -461,32 +461,32 @@ export class RateLimitingService extends EventEmitter {
   return {
   category: EndpointCategory.AUTHENTICATION,
   endpoint,
-  limits: {,
+  limits: {
   perSecond: 5,
   perMinute: 20,
   perHour: 100,
   perDay: 500,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.EXPONENTIAL,
   baseDelay: 1,
   maxDelay: 300,
   multiplier: 2,
 },
-  burst: {,
+  burst: {
   enabled: true,
   size: 10,
   refillRate: 1,
 },
-  adaptiveTriggers: {,
+  adaptiveTriggers: {
   suspiciousActivityThreshold: 10,
-  threatLevelAdjustments: {,
+  threatLevelAdjustments: {
   [ThreatLevel.LOW]: 1.0,
   [ThreatLevel.MEDIUM]: 0.8,
   [ThreatLevel.HIGH]: 0.5,
   [ThreatLevel.CRITICAL]: 0.3,
 };
-  private async assessThreatLevel(identifier: string,)
+  private async assessThreatLevel(identifier: string)
     endpoint: string,
     metadata: Partial<RateLimitAttempt['metadata']>): Promise<ThreatLevel> {,
   const context = this.threatContexts.get(identifier);
@@ -578,9 +578,9 @@ export class RateLimitingService extends EventEmitter {
   perHour: Math.ceil(config.limits.perHour * multiplier),
   perDay: Math.ceil(config.limits.perDay * multiplier),
 };
-  private evaluateRateLimits(attempts: RateLimitAttempt, limits: any): {,
+  private evaluateRateLimits(attempts: RateLimitAttempt, limits: any): {
   blocked: boolean;
-  warning: boolean;,
+  warning: boolean;
   remaining: number;
   resetTime: Date;
   retryAfter?: number;
@@ -625,7 +625,7 @@ export class RateLimitingService extends EventEmitter {
   identifier,
   threatLevel: ThreatLevel.LOW,
   indicators: [],
-  behaviorPattern: {,
+  behaviorPattern: {
   rapidRequests: false,
   unusualTiming: false,
   multipleEndpoints: false,

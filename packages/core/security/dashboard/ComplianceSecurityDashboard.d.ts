@@ -117,18 +117,18 @@ export interface ComplianceMetrics {
         lastAudit: Date;
         nextAudit?: Date;
     }>;
-    riskProfile: {,
+    riskProfile: {
         high: number;
         medium: number;
         low: number;
         accepted: number;
     };
-    auditStatus: {,
+    auditStatus: {
         upcoming: AuditCycle[];
         active: AuditCycle[];
         recentlyCompleted: AuditCycle[];
     };
-    evidenceHealth: {,
+    evidenceHealth: {
         current: number;
         outdated: number;
         missing: number;

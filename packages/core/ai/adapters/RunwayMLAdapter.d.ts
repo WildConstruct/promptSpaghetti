@@ -32,19 +32,19 @@ export interface RunwayMLRequestOptions {
     negative_prompt?: string;
 
 export interface RunwayMLGenerationResult {
-    video: {,
+    video: {
         url?: string;
         data?: ArrayBuffer;
         format: string;
         duration: number;
-        resolution: {,
+        resolution: {
             width: number;
             height: number;
         };
         fps: number;
         size: number;
     };
-    metadata: {,
+    metadata: {
         model: string;
         prompt: string;
         negative_prompt?: string;
@@ -54,9 +54,9 @@ export interface RunwayMLGenerationResult {
         camera_motion?: string;
         style_preset?: string;
         generation_time: number;
-        status: 'completed' | 'processing' | 'failed';
-    };
-    usage: {,
+        status: 'completed' | 'processing' | 'failed'
+  };
+    usage: {
         credits_consumed: number;
         cost: number;
         processing_time: number;

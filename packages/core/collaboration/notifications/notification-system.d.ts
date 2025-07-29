@@ -11,7 +11,7 @@ export interface NotificationPreferences {
     userId: UserId;
     channels: NotificationChannel[];
     filters: NotificationFilter[];
-    digest: {,
+    digest: {
         enabled: boolean;
         frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
         time?: string;
@@ -24,7 +24,7 @@ export interface NotificationFilter {
 
 export interface NotificationTemplate {
     type: NotificationType;
-    channels: {,
+    channels: {
         [channel: string]: {
             subject: string;
             body: string;

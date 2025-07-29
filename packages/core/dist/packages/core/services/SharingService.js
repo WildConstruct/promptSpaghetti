@@ -90,7 +90,8 @@ Promise < ShareResponse > {
     twitter: {
         card: 'summary_large_image',
         title: config.title,
-        description: config.description || `Interactive ${config.resourceType} template` }
+        description: config.description || `Interactive ${config.resourceType} template`
+    }
 },
     image;
 config.thumbnailUrl;
@@ -305,9 +306,11 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                                     /**
                                      * Update share permissions
                                      */
-                                    async updateSharePermissions() { } }(),
+                                    async updateSharePermissions() { }
+                                }(),
                                 shareConfigId: string,
-                                permissions: (Partial), } };
+                                permissions: (Partial),
+                            } };
                         Promise < ShareConfig > {
                             // TODO: Implement actual database update,
                             throw: new Error('Not implemented'),
@@ -384,7 +387,8 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                     buildEmailShareUrl(title, url, description) {
                         const subject = encodeURIComponent(`Check out: ${title}`);
                     },
-                    const: body = encodeURIComponent(`I thought you might be interested in this:\n\n${title}\n${description || ''}\n\n${url}`) },
+                    const: body = encodeURIComponent(`I thought you might be interested in this:\n\n${title}\n${description || ''}\n\n${url}`)
+                },
                 return: `mailto:?subject=${subject}&body=${body}` }
         };
     }

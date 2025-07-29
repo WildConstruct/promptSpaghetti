@@ -13,13 +13,13 @@ import { StateSynchronizer, SyncMessage, OptimisticUpdate } from '../orchestrati
 // Real-time types
 
 export interface WebSocketConnection {
-  socket: WebSocket;,
+  socket: WebSocket;
   id: string;
-  userId: string;,
+  userId: string;
   domains: string;
-  isReady: boolean;,
+  isReady: boolean;
   lastPing: number;
-  latency: number;,
+  latency: number;
   reconnectAttempts: number;
   metadata: ConnectionMetadata;
 }
@@ -27,38 +27,38 @@ export interface ConnectionMetadata {
   userAgent: string;
   ip?: string;
   location?: string;
-  sessionId: string;,
+  sessionId: string;
   connectTime: number;
 }
 export interface StateSubscription {
-  id: string;,
+  id: string;
   domain: string;
-  filters: SubscriptionFilter;,
+  filters: SubscriptionFilter;
   callback: StateChangeCallback;
   options: SubscriptionOptions;
 }
 export interface SubscriptionFilter {
-  type: 'path' | 'user' | 'change_type' | 'custom';,
+  type: 'path' | 'user' | 'change_type' | 'custom';
   value: string | string | ((change: StateChange<any>) => boolean);
-  operator?: 'equals' | 'contains' | 'matches' | 'in';
-}
+  operator?: 'equals' | 'contains' | 'matches' | 'in'
+  }
 export interface SubscriptionOptions {
   includeOptimistic?: boolean;
   batchUpdates?: boolean;
   throttleMs?: number;
-  priority?: 'low' | 'normal' | 'high';
-}
+  priority?: 'low' | 'normal' | 'high'
+  }
 export type StateChangeCallback = (change: StateChange<any>, metadata: ChangeMetadata) => void;
 
 export interface ChangeMetadata {
-  source: 'local' | 'remote' | 'server';,
+  source: 'local' | 'remote' | 'server';
   optimistic: boolean;
   clientId: string;
   latency?: number;
   timestamp: number;
 }
 export interface StateMutation {
-  domain: string;,
+  domain: string;
   operation: MutationOperation;
   path?: string;
   value?: any;
@@ -67,15 +67,15 @@ export interface StateMutation {
 export type MutationOperation = 'create' | 'update' | 'delete' | 'replace' | 'merge';
 
 export interface RealtimeConfig {
-  wsUrl: string;,
+  wsUrl: string;
   reconnectInterval: number;
-  maxReconnectAttempts: number;,
+  maxReconnectAttempts: number;
   pingInterval: number;
-  pongTimeout: number;,
+  pongTimeout: number;
   batchInterval: number;
-  maxBatchSize: number;,
+  maxBatchSize: number;
   enableOptimistic: boolean;
-  enableCompression: boolean;,
+  enableCompression: boolean;
   enableHeartbeat: boolean;
   debugMode: boolean;
 }
@@ -83,9 +83,9 @@ export interface ConnectionState {
   status: 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'error';
   error?: Error;
   lastConnected?: number;
-  reconnectAttempts: number;,
+  reconnectAttempts: number;
   latency: number;
-  messagesSent: number;,
+  messagesSent: number;
   messagesReceived: number;
   bytesTransferred: number;
   // Error types
@@ -168,7 +168,7 @@ export class RealTimeStateManager extends EventEmitter {
   lastPing: Date.now(),
   latency: 0,
   reconnectAttempts: this.connectionState.reconnectAttempts,
-  metadata: {,
+  metadata: {
   userAgent: navigator.userAgent,
   sessionId: sessionId || this.generateSessionId(),
   connectTime: Date.now(),
@@ -334,7 +334,7 @@ export class RealTimeStateManager extends EventEmitter {
   domain,
   filters,
   callback,
-  options: {,
+  options: {
   includeOptimistic: true,
   batchUpdates: false,
   throttleMs: 0,
@@ -345,7 +345,7 @@ export class RealTimeStateManager extends EventEmitter {
     // Send subscription request to server
     this.sendMessage({)
   type: 'subscribe',
-  payload: {,
+  payload: {
   domain,
   filters,
   options
@@ -358,7 +358,7 @@ export class RealTimeStateManager extends EventEmitter {
         payload: { subscriptionId: subscription.id }
       });
     };
-  private notifySubscribers(domain: string,)
+  private notifySubscribers(domain: string)
     change: StateChange<any>,
     metadata: ChangeMetadata): void {,
     for (const subscription of this.subscriptions.values()) {
@@ -406,14 +406,14 @@ export class RealTimeStateManager extends EventEmitter {
         timestamp: Date.now(),
         type: `OPTIMISTIC_${mutation.operation.toUpperCase()}`}
 },
-  payload: {,
+  payload: {
   path: mutation.path,
   value: mutation.value,
   operation: mutation.operation,
   optimistic: true,
   updateId
 },
-  source: 'local';
+  source: 'local'
   };
       // Apply optimistic update locally
       const rollbackId = await this.synchronizer.applyOptimisticUpdate(domain, change);
@@ -431,7 +431,7 @@ export class RealTimeStateManager extends EventEmitter {
       // Send to server for confirmation
       await this.sendMessage({)
   type: 'optimistic_update',
-  payload: {,
+  payload: {
   updateId,
   domain,
   mutation,
@@ -490,11 +490,11 @@ export class RealTimeStateManager extends EventEmitter {
   private async sendHandshake(): Promise<void> {,
   await this.sendMessage({)
   type: 'handshake',
-  payload: {,
+  payload: {
   clientId: this.connection?.id,
   userId: this.connection?.userId,
   domains: Array.from(this.domains.keys()),
-  capabilities: {,
+  capabilities: {
   optimisticUpdates: this.config.enableOptimistic,
   compression: this.config.enableCompression,
   heartbeat: this.config.enableHeartbeat,

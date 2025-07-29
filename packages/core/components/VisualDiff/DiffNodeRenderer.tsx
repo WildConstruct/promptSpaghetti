@@ -3,10 +3,10 @@
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 interface DiffNodeData {
-  originalNode: Error;,
+  originalNode: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
   changeDetails: Record<string, any>;
-  showMetadata: boolean;,
+  showMetadata: boolean;
   side: 'source' | 'target';
   [key: string]: unknown;
 
@@ -25,23 +25,23 @@ export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected 
   position: 'relative' as const,
 };
     const stateStyles = {
-  added: {,
+  added: {
   borderColor: '#10b981',
   backgroundColor: '#ecfdf5',
   color: '#065f46',
 },
-  removed: {,
+  removed: {
   borderColor: '#ef4444',
   backgroundColor: '#fef2f2',
   color: '#991b1b',
   opacity: 0.7,
 },
-  modified: {,
+  modified: {
   borderColor: '#f59e0b',
   backgroundColor: '#fffbeb',
   color: '#92400e',
 },
-  unchanged: {,
+  unchanged: {
   borderColor: '#6b7280',
   backgroundColor: '#f9fafb',
   color: '#374151',

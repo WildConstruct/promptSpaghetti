@@ -17,25 +17,25 @@ export class ExtensionManifestUtils {
   name: packageJson.displayName || packageJson.name || 'Unknown Extension',
   version: packageJson.version || '1.0.0',
   description: packageJson.description || 'No description provided',
-  author: {,
+  author: {
   name: typeof packageJson.author === 'string' ? packageJson.author : packageJson.author?.name || 'Unknown',
   email: typeof packageJson.author === 'object' ? packageJson.author.email : undefined,
   url: typeof packageJson.author === 'object' ? packageJson.author.url : undefined,
 },
   extension_type: packageJson.extensionType || 'node',
       main: packageJson.main || 'index.js',
-      dependencies: {,
+      dependencies: {
   system: packageJson.engines?.promptSpaghetti || '1.0.0',
         extensions: packageJson.extensionDependencies || {},
         npm: packageJson.dependencies || {}
   },
   permissions: packageJson.permissions || [],
-      capabilities: {,
+      capabilities: {
   provides: packageJson.capabilities?.provides || [],
   requires: packageJson.capabilities?.requires || [],
   optional: packageJson.capabilities?.optional || [],
 },
-  metadata: {,
+  metadata: {
   license: packageJson.license || 'MIT',
   repository: packageJson.repository?.url || packageJson.repository,
   homepage: packageJson.homepage,
@@ -43,7 +43,7 @@ export class ExtensionManifestUtils {
   keywords: packageJson.keywords || [],
   categories: packageJson.categories || [],
 },
-  compatibility: {,
+  compatibility: {
   min_system_version: packageJson.engines?.promptSpaghetti || '1.0.0',
   platforms: packageJson.platforms || ['web'],
 };
@@ -65,13 +65,13 @@ export class ExtensionManifestUtils {
   version: manifest.version,
   description: manifest.description,
   main: manifest.main,
-  author: {,
+  author: {
   name: manifest.author.name,
   email: manifest.author.email,
   url: manifest.author.url,
 },
   extensionType: manifest.extension_type,
-      engines: {,
+      engines: {
   promptSpaghetti: manifest.dependencies?.system || '1.0.0',
 },
   dependencies: manifest.dependencies?.npm || {},
@@ -111,11 +111,11 @@ export class ExtensionManifestUtils {
   merged.dependencies = {
   ...merged.dependencies,
   ...override.dependencies,
-  extensions: {,
+  extensions: {
   ...merged.dependencies?.extensions,
   ...override.dependencies.extensions
 },
-  npm: {,
+  npm: {
           ...merged.dependencies?.npm,
           ...override.dependencies.npm
       };
@@ -153,9 +153,9 @@ export class ExtensionManifestUtils {
   /**
    * Validate manifest dependencies
    */
-  public static validateManifestDependencies(manifest: ExtensionManifest): {,
+  public static validateManifestDependencies(manifest: ExtensionManifest): {
   valid: boolean;
-    errors: string;,
+    errors: string;
   warnings: string;
     const errors: string = [];
     const warnings: string = [];
@@ -414,24 +414,24 @@ export class ExtensionManifestUtils {
   name: 'My Node Extension',
   version: '1.0.0',
   description: 'A custom node extension',
-  author: {,
+  author: {
   name: 'Your Name',
   email: 'your.email@example.com',
 },
   extension_type: 'node',
       main: 'index.js',
-      dependencies: {,
+      dependencies: {
   system: '1.0.0',
 },
   permissions: [,
         'runtime-nodes'
       ],
-      runtime: {,
+      runtime: {
   node_types: [,
   'custom-node'
   ]
 },
-  metadata: {,
+  metadata: {
   license: 'MIT',
   keywords: ['node', 'custom'],
   categories: ['workflow'],
@@ -443,24 +443,24 @@ export class ExtensionManifestUtils {
   name: 'My UI Extension',
   version: '1.0.0',
   description: 'A custom UI extension',
-  author: {,
+  author: {
   name: 'Your Name',
   email: 'your.email@example.com',
 },
   extension_type: 'ui',
       main: 'index.js',
-      dependencies: {,
+      dependencies: {
   system: '1.0.0',
 },
   permissions: [,
         'ui-components'
       ],
-      ui: {,
+      ui: {
   category: 'general',
-  components: {,
+  components: {
   'custom-component': './components/CustomComponent.js',
 },
-  metadata: {,
+  metadata: {
   license: 'MIT',
   keywords: ['ui', 'components'],
   categories: ['interface'],
@@ -472,21 +472,21 @@ export class ExtensionManifestUtils {
   name: 'My Transform Extension',
   version: '1.0.0',
   description: 'A custom transform extension',
-  author: {,
+  author: {
   name: 'Your Name',
   email: 'your.email@example.com',
 },
   extension_type: 'transform',
       main: 'index.js',
-      dependencies: {,
+      dependencies: {
   system: '1.0.0',
 },
-  runtime: {,
+  runtime: {
   transforms: [,
   'custom-transform'
   ]
 },
-  metadata: {,
+  metadata: {
   license: 'MIT',
   keywords: ['transform', 'data'],
   categories: ['processing'],
@@ -498,24 +498,24 @@ export class ExtensionManifestUtils {
   name: 'My Storage Extension',
   version: '1.0.0',
   description: 'A custom storage extension',
-  author: {,
+  author: {
   name: 'Your Name',
   email: 'your.email@example.com',
 },
   extension_type: 'storage',
       main: 'index.js',
-      dependencies: {,
+      dependencies: {
   system: '1.0.0',
 },
   permissions: [,
         'storage'
       ],
-      runtime: {,
+      runtime: {
   storage_providers: [,
   'custom-storage'
   ]
 },
-  metadata: {,
+  metadata: {
   license: 'MIT',
   keywords: ['storage', 'persistence'],
   categories: ['data'],
@@ -523,42 +523,42 @@ export class ExtensionManifestUtils {
 
 // Types and Interfaces
 interface ManifestSizeInfo {
-  raw: number;,
+  raw: number;
   compressed: number;
-  compressionRatio: number;,
+  compressionRatio: number;
   fieldCount: number;
-  dependencyCount: number;,
+  dependencyCount: number;
   permissionCount: number;
   interface ManifestMetadata {
-  id: string;,
+  id: string;
   name: string;
-  version: string;,
+  version: string;
   type: string;
-  author: string;,
+  author: string;
   description: string;
-  license: string;,
+  license: string;
   keywords: string;
-  categories: string;,
+  categories: string;
   hasUI: boolean;
-  hasRuntime: boolean;,
+  hasRuntime: boolean;
   hasSecurity: boolean;
-  dependencyCount: number;,
+  dependencyCount: number;
   permissionCount: number;
   size: ManifestSizeInfo;
   interface ManifestComparison {
-  identical: boolean;,
+  identical: boolean;
   versionChanged: boolean;
-  dependenciesChanged: boolean;,
+  dependenciesChanged: boolean;
   permissionsChanged: boolean;
-  configurationChanged: boolean;,
+  configurationChanged: boolean;
   changes: Array<{,
-  field: string;,
+  field: string;
   oldValue: string;
-  newValue: string;,
-  type: 'added' | 'removed' | 'modified';
-}>;
+  newValue: string;
+  type: 'added' | 'removed' | 'modified'
+  }>;
 interface ManifestWizardQuestion {
-  key: string;,
+  key: string;
   prompt: string;
   type: 'text' | 'select' | 'boolean';
   required?: boolean;

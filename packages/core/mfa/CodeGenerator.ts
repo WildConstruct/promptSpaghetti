@@ -18,26 +18,26 @@ import { EventEmitter } from 'events';
 // Types and Interfaces
 
 export interface CodeGenerationOptions {
-  length: number;,
+  length: number;
   format: 'numeric' | 'alphanumeric' | 'alphabetic';
   excludeAmbiguous: boolean;
   customAlphabet?: string;
 }
 export interface CodeValidationOptions {
-  allowedAttempts: number;,
+  allowedAttempts: number;
   timeWindowMinutes: number;
   constantTimeValidation: boolean;
 }
 export interface VerificationCodeData {
-  id: string;,
+  id: string;
   codeHash: string;
-  algorithm: string;,
+  algorithm: string;
   salt: string;
-  purpose: string;,
+  purpose: string;
   userId: string;
-  createdAt: Date;,
+  createdAt: Date;
   expiresAt: Date;
-  attempts: number;,
+  attempts: number;
   maxAttempts: number;
   used: boolean;
   metadata?: Record<string, any>;
@@ -60,7 +60,7 @@ export interface ValidationResult {
   // Timing attack protection
   CONSTANT_TIME_DELAY_MS: 100,
   // Character sets (excluding ambiguous characters)
-  ALPHABETS: {,
+  ALPHABETS: {
   numeric: '0123456789',
   alphanumeric: 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', // Excludes 0,O,1,I,L,
   alphabetic: 'ABCDEFGHJKMNPQRSTUVWXYZ',
@@ -104,7 +104,7 @@ export class SecureCodeGenerator extends EventEmitter {
     code: string,
     userId: string,
     purpose: string,
-    options: {,
+    options: {
   expirationMinutes?: number;
   maxAttempts?: number;
   metadata?: Record<string, any>;
@@ -283,7 +283,7 @@ export class SecureCodeGenerator extends EventEmitter {
   32, // 256-bit output
   this.config.HASH_ALGORITHM
   ).toString('base64');
-  private async constantTimeValidation(inputCode: string,)
+  private async constantTimeValidation(inputCode: string)
   storedHash: string,
   salt: Buffer): Promise<boolean> {,
   // Hash the input code with the same parameters
@@ -293,7 +293,7 @@ export class SecureCodeGenerator extends EventEmitter {
   Buffer.from(storedHash, 'base64'),
   Buffer.from(inputHash, 'base64')
   );
-  private createValidationResult(valid: boolean,)
+  private createValidationResult(valid: boolean)
   code: VerificationCodeData,
   reason?: ValidationResult['reason']): ValidationResult {,
   const result: ValidationResult = {,

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useGraphStore } from '../../graphStore';
 
 export interface VariationListProps {
-  nodeId: string;,
+  nodeId: string;
   variations: string;
   onAdd?: (variation: string) => void;
   onRemove?: (index: number) => void;

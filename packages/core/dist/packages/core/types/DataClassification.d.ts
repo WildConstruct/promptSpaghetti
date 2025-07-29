@@ -9,10 +9,19 @@ export declare enum DataClassificationLevel {
     INTERNAL = "INTERNAL",
     CONFIDENTIAL = "CONFIDENTIAL",
     RESTRICTED = "RESTRICTED",
-    TOP_SECRET = "TOP_SECRET",
-    export,
-    interface,
-    DataClassification
+    TOP_SECRET = "TOP_SECRET"
+}
+export interface DataClassification {
+    id: string;
+    dataElement: string;
+    classification: DataClassificationLevel;
+    rationale: string;
+    dataOwner: string;
+    classifiedBy: string;
+    classificationDate: Date;
+    reviewDate: Date;
+    approvals: ClassificationApproval;
+    metadata: ClassificationMetadata;
 }
 export interface ClassificationApproval {
     approver: string;

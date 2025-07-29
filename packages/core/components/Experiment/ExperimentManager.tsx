@@ -50,29 +50,29 @@ import {
 } from '../../types/experiment';
 
 export interface ExperimentManagerProps {
-  experiments: Experiment;,
+  experiments: Experiment;
   templates: ExperimentTemplate;
-  knowledgeBase: KnowledgeBaseEntry;,
+  knowledgeBase: KnowledgeBaseEntry;
   onCreateExperiment: (template?: ExperimentTemplate) => void;
-  onEditExperiment: (id: string) => void;,
-  onViewResults: (id: string) => void;,
-  onDuplicateExperiment: (id: string) => void;,
-  onArchiveExperiment: (id: string) => void;,
-  onStartExperiment: (id: string) => Promise<void>;,
-  onPauseExperiment: (id: string) => Promise<void>;,
-  onStopExperiment: (id: string) => Promise<void>;,
-  onExportExperiments: (format: 'csv' | 'json') => Promise<void>;,
-  onImportTemplate: (file: File) => Promise<void>;,
+  onEditExperiment: (id: string) => void;
+  onViewResults: (id: string) => void;
+  onDuplicateExperiment: (id: string) => void;
+  onArchiveExperiment: (id: string) => void;
+  onStartExperiment: (id: string) => Promise<void>;
+  onPauseExperiment: (id: string) => Promise<void>;
+  onStopExperiment: (id: string) => Promise<void>;
+  onExportExperiments: (format: 'csv' | 'json') => Promise<void>;
+  onImportTemplate: (file: File) => Promise<void>;
   onCreateTemplate: (experimentId: string) => Promise<void>;
   className?: string;
   interface ManagerState {
-  activeTab: string;,
+  activeTab: string;
   searchQuery: string;
-  statusFilter: ExperimentStatus | 'all';,
+  statusFilter: ExperimentStatus | 'all';
   typeFilter: ExperimentType | 'all';
-  tagFilter: string;,
+  tagFilter: string;
   sortBy: 'created' | 'updated' | 'name' | 'status';
-  sortOrder: 'asc' | 'desc';,
+  sortOrder: 'asc' | 'desc';
   selectedExperiments: string;
   showArchived: boolean;
 }
@@ -216,8 +216,8 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
   case 'completed': return 'default';
   case 'paused': return 'secondary';
   case 'archived': return 'outline';
-  default: return 'secondary';
-}, []);
+  default: return 'secondary'
+  }, []);
   /**
    * Format duration
    */

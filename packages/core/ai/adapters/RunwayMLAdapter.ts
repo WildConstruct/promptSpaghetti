@@ -50,19 +50,19 @@ export interface RunwayMLRequestOptions {
   negative_prompt?: string;
 }
 export interface RunwayMLGenerationResult {
-  video: {,
+  video: {
   url?: string;
   data?: ArrayBuffer;
-  format: string;,
+  format: string;
   duration: number;
-  resolution: {,
-  width: number;,
+  resolution: {
+  width: number;
   height: number;
 };
-    fps: number;,
+    fps: number;
   size: number;
   };
-  metadata: {,
+  metadata: {
   model: string;
   prompt: string;
   negative_prompt?: string;
@@ -71,17 +71,17 @@ export interface RunwayMLGenerationResult {
   motion: number;
   camera_motion?: string;
   style_preset?: string;
-  generation_time: number;,
-  status: 'completed' | 'processing' | 'failed';
-};
-  usage: {,
+  generation_time: number;
+  status: 'completed' | 'processing' | 'failed'
+  };
+  usage: {
   credits_consumed: number;
-  cost: number;,
+  cost: number;
   processing_time: number;
 };
 }
 export interface RunwayMLTask {
-  id: string;,
+  id: string;
   status: 'PENDING' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
   progress?: number;
   failure_code?: string;
@@ -104,7 +104,7 @@ export class RunwayMLAdapter extends BaseAIModel {
   costPerRequest: 10, // Credits per generation (varies by model),
   averageLatency: 120000, // 2 minutes average,
   maxConcurrency: 3,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 10,
   tokensPerMinute: 5000,
 },
@@ -119,20 +119,20 @@ export class RunwayMLAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: false,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   duration: { type: 'number', options: [4, 10, 16], default: 4 },
         motion: { type: 'number', min: 1, max: 10, default: 5 },
-        resolution: {,
+        resolution: {
   type: 'string',
   options: ['1280x768', '768x1280', '1024x576', '576x1024', '960x640', '640x960'],
   default: '1280x768',
 },
-  model: {,
+  model: {
   type: 'string',
   options: ['gen2', 'gen3', 'gen3-turbo'],
   default: 'gen3',
 },
-  style_preset: {,
+  style_preset: {
   type: 'string',
   options: ['cinematic', 'anime', 'photorealistic', 'abstract', 'documentary'],
   default: 'cinematic',
@@ -187,13 +187,13 @@ export class RunwayMLAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.8,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: estimatedCost,
   processingCost: 0,
 };
   // RunwayML-specific methods
-  async generateTextToVideo(prompt: string,)
+  async generateTextToVideo(prompt: string)
     duration: number = 4,
     options?: Partial<RunwayMLRequestOptions>
   ): Promise<RunwayMLGenerationResult> {
@@ -204,7 +204,7 @@ export class RunwayMLAdapter extends BaseAIModel {
   ...options
 };
     return this.process(prompt, runwayOptions);
-  async generateImageToVideo(prompt: string,)
+  async generateImageToVideo(prompt: string)
     imageData: string,
     duration: number = 4,
     options?: Partial<RunwayMLRequestOptions>
@@ -217,7 +217,7 @@ export class RunwayMLAdapter extends BaseAIModel {
   ...options
 };
     return this.process(prompt, runwayOptions);
-  async generateVideoToVideo(prompt: string,)
+  async generateVideoToVideo(prompt: string)
     videoData: string,
     options?: Partial<RunwayMLRequestOptions>
   ): Promise<RunwayMLGenerationResult> {
@@ -271,7 +271,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       if (input.description) return input.description;
       if (input.text) return input.text;
     return JSON.stringify(input);
-  private _processOptions(options?: RunwayMLRequestOptions,)
+  private _processOptions(options?: RunwayMLRequestOptions)
     prompt?: string
   ): Required<Pick<RunwayMLRequestOptions, 'model' | 'duration' | 'resolution' | 'motion' | 'mode' | 'text_prompt'>> & Omit<RunwayMLRequestOptions, 'text_prompt'> & { text_prompt: string } {
   const defaults = {
@@ -304,7 +304,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     const payload = {
       taskType: 'gen2' === options.model ? 'gen2' : 'gen3',
       internal: false,
-      options: {,
+      options: {
   text_prompt: prompt,
         duration: options.duration,
         resolution: options.resolution,
@@ -337,7 +337,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       // Wait before next poll
       await new Promise(resolve => setTimeout(resolve, pollInterval));
     throw new Error('Video generation timed out');
-  private async _processGenerationResult(task: RunwayMLTask,)
+  private async _processGenerationResult(task: RunwayMLTask)
     prompt: string,
     options: RunwayMLRequestOptions,
     generationTime: number): Promise<RunwayMLGenerationResult> {,
@@ -355,7 +355,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       console.warn('Failed to download video data:', error);
     const credits = this._calculateCredits(options.model || 'gen3', options.duration || 4);
     return {
-      video: {,
+      video: {
   url: videoUrl,
         data: videoData,
         format: 'mp4',
@@ -364,7 +364,7 @@ export class RunwayMLAdapter extends BaseAIModel {
         fps: 24, // Standard FPS for RunwayML
         size: videoData?.byteLength || 0;
   },
-  metadata: {,
+  metadata: {
   model: options.model || 'gen3',
   prompt,
   negative_prompt: options.negative_prompt,
@@ -376,7 +376,7 @@ export class RunwayMLAdapter extends BaseAIModel {
   generation_time: generationTime,
   status: 'completed',
 },
-  usage: {,
+  usage: {
   credits_consumed: credits,
   cost: credits * 0.005,
   processing_time: generationTime,

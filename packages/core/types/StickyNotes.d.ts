@@ -5,42 +5,42 @@
 
 export interface StickyNote {
     id: string;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
-    size: {,
+    size: {
         width: number;
         height: number;
     };
-    content: {,
+    content: {
         text: string;
         markdown?: string;
-        format: 'plain' | 'markdown' | 'rich';
-    };
-    appearance: {,
+        format: 'plain' | 'markdown' | 'rich'
+  };
+    appearance: {
         color: StickyNoteColor;
         category?: StickyNoteCategory;
         opacity: number;
         zIndex: number;
     };
-    metadata: {,
+    metadata: {
         createdAt: string;
         updatedAt: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email?: string;
         };
         version: number;
     };
-    behavior: {,
+    behavior: {
         draggable: boolean;
         resizable: boolean;
         editable: boolean;
         minimized: boolean;
     };
-    collaboration: {,
+    collaboration: {
         locked: boolean;
         lockedBy?: string;
         comments: StickyNoteComment[];
@@ -53,7 +53,7 @@ export type StickyNoteCategory = 'general' | 'technical' | 'creative' | 'feedbac
 export interface StickyNoteComment {
     id: string;
     text: string;
-    author: {,
+    author: {
         id: string;
         name: string;
     };
@@ -64,11 +64,11 @@ export interface StickyNoteGroup {
     id: string;
     name: string;
     notes: string[];
-    position: {,
+    position: {
         x: number;
         y: number;
     };
-    appearance: {,
+    appearance: {
         backgroundColor: string;
         borderColor: string;
         collapsed: boolean;
@@ -91,7 +91,7 @@ export interface StickyNoteState {
     selection: string[];
     activeNote?: string;
     filter: StickyNoteFilter;
-    settings: {,
+    settings: {
         showAll: boolean;
         ghostMode: boolean;
         snapToGrid: boolean;
@@ -152,7 +152,7 @@ export interface StickyNoteEvent {
 export interface StickyNoteReactFlowNode {
     id: string;
     type: 'stickyNote';
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -168,7 +168,7 @@ export interface StickyNoteTemplate {
     content: StickyNote['content'];
     appearance: StickyNote['appearance'];
     category: StickyNoteCategory;
-    author: {,
+    author: {
         id: string;
         name: string;
     };

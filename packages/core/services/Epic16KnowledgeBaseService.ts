@@ -10,52 +10,52 @@ import { EventEmitter } from 'events';
 // Core knowledge base interfaces
 
 export interface KnowledgeBaseArticle {
-  id: string;,
+  id: string;
   title: string;
-  slug: string;,
+  slug: string;
   content: string;
   excerpt: string;
   // Classification
-  category: KnowledgeCategory;,
+  category: KnowledgeCategory;
   subcategory: string;
-  type: ArticleType;,
+  type: ArticleType;
   tags: string;
   keywords: string;
   // Content structure
-  sections: ArticleSection;,
+  sections: ArticleSection;
   attachments: ArticleAttachment;
-  relatedArticles: string;,
+  relatedArticles: string;
   prerequisites: string;
   // Metadata
-  author: string;,
+  author: string;
   authorId: string;
-  contributors: string;,
+  contributors: string;
   version: string;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   publishedAt: Date;
   status: ArticleStatus;
   // User interaction
-  views: number;,
+  views: number;
   ratings: ArticleRating;
-  feedback: ArticleFeedback;,
+  feedback: ArticleFeedback;
   helpfulVotes: number;
   unhelpfulVotes: number;
   // SEO and searchability
   seoTitle?: string;
   metaDescription?: string;
-  searchableText: string;,
+  searchableText: string;
   searchScore: number;
   // Accessibility
-  accessibilityFeatures: AccessibilityFeature;,
+  accessibilityFeatures: AccessibilityFeature;
   readingLevel: ReadingLevel;
   estimatedReadTime: number;
   // Localization
-  language: string;,
+  language: string;
   translations: Record<string, string>;
   // Advanced features
-  interactiveElements: InteractiveKBElement;,
+  interactiveElements: InteractiveKBElement;
   codeExamples: CodeExample;
-  videos: VideoContent;,
+  videos: VideoContent;
   images: ImageContent;
   // Analytics
   analytics: ArticleAnalytics;
@@ -102,13 +102,13 @@ export enum KnowledgeCategory {
   ADVANCED = 'advanced',
   EXPERT = 'expert'
   export interface ArticleSection {
-  id: string;,
+  id: string;
   title: string;
-  content: string;,
+  content: string;
   order: number;
-  type: SectionType;,
+  type: SectionType;
   anchor: string;
-  isCollapsible: boolean;,
+  isCollapsible: boolean;
   metadata: Record<string, any>;
 }
 export enum SectionType {
@@ -124,30 +124,30 @@ export enum SectionType {
   TABLE = 'table',
   INTERACTIVE = 'interactive'
   export interface ArticleAttachment {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   url: string;
-  type: string;,
+  type: string;
   size: number;
-  downloadCount: number;,
+  downloadCount: number;
   isPublic: boolean;
 }
 export interface ArticleRating {
-  userId: string;,
+  userId: string;
   rating: number; // 1-5,
   comment?: string;
-  timestamp: Date;,
+  timestamp: Date;
   helpful: boolean;
 }
 export interface ArticleFeedback {
-  id: string;,
+  id: string;
   userId: string;
-  type: FeedbackType;,
+  type: FeedbackType;
   message: string;
   status: FeedbackStatus;
   response?: string;
-  timestamp: Date;,
+  timestamp: Date;
   resolved: boolean;
 }
 export enum FeedbackType {
@@ -164,7 +164,7 @@ export enum FeedbackType {
   RESOLVED = 'resolved',
   REJECTED = 'rejected'
   export interface AccessibilityFeature {
-  type: AccessibilityType;,
+  type: AccessibilityType;
   description: string;
   enabled: boolean;
 }
@@ -177,7 +177,7 @@ export enum AccessibilityType {
   CAPTIONS = 'captions',
   TRANSCRIPT = 'transcript'
   export interface InteractiveKBElement {
-  id: string;,
+  id: string;
   type: InteractiveElementType;
   config: Record<string, any>;
   position: ElementPosition;
@@ -194,14 +194,14 @@ export enum InteractiveElementType {
   QUIZ = 'quiz',
   CHECKLIST = 'checklist'
   export interface ElementPosition {
-  sectionId: string;,
+  sectionId: string;
   order: number;
-  placement: 'before' | 'after' | 'replace' | 'inline';
-}
+  placement: 'before' | 'after' | 'replace' | 'inline'
+  }
 export interface CodeExample {
-  id: string;,
+  id: string;
   language: string;
-  title: string;,
+  title: string;
   description: string;
   code: string;
   output?: string;
@@ -209,83 +209,83 @@ export interface CodeExample {
   githubLink?: string;
 }
 export interface VideoContent {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   url: string;
-  thumbnail: string;,
+  thumbnail: string;
   duration: number;
   transcript?: string;
   captions?: string;
   chapters: VideoChapter;
 }
 export interface VideoChapter {
-  title: string;,
+  title: string;
   startTime: number;
   endTime: number;
   description?: string;
 }
 export interface ImageContent {
-  id: string;,
+  id: string;
   url: string;
   alt: string;
   caption?: string;
-  width: number;,
+  width: number;
   height: number;
-  format: string;,
+  format: string;
   zoomable: boolean;
 }
 export interface ArticleAnalytics {
-  totalViews: number;,
+  totalViews: number;
   uniqueViews: number;
-  averageReadTime: number;,
+  averageReadTime: number;
   bounceRate: number;
-  completionRate: number;,
+  completionRate: number;
   shareCount: number;
-  downloadCount: number;,
+  downloadCount: number;
   searchImpressions: number;
-  searchClicks: number;,
+  searchClicks: number;
   conversionRate: number;
   // Time-based analytics
   dailyViews: Record<string, number>;
-  popularSections: SectionAnalytics;,
+  popularSections: SectionAnalytics;
   userJourney: UserJourneyStep;
   // Quality metrics
-  helpfulnessScore: number;,
+  helpfulnessScore: number;
   accuracyScore: number;
-  freshnessScore: number;,
+  freshnessScore: number;
   seoScore: number;
 }
 export interface SectionAnalytics {
-  sectionId: string;,
+  sectionId: string;
   views: number;
-  timeSpent: number;,
+  timeSpent: number;
   exitRate: number;
 }
 export interface UserJourneyStep {
   fromArticle?: string;
   toArticle?: string;
-  timestamp: Date;,
+  timestamp: Date;
   sessionId: string;
   // Search and discovery interfaces
 }
 export interface KnowledgeBaseSearch {
-  query: string;,
+  query: string;
   filters: SearchFilters;
-  results: SearchResult;,
+  results: SearchResult;
   suggestions: SearchSuggestion;
-  totalResults: number;,
+  totalResults: number;
   searchTime: number;
   didYouMean?: string;
 }
 export interface SearchFilters {
-  categories: KnowledgeCategory;,
+  categories: KnowledgeCategory;
   types: ArticleType;
-  tags: string;,
+  tags: string;
   readingLevel: ReadingLevel;
-  language: string;,
+  language: string;
   lastUpdated: DateRange;
-  minRating: number;,
+  minRating: number;
   hasVideo: boolean;
   hasCode: boolean;
 }
@@ -294,20 +294,20 @@ export interface DateRange {
   end?: Date;
 }
 export interface SearchResult {
-  article: KnowledgeBaseArticle;,
+  article: KnowledgeBaseArticle;
   score: number;
-  matchedSections: MatchedSection;,
+  matchedSections: MatchedSection;
   highlightedContent: string;
   relevanceReason: string;
 }
 export interface MatchedSection {
-  sectionId: string;,
+  sectionId: string;
   title: string;
-  matchScore: number;,
+  matchScore: number;
   highlightedText: string;
 }
 export interface SearchSuggestion {
-  text: string;,
+  text: string;
   type: SuggestionType;
   score: number;
   category?: KnowledgeCategory;
@@ -319,9 +319,9 @@ export enum SuggestionType {
   POPULAR_SEARCH = 'popular_search'
   // AI and recommendation interfaces
   export interface AIRecommendation {
-  articleId: string;,
+  articleId: string;
   score: number;
-  reason: RecommendationReason;,
+  reason: RecommendationReason;
   context: RecommendationContext;
   personalizedFactors: PersonalizationFactor;
 }
@@ -335,14 +335,14 @@ export enum RecommendationReason {
   PERSONALIZED = 'personalized'
   export interface RecommendationContext {
   currentArticleId?: string;
-  userSearchHistory: string;,
+  userSearchHistory: string;
   viewedArticles: string;
-  userRole: string;,
+  userRole: string;
   userExperience: string;
   timestamp: Date;
 }
 export interface PersonalizationFactor {
-  type: PersonalizationType;,
+  type: PersonalizationType;
   weight: number;
   value: any;
 }
@@ -370,55 +370,55 @@ export enum PersonalizationType {
   integrationConfig: IntegrationConfig;
 }
 export interface SearchConfig {
-  enableAISearch: boolean;,
+  enableAISearch: boolean;
   enableAutoComplete: boolean;
-  enableSpellCheck: boolean;,
+  enableSpellCheck: boolean;
   maxResults: number;
-  searchTimeout: number;,
+  searchTimeout: number;
   indexUpdateInterval: number;
   boostFactors: Record<string, number>;
-  stopWords: string;,
+  stopWords: string;
   synonyms: Record<string, string>;
 }
 export interface AIConfig {
-  enableRecommendations: boolean;,
+  enableRecommendations: boolean;
   enableContentGeneration: boolean;
-  enableSentimentAnalysis: boolean;,
+  enableSentimentAnalysis: boolean;
   recommendationModel: string;
-  confidenceThreshold: number;,
+  confidenceThreshold: number;
   maxRecommendations: number;
   personalizedWeight: number;
 }
 export interface ContentConfig {
-  autoPublish: boolean;,
+  autoPublish: boolean;
   requireReview: boolean;
-  versionControl: boolean;,
+  versionControl: boolean;
   maxFileSize: number;
-  allowedFileTypes: string;,
+  allowedFileTypes: string;
   contentModeration: boolean;
   duplicateDetection: boolean;
 }
 export interface AnalyticsConfig {
-  trackingEnabled: boolean;,
+  trackingEnabled: boolean;
   retentionPeriod: number;
-  anonymizeData: boolean;,
+  anonymizeData: boolean;
   realTimeTracking: boolean;
-  heatmapTracking: boolean;,
+  heatmapTracking: boolean;
   performanceTracking: boolean;
 }
 export interface LocalizationConfig {
-  defaultLanguage: string;,
+  defaultLanguage: string;
   supportedLanguages: string;
-  autoTranslation: boolean;,
+  autoTranslation: boolean;
   translationService: string;
   fallbackLanguage: string;
 }
 export interface IntegrationConfig {
-  crmIntegration: boolean;,
+  crmIntegration: boolean;
   helpDeskIntegration: boolean;
-  slackIntegration: boolean;,
+  slackIntegration: boolean;
   discordIntegration: boolean;
-  emailIntegration: boolean;,
+  emailIntegration: boolean;
   apiAccess: boolean;
   webhookSupport: boolean;
   // Knowledge base service class
@@ -591,26 +591,26 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
   // Configuration and utilities
   private initializeConfig(config?: Partial<KnowledgeBaseConfig>): KnowledgeBaseConfig {
   return {
-  searchConfig: {,
+  searchConfig: {
   enableAISearch: true,
   enableAutoComplete: true,
   enableSpellCheck: true,
   maxResults: 50,
   searchTimeout: 5000,
   indexUpdateInterval: 300000, // 5 minutes,
-  boostFactors: {,
+  boostFactors: {
   title: 2.0,
   tags: 1.5,
   keywords: 1.3,
   content: 1.0,
 },
   stopWords: ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with'],
-        synonyms: {,
+        synonyms: {
   'help': ['assistance', 'support', 'guide'],
   'create': ['make', 'build', 'generate'],
   'delete': ['remove', 'eliminate', 'erase'],
 },
-  aiConfig: {,
+  aiConfig: {
   enableRecommendations: true,
   enableContentGeneration: true,
   enableSentimentAnalysis: true,
@@ -619,7 +619,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
   maxRecommendations: 10,
   personalizedWeight: 0.6,
 },
-  contentConfig: {,
+  contentConfig: {
   autoPublish: false,
   requireReview: true,
   versionControl: true,
@@ -628,7 +628,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
   contentModeration: true,
   duplicateDetection: true,
 },
-  analyticsConfig: {,
+  analyticsConfig: {
   trackingEnabled: true,
   retentionPeriod: 90, // days,
   anonymizeData: true,
@@ -636,14 +636,14 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
   heatmapTracking: true,
   performanceTracking: true,
 },
-  localizationConfig: {,
+  localizationConfig: {
   defaultLanguage: 'en',
   supportedLanguages: ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko'],
   autoTranslation: false,
   translationService: 'google-translate',
   fallbackLanguage: 'en',
 },
-  integrationConfig: {,
+  integrationConfig: {
   crmIntegration: true,
   helpDeskIntegration: true,
   slackIntegration: true,
@@ -876,14 +876,14 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
 // Supporting interfaces
 
 export interface UserKBSession {
-  userId: string;,
+  userId: string;
   sessionStart: Date;
-  viewedArticles: Set<string>;,
+  viewedArticles: Set<string>;
   searchHistory: SearchHistoryItem;
   preferences: UserKBPreferences;
 }
 export interface SearchHistoryItem {
-  query: string;,
+  query: string;
   timestamp: Date;
   results: number;
 }

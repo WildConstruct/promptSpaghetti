@@ -41,9 +41,9 @@ import { ComplianceFramework } from '../SecurityLogger';
 import { DataClassificationLevel } from '../DataClassificationAccessControl';
 
 export interface SecurityAlertingConfigurationUIProps {
-  currentConfig: SecurityAlertingConfig;,
-  onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;,
-  onValidateConfig: (config: SecurityAlertingConfig) => Promise<ValidationResult>;,
+  currentConfig: SecurityAlertingConfig;
+  onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;
+  onValidateConfig: (config: SecurityAlertingConfig) => Promise<ValidationResult>;
   userRole: 'admin' | 'security_admin' | 'security_analyst';
   complianceFrameworks: ComplianceFramework;
   theme?: 'light' | 'dark' | 'cinema';
@@ -51,26 +51,26 @@ export interface SecurityAlertingConfigurationUIProps {
   allowAdvancedSettings?: boolean;
 }
 export interface ValidationResult {
-  isValid: boolean;,
+  isValid: boolean;
   errors: ConfigValidationError;
-  warnings: ConfigValidationWarning;,
+  warnings: ConfigValidationWarning;
   securityScore: number;
 }
 export interface ConfigValidationError {
-  field: string;,
+  field: string;
   message: string;
-  severity: 'error' | 'critical';
-}
+  severity: 'error' | 'critical'
+  }
 export interface ConfigValidationWarning {
-  field: string;,
+  field: string;
   message: string;
   impact: 'low' | 'medium' | 'high';
   interface ConfigurationState {
-  config: SecurityAlertingConfig;,
+  config: SecurityAlertingConfig;
   validation: ValidationResult | null;
-  isLoading: boolean;,
+  isLoading: boolean;
   isSaving: boolean;
-  hasUnsavedChanges: boolean;,
+  hasUnsavedChanges: boolean;
   activeTab: 'general' | 'thresholds' | 'automation' | 'notifications' | 'compliance';
   expandedSections: Set<string>;
   /**
@@ -99,7 +99,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   // Theme configuration
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   surface: '#f8fafc',
   surfaceSecondary: '#f1f5f9',
@@ -115,7 +115,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   critical: '#dc2626',
   shadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   surface: '#1e293b',
   surfaceSecondary: '#334155',
@@ -131,7 +131,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   critical: '#ef4444',
   shadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
 },
-  cinema: {,
+  cinema: {
   background: '#0a0a0a',
   surface: '#1a1a1a',
   surfaceSecondary: '#2d2d2d',
@@ -159,7 +159,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       setState(prev => ({ )
         ...prev, 
         isLoading: false,
-        validation: {,
+        validation: {
   isValid: false,
           errors: [{ field: 'general', message: 'Configuration validation failed', severity: 'error' }],
           warnings: [],
@@ -190,7 +190,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   const updateEscalationThresholds = useCallback((thresholds: Partial<EscalationThresholds>) => {
     setState(prev => ({)
   ...prev,
-      config: {,
+      config: {
         ...prev.config,
         escalationThresholds: { ...prev.config.escalationThresholds, ...thresholds }
   },
@@ -227,7 +227,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   borderRadius: '6px',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px';
+          gap: '8px'
   }}>
           <div style={{
             width: '16px',
@@ -253,7 +253,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-        marginBottom: '20px';
+        marginBottom: '20px'
   }}>
         <div style={{
   display: 'flex',
@@ -349,7 +349,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
         display: 'flex',
         borderBottom: `1px solid ${themeStyles.border}`}
 },
-  marginBottom: '24px';
+  marginBottom: '24px'
   }}>
         {tabs.map(tab => ()
           <button
@@ -388,7 +388,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '8px',
         padding: '20px',
-        marginBottom: '16px';
+        marginBottom: '16px'
   }}>
         <h3 style={{
   color: themeStyles.text,
@@ -521,7 +521,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '4px',
               color: themeStyles.text,
-              fontSize: '14px';
+              fontSize: '14px'
   }}
           />
           <div style={{
@@ -544,7 +544,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '8px',
         padding: '20px',
-        marginBottom: '16px';
+        marginBottom: '16px'
   }}>
         <h3 style={{
   color: themeStyles.text,
@@ -583,7 +583,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px';
+                fontSize: '14px'
   }}
             />
           </div>
@@ -611,7 +611,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px';
+                fontSize: '14px'
   }}
             />
           </div>
@@ -639,7 +639,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px';
+                fontSize: '14px'
   }}
             />
           </div>
@@ -667,7 +667,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '4px',
                 color: themeStyles.text,
-                fontSize: '14px';
+                fontSize: '14px'
   }}
             />
           </div>
@@ -703,7 +703,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             fontSize: '14px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px';
+            gap: '6px'
   }}
         >
           🔍 Validate Configuration
@@ -849,7 +849,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center';
+            textAlign: 'center'
   }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               🤖 Response Automation
@@ -866,7 +866,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center';
+            textAlign: 'center'
   }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               📧 Notification Channels
@@ -883,7 +883,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
 },
   borderRadius: '8px',
             padding: '40px',
-            textAlign: 'center';
+            textAlign: 'center'
   }}>
             <h3 style={{ color: themeStyles.text, marginBottom: '8px' }}>
               📋 Compliance Framework

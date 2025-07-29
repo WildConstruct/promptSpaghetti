@@ -286,7 +286,7 @@ describe('SynchronizationRecovery', () => {
       const conflict = {
         id: conflictId,
         type: 'concurrent_edit' as const,
-        operation1: {,
+        operation1: {
   id: 'op1',
           type: 'update' as const,
           target: 'node' as const,
@@ -296,7 +296,7 @@ describe('SynchronizationRecovery', () => {
           userId: 'user1',
           version: 2;
   },
-  operation2: {,
+  operation2: {
   id: 'op2',
           type: 'update' as const,
           target: 'node' as const,
@@ -333,7 +333,7 @@ describe('SynchronizationRecovery', () => {
       const conflict = {
         id: conflictId,
         type: 'concurrent_edit' as const,
-        operation1: {,
+        operation1: {
   id: 'op1',
           type: 'update' as const,
           target: 'node' as const,

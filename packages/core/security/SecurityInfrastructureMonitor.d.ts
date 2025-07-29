@@ -13,7 +13,7 @@ export interface InfrastructureComponent {
     name: string;
     type: 'server' | 'database' | 'cache' | 'load_balancer' | 'storage' | 'network' | 'container' | 'kubernetes_pod' | 'lambda_function';
     category: 'compute' | 'storage' | 'network' | 'security' | 'monitoring' | 'analytics';
-    configuration: {,
+    configuration: {
         hostname: string;
         ip_address: string;
         port?: number;
@@ -22,32 +22,32 @@ export interface InfrastructureComponent {
         availability_zone?: string;
         tags: Record<string, string>;
     };
-    monitoring: {,
+    monitoring: {
         enabled: boolean;
         check_interval_ms: number;
         timeout_ms: number;
         retry_attempts: number;
         health_checks: HealthCheckConfig[];
-        performance_monitoring: {,
+        performance_monitoring: {
             enabled: boolean;
             metrics_collection_interval_ms: number;
             custom_metrics: CustomMetricConfig[];
         };
-        log_monitoring: {,
+        log_monitoring: {
             enabled: boolean;
             log_paths: string[];
             error_patterns: string[];
             warning_patterns: string[];
         };
     };
-    alerting: {,
+    alerting: {
         enabled: boolean;
         alert_thresholds: AlertThreshold[];
         notification_channels: NotificationChannel[];
         escalation_policies: EscalationPolicy[];
         suppression_rules: SuppressionRule[];
     };
-    status: {,
+    status: {
         health_status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
         last_check_time: number;
         uptime_seconds: number;
@@ -67,7 +67,7 @@ export interface HealthCheckConfig {
     id: string;
     name: string;
     type: 'http' | 'tcp' | 'ping' | 'dns' | 'ssl_cert' | 'disk_space' | 'memory' | 'cpu' | 'process' | 'custom_script';
-    parameters: {,
+    parameters: {
         endpoint?: string;
         expected_status_code?: number;
         expected_response_time_ms?: number;
@@ -78,7 +78,7 @@ export interface HealthCheckConfig {
         threshold_value?: number;
         threshold_unit?: string;
     };
-    success_criteria: {,
+    success_criteria: {
         min_success_rate: number;
         consecutive_failures_threshold: number;
         response_time_threshold_ms: number;
@@ -91,17 +91,17 @@ export interface CustomMetricConfig {
     name: string;
     description: string;
     metric_type: 'gauge' | 'counter' | 'histogram' | 'summary';
-    collection: {,
+    collection: {
         method: 'api_endpoint' | 'file_parsing' | 'command_execution' | 'snmp' | 'prometheus';
         source: string;
         parsing_rule?: string;
-        aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count';
-    };
-    thresholds: {,
+        aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count'
+  };
+    thresholds: {
         warning_threshold?: number;
         critical_threshold?: number;
-        comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-    };
+        comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte'
+  };
     unit: string;
     enabled: boolean;
 
@@ -109,7 +109,7 @@ export interface AlertThreshold {
     id: string;
     name: string;
     metric_name: string;
-    condition: {,
+    condition: {
         operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte' | 'between' | 'not_between';
         value: number;
         value_max?: number;
@@ -124,7 +124,7 @@ export interface NotificationChannel {
     id: string;
     name: string;
     type: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty' | 'teams' | 'discord';
-    configuration: {,
+    configuration: {
         endpoint?: string;
         api_key?: string;
         webhook_url?: string;
@@ -133,7 +133,7 @@ export interface NotificationChannel {
         channel_id?: string;
         template?: string;
     };
-    routing: {,
+    routing: {
         severity_filter: ('info' | 'warning' | 'critical')[];
         component_filter: string[];
         time_filter?: {
@@ -143,7 +143,7 @@ export interface NotificationChannel {
             timezone: string;
         };
     };
-    rate_limiting: {,
+    rate_limiting: {
         enabled: boolean;
         max_notifications_per_hour: number;
         max_notifications_per_day: number;
@@ -161,13 +161,13 @@ export interface EscalationPolicy {
         notification_channels: string[];
         actions: EscalationAction[];
     }>;
-    trigger_conditions: {,
+    trigger_conditions: {
         severity_levels: ('info' | 'warning' | 'critical')[];
         component_types: InfrastructureComponent['type'][];
         unacknowledged_duration_minutes: number;
         consecutive_failures?: number;
     };
-    de_escalation: {,
+    de_escalation: {
         auto_resolve: boolean;
         auto_resolve_delay_minutes: number;
         require_manual_acknowledgment: boolean;
@@ -185,13 +185,13 @@ export interface SuppressionRule {
     id: string;
     name: string;
     description: string;
-    conditions: {,
+    conditions: {
         component_patterns: string[];
         alert_patterns: string[];
         severity_levels: ('info' | 'warning' | 'critical')[];
         maintenance_windows?: MaintenanceWindow[];
     };
-    behavior: {,
+    behavior: {
         suppress_notifications: boolean;
         suppress_escalations: boolean;
         suppress_logging: boolean;
@@ -210,7 +210,7 @@ export interface MaintenanceWindow {
     id: string;
     name: string;
     description: string;
-    schedule: {,
+    schedule: {
         start_time: number;
         end_time: number;
         timezone: string;
@@ -226,7 +226,7 @@ export interface MaintenanceWindow {
 export interface InfrastructureMetrics {
     component_id: string;
     timestamp: number;
-    system: {,
+    system: {
         cpu_usage_percent: number;
         memory_usage_percent: number;
         disk_usage_percent: number;
@@ -268,7 +268,7 @@ export interface InfrastructureAlert {
     title: string;
     description: string;
     detected_at: number;
-    context: {,
+    context: {
         metric_name?: string;
         current_value?: number;
         threshold_value?: number;
@@ -276,9 +276,9 @@ export interface InfrastructureAlert {
         failure_count?: number;
         affected_services: string[];
         root_cause_analysis?: string;
-        impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical';
-    };
-    resolution: {,
+        impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  };
+    resolution: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
@@ -289,7 +289,7 @@ export interface InfrastructureAlert {
         resolution_time_minutes?: number;
         auto_resolved: boolean;
     };
-    escalation: {,
+    escalation: {
         escalated: boolean;
         escalation_level: number;
         escalation_history: Array<{,
@@ -299,7 +299,7 @@ export interface InfrastructureAlert {
             actions_taken: string[];
         }>;
     };
-    notifications: {,
+    notifications: {
         channels_notified: string[];
         notification_count: number;
         last_notification_at?: number;
@@ -314,7 +314,7 @@ export interface InfrastructureEvent {
     timestamp: number;
     title: string;
     description: string;
-    metadata: {,
+    metadata: {
         source: string;
         automated: boolean;
         user_initiated: boolean;
@@ -322,7 +322,7 @@ export interface InfrastructureEvent {
         correlation_id?: string;
         tags: Record<string, string>;
     };
-    impact: {,
+    impact: {
         severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
         affected_components: string[];
         estimated_downtime_minutes?: number;
@@ -338,12 +338,12 @@ export interface InfrastructureEvent {
 export interface MonitoringReport {
     report_id: string;
     generated_at: number;
-    report_period: {,
+    report_period: {
         start_time: number;
         end_time: number;
         duration_hours: number;
     };
-    health_summary: {,
+    health_summary: {
         total_components: number;
         healthy_components: number;
         warning_components: number;
@@ -351,7 +351,7 @@ export interface MonitoringReport {
         overall_health_score: number;
         availability_percentage: number;
     };
-    performance_summary: {,
+    performance_summary: {
         avg_response_time_ms: number;
         p95_response_time_ms: number;
         p99_response_time_ms: number;
@@ -360,7 +360,7 @@ export interface MonitoringReport {
         avg_disk_usage_percent: number;
         network_throughput_mbps: number;
     };
-    alert_summary: {,
+    alert_summary: {
         total_alerts: number;
         critical_alerts: number;
         warning_alerts: number;
@@ -377,13 +377,13 @@ export interface MonitoringReport {
         impact_score: number;
         recommended_action: string;
     }>;
-    trends: {,
+    trends: {
         performance_trend: 'improving' | 'stable' | 'degrading';
         availability_trend: 'improving' | 'stable' | 'degrading';
         alert_volume_trend: 'increasing' | 'stable' | 'decreasing';
-        resource_utilization_trend: 'increasing' | 'stable' | 'decreasing';
-    };
-    recommendations: {,
+        resource_utilization_trend: 'increasing' | 'stable' | 'decreasing'
+  };
+    recommendations: {
         immediate_actions: string[];
         preventive_measures: string[];
         capacity_planning: string[];

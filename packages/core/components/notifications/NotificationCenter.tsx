@@ -6,15 +6,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NotificationManager } from './NotificationManager';
 
 export interface Notification {
-  id: string;,
+  id: string;
   user_id: string;
   workspace_id: string;
   event_id?: string;
-  notification_type: string;,
+  notification_type: string;
   title: string;
   message: string;
   action_url?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';,
+  priority: 'low' | 'normal' | 'high' | 'urgent';
   delivery_channel: 'in_app' | 'email' | 'push';
   read_at?: string;
   delivered_at: string;
@@ -23,7 +23,7 @@ export interface Notification {
   color?: string;
   action_label?: string;
   interface NotificationCenterProps {
-  notificationManager: NotificationManager;,
+  notificationManager: NotificationManager;
   isOpen: boolean;
   onClose: () => void;
   className?: string;
@@ -265,12 +265,12 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   );
 };
 interface NotificationItemProps {
-  notification: Notification;,
+  notification: Notification;
   onClick: () => void;
-  onMarkAsRead: () => void;,
+  onMarkAsRead: () => void;
   onDelete: () => void;
-  getIcon: (notification: Notification) => string;,
-  getPriorityColor: (priority: string) => string;,
+  getIcon: (notification: Notification) => string;
+  getPriorityColor: (priority: string) => string;
   formatTimeAgo: (dateString: string) => string;
   const NotificationItem: React.FC<NotificationItemProps> = ({,)
   notification,

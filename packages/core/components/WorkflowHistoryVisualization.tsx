@@ -17,13 +17,13 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 interface WorkflowHistoryEntry {
-  id: string;,
+  id: string;
   workspace_id: string;
-  resource_id: string;,
+  resource_id: string;
   action_type: string;
   previous_state_id?: string;
   new_state_id?: string;
-  actor_id: string;,
+  actor_id: string;
   action_timestamp: Date;
   approval_id?: string;
   transition_id?: string;
@@ -66,8 +66,8 @@ interface WorkflowHistoryEntry {
   const getStateName = (stateId?: string) => {
   if (!stateId) return 'Unknown';
   const state = states.find(s => s.id === stateId);
-  return state ? state.name : 'Unknown';
-};
+  return state ? state.name : 'Unknown'
+  };
   const getStateColor = (stateId?: string) => {
   if (!stateId) return '#6B7280';
   const state = states.find(s => s.id === stateId);

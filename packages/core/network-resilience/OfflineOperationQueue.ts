@@ -2,13 +2,13 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface QueuedOperation {
-  id: string;,
+  id: string;
   type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
-  payload: any;,
+  payload: any;
   timestamp: number;
-  retryCount: number;,
+  retryCount: number;
   priority: 'high' | 'medium' | 'low';
-  documentId: string;,
+  documentId: string;
   userId: string;
   requiresOrder: boolean;
   dependencies?: string;
@@ -16,32 +16,32 @@ export interface QueuedOperation {
   expiresAt?: number;
 }
 export interface QueueMetrics {
-  totalOperations: number;,
+  totalOperations: number;
   pendingOperations: number;
-  failedOperations: number;,
+  failedOperations: number;
   retryingOperations: number;
-  expiredOperations: number;,
+  expiredOperations: number;
   averageQueueTime: number;
-  oldestOperationAge: number;,
-  queueSizeByPriority: {,
-  high: number;,
+  oldestOperationAge: number;
+  queueSizeByPriority: {
+  high: number;
   medium: number;
   low: number;
 };
   operationsByType: Map<string, number>;
 }
 export interface OfflineQueueConfig {
-  maxQueueSize: number;,
+  maxQueueSize: number;
   maxRetries: number;
-  retryBackoffMs: number;,
+  retryBackoffMs: number;
   maxBackoffMs: number;
-  operationTtlMs: number;,
+  operationTtlMs: number;
   persistToLocalStorage: boolean;
-  storageKey: string;,
+  storageKey: string;
   compressionEnabled: boolean;
-  batchSizeLimit: number;,
-  priorityWeights: {,
-  high: number;,
+  batchSizeLimit: number;
+  priorityWeights: {
+  high: number;
   medium: number;
   low: number;
 };
@@ -66,7 +66,7 @@ export class OfflineOperationQueue extends EventEmitter {
   storageKey: 'prompt-spaghetti-offline-queue',
   compressionEnabled: false,
   batchSizeLimit: 50,
-  priorityWeights: {,
+  priorityWeights: {
   high: 3,
   medium: 2,
   low: 1,
@@ -81,7 +81,7 @@ export class OfflineOperationQueue extends EventEmitter {
   expiredOperations: 0,
   averageQueueTime: 0,
   oldestOperationAge: 0,
-  queueSizeByPriority: {,
+  queueSizeByPriority: {
   high: 0,
   medium: 0,
   low: 0,

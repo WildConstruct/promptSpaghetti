@@ -9,18 +9,8 @@
 import { EventEmitter } from 'events';
  > ;
 // User/project breakdown (if enabled)
-user_costs ?  : Array < {
-    user_id: string,
-    cost: number,
-    requests: number,
-    cost_per_request: number
-} > ;
-project_costs ?  : Array < {
-    project_id: string,
-    cost: number,
-    resources: number,
-    cost_per_resource: number
-} > ;
+user_costs ?  : Array;
+project_costs ?  : Array;
 collected_at: number;
 collection_method: 'automated' | 'manual';
  > ;
@@ -1608,80 +1598,67 @@ View Full Report: /cost-optimizer/reports/${report.id}
                                         name: 'Security Operations',
                                         description: 'Cost center for security monitoring and operations',
                                         department: 'Security',
-                                        allocation: {},
-                                        budget_monthly: 10000,
-                                        budget_yearly: 120000,
-                                        currency: 'USD',
-                                        cost_allocation_method: 'usage_based',
-                                        allocation_weights: {},
-                                        compute: 0.4,
-                                        storage: 0.2,
-                                        network: 0.1,
-                                        licensing: 0.2,
-                                        personnel: 0.1,
-                                    },
-                                    tracking, {},
-                                    track_by_service, true,
-                                    track_by_user, true,
-                                    track_by_project, true,
-                                    granularity, 'hourly',
-                                    retention_days, 90,]
-                            },
-                                controls;
-                            {
-                                spending_limits: {
-                                    daily_limit: 400,
-                                        weekly_limit;
-                                    2500,
-                                        monthly_limit;
-                                    11000,
-                                        auto_shutdown_on_limit;
-                                    false,
-                                    ;
-                                }
-                                approval_thresholds: {
-                                    minor_threshold: 100,
-                                        major_threshold;
-                                    500,
-                                        critical_threshold;
-                                    1000,
-                                    ;
-                                }
-                                cost_alerts: [];
-                            }
-                            reporting: {
-                                automated_reports: true,
-                                    report_frequency;
-                                'weekly',
-                                    report_recipients;
-                                ['security-ops@company.com', 'finance@company.com'],
-                                    include_recommendations;
-                                true,
-                                    include_trending;
-                                true,
-                                ;
-                            }
-                            created_by: 'system',
-                                active;
-                            true;
-                            ;
-                            defaultCostCenters.forEach(async (costCenter) => {
-                                await this.createCostCenter(costCenter);
-                            });
-                            startCostMonitoring();
-                            void {
-                                // Monitor costs every 5 minutes
-                                this: .costMonitoringInterval = setInterval(async () => {
-                                    for (const [costCenterId] of this.costCenters) {
-                                        try {
-                                            await this.collectCostMetrics(costCenterId);
+                                        allocation: {
+                                            budget_monthly: 10000,
+                                            budget_yearly: 120000,
+                                            currency: 'USD',
+                                            cost_allocation_method: 'usage_based',
+                                            allocation_weights: {
+                                                compute: 0.4,
+                                                storage: 0.2,
+                                                network: 0.1,
+                                                licensing: 0.2,
+                                                personnel: 0.1,
+                                            },
+                                            tracking: {
+                                                track_by_service: true,
+                                                track_by_user: true,
+                                                track_by_project: true,
+                                                granularity: 'hourly',
+                                                retention_days: 90,
+                                            },
+                                            controls: {
+                                                spending_limits: {
+                                                    daily_limit: 400,
+                                                    weekly_limit: 2500,
+                                                    monthly_limit: 11000,
+                                                    auto_shutdown_on_limit: false,
+                                                },
+                                                approval_thresholds: {
+                                                    minor_threshold: 100,
+                                                    major_threshold: 500,
+                                                    critical_threshold: 1000,
+                                                },
+                                                cost_alerts: []
+                                            },
+                                            reporting: {
+                                                automated_reports: true,
+                                                report_frequency: 'weekly',
+                                                report_recipients: ['security-ops@company.com', 'finance@company.com'],
+                                                include_recommendations: true,
+                                                include_trending: true,
+                                            },
+                                            created_by: 'system',
+                                            active: true
                                         }
-                                        catch (error) {
-                                            console.error(`Failed to collect cost metrics for ${costCenterId}:`, error);
-                                        }
-                                    }
-                                    300000;
+                                    }],
+                                defaultCostCenters, : .forEach(async (costCenter) => {
+                                    await this.createCostCenter(costCenter);
                                 }),
+                                startCostMonitoring() {
+                                    // Monitor costs every 5 minutes
+                                    this.costMonitoringInterval = setInterval(async () => {
+                                        for (const [costCenterId] of this.costCenters) {
+                                            try {
+                                                await this.collectCostMetrics(costCenterId);
+                                            }
+                                            catch (error) {
+                                                console.error(`Failed to collect cost metrics for ${costCenterId}:`, error);
+                                            }
+                                        }
+                                        300000;
+                                    });
+                                },
                                 startMetricsCollection() {
                                     // Collect detailed metrics every hour
                                     this.metricsCollectionInterval = setInterval(() => {

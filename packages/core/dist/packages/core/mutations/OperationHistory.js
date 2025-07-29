@@ -377,7 +377,8 @@ NodeDeleteOperation;
                         sessionId: operation.sessionId,
                         payload: {
                             edgeId: operation.payload.edge.id,
-                            snapshot: operation.payload.edge, },
+                            snapshot: operation.payload.edge,
+                        },
                         id: string,
                         timestamp: Date, EdgeAddOperation
                     };

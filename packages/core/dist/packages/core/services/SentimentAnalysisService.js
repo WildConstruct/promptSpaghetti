@@ -564,7 +564,8 @@ export class SentimentAnalysisService {
                                                 positive: {
                                                     count: sentimentCounts.positive,
                                                     percentage: total > 0 ? (sentimentCounts.positive / total) * 100 : 0,
-                                                    averageScore: sentimentScores.positive.length > 0, }
+                                                    averageScore: sentimentScores.positive.length > 0,
+                                                }
                                                     ? sentimentScores.positive.reduce((a, b) => a + b, 0) / sentimentScores.positive.length : ,
                                             };
                                             0,
@@ -626,7 +627,8 @@ export class SentimentAnalysisService {
                                             Object, : .entries(emotionCounts).map(([emotion, count]) => [
                                                 emotion,
                                                 total > 0 ? (count / total) * 100 : 0
-                                            ]) }
+                                            ])
+                                        }
                                     };
                                     as;
                                     any,
@@ -990,7 +992,9 @@ export class SentimentAnalysisService {
                                                                                     severeToxicity: true,
                                                                                     criticalIntent: true,
                                                                                     negativeSpike: false,
-                                                                                } } }
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     };
                                                                 }
                                                             };

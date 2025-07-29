@@ -33,7 +33,7 @@ import {
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 interface RestoreProgressPanelProps {
-  progress: RestorationProgressResponse;,
+  progress: RestorationProgressResponse;
   onCancel: () => void;
   showDetails?: boolean;
   export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({,)
@@ -71,8 +71,8 @@ interface RestoreProgressPanelProps {
   case 'cancelled':,
   return 'default';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const getProgressStatus = () => {
   switch (progress.status) {
   case 'completed':,
@@ -82,8 +82,8 @@ interface RestoreProgressPanelProps {
   case 'cancelled':,
   return 'exception';
   default:,
-  return 'active';
-};
+  return 'active'
+  };
   const formatTime = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}

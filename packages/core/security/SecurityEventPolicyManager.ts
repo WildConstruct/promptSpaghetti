@@ -24,81 +24,81 @@ import {
 // Policy Management Configuration
 
 export interface PolicyManagerConfig {
-  enabled: boolean;,
+  enabled: boolean;
   real_time_processing: boolean;
   batch_processing_interval: number; // milliseconds,
-  max_event_batch_size: number;,
-  retention_policy: {,
-  default_retention_days: number;,
+  max_event_batch_size: number;
+  retention_policy: {
+  default_retention_days: number;
   compliance_retention_overrides: Record<ComplianceFramework, number>;
 };
-  notification_config: {,
+  notification_config: {
   channels: NotificationChannel;
   escalation_delays: Record<SecurityEventSeverity, number>; // milliseconds,
   retry_attempts: number;
 };
-  integration_config: {,
+  integration_config: {
   audit_system_enabled: boolean;
-  siem_integration_enabled: boolean;,
+  siem_integration_enabled: boolean;
   compliance_reporting_enabled: boolean;
 };
 }
 export interface NotificationChannel {
-  channel_id: string;,
+  channel_id: string;
   channel_type: 'email' | 'sms' | 'slack' | 'webhook' | 'dashboard' | 'siem';
   endpoint: string;
   credentials?: Record<string, string>;
-  enabled: boolean;,
+  enabled: boolean;
   severity_filter: SecurityEventSeverity;
-  rate_limit?: {,
-  max_per_minute: number;,
+  rate_limit?: {
+  max_per_minute: number;
   burst_limit: number;
 };
 
 // Policy Enforcement Result
 }
 export interface PolicyEnforcementResult {
-  event_id: string;,
+  event_id: string;
   policies_matched: string;
-  actions_executed: PolicyAction;,
+  actions_executed: PolicyAction;
   notifications_sent: NotificationResult;
-  compliance_impact: ComplianceImpact;,
+  compliance_impact: ComplianceImpact;
   escalations_triggered: string;
-  automated_responses: AutomatedResponse;,
+  automated_responses: AutomatedResponse;
   processing_time_ms: number;
   errors: string;
 }
 export interface PolicyAction {
-  action_id: string;,
+  action_id: string;
   action_type: 'containment' | 'notification' | 'escalation' | 'documentation' | 'analysis';
-  action_name: string;,
+  action_name: string;
   executed_at: Date;
-  success: boolean;,
+  success: boolean;
   details: Record<string, any>;
   error_message?: string;
 }
 export interface NotificationResult {
-  notification_id: string;,
+  notification_id: string;
   channel_id: string;
-  channel_type: string;,
+  channel_type: string;
   recipient: string;
-  sent_at: Date;,
+  sent_at: Date;
   success: boolean;
   delivery_status?: 'pending' | 'delivered' | 'failed' | 'bounced';
   error_message?: string;
 }
 export interface ComplianceImpact {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   requirement_ids: string;
-  impact_level: 'low' | 'medium' | 'high' | 'critical';,
+  impact_level: 'low' | 'medium' | 'high' | 'critical';
   notification_required: boolean;
   reporting_deadline?: Date;
   external_notification_required: boolean;
 }
 export interface AutomatedResponse {
-  response_id: string;,
+  response_id: string;
   response_type: 'ip_block' | 'account_lock' | 'service_isolation' | 'data_quarantine';
-  executed_at: Date;,
+  executed_at: Date;
   success: boolean;
   details: Record<string, any>;
   rollback_available: boolean;
@@ -106,13 +106,13 @@ export interface AutomatedResponse {
   // Policy Performance Metrics
 }
 export interface PolicyMetrics {
-  policy_id: string;,
+  policy_id: string;
   events_processed: number;
-  actions_triggered: number;,
+  actions_triggered: number;
   false_positives: number;
-  true_positives: number;,
+  true_positives: number;
   response_time_avg_ms: number;
-  escalations_count: number;,
+  escalations_count: number;
   compliance_violations: number;
   effectiveness_score: number; // 0-100,
   last_updated: Date;
@@ -144,7 +144,7 @@ export class SecurityEventPolicyManager {
   endpoint: 'security-team@promptscape.com',
   enabled: true,
   severity_filter: [SecurityEventSeverity.HIGH, SecurityEventSeverity.CRITICAL],
-  rate_limit: {,
+  rate_limit: {
   max_per_minute: 10,
   burst_limit: 20,
 });
@@ -153,12 +153,12 @@ export class SecurityEventPolicyManager {
   channel_id: 'slack_security',
   channel_type: 'slack',
   endpoint: 'https://hooks.slack.com/services/security-alerts',
-  credentials: {,
+  credentials: {
   webhook_token: process.env.SLACK_WEBHOOK_TOKEN || '',
 },
   enabled: true,
       severity_filter: [SecurityEventSeverity.MEDIUM, SecurityEventSeverity.HIGH, SecurityEventSeverity.CRITICAL],
-      rate_limit: {,
+      rate_limit: {
   max_per_minute: 15,
   burst_limit: 30,
 });
@@ -167,13 +167,13 @@ export class SecurityEventPolicyManager {
   channel_id: 'siem_integration',
   channel_type: 'siem',
   endpoint: process.env.SIEM_ENDPOINT || 'https://siem.promptscape.internal/api/events',
-  credentials: {,
+  credentials: {
   api_key: process.env.SIEM_API_KEY || '',
   tenant_id: process.env.SIEM_TENANT_ID || '',
 },
   enabled: this.config.integration_config.siem_integration_enabled,
       severity_filter: Object.values(SecurityEventSeverity),
-      rate_limit: {,
+      rate_limit: {
   max_per_minute: 100,
   burst_limit: 200,
 });
@@ -190,13 +190,13 @@ export class SecurityEventPolicyManager {
   channel_id: 'sms_critical',
   channel_type: 'sms',
   endpoint: process.env.SMS_SERVICE_ENDPOINT || '',
-  credentials: {,
+  credentials: {
   api_key: process.env.SMS_API_KEY || '',
   sender_id: process.env.SMS_SENDER_ID || 'PromptScape',
 },
   enabled: true,
       severity_filter: [SecurityEventSeverity.CRITICAL],
-      rate_limit: {,
+      rate_limit: {
   max_per_minute: 5,
   burst_limit: 10,
 });
@@ -404,7 +404,7 @@ export class SecurityEventPolicyManager {
         regulatory_impact: securityEvent.regulatory_impact,
         sensitive_data_involved: securityEvent.evidence_preserved,
         tags: securityEvent.tags,
-        metadata: {,
+        metadata: {
   security_event_id: securityEvent.event_id,
   policies_matched: enforcementResult.policies_matched,
   actions_executed: enforcementResult.actions_executed.length,
@@ -484,7 +484,7 @@ export class SecurityEventPolicyManager {
   // Implementation would capture relevant logs, network traffic, etc.
   return {
   success: true,
-  details: {,
+  details: {
   evidence_id: crypto.randomUUID(),
   preservation_timestamp: new Date().toISOString(),
   evidence_types: ['logs', 'network_traffic', 'system_state'],
@@ -602,13 +602,13 @@ export class SecurityEventPolicyManager {
    * Generate policy effectiveness report
    */
   generatePolicyEffectivenessReport(): {
-  total_policies: number;,
+  total_policies: number;
   active_policies: number;
-  avg_response_time: number;,
+  avg_response_time: number;
   total_events_processed: number;
-  false_positive_rate: number;,
+  false_positive_rate: number;
   compliance_violation_rate: number;
-  top_performing_policies: PolicyMetrics;,
+  top_performing_policies: PolicyMetrics;
   recommendations: string;
   const metrics = Array.from(this.policyMetrics.values());
   const activePolicies = securityEventPolicyEngine.getPolicies().filter(p => p.enabled);
@@ -647,9 +647,9 @@ export class SecurityEventPolicyManager {
   real_time_processing: true,
   batch_processing_interval: 60000, // 1 minute,
   max_event_batch_size: 100,
-  retention_policy: {,
+  retention_policy: {
   default_retention_days: 1095, // 3 years,
-  compliance_retention_overrides: {,
+  compliance_retention_overrides: {
   [ComplianceFramework.SOX]: 2555, // 7 years,
   [ComplianceFramework.GDPR]: 2190, // 6 years,
   [ComplianceFramework.CCPA]: 1095, // 3 years,
@@ -661,9 +661,9 @@ export class SecurityEventPolicyManager {
   [ComplianceFramework.GLBA]: 2190, // 6 years,
   [ComplianceFramework.FEDRAMP]: 2190 // 6 years,
 },
-  notification_config: {,
+  notification_config: {
   channels: [],
-  escalation_delays: {,
+  escalation_delays: {
   [SecurityEventSeverity.CRITICAL]: 0, // Immediate,
   [SecurityEventSeverity.HIGH]: 300000, // 5 minutes,
   [SecurityEventSeverity.MEDIUM]: 900000, // 15 minutes,
@@ -672,7 +672,7 @@ export class SecurityEventPolicyManager {
 },
   retry_attempts: 3;
   },
-  integration_config: {,
+  integration_config: {
   audit_system_enabled: true,
   siem_integration_enabled: true,
   compliance_reporting_enabled: true,

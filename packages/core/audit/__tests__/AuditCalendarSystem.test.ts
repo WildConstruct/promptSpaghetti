@@ -64,7 +64,7 @@ describe('AuditCalendarSystem', () => {
   scheduled_end: new Date('2025-08-01T12:00:00Z'),
   estimated_duration: 120,
   recurrence_pattern: RecurrencePattern.MONTHLY,
-  recurrence_config: {,
+  recurrence_config: {
   interval: 1,
   end_date: new Date('2025-12-31T23:59:59Z'),
   max_occurrences: 12,
@@ -321,7 +321,7 @@ describe('AuditCalendarSystem', () => {
   view_type: 'month' as const,
   start_date: new Date('2025-07-01T00:00:00Z'),
   end_date: new Date('2025-07-31T23:59:59Z'),
-  display_options: {,
+  display_options: {
   show_completed: true,
   show_cancelled: false,
   color_by: 'priority' as const,
@@ -339,10 +339,10 @@ describe('AuditCalendarSystem', () => {
   view_type: 'month' as const,
   start_date: new Date('2025-07-01T00:00:00Z'),
   end_date: new Date('2025-07-31T23:59:59Z'),
-  filters: {,
+  filters: {
   activity_types: [AuditActivityType.COMPLIANCE_REVIEW],
 },
-  display_options: {,
+  display_options: {
   show_completed: true,
   show_cancelled: false,
   color_by: 'priority' as const,
@@ -356,7 +356,7 @@ describe('AuditCalendarSystem', () => {
   view_type: 'week' as const,
   start_date: new Date('2025-07-20T00:00:00Z'),
   end_date: new Date('2025-07-26T23:59:59Z'),
-  display_options: {,
+  display_options: {
   color_by: 'status' as const,
 };
       const calendarView = calendarSystem.generateCalendarView(config);
@@ -375,7 +375,7 @@ describe('AuditCalendarSystem', () => {
   scheduled_end: new Date('2025-07-22T06:30:00Z'),
   estimated_duration: 30,
   recurrence_pattern: RecurrencePattern.DAILY,
-  recurrence_config: {,
+  recurrence_config: {
   interval: 1,
   max_occurrences: 30,
 },
@@ -387,7 +387,7 @@ describe('AuditCalendarSystem', () => {
         deliverables: [],
         tags: ['daily', 'backup'],
         created_by: 'admin',
-        updated_by: 'admin';
+        updated_by: 'admin'
   });
       const instances = calendarSystem.generateRecurringInstances(;);
         recurringSchedule.id,
@@ -412,7 +412,7 @@ describe('AuditCalendarSystem', () => {
   scheduled_end: new Date('2025-07-25T11:00:00Z'),
   estimated_duration: 60,
   recurrence_pattern: RecurrencePattern.WEEKLY,
-  recurrence_config: {,
+  recurrence_config: {
   interval: 1,
   days_of_week: [5], // Friday,
   max_occurrences: 12,
@@ -425,7 +425,7 @@ describe('AuditCalendarSystem', () => {
         deliverables: [],
         tags: ['weekly', 'meeting'],
         created_by: 'admin',
-        updated_by: 'admin';
+        updated_by: 'admin'
   });
       const instances = calendarSystem.generateRecurringInstances(;);
         recurringSchedule.id,
@@ -723,7 +723,7 @@ describe('Audit Calendar Utilities', () => {
   view_type: 'week',
   start_date: new Date('2025-08-11T00:00:00Z'),
   end_date: new Date('2025-08-17T23:59:59Z'),
-  display_options: {,
+  display_options: {
   color_by: 'priority',
 });
     expect(view).toBeDefined();

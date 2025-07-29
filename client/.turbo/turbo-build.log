@@ -10,20 +10,20 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 41 modules transformed.
-✗ Build failed in 361ms
+✓ 60 modules transformed.
+✗ Build failed in 425ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:318:2: ERROR: Expected "}" but found "const"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:318:2
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14: ERROR: Expected "=>" but found "<"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14
 
-Expected "}" but found "const"
-316|  }
-317|    // Highlighted nodes & edges from preview result hover
-318|    const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
-   |    ^
-319|    const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
-320|    const { errors, styledEdges, styledNodes } = useValidation({
+Expected "=>" but found "<"
+256|            <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
+257|              {(['list', 'grid'] as const).map(mode => ()
+258|                <button
+   |                ^
+259|                  key={mode}
+260|                  onClick={() => setViewMode(mode)}
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -38,3 +38,51 @@ Expected "}" but found "const"
 Safe config failed, trying regular config...
 vite v7.0.5 building for production...
 transforming...
+✓ 58 modules transformed.
+✗ Build failed in 583ms
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14: ERROR: Expected "=>" but found "<"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/RecentFilesPanel.tsx:258:14
+
+Expected "=>" but found "<"
+256|            <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
+257|              {(['list', 'grid'] as const).map(mode => ()
+258|                <button
+   |                ^
+259|                  key={mode}
+260|                  onClick={() => setViewMode(mode)}
+
+    at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
+    at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
+    at responseCallbacks.<computed> (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:601:9)
+    at handleIncomingPacket (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:656:12)
+    at Socket.readFromStdout (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:579:7)
+    at Socket.emit (node:events:507:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: vite build --config vite.config.production.ts
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:924:11)
+    at execSync (node:child_process:996:15)
+    at file:///Users/brianbehm/CascadeProjects/prompt-spaghetti/client/build-standalone.js:30:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:370:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 37727,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.4.0
+ ELIFECYCLE  Command failed with exit code 1.

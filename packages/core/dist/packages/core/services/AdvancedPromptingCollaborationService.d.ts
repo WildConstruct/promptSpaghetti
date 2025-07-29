@@ -133,5 +133,12 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     private initializeDefaults;
     private initializeMARSRegionTemplates;
     private initializeZadaPromptPatterns;
+    private initializeWorkflowTemplates;
+    createCollaborationSession(title: string): any;
+    methodology: PromptingMethodology;
+    creatorId: string;
+    Promise<PromptingMethodologySession>(): void;
+    const creator: FilmIndustryUser;
+    const session: PromptingMethodologySession;
 }
 //# sourceMappingURL=AdvancedPromptingCollaborationService.d.ts.map

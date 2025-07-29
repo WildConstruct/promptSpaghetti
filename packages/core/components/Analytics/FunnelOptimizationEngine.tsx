@@ -30,7 +30,7 @@ import {
 // Optimization engine interfaces
 
 export interface FunnelOptimizationEngineProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange: { start: number; end: number };
   currentPerformance: FunnelPerformanceSnapshot;
@@ -40,53 +40,53 @@ export interface FunnelOptimizationEngineProps {
   onExperimentPlan?: (experiments: ExperimentPlan) => void;
 }
 export interface FunnelPerformanceSnapshot {
-  overallConversionRate: number;,
+  overallConversionRate: number;
   stepPerformance: StepPerformanceSnapshot;
-  revenueMetrics: RevenueMetricsSnapshot;,
+  revenueMetrics: RevenueMetricsSnapshot;
   userExperienceMetrics: UXMetricsSnapshot;
-  technicalMetrics: TechnicalMetricsSnapshot;,
+  technicalMetrics: TechnicalMetricsSnapshot;
   timestamp: number;
 }
 export interface StepPerformanceSnapshot {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  conversionRate: number;,
+  conversionRate: number;
   dropOffRate: number;
-  averageTimeSpent: number;,
+  averageTimeSpent: number;
   errorRate: number;
-  userSatisfactionScore: number;,
+  userSatisfactionScore: number;
   completionQuality: number;
 }
 export interface RevenueMetricsSnapshot {
-  revenuePerVisitor: number;,
+  revenuePerVisitor: number;
   revenuePerConversion: number;
-  lifetimeValue: number;,
+  lifetimeValue: number;
   paybackPeriod: number;
   marginPerConversion: number;
 }
 export interface UXMetricsSnapshot {
-  overallSatisfactionScore: number;,
+  overallSatisfactionScore: number;
   easeOfUseScore: number;
-  clarityScore: number;,
+  clarityScore: number;
   trustScore: number;
-  mobileExperienceScore: number;,
+  mobileExperienceScore: number;
   accessibilityScore: number;
 }
 export interface TechnicalMetricsSnapshot {
-  averageLoadTime: number;,
+  averageLoadTime: number;
   errorRate: number;
-  availabilityScore: number;,
+  availabilityScore: number;
   performanceScore: number;
-  securityScore: number;,
+  securityScore: number;
   compatibilityScore: number;
 }
 export interface OptimizationGoal {
-  id: string;,
+  id: string;
   type: OptimizationGoalType;
-  target: number;,
+  target: number;
   priority: 'critical' | 'high' | 'medium' | 'low';
   timeframe: number; // Days to achieve,
-  constraints: string;,
+  constraints: string;
   successMetrics: string;
 }
 export type OptimizationGoalType = 
@@ -100,12 +100,12 @@ export type OptimizationGoalType =
   | 'improve_accessibility';
 
 export interface OptimizationConstraint {
-  id: string;,
+  id: string;
   type: ConstraintType;
-  value: number | string;,
+  value: number | string;
   description: string;
-  flexibility: 'strict' | 'moderate' | 'flexible';
-}
+  flexibility: 'strict' | 'moderate' | 'flexible'
+  }
 export type ConstraintType = 
   | 'budget_limit'
   | 'time_limit'
@@ -115,33 +115,33 @@ export type ConstraintType =
   | 'compliance_requirement';
 
 export interface OptimizationAnalysisData {
-  recommendations: OptimizationRecommendation;,
+  recommendations: OptimizationRecommendation;
   experimentPlans: ExperimentPlan;
-  impactPredictions: ImpactPrediction;,
+  impactPredictions: ImpactPrediction;
   resourceAllocation: ResourceAllocation;
-  optimizationRoadmap: OptimizationRoadmap;,
+  optimizationRoadmap: OptimizationRoadmap;
   riskAssessment: RiskAssessment;
-  competitiveAnalysis: CompetitiveAnalysis;,
+  competitiveAnalysis: CompetitiveAnalysis;
   trends: OptimizationTrend;
 }
 export interface OptimizationRecommendation {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: RecommendationCategory;
-  priority: RecommendationPriority;,
+  priority: RecommendationPriority;
   impactScore: number; // 0-100,
   confidenceScore: number; // 0-1,
   effortScore: number; // 0-100,
   riskScore: number; // 0-100,
-  roiEstimate: number;,
+  roiEstimate: number;
   timeToImplement: number; // Days,
   timeToImpact: number; // Days,
-  affectedSteps: string;,
+  affectedSteps: string;
   targetedGoals: string;
-  implementation: ImplementationPlan;,
+  implementation: ImplementationPlan;
   validation: ValidationPlan;
-  dependencies: string;,
+  dependencies: string;
   alternatives: AlternativeRecommendation;
 }
 export type RecommendationCategory = 
@@ -162,93 +162,93 @@ export type RecommendationPriority =
   | 'nice_to_have';
 
 export interface ImplementationPlan {
-  phases: ImplementationPhase;,
+  phases: ImplementationPhase;
   resources: ResourceRequirement;
-  timeline: TimelineItem;,
+  timeline: TimelineItem;
   risksAndMitigations: RiskMitigation;
   successCriteria: SuccessCriterion;
 }
 export interface ImplementationPhase {
-  phase: string;,
+  phase: string;
   description: string;
   duration: number; // Days,
-  deliverables: string;,
+  deliverables: string;
   dependencies: string;
-  resources: string;,
+  resources: string;
   milestones: Milestone;
 }
 export interface ResourceRequirement {
-  type: 'development' | 'design' | 'content' | 'qa' | 'marketing' | 'analytics';,
+  type: 'development' | 'design' | 'content' | 'qa' | 'marketing' | 'analytics';
   hours: number;
-  skills: string;,
-  urgency: 'immediate' | 'soon' | 'later';
-}
+  skills: string;
+  urgency: 'immediate' | 'soon' | 'later'
+  }
 export interface TimelineItem {
-  date: number;,
+  date: number;
   activity: string;
-  responsible: string;,
+  responsible: string;
   dependencies: string;
   deliverable?: string;
 }
 export interface RiskMitigation {
-  risk: string;,
+  risk: string;
   probability: number; // 0-1,
   impact: number; // 0-100,
-  mitigation: string;,
+  mitigation: string;
   contingency: string;
 }
 export interface SuccessCriterion {
-  metric: string;,
+  metric: string;
   target: number;
-  measurement: string;,
+  measurement: string;
   timeframe: number; // Days,
 }
 export interface Milestone {
-  name: string;,
+  name: string;
   date: number;
-  criteria: string;,
+  criteria: string;
   dependencies: string;
 }
 export interface ValidationPlan {
-  hypothesis: string;,
+  hypothesis: string;
   testMethod: 'ab_test' | 'multivariate' | 'holdout' | 'gradual_rollout';
-  sampleSize: number;,
+  sampleSize: number;
   duration: number; // Days,
-  successMetrics: ValidationMetric;,
+  successMetrics: ValidationMetric;
   stopConditions: StopCondition;
 }
 export interface ValidationMetric {
-  metric: string;,
+  metric: string;
   target: number;
-  tolerance: number;,
+  tolerance: number;
   significance: number;
 }
 export interface StopCondition {
-  condition: string;,
+  condition: string;
   threshold: number;
-  action: 'stop' | 'modify' | 'continue';
-}
+  action: 'stop' | 'modify' | 'continue'
+  }
 export interface AlternativeRecommendation {
-  title: string;,
+  title: string;
   description: string;
-  impactScore: number;,
+  impactScore: number;
   effortScore: number;
-  riskScore: number;,
+  riskScore: number;
   tradeoffs: string;
 }
 export interface ExperimentPlan {
-  id: string;,
+  id: string;
   name: string;
-  objective: string;,
+  objective: string;
   hypothesis: string;
-  experimentType: ExperimentType;,
+  experimentType: ExperimentType;
   targetSteps: string;
-  variants: ExperimentVariant;,
+  variants: ExperimentVariant;
   trafficAllocation: TrafficAllocation;
   duration: number; // Days,
-  sampleSize: SampleSizeCalculation;,
+  sampleSize: SampleSizeCalculation;
   successMetrics: ExperimentMetric;
-  guardrailMetrics: GuardrailMetric;,
+  guardrailMetrics: GuardrailMetric;
   analysisFramework: AnalysisFramework;
   riskAssessment: ExperimentRiskAssessment;
 }
@@ -261,366 +261,366 @@ export type ExperimentType =
   | 'sequential';
 
 export interface ExperimentVariant {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   changes: VariantChange;
-  trafficPercentage: number;,
+  trafficPercentage: number;
   expectedImpact: number;
-  riskLevel: 'low' | 'medium' | 'high';
-}
+  riskLevel: 'low' | 'medium' | 'high'
+  }
 export interface VariantChange {
-  type: 'ui' | 'content' | 'flow' | 'logic' | 'design';,
+  type: 'ui' | 'content' | 'flow' | 'logic' | 'design';
   element: string;
-  change: string;,
+  change: string;
   rationale: string;
 }
 export interface TrafficAllocation {
   strategy: 'equal' | 'weighted' | 'adaptive' | 'sequential';
   rampUpPlan?: RampUpPlan;
-  exclusionCriteria: string;,
+  exclusionCriteria: string;
   inclusionCriteria: string;
 }
 export interface RampUpPlan {
-  initialPercentage: number;,
+  initialPercentage: number;
   finalPercentage: number;
   rampUpDuration: number; // Days,
   milestones: RampUpMilestone;
 }
 export interface RampUpMilestone {
-  percentage: number;,
+  percentage: number;
   date: number;
   criteria: string;
 }
 export interface SampleSizeCalculation {
-  minimumDetectableEffect: number;,
+  minimumDetectableEffect: number;
   baselineConversionRate: number;
-  power: number;,
+  power: number;
   significance: number;
-  calculatedSampleSize: number;,
+  calculatedSampleSize: number;
   recommendedDuration: number; // Days,
   confidenceInterval: [number, number];
 }
 export interface ExperimentMetric {
-  name: string;,
+  name: string;
   type: 'primary' | 'secondary';
-  calculation: string;,
+  calculation: string;
   target: number;
   minimumDetectableEffect: number;
 }
 export interface GuardrailMetric {
-  name: string;,
+  name: string;
   threshold: number;
-  direction: 'increase' | 'decrease';,
-  action: 'stop' | 'alert' | 'adjust';
-}
+  direction: 'increase' | 'decrease';
+  action: 'stop' | 'alert' | 'adjust'
+  }
 export interface AnalysisFramework {
-  method: 'frequentist' | 'bayesian' | 'sequential';,
+  method: 'frequentist' | 'bayesian' | 'sequential';
   interimAnalyses: InterimAnalysis;
-  finalAnalysis: FinalAnalysis;,
+  finalAnalysis: FinalAnalysis;
   reportingSchedule: ReportingSchedule;
 }
 export interface InterimAnalysis {
-  day: number;,
+  day: number;
   purpose: string;
-  metrics: string;,
+  metrics: string;
   decisionCriteria: string;
 }
 export interface FinalAnalysis {
-  methods: string;,
+  methods: string;
   visualizations: string;
-  segmentAnalysis: string;,
+  segmentAnalysis: string;
   statisticalTests: string;
 }
 export interface ReportingSchedule {
-  frequency: 'daily' | 'weekly' | 'milestone';,
+  frequency: 'daily' | 'weekly' | 'milestone';
   audience: string;
   content: string;
 }
 export interface ExperimentRiskAssessment {
-  businessRisks: BusinessRisk;,
+  businessRisks: BusinessRisk;
   technicalRisks: TechnicalRisk;
-  userExperienceRisks: UXRisk;,
+  userExperienceRisks: UXRisk;
   mitigationPlans: RiskMitigationPlan;
 }
 export interface BusinessRisk {
-  risk: string;,
+  risk: string;
   probability: number;
-  impact: number;,
+  impact: number;
   mitigation: string;
 }
 export interface TechnicalRisk {
-  risk: string;,
+  risk: string;
   probability: number;
-  impact: number;,
+  impact: number;
   mitigation: string;
 }
 export interface UXRisk {
-  risk: string;,
+  risk: string;
   probability: number;
-  impact: number;,
+  impact: number;
   mitigation: string;
 }
 export interface RiskMitigationPlan {
-  risk: string;,
+  risk: string;
   plan: string;
-  responsible: string;,
+  responsible: string;
   timeline: number;
 }
 export interface ImpactPrediction {
-  recommendationId: string;,
+  recommendationId: string;
   predictedImpact: PredictedMetricImpact;
   confidenceInterval: [number, number];
-  timeToRealization: number;,
+  timeToRealization: number;
   factorsConsidered: string;
-  assumptions: string;,
+  assumptions: string;
   sensitivityAnalysis: SensitivityAnalysis;
 }
 export interface PredictedMetricImpact {
-  metric: string;,
+  metric: string;
   currentValue: number;
-  predictedValue: number;,
+  predictedValue: number;
   changeAbsolute: number;
-  changeRelative: number;,
+  changeRelative: number;
   confidence: number;
 }
 export interface SensitivityAnalysis {
-  factors: SensitivityFactor;,
+  factors: SensitivityFactor;
   scenarios: ImpactScenario;
 }
 export interface SensitivityFactor {
-  factor: string;,
+  factor: string;
   impact: number;
   uncertainty: number;
 }
 export interface ImpactScenario {
-  scenario: string;,
+  scenario: string;
   probability: number;
   impact: PredictedMetricImpact;
 }
 export interface ResourceAllocation {
-  totalBudget: number;,
+  totalBudget: number;
   allocations: AllocationItem;
-  priorities: PriorityMatrix;,
+  priorities: PriorityMatrix;
   timeline: AllocationTimeline;
   optimization: AllocationOptimization;
 }
 export interface AllocationItem {
-  recommendationId: string;,
+  recommendationId: string;
   allocatedBudget: number;
-  allocatedTime: number;,
+  allocatedTime: number;
   allocatedResources: AllocatedResource;
-  expectedROI: number;,
+  expectedROI: number;
   priority: number;
 }
 export interface AllocatedResource {
-  type: string;,
+  type: string;
   amount: number;
-  duration: number;,
+  duration: number;
   utilization: number;
 }
 export interface PriorityMatrix {
-  highImpactLowEffort: string;,
+  highImpactLowEffort: string;
   highImpactHighEffort: string;
-  lowImpactLowEffort: string;,
+  lowImpactLowEffort: string;
   lowImpactHighEffort: string;
 }
 export interface AllocationTimeline {
-  period: string;,
+  period: string;
   allocations: AllocationItem;
   capacity: CapacityInfo;
 }
 export interface CapacityInfo {
-  available: number;,
+  available: number;
   allocated: number;
-  utilization: number;,
+  utilization: number;
   bottlenecks: string;
 }
 export interface AllocationOptimization {
-  method: 'linear_programming' | 'genetic_algorithm' | 'monte_carlo';,
+  method: 'linear_programming' | 'genetic_algorithm' | 'monte_carlo';
   objective: 'maximize_roi' | 'minimize_risk' | 'balanced';
-  constraints: OptimizationConstraint;,
+  constraints: OptimizationConstraint;
   solution: OptimizationSolution;
 }
 export interface OptimizationSolution {
-  optimalAllocations: AllocationItem;,
+  optimalAllocations: AllocationItem;
   expectedOutcome: number;
-  confidence: number;,
+  confidence: number;
   alternatives: AlternativeSolution;
 }
 export interface AlternativeSolution {
-  description: string;,
+  description: string;
   allocations: AllocationItem;
-  expectedOutcome: number;,
+  expectedOutcome: number;
   tradeoffs: string;
 }
 export interface OptimizationRoadmap {
-  phases: RoadmapPhase;,
+  phases: RoadmapPhase;
   milestones: RoadmapMilestone;
-  dependencies: RoadmapDependency;,
+  dependencies: RoadmapDependency;
   riskMitigations: RoadmapRiskMitigation;
   success: RoadmapSuccess;
 }
 export interface RoadmapPhase {
-  phase: string;,
+  phase: string;
   duration: number;
-  objectives: string;,
+  objectives: string;
   deliverables: string;
-  resources: ResourceRequirement;,
+  resources: ResourceRequirement;
   risks: string;
   successCriteria: string;
 }
 export interface RoadmapMilestone {
-  name: string;,
+  name: string;
   date: number;
-  description: string;,
+  description: string;
   dependencies: string;
-  successCriteria: string;,
+  successCriteria: string;
   impact: number;
 }
 export interface RoadmapDependency {
-  from: string;,
+  from: string;
   to: string;
-  type: 'blocking' | 'enabling' | 'informing';,
+  type: 'blocking' | 'enabling' | 'informing';
   description: string;
-  criticality: 'critical' | 'important' | 'nice_to_have';
-}
+  criticality: 'critical' | 'important' | 'nice_to_have'
+  }
 export interface RoadmapRiskMitigation {
-  risk: string;,
+  risk: string;
   phase: string;
-  mitigation: string;,
+  mitigation: string;
   contingency: string;
   monitoring: string;
 }
 export interface RoadmapSuccess {
-  definition: string;,
+  definition: string;
   metrics: SuccessMetric;
-  timeline: number;,
+  timeline: number;
   dependencies: string;
 }
 export interface SuccessMetric {
-  metric: string;,
+  metric: string;
   target: number;
-  measurement: string;,
+  measurement: string;
   frequency: string;
 }
 export interface RiskAssessment {
-  overallRiskScore: number;,
+  overallRiskScore: number;
   riskCategories: RiskCategory;
-  mitigationStrategies: MitigationStrategy;,
+  mitigationStrategies: MitigationStrategy;
   contingencyPlans: ContingencyPlan;
   monitoring: RiskMonitoring;
 }
 export interface RiskCategory {
-  category: string;,
-  risks: Risk;
-  overallScore: number;,
-  trend: 'increasing' | 'stable' | 'decreasing';
-}
-export interface Risk {
-  id: string;,
-  description: string;
-  probability: number;,
-  impact: number;
-  score: number;,
   category: string;
-  triggers: string;,
+  risks: Risk;
+  overallScore: number;
+  trend: 'increasing' | 'stable' | 'decreasing'
+  }
+export interface Risk {
+  id: string;
+  description: string;
+  probability: number;
+  impact: number;
+  score: number;
+  category: string;
+  triggers: string;
   indicators: string;
 }
 export interface MitigationStrategy {
-  riskId: string;,
+  riskId: string;
   strategy: string;
-  effectiveness: number;,
+  effectiveness: number;
   cost: number;
-  timeframe: number;,
+  timeframe: number;
   responsible: string;
 }
 export interface ContingencyPlan {
-  scenario: string;,
+  scenario: string;
   probability: number;
-  impact: number;,
+  impact: number;
   response: string;
-  resources: string;,
+  resources: string;
   timeline: number;
 }
 export interface RiskMonitoring {
-  indicators: RiskIndicator;,
+  indicators: RiskIndicator;
   alertThresholds: AlertThreshold;
-  reportingFrequency: string;,
+  reportingFrequency: string;
   responsible: string;
 }
 export interface RiskIndicator {
-  indicator: string;,
+  indicator: string;
   measurement: string;
-  threshold: number;,
+  threshold: number;
   frequency: string;
 }
 export interface AlertThreshold {
-  metric: string;,
+  metric: string;
   threshold: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   action: string;
 }
 export interface CompetitiveAnalysis {
-  competitors: Competitor;,
+  competitors: Competitor;
   benchmarks: CompetitiveBenchmark;
-  opportunities: CompetitiveOpportunity;,
+  opportunities: CompetitiveOpportunity;
   threats: CompetitiveThreat;
   positioning: PositioningAnalysis;
 }
 export interface Competitor {
-  name: string;,
+  name: string;
   strengths: string;
-  weaknesses: string;,
+  weaknesses: string;
   marketPosition: string;
-  conversionStrategies: string;,
+  conversionStrategies: string;
   differentiators: string;
 }
 export interface CompetitiveBenchmark {
-  metric: string;,
+  metric: string;
   ourValue: number;
-  competitorValues: CompetitorValue;,
+  competitorValues: CompetitorValue;
   marketLeader: number;
-  marketAverage: number;,
+  marketAverage: number;
   ourRanking: number;
 }
 export interface CompetitorValue {
-  competitor: string;,
+  competitor: string;
   value: number;
   confidence: number;
 }
 export interface CompetitiveOpportunity {
-  opportunity: string;,
+  opportunity: string;
   description: string;
-  impact: number;,
+  impact: number;
   difficulty: number;
-  timeframe: number;,
+  timeframe: number;
   requirements: string;
 }
 export interface CompetitiveThreat {
-  threat: string;,
+  threat: string;
   description: string;
-  probability: number;,
+  probability: number;
   impact: number;
-  timeframe: number;,
+  timeframe: number;
   mitigations: string;
 }
 export interface PositioningAnalysis {
-  currentPosition: string;,
+  currentPosition: string;
   targetPosition: string;
-  differentiators: string;,
+  differentiators: string;
   weaknesses: string;
-  opportunities: string;,
+  opportunities: string;
   strategies: string;
 }
 export interface OptimizationTrend {
-  trend: string;,
+  trend: string;
   description: string;
-  relevance: number;,
+  relevance: number;
   adoptionRate: number;
-  impact: number;,
+  impact: number;
   timeframe: number;
-  implementation: string;,
+  implementation: string;
   examples: string;
   /**
   * Main Funnel Optimization Engine Component
@@ -759,9 +759,9 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
  * Optimization Engine Header Component
  */
 interface OptimizationEngineHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   currentPerformance: FunnelPerformanceSnapshot;
-  analysisData: OptimizationAnalysisData;,
+  analysisData: OptimizationAnalysisData;
   activeView: string;
   onViewChange: (view: 'recommendations' | 'experiments' | 'roadmap' | 'allocation') => void;
   const OptimizationEngineHeader: React.FC<OptimizationEngineHeaderProps> = ({,)
@@ -822,9 +822,9 @@ interface OptimizationEngineHeaderProps {
  * Recommendations View Component
  */
 interface RecommendationsViewProps {
-  recommendations: OptimizationRecommendation;,
+  recommendations: OptimizationRecommendation;
   impactPredictions: ImpactPrediction;
-  selectedRecommendation: string | null;,
+  selectedRecommendation: string | null;
   onRecommendationSelect: (id: string) => void;
   const RecommendationsView: React.FC<RecommendationsViewProps> = ({,)
   recommendations,
@@ -883,7 +883,7 @@ interface RecommendationsViewProps {
 interface RecommendationCardProps {
   recommendation: OptimizationRecommendation;
   impactPrediction?: ImpactPrediction;
-  isSelected: boolean;,
+  isSelected: boolean;
   onSelect: () => void;
   const RecommendationCard: React.FC<RecommendationCardProps> = ({,)
   recommendation,
@@ -991,7 +991,7 @@ interface RecommendationCardProps {
  * Experiments View Component
  */
 interface ExperimentsViewProps {
-  experimentPlans: ExperimentPlan;,
+  experimentPlans: ExperimentPlan;
   recommendations: OptimizationRecommendation;
 const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, recommendations }) => {
   return;
@@ -1061,7 +1061,7 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
  * Roadmap View Component
  */
 interface RoadmapViewProps {
-  roadmap: OptimizationRoadmap;,
+  roadmap: OptimizationRoadmap;
   recommendations: OptimizationRecommendation;
   riskAssessment: RiskAssessment;
 const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, riskAssessment }) => {
@@ -1129,7 +1129,7 @@ const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
  * Resource Allocation View Component
  */
 interface ResourceAllocationViewProps {
-  allocation: ResourceAllocation;,
+  allocation: ResourceAllocation;
   recommendations: OptimizationRecommendation;
 const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocation, recommendations }) => {
   return;
@@ -1203,7 +1203,7 @@ const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocat
  * Competitive Insights Panel Component
  */
 interface CompetitiveInsightsPanelProps {
-  analysis: CompetitiveAnalysis;,
+  analysis: CompetitiveAnalysis;
   trends: OptimizationTrend;
 const CompetitiveInsightsPanel: React.FC<CompetitiveInsightsPanelProps> = ({ analysis, trends }) => {
   return;
@@ -1258,7 +1258,7 @@ const OptimizationEngineLoadingState: React.FC = () => ()
   </div>
 );
 interface OptimizationEngineErrorStateProps {
-  error: string;,
+  error: string;
   onRetry: () => void;
 const OptimizationEngineErrorState: React.FC<OptimizationEngineErrorStateProps> = ({ error, onRetry }) => ()
   <div className="optimization-engine-error">
@@ -1273,7 +1273,7 @@ const OptimizationEngineErrorState: React.FC<OptimizationEngineErrorStateProps> 
 );
 
 // Utility Functions
-async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDefinition,)
+async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDefinition)
   currentPerformance: FunnelPerformanceSnapshot,
   goals: OptimizationGoal,
   constraints: OptimizationConstraint,
@@ -1295,7 +1295,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   timeToImpact: 7,
   affectedSteps: ['step-2'],
   targetedGoals: ['increase_conversion_rate', 'reduce_drop_off'],
-  implementation: {,
+  implementation: {
   phases: [,
   {
   phase: 'Research & Design',
@@ -1358,7 +1358,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   measurement: 'Average seconds spent browsing templates',
   timeframe: 30];
   },
-  validation: {,
+  validation: {
   hypothesis: 'Improved template browsing UX will increase step conversion rate by 15%',
   testMethod: 'ab_test',
   sampleSize: 10000,
@@ -1400,7 +1400,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   timeToImpact: 5,
   affectedSteps: ['step-2', 'step-3'],
   targetedGoals: ['improve_user_experience', 'reduce_time_to_convert'],
-  implementation: {,
+  implementation: {
   phases: [,
   {
   phase: 'Technical Architecture',
@@ -1434,7 +1434,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   measurement: 'Milliseconds to interactive',
   timeframe: 14];
   },
-  validation: {,
+  validation: {
   hypothesis: 'Progressive previews will reduce bounce rate by 20%',
   testMethod: 'ab_test',
   sampleSize: 8000,
@@ -1486,13 +1486,13 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   trafficPercentage: 50,
   expectedImpact: 15,
   riskLevel: 'medium'],
-  trafficAllocation: {,
+  trafficAllocation: {
   strategy: 'equal',
   exclusionCriteria: ['Mobile users under 5 sessions'],
   inclusionCriteria: ['Active template browsers'],
 },
   duration: 14,
-      sampleSize: {,
+      sampleSize: {
   minimumDetectableEffect: 15,
   baselineConversionRate: 65,
   power: 0.8,
@@ -1514,7 +1514,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   threshold: -5,
   direction: 'decrease',
   action: 'stop'],
-  analysisFramework: {,
+  analysisFramework: {
   method: 'frequentist',
   interimAnalyses: [,
   {
@@ -1522,7 +1522,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   purpose: 'Early signal detection',
   metrics: ['conversion_rate', 'engagement'],
   decisionCriteria: ['Statistical significance', 'Guardrail violations']],
-  finalAnalysis: {,
+  finalAnalysis: {
   methods: ['T-test', 'Chi-square'],
   visualizations: ['Conversion funnel', 'Time series'],
   segmentAnalysis: ['Device type', 'User segment'],
@@ -1534,7 +1534,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   audience: ['Product Team', 'Engineering'],
   content: ['Key metrics', 'Guardrails', 'User feedback']]
 },
-  riskAssessment: {,
+  riskAssessment: {
   businessRisks: [,
   {
   risk: 'Decreased conversion rate',
@@ -1557,7 +1557,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   return {
   recommendations,
   experimentPlans,
-  impactPredictions: recommendations.map(rec => ({,)
+  impactPredictions: recommendations.map(rec => ({)
   recommendationId: rec.id,
   predictedImpact: [,
   {
@@ -1571,7 +1571,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   timeToRealization: rec.timeToImpact,
   factorsConsidered: ['Historical performance', 'Industry benchmarks', 'User behavior patterns'],
   assumptions: ['Consistent traffic patterns', 'No external market changes'],
-  sensitivityAnalysis: {,
+  sensitivityAnalysis: {
   factors: [,
   {
   factor: 'Implementation quality',
@@ -1579,13 +1579,13 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   uncertainty: 0.2],
   scenarios: [],
 })),
-    resourceAllocation: {,
+    resourceAllocation: {
   totalBudget: 100000,
   allocations: recommendations.map((rec, index) => ({,)
   recommendationId: rec.id,
   allocatedBudget: rec.effortScore * 500,
   allocatedTime: rec.timeToImplement,
-  allocatedResources: rec.implementation.resources.map(res => ({,)
+  allocatedResources: rec.implementation.resources.map(res => ({)
   type: res.type,
   amount: res.hours,
   duration: rec.timeToImplement,
@@ -1594,7 +1594,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
         expectedROI: rec.roiEstimate,
         priority: index + 1;
   })),
-      priorities: {,
+      priorities: {
   highImpactLowEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore < 40).map(r => r.id),
   highImpactHighEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
   lowImpactLowEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
@@ -1611,23 +1611,23 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   expectedROI: rec.roiEstimate,
   priority: allocIndex + 1,
 })),
-        capacity: {,
+        capacity: {
   available: 100,
   allocated: 80,
   utilization: 0.8,
   bottlenecks: ['Development capacity', 'Design resources'],
 })),
-      optimization: {,
+      optimization: {
   method: 'linear_programming',
   objective: 'maximize_roi',
   constraints: [],
-  solution: {,
+  solution: {
   optimalAllocations: [],
   expectedOutcome: 3.5,
   confidence: 0.85,
   alternatives: [],
 },
-  optimizationRoadmap: {,
+  optimizationRoadmap: {
   phases: [,
   {
   phase: 'Quick Wins (Month 1)',
@@ -1666,7 +1666,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   impact: 5],
   dependencies: [],
   riskMitigations: [],
-  success: {,
+  success: {
   definition: 'Overall funnel conversion rate increased by 20%',
   metrics: [,
   {
@@ -1677,7 +1677,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   timeline: 90,
   dependencies: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   overallRiskScore: 35,
   riskCategories: [,
   {
@@ -1696,13 +1696,13 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   trend: 'stable'],
   mitigationStrategies: [],
   contingencyPlans: [],
-  monitoring: {,
+  monitoring: {
   indicators: [],
   alertThresholds: [],
   reportingFrequency: 'weekly',
   responsible: ['Product Manager', 'Engineering Lead'],
 },
-  competitiveAnalysis: {,
+  competitiveAnalysis: {
   competitors: [,
         {
           name: 'Competitor A',
@@ -1731,7 +1731,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   timeframe: 3,
   requirements: ['3D preview technology', 'Advanced rendering']],
   threats: [],
-  positioning: {,
+  positioning: {
   currentPosition: 'Strong challenger with growth potential',
   targetPosition: 'Market leader in conversion optimization',
   differentiators: ['Advanced analytics', 'AI-powered recommendations'],

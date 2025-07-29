@@ -97,7 +97,8 @@ Promise < Experiment > {
                         const updatedExperiment = await this.updateExperiment(id, {});
                         status: 'completed',
                             schedule;
-                        { }
+                        {
+                        }
                     },
                     ...experiment.schedule,
                     endAt: new Date(),

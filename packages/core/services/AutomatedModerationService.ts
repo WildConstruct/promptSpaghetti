@@ -45,23 +45,23 @@ export type ContentType =
 export type ModerationSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export interface ModerationRequest {
-  id: string;,
+  id: string;
   contentId: string;
-  contentType: ContentType;,
-  content: {,
+  contentType: ContentType;
+  content: {
   title?: string;
   description?: string;
   body?: string;
   metadata?: Record<string, any>;
 };
-  author: {,
+  author: {
   userId: string;
   userEmail?: string;
   trustScore?: number;
   previousViolations?: number;
   accountAge?: number; // days,
 };
-  context: {,
+  context: {
   source: string;
   timestamp: string;
   ipAddress?: string;
@@ -72,58 +72,58 @@ export interface ModerationRequest {
   skipCache?: boolean;
 }
 export interface ModerationResult {
-  id: string;,
+  id: string;
   requestId: string;
-  decision: ModerationAction;,
+  decision: ModerationAction;
   confidence: number; // 0-100,
-  severity: ModerationSeverity;,
+  severity: ModerationSeverity;
   reasons: ModerationReason;
   explanation: string;
   // Policy Results
-  policyResults: PolicyCheckResult;,
+  policyResults: PolicyCheckResult;
   policyViolations: number;
   overallComplianceScore: number;
   // ML Analysis
-  mlAnalysis?: {,
-  toxicityScore: number;,
+  mlAnalysis?: {
+  toxicityScore: number;
   spamProbability: number;
-  sentimentScore: number;,
+  sentimentScore: number;
   languageQuality: number;
   contentSimilarity?: number;
 };
   // Trust & History Analysis
-  trustAnalysis: {,
+  trustAnalysis: {
   authorTrustScore: number;
-  trustTrend: 'increasing' | 'stable' | 'decreasing';,
+  trustTrend: 'increasing' | 'stable' | 'decreasing';
   riskFactors: string;
   historicalViolations: number;
 };
   // Recommended Actions
   recommendedActions: Array<{,
   action: ModerationAction;
-  reason: string;,
+  reason: string;
   priority: number;
   automated: boolean;
 }>;
   // Review Information
-  requiresHumanReview: boolean;,
+  requiresHumanReview: boolean;
   reviewPriority: 'low' | 'medium' | 'high' | 'urgent';
   assignedReviewer?: string;
   reviewDeadline?: string;
   // Metadata
-  executionTimeMs: number;,
+  executionTimeMs: number;
   timestamp: string;
   version: string;
 }
 export interface ModerationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
   priority: number;
   // Triggers
-  contentTypes: ContentType;,
-  triggers: {,
+  contentTypes: ContentType;
+  triggers: {
   policyViolation?: boolean;
   trustScoreBelow?: number;
   mlFlagThreshold?: number;
@@ -137,35 +137,35 @@ export interface ModerationRule {
   parameters?: Record<string, any>;
 }>;
   // Configuration
-  autoExecute: boolean;,
+  autoExecute: boolean;
   requiresApproval: boolean;
   escalationPath?: string;
   // Metadata
-  version: string;,
+  version: string;
   createdAt: string;
-  updatedAt: string;,
+  updatedAt: string;
   createdBy: string;
 }
 export interface ModerationWorkflow {
-  id: string;,
+  id: string;
   name: string;
-  contentTypes: ContentType;,
+  contentTypes: ContentType;
   steps: ModerationWorkflowStep;
   enabled: boolean;
 }
 export interface ModerationWorkflowStep {
-  id: string;,
+  id: string;
   name: string;
-  type: 'automated_check' | 'ml_analysis' | 'policy_check' | 'human_review' | 'action_execution';,
+  type: 'automated_check' | 'ml_analysis' | 'policy_check' | 'human_review' | 'action_execution';
   configuration: Record<string, any>;
   conditions: string;
   timeoutMs?: number;
   retryCount?: number;
 }
 export interface ModerationQueue {
-  id: string;,
+  id: string;
   name: string;
-  filters: {,
+  filters: {
   contentTypes?: ContentType;
   severityLevels?: ModerationSeverity;
   requiresReview?: boolean;
@@ -175,10 +175,10 @@ export interface ModerationQueue {
   condition: string;
   priority: number;
 }>;
-  autoAssignment: {,
+  autoAssignment: {
   enabled: boolean;
   rules: Array<{,
-  condition: string;,
+  condition: string;
   assignTo: string;
 }>;
   };
@@ -272,7 +272,7 @@ export class AutomatedModerationService {
         policyResults: [],
         policyViolations: 0,
         overallComplianceScore: 0,
-        trustAnalysis: {,
+        trustAnalysis: {
   authorTrustScore: request.author.trustScore || 0,
   trustTrend: 'stable',
   riskFactors: ['system_error'],
@@ -308,11 +308,11 @@ export class AutomatedModerationService {
   resourceType: 'content' as const,
       resourceId: request.contentId,
       data: request.content,
-      context: {,
+      context: {
   userId: request.author.userId,
   source: request.context.source,
   timestamp: request.context.timestamp,
-  metadata: {,
+  metadata: {
   contentType: request.contentType,
   authorTrustScore: request.author.trustScore,
 },
@@ -360,19 +360,19 @@ export class AutomatedModerationService {
   historicalViolations: violations,
 };
   // Rule Application
-  private async applyModerationRules(request: ModerationRequest,)
-    analysis: {,
+  private async applyModerationRules(request: ModerationRequest)
+    analysis: {
   policyResults: PolicyCheckResult;
   mlAnalysis?: ModerationResult['mlAnalysis'];
   trustAnalysis: ModerationResult['trustAnalysis'];
   ): Promise<{,
-  decision: ModerationAction;,
+  decision: ModerationAction;
   confidence: number;
-  severity: ModerationSeverity;,
+  severity: ModerationSeverity;
   reasons: ModerationReason;
-  explanation: string;,
+  explanation: string;
   recommendedActions: ModerationResult['recommendedActions'];
-  requiresHumanReview: boolean;,
+  requiresHumanReview: boolean;
   reviewPriority: ModerationResult['reviewPriority'];
   assignedReviewer?: string;
   reviewDeadline?: string;
@@ -502,9 +502,9 @@ export class AutomatedModerationService {
     // 4. Send notifications
   // Statistics and Analytics
   async getModerationStatistics(): Promise<{
-    totalModerated: number;,
+    totalModerated: number;
   actionBreakdown: Record<ModerationAction, number>;
-    averageConfidence: number;,
+    averageConfidence: number;
   humanReviewRate: number;
     topViolationReasons: Array<{ reason: ModerationReason; count: number }>;
     averageProcessingTime: number;
@@ -513,7 +513,7 @@ export class AutomatedModerationService {
   // For now, return mock data
   return {
   totalModerated: 1847,
-  actionBreakdown: {,
+  actionBreakdown: {
   approve: 1234,
   reject: 89,
   flag_review: 324,
@@ -549,7 +549,7 @@ export class AutomatedModerationService {
     return scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   private generateCacheKey(request: ModerationRequest): string {
     return `mod_${request.contentId}_${request.contentType}_${request.author.userId}`;}
-  private generateExplanation(decision: ModerationAction,)
+  private generateExplanation(decision: ModerationAction)
     reasons: ModerationReason,
     confidence: number,
     analysis: any): string {,
@@ -623,7 +623,7 @@ export class AutomatedModerationService {
         version: '1.0.0',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        createdBy: 'system';
+        createdBy: 'system'
   }
       {
         id: 'low-trust-review',
@@ -648,14 +648,14 @@ export class AutomatedModerationService {
   {
   id: 'general-review',
   name: 'General Review Queue',
-  filters: {,
+  filters: {
   requiresReview: true,
 },
   priorityRules: [{,
   condition: 'severity === "critical"',
   priority: 1,
 }],
-        autoAssignment: {,
+        autoAssignment: {
   enabled: true,
   rules: [{,
   condition: 'contentType === "template"',
@@ -665,7 +665,7 @@ export class AutomatedModerationService {
       {
   id: 'high-priority',
   name: 'High Priority Review',
-  filters: {,
+  filters: {
   severityLevels: ['critical', 'high'],
   requiresReview: true,
 },
@@ -673,7 +673,7 @@ export class AutomatedModerationService {
   condition: 'severity === "critical"',
   priority: 1,
 }],
-        autoAssignment: {,
+        autoAssignment: {
   enabled: true,
   rules: [{,
   condition: 'severity === "critical"',

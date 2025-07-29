@@ -44,7 +44,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         validateOutput: boolean;
         style: "creative" | "logical" | "balanced";
         complexity: "simple" | "complex" | "moderate";
-        nodeTypes: {,
+        nodeTypes: {
             weight: number;
             required: boolean;
             nodeType: string;
@@ -104,12 +104,12 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
     updatedAt: string;
     name: string;
     description: string;
-    parameters: {,
+    parameters: {
         includeMetadata: boolean;
         validateOutput: boolean;
         style: "creative" | "logical" | "balanced";
         complexity: "simple" | "complex" | "moderate";
-        nodeTypes: {,
+        nodeTypes: {
             weight: number;
             required: boolean;
             nodeType: string;
@@ -141,7 +141,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
     updatedAt: string;
     name: string;
     description: string;
-    parameters: {,
+    parameters: {
         style: "creative" | "logical" | "balanced";
         complexity: "simple" | "complex" | "moderate";
         nodeCount: number;
@@ -204,24 +204,24 @@ export declare const ValidationResultSchema: z.ZodObject<{
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     isValid: boolean;
-    warnings: {,
+    warnings: {
         message: string;
         field: string;
         suggestion?: string | undefined;
     }[];
-    errors: {,
+    errors: {
         code: string;
         message: string;
         field: string;
     }[];
 }, {
     isValid: boolean;
-    warnings: {,
+    warnings: {
         message: string;
         field: string;
         suggestion?: string | undefined;
     }[];
-    errors: {,
+    errors: {
         code: string;
         message: string;
         field: string;

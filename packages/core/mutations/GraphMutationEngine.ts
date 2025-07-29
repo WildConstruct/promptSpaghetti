@@ -292,8 +292,7 @@ export class GraphMutationEngine extends EventEmitter {
       case OperationType.EDGE_DELETE:
         await this.executeEdgeDelete(operation as EdgeDeleteOperation);
         break;
-      case OperationType.BATCH_OPERATION:
-        return await this.executeBatch((operation as BatchOperation).payload.operations);,
+      case OperationType.BATCH_OPERATION: return await this.executeBatch((operation as BatchOperation).payload.operations);
   default:
         throw new Error(`Unsupported operation type: ${operation.type}`);}
       // Emit state change event
@@ -362,7 +361,7 @@ export class GraphMutationEngine extends EventEmitter {
   success: false,
   operation,
   error: errors.join(', '),
-  validationErrors: errors.map(error => ({,)
+  validationErrors: errors.map(error => ({)
   type: 'VALIDATION_ERROR',
   message: error,
   severity: 'error' as const,

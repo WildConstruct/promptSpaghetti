@@ -24,26 +24,26 @@ export interface NodeValidationConfig {
 
 export interface NodeValidationResult extends ValidationResult {
     /** Security-specific validation results */
-    security: {,
+    security: {
         passed: boolean;
         threats: SecurityThreat[];
-        riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    };
+        riskLevel: 'low' | 'medium' | 'high' | 'critical'
+  };
     /** Performance-specific validation results */
-    performance: {,
+    performance: {
         passed: boolean;
         issues: PerformanceIssue[];
         estimatedMemoryUsage: number;
         estimatedExecutionTime: number;
     };
     /** Type safety validation results */
-    typeSafety: {,
+    typeSafety: {
         passed: boolean;
         typeErrors: TypeError[];
-        compatibility: 'full' | 'partial' | 'incompatible';
-    };
+        compatibility: 'full' | 'partial' | 'incompatible'
+  };
     /** Schema validation results */
-    schema: {,
+    schema: {
         passed: boolean;
         schemaErrors: string[];
     };

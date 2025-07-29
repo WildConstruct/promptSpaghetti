@@ -6,77 +6,77 @@
  */
 
 export interface ResourceUsage {
-  memory: {,
-  used: number;,
+  memory: {
+  used: number;
   available: number;
-  percentage: number;,
+  percentage: number;
   peak: number;
 };
-  cpu: {,
+  cpu: {
   usage: number;
-  cores: number;,
+  cores: number;
   load: number;
 };
-  network: {,
+  network: {
   bytesIn: number;
-  bytesOut: number;,
+  bytesOut: number;
   latency: number;
   bandwidth: number;
 };
-  disk: {,
+  disk: {
   used: number;
-  available: number;,
+  available: number;
   ioOperations: number;
   throughput: number;
 };
   gpu?: {
-  usage: number;,
+  usage: number;
   memory: number;
   temperature: number;
 };
 }
 export interface OptimizationStrategy {
-  name: string;,
+  name: string;
   description: string;
-  priority: 'low' | 'medium' | 'high';,
+  priority: 'low' | 'medium' | 'high';
   category: 'memory' | 'cpu' | 'network' | 'disk' | 'model' | 'caching';
-  estimatedSavings: {,
+  estimatedSavings: {
   memory?: number;
   cpu?: number;
   cost?: number;
   responseTime?: number;
 };
-  implementation: () => Promise<void>;,
+  implementation: () => Promise<void>;
   rollback: () => Promise<void>;
 }
 export interface ResourceOptimizationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   monitoringInterval: number; // milliseconds,
-  optimizationThresholds: {,
+  optimizationThresholds: {
   memoryUsage: number; // 0-1, trigger optimization when exceeded,
-  cpuUsage: number;,
+  cpuUsage: number;
   diskUsage: number;
   responseTime: number; // milliseconds,
 };
-  strategies: {,
+  strategies: {
   memoryOptimization: boolean;
-  modelPooling: boolean;,
+  modelPooling: boolean;
   requestBatching: boolean;
-  dynamicScaling: boolean;,
+  dynamicScaling: boolean;
   intelligentCaching: boolean;
   resourcePreemption: boolean;
 };
-  limits: {,
+  limits: {
   maxMemoryUsage: number; // bytes,
-  maxConcurrentRequests: number;,
+  maxConcurrentRequests: number;
   maxModelInstances: number;
   maxCacheSize: number;
 };
 }
 export interface ModelResourceProfile {
-  modelId: string;,
-  resourceRequirements: {,
-  memory: number;,
+  modelId: string;
+  resourceRequirements: {
+  memory: number;
   cpu: number;
   gpu?: number;
   disk: number;
@@ -85,9 +85,9 @@ export interface ModelResourceProfile {
   timestamp: number;
   usage: ResourceUsage;
 }>;
-  optimizationApplied: string;,
+  optimizationApplied: string;
   efficiency: {;
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   costEfficiency: number;
   resourceEfficiency: number;
 };
@@ -126,7 +126,7 @@ export class ResourceOptimizer {
   resourceRequirements,
   utilizationHistory: [],
   optimizationApplied: [],
-  efficiency: {,
+  efficiency: {
   requestsPerSecond: 0,
   costEfficiency: 0,
   resourceEfficiency: 0,
@@ -139,7 +139,7 @@ export class ResourceOptimizer {
   if (optimizationId.includes(modelId)) {
   this.activeOptimizations.delete(optimizationId);
   async optimizeMemoryUsage(): Promise<{,
-  memoryFreed: number;,
+  memoryFreed: number;
   optimizationsApplied: string;
 }> {
   const initialMemory = this.currentUsage.memory.used;
@@ -164,7 +164,7 @@ export class ResourceOptimizer {
   optimizationsApplied
 };
   async optimizeCPUUsage(): Promise<{
-  cpuSavings: number;,
+  cpuSavings: number;
   optimizationsApplied: string;
 }> {
   const initialCPU = this.currentUsage.cpu.usage;
@@ -187,7 +187,7 @@ export class ResourceOptimizer {
   optimizationsApplied
 };
   async optimizeNetworkUsage(): Promise<{
-  bandwidthSaved: number;,
+  bandwidthSaved: number;
   latencyImprovement: number;
   optimizationsApplied: string;
 }> {
@@ -212,7 +212,7 @@ export class ResourceOptimizer {
 };
   async optimizeModelPerformance(modelId: string): Promise<{,
   responseTimeImprovement: number;
-  resourceSavings: Partial<ResourceUsage>;,
+  resourceSavings: Partial<ResourceUsage>;
   optimizationsApplied: string;
 }> {
     const profile = this.modelProfiles.get(modelId);
@@ -240,12 +240,12 @@ export class ResourceOptimizer {
   optimizationsApplied
 };
   async generateOptimizationPlan(): Promise<{
-  currentState: ResourceUsage;,
+  currentState: ResourceUsage;
   recommendedOptimizations: OptimizationStrategy;
-  estimatedImpact: {,
-  memoryReduction: number;,
+  estimatedImpact: {
+  memoryReduction: number;
   cpuReduction: number;
-  costSavings: number;,
+  costSavings: number;
   responseTimeImprovement: number;
 };
     implementationOrder: string;
@@ -262,9 +262,9 @@ export class ResourceOptimizer {
   async applyOptimizationPlan(plan: OptimizationStrategy): Promise<{,
   applied: string;
     failed: Array<{ strategy: string; error: string }>;
-    totalImpact: {,
+    totalImpact: {
   memoryFreed: number;
-  cpuSaved: number;,
+  cpuSaved: number;
   costSaved: number;
   responseTimeImproved: number;
 };
@@ -314,24 +314,24 @@ export class ResourceOptimizer {
   // Private helper methods
   private initializeResourceUsage(): ResourceUsage {
   return {
-  memory: {,
+  memory: {
   used: 0,
   available: 0,
   percentage: 0,
   peak: 0,
 },
-  cpu: {,
+  cpu: {
   usage: 0,
   cores: 1,
   load: [0],
 },
-  network: {,
+  network: {
   bytesIn: 0,
   bytesOut: 0,
   latency: 0,
   bandwidth: 0,
 },
-  disk: {,
+  disk: {
   used: 0,
   available: 0,
   ioOperations: 0,
@@ -458,7 +458,7 @@ export class ResourceOptimizer {
   // Implement request prioritization for the model
   private calculateResourceSavings(initial: any, final: any): Partial<ResourceUsage> {,
   return {
-  memory: {,
+  memory: {
   used: Math.max(0, initial.resourceUsage.memory.used - final.resourceUsage.memory.used),
   available: 0,
   percentage: 0,
@@ -489,9 +489,9 @@ export class ResourceOptimizer {
         rollback: async () => {}
       });
     return strategies;
-  private calculateEstimatedImpact(strategies: OptimizationStrategy): {,
+  private calculateEstimatedImpact(strategies: OptimizationStrategy): {
   memoryReduction: number;
-  cpuReduction: number;,
+  cpuReduction: number;
   costSavings: number;
   responseTimeImprovement: number;
   return strategies.reduce((impact, strategy) => ({)
@@ -513,9 +513,9 @@ export class ResourceOptimizer {
   private async measureCurrentState(): Promise<ResourceUsage> {
     await this.monitorResources();
     return { ...this.currentUsage };
-  private calculateImpact(before: ResourceUsage, after: ResourceUsage, strategy: OptimizationStrategy): {,
+  private calculateImpact(before: ResourceUsage, after: ResourceUsage, strategy: OptimizationStrategy): {
   memoryFreed: number;
-  cpuSaved: number;,
+  cpuSaved: number;
   costSaved: number;
   responseTimeImproved: number;
   return {

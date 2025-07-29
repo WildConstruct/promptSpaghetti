@@ -14,9 +14,9 @@ import { AnalyticsClient } from './AnalyticsClient';
 import { ConversionArchitectureManager, CrossDeviceIdentity, DeviceIdentity, LinkingSignal } from './ConversionFunnelArchitecture';
 
 export interface EnhancedSession {
-  sessionId: string;,
+  sessionId: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   startTime: number;
   lastActivity: number;
   endTime?: number;
@@ -25,11 +25,11 @@ export interface EnhancedSession {
   crossDeviceSessionId?: string;
   linkedSessions: string;
   // Session context
-  referrer: string;,
+  referrer: string;
   initialPage: string;
-  userAgent: string;,
+  userAgent: string;
   ipHash: string; // Privacy-compliant hashed IP,
-  location?: {,
+  location?: {
   country?: string;
   region?: string;
   city?: string; // Only if user consents,
@@ -41,27 +41,27 @@ export interface EnhancedSession {
   utmContent?: string;
   utmTerm?: string;
   // Session metrics
-  pageViews: number;,
+  pageViews: number;
   events: number;
-  conversionEvents: number;,
+  conversionEvents: number;
   bounced: boolean;
   engaged: boolean; // >30s or >1 page or conversion event
   // Privacy and consent
-  trackingConsent: boolean;,
+  trackingConsent: boolean;
   analyticsConsent: boolean;
-  personalizationConsent: boolean;,
+  personalizationConsent: boolean;
   crossDeviceConsent: boolean;
   // Technical metadata
-  viewport: {,
+  viewport: {
   width: number;
   height: number;
 };
-  deviceType: 'desktop' | 'mobile' | 'tablet';,
+  deviceType: 'desktop' | 'mobile' | 'tablet';
   browser: string;
   os: string;
 }
 export interface SessionEvent {
-  sessionId: string;,
+  sessionId: string;
   timestamp: number;
   type: SessionEventType;
   page?: string;
@@ -77,30 +77,30 @@ export type SessionEventType =
   | 'consent_update';
 
 export interface SessionAnalytics {
-  totalSessions: number;,
+  totalSessions: number;
   uniqueUsers: number;
-  averageSessionDuration: number;,
+  averageSessionDuration: number;
   averagePagesPerSession: number;
-  bounceRate: number;,
+  bounceRate: number;
   conversionRate: number;
-  crossDeviceUsers: number;,
+  crossDeviceUsers: number;
   sessionsWithConsent: number;
   // Segmentation
   deviceBreakdown: Record<string, number>;
   sourceBreakdown: Record<string, number>;
   conversionsBySource: Record<string, number>;
   // Time-based metrics
-  hourlyDistribution: number;,
+  hourlyDistribution: number;
   dailyDistribution: number;
   // User journey insights
   commonPaths: Array<{,
-  path: string;,
+  path: string;
   frequency: number;
   conversionRate: number;
 }>;
   dropoffPoints: Array<{,
   page: string;
-  dropoffRate: number;,
+  dropoffRate: number;
   recoverableUsers: number;
 }>;
 /**
@@ -174,7 +174,7 @@ export class SessionTrackingManager {
   personalizationConsent: consent.personalizationConsent,
   crossDeviceConsent: consent.crossDeviceConsent,
   // Technical metadata
-  viewport: {,
+  viewport: {
   width: window.innerWidth,
   height: window.innerHeight,
 },
@@ -185,9 +185,9 @@ export class SessionTrackingManager {
     this.saveSessionToStorage();
     this.attemptCrossDeviceLinking();
   private getConsentPreferences(): {
-  trackingConsent: boolean;,
+  trackingConsent: boolean;
   analyticsConsent: boolean;
-  personalizationConsent: boolean;,
+  personalizationConsent: boolean;
   crossDeviceConsent: boolean;
   const stored = localStorage.getItem(this.privacyConfig.consentStorageKey);
   if (stored) {
@@ -203,14 +203,14 @@ export class SessionTrackingManager {
   crossDeviceConsent: false,
 };
   private getDeviceInfo(): {
-  deviceType: 'desktop' | 'mobile' | 'tablet';,
+  deviceType: 'desktop' | 'mobile' | 'tablet';
   browser: string;
   os: string;
   const userAgent = navigator.userAgent;
   let deviceType: 'desktop' | 'mobile' | 'tablet' = 'desktop';
   if (/tablet|ipad/i.test(userAgent)) {
-  deviceType = 'tablet';
-} else if (/mobile|iphone|android/i.test(userAgent)) {
+  deviceType = 'tablet'
+  } else if (/mobile|iphone|android/i.test(userAgent)) {
       deviceType = 'mobile';
     let browser = 'unknown';
     if (userAgent.includes('Chrome')) browser = 'chrome';
@@ -300,7 +300,7 @@ export class SessionTrackingManager {
   type: 'behavioral',
   strength: similarity,
   timestamp: Date.now(),
-  metadata: {,
+  metadata: {
   similarSession: session.sessionId,
   similarity
 });
@@ -422,10 +422,10 @@ export class SessionTrackingManager {
   conversionRate: this.currentSession.conversionEvents > 0 ? 100 : 0,
   crossDeviceUsers: this.currentSession.crossDeviceSessionId ? 1 : 0,
   sessionsWithConsent: this.currentSession.analyticsConsent ? 1 : 0,
-  deviceBreakdown: {,
+  deviceBreakdown: {
   [this.currentSession.deviceType]: 1,
 },
-  sourceBreakdown: {,
+  sourceBreakdown: {
   [this.currentSession.utmSource || 'direct']: 1,
 };
   // Private helper methods

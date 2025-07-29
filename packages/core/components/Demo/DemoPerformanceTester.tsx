@@ -9,13 +9,13 @@ import { Node, Edge } from 'reactflow';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
 export interface PerformanceTestResult {
-  nodeCount: number;,
+  nodeCount: number;
   edgeCount: number;
-  renderTime: number;,
+  renderTime: number;
   fps: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   testDuration: number;
-  passedThreshold: boolean;,
+  passedThreshold: boolean;
   recommendations: string;
 }
 export interface DemoPerformanceTesterProps {
@@ -56,7 +56,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   type: 'default',
         position: { x, y },
-        data: {,
+        data: {
   nodeType: category,
           label: `${category} ${i + 1}`}
 }
@@ -84,7 +84,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 1].id,
-          type: 'smoothstep';
+          type: 'smoothstep'
   });
       // Add some branching connections
       if (i % 5 === 0 && i + 3 < nodes.length) {
@@ -93,7 +93,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 3].id,
-          type: 'smoothstep';
+          type: 'smoothstep'
   });
       // Add convergence connections
       if (i % 7 === 0 && i + 2 < nodes.length) {
@@ -102,7 +102,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 2].id,
-          type: 'straight';
+          type: 'straight'
   });
     return { nodes, edges };
   }, []);
@@ -323,7 +323,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
   borderRadius: '4px',
                   padding: '8px',
                   marginBottom: '8px',
-                  fontSize: '10px';
+                  fontSize: '10px'
   }}
               >
                 <div style={{ fontWeight: 500, marginBottom: 4 }}>

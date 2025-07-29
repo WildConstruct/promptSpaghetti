@@ -49,23 +49,23 @@ export enum PasswordStrength {
   metadata?: Record<string, any>;
 }
 export interface TokenVerification {
-  token: string;,
+  token: string;
   email: string;
 }
 export interface PasswordResetData {
-  token: string;,
+  token: string;
   newPassword: string;
   confirmPassword: string;
 }
 export interface PasswordValidation {
-  isValid: boolean;,
+  isValid: boolean;
   strength: PasswordStrength;
-  score: number;,
+  score: number;
   feedback: string;
-  requirements: {,
-  length: boolean;,
+  requirements: {
+  length: boolean;
   uppercase: boolean;
-  lowercase: boolean;,
+  lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
 };
@@ -108,7 +108,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   strength: PasswordStrength.WEAK,
   score: 0,
   feedback: [],
-  requirements: {,
+  requirements: {
   length: false,
   uppercase: false,
   lowercase: false,
@@ -221,7 +221,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   email,
   ipAddress: '192.168.1.100', // Would be detected from client,
   userAgent: navigator.userAgent,
-  metadata: {,
+  metadata: {
   timestamp: new Date().toISOString(),
   referrer: document.referrer,
 };
@@ -324,7 +324,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
   case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
   case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
-  case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';,
+  case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
   default: return 'text-gray-600 bg-gray-100';
 };
   const getPasswordStrengthWidth = (score: number) => {

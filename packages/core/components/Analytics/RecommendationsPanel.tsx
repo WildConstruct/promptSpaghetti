@@ -313,7 +313,7 @@ interface RecommendationSummaryProps {
  */
 
 export interface RecommendationsPanelProps {
-  recommendations: unknown;,
+  recommendations: unknown;
   analyticsClient: AnalyticsClient;
   userId?: number;
   organizationId?: number;

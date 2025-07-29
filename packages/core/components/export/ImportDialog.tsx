@@ -8,11 +8,11 @@ import {
   FiInfo
 } from 'react-icons/fi';
 interface ImportDialogProps {
-  onClose: () => void;,
+  onClose: () => void;
   onImportComplete: (result: Record<string, unknown>) => void;
   className?: string;
   interface ImportResult {
-  success: boolean;,
+  success: boolean;
   message: string;
   data?: unknown;
   warnings?: string;

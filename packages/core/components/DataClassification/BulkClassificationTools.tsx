@@ -16,7 +16,7 @@ import {
   ClassificationCondition
 } from '../../types/DataClassification';
 interface DataElement {
-  id: string;,
+  id: string;
   name: string;
   type: string;
   content?: string;
@@ -29,24 +29,24 @@ interface DataElement {
   onValidationResults?: (results: ValidationResult) => void;
   context?: ClassificationContext;
   interface ClassificationTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   classification: DataClassificationLevel;
-  rationale: string;,
-  criteria: {,
-  dataTypes: string;,
+  rationale: string;
+  criteria: {
+  dataTypes: string;
   namePatterns: string;
   contentPatterns: string;
 };
 interface BulkOperationState {
-  selectedElements: Set<string>;,
+  selectedElements: Set<string>;
   operationType: 'manual' | 'template' | 'rules' | 'ai';
   selectedTemplate?: ClassificationTemplate;
   manualClassification?: DataClassificationLevel;
-  rationale: string;,
+  rationale: string;
   dataOwner: string;
-  processing: boolean;,
+  processing: boolean;
   results: Map<string, DataClassification | string>; // string for errors
 const DEFAULT_TEMPLATES: ClassificationTemplate = [
   {
@@ -55,7 +55,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
     description: 'For data containing personal identifiable information',
     classification: 'CONFIDENTIAL',
     rationale: 'Contains personal information requiring protection',
-    criteria: {,
+    criteria: {
   dataTypes: ['personal', 'customer', 'employee'],
       namePatterns: ['*email*', '*phone*', '*ssn*', '*name*', '*address*'],
       contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2
@@ -67,7 +67,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
     description: 'For financial and payment data',
     classification: 'RESTRICTED',
     rationale: 'Financial data requires highest protection level',
-    criteria: {,
+    criteria: {
   dataTypes: ['financial', 'payment', 'banking'],
       namePatterns: ['*account*', '*card*', '*payment*', '*bank*', '*credit*'],
       contentPatterns: ['\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b']
@@ -78,7 +78,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
   description: 'For publicly available information',
   classification: 'PUBLIC',
   rationale: 'Information intended for public consumption',
-  criteria: {,
+  criteria: {
   dataTypes: ['public', 'marketing', 'documentation'],
   namePatterns: ['*public*', '*marketing*', '*docs*', '*help*'],
   contentPatterns: [],
@@ -89,7 +89,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
   description: 'For internal business information',
   classification: 'INTERNAL',
   rationale: 'Internal business information for employee use',
-  criteria: {,
+  criteria: {
   dataTypes: ['internal', 'business', 'operational'],
   namePatterns: ['*internal*', '*business*', '*operational*', '*metrics*'],
   contentPatterns: []];
@@ -235,7 +235,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
         classificationDate: new Date(),
         reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
         approvals: [],
-        metadata: {,
+        metadata: {
   businessJustification: `Bulk classification using ${state.operationType} method`}
 },
   riskAssessment: 'Risk assessment pending individual review',
@@ -250,7 +250,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
     try {
   const classifications = generatePreview();
   // Validate classifications
-  const validationResults: ValidationResult = classifications.map(classification => {,)
+  const validationResults: ValidationResult = classifications.map(classification => {)
   const errors: string = [];
   const warnings: string = [];
   if (!classification.rationale || classification.rationale.length < 10) {

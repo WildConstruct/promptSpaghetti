@@ -30,7 +30,7 @@ export interface HelpContentItem {
     thumbnail?: string;
     videoUrl?: string;
     lastUpdated: Date;
-    helpfulness: {,
+    helpfulness: {
         helpful: number;
         unhelpful: number;
     };

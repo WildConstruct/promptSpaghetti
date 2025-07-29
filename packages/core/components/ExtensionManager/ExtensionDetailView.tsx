@@ -7,7 +7,7 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
 export interface ExtensionDetailViewProps {
-  extension: ExtensionManifest;,
+  extension: ExtensionManifest;
   status: ExtensionStatus;
   viewMode: 'installed' | 'marketplace';
   onToggle?: () => void;

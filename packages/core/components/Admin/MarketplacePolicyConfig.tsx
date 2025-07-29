@@ -28,23 +28,23 @@ import {
 } from 'lucide-react';
 
 export interface PolicyRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   condition: string;
-  action: string;,
+  action: string;
   enabled: boolean;
   priority: number;
 }
 export interface MarketplacePolicyTemplate {
-  templateId: string;,
+  templateId: string;
   name: string;
-  description: string;,
+  description: string;
   category: 'creator' | 'buyer' | 'template' | 'transaction' | 'system';
-  rules: PolicyRule;,
+  rules: PolicyRule;
   defaultSeverity: 'low' | 'medium' | 'high' | 'critical';
-  isSystemTemplate: boolean;,
-  configurable: {,
+  isSystemTemplate: boolean;
+  configurable: {
   thresholds: Record<string, number>;
   timeframes: Record<string, number>;
   actions: string;
@@ -86,13 +86,13 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           action: 'send_warning_notification',
           enabled: true,
           priority: 2],
-      configurable: {,
-  thresholds: {,
+      configurable: {
+  thresholds: {
   minTrustScore: 60,
   warningThreshold: 70,
   criticalThreshold: 50,
 },
-  timeframes: {,
+  timeframes: {
   evaluationPeriod: 7, // days,
   warningCooldown: 24 // hours,
 },
@@ -123,13 +123,13 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           action: 'flag_for_promotion',
           enabled: false,
           priority: 3],
-      configurable: {,
-  thresholds: {,
+      configurable: {
+  thresholds: {
   minQualityScore: 3.5,
   minReviews: 5,
   maxRefundRate: 10 // percentage,
 },
-  timeframes: {,
+  timeframes: {
   evaluationPeriod: 30, // days,
   gracePeriod: 7 // days,
 },
@@ -160,13 +160,13 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           action: 'temporary_block',
           enabled: true,
           priority: 1],
-      configurable: {,
-  thresholds: {,
+      configurable: {
+  thresholds: {
   maxTransactions24h: 20,
   maxFailures1h: 3,
   maxChargebacks: 2,
 },
-  timeframes: {,
+  timeframes: {
   velocityWindow: 24, // hours,
   cooldownPeriod: 1 // hours,
 },
@@ -188,12 +188,12 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           action: 'require_payment_verification',
           enabled: true,
           priority: 2],
-      configurable: {,
-  thresholds: {,
+      configurable: {
+  thresholds: {
   maxDisputeRate: 15, // percentage,
   maxRefundRate: 25 // percentage,
 },
-  timeframes: {,
+  timeframes: {
   evaluationPeriod: 90 // days,
 },
   actions: ['require_payment_verification', 'limit_purchases', 'flag_for_review']
@@ -502,11 +502,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </div>
       <style>{`
         .marketplace-policy-config {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .config-header {
           display: flex;
@@ -514,39 +514,39 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         .category-filter {
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
         .filter-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           flex-wrap: wrap;
         .category-button {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          padding: 0.75rem 1rem;,
+          padding: 0.75rem 1rem;
   border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: white;
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s ease;
         .category-button:hover {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #f8fafc;
         .category-button.active {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #eff6ff;
           color: #1e40af;
         .count-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
         .templates-grid {
           display: grid;
@@ -557,92 +557,92 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .template-info {
           flex: 1;
         .template-title {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
           margin-bottom: 0.75rem;
         .template-title h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .template-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .template-description {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .template-stats {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         .template-rules h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
         .rules-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .rule-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #e5e7eb;
           border-radius: 4px;
         .rule-info {
-          flex: 1;,
+          flex: 1;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.125rem;
         .rule-name {
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
         .rule-description {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .more-rules {
           padding: 0.5rem;
           text-align: center;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           font-style: italic;
         .template-editor-overlay {
-          position: fixed;,
+          position: fixed;
   top: 0;
-          left: 0;,
+          left: 0;
   right: 0;
-          bottom: 0;,
+          bottom: 0;
   background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;,
+          z-index: 1000;
   padding: 1rem;
         .template-editor {
           width: 100%;
@@ -655,18 +655,18 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           align-items: center;
         .editor-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .editor-title h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .editor-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .editor-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
@@ -676,33 +676,33 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           gap: 1rem;
         .threshold-item, .timeframe-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .threshold-label, .timeframe-label {
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .threshold-input, .timeframe-input {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         .timeframe-input-group {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .timeframe-input {
           flex: 1;
         .timeframe-unit {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .rules-editor {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .rule-editor-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 1rem;
         .rule-editor-header {
           display: flex;
@@ -710,46 +710,46 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           align-items: flex-start;
           margin-bottom: 0.75rem;
         .rule-editor-info h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .rule-editor-info p {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin: 0;
         .rule-toggle {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .rule-editor-details {
           display: grid;
-          grid-template-columns: 2fr 1fr;,
+          grid-template-columns: 2fr 1fr;
   gap: 1rem;
         .rule-condition label, .rule-action label {
           display: block;
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           margin-bottom: 0.5rem;
         .condition-code {
-          display: block;,
+          display: block;
   padding: 0.5rem;
-          background: #f3f4f6;,
+          background: #f3f4f6;
   border: 1px solid #d1d5db;
           border-radius: 4px;
           font-family: monospace;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #374151;
         .action-select {
-          width: 100%;,
+          width: 100%;
   padding: 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         .editor-actions {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
           justify-content: flex-end;
           padding-top: 1rem;
@@ -764,19 +764,19 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           margin-top: 2rem;
         .guide-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .guide-section {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
         .guide-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .guide-section p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         @media (max-width: 1200px) {
           .templates-grid {
@@ -786,17 +786,17 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         @media (max-width: 768px) {
           .config-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .filter-buttons {
             flex-direction: column;
           .category-button {
             justify-content: center;
           .template-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .template-stats {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.5rem;
           .stat-item {
             flex-direction: row;

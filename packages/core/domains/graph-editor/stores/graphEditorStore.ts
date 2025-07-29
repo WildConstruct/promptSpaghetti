@@ -19,21 +19,21 @@ import { GRAPH_DOMAIN_EVENTS } from '../GraphEditorDomain';
 
 // Default configuration
 const DEFAULT_CONFIG: GraphEditorConfig = {,
-  autosave: {,
+  autosave: {
   enabled: true,
   intervalMs: 5000,
 },
-  preview: {,
+  preview: {
   seeds: [1, 42, 100],
   maxSeeds: 10,
   autoRefresh: true,
   debounceMs: 500,
 },
-  validation: {,
+  validation: {
   realTime: true,
   debounceMs: 300,
 },
-  ui: {,
+  ui: {
   showMinimap: false,
   showGrid: true,
   snapToGrid: true,
@@ -49,51 +49,51 @@ interface GraphEditorStore extends GraphEditorState {
   // Configuration
   config: GraphEditorConfig;
   // History for undo/redo
-  history: GraphOperation;,
+  history: GraphOperation;
   historyIndex: number;
   maxHistorySize: number;
   // Actions
-  setGraph: (graph: Graph) => void;,
+  setGraph: (graph: Graph) => void;
   updateGraph: (updater: (graph: Graph) => Graph) => void;
   // Node operations
   addNode: (nodeType: string, position: { x: number; y: number }) => void;
-  removeNode: (nodeId: string) => void;,
-  updateNode: (nodeId: string, updates: Partial<Node>) => void;,
+  removeNode: (nodeId: string) => void;
+  updateNode: (nodeId: string, updates: Partial<Node>) => void;
   moveNode: (nodeId: string, position: { x: number; y: number }) => void;
   duplicateNode: (nodeId: string) => void;
   // Edge operations
-  addEdge: (sourceId: string, targetId: string) => void;,
+  addEdge: (sourceId: string, targetId: string) => void;
   removeEdge: (edgeId: string) => void;
   // Selection management
   selectNodes: (nodeIds: string, isMultiSelect?: boolean) => void;
-  clearSelection: () => void;,
+  clearSelection: () => void;
   toggleNodeSelection: (nodeId: string) => void;
   // Execution
-  setExecuting: (isExecuting: boolean) => void;,
+  setExecuting: (isExecuting: boolean) => void;
   setExecutionResults: (results: Record<string, any>) => void;
   clearExecutionResults: () => void;
   // Validation
-  setValidationErrors: (errors: ValidationError) => void;,
+  setValidationErrors: (errors: ValidationError) => void;
   clearValidationErrors: () => void;
   // Preview seeds
-  setPreviewSeeds: (seeds: number) => void;,
+  setPreviewSeeds: (seeds: number) => void;
   addPreviewSeed: () => void;
   removePreviewSeed: (index: number) => void;
   // State management
-  setDirty: (isDirty: boolean) => void;,
+  setDirty: (isDirty: boolean) => void;
   resetState: () => void;
   // Configuration
-  updateConfig: (config: Partial<GraphEditorConfig>) => void;,
+  updateConfig: (config: Partial<GraphEditorConfig>) => void;
   resetConfig: () => void;
   // History operations
-  addToHistory: (operation: GraphOperation) => void;,
+  addToHistory: (operation: GraphOperation) => void;
   undo: () => void;
-  redo: () => void;,
+  redo: () => void;
   canUndo: () => boolean;
-  canRedo: () => boolean;,
+  canRedo: () => boolean;
   clearHistory: () => void;
   // Utilities
-  getNodeById: (nodeId: string) => Node | undefined;,
+  getNodeById: (nodeId: string) => Node | undefined;
   getSelectedNodes: () => Node;
   isNodeSelected: (nodeId: string) => boolean;
 
@@ -200,7 +200,7 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           const duplicatedNode: Node = {
   ...node,
   id: newNodeId,
-  position: {,
+  position: {
   x: node.position.x + 50,
   y: node.position.y + 50,
 };

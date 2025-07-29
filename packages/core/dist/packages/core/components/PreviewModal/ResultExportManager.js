@@ -250,27 +250,30 @@ div >
                         cursor: 'pointer',
                         textAlign: 'left',
                         transition: 'all 0.2s',
-                        ':hover': {},
-                        borderColor: '#3b82f6',
-                        boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
-                    }, ">", _jsxs("div", { style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            marginBottom: 6,
-                        }, children: [_jsx("span", { style: { fontSize: 20 }, children: format.icon }), _jsx("span", { style: {
-                                    fontSize: 14,
-                                    fontWeight: 600,
-                                    color: '#1f2937',
-                                }, children: format.name }), format.vfxCompatible && ()
-                                < span, " style=", {
-                                background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
-                                color: 'white',
-                                fontSize: 9,
-                                padding: '1px 4px',
-                                borderRadius: 4,
-                                fontWeight: 500,
-                            }, "> VFX"] }), ")}"] })
+                        ':hover': {
+                            borderColor: '#3b82f6',
+                            boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
+                        }
+                    }
+                        >
+                            _jsxs("div", { style: {
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                    marginBottom: 6,
+                                }, children: [_jsx("span", { style: { fontSize: 20 }, children: format.icon }), _jsx("span", { style: {
+                                            fontSize: 14,
+                                            fontWeight: 600,
+                                            color: '#1f2937',
+                                        }, children: format.name }), format.vfxCompatible && ()
+                                        < span, " style=", {
+                                        background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+                                        color: 'white',
+                                        fontSize: 9,
+                                        padding: '1px 4px',
+                                        borderRadius: 4,
+                                        fontWeight: 500,
+                                    }, "> VFX"] }), ")}"] })
                 ,
                     _jsx("div", { style: {
                             fontSize: 12,
@@ -416,8 +419,8 @@ button >
                                 fontWeight: 500,
                                 color: '#6b7280',
                                 marginBottom: 4,
-                            }, children: "Target Pipeline" }), _jsx("select", { value: exportOptions?.vfxOptions?.targetPipeline || 'stable-diffusion', onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, vfxOptions: ", (,
-                        ), "...prev.vfxOptions, targetPipeline: e.target.value as any, } : null)} style=", {
+                            }, children: "Target Pipeline" }), _jsx("select", { value: exportOptions?.vfxOptions?.targetPipeline || 'stable-diffusion', onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, vfxOptions: ", ...(prev.vfxOptions,
+                            targetPipeline), ": e.target.value as any, } : null)} style=", {
                             width: '100%',
                             padding: '6px 8px',
                             border: '1px solid #d1d5db',
@@ -434,8 +437,8 @@ button >
                                 }, children: "Resolution" }), _jsx("select", { value: `${exportOptions?.vfxOptions?.resolution?.[0]}x${exportOptions?.vfxOptions?.resolution?.[1]}`, onChange: (e) => {
                                     const [width, height] = e.target.value.split('x').map(Number);
                                     setExportOptions(prev => prev ? {} : );
-                                } }), "...prev, vfxOptions: ", (,
-                            ), "...prev.vfxOptions, resolution: [width, height], } : null); }} style=", {
+                                } }), "...prev, vfxOptions: ", ...(prev.vfxOptions,
+                                resolution), ": [width, height], } : null); }} style=", {
                                 width: '100%',
                                 padding: '6px 8px',
                                 border: '1px solid #d1d5db',
@@ -469,15 +472,15 @@ div >
                                 gap: 6,
                                 cursor: 'pointer',
                                 fontSize: 13,
-                            }, children: [_jsx("input", { type: "checkbox", checked: exportOptions?.filmOptions?.includeCharacterNotes || false, onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, filmOptions: ", (,
-                                ), "...prev.filmOptions, includeCharacterNotes: e.target.checked, } : null)} style=", { accentColor: '#3b82f6' }, "/> Character Notes"] }), _jsxs("label", { style: {
+                            }, children: [_jsx("input", { type: "checkbox", checked: exportOptions?.filmOptions?.includeCharacterNotes || false, onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, filmOptions: ", ...(prev.filmOptions,
+                                    includeCharacterNotes), ": e.target.checked, } : null)} style=", { accentColor: '#3b82f6' }, "/> Character Notes"] }), _jsxs("label", { style: {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 6,
                                 cursor: 'pointer',
                                 fontSize: 13,
-                            }, children: [_jsx("input", { type: "checkbox", checked: exportOptions?.filmOptions?.includeDirectorNotes || false, onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, filmOptions: ", (,
-                                ), "...prev.filmOptions, includeDirectorNotes: e.target.checked, } : null)} style=", { accentColor: '#3b82f6' }, "/> Director Notes"] })] }));
+                            }, children: [_jsx("input", { type: "checkbox", checked: exportOptions?.filmOptions?.includeDirectorNotes || false, onChange: (e) => setExportOptions(prev => prev ? {} : ) }), "...prev, filmOptions: ", ...(prev.filmOptions,
+                                    includeDirectorNotes), ": e.target.checked, } : null)} style=", { accentColor: '#3b82f6' }, "/> Director Notes"] })] }));
     div >
     ;
 }

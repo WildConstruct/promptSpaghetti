@@ -34,76 +34,76 @@ import {
 } from './SecurityDashboardFramework';
 
 export interface SecurityAlert {
-  id: string;,
+  id: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
-  category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';,
+  category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';
   title: string;
-  description: string;,
+  description: string;
   source: string;
-  timestamp: Date;,
+  timestamp: Date;
   status: 'new' | 'investigating' | 'escalated' | 'resolved' | 'false_positive';
   assignee?: string;
-  affectedAssets: string;,
+  affectedAssets: string;
   indicators: string;
   responseActions: ResponseAction;
 }
 export interface ResponseAction {
-  id: string;,
+  id: string;
   type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
-  description: string;,
+  description: string;
   automated: boolean;
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   performer?: string;
   timestamp?: Date;
 }
 export interface SystemStatus {
-  component: string;,
+  component: string;
   status: 'operational' | 'degraded' | 'outage' | 'maintenance';
   lastCheck: Date;
   responseTime?: number;
-  uptime: number;,
+  uptime: number;
   criticalIssues: number;
 }
 export interface ThreatIntelligence {
-  feed: string;,
+  feed: string;
   lastUpdate: Date;
-  newIndicators: number;,
+  newIndicators: number;
   activeThreats: number;
-  confidence: 'high' | 'medium' | 'low';,
+  confidence: 'high' | 'medium' | 'low';
   categories: string;
 }
 export interface OperationalMetrics {
-  alerts: {,
-  total: number;,
+  alerts: {
+  total: number;
   newLast24h: number;
   byCategory: Record<string, number>;
   bySeverity: Record<string, number>;
-  avgResponseTime: number;,
+  avgResponseTime: number;
   slaCompliance: number;
 };
-  incidents: {,
+  incidents: {
   active: number;
-  resolved24h: number;,
+  resolved24h: number;
   avgResolutionTime: number;
   escalated: number;
 };
-  system: {,
+  system: {
   overallHealth: number;
-  componentsOperational: number;,
+  componentsOperational: number;
   totalComponents: number;
   criticalIssues: number;
 };
-  team: {,
+  team: {
   onlineAnalysts: number;
-  totalAnalysts: number;,
+  totalAnalysts: number;
   workload: 'low' | 'normal' | 'high' | 'critical';
   avgCaseload: number;
 };
 }
 export interface OperationalSecurityDashboardProps {
-  alerts: SecurityAlert;,
+  alerts: SecurityAlert;
   metrics: OperationalMetrics;
-  systemStatus: SystemStatus;,
+  systemStatus: SystemStatus;
   threatIntel: ThreatIntelligence;
   theme?: DashboardTheme;
   refreshInterval?: number; // seconds,
@@ -134,7 +134,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   // Theme configuration
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   surface: '#f8fafc',
   border: '#e2e8f0',
@@ -146,7 +146,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   error: '#ef4444',
   critical: '#dc2626',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   surface: '#1e293b',
   border: '#334155',
@@ -158,7 +158,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   error: '#f87171',
   critical: '#ef4444',
 },
-  cinema: {,
+  cinema: {
   background: '#0a0a0a',
   surface: '#1a1a1a',
   border: '#333333',
@@ -312,7 +312,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   color: getSeverityColor(alert.severity),
             borderRadius: '4px',
             fontWeight: 600,
-            textTransform: 'uppercase';
+            textTransform: 'uppercase'
   }}>
             {alert.severity}
           </span>
@@ -481,7 +481,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   borderRadius: '8px',
             padding: '20px',
             display: 'flex',
-            flexDirection: 'column';
+            flexDirection: 'column'
   }}>
             <div style={{
   display: 'flex',
@@ -512,7 +512,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       fontSize: '12px',
                       fontWeight: 500,
                       cursor: 'pointer',
-                      textTransform: 'capitalize';
+                      textTransform: 'capitalize'
   }}
                   >
                     {filter}
@@ -550,7 +550,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
               border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-              padding: '16px';
+              padding: '16px'
   }}>
               <h3 style={{
   margin: '0 0 12px 0',
@@ -598,7 +598,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
               border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-              padding: '16px';
+              padding: '16px'
   }}>
               <h3 style={{
   margin: '0 0 12px 0',
@@ -682,7 +682,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
             maxWidth: '600px',
             width: '90%',
             maxHeight: '80vh',
-            overflowY: 'auto';
+            overflowY: 'auto'
   }}>
             <div style={{
   display: 'flex',

@@ -30,23 +30,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface SettingsModalProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onSettingsChange?: (settings: AdvancedSettings) => void;
   /**
@@ -252,7 +252,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
           width: '240px',
           borderRight: `1px solid ${uiColors.ui.border}`}
 },
-  paddingRight: '24px';
+  paddingRight: '24px'
   }}>
           <div style={{
   marginBottom: '16px',
@@ -285,7 +285,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none';
+                outline: 'none'
   }}
               onMouseEnter={(e) => {
                 if (activeGroup !== group.id) {
@@ -293,8 +293,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               }}
               onMouseLeave={(e) => {
                 if (activeGroup !== group.id) {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-              }}
+                  e.currentTarget.style.backgroundColor = 'transparent'
+  }}
             >
               <group.icon 
                 size={18} 

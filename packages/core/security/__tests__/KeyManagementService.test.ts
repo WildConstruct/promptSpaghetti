@@ -38,7 +38,7 @@ describe('KeyManagementService', () => {
   encryptionAtRest: true,
   keyDerivationComplexity: 'medium',
   performanceMonitoring: false, // Disable for tests,
-  alertThresholds: {,
+  alertThresholds: {
   keyUsageRate: 1000,
   failureRate: 0.01,
   responseTime: 100,
@@ -103,7 +103,7 @@ describe('KeyManagementService', () => {
   type: KeyType.DERIVATION,
   purpose: KeyPurpose.PASSWORD_HASHING,
   algorithm: KeyAlgorithm.PBKDF2_SHA256,
-  derivationParams: {,
+  derivationParams: {
   iterations: 150000,
   keyLength: 32,
 };

@@ -408,7 +408,8 @@ export class AlertSystem {
                                                                                                                                         metadata: {
                                                                                                                                             ...currentAlert.metadata,
                                                                                                                                             escalationStage: index + 1,
-                                                                                                                                            escalationReason: `Escalated to ${stage.severity} after ${stage.delayMinutes} minutes` }
+                                                                                                                                            escalationReason: `Escalated to ${stage.severity} after ${stage.delayMinutes} minutes`
+                                                                                                                                        }
                                                                                                                                     };
                                                                                                                                     this.alerts.set(alert.id, escalatedAlert);
                                                                                                                                     await this.executeActions(stage.actions, escalatedAlert);
@@ -600,10 +601,11 @@ AlertPriority;
                                             id: 'notify_timeout',
                                             type: 'notification',
                                             enabled: true,
-                                            configuration: {},
-                                            type: 'warning',
-                                            title: 'Execution Timeout',
-                                            autoHide: false
+                                            configuration: {
+                                                type: 'warning',
+                                                title: 'Execution Timeout',
+                                                autoHide: false
+                                            }
                                         }],
                                     cooldownPeriod: 5,
                                     tags: ['performance', 'execution'],
@@ -631,37 +633,40 @@ AlertPriority;
                                                     id: 'notify_errors',
                                                     type: 'notification',
                                                     enabled: true,
-                                                    configuration: {},
-                                                    type: 'error',
-                                                    title: 'High Error Rate Detected',
-                                                    autoHide: false
+                                                    configuration: {
+                                                        type: 'error',
+                                                        title: 'High Error Rate Detected',
+                                                        autoHide: false
+                                                    }
                                                 }],
-                                            escalation: {},
-                                            enabled: true,
-                                            stages: [,
-                                                {
-                                                    id: 'escalate_to_critical',
-                                                    delayMinutes: 15,
-                                                    severity: 'critical',
-                                                    condition: 'unacknowledged',
-                                                    actions: [,
-                                                        {
-                                                            id: 'critical_notification',
-                                                            type: 'notification',
-                                                            enabled: true,
-                                                            configuration: {},
-                                                            type: 'error',
-                                                            title: 'CRITICAL: High Error Rate Unresolved',
-                                                            autoHide: false
-                                                        }],
-                                                }
-                                            ]
-                                        },
-                                        cooldownPeriod, 10,
-                                        tags, ['error', 'system'],
-                                        createdAt, new Date(),
-                                        updatedAt, new Date(),
-                                        createdBy, 'system'],
+                                            escalation: {
+                                                enabled: true,
+                                                stages: [,
+                                                    {
+                                                        id: 'escalate_to_critical',
+                                                        delayMinutes: 15,
+                                                        severity: 'critical',
+                                                        condition: 'unacknowledged',
+                                                        actions: [,
+                                                            {
+                                                                id: 'critical_notification',
+                                                                type: 'notification',
+                                                                enabled: true,
+                                                                configuration: {
+                                                                    type: 'error',
+                                                                    title: 'CRITICAL: High Error Rate Unresolved',
+                                                                    autoHide: false
+                                                                }
+                                                            }],
+                                                    }
+                                                ]
+                                            },
+                                            cooldownPeriod: 10,
+                                            tags: ['error', 'system'],
+                                            createdAt: new Date(),
+                                            updatedAt: new Date(),
+                                            createdBy: 'system'
+                                        }],
                                     defaultRules, : .forEach(rule => { }),
                                     this: .rules.set(rule.id, rule)
                                 },
@@ -710,67 +715,73 @@ AlertPriority;
                                             message: alert.message,
                                             autoHide: config.autoHide !== false,
                                             duration: config.duration || 5000,
-                                            metadata: {},
-                                            alertId: alert.id,
-                                            severity: alert.severity,
-                                            source: 'alert_system',
-                                        };
-                                        // This would integrate with the existing NotificationSystem
-                                        console.debug('Sending notification:', notification);
-                                    },
-                                    async sendEmail(alert, config) {
-                                        // Email sending implementation
-                                        console.debug('Sending email alert:', { alert: alert.id, config });
-                                    },
-                                    async callWebhook(alert, config) {
-                                        // Webhook calling implementation
-                                        if (!config.url)
-                                            return;
-                                        try {
-                                            const response = await fetch(config.url, {});
-                                            method: 'POST',
-                                                headers;
-                                            { }
-                                        }
-                                        finally { }
-                                    },
-                                    'Content-Type': 'application/json',
-                                    ...(config.headers || {})
-                                },
-                                body, JSON.stringify({}),
-                                alert,
-                                timestamp, new Date().toISOString(),]
+                                            metadata: {
+                                                alertId: alert.id,
+                                                severity: alert.severity,
+                                                source: 'alert_system',
+                                            },
+                                            // This would integrate with the existing NotificationSystem
+                                            console, : .debug('Sending notification:', notification),
+                                            async sendEmail(alert, config) {
+                                                // Email sending implementation
+                                                console.debug('Sending email alert:', { alert: alert.id, config });
+                                            },
+                                            async callWebhook(alert, config) {
+                                                // Webhook calling implementation
+                                                if (!config.url)
+                                                    return;
+                                                try {
+                                                    const response = await fetch(config.url, {});
+                                                    method: 'POST',
+                                                        headers;
+                                                    {
+                                                        'Content-Type';
+                                                        'application/json',
+                                                        ;
+                                                    }
+                                                }
+                                                finally {
+                                                }
+                                            },
+                                            ...(config.headers || {})
+                                        }, body;
+                                        ({},
+                                            alert,
+                                            timestamp);
+                                        new Date().toISOString(),
+                                        ;
+                                    }
+                                }],
+                            if(, response) { }, : .ok
+                        }, {
+                            throw: new Error(`Webhook failed: ${response.status}`)
                         }
                     ]
                 };
-                ;
-                if (!response.ok) {
-                    throw new Error(`Webhook failed: ${response.status}`);
+                try { }
+                catch (error) {
+                    console.error('Webhook error:', error);
+                    throw error;
+                    async;
+                    executeScript(alert, Alert, config, (Record));
+                    Promise < void  > {
+                        // Script execution implementation (would need proper sandboxing)
+                        console, : .debug('Executing script for alert:', { alert: alert.id, config }),
+                        async createTask(alert, config) {
+                            // Task creation implementation
+                            console.debug('Creating task for alert:', { alert: alert.id, config });
+                            // Export singleton instance
+                            export const alertSystem = AlertSystem.getInstance();
+                            // Convenience functions
+                            export const triggerAlert = (ruleId, context, overrides) => alertSystem.triggerAlert(ruleId, context, overrides);
+                            export const acknowledgeAlert = (alertId, acknowledgedBy, note) => alertSystem.acknowledgeAlert(alertId, acknowledgedBy, note);
+                            export const resolveAlert = (alertId, resolvedBy, resolution) => alertSystem.resolveAlert(alertId, resolvedBy, resolution);
+                            export const getAlerts = (filter) => alertSystem.getAlerts(filter);
+                            export const getAlertStats = () => alertSystem.getAlertStats();
+                            export const subscribeToAlerts = (listenerId, callback) => alertSystem.subscribe(listenerId, callback);
+                        }
+                    };
                 }
-            }
-            try { }
-            catch (error) {
-                console.error('Webhook error:', error);
-                throw error;
-                async;
-                executeScript(alert, Alert, config, (Record));
-                Promise < void  > {
-                    // Script execution implementation (would need proper sandboxing)
-                    console, : .debug('Executing script for alert:', { alert: alert.id, config }),
-                    async createTask(alert, config) {
-                        // Task creation implementation
-                        console.debug('Creating task for alert:', { alert: alert.id, config });
-                        // Export singleton instance
-                        export const alertSystem = AlertSystem.getInstance();
-                        // Convenience functions
-                        export const triggerAlert = (ruleId, context, overrides) => alertSystem.triggerAlert(ruleId, context, overrides);
-                        export const acknowledgeAlert = (alertId, acknowledgedBy, note) => alertSystem.acknowledgeAlert(alertId, acknowledgedBy, note);
-                        export const resolveAlert = (alertId, resolvedBy, resolution) => alertSystem.resolveAlert(alertId, resolvedBy, resolution);
-                        export const getAlerts = (filter) => alertSystem.getAlerts(filter);
-                        export const getAlertStats = () => alertSystem.getAlertStats();
-                        export const subscribeToAlerts = (listenerId, callback) => alertSystem.subscribe(listenerId, callback);
-                    }
-                };
             }
     }
 }

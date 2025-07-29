@@ -14,8 +14,8 @@ import {
 import { Notification, NotificationType } from '../../types/NotificationTypes';
 
 interface NotificationItemProps {
-  notification: Notification;,
-  onMarkAsRead: (id: string) => void;,
+  notification: Notification;
+  onMarkAsRead: (id: string) => void;
   onDelete: (id: string) => void;
   const getNotificationIcon = (type: NotificationType) => {,
   switch (type) {

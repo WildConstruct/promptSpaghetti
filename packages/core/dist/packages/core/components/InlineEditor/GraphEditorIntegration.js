@@ -68,11 +68,14 @@ export const GraphEditorWithInlineEditing = ({
         _jsx(InlineEditorProvider, { children: _jsxs("div", { ref: canvasRef, className: `graph-editor-inline ${className}`, style: { height: '100%', position: 'relative' }, children: ["}", _jsx(ReactFlowProvider, { children: _jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, nodeTypes: nodeTypes, style: reactFlowStyle, fitView: true, attributionPosition: "bottom-left", proOptions: { hideAttribution: true }, children: [showBackground && ()
                                     < Background, "variant=\"dots\"", ...getBackgroundProps(), "/> )}", showControls && ()
                                     < Controls, "style=", {
-                                    button: {},
-                                    backgroundColor: theme === 'light' ? 'white' : '#2d3748',
-                                    color: theme === 'light' ? '#2d3748' : 'white',
-                                    border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #4a5568',
-                                }, "/> )}", _jsx(InlineEditorManager, { nodes: enhancedNodes, onNodeUpdate: onNodeUpdate, canvasRef: canvasRef })] }) }), _jsx("style", { children: `
+                                    button: {
+                                        backgroundColor: theme === 'light' ? 'white' : '#2d3748',
+                                        color: theme === 'light' ? '#2d3748' : 'white',
+                                        border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #4a5568',
+                                    }
+                                }
+                                    /  >
+                                , ")}", _jsx(InlineEditorManager, { nodes: enhancedNodes, onNodeUpdate: onNodeUpdate, canvasRef: canvasRef })] }) }), _jsx("style", { children: `
           .graph-editor-inline {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
           .graph-editor-inline .react-flow__node {
@@ -84,9 +87,9 @@ export const GraphEditorWithInlineEditing = ({
             stroke: #4299e1;
             stroke-width: 3;
           .graph-editor-inline .react-flow__handle {
-            border: 2px solid white;,
+            border: 2px solid white;
   background: #4299e1;
-            width: 12px;,
+            width: 12px;
   height: 12px;
           .graph-editor-inline .react-flow__handle:hover {,
   background: #63b3ed;
@@ -94,7 +97,7 @@ export const GraphEditorWithInlineEditing = ({
           .graph-editor-inline .react-flow__controls {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border: 1px solid ${theme === 'light' ? '#e2e8f0' : '#4a5568'};}
-            border-radius: 8px;,
+            border-radius: 8px;
   overflow: hidden;
           .graph-editor-inline .react-flow__controls button {
             background: ${theme === 'light' ? 'white' : '#2d3748'};},}

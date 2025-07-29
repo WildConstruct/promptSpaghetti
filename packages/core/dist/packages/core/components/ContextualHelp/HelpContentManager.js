@@ -67,8 +67,9 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Canvas', 'Node Palette', 'Preview System'],
                 level: 'beginner',
-                context: {},
-                conditions: { nodeCount: 0 }
+                context: {
+                    conditions: { nodeCount: 0 }
+                }
             },
             {
                 id: 'output-node-scene',
@@ -82,9 +83,10 @@ export class HelpContentManager {
                     'Connect it to other nodes to build complexity'
                 ],
                 level: 'beginner',
-                context: {},
-                nodeTypes: ['Output'],
-                actions: ['node-creation'],
+                context: {
+                    nodeTypes: ['Output'],
+                    actions: ['node-creation'],
+                }
             },
             {
                 id: 'weighted-choice-takes',
@@ -100,9 +102,10 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Weight Controls', 'Preview System', 'Variance Analysis'],
                 level: 'intermediate',
-                context: {},
-                nodeTypes: ['WeightedChoice'],
-                actions: ['weight-adjustment'],
+                context: {
+                    nodeTypes: ['WeightedChoice'],
+                    actions: ['weight-adjustment'],
+                }
             },
             {
                 id: 'connection-editing-decisions',
@@ -117,8 +120,9 @@ export class HelpContentManager {
                     'Use conditional connections for smart narrative flow'
                 ],
                 level: 'beginner',
-                context: {},
-                actions: ['connection-creation', 'edge-editing'],
+                context: {
+                    actions: ['connection-creation', 'edge-editing'],
+                }
             },
             {
                 id: 'preview-dailies-review',
@@ -134,9 +138,10 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Creative Analysis'],
                 level: 'intermediate',
-                context: {},
-                actions: ['preview-generation'],
-                triggerElements: ['preview-button', 'director-toolbar'],
+                context: {
+                    actions: ['preview-generation'],
+                    triggerElements: ['preview-button', 'director-toolbar'],
+                }
             },
             {
                 id: 'conditional-smart-direction',
@@ -151,9 +156,10 @@ export class HelpContentManager {
                     'Combine with WeightedChoice for sophisticated narrative control'
                 ],
                 level: 'advanced',
-                context: {},
-                nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
-                conditions: { hasConditionals: true }
+                context: {
+                    nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
+                    conditions: { hasConditionals: true }
+                }
             },
             {
                 id: 'professional-pipeline-export',
@@ -169,9 +175,10 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Project Export', 'Bundle Generation', 'Version Control'],
                 level: 'professional',
-                context: {},
-                actions: ['project-export', 'bundle-export'],
-                conditions: { projectsCompleted: 1 }
+                context: {
+                    actions: ['project-export', 'bundle-export'],
+                    conditions: { projectsCompleted: 1 }
+                }
             }
         ];
         defaultContent.forEach(content => { });

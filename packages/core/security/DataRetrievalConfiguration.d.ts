@@ -33,17 +33,17 @@ export interface OperationModifier {
  * Environment-Specific Configurations
  */
 export declare const ENVIRONMENT_CONFIGURATIONS: {
-    DEVELOPMENT: {,
+    DEVELOPMENT: {
         globalLimits: GlobalDataLimits;
         relaxedMode: boolean;
         debugLogging: boolean;
     };
-    STAGING: {,
+    STAGING: {
         globalLimits: GlobalDataLimits;
         relaxedMode: boolean;
         debugLogging: boolean;
     };
-    PRODUCTION: {,
+    PRODUCTION: {
         globalLimits: GlobalDataLimits;
         relaxedMode: boolean;
         debugLogging: boolean;
@@ -57,36 +57,36 @@ export declare const STANDARD_ALERT_THRESHOLDS: AlertThresholds;
  * Role-Based Exemption Templates
  */
 export declare const ROLE_EXEMPTION_TEMPLATES: {
-    SYSTEM_ADMIN: {,
+    SYSTEM_ADMIN: {
         exemptionType: "RATE_LIMIT";
         reason: string;
-        conditions: {,
+        conditions: {
             type: "EMERGENCY";
-            specification: {,
+            specification: {
                 severity: string;
             };
             required: boolean;
         }[];
         auditRequired: boolean;
     };
-    DATA_OWNER: {,
+    DATA_OWNER: {
         exemptionType: "QUOTA";
         reason: string;
-        conditions: {,
+        conditions: {
             type: "BUSINESS_CRITICAL";
-            specification: {,
+            specification: {
                 justification_required: boolean;
             };
             required: boolean;
         }[];
         auditRequired: boolean;
     };
-    SECURITY_OFFICER: {,
+    SECURITY_OFFICER: {
         exemptionType: "CLASSIFICATION";
         reason: string;
-        conditions: {,
+        conditions: {
             type: "TIME_RANGE";
-            specification: {,
+            specification: {
                 start: string;
                 end: string;
                 timezone: string;
@@ -95,12 +95,12 @@ export declare const ROLE_EXEMPTION_TEMPLATES: {
         }[];
         auditRequired: boolean;
     };
-    COMPLIANCE_OFFICER: {,
+    COMPLIANCE_OFFICER: {
         exemptionType: "TIME_RESTRICTION";
         reason: string;
-        conditions: {,
+        conditions: {
             type: "OPERATION";
-            specification: {,
+            specification: {
                 operations: string[];
             };
             required: boolean;
@@ -115,7 +115,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create configuration for specific environment
      */
-    static createConfiguration(environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION',)
+    static createConfiguration(environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION')
       customizations?: Partial<DataRetrievalConfig>
     ): DataRetrievalConfig;
     /**
@@ -125,7 +125,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create role-based exemption
      */
-    static createRoleExemption(exemptionId: string,)
+    static createRoleExemption(exemptionId: string)
       role: keyof typeof ROLE_EXEMPTION_TEMPLATES,
       userId?: string,
       approvedBy?: string,

@@ -13,13 +13,13 @@ import { globalConflictResolver } from './ConflictResolver';
 // Synchronization types
 
 export interface SyncMessage {
-  id: string;,
+  id: string;
   type: SyncMessageType;
-  domain: string;,
+  domain: string;
   payload: any;
-  timestamp: number;,
+  timestamp: number;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   version: number;
   checksum?: string;
 }
@@ -35,50 +35,50 @@ export type SyncMessageType =
   | 'FORCE_SYNC';
 
 export interface SyncClient {
-  id: string;,
+  id: string;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   domains: string;
-  lastSeen: number;,
+  lastSeen: number;
   version: number;
-  isActive: boolean;,
+  isActive: boolean;
   latency: number;
-  metadata: {,
+  metadata: {
   userAgent?: string;
   ip?: string;
   location?: string;
 };
 }
 export interface SyncState {
-  version: number;,
+  version: number;
   clients: Map<string, SyncClient>;
   pendingChanges: Map<string, PendingChange>;
-  conflictQueue: ConflictQueueItem;,
+  conflictQueue: ConflictQueueItem;
   syncHistory: SyncHistoryEntry;
   lastFullSync: number;
 }
 export interface PendingChange {
-  id: string;,
+  id: string;
   change: StateChange<any>;
-  domain: string;,
+  domain: string;
   clientId: string;
-  timestamp: number;,
+  timestamp: number;
   acknowledged: Set<string>;
-  requiredAcks: number;,
+  requiredAcks: number;
   timeout: number;
   retryCount: number;
 }
 export interface ConflictQueueItem {
-  id: string;,
+  id: string;
   conflictId: string;
-  localChange: StateChange<any>;,
+  localChange: StateChange<any>;
   remoteChange: StateChange<any>;
-  domain: string;,
+  domain: string;
   priority: number;
   timestamp: number;
 }
 export interface SyncHistoryEntry {
-  timestamp: number;,
+  timestamp: number;
   type: 'sync' | 'conflict' | 'error' | 'client_event';
   clientId?: string;
   domain?: string;
@@ -86,22 +86,22 @@ export interface SyncHistoryEntry {
   metadata?: Record<string, any>;
 }
 export interface OptimisticUpdate {
-  id: string;,
+  id: string;
   domain: string;
-  change: StateChange<any>;,
+  change: StateChange<any>;
   rollbackFn: () => void;
-  timestamp: number;,
+  timestamp: number;
   confirmed: boolean;
   clientId: string;
 }
 export interface SyncConfiguration {
-  batchInterval: number;,
+  batchInterval: number;
   maxBatchSize: number;
-  conflictResolutionTimeout: number;,
+  conflictResolutionTimeout: number;
   heartbeatInterval: number;
-  clientTimeout: number;,
+  clientTimeout: number;
   maxRetries: number;
-  enableOptimisticUpdates: boolean;,
+  enableOptimisticUpdates: boolean;
   enableConflictResolution: boolean;
   syncQuality: 'fast' | 'reliable' | 'eventual';
   // Main state synchronizer class
@@ -183,14 +183,14 @@ export class StateSynchronizer extends EventEmitter {
   client.lastSeen = Date.now();
   client.isActive = true;
   // State synchronization
-  async broadcastStateChange(domain: string,)
+  async broadcastStateChange(domain: string)
   change: StateChange<any>,
   excludeClient?: string): Promise<void> {,
   const message: SyncMessage = {,
   id: this.generateMessageId(),
   type: 'STATE_CHANGE',
   domain,
-  payload: {,
+  payload: {
   change,
   optimistic: false,
 },
@@ -401,7 +401,7 @@ export class StateSynchronizer extends EventEmitter {
   id: this.generateMessageId(),
   type: 'SYNC_RESPONSE',
   domain: 'all',
-  payload: {,
+  payload: {
   states: domainStates,
   version: this.syncState.version,
   timestamp: Date.now(),
@@ -419,7 +419,7 @@ export class StateSynchronizer extends EventEmitter {
   id: this.generateMessageId(),
   type: 'SYNC_REQUEST',
   domain: 'all',
-  payload: {,
+  payload: {
   clientId: this.clientId,
   domains: Array.from(this.domains.keys()),
   lastSync: this.syncState.lastFullSync,
@@ -461,7 +461,7 @@ export class StateSynchronizer extends EventEmitter {
   id: this.generateMessageId(),
   type: 'HEARTBEAT',
   domain: 'system',
-  payload: {,
+  payload: {
   clientId: this.clientId,
   timestamp: Date.now(),
   activeClients: this.syncState.clients.size,
@@ -540,7 +540,7 @@ export class StateSynchronizer extends EventEmitter {
   id: this.generateMessageId(),
   type: 'SYNC_RESPONSE',
   domain: message.domain,
-  payload: {,
+  payload: {
   originalMessageId: message.id,
   acknowledged: true,
 },
@@ -558,7 +558,7 @@ export class StateSynchronizer extends EventEmitter {
   path: change.payload?.path || '',
   value: change.payload?.value,
   operation: change.payload?.operation || 'update',
-  metadata: {,
+  metadata: {
   remote: true,
   clientId: message.sessionId,
   messageId: message.id,
@@ -571,7 +571,7 @@ export class StateSynchronizer extends EventEmitter {
   for (const [id, pending] of this.syncState.pendingChanges) {
   if (pending.clientId === clientId) {
   this.syncState.pendingChanges.delete(id);
-  private addToHistory(type: SyncHistoryEntry['type'],)
+  private addToHistory(type: SyncHistoryEntry['type'])
   message: string,
   metadata?: Record<string, any>): void {,
   this.syncState.syncHistory.push({)

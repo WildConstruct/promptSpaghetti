@@ -163,7 +163,7 @@ export interface ThemeColors {
 
 export interface ThemeTypography {
     fontFamily: string;
-    fontSize: {,
+    fontSize: {
         xs: string;
         sm: string;
         md: string;
@@ -172,19 +172,19 @@ export interface ThemeTypography {
         '2xl': string;
         '3xl': string;
     };
-    fontWeight: {,
+    fontWeight: {
         light: number;
         normal: number;
         medium: number;
         semibold: number;
         bold: number;
     };
-    lineHeight: {,
+    lineHeight: {
         tight: number;
         normal: number;
         relaxed: number;
     };
-    letterSpacing: {,
+    letterSpacing: {
         tight: string;
         normal: string;
         wide: string;
@@ -209,31 +209,31 @@ export interface ThemeShadows {
     custom?: Record<string, string>;
 
 export interface ThemeBorders {
-    width: {,
+    width: {
         thin: string;
         normal: string;
         thick: string;
     };
-    radius: {,
+    radius: {
         none: string;
         sm: string;
         md: string;
         lg: string;
         full: string;
     };
-    style: {,
+    style: {
         solid: string;
         dashed: string;
         dotted: string;
     };
 
 export interface ThemeTransitions {
-    duration: {,
+    duration: {
         fast: string;
         normal: string;
         slow: string;
     };
-    easing: {,
+    easing: {
         linear: string;
         ease: string;
         easeIn: string;

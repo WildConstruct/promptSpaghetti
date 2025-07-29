@@ -10,7 +10,7 @@ import {
 } from '../../VisualHierarchy/HierarchyDesignSystem';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
 interface VisualHierarchyDemoEditorProps {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
   data: Record<string, unknown>;
   onChange: (updates: Record<string, any>) => void;

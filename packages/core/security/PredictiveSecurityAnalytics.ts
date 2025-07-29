@@ -14,13 +14,13 @@ import { EventEmitter } from 'events';
 // ==========================================
 
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
   userId?: string;
   sessionId?: string;
   sourceIP: string;
   userAgent?: string;
-  eventType: SecurityEventType;,
+  eventType: SecurityEventType;
   severity: SecuritySeverity;
   metadata: Record<string, unknown>;
   riskScore: number;
@@ -45,23 +45,23 @@ export enum SecurityEventType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface GeolocationData {
-  country: string;,
+  country: string;
   region: string;
-  city: string;,
+  city: string;
   latitude: number;
-  longitude: number;,
+  longitude: number;
   isKnownLocation: boolean;
 }
 export interface ThreatPrediction {
-  predictionId: string;,
+  predictionId: string;
   timestamp: Date;
-  threatType: ThreatType;,
+  threatType: ThreatType;
   confidence: number;
-  riskScore: number;,
+  riskScore: number;
   predictedTimeframe: number; // seconds until predicted occurrence,
-  affectedEntities: string;,
+  affectedEntities: string;
   recommendedActions: PreventiveAction;
-  modelVersion: string;,
+  modelVersion: string;
   features: Record<string, number>;
 }
 export enum ThreatType {
@@ -74,10 +74,10 @@ export enum ThreatType {
   DATA_EXFILTRATION = 'data_exfiltration',
   PRIVILEGE_ESCALATION_ATTEMPT = 'privilege_escalation_attempt'
   export interface PreventiveAction {
-  actionType: ActionType;,
+  actionType: ActionType;
   target: string;
   parameters: Record<string, unknown>;
-  urgency: 'low' | 'medium' | 'high' | 'immediate';,
+  urgency: 'low' | 'medium' | 'high' | 'immediate';
   description: string;
   estimatedEffectiveness: number;
 }
@@ -91,24 +91,24 @@ export enum ActionType {
   REVOKE_PERMISSIONS = 'revoke_permissions',
   FORCE_PASSWORD_RESET = 'force_password_reset'
   export interface PredictionModel {
-  modelId: string;,
+  modelId: string;
   name: string;
-  version: string;,
+  version: string;
   accuracy: number;
-  precision: number;,
+  precision: number;
   recall: number;
-  trainedAt: Date;,
+  trainedAt: Date;
   lastUpdated: Date;
-  isActive: boolean;,
+  isActive: boolean;
   threatTypes: ThreatType;
   featureImportance: Record<string, number>;
 }
 export interface AnalyticsConfiguration {
-  predictionThreshold: number;,
+  predictionThreshold: number;
   maxPredictionTimeframe: number;
-  enableRealTimeAnalysis: boolean;,
+  enableRealTimeAnalysis: boolean;
   modelUpdateInterval: number;
-  retentionPeriod: number;,
+  retentionPeriod: number;
   alertingEnabled: boolean;
   autoResponseEnabled: boolean;
   // ==========================================
@@ -263,7 +263,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   /**
    * Predict account takeover attempts
    */
-  private async predictAccountTakeovers(features: Record<string, number>,)
+  private async predictAccountTakeovers(features: Record<string, number>)
     model: PredictionModel): Promise<ThreatPrediction> {,
   const predictions: ThreatPrediction = [];
   // Successful login from unknown location with high risk score
@@ -289,7 +289,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   /**
    * Predict credential stuffing attacks
    */
-  private async predictCredentialStuffing(features: Record<string, number>,)
+  private async predictCredentialStuffing(features: Record<string, number>)
     model: PredictionModel): Promise<ThreatPrediction> {,
   const predictions: ThreatPrediction = [];
   // Multiple IPs with low success rate but consistent patterns
@@ -315,7 +315,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   /**
    * Predict insider threats based on behavior patterns
    */
-  private async predictInsiderThreats(features: Record<string, number>,)
+  private async predictInsiderThreats(features: Record<string, number>)
     model: PredictionModel): Promise<ThreatPrediction> {,
   const predictions: ThreatPrediction = [];
   // Unusual access patterns from known users
@@ -387,7 +387,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   lastUpdated: new Date(),
   isActive: true,
   threatTypes: [ThreatType.BRUTE_FORCE_ATTACK],
-  featureImportance: {,
+  featureImportance: {
   loginFailures: 0.4,
   successRate: 0.3,
   eventsPerMinute: 0.2,
@@ -404,7 +404,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
         lastUpdated: new Date(),
         isActive: true,
         threatTypes: [ThreatType.ACCOUNT_TAKEOVER],
-        featureImportance: {,
+        featureImportance: {
   unknownLocationRatio: 0.4,
           averageRiskScore: 0.35,
           uniqueIPs: 0.15,

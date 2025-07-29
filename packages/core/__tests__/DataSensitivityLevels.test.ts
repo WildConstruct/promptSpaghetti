@@ -316,7 +316,7 @@ describe('DataSensitivityLevels', () => {
   confidence: 95,
   rationale: ['Contains email address pattern'],
   reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-  metadata: {,
+  metadata: {
   dataCategory: 'pii',
   sourceSystem: 'customer-db',
   businessOwner: 'data-team',
@@ -360,7 +360,7 @@ describe('DataSensitivityLevels', () => {
       it('should warn about missing metadata', () => {
   const missingMetadata = {
   ...validClassification,
-  metadata: {,
+  metadata: {
   ...validClassification.metadata,
   businessOwner: '',
   technicalOwner: '',
@@ -495,7 +495,7 @@ describe('DataSensitivityLevels', () => {
   confidence: 80,
   rationale: ['test'],
   reviewDate: new Date(Date.now() + 1000),
-  metadata: {,
+  metadata: {
   dataCategory: 'test',
   sourceSystem: 'test',
   businessOwner: 'test',

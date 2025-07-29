@@ -79,88 +79,88 @@ import {
 // Enhanced comparison interfaces
 
 export interface ComparisonItem {
-  id: string;,
+  id: string;
   name: string;
-  type: 'graph' | 'content' | 'config' | 'schema' | 'permission';,
+  type: 'graph' | 'content' | 'config' | 'schema' | 'permission';
   version: string;
-  lastModified: Date;,
+  lastModified: Date;
   author: string;
-  size: number;,
+  size: number;
   checksum: string;
   metadata: Record<string, any>;
 }
 export interface ComparisonSession {
-  id: string;,
+  id: string;
   name: string;
-  sourceItem: ComparisonItem;,
+  sourceItem: ComparisonItem;
   targetItem: ComparisonItem;
-  comparisonType: ComparisonType;,
+  comparisonType: ComparisonType;
   viewMode: ViewMode;
-  highlightMode: HighlightMode;,
+  highlightMode: HighlightMode;
   filters: ComparisonFilters;
-  annotations: ComparisonAnnotation;,
+  annotations: ComparisonAnnotation;
   createdAt: Date;
-  lastAccessed: Date;,
+  lastAccessed: Date;
   isBookmarked: boolean;
 }
 export interface ComparisonFilters {
-  showUnchanged: boolean;,
+  showUnchanged: boolean;
   showMetadata: boolean;
-  nodeTypes: string;,
+  nodeTypes: string;
   changeTypes: MatchType;
-  confidenceThreshold: number;,
+  confidenceThreshold: number;
   severityLevels: ('low' | 'medium' | 'high' | 'critical')[];
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   author?: string;
   searchQuery?: string;
 }
 export interface ComparisonAnnotation {
-  id: string;,
+  id: string;
   type: 'comment' | 'highlight' | 'bookmark' | 'issue';
   targetId: string; // node/edge/property ID,
   title: string;
   content: string;
   severity?: 'low' | 'medium' | 'high' | 'critical';
-  author: string;,
+  author: string;
   createdAt: Date;
   resolved: boolean;
   position?: { x: number; y: number };
 }
 export interface ComparisonMetrics {
-  structuralSimilarity: number;,
+  structuralSimilarity: number;
   semanticSimilarity: number;
-  visualSimilarity: number;,
+  visualSimilarity: number;
   overallSimilarity: number;
-  complexity: number;,
+  complexity: number;
   impactScore: number;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
-  performanceImpact: {,
-  estimated: boolean;,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  performanceImpact: {
+  estimated: boolean;
   cpuDelta: number;
-  memoryDelta: number;,
+  memoryDelta: number;
   networkDelta: number;
 };
-  breakingChanges: number;,
+  breakingChanges: number;
   deprecations: number;
   newFeatures: number;
 }
 export interface ComparisonReport {
-  session: ComparisonSession;,
+  session: ComparisonSession;
   comparison: GraphComparison;
-  metrics: ComparisonMetrics;,
-  summary: {,
-  title: string;,
+  metrics: ComparisonMetrics;
+  summary: {
+  title: string;
   description: string;
-  recommendations: string;,
+  recommendations: string;
   warnings: string;
   errors: string;
 };
   timeline: Array<{,
   timestamp: Date;
-  event: string;,
+  event: string;
   impact: 'low' | 'medium' | 'high';
   description: string;
 }>;
@@ -171,10 +171,10 @@ export interface ComparisonReport {
 export interface ComparisonToolsProps {
   sessions: ComparisonSession;
   activeSessionId?: string;
-  onSessionSelect: (sessionId: string) => void;,
-  onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;,
-  onSessionUpdate: (sessionId: string, updates: Partial<ComparisonSession>) => void;,
-  onSessionDelete: (sessionId: string) => void;,
+  onSessionSelect: (sessionId: string) => void;
+  onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;
+  onSessionUpdate: (sessionId: string, updates: Partial<ComparisonSession>) => void;
+  onSessionDelete: (sessionId: string) => void;
   onExportReport: (sessionId: string, format: string) => void;
   className?: string;
 }
@@ -381,12 +381,12 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
 
 // Comparison Session Card Component
 interface ComparisonSessionCardProps {
-  session: ComparisonSession;,
+  session: ComparisonSession;
   isActive: boolean;
-  isSelected: boolean;,
+  isSelected: boolean;
   onSelect: () => void;
-  onToggleSelection: (selected: boolean) => void;,
-  onUpdate: (updates: Partial<ComparisonSession>) => void;,
+  onToggleSelection: (selected: boolean) => void;
+  onUpdate: (updates: Partial<ComparisonSession>) => void;
   onDelete: () => void;
   onExport: (format: string) => void;
   const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({,)
@@ -512,12 +512,12 @@ interface ComparisonSessionCardProps {
 
 // Comparison Session Row Component
 interface ComparisonSessionRowProps {
-  session: ComparisonSession;,
+  session: ComparisonSession;
   isActive: boolean;
-  isSelected: boolean;,
+  isSelected: boolean;
   onSelect: () => void;
-  onToggleSelection: (selected: boolean) => void;,
-  onUpdate: (updates: Partial<ComparisonSession>) => void;,
+  onToggleSelection: (selected: boolean) => void;
+  onUpdate: (updates: Partial<ComparisonSession>) => void;
   onDelete: () => void;
   const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({,)
   session,
@@ -680,11 +680,11 @@ interface ComparisonTimelineProps {
 // Advanced Diff Viewer Component
 
 export interface AdvancedDiffViewerProps {
-  comparison: GraphComparison;,
+  comparison: GraphComparison;
   session: ComparisonSession;
-  onSessionUpdate: (updates: Partial<ComparisonSession>) => void;,
+  onSessionUpdate: (updates: Partial<ComparisonSession>) => void;
   onAnnotationAdd: (annotation: Omit<ComparisonAnnotation, 'id' | 'createdAt'>) => void;
-  onAnnotationUpdate: (id: string, updates: Partial<ComparisonAnnotation>) => void;,
+  onAnnotationUpdate: (id: string, updates: Partial<ComparisonAnnotation>) => void;
   onAnnotationDelete: (id: string) => void;
   className?: string;
 }
@@ -774,13 +774,13 @@ export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
 
 // Diff Viewer Toolbar
 interface DiffViewerToolbarProps {
-  session: ComparisonSession;,
+  session: ComparisonSession;
   comparison: GraphComparison;
-  onViewModeChange: (mode: ViewMode) => void;,
-  onHighlightModeChange: (mode: HighlightMode) => void;,
-  onFiltersChange: (filters: Partial<ComparisonFilters>) => void;,
+  onViewModeChange: (mode: ViewMode) => void;
+  onHighlightModeChange: (mode: HighlightMode) => void;
+  onFiltersChange: (filters: Partial<ComparisonFilters>) => void;
   zoomLevel: number;
-  onZoomChange: (zoom: number) => void;,
+  onZoomChange: (zoom: number) => void;
   showAnnotations: boolean;
   onToggleAnnotations: (show: boolean) => void;
   const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({,)

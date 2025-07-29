@@ -25,13 +25,13 @@ import { Graph } from '../graphSchema';
 export interface GraphNodeCRDT {
     id: string;
     type: string;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
     data: Record<string, any>;
     inputs: string[];
-    metadata: {,
+    metadata: {
         version: number;
         lastModified: string;
         modifiedBy: string;
@@ -49,7 +49,7 @@ export interface GraphEdgeCRDT {
     sourcePort?: string;
     targetPort?: string;
     type: 'data' | 'control' | 'conditional';
-    metadata: {,
+    metadata: {
         version: number;
         lastModified: string;
         modifiedBy: string;

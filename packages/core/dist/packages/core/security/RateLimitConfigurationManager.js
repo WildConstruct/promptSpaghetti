@@ -718,8 +718,7 @@ boolean;
                                                             return RateLimitKeyGenerator.byUser;
                                                         case RateLimitScope.ENDPOINT:
                                                             return RateLimitKeyGenerator.byEndpoint;
-                                                        case RateLimitScope.GLOBAL:
-                                                            return () => 'global';
+                                                        case RateLimitScope.GLOBAL: return () => 'global';
                                                         default:
                                                             return RateLimitKeyGenerator.byIP;
                                                     }

@@ -196,310 +196,196 @@ export var ReportType;
                             title: 'Overall Security Posture',
                             position: { x: 0, y: 0 },
                             size: { width: 6, height: 4 },
-                            config: {},
-                            theme: 'light',
-                            colors: ['#ff4444', '#ffaa00', '#44ff44'],
-                            showLegend: true,
-                            showLabels: true,
-                            animation: true,
-                            customOptions: { min: 0, max: 100 }
+                            config: {
+                                theme: 'light',
+                                colors: ['#ff4444', '#ffaa00', '#44ff44'],
+                                showLegend: true,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: { min: 0, max: 100 }
+                            },
+                            dataSource: 'security_posture',
+                            refreshRate: 30000,
+                            isVisible: true
                         },
-                        dataSource, 'security_posture',
-                        refreshRate, 30000,
-                        isVisible, true
+                        {
+                            id: 'threat-level-indicator',
+                            type: WidgetType.METRIC_CARD,
+                            title: 'Current Threat Level',
+                            position: { x: 6, y: 0 },
+                            size: { width: 3, height: 2 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#ff4444'],
+                                showLegend: false,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: {}
+                            },
+                            dataSource: 'threat_level',
+                            refreshRate: 10000,
+                            isVisible: true
+                        },
+                        {
+                            id: 'active-threats-count',
+                            type: WidgetType.METRIC_CARD,
+                            title: 'Active Threats',
+                            position: { x: 9, y: 0 },
+                            size: { width: 3, height: 2 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#ff6b35'],
+                                showLegend: false,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: {}
+                            },
+                            dataSource: 'active_threats',
+                            refreshRate: 10000,
+                            isVisible: true
+                        },
+                        {
+                            id: 'compliance-score',
+                            type: WidgetType.GAUGE,
+                            title: 'Compliance Score',
+                            position: { x: 6, y: 2 },
+                            size: { width: 6, height: 4 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#ff4444', '#ffaa00', '#44ff44'],
+                                showLegend: true,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: { min: 0, max: 100 }
+                            },
+                            dataSource: 'compliance_score',
+                            refreshRate: 60000,
+                            isVisible: true
+                        },
+                        {
+                            id: 'security-events-timeline',
+                            type: WidgetType.LINE_CHART,
+                            title: 'Security Events Timeline',
+                            position: { x: 0, y: 4 },
+                            size: { width: 12, height: 6 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#007acc', '#ff6b35', '#ff4444'],
+                                showLegend: true,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: { timeWindow: '24h' }
+                            },
+                            dataSource: 'security_events_timeline',
+                            refreshRate: 30000,
+                            isVisible: true
+                        },
+                        {
+                            id: 'threat-distribution',
+                            type: WidgetType.PIE_CHART,
+                            title: 'Threat Distribution by Type',
+                            position: { x: 0, y: 10 },
+                            size: { width: 6, height: 6 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#007acc', '#ff6b35', '#ff4444', '#44ff44', '#ffaa00'],
+                                showLegend: true,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: {}
+                            },
+                            dataSource: 'threat_distribution',
+                            refreshRate: 60000,
+                            isVisible: true
+                        },
+                        {
+                            id: 'geographical-threats',
+                            type: WidgetType.THREAT_MAP,
+                            title: 'Global Threat Activity',
+                            position: { x: 6, y: 10 },
+                            size: { width: 6, height: 6 },
+                            config: {
+                                theme: 'light',
+                                colors: ['#ffaa00', '#ff6b35', '#ff4444'],
+                                showLegend: true,
+                                showLabels: true,
+                                animation: true,
+                                customOptions: { mapType: 'world' }
+                            },
+                            dataSource: 'geographical_threats',
+                            refreshRate: 120000,
+                            isVisible: true
+                        }
                     ];
-                }
-            };
-            {
-                id: 'threat-level-indicator',
-                    type;
-                WidgetType.METRIC_CARD,
-                    title;
-                'Current Threat Level',
-                    position;
-                {
-                    x: 6, y;
-                    0;
-                }
-                size: {
-                    width: 3, height;
-                    2;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#ff4444'],
-                        showLegend;
-                    false,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    { }
-                }
-                dataSource: 'threat_level',
-                    refreshRate;
-                10000,
-                    isVisible;
-                true;
-            }
-            {
-                id: 'active-threats-count',
-                    type;
-                WidgetType.METRIC_CARD,
-                    title;
-                'Active Threats',
-                    position;
-                {
-                    x: 9, y;
-                    0;
-                }
-                size: {
-                    width: 3, height;
-                    2;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#ff6b35'],
-                        showLegend;
-                    false,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    { }
-                }
-                dataSource: 'active_threats',
-                    refreshRate;
-                10000,
-                    isVisible;
-                true;
-            }
-            {
-                id: 'compliance-score',
-                    type;
-                WidgetType.GAUGE,
-                    title;
-                'Compliance Score',
-                    position;
-                {
-                    x: 6, y;
-                    2;
-                }
-                size: {
-                    width: 6, height;
-                    4;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#ff4444', '#ffaa00', '#44ff44'],
-                        showLegend;
-                    true,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    {
-                        min: 0, max;
-                        100;
+                    defaultWidgets.forEach(widget => { });
+                    this.widgets.set(widget.id, widget);
+                },
+                // ==========================================
+                // DATA PROCESSING
+                // ==========================================
+                /**
+                 * Process security intelligence data for dashboard
+                 */
+                async processSecurityIntelligence(intelligence) {
+                    try {
+                        // Update security posture
+                        await this.updateSecurityPosture(intelligence);
+                        // Update threat intelligence
+                        await this.updateThreatIntelligence(intelligence);
+                        // Update dashboard metrics
+                        await this.updateDashboardMetrics(intelligence);
+                        // Check alert thresholds
+                        await this.checkAlertThresholds();
+                        this.emit('dataUpdated', {});
+                        securityPosture: this.securityPosture,
+                            threatIntelligence;
+                        this.threatIntelligence,
+                            metrics;
+                        this.dashboardMetrics,
+                        ;
                     }
-                }
-                dataSource: 'compliance_score',
-                    refreshRate;
-                60000,
-                    isVisible;
-                true;
-            }
-            {
-                id: 'security-events-timeline',
-                    type;
-                WidgetType.LINE_CHART,
-                    title;
-                'Security Events Timeline',
-                    position;
-                {
-                    x: 0, y;
-                    4;
-                }
-                size: {
-                    width: 12, height;
-                    6;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#007acc', '#ff6b35', '#ff4444'],
-                        showLegend;
-                    true,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    {
-                        timeWindow: '24h';
-                    }
-                }
-                dataSource: 'security_events_timeline',
-                    refreshRate;
-                30000,
-                    isVisible;
-                true;
-            }
-            {
-                id: 'threat-distribution',
-                    type;
-                WidgetType.PIE_CHART,
-                    title;
-                'Threat Distribution by Type',
-                    position;
-                {
-                    x: 0, y;
-                    10;
-                }
-                size: {
-                    width: 6, height;
-                    6;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#007acc', '#ff6b35', '#ff4444', '#44ff44', '#ffaa00'],
-                        showLegend;
-                    true,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    { }
-                }
-                dataSource: 'threat_distribution',
-                    refreshRate;
-                60000,
-                    isVisible;
-                true;
-            }
-            {
-                id: 'geographical-threats',
-                    type;
-                WidgetType.THREAT_MAP,
-                    title;
-                'Global Threat Activity',
-                    position;
-                {
-                    x: 6, y;
-                    10;
-                }
-                size: {
-                    width: 6, height;
-                    6;
-                }
-                config: {
-                    theme: 'light',
-                        colors;
-                    ['#ffaa00', '#ff6b35', '#ff4444'],
-                        showLegend;
-                    true,
-                        showLabels;
-                    true,
-                        animation;
-                    true,
-                        customOptions;
-                    {
-                        mapType: 'world';
-                    }
-                }
-                dataSource: 'geographical_threats',
-                    refreshRate;
-                120000,
-                    isVisible;
-                true;
-                ;
-                defaultWidgets.forEach(widget => { });
-                this.widgets.set(widget.id, widget);
-            }
-            ;
-            // ==========================================
-            // DATA PROCESSING
-            // ==========================================
-            /**
-             * Process security intelligence data for dashboard
-             */
-        }
-        // ==========================================
-        // DATA PROCESSING
-        // ==========================================
-        /**
-         * Process security intelligence data for dashboard
-         */
-        async processSecurityIntelligence(intelligence) {
-            try {
-                // Update security posture
-                await this.updateSecurityPosture(intelligence);
-                // Update threat intelligence
-                await this.updateThreatIntelligence(intelligence);
-                // Update dashboard metrics
-                await this.updateDashboardMetrics(intelligence);
-                // Check alert thresholds
-                await this.checkAlertThresholds();
-                this.emit('dataUpdated', {});
-                securityPosture: this.securityPosture,
-                    threatIntelligence;
-                this.threatIntelligence,
-                    metrics;
-                this.dashboardMetrics,
-                ;
-            }
-            finally { }
-            ;
-        }
-        catch(error) {
-            console.error('Error processing security intelligence:', error);
-            this.emit('error', { error, intelligence });
-            /**
-             * Process security anomalies for dashboard
-             */
-        }
-        /**
-         * Process security anomalies for dashboard
-         */
-        async processSecurityAnomalies(anomalies) {
-            try {
-                // Update anomaly metrics
-                this.dashboardMetrics.anomalies.detected = anomalies.length;
-                this.dashboardMetrics.anomalies.falsePositives = anomalies.filter(a => );
-                a.isResolved && a.resolvedBy === 'false_positive';
-                length;
-                const totalResolved = anomalies.filter(a => a.isResolved).length;
-                if (totalResolved > 0) {
-                    this.dashboardMetrics.anomalies.accuracy =
-                        ((totalResolved - this.dashboardMetrics.anomalies.falsePositives) / totalResolved) * 100;
-                    // Update risk factors from anomalies
-                    await this.updateRiskFactorsFromAnomalies(anomalies);
-                    this.emit('anomaliesProcessed', { count: anomalies.length });
-                }
-                try { }
-                catch (error) {
-                    console.error('Error processing security anomalies:', error);
-                    this.emit('error', { error, anomalies });
+                    finally { }
+                    ;
+                }, catch(error) {
+                    console.error('Error processing security intelligence:', error);
+                    this.emit('error', { error, intelligence });
                     /**
-                     * Process threat forecasts for dashboard
+                     * Process security anomalies for dashboard
                      */
                 }
                 /**
+                 * Process security anomalies for dashboard
+                 */
+                ,
+                /**
+                 * Process security anomalies for dashboard
+                 */
+                async processSecurityAnomalies(anomalies) {
+                    try {
+                        // Update anomaly metrics
+                        this.dashboardMetrics.anomalies.detected = anomalies.length;
+                        this.dashboardMetrics.anomalies.falsePositives = anomalies.filter(a => );
+                        a.isResolved && a.resolvedBy === 'false_positive';
+                    }
+                    finally { }
+                }, : .length,
+                const: totalResolved = anomalies.filter(a => a.isResolved).length,
+                if(totalResolved) { }
+            } > 0;
+            {
+                this.dashboardMetrics.anomalies.accuracy =
+                    ((totalResolved - this.dashboardMetrics.anomalies.falsePositives) / totalResolved) * 100;
+                // Update risk factors from anomalies
+                await this.updateRiskFactorsFromAnomalies(anomalies);
+                this.emit('anomaliesProcessed', { count: anomalies.length });
+            }
+            try { }
+            catch (error) {
+                console.error('Error processing security anomalies:', error);
+                this.emit('error', { error, anomalies });
+                /**
                  * Process threat forecasts for dashboard
                  */
-            }
-            /**
-             * Process threat forecasts for dashboard
-             */
-            finally {
             }
             /**
              * Process threat forecasts for dashboard
@@ -603,13 +489,14 @@ const geographicalThreats = [
         country: 'Various',
         region: 'Global',
         threatCount: activeThreats.length,
-        severityDistribution: {},
-        critical: activeThreats.filter(i => i.severity === 'critical').length,
-        high: activeThreats.filter(i => i.severity === 'high').length,
-        medium: activeThreats.filter(i => i.severity === 'medium').length,
-        low: activeThreats.filter(i => i.severity === 'low').length,
-    },
-    primaryThreatTypes, Object.keys(threatsByCategory).slice(0, 3)
+        severityDistribution: {
+            critical: activeThreats.filter(i => i.severity === 'critical').length,
+            high: activeThreats.filter(i => i.severity === 'high').length,
+            medium: activeThreats.filter(i => i.severity === 'medium').length,
+            low: activeThreats.filter(i => i.severity === 'low').length,
+        },
+        primaryThreatTypes: Object.keys(threatsByCategory).slice(0, 3)
+    }
 ];
 this.threatIntelligence = {
     activeThreatCount: activeThreats.length,

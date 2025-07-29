@@ -15,19 +15,19 @@ import {
 } from '../types/UTDG';
 
 export interface ConstraintSuggestion {
-  id: string;,
+  id: string;
   constraint_id: string;
-  type: 'fix' | 'alternative' | 'educational' | 'creative';,
+  type: 'fix' | 'alternative' | 'educational' | 'creative';
   priority: 'high' | 'medium' | 'low';
-  title: string;,
+  title: string;
   description: string;
-  specific_actions: SpecificAction;,
+  specific_actions: SpecificAction;
   historical_context: string;
   trade_offs?: string;
   example?: string;
 }
 export interface SpecificAction {
-  action_type: 'replace_node' | 'add_node' | 'modify_attribute' | 'remove_node' | 'add_context';,
+  action_type: 'replace_node' | 'add_node' | 'modify_attribute' | 'remove_node' | 'add_context';
   description: string;
   target_node_ids?: string;
   suggested_values?: any;
@@ -38,8 +38,8 @@ export interface SuggestionContext {
   social_class?: SocialClass;
   scenario: 'daily_life' | 'ceremonial' | 'military' | 'religious' | 'artistic';
   region?: string;
-  creative_flexibility: 'strict' | 'moderate' | 'flexible';
-}
+  creative_flexibility: 'strict' | 'moderate' | 'flexible'
+  }
 export class ConstraintSuggestionEngine {
   private historicalDatabase: HistoricalKnowledge;
   constructor() {
@@ -70,7 +70,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate suggestions for fixing constraint violations
    */
-  private generateViolationSuggestions(violation: any,)
+  private generateViolationSuggestions(violation: any)
     constraint: HistoricalConstraint,
     nodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
@@ -99,7 +99,7 @@ export class ConstraintSuggestionEngine {
   /**
   * Generate era compatibility suggestions
   */
-  private generateEraCompatibilitySuggestions(violation: any,)
+  private generateEraCompatibilitySuggestions(violation: any)
   affectedNodes: UTDGNode,
   context: SuggestionContext): ConstraintSuggestion {,
   const suggestions: ConstraintSuggestion = [];
@@ -152,7 +152,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate social class suggestions
    */
-  private generateSocialClassSuggestions(violation: any,)
+  private generateSocialClassSuggestions(violation: any)
     affectedNodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
     const suggestions: ConstraintSuggestion = [];
@@ -186,7 +186,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate material availability suggestions
    */
-  private generateMaterialAvailabilitySuggestions(violation: any,)
+  private generateMaterialAvailabilitySuggestions(violation: any)
     affectedNodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
     const suggestions: ConstraintSuggestion = [];
@@ -218,7 +218,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate cultural appropriateness suggestions
    */
-  private generateCulturalSuggestions(violation: any,)
+  private generateCulturalSuggestions(violation: any)
     affectedNodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
     const suggestions: ConstraintSuggestion = [];
@@ -266,7 +266,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate temporal consistency suggestions
    */
-  private generateTemporalSuggestions(violation: any,)
+  private generateTemporalSuggestions(violation: any)
     affectedNodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
     const suggestions: ConstraintSuggestion = [];
@@ -294,7 +294,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate regional authenticity suggestions
    */
-  private generateRegionalSuggestions(violation: any,)
+  private generateRegionalSuggestions(violation: any)
     affectedNodes: UTDGNode,
     context: SuggestionContext): ConstraintSuggestion {,
     const suggestions: ConstraintSuggestion = [];

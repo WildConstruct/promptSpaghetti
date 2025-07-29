@@ -287,7 +287,8 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                             const overhead = 1024; // Object overhead;
                             return choicesMemory + weightsMemory + overhead;
                             export default WeightedChoiceFrameworkNode;
-                        } }
+                        }
+                    }
                 } };
         }
     }

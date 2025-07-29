@@ -8,72 +8,72 @@ import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceMetrics } from '../monitoring';
 
 export interface CategoryPerformanceConfig {
-  enableCategoryOptimization: boolean;,
+  enableCategoryOptimization: boolean;
   enableDynamicThresholds: boolean;
-  enablePredictiveScaling: boolean;,
+  enablePredictiveScaling: boolean;
   categories: Record<string, CategoryConfig>;
-  globalSettings: {,
-  maxConcurrentOperations: number;,
+  globalSettings: {
+  maxConcurrentOperations: number;
   memoryThreshold: number;
-  cpuThreshold: number;,
+  cpuThreshold: number;
   responseTimeTarget: number;
 };
 }
 export interface CategoryConfig {
-  name: string;,
+  name: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  optimizationStrategy: 'throughput' | 'latency' | 'memory' | 'balanced';,
-  resourceLimits: {,
-  maxMemoryMB: number;,
+  optimizationStrategy: 'throughput' | 'latency' | 'memory' | 'balanced';
+  resourceLimits: {
+  maxMemoryMB: number;
   maxExecutionTimeMs: number;
-  maxConcurrentNodes: number;,
+  maxConcurrentNodes: number;
   queueLimit: number;
 };
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: boolean;
-  ttlMs: number;,
+  ttlMs: number;
   maxSize: number;
-  evictionPolicy: 'lru' | 'lfu' | 'ttl';
-};
-  scalingRules: {,
+  evictionPolicy: 'lru' | 'lfu' | 'ttl'
+  };
+  scalingRules: {
   scaleUpThreshold: number;
-  scaleDownThreshold: number;,
+  scaleDownThreshold: number;
   cooldownMs: number;
   maxInstances: number;
 };
 }
 export interface CategoryMetrics {
-  categoryName: string;,
+  categoryName: string;
   totalNodes: number;
-  activeNodes: number;,
+  activeNodes: number;
   queuedNodes: number;
   // Performance Metrics
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   p95ExecutionTime: number;
   throughput: number; // operations per second,
   errorRate: number;
   // Resource Utilization
-  memoryUsage: number;,
+  memoryUsage: number;
   cpuUsage: number;
   cacheHitRate: number;
   // Optimization Status
   optimizationLevel: number; // 0-100,
-  bottlenecks: string;,
+  bottlenecks: string;
   recommendations: string;
   lastUpdated: number;
 }
 export interface OptimizationAction {
-  id: string;,
+  id: string;
   category: string;
-  action: 'scale_up' | 'scale_down' | 'cache_optimize' | 'throttle' | 'priority_boost';,
+  action: 'scale_up' | 'scale_down' | 'cache_optimize' | 'throttle' | 'priority_boost';
   reason: string;
   parameters: Record<string, any>;
-  expectedImpact: {,
+  expectedImpact: {
   performanceGain: number; // percentage,
   resourceCost: number; // percentage,
   confidence: number; // 0-1,
 };
-  timestamp: number;,
+  timestamp: number;
   applied: boolean;
 /**
  * Category-based performance optimization manager
@@ -96,7 +96,7 @@ export class CategoryPerformanceManager extends EventEmitter {
   enableDynamicThresholds: true,
   enablePredictiveScaling: true,
   categories: this.getDefaultCategoryConfigs(),
-  globalSettings: {,
+  globalSettings: {
   maxConcurrentOperations: 100,
   memoryThreshold: 1024 * 1024 * 1024, // 1GB,
   cpuThreshold: 80, // 80%,
@@ -164,15 +164,15 @@ export class CategoryPerformanceManager extends EventEmitter {
    * Get optimization recommendations for all categories
    */
   getOptimizationRecommendations(): Array<{
-  category: string;,
+  category: string;
   recommendations: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   estimatedImpact: number;
 }> {
   const recommendations: Array<{,
-  category: string;,
+  category: string;
   recommendations: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   estimatedImpact: number;
 }> = [];
     for (const [category, metrics] of this.categoryMetrics) {
@@ -218,15 +218,15 @@ export class CategoryPerformanceManager extends EventEmitter {
    * Get cache statistics for all categories
    */
   getCacheStatistics(): Record<string, {
-  size: number;,
+  size: number;
   maxSize: number;
-  hitRate: number;,
+  hitRate: number;
   evictions: number;
 }> {
   const stats: Record<string, {,
-  size: number;,
+  size: number;
   maxSize: number;
-  hitRate: number;,
+  hitRate: number;
   evictions: number;
 }> = {};
     for (const [category, cache] of this.caches) {
@@ -261,23 +261,23 @@ export class CategoryPerformanceManager extends EventEmitter {
   // Private helper methods
   private getDefaultCategoryConfigs(): Record<string, CategoryConfig> {,
   return {
-  'basic': {,
+  'basic': {
   name: 'Basic Operations',
   priority: 'medium',
   optimizationStrategy: 'throughput',
-  resourceLimits: {,
+  resourceLimits: {
   maxMemoryMB: 100,
   maxExecutionTimeMs: 1000,
   maxConcurrentNodes: 50,
   queueLimit: 1000,
 },
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: true,
   ttlMs: 300000, // 5 minutes,
   maxSize: 1000,
   evictionPolicy: 'lru',
 },
-  scalingRules: {,
+  scalingRules: {
   scaleUpThreshold: 70,
   scaleDownThreshold: 30,
   cooldownMs: 30000,
@@ -287,19 +287,19 @@ export class CategoryPerformanceManager extends EventEmitter {
   name: 'Advanced Operations',
   priority: 'high',
   optimizationStrategy: 'balanced',
-  resourceLimits: {,
+  resourceLimits: {
   maxMemoryMB: 500,
   maxExecutionTimeMs: 5000,
   maxConcurrentNodes: 20,
   queueLimit: 200,
 },
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: true,
   ttlMs: 600000, // 10 minutes,
   maxSize: 500,
   evictionPolicy: 'lfu',
 },
-  scalingRules: {,
+  scalingRules: {
   scaleUpThreshold: 60,
   scaleDownThreshold: 20,
   cooldownMs: 60000,
@@ -309,19 +309,19 @@ export class CategoryPerformanceManager extends EventEmitter {
   name: 'Utility Operations',
   priority: 'low',
   optimizationStrategy: 'memory',
-  resourceLimits: {,
+  resourceLimits: {
   maxMemoryMB: 50,
   maxExecutionTimeMs: 2000,
   maxConcurrentNodes: 100,
   queueLimit: 2000,
 },
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: true,
   ttlMs: 900000, // 15 minutes,
   maxSize: 2000,
   evictionPolicy: 'ttl',
 },
-  scalingRules: {,
+  scalingRules: {
   scaleUpThreshold: 80,
   scaleDownThreshold: 40,
   cooldownMs: 120000,
@@ -331,19 +331,19 @@ export class CategoryPerformanceManager extends EventEmitter {
   name: 'Integration Operations',
   priority: 'critical',
   optimizationStrategy: 'latency',
-  resourceLimits: {,
+  resourceLimits: {
   maxMemoryMB: 200,
   maxExecutionTimeMs: 3000,
   maxConcurrentNodes: 10,
   queueLimit: 50,
 },
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: false, // Integration operations should not be cached,
   ttlMs: 0,
   maxSize: 0,
   evictionPolicy: 'lru',
 },
-  scalingRules: {,
+  scalingRules: {
   scaleUpThreshold: 50,
   scaleDownThreshold: 10,
   cooldownMs: 15000,
@@ -539,12 +539,12 @@ export class CategoryPerformanceManager extends EventEmitter {
         action: 'scale_up',
         reason: `High utilization: ${Math.round(utilizationRate * 100)}%`}
 },
-  parameters: {,
+  parameters: {
   targetInstances: Math.min(),
   categoryConfig.resourceLimits.maxConcurrentNodes * 1.5,
   categoryConfig.scalingRules.maxInstances
 },
-  expectedImpact: {,
+  expectedImpact: {
   performanceGain: 30,
   resourceCost: 40,
   confidence: 0.85,
@@ -561,11 +561,11 @@ export class CategoryPerformanceManager extends EventEmitter {
         action: 'cache_optimize',
         reason: `Low cache hit rate: ${Math.round(metrics.cacheHitRate * 100)}%`}
 },
-  parameters: {,
+  parameters: {
   increaseCacheSize: true,
   optimizeTTL: true,
 },
-  expectedImpact: {,
+  expectedImpact: {
   performanceGain: 25,
   resourceCost: 15,
   confidence: 0.75,
@@ -582,10 +582,10 @@ export class CategoryPerformanceManager extends EventEmitter {
         action: 'throttle',
         reason: `High error rate: ${Math.round(metrics.errorRate * 100)}%`}
 },
-  parameters: {,
+  parameters: {
   reduceRate: 0.5,
 },
-  expectedImpact: {,
+  expectedImpact: {
   performanceGain: -10, // Short-term performance loss,
   resourceCost: -20, // But reduced resource usage,
   confidence: 0.90,
@@ -611,12 +611,12 @@ export class CategoryPerformanceManager extends EventEmitter {
   return recommendations;
   private calculateRecommendationPriority(metrics: CategoryMetrics): 'low' | 'medium' | 'high' | 'critical' {,
   if (metrics.errorRate > 0.2 || metrics.queuedNodes > 1000) {
-  return 'critical';
-} else if (metrics.errorRate > 0.1 || metrics.averageExecutionTime > 5000) {
-      return 'high';
-    } else if (metrics.cacheHitRate < 0.5 || metrics.queuedNodes > 100) {
-      return 'medium';
-    } else {
+  return 'critical'
+  } else if (metrics.errorRate > 0.1 || metrics.averageExecutionTime > 5000) {
+      return 'high'
+  } else if (metrics.cacheHitRate < 0.5 || metrics.queuedNodes > 100) {
+      return 'medium'
+  } else {
   return 'low';
   private estimateOptimizationImpact(metrics: CategoryMetrics, config: CategoryConfig): number {,
   // Simple heuristic for estimating optimization impact

@@ -29,7 +29,7 @@ export interface PasswordValidation {
     strength: PasswordStrength;
     score: number;
     feedback: string[];
-    requirements: {,
+    requirements: {
         length: boolean;
         uppercase: boolean;
         lowercase: boolean;

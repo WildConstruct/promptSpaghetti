@@ -735,11 +735,12 @@ export var AnomalyType;
                                                                                                     target: 'security-alerts@company.com',
                                                                                                     enabled: true,
                                                                                                     severity: [AnomalySeverity.MEDIUM, AnomalySeverity.HIGH, AnomalySeverity.CRITICAL],
-                                                                                                    rateLimiting: {},
-                                                                                                    maxAlertsPerHour: 10,
-                                                                                                    maxAlertsPerDay: 50,
-                                                                                                    burstLimit: 3,
-                                                                                                    cooldownPeriod: 5
+                                                                                                    rateLimiting: {
+                                                                                                        maxAlertsPerHour: 10,
+                                                                                                        maxAlertsPerDay: 50,
+                                                                                                        burstLimit: 3,
+                                                                                                        cooldownPeriod: 5
+                                                                                                    }
                                                                                                 }
                                                                                             ];
                                                                                             return channels.filter(channel => channel.severity.includes(severity));

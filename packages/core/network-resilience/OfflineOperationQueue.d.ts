@@ -22,7 +22,7 @@ export interface QueueMetrics {
     expiredOperations: number;
     averageQueueTime: number;
     oldestOperationAge: number;
-    queueSizeByPriority: {,
+    queueSizeByPriority: {
         high: number;
         medium: number;
         low: number;
@@ -39,7 +39,7 @@ export interface OfflineQueueConfig {
     storageKey: string;
     compressionEnabled: boolean;
     batchSizeLimit: number;
-    priorityWeights: {,
+    priorityWeights: {
         high: number;
         medium: number;
         low: number;

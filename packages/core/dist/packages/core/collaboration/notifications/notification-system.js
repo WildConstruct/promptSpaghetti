@@ -272,7 +272,6 @@ The Team`;
                                                                         if(, template) {
                                                                             console.error(`No template found for notification type: ${type}`);
                                                                         },
-                                                                        return: ,
                                                                         for(, userId, of, context) { }, : .targetUserIds
                                                                     };
                                                                     {
@@ -284,38 +283,31 @@ The Team`;
                                                                         if (!this.shouldSendNotification(type, context, preferences)) {
                                                                             continue;
                                                                             // Create notification record
-                                                                            const notification = await this.dao.createNotification({});
-                                                                            user_id: userId,
-                                                                                workspace_id;
-                                                                            context.workspaceId,
-                                                                                project_id;
-                                                                            context.projectId,
+                                                                            const notification = await this.dao.createNotification({
+                                                                                user_id: userId,
+                                                                                workspace_id: context.workspaceId,
+                                                                                project_id: context.projectId,
                                                                                 type,
-                                                                                title;
-                                                                            this.renderTemplate(template.channels.in_app.subject, context, userId),
-                                                                                message;
-                                                                            this.renderTemplate(template.channels.in_app.body, context, userId),
-                                                                                data;
-                                                                            context.data,
-                                                                                is_active;
-                                                                            true,
-                                                                            ;
-                                                                        }
-                                                                        ;
-                                                                        // Queue delivery for each enabled channel
-                                                                        for (const channel of preferences.channels) {
-                                                                            if (!channel.enabled)
-                                                                                continue;
-                                                                            const channelTemplate = template.channels[channel.type];
-                                                                            if (!channelTemplate)
-                                                                                continue;
-                                                                            if (preferences.digest.enabled && this.shouldAddToDigest(type, preferences)) {
-                                                                                // Add to digest queue
-                                                                                this.addToDigest(userId, notification);
-                                                                            }
-                                                                            else {
-                                                                                // Send immediately
-                                                                                await this.queueDelivery(notification, userId, channel.type, channelTemplate, context);
+                                                                                title: this.renderTemplate(template.channels.in_app.subject, context, userId),
+                                                                                message: this.renderTemplate(template.channels.in_app.body, context, userId),
+                                                                                data: context.data,
+                                                                                is_active: true,
+                                                                            });
+                                                                            // Queue delivery for each enabled channel
+                                                                            for (const channel of preferences.channels) {
+                                                                                if (!channel.enabled)
+                                                                                    continue;
+                                                                                const channelTemplate = template.channels[channel.type];
+                                                                                if (!channelTemplate)
+                                                                                    continue;
+                                                                                if (preferences.digest.enabled && this.shouldAddToDigest(type, preferences)) {
+                                                                                    // Add to digest queue
+                                                                                    this.addToDigest(userId, notification);
+                                                                                }
+                                                                                else {
+                                                                                    // Send immediately
+                                                                                    await this.queueDelivery(notification, userId, channel.type, channelTemplate, context);
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -401,8 +393,7 @@ The Team`;
     }
     async processDeliveryQueue() {
         if (this.isProcessing)
-            return;
-        this.isProcessing = true;
+            return (this.isProcessing = true);
         while (this.deliveryQueue.length > 0) {
             const delivery = this.deliveryQueue.shift();
             try {

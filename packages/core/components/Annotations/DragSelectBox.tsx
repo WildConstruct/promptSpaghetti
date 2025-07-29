@@ -8,9 +8,9 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 interface DragSelectBoxProps {
   onSelectionComplete: (bounds: { x: number; y: number; width: number; height: number }) => void;
-  onSelectionCancel: () => void;,
+  onSelectionCancel: () => void;
   canvasOffset: { x: number; y: number };
-  zoom: number;,
+  zoom: number;
   isActive: boolean;
 
 export const DragSelectBox: React.FC<DragSelectBoxProps> = ({)

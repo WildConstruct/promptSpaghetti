@@ -23,15 +23,15 @@ const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
 interface RestorationWizardProps {
-  visible: boolean;,
+  visible: boolean;
   onClose: () => void;
-  projectId: string;,
+  projectId: string;
   sourceSnapshotId: string;
   targetSnapshotId?: string;
   onSuccess?: (attempt: RestorationAttempt) => void;
   onError?: (error: string) => void;
   interface WizardStep {
-  title: string;,
+  title: string;
   description: string;
   icon: React.ReactNode;
   const wizardSteps: WizardStep = [

@@ -73,7 +73,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         name: string;
         description: string;
-        parameters: {,
+        parameters: {
             name: string;
             description: string;
             type: string;
@@ -85,7 +85,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     }, {
         name: string;
         description: string;
-        parameters: {,
+        parameters: {
             name: string;
             description: string;
             type: string;
@@ -173,24 +173,24 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name: string;
     description: string;
     priority: ExtensionPointPriority;
-    location: {,
+    location: {
         file: string;
         function?: string | undefined;
         line?: number | undefined;
     };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {,
+    metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {,
+    interfaces: {
         name: string;
         description: string;
-        parameters: {,
+        parameters: {
             name: string;
             description: string;
             type: string;
@@ -222,24 +222,24 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name: string;
     description: string;
     priority: ExtensionPointPriority;
-    location: {,
+    location: {
         file: string;
         function?: string | undefined;
         line?: number | undefined;
     };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {,
+    metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {,
+    interfaces: {
         name: string;
         description: string;
-        parameters: {,
+        parameters: {
             name: string;
             description: string;
             type: string;

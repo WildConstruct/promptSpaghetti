@@ -11,7 +11,7 @@ import { VarianceSuggestion } from '../services/VarianceAnalysisService';
 
 // Mock the variance analysis service
 jest.mock('../services/VarianceAnalysisService', () => ({)
-  varianceAnalysisService: {,
+  varianceAnalysisService: {
   analyzeVariance: jest.fn<unknown, unknown>(),
   createDiversityIndicators: jest.fn<unknown, unknown>(),
   getVarianceLevelInfo: jest.fn<unknown, unknown>(),
@@ -23,7 +23,7 @@ const createMockResult = (seed: number, output: string): PreviewResultWithPath =
   executionTimeMs: 100,
   usedNodeIds: ['node1'],
   usedEdgeIds: ['edge1'],
-  executionPath: {,
+  executionPath: {
   id: `exec_${seed}`}
 }
     seed,
@@ -38,13 +38,13 @@ const createMockResult = (seed: number, output: string): PreviewResultWithPath =
 const mockAnalysis = {
   overallVariance: 'medium' as const,
   varianceScore: 0.65,
-  diversityMetrics: {,
+  diversityMetrics: {
   outputLengthVariance: 0.4,
   vocabularyDiversity: 0.7,
   structuralDiversity: 0.5,
   executionPathDiversity: 0.3,
 },
-  creativeRange: {,
+  creativeRange: {
   uniqueElements: ['unique', 'elements', 'here'],
   commonElements: ['common', 'words'],
   repetitionRate: 0.3,
@@ -337,7 +337,7 @@ describe('VarianceAnalysis', () => {
     it('should handle empty unique/common elements', () => {
   const analysisWithEmptyElements = {
   ...mockAnalysis,
-  creativeRange: {,
+  creativeRange: {
   ...mockAnalysis.creativeRange,
   uniqueElements: [],
   commonElements: [],

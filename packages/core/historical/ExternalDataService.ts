@@ -16,9 +16,9 @@ import {
 } from '../types/UTDG';
 
 export interface CacheEntry {
-  data: any;,
+  data: any;
   timestamp: number;
-  ttl: number;,
+  ttl: number;
   source_id: string;
 }
 export interface DataSourceRegistry {
@@ -68,7 +68,7 @@ export class ExternalDataService {
   return {
   nodes: cachedResult.data.nodes,
   total_count: cachedResult.data.total_count,
-  query_metadata: {,
+  query_metadata: {
   query_time: performance.now() - startTime,
   cache_hit: true,
   sources_used: cachedResult.data.sources_used,
@@ -99,7 +99,7 @@ export class ExternalDataService {
     const result: HistoricalQueryResult = {,
   nodes: processedResults.slice(0, query.limit || 50),
   total_count: processedResults.length,
-  query_metadata: {,
+  query_metadata: {
   query_time: performance.now() - startTime,
   cache_hit: false,
   sources_used: sourcesUsed,
@@ -262,13 +262,13 @@ export class ExternalDataService {
   type: item[fieldMapping.type] || 'material',
         content: item[fieldMapping.content] || item.name || item.description,
         description: item[fieldMapping.description],
-        metadata: {,
+        metadata: {
   era: this.parseEras(item[fieldMapping.era] || item.period),
   authenticity: parseFloat(item[fieldMapping.authenticity]) || 0.5,
   source: config.source_name || 'external',
   tags: this.parseTags(item[fieldMapping.tags] || item.keywords || []),
 },
-  relationships: {,
+  relationships: {
   compatible: [],
   incompatible: [],
   variations: [],
@@ -338,7 +338,7 @@ export class ExternalDataService {
         name: eraData,
         period: { start: 1000, end: 1500 }, // Default medieval
         region: ['Unknown'],
-        accuracy: 'low';
+        accuracy: 'low'
   }];
     if (Array.isArray(eraData)) {
   return eraData.map(this.parseEras).flat();
@@ -504,7 +504,7 @@ export class ExternalDataService {
   name: 'Medieval Demo Database',
   type: 'file',
   endpoint: '/data/medieval-demo.json',
-  caching: {,
+  caching: {
   enabled: true,
   ttl: 3600,
   strategy: 'memory',
@@ -512,8 +512,8 @@ export class ExternalDataService {
   transforms: [,
         {
   type: 'map_fields',
-  config: {,
-  field_mapping: {,
+  config: {
+  field_mapping: {
   id: 'id',
   type: 'item_type',
   content: 'description',
@@ -524,7 +524,7 @@ export class ExternalDataService {
   source_name: 'Medieval Demo';
   },
   description: 'Map medieval demo fields to UTDG format'],
-      metadata: {,
+      metadata: {
   description: 'Historical medieval clothing and materials demo database',
   coverage_eras: [require('../types/UTDG').HISTORICAL_ERAS.MEDIEVAL_HIGH],
   data_types: ['garment', 'material', 'accessory'],

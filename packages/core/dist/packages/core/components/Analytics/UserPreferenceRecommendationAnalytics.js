@@ -130,7 +130,8 @@ const handleExport = useCallback(() => {
             analysisTimestamp: Date.now(),
             metadata: {
                 totalUsers: userPreferences.length,
-                averagePreferenceConfidence: userPreferences.reduce(), }(sum),
+                averagePreferenceConfidence: userPreferences.reduce(),
+            }(sum),
             u };
     }
 });

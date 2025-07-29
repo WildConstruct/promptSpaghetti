@@ -6,7 +6,7 @@ import { StickyNoteState, StickyNoteActions } from '../types/StickyNotes.js';
 interface StickyNotesStore extends StickyNoteState, StickyNoteActions {
 
 export declare const useStickyNotesStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<StickyNotesStore>, "subscribe"> & {
-    subscribe: {,
+    subscribe: {
         (listener: (selectedState: StickyNotesStore, previousSelectedState: StickyNotesStore) => void): () => void;
         <U>(selector: (state: StickyNotesStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;

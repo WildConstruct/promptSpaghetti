@@ -717,11 +717,21 @@ export class EmbedAnalytics extends EventEmitter {
                                                                                             // Additional utility methods would be implemented here...
                                                                                             ,
                                                                                             // Additional utility methods would be implemented here...
-                                                                                            getDeviceType() { return 'desktop'; },
-                                                                                            getOS() { return 'unknown'; },
-                                                                                            getOSVersion() { return 'unknown'; },
-                                                                                            getBrowser() { return 'unknown'; },
-                                                                                            getBrowserVersion() { return 'unknown'; },
+                                                                                            getDeviceType() {
+                                                                                                return 'desktop';
+                                                                                            },
+                                                                                            getOS() {
+                                                                                                return 'unknown';
+                                                                                            },
+                                                                                            getOSVersion() {
+                                                                                                return 'unknown';
+                                                                                            },
+                                                                                            getBrowser() {
+                                                                                                return 'unknown';
+                                                                                            },
+                                                                                            getBrowserVersion() {
+                                                                                                return 'unknown';
+                                                                                            },
                                                                                             getConnectionType() { return undefined; },
                                                                                             isDarkMode() { return false; },
                                                                                             isReturningUser() { return false; },
@@ -756,7 +766,9 @@ export class EmbedAnalytics extends EventEmitter {
                                                                                                         };
                                                                                                     },
                                                                                                     getEmbedVersion() { return '1.0.0'; },
-                                                                                                    getEmbedType() { return 'widget'; },
+                                                                                                    getEmbedType() {
+                                                                                                        return 'widget';
+                                                                                                    },
                                                                                                     getEmbedSize() { return { width: 0, height: 0 }; },
                                                                                                     getEmbedPosition() { return { x: 0, y: 0 }; },
                                                                                                     isEmbedVisible() { return true; },

@@ -72,7 +72,7 @@ export const BaseFeedbackSchema = z.object({)
   // Content
   title: z.string().min(1).max(200).optional(),
   content: z.string().min(1).max(5000),
-  attachments: z.array(z.object({,)
+  attachments: z.array(z.object({)
   id: z.string(),
   type: z.enum(['image', 'video', 'document', 'screenshot']),
   url: z.string().url(),
@@ -134,7 +134,7 @@ export const ReportFeedbackSchema = BaseFeedbackSchema.extend({)
   // Report-specific fields
   reason: ReportReasonSchema,
   severity: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
-  evidence: z.array(z.object({,)
+  evidence: z.array(z.object({)
   type: z.enum(['screenshot', 'url', 'text', 'video']),
   content: z.string(),
   description: z.string().optional(),
@@ -246,7 +246,7 @@ export const FeedbackReplySchema = z.object({)
   authorType: z.enum(['user', 'creator', 'moderator', 'admin']),
   // Content
   content: z.string().min(1).max(2000),
-  attachments: z.array(z.object({,)
+  attachments: z.array(z.object({)
   id: z.string(),
   type: z.enum(['image', 'document']),
   url: z.string().url(),
@@ -436,7 +436,7 @@ export const FEEDBACK_DEFAULTS = {
   MAX_ATTACHMENT_SIZE_MB: 10,
   AUTO_APPROVE_THRESHOLD: 80, // Quality score,
   FLAGGED_THRESHOLD: 3, // Number of reports,
-  MODERATION_QUEUE_PRIORITY: {,
+  MODERATION_QUEUE_PRIORITY: {
   critical: 1,
   high: 2,
   medium: 3,

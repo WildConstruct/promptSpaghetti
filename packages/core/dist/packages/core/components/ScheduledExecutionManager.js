@@ -36,111 +36,72 @@ export const ScheduledExecutionManager = ({
                     schedule_type: 'cron',
                     schedule_expression: '0 9 * * *', // 9 AM daily,
                     action_type: 'state_transition',
-                    action_config: {},
-                    to_state_id: 'review-state',
-                    comment: 'Automated daily review trigger',
+                    action_config: {
+                        to_state_id: 'review-state',
+                        comment: 'Automated daily review trigger',
+                    },
+                    enabled: true,
+                    next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow 9 AM
+                    last_run_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday 9 AM
+                    run_count: 15,
+                    max_runs: undefined,
+                    retry_count: 0,
+                    max_retries: 3,
+                    created_by: 'user1',
+                    created_at: new Date('2024-01-01'),
+                    updated_at: new Date('2024-01-20')
                 },
-                enabled, true,
-                next_run_at, new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow 9 AM
-                last_run_at, new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday 9 AM
-                run_count, 15,
-                max_runs, undefined,
-                retry_count, 0,
-                max_retries, 3,
-                created_by, 'user1',
-                created_at, new Date('2024-01-01'),
-                updated_at, new Date('2024-01-20')
+                {
+                    id: '2',
+                    workspace_id: workspaceId,
+                    resource_id: resourceId || 'resource-2',
+                    schedule_name: 'Weekly Report Generation',
+                    schedule_type: 'cron',
+                    schedule_expression: '0 0 * * 0', // Sunday midnight,
+                    action_type: 'custom',
+                    action_config: {
+                        action: 'generate_report',
+                        report_type: 'weekly_summary',
+                        email_recipients: ['admin@example.com'],
+                    },
+                    enabled: true,
+                    next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next Sunday
+                    last_run_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last Sunday
+                    run_count: 8,
+                    max_runs: undefined,
+                    retry_count: 1,
+                    max_retries: 3,
+                    created_by: 'user2',
+                    created_at: new Date('2024-01-01'),
+                    updated_at: new Date('2024-01-15')
+                },
+                {
+                    id: '3',
+                    workspace_id: workspaceId,
+                    resource_id: resourceId || 'resource-3',
+                    schedule_name: 'One-time Migration',
+                    schedule_type: 'once',
+                    schedule_expression: '2024-01-25T15:00:00Z',
+                    action_type: 'custom',
+                    action_config: {
+                        action: 'migrate_data',
+                        source: 'old_system',
+                        target: 'new_system',
+                    },
+                    enabled: false,
+                    next_run_at: new Date('2024-01-25T15:00:00Z'),
+                    last_run_at: undefined,
+                    run_count: 0,
+                    max_runs: 1,
+                    retry_count: 0,
+                    max_retries: 3,
+                    created_by: 'user3',
+                    created_at: new Date('2024-01-20'),
+                    updated_at: new Date('2024-01-20')
+                }
             ];
-        }
-        finally {
-            id: '2',
-                workspace_id;
-            workspaceId,
-                resource_id;
-            resourceId || 'resource-2',
-                schedule_name;
-            'Weekly Report Generation',
-                schedule_type;
-            'cron',
-                schedule_expression;
-            '0 0 * * 0', // Sunday midnight,
-                action_type;
-            'custom',
-                action_config;
-            {
-                action: 'generate_report',
-                    report_type;
-                'weekly_summary',
-                    email_recipients;
-                ['admin@example.com'],
-                ;
-            }
-            enabled: true,
-                next_run_at;
-            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next Sunday
-                last_run_at;
-            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last Sunday
-                run_count;
-            8,
-                max_runs;
-            undefined,
-                retry_count;
-            1,
-                max_retries;
-            3,
-                created_by;
-            'user2',
-                created_at;
-            new Date('2024-01-01'),
-                updated_at;
-            new Date('2024-01-15');
-        }
-        {
-            id: '3',
-                workspace_id;
-            workspaceId,
-                resource_id;
-            resourceId || 'resource-3',
-                schedule_name;
-            'One-time Migration',
-                schedule_type;
-            'once',
-                schedule_expression;
-            '2024-01-25T15:00:00Z',
-                action_type;
-            'custom',
-                action_config;
-            {
-                action: 'migrate_data',
-                    source;
-                'old_system',
-                    target;
-                'new_system',
-                ;
-            }
-            enabled: false,
-                next_run_at;
-            new Date('2024-01-25T15:00:00Z'),
-                last_run_at;
-            undefined,
-                run_count;
-            0,
-                max_runs;
-            1,
-                retry_count;
-            0,
-                max_retries;
-            3,
-                created_by;
-            'user3',
-                created_at;
-            new Date('2024-01-20'),
-                updated_at;
-            new Date('2024-01-20');
-            ;
             setSchedules(mockSchedules);
         }
-        try { }
         catch (error) {
             setError('Failed to load schedules');
         }
@@ -159,54 +120,39 @@ export const ScheduledExecutionManager = ({
                         status: 'completed',
                         started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
                         completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
-                        result_data: {},
-                        state_changed: true,
-                        new_state: 'review',
-                        affected_resources: 1,
+                        result_data: {
+                            state_changed: true,
+                            new_state: 'review',
+                            affected_resources: 1,
+                        },
+                        execution_time_ms: 5000,
+                        retry_attempt: 0
                     },
-                    execution_time_ms, 5000,
-                    retry_attempt, 0
+                    {
+                        id: '2',
+                        schedule_id: '2',
+                        execution_id: 'exec-2',
+                        status: 'failed',
+                        started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                        completed_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 30000),
+                        result_data: {},
+                        error_message: 'Failed to generate report: Database connection timeout',
+                        execution_time_ms: 30000,
+                        retry_attempt: 1,
+                        next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000)
+                    },
+                    {
+                        id: '3',
+                        schedule_id: '1',
+                        execution_id: 'exec-3',
+                        status: 'running',
+                        started_at: new Date(Date.now() - 2 * 60 * 1000),
+                        result_data: {},
+                        retry_attempt: 0
+                    }
                 ];
-            }
-            finally {
-                id: '2',
-                    schedule_id;
-                '2',
-                    execution_id;
-                'exec-2',
-                    status;
-                'failed',
-                    started_at;
-                new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                    completed_at;
-                new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 30000),
-                    result_data;
-                { }
-                error_message: 'Failed to generate report: Database connection timeout',
-                    execution_time_ms;
-                30000,
-                    retry_attempt;
-                1,
-                    next_retry_at;
-                new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000);
-            }
-            {
-                id: '3',
-                    schedule_id;
-                '1',
-                    execution_id;
-                'exec-3',
-                    status;
-                'running',
-                    started_at;
-                new Date(Date.now() - 2 * 60 * 1000),
-                    result_data;
-                { }
-                retry_attempt: 0;
-                ;
                 setExecutionLogs(mockLogs);
             }
-            try { }
             catch (error) {
                 setError('Failed to load execution logs');
             }

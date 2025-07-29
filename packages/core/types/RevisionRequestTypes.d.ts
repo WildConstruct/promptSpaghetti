@@ -193,7 +193,7 @@ export type RevisionRequestSortField = 'created_at' | 'updated_at' | 'due_date' 
 
 export interface RevisionRequestSearchResults {
     requests: RevisionRequest[];
-    pagination: {,
+    pagination: {
         page: number;
         pageSize: number;
         total: number;
@@ -207,7 +207,7 @@ export interface RevisionRequestAggregations {
     priorityBreakdown: Record<RevisionRequestPriority, number>;
     typeBreakdown: Record<RevisionRequestType, number>;
     contentTypeBreakdown: Record<RevisionContentType, number>;
-    assignmentStats: {,
+    assignmentStats: {
         assigned: number;
         unassigned: number;
         overdue: number;
@@ -258,7 +258,7 @@ export interface RevisionRequestOverview {
     averageCompletionTime: number;
     completionRate: number;
     satisfactionScore: number;
-    growthMetrics: {,
+    growthMetrics: {
         requestGrowth: number;
         completionGrowth: number;
         averageTimeImprovement: number;
@@ -268,7 +268,7 @@ export interface RevisionRequestPerformance {
     reviewerPerformance: Record<string, ReviewerPerformance>;
     contentTypePerformance: Record<RevisionContentType, ContentTypePerformance>;
     priorityPerformance: Record<RevisionRequestPriority, PriorityPerformance>;
-    slaMetrics: {,
+    slaMetrics: {
         onTimeCompletionRate: number;
         averageResponseTime: number;
         escalationRate: number;
@@ -329,7 +329,7 @@ export interface RevisionRequestRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {,
+    implementation: {
         complexity: 'low' | 'medium' | 'high';
         timeframe: string;
         requirements: string[];
@@ -354,7 +354,7 @@ export interface RevisionRequestConfig {
     multipleReviewersFor: RevisionRequestType[];
     enableEmailNotifications: boolean;
     enableSlackNotifications: boolean;
-    notificationSettings: {,
+    notificationSettings: {
         onAssignment: boolean;
         onStatusChange: boolean;
         onComment: boolean;

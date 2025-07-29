@@ -37,22 +37,22 @@ import {
   X
 } from 'lucide-react';
 interface DateTimeSelection {
-  date: Date;,
+  date: Date;
   time: string; // HH:MM format,
   timezone: string;
   businessHoursOnly?: boolean;
   avoidWeekends?: boolean;
   smartSuggestion?: boolean;
 interface BusinessHours {
-  enabled: boolean;,
+  enabled: boolean;
   workdays: number; // 0-6 (Sunday-Saturday)
   startTime: string; // HH:MM,
   endTime: string; // HH:MM,
   timezone: string;
 interface ConflictInfo {
-  hasConflict: boolean;,
+  hasConflict: boolean;
   type: 'business_hours' | 'weekend' | 'holiday' | 'maintenance' | 'high_traffic' | 'other';
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high';
   suggestion?: string;
   alternativeTimes?: Date;

@@ -17,7 +17,7 @@ describe('PreviewSection', () => {
   id: `test-${type}`}
 }
     type,
-    data: {,
+    data: {
   label: `Test ${type}`}
 }
       ...data

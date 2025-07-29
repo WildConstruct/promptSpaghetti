@@ -4,25 +4,21 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
-{
+export const SaveProjectDialog = ({ isOpen, onClose, onSave }) => {
     const { saveProject, currentProject } = useGraphStore();
-    const [formData, setFormData] = useState({});
-    name: currentProject?.name || '',
-        description;
-    currentProject?.description || '',
-        author;
-    currentProject?.author || '',
-        tags;
-    currentProject?.tags?.join(', ') || '',
+    const [formData, setFormData] = useState({
+        name: currentProject?.name || '',
+        description: currentProject?.description || '',
+        author: currentProject?.author || '',
+        tags: currentProject?.tags?.join(', ') || '',
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const handleInputChange = (field) => ();
     ;
-}
-;
-const [isLoading, setIsLoading] = useState(false);
-const [error, setError] = useState(null);
-const handleInputChange = (field) => ();
-;
-;
-e: React.ChangeEvent;
+    ;
+    e: React.ChangeEvent;
+};
 {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
     if (error)

@@ -9,7 +9,7 @@ import React from 'react';
 export interface DirectorAnalyticsViewProps {
     conversionData: unknown;
     performanceData: unknown;
-    timeRange: {,
+    timeRange: {
         startTime: number;
         endTime: number;
     };

@@ -6,33 +6,33 @@ import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types
 import { VFXPipelineMetadata } from '../types/VFXExport';
 
 export interface CrowdGenerationRequest {
-    scene: {,
+    scene: {
         era: Era;
         region: string;
         location: string;
         timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
-        season: 'spring' | 'summer' | 'autumn' | 'winter';
-    };
-    crowd: {,
+        season: 'spring' | 'summer' | 'autumn' | 'winter'
+  };
+    crowd: {
         size: number;
         density: 'sparse' | 'moderate' | 'dense';
         demographics: CrowdDemographics;
         activity: CrowdActivity;
     };
-    constraints: {,
+    constraints: {
         historicalAccuracy: 'strict' | 'moderate' | 'creative';
         socialMixing: boolean;
         genderMixing: boolean;
         culturalSensitivity: boolean;
     };
-    output: {,
+    output: {
         format: 'json' | 'xml' | 'csv';
         includeMetadata: boolean;
         vfxPipeline: VFXPipelineMetadata;
     };
 
 export interface CrowdDemographics {
-    socialClasses: {,
+    socialClasses: {
         peasant: number;
         artisan: number;
         merchant: number;
@@ -40,13 +40,13 @@ export interface CrowdDemographics {
         clergy: number;
         royal: number;
     };
-    ageDistribution: {,
+    ageDistribution: {
         children: number;
         youth: number;
         adults: number;
         elderly: number;
     };
-    genderRatio: {,
+    genderRatio: {
         male: number;
         female: number;
         nonBinary?: number;
@@ -72,24 +72,24 @@ export interface CrowdGenerationResult {
 
 export interface CrowdIndividual {
     id: string;
-    demographics: {,
+    demographics: {
         age: number;
         gender: 'male' | 'female';
         socialClass: string;
         occupation: string;
     };
-    appearance: {,
+    appearance: {
         clothing: HistoricalItem[];
         accessories: HistoricalItem[];
         physicalTraits: string[];
     };
-    behavior: {,
+    behavior: {
         activity: string;
         posture: string;
         movement: string;
         interactions: string[];
     };
-    position: {,
+    position: {
         x: number;
         y: number;
         z: number;
@@ -114,18 +114,18 @@ export interface CrowdInteraction {
     historicalContext: string;
 
 export interface CrowdMetadata {
-    generation: {,
+    generation: {
         timestamp: string;
         processingTime: number;
         algorithm: string;
         version: string;
     };
-    validation: {,
+    validation: {
         overallAccuracy: number;
         constraintViolations: number;
         historicalConsistency: number;
     };
-    vfx: {,
+    vfx: {
         renderComplexity: 'low' | 'medium' | 'high';
         memoryEstimate: number;
         polyCount: number;

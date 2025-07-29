@@ -34,7 +34,7 @@ import { SecurityDashboardDataService } from './SecurityDashboardDataService';
 // Main Dashboard Types
 
 export interface SecurityDashboardMainProps {
-  workspaceId: string;,
+  workspaceId: string;
   userId: string;
   userRole: SecurityRole;
   initialDashboardType?: DashboardType;
@@ -43,48 +43,48 @@ export interface SecurityDashboardMainProps {
   refreshInterval?: number; // seconds,
 }
 export interface SecurityMetrics {
-  securityScore: number;,
+  securityScore: number;
   activeThreats: number;
-  blockedThreats: number;,
+  blockedThreats: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   lastScanTime: Date;
 }
 export interface SecurityAlert {
-  id: string;,
+  id: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
-  category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';,
+  category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';
   title: string;
-  description: string;,
+  description: string;
   source: string;
-  timestamp: Date;,
+  timestamp: Date;
   status: 'new' | 'investigating' | 'escalated' | 'resolved' | 'false_positive';
   assignee?: string;
-  affectedAssets: string;,
+  affectedAssets: string;
   indicators: string;
   responseActions: ResponseAction;
 }
 export interface ResponseAction {
-  id: string;,
+  id: string;
   type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
-  description: string;,
+  description: string;
   automated: boolean;
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   performer?: string;
   timestamp?: Date;
 }
 export interface ComplianceStatus {
-  framework: string;,
+  framework: string;
   status: 'compliant' | 'non_compliant' | 'partial';
-  score: number;,
+  score: number;
   violations: ComplianceViolation;
   lastAssessment: Date;
 }
 export interface ComplianceViolation {
-  id: string;,
+  id: string;
   type: string;
-  description: string;,
+  description: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
-  remediation: string;,
+  remediation: string;
   dueDate: Date;
   /**
   * Main Security Dashboard Component
@@ -115,7 +115,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   // Theme styles
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   surface: '#f8fafc',
   border: '#e2e8f0',
@@ -127,7 +127,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   error: '#ef4444',
   critical: '#dc2626',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   surface: '#1e293b',
   border: '#334155',
@@ -139,7 +139,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   error: '#f87171',
   critical: '#ef4444',
 },
-  cinema: {,
+  cinema: {
   background: '#0a0a0a',
   surface: '#1a1a1a',
   border: '#333333',
@@ -297,7 +297,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
         <OperationalSecurityDashboard
           alerts={securityAlerts}
           metrics={{
-  alerts: {,
+  alerts: {
   total: securityAlerts.length,
   newLast24h: securityAlerts.filter(a => ),
   Date.now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
@@ -313,19 +313,19 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
               avgResponseTime: 45,
               slaCompliance: 96;
   },
-  incidents: {,
+  incidents: {
   active: securityAlerts.filter(a => a.status === 'investigating').length,
   resolved24h: 12,
   avgResolutionTime: 180,
   escalated: securityAlerts.filter(a => a.status === 'escalated').length,
 },
-  system: {,
+  system: {
   overallHealth: 98,
   componentsOperational: 47,
   totalComponents: 50,
   criticalIssues: 2,
 },
-  team: {,
+  team: {
   onlineAnalysts: 8,
   totalAnalysts: 12,
   workload: 'normal' as const,
@@ -428,7 +428,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
 },
   borderRadius: '50%',
           animation: 'spin 1s linear infinite',
-          marginBottom: '24px';
+          marginBottom: '24px'
   }} />
         <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>
           Loading Security Dashboard...
@@ -583,7 +583,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: 600,
-                textTransform: 'uppercase';
+                textTransform: 'uppercase'
   }}>
                 Risk: {securityMetrics.riskLevel}
               </div>

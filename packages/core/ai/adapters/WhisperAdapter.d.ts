@@ -49,7 +49,7 @@ export interface WhisperTranscriptionResult {
         start: number;
         end: number;
     }>;
-    metadata: {,
+    metadata: {
         model: string;
         task: string;
         language: string;
@@ -57,7 +57,7 @@ export interface WhisperTranscriptionResult {
         processing_time: number;
         confidence_score?: number;
     };
-    usage: {,
+    usage: {
         audio_duration: number;
         cost: number;
     };

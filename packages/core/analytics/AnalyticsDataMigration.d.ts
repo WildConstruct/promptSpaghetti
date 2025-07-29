@@ -64,7 +64,7 @@ export interface MigrationResult {
     failedRecords: number;
     skippedRecords: number;
     validationErrors: ValidationError[];
-    performanceMetrics: {,
+    performanceMetrics: {
         recordsPerSecond: number;
         averageBatchTime: number;
         peakMemoryUsage: number;
@@ -88,7 +88,7 @@ export interface DataTransformationRule {
     sourceField: string;
     targetField: string;
     transformationType: 'direct' | 'computed' | 'lookup' | 'conditional';
-    transformation: {,
+    transformation: {
         expression?: string;
         lookupTable?: {
             [key: string]: any;
@@ -113,7 +113,7 @@ export interface MigrationProgress {
     migrationId: string;
     systemName: string;
     status: MigrationStatus;
-    progress: {,
+    progress: {
         percentage: number;
         processedRecords: number;
         totalRecords: number;
@@ -123,7 +123,7 @@ export interface MigrationProgress {
     };
     currentOperation: string;
     lastError?: string;
-    throughput: {,
+    throughput: {
         recordsPerSecond: number;
         bytesPerSecond: number;
     };

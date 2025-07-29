@@ -76,8 +76,8 @@ describe('MFARetryHandler', () => {
   describe('Retry Strategies', () => {
   test('should use exponential backoff strategy', async () => {
   const customHandler = new MFARetryHandler({)
-  operationConfigs: {,
-  [MFAOperation.TOTP_VERIFICATION]: {,
+  operationConfigs: {
+  [MFAOperation.TOTP_VERIFICATION]: {
   maxAttempts: 3,
   strategy: RetryStrategy.EXPONENTIAL,
   baseDelayMs: 100,
@@ -109,8 +109,8 @@ describe('MFARetryHandler', () => {
     });
     test('should use linear backoff strategy', async () => {
   const customHandler = new MFARetryHandler({)
-  operationConfigs: {,
-  [MFAOperation.SMS_SEND]: {,
+  operationConfigs: {
+  [MFAOperation.SMS_SEND]: {
   maxAttempts: 3,
   strategy: RetryStrategy.LINEAR,
   baseDelayMs: 100,
@@ -174,7 +174,7 @@ describe('MFARetryHandler', () => {
   describe('Circuit Breaker', () => {
   test('should open circuit breaker after failure threshold', async () => {
   const customHandler = new MFARetryHandler({)
-  circuitBreaker: {,
+  circuitBreaker: {
   failureThreshold: 2,
   resetTimeoutMs: 60000,
   monitoringWindowMs: 300000,
@@ -209,8 +209,8 @@ describe('MFARetryHandler', () => {
   describe('Timeout Handling', () => {
   test('should timeout long-running operations', async () => {
   const customHandler = new MFARetryHandler({)
-  operationConfigs: {,
-  [MFAOperation.EMAIL_SEND]: {,
+  operationConfigs: {
+  [MFAOperation.EMAIL_SEND]: {
   maxAttempts: 1,
   strategy: RetryStrategy.FIXED,
   baseDelayMs: 100,
@@ -332,7 +332,7 @@ describe('MFARetryHandler', () => {
   const circuitBreakerHandler = jest.fn<unknown, unknown>();
   retryHandler.on('circuitBreakerOpened', circuitBreakerHandler);
   const customHandler = new MFARetryHandler({)
-  circuitBreaker: {,
+  circuitBreaker: {
   failureThreshold: 1,
   resetTimeoutMs: 60000,
   monitoringWindowMs: 300000,
@@ -365,8 +365,8 @@ describe('MFARetryHandler', () => {
     });
     test('should use custom retry configuration', async () => {
   const customHandler = new MFARetryHandler({)
-  operationConfigs: {,
-  [MFAOperation.TOTP_VERIFICATION]: {,
+  operationConfigs: {
+  [MFAOperation.TOTP_VERIFICATION]: {
   maxAttempts: 1,
   strategy: RetryStrategy.FIXED,
   baseDelayMs: 0,

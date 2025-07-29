@@ -40,7 +40,7 @@ export interface CommentStats {
     resolved: number;
     unresolved: number;
     by_author: Record<string, number>;
-    recent_activity: {,
+    recent_activity: {
         today: number;
         this_week: number;
         this_month: number;

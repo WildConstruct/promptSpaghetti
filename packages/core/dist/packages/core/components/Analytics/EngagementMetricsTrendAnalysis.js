@@ -61,7 +61,8 @@ const generateMockEngagementMetrics = () => {
             strength: Math.random(),
             duration: Math.floor(Math.random() * 30) + 7,
             significance: Math.random(),
-            changeRate: (Math.random() - 0.5) * 10, },
+            changeRate: (Math.random() - 0.5) * 10,
+        },
         forecast: {
             predictions: Array.from({ length: 7 }, (_, i) => ({}), timestamp, Date.now() + (i + 1) * 86400000, predictedValue, Math.random() * 100 + 50, confidence, Math.random() * 0.3 + 0.6, range, {
                 lower: Math.random() * 20 + 30,

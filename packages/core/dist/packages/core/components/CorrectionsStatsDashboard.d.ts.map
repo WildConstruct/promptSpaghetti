@@ -1,1 +1,1 @@
-{"version":3,"file":"CorrectionsStatsDashboard.d.ts","sourceRoot":"","sources":["../../../../components/CorrectionsStatsDashboard.tsx"],"names":[],"mappings":""}
+{"version":3,"file":"CorrectionsStatsDashboard.d.ts","sourceRoot":"","sources":["../../../../components/CorrectionsStatsDashboard.tsx"],"names":[],"mappings":"AAAA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAqDnD,UAAU,8BAA8B;IACtC,MAAM,EAAE,OAAO,CAAC;IAChB,OAAO,EAAE,MAAM,IAAI,CAAC;CACrB;AACD,eAAO,MAAM,yBAAyB,EAAE,KAAK,CAAC,EAAE,CAAC,8BAA8B,CAijB9E,CAAC"}

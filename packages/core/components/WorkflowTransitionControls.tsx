@@ -14,22 +14,22 @@ import { useWorkflowStore } from '../stores/workflowStore';
 interface WorkflowTransition {
   id: string;
   from_state_id?: string;
-  to_state_id: string;,
+  to_state_id: string;
   name: string;
   description?: string;
-  requires_approval: boolean;,
+  requires_approval: boolean;
   required_permissions: bigint;
   conditions: Record<string, any>;
   interface WorkflowState {
-  id: string;,
+  id: string;
   name: string;
   color: string;
   icon?: string;
   is_locked: boolean;
   interface WorkflowTransitionControlsProps {
-  resourceId: string;,
+  resourceId: string;
   currentStateId: string;
-  currentUserId: string;,
+  currentUserId: string;
   workspaceId: string;
   onTransitionComplete?: (newStateId: string) => void;
   onApprovalRequested?: (approvalId: string) => void;
@@ -110,7 +110,7 @@ interface WorkflowTransition {
   currentUserId,
   {
   comment: transitionComment,
-  metadata: {,
+  metadata: {
   transition_id: transition.id,
   transition_name: transition.name);
   if (result.success) {

@@ -36,58 +36,58 @@ import {
 // Epic 16 theme imports removed
 
 export interface UserProgress {
-  userId: string;,
+  userId: string;
   level: number;
-  totalXP: number;,
+  totalXP: number;
   nextLevelXP: number;
-  currentLevelXP: number;,
+  currentLevelXP: number;
   joinDate: Date;
-  lastActivity: Date;,
+  lastActivity: Date;
   streakDays: number;
   longestStreak: number;
 }
 export interface EngagementMetrics {
   // Discovery metrics
-  templatesViewed: number;,
+  templatesViewed: number;
   searchesPerformed: number;
-  categoriesExplored: number;,
+  categoriesExplored: number;
   filtersUsed: number;
   // Usage metrics
-  templatesDownloaded: number;,
+  templatesDownloaded: number;
   templatesPurchased: number;
-  templatesImplemented: number;,
+  templatesImplemented: number;
   projectsCompleted: number;
   // Contribution metrics
-  templatesCreated: number;,
+  templatesCreated: number;
   templatesPublished: number;
-  templatesShared: number;,
+  templatesShared: number;
   reviewsWritten: number;
   // Social metrics
-  likesReceived: number;,
+  likesReceived: number;
   sharesReceived: number;
-  followersGained: number;,
+  followersGained: number;
   collaborationsJoined: number;
   // Learning metrics
-  tutorialsCompleted: number;,
+  tutorialsCompleted: number;
   skillsLearned: string;
-  certificationsEarned: number;,
+  certificationsEarned: number;
   learningPathsCompleted: number;
 }
 export interface Milestone {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: 'discovery' | 'usage' | 'creation' | 'social' | 'learning' | 'special';
-  target: number;,
+  target: number;
   current: number;
   completed: boolean;
   completedAt?: Date;
   xpReward: number;
   badgeReward?: string;
-  icon: string;,
+  icon: string;
   tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
-  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-}
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
+  }
 export interface ProgressTrackerProps {
   userId: string;
   variant?: 'full' | 'compact' | 'dashboard';

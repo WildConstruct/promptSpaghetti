@@ -15,22 +15,22 @@
 import { conversionTracker } from './ConversionTracker';
 
 export interface MarketplaceEvent {
-  id: string;,
+  id: string;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   timestamp: number;
-  type: MarketplaceEventType;,
+  type: MarketplaceEventType;
   category: MarketplaceCategory;
   entityId?: string; // Template ID, Creator ID, etc.,
   entityType?: 'template' | 'creator' | 'category' | 'collection';
   value?: number; // Revenue, rating, etc.,
   properties: Record<string, any>;
-  metadata: {,
-  userAgent: string;,
+  metadata: {
+  userAgent: string;
   referrer: string;
   location?: string;
-  deviceType: 'desktop' | 'mobile' | 'tablet';
-};
+  deviceType: 'desktop' | 'mobile' | 'tablet'
+  };
 }
 export type MarketplaceEventType =
   // Discovery & Browse
@@ -70,98 +70,98 @@ export type MarketplaceCategory =
   | 'recommendation';
 
 export interface TemplateMetrics {
-  templateId: string;,
+  templateId: string;
   name: string;
-  creatorId: string;,
+  creatorId: string;
   category: string;
-  metrics: {,
+  metrics: {
   views: number;
-    previews: number;,
+    previews: number;
   downloads: number;
-    purchases: number;,
+    purchases: number;
   favorites: number;
-    shares: number;,
+    shares: number;
   ratings: {;
-  average: number;,
+  average: number;
   count: number;
       distribution: { [stars: number]: number };
     };
-    revenue: {,
+    revenue: {
   total: number;
-  monthly: number;,
+  monthly: number;
   weekly: number;
 };
-    conversionRates: {,
+    conversionRates: {
   viewToPreview: number;
-  previewToDownload: number;,
+  previewToDownload: number;
   viewToFavorite: number;
 };
   };
-  trends: {,
+  trends: {
   viewsGrowth: number;
-  revenueGrowth: number;,
-  ratingTrend: 'improving' | 'stable' | 'declining';
-};
+  revenueGrowth: number;
+  ratingTrend: 'improving' | 'stable' | 'declining'
+  };
 }
 export interface CreatorMetrics {
-  creatorId: string;,
+  creatorId: string;
   name: string;
-  metrics: {,
-  totalTemplates: number;,
+  metrics: {
+  totalTemplates: number;
   totalRevenue: number;
-  totalDownloads: number;,
+  totalDownloads: number;
   averageRating: number;
-  followers: number;,
-  topPerformingTemplate: {,
-  id: string;,
+  followers: number;
+  topPerformingTemplate: {
+  id: string;
   name: string;
   revenue: number;
 };
-    recentPerformance: {,
+    recentPerformance: {
   period: string;
-  revenue: number;,
+  revenue: number;
   downloads: number;
   newFollowers: number;
 };
   };
-  trends: {,
+  trends: {
   revenueGrowth: number;
-  followerGrowth: number;,
-  templatePerformance: 'improving' | 'stable' | 'declining';
-};
+  followerGrowth: number;
+  templatePerformance: 'improving' | 'stable' | 'declining'
+  };
 }
 export interface MarketplaceDashboardData {
-  overview: {,
-  totalRevenue: number;,
+  overview: {
+  totalRevenue: number;
   totalTransactions: number;
-  activeTemplates: number;,
+  activeTemplates: number;
   activeCreators: number;
-  averageRating: number;,
+  averageRating: number;
   conversionRate: number;
 };
-  trends: {,
+  trends: {
   revenueGrowth: number;
-  transactionGrowth: number;,
+  transactionGrowth: number;
   userGrowth: number;
   topCategories: Array<{,
-  category: string;,
+  category: string;
   revenue: number;
   growth: number;
 }>;
   };
-  recommendations: {,
+  recommendations: {
   shown: number;
-  clicked: number;,
+  clicked: number;
   converted: number;
-  ctr: number;,
+  ctr: number;
   conversionRate: number;
 };
-  searchAnalytics: {,
+  searchAnalytics: {
   totalSearches: number;
   topQueries: Array<{,
-  query: string;,
+  query: string;
   count: number;
-  resultsFound: number;,
+  resultsFound: number;
   ctr: number;
 }>;
     zeroResultQueries: Array<{,
@@ -186,7 +186,7 @@ export class MarketplaceMetrics {
         name: 'Character Development Framework',
         creatorId: 'creator-johnsmith',
         category: 'Pre-Production',
-        metrics: {,
+        metrics: {
   views: 2847,
           previews: 892,
           downloads: 267,
@@ -195,12 +195,12 @@ export class MarketplaceMetrics {
           shares: 43,
           ratings: { average: 4.7, count: 89, distribution: { 5: 67, 4: 18, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 3680, monthly: 920, weekly: 230 },
-          conversionRates: {,
+          conversionRates: {
   viewToPreview: 31.3,
   previewToDownload: 29.9,
   viewToFavorite: 5.5,
 },
-  trends: {,
+  trends: {
   viewsGrowth: 23.5,
   revenueGrowth: 18.2,
   ratingTrend: 'improving',
@@ -210,7 +210,7 @@ export class MarketplaceMetrics {
         name: 'Scene Breakdown Template',
         creatorId: 'creator-maryjones',
         category: 'Production',
-        metrics: {,
+        metrics: {
   views: 1934,
           previews: 578,
           downloads: 201,
@@ -219,12 +219,12 @@ export class MarketplaceMetrics {
           shares: 28,
           ratings: { average: 4.5, count: 67, distribution: { 5: 45, 4: 18, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 2900, monthly: 725, weekly: 181 },
-          conversionRates: {,
+          conversionRates: {
   viewToPreview: 29.9,
   previewToDownload: 34.8,
   viewToFavorite: 6.8,
 },
-  trends: {,
+  trends: {
   viewsGrowth: 15.8,
   revenueGrowth: 22.1,
   ratingTrend: 'stable',
@@ -234,7 +234,7 @@ export class MarketplaceMetrics {
         name: 'Three-Act Story Structure',
         creatorId: 'creator-davidbrown',
         category: 'Writing',
-        metrics: {,
+        metrics: {
   views: 3521,
           previews: 1247,
           downloads: 421,
@@ -243,12 +243,12 @@ export class MarketplaceMetrics {
           shares: 67,
           ratings: { average: 4.8, count: 134, distribution: { 5: 102, 4: 28, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 5960, monthly: 1490, weekly: 373 },
-          conversionRates: {,
+          conversionRates: {
   viewToPreview: 35.4,
   previewToDownload: 33.8,
   viewToFavorite: 7.0,
 },
-  trends: {,
+  trends: {
   viewsGrowth: 31.2,
   revenueGrowth: 28.7,
   ratingTrend: 'improving'];
@@ -260,24 +260,24 @@ export class MarketplaceMetrics {
       {
   creatorId: 'creator-johnsmith',
   name: 'John Smith',
-  metrics: {,
+  metrics: {
   totalTemplates: 8,
   totalRevenue: 12450,
   totalDownloads: 1847,
   averageRating: 4.6,
   followers: 234,
-  topPerformingTemplate: {,
+  topPerformingTemplate: {
   id: 'tpl-character-dev-001',
   name: 'Character Development Framework',
   revenue: 3680,
 },
-  recentPerformance: {,
+  recentPerformance: {
   period: 'last 30 days',
   revenue: 920,
   downloads: 267,
   newFollowers: 23,
 },
-  trends: {,
+  trends: {
   revenueGrowth: 18.2,
   followerGrowth: 15.4,
   templatePerformance: 'improving',
@@ -285,24 +285,24 @@ export class MarketplaceMetrics {
       {
   creatorId: 'creator-maryjones',
   name: 'Mary Jones',
-  metrics: {,
+  metrics: {
   totalTemplates: 12,
   totalRevenue: 18750,
   totalDownloads: 2934,
   averageRating: 4.5,
   followers: 378,
-  topPerformingTemplate: {,
+  topPerformingTemplate: {
   id: 'tpl-production-schedule',
   name: 'Production Schedule Template',
   revenue: 4250,
 },
-  recentPerformance: {,
+  recentPerformance: {
   period: 'last 30 days',
   revenue: 1340,
   downloads: 421,
   newFollowers: 31,
 },
-  trends: {,
+  trends: {
   revenueGrowth: 22.1,
   followerGrowth: 12.8,
   templatePerformance: 'stable'];
@@ -323,7 +323,7 @@ export class MarketplaceMetrics {
   /**
    * Track marketplace event
    */
-  public trackEvent(type: MarketplaceEventType,)
+  public trackEvent(type: MarketplaceEventType)
     properties: Record<string, any> = {},
     entityId?: string,
     entityType?: 'template' | 'creator' | 'category' | 'collection',
@@ -340,7 +340,7 @@ export class MarketplaceMetrics {
   entityType,
   value,
   properties,
-  metadata: {,
+  metadata: {
   userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'server',
   referrer: typeof document !== 'undefined' ? document.referrer : '',
   location: properties.location,
@@ -528,9 +528,9 @@ export class MarketplaceMetrics {
    * Generate marketplace insights
    */
   public generateMarketplaceInsights(): Array<{
-  type: 'opportunity' | 'trend' | 'optimization';,
+  type: 'opportunity' | 'trend' | 'optimization';
   title: string;
-  description: string;,
+  description: string;
   impact: 'high' | 'medium' | 'low';
   action: string;
   metrics?: Record<string, number>;

@@ -16,24 +16,24 @@ describe('ConversionDataRelationshipManager', () => {
   type: 'template_purchased',
   category: 'revenue',
   value: 25.00,
-  properties: {,
+  properties: {
   templateId: 'tpl-character-dev-001',
   funnelId: 'marketplace-discovery',
   stepId: 'template-purchase',
   stepOrder: 4,
 },
-  metadata: {,
+  metadata: {
   userAgent: 'test-agent',
   referrer: 'https://example.com',
 },
   deviceFingerprint: 'test-fingerprint',
       crossDeviceUserId: undefined,
-      attributionData: {,
+      attributionData: {
   touchpoints: [],
-  primaryAttribution: {,
+  primaryAttribution: {
   name: 'first_touch',
   weight: 1.0,
-  touchpoint: {,
+  touchpoint: {
   id: 'tp-001',
   timestamp: Date.now(),
   channel: 'direct',
@@ -46,13 +46,13 @@ describe('ConversionDataRelationshipManager', () => {
   },
   assistedAttribution: [];
   },
-  privacyConsent: {,
+  privacyConsent: {
   tracking: true,
   analytics: true,
   personalization: true,
   crossDevice: false,
 },
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: 'stream-123',
   batchId: 'batch-456',
   processed: false,
@@ -104,7 +104,7 @@ describe('ConversionDataRelationshipManager', () => {
     it('should handle events without template context', async () => {
   const eventWithoutTemplate = {
   ...mockBaseEvent,
-  properties: {,
+  properties: {
   funnelId: 'user-onboarding',
   stepId: 'profile-setup',
 };
@@ -141,7 +141,7 @@ describe('ConversionDataRelationshipManager', () => {
       for (const testCase of testCases) {
   const eventWithReferrer = {
   ...mockBaseEvent,
-  metadata: {,
+  metadata: {
   ...mockBaseEvent.metadata,
   referrer: testCase.referrer,
 };
@@ -213,7 +213,7 @@ describe('ConversionDataRelationshipManager', () => {
     it('should handle missing funnel properties gracefully', async () => {
   const eventWithoutFunnel = {
   ...mockBaseEvent,
-  properties: {,
+  properties: {
   templateId: 'tpl-001',
 };
       const enrichedEvent = await manager.enrichConversionEvent(eventWithoutFunnel);
@@ -304,16 +304,16 @@ describe('ConversionDataRelationshipManager', () => {
         type: 'page_view',
         category: 'engagement',
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test',
   referrer: '',
 },
-  attributionData: {,
+  attributionData: {
   touchpoints: [],
-  primaryAttribution: {,
+  primaryAttribution: {
   name: 'direct',
   weight: 1.0,
-  touchpoint: {,
+  touchpoint: {
   id: 'direct',
   timestamp: Date.now(),
   channel: 'direct',
@@ -326,13 +326,13 @@ describe('ConversionDataRelationshipManager', () => {
   },
   assistedAttribution: [];
   },
-  privacyConsent: {,
+  privacyConsent: {
   tracking: true,
   analytics: true,
   personalization: false,
   crossDevice: false,
 },
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: 'stream',
   batchId: 'batch',
   processed: false,
@@ -363,7 +363,7 @@ describe('ConversionDataRelationshipManager', () => {
   const eventWithNulls = {
   ...mockBaseEvent,
   value: null,
-  properties: {,
+  properties: {
   templateId: undefined,
   funnelId: null,
 } as any;

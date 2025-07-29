@@ -13,25 +13,25 @@ import {
   ColorThreshold
 } from '../../services/Epic16InteractiveElementsService';
 interface GamifiedProgressBarProps {
-  element: ProgressBarElement;,
+  element: ProgressBarElement;
   interactiveService: Epic16InteractiveElementsService;
-  userId: string;,
+  userId: string;
   currentValue: number;
   onMilestoneReached?: (milestone: Milestone) => void;
   onComplete?: () => void;
   className?: string;
   interface Achievement {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   icon: string;
   unlocked: boolean;
   unlockedAt?: Date;
   value: number;
   interface AnimationState {
-  isAnimating: boolean;,
+  isAnimating: boolean;
   newValue: number;
-  previousValue: number;,
+  previousValue: number;
   celebrationActive: boolean;
   milestoneJustReached?: Milestone;
   export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({,)
@@ -157,7 +157,7 @@ interface GamifiedProgressBarProps {
   type: InteractionType.CUSTOM,
             user_id: userId,
             timestamp: new Date(),
-            context: {,
+            context: {
   page_url: window.location.href,
               referrer: document.referrer,
               user_agent: navigator.userAgent,
@@ -169,13 +169,13 @@ interface GamifiedProgressBarProps {
               session_id: 'session-' + Date.now(),
               ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'milestone_reached',
   milestone_id: newlyReachedMilestone.label,
   milestone_value: newlyReachedMilestone.value,
   progress_percentage: progressPercentage,
 },
-  result: {,
+  result: {
   success: true,
               conversion: true,
               data: { milestone: newlyReachedMilestone }
@@ -323,7 +323,7 @@ interface GamifiedProgressBarProps {
   top: `${particle.y}%`}
 },
   backgroundColor: particle.color,
-              animationDuration: '1s';
+              animationDuration: '1s'
   }}
           />
         ))}
@@ -393,10 +393,10 @@ interface GamifiedProgressBarProps {
       <style>{`
         @keyframes scale-in {
           0% {
-            transform: scale(0.8);,
+            transform: scale(0.8);
   opacity: 0;
           100% {
-            transform: scale(1);,
+            transform: scale(1);
   opacity: 1;
         .animate-scale-in {
           animation: scale-in 0.3s ease-out;

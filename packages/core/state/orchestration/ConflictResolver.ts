@@ -9,11 +9,11 @@ import { StateChange } from '../containers/BaseStateContainer';
 // Conflict resolution types
 
 export interface StateConflict<T = any> {
-  id: string;,
+  id: string;
   timestamp: number;
-  localChange: StateChange<T>;,
+  localChange: StateChange<T>;
   remoteChange: StateChange<T>;
-  conflictType: ConflictType;,
+  conflictType: ConflictType;
   severity: ConflictSeverity;
   affectedPaths: string;
   metadata?: Record<string, any>;
@@ -36,11 +36,11 @@ export interface StateConflict<T = any> {
   | 'SECURITY_PRIORITY'
   | 'ROLLBACK_ALL';
   export interface ConflictResolution<T = any> {
-  id: string;,
+  id: string;
   conflictId: string;
-  strategy: ResolutionStrategy;,
+  strategy: ResolutionStrategy;
   resolvedState: T;
-  timestamp: number;,
+  timestamp: number;
   appliedChanges: StateChange<T>[];
   rejectedChanges: StateChange<T>[];
   userAction?: 'approved' | 'rejected' | 'modified';
@@ -49,7 +49,7 @@ export interface StateConflict<T = any> {
   name: string;
   domain?: string;
   pathPattern?: RegExp;
-  conflictTypes: ConflictType;,
+  conflictTypes: ConflictType;
   strategy: ResolutionStrategy;
   priority: number;
   condition?: (conflict: StateConflict) => boolean;
@@ -71,16 +71,16 @@ export interface GraphMutation {
   timestamp: number;
 }
 export interface Permission {
-  resource: string;,
+  resource: string;
   action: string;
   level: 'none' | 'read' | 'write' | 'admin';
   conditions?: Record<string, any>;
 }
 export interface DashboardLayout {
   widgets: Array<{,
-  id: string;,
+  id: string;
   x: number;
-  y: number;,
+  y: number;
   w: number;
   h: number;
   minW?: number;
@@ -100,7 +100,7 @@ export class ConflictResolver {
   constructor() {
   this.setupDefaultRules();
   // Main conflict detection and resolution
-  async detectAndResolveConflicts<T>(localChanges: StateChange<T>[],)
+  async detectAndResolveConflicts<T>(localChanges: StateChange<T>[])
   remoteChanges: StateChange<T>[],
   currentState: T,
   domain: string): Promise<ConflictResolution<T>[]> {,
@@ -121,7 +121,7 @@ export class ConflictResolver {
         // Keep in active conflicts for retry
         this.activeConflicts.set(conflict.id, conflict);
     return resolutions;
-  private detectConflicts<T>(localChanges: StateChange<T>[],)
+  private detectConflicts<T>(localChanges: StateChange<T>[])
     remoteChanges: StateChange<T>[],
     currentState: T,
     domain: string): StateConflict<T>[] {,
@@ -133,7 +133,7 @@ export class ConflictResolver {
   if (conflict) {
   conflicts.push(conflict);
   return conflicts;
-  private analyzeChangePair<T>(localChange: StateChange<T>,)
+  private analyzeChangePair<T>(localChange: StateChange<T>)
   remoteChange: StateChange<T>,
   currentState: T,
   domain: string): StateConflict<T> | null {,
@@ -156,7 +156,7 @@ export class ConflictResolver {
   conflictType,
   severity,
   affectedPaths: overlappingPaths,
-  metadata: {,
+  metadata: {
   domain,
   localTimestamp: localChange.timestamp,
   remoteTimestamp: remoteChange.timestamp,

@@ -49,7 +49,7 @@ describe('DeviceVerificationService', () => {
   createdAt: new Date(),
   lastSeen: new Date(),
   seenCount: 1,
-  basic: {,
+  basic: {
   userAgent: testContext.userAgent,
   language: 'en-US',
   platform: 'MacOS',
@@ -58,7 +58,7 @@ describe('DeviceVerificationService', () => {
   timezone: 'America/Los_Angeles',
   timezoneOffset: -480,
 },
-  enhanced: {,
+  enhanced: {
   screen: { width: 1920, height: 1080, colorDepth: 24, pixelRatio: 2, orientation: 'landscape' },
       browser: { name: 'Chrome', version: '126', engine: 'Blink', engineVersion: '126' },
       plugins: [],
@@ -67,7 +67,7 @@ describe('DeviceVerificationService', () => {
       canvas: { fingerprint: 'canvas-fp-123', geometry: 'geo-123', text: 'text-123' },
       audio: { fingerprint: 'audio-fp-123', sampleRate: 48000, channelCount: 2, contextState: 'running' }
   },
-  comprehensive: {,
+  comprehensive: {
   hardware: { cpuCores: 8, memory: 16, touchSupport: false, sensors: [], bluetooth: true, usb: true, webrtc: { supported: true, localCandidates: [], stunServers: [] } },
       network: { connectionType: 'wifi', downlink: 100, effectiveType: '4g', rtt: 50 },
       permissions: { camera: 'granted', microphone: 'granted', location: 'prompt', notifications: 'granted', persistentStorage: 'granted' },
@@ -130,13 +130,13 @@ describe('DeviceVerificationService', () => {
   sessionTimeoutMinutes: 30,
   maxAttemptsPerChallenge: 3,
   maxVerificationAttempts: 5,
-  riskThresholds: {,
+  riskThresholds: {
   lowRisk: 20,
   mediumRisk: 50,
   highRisk: 80,
   requireManualReview: 95,
 },
-  challengeRequirements: {,
+  challengeRequirements: {
   [RiskLevel.LOW]: [ChallengeType.EMAIL_CODE],
   [RiskLevel.MEDIUM]: [ChallengeType.EMAIL_CODE, ChallengeType.SMS_CODE],
   [RiskLevel.HIGH]: [ChallengeType.EMAIL_CODE, ChallengeType.SMS_CODE, ChallengeType.CAPTCHA],
@@ -430,7 +430,7 @@ describe('DeviceVerificationService', () => {
   test('should detect VPN usage', async () => {
   const vpnLocation: LocationData = {,
   ...testLocation,
-  network: {,
+  network: {
   ...testLocation.network,
   vpnDetected: true,
 };
@@ -466,7 +466,7 @@ describe('DeviceVerificationService', () => {
 };
       const spoofedFingerprint: DeviceFingerprint = {
   ...testFingerprint,
-  basic: {,
+  basic: {
   ...testFingerprint.basic,
   userAgent: spoofedContext.userAgent,
 };

@@ -130,7 +130,7 @@ showPanel ? ()
                                 }, children: [user.permissions.slice(0, 2).map(permission => ()
                                         < span, key = { permission }, style = {}, {
                                         background: `${getRoleColor(user.role)}20`
-                                    }), ", color: getRoleColor(user.role), fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 500, textTransform: 'capitalize'; }} >", permission.replace('_', ' ')] }))
+                                    }), ", color: getRoleColor(user.role), fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 500, textTransform: 'capitalize' }} >", permission.replace('_', ' ')] }))
     :
 ;
 {

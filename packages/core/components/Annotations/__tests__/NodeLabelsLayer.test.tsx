@@ -25,7 +25,7 @@ const mockNodes: Node = [
     width: 180,
     height: 90];
 const mockLabelConfigs: Record<string, NodeLabelConfig> = {
-  'label-1': {,
+  'label-1': {
   id: 'label-1',
   nodeId: 'node-1',
   customLabel: 'Custom Label 1',
@@ -448,7 +448,7 @@ describe('NodeLabelsLayer Component', () => {
     });
     test('handles invalid label configs gracefully', () => {
   const invalidConfigs = {
-  'invalid-label': {,
+  'invalid-label': {
   id: 'invalid-label',
   nodeId: 'non-existent-node',
 } as any

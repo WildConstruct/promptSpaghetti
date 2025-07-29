@@ -9,7 +9,7 @@ import { ReactionData, ReactionSummary } from '../components/Reactions/ReactionB
 
 export interface ReactionAnalytics {
     contentId: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -18,22 +18,22 @@ export interface ReactionAnalytics {
     reactionBreakdown: Record<string, {
         count: number;
         percentage: number;
-        trend: 'increasing' | 'decreasing' | 'stable';
-    }>;
-    sentimentAnalysis: {,
+        trend: 'increasing' | 'decreasing' | 'stable'
+  }>;
+    sentimentAnalysis: {
         overallScore: number;
         positivePercentage: number;
         neutralPercentage: number;
         negativePercentage: number;
         emotionalDistribution: Record<string, number>;
     };
-    engagementMetrics: {,
+    engagementMetrics: {
         reactionRate: number;
         velocityScore: number;
         viralityIndicator: number;
         retentionScore: number;
     };
-    temporalPatterns: {,
+    temporalPatterns: {
         hourlyDistribution: number[];
         dailyDistribution: number[];
         peakActivityHours: number[];
@@ -43,7 +43,7 @@ export interface ReactionAnalytics {
             change: number;
         }>;
     };
-    comparativeMetrics: {,
+    comparativeMetrics: {
         vsAverageContent: number;
         categoryRanking: number;
         similarContentComparison: Array<{,
@@ -55,7 +55,7 @@ export interface ReactionAnalytics {
 
 export interface ReactionBehaviorInsights {
     userId: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -67,13 +67,13 @@ export interface ReactionBehaviorInsights {
         reactionCount: number;
         preferredReactions: string[];
     }>;
-    behaviorPatterns: {,
+    behaviorPatterns: {
         reactsQuickly: boolean;
         consideredReactor: boolean;
         positivityScore: number;
         influencer: boolean;
     };
-    engagementTiming: {,
+    engagementTiming: {
         mostActiveHours: number[];
         averageResponseTime: number;
         burstyBehavior: boolean;
@@ -81,7 +81,7 @@ export interface ReactionBehaviorInsights {
 
 export interface ReactionTrend {
     reactionType: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -97,7 +97,7 @@ export interface ReactionTrend {
         end: Date;
         intensity: number;
     }>;
-    seasonality: {,
+    seasonality: {
         hasPattern: boolean;
         cycleLength?: number;
         amplitude?: number;
@@ -131,7 +131,7 @@ export interface ReactionConfig {
     reactionCooldownMs: number;
     enableRealTimeUpdates: boolean;
     analyticsRetentionDays: number;
-    spamDetection: {,
+    spamDetection: {
         enabled: boolean;
         maxReactionsPerMinute: number;
         suspiciousPatternThreshold: number;

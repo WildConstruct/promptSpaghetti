@@ -214,7 +214,7 @@ export class ExtensionVersionManager {
   /**
    * Check compatibility between extensions
    */
-  public checkCompatibility(extension: ExtensionManifest,)
+  public checkCompatibility(extension: ExtensionManifest)
     systemVersion: string,
     availableExtensions: Map<string, ExtensionManifest>
   ): CompatibilityResult {
@@ -227,7 +227,7 @@ export class ExtensionVersionManager {
   /**
   * Perform actual compatibility check
   */
-  private performCompatibilityCheck(extension: ExtensionManifest,)
+  private performCompatibilityCheck(extension: ExtensionManifest)
   systemVersion: string,
   availableExtensions: Map<string, ExtensionManifest>): CompatibilityResult {,
   const issues: CompatibilityIssue = [];
@@ -294,7 +294,7 @@ export class ExtensionVersionManager {
   /**
    * Check system version compatibility
    */
-  private checkSystemCompatibility(extension: ExtensionManifest, systemVersion: string): {,
+  private checkSystemCompatibility(extension: ExtensionManifest, systemVersion: string): {
   compatible: boolean;
     message?: string;
     const systemVer = this.parseVersion(systemVersion);
@@ -344,7 +344,7 @@ export class ExtensionVersionManager {
   /**
   * Get upgrade path for extension
   */
-  public getUpgradePath(currentVersion: string,)
+  public getUpgradePath(currentVersion: string)
   targetVersion: string,
   availableVersions: string): UpgradePath {,
   const current = this.parseVersion(currentVersion);
@@ -444,9 +444,9 @@ export class ExtensionVersionManager {
   this.compatibilityCache.clear();
   // Types and Interfaces
   interface ParsedVersion {
-  major: number;,
+  major: number;
   minor: number;
-  patch: number;,
+  patch: number;
   prerelease: string;
   build: string;
   type ReleaseType = 'major' | 'minor' | 'patch' | 'prerelease';
@@ -454,19 +454,19 @@ export class ExtensionVersionManager {
   type RiskLevel = 'low' | 'medium' | 'high';
   type UpgradeStepType = 'major' | 'minor' | 'patch' | 'prerelease';
   interface Comparator {
-  operator: string;,
+  operator: string;
   version: SemanticVersion;
   satisfies: (version: SemanticVersion) => boolean;
   type RangeSet = Comparator;
   export interface CompatibilityResult {
-  compatible: boolean;,
+  compatible: boolean;
   issues: CompatibilityIssue;
-  warnings: string;,
+  warnings: string;
   systemVersion: string;
   extensionVersion: string;
 }
 export interface CompatibilityIssue {
-  type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';,
+  type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';
   severity: 'error' | 'warning';
   message: string;
   dependencyId?: string;
@@ -482,11 +482,11 @@ export interface UpgradePath {
   estimatedDuration?: string;
 }
 export interface UpgradeStep {
-  fromVersion: string;,
+  fromVersion: string;
   toVersion: string;
-  type: UpgradeStepType;,
+  type: UpgradeStepType;
   risk: RiskLevel;
-  breakingChanges: boolean;,
+  breakingChanges: boolean;
   recommendedActions: string;
   // Export singleton
 }

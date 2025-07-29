@@ -21,77 +21,77 @@ interface ConsentPreferenceCenterProps {
   jurisdiction?: string;
   interface ConsentSettings {
   categories: Record<string, CategoryConsent>;
-  communications: CommunicationPreferences;,
+  communications: CommunicationPreferences;
   dataProcessing: DataProcessingPreferences;
-  retention: RetentionPreferences;,
+  retention: RetentionPreferences;
   sharing: SharingPreferences;
   lastUpdated: Date;
   interface CategoryConsent {
-  enabled: boolean;,
+  enabled: boolean;
   granularChoices: Record<string, boolean>;
   lastModified: Date;
   expiresAt?: Date;
   source: string;
   interface CommunicationPreferences {
-  email: ChannelPreference;,
+  email: ChannelPreference;
   sms: ChannelPreference;
-  push: ChannelPreference;,
+  push: ChannelPreference;
   phone: ChannelPreference;
   post: ChannelPreference;
   interface ChannelPreference {
-  enabled: boolean;,
+  enabled: boolean;
   frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
-  topics: string;,
-  quietHours: {,
-  enabled: boolean;,
+  topics: string;
+  quietHours: {
+  enabled: boolean;
   start: string;
-  end: string;,
+  end: string;
   timezone: string;
 };
 interface DataProcessingPreferences {
-  analytics: ProcessingConsent;,
+  analytics: ProcessingConsent;
   personalization: ProcessingConsent;
-  marketing: ProcessingConsent;,
+  marketing: ProcessingConsent;
   research: ProcessingConsent;
   aiProcessing: ProcessingConsent;
   interface ProcessingConsent {
-  enabled: boolean;,
+  enabled: boolean;
   allowAutomatedDecisions: boolean;
-  allowProfiling: boolean;,
+  allowProfiling: boolean;
   allowSharing: boolean;
-  allowInternationalTransfers: boolean;,
+  allowInternationalTransfers: boolean;
   retentionPeriod: number; // days,
   interface RetentionPreferences {
-  minimumRetention: boolean;,
+  minimumRetention: boolean;
   autoDelete: boolean;
   customRetentionPeriods: Record<string, number>;
-  deleteInactiveData: boolean;,
+  deleteInactiveData: boolean;
   inactivityThreshold: number; // days,
   interface SharingPreferences {
-  internal: SharingConsent;,
+  internal: SharingConsent;
   partners: SharingConsent;
-  vendors: SharingConsent;,
+  vendors: SharingConsent;
   research: SharingConsent;
   legal: SharingConsent;
   interface SharingConsent {
-  enabled: boolean;,
+  enabled: boolean;
   purposes: string;
-  recipientTypes: string;,
+  recipientTypes: string;
   geographicRestrictions: string;
   requiresNotification: boolean;
   interface ConsentHistoryEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  action: 'GRANTED' | 'WITHDRAWN' | 'MODIFIED' | 'EXPIRED' | 'RENEWED';,
+  action: 'GRANTED' | 'WITHDRAWN' | 'MODIFIED' | 'EXPIRED' | 'RENEWED';
   category: string;
-  details: string;,
+  details: string;
   method: string;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   interface DataRightRequest {
-  id: string;,
+  id: string;
   type: DataRequestType;
-  status: 'SUBMITTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED';,
+  status: 'SUBMITTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED';
   submittedAt: Date;
   completedAt?: Date;
   description: string;
@@ -106,84 +106,84 @@ interface DataProcessingPreferences {
 }) => {
   const [activeSection, setActiveSection] = useState('overview');
   const [settings, setSettings] = useState<ConsentSettings>({)
-  categories: {,
+  categories: {
   essential: {;
   enabled: true,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'SYSTEM';
+        source: 'SYSTEM'
   },
-  functional: {,
+  functional: {
   enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER';
+        source: 'USER'
   },
-  analytics: {,
+  analytics: {
   enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER';
+        source: 'USER'
   },
-  marketing: {,
+  marketing: {
   enabled: false,
         granularChoices: {},
         lastModified: new Date(),
-        source: 'USER';
+        source: 'USER'
   },
-  communications: {,
-  email: {,
+  communications: {
+  email: {
   enabled: true,
   frequency: 'WEEKLY',
   topics: ['product_updates'],
-  quietHours: {,
+  quietHours: {
   enabled: true,
   start: '22:00',
   end: '08:00',
   timezone: 'UTC',
 },
-  sms: {,
+  sms: {
   enabled: false,
   frequency: 'NEVER',
   topics: [],
-  quietHours: {,
+  quietHours: {
   enabled: true,
   start: '21:00',
   end: '09:00',
   timezone: 'UTC',
 },
-  push: {,
+  push: {
   enabled: true,
   frequency: 'IMMEDIATE',
   topics: ['security_alerts'],
-  quietHours: {,
+  quietHours: {
   enabled: false,
   start: '22:00',
   end: '08:00',
   timezone: 'UTC',
 },
-  phone: {,
+  phone: {
   enabled: false,
   frequency: 'NEVER',
   topics: [],
-  quietHours: {,
+  quietHours: {
   enabled: true,
   start: '20:00',
   end: '09:00',
   timezone: 'UTC',
 },
-  post: {,
+  post: {
   enabled: false,
   frequency: 'NEVER',
   topics: [],
-  quietHours: {,
+  quietHours: {
   enabled: false,
   start: '00:00',
   end: '00:00',
   timezone: 'UTC',
 },
-  dataProcessing: {,
-  analytics: {,
+  dataProcessing: {
+  analytics: {
   enabled: false,
   allowAutomatedDecisions: false,
   allowProfiling: false,
@@ -191,7 +191,7 @@ interface DataProcessingPreferences {
   allowInternationalTransfers: false,
   retentionPeriod: 365,
 },
-  personalization: {,
+  personalization: {
   enabled: false,
   allowAutomatedDecisions: true,
   allowProfiling: true,
@@ -199,7 +199,7 @@ interface DataProcessingPreferences {
   allowInternationalTransfers: false,
   retentionPeriod: 730,
 },
-  marketing: {,
+  marketing: {
   enabled: false,
   allowAutomatedDecisions: false,
   allowProfiling: false,
@@ -207,7 +207,7 @@ interface DataProcessingPreferences {
   allowInternationalTransfers: false,
   retentionPeriod: 365,
 },
-  research: {,
+  research: {
   enabled: false,
   allowAutomatedDecisions: false,
   allowProfiling: false,
@@ -215,7 +215,7 @@ interface DataProcessingPreferences {
   allowInternationalTransfers: false,
   retentionPeriod: 1825,
 },
-  aiProcessing: {,
+  aiProcessing: {
   enabled: false,
   allowAutomatedDecisions: false,
   allowProfiling: false,
@@ -223,43 +223,43 @@ interface DataProcessingPreferences {
   allowInternationalTransfers: false,
   retentionPeriod: 365,
 },
-  retention: {,
+  retention: {
   minimumRetention: true,
       autoDelete: true,
       customRetentionPeriods: {},
       deleteInactiveData: true,
       inactivityThreshold: 1095 // 3 years;
   },
-  sharing: {,
-  internal: {,
+  sharing: {
+  internal: {
   enabled: true,
   purposes: ['service_provision'],
   recipientTypes: ['subsidiaries'],
   geographicRestrictions: [],
   requiresNotification: false,
 },
-  partners: {,
+  partners: {
   enabled: false,
   purposes: [],
   recipientTypes: [],
   geographicRestrictions: ['EU', 'US'],
   requiresNotification: true,
 },
-  vendors: {,
+  vendors: {
   enabled: false,
   purposes: [],
   recipientTypes: [],
   geographicRestrictions: ['EU', 'US'],
   requiresNotification: true,
 },
-  research: {,
+  research: {
   enabled: false,
   purposes: [],
   recipientTypes: [],
   geographicRestrictions: [],
   requiresNotification: true,
 },
-  legal: {,
+  legal: {
   enabled: true,
   purposes: ['legal_compliance'],
   recipientTypes: ['authorities'],
@@ -356,9 +356,9 @@ interface DataProcessingPreferences {
   if (category === 'essential' && !enabled) return; // Cannot disable essential
   setSettings(prev => ({)
   ...prev,
-  categories: {,
+  categories: {
   ...prev.categories,
-  [category]: {,
+  [category]: {
   ...prev.categories[category],
   enabled,
   lastModified: new Date(),
@@ -369,9 +369,9 @@ interface DataProcessingPreferences {
     updates: Partial<ChannelPreference>) => {,
   setSettings(prev => ({)
   ...prev,
-  communications: {,
+  communications: {
   ...prev.communications,
-  [channel]: {,
+  [channel]: {
   ...prev.communications[channel],
   ...updates
 }));

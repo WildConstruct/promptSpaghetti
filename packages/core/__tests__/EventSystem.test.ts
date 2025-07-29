@@ -139,7 +139,7 @@ describe('EventSystem', () => {
   const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
   const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
   eventBus.subscribe({)
-  timeWindow: {,
+  timeWindow: {
   start: oneHourAgo,
   end: oneHourFromNow,
 }, handler);

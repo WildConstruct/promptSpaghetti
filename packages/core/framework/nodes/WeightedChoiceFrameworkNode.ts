@@ -9,7 +9,7 @@ import { AdvancedNodeConfig, AdvancedExecutionContext } from '../../runtime/adva
 import { IOPortDefinition } from '../../runtime/io-system';
 
 export interface WeightedChoiceData {
-  choices: string;,
+  choices: string;
   weights: number;
   normalizeWeights?: boolean;
   seedOverride?: string;
@@ -33,15 +33,15 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   description: 'Randomly selects from a list of choices based on assigned weights',
   category: 'basic',
   version: '2.0.0',
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: true,
   stateful: false,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 },
-  ports: {,
+  ports: {
   inputs: [,
   {
   id: 'choices',
@@ -72,7 +72,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   required: false,
   description: 'Index of the selected choice'] as IOPortDefinition;
   },
-  metadata: {,
+  metadata: {
   author: 'Framework Team',
   tags: ['random', 'choice', 'weighted', 'selection'],
   deprecated: false,
@@ -128,14 +128,14 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   /**
   * Get current choice statistics
   */
-  getChoiceStatistics(): {,
-  totalChoices: number;,
+  getChoiceStatistics(): {
+  totalChoices: number;
   totalWeight: number;
-  averageWeight: number;,
+  averageWeight: number;
   choiceDistribution: Array<{,
-  choice: string;,
+  choice: string;
   weight: number;
-  normalizedWeight: number;,
+  normalizedWeight: number;
   percentage: number;
 }>;
     const choiceDistribution = this.data.choices.map((choice, index) => {
@@ -162,9 +162,9 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   results: Record<string, number>;
   percentages: Record<string, number>;
   expectedVsActual: Array<{,
-  choice: string;,
+  choice: string;
   expected: number;
-  actual: number;,
+  actual: number;
   deviation: number;
 }>;
     const results: Record<string, number> = {};

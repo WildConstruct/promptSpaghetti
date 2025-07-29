@@ -263,7 +263,7 @@ export class GraphSerializer {
   /**
   * Utility function for easy serialization
   */
-  export function serializeGraph(graph: Graph,)
+  export function serializeGraph(graph: Graph)
   metadata?: SerializationMetadata,
   options?: SerializationOptions): string {,
   return GraphSerializer.serialize(graph, metadata, options);

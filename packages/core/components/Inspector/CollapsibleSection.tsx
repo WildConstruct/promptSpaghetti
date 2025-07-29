@@ -1,9 +1,9 @@
 import React from 'react';
 
 export interface CollapsibleSectionProps {
-  title: string;,
+  title: string;
   collapsed: boolean;
-  onToggle: () => void;,
+  onToggle: () => void;
   children: React.ReactNode;
 }
 export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)

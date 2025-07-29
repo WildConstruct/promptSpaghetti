@@ -257,7 +257,7 @@ baselines `);}
   /**
    * Record a new measurement against a baseline
    */
-  async recordMeasurement(baselineId: string,)
+  async recordMeasurement(baselineId: string)
     actualValue: number,
     context?: Record<string, any>,
     notes?: string
@@ -454,7 +454,7 @@ $;
   /**
    * Update baseline target or tolerance
    */
-  async updateBaseline(baselineId: string,)
+  async updateBaseline(baselineId: string)
     updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>
   ): Promise<void> {
     const baseline = this.baselines.get(baselineId);
@@ -522,8 +522,8 @@ baseline: $;
   /**
   * Export baseline data for reporting
   */
-  exportBaselineData(framework?: string, daysPeriod: number = 30): {,
-  baselines: ComplianceBaseline;,
+  exportBaselineData(framework?: string, daysPeriod: number = 30): {
+  baselines: ComplianceBaseline;
   measurements: ComplianceMeasurement;
   summary: Record<string, any>;
   const baselines = Array.from(this.baselines.values());
@@ -557,10 +557,10 @@ days `}
   private determineStatus(deviation: number, toleranceThreshold: number): ComplianceMeasurement['status'] {,
   const absDeviation = Math.abs(deviation);
   if (absDeviation <= toleranceThreshold) {
-  return deviation >= 0 ? 'above_baseline' : 'at_baseline';
-} else if (absDeviation <= toleranceThreshold * 2) {
-      return 'below_baseline';
-    } else {
+  return deviation >= 0 ? 'above_baseline' : 'at_baseline'
+  } else if (absDeviation <= toleranceThreshold * 2) {
+      return 'below_baseline'
+  } else {
   return 'critical_deviation';
   private calculateConsistencyScore(measurements: ComplianceMeasurement): number {,
   if (measurements.length < 2) return 100;
@@ -578,12 +578,12 @@ days `}
   const trendValue = last.actualValue - first.actualValue;
   const criticalCount = recentMeasurements.filter(m => m.status === 'critical_deviation').length;
   if (criticalCount >= recentMeasurements.length / 2) {
-  return 'critical';
-} else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
-      return 'stable';
-    } else if (trendValue > 0) {
-      return 'improving';
-    } else {
+  return 'critical'
+  } else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
+      return 'stable'
+  } else if (trendValue > 0) {
+      return 'improving'
+  } else {
       return 'declining';
   private generateRecommendations(baseline: ComplianceBaseline, )
     measurements: ComplianceMeasurement, 
@@ -697,9 +697,9 @@ $;
   }
       .sort((a, b) => b.currentGap - a.currentGap)
       .slice(0, 10);
-  private async createAlert(alertData: {,)
+  private async createAlert(alertData: {)
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;,
+  message: string;
   baselineId: string;
   measurement: ComplianceMeasurement;
 }): Promise<void> {

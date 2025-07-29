@@ -58,7 +58,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
   deterministic: true,
   cacheable: false, // Don't cache since output depends on variable state,
   stateful: false,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 };
@@ -174,12 +174,12 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
   id: this.id,
   type: 'Conditional',
   config: this.getConfig(),
-  data: {,
+  data: {
   branches: this.branches,
   defaultOutput: this.defaultOutput,
   conditionalConfig: this.conditionalConfig,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };
@@ -308,7 +308,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
           { 
             nodeId: this.id,
             nodeType: 'Conditional',
-            additionalData: {,
+            additionalData: {
   pattern: pattern.source,
               patternIndex: dangerous.indexOf(pattern));
         throw new Error(`Dangerous pattern detected: ${pattern.source}`);}
@@ -316,7 +316,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Conditional nodes
  */
-export function createConditionalNode(id: string,)
+export function createConditionalNode(id: string)
   branches: ConditionalBranch,
   defaultOutput?: string,
   config?: ConditionalConfig

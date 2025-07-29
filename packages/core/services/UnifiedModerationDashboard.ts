@@ -13,49 +13,49 @@ import { RBACService } from './RBACService';
 import { CommentAnalyticsService } from './CommentAnalyticsService';
 
 export interface UnifiedDashboardConfig {
-  enableRealTimeUpdates: boolean;,
+  enableRealTimeUpdates: boolean;
   autoRefreshInterval: number; // milliseconds,
-  maxQueueItems: number;,
+  maxQueueItems: number;
   enableAdvancedFiltering: boolean;
-  enablePerformanceTracking: boolean;,
+  enablePerformanceTracking: boolean;
   enableMobileModerator: boolean;
-  defaultModerationMode: 'manual' | 'assisted' | 'automated';,
+  defaultModerationMode: 'manual' | 'assisted' | 'automated';
   escalationThreshold: number;
-  workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced';
-}
+  workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced'
+  }
 export interface DashboardOverview {
-  timestamp: Date;,
-  summary: {,
-  totalItems: number;,
+  timestamp: Date;
+  summary: {
+  totalItems: number;
   pendingReview: number;
-  autoApproved: number;,
+  autoApproved: number;
   autoRejected: number;
-  escalated: number;,
+  escalated: number;
   appealed: number;
 };
-  queues: {,
+  queues: {
   highPriority: number;
-  mediumPriority: number;,
+  mediumPriority: number;
   lowPriority: number;
   automated: number;
 };
-  performance: {,
+  performance: {
   avgProcessingTime: number; // minutes,
-  throughputLast24h: number;,
+  throughputLast24h: number;
   moderatorEfficiency: number; // percentage,
   slaCompliance: number; // percentage,
 };
-  alerts: ModerationAlert;,
+  alerts: ModerationAlert;
   trends: {;
-  volumeTrend: 'increasing' | 'decreasing' | 'stable';,
+  volumeTrend: 'increasing' | 'decreasing' | 'stable';
   violationTrend: 'increasing' | 'decreasing' | 'stable';
-  performanceTrend: 'improving' | 'declining' | 'stable';
-};
+  performanceTrend: 'improving' | 'declining' | 'stable'
+  };
 }
 export interface ModerationAlert {
-  id: string;,
+  id: string;
   type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
   timestamp: Date;
   data?: Record<string, unknown>;
@@ -63,15 +63,15 @@ export interface ModerationAlert {
   assignedTo?: string;
 }
 export interface ModerationWorkload {
-  moderatorId: string;,
+  moderatorId: string;
   currentLoad: number;
-  capacity: number;,
+  capacity: number;
   utilization: number; // percentage,
   averageResolutionTime: number; // minutes,
   accuracy: number; // percentage,
-  specializations: string;,
+  specializations: string;
   performanceRating: number; // 1-5 scale,
-  availabilityWindow: {,
+  availabilityWindow: {
   start: string; // HH:MM,
   end: string; // HH:MM,
   timezone: string;
@@ -81,14 +81,14 @@ export interface AdvancedSearchQuery {
   contentTypes?: string;
   statuses?: string;
   priorities?: string;
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   moderators?: string;
   policies?: string;
   confidence?: {
-  min: number;,
+  min: number;
   max: number;
 };
   keywords?: string;
@@ -99,7 +99,7 @@ export interface AdvancedSearchQuery {
   offset?: number;
 }
 export interface BulkModerationAction {
-  actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';,
+  actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
   itemIds: string;
   reason?: string;
   assignTo?: string;
@@ -107,23 +107,23 @@ export interface BulkModerationAction {
   scheduledFor?: Date;
 }
 export interface DashboardMetrics {
-  realTime: {,
-  activeModerators: number;,
+  realTime: {
+  activeModerators: number;
   itemsBeingReviewed: number;
-  averageWaitTime: number;,
+  averageWaitTime: number;
   systemLoad: number;
 };
-  historical: {,
+  historical: {
   dailyVolume: Array<{ date: string; volume: number }>;
     resolutionTimes: Array<{ date: string; avgTime: number }>;
     accuracyTrends: Array<{ date: string; accuracy: number }>;
     violationTypes: Record<string, number>;
   };
-  predictions: {,
+  predictions: {
   expectedVolume24h: number;
-  estimatedBacklog: number;,
-  resourceNeeds: {,
-  additionalModerators: number;,
+  estimatedBacklog: number;
+  resourceNeeds: {
+  additionalModerators: number;
   peakHours: string;
 };
   };
@@ -187,7 +187,7 @@ export class UnifiedModerationDashboard {
   // Compile comprehensive overview
   const overview: DashboardOverview = {,
   timestamp: new Date(),
-  summary: {,
+  summary: {
   totalItems: automatedStats.totalProcessed || 0,
   pendingReview: queueStatus.pendingCount || 0,
   autoApproved: automatedStats.autoApproved || 0,
@@ -195,13 +195,13 @@ export class UnifiedModerationDashboard {
   escalated: automatedStats.escalated || 0,
   appealed: automatedStats.appealed || 0,
 },
-  queues: {,
+  queues: {
   highPriority: queueStatus.highPriority || 0,
   mediumPriority: queueStatus.mediumPriority || 0,
   lowPriority: queueStatus.lowPriority || 0,
   automated: queueStatus.automated || 0,
 },
-  performance: {,
+  performance: {
   avgProcessingTime: performanceData.avgProcessingTime || 0,
   throughputLast24h: performanceData.throughput24h || 0,
   moderatorEfficiency: performanceData.efficiency || 0,
@@ -223,7 +223,7 @@ export class UnifiedModerationDashboard {
    */
   async advancedSearch(query: AdvancedSearchQuery, moderatorId: string): Promise<{,
   items: any;
-  totalCount: number;,
+  totalCount: number;
   aggregations: Record<string, any>;
   suggestions: string;
 }> {
@@ -263,7 +263,7 @@ export class UnifiedModerationDashboard {
     actions: BulkModerationAction,
     moderatorId: string,
   ): Promise<{
-    successful: number;,
+    successful: number;
   failed: number;
     errors: Array<{ itemId: string; error: string }>;
     summary: Record<string, number>;
@@ -320,7 +320,7 @@ export class UnifiedModerationDashboard {
     distribution: 'urgent' | 'balanced' | 'expertise',
   ): Promise<{
     assignments: Array<{ moderatorId: string; itemIds: string }>;
-    unassigned: string;,
+    unassigned: string;
   reasoning: string;
   }> {
     const workloads = await this.getModeratorWorkloads();
@@ -485,7 +485,7 @@ export class UnifiedModerationDashboard {
   accuracy: 96.8,
   specializations: ['content_moderation', 'spam_detection'],
   performanceRating: 4.2,
-  availabilityWindow: {,
+  availabilityWindow: {
   start: '09:00',
   end: '17:00',
   timezone: 'UTC',
@@ -577,7 +577,7 @@ export class UnifiedModerationDashboard {
   return {
   expectedVolume24h: 1400,
   estimatedBacklog: 45,
-  resourceNeeds: {,
+  resourceNeeds: {
   additionalModerators: 2,
   peakHours: ['14:00', '15:00', '16:00'],
 };

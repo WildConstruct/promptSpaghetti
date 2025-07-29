@@ -406,9 +406,12 @@ return async (req, res, next) => {
                                                                                                                                 break: ,
                                                                                                                                 // Apply the security middleware
                                                                                                                                 const: securityMiddleware = createSecurityMiddleware(securityConfig),
-                                                                                                                                securityMiddleware({}, as, any, res) { } }()
+                                                                                                                                securityMiddleware({}, as, any, res) { }
+                                                                                                                            }()
                                                                                                                         }
-                                                                                                                    } } }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
                                                                                                         };
                                                                                                         { }
                                                                                                         ;

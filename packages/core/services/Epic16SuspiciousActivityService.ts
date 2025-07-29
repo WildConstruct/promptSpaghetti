@@ -10,27 +10,27 @@ import { EventEmitter } from 'events';
 // Core suspicious activity interfaces
 
 export interface SuspiciousActivity {
-  id: string;,
+  id: string;
   type: ActivityType;
-  severity: SeverityLevel;,
+  severity: SeverityLevel;
   confidence: number; // 0-1,
   // Context information
   userId?: string;
-  sessionId: string;,
+  sessionId: string;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   timestamp: Date;
   // Activity details
-  description: string;,
+  description: string;
   evidence: ActivityEvidence;
-  patterns: DetectionPattern;,
+  patterns: DetectionPattern;
   metadata: Record<string, any>;
   // Detection information
-  detectionMethod: DetectionMethod;,
+  detectionMethod: DetectionMethod;
   detectedBy: string; // detector ID or rule name,
   riskScore: number; // 0-100,
   // Status and handling
-  status: ActivityStatus;,
+  status: ActivityStatus;
   investigated: boolean;
   investigatedBy?: string;
   investigatedAt?: Date;
@@ -140,7 +140,7 @@ export enum SeverityLevel {
     const rule: DetectionRule = {,
   id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
-  analytics: {,
+  analytics: {
   totalTriggers: 0,
   truePositives: 0,
   falsePositives: 0,
@@ -259,7 +259,7 @@ export enum SeverityLevel {
         description: this.generateActivityDescription(rule, event),
         evidence: this.collectEvidence(rule, event, relatedEvents),
         patterns: this.identifyPatterns(rule, event, relatedEvents),
-        metadata: {,
+        metadata: {
   ruleId: rule.id,
   ruleName: rule.name,
   eventType: event.type,
@@ -400,16 +400,16 @@ export enum SeverityLevel {
   operator: ConditionOperator.EQUALS,
   value: 'login_failed',
   weight: 1.0],
-  aggregation: {,
+  aggregation: {
   type: AggregationType.COUNT,
   groupBy: ['ipAddress'],
   minimumEvents: 5,
 },
-  timeWindow: {,
+  timeWindow: {
   duration: 300000, // 5 minutes,
   sliding: true,
 },
-  threshold: {,
+  threshold: {
   value: 5,
   operator: ConditionOperator.GREATER_THAN,
   dynamic: false,
@@ -443,16 +443,16 @@ export enum SeverityLevel {
   operator: ConditionOperator.EQUALS,
   value: 'login_success',
   weight: 1.0],
-  aggregation: {,
+  aggregation: {
   type: AggregationType.COUNT,
   groupBy: ['userId'],
   minimumEvents: 1,
 },
-  timeWindow: {,
+  timeWindow: {
   duration: 86400000, // 24 hours,
   sliding: false,
 },
-  threshold: {,
+  threshold: {
   value: 1,
   operator: ConditionOperator.GREATER_THAN,
   dynamic: true,
@@ -610,24 +610,24 @@ export enum SeverityLevel {
 export interface SuspiciousActivityEvent {
   eventType: string;
   userId?: string;
-  sessionId: string;,
+  sessionId: string;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   timestamp: Date;
   geolocation?: GeoLocation;
   deviceFingerprint?: DeviceFingerprint;
   metadata: Record<string, any>;
 }
 export interface SecurityMetrics {
-  totalActivities: number;,
+  totalActivities: number;
   severityDistribution: Record<SeverityLevel, number>;
   typeDistribution: Record<ActivityType, number>;
   statusDistribution: Record<ActivityStatus, number>;
   topAttackers: Array<{ ip: string; count: number }>;
   topTargets: Array<{ userId: string; count: number }>;
-  detectionEffectiveness: number;,
+  detectionEffectiveness: number;
   responseTime: number;
-  falsePositiveRate: number;,
+  falsePositiveRate: number;
   trendsOverTime: any;
 }
 export default Epic16SuspiciousActivityService;

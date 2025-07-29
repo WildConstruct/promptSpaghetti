@@ -109,14 +109,14 @@ export class PerformanceBaselineManager {
   /**
   * Create a new performance baseline
   */
-  createBaseline(config: {,)
-  id: string;,
+  createBaseline(config: {)
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: BaselineCategory;
-  type: MeasurementType;,
+  type: MeasurementType;
   unit: string;
-  target: number;,
+  target: number;
   warning: number;
   critical: number;
   tags?: string;
@@ -188,9 +188,9 @@ export class PerformanceBaselineManager {
   /**
    * Check if a measurement violates baseline thresholds
    */
-  checkThreshold(baselineId: string, value: number): {,
+  checkThreshold(baselineId: string, value: number): {
   status: 'ok' | 'warning' | 'critical';
-    message: string;,
+    message: string;
   baseline: PerformanceBaseline;
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
@@ -247,9 +247,9 @@ export class PerformanceBaselineManager {
   /**
    * Get performance trend for a baseline
    */
-  getTrend(baselineId: string, days: number = 7): {,
+  getTrend(baselineId: string, days: number = 7): {
   trend: 'improving' | 'stable' | 'degrading';
-    percentage: number;,
+    percentage: number;
   measurements: PerformanceMeasurement;
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
@@ -274,25 +274,25 @@ export class PerformanceBaselineManager {
     const isLowerBetter = this.isLowerBetter(baseline.category, baseline.type);
     let trend: 'improving' | 'stable' | 'degrading';
     if (Math.abs(percentage) < 5) {
-      trend = 'stable';
-    } else if (isLowerBetter) {
-  trend = percentage < 0 ? 'improving' : 'degrading';
-} else {
+      trend = 'stable'
+  } else if (isLowerBetter) {
+  trend = percentage < 0 ? 'improving' : 'degrading'
+  } else {
       trend = percentage > 0 ? 'improving' : 'degrading';
     return { trend, percentage: Math.abs(percentage), measurements: recentMeasurements };
   /**
    * Generate baseline report
    */
   generateReport(): {
-  summary: {,
-  totalBaselines: number;,
+  summary: {
+  totalBaselines: number;
   activeBaselines: number;
   categories: Record<BaselineCategory, number>;
   alerts: number;
 };
     baselines: Array<{,
   baseline: PerformanceBaseline;
-  status: 'ok' | 'warning' | 'critical';,
+  status: 'ok' | 'warning' | 'critical';
   trend: 'improving' | 'stable' | 'degrading';
   lastMeasurement?: PerformanceMeasurement;
 }>;
@@ -318,7 +318,7 @@ export class PerformanceBaselineManager {
 };
     });
     return {
-  summary: {,
+  summary: {
   totalBaselines: baselines.length,
   activeBaselines: baselines.filter(b => b.enabled).length,
   categories,
@@ -336,16 +336,16 @@ export class PerformanceBaselineManager {
   updatedAt: new Date(),
   environment: this.environment,
   baselines: Array.from(this.baselines.values()),
-  metadata: {,
-  systemInfo: {,
+  metadata: {
+  systemInfo: {
   nodeVersion: process.version,
   platform: process.platform,
   arch: process.arch,
 },
-  buildInfo: {,
+  buildInfo: {
   timestamp: new Date().toISOString(),
 },
-  testConfig: {,
+  testConfig: {
   environment: this.environment,
 };
   /**

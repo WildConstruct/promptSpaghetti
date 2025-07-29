@@ -18,20 +18,20 @@ export interface ModerationRequest {
     id: string;
     contentId: string;
     contentType: ContentType;
-    content: {,
+    content: {
         title?: string;
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
     };
-    author: {,
+    author: {
         userId: string;
         userEmail?: string;
         trustScore?: number;
         previousViolations?: number;
         accountAge?: number;
     };
-    context: {,
+    context: {
         source: string;
         timestamp: string;
         ipAddress?: string;
@@ -59,7 +59,7 @@ export interface ModerationResult {
         languageQuality: number;
         contentSimilarity?: number;
     };
-    trustAnalysis: {,
+    trustAnalysis: {
         authorTrustScore: number;
         trustTrend: 'increasing' | 'stable' | 'decreasing';
         riskFactors: string[];
@@ -86,7 +86,7 @@ export interface ModerationRule {
     enabled: boolean;
     priority: number;
     contentTypes: ContentType[];
-    triggers: {,
+    triggers: {
         policyViolation?: boolean;
         trustScoreBelow?: number;
         mlFlagThreshold?: number;
@@ -125,7 +125,7 @@ export interface ModerationWorkflowStep {
 export interface ModerationQueue {
     id: string;
     name: string;
-    filters: {,
+    filters: {
         contentTypes?: ContentType[];
         severityLevels?: ModerationSeverity[];
         requiresReview?: boolean;
@@ -135,7 +135,7 @@ export interface ModerationQueue {
         condition: string;
         priority: number;
     }>;
-    autoAssignment: {,
+    autoAssignment: {
         enabled: boolean;
         rules: Array<{,
             condition: string;

@@ -17,7 +17,7 @@ export type FilteringAction = 'allow' | 'allow_with_warnings' | 'require_review'
 export interface ContentFilteringRequest {
     id: string;
     content_type: MarketplaceContentType;
-    content_data: {,
+    content_data: {
         title?: string;
         description?: string;
         body?: string;
@@ -27,7 +27,7 @@ export interface ContentFilteringRequest {
         skill_level?: SkillLevel;
         target_audience?: string[];
     };
-    context: {,
+    context: {
         user_id: string;
         user_role: 'buyer' | 'seller' | 'creator' | 'contributor' | 'moderator';
         submission_type: 'new' | 'update' | 'revision';
@@ -35,20 +35,20 @@ export interface ContentFilteringRequest {
         community_context?: CommunityContext;
         learning_context?: LearningContext;
     };
-    integration_data: {,
+    integration_data: {
         contribution_id?: string;
         template_id?: string;
         tutorial_id?: string;
         learning_path_id?: string;
         related_content_ids?: string[];
     };
-    filtering_config: {,
+    filtering_config: {
         categories_to_check: FilteringCategory[];
         strictness_level: 'permissive' | 'standard' | 'strict' | 'enterprise';
         auto_fix_enabled: boolean;
         learning_mode: boolean;
-        priority: 'low' | 'medium' | 'high' | 'urgent';
-    };
+        priority: 'low' | 'medium' | 'high' | 'urgent'
+  };
 
 export interface MarketplaceContext {
     template_type?: string;
@@ -79,7 +79,7 @@ export interface ContentFilteringResult {
     overall_confidence: number;
     processing_time_ms: number;
     category_results: CategoryFilterResult[];
-    quality_assessment: {,
+    quality_assessment: {
         overall_score: number;
         content_completeness: number;
         language_quality: number;
@@ -87,14 +87,14 @@ export interface ContentFilteringResult {
         user_experience_score: number;
         accessibility_score: number;
     };
-    marketplace_analysis: {,
+    marketplace_analysis: {
         market_fit_score: number;
         competitive_differentiation: number;
         monetization_potential: number;
         user_demand_indicator: number;
         template_effectiveness_prediction: number;
     };
-    community_integration: {,
+    community_integration: {
         knowledge_value_score: number;
         community_engagement_potential: number;
         expertise_level_match: number;
@@ -147,12 +147,12 @@ export interface ContentIssue {
     description: string;
     location?: string;
     evidence: string[];
-    impact_assessment: {,
+    impact_assessment: {
         user_experience_impact: 'low' | 'medium' | 'high';
         business_impact: 'low' | 'medium' | 'high';
         compliance_risk: 'low' | 'medium' | 'high';
-        reputation_risk: 'low' | 'medium' | 'high';
-    };
+        reputation_risk: 'low' | 'medium' | 'high'
+  };
     resolution_required: boolean;
     resolution_deadline?: string;
 
@@ -163,13 +163,13 @@ export interface ImprovementSuggestion {
     title: string;
     description: string;
     rationale: string;
-    implementation: {,
+    implementation: {
         difficulty: 'easy' | 'medium' | 'hard';
         estimated_time_minutes: number;
         required_expertise: string[];
         automated_assistance_available: boolean;
     };
-    expected_impact: {,
+    expected_impact: {
         quality_improvement: number;
         user_satisfaction_improvement: number;
         marketplace_performance_boost: number;
@@ -191,20 +191,20 @@ export interface AutoFixSuggestion {
 export interface ComplianceStatus {
     overall_compliant: boolean;
     compliance_score: number;
-    policy_compliance: {,
+    policy_compliance: {
         community_guidelines: boolean;
         marketplace_terms: boolean;
         content_policy: boolean;
         intellectual_property: boolean;
         accessibility_standards: boolean;
     };
-    regulatory_compliance: {,
+    regulatory_compliance: {
         data_protection: boolean;
         consumer_protection: boolean;
         advertising_standards: boolean;
         content_labeling: boolean;
     };
-    platform_standards: {,
+    platform_standards: {
         quality_thresholds: boolean;
         technical_requirements: boolean;
         user_experience_standards: boolean;
@@ -223,19 +223,19 @@ export interface ComplianceViolation {
 export interface SafetyAssessment {
     overall_safe: boolean;
     safety_score: number;
-    content_safety: {,
+    content_safety: {
         toxicity_level: number;
         spam_probability: number;
         misinformation_risk: number;
         harmful_content_detected: boolean;
     };
-    user_safety: {,
+    user_safety: {
         privacy_risk: number;
         security_risk: number;
         financial_risk: number;
         reputation_risk: number;
     };
-    community_safety: {,
+    community_safety: {
         disruption_potential: number;
         abuse_potential: number;
         manipulation_risk: number;
@@ -362,7 +362,7 @@ export interface FilteringRule {
     priority: number;
     enabled: boolean;
     learning_enabled: boolean;
-    metadata: {,
+    metadata: {
         created_by: string;
         created_at: string;
         updated_at: string;
@@ -383,7 +383,7 @@ export interface FilteringRuleAction {
     notification_required: boolean;
 
 export interface FilteringConfiguration {
-    global_settings: {,
+    global_settings: {
         default_strictness: 'permissive' | 'standard' | 'strict' | 'enterprise';
         auto_fix_enabled: boolean;
         learning_mode_enabled: boolean;
@@ -391,13 +391,13 @@ export interface FilteringConfiguration {
     };
     category_settings: Record<FilteringCategory, CategorySettings>;
     content_type_settings: Record<MarketplaceContentType, ContentTypeSettings>;
-    integration_settings: {,
+    integration_settings: {
         moderation_service_enabled: boolean;
         contribution_workflow_integration: boolean;
         analytics_tracking_enabled: boolean;
         quality_gate_enforcement: boolean;
     };
-    performance_settings: {,
+    performance_settings: {
         batch_size: number;
         timeout_ms: number;
         retry_attempts: number;

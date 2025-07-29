@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { User, Crown, Shield } from 'lucide-react';
 interface MentionUser {
-  id: string;,
+  id: string;
   name: string;
   email?: string;
   avatar_url?: string;
   role?: 'owner' | 'admin' | 'editor' | 'viewer';
   online?: boolean;
   interface CommentMentionsProps {
-  workspaceId: string;,
+  workspaceId: string;
   query: string;
-  onSelect: (userId: string, userName: string) => void;,
+  onSelect: (userId: string, userName: string) => void;
   onClose: () => void;
   maxResults?: number;
   const CommentMentions: React.FC<CommentMentionsProps> = ({ ),

@@ -31,29 +31,29 @@ export declare const useConnectionAnnotations: ()
   autoOptimizePositions }: UseConnectionAnnotationsProps
 ) => UseConnectionAnnotationsReturn;
 export declare const connectionAnnotationPresets: {
-    dataFlow: {,
-        labelStyle: {,
+    dataFlow: {
+        labelStyle: {
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    control: {,
-        labelStyle: {,
+    control: {
+        labelStyle: {
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    dependency: {,
-        labelStyle: {,
+    dependency: {
+        labelStyle: {
             color: string;
             backgroundColor: string;
             border: string;
         };
     };
-    error: {,
-        labelStyle: {,
+    error: {
+        labelStyle: {
             color: string;
             backgroundColor: string;
             border: string;

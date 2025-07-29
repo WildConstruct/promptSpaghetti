@@ -8,25 +8,25 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface ModalProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  title: string;,
+  title: string;
   children: ReactNode;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   closeOnOverlayClick?: boolean;
@@ -178,7 +178,7 @@ export const Modal: React.FC<ModalProps> = ({)
           overflow: 'hidden',
           transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)',
           transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          outline: 'none';
+          outline: 'none'
   }}
       >
         {/* Modal Header */}
@@ -232,8 +232,8 @@ export const Modal: React.FC<ModalProps> = ({)
                 e.currentTarget.style.boxShadow = `0 0 0 2px ${uiColors.accent.primary}`;}
               }}
               onBlur={(e) => {
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+                e.currentTarget.style.boxShadow = 'none'
+  }}
             >
               <FiX size={20} />
             </button>

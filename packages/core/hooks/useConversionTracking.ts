@@ -84,9 +84,9 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
 });
   }, [trackDirectorAction]);
   // Track preview generation events
-  const trackPreviewGeneration = useCallback((previewConfig: {,)
+  const trackPreviewGeneration = useCallback((previewConfig: {)
   nodeCount: number;
-  edgeCount: number;,
+  edgeCount: number;
   seedCount: number;
   executionTime?: number;
 }) => {
@@ -115,9 +115,9 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
 });
   }, [trackDirectorAction]);
   // Track project save events
-  const trackProjectSave = useCallback((projectData: {,)
+  const trackProjectSave = useCallback((projectData: {)
   nodeCount: number;
-  edgeCount: number;,
+  edgeCount: number;
   projectId: string;
   isFirstSave?: boolean;
 }) => {
@@ -131,7 +131,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
 });
   }, []);
   // Track help system interactions
-  const trackHelpInteraction = useCallback((helpContext: {,)
+  const trackHelpInteraction = useCallback((helpContext: {)
   helpContentId: string;
   userLevel: string;
   triggerAction?: string;
@@ -147,9 +147,9 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
 });
   }, []);
   // Track export generation
-  const trackExportGeneration = useCallback((exportData: {,)
+  const trackExportGeneration = useCallback((exportData: {)
   format: string;
-  projectSize: number;,
+  projectSize: number;
   exportTime: number;
 }) => {
   conversionTracker.trackEvent('export_generated', {)
@@ -173,7 +173,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
 });
   }, []);
   // Track template usage
-  const trackTemplateUsage = useCallback((templateData: {,)
+  const trackTemplateUsage = useCallback((templateData: {)
   templateId: string;
   templateCategory: string;
   isFirstTemplate?: boolean;

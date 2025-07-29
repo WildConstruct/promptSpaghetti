@@ -4,13 +4,13 @@ import { DragReorderList } from '../WeightControls/DragReorderList';
 import { WeightPresets, WeightPreset } from '../WeightControls/WeightPresets';
 
 export interface WeightControlOption {
-  id: string;,
+  id: string;
   text: string;
   weight: number;
   locked?: boolean;
   // Removed duplicate type definition - using the one from WeightPresets component
   interface WeightControlSliderProps {
-  options: WeightControlOption;,
+  options: WeightControlOption;
   onOptionsChange: (options: WeightControlOption) => void;
   onPreviewRequest?: (options: WeightControlOption) => void;
   visualization?: 'pie' | 'bar' | 'slider-only';
@@ -78,7 +78,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
         background: '#2d3748',
         borderRadius: 6,
         color: 'white',
-        textAlign: 'center';
+        textAlign: 'center'
   }}>
         <p>No options to weight. Add some choices first.</p>
       </div>
@@ -88,7 +88,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
   padding: 16,
       background: '#2d3748',
       borderRadius: 6,
-      color: 'white';
+      color: 'white'
   }}>
       <h3 style={{ marginBottom: 16, color: '#e2e8f0' }}>Weight Controls</h3>
       {/* Visualization Section */}

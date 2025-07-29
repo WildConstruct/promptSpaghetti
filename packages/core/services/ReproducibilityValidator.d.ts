@@ -15,13 +15,13 @@ export interface ReproducibilityValidationReport {
     errors: ValidationError[];
     warnings: ValidationWarning[];
     suggestions: ValidationSuggestion[];
-    integrity: {,
+    integrity: {
         configurationValid: boolean;
         seedsValid: boolean;
         versionCompatible: boolean;
         checksumValid: boolean;
     };
-    performance: {,
+    performance: {
         estimatedReproductionTime: number;
         complexityScore: number;
         memoryRequirement: number;

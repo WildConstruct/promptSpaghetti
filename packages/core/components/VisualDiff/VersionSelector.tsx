@@ -3,17 +3,17 @@
 import React, { useMemo } from 'react';
 
 export interface Version {
-  id: string;,
+  id: string;
   version_number: number;
-  description: string;,
+  description: string;
   created_at: Date;
   created_by?: string;
   is_current?: boolean;
 }
 export interface VersionSelectorProps {
-  graphId: string;,
+  graphId: string;
   versions: Version;
-  sourceVersionId: string;,
+  sourceVersionId: string;
   targetVersionId: string;
   onVersionChange: (sourceId: string, targetId: string) => void;
   className?: string;

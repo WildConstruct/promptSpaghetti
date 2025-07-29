@@ -10,38 +10,38 @@ import {
   optimizeLabelPositions 
 } from '../components/Annotations/ConnectionAnnotations';
 interface ConnectionAnnotationsState {
-  selectedEdgeId: string | null;,
+  selectedEdgeId: string | null;
   showAllLabels: boolean;
-  labelEditMode: boolean;,
+  labelEditMode: boolean;
   smartPositioning: boolean;
   interface UseConnectionAnnotationsProps {
-  edges: Edge;,
+  edges: Edge;
   onEdgesChange: (edges: Edge) => void;
   autoOptimizePositions?: boolean;
   interface UseConnectionAnnotationsReturn {
   // State
-  annotatedEdges: AnnotatedEdge;,
+  annotatedEdges: AnnotatedEdge;
   selectedEdgeId: string | null;
-  showAllLabels: boolean;,
+  showAllLabels: boolean;
   labelEditMode: boolean;
   smartPositioning: boolean;
   // Actions
   addLabel: (edgeId: string, label: string, options?: Partial<AnnotatedEdge>) => void;
-  updateLabel: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;,
-  removeLabel: (edgeId: string) => void;,
-  toggleLabel: (edgeId: string) => void;,
+  updateLabel: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
+  removeLabel: (edgeId: string) => void;
+  toggleLabel: (edgeId: string) => void;
   selectEdge: (edgeId: string | null) => void;
   // Bulk operations
-  showAllLabelsToggle: () => void;,
+  showAllLabelsToggle: () => void;
   hideAllLabels: () => void;
-  clearAllLabels: () => void;,
+  clearAllLabels: () => void;
   optimizePositions: () => void;
   // Mode toggles
-  setLabelEditMode: (enabled: boolean) => void;,
+  setLabelEditMode: (enabled: boolean) => void;
   setSmartPositioning: (enabled: boolean) => void;
   // Utility
-  getEdgeLabel: (edgeId: string) => string | undefined;,
-  hasLabel: (edgeId: string) => boolean;,
+  getEdgeLabel: (edgeId: string) => string | undefined;
+  hasLabel: (edgeId: string) => boolean;
   getVisibleLabelsCount: () => number;
   export const useConnectionAnnotations = ({)
   edges,
@@ -201,26 +201,26 @@ interface ConnectionAnnotationsState {
 // Connection annotation utilities for common use cases
 export const connectionAnnotationPresets = {
   // Common label styles for different connection types
-  dataFlow: {,
-  labelStyle: {,
+  dataFlow: {
+  labelStyle: {
   color: '#4299e1',
   backgroundColor: 'rgba(66, 153, 225, 0.1)',
   border: '1px solid #4299e1',
 },
-  control: {,
-  labelStyle: {,
+  control: {
+  labelStyle: {
   color: '#ed8936',
   backgroundColor: 'rgba(237, 137, 54, 0.1)',
   border: '1px solid #ed8936',
 },
-  dependency: {,
-  labelStyle: {,
+  dependency: {
+  labelStyle: {
   color: '#9f7aea',
   backgroundColor: 'rgba(159, 122, 234, 0.1)',
   border: '1px solid #9f7aea',
 },
-  error: {,
-  labelStyle: {,
+  error: {
+  labelStyle: {
   color: '#f56565',
   backgroundColor: 'rgba(245, 101, 101, 0.1)',
   border: '1px solid #f56565',
@@ -242,7 +242,7 @@ export const labelTemplates = {
 };
 
 // Helper to create preset connections
-export const createPresetConnection = (baseEdge: Edge,)
+export const createPresetConnection = (baseEdge: Edge)
   preset: keyof typeof connectionAnnotationPresets,
   label: string): AnnotatedEdge => {,
   return createAnnotatedEdge()

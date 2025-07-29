@@ -79,38 +79,38 @@ export enum DashboardType {
   STATUS = 'status'                  // Status indicators and health checks
   // Dashboard Configuration
   export interface DashboardConfig {
-  id: string;,
+  id: string;
   type: DashboardType;
-  title: string;,
+  title: string;
   description: string;
-  layout: DashboardLayout;,
+  layout: DashboardLayout;
   widgets: WidgetConfiguration;
-  permissions: DashboardPermissions;,
+  permissions: DashboardPermissions;
   refreshInterval: number; // milliseconds,
-  autoRefresh: boolean;,
+  autoRefresh: boolean;
   theme: DashboardTheme;
   customStyles?: Record<string, any>;
-  metadata: DashboardMetadata;,
+  metadata: DashboardMetadata;
   dataClassification: DataClassificationLevel;
   // Layout Configuration
 }
 export interface DashboardLayout {
-  type: 'grid' | 'masonry' | 'custom';,
+  type: 'grid' | 'masonry' | 'custom';
   columns: number;
   rows?: number;
-  gap: number;,
+  gap: number;
   responsive: boolean;
   breakpoints?: LayoutBreakpoint;
   regions?: LayoutRegion;
 }
 export interface LayoutBreakpoint {
-  name: string;,
+  name: string;
   minWidth: number;
   columns: number;
   gap?: number;
 }
 export interface LayoutRegion {
-  id: string;,
+  id: string;
   name: string;
   gridArea?: string;
   minHeight?: number;
@@ -120,27 +120,27 @@ export interface LayoutRegion {
   // Widget Configuration
 }
 export interface WidgetConfiguration {
-  id: string;,
+  id: string;
   type: string;
-  category: WidgetCategory;,
+  category: WidgetCategory;
   title: string;
-  position: WidgetPosition;,
+  position: WidgetPosition;
   size: WidgetSize;
   config: Record<string, any>;
-  dataSource: DataSourceConfig;,
+  dataSource: DataSourceConfig;
   permissions: WidgetPermissions;
   refreshInterval?: number;
   autoRefresh?: boolean;
   customStyles?: Record<string, any>;
 }
 export interface WidgetPosition {
-  x: number;,
+  x: number;
   y: number;
   order?: number;
   region?: string;
 }
 export interface WidgetSize {
-  width: number;,
+  width: number;
   height: number;
   minWidth?: number;
   minHeight?: number;
@@ -150,7 +150,7 @@ export interface WidgetSize {
   // Data Source Configuration
 }
 export interface DataSourceConfig {
-  type: 'realtime' | 'batch' | 'static';,
+  type: 'realtime' | 'batch' | 'static';
   source: string;
   endpoint?: string;
   query?: string;
@@ -160,200 +160,200 @@ export interface DataSourceConfig {
   authentication?: AuthenticationConfig;
 }
 export interface AggregationConfig {
-  groupBy: string;,
+  groupBy: string;
   timeWindow: string;
   functions: AggregationFunction;
 }
 export interface AggregationFunction {
-  field: string;,
+  field: string;
   function: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
   alias?: string;
 }
 export interface CachingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   ttl: number; // seconds,
   invalidationRules?: string;
 }
 export interface AuthenticationConfig {
-  required: boolean;,
+  required: boolean;
   method: 'oauth' | 'apikey' | 'certificate' | 'none';
   credentials?: Record<string, string>;
   // Permission System
 }
 export interface DashboardPermissions {
-  view: SecurityRole;,
+  view: SecurityRole;
   edit: SecurityRole;
-  delete: SecurityRole;,
+  delete: SecurityRole;
   export: SecurityRole;
-  share: SecurityRole;,
+  share: SecurityRole;
   adminOnly: boolean;
   dataClassificationRequirement?: DataClassificationLevel;
 }
 export interface WidgetPermissions {
-  view: SecurityRole;,
+  view: SecurityRole;
   configure: SecurityRole;
-  export: SecurityRole;,
+  export: SecurityRole;
   drillDown: SecurityRole;
   dataAccess: DataClassificationLevel;
   // Metadata
 }
 export interface DashboardMetadata {
-  version: string;,
+  version: string;
   createdAt: Date;
-  updatedAt: Date;,
+  updatedAt: Date;
   createdBy: string;
-  updatedBy: string;,
+  updatedBy: string;
   tags: string;
-  category: string;,
+  category: string;
   organization: string;
-  compliance: ComplianceMetadata;,
+  compliance: ComplianceMetadata;
   usage: UsageMetadata;
 }
 export interface ComplianceMetadata {
-  frameworks: string;,
+  frameworks: string;
   requirements: string;
-  auditRequired: boolean;,
+  auditRequired: boolean;
   retentionPeriod: number; // days,
   dataResidency: string;
 }
 export interface UsageMetadata {
-  viewCount: number;,
+  viewCount: number;
   lastViewed: Date;
-  popularWidgets: string;,
+  popularWidgets: string;
   averageSessionDuration: number; // seconds,
   peakUsageHours: number;
   // Widget Registry
 }
 export interface WidgetDefinition {
-  type: string;,
+  type: string;
   name: string;
-  category: WidgetCategory;,
+  category: WidgetCategory;
   description: string;
-  icon: string;,
+  icon: string;
   component: string; // React component name,
   configSchema: any; // JSON schema for configuration,
-  dataRequirements: DataRequirement;,
+  dataRequirements: DataRequirement;
   minSize: WidgetSize;
-  maxSize: WidgetSize;,
+  maxSize: WidgetSize;
   defaultConfig: Record<string, any>;
-  permissions: WidgetPermissions;,
+  permissions: WidgetPermissions;
   tags: string;
   version: string;
 }
 export interface DataRequirement {
-  field: string;,
+  field: string;
   type: 'number' | 'string' | 'boolean' | 'date' | 'object';
-  required: boolean;,
+  required: boolean;
   description: string;
   format?: string;
   validation?: ValidationRule;
 }
 export interface ValidationRule {
-  type: 'range' | 'pattern' | 'enum' | 'custom';,
+  type: 'range' | 'pattern' | 'enum' | 'custom';
   params: Record<string, any>;
   message: string;
   // Theme Configuration
 }
 export interface ThemeConfig {
-  name: DashboardTheme;,
+  name: DashboardTheme;
   displayName: string;
-  colors: ColorPalette;,
+  colors: ColorPalette;
   typography: TypographyConfig;
-  spacing: SpacingConfig;,
+  spacing: SpacingConfig;
   shadows: ShadowConfig;
-  borders: BorderConfig;,
+  borders: BorderConfig;
   animations: AnimationConfig;
   accessibility: AccessibilityConfig;
 }
 export interface ColorPalette {
-  primary: string;,
+  primary: string;
   secondary: string;
-  accent: string;,
+  accent: string;
   background: string;
-  surface: string;,
+  surface: string;
   text: string;
-  textSecondary: string;,
+  textSecondary: string;
   textMuted: string;
-  success: string;,
+  success: string;
   warning: string;
-  error: string;,
+  error: string;
   critical: string;
-  info: string;,
+  info: string;
   border: string;
   shadow: string;
 }
 export interface TypographyConfig {
-  fontFamily: string;,
-  fontSize: {,
-  xs: string;,
+  fontFamily: string;
+  fontSize: {
+  xs: string;
   sm: string;
-  base: string;,
+  base: string;
   lg: string;
   xl: string;
   '2xl': string;
   '3xl': string;
 };
-  fontWeight: {,
+  fontWeight: {
   light: number;
-  normal: number;,
+  normal: number;
   medium: number;
-  semibold: number;,
+  semibold: number;
   bold: number;
 };
-  lineHeight: {,
+  lineHeight: {
   tight: number;
-  normal: number;,
+  normal: number;
   relaxed: number;
 };
 }
 export interface SpacingConfig {
-  xs: string;,
+  xs: string;
   sm: string;
-  md: string;,
+  md: string;
   lg: string;
   xl: string;
   '2xl': string;
   '3xl': string;
 }
 export interface ShadowConfig {
-  sm: string;,
+  sm: string;
   md: string;
-  lg: string;,
+  lg: string;
   xl: string;
 }
 export interface BorderConfig {
-  width: {,
-  thin: string;,
+  width: {
+  thin: string;
   normal: string;
   thick: string;
 };
-  radius: {,
+  radius: {
   sm: string;
-  md: string;,
+  md: string;
   lg: string;
   full: string;
 };
 }
 export interface AnimationConfig {
-  duration: {,
-  fast: string;,
+  duration: {
+  fast: string;
   normal: string;
   slow: string;
 };
-  easing: {,
+  easing: {
   linear: string;
-  easeIn: string;,
+  easeIn: string;
   easeOut: string;
   easeInOut: string;
 };
 }
 export interface AccessibilityConfig {
-  focusRing: string;,
+  focusRing: string;
   screenReaderOnly: string;
-  highContrast: boolean;,
+  highContrast: boolean;
   reducedMotion: boolean;
-  fontSize: {,
-  min: string;,
+  fontSize: {
+  min: string;
   max: string;
 };
 
@@ -372,27 +372,27 @@ export interface DashboardFrameworkEvents {
   'layout:changed': (layout: DashboardLayout) => void;
 }
 export interface UserInteractionEvent {
-  userId: string;,
+  userId: string;
   action: string;
-  target: string;,
+  target: string;
   timestamp: Date;
   metadata: Record<string, any>;
 }
 export interface PermissionDeniedEvent {
-  userId: string;,
+  userId: string;
   requiredRole: SecurityRole;
-  userRoles: SecurityRole;,
+  userRoles: SecurityRole;
   resource: string;
-  action: string;,
+  action: string;
   timestamp: Date;
   // Main Framework Class
 }
 export interface SecurityDashboardFrameworkOptions {
-  enableAuditLogging: boolean;,
+  enableAuditLogging: boolean;
   enablePerformanceMonitoring: boolean;
-  enableCaching: boolean;,
+  enableCaching: boolean;
   defaultTheme: DashboardTheme;
-  maxWidgetsPerDashboard: number;,
+  maxWidgetsPerDashboard: number;
   maxDashboardsPerUser: number;
   sessionTimeout: number; // minutes,
   dataRetention: number; // days,
@@ -445,7 +445,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Security dashboard framework initialized successfully',
-  details: {,
+  details: {
   widgetCount: this.widgets.size,
   dashboardCount: this.dashboards.size,
   themeCount: this.themes.size,
@@ -472,7 +472,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   // Store dashboard
   this.dashboards.set(config.id, {)
   ...config,
-  metadata: {,
+  metadata: {
   ...config.metadata,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -482,7 +482,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Dashboard registered successfully',
-  details: {,
+  details: {
   dashboardId: config.id,
   type: config.type,
   widgetCount: config.widgets.length,
@@ -495,7 +495,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.ERROR,
   message: 'Failed to register dashboard',
-  details: {,
+  details: {
   dashboardId: config.id,
   error: error instanceof Error ? error.message : 'Unknown error',
 });
@@ -511,7 +511,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Widget type registered successfully',
-  details: {,
+  details: {
   widgetType: definition.type,
   category: definition.category,
   version: definition.version,
@@ -522,7 +522,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.ERROR,
   message: 'Failed to register widget type',
-  details: {,
+  details: {
   widgetType: definition.type,
   error: error instanceof Error ? error.message : 'Unknown error',
 });
@@ -541,7 +541,7 @@ export class SecurityDashboardFramework extends EventEmitter {
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.WARN,
   message: 'Dashboard access denied',
-  details: {,
+  details: {
   dashboardId: id,
   userId,
   userRoles,

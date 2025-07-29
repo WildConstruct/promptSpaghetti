@@ -26,8 +26,8 @@ export interface ProfessionalIntegrationProps {
   onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
   onSave: () => void;
   onLoad: () => void;
-  theme?: 'light' | 'dark' | 'cinema';
-}
+  theme?: 'light' | 'dark' | 'cinema'
+  }
 export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = ({
   nodes,
   edges,

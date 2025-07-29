@@ -38,18 +38,18 @@ export interface CreatorAttributionDashboardProps {
   onSettingsClick?: () => void;
   className?: string;
   interface DashboardStats {
-  totalTemplates: number;,
+  totalTemplates: number;
   totalRevenue: number;
-  pendingRevenue: number;,
+  pendingRevenue: number;
   collaborations: number;
-  activeClaims: number;,
+  activeClaims: number;
   verificationRate: number;
   interface TemplatePerformance {
-  templateId: string;,
+  templateId: string;
   title: string;
-  views: number;,
+  views: number;
   purchases: number;
-  revenue: number;,
+  revenue: number;
   rating: number;
   trend: 'up' | 'down' | 'stable';
   // =============================================================================
@@ -79,7 +79,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
       setError(null);
       const response = await fetch(`/api/marketplace-attribution/creators/${userId}/dashboard`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${getAuthToken()}`}
       });
       if (!response.ok) {
@@ -142,7 +142,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
 },
   subtext: `$${(stats.pendingRevenue / 100).toFixed(2)} pending`}
 },
-  color: 'green';
+  color: 'green'
   }
       {
   icon: Users,

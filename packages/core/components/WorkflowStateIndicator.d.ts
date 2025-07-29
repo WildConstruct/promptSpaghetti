@@ -20,7 +20,7 @@ interface WorkflowStateIndicatorProps {
 export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps>;
 export declare const WorkflowStateBadge: React.FC<{
     state: WorkflowState;
-    size?: 'sm' | 'md' | 'lg';
-}>;
+    size?: 'sm' | 'md' | 'lg'
+  }>;
 export {};
 //# sourceMappingURL=WorkflowStateIndicator.d.ts.map

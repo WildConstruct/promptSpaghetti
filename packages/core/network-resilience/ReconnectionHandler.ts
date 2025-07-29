@@ -7,40 +7,40 @@ export enum ReconnectionState {
   FAILED = 'failed',
   SUCCEEDED = 'succeeded'
   export interface ReconnectionAttempt {
-  attemptNumber: number;,
+  attemptNumber: number;
   startTime: number;
   endTime?: number;
   duration?: number;
   success: boolean;
   error?: Error;
-  backoffDelay: number;,
-  connectionType: 'websocket' | 'http' | 'custom';
-}
+  backoffDelay: number;
+  connectionType: 'websocket' | 'http' | 'custom'
+  }
 export interface ReconnectionConfig {
-  maxAttempts: number;,
+  maxAttempts: number;
   initialDelay: number;
-  maxDelay: number;,
+  maxDelay: number;
   backoffFactor: number;
-  jitterFactor: number;,
+  jitterFactor: number;
   resetTimeoutMs: number;
-  connectionTimeout: number;,
+  connectionTimeout: number;
   enableJitter: boolean;
-  enableCircuitBreaker: boolean;,
+  enableCircuitBreaker: boolean;
   circuitBreakerThreshold: number;
-  circuitBreakerResetTime: number;,
+  circuitBreakerResetTime: number;
   quickReconnectWindow: number;
   quickReconnectAttempts: number;
 }
 export interface ReconnectionStats {
-  totalAttempts: number;,
+  totalAttempts: number;
   successfulAttempts: number;
-  failedAttempts: number;,
+  failedAttempts: number;
   averageReconnectTime: number;
-  longestReconnectTime: number;,
+  longestReconnectTime: number;
   shortestReconnectTime: number;
-  currentStreak: number;,
+  currentStreak: number;
   maxStreak: number;
-  lastSuccessTime: number | null;,
+  lastSuccessTime: number | null;
   lastFailureTime: number | null;
   circuitBreakerTrips: number;
 }

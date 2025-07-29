@@ -24,13 +24,13 @@ describe('CategoryPerformanceManager', () => {
   nodeType: 'WeightedChoice',
   executionId: 'exec-123',
   duration: 150,
-  memoryUsage: {,
+  memoryUsage: {
   before: 1000,
   after: 1024,
   peak: 1050,
   delta: 24,
 },
-  contextSize: {,
+  contextSize: {
   variableCount: 5,
   stateCount: 3,
   cacheSize: 10,
@@ -69,7 +69,7 @@ describe('CategoryPerformanceManager', () => {
     test('should initialize with custom configuration', () => {
   const customConfig: Partial<CategoryPerformanceConfig> = {,
   enableCategoryOptimization: false,
-  globalSettings: {,
+  globalSettings: {
   maxConcurrentOperations: 50,
   memoryThreshold: 512 * 1024 * 1024,
   cpuThreshold: 90,
@@ -232,7 +232,7 @@ describe('CategoryPerformanceManager', () => {
   nodeType: 'WeightedChoice',
             nodeId: `error-node-${i}`}
 },
-  metrics: {,
+  metrics: {
   ...mockPerformanceMetrics,
   errors: ['Validation failed', 'Timeout error'],
 });
@@ -464,7 +464,7 @@ describe('CategoryPerformanceManager', () => {
     });
     test('should work with partial configuration', () => {
   const partialConfig: Partial<CategoryPerformanceConfig> = {,
-  globalSettings: {,
+  globalSettings: {
   maxConcurrentOperations: 25,
   memoryThreshold: 512 * 1024 * 1024,
   cpuThreshold: 70,
@@ -476,23 +476,23 @@ describe('CategoryPerformanceManager', () => {
     });
     test('should validate category configuration overrides', () => {
   const customCategories: Record<string, CategoryConfig> = {,
-  'custom': {,
+  'custom': {
   name: 'Custom Category',
   priority: 'high',
   optimizationStrategy: 'latency',
-  resourceLimits: {,
+  resourceLimits: {
   maxMemoryMB: 1000,
   maxExecutionTimeMs: 2000,
   maxConcurrentNodes: 25,
   queueLimit: 500,
 },
-  cacheStrategy: {,
+  cacheStrategy: {
   enabled: true,
   ttlMs: 120000,
   maxSize: 100,
   evictionPolicy: 'lfu',
 },
-  scalingRules: {,
+  scalingRules: {
   scaleUpThreshold: 80,
   scaleDownThreshold: 20,
   cooldownMs: 45000,

@@ -10,22 +10,22 @@ import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 import { conversionTracker } from '../analytics/ConversionTracker';
 
 export interface Badge {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: BadgeCategory;
-  tier: BadgeTier;,
+  tier: BadgeTier;
   icon: string;
-  criteria: BadgeCriteria;,
+  criteria: BadgeCriteria;
   requirements: string;
-  unlockMessage: string;,
+  unlockMessage: string;
   rarity: BadgeRarity;
   points: number;
   prerequisites?: string;
-  isVisible: boolean;,
+  isVisible: boolean;
   isActive: boolean;
-  metadata: {,
-  createdAt: number;,
+  metadata: {
+  createdAt: number;
   updatedAt: number;
   version: string;
 };
@@ -64,47 +64,47 @@ export interface BadgeCriteria {
   customLogic?: (user: UserBadgeProgress) => boolean;
 }
 export interface UserBadge {
-  badgeId: string;,
+  badgeId: string;
   userId: string;
-  unlockedAt: number;,
+  unlockedAt: number;
   tier: BadgeTier;
   progress?: number;
   metadata?: Record<string, any>;
-  isDisplayed: boolean;,
+  isDisplayed: boolean;
   isNotificationSent: boolean;
 }
 export interface UserBadgeProgress {
-  userId: string;,
+  userId: string;
   badges: Map<string, UserBadge>;
-  totalPoints: number;,
+  totalPoints: number;
   level: number;
-  experience: number;,
+  experience: number;
   streak: number;
-  lastActivity: number;,
-  statistics: {,
-  templatesCreated: number;,
+  lastActivity: number;
+  statistics: {
+  templatesCreated: number;
   templatesDownloaded: number;
-  projectsCompleted: number;,
+  projectsCompleted: number;
   collaborations: number;
-  ratingsGiven: number;,
+  ratingsGiven: number;
   ratingsReceived: number;
-  forumPosts: number;,
+  forumPosts: number;
   helpfulVotes: number;
-  mentoringSessions: number;,
+  mentoringSessions: number;
   workshopsAttended: number;
 };
-  achievements: {,
+  achievements: {
   firstTemplate: boolean;
-  firstCollaboration: boolean;,
+  firstCollaboration: boolean;
   firstSale: boolean;
-  expertRating: boolean;,
+  expertRating: boolean;
   communityLeader: boolean;
 };
 }
 export interface BadgeUnlockEvent {
-  userId: string;,
+  userId: string;
   badgeId: string;
-  unlockedAt: number;,
+  unlockedAt: number;
   progress: number;
   isLevelUp: boolean;
   newLevel?: number;
@@ -211,7 +211,7 @@ export class BadgeSystem {
   category: 'creation',
   tier: 'diamond',
   icon: '💎',
-  criteria: {,
+  criteria: {
   type: 'composite',
   customLogic: (user) => {,
   return user.statistics.templatesCreated >= 100 &&
@@ -301,7 +301,7 @@ export class BadgeSystem {
         category: 'special',
         tier: 'diamond',
         icon: '🚀',
-        criteria: {,
+        criteria: {
   type: 'completion', 
           conditions: { joined_before: Date.now() + (30 * 24 * 60 * 60 * 1000) } // 30 days from now
   },
@@ -370,7 +370,7 @@ export class BadgeSystem {
   const sampleUsers = [;
   {
   userId: 'creator-johnsmith',
-  progress: {,
+  progress: {
   templatesCreated: 15,
   templatesDownloaded: 47,
   projectsCompleted: 8,
@@ -386,7 +386,7 @@ export class BadgeSystem {
   }
       {
   userId: 'creator-maryjones',
-  progress: {,
+  progress: {
   templatesCreated: 32,
   templatesDownloaded: 89,
   projectsCompleted: 18,
@@ -409,7 +409,7 @@ export class BadgeSystem {
   experience: user.progress.templatesCreated * 100,
   streak: 5,
   lastActivity: Date.now(),
-  statistics: {,
+  statistics: {
   templatesCreated: user.progress.templatesCreated,
   templatesDownloaded: user.progress.templatesDownloaded,
   projectsCompleted: user.progress.projectsCompleted,
@@ -421,7 +421,7 @@ export class BadgeSystem {
   mentoringSessions: user.progress.mentoringSessions,
   workshopsAttended: user.progress.workshopsAttended,
 },
-  achievements: {,
+  achievements: {
   firstTemplate: user.progress.templatesCreated > 0,
   firstCollaboration: user.progress.collaborations > 0,
   firstSale: user.badges.includes('first-sale'),
@@ -607,9 +607,9 @@ export class BadgeSystem {
   * Get leaderboard data
   */
   public getLeaderboard(limit: number = 10): Array<{,
-  userId: string;,
+  userId: string;
   totalPoints: number;
-  level: number;,
+  level: number;
   badgeCount: number;
   rank: number;
 }> {
@@ -653,10 +653,10 @@ export class BadgeSystem {
   /**
   * Get badge statistics
   */
-  public getBadgeStatistics(): {,
-  totalBadges: number;,
+  public getBadgeStatistics(): {
+  totalBadges: number;
   totalUsers: number;
-  mostPopularBadge: string;,
+  mostPopularBadge: string;
   rarest: string;
   averageBadgesPerUser: number;
   const totalBadges = this.badges.size;

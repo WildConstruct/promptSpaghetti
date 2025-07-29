@@ -13,13 +13,13 @@ import {
 } from '../types/DataClassification';
 
 export interface MonitoringEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
-  eventType: 'CLASSIFICATION' | 'ACCESS' | 'VALIDATION' | 'POLICY_CHANGE' | 'VIOLATION' | 'COMPLIANCE_CHECK';,
+  eventType: 'CLASSIFICATION' | 'ACCESS' | 'VALIDATION' | 'POLICY_CHANGE' | 'VIOLATION' | 'COMPLIANCE_CHECK';
   classification: DataClassificationLevel;
-  userId: string;,
+  userId: string;
   dataId: string;
-  operation: string;,
+  operation: string;
   result: 'SUCCESS' | 'FAILURE' | 'WARNING';
   details: Record<string, any>;
   context: OperationContext;
@@ -33,63 +33,63 @@ export interface MonitoringMetrics {
   riskScore?: number;
 }
 export interface ClassificationStats {
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   totalEvents: number;
-  successCount: number;,
+  successCount: number;
   failureCount: number;
-  warningCount: number;,
+  warningCount: number;
   averageProcessingTime: number;
-  violationRate: number;,
+  violationRate: number;
   complianceRate: number;
   lastUpdated: Date;
 }
 export interface UserActivity {
-  userId: string;,
+  userId: string;
   totalEvents: number;
   classificationCounts: Record<DataClassificationLevel, number>;
-  violationCount: number;,
+  violationCount: number;
   lastActivity: Date;
-  riskScore: number;,
+  riskScore: number;
   suspiciousActivities: string;
 }
 export interface MonitoringAlert {
-  id: string;,
+  id: string;
   timestamp: Date;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   type: 'THRESHOLD_EXCEEDED' | 'UNUSUAL_PATTERN' | 'COMPLIANCE_VIOLATION' | 'SECURITY_RISK';
-  message: string;,
+  message: string;
   details: Record<string, any>;
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
 }
 export interface MonitoringThreshold {
-  name: string;,
+  name: string;
   description: string;
-  metric: string;,
+  metric: string;
   operator: '>' | '<' | '>=' | '<=' | '==' | '!=';
-  value: number;,
+  value: number;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  enabled: boolean;,
+  enabled: boolean;
   cooldownMinutes: number;
   lastTriggered?: Date;
 }
 export interface MonitoringDashboard {
-  overallStats: {,
-  totalEvents: number;,
+  overallStats: {
+  totalEvents: number;
   successRate: number;
-  averageProcessingTime: number;,
+  averageProcessingTime: number;
   activeUsers: number;
-  violationCount: number;,
+  violationCount: number;
   complianceScore: number;
 };
-  classificationBreakdown: ClassificationStats;,
+  classificationBreakdown: ClassificationStats;
   topUsers: UserActivity;
-  recentAlerts: MonitoringAlert;,
+  recentAlerts: MonitoringAlert;
   trendData: {;
-  timestamp: Date;,
+  timestamp: Date;
   eventCount: number;
-  violationCount: number;,
+  violationCount: number;
   complianceScore: number;
 }[];
 }
@@ -241,7 +241,7 @@ export class ClassificationMonitoringService {
   activity = {
   userId: event.userId,
   totalEvents: 0,
-  classificationCounts: {,
+  classificationCounts: {
   PUBLIC: 0,
   INTERNAL: 0,
   CONFIDENTIAL: 0,
@@ -326,7 +326,7 @@ export class ClassificationMonitoringService {
           type: 'THRESHOLD_EXCEEDED',
           message: `${threshold.description}: ${threshold.metric} ${threshold.operator} ${threshold.value}`}
 },
-  details: {,
+  details: {
   threshold: name,
   metric: threshold.metric,
   actualValue: metricValue,
@@ -466,7 +466,7 @@ export class ClassificationMonitoringService {
   : 100,
 });
     return {
-  overallStats: {,
+  overallStats: {
   totalEvents: recentEvents.length,
   successRate: recentEvents.length > 0 ? (successEvents.length / recentEvents.length) * 100 : 100,
   averageProcessingTime: this.calculateAverageProcessingTime(recentEvents),
@@ -492,14 +492,14 @@ export class ClassificationMonitoringService {
   /**
   * Get events by criteria
   */
-  getEvents(criteria?: {,)
+  getEvents(criteria?: {)
   classification?: DataClassificationLevel;
   userId?: string;
   eventType?: string;
   startDate?: Date;
   endDate?: Date;
-  result?: 'SUCCESS' | 'FAILURE' | 'WARNING';
-}): MonitoringEvent {
+  result?: 'SUCCESS' | 'FAILURE' | 'WARNING'
+  }): MonitoringEvent {
   let filteredEvents = this.events;
   if (criteria) {
   if (criteria.classification) {

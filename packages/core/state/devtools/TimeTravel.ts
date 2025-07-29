@@ -11,88 +11,88 @@ import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
 // Time travel types
 
 export interface TimeTravelConfig {
-  maxHistorySize: number;,
+  maxHistorySize: number;
   enableBranching: boolean;
-  enableSnapshots: boolean;,
+  enableSnapshots: boolean;
   enableDiffing: boolean;
-  compressionEnabled: boolean;,
+  compressionEnabled: boolean;
   persistHistory: boolean;
-  autoSnapshot: {,
-  enabled: boolean;,
+  autoSnapshot: {
+  enabled: boolean;
   interval: number;
   maxSnapshots: number;
 };
 }
 export interface TimelineEntry<T = any> {
-  id: string;,
+  id: string;
   timestamp: number;
-  type: 'snapshot' | 'change' | 'branch' | 'merge' | 'marker';,
+  type: 'snapshot' | 'change' | 'branch' | 'merge' | 'marker';
   domain: string;
   snapshot?: StateSnapshot<T>;
   change?: StateChange<T>;
-  metadata: {,
+  metadata: {
   description?: string;
   author?: string;
   tags: string;
   branchId?: string;
   parentId?: string;
-  childIds: string;,
+  childIds: string;
   size: number;
   compressed: boolean;
 };
 
 export interface TimeBranch {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   created: number;
-  lastModified: number;,
+  lastModified: number;
   parentEntryId: string;
-  headEntryId: string;,
+  headEntryId: string;
   entryIds: string;
-  metadata: {,
-  author: string;,
+  metadata: {
+  author: string;
   tags: string;
-  protected: boolean;,
+  protected: boolean;
   color: string;
 };
 }
 export interface TimeTravelState {
-  currentPosition: number;,
+  currentPosition: number;
   currentBranch: string;
-  totalEntries: number;,
+  totalEntries: number;
   isReplaying: boolean;
-  canGoBack: boolean;,
+  canGoBack: boolean;
   canGoForward: boolean;
-  branches: string;,
+  branches: string;
   markers: TimelineMarker;
 }
 export interface TimelineMarker {
-  id: string;,
+  id: string;
   entryId: string;
-  name: string;,
+  name: string;
   description: string;
-  color: string;,
+  color: string;
   timestamp: number;
-  type: 'bookmark' | 'bug' | 'feature' | 'test' | 'milestone';
-}
+  type: 'bookmark' | 'bug' | 'feature' | 'test' | 'milestone'
+  }
 export interface StateDiff {
-  path: string;,
+  path: string;
   type: 'added' | 'removed' | 'modified' | 'unchanged';
   oldValue?: any;
   newValue?: any;
   children?: StateDiff;
 }
 export interface ReplaySession {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   timeline: TimelineEntry;
-  currentIndex: number;,
+  currentIndex: number;
   playbackSpeed: number;
-  autoPlay: boolean;,
+  autoPlay: boolean;
   loop: boolean;
-  breakpoints: number;,
+  breakpoints: number;
   created: number;
   lastPlayed: number;
 }
@@ -128,7 +128,7 @@ export class TimeTravel extends EventEmitter {
   enableDiffing: true,
   compressionEnabled: true,
   persistHistory: false,
-  autoSnapshot: {,
+  autoSnapshot: {
   enabled: true,
   interval: 60000, // 1 minute,
   maxSnapshots: 50,
@@ -152,7 +152,7 @@ export class TimeTravel extends EventEmitter {
       type: 'snapshot',
       domain,
       snapshot: compressed,
-      metadata: {,
+      metadata: {
   description: options.description || `Snapshot for ${domain}`}
 },
   tags: options.tags || [],
@@ -184,7 +184,7 @@ export class TimeTravel extends EventEmitter {
       type: 'change',
       domain,
       change,
-      metadata: {,
+      metadata: {
   description: options.description || `${change.type} in ${domain}`}
 },
   tags: options.tags || [],
@@ -240,7 +240,7 @@ export class TimeTravel extends EventEmitter {
   goToEnd(): boolean {,
   return this.goToPosition(this.timelineOrder.length - 1);
   // Branching
-  createBranch(name: string, options: {,)
+  createBranch(name: string, options: {)
   description?: string;
   fromEntryId?: string;
   author?: string;
@@ -261,7 +261,7 @@ export class TimeTravel extends EventEmitter {
       parentEntryId: fromEntryId,
       headEntryId: fromEntryId,
       entryIds: [fromEntryId],
-      metadata: {,
+      metadata: {
   author: options.author || 'anonymous',
   tags: options.tags || [],
   protected: false,
@@ -300,7 +300,7 @@ export class TimeTravel extends EventEmitter {
       timestamp: Date.now(),
       type: 'merge',
       domain: 'system',
-      metadata: {,
+      metadata: {
   description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}`}
 },
   tags: ['merge'],
@@ -421,7 +421,7 @@ export class TimeTravel extends EventEmitter {
   // Query and search
   queryTimeline(query: TimelineQuery): TimelineEntry {
   return this.getFilteredTimeline(query);
-  searchTimeline(searchTerm: string, options: {,)
+  searchTimeline(searchTerm: string, options: {)
   fields?: string;
   caseSensitive?: boolean;
   regex?: boolean;
@@ -451,7 +451,7 @@ export class TimeTravel extends EventEmitter {
   parentEntryId: '',
   headEntryId: '',
   entryIds: [],
-  metadata: {,
+  metadata: {
   author: 'system',
   tags: ['main'],
   protected: true,
@@ -641,7 +641,7 @@ export class TimeTravel extends EventEmitter {
   branches: Object.fromEntries(this.branches),
   markers: Object.fromEntries(this.markers),
   config: this.config,
-  metadata: {,
+  metadata: {
   currentPosition: this.currentPosition,
   currentBranch: this.currentBranch,
   exported: Date.now(),

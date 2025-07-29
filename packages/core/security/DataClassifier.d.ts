@@ -144,12 +144,12 @@ export interface ClassificationPolicy {
     applicableFrameworks: ComplianceFramework[];
     encryptionRequired: boolean;
     requiredAccessControls: string[];
-    retentionRequirements: {,
+    retentionRequirements: {
         minimumPeriod: string;
         maximumPeriod: string;
         disposalMethod: string;
     };
-    auditRequirements: {,
+    auditRequirements: {
         frequency: string;
         scope: string[];
     };

@@ -36,7 +36,7 @@ export enum TimeoutPolicy {
   CRITICAL = 'critical'
   // Timeout Configuration
   export interface TimeoutConfiguration {
-  sessionId: string;,
+  sessionId: string;
   policy: TimeoutPolicy;
   // Base timeout settings
   idleTimeout: number; // milliseconds of inactivity before timeout,
@@ -50,7 +50,7 @@ export enum TimeoutPolicy {
   extensionDuration: number; // how long each extension lasts,
   automaticExtension: boolean; // extend automatically on activity,
   // Adaptive settings
-  adaptiveEnabled: boolean;,
+  adaptiveEnabled: boolean;
   activityThreshold: number; // activity level required to extend session,
   learningEnabled: boolean; // learn user patterns to adjust timeouts,
   // Security constraints
@@ -61,7 +61,7 @@ export enum TimeoutPolicy {
   // Activity Tracking
 }
 export interface ActivityData {
-  timestamp: Date;,
+  timestamp: Date;
   type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
   intensity: ActivityLevel;
   endpoint?: string;
@@ -70,26 +70,26 @@ export interface ActivityData {
   // Session Timeout State
 }
 export interface SessionTimeoutState {
-  sessionId: string;,
+  sessionId: string;
   configuration: TimeoutConfiguration;
   // Current state
-  isActive: boolean;,
+  isActive: boolean;
   lastActivity: Date;
-  sessionStart: Date;,
+  sessionStart: Date;
   currentTimeout: Date;
-  warningsIssued: number;,
+  warningsIssued: number;
   extensionsUsed: number;
-  gracePeriodActive: boolean;,
+  gracePeriodActive: boolean;
   criticalOperationActive: boolean;
   // Calculated values
   remainingTime: number;
   nextWarning?: Date;
   adaptedTimeout?: number;
   // Activity tracking
-  recentActivities: ActivityData;,
+  recentActivities: ActivityData;
   activityScore: number;
-  activityPattern: {,
-  peakHours: number;,
+  activityPattern: {
+  peakHours: number;
   averageSessionLength: number;
   typicalActivityLevel: ActivityLevel;
 };
@@ -100,11 +100,11 @@ export interface SessionTimeoutState {
 // Timeout Event
 }
 export interface TimeoutEvent {
-  sessionId: string;,
+  sessionId: string;
   eventType: 'warning' | 'timeout' | 'extension' | 'renewal';
-  timestamp: Date;,
+  timestamp: Date;
   remainingTime: number;
-  reason: TimeoutReason;,
+  reason: TimeoutReason;
   userNotified: boolean;
   actionRequired: boolean;
   metadata?: Record<string, any>;
@@ -161,12 +161,12 @@ export class SessionTimeoutController extends EventEmitter {
   remainingTime: finalConfig.idleTimeout,
   recentActivities: [],
   activityScore: 0,
-  activityPattern: {,
+  activityPattern: {
   peakHours: [],
   averageSessionLength: 0,
   typicalActivityLevel: ActivityLevel.MEDIUM,
 },
-  status: 'active';
+  status: 'active'
   };
     this.sessionStates.set(sessionId, state);
     this.scheduleTimeoutWarnings(sessionId);
@@ -176,7 +176,7 @@ export class SessionTimeoutController extends EventEmitter {
   /**
    * Record user activity
    */
-  public recordActivity(sessionId: string,)
+  public recordActivity(sessionId: string)
     activity: Omit<ActivityData, 'timestamp'>
   ): void {
   const state = this.sessionStates.get(sessionId);
@@ -319,11 +319,11 @@ export class SessionTimeoutController extends EventEmitter {
    * Get timeout statistics
    */
   public getTimeoutStatistics(): {
-  totalSessions: number;,
+  totalSessions: number;
   activeSessions: number;
-  timeoutEvents: number;,
+  timeoutEvents: number;
   averageSessionLength: number;
-  extensionUsage: number;,
+  extensionUsage: number;
   timeoutReasons: Record<TimeoutReason, number>;
   policyDistribution: Record<TimeoutPolicy, number>;
   const states = Array.from(this.sessionStates.values());

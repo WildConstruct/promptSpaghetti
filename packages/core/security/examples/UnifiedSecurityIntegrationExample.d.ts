@@ -42,7 +42,7 @@ export declare function monitorSecurityHealth(integration: AdaptiveRateLimitingI
     config: import("../AdaptiveRateLimitingIntegration").IntegrationConfig;
     performance: any;
     learning: import("../AdaptiveRateLimitingIntegration").CrossSystemLearning;
-    systemHealth: {,
+    systemHealth: {
         rateLimitingHealth: number;
         throttlingHealth: number;
         integrationHealth: number;

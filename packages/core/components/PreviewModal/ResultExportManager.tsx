@@ -10,9 +10,9 @@ import { useResultManagementStore } from '../../stores/resultManagementStore';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 
 export interface ExportFormat {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   extension: string;
   category: 'script' | 'vfx' | 'data' | 'report';
   vfxCompatible?: boolean;
@@ -26,7 +26,7 @@ export interface ExportOptions {
   includeVarianceAnalysis?: boolean;
   compressOutput?: boolean;
   // VFX-specific options
-  vfxOptions?: {,
+  vfxOptions?: {
   targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
   includeControlNet?: boolean;
   includeSceneData?: boolean;
@@ -43,7 +43,7 @@ export interface ExportOptions {
 };
 }
 export interface ResultExportManagerProps {
-  results: EnhancedPreviewResult;,
+  results: EnhancedPreviewResult;
   selectedResultIds: string;
   onExportComplete?: (exportedResultIds: string, format: ExportFormat) => void;
   onExportError?: (error: Error) => void;
@@ -214,7 +214,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
   // Call the export API endpoint
   const response = await fetch('/api/export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -299,7 +299,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
   background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{
@@ -356,7 +356,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
   cursor: 'pointer',
   textAlign: 'left',
   transition: 'all 0.2s',
-  ':hover': {,
+  ':hover': {
   borderColor: '#3b82f6',
   boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
 }}
@@ -555,7 +555,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                         value={exportOptions?.vfxOptions?.targetPipeline || 'stable-diffusion'}
                         onChange={(e) => setExportOptions(prev => prev ? {)
   ...prev,
-  vfxOptions: {,
+  vfxOptions: {
   ...prev.vfxOptions,
   targetPipeline: e.target.value as any,
 } : null)}
@@ -589,7 +589,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
   const [width, height] = e.target.value.split('x').map(Number);
   setExportOptions(prev => prev ? {)
   ...prev,
-  vfxOptions: {,
+  vfxOptions: {
   ...prev.vfxOptions,
   resolution: [width, height],
 } : null);
@@ -639,7 +639,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                         checked={exportOptions?.filmOptions?.includeCharacterNotes || false}
                         onChange={(e) => setExportOptions(prev => prev ? {)
   ...prev,
-  filmOptions: {,
+  filmOptions: {
   ...prev.filmOptions,
   includeCharacterNotes: e.target.checked,
 } : null)}
@@ -659,7 +659,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                         checked={exportOptions?.filmOptions?.includeDirectorNotes || false}
                         onChange={(e) => setExportOptions(prev => prev ? {)
   ...prev,
-  filmOptions: {,
+  filmOptions: {
   ...prev.filmOptions,
   includeDirectorNotes: e.target.checked,
 } : null)}
@@ -755,7 +755,7 @@ async function prepareExportPayload(()
   ): Promise<unknown> {
   const { format, includeMetadata, includeExecutionPath, includeVarianceAnalysis } = options;
   const basePayload = {
-    results: results.map(result => ({,)
+    results: results.map(result => ({)
   id: result.id,
       seed: result.seed,
       output: result.output,
@@ -770,7 +770,7 @@ async function prepareExportPayload(()
   case 'vfx':,
   return {
   ...basePayload,
-  vfxData: {,
+  vfxData: {
   pipeline: options.vfxOptions?.targetPipeline,
   resolution: options.vfxOptions?.resolution,
   controlNetCompatible: format.controlNetReady,
@@ -778,7 +778,7 @@ async function prepareExportPayload(()
   case 'script':
     return {
   ...basePayload,
-  scriptData: {,
+  scriptData: {
   format: options.filmOptions?.scriptFormat,
   includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes,
 };

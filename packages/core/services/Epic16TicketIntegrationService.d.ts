@@ -321,17 +321,17 @@ export interface TicketIntegrationConfig {
     autoAssignment: boolean;
     slaEnabled: boolean;
     integrations: IntegrationConfig;
-    notifications: {,
+    notifications: {
         enabled: boolean;
         channels: string[];
         templates: Record<string, string>;
     };
-    security: {,
+    security: {
         encryptAttachments: boolean;
         scanUploads: boolean;
         retentionPeriod: number;
     };
-    analytics: {,
+    analytics: {
         trackMetrics: boolean;
         dashboardEnabled: boolean;
         reportingEnabled: boolean;

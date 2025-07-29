@@ -22,8 +22,8 @@ interface PerformanceMetrics {
   avg_characters_saved: number;
   complexity_score: number;
   usage_trend: 'increasing' | 'decreasing' | 'stable';
-  performance_trend: 'improving' | 'degrading' | 'stable';
-}>;
+  performance_trend: 'improving' | 'degrading' | 'stable'
+  }>;
   performance_trends: Array<{
   date: string;
   executions: number;
@@ -79,12 +79,12 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
         setError(null);
       } else {
         setError('Failed to fetch statistics');
-
+      }
     } catch (err) {
       setError('Failed to fetch statistics');
     } finally {
       setLoading(false);
-
+    }
   };
   if (!isOpen) return null;
   return (

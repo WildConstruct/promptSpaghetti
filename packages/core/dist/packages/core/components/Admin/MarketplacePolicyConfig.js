@@ -288,11 +288,11 @@ export const MarketplacePolicyConfig = ({
                     return;
                     _jsxs("div", { className: `marketplace-policy-config ${className}`, children: ["}", _jsxs("div", { className: "config-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Marketplace Policy Configuration" }), _jsx("p", { children: "Configure and customize policies for marketplace operations" })] }), _jsx("div", { className: "header-actions", children: _jsxs(Button, { onClick: () => setIsCreatingNew(true), children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Create Policy"] }) })] }), renderCategoryFilter(), _jsx("div", { className: "templates-section", children: _jsx("div", { className: "templates-grid", children: filteredTemplates.map(template => renderTemplateCard(template)) }) }), editingTemplate && renderTemplateEditor(), _jsx("div", { className: "config-info", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Policy Configuration Guide" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "guide-content", children: [_jsxs("div", { className: "guide-section", children: [_jsx(Info, { className: "w-5 h-5 text-blue-500" }), _jsxs("div", { children: [_jsx("h4", { children: "Getting Started" }), _jsx("p", { children: "Select a policy category to view available templates. Each template contains pre-configured rules that can be customized for your marketplace needs." })] })] }), _jsxs("div", { className: "guide-section", children: [_jsx(Zap, { className: "w-5 h-5 text-orange-500" }), _jsxs("div", { children: [_jsx("h4", { children: "Rule Conditions" }), _jsx("p", { children: "Policy rules use expressions to evaluate conditions. Variables like user.trustScore and template.qualityScore are automatically populated from your system data." })] })] }), _jsxs("div", { className: "guide-section", children: [_jsx(Shield, { className: "w-5 h-5 text-green-500" }), _jsxs("div", { children: [_jsx("h4", { children: "Enforcement Actions" }), _jsx("p", { children: "When a policy rule is triggered, the configured action is automatically executed. Actions range from notifications to account restrictions." })] })] })] }) })] }) }), _jsx("style", { children: `
         .marketplace-policy-config {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .config-header {
           display: flex;
@@ -300,39 +300,39 @@ export const MarketplacePolicyConfig = ({
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         .category-filter {
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
         .filter-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           flex-wrap: wrap;
         .category-button {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          padding: 0.75rem 1rem;,
+          padding: 0.75rem 1rem;
   border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: white;
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s ease;
         .category-button:hover {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #f8fafc;
         .category-button.active {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #eff6ff;
           color: #1e40af;
         .count-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
         .templates-grid {
           display: grid;
@@ -343,92 +343,92 @@ export const MarketplacePolicyConfig = ({
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .template-info {
           flex: 1;
         .template-title {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
           margin-bottom: 0.75rem;
         .template-title h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .template-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .template-description {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .template-stats {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         .template-rules h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
         .rules-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .rule-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #e5e7eb;
           border-radius: 4px;
         .rule-info {
-          flex: 1;,
+          flex: 1;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.125rem;
         .rule-name {
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
         .rule-description {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .more-rules {
           padding: 0.5rem;
           text-align: center;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           font-style: italic;
         .template-editor-overlay {
-          position: fixed;,
+          position: fixed;
   top: 0;
-          left: 0;,
+          left: 0;
   right: 0;
-          bottom: 0;,
+          bottom: 0;
   background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;,
+          z-index: 1000;
   padding: 1rem;
         .template-editor {
           width: 100%;
@@ -441,18 +441,18 @@ export const MarketplacePolicyConfig = ({
           align-items: center;
         .editor-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .editor-title h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .editor-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .editor-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
           margin-top: 0;
@@ -462,33 +462,33 @@ export const MarketplacePolicyConfig = ({
           gap: 1rem;
         .threshold-item, .timeframe-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .threshold-label, .timeframe-label {
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .threshold-input, .timeframe-input {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         .timeframe-input-group {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .timeframe-input {
           flex: 1;
         .timeframe-unit {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .rules-editor {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .rule-editor-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 1rem;
         .rule-editor-header {
           display: flex;
@@ -496,46 +496,46 @@ export const MarketplacePolicyConfig = ({
           align-items: flex-start;
           margin-bottom: 0.75rem;
         .rule-editor-info h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .rule-editor-info p {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin: 0;
         .rule-toggle {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .rule-editor-details {
           display: grid;
-          grid-template-columns: 2fr 1fr;,
+          grid-template-columns: 2fr 1fr;
   gap: 1rem;
         .rule-condition label, .rule-action label {
           display: block;
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           margin-bottom: 0.5rem;
         .condition-code {
-          display: block;,
+          display: block;
   padding: 0.5rem;
-          background: #f3f4f6;,
+          background: #f3f4f6;
   border: 1px solid #d1d5db;
           border-radius: 4px;
           font-family: monospace;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #374151;
         .action-select {
-          width: 100%;,
+          width: 100%;
   padding: 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         .editor-actions {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
           justify-content: flex-end;
           padding-top: 1rem;
@@ -550,19 +550,19 @@ export const MarketplacePolicyConfig = ({
           margin-top: 2rem;
         .guide-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .guide-section {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
         .guide-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .guide-section p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         @media (max-width: 1200px) {
           .templates-grid {
@@ -572,17 +572,17 @@ export const MarketplacePolicyConfig = ({
         @media (max-width: 768px) {
           .config-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .filter-buttons {
             flex-direction: column;
           .category-button {
             justify-content: center;
           .template-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .template-stats {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.5rem;
           .stat-item {
             flex-direction: row;

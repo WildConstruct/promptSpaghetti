@@ -5,11 +5,11 @@ import { Node, Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { parseTemplate } from '../utils/templateParser';
 interface VariablePortNodeRendererProps {
-  id: string;,
+  id: string;
   data: Record<string, unknown>;
   selected?: boolean;
-  onSelect: (nodeId: string) => void;,
-  getNodeMeta: (nodeType: string) => NodeMeta;,
+  onSelect: (nodeId: string) => void;
+  getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
   export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
   id,

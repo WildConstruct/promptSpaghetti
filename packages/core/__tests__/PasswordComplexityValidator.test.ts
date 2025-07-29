@@ -26,7 +26,7 @@ describe('PasswordComplexityValidator', () => {
   const customConfig: Partial<PasswordComplexityConfig> = {,
   mode: 'strict',
   minimumScore: 80,
-  allowOverrides: {,
+  allowOverrides: {
   enabled: true,
   roles: ['admin'],
   requireJustification: false,

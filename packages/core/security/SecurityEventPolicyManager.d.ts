@@ -12,16 +12,16 @@ export interface PolicyManagerConfig {
     real_time_processing: boolean;
     batch_processing_interval: number;
     max_event_batch_size: number;
-    retention_policy: {,
+    retention_policy: {
         default_retention_days: number;
         compliance_retention_overrides: Record<ComplianceFramework, number>;
     };
-    notification_config: {,
+    notification_config: {
         channels: NotificationChannel[];
         escalation_delays: Record<SecurityEventSeverity, number>;
         retry_attempts: number;
     };
-    integration_config: {,
+    integration_config: {
         audit_system_enabled: boolean;
         siem_integration_enabled: boolean;
         compliance_reporting_enabled: boolean;

@@ -15,7 +15,7 @@ export interface FormatProcessor {
 // JSON Format Processor
 }
 export class JSONFormatProcessor implements FormatProcessor {
-  async export(template: ProjectTemplate, version?: TemplateVersion, options: {,)
+  async export(template: ProjectTemplate, version?: TemplateVersion, options: {)
   include_version_info?: boolean;
   pretty_print?: boolean;
   include_metadata?: boolean;
@@ -81,7 +81,7 @@ export class JSONFormatProcessor implements FormatProcessor {
 
 // YAML Format Processor
 export class YAMLFormatProcessor implements FormatProcessor {
-  async export(template: ProjectTemplate, version?: TemplateVersion, options: {,)
+  async export(template: ProjectTemplate, version?: TemplateVersion, options: {)
   include_version_info?: boolean;
   include_metadata?: boolean;
 } = {}): Promise<string> {
@@ -143,7 +143,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
 
 // Template Bundle Processor
 export class BundleFormatProcessor implements FormatProcessor {
-  async export(template: ProjectTemplate, version?: TemplateVersion, options: {,)
+  async export(template: ProjectTemplate, version?: TemplateVersion, options: {)
   include_dependencies?: boolean;
   include_assets?: boolean;
   include_documentation?: boolean;
@@ -160,7 +160,7 @@ export class BundleFormatProcessor implements FormatProcessor {
       dependencies: [], // Would include actual dependencies
       related_templates: [],
       assets: [],
-      documentation: {,
+      documentation: {
   readme: this.generateReadme(template),
   changelog: version?.changelog || 'Initial version',
   examples: this.generateExamples(template),
@@ -247,7 +247,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
 `;
   private generateExamples(template: ProjectTemplate): Array<{,
   name: string;
-  description: string;,
+  description: string;
   graph_data: any;
 }> {
   // Generate example configurations
@@ -269,7 +269,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   // ZIP Archive Processor
   export class ZipFormatProcessor implements FormatProcessor {
-  async export(template: ProjectTemplate, version?: TemplateVersion, options: {,)
+  async export(template: ProjectTemplate, version?: TemplateVersion, options: {)
   include_version_history?: boolean;
   include_dependencies?: boolean;
   separate_files?: boolean;
@@ -306,7 +306,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
     // Create ZIP (simplified - would use actual ZIP library)
     const archive = {
   files,
-  metadata: {,
+  metadata: {
   file_count: Object.keys(files).length,
   total_size: Object.values(files).reduce((sum, content) => sum + content.length, 0),
 };
@@ -409,10 +409,10 @@ export class TemplateFormatRegistry {
     if (typeof data === 'string') {
       const trimmed = data.trim();
       if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-        return 'json';
-      } else if (trimmed.includes('---') || trimmed.match(/^\w+:/)) {
-        return 'yaml';
-    } else {
+        return 'json'
+  } else if (trimmed.includes('---') || trimmed.match(/^\w+:/)) {
+        return 'yaml'
+  } else {
       // Binary data - check for ZIP or bundle signatures
       const view = new DataView(data);
       // ZIP file signature
@@ -423,7 +423,7 @@ export class TemplateFormatRegistry {
         const text = new TextDecoder().decode(data);
         const parsed = JSON.parse(text);
         if (parsed.format_version && parsed.template) {
-          return 'template_bundle';
-      } catch (error) {
+          return 'template_bundle'
+  } catch (error) {
         // Not a bundle
     return null;

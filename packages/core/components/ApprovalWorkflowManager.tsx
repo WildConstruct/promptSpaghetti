@@ -17,37 +17,37 @@ import { ApprovalDashboard } from './ApprovalDashboard';
 import { ApprovalReviewInterface } from './ApprovalReviewInterface';
 import { ApprovalStatistics } from './ApprovalStatistics';
 interface ApprovalCriteria {
-  id: string;,
+  id: string;
   workspace_id: string;
   name: string;
   description?: string;
   conditions: Record<string, any>;
-  weight: number;,
+  weight: number;
   is_required: boolean;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   interface ApprovalRule {
-  id: string;,
+  id: string;
   workspace_id: string;
-  transition_id: string;,
+  transition_id: string;
   name: string;
   description?: string;
-  reviewer_assignment_type: 'manual' | 'automatic' | 'role_based' | 'round_robin';,
+  reviewer_assignment_type: 'manual' | 'automatic' | 'role_based' | 'round_robin';
   required_reviewers: number;
-  minimum_approvals: number;,
+  minimum_approvals: number;
   allow_self_approval: boolean;
-  criteria_ids: string;,
+  criteria_ids: string;
   require_all_criteria: boolean;
-  approval_timeout_hours: number;,
+  approval_timeout_hours: number;
   escalation_enabled: boolean;
-  escalation_after_hours: number;,
+  escalation_after_hours: number;
   escalation_reviewers: string;
-  auto_approval_enabled: boolean;,
+  auto_approval_enabled: boolean;
   auto_approval_conditions: Record<string, any>;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   interface ApprovalWorkflowManagerProps {
-  workspaceId: string;,
+  workspaceId: string;
   currentUserId: string;
   userRole: 'admin' | 'manager' | 'reviewer' | 'user';
   export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({,)
@@ -123,7 +123,7 @@ interface ApprovalCriteria {
     try {
       const response = await fetch(`/api/approval/criteria/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       if (response.ok) {
         await loadApprovalData();
@@ -153,7 +153,7 @@ interface ApprovalCriteria {
       const response = await fetch(`/api/approval/requests/${selectedRequest.id}/review`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
   'x-user-id': currentUserId,
 },
@@ -172,7 +172,7 @@ interface ApprovalCriteria {
   };
   const CriteriaModal: React.FC<{
   criteria?: ApprovalCriteria;
-  onSave: (data: Partial<ApprovalCriteria>) => void;,
+  onSave: (data: Partial<ApprovalCriteria>) => void;
   onClose: () => void;
 }> = ({ criteria, onSave, onClose }) => {
     const [formData, setFormData] = useState({)

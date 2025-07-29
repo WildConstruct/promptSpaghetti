@@ -146,8 +146,8 @@ interface RecentProjectsMenuProps {
                       (e.currentTarget as HTMLElement).style.backgroundColor = '#f8f9fa';
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-                    }}
+                      (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
+  }}
                   >
                     <div style={thumbnailStyle}>
                       {project.thumbnail ? ()

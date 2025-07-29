@@ -28,20 +28,20 @@ export enum ResetStep {
   GOOD = 'good',
   STRONG = 'strong'
   export interface PasswordValidation {
-  isValid: boolean;,
+  isValid: boolean;
   strength: PasswordStrength;
-  score: number;,
+  score: number;
   feedback: string;
-  requirements: {,
-  length: boolean;,
+  requirements: {
+  length: boolean;
   uppercase: boolean;
-  lowercase: boolean;,
+  lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
 };
 }
 export interface ResetToken {
-  token: string;,
+  token: string;
   tokenId: string;
   expiresAt: Date;
 }
@@ -55,38 +55,38 @@ export interface UsePasswordResetOptions {
 }
 export interface UsePasswordResetReturn {
   // State
-  currentStep: ResetStep;,
+  currentStep: ResetStep;
   loading: boolean;
-  error: string | null;,
+  error: string | null;
   success: string | null;
   // Form data
-  email: string;,
+  email: string;
   token: string;
-  newPassword: string;,
+  newPassword: string;
   confirmPassword: string;
   // Validation
-  passwordValidation: PasswordValidation;,
+  passwordValidation: PasswordValidation;
   emailValid: boolean;
-  tokenValid: boolean;,
+  tokenValid: boolean;
   passwordsMatch: boolean;
   // Timer state
-  resendTimer: number;,
+  resendTimer: number;
   canResend: boolean;
   // Actions
-  setEmail: (email: string) => void;,
-  setToken: (token: string) => void;,
-  setNewPassword: (password: string) => void;,
+  setEmail: (email: string) => void;
+  setToken: (token: string) => void;
+  setNewPassword: (password: string) => void;
   setConfirmPassword: (password: string) => void;
   // Flow control
-  requestReset: () => Promise<boolean>;,
+  requestReset: () => Promise<boolean>;
   verifyToken: () => Promise<boolean>;
-  resetPassword: () => Promise<boolean>;,
+  resetPassword: () => Promise<boolean>;
   resendCode: () => Promise<boolean>;
-  goBack: () => void;,
+  goBack: () => void;
   reset: () => void;
   // Utilities
-  validatePassword: (password: string) => PasswordValidation;,
-  getPasswordStrengthColor: (strength: PasswordStrength) => string;,
+  validatePassword: (password: string) => PasswordValidation;
+  getPasswordStrengthColor: (strength: PasswordStrength) => string;
   getPasswordStrengthWidth: (score: number) => string;
 }
 export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePasswordResetReturn => {
@@ -393,7 +393,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
   case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
   case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
   case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
-  case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';,
+  case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
   default: return 'text-gray-600 bg-gray-100';
 }, []);
   const getPasswordStrengthWidth = useCallback((score: number): string => {

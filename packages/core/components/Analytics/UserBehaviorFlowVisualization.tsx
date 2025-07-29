@@ -20,7 +20,7 @@ import {
 // Core interfaces
 
 export interface UserBehaviorFlowVisualizationProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   flowConfig: FlowVisualizationConfig;
   behaviorData: BehaviorFlowData;
   onFlowAnalysis?: (analysis: FlowAnalysis) => void;
@@ -28,34 +28,34 @@ export interface UserBehaviorFlowVisualizationProps {
   onExport?: (data: FlowVisualizationExportData) => void;
 }
 export interface FlowVisualizationConfig {
-  visualizationType: VisualizationType;,
+  visualizationType: VisualizationType;
   timeRange: { start: number; end: number };
-  segmentFilters: SegmentFilter;,
+  segmentFilters: SegmentFilter;
   pathwayAnalysis: PathwayAnalysisSettings;
-  interactionFilters: InteractionFilter;,
+  interactionFilters: InteractionFilter;
   performanceSettings: VisualizationPerformanceSettings;
 }
 export type VisualizationType = 'sankey' | 'node_link' | 'flow_map' | 'journey_map' | 'heatmap';
 
 export interface BehaviorFlowData {
-  userId: string;,
+  userId: string;
   sessionId: string;
-  flowPath: FlowStep;,
+  flowPath: FlowStep;
   metadata: FlowMetadata;
   outcomes: FlowOutcome;
 }
 export interface FlowStep {
-  stepId: string;,
+  stepId: string;
   page: string;
-  action: string;,
+  action: string;
   timestamp: number;
-  duration: number;,
+  duration: number;
   context: StepContext;
 }
 export interface FlowAnalysis {
-  popularPaths: PopularPath;,
+  popularPaths: PopularPath;
   dropoffPoints: DropoffPoint;
-  conversionPaths: ConversionPath;,
+  conversionPaths: ConversionPath;
   optimizationOpportunities: OptimizationOpportunity;
 
 // Mock data generator
@@ -72,12 +72,12 @@ const generateMockBehaviorFlowData = (): BehaviorFlowData => ({)
   action: ['view', 'click', 'scroll', 'form_submit'][Math.floor(Math.random() * 4)],
     timestamp: Date.now() - (10 - i) * 60000,
     duration: Math.random() * 120000 + 30000,
-    context: {,
+    context: {
   device: 'desktop',
   referrer: i === 0 ? 'google.com' : undefined,
   exitType: i === 9 ? 'conversion' : 'continue',
 })),
-  metadata: {,
+  metadata: {
   totalDuration: Math.random() * 1800000 + 300000,
   deviceType: 'desktop',
   userType: 'returning',
@@ -174,7 +174,7 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
   flowData: mockFlowData,
   analysis: analysisResults,
   visualizationConfig: flowConfig,
-  metadata: {,
+  metadata: {
   exportTimestamp: Date.now(),
   totalFlows: mockFlowData.length,
   timeRange: flowConfig.timeRange,
@@ -316,30 +316,30 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
 // Supporting interfaces (condensed)
 
 export interface SegmentFilter {
-  segment: string;,
+  segment: string;
   enabled: boolean;
 }
 export interface PathwayAnalysisSettings {
-  minPathLength: number;,
+  minPathLength: number;
   maxPathLength: number;
   includeLoops: boolean;
 }
 export interface InteractionFilter {
-  actionType: string;,
+  actionType: string;
   enabled: boolean;
 }
 export interface VisualizationPerformanceSettings {
-  maxNodes: number;,
+  maxNodes: number;
   aggregationLevel: 'high' | 'medium' | 'low';
-  renderingMode: 'fast' | 'detailed';
-}
+  renderingMode: 'fast' | 'detailed'
+  }
 export interface FlowMetadata {
-  totalDuration: number;,
+  totalDuration: number;
   deviceType: string;
   userType: string;
 }
 export interface FlowOutcome {
-  type: string;,
+  type: string;
   value: number;
   timestamp: number;
 }
@@ -349,50 +349,50 @@ export interface StepContext {
   exitType: string;
 }
 export interface PopularPath {
-  path: string;,
+  path: string;
   count: number;
-  percentage: number;,
+  percentage: number;
   avgDuration: number;
   conversionRate: number;
 }
 export interface DropoffPoint {
-  page: string;,
+  page: string;
   entries: number;
-  exits: number;,
+  exits: number;
   dropoffRate: number;
   impactScore: number;
 }
 export interface ConversionPath {
-  path: string;,
+  path: string;
   conversionRate: number;
   value: number;
 }
 export interface OptimizationOpportunity {
-  type: string;,
+  type: string;
   description: string;
-  impact: number;,
+  impact: number;
   effort: string;
 }
 export interface PathwayOptimization {
-  recommendations: OptimizationRecommendation;,
+  recommendations: OptimizationRecommendation;
   projectedImpact: ProjectedImpact;
 }
 export interface OptimizationRecommendation {
-  action: string;,
+  action: string;
   rationale: string;
   priority: string;
 }
 export interface ProjectedImpact {
-  conversionIncrease: number;,
+  conversionIncrease: number;
   engagementIncrease: number;
   dropoffReduction: number;
 }
 export interface FlowVisualizationExportData {
-  flowData: BehaviorFlowData;,
+  flowData: BehaviorFlowData;
   analysis: FlowAnalysis | null;
-  visualizationConfig: FlowVisualizationConfig;,
+  visualizationConfig: FlowVisualizationConfig;
   metadata: {;
-  exportTimestamp: number;,
+  exportTimestamp: number;
   totalFlows: number;
     timeRange: { start: number; end: number };
     version: string;

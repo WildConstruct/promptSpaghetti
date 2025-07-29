@@ -71,7 +71,7 @@ export interface MonitoringThreshold {
     lastTriggered?: Date;
 
 export interface MonitoringDashboard {
-    overallStats: {,
+    overallStats: {
         totalEvents: number;
         successRate: number;
         averageProcessingTime: number;
@@ -82,7 +82,7 @@ export interface MonitoringDashboard {
     classificationBreakdown: ClassificationStats[];
     topUsers: UserActivity[];
     recentAlerts: MonitoringAlert[];
-    trendData: {,
+    trendData: {
         timestamp: Date;
         eventCount: number;
         violationCount: number;
@@ -175,8 +175,8 @@ export declare class ClassificationMonitoringService {
         eventType?: string;
         startDate?: Date;
         endDate?: Date;
-        result?: 'SUCCESS' | 'FAILURE' | 'WARNING';
-    }): MonitoringEvent[];
+        result?: 'SUCCESS' | 'FAILURE' | 'WARNING'
+  }): MonitoringEvent[];
     /**
      * Get alerts
      */

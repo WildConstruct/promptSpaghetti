@@ -595,7 +595,8 @@ getValidationStatistics();
                             prng: () => Math.random(),
                             executionMeta: {
                                 startTime: Date.now(),
-                                executionId: `test-${Math.random().toString(36).substr(2, 9)}` }
+                                executionId: `test-${Math.random().toString(36).substr(2, 9)}`
+                            }
                         },
                             nodeExecutionOrder;
                         [],

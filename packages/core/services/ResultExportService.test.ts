@@ -18,7 +18,7 @@ const mockResults: PreviewResultWithPath = [
     executionTimeMs: 150,
     usedNodeIds: ['node1', 'node2'],
     usedEdgeIds: ['edge1'],
-    executionPath: {,
+    executionPath: {
   id: 'exec_1',
       seed: 12345,
       startTime: Date.now() - 1000,
@@ -33,7 +33,7 @@ const mockResults: PreviewResultWithPath = [
           executionTimeMs: 50,
           inputs: [{ value: 'input1', inputIndex: 0 }],
           output: 'choice1',
-          randomChoice: {,
+          randomChoice: {
   choiceType: 'weighted',
   availableOptions: ['choice1', 'choice2'],
   selectedOption: 'choice1',
@@ -60,7 +60,7 @@ const mockResults: PreviewResultWithPath = [
   probability: 0.7,
   weight: 3];
   },
-  debugInfo: {,
+  debugInfo: {
   nodeExecutionOrder: ['node1', 'node2'],
   randomChoices: [,
   {
@@ -70,7 +70,7 @@ const mockResults: PreviewResultWithPath = [
   selectionReason: 'Weight-based selection',
   probability: 0.7,
   weight: 3],
-  performanceBreakdown: {,
+  performanceBreakdown: {
   'WeightedChoice': 50,
   'Output': 100,
 }
@@ -80,7 +80,7 @@ const mockResults: PreviewResultWithPath = [
     executionTimeMs: 200,
     usedNodeIds: ['node1', 'node2'],
     usedEdgeIds: ['edge1'],
-    executionPath: {,
+    executionPath: {
   id: 'exec_2',
       seed: 67890,
       startTime: Date.now() - 1000,
@@ -95,7 +95,7 @@ const mockResults: PreviewResultWithPath = [
           executionTimeMs: 80,
           inputs: [{ value: 'input1', inputIndex: 0 }],
           output: 'choice2',
-          randomChoice: {,
+          randomChoice: {
   choiceType: 'weighted',
   availableOptions: ['choice1', 'choice2'],
   selectedOption: 'choice2',
@@ -238,7 +238,7 @@ const mockResults: PreviewResultWithPath = [
   includeMetadata: true,
   includeExecutionPaths: false,
   includeDebugInfo: false,
-  analysisOptions: {,
+  analysisOptions: {
   performanceBreakdown: true,
   varianceAnalysis: true,
 };
@@ -277,7 +277,7 @@ const mockResults: PreviewResultWithPath = [
   includeMetadata: true,
   includeExecutionPaths: false,
   includeDebugInfo: false,
-  analysisOptions: {,
+  analysisOptions: {
   performanceBreakdown: true,
   varianceAnalysis: true,
   creativityMetrics: true,
@@ -317,7 +317,7 @@ const mockResults: PreviewResultWithPath = [
   includeMetadata: true,
   includeExecutionPaths: true,
   includeDebugInfo: false,
-  analysisOptions: {,
+  analysisOptions: {
   varianceAnalysis: true,
   comparisonMatrix: true,
 };
@@ -384,7 +384,7 @@ const mockResults: PreviewResultWithPath = [
   includeMetadata: false,
   includeExecutionPaths: false,
   includeDebugInfo: false,
-  vfxOptions: {,
+  vfxOptions: {
   controlNetCompatible: false,
 };
       const errors = exportService.validateExportOptions('controlnet-json', invalidOptions);
@@ -473,7 +473,7 @@ const mockResults: PreviewResultWithPath = [
   nodeType: 'WeightedChoice',
   timestamp: expect.any(Number),
   executionTime: 50,
-  randomChoice: {,
+  randomChoice: {
   type: 'weighted',
   selected: 'choice1',
   reason: 'Weight-based selection',
@@ -485,7 +485,7 @@ const mockResults: PreviewResultWithPath = [
   includeMetadata: true,
   includeExecutionPaths: false,
   includeDebugInfo: false,
-  analysisOptions: {,
+  analysisOptions: {
   varianceAnalysis: true,
 };
       const result = await exportService.exportBatchResults(;);

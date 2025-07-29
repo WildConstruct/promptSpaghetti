@@ -30,7 +30,7 @@ export interface NodeTag {
 export interface EraTag {
     id: string;
     name: string;
-    period: {,
+    period: {
         start: number;
         end: number;
     };
@@ -194,7 +194,7 @@ export declare class NodeMetadataManager {
         totalTags: number;
         tagsByType: Record<string, number>;
         averageTagsPerNode: number;
-        topTags: {,
+        topTags: {
             value: string;
             count: number;
         }[];

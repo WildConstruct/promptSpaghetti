@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NodeData } from '../../types/NodeTypes';
 interface RichTextEditorProps {
-  value: string;,
+  value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   nodeType?: string;
@@ -255,9 +255,9 @@ interface RichTextEditorProps {
 
 // Toolbar Button Component
 interface ToolbarButtonProps {
-  onClick: () => void;,
+  onClick: () => void;
   title: string;
-  children: React.ReactNode;,
+  children: React.ReactNode;
   theme: 'light' | 'dark' | 'cinema';
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children, theme }) => {
   const getButtonColors = () => {
@@ -320,11 +320,11 @@ const renderTemplatePreview = (template: string): string => {
 // Specialized Rich Text Editor for different node types
 export const NodeSpecificRichEditor: React.FC<{,
   nodeType: string;
-  data: NodeData;,
+  data: NodeData;
   field: string;
   onChange: (field: string, value: string) => void;
-  theme?: 'light' | 'dark' | 'cinema';
-}> = ({ nodeType, data, field, onChange, theme = 'cinema' }) => {
+  theme?: 'light' | 'dark' | 'cinema'
+  }> = ({ nodeType, data, field, onChange, theme = 'cinema' }) => {
   const value = (data as any)[field] || '';
   const getEditorConfig = () => {
     switch (nodeType) {

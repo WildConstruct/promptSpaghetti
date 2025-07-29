@@ -32,7 +32,7 @@ export declare enum DataEndpointCategory {
 export interface DataRetrievalLimits {
     classification: DataClassificationLevel;
     operation: DataOperation;
-    limits: {,
+    limits: {
         requestsPerMinute: number;
         requestsPerHour: number;
         requestsPerDay: number;
@@ -42,13 +42,13 @@ export interface DataRetrievalLimits {
         recordsPerHour: number;
         concurrentRequests: number;
     };
-    backoff: {,
+    backoff: {
         strategy: BackoffStrategy;
         baseDelay: number;
         maxDelay: number;
         multiplier: number;
     };
-    adaptiveFactors: {,
+    adaptiveFactors: {
         userRiskMultiplier: number;
         timeOfDayMultiplier: number;
         locationMultiplier: number;
@@ -123,7 +123,7 @@ export interface GlobalDataLimits {
     maxDailyBytes: number;
     maxDailyRecords: number;
     maxRequestRate: number;
-    emergencyThrottle: {,
+    emergencyThrottle: {
         enabled: boolean;
         thresholdCpuPercent: number;
         thresholdMemoryPercent: number;
@@ -131,19 +131,19 @@ export interface GlobalDataLimits {
     };
 
 export interface AlertThresholds {
-    volumeSpike: {,
+    volumeSpike: {
         percentIncrease: number;
         timeWindow: number;
     };
-    userQuotaUsage: {,
+    userQuotaUsage: {
         warningPercent: number;
         criticalPercent: number;
     };
-    classificationAccess: {,
+    classificationAccess: {
         restrictedAccessCount: number;
         timeWindow: number;
     };
-    anomalyScore: {,
+    anomalyScore: {
         warningThreshold: number;
         criticalThreshold: number;
     };
@@ -245,7 +245,7 @@ export interface DataRetrievalDecision {
         records: number;
         requests: number;
     };
-    metadata: {,
+    metadata: {
         timestamp: Date;
         evaluationTime: number;
         appliedLimits: string[];

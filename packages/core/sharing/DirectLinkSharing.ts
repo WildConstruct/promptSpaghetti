@@ -23,78 +23,78 @@ import { EmbedAnalytics } from '../analytics/EmbedAnalytics';
 // Core Sharing Interfaces
 
 export interface ShareConfig {
-  domainConfig: DomainConfig;,
+  domainConfig: DomainConfig;
   security: SecurityConfig;
-  analytics: AnalyticsConfig;,
+  analytics: AnalyticsConfig;
   branding: BrandingConfig;
-  limits: LimitsConfig;,
+  limits: LimitsConfig;
   features: FeatureConfig;
   integrations: IntegrationConfig;
 }
 export interface DomainConfig {
-  primaryDomain: string;,
+  primaryDomain: string;
   customDomains: CustomDomain;
-  defaultScheme: 'http' | 'https';,
+  defaultScheme: 'http' | 'https';
   subdomainStrategy: 'random' | 'hash' | 'sequential' | 'custom';
   pathPrefix?: string;
-  enableShortening: boolean;,
-  shorteningStrategy: 'base62' | 'base36' | 'uuid' | 'custom';
-}
+  enableShortening: boolean;
+  shorteningStrategy: 'base62' | 'base36' | 'uuid' | 'custom'
+  }
 export interface CustomDomain {
-  domain: string;,
+  domain: string;
   verified: boolean;
-  sslEnabled: boolean;,
+  sslEnabled: boolean;
   brandingEnabled: boolean;
   createdAt: Date;
   expiresAt?: Date;
-  owner: string;,
+  owner: string;
   usage: DomainUsage;
 }
 export interface DomainUsage {
-  totalLinks: number;,
+  totalLinks: number;
   totalClicks: number;
-  monthlyLimit: number;,
+  monthlyLimit: number;
   currentMonthUsage: number;
   lastReset: Date;
 }
 export interface SecurityConfig {
-  tokenGeneration: TokenConfig;,
+  tokenGeneration: TokenConfig;
   accessControl: AccessControlConfig;
-  validation: ValidationConfig;,
+  validation: ValidationConfig;
   rateLimit: RateLimitConfig;
-  fraud: FraudDetectionConfig;,
+  fraud: FraudDetectionConfig;
   privacy: PrivacyConfig;
 }
 export interface TokenConfig {
-  algorithm: 'random' | 'hash' | 'jwt' | 'signed';,
+  algorithm: 'random' | 'hash' | 'jwt' | 'signed';
   length: number;
-  charset: string;,
+  charset: string;
   collisionHandling: 'retry' | 'increment' | 'error';
-  caseSensitive: boolean;,
+  caseSensitive: boolean;
   excludeAmbiguous: boolean;
 }
 export interface AccessControlConfig {
-  requireAuthentication: boolean;,
+  requireAuthentication: boolean;
   allowedRoles: string;
-  ipWhitelist: string;,
+  ipWhitelist: string;
   geoRestrictions: GeoRestriction;
-  deviceRestrictions: DeviceRestriction;,
+  deviceRestrictions: DeviceRestriction;
   timeRestrictions: TimeRestriction;
 }
 export interface GeoRestriction {
-  type: 'allow' | 'deny';,
+  type: 'allow' | 'deny';
   countries: string;
-  regions: string;,
+  regions: string;
   cities: string;
 }
 export interface DeviceRestriction {
-  type: 'allow' | 'deny';,
+  type: 'allow' | 'deny';
   deviceTypes: ('desktop' | 'mobile' | 'tablet')[];
-  browsers: string;,
+  browsers: string;
   operatingSystems: string;
 }
 export interface TimeRestriction {
-  type: 'allow' | 'deny';,
+  type: 'allow' | 'deny';
   schedule: TimeSchedule;
   timezone: string;
 }
@@ -104,71 +104,71 @@ export interface TimeSchedule {
   dateRange?: { start: Date; end: Date };
 }
 export interface ValidationConfig {
-  enableLinkValidation: boolean;,
+  enableLinkValidation: boolean;
   contentValidation: ContentValidation;
-  urlValidation: URLValidation;,
+  urlValidation: URLValidation;
   malwareScanning: boolean;
   phishingDetection: boolean;
 }
 export interface ContentValidation {
-  enabled: boolean;,
+  enabled: boolean;
   allowedContentTypes: string;
-  maxContentSize: number;,
+  maxContentSize: number;
   scanForMalware: boolean;
   requireApproval: boolean;
 }
 export interface URLValidation {
-  enabled: boolean;,
+  enabled: boolean;
   allowedDomains: string;
-  blockedDomains: string;,
+  blockedDomains: string;
   requireHTTPS: boolean;
   validateDNS: boolean;
 }
 export interface RateLimitConfig {
-  enabled: boolean;,
+  enabled: boolean;
   requests: number;
-  windowMs: number;,
+  windowMs: number;
   skipAuthenticated: boolean;
-  storage: 'memory' | 'redis' | 'database';
-}
+  storage: 'memory' | 'redis' | 'database'
+  }
 export interface FraudDetectionConfig {
-  enabled: boolean;,
+  enabled: boolean;
   botDetection: boolean;
-  clickFraud: boolean;,
+  clickFraud: boolean;
   velocityChecks: boolean;
-  fingerprintTracking: boolean;,
+  fingerprintTracking: boolean;
   anomalyDetection: boolean;
 }
 export interface PrivacyConfig {
-  anonymizeIPs: boolean;,
+  anonymizeIPs: boolean;
   respectDoNotTrack: boolean;
-  gdprCompliance: boolean;,
+  gdprCompliance: boolean;
   dataRetentionDays: number;
-  allowOptOut: boolean;,
+  allowOptOut: boolean;
   consentRequired: boolean;
 }
 export interface AnalyticsConfig {
-  enabled: boolean;,
+  enabled: boolean;
   trackClicks: boolean;
-  trackReferrers: boolean;,
+  trackReferrers: boolean;
   trackUserAgents: boolean;
-  trackGeolocation: boolean;,
+  trackGeolocation: boolean;
   realTimeUpdates: boolean;
-  attributionTracking: boolean;,
+  attributionTracking: boolean;
   customEvents: string;
 }
 export interface BrandingConfig {
   enabled: boolean;
   logoUrl?: string;
   brandName?: string;
-  brandColors: BrandColors;,
+  brandColors: BrandColors;
   customPages: CustomPageConfig;
   socialMediaCards: SocialMediaConfig;
 }
 export interface BrandColors {
-  primary: string;,
+  primary: string;
   secondary: string;
-  accent: string;,
+  accent: string;
   background: string;
   text: string;
 }
@@ -179,15 +179,15 @@ export interface CustomPageConfig {
   restrictedPage?: PageTemplate;
 }
 export interface PageTemplate {
-  template: string;,
+  template: string;
   variables: Record<string, string>;
   css?: string;
   javascript?: string;
 }
 export interface SocialMediaConfig {
-  enabled: boolean;,
+  enabled: boolean;
   openGraph: OpenGraphConfig;
-  twitterCard: TwitterCardConfig;,
+  twitterCard: TwitterCardConfig;
   linkedIn: LinkedInConfig;
 }
 export interface OpenGraphConfig {
@@ -210,155 +210,155 @@ export interface LinkedInConfig {
   image?: string;
 }
 export interface LimitsConfig {
-  maxLinksPerUser: number;,
+  maxLinksPerUser: number;
   maxLinksPerDay: number;
-  maxClicksPerLink: number;,
+  maxClicksPerLink: number;
   linkExpirationDays: number;
   customLimits: CustomLimit;
 }
 export interface CustomLimit {
-  name: string;,
+  name: string;
   type: 'user' | 'domain' | 'ip' | 'global';
-  value: number;,
+  value: number;
   period: 'hour' | 'day' | 'week' | 'month' | 'year';
-  action: 'block' | 'throttle' | 'notify';
-}
+  action: 'block' | 'throttle' | 'notify'
+  }
 export interface FeatureConfig {
-  qrCodes: QRCodeConfig;,
+  qrCodes: QRCodeConfig;
   preview: PreviewConfig;
-  scheduling: SchedulingConfig;,
+  scheduling: SchedulingConfig;
   collaboration: CollaborationConfig;
   automation: AutomationConfig;
 }
 export interface QRCodeConfig {
-  enabled: boolean;,
+  enabled: boolean;
   defaultSize: number;
-  formats: ('png' | 'svg' | 'pdf')[];,
+  formats: ('png' | 'svg' | 'pdf')[];
   errorCorrection: 'low' | 'medium' | 'quartile' | 'high';
   customization: QRCustomization;
 }
 export interface QRCustomization {
   colors: { foreground: string; background: string };
   logo?: { url: string; size: number };
-  style: 'square' | 'rounded' | 'circular';,
+  style: 'square' | 'rounded' | 'circular';
   margin: number;
 }
 export interface PreviewConfig {
-  enabled: boolean;,
+  enabled: boolean;
   generatePreviews: boolean;
-  cacheLifetime: number;,
+  cacheLifetime: number;
   supportedTypes: string;
   maxPreviewSize: number;
 }
 export interface SchedulingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   maxScheduleDays: number;
-  timezoneSupport: boolean;,
+  timezoneSupport: boolean;
   recurringShares: boolean;
 }
 export interface CollaborationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   allowTeamSharing: boolean;
-  permissions: CollaborationPermission;,
+  permissions: CollaborationPermission;
   notifications: NotificationConfig;
 }
 export interface CollaborationPermission {
-  role: string;,
+  role: string;
   actions: ('create' | 'edit' | 'delete' | 'view' | 'share')[];
   limits?: Record<string, number>;
 }
 export interface NotificationConfig {
-  email: boolean;,
+  email: boolean;
   webhook: boolean;
-  inApp: boolean;,
+  inApp: boolean;
   events: string;
 }
 export interface AutomationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   autoExpiration: boolean;
-  autoArchiving: boolean;,
+  autoArchiving: boolean;
   smartRedirects: boolean;
   bulkOperations: boolean;
 }
 export interface IntegrationConfig {
-  attribution: AttributionIntegration;,
+  attribution: AttributionIntegration;
   analytics: AnalyticsIntegration;
-  social: SocialIntegration;,
+  social: SocialIntegration;
   webhooks: WebhookIntegration;
 }
 export interface AttributionIntegration {
-  enabled: boolean;,
+  enabled: boolean;
   trackingParameters: string;
-  defaultSource: string;,
+  defaultSource: string;
   defaultMedium: string;
   campaignTracking: boolean;
 }
 export interface AnalyticsIntegration {
-  providers: AnalyticsProvider;,
+  providers: AnalyticsProvider;
   realTimeSync: boolean;
-  customDimensions: string;,
+  customDimensions: string;
   eventTracking: boolean;
 }
 export interface AnalyticsProvider {
-  name: string;,
+  name: string;
   type: 'google_analytics' | 'adobe_analytics' | 'mixpanel' | 'segment' | 'custom';
-  apiKey: string;,
+  apiKey: string;
   config: Record<string, any>;
   enabled: boolean;
 }
 export interface SocialIntegration {
-  platforms: SocialPlatform;,
+  platforms: SocialPlatform;
   autoPosting: boolean;
-  hashtagSuggestions: boolean;,
+  hashtagSuggestions: boolean;
   optimalTiming: boolean;
 }
 export interface SocialPlatform {
-  name: string;,
+  name: string;
   apiCredentials: Record<string, string>;
-  enabled: boolean;,
+  enabled: boolean;
   defaultSettings: Record<string, any>;
 }
 export interface WebhookIntegration {
-  endpoints: WebhookEndpoint;,
+  endpoints: WebhookEndpoint;
   events: string;
-  retryPolicy: RetryPolicy;,
+  retryPolicy: RetryPolicy;
   security: WebhookSecurity;
 }
 export interface WebhookEndpoint {
-  name: string;,
+  name: string;
   url: string;
-  events: string;,
+  events: string;
   headers: Record<string, string>;
   enabled: boolean;
 }
 export interface RetryPolicy {
-  maxAttempts: number;,
+  maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
-  baseDelay: number;,
+  baseDelay: number;
   maxDelay: number;
 }
 export interface WebhookSecurity {
   signatureVerification: boolean;
   secretKey?: string;
-  ipWhitelist: string;,
+  ipWhitelist: string;
   requireHTTPS: boolean;
   // Core Link Models
 }
 export interface ShareLink {
-  id: string;,
+  id: string;
   shortCode: string;
-  originalUrl: string;,
+  originalUrl: string;
   shortUrl: string;
   title?: string;
   description?: string;
-  metadata: LinkMetadata;,
+  metadata: LinkMetadata;
   security: LinkSecurity;
-  analytics: LinkAnalytics;,
+  analytics: LinkAnalytics;
   branding: LinkBranding;
-  status: LinkStatus;,
+  status: LinkStatus;
   creator: UserInfo;
   team?: TeamInfo;
-  created: Date;,
+  created: Date;
   updated: Date;
   expires?: Date;
   lastAccessed?: Date;
@@ -372,17 +372,17 @@ export interface LinkMetadata {
   campaign?: string;
   source?: string;
   medium?: string;
-  utm: UTMParameters;,
+  utm: UTMParameters;
   custom: Record<string, any>;
 }
 export interface PreviewData {
-  title: string;,
+  title: string;
   description: string;
   image?: string;
   favicon?: string;
   siteName?: string;
-  type: 'website' | 'article' | 'video' | 'image' | 'document';
-}
+  type: 'website' | 'article' | 'video' | 'image' | 'document'
+  }
 export interface UTMParameters {
   source?: string;
   medium?: string;
@@ -394,15 +394,15 @@ export interface UTMParameters {
 export interface LinkSecurity {
   accessLevel: AccessLevel;
   password?: string;
-  allowedUsers: string;,
+  allowedUsers: string;
   allowedRoles: string;
-  restrictions: AccessRestriction;,
+  restrictions: AccessRestriction;
   verification: VerificationConfig;
 }
 export type AccessLevel = 'public' | 'restricted' | 'private' | 'team' | 'custom';
 
 export interface AccessRestriction {
-  type: RestrictionType;,
+  type: RestrictionType;
   config: Record<string, any>;
   message?: string;
 }
@@ -417,13 +417,13 @@ export type RestrictionType =
   | 'rate_limit';
 
 export interface VerificationConfig {
-  requireEmail: boolean;,
+  requireEmail: boolean;
   requirePhone: boolean;
-  requireCaptcha: boolean;,
+  requireCaptcha: boolean;
   require2FA: boolean;
 }
 export interface LinkAnalytics {
-  totalClicks: number;,
+  totalClicks: number;
   uniqueClicks: number;
   clicksByCountry: Record<string, number>;
   clicksByDevice: Record<string, number>;
@@ -435,9 +435,9 @@ export interface LinkAnalytics {
   goals: GoalTracking;
 }
 export interface GoalTracking {
-  goalId: string;,
+  goalId: string;
   goalName: string;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
   value: number;
   lastConversion?: Date;
@@ -460,54 +460,54 @@ export type LinkStatus =
   | 'error';
 
 export interface UserInfo {
-  id: string;,
+  id: string;
   email: string;
-  name: string;,
+  name: string;
   role: string;
   permissions: string;
 }
 export interface TeamInfo {
-  id: string;,
+  id: string;
   name: string;
-  members: TeamMember;,
+  members: TeamMember;
   permissions: TeamPermission;
 }
 export interface TeamMember {
-  userId: string;,
+  userId: string;
   role: string;
-  joinedAt: Date;,
+  joinedAt: Date;
   permissions: string;
 }
 export interface TeamPermission {
-  action: string;,
+  action: string;
   resource: string;
   conditions?: Record<string, any>;
   // Click Tracking
 }
 export interface ClickEvent {
-  id: string;,
+  id: string;
   linkId: string;
-  shortCode: string;,
+  shortCode: string;
   timestamp: Date;
-  visitor: VisitorInfo;,
+  visitor: VisitorInfo;
   request: RequestInfo;
-  response: ResponseInfo;,
+  response: ResponseInfo;
   attribution: ClickAttribution;
   conversion?: ConversionInfo;
 }
 export interface VisitorInfo {
-  id: string;,
+  id: string;
   isUnique: boolean;
   sessionId: string;
   fingerprint?: string;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
-  geo: GeoLocation;,
+  geo: GeoLocation;
   device: DeviceInfo;
   referrer?: ReferrerInfo;
 }
 export interface GeoLocation {
-  country: string;,
+  country: string;
   countryCode: string;
   region?: string;
   city?: string;
@@ -517,7 +517,7 @@ export interface GeoLocation {
   isp?: string;
 }
 export interface DeviceInfo {
-  type: 'desktop' | 'mobile' | 'tablet' | 'tv' | 'bot';,
+  type: 'desktop' | 'mobile' | 'tablet' | 'tv' | 'bot';
   os: string;
   osVersion?: string;
   browser: string;
@@ -533,23 +533,23 @@ export interface ReferrerInfo {
   socialPlatform?: string;
 }
 export interface RequestInfo {
-  method: string;,
+  method: string;
   headers: Record<string, string>;
   queryParams: Record<string, string>;
   body?: any;
   timestamp: Date;
 }
 export interface ResponseInfo {
-  statusCode: number;,
+  statusCode: number;
   redirectUrl: string;
-  responseTime: number;,
+  responseTime: number;
   cacheHit: boolean;
   errors?: string;
 }
 export interface ClickAttribution {
   touchPointId?: string;
   campaignId?: string;
-  source: string;,
+  source: string;
   medium: string;
   campaign?: string;
   content?: string;
@@ -557,20 +557,20 @@ export interface ClickAttribution {
   custom: Record<string, string>;
 }
 export interface ConversionInfo {
-  type: string;,
+  type: string;
   value: number;
   currency?: string;
   goalId?: string;
-  timestamp: Date;,
+  timestamp: Date;
   attribution: string;
   // Bulk Operations
 }
 export interface BulkOperation {
-  id: string;,
+  id: string;
   type: BulkOperationType;
-  status: OperationStatus;,
+  status: OperationStatus;
   request: BulkRequest;
-  progress: OperationProgress;,
+  progress: OperationProgress;
   results: BulkResults;
   created: Date;
   started?: Date;
@@ -593,34 +593,34 @@ export type OperationStatus =
   | 'cancelled';
 
 export interface BulkRequest {
-  items: any;,
+  items: any;
   options: Record<string, any>;
   metadata: Record<string, any>;
 }
 export interface OperationProgress {
-  total: number;,
+  total: number;
   completed: number;
-  failed: number;,
+  failed: number;
   percentage: number;
   estimatedCompletion?: Date;
   currentItem?: string;
 }
 export interface BulkResults {
-  successful: BulkResultItem;,
+  successful: BulkResultItem;
   failed: BulkResultItem;
   summary: ResultSummary;
 }
 export interface BulkResultItem {
-  index: number;,
+  index: number;
   input: any;
   output?: any;
   error?: string;
   duration: number;
 }
 export interface ResultSummary {
-  totalProcessed: number;,
+  totalProcessed: number;
   successCount: number;
-  failureCount: number;,
+  failureCount: number;
   averageProcessingTime: number;
   warnings: string;
   // Main Direct Link Sharing System
@@ -730,7 +730,7 @@ export class DirectLinkSharing extends EventEmitter {
       this.emit('accessError', { shortCode, error: error.message });
       throw error;
   // Analytics and Reporting
-  async getLinkAnalytics(linkId: string,)
+  async getLinkAnalytics(linkId: string)
     timeRange?: { start: Date; end: Date }
   ): Promise<LinkAnalyticsReport> {
     const link = this.links.get(linkId);
@@ -741,14 +741,14 @@ export class DirectLinkSharing extends EventEmitter {
       ? clicks.filter(c => c.timestamp >= timeRange.start && c.timestamp <= timeRange.end)
       : clicks;
     return this.generateAnalyticsReport(link, filteredClicks);
-  async getBulkAnalytics(linkIds: string,)
+  async getBulkAnalytics(linkIds: string)
     timeRange?: { start: Date; end: Date }
   ): Promise<BulkAnalyticsReport> {
     const reports = await Promise.all(;);
       linkIds.map(id => this.getLinkAnalytics(id, timeRange))
     );
     return this.aggregateAnalyticsReports(reports);
-  async getUserAnalytics(userId: string,)
+  async getUserAnalytics(userId: string)
     timeRange?: { start: Date; end: Date }
   ): Promise<UserAnalyticsReport> {
     const userLinks = Array.from(this.links.values()).filter(;);
@@ -765,21 +765,21 @@ export class DirectLinkSharing extends EventEmitter {
   id: operationId,
       type: 'create',
       status: 'pending',
-      request: {,
+      request: {
   items: requests,
         options: {},
         metadata: {}
   },
-  progress: {,
+  progress: {
   total: requests.length,
   completed: 0,
   failed: 0,
   percentage: 0,
 },
-  results: {,
+  results: {
   successful: [],
   failed: [],
-  summary: {,
+  summary: {
   totalProcessed: 0,
   successCount: 0,
   failureCount: 0,
@@ -829,7 +829,7 @@ export class DirectLinkSharing extends EventEmitter {
     await this.processScheduledShare(scheduledShare);
     return scheduledShare;
   // Team Management
-  async shareWithTeam(linkId: string,)
+  async shareWithTeam(linkId: string)
     teamId: string,
     permissions: string): Promise<void> {,
   const link = this.links.get(linkId);
@@ -840,7 +840,7 @@ export class DirectLinkSharing extends EventEmitter {
   id: teamId,
   name: '', // Would be fetched from team service,
   members: [],
-  permissions: permissions.map(p => ({,)
+  permissions: permissions.map(p => ({)
   action: p,
   resource: 'link',
 }))
@@ -869,7 +869,7 @@ export class DirectLinkSharing extends EventEmitter {
   // Private Methods
   private mergeDefaultConfig(config: Partial<ShareConfig>): ShareConfig {
   return {
-  domainConfig: {,
+  domainConfig: {
   primaryDomain: 'short.ly',
   customDomains: [],
   defaultScheme: 'https',
@@ -878,8 +878,8 @@ export class DirectLinkSharing extends EventEmitter {
   shorteningStrategy: 'base62',
   ...config.domainConfig
 },
-  security: {,
-  tokenGeneration: {,
+  security: {
+  tokenGeneration: {
   algorithm: 'random',
   length: 6,
   charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
@@ -887,7 +887,7 @@ export class DirectLinkSharing extends EventEmitter {
   caseSensitive: true,
   excludeAmbiguous: true,
 },
-  accessControl: {,
+  accessControl: {
   requireAuthentication: false,
   allowedRoles: [],
   ipWhitelist: [],
@@ -895,16 +895,16 @@ export class DirectLinkSharing extends EventEmitter {
   deviceRestrictions: [],
   timeRestrictions: [],
 },
-  validation: {,
+  validation: {
   enableLinkValidation: true,
-  contentValidation: {,
+  contentValidation: {
   enabled: true,
   allowedContentTypes: ['text/html', 'application/json'],
   maxContentSize: 10485760,
   scanForMalware: false,
   requireApproval: false,
 },
-  urlValidation: {,
+  urlValidation: {
   enabled: true,
   allowedDomains: [],
   blockedDomains: [],
@@ -914,14 +914,14 @@ export class DirectLinkSharing extends EventEmitter {
   malwareScanning: false,
           phishingDetection: false;
   },
-  rateLimit: {,
+  rateLimit: {
   enabled: true,
   requests: 100,
   windowMs: 3600000,
   skipAuthenticated: true,
   storage: 'memory',
 },
-  fraud: {,
+  fraud: {
   enabled: false,
   botDetection: false,
   clickFraud: false,
@@ -929,7 +929,7 @@ export class DirectLinkSharing extends EventEmitter {
   fingerprintTracking: false,
   anomalyDetection: false,
 },
-  privacy: {,
+  privacy: {
   anonymizeIPs: true,
   respectDoNotTrack: true,
   gdprCompliance: true,
@@ -939,7 +939,7 @@ export class DirectLinkSharing extends EventEmitter {
 }
         ...config.security
   },
-  analytics: {,
+  analytics: {
   enabled: true,
   trackClicks: true,
   trackReferrers: true,
@@ -950,9 +950,9 @@ export class DirectLinkSharing extends EventEmitter {
   customEvents: [],
   ...config.analytics
 },
-  branding: {,
+  branding: {
   enabled: true,
-  brandColors: {,
+  brandColors: {
   primary: '#007bff',
   secondary: '#6c757d',
   accent: '#28a745',
@@ -960,7 +960,7 @@ export class DirectLinkSharing extends EventEmitter {
   text: '#212529',
 },
   customPages: {},
-        socialMediaCards: {,
+        socialMediaCards: {
   enabled: true,
           openGraph: {},
           twitterCard: {},
@@ -968,7 +968,7 @@ export class DirectLinkSharing extends EventEmitter {
   }
         ...config.branding
   },
-  limits: {,
+  limits: {
   maxLinksPerUser: 1000,
   maxLinksPerDay: 100,
   maxClicksPerLink: 1000000,
@@ -976,41 +976,41 @@ export class DirectLinkSharing extends EventEmitter {
   customLimits: [],
   ...config.limits
 },
-  features: {,
+  features: {
   qrCodes: {;
   enabled: true,
           defaultSize: 200,
           formats: ['png', 'svg'],
           errorCorrection: 'medium',
-          customization: {,
+          customization: {
   colors: { foreground: '#000000', background: '#ffffff' },
             style: 'square',
             margin: 4;
   },
-  preview: {,
+  preview: {
   enabled: true,
   generatePreviews: true,
   cacheLifetime: 3600,
   supportedTypes: ['text/html'],
   maxPreviewSize: 1048576,
 },
-  scheduling: {,
+  scheduling: {
   enabled: false,
   maxScheduleDays: 30,
   timezoneSupport: true,
   recurringShares: false,
 },
-  collaboration: {,
+  collaboration: {
   enabled: false,
   allowTeamSharing: false,
   permissions: [],
-  notifications: {,
+  notifications: {
   email: false,
   webhook: false,
   inApp: false,
   events: [],
 },
-  automation: {,
+  automation: {
   enabled: false,
   autoExpiration: false,
   autoArchiving: false,
@@ -1019,36 +1019,36 @@ export class DirectLinkSharing extends EventEmitter {
 }
         ...config.features
   },
-  integrations: {,
-  attribution: {,
+  integrations: {
+  attribution: {
   enabled: false,
   trackingParameters: ['utm_source', 'utm_medium', 'utm_campaign'],
   defaultSource: 'direct',
   defaultMedium: 'link',
   campaignTracking: true,
 },
-  analytics: {,
+  analytics: {
   providers: [],
   realTimeSync: false,
   customDimensions: [],
   eventTracking: false,
 },
-  social: {,
+  social: {
   platforms: [],
   autoPosting: false,
   hashtagSuggestions: false,
   optimalTiming: false,
 },
-  webhooks: {,
+  webhooks: {
   endpoints: [],
   events: [],
-  retryPolicy: {,
+  retryPolicy: {
   maxAttempts: 3,
   backoffStrategy: 'exponential',
   baseDelay: 1000,
   maxDelay: 10000,
 },
-  security: {,
+  security: {
   signatureVerification: false,
   ipWhitelist: [],
   requireHTTPS: true,
@@ -1066,7 +1066,7 @@ export class DirectLinkSharing extends EventEmitter {
       shortUrl,
       title: request.title,
       description: request.description,
-      metadata: {,
+      metadata: {
   contentType: request.metadata?.contentType,
         fileSize: request.metadata?.fileSize,
         preview: request.metadata?.preview,
@@ -1078,7 +1078,7 @@ export class DirectLinkSharing extends EventEmitter {
         utm: request.metadata?.utm || { custom: {} },
         custom: request.metadata?.custom || {}
   },
-  security: {,
+  security: {
   accessLevel: request.security?.accessLevel || 'public',
   password: request.security?.password,
   allowedUsers: request.security?.allowedUsers || [],
@@ -1090,7 +1090,7 @@ export class DirectLinkSharing extends EventEmitter {
   requireCaptcha: false,
   require2FA: false,
 },
-  analytics: {,
+  analytics: {
   totalClicks: 0,
         uniqueClicks: 0,
         clicksByCountry: {},
@@ -1099,7 +1099,7 @@ export class DirectLinkSharing extends EventEmitter {
         clicksByHour: {},
         goals: [];
   },
-  branding: {,
+  branding: {
   domain,
   customSlug: request.customSlug,
   colors: this.config.branding.brandColors,
@@ -1245,7 +1245,7 @@ export class DirectLinkSharing extends EventEmitter {
       linkId: link.id,
       shortCode: link.shortCode,
       timestamp: new Date(),
-      visitor: {,
+      visitor: {
   id: this.generateVisitorId(context),
         isUnique: await this.isUniqueVisitor(link.id, context),
         sessionId: context.sessionId || this.generateSessionId(),
@@ -1256,19 +1256,19 @@ export class DirectLinkSharing extends EventEmitter {
         device: context.device || { type: 'desktop', os: '', browser: '' },
         referrer: context.referrer;
   },
-  request: {,
+  request: {
   method: 'GET',
         headers: context.headers || {},
         queryParams: context.queryParams || {},
         timestamp: new Date();
   },
-  response: {,
+  response: {
   statusCode: 302,
   redirectUrl: link.originalUrl,
   responseTime: 0,
   cacheHit: false,
 },
-  attribution: {,
+  attribution: {
   source: context.attribution?.source || 'direct',
         medium: context.attribution?.medium || 'link',
         campaign: context.attribution?.campaign,
@@ -1311,7 +1311,7 @@ export class DirectLinkSharing extends EventEmitter {
       content: clickEvent.attribution.content,
       term: clickEvent.attribution.term,
       timestamp: clickEvent.timestamp,
-      data: {,
+      data: {
   url: link.shortUrl,
         page: { title: link.title || '', path: `/${link.shortCode}`, tags: link.metadata.tags }
 },
@@ -1320,7 +1320,7 @@ export class DirectLinkSharing extends EventEmitter {
         location: clickEvent.visitor.geo,
         custom: { linkId: link.id, shortCode: link.shortCode }
     });
-  private createAccessResult(status: AccessResultStatus,)
+  private createAccessResult(status: AccessResultStatus)
     link?: ShareLink,
     message?: string,
     clickEvent?: ClickEvent
@@ -1376,13 +1376,13 @@ export class DirectLinkSharing extends EventEmitter {
     return {
       linkId: link.id,
       timeRange: { start: new Date(), end: new Date() },
-      summary: {,
+      summary: {
   totalClicks: clicks.length,
   uniqueClicks: new Set(clicks.map(c => c.visitor.id)).size,
   conversionRate: 0,
   averageClicksPerDay: 0,
 },
-  breakdown: {,
+  breakdown: {
   byCountry: {},
         byDevice: {},
         byReferrer: {},
@@ -1394,7 +1394,7 @@ export class DirectLinkSharing extends EventEmitter {
   private aggregateAnalyticsReports(reports: LinkAnalyticsReport): BulkAnalyticsReport {
   return {
   totalLinks: reports.length,
-  summary: {,
+  summary: {
   totalClicks: reports.reduce((sum, r) => sum + r.summary.totalClicks, 0),
   uniqueClicks: reports.reduce((sum, r) => sum + r.summary.uniqueClicks, 0),
   conversionRate: 0,
@@ -1409,7 +1409,7 @@ export class DirectLinkSharing extends EventEmitter {
   userId: links[0]?.creator.id || '',
   totalLinks: links.length,
   activeLinks: links.filter(l => l.status === 'active').length,
-  summary: {,
+  summary: {
   totalClicks: reports.reduce((sum, r) => sum + r.summary.totalClicks, 0),
   uniqueClicks: reports.reduce((sum, r) => sum + r.summary.uniqueClicks, 0),
   conversionRate: 0,
@@ -1487,25 +1487,25 @@ export interface QRCodeOptions {
   logo?: { url: string; size: number };
 }
 export interface QRCodeResult {
-  url: string;,
+  url: string;
   dataUrl: string;
-  svg: string;,
+  svg: string;
   size: number;
   format: string;
 }
 export interface ShareSchedule {
-  publishAt: Date;,
+  publishAt: Date;
   timezone: string;
-  recurring?: {,
-  frequency: 'daily' | 'weekly' | 'monthly';,
+  recurring?: {
+  frequency: 'daily' | 'weekly' | 'monthly';
   interval: number;
   endDate?: Date;
 };
 }
 export interface ScheduledShare {
-  id: string;,
+  id: string;
   request: CreateLinkRequest;
-  schedule: ShareSchedule;,
+  schedule: ShareSchedule;
   status: 'pending' | 'published' | 'failed' | 'cancelled';
   created: Date;
   publishedAt?: Date;
@@ -1513,15 +1513,15 @@ export interface ScheduledShare {
   // Analytics Reports
 }
 export interface LinkAnalyticsReport {
-  linkId: string;,
+  linkId: string;
   timeRange: { start: Date; end: Date };
-  summary: {,
+  summary: {
   totalClicks: number;
-  uniqueClicks: number;,
+  uniqueClicks: number;
   conversionRate: number;
   averageClicksPerDay: number;
 };
-  breakdown: {,
+  breakdown: {
   byCountry: Record<string, number>;
   byDevice: Record<string, number>;
   byReferrer: Record<string, number>;
@@ -1531,11 +1531,11 @@ export interface LinkAnalyticsReport {
   generatedAt: Date;
 }
 export interface BulkAnalyticsReport {
-  totalLinks: number;,
-  summary: {,
-  totalClicks: number;,
+  totalLinks: number;
+  summary: {
+  totalClicks: number;
   uniqueClicks: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageClicksPerDay: number;
 };
   topPerformers: Array<{ linkId: string; clicks: number }>;
@@ -1543,24 +1543,24 @@ export interface BulkAnalyticsReport {
   generatedAt: Date;
 }
 export interface UserAnalyticsReport {
-  userId: string;,
+  userId: string;
   totalLinks: number;
-  activeLinks: number;,
-  summary: {,
-  totalClicks: number;,
+  activeLinks: number;
+  summary: {
+  totalClicks: number;
   uniqueClicks: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageClicksPerDay: number;
 };
   topLinks: Array<{ linkId: string; clicks: number }>;
   generatedAt: Date;
 }
 export interface SystemStats {
-  totalLinks: number;,
+  totalLinks: number;
   activeLinks: number;
-  totalClicks: number;,
+  totalClicks: number;
   uniqueVisitors: number;
-  averageClicksPerLink: number;,
+  averageClicksPerLink: number;
   topDomains: Array<{ domain: string; count: number }>;
   recentActivity: Array<{ type: string; timestamp: Date; data: any }>;
   performanceMetrics: any;

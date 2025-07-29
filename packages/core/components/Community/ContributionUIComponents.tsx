@@ -33,51 +33,51 @@ import {
 // Types with comprehensive validation
 
 export interface ContributionFormData {
-  title: string;,
+  title: string;
   description: string;
-  content: string;,
+  content: string;
   category: string;
-  tags: string;,
+  tags: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimatedTime: number; // minutes,
-  prerequisites: string;,
+  prerequisites: string;
   resources: Array<{,
-  type: 'link' | 'file' | 'image' | 'video';,
+  type: 'link' | 'file' | 'image' | 'video';
   url: string;
   title: string;
 }>;
-  license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary';
-}
+  license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary'
+  }
 export interface ContributionItem {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
-  author: {,
-  id: string;,
+  description: string;
+  author: {
+  id: string;
   name: string;
   avatar?: string;
   reputation: number;
 };
-  category: string;,
+  category: string;
   tags: string;
-  difficulty: string;,
+  difficulty: string;
   status: 'draft' | 'submitted' | 'approved' | 'rejected' | 'published';
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  rating: number;,
+  rating: number;
   reviewCount: number;
-  downloadCount: number;,
+  downloadCount: number;
   comments: number;
 
 // Error types for comprehensive error handling
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
   code: string;
 }
 export interface ContributionError {
-  type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';,
+  type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';
   message: string;
   details?: string;
   field?: string;
@@ -177,14 +177,14 @@ export class ContributionValidator {
   field: `tags[${index}]`}
 },
   message: 'Each tag must be less than 30 characters',
-          code: 'MAX_LENGTH';
+          code: 'MAX_LENGTH'
   });
       if (!/^[a-zA-Z0-9\-_\s]+$/.test(tag)) {
         errors.push({)
   field: `tags[${index}]`}
 },
   message: 'Tags can only contain letters, numbers, hyphens, and underscores',
-          code: 'INVALID_FORMAT';
+          code: 'INVALID_FORMAT'
   });
     });
     return errors;

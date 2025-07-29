@@ -18,7 +18,7 @@ export interface PricingModel {
     demandMultiplier?: number;
     complexityMultiplier?: number;
     volumeDiscounts?: VolumeDiscount[];
-    aiOptimization: {,
+    aiOptimization: {
         enabled: boolean;
         strategy: 'maximize_revenue' | 'maximize_adoption' | 'competitive' | 'value_based';
         sensitivityAnalysis: boolean;
@@ -79,7 +79,7 @@ export interface PricingCalculationResult {
     discounts: PricingDiscount[];
     taxes?: Tax[];
     billingPeriod: 'one_time' | 'monthly' | 'annual';
-    aiInsights: {,
+    aiInsights: {
         priceOptimality: number;
         demandPrediction: 'low' | 'medium' | 'high';
         competitivePosition: 'below_market' | 'at_market' | 'above_market';
@@ -122,7 +122,7 @@ export interface Tax {
 
 export interface PricingAnalytics {
     modelId: string;
-    period: {,
+    period: {
         start: number;
         end: number;
     };
@@ -158,7 +158,7 @@ export interface PricingOptimizationConfig {
     maxPriceIncreasePercent: number;
     maxPriceDecreasePercent: number;
     minRevenueMaintenance: number;
-    filmIndustryOptimization: {,
+    filmIndustryOptimization: {
         studioTierAdjustments: boolean;
         productionCycleTracking: boolean;
         festivalSeasonOptimization: boolean;
@@ -248,7 +248,7 @@ export interface CompetitiveAnalysis {
     position: 'below_market' | 'at_market' | 'above_market';
     competitorCount: number;
     averagePrice: number;
-    priceRange: {,
+    priceRange: {
         min: number;
         max: number;
     };

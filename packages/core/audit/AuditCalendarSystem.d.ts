@@ -191,13 +191,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             timestamp: Date;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        notes: {,
+        notes: {
             author: string;
             content: string;
             timestamp: Date;
         }[];
         completion_percentage: number;
-        milestones: {,
+        milestones: {
             name: string;
             completed: boolean;
             due_date: Date;
@@ -233,7 +233,7 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     tags: string[];
     title: string;
     mandatory: boolean;
-    notifications: {,
+    notifications: {
         channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
@@ -249,12 +249,12 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     estimated_duration: number;
     recurrence_pattern: RecurrencePattern;
     compliance_frameworks: string[];
-    prerequisites: {,
+    prerequisites: {
         description: string;
         type: "task_completion" | "document_approval" | "system_ready";
         completed: boolean;
     }[];
-    deliverables: {,
+    deliverables: {
         name: string;
         type: "documentation" | "assessment" | "report" | "certificate";
         completed: boolean;
@@ -266,13 +266,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     updated_by: string;
     metadata?: Record<string, unknown> | undefined;
     progress?: {
-        notes: {,
+        notes: {
             author: string;
             content: string;
             timestamp: Date;
         }[];
         completion_percentage: number;
-        milestones: {,
+        milestones: {
             name: string;
             completed: boolean;
             due_date: Date;
@@ -412,8 +412,8 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
         show_completed: boolean;
         show_cancelled: boolean;
-        color_by: "priority" | "status" | "assignee" | "activity_type";
-    }, {
+        color_by: "priority" | "status" | "assignee" | "activity_type"
+  }, {
         group_by?: "none" | "assignee" | "activity_type" | "compliance_framework" | undefined;
         show_completed?: boolean | undefined;
         show_cancelled?: boolean | undefined;
@@ -435,8 +435,8 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
         show_completed: boolean;
         show_cancelled: boolean;
-        color_by: "priority" | "status" | "assignee" | "activity_type";
-    } | undefined;
+        color_by: "priority" | "status" | "assignee" | "activity_type"
+  } | undefined;
 }, {
     start_date: Date;
     end_date: Date;
@@ -547,7 +547,7 @@ export declare class AuditCalendarSystem {
             color: string;
             description?: string;
         }>;
-        summary: {,
+        summary: {
             total_events: number;
             by_status: Record<ScheduleStatus, number>;
             by_priority: Record<SchedulePriority, number>;
@@ -588,7 +588,7 @@ export declare class AuditCalendarSystem {
         start: Date;
         end: Date;
     }): {
-        summary: {,
+        summary: {
             total_schedules: number;
             completed_schedules: number;
             overdue_schedules: number;
@@ -603,7 +603,7 @@ export declare class AuditCalendarSystem {
             completed: number;
             overdue: number;
         }>;
-        resource_utilization: {,
+        resource_utilization: {
             by_assignee: Record<string, number>;
             by_activity_type: Record<AuditActivityType, number>;
         };
@@ -638,7 +638,7 @@ export declare         title: string;
         color: string;
         description?: string;
     }>;
-    summary: {,
+    summary: {
         total_events: number;
         by_status: Record<ScheduleStatus, number>;
         by_priority: Record<SchedulePriority, number>;

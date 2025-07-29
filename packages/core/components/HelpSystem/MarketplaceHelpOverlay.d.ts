@@ -19,7 +19,7 @@ export type MarketplaceHelpContentType = 'marketplace-discovery' | 'template-bro
 
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
     type: HelpContentType | MarketplaceHelpContentType;
-    marketplaceContext: {,
+    marketplaceContext: {
         page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
         userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
         templateCategory?: string;

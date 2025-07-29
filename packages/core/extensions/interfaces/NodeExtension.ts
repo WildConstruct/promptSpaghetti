@@ -28,9 +28,9 @@ export interface NodeExtension extends BaseExtension {
   // Node Definition
   export interface NodeDefinition {
   // Basic metadata
-  id: string;,
+  id: string;
   name: string;
-  category: NodeCategory;,
+  category: NodeCategory;
   description: string;
   version: string;
   // Node class
@@ -85,10 +85,10 @@ export interface NodeEditorConfiguration {
   // Node Editor Props
 }
 export interface NodeEditorProps {
-  node: any;,
+  node: any;
   config: any;
   onChange: (config: any) => void;
-  onValidate?: (result: ExtensionValidationResult) => void;,
+  onValidate?: (result: ExtensionValidationResult) => void;
   context: ExtensionContext;
   // Node Field Configuration
 }
@@ -135,7 +135,7 @@ export interface NodePreviewConfiguration {
   // Node Preview Props
 }
 export interface NodePreviewProps {
-  node: any;,
+  node: any;
   config: any;
   context: ExtensionContext;
   executionResult?: any;
@@ -178,14 +178,14 @@ export interface NodeCachingConfiguration {
   // Node Metadata
 }
 export interface NodeMetadata {
-  author: string;,
+  author: string;
   license: string;
   repository?: string;
   documentation?: string;
   examples?: NodeExample;
   changelog?: string;
   // Compatibility
-  compatibility?: {,
+  compatibility?: {
   minVersion: string;
   maxVersion?: string;
   deprecatedIn?: string;
@@ -198,7 +198,7 @@ export interface NodeMetadata {
 // Node Example
 }
 export interface NodeExample {
-  name: string;,
+  name: string;
   description: string;
   config: any;
   expectedOutput?: any;
@@ -217,9 +217,9 @@ export interface NodeValidation {
   // Node Validation Rule
 }
 export interface NodeValidationRule {
-  name: string;,
+  name: string;
   description: string;
-  validate: (node: any, context: any) => ExtensionValidationResult;,
+  validate: (node: any, context: any) => ExtensionValidationResult;
   severity: 'error' | 'warning' | 'info';
   // Node Registry Interface
 }
@@ -258,23 +258,23 @@ export interface NodeExecutionContextExtensions {
   // Node-specific extensions
   nodeExtensions: Map<string, any>;
   // Performance tracking
-  performanceTracking: {,
+  performanceTracking: {
   startTime: number;
   endTime?: number;
   executionTime?: number;
   memoryUsage?: number;
 };
   // Security context
-  securityContext: {,
+  securityContext: {
   permissions: string;
-  sandboxed: boolean;,
-  resourceLimits: {,
+  sandboxed: boolean;
+  resourceLimits: {
   memory?: number;
   time?: number;
 };
   };
   // Caching context
-  cachingContext: {,
+  cachingContext: {
   enabled: boolean;
   cacheKey?: string;
   cacheHit?: boolean;
@@ -299,13 +299,13 @@ export interface ExtendedExecutionContext extends AdvancedExecutionContext {
   // Node Execution Metrics
 }
 export interface NodeExecutionMetrics {
-  nodeId: string;,
+  nodeId: string;
   totalExecutions: number;
-  successfulExecutions: number;,
+  successfulExecutions: number;
   failedExecutions: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   minExecutionTime: number;
-  maxExecutionTime: number;,
+  maxExecutionTime: number;
   averageMemoryUsage: number;
   lastExecuted: Date;
   lastError?: Error;

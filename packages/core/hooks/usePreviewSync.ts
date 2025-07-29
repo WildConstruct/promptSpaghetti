@@ -10,9 +10,9 @@ import { useGraphStore } from '../graphStore';
 import { usePreviewStateStore } from '../stores/previewStateStore';
 import { debounce } from 'lodash';
 interface GraphChangeAnalysis {
-  changeType: 'structural' | 'content' | 'cosmetic';,
+  changeType: 'structural' | 'content' | 'cosmetic';
   affectedNodes: string;
-  affectedEdges: string;,
+  affectedEdges: string;
   significance: number; // 0-1 scale,
   shouldTriggerPreview: boolean;
   interface PreviewSyncOptions {
@@ -22,15 +22,15 @@ interface GraphChangeAnalysis {
   maxAutoRefreshRate?: number;
   enablePerformanceTracking?: boolean;
   interface PreviewSyncReturn {
-  isEnabled: boolean;,
+  isEnabled: boolean;
   isSyncing: boolean;
-  lastSyncTime: number | null;,
+  lastSyncTime: number | null;
   syncCount: number;
-  enableSync: (enabled: boolean) => void;,
+  enableSync: (enabled: boolean) => void;
   forceSyncNow: () => Promise<void>;
-  getChangeAnalysis: () => GraphChangeAnalysis | null;,
-  performanceMetrics: {,
-  avgSyncTime: number;,
+  getChangeAnalysis: () => GraphChangeAnalysis | null;
+  performanceMetrics: {
+  avgSyncTime: number;
   successRate: number;
   cacheHitRate: number;
 };

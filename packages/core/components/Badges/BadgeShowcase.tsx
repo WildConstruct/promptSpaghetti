@@ -555,7 +555,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       </Tabs>
       <style>{`
         .badge-showcase {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
           padding: 1rem;
         .showcase-header {
@@ -563,7 +563,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           margin-bottom: 2rem;
         .showcase-header h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .showcase-header p {
@@ -571,7 +571,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           font-size: 1.125rem;
         .badge-overview {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .overview-stats {
           display: grid;
@@ -583,7 +583,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   transform: translateY(-2px);
         .stat-content {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
           padding: 1.5rem;
         .stat-icon {
@@ -592,17 +592,17 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           flex: 1;
         .stat-value {
           font-size: 1.75rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .badge-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 1rem;
         .badge-card {
-          position: relative;,
+          position: relative;
   transition: all 0.2s ease;
           border-left: 4px solid transparent;
         .badge-card.unlocked {
@@ -610,7 +610,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           border-left-color: #10b981;
         .badge-card.locked {
           background: #f9fafb;
-          border-left-color: #e5e7eb;,
+          border-left-color: #e5e7eb;
   opacity: 0.8;
         .badge-card:hover {,
   transform: translateY(-2px);
@@ -623,28 +623,28 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           align-items: center;
           margin-bottom: 1rem;
         .badge-icon {
-          width: 3rem;,
+          width: 3rem;
   height: 3rem;
-          border-radius: 50%;,
+          border-radius: 50%;
   display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: white;
         .badge-info {
           margin-bottom: 1rem;
         .badge-name {
           font-size: 1.125rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .badge-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-bottom: 0.5rem;
         .badge-points {
           font-size: 0.75rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #059669;
         .tier-diamond { border-left-color: #a855f7; }
         .tier-platinum { border-left-color: #06b6d4; }
@@ -657,30 +657,30 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         .rarity-uncommon { background: linear-gradient(135deg, #d97706, #f59e0b); }
         .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
         .filters {
-          display: flex;,
+          display: flex;
   gap: 1rem;
           margin-bottom: 1.5rem;
           flex-wrap: wrap;
         .empty-state {
-          text-align: center;,
+          text-align: center;
   padding: 3rem;
           color: #6b7280;
         .empty-state h3 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   margin: 1rem 0 0.5rem;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 4rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
@@ -689,36 +689,36 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         .minimal {
           padding: 0.5rem;
         .minimal-stats {
-          display: flex;,
+          display: flex;
   gap: 1rem;
           align-items: center;
         .mini-stat {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .compact .compact-overview {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .compact-stats {
-          display: flex;,
+          display: flex;
   gap: 1rem;
         .compact-stat {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
         .recent-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .recent-badge-mini {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
-          border-radius: 50%;,
+          border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-          color: white;,
+          color: white;
   display: flex;
           align-items: center;
           justify-content: center;

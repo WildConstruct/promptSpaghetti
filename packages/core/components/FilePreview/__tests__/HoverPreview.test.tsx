@@ -9,7 +9,7 @@ import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
-  projectManager: {,
+  projectManager: {
   generateThumbnail: jest.fn<unknown, unknown>(),
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
@@ -25,7 +25,7 @@ describe('HoverPreview Component', () => {
   size: 3072,
   lastModified: new Date('2025-01-15T14:30:00Z'),
   nodeCount: 25,
-  metadata: {,
+  metadata: {
   title: 'Hover Test File',
   description: 'A file for testing hover preview functionality',
   tags: ['test', 'hover'],
@@ -299,7 +299,7 @@ describe('HoverPreview Component', () => {
     it('handles missing file metadata gracefully', async () => {
   const fileWithoutMetadata = {
   ...mockFile,
-  metadata: {,
+  metadata: {
   ...mockFile.metadata,
   title: undefined,
   description: undefined,

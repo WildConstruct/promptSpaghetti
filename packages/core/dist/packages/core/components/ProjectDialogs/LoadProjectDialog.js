@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
-{
+export const LoadProjectDialog = ({ isOpen, onClose, onLoad }) => {
     const { loadProject, hasUnsavedChanges } = useGraphStore();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -159,7 +159,7 @@ import { useGraphStore } from '../../graphStore';
             }
         };
     };
-}
+};
 { /* Action Buttons */ }
 _jsxs("div", { style: {
         display: 'flex',

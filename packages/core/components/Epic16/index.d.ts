@@ -44,17 +44,17 @@ export interface Epic16ComponentTheme {
     accent: string;
     background: string;
     surface: string;
-    text: {,
+    text: {
         primary: string;
         secondary: string;
         disabled: string;
     };
-    border: {,
+    border: {
         light: string;
         medium: string;
         dark: string;
     };
-    state: {,
+    state: {
         success: string;
         warning: string;
         error: string;
@@ -69,8 +69,8 @@ export declare const Epic16DesignTokens: {
         readonly md: "1rem";
         readonly lg: "1.5rem";
         readonly xl: "2rem";
-        readonly '2xl': "3rem";
-    };
+        readonly '2xl': "3rem"
+  };
     readonly borderRadius: {
         readonly sm: "0.25rem";
         readonly md: "0.375rem";
@@ -89,8 +89,8 @@ export declare const Epic16DesignTokens: {
         readonly normal: "400";
         readonly medium: "500";
         readonly semibold: "600";
-        readonly bold: "700";
-    };
+        readonly bold: "700"
+  };
     readonly boxShadow: {
         readonly sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)";
         readonly md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)";

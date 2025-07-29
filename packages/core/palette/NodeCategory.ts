@@ -18,19 +18,19 @@ import {
  */
 
 export interface NodeCategory {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   icon: React.ComponentType<{ size?: number; color?: string }>;
-  color: string;,
+  color: string;
   order: number;
-  collapsible: boolean;,
+  collapsible: boolean;
   defaultExpanded: boolean;
   metadata?: {
   keywords?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
-  usage?: 'common' | 'specialized' | 'experimental';
-};
+  usage?: 'common' | 'specialized' | 'experimental'
+  };
 /**
  * Special category IDs for system categories
  */
@@ -45,7 +45,7 @@ export const SPECIAL_CATEGORIES = {
  */
 export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   // Content creation nodes
-  content: {,
+  content: {
   id: 'content',
   name: 'Content Building',
   description: 'Basic building blocks for creating content and prompts',
@@ -54,13 +54,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 1,
   collapsible: true,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['text', 'content', 'character', 'subject', 'action', 'attribute'],
   difficulty: 'beginner',
   usage: 'common',
 }
   // Flow control and logic
-  flow: {,
+  flow: {
   id: 'flow',
   name: 'Flow Control',
   description: 'Control how content flows and connects together',
@@ -69,13 +69,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 2,
   collapsible: true,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['flow', 'control', 'random', 'choice', 'combine', 'concat'],
   difficulty: 'beginner',
   usage: 'common',
 }
   // Advanced rule-based nodes
-  advanced: {,
+  advanced: {
   id: 'advanced',
   name: 'Advanced Rules',
   description: 'Sophisticated logic and rule-based content generation',
@@ -84,13 +84,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 3,
   collapsible: true,
   defaultExpanded: false,
-  metadata: {,
+  metadata: {
   keywords: ['advanced', 'rules', 'conditional', 'weighted', 'smart'],
   difficulty: 'advanced',
   usage: 'specialized',
 }
   // Data transformation
-  transform: {,
+  transform: {
   id: 'transform',
   name: 'Transform & Logic',
   description: 'Transform and process data through complex logic',
@@ -99,13 +99,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 4,
   collapsible: true,
   defaultExpanded: false,
-  metadata: {,
+  metadata: {
   keywords: ['transform', 'logic', 'sequential', 'markov', 'process'],
   difficulty: 'intermediate',
   usage: 'specialized',
 }
   // Output and results
-  output: {,
+  output: {
   id: 'output',
   name: 'Output & Results',
   description: 'Final output nodes and result formatting',
@@ -114,13 +114,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 5,
   collapsible: true,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['output', 'result', 'final', 'export'],
   difficulty: 'beginner',
   usage: 'common',
 }
   // Memory and variables
-  memory: {,
+  memory: {
   id: 'memory',
   name: 'Memory & Variables',
   description: 'Store and retrieve values during execution',
@@ -129,13 +129,13 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 6,
   collapsible: true,
   defaultExpanded: false,
-  metadata: {,
+  metadata: {
   keywords: ['memory', 'variable', 'store', 'retrieve', 'get', 'set'],
   difficulty: 'intermediate',
   usage: 'common',
 }
   // Custom processing
-  process: {,
+  process: {
   id: 'process',
   name: 'Custom Processing',
   description: 'Custom scripts and advanced processing capabilities',
@@ -144,7 +144,7 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 7,
   collapsible: true,
   defaultExpanded: false,
-  metadata: {,
+  metadata: {
   keywords: ['custom', 'script', 'python', 'processing', 'transform'],
   difficulty: 'advanced',
   usage: 'experimental',
@@ -159,7 +159,7 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 0,
   collapsible: false,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['favorites', 'starred', 'bookmarks'],
   difficulty: 'beginner',
   usage: 'common',
@@ -173,7 +173,7 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: -1,
   collapsible: false,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['search', 'results', 'filter'],
   difficulty: 'beginner',
   usage: 'common',
@@ -187,7 +187,7 @@ export const NODE_CATEGORIES: Record<string, NodeCategory> = {
   order: 999,
   collapsible: false,
   defaultExpanded: true,
-  metadata: {,
+  metadata: {
   keywords: ['all', 'complete', 'everything'],
   difficulty: 'beginner',
   usage: 'common',

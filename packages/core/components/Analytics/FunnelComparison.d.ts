@@ -32,7 +32,7 @@ export interface ComparisonConfiguration {
     mode: ComparisonMode;
     baseline: ComparisonTarget;
     comparison: ComparisonTarget;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -87,40 +87,40 @@ export interface StepPerformanceData {
     value: number;
 
 export interface PerformanceDelta {
-    overallConversionRate: {,
+    overallConversionRate: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
-    totalConversions: {,
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
+    totalConversions: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
-    averageTimeToConvert: {,
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
+    averageTimeToConvert: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
-    totalValue: {,
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
+    totalValue: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
     stepDeltas: StepDelta[];
 
 export interface StepDelta {
     stepId: string;
-    conversionRate: {,
+    conversionRate: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
-    dropOffRate: {,
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
+    dropOffRate: {
         absolute: number;
         relative: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
 
 export interface StatisticalTestResult {
     testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
@@ -152,7 +152,7 @@ export interface ComparisonInsight {
 
 export interface InsightEvidence {
     statisticalTest?: StatisticalTestResult;
-    sampleSizes: {,
+    sampleSizes: {
         baseline: number;
         comparison: number;
     };
@@ -164,7 +164,7 @@ export interface ComparisonMetadata {
     comparisonId: string;
     generatedAt: number;
     configuration: ComparisonConfiguration;
-    dataQuality: {,
+    dataQuality: {
         baselineSampleSize: number;
         comparisonSampleSize: number;
         dataCompleteness: number;
@@ -176,7 +176,7 @@ export interface ComparisonMetadata {
 
 export interface ComparisonExportData {
     comparison: ComparisonResult;
-    rawData: {,
+    rawData: {
         baselineEvents: FlexibleConversionEvent[];
         comparisonEvents: FlexibleConversionEvent[];
     };

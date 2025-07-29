@@ -26,48 +26,48 @@ export interface NodeValidationConfig {
 }
 export interface NodeValidationResult extends ValidationResult {
   /** Security-specific validation results */
-  security: {,
-  passed: boolean;,
-  threats: SecurityThreat;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
-};
-  /** Performance-specific validation results */
-  performance: {,
+  security: {
   passed: boolean;
-  issues: PerformanceIssue;,
+  threats: SecurityThreat;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical'
+  };
+  /** Performance-specific validation results */
+  performance: {
+  passed: boolean;
+  issues: PerformanceIssue;
   estimatedMemoryUsage: number;
   estimatedExecutionTime: number;
 };
   /** Type safety validation results */
-  typeSafety: {,
+  typeSafety: {
   passed: boolean;
-  typeErrors: TypeError;,
-  compatibility: 'full' | 'partial' | 'incompatible';
-};
+  typeErrors: TypeError;
+  compatibility: 'full' | 'partial' | 'incompatible'
+  };
   /** Schema validation results */
-  schema: {,
+  schema: {
   passed: boolean;
   schemaErrors: string;
 };
 
 export interface SecurityThreat {
-  type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';,
+  type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   location: string;
   recommendation: string;
 }
 export interface PerformanceIssue {
-  type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';,
+  type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
   severity: 'low' | 'medium' | 'high';
-  description: string;,
+  description: string;
   impact: string;
   suggestion: string;
 }
 export interface TypeError {
-  expected: string;,
+  expected: string;
   actual: string;
-  field: string;,
+  field: string;
   description: string;
   /**
   * Core Node Validation Framework
@@ -115,23 +115,23 @@ export class NodeValidationFramework {
   valid: true,
   errors: [],
   warnings: [],
-  security: {,
+  security: {
   passed: true,
   threats: [],
   riskLevel: 'low',
 },
-  performance: {,
+  performance: {
   passed: true,
   issues: [],
   estimatedMemoryUsage: 0,
   estimatedExecutionTime: 0,
 },
-  typeSafety: {,
+  typeSafety: {
   passed: true,
   typeErrors: [],
   compatibility: 'full',
 },
-  schema: {,
+  schema: {
   passed: true,
   schemaErrors: [],
 };

@@ -126,7 +126,14 @@ export const NODE_CATEGORIES = {
                                     usage: 'experimental',
                                 }
                                 // Special categories
-                                [SPECIAL_CATEGORIES.FAVORITES] } } } } } } }
+                                [SPECIAL_CATEGORIES.FAVORITES]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }, { id: SPECIAL_CATEGORIES, FAVORITES, name: , 'Favorites': , description: , 'Your most frequently used nodes': , icon: FiStar, color: , '#fbbf24': , // Yellow,
 order: , 0: , collapsible: , false: , defaultExpanded: , true: , metadata: { keywords: [], 'favorites': , 'starred': , 'bookmarks': , difficulty: , 'beginner': , usage: , 'common': , }, [SPECIAL_CATEGORIES.SEARCH_RESULTS]: { id: SPECIAL_CATEGORIES, SEARCH_RESULTS, name: , 'Search Results': , description: , 'Nodes matching your search criteria': , icon: FiSearch, color: , '#6b7280': , // Gray,
 order:  } };

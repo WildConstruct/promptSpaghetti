@@ -47,60 +47,60 @@ const { _Option } = Select;
 
 // Types for promotion preview
 interface PromotionSlot {
-  id: string;,
+  id: string;
   name: string;
-  type: string;,
+  type: string;
   location: string;
   dimensions: { width: number; height: number };
-  traffic_allocation: number;,
+  traffic_allocation: number;
   priority: number;
 interface PromotionPreviewData {
-  schedule: {,
-  id: string;,
+  schedule: {
+  id: string;
   title: string;
-  promotion_type: string;,
+  promotion_type: string;
   slot: PromotionSlot;
-  start_date: Date;,
+  start_date: Date;
   end_date: Date;
   status: string;
 };
   content: Array<{,
   id: string;
-  title: string;,
+  title: string;
   category: string;
-  thumbnail: string;,
+  thumbnail: string;
   rating: number;
-  downloads: number;,
+  downloads: number;
   performance_score: number;
 }>;
-  rotation_config: {,
+  rotation_config: {
   pattern: string;
   duration_per_content?: number;
   click_threshold?: number;
   performance_threshold?: number;
 };
-  predicted_performance: {,
+  predicted_performance: {
   estimated_impressions: number;
-  estimated_ctr: number;,
+  estimated_ctr: number;
   estimated_conversions: number;
-  estimated_revenue: number;,
+  estimated_revenue: number;
   confidence_level: number;
 };
   ab_test_config?: {
-  test_name: string;,
+  test_name: string;
   variants: Array<{,
-  id: string;,
+  id: string;
   name: string;
-  traffic_split: number;,
+  traffic_split: number;
   content_ids: string;
 }>;
   };
 interface PerformancePrediction {
-  metric: string;,
+  metric: string;
   predicted_value: number;
   confidence_range: [number, number];
   factors: Array<{,
-  name: string;,
+  name: string;
   impact: number;
   description: string;
 }>;
@@ -610,7 +610,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
       <style>{`
         .promotion-preview {
           background: #fff;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 24px;
         .preview-header {
           display: flex;
@@ -625,12 +625,12 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           align-items: center;
           margin-bottom: 16px;
         .slot-mockup {
-          position: relative;,
+          position: relative;
   margin: 20px 0;
         .preview-controls {
-          position: absolute;,
+          position: absolute;
   bottom: -40px;
-          left: 50%;,
+          left: 50%;
   transform: translateX(-50%);
           background: rgba(255, 255, 255, 0.9);
           padding: 8px 12px;
@@ -638,9 +638,9 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         .content-preview-card {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
-          padding: 16px;,
+          padding: 16px;
   background: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -668,13 +668,13 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           border-color: #1890ff;
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         .promotion-preview-empty {
-          text-align: center;,
+          text-align: center;
   padding: 60px 20px;
           background: #fafafa;
           border-radius: 8px;
         @media (max-width: 768px) {
           .slot-mockup {
-            width: 100% !important;,
+            width: 100% !important;
   height: 300px !important;
           .content-preview-card {
             flex-direction: column;

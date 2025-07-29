@@ -274,7 +274,8 @@ const renderDashboardContent = () => {
                         alerts: {
                             total: securityAlerts.length,
                             newLast24h: securityAlerts.filter(a => ),
-                            Date, : .now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000 }
+                            Date, : .now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
+                        }
                     } });
         }
     }
@@ -401,7 +402,7 @@ if (loading) {
                     width: '64px',
                     height: '64px',
                     border: `4px solid ${themeStyles.border}`
-                } }), ", borderTop: `4px solid $", themeStyles.primary, "`} }, borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '24px'; }} />", _jsx("div", { style: { fontSize: '18px', fontWeight: 600, marginBottom: '8px' }, children: "Loading Security Dashboard..." }), _jsx("div", { style: { fontSize: '14px', color: themeStyles.textSecondary }, children: "Initializing real-time monitoring and threat detection" }), _jsx("style", { children: `
+                } }), ", borderTop: `4px solid $", themeStyles.primary, "`} }, borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '24px' }} />", _jsx("div", { style: { fontSize: '18px', fontWeight: 600, marginBottom: '8px' }, children: "Loading Security Dashboard..." }), _jsx("div", { style: { fontSize: '14px', color: themeStyles.textSecondary }, children: "Initializing real-time monitoring and threat detection" }), _jsx("style", { children: `
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -476,7 +477,7 @@ if (loading) {
                     < div, " style=", {
                     padding: '6px 12px',
                     background: securityMetrics.riskLevel === 'critical' ? `${themeStyles.critical}20` : 
-                }, "securityMetrics.riskLevel === 'high' ? `$", themeStyles.error, "20` :} securityMetrics.riskLevel === 'medium' ? `$", themeStyles.warning, "20` :} `$", themeStyles.success, "20`} }, color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :, securityMetrics.riskLevel === 'high' ? themeStyles.error : securityMetrics.riskLevel === 'medium' ? themeStyles.warning : themeStyles.success, borderRadius: '6px', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase'; }}> Risk: ", securityMetrics.riskLevel] });
+                }, "securityMetrics.riskLevel === 'high' ? `$", themeStyles.error, "20` :} securityMetrics.riskLevel === 'medium' ? `$", themeStyles.warning, "20` :} `$", themeStyles.success, "20`} }, color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :, securityMetrics.riskLevel === 'high' ? themeStyles.error : securityMetrics.riskLevel === 'medium' ? themeStyles.warning : themeStyles.success, borderRadius: '6px', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase' }}> Risk: ", securityMetrics.riskLevel] });
     }
     div >
     ;

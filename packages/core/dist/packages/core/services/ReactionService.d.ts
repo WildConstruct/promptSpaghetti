@@ -8,9 +8,31 @@ export interface ReactionAnalytics {
     uniqueReactors: number;
     reactionBreakdown: Record<string, {
         count: number;
-    }, percentage>;
-    number: any;
-    trend: 'increasing' | 'decreasing' | 'stable';
+        percentage: number;
+        trend: 'increasing' | 'decreasing' | 'stable';
+    }>;
+    sentimentAnalysis: {
+        overallScore: number;
+        positivePercentage: number;
+        neutralPercentage: number;
+        negativePercentage: number;
+        emotionalDistribution: Record<string, number>;
+    };
+    engagementMetrics: {
+        reactionRate: number;
+        velocityScore: number;
+        viralityIndicator: number;
+        retentionScore: number;
+    };
+    temporalPatterns: {
+        hourlyDistribution: number;
+        dailyDistribution: number;
+        peakActivityHours: number;
+        seasonalTrends?: Array<{}, period>;
+        string: any;
+        count: number;
+        change: number;
+    };
 }
 export interface ReactionBehaviorInsights {
     userId: string;

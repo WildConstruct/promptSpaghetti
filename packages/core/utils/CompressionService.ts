@@ -43,7 +43,7 @@ export enum CompressionAlgorithm {
   VIDEO = 'video',
   AUDIO = 'audio'
   export interface CompressionOptions {
-  algorithm: CompressionAlgorithm;,
+  algorithm: CompressionAlgorithm;
   level: CompressionLevel;
   dataType: DataType;
   threshold?: number; // Minimum size in bytes to compress,
@@ -51,11 +51,11 @@ export enum CompressionAlgorithm {
   includeMetadata?: boolean; // Include compression metadata in output,
 }
 export interface CompressionResult {
-  success: boolean;,
+  success: boolean;
   originalSize: number;
-  compressedSize: number;,
+  compressedSize: number;
   compressionRatio: number; // 0-1, where 0.5 means 50% of original size,
-  algorithm: CompressionAlgorithm;,
+  algorithm: CompressionAlgorithm;
   level: CompressionLevel;
   compressionTime: number; // milliseconds,
   data: Buffer;
@@ -63,30 +63,30 @@ export interface CompressionResult {
   error?: string;
 }
 export interface CompressionMetadata {
-  algorithm: CompressionAlgorithm;,
+  algorithm: CompressionAlgorithm;
   level: CompressionLevel;
-  originalSize: number;,
+  originalSize: number;
   compressedAt: Date;
   dataType: DataType;
   checksum?: string;
   version: string; // Compression service version,
 }
 export interface CompressionStats {
-  totalCompressions: number;,
+  totalCompressions: number;
   totalDecompressions: number;
-  totalBytesCompressed: number;,
+  totalBytesCompressed: number;
   totalBytesDecompressed: number;
-  totalCompressionTime: number;,
+  totalCompressionTime: number;
   totalDecompressionTime: number;
-  averageCompressionRatio: number;,
+  averageCompressionRatio: number;
   algorithmStats: Map<CompressionAlgorithm, AlgorithmStats>;
 }
 export interface AlgorithmStats {
-  algorithm: CompressionAlgorithm;,
+  algorithm: CompressionAlgorithm;
   usageCount: number;
-  totalBytesProcessed: number;,
+  totalBytesProcessed: number;
   totalProcessingTime: number;
-  averageCompressionRatio: number;,
+  averageCompressionRatio: number;
   averageSpeed: number; // bytes per millisecond,
 }
 export interface StreamCompressionOptions extends CompressionOptions {
@@ -208,7 +208,7 @@ export class CompressionService {
   /**
    * Decompress data
    */
-  async decompress(data: Buffer,)
+  async decompress(data: Buffer)
     algorithm?: CompressionAlgorithm,
     metadata?: CompressionMetadata
   ): Promise<Buffer> {
@@ -427,10 +427,10 @@ export class CompressionService {
   /**
   * Get compression efficiency report
   */
-  getEfficiencyReport(): {,
-  totalSpaceSaved: number;,
+  getEfficiencyReport(): {
+  totalSpaceSaved: number;
   averageCompressionRatio: number;
-  bestPerformingAlgorithm: CompressionAlgorithm;,
+  bestPerformingAlgorithm: CompressionAlgorithm;
   recommendedSettings: CompressionOptions;
   const totalOriginal = this.stats.totalBytesCompressed;
   const totalCompressed = Array.from(this.stats.algorithmStats.values());
@@ -442,7 +442,7 @@ export class CompressionService {
   totalSpaceSaved: totalOriginal - totalCompressed,
   averageCompressionRatio: this.stats.averageCompressionRatio,
   bestPerformingAlgorithm: bestAlgorithm,
-  recommendedSettings: {,
+  recommendedSettings: {
   algorithm: bestAlgorithm,
   level: CompressionLevel.BALANCED,
   dataType: DataType.TEXT,
@@ -474,7 +474,7 @@ export class CompressionService {
   averageCompressionRatio: 1.0,
   algorithmStats: new Map(),
 };
-  private updateCompressionStats(algorithm: CompressionAlgorithm,)
+  private updateCompressionStats(algorithm: CompressionAlgorithm)
     originalSize: number,
     compressedSize: number,
     timeMs: number): void {,
@@ -504,7 +504,7 @@ export class CompressionService {
     algorithmStat.averageCompressionRatio = 
       (algorithmStat.averageCompressionRatio * (algorithmStat.usageCount - 1) + ratio) / algorithmStat.usageCount;
     algorithmStat.averageSpeed = algorithmStat.totalBytesProcessed / algorithmStat.totalProcessingTime;
-  private updateDecompressionStats(algorithm: CompressionAlgorithm,)
+  private updateDecompressionStats(algorithm: CompressionAlgorithm)
     compressedSize: number,
     decompressedSize: number,
     timeMs: number): void {,
@@ -531,7 +531,7 @@ class DeflateProcessor extends AlgorithmProcessor {
   class BrotliProcessor extends AlgorithmProcessor {
   async compress(data: Buffer, options: CompressionOptions): Promise<Buffer> {,
   return brotliCompressAsync(data, {)
-  params: {,
+  params: {
   [require('zlib').constants.BROTLI_PARAM_QUALITY]: options.level,
 });
   async decompress(data: Buffer): Promise<Buffer> {

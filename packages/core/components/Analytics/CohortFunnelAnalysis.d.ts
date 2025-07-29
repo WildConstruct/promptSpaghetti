@@ -21,7 +21,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface CohortFunnelAnalysisProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -155,22 +155,22 @@ export interface ValueTrajectoryPoint {
     projectedValue: number;
 
 export interface ValueDistribution {
-    lowValue: {,
+    lowValue: {
         threshold: number;
         percentage: number;
         totalValue: number;
     };
-    mediumValue: {,
+    mediumValue: {
         threshold: number;
         percentage: number;
         totalValue: number;
     };
-    highValue: {,
+    highValue: {
         threshold: number;
         percentage: number;
         totalValue: number;
     };
-    topPercentile: {,
+    topPercentile: {
         threshold: number;
         percentage: number;
         totalValue: number;
@@ -253,12 +253,12 @@ export interface CohortRanking {
 
 export interface CohortDifference {
     metric: string;
-    cohortA: {,
+    cohortA: {
         id: string;
         name: string;
         value: number;
     };
-    cohortB: {,
+    cohortB: {
         id: string;
         name: string;
         value: number;
@@ -551,13 +551,13 @@ export interface InterventionRecommendation {
 
 export interface CohortAnalysisExportData {
     analysisMode: CohortAnalysisMode;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
     cohorts: string[];
     data: CohortAnalysisData;
-    visualizations: {,
+    visualizations: {
         comparative: string;
         retention: string;
         lifecycle: string;
@@ -565,7 +565,7 @@ export interface CohortAnalysisExportData {
     };
     insights: CohortInsight[];
     recommendations: InterventionRecommendation[];
-    metadata: {,
+    metadata: {
         exportedAt: number;
         analysisDepth: 'basic' | 'standard' | 'comprehensive';
         dataQuality: number;

@@ -22,9 +22,9 @@ interface TemplateCustomizationDialogProps {
   projectId?: string;
   className?: string;
 interface ParameterDefinition {
-  key: string;,
+  key: string;
   label: string;
-  type: 'string' | 'number' | 'boolean' | 'select' | 'multiselect' | 'json' | 'color' | 'file';,
+  type: 'string' | 'number' | 'boolean' | 'select' | 'multiselect' | 'json' | 'color' | 'file';
   defaultValue: Error;
   description?: string;
   required?: boolean;
@@ -39,7 +39,7 @@ interface ParameterDefinition {
 interface CustomizationState {
   parameters: Record<string, any>;
   customFields: Record<string, any>;
-  preview: unknown;,
+  preview: unknown;
   validationErrors: Record<string, string>;
   isDirty: boolean;
 const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
@@ -51,7 +51,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       defaultValue: 2,
       description: 'Number of spaces for JSON indentation',
       validation: { min: 0, max: 8 },
-      category: 'Formatting';
+      category: 'Formatting'
   }
     {
   key: 'includeMetadata',
@@ -66,7 +66,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'Date Format',
       type: 'select',
       defaultValue: 'iso',
-      validation: {,
+      validation: {
   options: [,
           { value: 'iso', label: 'ISO 8601 (2024-01-01T00:00:00Z)' },
           { value: 'unix', label: 'Unix Timestamp (1704067200)' },
@@ -82,14 +82,14 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       defaultValue: -1,
       description: 'YAML flow level (-1 for no flow)',
       validation: { min: -1, max: 10 },
-      category: 'Formatting';
+      category: 'Formatting'
   }
     {
       key: 'quotingType',
       label: 'String Quoting',
       type: 'select',
       defaultValue: 'auto',
-      validation: {,
+      validation: {
   options: [,
           { value: 'auto', label: 'Automatic' },
           { value: 'single', label: 'Single Quotes' },
@@ -119,7 +119,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'Delimiter',
       type: 'select',
       defaultValue: ',',
-      validation: {,
+      validation: {
   options: [,
           { value: ',', label: 'Comma ()' },
           { value: ';', label: 'Semicolon (;)' },
@@ -127,7 +127,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
           { value: '|', label: 'Pipe (|)' }
         ]
   },
-  category: 'Formatting';
+  category: 'Formatting'
   }
     {
       key: 'includeHeaders',
@@ -141,20 +141,20 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'Heading Style',
       type: 'select',
       defaultValue: 'atx',
-      validation: {,
+      validation: {
   options: [,
           { value: 'atx', label: 'ATX Style (# Heading)' },
           { value: 'setext', label: 'Setext Style (Heading\n======)' }
         ]
   },
-  category: 'Formatting';
+  category: 'Formatting'
   }
     {
       key: 'tableStyle',
       label: 'Table Style',
       type: 'select',
       defaultValue: 'github',
-      validation: {,
+      validation: {
   options: [,
           { value: 'github', label: 'GitHub Flavored' },
           { value: 'plain', label: 'Plain Markdown' }
@@ -167,14 +167,14 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'Page Size',
       type: 'select',
       defaultValue: 'A4',
-      validation: {,
+      validation: {
   options: [,
           { value: 'A4', label: 'A4' },
           { value: 'Letter', label: 'Letter' },
           { value: 'Legal', label: 'Legal' }
         ]
   },
-  category: 'Layout';
+  category: 'Layout'
   }
     {
       key: 'margins',
@@ -196,7 +196,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'Theme',
       type: 'select',
       defaultValue: 'default',
-      validation: {,
+      validation: {
   options: [,
           { value: 'default', label: 'Default' },
           { value: 'dark', label: 'Dark Theme' },
@@ -219,7 +219,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       label: 'VFX Pipeline',
       type: 'select',
       defaultValue: 'standard',
-      validation: {,
+      validation: {
   options: [,
           { value: 'standard', label: 'Standard Pipeline' },
           { value: 'maya', label: 'Maya Pipeline' },
@@ -227,7 +227,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
           { value: 'blender', label: 'Blender Pipeline' }
         ]
   },
-  category: 'Pipeline';
+  category: 'Pipeline'
   }
     {
       key: 'frameRange',
@@ -388,7 +388,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
 },
   borderRadius: '6px',
       fontSize: '14px',
-      background: error ? '#fef2f2' : 'white';
+      background: error ? '#fef2f2' : 'white'
   };
     switch (param.type) {
       case 'string':

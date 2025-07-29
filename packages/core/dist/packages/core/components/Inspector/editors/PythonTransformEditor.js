@@ -25,18 +25,15 @@ export const PythonTransformEditor = (props) => {
     const defaultOutput = pythonConfig.defaultOutput || '';
     // No manual collapse state needed - managed by ProgressiveDisclosureSection
     // State for validation
-    const [codeValidation, setCodeValidation] = useState < {
-        valid: boolean,
-        errors: string,
-        warnings: string
-    } | null > (null);
+    const [codeValidation, setCodeValidation] = useState(null);
     const [isValidating, setIsValidating] = useState(false);
     const handleFieldChange = (field, value) => {
         onChange({ [field]: value });
     };
     const handlePythonConfigChange = (field, value) => {
         onChange({});
-        pythonConfig: { }
+        pythonConfig: {
+        }
     };
 };
 pythonConfig,

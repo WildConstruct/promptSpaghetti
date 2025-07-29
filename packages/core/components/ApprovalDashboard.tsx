@@ -20,38 +20,38 @@ import {
   PencilIcon
 } from '@heroicons/react/24/outline';
 interface ApprovalRequest {
-  id: string;,
+  id: string;
   workspace_id: string;
-  resource_id: string;,
+  resource_id: string;
   rule_id: string;
-  transition_id: string;,
+  transition_id: string;
   requester_id: string;
   title: string;
   description?: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   business_justification?: string;
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';,
+  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';
   requested_at: Date;
   due_date?: Date;
   completed_at?: Date;
-  current_approvals: number;,
+  current_approvals: number;
   required_approvals: number;
   approval_percentage: number;
   escalated_at?: Date;
   escalation_reason?: string;
   interface ReviewerAssignment {
-  id: string;,
+  id: string;
   approval_request_id: string;
-  reviewer_id: string;,
+  reviewer_id: string;
   assignment_type: 'primary' | 'secondary' | 'escalated';
   assignment_reason?: string;
-  assigned_at: Date;,
+  assigned_at: Date;
   status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'abstained';
   reviewed_at?: Date;
   review_comment?: string;
   criteria_evaluations: Record<string, any>;
   interface ApprovalDashboardProps {
-  workspaceId: string;,
+  workspaceId: string;
   currentUserId: string;
   mode?: 'reviewer' | 'requester' | 'admin';
   export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({,)
@@ -119,7 +119,7 @@ interface ApprovalRequest {
       const response = await fetch(`/api/approval/requests/${requestId}/review`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
   'x-user-id': currentUserId,
 },

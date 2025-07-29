@@ -86,14 +86,14 @@ export enum PromotionType {
   readonly id: string;
   readonly type: PromotionType;
   // Basic information
-  name: string;,
+  name: string;
   description: string;
   internal_notes?: string;
   // Status and lifecycle
-  status: PromotionStatus;,
+  status: PromotionStatus;
   enabled: boolean;
   // Timing
-  start_date: Date;,
+  start_date: Date;
   end_date: Date;
   timezone: string;
   // Application
@@ -103,7 +103,7 @@ export enum PromotionType {
   usage_count: number;
   user_usage_limit?: number; // Per-user limit,
   // Targeting
-  target_type: PromotionTargetType;,
+  target_type: PromotionTargetType;
   targeting_rules: PromotionTargetingRule;
   // Priority and stacking
   priority: number; // 1-100, higher = more important,
@@ -115,9 +115,9 @@ export enum PromotionType {
   metadata: Record<string, any>;
   tags: string;
   // Audit trail
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
-  created_by: string;,
+  created_by: string;
   last_updated_by: string;
   approved_by?: string;
   approved_at?: Date;
@@ -155,7 +155,7 @@ export interface DiscountPromotion extends BasePromotion {
   | PromotionType.NEW_ARRIVALS
   | PromotionType.CREATOR_SPOTLIGHT;
   // Content selection
-  content_selection_strategy: ContentSelectionStrategy;,
+  content_selection_strategy: ContentSelectionStrategy;
   content_criteria: ContentSelectionCriteria;
   selected_content_ids: string;
   // Display configuration
@@ -173,19 +173,19 @@ export interface DiscountPromotion extends BasePromotion {
   | PromotionType.UPSELL
   | PromotionType.BUNDLE_DEAL;
   // Bundle configuration
-  bundle_config: BundleConfiguration;,
+  bundle_config: BundleConfiguration;
   bundle_items: BundleItem;
   // Discount for bundle
   bundle_discount: DiscountConfiguration;
   // Display and recommendations
-  recommendation_strategy: BundleRecommendationStrategy;,
+  recommendation_strategy: BundleRecommendationStrategy;
   display_triggers: BundleTrigger;
   /**
   * Campaign promotion - overarching marketing campaign
   */
   export interface CampaignPromotion extends BasePromotion {
   // Campaign information
-  campaign_name: string;,
+  campaign_name: string;
   campaign_theme: string;
   campaign_objectives: string;
   // Associated promotions
@@ -215,7 +215,7 @@ export interface DiscountPromotion extends BasePromotion {
   // Currency for fixed amounts
   currency: string;
   // Compound settings
-  compound_with_other_discounts: boolean;,
+  compound_with_other_discounts: boolean;
   apply_to_sale_items: boolean;
 }
 export interface DiscountTier {
@@ -248,18 +248,18 @@ export interface ApplicableItemsFilter {
   updated_after?: Date;
 }
 export interface PromotionTargetingRule {
-  type: PromotionTargetType;,
+  type: PromotionTargetType;
   conditions: TargetingCondition;
   operator: 'AND' | 'OR'; // How to combine conditions,
 }
 export interface TargetingCondition {
   field: string; // user.tier, user.location.country, user.total_purchases, etc.,
-  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'not_in';,
+  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'not_in';
   value: any;
   weight?: number; // For weighted scoring,
 }
 export interface ContentSelectionStrategy {
-  method: 'manual' | 'automatic' | 'hybrid';,
+  method: 'manual' | 'automatic' | 'hybrid';
   automatic_refresh: boolean;
   refresh_interval_hours?: number;
   performance_based_rotation: boolean;
@@ -290,19 +290,19 @@ export interface ContentSelectionCriteria {
   max_content_count: number;
 }
 export interface ContentDiversificationRule {
-  attribute: 'creator' | 'category' | 'content_type' | 'price_range';,
+  attribute: 'creator' | 'category' | 'content_type' | 'price_range';
   max_percentage: number;
   enforce_minimum_variety: boolean;
 }
 export interface ContentDisplayConfiguration {
   // Layout and positioning
   display_location: string; // homepage_hero, category_top, sidebar, etc.,
-  layout_type: 'carousel' | 'grid' | 'list' | 'featured_card' | 'banner';,
+  layout_type: 'carousel' | 'grid' | 'list' | 'featured_card' | 'banner';
   max_visible_items: number;
   // Visual styling
   theme: string;
   custom_css?: string;
-  show_badges: boolean;,
+  show_badges: boolean;
   show_pricing: boolean;
   show_creator_info: boolean;
   // Call-to-action
@@ -317,19 +317,19 @@ export interface ContentRotationConfig {
   // Fixed time rotation
   rotation_interval_minutes?: number;
   // Performance-based rotation
-  performance_thresholds?: {,
+  performance_thresholds?: {
   min_ctr?: number;
   min_conversions?: number;
   max_time_minutes?: number;
 };
   // Weighted rotation
   weight_factors?: {
-  performance_weight: number;,
+  performance_weight: number;
   recency_weight: number;
   diversity_weight: number;
 };
   // General settings
-  randomize_order: boolean;,
+  randomize_order: boolean;
   allow_repeat_within_session: boolean;
 }
 export interface BundleConfiguration {
@@ -341,17 +341,17 @@ export interface BundleConfiguration {
   // Dynamic bundles: AI-driven recommendations,
   dynamic_strategy?: 'collaborative_filtering' | 'content_similarity' | 'purchase_history';
   // Bundle constraints
-  min_items: number;,
+  min_items: number;
   max_items: number;
   allow_duplicates: boolean;
 }
 export interface BundleFlexibleOption {
-  category: string;,
+  category: string;
   required_count: number;
   available_items?: string;
 }
 export interface BundleItem {
-  item_id: string;,
+  item_id: string;
   required: boolean;
   discount_percentage?: number; // Individual item discount within bundle,
   position?: number; // Display order,
@@ -364,9 +364,9 @@ export interface BundleRecommendationStrategy {
   ml_model_id?: string;
   confidence_threshold?: number;
   // Display settings
-  max_recommendations: number;,
-  personalization_level: 'low' | 'medium' | 'high';
-}
+  max_recommendations: number;
+  personalization_level: 'low' | 'medium' | 'high'
+  }
 export interface BundleRecommendationRule {
   trigger_item_id?: string;
   trigger_category?: string;
@@ -375,18 +375,18 @@ export interface BundleRecommendationRule {
   boost_score: number; // Multiplier for recommendation strength,
 }
 export interface BundleTrigger {
-  trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page';,
+  trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page';
   trigger_conditions: Record<string, any>;
   display_timing: 'immediate' | 'delayed' | 'on_exit_intent';
   delay_seconds?: number;
 }
 export interface CampaignChannel {
-  channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';,
+  channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
   enabled: boolean;
   channel_config: Record<string, any>;
   // Channel-specific tracking
-  channel_metrics: {,
-  impressions: number;,
+  channel_metrics: {
+  impressions: number;
   clicks: number;
   conversions: number;
   spend?: number;
@@ -395,13 +395,13 @@ export interface CampaignChannel {
 export interface CampaignBudget {
   total_budget_cents: number;
   daily_budget_cents?: number;
-  spend_to_date_cents: number;,
+  spend_to_date_cents: number;
   budget_allocation: Record<string, number>; // Channel allocations,
   budget_alerts: BudgetAlert;
 }
 export interface BudgetAlert {
   threshold_percentage: number; // Alert when X% of budget is spent,
-  alert_channels: ('email' | 'dashboard' | 'slack')[];,
+  alert_channels: ('email' | 'dashboard' | 'slack')[];
   recipients: string;
   // =============================================================================
   // Metrics and Analytics Interfaces
@@ -409,23 +409,23 @@ export interface BudgetAlert {
 }
 export interface PromotionPerformanceMetrics {
   // Usage metrics
-  total_uses: number;,
+  total_uses: number;
   unique_users: number;
   conversion_rate: number;
   // Financial impact
-  total_discount_given_cents: number;,
+  total_discount_given_cents: number;
   total_revenue_generated_cents: number;
-  average_order_value_cents: number;,
+  average_order_value_cents: number;
   roi: number; // Return on Investment,
   // Traffic metrics
-  impressions: number;,
+  impressions: number;
   clicks: number;
   click_through_rate: number;
   // Time-based metrics
   first_use_date?: Date;
   last_use_date?: Date;
-  peak_usage_period?: {,
-  start: Date;,
+  peak_usage_period?: {
+  start: Date;
   end: Date;
   usage_count: number;
 };
@@ -439,64 +439,64 @@ export interface PromotionPerformanceMetrics {
   metrics_updated_at: Date;
 }
 export interface ContentPromotionMetrics {
-  content_id: string;,
+  content_id: string;
   content_title: string;
   // Display metrics
-  impressions: number;,
+  impressions: number;
   clicks: number;
   click_through_rate: number;
   // Conversion metrics
-  page_views: number;,
+  page_views: number;
   conversions: number;
-  conversion_rate: number;,
+  conversion_rate: number;
   revenue_generated_cents: number;
   // Engagement metrics
-  average_time_on_content_seconds: number;,
+  average_time_on_content_seconds: number;
   bounce_rate: number;
-  shares: number;,
+  shares: number;
   favorites: number;
   // Position and timing
-  average_display_position: number;,
+  average_display_position: number;
   total_display_time_minutes: number;
   performance_score: number; // 0-100,
   // Last updated
-  period_start: Date;,
+  period_start: Date;
   period_end: Date;
 }
 export interface CampaignMetrics {
   // Overall campaign performance
-  total_reach: number;,
+  total_reach: number;
   total_impressions: number;
-  total_clicks: number;,
+  total_clicks: number;
   total_conversions: number;
   // Financial metrics
-  total_spend_cents: number;,
+  total_spend_cents: number;
   total_revenue_cents: number;
-  cost_per_click_cents: number;,
+  cost_per_click_cents: number;
   cost_per_conversion_cents: number;
   return_on_ad_spend: number;
   // Channel breakdown
   channel_performance: Array<{,
-  channel: string;,
+  channel: string;
   impressions: number;
-  clicks: number;,
+  clicks: number;
   conversions: number;
-  spend_cents: number;,
+  spend_cents: number;
   roas: number;
 }>;
   // Promotion breakdown
   promotion_performance: Array<{,
   promotion_id: string;
-  promotion_name: string;,
+  promotion_name: string;
   contribution_to_revenue: number;
   usage_count: number;
 }>;
   // Time series data
   daily_metrics: Array<{,
   date: string;
-  impressions: number;,
+  impressions: number;
   clicks: number;
-  conversions: number;,
+  conversions: number;
   spend_cents: number;
 }>;
 
@@ -505,69 +505,69 @@ export interface CampaignMetrics {
 // =============================================================================
 }
 export interface PromotionRule {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Rule conditions
-  conditions: PromotionRuleCondition;,
+  conditions: PromotionRuleCondition;
   condition_operator: 'AND' | 'OR';
   // Actions to take
   actions: PromotionRuleAction;
   // Rule metadata
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
   // Effectiveness tracking
-  triggered_count: number;,
+  triggered_count: number;
   success_rate: number;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   created_by: string;
 }
 export interface PromotionRuleCondition {
   field: string; // cart.total, user.purchase_history, item.category, etc.,
-  operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'regex_match';,
+  operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'regex_match';
   value: any;
   negate?: boolean; // NOT condition,
 }
 export interface PromotionRuleAction {
-  action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification';,
+  action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification';
   parameters: Record<string, any>;
   delay_seconds?: number;
 }
 export interface PromotionTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   template_type: PromotionType;
   // Template configuration
-  default_settings: Partial<BasePromotion>;,
+  default_settings: Partial<BasePromotion>;
   configurable_fields: PromotionTemplateField;
   // Template metadata
-  category: string;,
+  category: string;
   use_case_examples: string;
-  created_by: string;,
+  created_by: string;
   created_at: Date;
   usage_count: number;
 }
 export interface PromotionTemplateField {
-  field_name: string;,
+  field_name: string;
   display_name: string;
-  field_type: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multi_select';,
+  field_type: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multi_select';
   required: boolean;
   default_value?: any;
   validation_rules?: ValidationRule;
   options?: { value: any; label: string }[]; // For select fields
 }
 export interface ValidationRule {
-  rule_type: 'min' | 'max' | 'pattern' | 'custom';,
+  rule_type: 'min' | 'max' | 'pattern' | 'custom';
   value: any;
   error_message: string;
 }
 export interface PromotionAuditLog {
-  id: string;,
+  id: string;
   promotion_id: string;
   // Action details
-  action: 'created' | 'updated' | 'activated' | 'deactivated' | 'deleted' | 'applied' | 'expired';,
+  action: 'created' | 'updated' | 'activated' | 'deactivated' | 'deleted' | 'applied' | 'expired';
   description: string;
   // Context
   user_id?: string; // User who performed action or was affected,
@@ -587,24 +587,24 @@ export interface PromotionAuditLog {
 export interface PromotionServiceResponse<T> {
   success: boolean;
   data?: T;
-  error?: {,
-  code: string;,
+  error?: {
+  code: string;
   message: string;
   details?: any;
 };
   metadata?: {
-  request_id: string;,
+  request_id: string;
   timestamp: Date;
   execution_time_ms: number;
 };
 
 export interface PromotionEligibilityCheck {
-  promotion_id: string;,
+  promotion_id: string;
   eligible: boolean;
   reasons?: string; // Why eligible/not eligible,
   discount_amount_cents?: number;
   // Requirements not met
-  missing_requirements?: {,
+  missing_requirements?: {
   minimum_purchase_amount?: number;
   required_items?: string;
   user_criteria?: string;
@@ -614,18 +614,18 @@ export interface PromotionEligibilityCheck {
   can_stack_with?: string; // Other promotions that can be combined
 }
 export interface PromotionApplicationResult {
-  success: boolean;,
+  success: boolean;
   promotion_id: string;
   discount_applied_cents: number;
   // Updated cart totals
-  original_total_cents: number;,
+  original_total_cents: number;
   new_total_cents: number;
   total_savings_cents: number;
   // Application details
   items_affected: Array<{,
-  item_id: string;,
+  item_id: string;
   original_price_cents: number;
-  discounted_price_cents: number;,
+  discounted_price_cents: number;
   discount_amount_cents: number;
 }>;
   // Metadata
@@ -660,17 +660,17 @@ export interface PromotionSearchCriteria {
   page?: number;
   limit?: number;
   sort_by?: 'name' | 'created_at' | 'start_date' | 'usage_count' | 'roi';
-  sort_order?: 'asc' | 'desc';
-}
+  sort_order?: 'asc' | 'desc'
+  }
 export interface PromotionSearchResult {
-  promotions: BasePromotion;,
+  promotions: BasePromotion;
   total_count: number;
   has_more: boolean;
   // Aggregates
-  aggregates: {,
-  total_active: number;,
+  aggregates: {
+  total_active: number;
   total_scheduled: number;
-  total_expired: number;,
+  total_expired: number;
   total_discount_given_cents: number;
   average_conversion_rate: number;
 };
@@ -697,7 +697,7 @@ export const CreatePromotionSchema = z.object({)
   usage_limit: z.number().int().min(1).optional(),
   user_usage_limit: z.number().int().min(1).optional(),
   target_type: z.nativeEnum(PromotionTargetType),
-  targeting_rules: z.array(z.object({,)
+  targeting_rules: z.array(z.object({)
   type: z.nativeEnum(PromotionTargetType),
   conditions: z.array(z.any()),
   operator: z.enum(['AND', 'OR']),

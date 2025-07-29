@@ -11,150 +11,150 @@ import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
 // Core DevTools types
 
 export interface StateInspectionConfig {
-  enableTimeTravel: boolean;,
+  enableTimeTravel: boolean;
   enablePerformanceTracking: boolean;
-  enableDependencyVisualization: boolean;,
+  enableDependencyVisualization: boolean;
   maxHistorySize: number;
-  trackingInterval: number;,
+  trackingInterval: number;
   enableStateValidation: boolean;
-  enableMemoryTracking: boolean;,
+  enableMemoryTracking: boolean;
   enableNetworkTracking: boolean;
 }
 export interface DependencyGraph {
-  nodes: DependencyNode;,
+  nodes: DependencyNode;
   edges: DependencyEdge;
-  metadata: {,
-  totalNodes: number;,
+  metadata: {
+  totalNodes: number;
   totalEdges: number;
-  circularDependencies: string;,
+  circularDependencies: string;
   criticalPaths: string[];
-  lastUpdated: number;,
+  lastUpdated: number;
   complexity: number;
 };
 }
 export interface DependencyNode {
-  id: string;,
+  id: string;
   type: 'state' | 'component' | 'selector' | 'middleware' | 'domain';
-  label: string;,
+  label: string;
   domain: string;
   position: { x: number; y: number };
-  size: number;,
+  size: number;
   color: string;
-  metadata: {,
+  metadata: {
   lastModified: number;
-  accessCount: number;,
+  accessCount: number;
   dependencies: string;
-  dependents: string;,
-  performance: {,
-  averageExecutionTime: number;,
+  dependents: string;
+  performance: {
+  averageExecutionTime: number;
   totalExecutions: number;
   errorCount: number;
 };
   };
 }
 export interface DependencyEdge {
-  id: string;,
+  id: string;
   from: string;
-  to: string;,
+  to: string;
   type: 'depends_on' | 'triggers' | 'subscribes_to' | 'validates';
   weight: number;
   label?: string;
-  metadata: {,
-  frequency: number;,
+  metadata: {
+  frequency: number;
   lastTriggered: number;
   latency: number;
 };
 }
 export interface PerformanceReport {
-  summary: {,
-  totalStateUpdates: number;,
+  summary: {
+  totalStateUpdates: number;
   averageUpdateLatency: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   renderSkipRate: number;
-  cacheEfficiency: number;,
+  cacheEfficiency: number;
   networkLatency: number;
 };
-  bottlenecks: PerformanceBottleneck;,
+  bottlenecks: PerformanceBottleneck;
   recommendations: PerformanceRecommendation;
-  trends: PerformanceTrend;,
+  trends: PerformanceTrend;
   domainAnalysis: Map<string, DomainPerformance>;
 }
 export interface PerformanceBottleneck {
-  id: string;,
+  id: string;
   type: 'memory' | 'cpu' | 'network' | 'render' | 'cache';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  location: string;,
+  location: string;
   impact: number;
-  frequency: number;,
+  frequency: number;
   suggestions: string;
-  timeframe: {,
-  start: number;,
+  timeframe: {
+  start: number;
   end: number;
   duration: number;
 };
 }
 export interface PerformanceRecommendation {
-  id: string;,
+  id: string;
   category: 'optimization' | 'refactoring' | 'caching' | 'batching';
-  priority: 'low' | 'medium' | 'high';,
+  priority: 'low' | 'medium' | 'high';
   title: string;
-  description: string;,
+  description: string;
   implementation: string;
-  estimatedImpact: number;,
+  estimatedImpact: number;
   difficulty: 'easy' | 'medium' | 'hard';
   codeExample?: string;
 }
 export interface PerformanceTrend {
-  metric: string;,
+  metric: string;
   values: { timestamp: number; value: number }[];
-  trend: 'improving' | 'degrading' | 'stable';,
+  trend: 'improving' | 'degrading' | 'stable';
   changeRate: number;
   prediction: { timestamp: number; value: number }[];
 }
 export interface DomainPerformance {
-  domain: string;,
+  domain: string;
   updateFrequency: number;
-  averageLatency: number;,
+  averageLatency: number;
   memoryUsage: number;
-  errorRate: number;,
+  errorRate: number;
   cacheHitRate: number;
-  dependencies: string;,
+  dependencies: string;
   criticalPath: boolean;
 }
 export interface ReplayEnvironment {
-  id: string;,
+  id: string;
   baseState: any;
-  changes: StateChange<any>[];,
+  changes: StateChange<any>[];
   currentIndex: number;
-  metadata: {,
-  created: number;,
+  metadata: {
+  created: number;
   totalChanges: number;
-  timespan: number;,
+  timespan: number;
   domains: string;
 };
 }
 export interface StateValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: StateValidationError;
-  warnings: StateValidationWarning;,
-  performance: {,
-  validationTime: number;,
+  warnings: StateValidationWarning;
+  performance: {
+  validationTime: number;
   memoryImpact: number;
 };
 }
 export interface StateValidationError {
-  path: string;,
+  path: string;
   message: string;
-  value: any;,
+  value: any;
   expected: any;
-  severity: 'error' | 'warning';,
+  severity: 'error' | 'warning';
   code: string;
 }
 export interface StateValidationWarning {
-  path: string;,
+  path: string;
   message: string;
-  suggestion: string;,
+  suggestion: string;
   impact: 'low' | 'medium' | 'high';
   // Main DevTools class
 }
@@ -185,7 +185,7 @@ export class StateDevTools extends EventEmitter {
     this.dependencyGraph = {
   nodes: [],
   edges: [],
-  metadata: {,
+  metadata: {
   totalNodes: 0,
   totalEdges: 0,
   circularDependencies: [],
@@ -201,7 +201,7 @@ export class StateDevTools extends EventEmitter {
   if (!this.isRecording) return;
   const enhancedSnapshot = {
   ...snapshot,
-  metadata: {,
+  metadata: {
   ...snapshot.metadata,
   domain,
   memoryUsage: this.memoryTracker.getCurrentUsage(),
@@ -235,9 +235,9 @@ export class StateDevTools extends EventEmitter {
   showDiff
 });
     return replayEnvironment;
-  private async executeReplay(environment: ReplayEnvironment, options: {,)
+  private async executeReplay(environment: ReplayEnvironment, options: {)
   stepDelay: number;
-  highlightChanges: boolean;,
+  highlightChanges: boolean;
   showDiff: boolean;
 }): Promise<void> {
     const { stepDelay, highlightChanges, showDiff } = options;
@@ -268,7 +268,7 @@ export class StateDevTools extends EventEmitter {
   this.isReplaying = false;
   this.emit('replayStopped');
   // State dependency visualization
-  visualizeStateDependencies(options: {,)
+  visualizeStateDependencies(options: {)
   domains?: string;
   includeComponents?: boolean;
   includeSelectors?: boolean;
@@ -356,7 +356,7 @@ export class StateDevTools extends EventEmitter {
   value: state,
         expected: 'valid state',
         severity: 'error',
-        code: 'VALIDATION_ERROR';
+        code: 'VALIDATION_ERROR'
   });
     const validationTime = performance.now() - startTime;
     const memoryAfter = this.memoryTracker.getCurrentUsage();
@@ -364,7 +364,7 @@ export class StateDevTools extends EventEmitter {
   valid: errors.length === 0,
   errors,
   warnings,
-  performance: {,
+  performance: {
   validationTime,
   memoryImpact: memoryAfter - memoryBefore,
 };
@@ -381,10 +381,10 @@ export class StateDevTools extends EventEmitter {
   this.memoryTracker.stop();
   this.networkTracker.stop();
   this.emit('recordingStopped');
-  getRecordingStatus(): {,
-  isRecording: boolean;,
+  getRecordingStatus(): {
+  isRecording: boolean;
   isReplaying: boolean;
-  historySize: number;,
+  historySize: number;
   memoryUsage: number;
   uptime: number;
   return {
@@ -395,7 +395,7 @@ export class StateDevTools extends EventEmitter {
   uptime: Date.now() - (this.stateHistory[0]?.timestamp || Date.now()),
 };
   // Utility methods
-  private getStateChangesBetween(fromTimestamp: number,)
+  private getStateChangesBetween(fromTimestamp: number)
     toTimestamp: number,
     domains?: string
   ): StateChange<any>[] {
@@ -415,7 +415,7 @@ export class StateDevTools extends EventEmitter {
   baseState: this.getBaseStateForReplay(changes[0]?.timestamp || Date.now()),
   changes,
   currentIndex: -1,
-  metadata: {,
+  metadata: {
   created: Date.now(),
   totalChanges: changes.length,
   timespan: changes.length > 0 ? changes[changes.length - 1].timestamp - changes[0].timestamp : 0,
@@ -459,11 +459,11 @@ export class StateDevTools extends EventEmitter {
 });
   private delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
-  private buildDependencyGraph(options: {,)
+  private buildDependencyGraph(options: {)
   domains?: string;
-  includeComponents: boolean;,
+  includeComponents: boolean;
   includeSelectors: boolean;
-  includeCrossDomainLinks: boolean;,
+  includeCrossDomainLinks: boolean;
   depth: number;
 }): DependencyGraph {
   // This would integrate with the actual state management system
@@ -471,7 +471,7 @@ export class StateDevTools extends EventEmitter {
   return {
   nodes: [],
   edges: [],
-  metadata: {,
+  metadata: {
   totalNodes: 0,
   totalEdges: 0,
   circularDependencies: [],
@@ -498,7 +498,7 @@ export class StateDevTools extends EventEmitter {
       if (!visited.has(node.id)) {
         this.dfsCircularDetection(node.id, graph, visited, recursionStack, circularPaths);
     graph.metadata.circularDependencies = circularPaths;
-  private dfsCircularDetection(nodeId: string,)
+  private dfsCircularDetection(nodeId: string)
     graph: DependencyGraph,
     visited: Set<string>,
     recursionStack: Set<string>,
@@ -563,7 +563,7 @@ export class StateDevTools extends EventEmitter {
         message: `Large state object detected in ${domain}`}
 },
   suggestion: 'Consider breaking down large state objects or implementing pagination',
-        impact: 'high';
+        impact: 'high'
   });
   private getDependencyCount(domain: string): number {
   return this.dependencyGraph.nodes.filter(node => node.domain === domain).length;
@@ -597,10 +597,10 @@ export class StateDevTools extends EventEmitter {
   this.stateHistory = [];
   this.performanceMetrics.clear();
   this.emit('historyCleared');
-  exportSession(): {,
-  config: StateInspectionConfig;,
+  exportSession(): {
+  config: StateInspectionConfig;
   history: StateSnapshot<any>[];
-  metrics: any;,
+  metrics: any;
   dependencyGraph: DependencyGraph;
   return {
   config: this.config,

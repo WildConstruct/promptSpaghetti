@@ -112,7 +112,7 @@ export interface NodeDefinition {
     icon?: string;
     color?: string;
     schema: z.ZodSchema<any>;
-    metadata: {,
+    metadata: {
         author: string;
         license: string;
         repository?: string;
@@ -280,7 +280,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     version: string;
     author: string;
     license: string;
-    engines: {,
+    engines: {
         promptSpaghetti: string;
         node?: string | undefined;
     };
@@ -311,7 +311,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     version: string;
     author: string;
     license: string;
-    engines: {,
+    engines: {
         promptSpaghetti: string;
         node?: string | undefined;
     };

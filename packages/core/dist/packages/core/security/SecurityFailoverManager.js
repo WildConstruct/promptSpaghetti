@@ -1045,286 +1045,264 @@ View details: /failover/events/${event.id}
                                                     name: 'Critical Node Failure',
                                                     description: 'Immediate failover for critical node failures',
                                                     enabled: true,
-                                                    triggers: {},
-                                                    node_failure: {},
-                                                    enabled: true,
-                                                    consecutive_failed_checks: 3,
-                                                    check_interval: 10000,
-                                                    timeout_threshold: 5000,
-                                                },
-                                                performance_degradation, {},
-                                                enabled, false,
-                                                cpu_threshold, 90,
-                                                memory_threshold, 95,
-                                                response_time_threshold, 5000,
-                                                error_rate_threshold, 10,
-                                                duration_threshold, 300000,]
-                                        },
-                                            capacity_limits;
-                                        {
-                                            enabled: false,
-                                                connection_threshold;
-                                            95,
-                                                queue_threshold;
-                                            1000,
-                                                throughput_threshold;
-                                            5,
-                                            ;
-                                        }
-                                        dependency_failure: {
-                                            enabled: true,
-                                                cascade_failover;
-                                            true,
-                                                dependency_timeout;
-                                            30000,
-                                            ;
-                                        }
-                                        strategy: {
-                                            type: 'immediate',
-                                                target_selection;
-                                            'priority',
-                                                data_synchronization;
-                                            'real_time',
-                                                session_handling;
-                                            'migrate',
-                                                rollback_enabled;
-                                            true,
-                                                rollback_conditions;
-                                            ['target_node_failure', 'data_corruption'],
-                                            ;
-                                        }
-                                        notifications: {
-                                            immediate: ['security-ops@company.com'],
-                                                escalation;
-                                            ['security-director@company.com'],
-                                                escalation_delay;
-                                            300000,
-                                                channels;
-                                            ['email', 'slack'],
-                                            ;
-                                        }
-                                        compliance: {
-                                            require_approval: false,
-                                                audit_all_actions;
-                                            true,
-                                                retention_period;
-                                            365 * 24 * 60 * 60 * 1000,
-                                                compliance_frameworks;
-                                            ['SOX', 'GDPR'],
-                                            ;
-                                        }
-                                        created_by: 'system';
-                                        ;
-                                        for (const policyDef of defaultPolicies) {
-                                            await this.registerFailoverPolicy(policyDef);
-                                            console.log(`📝 Loaded ${defaultPolicies.length} default failover policies`);
-                                        }
-                                        initializeMetrics();
-                                        FailoverMetrics;
-                                        {
-                                            return {
-                                                availability: {
-                                                    uptime_percentage: 100,
-                                                    downtime_minutes: 0,
-                                                    mean_time_between_failures: 0,
-                                                    mean_time_to_recovery: 0,
-                                                    availability_sla_compliance: 100,
-                                                },
-                                                failover_performance: {
-                                                    total_failovers: 0,
-                                                    successful_failovers: 0,
-                                                    failed_failovers: 0,
-                                                    average_failover_time: 0,
-                                                    fastest_failover_time: 0,
-                                                    slowest_failover_time: 0,
-                                                    automatic_failovers: 0,
-                                                    manual_failovers: 0,
-                                                },
-                                                system_health: {
-                                                    healthy_nodes: 0,
-                                                    total_nodes: 0,
-                                                    degraded_nodes: 0,
-                                                    offline_nodes: 0,
-                                                    average_response_time: 0,
-                                                    average_cpu_usage: 0,
-                                                    average_memory_usage: 0,
-                                                    error_rate: 0,
-                                                },
-                                                data_consistency: {
-                                                    replication_lag: 0,
-                                                    consistency_violations: 0,
-                                                    data_loss_incidents: 0,
-                                                    sync_success_rate: 100,
-                                                },
-                                                compliance: {
-                                                    rto_compliance: 100,
-                                                    rpo_compliance: 100,
-                                                    audit_events: 0,
-                                                    policy_violations: 0,
-                                                },
-                                                time_range: {
-                                                    start: Date.now(),
-                                                    end: Date.now(),
-                                                },
-                                                generatePolicyId() {
-                                                    return `policy-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                },
-                                                generateGroupId() {
-                                                    return `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                },
-                                                generateEventId() {
-                                                    return `event-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-                                                },
-                                                generateTimelineId() {
-                                                    return `timeline-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                }
-                                                /**
-                                                 * Shutdown the failover manager
-                                                 */
-                                                ,
-                                                /**
-                                                 * Shutdown the failover manager
-                                                 */
-                                                shutdown() {
-                                                    // Clear intervals
-                                                    if (this.healthCheckInterval) {
-                                                        clearInterval(this.healthCheckInterval);
-                                                        if (this.loadBalancingInterval) {
-                                                            clearInterval(this.loadBalancingInterval);
-                                                            if (this.metricsCollectionInterval) {
-                                                                clearInterval(this.metricsCollectionInterval);
-                                                                // Shutdown connection pools
-                                                                for (const pool of this.connectionPools.values()) {
-                                                                    pool.shutdown();
-                                                                    // Clear data
-                                                                    this.activeFailovers.clear();
-                                                                    this.healthCheckResults.clear();
-                                                                    this.emit('failover_manager_shutdown');
-                                                                    console.log('🔄 Security Failover Manager shutdown complete');
-                                                                    /**
-                                                                     * Load Balancer for distributing requests across healthy nodes
-                                                                     */
-                                                                    class LoadBalancer {
-                                                                        nodes = new Map();
-                                                                        algorithm;
-                                                                        roundRobinIndex = 0;
-                                                                        constructor(config) {
-                                                                            this.algorithm = config.algorithm;
-                                                                            addNode(nodeId, string, nodeInfo, { weight: number, capacity: number, health_score: number });
-                                                                            void {
-                                                                                this: .nodes.set(nodeId, nodeInfo),
-                                                                                removeNode(nodeId) {
-                                                                                    this.nodes.delete(nodeId);
-                                                                                    updateNode(nodeId, string, nodeInfo, { weight: number, capacity: number, health_score: number });
-                                                                                    void {
-                                                                                        : .nodes.has(nodeId)
-                                                                                    };
-                                                                                    {
-                                                                                        this.nodes.set(nodeId, nodeInfo);
-                                                                                        selectNode(request, any);
-                                                                                        string;
+                                                    triggers: {
+                                                        node_failure: {
+                                                            enabled: true,
+                                                            consecutive_failed_checks: 3,
+                                                            check_interval: 10000,
+                                                            timeout_threshold: 5000,
+                                                        },
+                                                        performance_degradation: {
+                                                            enabled: false,
+                                                            cpu_threshold: 90,
+                                                            memory_threshold: 95,
+                                                            response_time_threshold: 5000,
+                                                            error_rate_threshold: 10,
+                                                            duration_threshold: 300000,
+                                                        },
+                                                        capacity_limits: {
+                                                            enabled: false,
+                                                            connection_threshold: 95,
+                                                            queue_threshold: 1000,
+                                                            throughput_threshold: 5,
+                                                        },
+                                                        dependency_failure: {
+                                                            enabled: true,
+                                                            cascade_failover: true,
+                                                            dependency_timeout: 30000,
+                                                        },
+                                                        strategy: {
+                                                            type: 'immediate',
+                                                            target_selection: 'priority',
+                                                            data_synchronization: 'real_time',
+                                                            session_handling: 'migrate',
+                                                            rollback_enabled: true,
+                                                            rollback_conditions: ['target_node_failure', 'data_corruption'],
+                                                        },
+                                                        notifications: {
+                                                            immediate: ['security-ops@company.com'],
+                                                            escalation: ['security-director@company.com'],
+                                                            escalation_delay: 300000,
+                                                            channels: ['email', 'slack'],
+                                                        },
+                                                        compliance: {
+                                                            require_approval: false,
+                                                            audit_all_actions: true,
+                                                            retention_period: 365 * 24 * 60 * 60 * 1000,
+                                                            compliance_frameworks: ['SOX', 'GDPR'],
+                                                        },
+                                                        created_by: 'system'
+                                                    }
+                                                }],
+                                            for(, policyDef, of, defaultPolicies) {
+                                                await this.registerFailoverPolicy(policyDef);
+                                                console.log(`📝 Loaded ${defaultPolicies.length} default failover policies`);
+                                            },
+                                            initializeMetrics() {
+                                                return {
+                                                    availability: {
+                                                        uptime_percentage: 100,
+                                                        downtime_minutes: 0,
+                                                        mean_time_between_failures: 0,
+                                                        mean_time_to_recovery: 0,
+                                                        availability_sla_compliance: 100,
+                                                    },
+                                                    failover_performance: {
+                                                        total_failovers: 0,
+                                                        successful_failovers: 0,
+                                                        failed_failovers: 0,
+                                                        average_failover_time: 0,
+                                                        fastest_failover_time: 0,
+                                                        slowest_failover_time: 0,
+                                                        automatic_failovers: 0,
+                                                        manual_failovers: 0,
+                                                    },
+                                                    system_health: {
+                                                        healthy_nodes: 0,
+                                                        total_nodes: 0,
+                                                        degraded_nodes: 0,
+                                                        offline_nodes: 0,
+                                                        average_response_time: 0,
+                                                        average_cpu_usage: 0,
+                                                        average_memory_usage: 0,
+                                                        error_rate: 0,
+                                                    },
+                                                    data_consistency: {
+                                                        replication_lag: 0,
+                                                        consistency_violations: 0,
+                                                        data_loss_incidents: 0,
+                                                        sync_success_rate: 100,
+                                                    },
+                                                    compliance: {
+                                                        rto_compliance: 100,
+                                                        rpo_compliance: 100,
+                                                        audit_events: 0,
+                                                        policy_violations: 0,
+                                                    },
+                                                    time_range: {
+                                                        start: Date.now(),
+                                                        end: Date.now(),
+                                                    },
+                                                    generatePolicyId() {
+                                                        return `policy-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                    },
+                                                    generateGroupId() {
+                                                        return `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                    },
+                                                    generateEventId() {
+                                                        return `event-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+                                                    },
+                                                    generateTimelineId() {
+                                                        return `timeline-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                    }
+                                                    /**
+                                                     * Shutdown the failover manager
+                                                     */
+                                                    ,
+                                                    /**
+                                                     * Shutdown the failover manager
+                                                     */
+                                                    shutdown() {
+                                                        // Clear intervals
+                                                        if (this.healthCheckInterval) {
+                                                            clearInterval(this.healthCheckInterval);
+                                                            if (this.loadBalancingInterval) {
+                                                                clearInterval(this.loadBalancingInterval);
+                                                                if (this.metricsCollectionInterval) {
+                                                                    clearInterval(this.metricsCollectionInterval);
+                                                                    // Shutdown connection pools
+                                                                    for (const pool of this.connectionPools.values()) {
+                                                                        pool.shutdown();
+                                                                        // Clear data
+                                                                        this.activeFailovers.clear();
+                                                                        this.healthCheckResults.clear();
+                                                                        this.emit('failover_manager_shutdown');
+                                                                        console.log('🔄 Security Failover Manager shutdown complete');
+                                                                        /**
+                                                                         * Load Balancer for distributing requests across healthy nodes
+                                                                         */
+                                                                        class LoadBalancer {
+                                                                            nodes = new Map();
+                                                                            algorithm;
+                                                                            roundRobinIndex = 0;
+                                                                            constructor(config) {
+                                                                                this.algorithm = config.algorithm;
+                                                                                addNode(nodeId, string, nodeInfo, { weight: number, capacity: number, health_score: number });
+                                                                                void {
+                                                                                    this: .nodes.set(nodeId, nodeInfo),
+                                                                                    removeNode(nodeId) {
+                                                                                        this.nodes.delete(nodeId);
+                                                                                        updateNode(nodeId, string, nodeInfo, { weight: number, capacity: number, health_score: number });
+                                                                                        void {
+                                                                                            : .nodes.has(nodeId)
+                                                                                        };
                                                                                         {
-                                                                                            const availableNodes = Array.from(this.nodes.entries()).filter(([_, info]) => info.health_score > 50);
-                                                                                            if (availableNodes.length === 0) {
-                                                                                                throw new Error('No healthy nodes available');
-                                                                                                switch (this.algorithm) {
-                                                                                                    case 'round_robin':
-                                                                                                        return this.selectRoundRobin(availableNodes);
-                                                                                                    case 'weighted':
-                                                                                                        return this.selectWeighted(availableNodes);
-                                                                                                    case 'least_connections':
-                                                                                                        return this.selectLeastConnections(availableNodes);
-                                                                                                    case 'resource_based':
-                                                                                                        return this.selectResourceBased(availableNodes);
-                                                                                                    default:
-                                                                                                        return availableNodes[0][0];
-                                                                                                        getCurrentDistribution();
-                                                                                                        Record < string, number > {
-                                                                                                            const: distribution
-                                                                                                        };
-                                                                                                        { }
-                                                                                                        ;
-                                                                                                        const totalWeight = Array.from(this.nodes.values()).reduce((sum, info) => sum + info.weight, 0);
-                                                                                                        for (const [nodeId, info] of this.nodes.entries()) {
-                                                                                                            distribution[nodeId] = totalWeight > 0 ? (info.weight / totalWeight) * 100 : 0;
-                                                                                                            return distribution;
-                                                                                                        }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                selectRoundRobin(nodes) {
-                                                                                    const selectedNode = nodes[this.roundRobinIndex % nodes.length];
-                                                                                    this.roundRobinIndex++;
-                                                                                    return selectedNode[0];
-                                                                                },
-                                                                                selectWeighted(nodes) {
-                                                                                    const totalWeight = nodes.reduce((sum, [_, info]) => sum + info.weight * info.health_score / 100, 0);
-                                                                                    let random = Math.random() * totalWeight;
-                                                                                    for (const [nodeId, info] of nodes) {
-                                                                                        const adjustedWeight = info.weight * info.health_score / 100;
-                                                                                        if (random <= adjustedWeight) {
-                                                                                            return nodeId;
-                                                                                            random -= adjustedWeight;
-                                                                                            return nodes[0][0];
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                selectLeastConnections(nodes) {
-                                                                                    // Simplified - would track actual connections in practice
-                                                                                    return nodes.sort((a, b) => a[1].capacity - b[1].capacity)[0][0];
-                                                                                },
-                                                                                selectResourceBased(nodes) {
-                                                                                    return nodes.sort((a, b) => b[1].health_score - a[1].health_score)[0][0];
-                                                                                    /**
-                                                                                     * Connection Pool for managing connections to nodes
-                                                                                     */
-                                                                                    class ConnectionPool {
-                                                                                        nodeId;
-                                                                                        config;
-                                                                                        activeConnections = 0;
-                                                                                        constructor(nodeId, config) {
-                                                                                            this.nodeId = nodeId;
-                                                                                            this.config = config;
-                                                                                            async;
-                                                                                            getConnection();
-                                                                                            Promise < any > {
-                                                                                                : .activeConnections >= this.config.max_connections
-                                                                                            };
+                                                                                            this.nodes.set(nodeId, nodeInfo);
+                                                                                            selectNode(request, any);
+                                                                                            string;
                                                                                             {
-                                                                                                throw new Error(`Connection pool exhausted for node ${this.nodeId}`);
-                                                                                            }
-                                                                                            this.activeConnections++;
-                                                                                            // Simulate connection creation
-                                                                                            return {
-                                                                                                nodeId: this.nodeId,
-                                                                                                connected: true,
-                                                                                                release: () => {
-                                                                                                    this.activeConnections--;
-                                                                                                },
-                                                                                                getActiveConnections() {
-                                                                                                    return this.activeConnections;
-                                                                                                    shutdown();
-                                                                                                    void {
-                                                                                                        this: .activeConnections = 0,
-                                                                                                        export: , default: SecurityFailoverManager
-                                                                                                    };
+                                                                                                const availableNodes = Array.from(this.nodes.entries()).filter(([_, info]) => info.health_score > 50);
+                                                                                                if (availableNodes.length === 0) {
+                                                                                                    throw new Error('No healthy nodes available');
+                                                                                                    switch (this.algorithm) {
+                                                                                                        case 'round_robin':
+                                                                                                            return this.selectRoundRobin(availableNodes);
+                                                                                                        case 'weighted':
+                                                                                                            return this.selectWeighted(availableNodes);
+                                                                                                        case 'least_connections':
+                                                                                                            return this.selectLeastConnections(availableNodes);
+                                                                                                        case 'resource_based':
+                                                                                                            return this.selectResourceBased(availableNodes);
+                                                                                                        default:
+                                                                                                            return availableNodes[0][0];
+                                                                                                            getCurrentDistribution();
+                                                                                                            Record < string, number > {
+                                                                                                                const: distribution
+                                                                                                            };
+                                                                                                            { }
+                                                                                                            ;
+                                                                                                            const totalWeight = Array.from(this.nodes.values()).reduce((sum, info) => sum + info.weight, 0);
+                                                                                                            for (const [nodeId, info] of this.nodes.entries()) {
+                                                                                                                distribution[nodeId] = totalWeight > 0 ? (info.weight / totalWeight) * 100 : 0;
+                                                                                                                return distribution;
+                                                                                                            }
+                                                                                                    }
                                                                                                 }
-                                                                                            };
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    selectRoundRobin(nodes) {
+                                                                                        const selectedNode = nodes[this.roundRobinIndex % nodes.length];
+                                                                                        this.roundRobinIndex++;
+                                                                                        return selectedNode[0];
+                                                                                    },
+                                                                                    selectWeighted(nodes) {
+                                                                                        const totalWeight = nodes.reduce((sum, [_, info]) => sum + info.weight * info.health_score / 100, 0);
+                                                                                        let random = Math.random() * totalWeight;
+                                                                                        for (const [nodeId, info] of nodes) {
+                                                                                            const adjustedWeight = info.weight * info.health_score / 100;
+                                                                                            if (random <= adjustedWeight) {
+                                                                                                return nodeId;
+                                                                                                random -= adjustedWeight;
+                                                                                                return nodes[0][0];
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    selectLeastConnections(nodes) {
+                                                                                        // Simplified - would track actual connections in practice
+                                                                                        return nodes.sort((a, b) => a[1].capacity - b[1].capacity)[0][0];
+                                                                                    },
+                                                                                    selectResourceBased(nodes) {
+                                                                                        return nodes.sort((a, b) => b[1].health_score - a[1].health_score)[0][0];
+                                                                                        /**
+                                                                                         * Connection Pool for managing connections to nodes
+                                                                                         */
+                                                                                        class ConnectionPool {
+                                                                                            nodeId;
+                                                                                            config;
+                                                                                            activeConnections = 0;
+                                                                                            constructor(nodeId, config) {
+                                                                                                this.nodeId = nodeId;
+                                                                                                this.config = config;
+                                                                                                async;
+                                                                                                getConnection();
+                                                                                                Promise < any > {
+                                                                                                    : .activeConnections >= this.config.max_connections
+                                                                                                };
+                                                                                                {
+                                                                                                    throw new Error(`Connection pool exhausted for node ${this.nodeId}`);
+                                                                                                }
+                                                                                                this.activeConnections++;
+                                                                                                // Simulate connection creation
+                                                                                                return {
+                                                                                                    nodeId: this.nodeId,
+                                                                                                    connected: true,
+                                                                                                    release: () => {
+                                                                                                        this.activeConnections--;
+                                                                                                    },
+                                                                                                    getActiveConnections() {
+                                                                                                        return this.activeConnections;
+                                                                                                        shutdown();
+                                                                                                        void {
+                                                                                                            this: .activeConnections = 0,
+                                                                                                            export: , default: SecurityFailoverManager
+                                                                                                        };
+                                                                                                    }
+                                                                                                };
+                                                                                            }
                                                                                         }
                                                                                     }
-                                                                                }
-                                                                            };
+                                                                                };
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
-                                            };
-                                        }
+                                                };
+                                            }
+                                        };
                                     }
                                 }
                             }

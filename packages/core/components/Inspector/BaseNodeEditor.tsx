@@ -33,17 +33,17 @@ const getFilmmakerFriendlyError = (message: string): string => {
 };
 
 export interface BaseNodeEditorProps {
-  nodeId: string;,
+  nodeId: string;
   nodeData: Record<string, unknown>;
-  schema: ZodSchema<unknown>;,
+  schema: ZodSchema<unknown>;
   onChange: (partial: Record<string, unknown>) => void;
   className?: string;
   children?: React.ReactNode;
 }
 export interface EditorFieldProps {
-  label: string;,
+  label: string;
   value: unknown;
-  fieldKey: string;,
+  fieldKey: string;
   zodType: ZodTypeAny;
   error?: string;
   onChange: (value: unknown) => void;

@@ -167,7 +167,7 @@ describe('ConnectionLabel Component', () => {
   labelId: 'test-label-1',
   connectionId: 'edge-1',
   content: 'Updated Label',
-  label: {,
+  label: {
   content: 'Updated Label',
   isEditing: false,
   lastModified: expect.any(String),
@@ -211,7 +211,7 @@ describe('ConnectionLabel Component', () => {
   labelId: 'test-label-1',
   connectionId: 'edge-1',
   content: 'Blurred Content',
-  label: {,
+  label: {
   content: 'Blurred Content',
   isEditing: false,
   lastModified: expect.any(String),
@@ -235,7 +235,7 @@ describe('ConnectionLabel Component', () => {
   labelId: 'test-label-1',
   connectionId: 'edge-1',
   content: 'Untitled',
-  label: {,
+  label: {
   content: 'Untitled',
   isEditing: false,
   lastModified: expect.any(String),

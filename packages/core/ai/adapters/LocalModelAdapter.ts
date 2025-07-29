@@ -18,7 +18,7 @@ import {
 } from '../BaseAIModel';
 
 export interface LocalModelConfig {
-  endpoint: string;,
+  endpoint: string;
   modelName: string;
   timeout?: number;
   maxRetries?: number;
@@ -39,14 +39,14 @@ export interface LocalRequestOptions {
   system_prompt?: string;
 }
 export interface OllamaMessage {
-  role: 'system' | 'user' | 'assistant';,
+  role: 'system' | 'user' | 'assistant';
   content: string;
 }
 export interface LocalModelResponse {
-  model: string;,
+  model: string;
   created_at: string;
-  message?: {,
-  role: string;,
+  message?: {
+  role: string;
   content: string;
 };
   response?: string;
@@ -74,7 +74,7 @@ export class LocalModelAdapter extends BaseAIModel {
       costPerToken: 0, // Local models have no per-token cost
       averageLatency: 2000, // Generally slower than cloud APIs
       maxConcurrency: 5, // Limited by local hardware
-      rateLimit: {,
+      rateLimit: {
   requestsPerMinute: 60,
   tokensPerMinute: 50000,
 },
@@ -89,7 +89,7 @@ export class LocalModelAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: true,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   temperature: { type: 'number', min: 0, max: 2, default: 0.8 },
         max_tokens: { type: 'number', min: 1, max: 4096, default: 1000 },
         top_p: { type: 'number', min: 0, max: 1, default: 0.9 },
@@ -142,7 +142,7 @@ export class LocalModelAdapter extends BaseAIModel {
   estimatedCost: 0,
   currency: 'USD',
   confidence: 1.0,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: 0,
   processingCost: 0,
@@ -236,7 +236,7 @@ export class LocalModelAdapter extends BaseAIModel {
       model: this.config.modelName,
       messages,
       stream: false,
-      options: {,
+      options: {
   temperature: options?.temperature ?? 0.8,
         top_p: options?.top_p ?? 0.9,
         top_k: options?.top_k ?? 40,
@@ -252,7 +252,7 @@ export class LocalModelAdapter extends BaseAIModel {
   case 'huggingface':,
   return {
   inputs: messages.map(m => m.content).join('\n'),
-  parameters: {,
+  parameters: {
   max_new_tokens: options?.max_tokens || 1000,
   temperature: options?.temperature || 0.8,
   top_p: options?.top_p || 0.9,
@@ -319,7 +319,7 @@ export class LocalModelAdapter extends BaseAIModel {
   usage,
   model: response.model,
   done: response.done,
-  performance: {,
+  performance: {
   total_duration: response.total_duration,
   load_duration: response.load_duration,
   prompt_eval_duration: response.prompt_eval_duration,

@@ -802,47 +802,58 @@ export class ExternalDataService {
                                 transforms: [,
                                     {
                                         type: 'map_fields',
-                                        config: {},
-                                        field_mapping: {},
-                                        id: 'id',
-                                        type: 'item_type',
-                                        content: 'description',
-                                        era: 'period',
-                                        authenticity: 'accuracy',
-                                        tags: 'categories',
-                                    },
-                                    source_name, 'Medieval Demo'];
-                            },
-                            description: 'Map medieval demo fields to UTDG format',
-                            metadata: {
-                                description: 'Historical medieval clothing and materials demo database',
-                                coverage_eras: [require('../types/UTDG').HISTORICAL_ERAS.MEDIEVAL_HIGH],
-                                data_types: ['garment', 'material', 'accessory'],
-                                accuracy_level: 'high',
-                                last_validated: new Date().toISOString(),
-                            },
-                            /**
-                             * Simple rate limiter implementation
-                             */
-                            class: RateLimiter };
-                        {
-                        }
+                                        config: {
+                                            field_mapping: {
+                                                id: 'id',
+                                                type: 'item_type',
+                                                content: 'description',
+                                                era: 'period',
+                                                authenticity: 'accuracy',
+                                                tags: 'categories',
+                                            },
+                                            source_name: 'Medieval Demo'
+                                        },
+                                        description: 'Map medieval demo fields to UTDG format'
+                                    }],
+                                    metadata;
+                                {
+                                    description: 'Historical medieval clothing and materials demo database',
+                                        coverage_eras;
+                                    [require('../types/UTDG').HISTORICAL_ERAS.MEDIEVAL_HIGH],
+                                        data_types;
+                                    ['garment', 'material', 'accessory'],
+                                        accuracy_level;
+                                    'high',
+                                        last_validated;
+                                    new Date().toISOString(),
+                                    ;
+                                }
+                                ;
+                                /**
+                                 * Simple rate limiter implementation
+                                 */
+                                class RateLimiter {
+                                    limits;
+                                    requests = [];
+                                    constructor(limits) {
+                                        this.limits = limits;
+                                    }
+                                    canMakeRequest() {
+                                        const now = Date.now();
+                                        // Clean old requests
+                                        this.requests = this.requests.filter(time => now - time < 3600000); // 1 hour
+                                        const recentRequests = this.requests.filter(time => now - time < 60000); // 1 minute;
+                                        return recentRequests.length < this.limits.requests_per_minute &&
+                                            this.requests.length < this.limits.requests_per_hour;
+                                        recordRequest();
+                                        void {
+                                            this: .requests.push(Date.now()),
+                                            export: , default: ExternalDataService
+                                        };
+                                    }
+                                }
+                            } };
                     }
-                },
-                requests: number = [],
-                constructor(limits) { },
-                canMakeRequest() {
-                    const now = Date.now();
-                    // Clean old requests
-                    this.requests = this.requests.filter(time => now - time < 3600000); // 1 hour
-                    const recentRequests = this.requests.filter(time => now - time < 60000); // 1 minute;
-                    return recentRequests.length < this.limits.requests_per_minute &&
-                        this.requests.length < this.limits.requests_per_hour;
-                    recordRequest();
-                    void {
-                        this: .requests.push(Date.now()),
-                        export: , default: ExternalDataService
-                    };
                 } };
         }
     }

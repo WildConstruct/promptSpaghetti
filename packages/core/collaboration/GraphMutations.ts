@@ -15,9 +15,9 @@ import { NodeTypeEnum, Node } from '../graphSchema';
  */
 
 export interface BaseMutationOperation {
-  operationId: string;,
+  operationId: string;
   documentId: string;
-  timestamp: number;,
+  timestamp: number;
   userId: string;
   clientId?: string;
   operationVector?: VersionVector;
@@ -46,9 +46,9 @@ export enum OperationPriority {
  */
 
 export interface NodeAddOperation extends BaseMutationOperation {
-  type: 'NODE_ADD';,
+  type: 'NODE_ADD';
   nodeId: string;
-  nodeType: z.infer<typeof NodeTypeEnum>;,
+  nodeType: z.infer<typeof NodeTypeEnum>;
   position: { x: number; y: number };
   initialData?: Record<string, unknown>;
   parentId?: string;
@@ -58,11 +58,11 @@ export interface NodeAddOperation extends BaseMutationOperation {
  */
 
 export interface NodeUpdateOperation extends BaseMutationOperation {
-  type: 'NODE_UPDATE';,
+  type: 'NODE_UPDATE';
   nodeId: string;
-  propertyPath: string;,
+  propertyPath: string;
   oldValue: unknown;
-  newValue: unknown;,
+  newValue: unknown;
   partialUpdate: boolean;
   validationSchema?: string;
   priority?: OperationPriority;
@@ -70,9 +70,9 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   * Node Removal Operation
   */
   export interface NodeRemoveOperation extends BaseMutationOperation {
-  type: 'NODE_REMOVE';,
+  type: 'NODE_REMOVE';
   nodeId: string;
-  cascadeDelete: boolean;,
+  cascadeDelete: boolean;
   preserveConnections: boolean;
   snapshotData?: Node;
   priority?: OperationPriority;
@@ -83,7 +83,7 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   * Edge data structure
   */
   export interface GraphEdge {
-  id: string;,
+  id: string;
   sourceNodeId: string;
   targetNodeId: string;
   sourcePort?: string;
@@ -95,9 +95,9 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   */
 }
 export interface EdgeAddOperation extends BaseMutationOperation {
-  type: 'EDGE_ADD';,
+  type: 'EDGE_ADD';
   edgeId: string;
-  sourceNodeId: string;,
+  sourceNodeId: string;
   targetNodeId: string;
   sourcePort?: string;
   targetPort?: string;
@@ -108,9 +108,9 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Edge Update Operation
   */
   export interface EdgeUpdateOperation extends BaseMutationOperation {
-  type: 'EDGE_UPDATE';,
+  type: 'EDGE_UPDATE';
   edgeId: string;
-  property: 'source' | 'target' | 'sourcePort' | 'targetPort' | 'metadata' | 'type';,
+  property: 'source' | 'target' | 'sourcePort' | 'targetPort' | 'metadata' | 'type';
   oldValue: unknown;
   newValue: unknown;
   priority?: OperationPriority;
@@ -118,9 +118,9 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Edge Removal Operation
   */
   export interface EdgeRemoveOperation extends BaseMutationOperation {
-  type: 'EDGE_REMOVE';,
+  type: 'EDGE_REMOVE';
   edgeId: string;
-  sourceNodeId: string;,
+  sourceNodeId: string;
   targetNodeId: string;
   snapshotData?: GraphEdge;
   priority?: OperationPriority;
@@ -131,11 +131,11 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Parameter Update Operation
   */
   export interface ParameterUpdateOperation extends BaseMutationOperation {
-  type: 'PARAMETER_UPDATE';,
+  type: 'PARAMETER_UPDATE';
   nodeId: string;
   parameterKey: string;
   parameterPath?: string;
-  valueType: 'string' | 'number' | 'boolean' | 'object' | 'array';,
+  valueType: 'string' | 'number' | 'boolean' | 'object' | 'array';
   oldValue: unknown;
   newValue: unknown;
   validationSchema?: string;
@@ -147,9 +147,9 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Batch Operation for atomic multi-operation execution
   */
   export interface BatchMutationOperation extends BaseMutationOperation {
-  type: 'BATCH_MUTATION';,
+  type: 'BATCH_MUTATION';
   batchId: string;
-  operations: MutationOperation;,
+  operations: MutationOperation;
   atomic: boolean;
   rollbackOnFailure: boolean;
   priority?: OperationPriority;
@@ -215,13 +215,13 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Conflict resolution data
   */
   export interface ConflictResolution {
-  conflictId: string;,
+  conflictId: string;
   conflictType: ConflictType;
-  strategy: ResolutionStrategy;,
+  strategy: ResolutionStrategy;
   affectedOperations: string;
   affectedElements: string;
   resolutionData?: Record<string, unknown>;
-  resolvedBy: string;,
+  resolvedBy: string;
   timestamp: number;
   automatic: boolean;
   /**
@@ -229,17 +229,17 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   */
 }
 export interface ConflictOperation {
-  id: string;,
+  id: string;
   type: ConflictType;
   nodeId?: string;
   edgeId?: string;
   property?: string;
-  localValue: unknown;,
+  localValue: unknown;
   remoteValue: unknown;
   baseValue?: unknown;
-  userId: string;,
+  userId: string;
   timestamp: number;
-  documentId: string;,
+  documentId: string;
   requiresUserInput: boolean;
   suggestedResolution?: ResolutionStrategy;
   options: ResolutionOption;
@@ -248,7 +248,7 @@ export interface ConflictOperation {
   */
 }
 export interface ResolutionOption {
-  strategy: ResolutionStrategy;,
+  strategy: ResolutionStrategy;
   label: string;
   description: string;
   preview?: Record<string, unknown>;
@@ -261,11 +261,11 @@ export interface ResolutionOption {
   */
 }
 export interface GraphMutationMessage {
-  type: 'GRAPH_MUTATION';,
+  type: 'GRAPH_MUTATION';
   operationId: string;
-  documentId: string;,
+  documentId: string;
   operation: MutationOperation;
-  userId: string;,
+  userId: string;
   timestamp: number;
   operationVector: VersionVector;
   dependencies?: string;
@@ -275,11 +275,11 @@ export interface GraphMutationMessage {
   */
 }
 export interface BatchMutationMessage {
-  type: 'BATCH_MUTATION';,
+  type: 'BATCH_MUTATION';
   batchId: string;
-  documentId: string;,
+  documentId: string;
   operations: MutationOperation;
-  atomic: boolean;,
+  atomic: boolean;
   userId: string;
   timestamp: number;
   /**
@@ -287,13 +287,13 @@ export interface BatchMutationMessage {
   */
 }
 export interface ConflictDetectedMessage {
-  type: 'CONFLICT_DETECTED';,
+  type: 'CONFLICT_DETECTED';
   conflictId: string;
-  documentId: string;,
+  documentId: string;
   conflictType: ConflictType;
-  conflictOperation: ConflictOperation;,
+  conflictOperation: ConflictOperation;
   affectedOperations: string;
-  affectedElements: string;,
+  affectedElements: string;
   resolutionRequired: boolean;
   suggestedResolution?: ResolutionStrategy;
   timeout?: number;
@@ -302,22 +302,22 @@ export interface ConflictDetectedMessage {
   */
 }
 export interface ConflictResolvedMessage {
-  type: 'CONFLICT_RESOLVED';,
+  type: 'CONFLICT_RESOLVED';
   conflictId: string;
-  documentId: string;,
+  documentId: string;
   resolution: ConflictResolution;
-  resultingOperations: MutationOperation;,
+  resultingOperations: MutationOperation;
   timestamp: number;
   /**
   * Delta synchronization message
   */
 }
 export interface DeltaSyncMessage {
-  type: 'DELTA_SYNC';,
+  type: 'DELTA_SYNC';
   documentId: string;
-  fromVersion: number;,
+  fromVersion: number;
   toVersion: number;
-  operations: MutationOperation;,
+  operations: MutationOperation;
   checksum: string;
   userId: string;
   /**
@@ -325,13 +325,13 @@ export interface DeltaSyncMessage {
   */
 }
 export interface StateVerificationMessage {
-  type: 'STATE_VERIFICATION';,
+  type: 'STATE_VERIFICATION';
   documentId: string;
-  nodeCount: number;,
+  nodeCount: number;
   edgeCount: number;
-  nodeChecksum: string;,
+  nodeChecksum: string;
   edgeChecksum: string;
-  operationCount: number;,
+  operationCount: number;
   lastOperationId: string;
   requiredResync: boolean;
   /**
@@ -339,12 +339,12 @@ export interface StateVerificationMessage {
   */
 }
 export interface OperationAckMessage {
-  type: 'OPERATION_ACK';,
+  type: 'OPERATION_ACK';
   operationId: string;
-  documentId: string;,
+  documentId: string;
   success: boolean;
   error?: string;
-  resultingVersion: number;,
+  resultingVersion: number;
   timestamp: number;
   // =============================================================================
   // Validation Schemas (Zod)
@@ -357,14 +357,14 @@ export const VersionVectorSchema = z.record(z.string(), z.number().min(0));
 /**
  * Position validation schema
  */
-export const PositionSchema = z.object({)
+export const PositionSchema = z.object({
   x: z.number(),
   y: z.number(),
 });
 /**
  * Node add operation validation schema
  */
-export const NodeAddOperationSchema = z.object({)
+export const NodeAddOperationSchema = z.object({
   type: z.literal('NODE_ADD'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -383,7 +383,7 @@ export const NodeAddOperationSchema = z.object({)
 /**
  * Node update operation validation schema
  */
-export const NodeUpdateOperationSchema = z.object({)
+export const NodeUpdateOperationSchema = z.object({
   type: z.literal('NODE_UPDATE'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -403,7 +403,7 @@ export const NodeUpdateOperationSchema = z.object({)
 /**
  * Edge add operation validation schema
  */
-export const EdgeAddOperationSchema = z.object({)
+export const EdgeAddOperationSchema = z.object({
   type: z.literal('EDGE_ADD'),
   operationId: z.string().min(1),
   documentId: z.string().min(1),
@@ -459,16 +459,16 @@ export function generateEdgeId(sourceId: string, targetId: string): string {
  */
 export function operationAffectsNode(operation: MutationOperation, nodeId: string): boolean {
   switch (operation.type) {
-  case 'NODE_ADD':,
-  case 'NODE_UPDATE':,
-  case 'NODE_REMOVE':,
-  case 'PARAMETER_UPDATE':,
+  case 'NODE_ADD':
+  case 'NODE_UPDATE':
+  case 'NODE_REMOVE':
+  case 'PARAMETER_UPDATE':
   return operation.nodeId === nodeId;
-  case 'EDGE_ADD':,
-  case 'EDGE_UPDATE':,
-  case 'EDGE_REMOVE':,
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
   return operation.sourceNodeId === nodeId || operation.targetNodeId === nodeId;
-  case 'BATCH_MUTATION':,
+  case 'BATCH_MUTATION':
   return operation.operations.some(op => operationAffectsNode(op, nodeId));
   default:,
   return false;
@@ -477,11 +477,11 @@ export function operationAffectsNode(operation: MutationOperation, nodeId: strin
   */
   export function operationAffectsEdge(operation: MutationOperation, edgeId: string): boolean {,
   switch (operation.type) {
-  case 'EDGE_ADD':,
-  case 'EDGE_UPDATE':,
-  case 'EDGE_REMOVE':,
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
   return operation.edgeId === edgeId;
-  case 'BATCH_MUTATION':,
+  case 'BATCH_MUTATION':
   return operation.operations.some(op => operationAffectsEdge(op, edgeId));
   default:,
   return false;
@@ -516,20 +516,20 @@ export function operationAffectsNode(operation: MutationOperation, nodeId: strin
   * Extract all node IDs affected by an operation
   */
   export function getAffectedNodeIds(operation: MutationOperation): string {,
-  const nodeIds: string = [];
+  const nodeIds: string[] = [];
   switch (operation.type) {
-  case 'NODE_ADD':,
-  case 'NODE_UPDATE':,
-  case 'NODE_REMOVE':,
-  case 'PARAMETER_UPDATE':,
+  case 'NODE_ADD':
+  case 'NODE_UPDATE':
+  case 'NODE_REMOVE':
+  case 'PARAMETER_UPDATE':
   nodeIds.push(operation.nodeId);
   break;
-  case 'EDGE_ADD':,
-  case 'EDGE_UPDATE':,
-  case 'EDGE_REMOVE':,
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
   nodeIds.push(operation.sourceNodeId, operation.targetNodeId);
   break;
-  case 'BATCH_MUTATION':,
+  case 'BATCH_MUTATION':
   operation.operations.forEach(op => {)
   nodeIds.push(...getAffectedNodeIds(op));
 });
@@ -539,14 +539,14 @@ export function operationAffectsNode(operation: MutationOperation, nodeId: strin
  * Extract all edge IDs affected by an operation
  */
 export function getAffectedEdgeIds(operation: MutationOperation): string {
-  const edgeIds: string = [];
+  const edgeIds: string[] = [];
   switch (operation.type) {
-  case 'EDGE_ADD':,
-  case 'EDGE_UPDATE':,
-  case 'EDGE_REMOVE':,
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
   edgeIds.push(operation.edgeId);
   break;
-  case 'BATCH_MUTATION':,
+  case 'BATCH_MUTATION':
   operation.operations.forEach(op => {)
   edgeIds.push(...getAffectedEdgeIds(op));
 });

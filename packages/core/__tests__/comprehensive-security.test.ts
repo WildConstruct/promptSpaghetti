@@ -160,7 +160,7 @@ describe('Comprehensive Security Test Suite', () => {
       for (let i = 0; i < 150; i++) {
         manyNodes.body.push({)
   type: 'ExpressionStatement',
-          expression: {,
+          expression: {
   type: 'BinaryExpression',
             operator: '+',
             left: { type: 'Literal', value: i },
@@ -261,8 +261,8 @@ describe('Comprehensive Security Test Suite', () => {
       const safeMath = createSafeMathContext();
       // Try to modify
       expect(() => {
-        (safeMath as any).newFunction = () => 'evil';
-      }).toThrow();
+        (safeMath as any).newFunction = () => 'evil'
+  }).toThrow();
       // Try to delete
       expect(() => {
         delete (safeMath as any).min;

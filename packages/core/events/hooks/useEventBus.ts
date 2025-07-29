@@ -17,7 +17,7 @@ import {
 /**
  * Hook for subscribing to events with automatic cleanup
  */
-export function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter,)
+export function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter)
   handler: EventHandler<T>,
   options?: {
   priority?: EventPriority;

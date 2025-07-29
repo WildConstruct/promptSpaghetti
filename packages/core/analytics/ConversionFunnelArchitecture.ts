@@ -17,28 +17,28 @@ export interface EnhancedConversionEvent extends ConversionEvent {
   // Enhanced properties for Story 30.2
   deviceFingerprint?: string;
   crossDeviceUserId?: string; // Privacy-compliant user linking,
-  attributionData: {,
-  touchpoints: TouchPoint;,
+  attributionData: {
+  touchpoints: TouchPoint;
   primaryAttribution: AttributionModel;
   assistedAttribution: AttributionModel;
 };
-  privacyConsent: {,
+  privacyConsent: {
   tracking: boolean;
-  analytics: boolean;,
+  analytics: boolean;
   personalization: boolean;
   crossDevice: boolean;
 };
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: string;
-  batchId: string;,
+  batchId: string;
   processed: boolean;
   latency: number;
 };
 
 export interface TouchPoint {
-  id: string;,
+  id: string;
   timestamp: number;
-  channel: MarketingChannel;,
+  channel: MarketingChannel;
   source: string;
   medium: string;
   campaign?: string;
@@ -63,146 +63,146 @@ export type MarketingChannel =
   | 'marketplace_internal';
 
 export interface AttributionModel {
-  name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';,
+  name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
   weight: number;
-  touchpoint: TouchPoint;,
+  touchpoint: TouchPoint;
   attribution_value: number;
 }
 export interface EnhancedConversionFunnel extends ConversionFunnel {
   // Enhanced funnel properties for Story 30.2
-  crossDeviceTracking: boolean;,
+  crossDeviceTracking: boolean;
   attributionWindow: number; // Days to look back for attribution,
-  conversionDefinition: {,
-  primaryGoal: ConversionGoal;,
+  conversionDefinition: {
+  primaryGoal: ConversionGoal;
   microConversions: ConversionGoal;
   macroConversions: ConversionGoal;
 };
-  segmentation: {,
+  segmentation: {
   userSegments: UserSegment;
   cohortDefinitions: CohortDefinition;
 };
-  anomalyDetection: {,
+  anomalyDetection: {
   enabled: boolean;
-  thresholds: AnomalyThreshold;,
+  thresholds: AnomalyThreshold;
   alerting: AlertingConfig;
 };
 
 export interface ConversionGoal {
-  id: string;,
+  id: string;
   name: string;
-  type: 'micro' | 'macro';,
+  type: 'micro' | 'macro';
   value: number;
   eventPattern: string; // Regex or specific event type,
   conditions: Record<string, any>;
   weight: number; // For attribution calculation,
 }
 export interface UserSegment {
-  id: string;,
+  id: string;
   name: string;
-  definition: {,
-  rules: SegmentRule;,
-  operator: 'AND' | 'OR';
-};
-  size: number;,
+  definition: {
+  rules: SegmentRule;
+  operator: 'AND' | 'OR'
+  };
+  size: number;
   conversionRate: number;
 }
 export interface SegmentRule {
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: any;
 }
 export interface CohortDefinition {
-  id: string;,
+  id: string;
   name: string;
-  criteriaEvent: string;,
+  criteriaEvent: string;
   criteriaWindow: number; // Days,
   analysisWindow: number; // Days to track cohort,
   retentionPeriods: number; // Days to measure retention,
 }
 export interface AnomalyThreshold {
-  metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';,
+  metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
   threshold: number;
-  direction: 'above' | 'below' | 'change';,
-  sensitivity: 'low' | 'medium' | 'high';
-}
+  direction: 'above' | 'below' | 'change';
+  sensitivity: 'low' | 'medium' | 'high'
+  }
 export interface AlertingConfig {
-  channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];,
+  channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
   recipients: string;
-  frequency: 'immediate' | 'hourly' | 'daily';,
+  frequency: 'immediate' | 'hourly' | 'daily';
   cooldown: number; // Minutes between similar alerts,
 }
 export interface CrossDeviceIdentity {
-  primaryUserId: string;,
+  primaryUserId: string;
   linkedDevices: DeviceIdentity;
   confidence: number; // 0-1 confidence in device linking,
-  linkingMethod: 'deterministic' | 'probabilistic' | 'hybrid';,
+  linkingMethod: 'deterministic' | 'probabilistic' | 'hybrid';
   privacyCompliant: boolean;
-  dataRetention: {,
-  createdAt: number;,
+  dataRetention: {
+  createdAt: number;
   expiresAt: number;
   purpose: string;
 };
 }
 export interface DeviceIdentity {
-  deviceId: string;,
+  deviceId: string;
   deviceType: 'desktop' | 'mobile' | 'tablet';
-  fingerprint: string;,
+  fingerprint: string;
   firstSeen: number;
-  lastSeen: number;,
+  lastSeen: number;
   userAgent: string;
   ipAddress?: string; // Hashed for privacy,
-  linkedAt: number;,
+  linkedAt: number;
   linkingSignals: LinkingSignal;
 }
 export interface LinkingSignal {
-  type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';,
+  type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
   strength: number; // 0-1,
-  timestamp: number;,
+  timestamp: number;
   metadata: Record<string, any>;
 }
 export interface FunnelStreamConfig {
-  streamName: string;,
+  streamName: string;
   batchSize: number;
   flushInterval: number; // milliseconds,
-  retryPolicy: {,
-  maxRetries: number;,
+  retryPolicy: {
+  maxRetries: number;
   backoffMultiplier: number;
   maxBackoffTime: number;
 };
-  deadLetterQueue: {,
+  deadLetterQueue: {
   enabled: boolean;
   maxAge: number; // hours,
 };
-  partitioning: {,
+  partitioning: {
   strategy: 'user_id' | 'session_id' | 'time_based' | 'random';
   partitionCount: number;
 };
 }
 export interface ConversionPatternInsight {
-  pattern: {,
-  id: string;,
+  pattern: {
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   frequency: number;
   averageValue: number;
 };
-  segments: {,
+  segments: {
   high_value: UserJourneyPattern;
-  high_converting: UserJourneyPattern;,
+  high_converting: UserJourneyPattern;
   at_risk: UserJourneyPattern;
 };
-  recommendations: {,
+  recommendations: {
   optimization: string;
-  targeting: string;,
+  targeting: string;
   personalization: string;
 };
 }
 export interface UserJourneyPattern {
-  pattern: string;,
+  pattern: string;
   frequency: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageTimeToConvert: number;
-  averageValue: number;,
+  averageValue: number;
   dropOffPoints: string;
   characteristics: Record<string, any>;
   /**
@@ -259,7 +259,7 @@ export class ConversionArchitectureManager {
           name: 'Template Purchased',
           eventType: 'template_purchased',
           required: true],
-      conversionDefinition: {,
+      conversionDefinition: {
   primaryGoal: {;
   id: 'template-purchase',
           name: 'Template Purchase',
@@ -297,17 +297,17 @@ export class ConversionArchitectureManager {
             conditions: {},
             weight: 1.0];
   },
-  segmentation: {,
+  segmentation: {
   userSegments: [,
           {
             id: 'film-directors',
             name: 'Film Directors',
-            definition: {,
+            definition: {
   rules: [,
                 { field: 'user.role', operator: 'equals', value: 'director' },
                 { field: 'user.experience_level', operator: 'in', value: ['professional', 'expert'] }
               ],
-              operator: 'AND';
+              operator: 'AND'
   },
   size: 1247,
             conversionRate: 23.4;
@@ -315,12 +315,12 @@ export class ConversionArchitectureManager {
           {
             id: 'indie-filmmakers',
             name: 'Independent Filmmakers',
-            definition: {,
+            definition: {
   rules: [,
                 { field: 'user.budget_range', operator: 'less_than', value: 50000 },
                 { field: 'user.project_type', operator: 'contains', value: 'independent' }
               ],
-              operator: 'AND';
+              operator: 'AND'
   },
   size: 892,
             conversionRate: 18.7],
@@ -333,7 +333,7 @@ export class ConversionArchitectureManager {
   analysisWindow: 90,
   retentionPeriods: [1, 7, 30, 60, 90]]
 },
-  anomalyDetection: {,
+  anomalyDetection: {
   enabled: true,
   thresholds: [,
   {
@@ -347,7 +347,7 @@ export class ConversionArchitectureManager {
   threshold: 40.0,
   direction: 'above',
   sensitivity: 'high'],
-  alerting: {,
+  alerting: {
   channels: ['email', 'slack', 'dashboard'],
   recipients: ['analytics@company.com'],
   frequency: 'immediate',
@@ -359,16 +359,16 @@ export class ConversionArchitectureManager {
   streamName: 'conversion-events-stream',
   batchSize: 100,
   flushInterval: 5000,
-  retryPolicy: {,
+  retryPolicy: {
   maxRetries: 3,
   backoffMultiplier: 2,
   maxBackoffTime: 30000,
 },
-  deadLetterQueue: {,
+  deadLetterQueue: {
   enabled: true,
   maxAge: 24,
 },
-  partitioning: {,
+  partitioning: {
   strategy: 'user_id',
   partitionCount: 10,
 };
@@ -391,7 +391,7 @@ export class ConversionArchitectureManager {
   /**
    * Create enhanced conversion event with attribution and privacy compliance
    */
-  public createEnhancedEvent(baseEvent: ConversionEvent,)
+  public createEnhancedEvent(baseEvent: ConversionEvent)
     touchpoints: TouchPoint,
     privacyConsent: EnhancedConversionEvent['privacyConsent']): EnhancedConversionEvent {,
   const attribution = this.calculateAttribution(touchpoints);
@@ -401,13 +401,13 @@ export class ConversionArchitectureManager {
   ...baseEvent,
   deviceFingerprint,
   crossDeviceUserId,
-  attributionData: {,
+  attributionData: {
   touchpoints,
   primaryAttribution: attribution.primary,
   assistedAttribution: attribution.assisted,
 }
       privacyConsent,
-      realTimeProcessing: {,
+      realTimeProcessing: {
   streamId: this.generateStreamId(),
   batchId: this.generateBatchId(),
   processed: false,
@@ -416,7 +416,7 @@ export class ConversionArchitectureManager {
   /**
    * Calculate multi-touch attribution
    */
-  private calculateAttribution(touchpoints: TouchPoint): {,
+  private calculateAttribution(touchpoints: TouchPoint): {
   primary: AttributionModel;
   assisted: AttributionModel;
   if (touchpoints.length === 0) {
@@ -432,7 +432,7 @@ export class ConversionArchitectureManager {
   value: 0,
 };
       return {
-  primary: {,
+  primary: {
   name: 'first_touch',
   weight: 1.0,
   touchpoint: defaultTouchpoint,
@@ -569,7 +569,7 @@ export class ConversionArchitectureManager {
   /**
   * Create cross-device identity link
   */
-  public linkDeviceIdentity(userId: string,)
+  public linkDeviceIdentity(userId: string)
   deviceIdentity: DeviceIdentity,
   linkingSignals: LinkingSignal): boolean {,
   const privacySettings = this.privacySettings.get('cross_device_tracking');
@@ -586,7 +586,7 @@ export class ConversionArchitectureManager {
   confidence: 0,
   linkingMethod: 'hybrid',
   privacyCompliant: true,
-  dataRetention: {,
+  dataRetention: {
   createdAt: Date.now(),
   expiresAt: Date.now() + (730 * 24 * 60 * 60 * 1000), // 2 years,
   purpose: 'conversion_attribution',
@@ -625,49 +625,49 @@ export class ConversionArchitectureManager {
   // This would analyze actual user journey data
   // For MVP, returning sample insights
   return {
-  pattern: {,
+  pattern: {
   id: 'high-intent-purchase',
   name: 'High-Intent Purchase Pattern',
   description: 'Users who preview templates are 3x more likely to purchase',
   frequency: 234,
   averageValue: 24.50,
 },
-  segments: {,
-  high_value: {,
+  segments: {
+  high_value: {
   pattern: ['marketplace_visited', 'search_performed', 'template_viewed', 'template_previewed', 'template_purchased'],
   frequency: 89,
   conversionRate: 67.4,
   averageTimeToConvert: 1847000, // ~30 minutes,
   averageValue: 34.20,
   dropOffPoints: [],
-  characteristics: {,
+  characteristics: {
   user_role: 'director',
   experience_level: 'professional',
   device_type: 'desktop',
 },
-  high_converting: {,
+  high_converting: {
   pattern: ['marketplace_visited', 'category_browsed', 'template_viewed', 'template_purchased'],
   frequency: 156,
   conversionRate: 45.2,
   averageTimeToConvert: 3600000, // 1 hour,
   averageValue: 22.10,
   dropOffPoints: ['template_previewed'],
-  characteristics: {,
+  characteristics: {
   user_role: 'indie_filmmaker',
   device_type: 'mobile',
 },
-  at_risk: {,
+  at_risk: {
   pattern: ['marketplace_visited', 'template_viewed'],
   frequency: 512,
   conversionRate: 8.3,
   averageTimeToConvert: 0,
   averageValue: 0,
   dropOffPoints: ['template_previewed', 'template_purchased'],
-  characteristics: {,
+  characteristics: {
   session_duration: 'short',
   bounce_rate: 'high',
 },
-  recommendations: {,
+  recommendations: {
   optimization: [,
   'Add preview CTA on template view pages',
   'Implement exit-intent popups for at-risk users',

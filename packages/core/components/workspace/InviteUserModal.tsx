@@ -4,7 +4,7 @@
  */
 import React, { useState } from 'react';
 interface InviteUserModalProps {
-  workspaceId: string;,
+  workspaceId: string;
   workspaceName: string;
   onSubmit: (data: { userId: string; role: string }) => void;
   onCancel: () => void;

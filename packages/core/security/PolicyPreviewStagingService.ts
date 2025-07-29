@@ -39,29 +39,29 @@ export {
 };
 
 export interface PolicyPreviewConfig {
-  enableStagingEnvironments: boolean;,
+  enableStagingEnvironments: boolean;
   enableImpactSimulation: boolean;
-  enableUserTestingGroups: boolean;,
+  enableUserTestingGroups: boolean;
   enableAutomaticRollback: boolean;
-  previewRetentionDays: number;,
+  previewRetentionDays: number;
   maxConcurrentPreviews: number;
-  stagingEnvironments: StagingEnvironment;,
+  stagingEnvironments: StagingEnvironment;
   defaultValidations: ValidationType;
 }
 export interface StagingEnvironment {
-  environmentId: string;,
+  environmentId: string;
   name: string;
-  description: string;,
+  description: string;
   type: EnvironmentType;
-  isolated: boolean;,
+  isolated: boolean;
   userGroups: string;
-  maxActiveDeployments: number;,
+  maxActiveDeployments: number;
   autoCleanupHours: number;
-  monitoringEnabled: boolean;,
+  monitoringEnabled: boolean;
   features: EnvironmentFeature;
 }
 export interface EnvironmentFeature {
-  feature: string;,
+  feature: string;
   enabled: boolean;
   configuration: Record<string, any>;
 }
@@ -72,32 +72,32 @@ export enum EnvironmentType {
   CANARY = 'CANARY',
   PREVIEW = 'PREVIEW'
   export interface PolicyPreview {
-  previewId: string;,
+  previewId: string;
   policyId: string;
-  baseVersion: string;,
+  baseVersion: string;
   previewVersion: string;
-  title: string;,
+  title: string;
   description: string;
-  changes: PreviewChange;,
+  changes: PreviewChange;
   createdBy: string;
-  createdAt: Date;,
+  createdAt: Date;
   expiresAt: Date;
-  status: PreviewStatus;,
+  status: PreviewStatus;
   stagingDeployments: StagingDeployment;
   validationResults: PreviewValidationResult;
   impactSimulation?: ImpactSimulation;
-  userFeedback: UserFeedback;,
+  userFeedback: UserFeedback;
   metadata: Record<string, any>;
 }
 export interface PreviewChange {
-  changeId: string;,
+  changeId: string;
   section: string;
   type: 'addition' | 'modification' | 'deletion' | 'reorder';
   before?: string;
   after?: string;
-  reasoning: string;,
+  reasoning: string;
   impactLevel: 'low' | 'medium' | 'high' | 'critical';
-  userVisible: boolean;,
+  userVisible: boolean;
   requiresConsent: boolean;
 }
 export enum PreviewStatus {
@@ -109,15 +109,15 @@ export enum PreviewStatus {
   REJECTED = 'REJECTED',
   EXPIRED = 'EXPIRED'
   export interface StagingDeployment {
-  deploymentId: string;,
+  deploymentId: string;
   previewId: string;
-  environmentId: string;,
+  environmentId: string;
   targetUserGroups: string;
-  deployedAt: Date;,
+  deployedAt: Date;
   status: StagingDeploymentStatus;
-  metrics: StagingMetrics;,
+  metrics: StagingMetrics;
   issues: StagingIssue;
-  rollbackTriggers: RollbackTrigger;,
+  rollbackTriggers: RollbackTrigger;
   autoRollbackEnabled: boolean;
 }
 export enum StagingDeploymentStatus {
@@ -130,21 +130,21 @@ export enum StagingDeploymentStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED'
   export interface StagingMetrics {
-  userInteractions: number;,
+  userInteractions: number;
   consentRates: number;
-  errorRates: number;,
+  errorRates: number;
   pageLoadTimes: number;
-  userSatisfactionScore: number;,
+  userSatisfactionScore: number;
   complianceScore: number;
-  accessibilityScore: number;,
+  accessibilityScore: number;
   securityScore: number;
 }
 export interface StagingIssue {
-  issueId: string;,
+  issueId: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  category: IssueCategory;,
+  category: IssueCategory;
   description: string;
-  detectedAt: Date;,
+  detectedAt: Date;
   affectedUsers: string;
   resolution?: IssueResolution;
   status: IssueStatus;
@@ -164,16 +164,16 @@ export enum IssueCategory {
   RESOLVED = 'RESOLVED',
   IGNORED = 'IGNORED'
   export interface IssueResolution {
-  resolvedBy: string;,
+  resolvedBy: string;
   resolvedAt: Date;
-  resolution: string;,
+  resolution: string;
   changeRequired: boolean;
   fixApplied: boolean;
 }
 export interface RollbackTrigger {
-  triggerType: RollbackTriggerType;,
+  triggerType: RollbackTriggerType;
   threshold: number;
-  description: string;,
+  description: string;
   enabled: boolean;
   conditions: string;
 }
@@ -185,96 +185,96 @@ export enum RollbackTriggerType {
   SECURITY_INCIDENT = 'SECURITY_INCIDENT',
   MANUAL_TRIGGER = 'MANUAL_TRIGGER'
   export interface PreviewValidationResult {
-  validationId: string;,
+  validationId: string;
   validationType: ValidationType;
-  status: ValidationStatus;,
+  status: ValidationStatus;
   score: number; // 0-100,
-  findings: ValidationFinding;,
+  findings: ValidationFinding;
   recommendations: string;
-  blockers: string;,
+  blockers: string;
   warnings: string;
-  validatedAt: Date;,
+  validatedAt: Date;
   validatorInfo: ValidatorInfo;
 }
 export interface ValidationFinding {
-  findingId: string;,
+  findingId: string;
   severity: 'info' | 'warning' | 'error' | 'critical';
-  category: string;,
+  category: string;
   title: string;
-  description: string;,
+  description: string;
   location: string;
   suggestion?: string;
   autoFixable: boolean;
 }
 export interface ValidatorInfo {
-  validatorId: string;,
+  validatorId: string;
   validatorType: 'automated' | 'human' | 'hybrid';
   version: string;
   credentials?: string;
 }
 export interface ImpactSimulation {
-  simulationId: string;,
+  simulationId: string;
   scenarios: SimulationScenario;
-  results: SimulationResult;,
+  results: SimulationResult;
   confidence: number; // 0-100,
-  simulatedAt: Date;,
+  simulatedAt: Date;
   duration: number; // minutes,
   methodology: string;
 }
 export interface SimulationScenario {
-  scenarioId: string;,
+  scenarioId: string;
   name: string;
-  description: string;,
+  description: string;
   userSegment: string;
-  userCount: number;,
+  userCount: number;
   simulatedActions: SimulatedAction;
   expectedOutcomes: ExpectedOutcome;
 }
 export interface SimulatedAction {
-  action: string;,
+  action: string;
   parameters: Record<string, any>;
-  expectedResponse: string;,
+  expectedResponse: string;
   timing: number; // seconds from start,
 }
 export interface ExpectedOutcome {
-  metric: string;,
+  metric: string;
   expectedValue: number;
-  tolerance: number;,
+  tolerance: number;
   critical: boolean;
 }
 export interface SimulationResult {
-  scenarioId: string;,
+  scenarioId: string;
   actualOutcomes: ActualOutcome;
-  deviations: OutcomeDeviation;,
+  deviations: OutcomeDeviation;
   overallScore: number; // 0-100,
-  passedTests: number;,
+  passedTests: number;
   failedTests: number;
   recommendations: string;
 }
 export interface ActualOutcome {
-  metric: string;,
+  metric: string;
   actualValue: number;
-  expectedValue: number;,
+  expectedValue: number;
   variance: number;
   acceptable: boolean;
 }
 export interface OutcomeDeviation {
-  metric: string;,
+  metric: string;
   deviationType: 'positive' | 'negative' | 'unexpected';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  impact: string;,
+  impact: string;
   recommendedAction: string;
 }
 export interface UserFeedback {
-  feedbackId: string;,
+  feedbackId: string;
   userId: string;
-  userSegment: string;,
+  userSegment: string;
   feedbackType: FeedbackType;
   rating: number; // 1-5,
-  comments: string;,
+  comments: string;
   categories: FeedbackCategory;
-  submittedAt: Date;,
+  submittedAt: Date;
   processed: boolean;
   actionRequired: boolean;
 }
@@ -293,123 +293,123 @@ export enum FeedbackType {
   BUG_REPORT = 'BUG_REPORT',
   QUESTION = 'QUESTION'
   export interface PreviewAnalytics {
-  previewId: string;,
+  previewId: string;
   totalInteractions: number;
-  uniqueUsers: number;,
+  uniqueUsers: number;
   averageTimeSpent: number;
-  completionRate: number;,
+  completionRate: number;
   dropOffPoints: DropOffPoint;
-  heatmapData: HeatmapData;,
+  heatmapData: HeatmapData;
   userJourney: UserJourneyStep;
   conversionFunnel: ConversionStep;
 }
 export interface DropOffPoint {
-  section: string;,
+  section: string;
   dropOffRate: number;
-  userCount: number;,
+  userCount: number;
   commonReasons: string;
 }
 export interface HeatmapData {
-  element: string;,
+  element: string;
   interactionType: string;
-  frequency: number;,
+  frequency: number;
   coordinates: { x: number; y: number };
 }
 export interface UserJourneyStep {
-  step: number;,
+  step: number;
   section: string;
-  userCount: number;,
+  userCount: number;
   averageTime: number;
   successRate: number;
 }
 export interface ConversionStep {
-  stepName: string;,
+  stepName: string;
   usersEntered: number;
-  usersCompleted: number;,
+  usersCompleted: number;
   conversionRate: number;
   averageTime: number;
 }
 export interface PolicyComparisonReport {
-  comparisonId: string;,
+  comparisonId: string;
   baseVersion: string;
-  compareVersion: string;,
+  compareVersion: string;
   differences: PolicyDifference;
-  impactAnalysis: ComparisonImpactAnalysis;,
+  impactAnalysis: ComparisonImpactAnalysis;
   userImpactAssessment: UserImpactAssessment;
-  complianceComparison: ComplianceComparison;,
+  complianceComparison: ComplianceComparison;
   generatedAt: Date;
 }
 export interface PolicyDifference {
-  section: string;,
+  section: string;
   type: 'added' | 'removed' | 'modified' | 'moved';
   oldContent?: string;
   newContent?: string;
-  significance: 'minor' | 'moderate' | 'major' | 'critical';,
+  significance: 'minor' | 'moderate' | 'major' | 'critical';
   userVisible: boolean;
   legalImplications: string;
 }
 export interface ComparisonImpactAnalysis {
-  overallRisk: RiskLevel;,
+  overallRisk: RiskLevel;
   affectedUserSegments: string;
-  requiredActions: RequiredAction;,
+  requiredActions: RequiredAction;
   timelineRecommendations: TimelineRecommendation;
-  rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'very_complex';
-}
+  rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'very_complex'
+  }
 export interface RequiredAction {
-  action: string;,
+  action: string;
   priority: UpdatePriority;
-  deadline: Date;,
+  deadline: Date;
   responsible: string;
   dependencies: string;
 }
 export interface TimelineRecommendation {
-  phase: string;,
+  phase: string;
   duration: number; // days,
-  activities: string;,
+  activities: string;
   dependencies: string;
   risks: string;
 }
 export interface UserImpactAssessment {
-  totalAffectedUsers: number;,
+  totalAffectedUsers: number;
   segmentBreakdown: SegmentImpact;
-  communicationRequirements: CommunicationRequirement;,
+  communicationRequirements: CommunicationRequirement;
   trainingRequirements: TrainingRequirement;
   supportTicketEstimate: number;
 }
 export interface SegmentImpact {
-  segment: string;,
+  segment: string;
   userCount: number;
-  impactLevel: 'low' | 'medium' | 'high' | 'critical';,
+  impactLevel: 'low' | 'medium' | 'high' | 'critical';
   specificChanges: string;
   requiredActions: string;
 }
 export interface CommunicationRequirement {
-  channel: string;,
+  channel: string;
   audience: string;
-  message: string;,
+  message: string;
   timing: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-}
+  priority: 'low' | 'medium' | 'high' | 'urgent'
+  }
 export interface TrainingRequirement {
-  audience: string;,
+  audience: string;
   trainingType: string;
-  estimatedHours: number;,
+  estimatedHours: number;
   materials: string;
   deadline: Date;
 }
 export interface ComplianceComparison {
-  frameworks: FrameworkComparison;,
+  frameworks: FrameworkComparison;
   overallComplianceChange: 'improved' | 'maintained' | 'degraded';
-  newRequirements: string;,
+  newRequirements: string;
   removedRequirements: string;
   modifiedRequirements: string;
 }
 export interface FrameworkComparison {
-  framework: string;,
+  framework: string;
   beforeScore: number;
-  afterScore: number;,
+  afterScore: number;
   scoreDelta: number;
-  impactedRequirements: string;,
+  impactedRequirements: string;
   riskLevel: RiskLevel;
   /**
   * Main Policy Preview and Staging Service
@@ -431,9 +431,9 @@ export class PolicyPreviewStagingService extends EventEmitter {
     policyId: string,
     baseVersion: string,
     changes: PreviewChange,
-    options: {,
+    options: {
   title: string;
-      description: string;,
+      description: string;
   createdBy: string;
       expirationDays?: number;
       enableSimulation?: boolean;
@@ -482,7 +482,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   public async deployToStaging()
     previewId: string,
     environmentId: string,
-    options: {,
+    options: {
   targetUserGroups?: string;
   autoRollbackEnabled?: boolean;
   monitoringDuration?: number; // hours,
@@ -596,9 +596,9 @@ export class PolicyPreviewStagingService extends EventEmitter {
   public async collectUserFeedback()
     previewId: string,
     userId: string,
-    feedback: {,
+    feedback: {
   feedbackType: FeedbackType;
-  rating: number;,
+  rating: number;
   comments: string;
   categories: FeedbackCategory;
   ): Promise<UserFeedback> {,
@@ -640,7 +640,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
    */
   public async promoteToProduction()
     previewId: string,
-    options: {,
+    options: {
   approvedBy: string;
       effectiveDate: Date;
       rolloutStrategy?: string;
@@ -751,7 +751,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       blockers: criticalFindings.map(f => f.description),
       warnings: findings.filter(f => f.severity === 'warning').map(f => f.description),
       validatedAt: new Date(),
-      validatorInfo: {,
+      validatorInfo: {
   validatorId: `validator_${validationType.toLowerCase()}`}
 },
   validatorType: 'automated',
@@ -863,13 +863,14 @@ export class PolicyPreviewStagingService extends EventEmitter {
   private async runAccessibilityValidation(preview: PolicyPreview): Promise<ValidationFinding> { return []; }
   private generateRecommendations(findings: ValidationFinding): string { return []; }
   private async generateSimulationScenarios(preview: PolicyPreview): Promise<SimulationScenario> { return []; }
-  private async analyzePolicyDifferences(baseVersion: string,)
+  private async analyzePolicyDifferences(baseVersion: string)
     compareVersion: string,
     policyId: string): Promise<PolicyDifference> { return []; }
   private async analyzeComparisonImpact(differences: PolicyDifference): Promise<ComparisonImpactAnalysis> { return {} as any; }
   private async assessUserImpact(differences: PolicyDifference): Promise<UserImpactAssessment> { return {} as any; }
   private async compareCompliance(differences: PolicyDifference): Promise<ComplianceComparison> { return {} as any; }
-  private async getUserSegment(userId: string): Promise<string> { return 'general'; }
+  private async getUserSegment(userId: string): Promise<string> { return 'general'
+  }
   private async aggregateAnalytics(preview: PolicyPreview): Promise<PreviewAnalytics> { return {} as any; }
   private async validateProductionReadiness(preview: PolicyPreview): Promise<{ ready: boolean; reasons: string }> { return { ready: true, reasons: [] }; }
   private async createProductionVersion(()

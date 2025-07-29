@@ -10,41 +10,41 @@ describe('ReproducibilityValidator', () => {
   validator = ReproducibilityValidator.getInstance();
   // Create mock valid export data
   mockValidExport = {
-  metadata: {,
+  metadata: {
   exportId: 'test-export-001',
   version: '1.2.0',
   timestamp: '2025-07-24T10:00:00.000Z',
-  generator: {,
+  generator: {
   name: 'Wild Construct Prompt Generator',
   version: '1.0.0',
   build: 'test-build',
   coreVersion: '2.1.0',
   exporterVersion: '1.2.0',
   schemaVersion: '1.2.0',
-  dependencies: {,
+  dependencies: {
   reactflow: '11.10.1',
   seedrandom: '3.0.5',
   typescript: '5.0.0',
 },
-  project: {,
+  project: {
   name: 'Test Project',
   id: 'test-project-001',
 },
-  export: {,
+  export: {
   format: 'vfx-pipeline-v1',
   quality: 'production',
   includeDebugInfo: true,
   includeHistoricalData: false,
 },
-  compatibility: {,
+  compatibility: {
   controlNet: true,
   diffusionModels: ['stable-diffusion', 'sdxl'],
   animationFramework: true,
   billboardProjection: true,
 },
-  prompt: {,
+  prompt: {
   finalPrompt: 'A warrior in ancient temple',
-  components: {,
+  components: {
   subject: ['warrior'],
   action: ['standing'],
   setting: ['ancient temple'],
@@ -52,8 +52,8 @@ describe('ReproducibilityValidator', () => {
   technical: ['cinematic lighting'],
   style: ['realistic'],
 },
-  variables: {,
-  subject: {,
+  variables: {
+  subject: {
   value: 'warrior',
   source: 'generated',
   confidence: 0.85,
@@ -63,25 +63,25 @@ describe('ReproducibilityValidator', () => {
   seed: 12345,
   prompt: 'A warrior in ancient temple',
   confidence: 0.85,
-  metadata: {,
+  metadata: {
   generationTime: 150,
   nodesExecuted: 3,
   variablesUsed: ['subject'],
 }],
-        weights: {,
+        weights: {
   overall: 1.0,
   subject: 1.2,
   composition: 1.0,
   style: 0.8,
 },
-  graph: {,
+  graph: {
   nodes: [{;
   id: 'node-001',
           type: 'weightedChoice',
           label: 'Subject Choice',
           category: 'input',
           purpose: 'Select character type',
-          configuration: {,
+          configuration: {
   name: 'Subject Choice',
             choices: [,
               { text: 'warrior', weight: 3 },
@@ -92,38 +92,38 @@ describe('ReproducibilityValidator', () => {
           executionTime: 50,
           dependsOn: [],
           affects: ['node-002'],
-          reproducibilityData: {,
+          reproducibilityData: {
   originalPosition: { x: 100, y: 100 },
             originalSize: { width: 200, height: 100 },
             creationTimestamp: '2025-07-24T09:00:00.000Z',
             lastModified: '2025-07-24T09:30:00.000Z',
-            configurationHash: 'abc123def456';
+            configurationHash: 'abc123def456'
   }],
         connections: [{,
   id: 'conn-001',
           source: { nodeId: 'node-001' },
           target: { nodeId: 'node-002' },
-          dataType: 'text';
+          dataType: 'text'
   }],
         executionPath: ['node-001', 'node-002'],
         criticalPath: ['node-001', 'node-002'],
-        analysis: {,
+        analysis: {
   complexity: 'simple',
   variabilityScore: 0.6,
   determinismScore: 0.8,
   performanceScore: 0.9,
 },
-  execution: {,
-  randomization: {,
+  execution: {
+  randomization: {
   masterSeed: 12345,
-  nodeSeed: {,
+  nodeSeed: {
   'node-001': 12346,
   'node-002': 12347,
 },
   rngState: 'mocked-rng-state-string',
           reproducibilityHash: 'repro-hash-123',
-          nodeRngStates: {,
-  'node-001': {,
+          nodeRngStates: {
+  'node-001': {
   seed: 12346,
   state: 'node-rng-state-1',
   callCount: 3,
@@ -131,17 +131,17 @@ describe('ReproducibilityValidator', () => {
 },
   executionSequence: ['node-001', 'node-002']
   },
-  performance: {,
+  performance: {
   totalTime: 150,
-  nodePerformance: {,
-  'node-001': {,
+  nodePerformance: {
+  'node-001': {
   executionTime: 50,
   cacheHits: 0,
   cacheMisses: 1,
 },
   memoryUsage: 2048000;
   },
-  history: {,
+  history: {
   iterations: [{,
   iterationId: 'iter-001',
   timestamp: '2025-07-24T10:00:00.000Z',
@@ -152,8 +152,8 @@ describe('ReproducibilityValidator', () => {
 }],
           modifications: [];
   },
-  reproduction: {,
-  environment: {,
+  reproduction: {
+  environment: {
   nodeVersion: '18.17.0',
   platform: 'darwin',
 },
@@ -161,34 +161,34 @@ describe('ReproducibilityValidator', () => {
           approximateReproduction: true;
   },
   extensions: {},
-      rendering: {,
-  resolution: {,
+      rendering: {
+  resolution: {
   width: 1920,
   height: 1080,
   aspectRatio: '16:9',
 },
-  camera: {,
+  camera: {
   fov: 45,
   position: [0, 0, 5],
 },
-  lighting: {,
+  lighting: {
   timeOfDay: 'afternoon',
   mood: 'dramatic',
 },
-  style: {,
+  style: {
   filmstock: 'digital',
   colorGrading: 'cinematic',
 },
-  quality: {,
+  quality: {
   samples: 100,
   denoising: 0.7,
 };
     // Create mock invalid export (missing critical data)
     mockInvalidExport = {
       ...mockValidExport,
-      execution: {,
+      execution: {
         ...mockValidExport.execution,
-        randomization: {,
+        randomization: {
   masterSeed: undefined as any,
           nodeSeed: {},
           rngState: undefined,
@@ -215,9 +215,9 @@ describe('ReproducibilityValidator', () => {
     it('should handle missing node seeds', () => {
   const exportWithMissingNodeSeeds = {
   ...mockValidExport,
-  execution: {,
+  execution: {
   ...mockValidExport.execution,
-  randomization: {,
+  randomization: {
   ...mockValidExport.execution.randomization,
   nodeSeed: undefined as any,
 };
@@ -235,9 +235,9 @@ describe('ReproducibilityValidator', () => {
     it('should warn about missing RNG state', () => {
   const exportWithoutRngState = {
   ...mockValidExport,
-  execution: {,
+  execution: {
   ...mockValidExport.execution,
-  randomization: {,
+  randomization: {
   ...mockValidExport.execution.randomization,
   rngState: undefined,
 };
@@ -253,12 +253,12 @@ describe('ReproducibilityValidator', () => {
     it('should detect invalid per-node RNG states', () => {
   const exportWithInvalidNodeRng = {
   ...mockValidExport,
-  execution: {,
+  execution: {
   ...mockValidExport.execution,
-  randomization: {,
+  randomization: {
   ...mockValidExport.execution.randomization,
-  nodeRngStates: {,
-  'node-001': {,
+  nodeRngStates: {
+  'node-001': {
   seed: 'invalid-seed' as any,
   state: null as any,
   callCount: -1,
@@ -279,7 +279,7 @@ describe('ReproducibilityValidator', () => {
     it('should detect invalid node structure', () => {
   const exportWithInvalidNode = {
   ...mockValidExport,
-  graph: {,
+  graph: {
   ...mockValidExport.graph,
   nodes: [{,
   id: undefined as any,
@@ -294,7 +294,7 @@ describe('ReproducibilityValidator', () => {
     it('should warn about missing node configurations', () => {
   const exportWithoutConfig = {
   ...mockValidExport,
-  graph: {,
+  graph: {
   ...mockValidExport.graph,
   nodes: [{,
   ...mockValidExport.graph.nodes[0],
@@ -314,7 +314,7 @@ describe('ReproducibilityValidator', () => {
     it('should detect missing version information', () => {
   const exportWithoutVersion = {
   ...mockValidExport,
-  metadata: {,
+  metadata: {
   ...mockValidExport.metadata,
   version: undefined as any,
 };
@@ -324,9 +324,9 @@ describe('ReproducibilityValidator', () => {
     it('should warn about missing dependency versions', () => {
   const exportWithoutDeps = {
   ...mockValidExport,
-  metadata: {,
+  metadata: {
   ...mockValidExport.metadata,
-  generator: {,
+  generator: {
   ...mockValidExport.metadata.generator,
   dependencies: undefined as any,
 };
@@ -336,11 +336,11 @@ describe('ReproducibilityValidator', () => {
     it('should check for critical dependencies', () => {
   const exportWithMissingCriticalDep = {
   ...mockValidExport,
-  metadata: {,
+  metadata: {
   ...mockValidExport.metadata,
-  generator: {,
+  generator: {
   ...mockValidExport.metadata.generator,
-  dependencies: {,
+  dependencies: {
   typescript: '5.0.0',
   // Missing seedrandom and reactflow
 };
@@ -384,9 +384,9 @@ describe('ReproducibilityValidator', () => {
     it('should handle allowApproximate option', () => {
   const exportWithApproximateOnly = {
   ...mockValidExport,
-  execution: {,
+  execution: {
   ...mockValidExport.execution,
-  randomization: {,
+  randomization: {
   ...mockValidExport.execution.randomization,
   rngState: undefined // Only approximate reproducibility,
 };
@@ -407,7 +407,7 @@ describe('ReproducibilityValidator', () => {
       // Create export with high complexity
       const complexExport = {
         ...mockValidExport,
-        graph: {,
+        graph: {
           ...mockValidExport.graph,
           nodes: Array.from({ length: 30 }, (_, i) => ({)
   ...mockValidExport.graph.nodes[0],
@@ -420,9 +420,9 @@ describe('ReproducibilityValidator', () => {
     it('should suggest enhancement for missing RNG tracking', () => {
   const exportWithoutNodeRng = {
   ...mockValidExport,
-  execution: {,
+  execution: {
   ...mockValidExport.execution,
-  randomization: {,
+  randomization: {
   ...mockValidExport.execution.randomization,
   nodeRngStates: undefined,
 };
@@ -438,13 +438,13 @@ describe('ReproducibilityValidator', () => {
     it('should detect orphaned connections', () => {
       const exportWithOrphanedConnection = {
         ...mockValidExport,
-        graph: {,
+        graph: {
           ...mockValidExport.graph,
           connections: [{,
   id: 'orphaned-conn',
             source: { nodeId: 'non-existent-node' },
             target: { nodeId: 'node-001' },
-            dataType: 'text';
+            dataType: 'text'
   }]
       };
       const report = validator.validateReproducibility(exportWithOrphanedConnection);
@@ -453,7 +453,7 @@ describe('ReproducibilityValidator', () => {
     it('should validate execution path integrity', () => {
   const exportWithInvalidExecutionPath = {
   ...mockValidExport,
-  graph: {,
+  graph: {
   ...mockValidExport.graph,
   executionPath: ['node-001', 'non-existent-node'],
 };

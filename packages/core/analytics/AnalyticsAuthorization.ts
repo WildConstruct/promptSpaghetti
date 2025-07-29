@@ -47,16 +47,16 @@ export enum AnalyticsPermission {
   VIEW_INTEGRATION_ANALYTICS = 'analytics:view_integration_analytics',
   // Authorization Policy
   export interface AuthorizationPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   rules: AuthorizationRule;
-  priority: number;,
+  priority: number;
   enabled: boolean;
 }
 export interface AuthorizationRule {
-  id: string;,
-  condition: {,
+  id: string;
+  condition: {
   eventTypes?: string;
   categories?: string;
   sources?: string;
@@ -108,15 +108,15 @@ export class AnalyticsAuthorizationService {
   rules: [,
   {
   id: 'user-self-access',
-  condition: {,
+  condition: {
   userMatch: 'self',
   requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
 },
-  action: 'allow';
+  action: 'allow'
   }
         {
   id: 'user-other-deny',
-  condition: {,
+  condition: {
   userMatch: 'any',
   requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
 },
@@ -132,7 +132,7 @@ export class AnalyticsAuthorizationService {
   rules: [,
   {
   id: 'org-member-access',
-  condition: {,
+  condition: {
   organizationMatch: 'self',
   requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS],
 },
@@ -148,7 +148,7 @@ export class AnalyticsAuthorizationService {
   rules: [,
   {
   id: 'admin-full-access',
-  condition: {,
+  condition: {
   requiredRoles: ['admin', 'super_admin'],
   requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS],
 },
@@ -164,17 +164,17 @@ export class AnalyticsAuthorizationService {
   rules: [,
   {
   id: 'sensitive-data-redaction',
-  condition: {,
+  condition: {
   severities: ['critical', 'error'],
   requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
 },
   action: 'allow',
-          fields: {,
+          fields: {
   redacted: ['data.password', 'data.token', 'data.apiKey', 'data.secret'],
 }
         {
   id: 'security-events-restriction',
-  condition: {,
+  condition: {
   eventTypes: ['security_event', 'fraud_detection'],
   requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
 },
@@ -190,7 +190,7 @@ export class AnalyticsAuthorizationService {
   rules: [,
   {
   id: 'integration-access',
-  condition: {,
+  condition: {
   categories: ['integration'],
   requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS],
 },
@@ -220,7 +220,7 @@ export class AnalyticsAuthorizationService {
   userId: event.userId || authContext.userId,
   organizationId: event.organizationId || authContext.organizationId,
   sessionId: event.sessionId || authContext.sessionId,
-  metadata: {,
+  metadata: {
   ...event.metadata,
   authorizedBy: authContext.userId,
   authorizedAt: Date.now(),
@@ -322,7 +322,7 @@ export class AnalyticsAuthorizationService {
   /**
    * Apply authorization policies to event
    */
-  private async applyPolicies(event: Partial<UnifiedAnalyticsEvent>,)
+  private async applyPolicies(event: Partial<UnifiedAnalyticsEvent>)
     authContext: AuthContext,
     // action: 'publish' | 'view'
   ): Promise<AuthorizationResult> {
@@ -366,7 +366,7 @@ export class AnalyticsAuthorizationService {
   /**
    * Check if rule matches event and context
    */
-  private ruleMatches(rule: AuthorizationRule,)
+  private ruleMatches(rule: AuthorizationRule)
     event: Partial<UnifiedAnalyticsEvent>,
     authContext: AuthContext): boolean {,
     const condition = rule.condition;
@@ -428,7 +428,7 @@ export class AnalyticsAuthorizationService {
   /**
    * Filter event fields
    */
-  private filterFields(event: Record<string,)
+  private filterFields(event: Record<string)
     unknown>,
     fields: string,
     mode: 'allow' | 'deny'): Record<string, unknown> {
@@ -496,17 +496,17 @@ export class AnalyticsAuthorizationService {
   /**
   * Get authorization summary for user
   */
-  getAuthorizationSummary(authContext: AuthContext): {,
+  getAuthorizationSummary(authContext: AuthContext): {
   userId: string;
   organizationId?: string;
-  roles: string;,
+  roles: string;
   permissions: string;
-  capabilities: {,
-  canPublishEvents: boolean;,
+  capabilities: {
+  canPublishEvents: boolean;
   canViewEvents: boolean;
-  canViewAllEvents: boolean;,
+  canViewAllEvents: boolean;
   canViewOrganizationAnalytics: boolean;
-  canViewDashboard: boolean;,
+  canViewDashboard: boolean;
   canViewAdminDashboard: boolean;
   canManageAnalytics: boolean;
 };
@@ -515,7 +515,7 @@ export class AnalyticsAuthorizationService {
   organizationId: authContext.organizationId,
   roles: authContext.roles,
   permissions: authContext.permissions,
-  capabilities: {,
+  capabilities: {
   canPublishEvents: this.hasPermission(authContext, AnalyticsPermission.PUBLISH_EVENTS),
   canViewEvents: this.hasPermission(authContext, AnalyticsPermission.VIEW_EVENTS),
   canViewAllEvents: this.hasPermission(authContext, AnalyticsPermission.VIEW_ALL_EVENTS),

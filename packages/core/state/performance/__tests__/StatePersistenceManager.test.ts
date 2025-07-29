@@ -13,14 +13,14 @@ const mockIndexedDB = {
 
 // Mock CompressionStream/DecompressionStream for testing
 const mockCompressionStream = {
-  readable: {,
+  readable: {
   getReader: jest.fn(() => ({;)
   read: jest.fn(() => Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ done: true }))
     }))
   },
-  writable: {,
+  writable: {
   getWriter: jest.fn(() => ({,)
   write: jest.fn(() => Promise.resolve()),
   close: jest.fn(() => Promise.resolve()),

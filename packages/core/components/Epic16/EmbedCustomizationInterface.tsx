@@ -56,77 +56,77 @@ import { EmbedCustomization, EmbedBranding, PREVIEW_SIZES, PreviewSize } from '.
 export interface EmbedCustomizationInterfaceProps {
   template: Template;
   initialCustomization?: EmbedCustomization;
-  onCustomizationChange: (customization: EmbedCustomization) => void;,
-  onSave: (customization: EmbedCustomization) => Promise<void>;,
+  onCustomizationChange: (customization: EmbedCustomization) => void;
+  onSave: (customization: EmbedCustomization) => Promise<void>;
   onCancel: () => void;
-  onPreview: (customization: EmbedCustomization) => void;,
+  onPreview: (customization: EmbedCustomization) => void;
   onExport: (customization: EmbedCustomization, format: 'iframe' | 'javascript' | 'react') => string;
   className?: string;
   presets?: EmbedPreset;
 }
 export interface EmbedPreset {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   thumbnail: string;
-  category: 'social' | 'blog' | 'portfolio' | 'ecommerce' | 'documentation' | 'custom';,
+  category: 'social' | 'blog' | 'portfolio' | 'ecommerce' | 'documentation' | 'custom';
   customization: EmbedCustomization;
   popular: boolean;
 }
 export interface EmbedWidget {
-  id: string;,
+  id: string;
   type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
-  name: string;,
+  name: string;
   description: string;
-  icon: React.ComponentType<unknown>;,
+  icon: React.ComponentType<unknown>;
   configurable: boolean;
-  required: boolean;,
+  required: boolean;
   position: { x: number; y: number };
   size: { width: number; height: number };
-  visible: boolean;,
+  visible: boolean;
   config: Record<string, any>;
 }
 export interface CustomFont {
-  family: string;,
+  family: string;
   category: 'serif' | 'sans-serif' | 'monospace' | 'display' | 'handwriting';
   weights: number;
   url?: string;
-  provider: 'google' | 'adobe' | 'custom';
-}
+  provider: 'google' | 'adobe' | 'custom'
+  }
 export interface CustomTheme {
-  id: string;,
+  id: string;
   name: string;
-  colors: {,
-  primary: string;,
+  colors: {
+  primary: string;
   secondary: string;
-  accent: string;,
+  accent: string;
   background: string;
-  surface: string;,
+  surface: string;
   text: string;
-  textSecondary: string;,
+  textSecondary: string;
   border: string;
-  success: string;,
+  success: string;
   warning: string;
-  error: string;,
+  error: string;
   info: string;
 };
-  fonts: {,
+  fonts: {
   heading: CustomFont;
-  body: CustomFont;,
+  body: CustomFont;
   ui: CustomFont;
 };
-  spacing: {,
+  spacing: {
   unit: number;
   scale: number;
 };
-  borderRadius: {,
+  borderRadius: {
   small: number;
-  medium: number;,
+  medium: number;
   large: number;
 };
-  shadows: {,
+  shadows: {
   small: string;
-  medium: string;,
+  medium: string;
   large: string;
 };
 
@@ -139,10 +139,10 @@ const DEFAULT_PRESETS: EmbedPreset = [
     thumbnail: '/presets/social-card.png',
     category: 'social',
     popular: true,
-    customization: {,
+    customization: {
   size: { width: 600, height: 315, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {,
+      features: {
   showPreview: true,
   showMetadata: true,
   showActions: true,
@@ -152,7 +152,7 @@ const DEFAULT_PRESETS: EmbedPreset = [
   enablePurchase: false,
   showRating: true,
 },
-  layout: {,
+  layout: {
   orientation: 'horizontal',
   showHeader: true,
   showFooter: false,
@@ -162,13 +162,13 @@ const DEFAULT_PRESETS: EmbedPreset = [
   borderRadius: 12,
   shadow: 'md',
 },
-  branding: {,
+  branding: {
   showLogo: false,
   showTitle: true,
   showAuthor: true,
   showPoweredBy: false,
 },
-  social: {,
+  social: {
   showLikes: true,
   showShares: true,
   showComments: false,
@@ -185,10 +185,10 @@ const DEFAULT_PRESETS: EmbedPreset = [
     thumbnail: '/presets/blog-embed.png',
     category: 'blog',
     popular: true,
-    customization: {,
+    customization: {
   size: { width: 800, height: 400, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {,
+      features: {
   showPreview: true,
   showMetadata: true,
   showActions: true,
@@ -198,7 +198,7 @@ const DEFAULT_PRESETS: EmbedPreset = [
   enablePurchase: true,
   showRating: true,
 },
-  layout: {,
+  layout: {
   orientation: 'vertical',
   showHeader: true,
   showFooter: true,
@@ -208,13 +208,13 @@ const DEFAULT_PRESETS: EmbedPreset = [
   borderRadius: 8,
   shadow: 'lg',
 },
-  branding: {,
+  branding: {
   showLogo: true,
   showTitle: true,
   showAuthor: true,
   showPoweredBy: true,
 },
-  social: {,
+  social: {
   showLikes: true,
   showShares: true,
   showComments: true,
@@ -231,10 +231,10 @@ const DEFAULT_PRESETS: EmbedPreset = [
     thumbnail: '/presets/sidebar-widget.png',
     category: 'blog',
     popular: false,
-    customization: {,
+    customization: {
   size: { width: 300, height: 400, responsive: true },
       theme: { name: 'light', colors: {}, fonts: {} },
-      features: {,
+      features: {
   showPreview: true,
   showMetadata: false,
   showActions: true,
@@ -244,7 +244,7 @@ const DEFAULT_PRESETS: EmbedPreset = [
   enablePurchase: true,
   showRating: false,
 },
-  layout: {,
+  layout: {
   orientation: 'vertical',
   showHeader: true,
   showFooter: false,
@@ -254,13 +254,13 @@ const DEFAULT_PRESETS: EmbedPreset = [
   borderRadius: 6,
   shadow: 'sm',
 },
-  branding: {,
+  branding: {
   showLogo: false,
   showTitle: true,
   showAuthor: false,
   showPoweredBy: false,
 },
-  social: {,
+  social: {
   showLikes: false,
   showShares: false,
   showComments: false,
@@ -410,7 +410,7 @@ export const PresetSelector: React.FC<{,
 // Visual layout builder component
 export const VisualLayoutBuilder: React.FC<{,
   widgets: EmbedWidget;
-  onWidgetsChange: (widgets: EmbedWidget) => void;,
+  onWidgetsChange: (widgets: EmbedWidget) => void;
   previewSize: PreviewSize;
 }> = ({ widgets, onWidgetsChange, previewSize }) => {
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
@@ -842,9 +842,9 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                             type="color"
                             value={value}
                             onChange={(e) => updateCustomization({)
-  branding: {,
+  branding: {
   ...customization.branding,
-  customColors: {,
+  customColors: {
   ...customization.branding.customColors,
   [key]: e.target.value,
 })}
@@ -854,9 +854,9 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                             type="text"
                             value={value}
                             onChange={(e) => updateCustomization({)
-  branding: {,
+  branding: {
   ...customization.branding,
-  customColors: {,
+  customColors: {
   ...customization.branding.customColors,
   [key]: e.target.value,
 })}

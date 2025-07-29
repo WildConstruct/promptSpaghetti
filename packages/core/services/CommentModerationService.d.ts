@@ -102,19 +102,19 @@ export interface CommentModerationStats {
         avgTimeMinutes: number;
         accuracy: number;
     }>;
-    toxicityDistribution: {,
+    toxicityDistribution: {
         low: number;
         medium: number;
         high: number;
         critical: number;
     };
-    qualityDistribution: {,
+    qualityDistribution: {
         excellent: number;
         good: number;
         fair: number;
         poor: number;
     };
-    recentTrends: {,
+    recentTrends: {
         volumeChange24h: number;
         toxicityChange24h: number;
         qualityChange24h: number;

@@ -53,13 +53,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     push_enabled: true,
     in_app_enabled: true,
     type_preferences: {},
-    quiet_hours: {,
+    quiet_hours: {
   enabled: false,
   start: '22:00',
   end: '08:00',
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 },
-  digest_frequency: 'immediate';
+  digest_frequency: 'immediate'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -86,7 +86,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   setError(null);
   const response = await fetch('/api/notifications/preferences', {)
   method: 'PUT',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(preferences);
@@ -103,9 +103,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   const updateTypePreference = (type: NotificationType, delivery: string, enabled: boolean) => {
   setPreferences(prev => ({)
   ...prev,
-  type_preferences: {,
+  type_preferences: {
   ...prev.type_preferences,
-  [type]: {,
+  [type]: {
   ...prev.type_preferences[type],
   [delivery]: enabled,
 }));
@@ -119,7 +119,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   const updateQuietHours = (field: string, value: Error) => {
   setPreferences(prev => ({)
   ...prev,
-  quiet_hours: {,
+  quiet_hours: {
   ...prev.quiet_hours,
   [field]: value,
 }));

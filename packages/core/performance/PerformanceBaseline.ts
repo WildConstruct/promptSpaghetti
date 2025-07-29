@@ -7,44 +7,44 @@ import { measureExecution, ExecutionMetrics, PerformanceTracker } from '../utils
 import { EventEmitter } from 'events';
 
 export interface BaselineSnapshot {
-  id: string;,
+  id: string;
   timestamp: number;
-  environment: {,
+  environment: {
     userAgent?: string;
     viewport?: { width: number; height: number };
     connection?: string;
     deviceMemory?: number;
     hardwareConcurrency?: number;
   };
-  kpiSnapshots: KPISnapshot;,
-  systemInfo: {,
+  kpiSnapshots: KPISnapshot;
+  systemInfo: {
   nodeVersion?: string;
   platform?: string;
   memoryUsage?: NodeJS.MemoryUsage;
 };
-  testConditions: {,
+  testConditions: {
   graphComplexity: 'simple' | 'medium' | 'complex';
-  dataSize: 'small' | 'medium' | 'large';,
+  dataSize: 'small' | 'medium' | 'large';
   concurrentUsers: number;
 };
 }
 export interface BaselineSummary {
-  capturedAt: number;,
+  capturedAt: number;
   totalKPIs: number;
-  criticalKPIs: number;,
-  kpisByStatus: {,
-  excellent: number;,
+  criticalKPIs: number;
+  kpisByStatus: {
+  excellent: number;
   good: number;
-  warning: number;,
+  warning: number;
   critical: number;
 };
-  averageScores: {,
+  averageScores: {
   runtime: number;
-  api: number;,
+  api: number;
   bundle: number;
-  memory: number;,
+  memory: number;
   network: number;
-  build: number;,
+  build: number;
   userExperience: number;
 };
   recommendations: string;
@@ -116,7 +116,7 @@ export class PerformanceBaseline extends EventEmitter {
   timestamp: Date.now(),
   status,
   trend: 'stable', // Will be calculated after adding to history,
-  metadata: {,
+  metadata: {
   testConditions,
   measurementMethod: kpi.measurement.method,
 };
@@ -336,8 +336,8 @@ export class PerformanceBaseline extends EventEmitter {
 };
     const criticalKPIs = target.kpiSnapshots.filter(k => {)
   const kpi = corePerformanceKPIs.find(def => def.id === k.kpiId);
-      return kpi?.priority === 'critical';
-    }).length;
+      return kpi?.priority === 'critical'
+  }).length;
     // Calculate average scores by category
     const averageScores = this.calculateCategoryAverages(target.kpiSnapshots);
     // Generate recommendations for poor-performing KPIs
@@ -396,8 +396,8 @@ export class PerformanceBaseline extends EventEmitter {
   /**
   * Compare two baselines
   */
-  compareBaselines(baseline1: BaselineSnapshot, baseline2: BaselineSnapshot): {,
-  improved: string;,
+  compareBaselines(baseline1: BaselineSnapshot, baseline2: BaselineSnapshot): {
+  improved: string;
   degraded: string;
   unchanged: string;
   const improved: string = [];

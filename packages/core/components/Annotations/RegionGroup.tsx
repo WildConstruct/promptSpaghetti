@@ -13,7 +13,7 @@ import {
   REGION_GROUP_STYLES
 } from '../../types/CollaborationTypes';
 interface RegionGroupProps {
-  group: RegionGroupType;,
+  group: RegionGroupType;
   onAction: (action: RegionGroupAction) => void;
   selected?: boolean;
   canEdit?: boolean;
@@ -260,8 +260,8 @@ interface RegionGroupProps {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+              e.currentTarget.style.backgroundColor = 'transparent'
+  }}
             title={group.collapsed ? 'Expand group' : 'Collapse group'}
           >
             {group.collapsed ? '▶' : '▼'}

@@ -9,7 +9,7 @@ import {
 import { QueryResult } from '../../external-data/DataSourceManager';
 
 export interface HistoricalDataImportPanelProps {
-  visible: boolean;,
+  visible: boolean;
   onClose: () => void;
   onDataImported?: (results: QueryResult) => void;
   onError?: (error: Error) => void;

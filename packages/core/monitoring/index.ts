@@ -96,9 +96,9 @@ export systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }>
 export };
 
 // Monitoring system health check utility
-export epic17Health: 'healthy' | 'degraded' | 'unhealthy';,
+export epic17Health: 'healthy' | 'degraded' | 'unhealthy';
   securityHealth: 'healthy' | 'degraded' | 'unhealthy';
-  overallHealth: 'healthy' | 'degraded' | 'unhealthy';,
+  overallHealth: 'healthy' | 'degraded' | 'unhealthy';
   recommendations: string;
 } => {
   const dashboardData = integration.getIntegratedDashboardData();

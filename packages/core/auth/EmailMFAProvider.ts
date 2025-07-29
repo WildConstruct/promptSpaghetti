@@ -23,31 +23,31 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 // Configuration & Types
 // ========================================
 interface EmailMFAConfig {
-  encryption: {,
-  algorithm: 'aes-256-gcm';,
+  encryption: {
+  algorithm: 'aes-256-gcm';
   keyDerivation: 'pbkdf2';
   iterations: number;
 };
-  templates: {,
+  templates: {
   verificationCode: string;
   enrollmentCode: string;
 };
-  rateLimit: {,
+  rateLimit: {
   maxDailyEmails: number;
   cooldownMinutes: number;
 };
 interface EmailTemplate {
-  subject: string;,
+  subject: string;
   htmlTemplate: string;
-  textTemplate: string;,
+  textTemplate: string;
   variables: string;
 interface EmailSendResult {
-  messageId: string;,
+  messageId: string;
   status: 'sent' | 'failed';
   error?: string;
   timestamp: Date;
 interface RiskAssessmentContext {
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   location?: string;
   deviceFingerprint?: string;
@@ -230,7 +230,7 @@ export class EmailMFAProvider {
   encryptedToken: this.encryptToken(verificationCode),
   expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
   attempts: 0,
-  metadata: {,
+  metadata: {
   ipAddress: context.ipAddress,
   userAgent: context.userAgent,
   location: context.location,
@@ -312,7 +312,7 @@ export class EmailMFAProvider {
   eventType: 'brute_force',
   severity: 'high',
   description: 'Account locked due to repeated failed MFA attempts',
-  metadata: {,
+  metadata: {
   ipAddress: context.ipAddress,
   userAgent: context.userAgent,
   methodType: MFAMethodType.EMAIL,
@@ -363,7 +363,7 @@ export class EmailMFAProvider {
   encryptedToken: this.encryptToken(verificationCode),
   expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
   attempts: 0,
-  metadata: {,
+  metadata: {
   ipAddress: '0.0.0.0', // Enrollment context,
   userAgent: 'enrollment',
   riskScore: 0,
@@ -380,7 +380,7 @@ export class EmailMFAProvider {
   displayName: 'PromptScape Account',
   expiryMinutes: '10',
 });
-  private async sendVerificationEmail(emailAddress: string,)
+  private async sendVerificationEmail(emailAddress: string)
     code: string,
     displayName: string,
     includeSecurityWarning: boolean = false): Promise<void> {,

@@ -144,7 +144,7 @@ style = {};
                             flex: 1,
                             padding: '8px 12px',
                             border: `1px solid ${uiColors.ui.border}`
-                        } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none'; }} onFocus=", (e) => {
+                        } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none' }} onFocus=", (e) => {
                         e.target.style.borderColor = uiColors.accent.primary;
                     }, "onBlur=", (e) => {
                         e.target.style.borderColor = uiColors.ui.border;

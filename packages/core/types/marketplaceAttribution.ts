@@ -61,7 +61,7 @@ export const MarketplaceAuthorTypeSchema = z.enum([)
 // Template Attribution Schemas
 // =============================================================================
 
-export const TemplateAttributionSchema = z.object({)
+export const TemplateAttributionSchema = z.object({
   id: z.string().uuid(),
   templateId: z.string().uuid(),
   templateVersionId: z.string().uuid().optional(),
@@ -71,7 +71,7 @@ export const TemplateAttributionSchema = z.object({)
   primaryCreatorEmail: z.string().email(),
   creationDate: z.date(),
   // Collaboration attribution
-  collaborators: z.array(z.object({,)
+  collaborators: z.array(z.object({)
   userId: z.string().uuid(),
   userName: z.string(),
   userEmail: z.string().email(),
@@ -98,7 +98,7 @@ export const TemplateAttributionSchema = z.object({)
   totalPercentage: z.number().min(99.99).max(100.01) // Allow for rounding,
 }),
   // Verification and claims
-  attributionClaims: z.array(z.object({,)
+  attributionClaims: z.array(z.object({)
   claimId: z.string().uuid(),
   claimantId: z.string().uuid(),
   claimType: z.enum(['ownership', 'collaboration', 'derivation', 'inspiration']),
@@ -125,7 +125,7 @@ export const TemplateAttributionSchema = z.object({)
 // Revenue Attribution Schemas
 // =============================================================================
 
-export const RevenueAttributionSchema = z.object({)
+export const RevenueAttributionSchema = z.object({
   id: z.string().uuid(),
   templateId: z.string().uuid(),
   purchaseId: z.string().uuid(),
@@ -133,7 +133,7 @@ export const RevenueAttributionSchema = z.object({)
   totalRevenue: z.number().min(0),
   currency: z.string().length(3).default('USD'),
   // Attribution breakdown
-  attributions: z.array(z.object({,)
+  attributions: z.array(z.object({)
   recipientId: z.string().uuid(),
   recipientType: z.enum(['creator', 'collaborator', 'original_creator', 'platform']),
   attribution: z.enum(['primary_creator', 'collaborator', 'derived_from', 'platform_fee']),
@@ -163,7 +163,7 @@ export const RevenueAttributionSchema = z.object({)
 // Creator Attribution Profile Schemas
 // =============================================================================
 
-export const CreatorAttributionProfileSchema = z.object({)
+export const CreatorAttributionProfileSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   // Creator identification
@@ -206,7 +206,7 @@ export const CreatorAttributionProfileSchema = z.object({)
 // Attribution Analytics Schemas
 // =============================================================================
 
-export const MarketplaceAttributionAnalyticsSchema = z.object({)
+export const MarketplaceAttributionAnalyticsSchema = z.object({
   id: z.string().uuid(),
   creatorId: z.string().uuid().optional(),
   templateId: z.string().uuid().optional(),
@@ -235,7 +235,7 @@ export const MarketplaceAttributionAnalyticsSchema = z.object({)
   // Breakdown data
   breakdown: z.record(z.unknown()).default({}),
   // Insights
-  insights: z.array(z.object({,)
+  insights: z.array(z.object({)
   type: z.enum(['trend', 'anomaly', 'recommendation', 'alert']),
     title: z.string(),
     description: z.string(),
@@ -265,7 +265,7 @@ export type MarketplaceAttributionAnalytics = z.infer<typeof MarketplaceAttribut
 // =============================================================================
 
 // Extended change attribution for marketplace
-export const MarketplaceChangeAttributionSchema = ChangeAttributionSchema.extend({)
+export const MarketplaceChangeAttributionSchema = ChangeAttributionSchema.extend({
   resourceType: MarketplaceResourceTypeSchema,
   changeType: MarketplaceChangeTypeSchema,
   authorType: MarketplaceAuthorTypeSchema,
@@ -282,7 +282,7 @@ export const MarketplaceChangeAttributionSchema = ChangeAttributionSchema.extend
 });
 
 // Extended filter for marketplace attribution
-export const MarketplaceAttributionFilterSchema = AttributionFilterSchema.extend({)
+export const MarketplaceAttributionFilterSchema = AttributionFilterSchema.extend({
   resourceType: MarketplaceResourceTypeSchema.optional(),
   changeType: MarketplaceChangeTypeSchema.optional(),
   authorType: MarketplaceAuthorTypeSchema.optional(),
@@ -303,11 +303,11 @@ export type MarketplaceAttributionFilter = z.infer<typeof MarketplaceAttribution
 // Request/Response Schemas
 // =============================================================================
 
-export const CreateTemplateAttributionRequestSchema = z.object({)
+export const CreateTemplateAttributionRequestSchema = z.object({
   templateId: z.string().uuid(),
   templateVersionId: z.string().uuid().optional(),
   primaryCreatorId: z.string().uuid(),
-  collaborators: z.array(z.object({,)
+  collaborators: z.array(z.object({)
   userId: z.string().uuid(),
   contributionType: z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']),
   contributionPercentage: z.number().min(0).max(100),
@@ -322,7 +322,7 @@ export const CreateTemplateAttributionRequestSchema = z.object({)
   sourceMetadata: z.record(z.unknown()).default({})
 });
 
-export const CreateAttributionClaimRequestSchema = z.object({)
+export const CreateAttributionClaimRequestSchema = z.object({
   templateId: z.string().uuid(),
   claimType: z.enum(['ownership', 'collaboration', 'derivation', 'inspiration']),
   claimDescription: z.string(),
@@ -330,9 +330,9 @@ export const CreateAttributionClaimRequestSchema = z.object({)
   metadata: z.record(z.unknown()).default({})
 });
 
-export const UpdateRevenueAttributionRequestSchema = z.object({)
+export const UpdateRevenueAttributionRequestSchema = z.object({
   purchaseId: z.string().uuid(),
-  attributionOverrides: z.array(z.object({,)
+  attributionOverrides: z.array(z.object({)
   recipientId: z.string().uuid(),
   newPercentage: z.number().min(0).max(100),
   reason: z.string(),
@@ -349,9 +349,9 @@ export type UpdateRevenueAttributionRequest = z.infer<typeof UpdateRevenueAttrib
 // Response Schemas
 // =============================================================================
 
-export const TemplateAttributionResponseSchema = z.object({)
+export const TemplateAttributionResponseSchema = z.object({
   attribution: TemplateAttributionSchema,
-  relatedTemplates: z.array(z.object({,)
+  relatedTemplates: z.array(z.object({)
   templateId: z.string().uuid(),
   title: z.string(),
   relationship: z.enum(['original', 'derivative', 'similar']),
@@ -365,9 +365,9 @@ export const TemplateAttributionResponseSchema = z.object({)
 }).optional()
 });
 
-export const CreatorDashboardResponseSchema = z.object({)
+export const CreatorDashboardResponseSchema = z.object({
   profile: CreatorAttributionProfileSchema,
-  templates: z.array(z.object({,)
+  templates: z.array(z.object({)
   templateId: z.string().uuid(),
   title: z.string(),
   attribution: TemplateAttributionSchema,
@@ -383,7 +383,7 @@ export const CreatorDashboardResponseSchema = z.object({)
   derivatives: z.number().int(),
 }
   })),
-  collaborations: z.array(z.object({,)
+  collaborations: z.array(z.object({)
   templateId: z.string().uuid(),
   title: z.string(),
   role: z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']),

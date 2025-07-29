@@ -9,78 +9,78 @@ import { EventEmitter } from 'events';
 // Navigation state interfaces
 
 export interface NavigationPreferences {
-  userId: string;,
+  userId: string;
   expandedSections: string;
-  pinnedItems: string;,
+  pinnedItems: string;
   favoriteItems: string;
-  recentItems: NavigationHistoryItem;,
+  recentItems: NavigationHistoryItem;
   layout: 'sidebar' | 'top' | 'mobile';
-  theme: 'light' | 'dark' | 'auto';,
+  theme: 'light' | 'dark' | 'auto';
   compactMode: boolean;
-  showDescriptions: boolean;,
+  showDescriptions: boolean;
   enableAnimations: boolean;
-  searchHistory: string;,
+  searchHistory: string;
   lastSection: string;
   customSections: CustomNavigationSection;
 }
 export interface NavigationHistoryItem {
-  id: string;,
+  id: string;
   label: string;
-  path: string;,
+  path: string;
   icon: string;
-  timestamp: Date;,
+  timestamp: Date;
   category: string;
-  accessCount: number;,
+  accessCount: number;
   lastAccessed: Date;
 }
 export interface CustomNavigationSection {
-  id: string;,
+  id: string;
   label: string;
-  description: string;,
+  description: string;
   path: string;
-  icon: string;,
+  icon: string;
   permissions: string;
-  active: boolean;,
+  active: boolean;
   order: number;
-  category: string;,
+  category: string;
   createdBy: string;
   created: Date;
 }
 export interface NavigationAnalytics {
-  userId: string;,
+  userId: string;
   sessionId: string;
-  pathHistory: NavigationPathEvent;,
+  pathHistory: NavigationPathEvent;
   timeSpent: Map<string, number>; // section -> milliseconds,
   clickCounts: Map<string, number>; // item -> count,
-  searchQueries: SearchQueryEvent;,
+  searchQueries: SearchQueryEvent;
   errorEvents: NavigationErrorEvent;
   performanceMetrics: NavigationPerformanceMetric;
 }
 export interface NavigationPathEvent {
-  path: string;,
+  path: string;
   section: string;
-  timestamp: Date;,
+  timestamp: Date;
   duration: number; // milliseconds,
-  source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search';
-}
+  source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search'
+  }
 export interface SearchQueryEvent {
-  query: string;,
+  query: string;
   timestamp: Date;
   resultsCount: number;
   selectedResult?: string;
-  source: 'header' | 'sidebar' | 'modal';
-}
+  source: 'header' | 'sidebar' | 'modal'
+  }
 export interface NavigationErrorEvent {
-  path: string;,
+  path: string;
   error: string;
-  timestamp: Date;,
+  timestamp: Date;
   userAgent: string;
   resolved: boolean;
 }
 export interface NavigationPerformanceMetric {
-  action: string;,
+  action: string;
   duration: number; // milliseconds,
-  timestamp: Date;,
+  timestamp: Date;
   metadata: Record<string, any>;
 }
 export interface NavigationSearchOptions {
@@ -93,15 +93,15 @@ export interface NavigationSearchOptions {
   userId?: string;
 }
 export interface NavigationSearchResult {
-  item: {,
-  id: string;,
+  item: {
+  id: string;
   label: string;
-  description: string;,
+  description: string;
   path: string;
-  icon: string;,
+  icon: string;
   category: string;
 };
-  score: number;,
+  score: number;
   matchType: 'exact' | 'partial' | 'fuzzy' | 'description';
   highlightedText: string;
 /**
@@ -251,11 +251,11 @@ export class NavigationManagerService extends EventEmitter {
   let matchType: NavigationSearchResult['matchType'] = 'fuzzy';
   if (item.label.toLowerCase() === searchTerm) {
   score = 1.0;
-  matchType = 'exact';
-} else if (labelMatch) {
+  matchType = 'exact'
+  } else if (labelMatch) {
           score = 0.8;
-          matchType = 'partial';
-        } else if (descMatch) {
+          matchType = 'partial'
+  } else if (descMatch) {
   score = 0.6;
   matchType = 'description';
   // Apply category filter
@@ -349,9 +349,9 @@ export class NavigationManagerService extends EventEmitter {
    */
   async getAnalyticsSummary(userId: string): Promise<{,
   totalNavigations: number;
-  averageSessionTime: number;,
+  averageSessionTime: number;
   mostVisitedSections: string;
-  searchQueriesCount: number;,
+  searchQueriesCount: number;
   lastActivity: Date | null;
 }> {
   const analytics = this.analytics.get(userId);
@@ -385,7 +385,7 @@ export class NavigationManagerService extends EventEmitter {
    */
   async exportUserData(userId: string): Promise<{,
   preferences: NavigationPreferences;
-  analytics: NavigationAnalytics;,
+  analytics: NavigationAnalytics;
   summary: any;
 }> {
   const preferences = await this.getUserPreferences(userId);

@@ -48,7 +48,7 @@ export position: { x: number; y: number },
   type: 'NODE_ADD',
   timestamp: new Date(),
   userId,
-  payload: {,
+  payload: {
   node,
   position
 };

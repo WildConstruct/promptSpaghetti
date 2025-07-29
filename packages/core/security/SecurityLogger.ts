@@ -67,7 +67,7 @@ export enum LogLevel {
   sessionId?: string;
   requestId?: string;
   lockoutId?: string;
-  geolocation?: {,
+  geolocation?: {
   country?: string;
   region?: string;
   city?: string;
@@ -90,35 +90,35 @@ export enum LogLevel {
 // Security Log Entry
 }
 export interface SecurityLogEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  level: LogLevel;,
+  level: LogLevel;
   eventType: SecurityEventType;
-  message: string;,
-  actor: {,
-  type: 'user' | 'admin' | 'system';,
+  message: string;
+  actor: {
+  type: 'user' | 'admin' | 'system';
   id: string;
   email?: string;
   role?: AdminRole;
 };
   target?: {
-  type: 'user' | 'account' | 'lockout' | 'system';,
+  type: 'user' | 'account' | 'lockout' | 'system';
   id: string;
   email?: string;
 };
-  context: LogContext;,
+  context: LogContext;
   details: Record<string, any>;
-  outcome: 'success' | 'failure' | 'pending' | 'unknown';,
+  outcome: 'success' | 'failure' | 'pending' | 'unknown';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  compliance: {,
+  compliance: {
   frameworks: ComplianceFramework;
   retention: number; // days,
-  encrypted: boolean;,
+  encrypted: boolean;
   immutable: boolean;
 };
-  metadata: {,
+  metadata: {
   source: string;
-  environment: string;,
+  environment: string;
   version: string;
   correlationId?: string;
   traceId?: string;
@@ -128,63 +128,63 @@ export interface SecurityLogEntry {
 // Audit Trail Entry
 }
 export interface AuditTrailEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  operation: string;,
+  operation: string;
   resource: string;
-  resourceId: string;,
-  actor: {,
-  type: 'user' | 'admin' | 'system';,
+  resourceId: string;
+  actor: {
+  type: 'user' | 'admin' | 'system';
   id: string;
   email?: string;
 };
-  changes: {,
+  changes: {
   before?: any;
   after?: any;
   fields: string;
 };
   reason?: string;
-  context: LogContext;,
+  context: LogContext;
   compliance: ComplianceFramework;
   signature: string;
 
 // Security Metrics
 }
 export interface SecurityMetrics {
-  period: {,
-  start: Date;,
+  period: {
+  start: Date;
   end: Date;
 };
-  lockoutEvents: {,
+  lockoutEvents: {
   total: number;
   byReason: Record<LockoutReason, number>;
-  byHour: number;,
+  byHour: number;
   averagePerDay: number;
 };
-  unlockEvents: {,
+  unlockEvents: {
   total: number;
   byMethod: Record<UnlockMethod, number>;
-  adminUnlocks: number;,
+  adminUnlocks: number;
   emergencyUnlocks: number;
   averageResolutionTime: number;
 };
-  securityAlerts: {,
+  securityAlerts: {
   total: number;
   bySeverity: Record<string, number>;
-  falsePositives: number;,
+  falsePositives: number;
   responseTime: number;
 };
-  compliance: {,
+  compliance: {
   violations: number;
-  reportingRequirements: number;,
+  reportingRequirements: number;
   dataRetention: number;
   auditAccess: number;
 };
-  threatLandscape: {,
+  threatLandscape: {
   topAttackVectors: Array<{ vector: string; count: number }>;
     topTargetedUsers: Array<{ userId: string; count: number }>;
     geographicDistribution: Record<string, number>;
-    timePatterns: {,
+    timePatterns: {
   peakHours: number;
   peakDays: string;
 };
@@ -209,11 +209,11 @@ export interface LogQuery {
   // Log Retention Policy
 }
 export interface LogRetentionPolicy {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   retentionDays: number;
-  archiveAfterDays: number;,
+  archiveAfterDays: number;
   encrypted: boolean;
-  immutable: boolean;,
+  immutable: boolean;
   accessControls: string;
   /**
   * Comprehensive security logging service
@@ -244,22 +244,22 @@ export class SecurityLogger extends EventEmitter {
       eventType: SecurityEventType.ACCOUNT_LOCKED,
       message: `Account locked: ${lockout.userEmail} due to ${lockout.reason}`}
 },
-  actor: {,
+  actor: {
   type: 'system',
   id: 'lockout-service',
 },
-  target: {,
+  target: {
   type: 'account',
   id: lockout.userId,
   email: lockout.userEmail,
 },
-  context: {,
+  context: {
   ...context,
   userId: lockout.userId,
   userEmail: lockout.userEmail,
   lockoutId: lockout.id,
 },
-  details: {,
+  details: {
   reason: lockout.reason,
   failedAttempts: lockout.failedAttempts,
   lockoutTime: lockout.lockoutTime,
@@ -269,13 +269,13 @@ export class SecurityLogger extends EventEmitter {
 },
   outcome: 'success',
       severity: this.determineLockoutSeverity(lockout.reason),
-      compliance: {,
+      compliance: {
   frameworks: this.getApplicableFrameworks(lockout.reason),
   retention: this.getRetentionDays(lockout.reason),
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'AccountLockoutService',
   environment: process.env.NODE_ENV || 'development',
   version: '1.0.0',
@@ -291,7 +291,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Log account unlock event
    */
-  public logAccountUnlocked(lockout: AccountLockout,)
+  public logAccountUnlocked(lockout: AccountLockout)
     method: UnlockMethod,
     adminId?: string,
     context: LogContext = {}
@@ -303,24 +303,24 @@ export class SecurityLogger extends EventEmitter {
       eventType: SecurityEventType.ACCOUNT_UNLOCKED,
       message: `Account unlocked: ${lockout.userEmail} via ${method}${adminId ? ` by ${adminId}` : ''}`}
 },
-  actor: {,
+  actor: {
   type: adminId ? 'admin' : 'system',
         id: adminId || 'lockout-service',
         email: adminId ? `${adminId}@company.com` : undefined}
   },
-  target: {,
+  target: {
   type: 'account',
   id: lockout.userId,
   email: lockout.userEmail,
 },
-  context: {,
+  context: {
   ...context,
   userId: lockout.userId,
   userEmail: lockout.userEmail,
   lockoutId: lockout.id,
   adminId
 },
-  details: {,
+  details: {
   method,
   originalReason: lockout.reason,
   lockoutDuration: lockout.unlockTime ,
@@ -331,13 +331,13 @@ export class SecurityLogger extends EventEmitter {
 },
   outcome: 'success',
       severity: 'medium',
-      compliance: {,
+      compliance: {
   frameworks: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001],
   retention: 2555, // 7 years for SOX compliance,
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'AccountLockoutService',
   environment: process.env.NODE_ENV || 'development',
   version: '1.0.0',
@@ -354,7 +354,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Log unlock attempt
    */
-  public logUnlockAttempt(lockoutId: string,)
+  public logUnlockAttempt(lockoutId: string)
     adminId: string,
     reason: string,
     outcome: 'success' | 'failure',
@@ -367,34 +367,34 @@ export class SecurityLogger extends EventEmitter {
       eventType: SecurityEventType.UNLOCK_ATTEMPT,
       message: `Unlock attempt ${outcome}: ${adminId} for lockout ${lockoutId}`}
 },
-  actor: {,
+  actor: {
   type: 'admin',
         id: adminId,
         email: `${adminId}@company.com`}
   },
-  target: {,
+  target: {
   type: 'lockout',
   id: lockoutId,
 },
-  context: {,
+  context: {
         ...context,
         adminId,
         lockoutId
   },
-  details: {,
+  details: {
   reason,
   outcome,
   timestamp: new Date(),
 }
       outcome,
       severity: outcome === 'failure' ? 'medium' : 'low',
-      compliance: {,
+      compliance: {
   frameworks: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001],
   retention: 2555,
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'AccountLockoutService',
   environment: process.env.NODE_ENV || 'development',
   version: '1.0.0',
@@ -411,7 +411,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Log emergency unlock event
    */
-  public logEmergencyUnlock(lockoutId: string,)
+  public logEmergencyUnlock(lockoutId: string)
     adminId: string,
     emergencyCode: string,
     justification: string,
@@ -424,21 +424,21 @@ export class SecurityLogger extends EventEmitter {
       eventType: SecurityEventType.EMERGENCY_UNLOCK,
       message: `EMERGENCY UNLOCK: ${adminId} unlocked ${lockoutId} with emergency code`}
 },
-  actor: {,
+  actor: {
   type: 'admin',
         id: adminId,
         email: `${adminId}@company.com`}
   },
-  target: {,
+  target: {
   type: 'lockout',
   id: lockoutId,
 },
-  context: {,
+  context: {
         ...context,
         adminId,
         lockoutId
   },
-  details: {,
+  details: {
   emergencyCode: this.maskSensitiveData(emergencyCode),
   justification,
   fullEmergencyCodeHash: this.hashSensitiveData(emergencyCode),
@@ -446,7 +446,7 @@ export class SecurityLogger extends EventEmitter {
 },
   outcome: 'success',
       severity: 'critical',
-      compliance: {,
+      compliance: {
   frameworks: [,
   ComplianceFramework.SOX,
   ComplianceFramework.ISO_27001,
@@ -456,7 +456,7 @@ export class SecurityLogger extends EventEmitter {
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'AccountLockoutService',
   environment: process.env.NODE_ENV || 'development',
   version: '1.0.0',
@@ -473,7 +473,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Log security alert
    */
-  public logSecurityAlert(alertType: string,)
+  public logSecurityAlert(alertType: string)
     severity: 'low' | 'medium' | 'high' | 'critical',
     details: Record<string, any>,
     context: LogContext = {}
@@ -485,18 +485,18 @@ export class SecurityLogger extends EventEmitter {
       eventType: SecurityEventType.SECURITY_ALERT,
       message: `Security alert: ${alertType} (${severity})`}
 },
-  actor: {,
+  actor: {
   type: 'system',
   id: 'security-monitor',
 }
       context,
-      details: {,
+      details: {
         alertType,
         ...details
   },
   outcome: 'unknown',
       severity,
-      compliance: {,
+      compliance: {
   frameworks: [,
   ComplianceFramework.ISO_27001,
   ComplianceFramework.NIST,
@@ -506,7 +506,7 @@ export class SecurityLogger extends EventEmitter {
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'SecurityMonitor',
   environment: process.env.NODE_ENV || 'development',
   version: '1.0.0',
@@ -522,7 +522,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Create audit trail entry
    */
-  public createAuditTrail(operation: string,)
+  public createAuditTrail(operation: string)
     resource: string,
     resourceId: string,
     actorType: 'user' | 'admin' | 'system',
@@ -537,7 +537,7 @@ export class SecurityLogger extends EventEmitter {
       operation,
       resource,
       resourceId,
-      actor: {,
+      actor: {
   type: actorType,
         id: actorId,
         email: actorType !== 'system' ? `${actorId}@company.com` : undefined}
@@ -561,9 +561,9 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Query security logs
    */
-  public queryLogs(query: LogQuery): {,
+  public queryLogs(query: LogQuery): {
   logs: SecurityLogEntry;
-    total: number;,
+    total: number;
   hasMore: boolean;
     let logs = Array.from(this.logs.values());
     // Apply filters
@@ -632,7 +632,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Get security metrics
    */
-  public getSecurityMetrics(startTime?: Date,)
+  public getSecurityMetrics(startTime?: Date)
     endTime?: Date
   ): SecurityMetrics {
     if (!this.metrics || this.shouldUpdateMetrics()) {
@@ -641,15 +641,15 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Export logs for compliance
    */
-  public exportLogsForCompliance(framework: ComplianceFramework,)
+  public exportLogsForCompliance(framework: ComplianceFramework)
     startTime: Date,
     endTime: Date,
     format: 'json' | 'csv' | 'xml' = 'json'): {;
-  data: string;,
+  data: string;
   metadata: {;
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   period: { start: Date; end: Date };
-      recordCount: number;,
+      recordCount: number;
   exportTime: Date;
       signature: string;
     };
@@ -783,36 +783,36 @@ export class SecurityLogger extends EventEmitter {
     const alertLogs = logs.filter(log => log.eventType === SecurityEventType.SECURITY_ALERT);
     this.metrics = {
       period: { start, end },
-      lockoutEvents: {,
+      lockoutEvents: {
   total: lockoutLogs.length,
   byReason: this.groupByReason(lockoutLogs),
   byHour: this.groupByHour(lockoutLogs, start, end),
   averagePerDay: lockoutLogs.length / Math.max(1, (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)),
 },
-  unlockEvents: {,
+  unlockEvents: {
   total: unlockLogs.length,
   byMethod: this.groupByMethod(unlockLogs),
   adminUnlocks: unlockLogs.filter(log => log.actor.type === 'admin').length,
   emergencyUnlocks: logs.filter(log => log.eventType === SecurityEventType.EMERGENCY_UNLOCK).length,
   averageResolutionTime: this.calculateAverageResolutionTime(lockoutLogs, unlockLogs),
 },
-  securityAlerts: {,
+  securityAlerts: {
   total: alertLogs.length,
   bySeverity: this.groupBySeverity(alertLogs),
   falsePositives: 0, // Would need additional tracking,
   responseTime: 0 // Would need additional tracking,
 },
-  compliance: {,
+  compliance: {
   violations: logs.filter(log => log.eventType === SecurityEventType.POLICY_VIOLATION).length,
   reportingRequirements: logs.filter(log => log.compliance.frameworks.length > 0).length,
   dataRetention: logs.filter(log => log.compliance.retention > 0).length,
   auditAccess: logs.filter(log => log.eventType === SecurityEventType.AUDIT_LOG_ACCESS).length,
 },
-  threatLandscape: {,
+  threatLandscape: {
   topAttackVectors: this.getTopAttackVectors(logs),
   topTargetedUsers: this.getTopTargetedUsers(logs),
   geographicDistribution: this.getGeographicDistribution(logs),
-  timePatterns: {,
+  timePatterns: {
   peakHours: this.getPeakHours(logs),
   peakDays: this.getPeakDays(logs),
 };

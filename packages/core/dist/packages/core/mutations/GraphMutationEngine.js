@@ -343,8 +343,7 @@ GraphState;
                                                                             case OperationType.EDGE_DELETE:
                                                                                 await this.executeEdgeDelete(operation);
                                                                                 break;
-                                                                            case OperationType.BATCH_OPERATION:
-                                                                                return await this.executeBatch(operation.payload.operations);
+                                                                            case OperationType.BATCH_OPERATION: return await this.executeBatch(operation.payload.operations);
                                                                             default:
                                                                                 throw new Error(`Unsupported operation type: ${operation.type}`);
                                                                         }

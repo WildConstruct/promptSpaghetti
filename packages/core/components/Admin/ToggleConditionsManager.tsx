@@ -21,22 +21,22 @@ import {
   ToggleConditionsService
 } from '../../services/ToggleConditionsService';
 interface ToggleConditionsManagerProps {
-  conditionsService: ToggleConditionsService;,
+  conditionsService: ToggleConditionsService;
   toggleId: string;
   onConditionsChange?: (conditions: ToggleCondition) => void;
   onClose?: () => void;
   interface ConditionFormData {
-  name: string;,
+  name: string;
   description: string;
-  conditionType: ConditionType;,
+  conditionType: ConditionType;
   expression: string;
-  parameters: ConditionParameters;,
+  parameters: ConditionParameters;
   priority: number;
-  active: boolean;,
-  metadata: {,
-  category: string;,
+  active: boolean;
+  metadata: {
+  category: string;
   tags: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
 };
 
@@ -60,7 +60,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
     parameters: {},
     priority: 100,
     active: true,
-    metadata: {,
+    metadata: {
   category: 'feature_rollout',
   tags: [],
   riskLevel: 'medium',
@@ -68,7 +68,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
 });
   // Testing state
   const [testContext, setTestContext] = useState<EvaluationContext>({)
-  user: {,
+  user: {
   id: 'test-user-123',
       email: 'test@example.com',
       role: 'user',
@@ -77,16 +77,16 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
       groups: [],
       permissions: [];
   },
-  request: {,
+  request: {
   ip: '192.168.1.100',
   country: 'US',
   region: 'CA',
-  device: {,
+  device: {
   type: 'desktop',
   platform: 'Windows',
   browser: 'Chrome',
 },
-  environment: {,
+  environment: {
   environment: 'staging',
   region: 'us-west-2',
   timezone: 'America/Los_Angeles',
@@ -159,7 +159,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
       parameters: {},
       priority: 100,
       active: true,
-      metadata: {,
+      metadata: {
   category: 'feature_rollout',
   tags: [],
   riskLevel: 'medium',
@@ -178,7 +178,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
   parameters: condition.parameters,
   priority: condition.priority,
   active: condition.active,
-  metadata: {,
+  metadata: {
   category: condition.metadata.category,
   tags: condition.metadata.tags,
   riskLevel: condition.metadata.riskLevel,
@@ -471,7 +471,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
                   value={testContext.request?.device?.type || ''}
                   onChange={(e) => setTestContext({)
   ...testContext,
-                    request: {,
+                    request: {
                       ...testContext.request!,
                       device: { ...testContext.request!.device!, type: e.target.value as any }
                   })}
@@ -563,9 +563,9 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
 
 // Condition Form Modal (simplified implementation)
 interface ConditionFormModalProps {
-  formData: ConditionFormData;,
-  setFormData: (data: ConditionFormData) => void;,
-  onSubmit: (e: React.FormEvent) => void;,
+  formData: ConditionFormData;
+  setFormData: (data: ConditionFormData) => void;
+  onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
   isEditing: boolean;
   const ConditionFormModal: React.FC<ConditionFormModalProps> = ({,)

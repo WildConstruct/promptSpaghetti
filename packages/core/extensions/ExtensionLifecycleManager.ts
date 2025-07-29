@@ -63,7 +63,7 @@ export class ExtensionLifecycleManager {
   registeredAt: new Date(),
   lastStateChange: new Date(),
   errors: [],
-  healthStatus: {,
+  healthStatus: {
   status: 'healthy',
   lastChecked: new Date(),
 };
@@ -275,7 +275,7 @@ export class ExtensionLifecycleManager {
   public getExtensionStatistics(): ExtensionStatistics {
   const stats: ExtensionStatistics = {,
   total: this.extensions.size,
-  byState: {,
+  byState: {
   uninitialized: 0,
   initializing: 0,
   initialized: 0,
@@ -525,26 +525,26 @@ export class ExtensionLifecycleManager {
   return semverRegex.test(version);
   // Extension Lifecycle Entry
   interface ExtensionLifecycleEntry {
-  extension: BaseExtension;,
+  extension: BaseExtension;
   state: ExtensionLifecycleState;
-  context: ExtensionContext;,
+  context: ExtensionContext;
   registeredAt: Date;
   lastStateChange: Date;
   activatedAt?: Date;
   deactivatedAt?: Date;
   disposedAt?: Date;
   errors: Array<{,
-  error: Error;,
+  error: Error;
   timestamp: Date;
 }>;
   healthStatus: ExtensionHealthStatus;
 
 // Extension Statistics
 interface ExtensionStatistics {
-  total: number;,
+  total: number;
   byState: Record<ExtensionLifecycleState, number>;
   byType: Record<string, number>;
-  errors: number;,
+  errors: number;
   healthy: number;
 
 // Export singleton instance

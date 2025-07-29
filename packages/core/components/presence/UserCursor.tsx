@@ -4,7 +4,7 @@ export interface UserCursorProps {
   userId: string;
   userName?: string;
   userAvatar?: string;
-  x: number;,
+  x: number;
   y: number;
   color?: string;
   visible?: boolean;
@@ -90,7 +90,7 @@ export interface UserCursorOverlayProps {
   userId: string;
   userName?: string;
   userAvatar?: string;
-  x: number;,
+  x: number;
   y: number;
   nodeId?: string;
   visible?: boolean;

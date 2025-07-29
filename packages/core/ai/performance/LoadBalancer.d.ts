@@ -20,7 +20,7 @@ export interface ModelInstance {
     model: BaseAIModel;
     weight: number;
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
-    metrics: {,
+    metrics: {
         activeConnections: number;
         totalRequests: number;
         successfulRequests: number;
@@ -32,7 +32,7 @@ export interface ModelInstance {
         lastHealthCheck: number;
         consecutiveFailures: number;
     };
-    circuitBreaker: {,
+    circuitBreaker: {
         state: 'closed' | 'open' | 'half_open';
         openedAt: number;
         nextRetryAt: number;

@@ -65,12 +65,12 @@ export type ParameterPreset = z.infer<typeof ParameterPresetSchema>;
 
 export const ValidationResultSchema = z.object({)
   isValid: z.boolean(),
-  errors: z.array(z.object({,)
+  errors: z.array(z.object({)
   field: z.string(),
   message: z.string(),
   code: z.string(),
 })),
-  warnings: z.array(z.object({,)
+  warnings: z.array(z.object({)
   field: z.string(),
   message: z.string(),
   suggestion: z.string().optional(),
@@ -94,7 +94,7 @@ export class ParameterValidator {
   console.log('Schema validation failed:', result.error.errors);
   return {
   isValid: false,
-  errors: result.error.errors.map(err => ({,)
+  errors: result.error.errors.map(err => ({)
   field: err.path.join('.'),
   message: err.message,
   code: err.code,
@@ -257,7 +257,7 @@ export class ParameterValidator {
   name: 'Simple Greeting Generator',
   description: 'A basic greeting system that personalizes messages for users',
   category: 'Getting Started',
-  parameters: {,
+  parameters: {
   purpose: 'Create a personalized greeting system for users',
   complexity: 'simple',
   nodeCount: 3,
@@ -289,7 +289,7 @@ export class ParameterValidator {
   name: 'Creative Storyteller',
   description: 'Generate dynamic story elements with creative branching',
   category: 'Creative Writing',
-  parameters: {,
+  parameters: {
   purpose: 'Create dynamic story generation with multiple plot branches',
   complexity: 'moderate',
   nodeCount: 8,
@@ -321,7 +321,7 @@ export class ParameterValidator {
   name: 'Technical Documentation',
   description: 'Generate structured technical documentation with precise formatting',
   category: 'Professional',
-  parameters: {,
+  parameters: {
   purpose: 'Create comprehensive technical documentation with structured format',
   complexity: 'complex',
   nodeCount: 12,

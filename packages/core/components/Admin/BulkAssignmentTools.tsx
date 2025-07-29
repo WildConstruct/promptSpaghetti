@@ -25,7 +25,7 @@ export enum AssignmentType {
   UPDATE = 'update',
   TRANSFER = 'transfer'
   export interface BulkAssignmentTarget {
-  id: string;,
+  id: string;
   type: 'user' | 'team' | 'service' | 'role';
   name: string;
   email?: string;
@@ -35,29 +35,29 @@ export enum AssignmentType {
   metadata?: Record<string, any>;
 }
 export interface Assignment {
-  id: string;,
+  id: string;
   assignmentType: AssignmentType;
-  resourceId: string;,
+  resourceId: string;
   resourceName: string;
   assignedAt: Date;
   expiresAt?: Date;
-  status: 'active' | 'expired' | 'suspended';,
+  status: 'active' | 'expired' | 'suspended';
   assignedBy: string;
   metadata?: Record<string, any>;
 }
 export interface AssignmentConflict {
-  type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';,
+  type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   affectedAssignments: string;
-  resolution?: 'skip' | 'override' | 'merge' | 'escalate';
-}
+  resolution?: 'skip' | 'override' | 'merge' | 'escalate'
+  }
 export interface BulkAssignmentOperation {
-  operationId: string;,
+  operationId: string;
   operationType: BulkOperationType;
-  assignmentType: AssignmentType;,
+  assignmentType: AssignmentType;
   targets: BulkAssignmentTarget;
-  resources: AssignmentResource;,
+  resources: AssignmentResource;
   parameters: BulkAssignmentParameters;
   template?: AssignmentTemplate;
   status: 'draft' | 'validating' | 'pending_approval' | 'executing' | 'completed' | 'failed' | 'cancelled';
@@ -66,7 +66,7 @@ export interface BulkAssignmentOperation {
   results?: BulkAssignmentResult;
 }
 export interface AssignmentResource {
-  id: string;,
+  id: string;
   type: AssignmentType;
   name: string;
   description?: string;
@@ -77,60 +77,60 @@ export interface AssignmentResource {
   metadata?: Record<string, any>;
 }
 export interface BulkAssignmentParameters {
-  executionMode: 'immediate' | 'scheduled' | 'staged';,
+  executionMode: 'immediate' | 'scheduled' | 'staged';
   batchSize: number;
-  maxConcurrency: number;,
+  maxConcurrency: number;
   continueOnError: boolean;
   notifyTargets: boolean;
   scheduledAt?: Date;
   expirationDate?: Date;
   gracePeriod?: number; // hours,
-  rollbackOnFailure: boolean;,
+  rollbackOnFailure: boolean;
   requireApproval: boolean;
-  autoResolveConflicts: boolean;,
+  autoResolveConflicts: boolean;
   customProperties: Record<string, any>;
 }
 export interface AssignmentTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   assignmentType: AssignmentType;
-  operationType: BulkOperationType;,
+  operationType: BulkOperationType;
   defaultParameters: Partial<BulkAssignmentParameters>;
-  defaultResources: string;,
+  defaultResources: string;
   targetFilters: TargetFilter;
-  usage: {,
+  usage: {
   timesUsed: number;
   lastUsed?: Date;
   successRate: number;
 };
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
   isSystemTemplate: boolean;
 }
 export interface TargetFilter {
-  field: string;,
+  field: string;
   operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
   value: Error;
-  logicalOperator?: 'AND' | 'OR';
-}
+  logicalOperator?: 'AND' | 'OR'
+  }
 export interface BulkAssignmentProgress {
-  totalTargets: number;,
+  totalTargets: number;
   processedTargets: number;
-  successfulAssignments: number;,
+  successfulAssignments: number;
   failedAssignments: number;
-  skippedAssignments: number;,
+  skippedAssignments: number;
   conflictsResolved: number;
-  currentBatch: number;,
+  currentBatch: number;
   totalBatches: number;
   percentComplete: number;
   estimatedTimeRemaining?: number; // minutes,
   currentStep: string;
 }
 export interface BulkAssignmentResult {
-  targetId: string;,
+  targetId: string;
   targetName: string;
-  status: 'success' | 'failed' | 'skipped' | 'partial';,
+  status: 'success' | 'failed' | 'skipped' | 'partial';
   assignedResources: string;
   errors?: string;
   warnings?: string;
@@ -142,11 +142,11 @@ export interface BulkAssignmentResult {
   // =============================================================================
 }
 export interface BulkAssignmentToolsProps {
-  assignmentType: AssignmentType;,
+  assignmentType: AssignmentType;
   operationType: BulkOperationType;
-  availableTargets: BulkAssignmentTarget;,
+  availableTargets: BulkAssignmentTarget;
   availableResources: AssignmentResource;
-  availableTemplates: AssignmentTemplate;,
+  availableTemplates: AssignmentTemplate;
   onExecute: (operation: BulkAssignmentOperation) => Promise<string>;
   onCancel?: (operationId: string) => Promise<void>;
   onTemplateCreate?: (template: Omit<AssignmentTemplate, 'id' | 'createdAt' | 'usage'>) => Promise<string>;
@@ -170,7 +170,7 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
     assignmentType,
     targets: [],
     resources: [],
-    parameters: {,
+    parameters: {
   executionMode: 'immediate',
       batchSize: 50,
       maxConcurrency: 5,
@@ -181,7 +181,7 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
       autoResolveConflicts: false,
       customProperties: {}
   },
-  status: 'draft';
+  status: 'draft'
   });
   const steps = [;
     { number: 1, title: 'Select Targets', description: 'Choose users, teams, or services' },
@@ -308,9 +308,9 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
 // Bulk Assignment Header Component
 // =============================================================================
 interface BulkAssignmentHeaderProps {
-  assignmentType: AssignmentType;,
+  assignmentType: AssignmentType;
   operationType: BulkOperationType;
-  operation: BulkAssignmentOperation;,
+  operation: BulkAssignmentOperation;
   availableTemplates: AssignmentTemplate;
   onTemplateLoad: (template: AssignmentTemplate) => void;
   const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({,)
@@ -390,8 +390,8 @@ interface BulkAssignmentHeaderProps {
 // =============================================================================
 interface BulkAssignmentWizardProps {
   steps: Array<{ number: number; title: string; description: string }>;
-  currentStep: number;,
-  onStepChange: (step: number) => void;,
+  currentStep: number;
+  onStepChange: (step: number) => void;
   canProceed: boolean;
 const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   steps,
@@ -423,9 +423,9 @@ const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
 // Target Selection Step Component
 // =============================================================================
 interface TargetSelectionStepProps {
-  targets: BulkAssignmentTarget;,
+  targets: BulkAssignmentTarget;
   selectedTargets: BulkAssignmentTarget;
-  onTargetsChange: (targets: BulkAssignmentTarget) => void;,
+  onTargetsChange: (targets: BulkAssignmentTarget) => void;
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
   const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({,)
@@ -553,9 +553,9 @@ interface TargetSelectionStepProps {
 // Target Card Component
 // =============================================================================
 interface TargetCardProps {
-  target: BulkAssignmentTarget;,
+  target: BulkAssignmentTarget;
   selected: boolean;
-  onToggle: () => void;,
+  onToggle: () => void;
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
   const TargetCard: React.FC<TargetCardProps> = ({,)
@@ -659,13 +659,13 @@ interface TargetCardProps {
 // Action Buttons Component
 // =============================================================================
 interface BulkAssignmentActionsProps {
-  currentStep: number;,
+  currentStep: number;
   totalSteps: number;
-  canProceed: boolean;,
+  canProceed: boolean;
   onPrevious: () => void;
-  onNext: () => void;,
+  onNext: () => void;
   onExecute: () => void;
-  onReset: () => void;,
+  onReset: () => void;
   isExecuting: boolean;
   readonly: boolean;
   const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({,)

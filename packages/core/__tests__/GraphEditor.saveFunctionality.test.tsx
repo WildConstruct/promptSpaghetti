@@ -125,7 +125,7 @@ jest.mock('../components/Modal/SettingsModal', () => ({)
 }));
 jest.mock('../components/ContextualHelp', () => ({)
   ContextualHelpSystem: () => <div>ContextualHelpSystem</div>,
-  helpContentManager: {,
+  helpContentManager: {
   updateProgress: jest.fn<unknown, unknown>(),
   markContentViewed: jest.fn<unknown, unknown>(),
 }));
@@ -249,7 +249,7 @@ describe('GraphEditor Save Functionality', () => {
     applyTemplate: jest.fn<unknown, unknown>(),
     // Add other required store properties
     stickyNotes: [],
-    annotations: {,
+    annotations: {
   stickyNotes: [],
       nodeLabels: {},
       nodeLabelConfigs: {},
@@ -259,13 +259,13 @@ describe('GraphEditor Save Functionality', () => {
       labelPreferences: {},
       regionGroupPreferences: {},
       connectionAnnotationPreferences: {},
-      metadata: {,
+      metadata: {
   author: 'Test',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),
   version: '1.0.0',
 },
-  projectSettings: {,
+  projectSettings: {
   autoSave: true,
   backupInterval: 5,
   maxBackups: 10,

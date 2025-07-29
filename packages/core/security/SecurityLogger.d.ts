@@ -84,7 +84,7 @@ export interface SecurityLogEntry {
     level: LogLevel;
     eventType: SecurityEventType;
     message: string;
-    actor: {,
+    actor: {
         type: 'user' | 'admin' | 'system';
         id: string;
         email?: string;
@@ -99,13 +99,13 @@ export interface SecurityLogEntry {
     details: Record<string, any>;
     outcome: 'success' | 'failure' | 'pending' | 'unknown';
     severity: 'low' | 'medium' | 'high' | 'critical';
-    compliance: {,
+    compliance: {
         frameworks: ComplianceFramework[];
         retention: number;
         encrypted: boolean;
         immutable: boolean;
     };
-    metadata: {,
+    metadata: {
         source: string;
         environment: string;
         version: string;
@@ -120,12 +120,12 @@ export interface AuditTrailEntry {
     operation: string;
     resource: string;
     resourceId: string;
-    actor: {,
+    actor: {
         type: 'user' | 'admin' | 'system';
         id: string;
         email?: string;
     };
-    changes: {,
+    changes: {
         before?: any;
         after?: any;
         fields: string[];
@@ -136,36 +136,36 @@ export interface AuditTrailEntry {
     signature: string;
 
 export interface SecurityMetrics {
-    period: {,
+    period: {
         start: Date;
         end: Date;
     };
-    lockoutEvents: {,
+    lockoutEvents: {
         total: number;
         byReason: Record<LockoutReason, number>;
         byHour: number[];
         averagePerDay: number;
     };
-    unlockEvents: {,
+    unlockEvents: {
         total: number;
         byMethod: Record<UnlockMethod, number>;
         adminUnlocks: number;
         emergencyUnlocks: number;
         averageResolutionTime: number;
     };
-    securityAlerts: {,
+    securityAlerts: {
         total: number;
         bySeverity: Record<string, number>;
         falsePositives: number;
         responseTime: number;
     };
-    compliance: {,
+    compliance: {
         violations: number;
         reportingRequirements: number;
         dataRetention: number;
         auditAccess: number;
     };
-    threatLandscape: {,
+    threatLandscape: {
         topAttackVectors: Array<{,
             vector: string;
             count: number;
@@ -175,7 +175,7 @@ export interface SecurityMetrics {
             count: number;
         }>;
         geographicDistribution: Record<string, number>;
-        timePatterns: {,
+        timePatterns: {
             peakHours: number[];
             peakDays: string[];
         };
@@ -281,9 +281,9 @@ export declare class SecurityLogger extends EventEmitter {
       format?: 'json' | 'csv' | 'xml'
     ): {
         data: string;
-        metadata: {,
+        metadata: {
             framework: ComplianceFramework;
-            period: {,
+            period: {
                 start: Date;
                 end: Date;
             };

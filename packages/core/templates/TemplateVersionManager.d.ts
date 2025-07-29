@@ -100,7 +100,7 @@ export interface VersionComparisonResult {
     from_version: TemplateVersion;
     to_version: TemplateVersion;
     diff: TemplateDiff;
-    compatibility: {,
+    compatibility: {
         breaking_changes: boolean;
         api_changes: boolean;
         schema_changes: boolean;
@@ -115,8 +115,8 @@ export interface TemplateDiff {
         field: string;
         old_value: any;
         new_value: any;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
+        change_type: 'added' | 'removed' | 'modified'
+  }>;
     variable_changes: Array<{,
         variable_id: string;
         change_type: 'added' | 'removed' | 'modified';
@@ -129,7 +129,7 @@ export interface TemplateDiff {
         old_point?: CustomizationPoint;
         new_point?: CustomizationPoint;
     }>;
-    graph_changes: {,
+    graph_changes: {
         nodes_added: number;
         nodes_removed: number;
         nodes_modified: number;
@@ -152,12 +152,12 @@ export declare class TemplateVersionManager {
         description?: string;
         changelog?: string;
         branch_name?: string;
-        compatibility_level?: 'patch' | 'minor' | 'major';
-    }): Promise<TemplateVersion>;
+        compatibility_level?: 'patch' | 'minor' | 'major'
+  }): Promise<TemplateVersion>;
     publishVersion(versionId: string, options?: {)
         release_notes?: string;
-        visibility?: 'private' | 'workspace' | 'public';
-    }): Promise<TemplateVersion>;
+        visibility?: 'private' | 'workspace' | 'public'
+  }): Promise<TemplateVersion>;
     getVersions(options?: {)
         include_drafts?: boolean;
         branch_name?: string;
@@ -212,8 +212,8 @@ export declare class TemplateVersionManager {
     }>;
     resolveDependencies(versionId: string, options: {)
         auto_install?: boolean;
-        update_strategy?: 'conservative' | 'latest' | 'compatible';
-    }): Promise<{
+        update_strategy?: 'conservative' | 'latest' | 'compatible'
+  }): Promise<{
         resolved: TemplateDependency[];
         installed: string[];
         updated: string[];
@@ -253,7 +253,7 @@ export interface TemplateBundle {
         data: ArrayBuffer | string;
         mime_type: string;
     }>;
-    documentation: {,
+    documentation: {
         readme: string;
         changelog: string;
         api_docs?: string;

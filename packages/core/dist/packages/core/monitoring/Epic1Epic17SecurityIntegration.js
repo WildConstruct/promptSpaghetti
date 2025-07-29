@@ -309,7 +309,8 @@ Promise < void  > {
                     correlationAnalysis: {
                         correlatedEvents: number,
                         riskFactors: (Array),
-                        predictiveInsights: string },
+                        predictiveInsights: string
+                    },
                     recommendations: Array < {
                         category: string,
                         priority: 'low' | 'medium' | 'high' | 'critical',
@@ -696,7 +697,8 @@ Promise < void  > {
                                                  | 'admin' | 'security';
                                                 event: any;
                                                 timestamp: number;
-                                            } } > , []: ,
+                                            }
+                                        } > , []: ,
                                         constructor(config) {
                                             super();
                                             this.config = config;
@@ -756,7 +758,9 @@ Promise < void  > {
                                                     };
                                                 }
                                             };
-                                        } } }
+                                        }
+                                    }
+                                }
                             };
                         }
                     }

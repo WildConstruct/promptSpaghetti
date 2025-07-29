@@ -105,7 +105,7 @@ export interface SegmentMembership {
 
 export interface SegmentPerformanceMetrics {
     segmentId: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -135,7 +135,7 @@ export interface SegmentRecommendation {
     title: string;
     description: string;
     rationale: string;
-    expectedImpact: {,
+    expectedImpact: {
         userCountChange?: number;
         performanceImprovement?: number;
         qualityScoreChange?: number;
@@ -263,7 +263,7 @@ export interface SegmentIntegration {
     name: string;
     type: 'webhook' | 'api' | 'database' | 'message_queue' | 'custom';
     endpoint: string;
-    authentication: {,
+    authentication: {
         type: 'api_key' | 'oauth' | 'basic' | 'token' | 'custom';
         credentials: Record<string, any>;
     };
@@ -338,8 +338,8 @@ export interface IUserSegmentService {
     }): Promise<SegmentExport>;
     importSegmentUsers(segmentId: string, data: any[], options?: {)
         format: 'csv' | 'json';
-        mergeStrategy: 'replace' | 'append' | 'merge';
-    }): Promise<SegmentOperationResult>;
+        mergeStrategy: 'replace' | 'append' | 'merge'
+  }): Promise<SegmentOperationResult>;
     createExperiment(experiment: Omit<SegmentExperiment, 'id' | 'createdAt'>): Promise<SegmentExperiment>;
     getExperimentResults(experimentId: string): Promise<SegmentExperiment['results']>;
     optimizeSegment(segmentId: string): Promise<SegmentOperationResult>;

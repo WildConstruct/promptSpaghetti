@@ -338,7 +338,8 @@ const rateResult = useCallback((resultId, rating) => {
             ...r,
             metadata: {
                 ...r.metadata,
-                rating: rating, }
+                rating: rating,
+            }
         }
         : r);
 });
@@ -350,7 +351,8 @@ const addNoteToResult = useCallback((resultId, note) => {
             ...r,
             metadata: {
                 ...r.metadata,
-                notes: note, }
+                notes: note,
+            }
         }
         : r);
 });

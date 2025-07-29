@@ -6,34 +6,34 @@
 import { ComplianceFramework, DataSensitivityLevel } from './DataProtectionEventLogger';
 
 export interface SecurityEventConfig {
-  logging: LoggingConfiguration;,
+  logging: LoggingConfiguration;
   alerting: AlertingConfiguration;
-  retention: RetentionConfiguration;,
+  retention: RetentionConfiguration;
   compliance: ComplianceConfiguration;
   performance: PerformanceConfiguration;
 }
 export interface LoggingConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   level: 'debug' | 'info' | 'warn' | 'error' | 'critical';
-  destinations: LogDestination;,
+  destinations: LogDestination;
   encryption: EncryptionConfiguration;
-  batchSize: number;,
+  batchSize: number;
   flushInterval: number; // milliseconds,
-  bufferSize: number;,
+  bufferSize: number;
   enableCircuitBreaker: boolean;
   circuitBreakerConfig: CircuitBreakerConfiguration;
 }
 export interface LogDestination {
-  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';,
+  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
   config: Record<string, any>;
-  enabled: boolean;,
+  enabled: boolean;
   filters: LogFilter;
   formatters: LogFormatter;
 }
 export interface LogFilter {
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'regex' | 'greater_than' | 'less_than';
-  value: any;,
+  value: any;
   invert: boolean;
 }
 export interface LogFormatter {
@@ -43,198 +43,198 @@ export interface LogFormatter {
   excludeFields?: string;
 }
 export interface EncryptionConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: 'AES-256-GCM' | 'AES-256-CBC';
   keyRotationInterval: number; // days,
-  encryptSensitiveFields: boolean;,
+  encryptSensitiveFields: boolean;
   sensitiveFields: string;
 }
 export interface CircuitBreakerConfiguration {
-  failureThreshold: number;,
+  failureThreshold: number;
   resetTimeout: number; // milliseconds,
   monitoringPeriod: number; // milliseconds,
   enabled: boolean;
 }
 export interface AlertingConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   rules: SecurityAlertRule;
-  channels: AlertChannel;,
+  channels: AlertChannel;
   suppressionRules: SuppressionRule;
   escalationPolicies: EscalationPolicy;
 }
 export interface SecurityAlertRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
-  eventTypes: string;,
+  eventTypes: string;
   conditions: AlertCondition;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   channels: string; // Channel IDs,
   suppressionRules?: string; // Suppression rule IDs,
   escalationPolicy?: string; // Escalation policy ID,
   metadata: Record<string, any>;
 }
 export interface AlertCondition {
-  type: 'threshold' | 'pattern' | 'anomaly' | 'correlation';,
+  type: 'threshold' | 'pattern' | 'anomaly' | 'correlation';
   field: string;
-  operator: 'greater_than' | 'less_than' | 'equals' | 'contains' | 'regex' | 'exists';,
+  operator: 'greater_than' | 'less_than' | 'equals' | 'contains' | 'regex' | 'exists';
   value: any;
   timeWindow: number; // minutes,
   aggregation?: 'count' | 'sum' | 'avg' | 'max' | 'min';
   groupBy?: string;
 }
 export interface AlertChannel {
-  id: string;,
+  id: string;
   type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'sms';
   config: Record<string, any>;
-  enabled: boolean;,
+  enabled: boolean;
   rateLimits: RateLimit;
 }
 export interface RateLimit {
-  maxAlerts: number;,
+  maxAlerts: number;
   timeWindow: number; // minutes,
-  severity?: 'low' | 'medium' | 'high' | 'critical';
-}
+  severity?: 'low' | 'medium' | 'high' | 'critical'
+  }
 export interface SuppressionRule {
-  id: string;,
+  id: string;
   name: string;
-  enabled: boolean;,
+  enabled: boolean;
   conditions: AlertCondition;
   duration: number; // minutes,
   reason: string;
 }
 export interface EscalationPolicy {
-  id: string;,
+  id: string;
   name: string;
-  enabled: boolean;,
+  enabled: boolean;
   steps: EscalationStep;
 }
 export interface EscalationStep {
   delay: number; // minutes,
   channels: string;
-  condition?: 'unacknowledged' | 'unresolved';
-}
+  condition?: 'unacknowledged' | 'unresolved'
+  }
 export interface RetentionConfiguration {
-  policies: RetentionPolicy;,
+  policies: RetentionPolicy;
   archival: ArchivalConfiguration;
   deletion: DeletionConfiguration;
 }
 export interface RetentionPolicy {
-  id: string;,
+  id: string;
   name: string;
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   eventTypes: string;
-  dataClassifications: DataSensitivityLevel;,
+  dataClassifications: DataSensitivityLevel;
   retentionPeriod: number; // days,
-  archivalRequired: boolean;,
+  archivalRequired: boolean;
   encryptionRequired: boolean;
-  immutableStorage: boolean;,
+  immutableStorage: boolean;
   purgeAfterRetention: boolean;
   exceptions: RetentionException;
 }
 export interface RetentionException {
-  reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';,
+  reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
   extendedPeriod: number; // days,
-  approvalRequired: boolean;,
+  approvalRequired: boolean;
   notificationRequired: boolean;
 }
 export interface ArchivalConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   storageBackend: 'file' | 's3' | 'azure_blob' | 'gcs';
-  compressionEnabled: boolean;,
+  compressionEnabled: boolean;
   encryptionEnabled: boolean;
   verificationEnabled: boolean;
 }
 export interface DeletionConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   scheduledDeletion: boolean;
-  batchSize: number;,
+  batchSize: number;
   verificationRequired: boolean;
-  backupBeforeDeletion: boolean;,
+  backupBeforeDeletion: boolean;
   auditDeletion: boolean;
 }
 export interface ComplianceConfiguration {
-  frameworks: ComplianceFrameworkConfig;,
+  frameworks: ComplianceFrameworkConfig;
   reporting: ReportingConfiguration;
   monitoring: ComplianceMonitoringConfiguration;
 }
 export interface ComplianceFrameworkConfig {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   enabled: boolean;
-  requirements: ComplianceRequirement;,
+  requirements: ComplianceRequirement;
   reportingFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
   alertOnViolations: boolean;
 }
 export interface ComplianceRequirement {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   mandatory: boolean;
-  eventTypes: string;,
+  eventTypes: string;
   validationRules: ValidationRule;
 }
 export interface ValidationRule {
-  field: string;,
+  field: string;
   required: boolean;
-  validation: 'regex' | 'range' | 'enum' | 'custom';,
+  validation: 'regex' | 'range' | 'enum' | 'custom';
   value: any;
   message: string;
 }
 export interface ReportingConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   autoGeneration: boolean;
-  outputFormats: ('json' | 'csv' | 'pdf' | 'xlsx')[];,
+  outputFormats: ('json' | 'csv' | 'pdf' | 'xlsx')[];
   recipients: ReportRecipient;
   schedules: ReportSchedule;
 }
 export interface ReportRecipient {
-  email: string;,
+  email: string;
   role: string;
-  frameworks: ComplianceFramework;,
+  frameworks: ComplianceFramework;
   reportTypes: string;
 }
 export interface ReportSchedule {
-  id: string;,
+  id: string;
   framework: ComplianceFramework;
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';,
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
   time: string; // HH:MM format,
   enabled: boolean;
 }
 export interface ComplianceMonitoringConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   continuousMonitoring: boolean;
-  violationAlerts: boolean;,
+  violationAlerts: boolean;
   dashboardEnabled: boolean;
   metricsCollection: boolean;
 }
 export interface PerformanceConfiguration {
-  monitoring: {,
-  enabled: boolean;,
+  monitoring: {
+  enabled: boolean;
   metricsCollectionInterval: number; // milliseconds,
   alertThresholds: PerformanceThreshold;
 };
-  optimization: {,
+  optimization: {
   asyncLogging: boolean;
-  batchProcessing: boolean;,
+  batchProcessing: boolean;
   caching: CacheConfiguration;
   compression: boolean;
 };
-  scaling: {,
+  scaling: {
   autoScaling: boolean;
-  maxConcurrentEvents: number;,
+  maxConcurrentEvents: number;
   queueMaxSize: number;
   workerPoolSize: number;
 };
 }
 export interface PerformanceThreshold {
-  metric: 'latency' | 'throughput' | 'error_rate' | 'queue_depth';,
+  metric: 'latency' | 'throughput' | 'error_rate' | 'queue_depth';
   threshold: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
-  action: 'log' | 'alert' | 'throttle' | 'circuit_break';
-}
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  action: 'log' | 'alert' | 'throttle' | 'circuit_break'
+  }
 export interface CacheConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   type: 'memory' | 'redis' | 'memcached';
   ttl: number; // seconds,
   maxSize: number; // entries,
@@ -245,13 +245,13 @@ export interface CacheConfiguration {
   */
 }
 export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
-  logging: {,
+  logging: {
   enabled: true,
   level: 'info',
   destinations: [,
   {
   type: 'database',
-  config: {,
+  config: {
   table: 'security_events',
   connection: 'default',
 },
@@ -261,7 +261,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   }
       {
   type: 'file',
-  config: {,
+  config: {
   path: '/var/log/security/events.log',
   rotationPolicy: 'daily',
   maxSize: '100MB',
@@ -270,7 +270,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
         filters: [],
         formatters: [{ type: 'structured' }]
     ],
-    encryption: {,
+    encryption: {
   enabled: true,
   algorithm: 'AES-256-GCM',
   keyRotationInterval: 90,
@@ -281,13 +281,13 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
     flushInterval: 5000,
     bufferSize: 1000,
     enableCircuitBreaker: true,
-    circuitBreakerConfig: {,
+    circuitBreakerConfig: {
   failureThreshold: 5,
   resetTimeout: 60000,
   monitoringPeriod: 30000,
   enabled: true,
 },
-  alerting: {,
+  alerting: {
   enabled: true,
     rules: [,
       {
@@ -348,7 +348,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
       {
         id: 'security-team-email',
         type: 'email',
-        config: {,
+        config: {
   recipients: ['security@company.com'],
           subject: 'Security Alert: {alertName}',
           template: 'security-alert-template';
@@ -363,10 +363,10 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
       {
         id: 'compliance-webhook',
         type: 'webhook',
-        config: {,
+        config: {
   url: 'https://compliance-system.company.com/webhooks/security-alerts',
           method: 'POST',
-          headers: {,
+          headers: {
             'Authorization': 'Bearer ${COMPLIANCE_WEBHOOK_TOKEN}'}
 }
             'Content-Type': 'application/json'
@@ -376,7 +376,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
     suppressionRules: [],
     escalationPolicies: [];
   },
-  retention: {,
+  retention: {
   policies: [,
   {
   id: 'gdpr-policy',
@@ -403,14 +403,14 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   immutableStorage: true,
   purgeAfterRetention: true,
   exceptions: []],
-  archival: {,
+  archival: {
   enabled: true,
   storageBackend: 's3',
   compressionEnabled: true,
   encryptionEnabled: true,
   verificationEnabled: true,
 },
-  deletion: {,
+  deletion: {
   enabled: true,
   scheduledDeletion: true,
   batchSize: 1000,
@@ -418,7 +418,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   backupBeforeDeletion: true,
   auditDeletion: true,
 },
-  compliance: {,
+  compliance: {
   frameworks: [,
   {
   framework: ComplianceFramework.GDPR,
@@ -440,7 +440,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   requirements: [],
   reportingFrequency: 'annually',
   alertOnViolations: true],
-  reporting: {,
+  reporting: {
   enabled: true,
   autoGeneration: true,
   outputFormats: ['json', 'pdf', 'csv'],
@@ -458,15 +458,15 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   time: '09:00',
   enabled: true];
   },
-  monitoring: {,
+  monitoring: {
   enabled: true,
   continuousMonitoring: true,
   violationAlerts: true,
   dashboardEnabled: true,
   metricsCollection: true,
 },
-  performance: {,
-  monitoring: {,
+  performance: {
+  monitoring: {
   enabled: true,
   metricsCollectionInterval: 30000,
   alertThresholds: [,
@@ -482,10 +482,10 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   severity: 'medium',
   action: 'log'];
   },
-  optimization: {,
+  optimization: {
   asyncLogging: true,
   batchProcessing: true,
-  caching: {,
+  caching: {
   enabled: true,
   type: 'redis',
   ttl: 3600,
@@ -494,7 +494,7 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
 },
   compression: true;
   },
-  scaling: {,
+  scaling: {
   autoScaling: true,
   maxConcurrentEvents: 10000,
   queueMaxSize: 50000,
@@ -506,13 +506,13 @@ export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
  */
 export const DEVELOPMENT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {
   ...DEFAULT_SECURITY_EVENT_CONFIG,
-  logging: {,
+  logging: {
   ...DEFAULT_SECURITY_EVENT_CONFIG.logging,
   level: 'debug',
   destinations: [,
   {
   type: 'file',
-  config: {,
+  config: {
   path: './logs/security-events-dev.log',
   rotationPolicy: 'none',
 },
@@ -520,13 +520,13 @@ export const DEVELOPMENT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {
         filters: [],
         formatters: [{ type: 'json' }]
     ],
-    encryption: {,
+    encryption: {
   ...DEFAULT_SECURITY_EVENT_CONFIG.logging.encryption,
   enabled: false,
 },
-  retention: {,
+  retention: {
   ...DEFAULT_SECURITY_EVENT_CONFIG.retention,
-  policies: DEFAULT_SECURITY_EVENT_CONFIG.retention.policies.map(policy => ({,)
+  policies: DEFAULT_SECURITY_EVENT_CONFIG.retention.policies.map(policy => ({)
   ...policy,
   retentionPeriod: 30 // 30 days for development,
 }))

@@ -14,26 +14,26 @@
 import { EnhancedConversionEvent, TouchPoint, AttributionModel } from './ConversionFunnelArchitecture';
 
 export interface ValidationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   severity: 'error' | 'warning' | 'info';
-  category: 'schema' | 'business' | 'privacy' | 'security' | 'quality';,
+  category: 'schema' | 'business' | 'privacy' | 'security' | 'quality';
   validator: (event: EnhancedConversionEvent, context?: ValidationContext) => ValidationResult;
-  enabled: boolean;,
+  enabled: boolean;
   weight: number; // For scoring,
 }
 export interface ValidationResult {
-  isValid: boolean;,
+  isValid: boolean;
   score: number; // 0-100,
-  errors: ValidationError;,
+  errors: ValidationError;
   warnings: ValidationWarning;
   metadata: Record<string, any>;
 }
 export interface ValidationError {
   rule: string;
   field?: string;
-  message: string;,
+  message: string;
   severity: 'critical' | 'major' | 'minor';
   code: string;
   suggestion?: string;
@@ -41,12 +41,12 @@ export interface ValidationError {
 export interface ValidationWarning {
   rule: string;
   field?: string;
-  message: string;,
+  message: string;
   code: string;
   impact: string;
 }
 export interface ValidationContext {
-  userId: string;,
+  userId: string;
   sessionId: string;
   recentEvents: EnhancedConversionEvent;
   userProfile?: UserProfile;
@@ -54,71 +54,71 @@ export interface ValidationContext {
   behaviorProfile?: BehaviorProfile;
 }
 export interface UserProfile {
-  id: string;,
+  id: string;
   registrationDate: number;
-  totalEvents: number;,
+  totalEvents: number;
   averageValue: number;
-  riskScore: number;,
+  riskScore: number;
   verificationStatus: 'verified' | 'pending' | 'suspicious';
-  locationHistory: string;,
+  locationHistory: string;
   deviceHistory: string;
 }
 export interface DeviceProfile {
-  fingerprint: string;,
+  fingerprint: string;
   firstSeen: number;
-  lastSeen: number;,
+  lastSeen: number;
   eventCount: number;
-  userCount: number;,
+  userCount: number;
   riskIndicators: string;
   characteristics: Record<string, any>;
 }
 export interface BehaviorProfile {
-  sessionCount: number;,
+  sessionCount: number;
   averageSessionDuration: number;
-  typicalEventSequence: string;,
+  typicalEventSequence: string;
   anomalyScore: number;
   patterns: BehaviorPattern;
 }
 export interface BehaviorPattern {
-  type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';,
+  type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
   description: string;
-  confidence: number;,
+  confidence: number;
   baseline: number;
-  current: number;,
+  current: number;
   deviation: number;
 }
 export interface DeduplicationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   timeWindow: number; // milliseconds,
-  fuzzyMatching: boolean;,
+  fuzzyMatching: boolean;
   similarityThreshold: number; // 0-1,
-  fields: DeduplicationField;,
+  fields: DeduplicationField;
   exactMatchFields: string;
   fuzzyMatchFields: string;
 }
 export interface DeduplicationField {
-  name: string;,
+  name: string;
   weight: number;
   transform?: (value: unknown) => string;
   matcher?: (val1: unknown, val2: unknown) => number; // Returns similarity 0-1,
 }
 export interface DeduplicationResult {
-  isDuplicate: boolean;,
+  isDuplicate: boolean;
   confidence: number;
   matchedEvent?: EnhancedConversionEvent;
-  matchType: 'exact' | 'fuzzy' | 'none';,
+  matchType: 'exact' | 'fuzzy' | 'none';
   matchScore: number;
   matchedFields: string;
 }
 export interface ValidationMetrics {
-  totalValidated: number;,
+  totalValidated: number;
   passRate: number;
-  averageScore: number;,
+  averageScore: number;
   errorsByCategory: Record<string, number>;
   errorsByRule: Record<string, number>;
-  duplicatesFound: number;,
+  duplicatesFound: number;
   anomaliesDetected: number;
-  processingTime: number;,
+  processingTime: number;
   privacyViolations: number;
   /**
   * Comprehensive Conversion Event Validator
@@ -182,7 +182,7 @@ export class ConversionEventValidator {
           message: `Validation failed: ${error}`}
 },
   severity: 'critical',
-          code: 'VALIDATION_ERROR';
+          code: 'VALIDATION_ERROR'
   }],
         warnings: [],
         metadata: { error: String(error) }
@@ -244,7 +244,7 @@ export class ConversionEventValidator {
   deviceHistory: [],
 };
     this.userProfiles.set(userId, { ...existing, ...profile });
-  private async buildValidationContext(event: EnhancedConversionEvent,)
+  private async buildValidationContext(event: EnhancedConversionEvent)
     context?: Partial<ValidationContext>
   ): Promise<ValidationContext> {
   const recentEvents = this.getRecentEvents(event.userId, 3600000); // Last hour;
@@ -279,7 +279,7 @@ export class ConversionEventValidator {
             message: `Rule execution failed: ${error}`}
 },
   severity: 'major',
-            code: 'RULE_EXECUTION_ERROR';
+            code: 'RULE_EXECUTION_ERROR'
   }],
           warnings: [],
           metadata: { error: String(error) }
@@ -305,7 +305,7 @@ export class ConversionEventValidator {
   score: averageScore,
   errors: allErrors,
   warnings: allWarnings,
-  metadata: {,
+  metadata: {
   ...metadata,
   ruleCount: results.length,
   scoreDistribution: scores,
@@ -314,7 +314,7 @@ export class ConversionEventValidator {
     event1: EnhancedConversionEvent,
     event2: EnhancedConversionEvent,
   ): Promise<{
-  matchScore: number;,
+  matchScore: number;
   matchType: 'exact' | 'fuzzy';
   matchedFields: string;
 }> {

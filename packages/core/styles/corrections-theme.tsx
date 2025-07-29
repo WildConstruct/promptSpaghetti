@@ -1,127 +1,127 @@
 // Theme configuration for corrections UI components
 
 export interface CorrectionsTheme {
-  colors: {,
-  primary: string;,
+  colors: {
+  primary: string;
   secondary: string;
-  success: string;,
+  success: string;
   warning: string;
-  error: string;,
+  error: string;
   info: string;
-  background: {,
-  primary: string;,
+  background: {
+  primary: string;
   secondary: string;
-  tertiary: string;,
+  tertiary: string;
   elevated: string;
   overlay: string;
 };
-    text: {,
+    text: {
   primary: string;
-  secondary: string;,
+  secondary: string;
   disabled: string;
   inverse: string;
 };
-    border: {,
+    border: {
   primary: string;
-  secondary: string;,
+  secondary: string;
   active: string;
 };
-    status: {,
+    status: {
   active: string;
-  inactive: string;,
+  inactive: string;
   regex: string;
   priority: string;
 };
   };
-  spacing: {,
+  spacing: {
   xs: string;
-  sm: string;,
+  sm: string;
   md: string;
-  lg: string;,
+  lg: string;
   xl: string;
   xxl: string;
 };
-  typography: {,
+  typography: {
   fontFamily: string;
-  fontSize: {,
-  xs: string;,
+  fontSize: {
+  xs: string;
   sm: string;
-  md: string;,
+  md: string;
   lg: string;
-  xl: string;,
+  xl: string;
   xxl: string;
 };
-    fontWeight: {,
+    fontWeight: {
   normal: number;
-  medium: number;,
+  medium: number;
   semibold: number;
   bold: number;
 };
-    lineHeight: {,
+    lineHeight: {
   tight: number;
-  normal: number;,
+  normal: number;
   loose: number;
 };
   };
-  shadows: {,
+  shadows: {
   sm: string;
-  md: string;,
+  md: string;
   lg: string;
   xl: string;
 };
-  radius: {,
+  radius: {
   none: string;
-  xs: string;,
+  xs: string;
   sm: string;
-  md: string;,
+  md: string;
   lg: string;
-  xl: string;,
+  xl: string;
   full: string;
 };
-  transitions: {,
+  transitions: {
   fast: string;
-  normal: string;,
+  normal: string;
   slow: string;
 };
-  breakpoints: {,
+  breakpoints: {
   mobile: string;
-  tablet: string;,
+  tablet: string;
   desktop: string;
 };
 }
 export const darkTheme: CorrectionsTheme = {,
-  colors: {,
+  colors: {
   primary: '#63b3ed',
   secondary: '#9f7aea',
   success: '#68d391',
   warning: '#fbb040',
   error: '#e53e3e',
   info: '#63b3ed',
-  background: {,
+  background: {
   primary: '#23272f',
   secondary: '#2a2e37',
   tertiary: '#1e2228',
   elevated: '#2d3748',
   overlay: 'rgba(0, 0, 0, 0.8)',
 },
-  text: {,
+  text: {
   primary: '#ffffff',
   secondary: '#a0aec0',
   disabled: '#718096',
   inverse: '#000000',
 },
-  border: {,
+  border: {
   primary: '#444444',
   secondary: '#2d3748',
   active: '#63b3ed',
 },
-  status: {,
+  status: {
   active: '#68d391',
   inactive: '#718096',
   regex: '#9f7aea',
   priority: '#fbb040',
 },
-  spacing: {,
+  spacing: {
   xs: '4px',
   sm: '8px',
   md: '12px',
@@ -129,9 +129,9 @@ export const darkTheme: CorrectionsTheme = {,
   xl: '20px',
   xxl: '24px',
 },
-  typography: {,
+  typography: {
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  fontSize: {,
+  fontSize: {
   xs: '10px',
   sm: '12px',
   md: '14px',
@@ -139,24 +139,24 @@ export const darkTheme: CorrectionsTheme = {,
   xl: '18px',
   xxl: '20px',
 },
-  fontWeight: {,
+  fontWeight: {
   normal: 400,
   medium: 500,
   semibold: 600,
   bold: 700,
 },
-  lineHeight: {,
+  lineHeight: {
   tight: 1.25,
   normal: 1.5,
   loose: 1.75,
 },
-  shadows: {,
+  shadows: {
   sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
   md: '0 4px 6px rgba(0, 0, 0, 0.1)',
   lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
   xl: '0 20px 25px rgba(0, 0, 0, 0.15)',
 },
-  radius: {,
+  radius: {
   none: '0',
   xs: '2px',
   sm: '4px',
@@ -165,12 +165,12 @@ export const darkTheme: CorrectionsTheme = {,
   xl: '12px',
   full: '9999px',
 },
-  transitions: {,
+  transitions: {
   fast: 'all 0.1s ease',
   normal: 'all 0.2s ease',
   slow: 'all 0.3s ease',
 },
-  breakpoints: {,
+  breakpoints: {
   mobile: '768px',
   tablet: '1024px',
   desktop: '1280px',
@@ -178,22 +178,22 @@ export const darkTheme: CorrectionsTheme = {,
 
 export const lightTheme: CorrectionsTheme = {
   ...darkTheme,
-  colors: {,
+  colors: {
   ...darkTheme.colors,
-  background: {,
+  background: {
   primary: '#ffffff',
   secondary: '#f7fafc',
   tertiary: '#edf2f7',
   elevated: '#e2e8f0',
   overlay: 'rgba(0, 0, 0, 0.6)',
 },
-  text: {,
+  text: {
   primary: '#1a202c',
   secondary: '#4a5568',
   disabled: '#a0aec0',
   inverse: '#ffffff',
 },
-  border: {,
+  border: {
   primary: '#e2e8f0',
   secondary: '#cbd5e0',
   active: '#63b3ed',
@@ -202,7 +202,7 @@ export const lightTheme: CorrectionsTheme = {
 // Theme context and provider
 import React, { createContext, useContext, ReactNode } from 'react';
 interface CorrectionsThemeContextType {
-  theme: CorrectionsTheme;,
+  theme: CorrectionsTheme;
   isDark: boolean;
   toggleTheme: () => void;
   const CorrectionsThemeContext = createContext<CorrectionsThemeContextType | undefined>(undefined);
@@ -235,7 +235,7 @@ export const useCorrectionsTheme = () => {
 // Utility functions for styles
 export const createStyles = (theme: CorrectionsTheme) => ({)
   // Button styles
-  button: {,
+  button: {
   primary: {;
   backgroundColor: theme.colors.primary,
       color: theme.colors.text.inverse,
@@ -248,7 +248,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       cursor: 'pointer',
       transition: theme.transitions.normal;
   },
-  secondary: {,
+  secondary: {
   backgroundColor: theme.colors.background.secondary,
       color: theme.colors.text.primary,
       border: `1px solid ${theme.colors.border.primary}`}
@@ -261,7 +261,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       cursor: 'pointer',
       transition: theme.transitions.normal;
   },
-  danger: {,
+  danger: {
   backgroundColor: theme.colors.error,
       color: theme.colors.text.inverse,
       border: 'none',
@@ -274,7 +274,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       transition: theme.transitions.normal;
   }
   // Input styles
-  input: {,
+  input: {
   base: {;
   backgroundColor: theme.colors.background.secondary,
       color: theme.colors.text.primary,
@@ -289,7 +289,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
   borderColor: theme.colors.border.active,
   outline: 'none',
 },
-  search: {,
+  search: {
   backgroundColor: theme.colors.background.secondary,
       color: theme.colors.text.primary,
       border: `1px solid ${theme.colors.border.primary}`}
@@ -305,7 +305,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
   outline: 'none',
 }
   // Card styles
-  card: {,
+  card: {
   base: {;
   backgroundColor: theme.colors.background.secondary,
       border: `1px solid ${theme.colors.border.primary}`}
@@ -315,7 +315,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       boxShadow: theme.shadows.sm,
       transition: theme.transitions.normal;
   },
-  elevated: {,
+  elevated: {
   backgroundColor: theme.colors.background.elevated,
       border: `1px solid ${theme.colors.border.primary}`}
 },
@@ -325,7 +325,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       transition: theme.transitions.normal;
   }
   // Layout styles
-  panel: {,
+  panel: {
   base: {;
   backgroundColor: theme.colors.background.primary,
       color: theme.colors.text.primary,
@@ -337,7 +337,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       flexDirection: 'column' as const,
       transition: theme.transitions.normal;
   },
-  mobile: {,
+  mobile: {
   backgroundColor: theme.colors.background.primary,
   color: theme.colors.text.primary,
   height: '100vh',
@@ -347,14 +347,14 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
   flexDirection: 'column' as const,
 }
   // Status styles
-  status: {,
-  active: {,
+  status: {
+  active: {
   color: theme.colors.status.active,
 },
-  inactive: {,
+  inactive: {
   color: theme.colors.status.inactive,
 },
-  regex: {,
+  regex: {
   backgroundColor: theme.colors.status.regex,
       color: theme.colors.text.inverse,
       padding: `${theme.spacing.xs} ${theme.spacing.sm}`}
@@ -364,26 +364,26 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       fontWeight: theme.typography.fontWeight.medium;
   }
   // Typography styles
-  text: {,
-  heading: {,
+  text: {
+  heading: {
   fontSize: theme.typography.fontSize.xl,
   fontWeight: theme.typography.fontWeight.semibold,
   color: theme.colors.text.primary,
   lineHeight: theme.typography.lineHeight.tight,
 },
-  subheading: {,
+  subheading: {
   fontSize: theme.typography.fontSize.lg,
   fontWeight: theme.typography.fontWeight.medium,
   color: theme.colors.text.primary,
   lineHeight: theme.typography.lineHeight.normal,
 },
-  body: {,
+  body: {
   fontSize: theme.typography.fontSize.md,
   fontWeight: theme.typography.fontWeight.normal,
   color: theme.colors.text.primary,
   lineHeight: theme.typography.lineHeight.normal,
 },
-  caption: {,
+  caption: {
   fontSize: theme.typography.fontSize.sm,
   fontWeight: theme.typography.fontWeight.normal,
   color: theme.colors.text.secondary,
@@ -401,15 +401,15 @@ export const mediaQueries = {
 
 // Animation presets
 export const animations = {
-  fadeIn: {,
+  fadeIn: {
   from: { opacity: 0 },
     to: { opacity: 1 }
   },
-  slideIn: {,
+  slideIn: {
   from: { transform: 'translateX(100%)' },
     to: { transform: 'translateX(0)' }
   },
-  scaleIn: {,
+  scaleIn: {
   from: { transform: 'scale(0.95)', opacity: 0 },
     to: { transform: 'scale(1)', opacity: 1 }
 };

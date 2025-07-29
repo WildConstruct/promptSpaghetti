@@ -29,7 +29,7 @@ const mockCreateObjectURL = jest.fn(() => 'mock-url');
 const mockRevokeObjectURL = jest.fn<unknown, unknown>();
 global.document = {
   createElement: mockCreateElement,
-  body: {,
+  body: {
   appendChild: mockAppendChild,
   removeChild: mockRemoveChild,
 } as any;
@@ -51,7 +51,7 @@ describe('Project Workflow Integration Tests', () => {
           id: 'node-1',
           type: 'default',
           position: { x: 100, y: 100 },
-          data: {,
+          data: {
   nodeType: 'weighted-choice',
   label: 'Character Type',
   variations: ['Warrior', 'Mage', 'Rogue'],
@@ -60,7 +60,7 @@ describe('Project Workflow Integration Tests', () => {
           id: 'node-2',
           type: 'default',
           position: { x: 300, y: 100 },
-          data: {,
+          data: {
   nodeType: 'concat',
             template: 'A {input} from the {location}'
   }
@@ -68,7 +68,7 @@ describe('Project Workflow Integration Tests', () => {
           id: 'node-3',
           type: 'default',
           position: { x: 500, y: 100 },
-          data: {,
+          data: {
   nodeType: 'output',
   label: 'Final Output'],
   edges: [,
@@ -192,7 +192,7 @@ describe('Project Workflow Integration Tests', () => {
 },
   type: 'default' as const,
         position: { x: (i % 10) * 100, y: Math.floor(i / 10) * 100 },
-        data: {,
+        data: {
   nodeType: 'weighted-choice',
           label: `Node ${i}`}
 },
@@ -206,7 +206,7 @@ describe('Project Workflow Integration Tests', () => {
   target: `node-${i + 1}`}
 },
   sourceHandle: 'output',
-        targetHandle: 'input';
+        targetHandle: 'input'
   }))
     };
     const metadata = createDefaultMetadata('Large Test Project', projectAuthor);

@@ -25,13 +25,13 @@ export interface SecurityAnalyticsDashboardProps {
   onThreatDetected?: (threat: SecurityPattern) => void;
   onCriticalAlert?: (insight: SecurityInsight) => void;
   interface DashboardState {
-  summary: SecurityMetricsSummary | null;,
+  summary: SecurityMetricsSummary | null;
   insights: SecurityInsight;
-  patterns: SecurityPattern;,
+  patterns: SecurityPattern;
   isLoading: boolean;
-  lastUpdate: Date | null;,
+  lastUpdate: Date | null;
   selectedTimeframe: '1h' | '24h' | '7d' | '30d';
-  selectedCategory: ThreatCategory | 'all';,
+  selectedCategory: ThreatCategory | 'all';
   alertsEnabled: boolean;
   /**
   * Comprehensive security analytics dashboard for executive and operational use
@@ -59,7 +59,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   // Theme configuration
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   tertiary: '#f1f5f9',
@@ -73,7 +73,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   danger: '#ef4444',
   critical: '#dc2626',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   secondary: '#1e293b',
   tertiary: '#334155',
@@ -87,7 +87,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   danger: '#f87171',
   critical: '#ef4444',
 },
-  cinema: {,
+  cinema: {
   background: '#0d1117',
   secondary: '#161b22',
   tertiary: '#21262d',
@@ -163,7 +163,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   case RiskLevel.CRITICAL: return themeStyles.critical;
   case RiskLevel.HIGH: return themeStyles.danger;
   case RiskLevel.MEDIUM: return themeStyles.warning;
-  case RiskLevel.LOW: return themeStyles.success;,
+  case RiskLevel.LOW: return themeStyles.success;
   default: return themeStyles.textMuted;
 }, [themeStyles]);
   // Format numbers for display
@@ -252,7 +252,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   borderRadius: '6px',
               padding: '8px 12px',
               color: themeStyles.text,
-              fontSize: '14px';
+              fontSize: '14px'
   }}
           >
             <option value="1h">Last Hour</option>
@@ -271,7 +271,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   borderRadius: '6px',
               padding: '8px 12px',
               color: themeStyles.text,
-              fontSize: '14px';
+              fontSize: '14px'
   }}
           >
             <option value="all">All Categories</option>
@@ -362,7 +362,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-            padding: '20px';
+            padding: '20px'
   }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               SECURITY EVENTS
@@ -391,7 +391,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-            padding: '20px';
+            padding: '20px'
   }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               ACTIVE THREATS
@@ -417,7 +417,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-            padding: '20px';
+            padding: '20px'
   }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: themeStyles.textSecondary, fontWeight: 600 }}>
               SECURITY POSTURE
@@ -452,7 +452,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-          padding: '24px';
+          padding: '24px'
   }}>
           <h3 style={{
   margin: '0 0 20px 0',
@@ -583,7 +583,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-          padding: '24px';
+          padding: '24px'
   }}>
           <h3 style={{
   margin: '0 0 20px 0',
@@ -699,7 +699,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-          padding: '24px';
+          padding: '24px'
   }}>
           <h3 style={{
   margin: '0 0 20px 0',
@@ -729,7 +729,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               borderLeft: `4px solid ${themeStyles.critical}`}
 },
   padding: '16px',
-              borderRadius: '8px';
+              borderRadius: '8px'
   }}>
               <h4 style={{ margin: '0 0 12px 0', color: themeStyles.critical, fontSize: '16px' }}>
                 🚨 Immediate Action Required

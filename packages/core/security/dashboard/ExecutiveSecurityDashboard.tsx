@@ -37,11 +37,11 @@ import {
 
 export interface ExecutiveMetrics {
   securityScore: number; // 0-100,
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
-  incidentCount: {,
-  total: number;,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  incidentCount: {
+  total: number;
   resolved: number;
-  open: number;,
+  open: number;
   critical: number;
 };
   complianceScore: number; // 0-100,
@@ -51,33 +51,33 @@ export interface ExecutiveMetrics {
   savings: number; // USD,
   roi: number; // percentage,
 };
-  trends: {,
+  trends: {
   securityTrend: 'improving' | 'stable' | 'declining';
-  threatTrend: 'increasing' | 'stable' | 'decreasing';,
-  complianceTrend: 'improving' | 'stable' | 'declining';
-};
-  benchmarks: {,
+  threatTrend: 'increasing' | 'stable' | 'decreasing';
+  complianceTrend: 'improving' | 'stable' | 'declining'
+  };
+  benchmarks: {
   industryRanking: number; // percentile,
-  peerComparison: 'above' | 'average' | 'below';,
-  maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing';
-};
+  peerComparison: 'above' | 'average' | 'below';
+  maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing'
+  };
 }
 export interface ExecutiveInsight {
-  id: string;,
+  id: string;
   type: 'risk' | 'opportunity' | 'compliance' | 'investment';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   impact: string;
-  recommendation: string;,
+  recommendation: string;
   cost: number;
-  benefit: number;,
+  benefit: number;
   timeline: string;
-  owner: string;,
-  status: 'new' | 'in_progress' | 'completed' | 'deferred';
-}
+  owner: string;
+  status: 'new' | 'in_progress' | 'completed' | 'deferred'
+  }
 export interface ExecutiveSecurityDashboardProps {
-  metrics: ExecutiveMetrics;,
+  metrics: ExecutiveMetrics;
   insights: ExecutiveInsight;
   theme?: DashboardTheme;
   refreshInterval?: number; // minutes,
@@ -105,7 +105,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   // Theme configuration
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   surface: '#f8fafc',
   border: '#e2e8f0',
@@ -118,7 +118,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   critical: '#dc2626',
   accent: '#8b5cf6',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   surface: '#1e293b',
   border: '#334155',
@@ -131,7 +131,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   critical: '#ef4444',
   accent: '#a78bfa',
 },
-  cinema: {,
+  cinema: {
   background: '#0a0a0a',
   surface: '#1a1a1a',
   border: '#333333',
@@ -256,7 +256,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   borderRadius: '12px',
         padding: '24px',
         textAlign: 'center',
-        cursor: 'pointer';
+        cursor: 'pointer'
   }}
       onClick={() => onDrillDown?.('securityScore')}
       >
@@ -323,7 +323,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
 },
   borderRadius: '12px',
       padding: '24px',
-      cursor: 'pointer';
+      cursor: 'pointer'
   }}
     onClick={() => onDrillDown?.('riskLevel')}
     >
@@ -372,7 +372,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
 },
   borderRadius: '12px',
       padding: '24px',
-      cursor: 'pointer';
+      cursor: 'pointer'
   }}
     onClick={() => onDrillDown?.('incidents')}
     >
@@ -460,7 +460,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
 },
   borderRadius: '12px',
       padding: '24px',
-      cursor: 'pointer';
+      cursor: 'pointer'
   }}
     onClick={() => onDrillDown?.('financial')}
     >
@@ -549,7 +549,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
         border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '12px',
-        padding: '24px';
+        padding: '24px'
   }}>
         <h3 style={{
   margin: '0 0 16px 0',
@@ -581,7 +581,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   borderLeft: `4px solid ${insight.priority === 'critical' ? themeStyles.critical : themeStyles.error}`}
 },
   borderRadius: '8px',
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
                 onClick={() => onInsightAction?.(insight, 'view')}
               >
@@ -677,7 +677,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
 },
   borderRadius: '6px',
                 color: themeStyles.text,
-                fontSize: '14px';
+                fontSize: '14px'
   }}
             >
               <option value="30d">Last 30 Days</option>
@@ -768,7 +768,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
         padding: '24px',
         borderTop: `1px solid ${themeStyles.border}`}
 },
-  textAlign: 'center';
+  textAlign: 'center'
   }}>
         <div style={{
   fontSize: '12px',

@@ -553,7 +553,7 @@ describe('AuditManagementSystem', () => {
       oldEvent.timestamp = new Date('2024-01-01'); // Very old event
       const policies = {
   defaultRetentionDays: 365,
-  complianceRetentionDays: {,
+  complianceRetentionDays: {
   [ComplianceFramework.GDPR]: 2555 // 7 years for GDPR,
 },
   archivalStorage: 's3://audit-archive',

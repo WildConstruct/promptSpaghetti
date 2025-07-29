@@ -70,7 +70,7 @@ export interface NotificationConfig {
 
 export interface UserNotificationPreferences {
     userId: string;
-    channels: {,
+    channels: {
         [key in NotificationChannel]: {
             enabled: boolean;
             address?: string;
@@ -81,13 +81,13 @@ export interface UserNotificationPreferences {
             };
         };
     };
-    conflictResolution: {,
+    conflictResolution: {
         autoResolve: boolean;
         preferredResolution: ConflictResolution;
         requireConfirmation: boolean;
         timeoutMinutes: number;
     };
-    securityAlerts: {,
+    securityAlerts: {
         enabledTypes: NotificationType[];
         minimumPriority: NotificationPriority;
     };
@@ -106,7 +106,7 @@ export interface NotificationMessage {
     channels: NotificationChannel[];
     createdAt: Date;
     expiresAt: Date;
-    deliveryStatus: {,
+    deliveryStatus: {
         [key in NotificationChannel]?: {
             status: DeliveryStatus;
             attempts: number;
@@ -115,7 +115,7 @@ export interface NotificationMessage {
             error?: string;
         };
     };
-    metadata: {,
+    metadata: {
         conflictId?: string;
         sessionPriority?: SessionPriority;
         deviceInfo?: any;
@@ -157,7 +157,7 @@ export interface NotificationStats {
     deliveryRate: number;
     averageDeliveryTime: number;
     failureRate: number;
-    channelStats: {,
+    channelStats: {
         [key in NotificationChannel]: {
             sent: number;
             delivered: number;
@@ -165,7 +165,7 @@ export interface NotificationStats {
             avgDeliveryTime: number;
         };
     };
-    typeStats: {,
+    typeStats: {
         [key in NotificationType]: {
             sent: number;
             actionTaken: number;

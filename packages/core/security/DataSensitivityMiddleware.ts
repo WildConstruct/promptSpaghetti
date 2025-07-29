@@ -28,10 +28,10 @@ import { createSecurityMiddleware, SecurityConfig, SecurityPresets } from './Sec
  */
 
 export interface SensitivityAwareRequest extends Request {
-  dataSensitivity?: {,
-  level: DataSensitivityLevel;,
+  dataSensitivity?: {
+  level: DataSensitivityLevel;
   detectedElements: EnhancedDataElement;
-  policyEnforcement: SecurityPolicyEnforcementResult;,
+  policyEnforcement: SecurityPolicyEnforcementResult;
   complianceRequirements: string;
 };
 /**
@@ -55,7 +55,7 @@ export interface DataSensitivityMiddlewareConfig {
   maxSensitivityLevel?: DataSensitivityLevel;
   /** Custom validation rules */
   customValidation?: (req: SensitivityAwareRequest) => Promise<{,
-  allowed: boolean;,
+  allowed: boolean;
   reasons: string;
 }>;
   /** Compliance frameworks to validate against */
@@ -123,9 +123,9 @@ async function analyzeSensitivity(()
     req: SensitivityAwareRequest,
     config: DataSensitivityMiddlewareConfig,
   ): Promise<{
-  level: DataSensitivityLevel;,
+  level: DataSensitivityLevel;
   detectedElements: EnhancedDataElement;
-  policyEnforcement: SecurityPolicyEnforcementResult;,
+  policyEnforcement: SecurityPolicyEnforcementResult;
   complianceRequirements: string;
 }> {
   const detectedElements: EnhancedDataElement = [];
@@ -177,7 +177,7 @@ async function analyzeSensitivity(()
   fieldName: 'request_aggregate',
     value: req.path,
     dataType: 'string',
-    context: {,
+    context: {
   method: req.method,
   path: req.path,
   elementCount: detectedElements.length,
@@ -201,7 +201,7 @@ async function analyzeSensitivity(()
 /**
  * Analyze object for sensitive data
  */
-function analyzeObjectForSensitivity(obj: Record<string, any>,)
+function analyzeObjectForSensitivity(obj: Record<string, any>)
   source: string): EnhancedDataElement {,
   const elements: EnhancedDataElement = [];
   function analyzeValue(key: string, value: any, path: string): void {
@@ -291,7 +291,7 @@ function extractAccessControlFromRequest(req: Request): string {
   async function enforceSensitivityPolicies(()
   req: SensitivityAwareRequest,
   config: DataSensitivityMiddlewareConfig): Promise<{,
-  allowed: boolean;,
+  allowed: boolean;
   violations: string;
 }> {
   const violations: string = [];
@@ -330,17 +330,17 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
   // Maximum security for restricted data
   securityConfig = {
   ...SecurityPresets.production,
-  hsts: {,
+  hsts: {
   enabled: true,
   maxAge: 63072000, // 2 years,
   includeSubDomains: true,
   preload: true,
 },
-  csp: {,
+  csp: {
   enabled: true,
   reportOnly: false,
   useNonces: true,
-  directives: {,
+  directives: {
   'default-src': '\'none\'',
   'script-src': '\'self\'',
   'style-src': '\'self\'',
@@ -353,9 +353,9 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
   'upgrade-insecure-requests': '',
   'block-all-mixed-content': '',
 },
-  permissionsPolicy: {,
+  permissionsPolicy: {
   enabled: true,
-  directives: {,
+  directives: {
   camera: '()',
   microphone: '()',
   geolocation: '()',
@@ -378,7 +378,7 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
     // Moderate security for internal data
     securityConfig = {
   ...SecurityPresets.production,
-  hsts: {,
+  hsts: {
   enabled: true,
   maxAge: 31536000, // 1 year,
   includeSubDomains: true,
@@ -389,16 +389,16 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
   default:
     // Basic security for public data
     securityConfig = {
-  hsts: {,
+  hsts: {
   enabled: true,
   maxAge: 86400, // 1 day,
   includeSubDomains: false,
   preload: false,
 },
-  csp: {,
+  csp: {
   enabled: true,
   reportOnly: false,
-  directives: {,
+  directives: {
   'default-src': '\'self\'',
   'script-src': '\'self\' \'unsafe-inline\'',
   'style-src': '\'self\' \'unsafe-inline\'',
@@ -417,7 +417,7 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
  * Endpoint-specific sensitivity configuration
  */
 export function createEndpointSensitivityMiddleware()
-  endpointConfig: {,
+  endpointConfig: {
   path: string;
   maxSensitivityLevel: DataSensitivityLevel;
   requiredControls?: string;

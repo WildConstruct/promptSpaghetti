@@ -435,8 +435,7 @@ export class ASTBuilder {
                 return null;
             case TokenType.ARRAY_START:
                 return this.parseArray();
-            case TokenType.INDENT:
-                return this.parseObject();
+            case TokenType.INDENT: return this.parseObject();
             default:
                 this.addError(`Unexpected token in value: ${token.value}`, 'error');
         }

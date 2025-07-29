@@ -29,9 +29,9 @@ import {
 } from '../../types/restoration';
 const { Title, Text } = Typography;
 interface RestorationConfirmationProps {
-  preview: RestorationPreviewResponse;,
+  preview: RestorationPreviewResponse;
   config: RestorationConfig;
-  onConfirm: () => void;,
+  onConfirm: () => void;
   onCancel: () => void;
   export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({,)
   preview,
@@ -89,8 +89,8 @@ interface RestorationConfirmationProps {
   case 'delete':,
   return 'error';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const formatDuration = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}

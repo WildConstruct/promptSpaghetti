@@ -180,7 +180,7 @@ export interface LearningInsight {
 export interface PreferenceLearningExportData {
     userProfiles: UserPreferenceProfile[];
     models: PreferenceModel[];
-    learningMetrics: {,
+    learningMetrics: {
         totalUsers: number;
         averageConfidence: number;
         bestModel: PreferenceModel;

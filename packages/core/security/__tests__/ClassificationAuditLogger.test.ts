@@ -106,17 +106,17 @@ describe('ClassificationAuditLogger', () => {
   id: logId,
   eventType: AuditEventType.CLASSIFICATION_PERFORMED,
   actor,
-  target: {,
+  target: {
   dataId: dataElement.id,
   resourceType: 'data_element',
   classification: result,
 },
-  action: {,
+  action: {
   operation: 'classify',
   result: 'success',
   duration: 25,
 },
-  compliance: {,
+  compliance: {
   frameworks: [ComplianceFramework.GDPR],
   dataCategory: DataCategory.PII,
   retentionRequired: true,
@@ -136,13 +136,13 @@ describe('ClassificationAuditLogger', () => {
       expect(logs).toHaveLength(1);
       expect(logs[0]).toMatchObject({)
   eventType: AuditEventType.CLASSIFICATION_UPDATED,
-  action: {,
+  action: {
   operation: 'update_classification',
   result: 'success',
   reason: 'Reclassified after review',
 },
-  context: {,
-  metadata: {,
+  context: {
+  metadata: {
   oldLevel: ClassificationLevel.INTERNAL,
   newLevel: ClassificationLevel.CONFIDENTIAL,
 });
@@ -165,12 +165,12 @@ describe('ClassificationAuditLogger', () => {
       expect(logs).toHaveLength(1);
       expect(logs[0]).toMatchObject({)
   eventType: AuditEventType.POLICY_VIOLATION,
-  action: {,
+  action: {
   operation: 'policy_check',
   result: 'failure',
   reason: 'Unencrypted PII data',
 },
-  compliance: {,
+  compliance: {
   frameworks: [ComplianceFramework.GDPR],
 });
     });
@@ -213,12 +213,12 @@ describe('ClassificationAuditLogger', () => {
       expect(logs).toHaveLength(1);
       expect(logs[0]).toMatchObject({)
   eventType: AuditEventType.ACCESS_GRANTED,
-  action: {,
+  action: {
   operation: 'access_request',
   result: 'success',
   reason: 'User has required permissions',
 },
-  target: {,
+  target: {
           classification
       });
     });
@@ -234,7 +234,7 @@ describe('ClassificationAuditLogger', () => {
       expect(logs).toHaveLength(1);
       expect(logs[0]).toMatchObject({)
   eventType: AuditEventType.ACCESS_DENIED,
-  action: {,
+  action: {
   operation: 'access_request',
   result: 'failure',
   reason: 'Insufficient permissions',
@@ -435,13 +435,13 @@ describe('ClassificationAuditLogger', () => {
   );
   expect(report).toMatchObject({)
   framework: ComplianceFramework.GDPR,
-  summary: {,
+  summary: {
   totalEvents: 12, // 10 classifications + 2 violations,
   compliantEvents: 10,
   violations: 2,
   complianceRate: expect.closeTo(83.33, 1),
 },
-  dataProcessing: {,
+  dataProcessing: {
   classified: 10,
   accessed: 0,
   exported: 0,

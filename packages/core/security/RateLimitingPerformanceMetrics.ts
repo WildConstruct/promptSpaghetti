@@ -16,90 +16,90 @@ import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 // ========================================
 
 export interface RateLimitingMetricsConfig {
-  enableRealTimeMetrics: boolean;,
+  enableRealTimeMetrics: boolean;
   metricsRetentionPeriod: number; // hours,
-  performanceThresholds: {,
+  performanceThresholds: {
   responseTime: number; // ms,
   throughput: number; // requests/second,
   errorRate: number; // percentage,
   blockRate: number; // percentage,
 };
-  visualizationOptions: {,
+  visualizationOptions: {
   enableCharts: boolean;
-  enableHeatmaps: boolean;,
+  enableHeatmaps: boolean;
   enableTimeseries: boolean;
-  enableGeospatialMaps: boolean;,
+  enableGeospatialMaps: boolean;
   refreshInterval: number; // seconds,
 };
-  alerting: {,
+  alerting: {
   enableAlerts: boolean;
-  alertThresholds: {,
-  highResponseTime: number;,
+  alertThresholds: {
+  highResponseTime: number;
   lowThroughput: number;
-  highErrorRate: number;,
+  highErrorRate: number;
   highBlockRate: number;
 };
   };
 }
 export interface PerformanceMetrics {
-  timestamp: Date;,
-  responseTime: {,
-  average: number;,
+  timestamp: Date;
+  responseTime: {
+  average: number;
   p50: number;
-  p95: number;,
+  p95: number;
   p99: number;
   max: number;
 };
-  throughput: {,
+  throughput: {
   requestsPerSecond: number;
-  allowedPerSecond: number;,
+  allowedPerSecond: number;
   blockedPerSecond: number;
   throttledPerSecond: number;
 };
-  errorRates: {,
+  errorRates: {
   totalRequests: number;
-  blockedRequests: number;,
+  blockedRequests: number;
   errorRequests: number;
   blockRate: number; // percentage,
   errorRate: number; // percentage,
 };
-  resourceUtilization: {,
+  resourceUtilization: {
   memoryUsage: number; // MB,
   cpuUsage: number; // percentage,
   cacheHitRate: number; // percentage,
   activeConnections: number;
 };
-  threatMetrics: {,
+  threatMetrics: {
   threatDistribution: Record<ThreatLevel, number>;
-  suspiciousActivities: number;,
+  suspiciousActivities: number;
   blockedThreats: number;
   adaptiveAdjustments: number;
 };
 }
 export interface MetricsVisualizationData {
-  timeSeriesData: {,
-  timestamps: Date;,
+  timeSeriesData: {
+  timestamps: Date;
   responseTime: number;
-  throughput: number;,
+  throughput: number;
   blockRate: number;
   errorRate: number;
 };
-  heatmapData: {,
+  heatmapData: {
   endpoints: string;
-  timeSlots: string;,
+  timeSlots: string;
   activityMatrix: number[];
   blockMatrix: number[];
 };
-  geospatialData: {,
+  geospatialData: {
   locations: Array<{,
-  latitude: number;,
+  latitude: number;
   longitude: number;
-  requestCount: number;,
+  requestCount: number;
   blockCount: number;
   threatLevel: ThreatLevel;
 }>;
   };
-  distributionData: {,
+  distributionData: {
   endpointDistribution: Record<string, number>;
     threatLevelDistribution: Record<ThreatLevel, number>;
     responseTimeDistribution: Array<{ range: string; count: number }>;
@@ -107,25 +107,25 @@ export interface MetricsVisualizationData {
   };
 }
 export interface AlertCondition {
-  alertId: string;,
+  alertId: string;
   timestamp: Date;
-  alertType: 'performance' | 'security' | 'capacity' | 'anomaly';,
+  alertType: 'performance' | 'security' | 'capacity' | 'anomaly';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  condition: string;,
+  condition: string;
   currentValue: number;
-  threshold: number;,
+  threshold: number;
   affectedEndpoints: string;
-  recommendedActions: string;,
+  recommendedActions: string;
   metadata: Record<string, unknown>;
 }
 export interface DashboardWidget {
-  widgetId: string;,
+  widgetId: string;
   widgetType: 'chart' | 'gauge' | 'table' | 'heatmap' | 'map' | 'counter';
-  title: string;,
+  title: string;
   description: string;
-  dataSource: string;,
+  dataSource: string;
   refreshInterval: number; // seconds,
-  config: {,
+  config: {
   chartType?: 'line' | 'bar' | 'pie' | 'area' | 'scatter';
   timeRange?: string; // e.g., '1h', '24h', '7d',
   aggregation?: 'sum' | 'avg' | 'max' | 'min' | 'count';
@@ -133,9 +133,9 @@ export interface DashboardWidget {
   dimensions?: string;
   metrics?: string;
 };
-  position: {,
+  position: {
   x: number;
-  y: number;,
+  y: number;
   width: number;
   height: number;
 };
@@ -165,22 +165,22 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   this.config = {
   enableRealTimeMetrics: true,
   metricsRetentionPeriod: 72, // 3 days,
-  performanceThresholds: {,
+  performanceThresholds: {
   responseTime: 100, // ms,
   throughput: 1000, // requests/second,
   errorRate: 5, // percentage,
   blockRate: 10 // percentage,
 },
-  visualizationOptions: {,
+  visualizationOptions: {
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
   enableGeospatialMaps: true,
   refreshInterval: 5 // seconds,
 },
-  alerting: {,
+  alerting: {
   enableAlerts: true,
-  alertThresholds: {,
+  alertThresholds: {
   highResponseTime: 200,
   lowThroughput: 100,
   highErrorRate: 10,
@@ -392,7 +392,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       { city: 'Sydney', lat: -33.8688, lng: 151.2093 }
     ];
     return {
-  locations: locations.map(loc => ({,)
+  locations: locations.map(loc => ({)
   latitude: loc.lat,
   longitude: loc.lng,
   requestCount: Math.floor(Math.random() * 10000) + 1000,
@@ -419,7 +419,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
         { range: '200-500ms', count: Math.floor(Math.random() * 200) + 50 },
         { range: '500ms+', count: Math.floor(Math.random() * 100) + 10 }
       ],
-      userAgentDistribution: {,
+      userAgentDistribution: {
   'Chrome': Math.floor(Math.random() * 5000) + 2000,
   'Firefox': Math.floor(Math.random() * 2000) + 800,
   'Safari': Math.floor(Math.random() * 1500) + 600,
@@ -451,7 +451,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   description: 'Average response time over time',
   dataSource: 'timeseries',
   refreshInterval: 5,
-  config: {,
+  config: {
   chartType: 'line',
   timeRange: '1h',
   aggregation: 'avg',
@@ -466,7 +466,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   description: 'Current requests per second',
   dataSource: 'current',
   refreshInterval: 1,
-  config: {,
+  config: {
   metrics: ['throughput'],
 },
   position: { x: 6, y: 0, width: 3, height: 4 }
@@ -478,7 +478,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   description: 'Percentage of requests blocked',
   dataSource: 'current',
   refreshInterval: 1,
-  config: {,
+  config: {
   metrics: ['blockRate'],
 },
   position: { x: 9, y: 0, width: 3, height: 4 }
@@ -490,7 +490,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   description: 'Request activity by endpoint and time',
   dataSource: 'heatmap',
   refreshInterval: 30,
-  config: {,
+  config: {
   timeRange: '24h',
 },
   position: { x: 0, y: 4, width: 8, height: 6 }
@@ -502,7 +502,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   description: 'Distribution of threat levels',
   dataSource: 'distribution',
   refreshInterval: 10,
-  config: {,
+  config: {
   chartType: 'pie',
   metrics: ['threatLevelDistribution'],
 },
@@ -650,7 +650,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   const alert: AlertCondition = {,
   ...alertData,
   timestamp: new Date(),
-  metadata: {,
+  metadata: {
   systemUptime: Date.now() - this.startTime.getTime(),
   metricsCount: this.metricsHistory.length,
 };
@@ -680,34 +680,34 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   private createEmptyMetrics(): PerformanceMetrics {
   return {
   timestamp: new Date(),
-  responseTime: {,
+  responseTime: {
   average: 0,
   p50: 0,
   p95: 0,
   p99: 0,
   max: 0,
 },
-  throughput: {,
+  throughput: {
   requestsPerSecond: 0,
   allowedPerSecond: 0,
   blockedPerSecond: 0,
   throttledPerSecond: 0,
 },
-  errorRates: {,
+  errorRates: {
   totalRequests: 0,
   blockedRequests: 0,
   errorRequests: 0,
   blockRate: 0,
   errorRate: 0,
 },
-  resourceUtilization: {,
+  resourceUtilization: {
   memoryUsage: 0,
   cpuUsage: 0,
   cacheHitRate: 0,
   activeConnections: 0,
 },
-  threatMetrics: {,
-  threatDistribution: {,
+  threatMetrics: {
+  threatDistribution: {
   [ThreatLevel.LOW]: 0,
   [ThreatLevel.MEDIUM]: 0,
   [ThreatLevel.HIGH]: 0,
@@ -758,14 +758,14 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
    * Get comprehensive system status
    */
   public getSystemStatus(): {
-  status: 'healthy' | 'warning' | 'critical';,
+  status: 'healthy' | 'warning' | 'critical';
   uptime: number;
-  metrics: PerformanceMetrics;,
+  metrics: PerformanceMetrics;
   alerts: AlertCondition;
-  systemInfo: {,
-  version: string;,
+  systemInfo: {
+  version: string;
   environment: string;
-  configuredEndpoints: number;,
+  configuredEndpoints: number;
   metricsCollected: number;
 };
     return {
@@ -774,7 +774,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   uptime: Date.now() - this.startTime.getTime(),
   metrics: this.currentMetrics,
   alerts: this.getActiveAlerts(),
-  systemInfo: {,
+  systemInfo: {
   version: '1.0.0',
   environment: process.env.NODE_ENV || 'development',
   configuredEndpoints: 0, // Would be populated from actual configuration,
@@ -810,7 +810,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   return JSON.stringify({)
   exportTimestamp: new Date().toISOString(),
   metricsCount: this.metricsHistory.length,
-  timeRange: {,
+  timeRange: {
   start: this.metricsHistory[0]?.timestamp,
   end: this.metricsHistory[this.metricsHistory.length - 1]?.timestamp,
 },

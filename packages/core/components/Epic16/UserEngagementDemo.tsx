@@ -118,7 +118,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   description: 'You\'ve completed the getting started tutorial',
   content: '<p>Great job! You now know how to browse and download templates. Next, try the template creation tutorial to learn how to build your own.</p>',
   type: 'completion'],
-  completionRewards: {,
+  completionRewards: {
   xp: 200,
   badge: 'Marketplace Explorer',
   certificate: 'Getting Started Certificate',
@@ -186,7 +186,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   description: 'You\'ve mastered advanced template creation',
   content: '<p>Excellent work! You\'re now ready to create professional-grade templates that will help users worldwide.</p>',
   type: 'completion'],
-  completionRewards: {,
+  completionRewards: {
   xp: 750,
   badge: 'Template Master',
   certificate: 'Advanced Template Creation Certificate',
@@ -250,7 +250,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   description: 'You\'ve mastered team collaboration workflows',
   content: '<p>Great job! You can now effectively collaborate with team members on template projects.</p>',
   type: 'completion'],
-  completionRewards: {,
+  completionRewards: {
   xp: 500,
   badge: 'Collaboration Expert',
   certificate: 'Team Collaboration Certificate',
@@ -263,7 +263,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   useEffect(() => {
   // Initialize some mock tutorial progress
   setUserTutorialProgress({)
-  'getting-started-basics': {,
+  'getting-started-basics': {
   tutorialId: 'getting-started-basics',
   currentStepIndex: 4,
   completed: true,

@@ -175,7 +175,12 @@ export class AdminStateContainer extends BaseStateContainer {
                                             }
                                         }, message, 'Widget must have id, type, and title', value, widget, code, 'INVALID_WIDGET');
                                     },
-                                    if(, widget) { }, : .position || widget.position.w <= 0 || widget.position.h <= 0 } } } } }
+                                    if(, widget) { }, : .position || widget.position.w <= 0 || widget.position.h <= 0
+                                }
+                            }
+                        }
+                    }
+                }
             };
             {
                 errors.push({});
@@ -198,7 +203,6 @@ state.users.list.forEach((user, index) => {
         field: `users.list[${index}]`;
     }
 }, message, 'User must have id, username, and email', value, user, code, 'INVALID_USER');
-;
 if (user.email && !this.isValidEmail(user.email)) {
     errors.push({});
     field: `users.list[${index}].email`;
@@ -240,7 +244,6 @@ state.security.activeIncidents.forEach((incident, index) => {
         field: `security.activeIncidents[${index}]`;
     }
 }, message, 'Security incident must have id, type, and severity', value, incident, code, 'INVALID_INCIDENT');
-;
 ;
 // Performance validations
 const widgetCount = state.layout.widgets.length;

@@ -9,24 +9,24 @@ export interface WebVitalsConfig {
     enabled: boolean;
     reportAllChanges: boolean;
     samplingRate: number;
-    thresholds: {,
-        fcp: {,
+    thresholds: {
+        fcp: {
             good: number;
             poor: number;
         };
-        lcp: {,
+        lcp: {
             good: number;
             poor: number;
         };
-        fid: {,
+        fid: {
             good: number;
             poor: number;
         };
-        cls: {,
+        cls: {
             good: number;
             poor: number;
         };
-        tti: {,
+        tti: {
             good: number;
             poor: number;
         };
@@ -48,31 +48,31 @@ export interface WebVitalsAnalytics {
     sessionId: string;
     timestamp: number;
     metrics: EnhancedMetric[];
-    summary: {,
-        fcp: {,
+    summary: {
+        fcp: {
             value: number;
             rating: string;
         };
-        lcp: {,
+        lcp: {
             value: number;
             rating: string;
         };
-        fid: {,
+        fid: {
             value: number;
             rating: string;
         };
-        cls: {,
+        cls: {
             value: number;
             rating: string;
         };
-        tti: {,
+        tti: {
             value: number;
             rating: string;
         };
     };
-    deviceInfo: {,
+    deviceInfo: {
         userAgent: string;
-        viewport: {,
+        viewport: {
             width: number;
             height: number;
         };
@@ -81,7 +81,7 @@ export interface WebVitalsAnalytics {
         deviceMemory?: number;
         hardwareConcurrency: number;
     };
-    pageInfo: {,
+    pageInfo: {
         url: string;
         referrer: string;
         title: string;

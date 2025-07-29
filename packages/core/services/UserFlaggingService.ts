@@ -9,15 +9,15 @@
 import { FlagSubmission, FlaggingStatus, FlaggingReason } from '../components/Flagging/FlaggingButton';
 
 export interface UserFlagReport {
-  id: string;,
+  id: string;
   contentId: string;
-  contentType: 'template' | 'comment' | 'review' | 'user' | 'project';,
+  contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
   reporterId: string;
   reasonId: string;
   details?: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   category: 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other';
-  status: 'pending' | 'investigating' | 'resolved' | 'dismissed';,
+  status: 'pending' | 'investigating' | 'resolved' | 'dismissed';
   createdAt: Date;
   updatedAt: Date;
   reviewedBy?: string;
@@ -27,7 +27,7 @@ export interface UserFlagReport {
   metadata: Record<string, unknown>;
 }
 export interface FlagResolution {
-  action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';,
+  action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
   reason: string;
   appealable: boolean;
   appealDeadline?: Date;
@@ -35,61 +35,61 @@ export interface FlagResolution {
   precedentCase?: string;
 }
 export interface ContentFlagSummary {
-  contentId: string;,
+  contentId: string;
   contentType: string;
-  totalFlags: number;,
+  totalFlags: number;
   uniqueReporters: number;
   flagsByReason: Record<string, number>;
-  averageSeverity: number;,
+  averageSeverity: number;
   firstFlaggedAt: Date;
-  lastFlaggedAt: Date;,
+  lastFlaggedAt: Date;
   status: 'clean' | 'under_review' | 'violations_found' | 'content_removed';
   autoFlagged: boolean;
   mlConfidence?: number;
-  moderationPriority: 'low' | 'medium' | 'high' | 'urgent';
-}
+  moderationPriority: 'low' | 'medium' | 'high' | 'urgent'
+  }
 export interface FlaggingAnalytics {
   timeRange: { start: Date; end: Date };
-  totalReports: number;,
+  totalReports: number;
   uniqueReporters: number;
-  uniqueContent: number;,
+  uniqueContent: number;
   reportsByReason: Record<string, number>;
   reportsBySeverity: Record<string, number>;
-  resolutionStats: {,
+  resolutionStats: {
   resolved: number;
-  dismissed: number;,
+  dismissed: number;
   pending: number;
   avgResolutionTimeHours: number;
 };
   topReporters: Array<{,
   userId: string;
-  reportCount: number;,
+  reportCount: number;
   accuracy: number;
 }>;
-  contentTrends: {,
+  contentTrends: {
   mostFlaggedContentTypes: Record<string, number>;
-  flagVolumeByHour: number;,
+  flagVolumeByHour: number;
   flagVolumeByDay: number;
 };
-  moderationEfficiency: {,
+  moderationEfficiency: {
   avgResponseTimeHours: number;
-  accuracyRate: number;,
+  accuracyRate: number;
   escalationRate: number;
 };
 }
 export interface FlaggingConfig {
-  enableUserFlagging: boolean;,
+  enableUserFlagging: boolean;
   maxFlagsPerUser24h: number;
-  maxFlagsPerContent: number;,
+  maxFlagsPerContent: number;
   autoEscalationThreshold: number;
-  enableDuplicateDetection: boolean;,
+  enableDuplicateDetection: boolean;
   requireJustification: string;
-  anonymousReporting: boolean;,
+  anonymousReporting: boolean;
   notifyContentOwner: boolean;
-  integrationSettings: {,
-  mlFlaggingWeight: number;,
+  integrationSettings: {
+  mlFlaggingWeight: number;
   userFlaggingWeight: number;
-  combineScores: boolean;,
+  combineScores: boolean;
   autoModerationThreshold: number;
 };
 /**
@@ -115,7 +115,7 @@ export class UserFlaggingService {
   requireJustification: ['harassment', 'security_issue', 'copyright_violation'],
   anonymousReporting: false,
   notifyContentOwner: false,
-  integrationSettings: {,
+  integrationSettings: {
   mlFlaggingWeight: 0.7,
   userFlaggingWeight: 0.3,
   combineScores: true,
@@ -128,7 +128,7 @@ export class UserFlaggingService {
    */
   async submitFlag(submission: FlagSubmission): Promise<{,
   reportId: string;
-  status: 'accepted' | 'rejected' | 'duplicate';,
+  status: 'accepted' | 'rejected' | 'duplicate';
   message: string;
   estimatedResolutionHours?: number;
 }> {
@@ -173,7 +173,7 @@ export class UserFlaggingService {
   /**
    * Get flagging status for content
    */
-  async getFlaggingStatus(contentId: string,)
+  async getFlaggingStatus(contentId: string)
     userId?: string
   ): Promise<FlaggingStatus> {
   try {
@@ -203,20 +203,20 @@ export class UserFlaggingService {
   /**
    * Get user's flag reports
    */
-  async getUserFlagReports(userId: string,)
-    options: {,
+  async getUserFlagReports(userId: string)
+    options: {
       status?: 'pending' | 'investigating' | 'resolved' | 'dismissed';
       timeRange?: { start: Date; end: Date };
       limit?: number;
       offset?: number;
     } = {}
   ): Promise<{
-  reports: UserFlagReport;,
+  reports: UserFlagReport;
   totalCount: number;
-  stats: {,
-  totalReports: number;,
+  stats: {
+  totalReports: number;
   pendingReports: number;
-  resolvedReports: number;,
+  resolvedReports: number;
   accuracyRate: number;
 };
   }> {
@@ -285,8 +285,8 @@ export class UserFlaggingService {
   /**
    * Update flag report status (for moderators)
    */
-  async updateFlagStatus(reportId: string,)
-    update: {,
+  async updateFlagStatus(reportId: string)
+    update: {
   status: 'investigating' | 'resolved' | 'dismissed';
       moderatorId: string;
       moderatorNote?: string;
@@ -365,7 +365,7 @@ export class UserFlaggingService {
   status: 'pending',
   createdAt: new Date(),
   updatedAt: new Date(),
-  metadata: {,
+  metadata: {
   ...submission.metadata,
   userAgent: 'web-interface',
   ipAddress: 'xxx.xxx.xxx.xxx' // Would be captured in real implementation,
@@ -401,7 +401,7 @@ export class UserFlaggingService {
         lastFlaggedAt: report.createdAt,
         status: 'clean',
         autoFlagged: false,
-        moderationPriority: 'low';
+        moderationPriority: 'low'
   };
     // Update summary
     summary.totalFlags++;
@@ -439,7 +439,7 @@ export class UserFlaggingService {
         lastFlaggedAt: new Date(),
         status: 'clean',
         autoFlagged: false,
-        moderationPriority: 'low';
+        moderationPriority: 'low'
   };
     return summary;
   private async hasUserFlagged(contentId: string, userId: string): Promise<boolean> {

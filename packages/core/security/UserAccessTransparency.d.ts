@@ -220,7 +220,7 @@ export interface ComplianceAction {
 
 export interface PrivacyScore {
     overall: number;
-    categories: {,
+    categories: {
         dataMinimization: number;
         consentHealth: number;
         securityPosture: number;
@@ -345,7 +345,7 @@ export interface NotificationPreferences {
     smsNotifications: boolean;
     frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
     eventTypes: TransparencyEventType[];
-    quietHours: {,
+    quietHours: {
         enabled: boolean;
         start: string;
         end: string;

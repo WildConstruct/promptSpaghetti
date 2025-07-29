@@ -21,7 +21,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       setError(null);
       const response = await fetch(`${API_BASE}/workspaces`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId // Mock auth header,
 });
@@ -41,7 +41,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     const response = await fetch(`${API_BASE}/workspaces`, {)}
   },
   method: 'POST',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 },
@@ -62,7 +62,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
   },
   method: 'PUT',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 },
@@ -83,7 +83,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
   },
   method: 'DELETE',
-      headers: {,
+      headers: {
   'X-User-Id': userId,
 });
     if (!response.ok) {
@@ -100,7 +100,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/invite`, {)}
   },
   method: 'POST',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 },

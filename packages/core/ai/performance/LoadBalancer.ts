@@ -7,39 +7,39 @@
 import { BaseAIModel } from '../BaseAIModel';
 
 export interface LoadBalancerConfig {
-  strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';,
+  strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
   healthCheckInterval: number; // milliseconds,
   failoverThreshold: number; // number of consecutive failures,
-  maxRetries: number;,
+  maxRetries: number;
   timeoutMs: number;
-  circuitBreakerEnabled: boolean;,
+  circuitBreakerEnabled: boolean;
   metricsCollection: boolean;
 }
 export interface ModelInstance {
-  id: string;,
+  id: string;
   model: BaseAIModel;
-  weight: number;,
+  weight: number;
   healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
-  metrics: {,
-  activeConnections: number;,
+  metrics: {
+  activeConnections: number;
   totalRequests: number;
-  successfulRequests: number;,
+  successfulRequests: number;
   failedRequests: number;
-  averageResponseTime: number;,
+  averageResponseTime: number;
   lastResponseTime: number;
-  errorRate: number;,
+  errorRate: number;
   costPerRequest: number;
-  lastHealthCheck: number;,
+  lastHealthCheck: number;
   consecutiveFailures: number;
 };
-  circuitBreaker: {,
+  circuitBreaker: {
   state: 'closed' | 'open' | 'half_open';
-  openedAt: number;,
+  openedAt: number;
   nextRetryAt: number;
 };
 }
 export interface LoadBalancingRequest {
-  id: string;,
+  id: string;
   input: any;
   options?: any;
   priority: 'low' | 'normal' | 'high';
@@ -49,11 +49,11 @@ export interface LoadBalancingRequest {
   metadata?: Record<string, any>;
 }
 export interface LoadBalancingResult<T = any> {
-  result: T;,
+  result: T;
   modelId: string;
-  responseTime: number;,
+  responseTime: number;
   retryCount: number;
-  cached: boolean;,
+  cached: boolean;
   cost: number;
   export class LoadBalancer {
   private config: LoadBalancerConfig;
@@ -71,7 +71,7 @@ export interface LoadBalancingResult<T = any> {
   model,
   weight,
   healthStatus: 'healthy',
-  metrics: {,
+  metrics: {
   activeConnections: 0,
   totalRequests: 0,
   successfulRequests: 0,
@@ -83,7 +83,7 @@ export interface LoadBalancingResult<T = any> {
   lastHealthCheck: Date.now(),
   consecutiveFailures: 0,
 },
-  circuitBreaker: {,
+  circuitBreaker: {
   state: 'closed',
   openedAt: 0,
   nextRetryAt: 0,
@@ -91,7 +91,7 @@ export interface LoadBalancingResult<T = any> {
     this.instances.set(id, instance);
   removeModel(id: string): boolean {
     return this.instances.delete(id);
-  async executeRequest<T>(input: any,)
+  async executeRequest<T>(input: any)
     options: any = {},
     priority: 'low' | 'normal' | 'high' = 'normal'): Promise<LoadBalancingResult<T>> {,
   const request: LoadBalancingRequest = {,
@@ -232,7 +232,7 @@ export interface LoadBalancingResult<T = any> {
         return true;
       default:
         return false;
-  private async executeWithTimeout(model: BaseAIModel,)
+  private async executeWithTimeout(model: BaseAIModel)
     input: any,
     options: any,
     timeoutMs: number): Promise<{ result: any; cost?: number; cached?: boolean }> {
@@ -289,12 +289,12 @@ export interface LoadBalancingResult<T = any> {
   const consecutiveFailures = instance.metrics.consecutiveFailures;
   const avgResponseTime = instance.metrics.averageResponseTime;
   if (consecutiveFailures >= this.config.failoverThreshold) {
-  instance.healthStatus = 'offline';
-} else if (errorRate > 0.5 || avgResponseTime > 30000) { // 30 second threshold
-      instance.healthStatus = 'unhealthy';
-    } else if (errorRate > 0.2 || avgResponseTime > 10000) { // 10 second threshold
-      instance.healthStatus = 'degraded';
-    } else {
+  instance.healthStatus = 'offline'
+  } else if (errorRate > 0.5 || avgResponseTime > 30000) { // 30 second threshold
+      instance.healthStatus = 'unhealthy'
+  } else if (errorRate > 0.2 || avgResponseTime > 10000) { // 10 second threshold
+      instance.healthStatus = 'degraded'
+  } else {
   instance.healthStatus = 'healthy';
   private updateCircuitBreaker(instance: ModelInstance, success: boolean): void {,
   const breaker = instance.circuitBreaker;
@@ -337,8 +337,8 @@ export interface LoadBalancingResult<T = any> {
       } catch (error) {
         instance.metrics.consecutiveFailures++;
         if (instance.metrics.consecutiveFailures >= this.config.failoverThreshold) {
-          instance.healthStatus = 'offline';
-    });
+          instance.healthStatus = 'offline'
+  });
     await Promise.allSettled(healthCheckPromises);
   getInstanceMetrics(): Map<string, ModelInstance['metrics']> {
     const metrics = new Map();
@@ -346,11 +346,11 @@ export interface LoadBalancingResult<T = any> {
       metrics.set(id, { ...instance.metrics });
     return metrics;
   getOverallMetrics(): {
-  totalInstances: number;,
+  totalInstances: number;
   healthyInstances: number;
-  totalRequests: number;,
+  totalRequests: number;
   averageResponseTime: number;
-  overallErrorRate: number;,
+  overallErrorRate: number;
   totalCost: number;
   const instances = Array.from(this.instances.values());
   const healthyCount = instances.filter(i => i.healthStatus === 'healthy').length;

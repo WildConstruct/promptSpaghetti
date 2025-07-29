@@ -11,30 +11,30 @@ import {
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
 export interface NotificationChannel {
-  type: 'in_app' | 'email' | 'slack' | 'webhook';,
+  type: 'in_app' | 'email' | 'slack' | 'webhook';
   enabled: boolean;
   config: Record<string, unknown>;
 }
 export interface NotificationPreferences {
-  userId: UserId;,
+  userId: UserId;
   channels: NotificationChannel;
-  filters: NotificationFilter;,
-  digest: {,
-  enabled: boolean;,
+  filters: NotificationFilter;
+  digest: {
+  enabled: boolean;
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   time?: string; // For scheduled digests,
 };
 }
 export interface NotificationFilter {
-  type: 'workspace' | 'project' | 'activity_type' | 'user';,
+  type: 'workspace' | 'project' | 'activity_type' | 'user';
   value: string;
-  action: 'include' | 'exclude';
-}
+  action: 'include' | 'exclude'
+  }
 export interface NotificationTemplate {
-  type: NotificationType;,
-  channels: {,
-  [channel: string]: {,
-  subject: string;,
+  type: NotificationType;
+  channels: {
+  [channel: string]: {
+  subject: string;
   body: string;
   metadata?: Record<string, unknown>;
 };
@@ -44,14 +44,14 @@ export interface NotificationContext {
   workspaceId: WorkspaceId;
   projectId?: ProjectId;
   resourceId?: ResourceId;
-  actorUserId: UserId;,
+  actorUserId: UserId;
   targetUserIds: UserId;
   data: Record<string, unknown>;
 }
 export interface NotificationDelivery {
-  id: string;,
+  id: string;
   notificationId: string;
-  userId: UserId;,
+  userId: UserId;
   channel: string;
   status: 'pending' | 'sent' | 'failed' | 'read';
   sentAt?: Date;
@@ -62,7 +62,7 @@ export interface NotificationDelivery {
 export class WorkspaceNotificationSystem extends EventEmitter {
   private preferences: Map<UserId, NotificationPreferences> = new Map();
   private templates: Map<NotificationType, NotificationTemplate> = new Map();
-  private deliveryQueue: NotificationDelivery = [];
+  private deliveryQueue: NotificationDelivery[] = [];
   private digestQueue: Map<UserId, Notification> = new Map();
   private isProcessing: boolean = false;
   constructor(private dao: WorkspaceDAO) {
@@ -73,13 +73,13 @@ export class WorkspaceNotificationSystem extends EventEmitter {
     // Workspace invitation template
     this.templates.set(NotificationType.WORKSPACE_INVITE, {)
   type: NotificationType.WORKSPACE_INVITE,
-      channels: {,
+      channels: {
   in_app: {;
   subject: 'You\'ve been invited to {{workspace_name}}',
           body: '{{actor_name}} has invited you to join the {{workspace_name}} workspace.',
           metadata: { priority: 'high' }
   },
-  email: {,
+  email: {
   subject: 'Invitation to join {{workspace_name}}',
           body: `Hi {{recipient_name}},
 {{actor_name}} has invited you to join the "{{workspace_name}}" workspace.
@@ -95,12 +95,12 @@ The Team`,
     // Project invitation template
     this.templates.set(NotificationType.PROJECT_INVITE, {)
   type: NotificationType.PROJECT_INVITE,
-      channels: {,
+      channels: {
   in_app: {;
   subject: 'Invited to {{project_name}}',
           body: '{{actor_name}} invited you to collaborate on {{project_name}}.'
   },
-  email: {,
+  email: {
   subject: 'Invitation to collaborate on {{project_name}}',
           body: `Hi {{recipient_name}},
 {{actor_name}} has invited you to collaborate on the "{{project_name}}" project in the {{workspace_name}} workspace.
@@ -115,12 +115,12 @@ The Team`
     // Comment mention template
     this.templates.set(NotificationType.COMMENT_MENTION, {)
   type: NotificationType.COMMENT_MENTION,
-      channels: {,
+      channels: {
   in_app: {;
   subject: '{{actor_name}} mentioned you',
           body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.'
   },
-  email: {,
+  email: {
   subject: 'You were mentioned in {{resource_name}}',
           body: `Hi {{recipient_name}},
 {{actor_name}} mentioned you in a comment:
@@ -132,12 +132,12 @@ The Team`
     // Comment reply template
     this.templates.set(NotificationType.COMMENT_REPLY, {)
   type: NotificationType.COMMENT_REPLY,
-      channels: {,
+      channels: {
   in_app: {;
   subject: 'Reply to your comment',
           body: '{{actor_name}} replied to your comment on {{resource_name}}.'
   },
-  email: {,
+  email: {
   subject: 'New reply to your comment on {{resource_name}}',
           body: `Hi {{recipient_name}},
 {{actor_name}} replied to your comment:
@@ -149,12 +149,12 @@ The Team`
     // Resource shared template
     this.templates.set(NotificationType.RESOURCE_SHARED, {)
   type: NotificationType.RESOURCE_SHARED,
-      channels: {,
+      channels: {
   in_app: {;
   subject: '{{resource_name}} shared with you',
           body: '{{actor_name}} shared {{resource_name}} with you.'
   },
-  email: {,
+  email: {
   subject: '{{actor_name}} shared {{resource_name}} with you',
           body: `Hi {{recipient_name}},
 {{actor_name}} has shared "{{resource_name}}" with you.
@@ -169,12 +169,12 @@ The Team`
     // Role changed template
     this.templates.set(NotificationType.ROLE_CHANGED, {)
   type: NotificationType.ROLE_CHANGED,
-      channels: {,
+      channels: {
   in_app: {;
   subject: 'Your role has been updated',
           body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.'
   },
-  email: {,
+  email: {
   subject: 'Role update in {{workspace_name}}',
           body: `Hi {{recipient_name}},
 Your role in "{{workspace_name}}" has been updated from {{old_role}} to {{new_role}}.
@@ -189,12 +189,12 @@ The Team`
     // Activity digest template
     this.templates.set(NotificationType.ACTIVITY_DIGEST, {)
   type: NotificationType.ACTIVITY_DIGEST,
-      channels: {,
+      channels: {
   in_app: {;
   subject: 'Activity digest for {{workspace_name}}',
           body: 'Here\'s what happened in {{workspace_name}} since your last visit.'
   },
-  email: {,
+  email: {
   subject: 'Activity digest for {{workspace_name}}',
           body: `Hi {{recipient_name}},
 Here's a summary of recent activity in "{{workspace_name}}":
@@ -229,7 +229,7 @@ The Team`
           config: {}
       ],
       filters: [],
-      digest: {,
+      digest: {
   enabled: true,
   frequency: 'daily',
   time: '09:00',
@@ -270,7 +270,7 @@ The Team`
     const template = this.templates.get(type);
     if (!template) {
       console.error(`No template found for notification type: ${type}`);}
-      return;
+      return (
     for (const userId of context.targetUserIds) {
   // Skip self-notifications
   if (userId === context.actorUserId) continue;
@@ -279,7 +279,7 @@ The Team`
   if (!this.shouldSendNotification(type, context, preferences)) {
   continue;
   // Create notification record
-  const notification = await this.dao.createNotification({)
+  const notification = await this.dao.createNotification({
   user_id: userId,
   workspace_id: context.workspaceId,
   project_id: context.projectId,
@@ -300,7 +300,7 @@ The Team`
         } else {
           // Send immediately
           await this.queueDelivery(notification, userId, channel.type, channelTemplate, context);
-  private shouldSendNotification(type: NotificationType,)
+  private shouldSendNotification(type: NotificationType)
     context: NotificationContext,
     preferences: NotificationPreferences): boolean {,
     for (const filter of preferences.filters) {
@@ -310,7 +310,7 @@ The Team`
       if (filter.action === 'include' && !shouldInclude) {
         return false;
     return true;
-  private evaluateFilter(filter: NotificationFilter,)
+  private evaluateFilter(filter: NotificationFilter)
     type: NotificationType,
     context: NotificationContext): boolean {,
     switch (filter.type) {
@@ -335,7 +335,7 @@ The Team`
     if (!this.digestQueue.has(userId)) {
       this.digestQueue.set(userId, []);
     this.digestQueue.get(userId)!.push(notification);
-  private async queueDelivery(notification: Notification,)
+  private async queueDelivery(notification: Notification)
     userId: UserId,
     channel: string,
     _template: unknown, // Unused parameter
@@ -354,7 +354,7 @@ The Team`
     if (!this.isProcessing) {
   this.processDeliveryQueue();
   private async processDeliveryQueue(): Promise<void> {,
-  if (this.isProcessing) return;
+  if (this.isProcessing) return (
   this.isProcessing = true;
   while (this.deliveryQueue.length > 0) {
   const delivery = this.deliveryQueue.shift()!;
@@ -440,32 +440,32 @@ The Team`
   const frequency = preferences.digest.frequency;
   // Simple frequency check - in production, implement proper scheduling
   switch (frequency) {
-  case 'immediate':,
+  case 'immediate':
   return true;
-  case 'hourly':,
+  case 'hourly':
   return now.getMinutes() === 0;
-  case 'daily':,
+  case 'daily':
   return now.getHours().toString().padStart(2, '0') + ':' +,
   now.getMinutes().toString().padStart(2, '0') ===
   (preferences.digest.time || '09:00');
-  case 'weekly':,
+  case 'weekly':
   return now.getDay() === 1 && // Monday
   now.getHours().toString().padStart(2, '0') + ':' +,
   now.getMinutes().toString().padStart(2, '0') ===
   (preferences.digest.time || '09:00');
   default:,
   return false;
-  private async sendDigestForWorkspace(userId: UserId,)
+  private async sendDigestForWorkspace(userId: UserId)
   workspaceId: WorkspaceId,
   notifications: Notification): Promise<void> {,
   const context: NotificationContext = {,
   workspaceId,
   actorUserId: userId,
   targetUserIds: [userId],
-  data: {,
+  data: {
   notifications,
   count: notifications.length,
-  activities: notifications.map(n => ({,)
+  activities: notifications.map(n => ({)
   description: n.message,
   actor_name: 'User', // Would fetch from database,
   time_ago: this.getTimeAgo(n.created_at),

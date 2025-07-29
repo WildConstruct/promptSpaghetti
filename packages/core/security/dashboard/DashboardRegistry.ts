@@ -32,42 +32,42 @@ import { OperationalSecurityDashboard } from './OperationalSecurityDashboard';
 import { ComplianceSecurityDashboard } from './ComplianceSecurityDashboard';
 
 export interface DashboardTemplate {
-  id: string;,
+  id: string;
   type: DashboardType;
-  name: string;,
+  name: string;
   description: string;
-  category: 'executive' | 'operational' | 'compliance' | 'analytics' | 'custom';,
+  category: 'executive' | 'operational' | 'compliance' | 'analytics' | 'custom';
   targetRoles: SecurityRole;
   previewImage?: string;
-  config: Partial<DashboardConfig>;,
+  config: Partial<DashboardConfig>;
   requiredWidgets: string;
-  optionalWidgets: string;,
-  customization: {,
-  allowLayoutChange: boolean;,
+  optionalWidgets: string;
+  customization: {
+  allowLayoutChange: boolean;
   allowWidgetAdd: boolean;
-  allowWidgetRemove: boolean;,
+  allowWidgetRemove: boolean;
   allowThemeChange: boolean;
 };
-  metadata: {,
+  metadata: {
   version: string;
-  author: string;,
+  author: string;
   createdAt: Date;
-  updatedAt: Date;,
+  updatedAt: Date;
   tags: string;
   industryFocus?: string;
   complianceFrameworks?: string;
 };
 }
 export interface DashboardPreset {
-  id: string;,
-  name: string;
-  description: string;,
-  dashboardType: DashboardType;
-  theme: DashboardTheme;,
-  layout: 'compact' | 'standard' | 'detailed';
-  widgets: {,
   id: string;
-    type: string;,
+  name: string;
+  description: string;
+  dashboardType: DashboardType;
+  theme: DashboardTheme;
+  layout: 'compact' | 'standard' | 'detailed';
+  widgets: {
+  id: string;
+    type: string;
   position: { x: number; y: number };
     size: { width: number; height: number };
     config: Record<string, any>;
@@ -75,11 +75,11 @@ export interface DashboardPreset {
   permissions: DashboardPermissions;
 }
 export interface RegistryOptions {
-  enableCache: boolean;,
+  enableCache: boolean;
   cacheTimeout: number; // milliseconds,
-  validateConfigs: boolean;,
+  validateConfigs: boolean;
   allowCustomDashboards: boolean;
-  maxCustomDashboards: number;,
+  maxCustomDashboards: number;
   enableAuditLogging: boolean;
   /**
   * Dashboard Registry Class
@@ -118,19 +118,19 @@ export class DashboardRegistry {
   description: 'High-level security posture overview for C-level executives',
   category: 'executive',
   targetRoles: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
-  config: {,
+  config: {
   id: 'executive-default',
   type: DashboardType.EXECUTIVE,
   title: 'Executive Security Dashboard',
   description: 'Strategic security overview',
-  layout: {,
+  layout: {
   type: 'grid',
   columns: 4,
   gap: 24,
   responsive: true,
 },
   widgets: [],
-        permissions: {,
+        permissions: {
   view: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
   edit: [SecurityRole.EXECUTIVE],
   delete: [SecurityRole.EXECUTIVE],
@@ -141,7 +141,7 @@ export class DashboardRegistry {
   refreshInterval: 900000, // 15 minutes
         autoRefresh: true,
         theme: DashboardTheme.CINEMA,
-        metadata: {,
+        metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -150,14 +150,14 @@ export class DashboardRegistry {
   tags: ['executive', 'overview', 'kpi'],
   category: 'executive',
   organization: 'wild-construct',
-  compliance: {,
+  compliance: {
   frameworks: ['SOC2', 'ISO27001'],
   requirements: [],
   auditRequired: false,
   retentionPeriod: 365,
   dataResidency: ['US', 'EU'],
 },
-  usage: {,
+  usage: {
   viewCount: 0,
   lastViewed: new Date(),
   popularWidgets: [],
@@ -168,13 +168,13 @@ export class DashboardRegistry {
   },
   requiredWidgets: ['security-score', 'risk-overview', 'incident-summary'],
       optionalWidgets: ['financial-impact', 'compliance-status', 'threat-trends'],
-      customization: {,
+      customization: {
   allowLayoutChange: false,
   allowWidgetAdd: false,
   allowWidgetRemove: false,
   allowThemeChange: true,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   author: 'Security Engineering Team',
   createdAt: new Date(),
@@ -191,19 +191,19 @@ export class DashboardRegistry {
   description: 'Real-time security monitoring and incident response',
   category: 'operational',
   targetRoles: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST, SecurityRole.INCIDENT_RESPONDER],
-  config: {,
+  config: {
   id: 'operational-default',
   type: DashboardType.OPERATIONAL,
   title: 'Security Operations Dashboard',
   description: 'Real-time threat monitoring',
-  layout: {,
+  layout: {
   type: 'grid',
   columns: 6,
   gap: 16,
   responsive: true,
 },
   widgets: [],
-        permissions: {,
+        permissions: {
   view: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST, SecurityRole.INCIDENT_RESPONDER],
   edit: [SecurityRole.SECURITY_ADMIN],
   delete: [SecurityRole.SECURITY_ADMIN],
@@ -214,7 +214,7 @@ export class DashboardRegistry {
   refreshInterval: 30000, // 30 seconds
         autoRefresh: true,
         theme: DashboardTheme.DARK,
-        metadata: {,
+        metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -223,14 +223,14 @@ export class DashboardRegistry {
   tags: ['operational', 'monitoring', 'real-time'],
   category: 'operational',
   organization: 'wild-construct',
-  compliance: {,
+  compliance: {
   frameworks: ['SOC2'],
   requirements: [],
   auditRequired: true,
   retentionPeriod: 90,
   dataResidency: ['US'],
 },
-  usage: {,
+  usage: {
   viewCount: 0,
   lastViewed: new Date(),
   popularWidgets: [],
@@ -241,13 +241,13 @@ export class DashboardRegistry {
   },
   requiredWidgets: ['alert-queue', 'system-status', 'threat-intel'],
       optionalWidgets: ['network-map', 'log-analysis', 'user-activity'],
-      customization: {,
+      customization: {
   allowLayoutChange: true,
   allowWidgetAdd: true,
   allowWidgetRemove: true,
   allowThemeChange: true,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   author: 'Security Engineering Team',
   createdAt: new Date(),
@@ -264,19 +264,19 @@ export class DashboardRegistry {
   description: 'Regulatory compliance tracking and audit management',
   category: 'compliance',
   targetRoles: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR],
-  config: {,
+  config: {
   id: 'compliance-default',
   type: DashboardType.COMPLIANCE,
   title: 'Compliance Dashboard',
   description: 'Regulatory compliance monitoring',
-  layout: {,
+  layout: {
   type: 'grid',
   columns: 4,
   gap: 20,
   responsive: true,
 },
   widgets: [],
-        permissions: {,
+        permissions: {
   view: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR, SecurityRole.SECURITY_ADMIN],
   edit: [SecurityRole.COMPLIANCE_OFFICER],
   delete: [SecurityRole.SECURITY_ADMIN],
@@ -287,7 +287,7 @@ export class DashboardRegistry {
   refreshInterval: 3600000, // 1 hour
         autoRefresh: true,
         theme: DashboardTheme.LIGHT,
-        metadata: {,
+        metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -296,14 +296,14 @@ export class DashboardRegistry {
   tags: ['compliance', 'audit', 'regulatory'],
   category: 'compliance',
   organization: 'wild-construct',
-  compliance: {,
+  compliance: {
   frameworks: ['SOC2', 'ISO27001', 'GDPR', 'CCPA', 'HIPAA'],
   requirements: [],
   auditRequired: true,
   retentionPeriod: 2555, // 7 years,
   dataResidency: ['US', 'EU'],
 },
-  usage: {,
+  usage: {
   viewCount: 0,
   lastViewed: new Date(),
   popularWidgets: [],
@@ -314,13 +314,13 @@ export class DashboardRegistry {
   },
   requiredWidgets: ['compliance-score', 'framework-status', 'audit-timeline'],
       optionalWidgets: ['evidence-tracker', 'gap-analysis', 'risk-register'],
-      customization: {,
+      customization: {
   allowLayoutChange: true,
   allowWidgetAdd: true,
   allowWidgetRemove: false,
   allowThemeChange: true,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   author: 'Security Engineering Team',
   createdAt: new Date(),
@@ -347,7 +347,7 @@ export class DashboardRegistry {
         { id: 'incidents', type: 'incident-summary', position: { x: 3, y: 0 }, size: { width: 1, height: 2 }, config: {} },
         { id: 'financial', type: 'financial-impact', position: { x: 0, y: 2 }, size: { width: 4, height: 2 }, config: {} }
       ],
-      permissions: {,
+      permissions: {
   view: [SecurityRole.EXECUTIVE],
   edit: [SecurityRole.EXECUTIVE],
   delete: [SecurityRole.EXECUTIVE],
@@ -368,7 +368,7 @@ export class DashboardRegistry {
         { id: 'metrics', type: 'metrics-summary', position: { x: 4, y: 0 }, size: { width: 2, height: 2 }, config: {} },
         { id: 'system-status', type: 'system-health', position: { x: 4, y: 2 }, size: { width: 2, height: 2 }, config: {} }
       ],
-      permissions: {,
+      permissions: {
   view: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST],
   edit: [SecurityRole.SECURITY_ADMIN],
   delete: [SecurityRole.SECURITY_ADMIN],
@@ -388,14 +388,14 @@ export class DashboardRegistry {
       description: 'Circular gauge showing overall security score',
       icon: '📊',
       component: 'SecurityGaugeWidget',
-      configSchema: {,
+      configSchema: {
   type: 'object',
-        properties: {,
+        properties: {
   showTrend: { type: 'boolean', default: true },
           showBenchmark: { type: 'boolean', default: true },
-          thresholds: {,
+          thresholds: {
   type: 'object',
-            properties: {,
+            properties: {
   excellent: { type: 'number', default: 90 },
               good: { type: 'number', default: 75 },
               poor: { type: 'number', default: 50 }
@@ -408,7 +408,7 @@ export class DashboardRegistry {
       minSize: { width: 200, height: 200, resizable: true },
       maxSize: { width: 400, height: 400, resizable: true },
       defaultConfig: { showTrend: true, showBenchmark: true },
-      permissions: {,
+      permissions: {
   view: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
   configure: [SecurityRole.SECURITY_ADMIN],
   export: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
@@ -426,9 +426,9 @@ export class DashboardRegistry {
       description: 'Real-time security alert list with filtering and actions',
       icon: '🚨',
       component: 'AlertQueueWidget',
-      configSchema: {,
+      configSchema: {
   type: 'object',
-        properties: {,
+        properties: {
   maxAlerts: { type: 'number', default: 50 },
           autoRefresh: { type: 'boolean', default: true },
           refreshInterval: { type: 'number', default: 30 },
@@ -443,7 +443,7 @@ export class DashboardRegistry {
       minSize: { width: 400, height: 300, resizable: true },
       maxSize: { width: 800, height: 600, resizable: true },
       defaultConfig: { maxAlerts: 50, autoRefresh: true, refreshInterval: 30 },
-      permissions: {,
+      permissions: {
   view: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST, SecurityRole.INCIDENT_RESPONDER],
   configure: [SecurityRole.SECURITY_ADMIN],
   export: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST],
@@ -461,9 +461,9 @@ export class DashboardRegistry {
       description: 'Multi-framework compliance score visualization',
       icon: '📋',
       component: 'ComplianceScoreWidget',
-      configSchema: {,
+      configSchema: {
   type: 'object',
-        properties: {,
+        properties: {
   frameworks: { type: 'array', default: ['SOC2', 'ISO27001'] },
           showDetails: { type: 'boolean', default: true },
           colorScheme: { type: 'string', default: 'traffic-light' }
@@ -475,7 +475,7 @@ export class DashboardRegistry {
       minSize: { width: 300, height: 250, resizable: true },
       maxSize: { width: 600, height: 500, resizable: true },
       defaultConfig: { frameworks: ['SOC2', 'ISO27001'], showDetails: true },
-      permissions: {,
+      permissions: {
   view: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR, SecurityRole.EXECUTIVE],
   configure: [SecurityRole.COMPLIANCE_OFFICER],
   export: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR],
@@ -558,7 +558,7 @@ export class DashboardRegistry {
       ...overrides,
       id: overrides?.id || `${template.id}-${Date.now()}`}
 },
-  metadata: {,
+  metadata: {
   ...template.config.metadata,
   ...overrides?.metadata,
   createdAt: new Date(),
@@ -585,7 +585,7 @@ export class DashboardRegistry {
 },
   theme: preset.theme,
       permissions: preset.permissions,
-      widgets: preset.widgets.map(w => ({,)
+      widgets: preset.widgets.map(w => ({)
   id: w.id,
   type: w.type,
   category: this.widgets.get(w.type)?.category || 'METRICS' as any,
@@ -593,7 +593,7 @@ export class DashboardRegistry {
   position: w.position,
   size: w.size,
   config: w.config,
-  dataSource: {,
+  dataSource: {
   type: 'realtime' as const,
   source: 'default',
 },
@@ -604,7 +604,7 @@ export class DashboardRegistry {
   drillDown: [SecurityRole.VIEWER],
   dataAccess: ['INTERNAL' as any],
 })),
-      metadata: {,
+      metadata: {
   ...template.config.metadata,
   ...overrides?.metadata,
   createdAt: new Date(),
@@ -627,10 +627,10 @@ export class DashboardRegistry {
   /**
   * Get registry statistics
   */
-  getRegistryStats(): {,
-  dashboardCount: number;,
+  getRegistryStats(): {
+  dashboardCount: number;
   presetCount: number;
-  widgetCount: number;,
+  widgetCount: number;
   categoriesByType: Record<DashboardType, number>;
   const categoriesByType: Record<DashboardType, number> = {,
   [DashboardType.EXECUTIVE]: 0,

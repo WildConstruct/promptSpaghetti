@@ -16,50 +16,50 @@ import {
 } from '../types/DataClassification';
 
 export interface AccessControlPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   classification: DataClassificationLevel;
-  requirements: AccessRequirements;,
+  requirements: AccessRequirements;
   created: Date;
-  lastModified: Date;,
+  lastModified: Date;
   version: string;
 }
 export interface AccessRequest {
-  userId: string;,
+  userId: string;
   dataId: string;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
-  purpose: string;,
+  purpose: string;
   context: OperationContext;
   requestedAt: Date;
 }
 export interface AccessDecision {
-  granted: boolean;,
+  granted: boolean;
   reason: string;
   conditions: AccessCondition;
   expiresAt?: Date;
-  auditRequired: boolean;,
-  monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME';
-}
+  auditRequired: boolean;
+  monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME'
+  }
 export interface AccessCondition {
-  type: 'TIME_RESTRICTION' | 'PURPOSE_LIMITATION' | 'APPROVAL_REQUIRED' | 'AUDIT_LOGGING' | 'EXPORT_RESTRICTED';,
+  type: 'TIME_RESTRICTION' | 'PURPOSE_LIMITATION' | 'APPROVAL_REQUIRED' | 'AUDIT_LOGGING' | 'EXPORT_RESTRICTED';
   description: string;
   parameters: Record<string, any>;
   mandatory: boolean;
 }
 export interface UserAccessProfile {
-  userId: string;,
+  userId: string;
   roles: string;
-  clearanceLevel: DataClassificationLevel;,
+  clearanceLevel: DataClassificationLevel;
   permissions: string;
-  restrictions: AccessRestriction;,
+  restrictions: AccessRestriction;
   mfaVerified: boolean;
-  lastAuthenticationAt: Date;,
-  authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
-}
+  lastAuthenticationAt: Date;
+  authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC'
+  }
 export interface AccessRestriction {
-  type: 'TIME_BASED' | 'IP_BASED' | 'DEVICE_BASED' | 'PURPOSE_BASED';,
+  type: 'TIME_BASED' | 'IP_BASED' | 'DEVICE_BASED' | 'PURPOSE_BASED';
   description: string;
   configuration: Record<string, any>;
   active: boolean;
@@ -76,12 +76,12 @@ export class ClassificationAccessControlService {
   */
   private initializeDefaultPolicies(): void {,
   const policies: Record<DataClassificationLevel, AccessControlPolicy> = {,
-  PUBLIC: {,
+  PUBLIC: {
   id: 'policy-public',
   name: 'Public Data Access Policy',
   description: 'Standard access policy for public data',
   classification: 'PUBLIC',
-  requirements: {,
+  requirements: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: false,
   approvalWorkflow: false,
@@ -94,12 +94,12 @@ export class ClassificationAccessControlService {
         lastModified: new Date(),
         version: '1.0.0';
   },
-  INTERNAL: {,
+  INTERNAL: {
   id: 'policy-internal',
   name: 'Internal Data Access Policy',
   description: 'Access policy for internal company data',
   classification: 'INTERNAL',
-  requirements: {,
+  requirements: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: true,
   approvalWorkflow: false,
@@ -112,12 +112,12 @@ export class ClassificationAccessControlService {
         lastModified: new Date(),
         version: '1.0.0';
   },
-  CONFIDENTIAL: {,
+  CONFIDENTIAL: {
   id: 'policy-confidential',
   name: 'Confidential Data Access Policy',
   description: 'Strict access policy for confidential data',
   classification: 'CONFIDENTIAL',
-  requirements: {,
+  requirements: {
   authenticationLevel: 'MFA',
   authorizationRequired: true,
   approvalWorkflow: true,
@@ -130,12 +130,12 @@ export class ClassificationAccessControlService {
         lastModified: new Date(),
         version: '1.0.0';
   },
-  RESTRICTED: {,
+  RESTRICTED: {
   id: 'policy-restricted',
   name: 'Restricted Data Access Policy',
   description: 'Maximum security policy for restricted data',
   classification: 'RESTRICTED',
-  requirements: {,
+  requirements: {
   authenticationLevel: 'STRONG_MFA',
   authorizationRequired: true,
   approvalWorkflow: true,
@@ -163,7 +163,7 @@ export class ClassificationAccessControlService {
 },
   conditions: [],
         auditRequired: true,
-        monitoringLevel: 'ENHANCED';
+        monitoringLevel: 'ENHANCED'
   };
     const userProfile = this.userProfiles.get(request.userId);
     if (!userProfile) {
@@ -183,7 +183,7 @@ export class ClassificationAccessControlService {
 },
   conditions: [],
         auditRequired: true,
-        monitoringLevel: 'ENHANCED';
+        monitoringLevel: 'ENHANCED'
   };
     // Check user clearance level
     if (!this.hasSufficientClearance(userProfile.clearanceLevel, request.classification)) {
@@ -194,7 +194,7 @@ export class ClassificationAccessControlService {
 },
   conditions: [],
         auditRequired: true,
-        monitoringLevel: 'ENHANCED';
+        monitoringLevel: 'ENHANCED'
   };
     // Generate access conditions based on policy requirements
     const conditions = this.generateAccessConditions(policy.requirements, request);
@@ -253,7 +253,7 @@ export class ClassificationAccessControlService {
   conditions.push({)
   type: 'TIME_RESTRICTION',
   description: 'Access limited to business hours',
-  parameters: {,
+  parameters: {
   startHour: 9,
   endHour: 17,
   timezone: 'UTC',
@@ -265,7 +265,7 @@ export class ClassificationAccessControlService {
   conditions.push({)
   type: 'PURPOSE_LIMITATION',
   description: 'Access limited to stated purpose',
-  parameters: {,
+  parameters: {
   allowedPurposes: [request.purpose],
   trackUsage: true,
   validatePurpose: true,
@@ -276,7 +276,7 @@ export class ClassificationAccessControlService {
   conditions.push({)
   type: 'EXPORT_RESTRICTED',
   description: 'Export functionality restricted',
-  parameters: {,
+  parameters: {
   allowExport: false,
   watermarkRequired: true,
   downloadTracking: true,
@@ -287,7 +287,7 @@ export class ClassificationAccessControlService {
   conditions.push({)
   type: 'AUDIT_LOGGING',
   description: 'Enhanced audit logging required',
-  parameters: {,
+  parameters: {
   logLevel: requirements.auditLogging,
   includeDataAccess: true,
   realTimeAlerting: requirements.auditLogging === 'REALTIME',
@@ -338,7 +338,7 @@ export class ClassificationAccessControlService {
       classification: request.classification,
       action: request.operation,
       result: granted ? 'SUCCESS' : 'FAILURE',
-      details: {,
+      details: {
   reason,
   purpose: request.purpose,
   context: request.context,

@@ -27,9 +27,9 @@ export const tutorialStepSchema = z.object({)
   type: z.enum(['text', 'video', 'interactive', 'quiz', 'code', 'image']),
   order: z.number().min(0),
   estimatedTime: z.number().min(1).max(60), // minutes,
-  resources: z.array(z.object({,)
+  resources: z.array(z.object({)
   type: z.enum(['link', 'file', 'image', 'video']),
-  url: z.string().url().refine(url => {,)
+  url: z.string().url().refine(url => {)
   // Security: Only allow HTTPS URLs and specific domains,
   return url.startsWith('https://') &&,
   (url.includes('example.com') || url.includes('tutorials.internal'));

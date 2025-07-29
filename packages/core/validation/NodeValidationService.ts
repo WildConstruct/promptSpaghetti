@@ -18,16 +18,16 @@ export interface ValidationServiceConfig extends NodeValidationConfig {
   /** Batch size for bulk validation operations */
   batchSize: number;
   export interface ValidationServiceMetrics {
-  totalValidations: number;,
+  totalValidations: number;
   successfulValidations: number;
-  failedValidations: number;,
+  failedValidations: number;
   averageValidationTime: number;
-  securityThreatsDetected: number;,
+  securityThreatsDetected: number;
   performanceIssuesDetected: number;
   cacheHitRate: number;
 }
 export interface ValidationCacheEntry {
-  result: NodeValidationResult;,
+  result: NodeValidationResult;
   timestamp: number;
   nodeHash: string;
   /**
@@ -148,7 +148,7 @@ export class NodeValidationService extends EventEmitter {
    */
   async *validateNodeStream(nodes: AdvancedNodeData): AsyncGenerator<{,
   index: number;
-  node: AdvancedNodeData;,
+  node: AdvancedNodeData;
   result: NodeValidationResult;
 }> {
     for (let i = 0; i < nodes.length; i++) {
@@ -172,9 +172,9 @@ export class NodeValidationService extends EventEmitter {
    * Get cache statistics
    */
   getCacheStats(): {
-  size: number;,
+  size: number;
   hitRate: number;
-  oldestEntry: number;,
+  oldestEntry: number;
   newestEntry: number;
   const entries = Array.from(this.cache.values());
   const timestamps = entries.map(e => e.timestamp);
@@ -199,7 +199,7 @@ export class NodeValidationService extends EventEmitter {
   exportValidationReport(nodes: AdvancedNodeData, results: NodeValidationResult): string {
   const report = {
   timestamp: new Date().toISOString(),
-  summary: {,
+  summary: {
   totalNodes: nodes.length,
   validNodes: results.filter(r => r.valid).length,
   invalidNodes: results.filter(r => !r.valid).length,

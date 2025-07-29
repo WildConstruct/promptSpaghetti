@@ -237,7 +237,7 @@ _jsx("div", { ref: listRef, className: `drag-reorder-list ${className}`, style: 
                         marginBottom: 4,
                         background: isDragged ? 'rgba(66, 153, 225, 0.1)' : '#2d3748',
                         border: `2px solid ${isDragged ? '#4299e1' : 'transparent'}`
-                    } }), ", borderRadius: 6, cursor: disabled ? 'default' : 'grab', opacity: isDragged ? 0.5 : 1, transition: isDragged ? 'none' : 'all 0.2s ease', userSelect: 'none'; }} >", _jsx("div", { style: {
+                    } }), ", borderRadius: 6, cursor: disabled ? 'default' : 'grab', opacity: isDragged ? 0.5 : 1, transition: isDragged ? 'none' : 'all 0.2s ease', userSelect: 'none' }} >", _jsx("div", { style: {
                         width: 16,
                         height: 16,
                         marginRight: 8,

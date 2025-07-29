@@ -86,7 +86,7 @@ export interface SmoothNodeWrapperProps extends NodeProps {
   // Professional color scheme based on node type
   const getNodeColors = () => {
   const colors = {
-  'WeightedChoice': {,
+  'WeightedChoice': {
   primary: '#3b82f6',
   secondary: '#1e40af',
   accent: '#60a5fa',
@@ -122,7 +122,7 @@ export interface SmoothNodeWrapperProps extends NodeProps {
   accent: '#f87171',
   background: 'rgba(239, 68, 68, 0.1)',
 },
-  default: {,
+  default: {
   primary: '#6b7280',
   secondary: '#4b5563',
   accent: '#9ca3af',
@@ -308,7 +308,7 @@ export interface SmoothNodeWrapperProps extends NodeProps {
  */
 
 export interface NodeCreationAnimatorProps {
-  children: React.ReactNode;,
+  children: React.ReactNode;
   isCreating: boolean;
   onAnimationComplete?: () => void;
 }

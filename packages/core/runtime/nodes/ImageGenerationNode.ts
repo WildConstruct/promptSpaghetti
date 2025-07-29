@@ -16,11 +16,11 @@ export interface ImageGenerationConfig {
   defaultParameters?: Record<string, any>;
 }
 export interface ImageMetadata {
-  width: number;,
+  width: number;
   height: number;
-  format: string;,
+  format: string;
   model: string;
-  provider: string;,
+  provider: string;
   generationTime: number;
   cost: number;
   seed?: number;
@@ -85,7 +85,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       const images: GeneratedImage = result.images.map((img: unknown) => ({,)
   url: img.url,
   base64: img.base64,
-  metadata: {,
+  metadata: {
   width: img.metadata?.size?.split('x')[0] || width,
   height: img.metadata?.size?.split('x')[1] || height,
   format: 'png',
@@ -107,7 +107,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
   parameters: options,
 };
       return {
-  outputs: {,
+  outputs: {
   images,
   metadata,
   cost: totalCost,
@@ -249,16 +249,16 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
   // Simulate variation generation
   variations.push({)
   url: sourceImage, // Placeholder - would be actual variation,
-  metadata: {,
+  metadata: {
   sourceImage,
   variationPrompt,
   strength,
   index: i,
 });
       return {
-  outputs: {,
+  outputs: {
   variations,
-  metadata: {,
+  metadata: {
   sourceImage,
   variationPrompt,
   strength,
@@ -306,7 +306,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
   processedAt: new Date(),
 };
       return {
-  outputs: {,
+  outputs: {
   upscaled_image: upscaledImage,
   metadata
 },
@@ -353,7 +353,7 @@ export class ImageEditNode extends AdvancedRuntimeNode {
   processedAt: new Date(),
 };
       return {
-  outputs: {,
+  outputs: {
   edited_image: editedImage,
   metadata
 },

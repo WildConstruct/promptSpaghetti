@@ -17,24 +17,24 @@ import {
   Activity
 } from 'lucide-react';
 interface Team {
-  id: string;,
+  id: string;
   organizationId: string;
   parentTeamId?: string;
   name: string;
   description?: string;
   settings: Record<string, unknown>;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   level?: number;
   path?: string;
   interface TeamMember {
-  id: string;,
+  id: string;
   userId: string;
-  role: 'owner' | 'admin' | 'member' | 'viewer';,
+  role: 'owner' | 'admin' | 'member' | 'viewer';
   joinedAt: Date;
   invitedBy?: string;
-  user: {,
-  id: string;,
+  user: {
+  id: string;
   email: string;
   displayName?: string;
   firstName?: string;
@@ -85,7 +85,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       setLoading(true);
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams/hierarchy`, {)}
   },
-  credentials: 'include';
+  credentials: 'include'
   });
       if (!response.ok) {
         throw new Error('Failed to load teams');
@@ -103,7 +103,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
     try {
       const response = await fetch(`/api/auth/teams/${teamId}/members`, {)}
   },
-  credentials: 'include';
+  credentials: 'include'
   });
       if (!response.ok) {
         throw new Error('Failed to load team members');
@@ -117,7 +117,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -143,7 +143,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/teams/${editingTeam.id}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -168,7 +168,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/teams/${teamId}`, {)}
   },
   method: 'DELETE',
-        credentials: 'include';
+        credentials: 'include'
   });
       if (!response.ok) {
         const errorData = await response.json();
@@ -185,7 +185,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -206,7 +206,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {)}
   },
   method: 'DELETE',
-        credentials: 'include';
+        credentials: 'include'
   });
       if (!response.ok) {
         const errorData = await response.json();
@@ -221,7 +221,7 @@ export const [organizations, setOrganizations] = useState<any>([]);
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',

@@ -33,28 +33,28 @@ import {
 import type { TrustScore } from '../../types/TrustTypes';
 
 export interface UserTrustData {
-  userId: string;,
+  userId: string;
   userName: string;
-  email: string;,
+  email: string;
   userType: 'creator' | 'buyer' | 'both';
-  trustScore: TrustScore;,
-  verificationStatus: {,
-  email: boolean;,
+  trustScore: TrustScore;
+  verificationStatus: {
+  email: boolean;
   phone: boolean;
-  identity: boolean;,
+  identity: boolean;
   professional: boolean;
 };
-  accountStatus: 'active' | 'suspended' | 'under_review';,
+  accountStatus: 'active' | 'suspended' | 'under_review';
   lastActivity: Date;
-  joinDate: Date;,
+  joinDate: Date;
   riskFlags: string;
 }
 export interface TrustScoreAdjustment {
-  userId: string;,
+  userId: string;
   adjustmentType: 'manual_override' | 'penalty' | 'bonus' | 'reset';
-  scoreChange: number;,
+  scoreChange: number;
   reason: string;
-  adminId: string;,
+  adminId: string;
   timestamp: Date;
   expiresAt?: Date;
 }
@@ -81,7 +81,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   userName: 'John Director',
   email: 'john@example.com',
   userType: 'creator',
-  trustScore: {,
+  trustScore: {
   score: 92,
   grade: 'A',
   status: 'excellent',
@@ -89,7 +89,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   version: '1.0',
   confidence: 95,
 },
-  verificationStatus: {,
+  verificationStatus: {
   email: true,
   phone: true,
   identity: true,
@@ -105,7 +105,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   userName: 'Sarah Producer',
   email: 'sarah@example.com',
   userType: 'creator',
-  trustScore: {,
+  trustScore: {
   score: 45,
   grade: 'D',
   status: 'warning',
@@ -113,7 +113,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   version: '1.0',
   confidence: 70,
 },
-  verificationStatus: {,
+  verificationStatus: {
   email: true,
   phone: false,
   identity: false,
@@ -161,7 +161,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   const newScore = Math.max(0, Math.min(100, user.trustScore.score + adjustmentData.scoreChange!));
   return {
   ...user,
-  trustScore: {,
+  trustScore: {
   ...user.trustScore,
   score: newScore,
   grade: getGradeFromScore(newScore),
@@ -192,14 +192,14 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
     if (score >= 73) return 'C+';
     if (score >= 67) return 'C';
     if (score >= 60) return 'D';
-    return 'F';
+    return 'F'
   };
   const getStatusFromScore = (score: number): TrustScore['status'] => {
     if (score >= 90) return 'excellent';
     if (score >= 80) return 'good';
     if (score >= 70) return 'fair';
     if (score >= 60) return 'warning';
-    return 'critical';
+    return 'critical'
   };
   const filteredUsers = userTrustData.filter(user => {)
   const matchesSearch = searchTerm === '' || ;
@@ -537,38 +537,38 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       </div>
       <style>{`
         .trust-score-manager {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1.5rem;
         .manager-layout {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
         .users-section {
           display: flex;
           flex-direction: column;
         .details-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .list-header {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .list-controls {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
         .search-bar {
-          position: relative;,
+          position: relative;
   flex: 1;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
-          top: 50%;,
+          top: 50%;
   transform: translateY(-50%);
           z-index: 1;
         .search-input {
-          width: 100%;,
+          width: 100%;
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -578,29 +578,29 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .filter-select {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   background: white;
           min-width: 150px;
         .users-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
           max-height: 600px;
           overflow-y: auto;
         .user-item {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   cursor: pointer;
           transition: all 0.2s ease;
         .user-item:hover {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #f8fafc;
         .user-item.selected {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #eff6ff;
         .user-header {
           display: flex;
@@ -609,16 +609,16 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           margin-bottom: 0.75rem;
         .user-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .user-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .user-email {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .user-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .user-metrics {
           display: flex;
@@ -626,37 +626,37 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           align-items: center;
         .trust-score-display {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .score-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .score-value {
           font-weight: 600;
         .score-grade {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .verification-indicators {
-          display: flex;,
+          display: flex;
   gap: 0.25rem;
         .risk-flags {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-top: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #dc2626;
         .user-details-placeholder {
-          height: 400px;,
+          height: 400px;
   display: flex;
           align-items: center;
           justify-content: center;
         .placeholder-content {
-          text-align: center;,
+          text-align: center;
   color: #6b7280;
         .user-details-panel {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .profile-header {
           display: flex;
@@ -664,7 +664,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           align-items: center;
         .profile-info h3 {
           font-size: 1.25rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .profile-info p {
@@ -675,36 +675,36 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
         .score-display {
           display: flex;
           align-items: baseline;
-          justify-content: center;,
+          justify-content: center;
   gap: 0.25rem;
         .score-number {
           font-size: 2rem;
           font-weight: 700;
         .score-max {
-          font-size: 1rem;,
+          font-size: 1rem;
   color: #9ca3af;
         .score-grade {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #6b7280;
           margin-top: 0.25rem;
         .profile-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
           margin-bottom: 1.5rem;
         .detail-item {
           display: flex;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         .detail-label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .detail-value {
           color: #1f2937;
         .verification-status h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
         .verification-grid {
@@ -713,24 +713,24 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           gap: 0.5rem;
         .verification-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           padding: 0.5rem;
           border-radius: 6px;
           font-size: 0.875rem;
         .verification-item.verified {
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #065f46;
         .verification-item.unverified {
-          background: #fee2e2;,
+          background: #fee2e2;
   color: #991b1b;
         .risk-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 1.5rem 0 0.75rem 0;
         .risk-flags-list {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .adjustment-header {
           display: flex;
@@ -738,17 +738,17 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           align-items: center;
         .adjustment-form {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .form-group label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .form-select, .form-input, .form-textarea {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -757,15 +757,15 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .form-helper {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .adjustment-preview {
-          background: #f9fafb;,
+          background: #f9fafb;
   border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 1rem;
         .adjustment-preview h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
         .preview-item {
@@ -783,16 +783,16 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   background: #047857;
           border-color: #047857;
         .adjustment-info {
-          text-align: center;,
+          text-align: center;
   padding: 2rem;
         .info-message {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
-          text-align: left;,
+          text-align: left;
   background: #eff6ff;
           border: 1px solid #bfdbfe;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 1rem;
         @media (max-width: 1200px) {
           .manager-layout {
@@ -803,7 +803,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           .search-bar {
             order: 2;
           .profile-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .verification-grid {

@@ -7,9 +7,9 @@ import { getNodeCategories, getCategoryById } from './NodeCategory';
  */
 
 export interface SearchResult {
-  node: NodeMeta;,
+  node: NodeMeta;
   relevance: number;
-  matchedFields: string;,
+  matchedFields: string;
   categories: string;
   /**
   * Search options configuration
@@ -241,7 +241,7 @@ interface SearchIndex {
  * Term information in search index
  */
 interface TermInfo {
-  frequency: number;,
+  frequency: number;
   nodes: Set<string>;
 /**
  * Utility function to highlight search terms in text

@@ -8,7 +8,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 export interface UserPreferenceLearningSystemProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   learningConfig: PreferenceLearningConfig;
   modelingConfig: PreferenceModelingConfig;
   onModelUpdate?: (model: PreferenceModel) => void;
@@ -16,47 +16,47 @@ export interface UserPreferenceLearningSystemProps {
   onExport?: (data: PreferenceLearningExportData) => void;
 }
 export interface PreferenceLearningConfig {
-  algorithms: LearningAlgorithm;,
+  algorithms: LearningAlgorithm;
   dataCollection: DataCollectionSettings;
-  realTimeUpdates: boolean;,
+  realTimeUpdates: boolean;
   privacySettings: PrivacySettings;
   modelValidation: ValidationSettings;
 }
 export interface PreferenceModelingConfig {
-  modelTypes: ModelType;,
+  modelTypes: ModelType;
   features: ModelFeature;
-  training: TrainingSettings;,
+  training: TrainingSettings;
   deployment: ModelDeploymentSettings;
   monitoring: ModelMonitoringSettings;
   // Core data structures
 }
 export interface UserPreferenceProfile {
-  userId: string;,
+  userId: string;
   preferenceVector: PreferenceVector;
-  learningHistory: LearningEvent;,
+  learningHistory: LearningEvent;
   modelPredictions: ModelPrediction;
-  confidenceMetrics: ConfidenceMetrics;,
+  confidenceMetrics: ConfidenceMetrics;
   lastUpdated: number;
 }
 export interface PreferenceVector {
-  dimensions: PreferenceDimension;,
+  dimensions: PreferenceDimension;
   embeddings: number;
-  weights: number;,
+  weights: number;
   uncertainty: number;
 }
 export interface PreferenceDimension {
-  dimension: string;,
+  dimension: string;
   value: number;
-  confidence: number;,
+  confidence: number;
   evidence: Evidence;
   temporal: TemporalPattern;
 }
 export interface LearningEvent {
-  eventId: string;,
+  eventId: string;
   timestamp: number;
-  type: LearningEventType;,
+  type: LearningEventType;
   data: Record<string, unknown>;
-  impact: LearningImpact;,
+  impact: LearningImpact;
   modelVersion: string;
 }
 export type LearningEventType = 
@@ -67,11 +67,11 @@ export type LearningEventType =
   | 'social_signal';
 
 export interface PreferenceModel {
-  modelId: string;,
+  modelId: string;
   version: string;
-  type: ModelType;,
+  type: ModelType;
   architecture: ModelArchitecture;
-  performance: ModelPerformance;,
+  performance: ModelPerformance;
   features: ModelFeature;
   training: TrainingMetadata;
 }
@@ -86,14 +86,14 @@ export type ModelType =
 const generateUserPreferenceProfile = (): UserPreferenceProfile => ({)
   userId: `user_${Math.random().toString(36).substr(2, 8)}`}
 },
-  preferenceVector: {,
+  preferenceVector: {
   dimensions: [,
   {
   dimension: 'content_complexity',
   value: Math.random(),
   confidence: Math.random() * 0.3 + 0.7,
   evidence: [],
-  temporal: {,
+  temporal: {
   trend: Math.random() > 0.5 ? 'increasing' : 'stable',
   seasonality: Math.random() > 0.7,
   changePoints: [],
@@ -103,7 +103,7 @@ const generateUserPreferenceProfile = (): UserPreferenceProfile => ({)
         value: Math.random(),
         confidence: Math.random() * 0.3 + 0.7,
         evidence: [],
-        temporal: {,
+        temporal: {
   trend: Math.random() > 0.5 ? 'decreasing' : 'stable',
           seasonality: Math.random() > 0.7,
           changePoints: []],
@@ -113,9 +113,9 @@ const generateUserPreferenceProfile = (): UserPreferenceProfile => ({)
   },
   learningHistory: [],
   modelPredictions: [],
-  confidenceMetrics: {,
+  confidenceMetrics: {
   overall: Math.random() * 0.3 + 0.7,
-  byDimension: {,
+  byDimension: {
   'content_complexity': Math.random() * 0.3 + 0.7,
   'visual_style': Math.random() * 0.3 + 0.7,
 },
@@ -129,13 +129,13 @@ const generatePreferenceModel = (): PreferenceModel => ({)
   version: `v${Math.floor(Math.random() * 10) + 1}.${Math.floor(Math.random() * 10)}.0`}
 },
   type: ['collaborative_filtering', 'content_based', 'deep_learning', 'hybrid'][Math.floor(Math.random() * 4)] as ModelType,
-  architecture: {,
+  architecture: {
   layers: Math.floor(Math.random() * 5) + 3,
   parameters: Math.floor(Math.random() * 1000000) + 100000,
   inputDimensions: Math.floor(Math.random() * 100) + 50,
   outputDimensions: Math.floor(Math.random() * 50) + 10,
 },
-  performance: {,
+  performance: {
   accuracy: Math.random() * 0.2 + 0.8,
   precision: Math.random() * 0.2 + 0.8,
   recall: Math.random() * 0.2 + 0.75,
@@ -144,7 +144,7 @@ const generatePreferenceModel = (): PreferenceModel => ({)
   auc: Math.random() * 0.1 + 0.9,
 },
   features: [],
-  training: {,
+  training: {
   trainingTime: Math.floor(Math.random() * 24) + 1,
   datasetSize: Math.floor(Math.random() * 1000000) + 100000,
   epochs: Math.floor(Math.random() * 100) + 10,
@@ -199,7 +199,7 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
   const exportData: PreferenceLearningExportData = {,
   userProfiles: userProfiles.slice(0, 50), // Limit for export,
   models,
-  learningMetrics: {,
+  learningMetrics: {
   totalUsers: userProfiles.length,
   averageConfidence: userProfiles.reduce(),
   (sum)
@@ -486,117 +486,117 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
 // Supporting interfaces (condensed)
 
 export interface LearningAlgorithm {
-  algorithmId: string;,
+  algorithmId: string;
   name: string;
-  type: 'supervised' | 'unsupervised' | 'reinforcement';,
+  type: 'supervised' | 'unsupervised' | 'reinforcement';
   parameters: Record<string, any>;
 }
 export interface DataCollectionSettings {
-  sources: string;,
+  sources: string;
   frequency: number;
-  batchSize: number;,
+  batchSize: number;
   qualityThreshold: number;
 }
 export interface PrivacySettings {
-  anonymization: boolean;,
+  anonymization: boolean;
   consentRequired: boolean;
-  dataRetention: number;,
+  dataRetention: number;
   rightToForgotten: boolean;
 }
 export interface ValidationSettings {
-  crossValidation: boolean;,
+  crossValidation: boolean;
   testSplit: number;
-  validationMetrics: string;,
+  validationMetrics: string;
   minimumAccuracy: number;
 }
 export interface ModelFeature {
-  featureId: string;,
+  featureId: string;
   name: string;
-  type: 'numerical' | 'categorical' | 'embedding';,
+  type: 'numerical' | 'categorical' | 'embedding';
   importance: number;
 }
 export interface TrainingSettings {
-  batchSize: number;,
+  batchSize: number;
   epochs: number;
-  learningRate: number;,
+  learningRate: number;
   optimizer: string;
   regularization: number;
 }
 export interface ModelDeploymentSettings {
-  environment: 'staging' | 'production';,
+  environment: 'staging' | 'production';
   rolloutStrategy: 'blue_green' | 'canary' | 'rolling';
   monitoringEnabled: boolean;
 }
 export interface ModelMonitoringSettings {
-  metrics: string;,
+  metrics: string;
   alertThresholds: Record<string, number>;
   reportingFrequency: number;
 }
 export interface Evidence {
-  type: string;,
+  type: string;
   value: Error;
-  timestamp: number;,
+  timestamp: number;
   weight: number;
 }
 export interface TemporalPattern {
-  trend: 'increasing' | 'decreasing' | 'stable';,
+  trend: 'increasing' | 'decreasing' | 'stable';
   seasonality: boolean;
   changePoints: number;
 }
 export interface LearningImpact {
-  magnitude: number;,
+  magnitude: number;
   direction: 'positive' | 'negative';
-  confidence: number;,
+  confidence: number;
   duration: number;
 }
 export interface ModelArchitecture {
-  layers: number;,
+  layers: number;
   parameters: number;
-  inputDimensions: number;,
+  inputDimensions: number;
   outputDimensions: number;
 }
 export interface ModelPerformance {
-  accuracy: number;,
+  accuracy: number;
   precision: number;
-  recall: number;,
+  recall: number;
   f1Score: number;
-  ndcg: number;,
+  ndcg: number;
   auc: number;
 }
 export interface TrainingMetadata {
   trainingTime: number; // hours,
-  datasetSize: number;,
+  datasetSize: number;
   epochs: number;
-  convergence: boolean;,
+  convergence: boolean;
   lastTrained: number;
 }
 export interface ModelPrediction {
-  predictionId: string;,
+  predictionId: string;
   timestamp: number;
-  prediction: unknown;,
+  prediction: unknown;
   confidence: number;
   actual?: unknown;
 }
 export interface ConfidenceMetrics {
-  overall: number;,
+  overall: number;
   byDimension: Record<string, number>;
   temporal: number;
 }
 export interface LearningInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  message: string;,
+  message: string;
   confidence: number;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   recommendations: string;
 }
 export interface PreferenceLearningExportData {
-  userProfiles: UserPreferenceProfile;,
+  userProfiles: UserPreferenceProfile;
   models: PreferenceModel;
-  learningMetrics: {,
-  totalUsers: number;,
+  learningMetrics: {
+  totalUsers: number;
   averageConfidence: number;
-  bestModel: PreferenceModel;,
+  bestModel: PreferenceModel;
   learningRate: number;
 };
   exportTimestamp: number;

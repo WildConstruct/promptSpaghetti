@@ -367,7 +367,8 @@ export class ExtensionManifestParser {
                                                     enabled: true,
                                                 },
                                                 // Add type-specific configurations
-                                                switch(options) { }, : .extensionType } }, { case: , 'node': , template, runtime = {
+                                                switch(options) { }, : .extensionType
+                                            } }, { case: , 'node': , template, runtime = {
                                             node_types: options.nodeTypes || [],
                                         } };
                                         break;

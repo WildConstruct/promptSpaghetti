@@ -396,7 +396,7 @@ else {
         --embed-font-family: ${typography.fontFamily.primary};}
         --embed-font-size: ${typography.fontSize.base};}
       .embed-content {
-        background-color: var(--embed-background);,
+        background-color: var(--embed-background);
   color: var(--embed-text);
         font-family: var(--embed-font-family);
         font-size: var(--embed-font-size);
@@ -950,7 +950,16 @@ else {
                                                                             };
                                                                         }
                                                                     }
-                                                                } } } } } } } } } }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         };
                     }
                 }

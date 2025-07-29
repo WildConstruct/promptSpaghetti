@@ -42,143 +42,132 @@ const loadDashboardData = useCallback(async () => {
                     startTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
                     assignedTo: 'admin-user-1',
                     playbooks: ['feature-toggle-recovery'],
-                    businessImpact: {},
-                    severity: 'high',
-                    affectedUsers: 15000,
-                    revenueImpact: 50000,
-                    reputationRisk: 'medium',
-                    complianceRisk: 'low',
-                    description: 'Feature toggles not responding, affecting user experience',
+                    businessImpact: {
+                        severity: 'high',
+                        affectedUsers: 15000,
+                        revenueImpact: 50000,
+                        reputationRisk: 'medium',
+                        complianceRisk: 'low',
+                        description: 'Feature toggles not responding, affecting user experience',
+                    },
+                    userImpact: {
+                        adminUsers: { affected: true, count: 25, impactType: 'degraded_performance', severity: 'high', estimatedDuration: 60 },
+                        regularUsers: { affected: true, count: 15000, impactType: 'limited_functionality', severity: 'medium', estimatedDuration: 30 },
+                        externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
+                        systemUsers: { affected: true, count: 5, impactType: 'service_unavailable', severity: 'high', estimatedDuration: 45 }
+                    },
+                    timeline: [,
+                        {
+                            timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                            type: 'created',
+                            description: 'Incident created due to health check failure',
+                            userId: 'system',
+                        },
+                        {
+                            timestamp: new Date(Date.now() - 110 * 60 * 1000),
+                            type: 'playbook_executed',
+                            description: 'Feature Toggle Recovery playbook executed',
+                            userId: 'system'
+                        }],
+                }
+            ],
+            playbookExecutions: [,
+                {
+                    executionId: 'EX-001',
+                    playbookId: 'feature-toggle-recovery',
+                    playbookName: 'Feature Toggle Emergency Recovery',
+                    category: 'feature_toggle_emergency',
+                    status: 'completed',
+                    progress: 100,
+                    startTime: new Date(Date.now() - 110 * 60 * 1000),
+                    endTime: new Date(Date.now() - 95 * 60 * 1000),
+                    triggeredBy: 'health-check-system',
+                    affectedSystems: ['feature_management']
+                }],
+            systemHealth: [,
+                {
+                    system: 'feature_management',
+                    status: 'degraded',
+                    lastCheck: new Date(),
+                    uptime: 98.5,
+                    responseTime: 450,
+                    errorRate: 2.3,
+                    alertCount: 3,
+                    healthScore: 75,
                 },
-                userImpact, {},
-                adminUsers, { affected: true, count: 25, impactType: 'degraded_performance', severity: 'high', estimatedDuration: 60 },
-                regularUsers, { affected: true, count: 15000, impactType: 'limited_functionality', severity: 'medium', estimatedDuration: 30 },
-                externalUsers, { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
-                systemUsers, { affected: true, count: 5, impactType: 'service_unavailable', severity: 'high', estimatedDuration: 45 }]
-        }, timeline;
+                {
+                    system: 'content_management',
+                    status: 'healthy',
+                    lastCheck: new Date(),
+                    uptime: 99.9,
+                    responseTime: 120,
+                    errorRate: 0.1,
+                    alertCount: 0,
+                    healthScore: 98,
+                },
+                {
+                    system: 'user_permission_management',
+                    status: 'healthy',
+                    lastCheck: new Date(),
+                    uptime: 99.7,
+                    responseTime: 85,
+                    errorRate: 0.2,
+                    alertCount: 1,
+                    healthScore: 95
+                }],
+            alertsSummary: {
+                total: 12,
+                critical: 1,
+                high: 3,
+                medium: 5,
+                low: 3,
+                recent: [,
+                    {
+                        id: 'ALT-001',
+                        title: 'Feature toggle response time exceeded',
+                        severity: 'high',
+                        system: 'feature_management',
+                        timestamp: new Date(Date.now() - 30 * 60 * 1000),
+                        acknowledged: true,
+                        playbookTriggered: true
+                    }],
+                trends: [,
+                    {
+                        system: 'feature_management',
+                        count: 8,
+                        trend: 'increasing',
+                        severity: 'high'
+                    }]
+            },
+            performanceMetrics: {
+                mttr: 15.5,
+                mtbf: 168,
+                playbookSuccessRate: 92,
+                automatedResolutionRate: 78,
+                escalationRate: 12,
+                userSatisfactionScore: 4.2,
+            },
+            recentActivity: [,
+                {
+                    id: 'ACT-001',
+                    timestamp: new Date(Date.now() - 15 * 60 * 1000),
+                    type: 'playbook_execution',
+                    description: 'Feature Toggle Recovery playbook completed successfully',
+                    severity: 'medium',
+                    system: 'feature_management',
+                    userId: 'system'
+                }]
+        };
+        setDashboardState(mockDashboardState);
     }
-    finally { }
-}), type, description, userId;
-{
-    timestamp: new Date(Date.now() - 110 * 60 * 1000),
-        type;
-    'playbook_executed',
-        description;
-    'Feature Toggle Recovery playbook executed',
-        userId;
-    'system';
-    playbookExecutions: [,
-        {
-            executionId: 'EX-001',
-            playbookId: 'feature-toggle-recovery',
-            playbookName: 'Feature Toggle Emergency Recovery',
-            category: 'feature_toggle_emergency',
-            status: 'completed',
-            progress: 100,
-            startTime: new Date(Date.now() - 110 * 60 * 1000),
-            endTime: new Date(Date.now() - 95 * 60 * 1000),
-            triggeredBy: 'health-check-system',
-            affectedSystems: ['feature_management']
-        }],
-        systemHealth;
-    [,
-        {
-            system: 'feature_management',
-            status: 'degraded',
-            lastCheck: new Date(),
-            uptime: 98.5,
-            responseTime: 450,
-            errorRate: 2.3,
-            alertCount: 3,
-            healthScore: 75,
-        },
-        {
-            system: 'content_management',
-            status: 'healthy',
-            lastCheck: new Date(),
-            uptime: 99.9,
-            responseTime: 120,
-            errorRate: 0.1,
-            alertCount: 0,
-            healthScore: 98,
-        },
-        {
-            system: 'user_permission_management',
-            status: 'healthy',
-            lastCheck: new Date(),
-            uptime: 99.7,
-            responseTime: 85,
-            errorRate: 0.2,
-            alertCount: 1,
-            healthScore: 95
-        }],
-        alertsSummary;
-    {
-        total: 12,
-            critical;
-        1,
-            high;
-        3,
-            medium;
-        5,
-            low;
-        3,
-            recent;
-        [,
-            {
-                id: 'ALT-001',
-                title: 'Feature toggle response time exceeded',
-                severity: 'high',
-                system: 'feature_management',
-                timestamp: new Date(Date.now() - 30 * 60 * 1000),
-                acknowledged: true,
-                playbookTriggered: true
-            }],
-            trends;
-        [,
-            {
-                system: 'feature_management',
-                count: 8,
-                trend: 'increasing',
-                severity: 'high'
-            }];
+    catch (error) {
+        console.error('Failed to load dashboard data:', error);
     }
-    performanceMetrics: {
-        mttr: 15.5,
-            mtbf;
-        168,
-            playbookSuccessRate;
-        92,
-            automatedResolutionRate;
-        78,
-            escalationRate;
-        12,
-            userSatisfactionScore;
-        4.2,
-        ;
+    finally {
+        setLoading(false);
     }
-    recentActivity: [,
-        {
-            id: 'ACT-001',
-            timestamp: new Date(Date.now() - 15 * 60 * 1000),
-            type: 'playbook_execution',
-            description: 'Feature Toggle Recovery playbook completed successfully',
-            severity: 'medium',
-            system: 'feature_management',
-            userId: 'system'
-        }];
-}
-;
-setDashboardState(mockDashboardState);
-try { }
-catch (error) {
-    console.error('Failed to load dashboard data:', error);
-}
-finally {
-    setLoading(false);
-}
-[];
-;
+    [];
+});
 const refreshDashboard = useCallback(async () => {
     setRefreshing(true);
     await loadDashboardData();

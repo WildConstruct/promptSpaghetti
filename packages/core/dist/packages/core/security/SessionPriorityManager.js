@@ -197,8 +197,7 @@ export var SessionPriority;
                                             return this.evictOldestSession(conflict.affectedSessions);
                                         case ConflictResolution.EVICT_LOWEST_PRIORITY:
                                             return this.evictLowestPrioritySession(conflict.affectedSessions);
-                                        case ConflictResolution.PROMPT_USER:
-                                            return this.offerUserChoice(conflict);
+                                        case ConflictResolution.PROMPT_USER: return this.offerUserChoice(conflict);
                                         default:
                                             return this.applyEvictionPolicy(conflict.affectedSessions);
                                             evictSession(sessionId, string);

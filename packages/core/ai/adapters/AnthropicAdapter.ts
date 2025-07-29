@@ -36,29 +36,29 @@ export interface AnthropicRequestOptions {
   tool_choice?: { type: 'auto' | 'any' | 'tool', name?: string };
 }
 export interface ClaudeMessage {
-  role: 'user' | 'assistant';,
+  role: 'user' | 'assistant';
   content: string | Array<{,
   type: 'text' | 'image';
   text?: string;
-  source?: {,
-  type: 'base64';,
+  source?: {
+  type: 'base64';
   media_type: string;
   data: string;
 };
   }>;
 }
 export interface AnthropicResponse {
-  id: string;,
+  id: string;
   type: 'message';
-  role: 'assistant';,
+  role: 'assistant';
   content: Array<{,
-  type: 'text';,
+  type: 'text';
   text: string;
 }>;
-  model: string;,
+  model: string;
   stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
   stop_sequence?: string;
-  usage: {,
+  usage: {
   input_tokens: number;
   output_tokens: number;
 };
@@ -77,7 +77,7 @@ export class AnthropicAdapter extends BaseAIModel {
       costPerToken: AnthropicAdapter.getModelCostPerToken(modelName),
       averageLatency: AnthropicAdapter.getModelAverageLatency(modelName),
       maxConcurrency: 20,
-      rateLimit: {,
+      rateLimit: {
   requestsPerMinute: 1000,
   tokensPerMinute: 80000,
 },
@@ -92,7 +92,7 @@ export class AnthropicAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: true,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   temperature: { type: 'number', min: 0, max: 1, default: 1 },
         max_tokens: { type: 'number', min: 1, max: 4096, default: 1000 },
         top_p: { type: 'number', min: 0, max: 1, default: 1 },
@@ -153,7 +153,7 @@ export class AnthropicAdapter extends BaseAIModel {
   estimatedCost: inputCost + outputCost,
   currency: 'USD',
   confidence: 0.85,
-  breakdown: {,
+  breakdown: {
   inputCost,
   outputCost,
   processingCost: 0,
@@ -198,7 +198,7 @@ export class AnthropicAdapter extends BaseAIModel {
       const response = await fetch(`${this.apiEndpoint}/v1/messages`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'x-api-key': this.config.apiKey,
   'content-type': 'application/json',
   'anthropic-version': '2023-06-01',
@@ -213,7 +213,7 @@ export class AnthropicAdapter extends BaseAIModel {
     const url = `${this.apiEndpoint}${endpoint}`;}
     const response = await fetch(url, {)
   method: 'POST',
-  headers: {,
+  headers: {
   'x-api-key': this.config.apiKey,
   'content-type': 'application/json',
   'anthropic-version': '2023-06-01',

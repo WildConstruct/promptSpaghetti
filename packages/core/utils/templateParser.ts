@@ -11,29 +11,29 @@ export interface ExtractedVariable {
   defaultValue?: string; // Default value based on type inference
 }
 export interface TemplateParseResult {
-  variables: ExtractedVariable;,
+  variables: ExtractedVariable;
   errors: TemplateError;
-  isValid: boolean;,
+  isValid: boolean;
   processedTemplate: string;  // Template with highlighted variables,
 }
 export interface TemplateError {
-  type: 'unclosed_brace' | 'empty_variable' | 'invalid_name' | 'nested_braces';,
+  type: 'unclosed_brace' | 'empty_variable' | 'invalid_name' | 'nested_braces';
   message: string;
-  position: number;,
-  severity: 'error' | 'warning';
-}
+  position: number;
+  severity: 'error' | 'warning'
+  }
 export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'auto';
 
 export interface VariableTypeInference {
-  type: VariableType;,
+  type: VariableType;
   confidence: number; // 0-1, how confident we are about this inference,
   reason: string; // Human-readable explanation,
   defaultValue: string; // Suggested default value,
 }
 export interface VariableSuggestion {
-  name: string;,
+  name: string;
   category: 'character' | 'setting' | 'action' | 'mood' | 'object' | 'cinematic' | 'temporal' | 'descriptive' | 'narrative' | 'custom';
-  description: string;,
+  description: string;
   examples: string;
   priority?: number; // For ranking suggestions (1-10, 10 = highest),
   nodeTypes?: string; // Specific node types where this suggestion is most relevant,
@@ -528,7 +528,7 @@ class TemplateParser {
   type: 'unclosed_brace',
         message: 'Unclosed brace - missing closing }',
         position: lastOpenBrace,
-        severity: 'error';
+        severity: 'error'
   });
   private findNestedBraces(template: string, errors: TemplateError): void {
   let braceDepth = 0;
@@ -564,7 +564,7 @@ class TemplateParser {
         confidence: 0.8,
         reason: `"${variableName}" suggests a numeric value`}
 },
-  defaultValue: '1';
+  defaultValue: '1'
   };
     // Boolean patterns
     if (name.startsWith('is') || name.startsWith('has') || name.startsWith('can') ||
@@ -576,7 +576,7 @@ class TemplateParser {
         confidence: 0.9,
         reason: `"${variableName}" suggests a true/false value`}
 },
-  defaultValue: 'true';
+  defaultValue: 'true'
   };
     // Array/List patterns
     if (name.includes('list') || name.includes('items') || name.includes('options') ||
@@ -610,7 +610,7 @@ class TemplateParser {
           confidence: 0.6,
           reason: `Context "${context}" suggests numeric values`}
 },
-  defaultValue: '1';
+  defaultValue: '1'
   };
       if (contextLower.includes('list') || contextLower.includes('array') || contextLower.includes('multiple')) {
         return {

@@ -24,7 +24,7 @@ const demoAuthors: ArticleAuthor = [
   email: 'sarah.chen@example.com',
   role: 'admin',
   bio: 'AI researcher and prompt engineering expert with 10+ years of experience.',
-  socialLinks: {,
+  socialLinks: {
   twitter: 'https://twitter.com/sarahchen',
   linkedin: 'https://linkedin.com/in/sarahchen',
 }
@@ -34,7 +34,7 @@ const demoAuthors: ArticleAuthor = [
   email: 'marcus.r@example.com',
   role: 'editor',
   bio: 'Technical writer specializing in AI and machine learning documentation.',
-  socialLinks: {,
+  socialLinks: {
   github: 'https://github.com/marcusr',
 }
   {
@@ -148,12 +148,12 @@ const demoAuthors: ArticleAuthor = [
   difficulty: 'beginner',
   featured: true,
   relatedArticles: ['article-2', 'article-3'],
-  seo: {,
+  seo: {
   metaTitle: 'Getting Started with Prompt Engineering - Complete Beginner Guide',
   metaDescription: 'Learn prompt engineering fundamentals with this comprehensive guide. Perfect for beginners looking to master AI prompts.',
   keywords: ['prompt engineering', 'AI prompts', 'beginner guide', 'getting started'],
 },
-  analytics: {,
+  analytics: {
   averageRating: 4.7,
   ratingCount: 124,
   completionRate: 78,
@@ -180,12 +180,12 @@ const demoAuthors: ArticleAuthor = [
   readTime: 12,
   difficulty: 'advanced',
   featured: true,
-  seo: {,
+  seo: {
   metaTitle: 'Advanced Template Optimization Techniques',
   metaDescription: 'Master advanced prompt template optimization with proven techniques for better performance.',
   keywords: ['template optimization', 'advanced prompts', 'performance tuning'],
 },
-  analytics: {,
+  analytics: {
   averageRating: 4.5,
   ratingCount: 76,
   completionRate: 65,
@@ -212,12 +212,12 @@ const demoAuthors: ArticleAuthor = [
   readTime: 10,
   difficulty: 'intermediate',
   featured: false,
-  seo: {,
+  seo: {
   metaTitle: 'Marketplace Success Strategies for Template Creators',
   metaDescription: 'Learn proven strategies for selling templates and building a successful marketplace presence.',
   keywords: ['marketplace success', 'template selling', 'creator strategies'],
 },
-  analytics: {,
+  analytics: {
   averageRating: 4.3,
   ratingCount: 52,
   completionRate: 72,
@@ -244,12 +244,12 @@ const demoAuthors: ArticleAuthor = [
   readTime: 15,
   difficulty: 'beginner',
   featured: false,
-  seo: {,
+  seo: {
   metaTitle: 'Building Your First Template - Step by Step Guide',
   metaDescription: 'Create your first prompt template with this comprehensive step-by-step tutorial.',
   keywords: ['template creation', 'first template', 'beginner tutorial'],
 },
-  analytics: {,
+  analytics: {
   averageRating: 4.6,
   ratingCount: 98,
   completionRate: 81,
@@ -276,12 +276,12 @@ const demoAuthors: ArticleAuthor = [
   readTime: 7,
   difficulty: 'intermediate',
   featured: false,
-  seo: {,
+  seo: {
   metaTitle: 'Common Prompt Engineering Mistakes to Avoid',
   metaDescription: 'Avoid these common prompt engineering mistakes and improve your results.',
   keywords: ['prompt mistakes', 'common errors', 'troubleshooting prompts'],
 },
-  analytics: {,
+  analytics: {
   averageRating: 4.2,
   ratingCount: 67,
   completionRate: 69,
@@ -422,7 +422,7 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
       difficulty: articleData.difficulty || 'beginner',
       featured: articleData.featured || false,
       seo: articleData.seo || {},
-      analytics: {,
+      analytics: {
   averageRating: 0,
   ratingCount: 0,
   completionRate: 0,

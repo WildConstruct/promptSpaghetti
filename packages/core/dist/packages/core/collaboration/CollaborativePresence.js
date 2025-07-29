@@ -35,9 +35,7 @@ const labelStyle = {
 };
 const userNames = users.map(u => u.name).join(', ');
 const isMultiple = users.length > 1;
-return;
-_jsx("div", { style: overlayStyle, children: _jsx("div", { style: labelStyle, children: isMultiple ? `${users.length} users` : userNames }) });
-;
+return (_jsx("div", { style: overlayStyle, children: _jsx("div", { style: labelStyle, children: isMultiple ? `${users.length} users` : userNames }) }));
 ;
  > ;
 remoteSelections: Map;
@@ -64,8 +62,7 @@ export const CollaborativePresence = ({
             height: node.height || 100 // Default height,
         };
     };
-    return;
-    _jsxs("div", { className: className, style: {
+    return (_jsxs("div", { className: className, style: {
             position: 'absolute',
             top: 0,
             left: 0,
@@ -80,38 +77,10 @@ export const CollaborativePresence = ({
                 const nodeRect = getNodeRect(nodeId);
                 if (!nodeRect)
                     return null;
-                return;
-                _jsx(NodeSelectionOverlay, { nodeId: nodeId, users: users, nodePosition: { x: nodeRect.x, y: nodeRect.y }, nodeWidth: nodeRect.width, nodeHeight: nodeRect.height }, nodeId);
-            }), "; })}"] });
-    ;
+                return (_jsx(NodeSelectionOverlay, { nodeId: nodeId, users: users, nodePosition: { x: nodeRect.x, y: nodeRect.y }, nodeWidth: nodeRect.width, nodeHeight: nodeRect.height }, nodeId));
+            })] }));
 }
 ;
-{
-    if (!isCollaborative)
-        return null;
-    const getStatusColor = () => {
-        switch (connectionStatus) {
-            case 'connected': return '#10b981';
-            case 'connecting': return '#f59e0b';
-            case 'disconnected': return '#6b7280';
-            case 'error': return '#ef4444';
-            default: return '#6b7280';
-        }
-        ;
-        const getStatusText = () => {
-            switch (connectionStatus) {
-                case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
-            }
-        };
-    };
-    'connecting';
-    return 'Connecting...';
-    'disconnected';
-    return 'Disconnected';
-    'error';
-    return 'Connection error';
-    return 'Unknown';
-}
 ;
 const statusStyle = {
     display: 'flex',
@@ -134,57 +103,11 @@ const dotStyle = {
         animation: 'pulse 2s infinite',
     })
 };
-return;
-_jsxs("div", { className: className, style: statusStyle, children: [_jsx("div", { style: dotStyle }), _jsx("span", { children: getStatusText() })] });
-;
+return (_jsxs("div", { className: className, style: statusStyle, children: [_jsx("div", { style: dotStyle }), _jsx("span", { children: getStatusText() })] }));
 ;
 {
-    const users = Array.from(connectedUsers.values());
-    filter(user => user.userId !== localUserId)
-        .slice(0, maxVisible);
-    const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user;
-    if (users.length === 0)
-        return null;
-    const containerStyle = {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-    };
-    const avatarStyle = (color) => ({
-        width: '24px',
-        height: '24px',
-        borderRadius: '50%',
-        backgroundColor: color,
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '10px',
-        fontWeight: 600,
-        border: '2px solid white',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-    });
-    const getInitials = (name) => {
-        return name.split(' ')
-            .map(word => word[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
-    return;
-    _jsxs("div", { className: className, style: containerStyle, children: [users.map(user => ()
-                < div, key = { user, : .userId }, style = { avatarStyle(user) { }, : .color }), "title=", user.name, ">", getInitials(user.name)] });
+    extraCount > 0 && (_jsxs("div", { style: avatarStyle('#6b7280'), title: `${extraCount} more user${extraCount !== 1 ? 's' : ''}`, children: ["+", extraCount] }));
 }
-{
-    extraCount > 0 && ()
-        < div;
-    style = {};
-    title = {} `${extraCount} more user${extraCount !== 1 ? 's' : ''}`;
-}
-    >
-        +{ extraCount };
-div >
-;
 div >
 ;
 ;

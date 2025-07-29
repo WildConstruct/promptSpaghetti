@@ -9,11 +9,11 @@ import {
   OutputEditor
 } from './NodeSpecificEditors';
 interface InlineNodeEditorProps {
-  node: Node<NodeData>;,
+  node: Node<NodeData>;
   isActive: boolean;
-  onUpdate: (nodeId: string, updates: Partial<NodeData>) => void;,
+  onUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   onClose: () => void;
-  onSubmit: () => void;,
+  onSubmit: () => void;
   position: { x: number; y: number };
   maxWidth?: number;
   maxHeight?: number;
@@ -270,10 +270,10 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
       <style>{`
         @keyframes slideIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: scale(0.95) translateY(-10px);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: scale(1) translateY(0);
       `}</style>
     </div>
@@ -282,9 +282,9 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
 
 // Node-specific editor components
 interface NodeSpecificEditorProps {
-  nodeType: string;,
+  nodeType: string;
   data: NodeData;
-  onChange: (field: string, value: any) => void;,
+  onChange: (field: string, value: any) => void;
   errors: Record<string, string>;
   theme?: 'light' | 'dark' | 'cinema';
   const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({,)

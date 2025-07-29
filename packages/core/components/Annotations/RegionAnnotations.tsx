@@ -42,31 +42,31 @@ import {
 // Region annotation types
 
 export interface RegionAnnotation {
-  id: string;,
+  id: string;
   name: string;
-  type: 'selection' | 'highlight' | 'problem_area' | 'optimization_zone' | 'mars_zone' | 'performance_area';,
+  type: 'selection' | 'highlight' | 'problem_area' | 'optimization_zone' | 'mars_zone' | 'performance_area';
   shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
-  area: RegionArea;,
+  area: RegionArea;
   style: RegionStyle;
-  description: string;,
+  description: string;
   author: VFXUser;
-  timestamp: string;,
+  timestamp: string;
   lastModified: string;
-  visible: boolean;,
+  visible: boolean;
   locked: boolean;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   status: 'active' | 'resolved' | 'archived';
   marsZone?: MARSZoneType;
   nodeIds: string; // Nodes contained within this region,
-  tags: string;,
+  tags: string;
   metadata: RegionMetadata;
 }
 export interface RegionArea {
-  shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';,
-  bounds: {,
-  x: number;,
+  shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
+  bounds: {
+  x: number;
   y: number;
-  width: number;,
+  width: number;
   height: number;
 };
   points: Array<{ x: number; y: number }>; // For polygons and freehand
@@ -74,15 +74,15 @@ export interface RegionArea {
   radius?: number; // For circles
 }
 export interface RegionStyle {
-  borderColor: string;,
+  borderColor: string;
   borderWidth: number;
-  borderStyle: 'solid' | 'dashed' | 'dotted';,
+  borderStyle: 'solid' | 'dashed' | 'dotted';
   fillColor: string;
   fillOpacity: number;
   shadowColor?: string;
   shadowBlur?: number;
-  animation?: 'none' | 'pulse' | 'glow' | 'march';
-}
+  animation?: 'none' | 'pulse' | 'glow' | 'march'
+  }
 export interface RegionMetadata {
   nodeCount: number;
   totalComplexity?: number;
@@ -104,17 +104,17 @@ export type MARSZoneType =
   | 'creative_decision'; // Director decision points
 
 export interface VFXUser {
-  id: string;,
+  id: string;
   name: string;
-  role: string;,
+  role: string;
   color: string;
 }
 export interface RegionAnnotationSystemProps {
-  width: number;,
+  width: number;
   height: number;
   regions: RegionAnnotation;
   nodes?: Array<{ id: string; x: number; y: number; width: number; height: number; type: string }>;
-  currentUser: VFXUser;,
+  currentUser: VFXUser;
   onRegionsChange: (regions: RegionAnnotation) => void;
   onRegionSelect?: (regionId: string | null) => void;
   onNodesInRegion?: (nodeIds: string) => void;
@@ -125,42 +125,42 @@ export interface RegionAnnotationSystemProps {
 
 // Region type configurations for VFX workflow
 const REGION_TYPES = {
-  selection: {,
+  selection: {
   icon: <Square className="w-4 h-4" />,
   label: 'Selection',
   color: '#3b82f6',
   fillOpacity: 0.1,
   description: 'Basic node selection area',
 },
-  highlight: {,
+  highlight: {
   icon: <Target className="w-4 h-4" />,
   label: 'Highlight',
   color: '#f59e0b',
   fillOpacity: 0.2,
   description: 'Important area highlighting',
 },
-  problem_area: {,
+  problem_area: {
   icon: <AlertTriangle className="w-4 h-4" />,
   label: 'Problem Area',
   color: '#ef4444',
   fillOpacity: 0.15,
   description: 'Issues or problems requiring attention',
 },
-  optimization_zone: {,
+  optimization_zone: {
   icon: <Zap className="w-4 h-4" />,
   label: 'Optimization Zone',
   color: '#10b981',
   fillOpacity: 0.12,
   description: 'Areas for performance optimization',
 },
-  mars_zone: {,
+  mars_zone: {
   icon: <Camera className="w-4 h-4" />,
   label: 'MARS Zone',
   color: '#8b5cf6',
   fillOpacity: 0.18,
   description: 'MARS methodology zone annotation',
 },
-  performance_area: {,
+  performance_area: {
   icon: <Clock className="w-4 h-4" />,
   label: 'Performance Area',
   color: '#06b6d4',
@@ -477,7 +477,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
     } else {
   area = {
   shape: creationTool,
-  bounds: {,
+  bounds: {
   x: Math.min(...creationPoints.map(p => p.x)),
   y: Math.min(...creationPoints.map(p => p.y)),
   width: Math.max(...creationPoints.map(p => p.x)) - Math.min(...creationPoints.map(p => p.x)),
@@ -493,7 +493,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
   type: newRegion.type as RegionAnnotation['type'] || 'selection',
       shape: creationTool,
       area,
-      style: {,
+      style: {
   borderColor: regionConfig.color,
   borderWidth: 2,
   borderStyle: 'solid',
@@ -511,7 +511,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
       marsZone: newRegion.marsZone,
       nodeIds: getNodesInRegion({ ...newRegion, area } as RegionAnnotation),
       tags: [],
-      metadata: {,
+      metadata: {
   nodeCount: 0 // Will be updated after creation,
 };
     // Update node count

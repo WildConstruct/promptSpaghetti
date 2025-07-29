@@ -48,7 +48,7 @@ export interface SessionConfiguration {
     reauthenticationInterval: number;
     enableActivityTracking: boolean;
     enableAnomalyDetection: boolean;
-    encryptionSettings: {,
+    encryptionSettings: {
         algorithm: string;
         keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
         iterations: number;
@@ -73,14 +73,14 @@ export interface SecureSession {
     csrfToken: string;
     mfaVerified: boolean;
     mfaExpiresAt?: Date;
-    metadata: {,
-        deviceInfo: {,
+    metadata: {
+        deviceInfo: {
             type: 'desktop' | 'mobile' | 'tablet' | 'unknown';
             os: string;
             browser: string;
             version: string;
         };
-        location: {,
+        location: {
             country?: string;
             region?: string;
             city?: string;
@@ -89,12 +89,12 @@ export interface SecureSession {
                 lon: number;
             };
         };
-        security: {,
+        security: {
             isVpn: boolean;
             isProxy: boolean;
             riskScore: number;
-            trustLevel: 'low' | 'medium' | 'high';
-        };
+            trustLevel: 'low' | 'medium' | 'high'
+  };
     };
     activities: Array<{,
         timestamp: Date;
@@ -120,7 +120,7 @@ export interface SessionContext {
         region: string;
         city: string;
     };
-    securityFlags: {,
+    securityFlags: {
         isSuspiciousLocation: boolean;
         isNewDevice: boolean;
         hasVpn: boolean;
@@ -147,7 +147,7 @@ export interface SessionValidationResult {
 export interface ActivityPattern {
     userId: string;
     deviceId: string;
-    pattern: {,
+    pattern: {
         typicalHours: number[];
         typicalDays: number[];
         commonLocations: string[];

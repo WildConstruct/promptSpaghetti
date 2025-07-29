@@ -7,16 +7,16 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
 export interface ExtensionStatus {
-  enabled: boolean;,
+  enabled: boolean;
   loaded: boolean;
   hasErrors: boolean;
   lastError?: string;
-  version: string;,
+  version: string;
   updateAvailable: boolean;
   availableVersion?: string;
 }
 export interface ExtensionInstallation {
-  extension: ExtensionManifest;,
+  extension: ExtensionManifest;
   installedAt: Date;
   enabledAt?: Date;
   disabledAt?: Date;
@@ -24,26 +24,26 @@ export interface ExtensionInstallation {
 }
 export interface ExtensionManagerState {
   // Extension data
-  installedExtensions: ExtensionManifest;,
+  installedExtensions: ExtensionManifest;
   availableExtensions: ExtensionManifest;
   extensionStatuses: Map<string, ExtensionStatus>;
   extensionConfigurations: Map<string, Record<string, any>>;
   // UI state
-  isLoading: boolean;,
+  isLoading: boolean;
   error: string | null;
   selectedExtensionId: string | null;
   // Actions
-  loadInstalledExtensions: () => Promise<void>;,
+  loadInstalledExtensions: () => Promise<void>;
   loadAvailableExtensions: () => Promise<void>;
-  installExtension: (extension: ExtensionManifest) => Promise<void>;,
-  uninstallExtension: (extensionId: string) => Promise<void>;,
-  enableExtension: (extensionId: string) => Promise<void>;,
-  disableExtension: (extensionId: string) => Promise<void>;,
-  updateExtension: (extensionId: string) => Promise<void>;,
+  installExtension: (extension: ExtensionManifest) => Promise<void>;
+  uninstallExtension: (extensionId: string) => Promise<void>;
+  enableExtension: (extensionId: string) => Promise<void>;
+  disableExtension: (extensionId: string) => Promise<void>;
+  updateExtension: (extensionId: string) => Promise<void>;
   configureExtension: (extensionId: string, config: Record<string, any>) => Promise<void>;
-  getExtensionStatus: (extensionId: string) => ExtensionStatus;,
+  getExtensionStatus: (extensionId: string) => ExtensionStatus;
   checkForUpdates: () => Promise<void>;
-  clearError: () => void;,
+  clearError: () => void;
   setSelectedExtension: (extensionId: string | null) => void;
   // Default extension status
   const createDefaultStatus = (extension: ExtensionManifest): ExtensionStatus => ({,)
@@ -64,15 +64,15 @@ const mockInstalledExtensions: ExtensionManifest = [
   description: 'Essential text processing and manipulation utilities',
   author: 'PromptSpaghetti Team',
   extension_type: 'transform',
-  capabilities: {,
+  capabilities: {
   provides: ['text-transform', 'string-manipulation'],
   requires: ['runtime-nodes'],
 },
-  dependencies: {,
+  dependencies: {
   system_version: '^1.0.0',
 },
   permissions: ['data-processing'],
-    runtime: {,
+    runtime: {
   entry_point: 'dist/index.js',
   node_types: ['TextCleanup', 'TextFormat', 'TextSplit'],
 }
@@ -84,15 +84,15 @@ const mockInstalledExtensions: ExtensionManifest = [
   description: 'Complex mathematical operations and statistical functions',
   author: 'MathUtils Inc',
   extension_type: 'node',
-  capabilities: {,
+  capabilities: {
   provides: ['math-operations', 'statistics'],
   requires: ['runtime-nodes', 'advanced-nodes'],
 },
-  dependencies: {,
+  dependencies: {
   system_version: '^1.0.0',
 },
   permissions: ['data-processing'],
-    runtime: {,
+    runtime: {
   entry_point: 'dist/math.js',
   node_types: ['MathCalculator', 'StatisticsAnalyzer', 'DataVisualizer']];
   const mockAvailableExtensions: ExtensionManifest = [
@@ -105,15 +105,15 @@ const mockInstalledExtensions: ExtensionManifest = [
   description: 'Connect to external data sources and APIs',
   author: 'DataFlow Systems',
   extension_type: 'storage',
-  capabilities: {,
+  capabilities: {
   provides: ['data-storage', 'api-integration'],
   requires: ['network-access'],
 },
-  dependencies: {,
+  dependencies: {
   system_version: '^1.0.0',
 },
   permissions: ['network', 'data-storage'],
-    runtime: {,
+    runtime: {
   entry_point: 'dist/connectors.js',
   storage_providers: ['RestAPI', 'GraphQL', 'Database'],
 }
@@ -125,15 +125,15 @@ const mockInstalledExtensions: ExtensionManifest = [
   description: 'Additional themes and visual customizations',
   author: 'Design Studio',
   extension_type: 'ui',
-  capabilities: {,
+  capabilities: {
   provides: ['themes', 'ui-components'],
   requires: ['ui-components'],
 },
-  dependencies: {,
+  dependencies: {
   system_version: '^1.0.0',
 },
   permissions: ['ui-components'],
-    ui: {,
+    ui: {
   themes: ['dark-pro', 'light-minimal', 'high-contrast'],
   components: ['ThemeSelector', 'ColorPicker']];
 }

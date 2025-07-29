@@ -26,7 +26,7 @@ const mockTemplate = {
   template_type: 'full' as const,
   is_public: false,
   is_system_template: false,
-  format_options: {,
+  format_options: {
   indent: 2,
   includeMetadata: true,
   dateFormat: 'iso',

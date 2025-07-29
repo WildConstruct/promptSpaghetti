@@ -8,9 +8,9 @@ import { BaseError, ErrorSeverity, ErrorCode } from './index';
 import { ErrorFactory } from './ErrorFactory';
 
 export interface RetryOptions {
-  maxAttempts: number;,
+  maxAttempts: number;
   baseDelay: number;
-  maxDelay: number;,
+  maxDelay: number;
   backoffMultiplier: number;
   retryCondition?: (error: Error) => boolean;
 }
@@ -19,7 +19,7 @@ export interface FallbackOptions<T> {
   fallbackFunction?: () => T | Promise<T>;
   logError?: boolean;
   export interface CircuitBreakerOptions {
-  threshold: number;,
+  threshold: number;
   resetTimeout: number;
   monitoringWindow: number;
   /**
@@ -171,10 +171,10 @@ export class ErrorRecovery {
   */
   static async withGracefulDegradation<T>()
   operations: Array<{,
-  operation: () => Promise<T>;,
+  operation: () => Promise<T>;
   name: string;
-  priority: 'critical' | 'important' | 'optional';
-}>,
+  priority: 'critical' | 'important' | 'optional'
+  }>,
     context: string): Promise<{;
   results: Array<{ name: string; result?: T; error?: Error; skipped?: boolean }>;
     success: boolean;
@@ -300,9 +300,9 @@ export class ErrorRecovery {
       breaker.lastFailureAt = 0;
       breaker.openedAt = 0;
 interface CircuitBreakerState extends CircuitBreakerOptions {
-  state: 'closed' | 'open' | 'half-open';,
+  state: 'closed' | 'open' | 'half-open';
   failures: number;
-  firstFailureAt: number;,
+  firstFailureAt: number;
   lastFailureAt: number;
   openedAt: number;
 /**
@@ -311,7 +311,7 @@ interface CircuitBreakerState extends CircuitBreakerOptions {
 export function withErrorRecovery<T extends any, R>()
   retryOptions?: Partial<RetryOptions>,
   fallbackOptions?: FallbackOptions<R>
-  return function (target: any,)
+  return function (target: any)
     propertyKey: string,
     descriptor: PropertyDescriptor,
     const originalMethod = descriptor.value;

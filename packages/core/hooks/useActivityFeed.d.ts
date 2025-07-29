@@ -19,7 +19,7 @@ interface ActivityStatsData {
         count: number;
     }>;
 
-export declare function useActivityFeed(workspaceId: string,)
+export declare function useActivityFeed(workspaceId: string)
   userId: string,
   filters?: ActivityEventFilter,
   options?: UseActivityFeedOptions

@@ -2,10 +2,10 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Node } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
 interface BatchNodeEditorProps {
-  selectedNodes: Node<NodeData>[];,
+  selectedNodes: Node<NodeData>[];
   isActive: boolean;
   onUpdate: (updates: Record<string, Partial<NodeData>>) => void;
-  onClose: () => void;,
+  onClose: () => void;
   position: { x: number; y: number };
   theme?: 'light' | 'dark' | 'cinema';
 
@@ -250,11 +250,11 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
 
 // Batch Edit Form Component
 interface BatchEditFormProps {
-  nodeAnalysis: any;,
+  nodeAnalysis: any;
   selectedFields: Set<string>;
   updates: Record<string, any>;
-  onFieldSelection: (field: string, selected: boolean) => void;,
-  onFieldUpdate: (field: string, value: any) => void;,
+  onFieldSelection: (field: string, selected: boolean) => void;
+  onFieldUpdate: (field: string, value: any) => void;
   colors: any;
   const BatchEditForm: React.FC<BatchEditFormProps> = ({,)
   nodeAnalysis,
@@ -350,9 +350,9 @@ interface BatchEditFormProps {
 
 // Field Editor Component
 interface FieldEditorProps {
-  field: string;,
+  field: string;
   value: any;
-  onChange: (value: any) => void;,
+  onChange: (value: any) => void;
   nodeAnalysis: any;
   colors: any;
   const FieldEditor: React.FC<FieldEditorProps> = ({,)
@@ -368,7 +368,7 @@ interface FieldEditorProps {
     if (existingValues.every(v => typeof v === 'boolean')) return 'boolean';
     if (existingValues.every(v => typeof v === 'number')) return 'number';
     if (existingValues.some(v => typeof v === 'string' && v.length > 50)) return 'textarea';
-    return 'text';
+    return 'text'
   }, [field, nodeAnalysis.fieldValues]);
   const inputStyle = {
     width: '100%',
@@ -426,9 +426,9 @@ interface FieldEditorProps {
 
 // Batch Preview Component
 interface BatchPreviewProps {
-  selectedNodes: Node<NodeData>[];,
+  selectedNodes: Node<NodeData>[];
   updates: Record<string, any>;
-  selectedFields: Set<string>;,
+  selectedFields: Set<string>;
   colors: any;
   const BatchPreview: React.FC<BatchPreviewProps> = ({,)
   selectedNodes,

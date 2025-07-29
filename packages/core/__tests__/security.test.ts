@@ -205,7 +205,8 @@ describe('Zod Schema Security Tests', () => {
   id: 'test',
             type: 'SetVariable',
             key: 'test',
-            value: function() { return 'evil'; }
+            value: function() { return 'evil'
+  }
           }]
   }
         {
@@ -304,7 +305,7 @@ describe('Zod Schema Security Tests', () => {
             type: 'Conditional',
             branches: [{,
   condition: 'function() { alert(1); }',
-              output: 'result';
+              output: 'result'
   }]
           }]
       ];
@@ -460,7 +461,8 @@ describe('Runtime Security Tests', () => {
     });
     it('should reject dangerous value types at runtime', () => {
       const dangerousValues = [;
-        function() { return 'evil'; },
+        function() { return 'evil'
+  },
         () => 'evil',
         Symbol('evil'),
         new Date(),

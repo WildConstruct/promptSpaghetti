@@ -14,14 +14,14 @@ import { EventEmitter } from 'events';
 // ==========================================
 
 export interface UserBehaviorEvent {
-  id: string;,
+  id: string;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   timestamp: Date;
-  actionType: UserActionType;,
+  actionType: UserActionType;
   resource: string;
   metadata: Record<string, unknown>;
-  sourceIP: string;,
+  sourceIP: string;
   userAgent: string;
   geolocation?: GeolocationData;
   success: boolean;
@@ -42,73 +42,73 @@ export enum UserActionType {
   SEARCH_QUERY = 'search_query',
   NAVIGATION = 'navigation'
   export interface GeolocationData {
-  country: string;,
+  country: string;
   region: string;
-  city: string;,
+  city: string;
   latitude: number;
-  longitude: number;,
+  longitude: number;
   timezone: string;
 }
 export interface UserBehaviorProfile {
-  userId: string;,
+  userId: string;
   createdAt: Date;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   totalEvents: number;
   // Temporal patterns
   typicalLoginTimes: number; // Hours of day (0-23),
   typicalDaysOfWeek: number; // Days (0-6, Sunday=0),
-  averageSessionDuration: number;,
+  averageSessionDuration: number;
   typicalLoginFrequency: number; // Logins per day,
   // Geographic patterns
-  commonLocations: GeolocationData;,
+  commonLocations: GeolocationData;
   travelPatterns: TravelPattern;
   suspiciousLocationThreshold: number;
   // Access patterns
-  commonResources: ResourceAccess;,
+  commonResources: ResourceAccess;
   typicalActionDistribution: Record<UserActionType, number>;
   peakActivityHours: number;
   // Security patterns
-  failureRate: number;,
+  failureRate: number;
   riskyBehaviorScore: number;
   privilegedAccessFrequency: number;
   // Device and technical patterns
-  commonUserAgents: string;,
+  commonUserAgents: string;
   typicalDeviceCount: number;
   ipAddressStability: number;
   // Behavioral scoring
-  baselineRiskScore: number;,
+  baselineRiskScore: number;
   anomalyThreshold: number;
   adaptationRate: number;
 }
 export interface TravelPattern {
-  fromLocation: GeolocationData;,
+  fromLocation: GeolocationData;
   toLocation: GeolocationData;
-  frequency: number;,
+  frequency: number;
   typicalDuration: number;
   lastOccurrence: Date;
 }
 export interface ResourceAccess {
-  resource: string;,
+  resource: string;
   accessCount: number;
-  averageAccessTime: number;,
+  averageAccessTime: number;
   typicalAccessPattern: number; // Hours when typically accessed,
-  lastAccessed: Date;,
+  lastAccessed: Date;
   riskScore: number;
 }
 export interface BehaviorAnomaly {
-  id: string;,
+  id: string;
   userId: string;
-  detectedAt: Date;,
+  detectedAt: Date;
   anomalyType: AnomalyType;
-  severity: AnomalySeverity;,
+  severity: AnomalySeverity;
   confidence: number;
-  description: string;,
+  description: string;
   triggeringEvents: UserBehaviorEvent;
-  deviationScore: number;,
+  deviationScore: number;
   baselineValue: number;
-  observedValue: number;,
+  observedValue: number;
   riskAssessment: RiskAssessment;
-  recommendedActions: string;,
+  recommendedActions: string;
   isResolved: boolean;
   resolvedAt?: Date;
   falsePositive?: boolean;
@@ -135,17 +135,17 @@ export enum AnomalyType {
   overallRisk: number; // 0-100,
   businessImpact: number; // 0-100,
   probabilityOfThreat: number; // 0-100,
-  potentialDamage: string;,
-  mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate';
-}
+  potentialDamage: string;
+  mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate'
+  }
 export interface BehaviorAnalyticsConfig {
-  profileUpdateInterval: number;,
+  profileUpdateInterval: number;
   anomalyDetectionSensitivity: number;
-  baselineTrainingPeriod: number;,
+  baselineTrainingPeriod: number;
   maxProfileAge: number;
-  enableRealTimeDetection: boolean;,
+  enableRealTimeDetection: boolean;
   enableGeolocationTracking: boolean;
-  minEventsForProfile: number;,
+  minEventsForProfile: number;
   adaptiveThresholding: boolean;
   // ==========================================
   // MAIN SERVICE CLASS
@@ -488,7 +488,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
         this.resolveAnomaly(anomaly.id, false);
       }, 24 * 60 * 60 * 1000); // 24 hours
     console.log(`🔍 BEHAVIOR ANOMALY: ${anomaly.anomalyType} (confidence: ${anomaly.confidence})`);}
-  private createAnomaly(event: UserBehaviorEvent,)
+  private createAnomaly(event: UserBehaviorEvent)
     type: AnomalyType,
     confidence: number,
     description: string,
@@ -549,7 +549,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   private isHighRiskResource(resource: string): boolean {,
   const highRiskKeywords = ['admin', 'config', 'financial', 'payment', 'customer', 'sensitive'];
   return highRiskKeywords.some(keyword => resource.toLowerCase().includes(keyword));
-  private getRecentEvents(userId: string,)
+  private getRecentEvents(userId: string)
   actionType?: UserActionType,
   timeframeMs: number = 24 * 60 * 60 * 1000): UserBehaviorEvent {,
   const userEvents = this.recentEvents.get(userId) || [];

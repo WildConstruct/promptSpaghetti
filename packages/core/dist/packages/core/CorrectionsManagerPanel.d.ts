@@ -1,8 +1,3 @@
 import React from 'react';
-interface CorrectionsPanelProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-export declare const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps>;
-export {};
+export declare const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps>, console: any, error: any;
 //# sourceMappingURL=CorrectionsManagerPanel.d.ts.map

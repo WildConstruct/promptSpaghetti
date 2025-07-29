@@ -38,7 +38,7 @@ export class MedievalDemoDatabase {
   /**
   * Get clothing items by criteria
   */
-  getClothing(criteria: {,)
+  getClothing(criteria: {)
   era?: Era;
   social_class?: SocialClass;
   gender?: 'male' | 'female' | 'unisex';
@@ -66,8 +66,8 @@ export class MedievalDemoDatabase {
   getMaterials(criteria: {)
   era?: Era;
   fabric_type?: string;
-  availability?: 'common' | 'expensive' | 'rare';
-} = {}): UTDGNode {
+  availability?: 'common' | 'expensive' | 'rare'
+  } = {}): UTDGNode {
     return this.materialDatabase.filter(item => {)
   if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
@@ -94,14 +94,14 @@ export class MedievalDemoDatabase {
   /**
    * Generate a complete medieval outfit
    */
-  generateOutfit(criteria: {,)
+  generateOutfit(criteria: {)
   era: Era;
-  social_class: SocialClass;,
+  social_class: SocialClass;
   gender: 'male' | 'female';
   occasion?: 'daily' | 'ceremonial' | 'work' | 'travel';
-  season?: 'spring' | 'summer' | 'autumn' | 'winter';
-}): {
-  outfit: (MedievalClothing | UTDGNode)[];,
+  season?: 'spring' | 'summer' | 'autumn' | 'winter'
+  }): {
+  outfit: (MedievalClothing | UTDGNode)[];
   description: string;
   historical_notes: string;
   const outfit: (MedievalClothing | UTDGNode)[] = [];
@@ -175,7 +175,7 @@ export class MedievalDemoDatabase {
   type: 'garment',
   content: 'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
   description: 'Basic peasant tunic for daily wear',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
   authenticity: 0.9,
   source: 'Archaeological evidence from 12th-13th century England',
@@ -185,7 +185,7 @@ export class MedievalDemoDatabase {
   daily_use: true,
   ceremonial: false,
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_peasant_braies_001', 'medieval_peasant_belt_001'],
   incompatible: ['medieval_noble_silk_001', 'medieval_royal_purple_001'],
   variations: [,
@@ -204,7 +204,7 @@ export class MedievalDemoDatabase {
   era_specific: true];
   },
   constraints: [],
-      medieval_specific: {,
+      medieval_specific: {
   garment_type: 'tunic',
   construction_method: 'sewn',
   fabric_type: 'wool',
@@ -217,7 +217,7 @@ export class MedievalDemoDatabase {
   type: 'garment',
   content: 'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.',
   description: 'Noble lady\'s formal gown',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
   authenticity: 0.95,
   source: 'Court records and artistic depictions, 13th-14th century',
@@ -227,7 +227,7 @@ export class MedievalDemoDatabase {
   daily_use: false,
   ceremonial: true,
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_noble_chemise_001', 'medieval_noble_belt_gold_001'],
   incompatible: ['medieval_peasant_tunic_001'],
   variations: [,
@@ -239,7 +239,7 @@ export class MedievalDemoDatabase {
   era_specific: true];
   },
   constraints: [],
-      medieval_specific: {,
+      medieval_specific: {
   garment_type: 'gown',
   construction_method: 'sewn',
   fabric_type: 'wool',
@@ -253,7 +253,7 @@ export class MedievalDemoDatabase {
   type: 'garment',
   content: 'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.',
   description: 'Benedictine monk\'s habit',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
   authenticity: 0.98,
   source: 'Monastic rules and surviving garments',
@@ -264,13 +264,13 @@ export class MedievalDemoDatabase {
   ceremonial: true,
   occupation: ['monk', 'clergy'],
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_rope_belt_001'],
   incompatible: ['medieval_noble_silk_001', 'medieval_bright_colors_001'],
   variations: [],
 },
   constraints: [],
-      medieval_specific: {,
+      medieval_specific: {
   garment_type: 'gown',
   construction_method: 'sewn',
   fabric_type: 'wool',
@@ -290,14 +290,14 @@ export class MedievalDemoDatabase {
   type: 'material',
   content: 'Coarse woolen cloth woven from sheep\'s wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.',
   description: 'Basic wool fabric for medieval clothing',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.EARLY_MEDIEVAL, MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
   authenticity: 0.95,
   source: 'Archaeological textile remains and historical records',
   tags: ['wool', 'fabric', 'common', 'sheep', 'woven'],
   social_class: ['peasant', 'artisan', 'merchant', 'noble'],
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_natural_dyes_001', 'medieval_linen_001'],
   incompatible: ['modern_synthetic_001'],
   variations: [,
@@ -325,14 +325,14 @@ export class MedievalDemoDatabase {
   type: 'material',
   content: 'Fine linen cloth woven from flax fibers, prized for undergarments and shirts. Naturally white or cream colored, sometimes bleached.',
   description: 'Linen fabric for medieval undergarments',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
   authenticity: 0.92,
   source: 'Textile archaeological evidence',
   tags: ['linen', 'flax', 'white', 'undergarment', 'hygiene'],
   social_class: ['artisan', 'merchant', 'noble', 'clergy'],
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_wool_001', 'medieval_chemise_001'],
   incompatible: ['medieval_peasant_only_001'],
   variations: [],
@@ -351,14 +351,14 @@ export class MedievalDemoDatabase {
   type: 'accessory',
   content: 'A sturdy leather belt with an iron buckle, used to cinch tunics and carry pouches or tools.',
   description: 'Basic leather belt for medieval clothing',
-  metadata: {,
+  metadata: {
   era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
   authenticity: 0.9,
   source: 'Archaeological finds and artistic depictions',
   tags: ['belt', 'leather', 'iron', 'practical'],
   social_class: ['peasant', 'artisan', 'merchant', 'noble'],
 },
-  relationships: {,
+  relationships: {
   compatible: ['medieval_tunic_001', 'medieval_gown_001'],
   incompatible: [],
   variations: [,

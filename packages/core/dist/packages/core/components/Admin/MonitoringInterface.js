@@ -215,7 +215,7 @@ const KeyMetrics = () => {
                                     marginTop: '8px',
                                 }, children: [_jsx("div", { style: {
                                             width: `${Math.min(metrics.system.cpu, 100)}%`
-                                        } }), ", height: '100%', backgroundColor: metrics.system.cpu > 80 ? '#dc2626' : metrics.system.cpu > 60 ? '#f59e0b' : '#10b981', borderRadius: '2px'; }} />"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', color: '#6b7280', marginBottom: '4px' }, children: "Memory Usage" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600', color: '#1f2937' }, children: [metrics.system.memory.toFixed(1), "%"] }), _jsxs("div", { style: {
+                                        } }), ", height: '100%', backgroundColor: metrics.system.cpu > 80 ? '#dc2626' : metrics.system.cpu > 60 ? '#f59e0b' : '#10b981', borderRadius: '2px' }} />"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', color: '#6b7280', marginBottom: '4px' }, children: "Memory Usage" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600', color: '#1f2937' }, children: [metrics.system.memory.toFixed(1), "%"] }), _jsxs("div", { style: {
                                     width: '100%',
                                     height: '4px',
                                     backgroundColor: '#e5e7eb',
@@ -224,7 +224,7 @@ const KeyMetrics = () => {
                                     marginTop: '8px',
                                 }, children: [_jsx("div", { style: {
                                             width: `${Math.min(metrics.system.memory, 100)}%`
-                                        } }), ", height: '100%', backgroundColor: metrics.system.memory > 80 ? '#dc2626' : metrics.system.memory > 60 ? '#f59e0b' : '#10b981', borderRadius: '2px'; }} />"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', color: '#6b7280', marginBottom: '4px' }, children: "API Latency" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600', color: '#1f2937' }, children: [metrics.api.averageLatency.toFixed(0), "ms"] }), _jsxs("div", { style: { fontSize: '12px', color: '#6b7280', marginTop: '4px' }, children: [metrics.api.requestsPerSecond.toFixed(1), " req/s"] })] })] })] });
+                                        } }), ", height: '100%', backgroundColor: metrics.system.memory > 80 ? '#dc2626' : metrics.system.memory > 60 ? '#f59e0b' : '#10b981', borderRadius: '2px' }} />"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', color: '#6b7280', marginBottom: '4px' }, children: "API Latency" }), _jsxs("div", { style: { fontSize: '20px', fontWeight: '600', color: '#1f2937' }, children: [metrics.api.averageLatency.toFixed(0), "ms"] }), _jsxs("div", { style: { fontSize: '12px', color: '#6b7280', marginTop: '4px' }, children: [metrics.api.requestsPerSecond.toFixed(1), " req/s"] })] })] })] });
 };
 ;
 ;
@@ -244,7 +244,7 @@ _jsxs("div", { style: {
                     padding: '12px',
                     backgroundColor: '#f9fafb',
                     borderLeft: `4px solid ${getSeverityColor(alert.severity)}`
-                }), ", borderRadius: '4px'; }} >", _jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500', color: '#1f2937', marginBottom: '2px' }, children: alert.title }), _jsxs("div", { style: { fontSize: '12px', color: '#6b7280' }, children: [alert.source, " \u2022 ", new Date(alert.timestamp).toLocaleString()] })] }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [!alert.acknowledged && ()
+                }), ", borderRadius: '4px' }} >", _jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500', color: '#1f2937', marginBottom: '2px' }, children: alert.title }), _jsxs("div", { style: { fontSize: '12px', color: '#6b7280' }, children: [alert.source, " \u2022 ", new Date(alert.timestamp).toLocaleString()] })] }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [!alert.acknowledged && ()
                             < button, "onClick=", () => handleAlertAction(alert.id, 'acknowledge'), "style=", {
                             padding: '4px 8px',
                             backgroundColor: '#3b82f6',

@@ -230,7 +230,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
 },
   type: 'default',
     position,
-    data: {,
+    data: {
   nodeType: 'WeightedChoice',
   title: title,
   ...data
@@ -240,14 +240,14 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
 },
   type: 'default',
     position,
-    data: {,
+    data: {
   nodeType: 'Output',
   title: title,
 });
   // Content generation helpers
   const generateBackgroundChoices = (role: string, genre: string) => {
   const backgrounds = {
-  protagonist: {,
+  protagonist: {
   drama: ['Troubled childhood in small town', 'Former military service', 'Academic background'],
   action: ['Special forces training', 'Law enforcement background', 'Martial arts expertise'],
   comedy: ['Failed comedian turned office worker', 'Overprotective parent', 'Aspiring influencer'],
@@ -255,7 +255,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
   'sci-fi': ['Space colony researcher', 'AI developer', 'Time travel experiment subject'],
   fantasy: ['Chosen one prophecy', 'Royal bloodline secret', 'Ancient magic wielder'],
 },
-  antagonist: {,
+  antagonist: {
   drama: ['Corrupt corporate executive', 'Manipulative family member', 'Fallen mentor figure'],
   action: ['International arms dealer', 'Rogue government agent', 'Criminal mastermind'],
   comedy: ['Uptight boss', 'Rival love interest', 'Overzealous HOA president'],

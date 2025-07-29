@@ -21,7 +21,7 @@ import {
 // Graph state interface matching the Zustand store
 
 export interface GraphState {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   annotations?: {
     stickyNotes?: Array<{ id: string; text: string; position: { x: number; y: number } }>;
@@ -51,8 +51,8 @@ export interface SerializationResult {
 }
 export interface DeserializationResult {
   success: boolean;
-  data?: {,
-  graph: GraphState;,
+  data?: {
+  graph: GraphState;
   metadata: ProjectMetadata;
   settings: ProjectSettings;
   collaboration?: CollaborationData;
@@ -64,7 +64,7 @@ export interface DeserializationResult {
  * Serializes graph state to .psg format
  */
 }
-export function serializeProject(graphState: GraphState,)
+export function serializeProject(graphState: GraphState)
   metadata: ProjectMetadata,
   settings: ProjectSettings,
   options: SerializationOptions = {}
@@ -95,7 +95,7 @@ export function serializeProject(graphState: GraphState,)
     if (includeCollaboration && graphState.annotations) {
       psgFile.collaboration = {
         stickyNotes: graphState.annotations.stickyNotes || [],
-        annotations: {,
+        annotations: {
   nodeLabels: graphState.annotations.nodeLabels || {},
           regionGroups: graphState.annotations.regionGroups || [],
           connectionLabels: graphState.annotations.connectionLabels || {}
@@ -195,7 +195,7 @@ export function deserializeProject(()
 };
     return {
   success: true,
-  data: {,
+  data: {
   graph: graphState,
   metadata: psgFile.metadata,
   settings: psgFile.settings,
@@ -228,7 +228,7 @@ function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, un
   'markov': 'Markov',
   'python-transform': 'PythonTransform',
 };
-    return typeMap[nodeType] || 'Output';
+    return typeMap[nodeType] || 'Output'
   };
   const nodeType = reactFlowNode.data?.nodeType || 'output';
   const schemaType = getSchemaNodeType(nodeType);
@@ -275,7 +275,7 @@ function convertGraphNodeToReactFlowNode(graphNode: Record<string, unknown>, )
   'Markov': 'markov',
   'PythonTransform': 'python-transform',
 };
-    return typeMap[schemaType] || 'output';
+    return typeMap[schemaType] || 'output'
   };
   const uiNodeType = getUINodeType(graphNode.type);
   const reactFlowNode: Node = {,
@@ -283,7 +283,7 @@ function convertGraphNodeToReactFlowNode(graphNode: Record<string, unknown>, )
 },
   type: 'default', // ReactFlow visual type
     position: { x: 0, y: 0 }, // Will be set by auto-layout or user
-    data: {,
+    data: {
   nodeType: uiNodeType,
   label: graphNode.label || graphNode.id,
   ...graphNode
@@ -316,7 +316,7 @@ function generateEdgesFromNodes(nodes: Node): Edge {
           sourceHandle: null,
           targetHandle: `input_${index}`}
 },
-  type: 'default';
+  type: 'default'
   });
       });
   });
@@ -342,7 +342,7 @@ export function validateFileIntegrity(psgFile: PsgFile): boolean {
 /**
  * Creates a minimal .psg file for testing
  */
-export function createEmptyProject(name: string = 'New Project',)
+export function createEmptyProject(name: string = 'New Project')
   author?: string
 ): PsgFile {
   return {

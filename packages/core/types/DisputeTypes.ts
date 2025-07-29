@@ -9,29 +9,29 @@
  */
 
 export interface Dispute {
-  disputeId: string;,
+  disputeId: string;
   transactionId: string;
-  buyerId: string;,
+  buyerId: string;
   sellerId: string;
   templateId?: string;
   // Dispute Classification
-  type: DisputeType;,
+  type: DisputeType;
   category: DisputeCategory;
-  reason: DisputeReason;,
+  reason: DisputeReason;
   severity: 'low' | 'medium' | 'high' | 'critical';
   // Dispute Details
-  amount: number;,
+  amount: number;
   currency: string;
-  description: string;,
+  description: string;
   customerClaim: string;
   merchantResponse?: string;
   // Status and Timeline
-  status: DisputeStatus;,
+  status: DisputeStatus;
   stage: DisputeStage;
   dueDate?: Date;
   responseDeadline?: Date;
   // Evidence and Documentation
-  evidence: DisputeEvidence;,
+  evidence: DisputeEvidence;
   attachments: DisputeAttachment;
   communications: DisputeCommunication;
   // Resolution and Outcome
@@ -43,7 +43,7 @@ export interface Dispute {
   trustImpact?: DisputeTrustImpact;
   policyViolations?: string;
   // Audit Trail
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   resolvedAt?: Date;
   createdBy: string;
@@ -134,18 +134,18 @@ export enum DisputeType {
   SYSTEM_DETECTION = 'system_detection',
   ADMIN_INITIATED = 'admin_initiated'
   export interface DisputeEvidence {
-  evidenceId: string;,
+  evidenceId: string;
   type: DisputeEvidenceType;
-  title: string;,
+  title: string;
   description: string;
-  content: string;,
+  content: string;
   attachments: string;
-  submittedBy: string;,
+  submittedBy: string;
   submittedAt: Date;
-  relevanceScore: number;,
+  relevanceScore: number;
   verified: boolean;
-  category: 'transaction' | 'communication' | 'delivery' | 'quality' | 'authorization' | 'other';
-}
+  category: 'transaction' | 'communication' | 'delivery' | 'quality' | 'authorization' | 'other'
+  }
 export enum DisputeEvidenceType {
   TRANSACTION_RECEIPT = 'transaction_receipt',
   AUTHORIZATION_PROOF = 'authorization_proof',
@@ -160,24 +160,24 @@ export enum DisputeEvidenceType {
   POLICY_DOCUMENTATION = 'policy_documentation',
   OTHER = 'other'
   export interface DisputeAttachment {
-  attachmentId: string;,
+  attachmentId: string;
   filename: string;
-  fileType: string;,
+  fileType: string;
   fileSize: number;
-  url: string;,
+  url: string;
   uploadedBy: string;
-  uploadedAt: Date;,
-  category: 'evidence' | 'communication' | 'documentation' | 'screenshot';
-}
+  uploadedAt: Date;
+  category: 'evidence' | 'communication' | 'documentation' | 'screenshot'
+  }
 export interface DisputeCommunication {
-  communicationId: string;,
+  communicationId: string;
   type: 'internal_note' | 'customer_message' | 'merchant_message' | 'provider_message' | 'system_notification';
   sender: string;
   recipient?: string;
   subject?: string;
-  content: string;,
+  content: string;
   timestamp: Date;
-  attachments: string;,
+  attachments: string;
   isPublic: boolean;
 }
 export enum DisputeOutcome {
@@ -188,12 +188,12 @@ export enum DisputeOutcome {
   WITHDRAWN = 'withdrawn',
   EXPIRED = 'expired'
   export interface DisputeResolution {
-  outcome: DisputeOutcome;,
+  outcome: DisputeOutcome;
   finalAmount: number;
   adjustedAmount?: number;
-  reason: string;,
+  reason: string;
   resolvedBy: string;
-  resolvedAt: Date;,
+  resolvedAt: Date;
   liabilityAmount: number;
   feesAwarded: number;
   notes?: string;
@@ -201,23 +201,23 @@ export enum DisputeOutcome {
   appealDeadline?: Date;
 }
 export interface DisputeTrustImpact {
-  buyerImpact: TrustScoreImpact;,
+  buyerImpact: TrustScoreImpact;
   sellerImpact: TrustScoreImpact;
   templateImpact?: TrustScoreImpact;
 }
 export interface TrustScoreImpact {
-  scoreDelta: number;,
+  scoreDelta: number;
   factors: string;
-  severity: 'minor' | 'moderate' | 'significant' | 'severe';,
+  severity: 'minor' | 'moderate' | 'significant' | 'severe';
   duration: number; // days,
   reversible: boolean;
 }
 export interface DisputeAppeal {
-  appealId: string;,
+  appealId: string;
   appealedBy: string;
-  appealedAt: Date;,
+  appealedAt: Date;
   reason: string;
-  evidence: DisputeEvidence;,
+  evidence: DisputeEvidence;
   status: 'pending' | 'under_review' | 'accepted' | 'rejected';
   reviewedBy?: string;
   reviewedAt?: Date;
@@ -225,35 +225,35 @@ export interface DisputeAppeal {
   notes?: string;
 }
 export interface DisputeWorkflow {
-  workflowId: string;,
+  workflowId: string;
   disputeId: string;
-  currentStage: DisputeStage;,
+  currentStage: DisputeStage;
   stages: DisputeWorkflowStage;
-  deadlines: DisputeDeadline;,
+  deadlines: DisputeDeadline;
   automatedActions: DisputeAutomation;
-  manualReviewRequired: boolean;,
+  manualReviewRequired: boolean;
   escalationRules: DisputeEscalation;
 }
 export interface DisputeWorkflowStage {
-  stage: DisputeStage;,
+  stage: DisputeStage;
   status: 'pending' | 'active' | 'completed' | 'skipped';
   startedAt?: Date;
   completedAt?: Date;
   assignedTo?: string;
-  requirements: string;,
+  requirements: string;
   actions: string;
   dependencies: string;
 }
 export interface DisputeDeadline {
-  type: 'response' | 'evidence' | 'review' | 'appeal';,
+  type: 'response' | 'evidence' | 'review' | 'appeal';
   dueDate: Date;
-  description: string;,
+  description: string;
   criticality: 'low' | 'medium' | 'high' | 'critical';
-  automated: boolean;,
+  automated: boolean;
   notificationSent: boolean;
 }
 export interface DisputeAutomation {
-  actionType: 'evidence_collection' | 'response_generation' | 'status_update' | 'notification' | 'escalation';,
+  actionType: 'evidence_collection' | 'response_generation' | 'status_update' | 'notification' | 'escalation';
   trigger: string;
   conditions: Record<string, any>;
   executed: boolean;
@@ -261,64 +261,64 @@ export interface DisputeAutomation {
   result?: string;
 }
 export interface DisputeEscalation {
-  condition: string;,
+  condition: string;
   escalateTo: string;
   triggered: boolean;
   triggeredAt?: Date;
   reason?: string;
 }
 export interface DisputeMetrics {
-  totalDisputes: number;,
+  totalDisputes: number;
   activeDisputes: number;
-  winRate: number;,
+  winRate: number;
   averageResolutionTime: number;
-  totalLiability: number;,
+  totalLiability: number;
   disputesByType: Record<DisputeType, number>;
   disputesByCategory: Record<DisputeCategory, number>;
   disputesByStatus: Record<DisputeStatus, number>;
   monthlyTrends: DisputeMonthlyTrend;
 }
 export interface DisputeMonthlyTrend {
-  month: string;,
+  month: string;
   totalDisputes: number;
-  winRate: number;,
+  winRate: number;
   totalLiability: number;
   averageResolutionTime: number;
 }
 export interface DisputeAnalytics {
-  period: {,
-  startDate: Date;,
+  period: {
+  startDate: Date;
   endDate: Date;
 };
-  metrics: DisputeMetrics;,
+  metrics: DisputeMetrics;
   insights: DisputeInsight;
-  recommendations: DisputeRecommendation;,
+  recommendations: DisputeRecommendation;
   generatedAt: Date;
 }
 export interface DisputeInsight {
-  insightId: string;,
+  insightId: string;
   type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
-  title: string;,
+  title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';,
+  impact: 'low' | 'medium' | 'high' | 'critical';
   confidence: number;
-  actionable: boolean;,
+  actionable: boolean;
   relatedMetrics: string;
   generatedAt: Date;
 }
 export interface DisputeRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   category: 'process_improvement' | 'evidence_strategy' | 'response_quality' | 'automation';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   expectedImpact: string;
-  implementation: {,
-  effort: 'low' | 'medium' | 'high';,
+  implementation: {
+  effort: 'low' | 'medium' | 'high';
   timeline: string;
   resources: string;
 };
-  successMetrics: string;,
+  successMetrics: string;
   generatedAt: Date;
 }
 export interface DisputeFilter {
@@ -326,12 +326,12 @@ export interface DisputeFilter {
   type?: DisputeType;
   category?: DisputeCategory;
   severity?: string;
-  dateRange?: {,
-  from: Date;,
+  dateRange?: {
+  from: Date;
   to: Date;
 };
   amountRange?: {
-  min: number;,
+  min: number;
   max: number;
 };
   assignedTo?: string;
@@ -344,11 +344,11 @@ export interface DisputeSearchCriteria extends DisputeFilter {
   limit?: number;
   offset?: number;
   export interface DisputeResponse {
-  responseId: string;,
+  responseId: string;
   disputeId: string;
-  responseType: 'accept' | 'contest' | 'partial_accept';,
+  responseType: 'accept' | 'contest' | 'partial_accept';
   argument: string;
-  evidence: DisputeEvidence;,
+  evidence: DisputeEvidence;
   attachments: DisputeAttachment;
   preparedBy: string;
   reviewedBy?: string;
@@ -359,13 +359,13 @@ export interface DisputeSearchCriteria extends DisputeFilter {
   notes?: string;
 }
 export interface DisputeNotification {
-  notificationId: string;,
+  notificationId: string;
   disputeId: string;
-  type: 'status_change' | 'deadline_reminder' | 'evidence_request' | 'resolution' | 'escalation';,
+  type: 'status_change' | 'deadline_reminder' | 'evidence_request' | 'resolution' | 'escalation';
   recipient: string;
-  title: string;,
+  title: string;
   content: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';,
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   sentAt: Date;
   readAt?: Date;
   actionRequired: boolean;

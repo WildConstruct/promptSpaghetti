@@ -21,16 +21,16 @@
 import { SecurityMetrics, SecurityAlert, ComplianceStatus, ResponseAction } from './SecurityDashboardMain';
 
 export interface SecurityAction {
-  type: string;,
+  type: string;
   payload: unknown;
-  timestamp: Date;,
+  timestamp: Date;
   executedBy: string;
 }
 export interface DataServiceConfig {
-  baseUrl: string;,
+  baseUrl: string;
   wsUrl: string;
   apiKey?: string;
-  timeout: number;,
+  timeout: number;
   retryAttempts: number;
   cacheTimeout: number; // seconds,
 }
@@ -85,7 +85,7 @@ export class SecurityDashboardDataService {
   /**
   * Get active security alerts
   */
-  async getActiveAlerts(filters?: {,)
+  async getActiveAlerts(filters?: {)
   severity?: string;
   category?: string;
   status?: string;
@@ -113,7 +113,7 @@ export class SecurityDashboardDataService {
   const alerts = response.data.map(alert => ({)
   ...alert,
   timestamp: new Date(alert.timestamp),
-  responseActions: alert.responseActions.map(action => ({,)
+  responseActions: alert.responseActions.map(action => ({)
   ...action,
   timestamp: action.timestamp ? new Date(action.timestamp) : undefined,
 }))
@@ -143,7 +143,7 @@ export class SecurityDashboardDataService {
   const complianceData = response.data.map(status => ({)
   ...status,
   lastAssessment: new Date(status.lastAssessment),
-  violations: status.violations.map(violation => ({,)
+  violations: status.violations.map(violation => ({)
   ...violation,
   dueDate: new Date(violation.dueDate),
 }))
@@ -312,7 +312,7 @@ export class SecurityDashboardDataService {
   ): Promise<ApiResponse<T>> {
     const url = `${this.config.baseUrl}${endpoint}`;}
     const requestOptions: RequestInit = {,
-  headers: {,
+  headers: {
         'Content-Type': 'application/json',
         ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })}
 }

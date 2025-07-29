@@ -29,10 +29,10 @@ export interface ActivityEvent {
   resource_id?: string;
   actor_id: string;
   actor_name?: string;
-  type: ActivityEventType;,
+  type: ActivityEventType;
   description: string;
   details?: string | Record<string, any>;
-  metadata?: {,
+  metadata?: {
   project_name?: string;
   resource_name?: string;
   resource_type?: string;
@@ -45,25 +45,25 @@ export interface ActivityEvent {
   created_at: string;
 }
 export interface ActivityStats {
-  total: number;,
+  total: number;
   by_type: Record<ActivityEventType, number>;
 
   by_actor: Record<string, { name: string; count: number }>;
-  recent_activity: {,
+  recent_activity: {
   today: number;
-  this_week: number;,
+  this_week: number;
   this_month: number;
 };
-  trends: {,
+  trends: {
   daily: Array<{ date: string; count: number }>;
     hourly: Array<{ hour: number; count: number }>;
   };
 }
 export interface ActivityActor {
-  id: string;,
+  id: string;
   name: string;
   avatar_url?: string;
-  activity_count: number;,
+  activity_count: number;
   last_activity: string;
 }
 export interface ActivityFilter {
@@ -76,7 +76,7 @@ export interface ActivityFilter {
   resource_id?: string;
 }
 export interface ActivityListResponse {
-  activities: ActivityEvent;,
+  activities: ActivityEvent;
   total: number;
   has_more: boolean;
   next_cursor?: string;
@@ -87,7 +87,7 @@ export interface ActivityEventCreateRequest {
   workspace_id?: string;
   project_id?: string;
   resource_id?: string;
-  actor_id: string;,
+  actor_id: string;
   type: ActivityEventType;
   description: string;
   details?: string | Record<string, any>;
@@ -103,7 +103,7 @@ export interface ActivityRealTimeConnection {
   error?: string;
 }
 export interface ActivityRealTimeEvent {
-  type: 'activity_created' | 'activity_updated' | 'activity_deleted';,
+  type: 'activity_created' | 'activity_updated' | 'activity_deleted';
   activity: ActivityEvent;
   timestamp: string;
   // Hook return types
@@ -120,15 +120,15 @@ export interface UseActivityFeedOptions {
   limit?: number;
 }
 export interface UseActivityFeedReturn {
-  activities: ActivityEvent;,
+  activities: ActivityEvent;
   loading: boolean;
-  error: Error | null;,
+  error: Error | null;
   hasMore: boolean;
-  stats: ActivityStats | null;,
+  stats: ActivityStats | null;
   actors: ActivityActor | null;
   realTimeConnection: ActivityRealTimeConnection | null;
   // Actions
-  refreshActivities: () => Promise<void>;,
+  refreshActivities: () => Promise<void>;
   loadMore: () => Promise<void>;
   createActivity: (activity: ActivityEventCreateRequest) => Promise<void>;
 }

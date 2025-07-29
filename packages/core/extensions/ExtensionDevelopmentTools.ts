@@ -171,14 +171,14 @@ ${this.generateExamples(extension, type)}
   return {
   extensionId,
   systemVersion: '1.0.0',
-  logger: {,
+  logger: {
   debug: jest.fn(),
   info: jest.fn(),
   warn: jest.fn(),
   error: jest.fn(),
   trace: jest.fn(),
 } as any,
-      storage: {,
+      storage: {
   get: jest.fn(),
   set: jest.fn(),
   delete: jest.fn(),
@@ -186,14 +186,14 @@ ${this.generateExamples(extension, type)}
   keys: jest.fn(),
   getScoped: jest.fn(),
 } as any,
-      events: {,
+      events: {
   on: jest.fn(),
   off: jest.fn(),
   emit: jest.fn(),
   once: jest.fn(),
   removeAllListeners: jest.fn(),
 } as any,
-      runtime: {,
+      runtime: {
   version: '1.0.0',
   environment: 'test',
   getSystemInfo: jest.fn(),
@@ -202,7 +202,7 @@ ${this.generateExamples(extension, type)}
   unregisterNode: jest.fn(),
   getRegisteredNodes: jest.fn(),
 } as any,
-      ui: {,
+      ui: {
   registerComponent: jest.fn(),
   unregisterComponent: jest.fn(),
   registerInspectorEditor: jest.fn(),
@@ -212,7 +212,7 @@ ${this.generateExamples(extension, type)}
   showNotification: jest.fn(),
   showModal: jest.fn(),
 } as any,
-      api: {,
+      api: {
   createHttpClient: jest.fn(),
   registerEndpoint: jest.fn(),
   unregisterEndpoint: jest.fn(),
@@ -526,9 +526,9 @@ class TestExtension implements BaseExtension {
 
 // Type definitions
 interface ExtensionSkeletonConfig {
-  id: string;,
+  id: string;
   name: string;
-  type: 'node' | 'ui' | 'transform' | 'storage';,
+  type: 'node' | 'ui' | 'transform' | 'storage';
   author: string;
   description: string;
 interface TestExtensionConfig {
@@ -540,12 +540,12 @@ interface TestExtensionConfig {
   dependencies?: string;
   permissions?: string;
 interface LifecycleTestResult {
-  success: boolean;,
+  success: boolean;
   phases: LifecyclePhaseResult;
-  errors: Error;,
+  errors: Error;
   duration: number;
 interface LifecyclePhaseResult {
-  phase: string;,
+  phase: string;
   success: boolean;
   duration: number;
   error?: Error;

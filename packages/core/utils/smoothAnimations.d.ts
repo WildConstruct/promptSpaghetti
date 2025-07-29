@@ -6,7 +6,7 @@
  */
 import React from 'react';
 export declare const easingFunctions: {
-    cinema4d: {,
+    cinema4d: {
         ease: string;
         easeIn: string;
         easeOut: string;
@@ -90,7 +90,7 @@ export declare const globalAnimationManager: AnimationManager;
 export declare function useSmoothHover(duration?: number): {
     isHovered: boolean;
     isTransitioning: boolean;
-    hoverProps: {,
+    hoverProps: {
         onMouseEnter: () => void;
         onMouseLeave: () => void;
     };

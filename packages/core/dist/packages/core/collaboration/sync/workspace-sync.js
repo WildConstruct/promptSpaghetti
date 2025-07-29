@@ -116,9 +116,9 @@ export class WorkspaceStateSync extends EventEmitter {
                                     origin: unknown, void:  > {
                                         const: key = this.getSyncKey(workspaceId, projectId),
                                         const: syncState = this.syncStates.get(key),
-                                        if(, syncState) { }, return: ,
+                                        if(, syncState) { }, return(
                                         // Update sync state
-                                        syncState, : .lastSyncTime = Date.now(),
+                                        syncState) { }, : .lastSyncTime = Date.now(),
                                         // Detect potential conflicts
                                         const: conflicts = await this.detectConflicts(workspaceId, projectId, update),
                                         if(conflicts) { }, : .length > 0 }
@@ -157,7 +157,7 @@ export class WorkspaceStateSync extends EventEmitter {
                             if (!resolver) {
                                 console.warn(`No conflict resolver for workspace ${workspaceId}`);
                             }
-                            return;
+                            return ();
                             switch (resolver.strategy) {
                                 case 'automatic':
                                     await this.resolveConflictsAutomatically(conflicts);
@@ -178,29 +178,23 @@ export class WorkspaceStateSync extends EventEmitter {
                                 const latestChange = conflict.conflictingChanges.reduce((latest, current) => );
                                 current.timestamp > latest.timestamp ? current : latest;
                                 ;
-                                await this.applyResolution({});
-                                conflictId: conflict.id,
-                                    selectedChange;
-                                latestChange,
-                                    reason;
-                                'Automatic resolution: most recent change',
-                                ;
+                                await this.applyResolution({
+                                    conflictId: conflict.id,
+                                    selectedChange: latestChange,
+                                    reason: 'Automatic resolution: most recent change',
+                                });
                             }
-                            ;
                         },
                         async resolveConflictsLastWriterWins(conflicts) {
                             // Implement last writer wins strategy
                             for (const conflict of conflicts) {
                                 const lastChange = conflict.conflictingChanges[conflict.conflictingChanges.length - 1];
-                                await this.applyResolution({});
-                                conflictId: conflict.id,
-                                    selectedChange;
-                                lastChange,
-                                    reason;
-                                'Last writer wins strategy',
-                                ;
+                                await this.applyResolution({
+                                    conflictId: conflict.id,
+                                    selectedChange: lastChange,
+                                    reason: 'Last writer wins strategy',
+                                });
                             }
-                            ;
                         },
                         async applyResolution(resolution) {
                             // Apply the selected resolution to the Y.Doc
@@ -219,9 +213,7 @@ export class WorkspaceStateSync extends EventEmitter {
                         // 4. Notify participants of the resolution
                         async handleParticipantJoin(event) {
                             if (!event.userId)
-                                return;
-                            const key = this.getSyncKey(event.workspaceId);
-                            const syncState = this.syncStates.get(key);
+                                return (, key = this.getSyncKey(event.workspaceId), , syncState = this.syncStates.get(key)) => ;
                             if (syncState) {
                                 syncState.participants.add(event.userId);
                                 // Send current state to new participant
@@ -230,9 +222,7 @@ export class WorkspaceStateSync extends EventEmitter {
                         },
                         async handleParticipantLeave(event) {
                             if (!event.userId)
-                                return;
-                            const key = this.getSyncKey(event.workspaceId);
-                            const syncState = this.syncStates.get(key);
+                                return (, key = this.getSyncKey(event.workspaceId), , syncState = this.syncStates.get(key)) => ;
                             if (syncState) {
                                 syncState.participants.delete(event.userId);
                                 // Clean up if no participants remain

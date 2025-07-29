@@ -21,84 +21,84 @@ import {
 // Enhanced classification types
 
 export interface MLClassificationModel {
-  id: string;,
+  id: string;
   name: string;
-  type: 'text_classifier' | 'pattern_detector' | 'anomaly_detector' | 'similarity_matcher';,
+  type: 'text_classifier' | 'pattern_detector' | 'anomaly_detector' | 'similarity_matcher';
   version: string;
-  accuracy: number;,
+  accuracy: number;
   trainingData: number;
-  lastTrained: Date;,
+  lastTrained: Date;
   enabled: boolean;
-  threshold: number;,
+  threshold: number;
   categories: DataCategory;
   features: string;
 }
 export interface ClassificationWorkflow {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   triggers: WorkflowTrigger;
-  actions: WorkflowAction;,
+  actions: WorkflowAction;
   conditions: WorkflowCondition;
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
 }
 export interface WorkflowTrigger {
-  type: 'classification_complete' | 'threshold_exceeded' | 'compliance_violation' | 'manual_review_required';,
+  type: 'classification_complete' | 'threshold_exceeded' | 'compliance_violation' | 'manual_review_required';
   conditions: Record<string, any>;
 }
 export interface WorkflowAction {
-  type: 'notify' | 'encrypt' | 'quarantine' | 'audit_log' | 'escalate' | 'auto_remediate';,
+  type: 'notify' | 'encrypt' | 'quarantine' | 'audit_log' | 'escalate' | 'auto_remediate';
   parameters: Record<string, any>;
   timeout: number;
 }
 export interface WorkflowCondition {
-  field: string;,
+  field: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
-  value: any;,
-  logic: 'AND' | 'OR';
-}
+  value: any;
+  logic: 'AND' | 'OR'
+  }
 export interface ClassificationAnalytics {
-  totalClassifications: number;,
+  totalClassifications: number;
   classificationsByLevel: Record<ClassificationLevel, number>;
   classificationsByCategory: Record<DataCategory, number>;
-  complianceViolations: number;,
+  complianceViolations: number;
   averageConfidence: number;
   topRiskPatterns: Array<{,
-  pattern: string;,
+  pattern: string;
   count: number;
   riskScore: number;
 }>;
   temporalTrends: Array<{,
   timestamp: Date;
-  count: number;,
+  count: number;
   avgConfidence: number;
 }>;
   lastUpdated: Date;
 }
 export interface DataFlow {
-  id: string;,
+  id: string;
   source: string;
-  destination: string;,
+  destination: string;
   dataTypes: DataCategory;
-  classificationLevels: ClassificationLevel;,
+  classificationLevels: ClassificationLevel;
   encryptionInTransit: boolean;
-  lastClassified: Date;,
+  lastClassified: Date;
   riskScore: number;
-  complianceStatus: 'compliant' | 'violation' | 'unknown';
-}
+  complianceStatus: 'compliant' | 'violation' | 'unknown'
+  }
 export interface ClassificationContext {
-  source: string;,
+  source: string;
   purpose: string;
-  userContext: {,
-  userId: string;,
+  userContext: {
+  userId: string;
   role: string;
-  department: string;,
+  department: string;
   clearanceLevel: string;
 };
-  environmentContext: {,
+  environmentContext: {
   system: string;
-  network: string;,
+  network: string;
   location: string;
   timezone: string;
 };
@@ -107,24 +107,24 @@ export interface ClassificationContext {
 }
 export interface EnhancedClassificationResult extends ClassificationResult {
   mlPredictions: Array<{,
-  model: string;,
+  model: string;
   prediction: ClassificationLevel;
-  confidence: number;,
+  confidence: number;
   features: Record<string, number>;
 }>;
   contextualFactors: Array<{,
   factor: string;
-  impact: number;,
+  impact: number;
   description: string;
 }>;
-  riskScore: number;,
+  riskScore: number;
   remediation: Array<{;
-  action: string;,
+  action: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   automated: boolean;
 }>;
-  workflowsTriggered: string;,
+  workflowsTriggered: string;
   reviewRequired: boolean;
   reviewReason?: string;
 /**
@@ -344,13 +344,13 @@ export class AdvancedClassificationEngine extends EventEmitter {
     framework: ComplianceFramework,
     dateRange: { start: Date; end: Date }
   ): {
-    framework: ComplianceFramework;,
+    framework: ComplianceFramework;
   period: { start: Date; end: Date };
-    totalClassifications: number;,
+    totalClassifications: number;
   compliantClassifications: number;
     violations: Array<{,
   dataId: string;
-  violation: string;,
+  violation: string;
   severity: string;
   timestamp: Date;
 }>;
@@ -392,7 +392,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       } catch (error) {
         console.warn(`ML model ${modelId} prediction failed:`, error);}
     return predictions;
-  private analyzeContextualFactors(data: DataElement,)
+  private analyzeContextualFactors(data: DataElement)
     context: ClassificationContext,
     baseResult: ClassificationResult): EnhancedClassificationResult['contextualFactors'] {,
   const factors: EnhancedClassificationResult['contextualFactors'] = [];
@@ -430,7 +430,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   description: 'PII data crossing international boundaries',
 });
     return factors;
-  private calculateRiskScore(baseResult: ClassificationResult,)
+  private calculateRiskScore(baseResult: ClassificationResult)
     mlPredictions: EnhancedClassificationResult['mlPredictions'],
     contextualFactors: EnhancedClassificationResult['contextualFactors']): number {,
   let riskScore = 0;
@@ -456,9 +456,9 @@ export class AdvancedClassificationEngine extends EventEmitter {
   case ClassificationLevel.PUBLIC: return 10;
   case ClassificationLevel.INTERNAL: return 30;
   case ClassificationLevel.CONFIDENTIAL: return 70;
-  case ClassificationLevel.RESTRICTED: return 90;,
+  case ClassificationLevel.RESTRICTED: return 90;
   default: return 30;
-  private shouldRequireReview(result: ClassificationResult,)
+  private shouldRequireReview(result: ClassificationResult)
   riskScore: number,
   context: ClassificationContext): boolean {,
   // High risk score
@@ -479,7 +479,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   if (result.confidence < 60) return 'Low classification confidence';
   if (result.complianceRequirements.length > 0) return 'Compliance-sensitive data detected';
   return 'Manual review required by policy';
-  private generateRemediationActions(result: ClassificationResult,)
+  private generateRemediationActions(result: ClassificationResult)
   riskScore: number,
   context: ClassificationContext): EnhancedClassificationResult['remediation'] {,
   const actions: EnhancedClassificationResult['remediation'] = [];
@@ -535,7 +535,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
 } catch (error) {
         console.warn(`Workflow ${workflowId} trigger evaluation failed:`, error);}
     return triggeredWorkflows;
-  private evaluateTrigger(trigger: WorkflowTrigger,)
+  private evaluateTrigger(trigger: WorkflowTrigger)
     result: EnhancedClassificationResult,
     context: ClassificationContext): boolean {,
   switch (trigger.type) {
@@ -550,7 +550,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   return result.reviewRequired;
   default:,
   return false;
-  private evaluateWorkflowConditions(workflow: ClassificationWorkflow,)
+  private evaluateWorkflowConditions(workflow: ClassificationWorkflow)
   result: EnhancedClassificationResult,
   context: ClassificationContext): boolean {,
   if (workflow.conditions.length === 0) return true;
@@ -577,7 +577,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
     case 'contains': return String(value).includes(String(condition.value));
     case 'matches': return condition.value instanceof RegExp && condition.value.test(String(value));
     default: return false;
-  private async executeWorkflowAction(action: WorkflowAction,)
+  private async executeWorkflowAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
     switch (action.type) {
@@ -599,7 +599,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
     case 'auto_remediate':
       await this.executeAutoRemediateAction(action, result, context);
       break;
-  private async executeNotifyAction(action: WorkflowAction,)
+  private async executeNotifyAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
     this.emit('workflowNotification', {)
@@ -611,7 +611,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   priority: action.parameters.priority || 'medium',
       timestamp: new Date();
   });
-  private async executeEncryptAction(action: WorkflowAction,)
+  private async executeEncryptAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
   this.emit('workflowEncryption', {)
@@ -620,7 +620,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   keyRotation: action.parameters.keyRotation || '90-days',
   timestamp: new Date(),
 });
-  private async executeQuarantineAction(action: WorkflowAction,)
+  private async executeQuarantineAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
     this.emit('workflowQuarantine', {)
@@ -630,7 +630,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
 },
   timestamp: new Date();
   });
-  private async executeAuditLogAction(action: WorkflowAction,)
+  private async executeAuditLogAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
   this.emit('workflowAuditLog', {)
@@ -641,7 +641,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   timestamp: new Date(),
   details: action.parameters,
 });
-  private async executeEscalateAction(action: WorkflowAction,)
+  private async executeEscalateAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
   this.emit('workflowEscalation', {)
@@ -652,7 +652,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   assignee: action.parameters.assignee || 'security-manager',
   timestamp: new Date(),
 });
-  private async executeAutoRemediateAction(action: WorkflowAction,)
+  private async executeAutoRemediateAction(action: WorkflowAction)
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
   // Execute automated remediation based on the result
@@ -677,7 +677,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   }));
   private hashSource(source: string): number {
   return parseInt(crypto.createHash('md5').update(source).digest('hex').substring(0, 8), 16) % 1000;
-  private async performTraining(model: MLClassificationModel,)
+  private async performTraining(model: MLClassificationModel)
   features: Record<string,
   number>[],
   trainingData: any): Promise<Record<string, number>> {,
@@ -689,7 +689,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   recall: accuracy * 0.9,
   f1Score: accuracy * 0.925,
 };
-  private extractModelFeatures(data: DataElement,)
+  private extractModelFeatures(data: DataElement)
     context: ClassificationContext,
     model: MLClassificationModel): Record<string, number> {
     const features: Record<string, number> = {};
@@ -717,7 +717,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
     case 'high': return 3;
     case 'critical': return 4;
     default: return 1;
-  private async makePrediction(model: MLClassificationModel,)
+  private async makePrediction(model: MLClassificationModel)
     features: Record<string,
     number>
   ): Promise<{ classification: ClassificationLevel; confidence: number }> {
@@ -776,13 +776,13 @@ export class AdvancedClassificationEngine extends EventEmitter {
   private initializeAnalytics(): void {,
   this.analytics = {
   totalClassifications: 0,
-  classificationsByLevel: {,
+  classificationsByLevel: {
   [ClassificationLevel.PUBLIC]: 0,
   [ClassificationLevel.INTERNAL]: 0,
   [ClassificationLevel.CONFIDENTIAL]: 0,
   [ClassificationLevel.RESTRICTED]: 0,
 },
-  classificationsByCategory: {,
+  classificationsByCategory: {
   [DataCategory.PII]: 0,
   [DataCategory.AUTHENTICATION]: 0,
   [DataCategory.SYSTEM_CONFIG]: 0,

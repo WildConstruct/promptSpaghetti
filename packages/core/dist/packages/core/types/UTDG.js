@@ -33,13 +33,5 @@ export const HISTORICAL_ERAS = {
         region: ['Europe'],
         accuracy: 'high',
         description: 'Renaissance period of cultural and artistic rebirth'
-    },
-    // Material and Content Variations
-    interface, Variation
-}, { id: string };
-type: 'color' | 'texture' | 'pattern' | 'quality' | 'condition';
-value: string;
-probability: number;
-era_specific ?  : boolean;
-region_specific ?  : string;
-social_class ?  : SocialClass;
+    }
+};

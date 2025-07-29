@@ -156,7 +156,7 @@ export interface ConditionEvaluationResult {
     score?: number;
     reason: string;
     executionTime: number;
-    metadata: {,
+    metadata: {
         evaluatedAt: Date;
         contextHash: string;
         intermediateValues?: Record<string, any>;
@@ -169,38 +169,38 @@ export interface ToggleEvaluationResult {
     conditions: ConditionEvaluationResult[];
     fallbackReason?: string;
     confidence: number;
-    metadata: {,
+    metadata: {
         evaluatedAt: Date;
         totalExecutionTime: number;
         cacheHit: boolean;
     };
 
 export interface ToggleConditionsConfig {
-    evaluation: {,
+    evaluation: {
         enableCaching: boolean;
         cacheTimeToLive: number;
         maxConditionsPerToggle: number;
         evaluationTimeout: number;
         strictMode: boolean;
     };
-    security: {,
+    security: {
         allowCustomExpressions: boolean;
         maxExpressionComplexity: number;
         enableSecurityAudit: boolean;
         blockedPatterns: string[];
     };
-    rollout: {,
+    rollout: {
         defaultSalt: string;
         stickinessDuration: number;
         enableGradualRollout: boolean;
         rolloutRateLimit: number;
     };
-    experiments: {,
+    experiments: {
         enableABTesting: boolean;
         defaultTrafficAllocation: number;
         maxVariants: number;
-        stickinessStrategy: 'user' | 'session' | 'device';
-    };
+        stickinessStrategy: 'user' | 'session' | 'device'
+  };
 /**
  * Toggle Conditions Service
  *

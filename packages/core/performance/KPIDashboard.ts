@@ -16,75 +16,75 @@ import { PerformanceBaseline, BaselineSnapshot, BaselineSummary } from './Perfor
 import { performanceTargets, getAdjustedTargets, PerformanceTargetConfig } from './PerformanceTargets';
 
 export interface DashboardWidget {
-  id: string;,
+  id: string;
   type: 'chart' | 'metric' | 'alert' | 'trend' | 'gauge' | 'table';
-  title: string;,
+  title: string;
   description: string;
-  size: 'small' | 'medium' | 'large';,
+  size: 'small' | 'medium' | 'large';
   config: Record<string, any>;
-  data: any;,
+  data: any;
   refreshRate: number; // in milliseconds,
   lastUpdated: number;
 }
 export interface DashboardLayout {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   widgets: DashboardWidget;
-  columns: number;,
+  columns: number;
   autoRefresh: boolean;
   refreshInterval: number;
 }
 export interface DashboardMetrics {
-  overview: {,
-  totalKPIs: number;,
+  overview: {
+  totalKPIs: number;
   monitoredKPIs: number;
-  healthyKPIs: number;,
+  healthyKPIs: number;
   warningKPIs: number;
-  criticalKPIs: number;,
+  criticalKPIs: number;
   averageScore: number;
-  trendsImproving: number;,
+  trendsImproving: number;
   trendsStable: number;
   trendsDegrading: number;
 };
   categories: Record<string, {
-  total: number;,
+  total: number;
   healthy: number;
-  warning: number;,
+  warning: number;
   critical: number;
   averageScore: number;
 }>;
-  alerts: {,
+  alerts: {
   total: number;
-  critical: number;,
+  critical: number;
   high: number;
-  medium: number;,
+  medium: number;
   low: number;
   acknowledged: number;
 };
-  trends: {,
+  trends: {
   improving: KPITrendAnalysis;
-  degrading: KPITrendAnalysis;,
+  degrading: KPITrendAnalysis;
   stable: KPITrendAnalysis;
 };
 }
 export interface DashboardReport {
-  id: string;,
+  id: string;
   timestamp: number;
-  type: 'summary' | 'detailed' | 'trend' | 'alert';,
-  period: {,
-  start: number;,
+  type: 'summary' | 'detailed' | 'trend' | 'alert';
+  period: {
+  start: number;
   end: number;
   duration: string;
 };
-  metrics: DashboardMetrics;,
+  metrics: DashboardMetrics;
   insights: {;
-  keyFindings: string;,
+  keyFindings: string;
   recommendations: string;
-  riskAreas: string;,
+  riskAreas: string;
   improvements: string;
 };
-  charts: {,
+  charts: {
   performanceScore: Array<{ timestamp: number; score: number }>;
     categoryBreakdown: Record<string, number>;
     alertsOverTime: Array<{ timestamp: number; count: number; severity: string }>;
@@ -385,7 +385,7 @@ export class KPIDashboard extends EventEmitter {
 },
   timestamp: now,
       type,
-      period: {,
+      period: {
         start,
         end: now,
         duration: `${periodHours}h`}
@@ -652,7 +652,7 @@ export class KPIDashboard extends EventEmitter {
   const activeAlerts = this.monitoringService.getActiveAlerts();
   return {
   alerts: activeAlerts.slice(0, widget.config.maxAlerts || 10),
-  groupedBySeverity: {,
+  groupedBySeverity: {
   critical: activeAlerts.filter(a => a.severity === 'critical'),
   high: activeAlerts.filter(a => a.severity === 'high'),
   medium: activeAlerts.filter(a => a.severity === 'medium'),

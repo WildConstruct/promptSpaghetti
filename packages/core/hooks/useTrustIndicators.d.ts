@@ -18,7 +18,7 @@ export interface EnhancedTrustData {
     downloadCount: number;
     averageRating: number;
     reviewCount: number;
-    verificationStatus: {,
+    verificationStatus: {
         email: boolean;
         phone: boolean;
         identity: boolean;
@@ -51,7 +51,7 @@ export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
     getTrustScoreColor: (score?: number) => string;
     trustScore: number;
     trustTier: "professional" | "basic" | "expert" | "verified" | "unverified";
-    verificationStatus: {,
+    verificationStatus: {
         email: boolean;
         phone: boolean;
         identity: boolean;

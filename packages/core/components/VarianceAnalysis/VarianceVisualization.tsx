@@ -6,11 +6,11 @@
 import React, { useMemo, useState } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
 interface VarianceVisualizationProps {
-  results: EnhancedPreviewResult;,
+  results: EnhancedPreviewResult;
   varianceAnalysis: VarianceAnalysis | null;
   className?: string;
   interface ChartDataPoint {
-  label: string;,
+  label: string;
   value: number;
   color: string;
   export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({,)
@@ -306,7 +306,7 @@ interface VarianceVisualizationProps {
         borderRadius: 12,
         border: '1px solid #e2e8f0',
         padding: 24,
-        textAlign: 'center';
+        textAlign: 'center'
   }}>
         <div style={{ fontSize: 24, marginBottom: 12 }}>📈</div>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 8 }}>
@@ -322,7 +322,7 @@ interface VarianceVisualizationProps {
   background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{

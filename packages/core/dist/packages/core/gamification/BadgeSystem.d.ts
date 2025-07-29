@@ -83,5 +83,50 @@ export declare class BadgeSystem {
     private eventListeners;
     constructor();
     private initializeDefaultBadges;
+    private initializeMockUserData;
+    /**
+     * Check and award badges for a user based on their current progress
+     */
+    checkAndAwardBadges(userId: string): BadgeUnlockEvent;
+    private checkBadgeCriteria;
+    private checkVerificationCriteria;
+    private getStatisticValue;
+    private checkCompletionCriteria;
+    private awardBadge;
+    private calculateLevel;
+    private triggerBadgeUnlockEvent;
+    /**
+     * Get user's badge progress
+     */
+    getUserProgress(userId: string): UserBadgeProgress | null;
+    /**
+    * Get all available badges
+    */
+    getAllBadges(): Badge;
+    /**
+    * Get badges by category
+    */
+    getBadgesByCategory(category: BadgeCategory): Badge;
+    /**
+    * Get user's earned badges
+    */
+    getUserBadges(userId: string): UserBadge;
+    /**
+    * Get badge by ID
+    */
+    getBadge(badgeId: string): Badge | null;
+    /**
+    * Get user's badge progress for a specific badge
+    */
+    getBadgeProgress(userId: string, badgeId: string): number;
+    /**
+    * Get leaderboard data
+    */
+    getLeaderboard(limit?: number): Array<{}, userId>;
+    string: any;
+    totalPoints: number;
+    level: number;
+    badgeCount: number;
+    rank: number;
 }
 //# sourceMappingURL=BadgeSystem.d.ts.map

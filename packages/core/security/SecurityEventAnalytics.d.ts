@@ -49,25 +49,25 @@ export interface SecurityPattern {
 
 export interface BehavioralBaseline {
     userId: string;
-    normalPatterns: {,
-        loginTimes: {,
+    normalPatterns: {
+        loginTimes: {
             hour: number;
             frequency: number;
         }[];
-        ipAddresses: {,
+        ipAddresses: {
             ip: string;
             frequency: number;
         }[];
-        devices: {,
+        devices: {
             deviceId: string;
             frequency: number;
         }[];
-        actions: {,
+        actions: {
             action: string;
             frequency: number;
         }[];
     };
-    riskProfile: {,
+    riskProfile: {
         baselineRisk: number;
         recentDeviations: number;
         trustedScore: number;
@@ -83,16 +83,16 @@ export interface SecurityInsight {
     severity: RiskLevel;
     confidence: number;
     impact: 'low' | 'medium' | 'high' | 'critical';
-    timeframe: {,
+    timeframe: {
         start: Date;
         end: Date;
     };
-    evidence: {,
+    evidence: {
         eventIds: string[];
         patterns: string[];
         metrics: Record<string, number>;
     };
-    recommendations: {,
+    recommendations: {
         immediate: string[];
         shortTerm: string[];
         longTerm: string[];
@@ -100,11 +100,11 @@ export interface SecurityInsight {
     generatedAt: Date;
 
 export interface SecurityMetricsSummary {
-    period: {,
+    period: {
         start: Date;
         end: Date;
     };
-    overallRisk: {,
+    overallRisk: {
         level: RiskLevel;
         score: number;
         trend: 'increasing' | 'decreasing' | 'stable';
@@ -113,17 +113,17 @@ export interface SecurityMetricsSummary {
             impact: number;
         }>;
     };
-    eventVolume: {,
+    eventVolume: {
         total: number;
         byType: Record<SecurityEventType, number>;
         bySeverity: Record<string, number>;
         hourlyDistribution: number[];
-        trends: {,
+        trends: {
             weekOverWeek: number;
             monthOverMonth: number;
         };
     };
-    threatLandscape: {,
+    threatLandscape: {
         activeThreats: number;
         newPatterns: number;
         topCategories: Array<{,
@@ -135,7 +135,7 @@ export interface SecurityMetricsSummary {
             riskScore: number;
         }>;
     };
-    userBehavior: {,
+    userBehavior: {
         anomalousUsers: number;
         highRiskUsers: Array<{,
             userId: string;
@@ -143,7 +143,7 @@ export interface SecurityMetricsSummary {
         }>;
         behavioralDeviations: number;
     };
-    systemHealth: {,
+    systemHealth: {
         securityPosture: number;
         vulnerabilityExposure: number;
         complianceScore: number;
@@ -154,14 +154,14 @@ export interface AlertConfiguration {
     id: string;
     name: string;
     description: string;
-    conditions: {,
+    conditions: {
         eventTypes?: SecurityEventType[];
         thresholds?: Record<string, number>;
         timeWindow?: number;
         userScope?: string[];
         riskLevel?: RiskLevel;
     };
-    actions: {,
+    actions: {
         notify: string[];
         escalate: boolean;
         autoResponse: string[];

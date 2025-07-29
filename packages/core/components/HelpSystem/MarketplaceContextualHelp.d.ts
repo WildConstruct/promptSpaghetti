@@ -44,7 +44,7 @@ export interface ContextualHelpRule {
     id: string;
     name: string;
     triggerType: ContextualTriggerType;
-    conditions: {,
+    conditions: {
         pagePattern?: RegExp;
         elementSelector?: string;
         userBehavior?: Partial<UserBehaviorContext>;

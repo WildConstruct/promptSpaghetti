@@ -31,7 +31,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 export interface WeightedOption {
-  id: string;,
+  id: string;
   text: string;
   weight: number;
   locked?: boolean;
@@ -39,7 +39,7 @@ export interface WeightedOption {
   category?: string;
 }
 export interface DragReorderProps {
-  options: WeightedOption;,
+  options: WeightedOption;
   onChange: (options: WeightedOption) => void;
   disabled?: boolean;
   showWeights?: boolean;
@@ -64,13 +64,13 @@ export interface DragReorderProps {
   showStatistics?: boolean;
 }
 export interface WeightStatistics {
-  totalWeight: number;,
+  totalWeight: number;
   averageWeight: number;
-  medianWeight: number;,
+  medianWeight: number;
   maxWeight: number;
-  minWeight: number;,
+  minWeight: number;
   standardDeviation: number;
-  entropyScore: number;,
+  entropyScore: number;
   weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
   // Sortable Item Component
   function SortableWeightItem({)
@@ -92,21 +92,21 @@ export interface WeightStatistics {
   isSelected,
   draggedItemId
 }: {
-  option: WeightedOption;,
+  option: WeightedOption;
   index: number;
-  percentage: number;,
+  percentage: number;
   isDragging: boolean;
-  showWeights: boolean;,
+  showWeights: boolean;
   showPercentages: boolean;
-  allowWeightEditing: boolean;,
+  allowWeightEditing: boolean;
   allowLocking: boolean;
-  minWeight: number;,
+  minWeight: number;
   maxWeight: number;
-  themeStyles: unknown;,
+  themeStyles: unknown;
   animationDuration: number;
-  onWeightChange: (optionId: string, weight: number) => void;,
-  onLockToggle: (optionId: string) => void;,
-  onItemSelect: (optionId: string, selected: boolean) => void;,
+  onWeightChange: (optionId: string, weight: number) => void;
+  onLockToggle: (optionId: string) => void;
+  onItemSelect: (optionId: string, selected: boolean) => void;
   isSelected: boolean;
   draggedItemId: string | null;
 }) {
@@ -145,7 +145,7 @@ export interface WeightStatistics {
 },
   cursor: option.locked ? 'default' : 'grab',
         opacity: isCurrentlyDragging ? 0.9 : 1,
-        userSelect: 'none';
+        userSelect: 'none'
   }}
       {...attributes}
       {...listeners}
@@ -261,7 +261,7 @@ export interface WeightStatistics {
                 backgroundColor: themeStyles.background,
                 color: themeStyles.text,
                 fontSize: '12px',
-                textAlign: 'center';
+                textAlign: 'center'
   }}
             />
           )}
@@ -344,9 +344,9 @@ function calculateWeightStatistics(options: WeightedOption): WeightStatistics {
   const cv = averageWeight > 0 ? standardDeviation / averageWeight : 0;
   let weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
   if (cv < 0.2) {
-    weightDistribution = 'uniform';
+    weightDistribution = 'uniform'
   } else if (cv < 0.5) {
-    weightDistribution = 'concentrated';
+    weightDistribution = 'concentrated'
   } else {
   // Simple bimodal detection: check if there are distinct clusters,
   const isSkewed = Math.abs(averageWeight - medianWeight) / standardDeviation > 0.5;
@@ -401,7 +401,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   // Configure sensors for better touch and keyboard support
   const sensors = useSensors(;);
     useSensor(PointerSensor, {)
-  activationConstraint: {,
+  activationConstraint: {
   distance: 8,
 }),
     useSensor(KeyboardSensor, {)
@@ -498,21 +498,21 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   border: '#e5e7eb',
   text: '#374151',
   accent: '#3b82f6',
   hover: '#f9fafb',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   border: '#4b5563',
   text: '#f9fafb',
   accent: '#60a5fa',
   hover: '#374151',
 },
-  cinema: {,
+  cinema: {
   background: '#1a1a1a',
   border: '#ff7c00',
   text: '#ffffff',
@@ -548,7 +548,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
         marginBottom: '20px',
         borderBottom: `1px solid ${themeStyles.border}`}
 },
-  paddingBottom: '16px';
+  paddingBottom: '16px'
   }}>
         <div>
           <h3 style={{
@@ -579,7 +579,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
                 borderRadius: '6px',
                 padding: '6px 12px',
                 fontSize: '12px',
-                cursor: 'pointer';
+                cursor: 'pointer'
   }}
             >
               Bulk Actions
@@ -598,7 +598,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
           marginBottom: '20px',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-          gap: '12px';
+          gap: '12px'
   }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '20px', fontWeight: 600, color: themeStyles.accent }}>
@@ -638,7 +638,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '12px',
-          flexWrap: 'wrap';
+          flexWrap: 'wrap'
   }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '14px', fontWeight: 500 }}>
@@ -654,7 +654,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
                 borderRadius: '4px',
                 padding: '4px 8px',
                 fontSize: '12px',
-                cursor: 'pointer';
+                cursor: 'pointer'
   }}
             >
               Equal Weights
@@ -669,7 +669,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
                 borderRadius: '4px',
                 padding: '4px 8px',
                 fontSize: '12px',
-                cursor: 'pointer';
+                cursor: 'pointer'
   }}
             >
               Normalize
@@ -684,7 +684,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
                 borderRadius: '4px',
                 padding: '4px 8px',
                 fontSize: '12px',
-                cursor: 'pointer';
+                cursor: 'pointer'
   }}
             >
               Randomize
@@ -748,8 +748,8 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
         <DragOverlay
           dropAnimation={{
   sideEffects: defaultDropAnimationSideEffects({,)
-  styles: {,
-  active: {,
+  styles: {
+  active: {
   opacity: '0.5',
 }
           }}
@@ -765,7 +765,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
 },
   transform: 'scale(1.02)',
               userSelect: 'none',
-              cursor: 'grabbing';
+              cursor: 'grabbing'
   }}>
               <div style={{
   fontSize: '14px',

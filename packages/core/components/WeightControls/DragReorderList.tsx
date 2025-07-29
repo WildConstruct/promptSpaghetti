@@ -6,7 +6,7 @@ import { WeightControlOption } from '../Inspector/WeightControlSlider';
 import { getOptionColor } from './WeightVisualization';
 
 export interface DragReorderListProps {
-  options: WeightControlOption;,
+  options: WeightControlOption;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onWeightChange?: (optionId: string, newWeight: number) => void;
   onTextChange?: (optionId: string, newText: string) => void;
@@ -14,9 +14,9 @@ export interface DragReorderListProps {
   disabled?: boolean;
   showWeights?: boolean;
 interface DragState {
-  isDragging: boolean;,
+  isDragging: boolean;
   draggedIndex: number | null;
-  dragOverIndex: number | null;,
+  dragOverIndex: number | null;
   dragOffset: { x: number; y: number };
   ghostPosition: { x: number; y: number };
 const DRAG_THRESHOLD = 5; // Minimum pixels to start drag;
@@ -54,7 +54,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
 };
     setDragState(prev => ({)
   ...prev,
-  dragOffset: {,
+  dragOffset: {
   x: event.clientX - rect.left,
   y: event.clientY - rect.top,
 }));
@@ -70,12 +70,12 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
   ...prev,
   isDragging: true,
   draggedIndex: dragStartRef.current!.index,
-  ghostPosition: {,
+  ghostPosition: {
   x: event.clientX - prev.dragOffset.x,
   y: event.clientY - prev.dragOffset.y,
 }));
       document.body.style.cursor = 'grabbing';
-      document.body.style.userSelect = 'none';
+      document.body.style.userSelect = 'none'
   }, [dragState.isDragging]);
   // Handle drag over - update drop target
   const handleDragOver = useCallback((event: MouseEvent) => {
@@ -84,7 +84,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
   // Update ghost position
   setDragState(prev => ({)
   ...prev,
-  ghostPosition: {,
+  ghostPosition: {
   x: event.clientX - prev.dragOffset.x,
   y: event.clientY - prev.dragOffset.y,
 }));
@@ -158,7 +158,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
 };
     setDragState(prev => ({)
   ...prev,
-  dragOffset: {,
+  dragOffset: {
   x: touch.clientX - rect.left,
   y: touch.clientY - rect.top,
 }));
@@ -175,7 +175,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
   ...prev,
   isDragging: true,
   draggedIndex: dragStartRef.current!.index,
-  ghostPosition: {,
+  ghostPosition: {
   x: touch.clientX - prev.dragOffset.x,
   y: touch.clientY - prev.dragOffset.y,
 }));
@@ -239,7 +239,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
                 cursor: disabled ? 'default' : 'grab',
                 opacity: isDragged ? 0.5 : 1,
                 transition: isDragged ? 'none' : 'all 0.2s ease',
-                userSelect: 'none';
+                userSelect: 'none'
   }}
             >
               {/* Drag handle */}

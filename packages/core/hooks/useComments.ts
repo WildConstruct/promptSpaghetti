@@ -6,9 +6,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Comment, CreateComment, UpdateComment, PaginatedResponse } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 interface UseCommentsOptions {
-  workspaceId: string;,
+  workspaceId: string;
   targetType: string;
-  targetId: string;,
+  targetId: string;
   userId: string;
   limit?: number;
   sortOrder?: 'asc' | 'desc';
@@ -48,7 +48,7 @@ interface UseCommentsOptions {
 });
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/comments?${params}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -74,7 +74,7 @@ interface UseCommentsOptions {
     const response = await fetch(`${API_BASE}/comments`, {)}
   },
   method: 'POST',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 },
@@ -98,7 +98,7 @@ interface UseCommentsOptions {
     const response = await fetch(`${API_BASE}/comments/${commentId}`, {)}
   },
   method: 'PUT',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 },
@@ -119,7 +119,7 @@ interface UseCommentsOptions {
     const response = await fetch(`${API_BASE}/comments/${commentId}`, {)}
   },
   method: 'DELETE',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -144,7 +144,7 @@ interface UseCommentsOptions {
     try {
       const response = await fetch(`${API_BASE}/comments/${commentId}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });

@@ -8,31 +8,31 @@ import React from 'react';
 
 // Typography scale for visual hierarchy
 export const TypographyScale = {
-  primary: {,
+  primary: {
   fontSize: 16,
   fontWeight: 600,
   lineHeight: 1.4,
   letterSpacing: '-0.01em',
 },
-  secondary: {,
+  secondary: {
   fontSize: 14,
   fontWeight: 500,
   lineHeight: 1.4,
   letterSpacing: '0em',
 },
-  tertiary: {,
+  tertiary: {
   fontSize: 12,
   fontWeight: 500,
   lineHeight: 1.3,
   letterSpacing: '0.01em',
 },
-  caption: {,
+  caption: {
   fontSize: 11,
   fontWeight: 400,
   lineHeight: 1.2,
   letterSpacing: '0.02em',
 },
-  micro: {,
+  micro: {
   fontSize: 10,
   fontWeight: 400,
   lineHeight: 1.2,
@@ -41,7 +41,7 @@ export const TypographyScale = {
 
 // Color system for progressive disclosure levels
 export const HierarchyColors = {
-  basic: {,
+  basic: {
   primary: '#4ade80',    // Green - Essential/Primary,
   secondary: '#22c55e',   // Darker green,
   background: '#1e2a3a',  // Slightly lighter background,
@@ -49,7 +49,7 @@ export const HierarchyColors = {
   text: '#e2e8f0',       // High contrast text,
   accent: '#065f46'      // Dark green accent,
 },
-  advanced: {,
+  advanced: {
   primary: '#60a5fa',     // Blue - Advanced features,
   secondary: '#3b82f6',   // Darker blue,
   background: '#1a202c',  // Standard background,
@@ -57,7 +57,7 @@ export const HierarchyColors = {
   text: '#90cdf4',       // Blue-tinted text,
   accent: '#1e3a8a'     // Dark blue accent,
 },
-  debug: {,
+  debug: {
   primary: '#c4b5fd',     // Purple - Technical/Debug,
   secondary: '#a78bfa',   // Darker purple,
   background: '#2d1b69',  // Purple-tinted background,
@@ -65,7 +65,7 @@ export const HierarchyColors = {
   text: '#c4b5fd',       // Light purple text,
   accent: '#581c87'     // Dark purple accent,
 },
-  neutral: {,
+  neutral: {
   primary: '#e2e8f0',     // Neutral text,
   secondary: '#a0aec0',   // Muted text,
   background: '#1a202c',  // Standard background,
@@ -87,44 +87,44 @@ export const SpacingScale = {
 
 // Component sizes for consistent proportions
 export const ComponentSizes = {
-  field: {,
+  field: {
   height: 36,
     padding: `${SpacingScale.sm}px ${SpacingScale.md}px`}
   },
-  section: {,
+  section: {
   padding: `${SpacingScale.md}px`}
 },
   marginBottom: SpacingScale.md;
   },
-  header: {,
+  header: {
   height: 32,
     padding: `${SpacingScale.sm}px ${SpacingScale.md}px`}
 };
 
 // Visual weight indicators for field importance
 export const FieldImportanceStyles = {
-  critical: {,
+  critical: {
   borderLeftWidth: 4,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.basic.primary,
     backgroundColor: `${HierarchyColors.basic.primary}15`, // 15% opacity}
     ...TypographyScale.secondary
   },
-  important: {,
+  important: {
   borderLeftWidth: 3,
     borderLeftStyle: 'solid' as const,
     borderLeftColor: HierarchyColors.advanced.primary,
     backgroundColor: `${HierarchyColors.advanced.primary}10`, // 10% opacity}
     ...TypographyScale.tertiary
   },
-  standard: {,
+  standard: {
   borderLeftWidth: 2,
   borderLeftStyle: 'solid' as const,
   borderLeftColor: HierarchyColors.neutral.border,
   backgroundColor: 'transparent',
   ...TypographyScale.tertiary
 },
-  supplementary: {,
+  supplementary: {
   borderLeftWidth: 1,
   borderLeftStyle: 'solid' as const,
   borderLeftColor: HierarchyColors.neutral.secondary,
@@ -166,13 +166,13 @@ export const classifyFieldPriority = (fieldName: string, nodeType = 'generic'): 
   if (supplementaryPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'supplementary';
   // Default to standard
-  return 'standard';
-};
+  return 'standard'
+  };
 
 // Section header component with visual hierarchy
 
 export interface HierarchyHeaderProps {
-  title: string;,
+  title: string;
   level: 'basic' | 'advanced' | 'debug';
   priority?: FieldPriority;
   description?: string;
@@ -263,7 +263,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
 // Field wrapper with visual hierarchy
 
 export interface HierarchyFieldProps {
-  priority: FieldPriority;,
+  priority: FieldPriority;
   level: 'basic' | 'advanced' | 'debug';
   children: React.ReactNode;
   label?: string;
@@ -361,8 +361,8 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
 export interface ComplexityIndicatorProps {
   level: 'basic' | 'advanced' | 'debug';
   showLabel?: boolean;
-  size?: 'small' | 'medium' | 'large';
-}
+  size?: 'small' | 'medium' | 'large'
+  }
 export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({)
   level,
   showLabel = true,

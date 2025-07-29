@@ -57,7 +57,7 @@ import {
 } from './icons';
 
 export interface GraphEditorWithProvidersProps {
-  initialNodes: Node;,
+  initialNodes: Node;
   initialEdges: Edge;
   validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
   // Provider configuration
@@ -221,11 +221,11 @@ const NODE_TYPES: NodeMeta = [
 
 // Core GraphEditor component with provider integration
 interface GraphEditorCoreProps {
-  initialNodes: Node;,
+  initialNodes: Node;
   initialEdges: Edge;
-  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;,
+  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
   registry: ProviderRegistry;
-  editorContext: EditorStateContext;,
+  editorContext: EditorStateContext;
   editorActions: EditorActions;
   isProviderLoading: boolean;
   const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({,)
@@ -388,7 +388,7 @@ interface GraphEditorCoreProps {
   // Allow drop on canvas
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
+    event.dataTransfer.dropEffect = 'copy'
   }, []);
   // Node click handler
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
@@ -595,7 +595,7 @@ export },
   console.error('[Analytics] Execution error:', error.message);
   // Could send error analytics here
 },
-  customActions: {,
+  customActions: {
   getAnalytics: (context) => ({,)
   nodeCount: context.nodes.length,
   edgeCount: context.edges.length,

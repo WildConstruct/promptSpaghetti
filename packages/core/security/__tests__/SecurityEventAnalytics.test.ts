@@ -29,13 +29,13 @@ class MockSecurityLogger extends SecurityLogger {
       details: {},
       outcome: 'success',
       severity: 'medium',
-      compliance: {,
+      compliance: {
   frameworks: [ComplianceFramework.ISO_27001],
   retention: 1095,
   encrypted: true,
   immutable: true,
 },
-  metadata: {,
+  metadata: {
   source: 'test',
   environment: 'test',
   version: '1.0.0',
@@ -164,7 +164,7 @@ class MockSecurityLogger extends SecurityLogger {
         mockLogger.addMockLog({)
   eventType: SecurityEventType.AUDIT_LOG_ACCESS,
           context: { userId: 'suspicious-user', threatContext: { attackVector: 'data_access' } },
-          severity: 'medium';
+          severity: 'medium'
   });
       await analytics.analyzeSecurityEvents();
       const patterns = analytics.getSecurityPatterns(ThreatCategory.DATA_EXFILTRATION);
@@ -220,7 +220,7 @@ class MockSecurityLogger extends SecurityLogger {
       // Add normal user activity
       for (let i = 0; i < 5; i++) {
         mockLogger.addMockLog({)
-  context: {,
+  context: {
             userId,
             ipAddress: '192.168.1.10',
             deviceInfo: { deviceId: 'device1' }
@@ -290,12 +290,12 @@ class MockSecurityLogger extends SecurityLogger {
         id: 'test-alert',
         name: 'Test Alert',
         description: 'Test alert configuration',
-        conditions: {,
+        conditions: {
   eventTypes: [SecurityEventType.SECURITY_ALERT],
           thresholds: { critical_events: 5 },
           timeWindow: 60;
   },
-  actions: {,
+  actions: {
   notify: ['test@example.com'],
   escalate: true,
   autoResponse: ['test-response'],

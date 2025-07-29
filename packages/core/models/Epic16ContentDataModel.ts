@@ -169,7 +169,7 @@ export const TemplateVersionSchema = z.object({)
   // Documentation
   changelog: z.string().max(5000).optional(),
   documentation: z.string().max(10000).optional(),
-  examples: z.array(z.object({,)
+  examples: z.array(z.object({)
   title: z.string().max(100),
   input: z.string().max(1000),
   expectedOutput: z.string().max(2000),
@@ -190,7 +190,7 @@ export const TemplateVersionSchema = z.object({)
   isPublic: z.boolean().default(true),
   releaseNotes: z.string().max(1000).optional(),
   // Assets
-  assets: z.array(z.object({,)
+  assets: z.array(z.object({)
   name: z.string().max(255),
   url: z.string().url(),
   size: z.number().int().min(0),
@@ -323,7 +323,7 @@ export const ForumPostSchema = z.object({)
   relatedTemplateIds: z.array(z.string().uuid()).max(5).default([]),
   relatedPostIds: z.array(z.string().uuid()).max(3).default([]),
   // Attachments and media
-  attachments: z.array(z.object({,)
+  attachments: z.array(z.object({)
   id: z.string().uuid(),
   name: z.string().max(255),
   url: z.string().url(),
@@ -362,7 +362,7 @@ export const KnowledgeArticleSchema = z.object({)
   tags: z.array(z.string().min(1).max(30)).max(15),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   // Content structure
-  tableOfContents: z.array(z.object({,)
+  tableOfContents: z.array(z.object({)
   id: z.string(),
   title: z.string().max(200),
   level: z.number().int().min(1).max(6),
@@ -403,13 +403,13 @@ export const TutorialSchema = z.object({)
   description: z.string().min(1).max(2000),
   shortDescription: z.string().max(300).optional(),
   // Content structure
-  steps: z.array(z.object({,)
+  steps: z.array(z.object({)
   id: z.string().uuid(),
   title: z.string().max(200),
   content: z.string().max(10000),
   order: z.number().int().min(0),
   estimatedDuration: z.number().int().min(0).optional(), // minutes,
-  resources: z.array(z.object({,)
+  resources: z.array(z.object({)
   name: z.string().max(255),
   url: z.string().url(),
   type: z.enum(['video', 'article', 'template', 'download', 'external']),
@@ -425,7 +425,7 @@ export const TutorialSchema = z.object({)
   // Media and assets
   thumbnailUrl: z.string().url().optional(),
   videoUrl: z.string().url().optional(),
-  assets: z.array(z.object({,)
+  assets: z.array(z.object({)
   name: z.string().max(255),
   url: z.string().url(),
   description: z.string().max(500).optional(),
@@ -529,7 +529,7 @@ export const SearchQuerySchema = z.object({)
   filters: z.record(z.any()).optional(),
   // Results and interaction
   resultsCount: z.number().int().min(0),
-  clickedResults: z.array(z.object({,)
+  clickedResults: z.array(z.object({)
   contentId: z.string().uuid(),
   contentType: z.nativeEnum(ContentType),
   position: z.number().int().min(0),
@@ -564,7 +564,7 @@ export const CollectionSchema = z.object({)
   isFeatured: z.boolean().default(false),
   allowCollaborators: z.boolean().default(false),
   // Content
-  items: z.array(z.object({,)
+  items: z.array(z.object({)
   contentId: z.string().uuid(),
   contentType: z.nativeEnum(ContentType),
   addedAt: z.date(),
@@ -575,7 +575,7 @@ export const CollectionSchema = z.object({)
   category: z.string().max(50).optional(),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
   // Collaboration
-  collaborators: z.array(z.object({,)
+  collaborators: z.array(z.object({)
   userId: z.string().uuid(),
   role: z.enum(['viewer', 'editor', 'admin']),
   addedAt: z.date(),
@@ -633,17 +633,17 @@ export type Notification = z.infer<typeof NotificationSchema>;
 // Main content data model types
 
 export type Epic16ContentModel = {
-  UserProfile: UserProfile;,
+  UserProfile: UserProfile;
   Template: Template;
-  TemplateVersion: TemplateVersion;,
+  TemplateVersion: TemplateVersion;
   Purchase: Purchase;
-  Review: Review;,
+  Review: Review;
   ForumPost: ForumPost;
-  KnowledgeArticle: KnowledgeArticle;,
+  KnowledgeArticle: KnowledgeArticle;
   Tutorial: Tutorial;
-  UserAnalytics: UserAnalytics;,
+  UserAnalytics: UserAnalytics;
   ContentAnalytics: ContentAnalytics;
-  SearchQuery: SearchQuery;,
+  SearchQuery: SearchQuery;
   Collection: Collection;
   Notification: Notification;
 };

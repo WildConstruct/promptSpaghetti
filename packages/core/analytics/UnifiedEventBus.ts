@@ -104,34 +104,34 @@ export type EventFilter = z.infer<typeof EventFilterSchema>;
 // Subscriber Interface
 
 export interface EventSubscriber {
-  id: string;,
+  id: string;
   name: string;
-  filter: EventFilter;,
-  handler: (event: UnifiedAnalyticsEvent) => Promise<void> | void;,
+  filter: EventFilter;
+  handler: (event: UnifiedAnalyticsEvent) => Promise<void> | void;
   priority: number;
   enabled: boolean;
-  retryConfig?: {,
-  maxRetries: number;,
+  retryConfig?: {
+  maxRetries: number;
   backoffMs: number;
 };
 
 // Event Bus Configuration
 }
 export interface EventBusConfig {
-  maxEventHistory: number;,
+  maxEventHistory: number;
   enablePersistence: boolean;
-  batchSize: number;,
+  batchSize: number;
   flushIntervalMs: number;
-  deadLetterQueue: boolean;,
+  deadLetterQueue: boolean;
   metricsEnabled: boolean;
   // Event Bus Metrics
 }
 export interface EventBusMetrics {
-  eventsPublished: number;,
+  eventsPublished: number;
   eventsProcessed: number;
-  eventsFailed: number;,
+  eventsFailed: number;
   subscribersActive: number;
-  averageProcessingTime: number;,
+  averageProcessingTime: number;
   queueDepth: number;
   lastEventTime: number;
   /**
@@ -258,7 +258,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Get event bus health status
    */
   getHealthStatus(): {
-    status: 'healthy' | 'degraded' | 'unhealthy';,
+    status: 'healthy' | 'degraded' | 'unhealthy';
   metrics: EventBusMetrics;
     issues: string;
     const issues: string = [];
@@ -300,7 +300,7 @@ export class UnifiedEventBus extends EventEmitter {
             typeof legacyEvent === 'object' && legacyEvent !== null ? legacyEvent as Record<string,
             unknown> : {}
           ),
-          metadata: {,
+          metadata: {
   ...transformedEvent.metadata,
   migrated: true,
   originalSystem: systemName,
@@ -390,7 +390,7 @@ export class UnifiedEventBus extends EventEmitter {
   /**
   * Retry failed subscriber processing
   */
-  private async retrySubscriber(event: UnifiedAnalyticsEvent,)
+  private async retrySubscriber(event: UnifiedAnalyticsEvent)
   subscriber: EventSubscriber,
   originalError: unknown): Promise<void> {,
   if (!subscriber.retryConfig) return;

@@ -9,62 +9,62 @@ import { AlertTriangle, Shield, Activity, Users, Server, Globe, Clock, TrendingU
 
 // Types
 interface DashboardMetrics {
-  security: {,
-  active_alerts: number;,
+  security: {
+  active_alerts: number;
   critical_alerts: number;
   threat_level: number; // 0-10,
-  incidents_today: number;,
+  incidents_today: number;
   mean_response_time: number;
   false_positive_rate: number;
 };
-  performance: {,
+  performance: {
   system_health: number; // 0-100,
-  avg_response_time: number;,
+  avg_response_time: number;
   requests_per_minute: number;
-  error_rate: number;,
+  error_rate: number;
   cpu_usage: number;
   memory_usage: number;
 };
-  analytics: {,
+  analytics: {
   active_users: number;
-  daily_sessions: number;,
+  daily_sessions: number;
   conversion_rate: number;
-  bounce_rate: number;,
+  bounce_rate: number;
   page_views_today: number;
   revenue_today: number;
 };
-  infrastructure: {,
+  infrastructure: {
   services_up: number;
-  services_total: number;,
+  services_total: number;
   database_health: number;
-  network_latency: number;,
+  network_latency: number;
   storage_usage: number;
-  backup_status: 'success' | 'warning' | 'error';
-};
+  backup_status: 'success' | 'warning' | 'error'
+  };
 interface AlertSummary {
-  id: string;,
+  id: string;
   type: 'security' | 'performance' | 'infrastructure' | 'business';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   timestamp: number;
-  source: string;,
+  source: string;
   status: 'active' | 'investigating' | 'resolved';
   interface TimeSeriesData {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   label?: string;
   interface SystemStatus {
-  name: string;,
+  name: string;
   status: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
-  uptime: number;,
+  uptime: number;
   last_check: number;
   response_time?: number;
   error_count?: number;
   // Mock data hook (would be replaced with real API calls)
   const useDashboardData = () => {
   const [metrics, setMetrics] = useState<DashboardMetrics>({)
-  security: {,
+  security: {
   active_alerts: 12,
   critical_alerts: 2,
   threat_level: 3.5,
@@ -72,7 +72,7 @@ interface AlertSummary {
   mean_response_time: 4200,
   false_positive_rate: 0.08,
 },
-  performance: {,
+  performance: {
   system_health: 94,
   avg_response_time: 245,
   requests_per_minute: 1820,
@@ -80,7 +80,7 @@ interface AlertSummary {
   cpu_usage: 68,
   memory_usage: 72,
 },
-  analytics: {,
+  analytics: {
   active_users: 2847,
   daily_sessions: 15624,
   conversion_rate: 0.034,
@@ -88,7 +88,7 @@ interface AlertSummary {
   page_views_today: 89453,
   revenue_today: 24890.50,
 },
-  infrastructure: {,
+  infrastructure: {
   services_up: 28,
   services_total: 30,
   database_health: 98,
@@ -139,12 +139,12 @@ interface AlertSummary {
   const interval = setInterval(() => {
   setMetrics(prev => ({)
   ...prev,
-  performance: {,
+  performance: {
   ...prev.performance,
   requests_per_minute: prev.performance.requests_per_minute + Math.floor(Math.random() * 100 - 50),
   avg_response_time: Math.max(100, prev.performance.avg_response_time + Math.floor(Math.random() * 40 - 20)),
 },
-  analytics: {,
+  analytics: {
   ...prev.analytics,
   active_users: Math.max(0, prev.analytics.active_users + Math.floor(Math.random() * 20 - 10)),
 }));

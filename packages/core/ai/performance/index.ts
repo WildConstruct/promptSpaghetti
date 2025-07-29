@@ -49,15 +49,15 @@ export {
 
 // Type definitions for missing interfaces
 interface CacheConfig {
-  maxSize: number;,
+  maxSize: number;
   maxMemoryMB: number;
-  defaultTTL: number;,
+  defaultTTL: number;
   evictionPolicy: string;
-  compressionEnabled: boolean;,
+  compressionEnabled: boolean;
   persistToDisk: boolean;
   metrics: { enabled: boolean; reportingInterval?: number };
 interface LoadBalancerConfig {
-  maxRetries: number;,
+  maxRetries: number;
   strategy: string;
   healthCheckInterval?: number;
   failoverThreshold?: number;
@@ -65,39 +65,39 @@ interface LoadBalancerConfig {
   maxConcurrentRequests?: number;
   enableFailover?: boolean;
   interface MonitoringConfig {
-  enabled: boolean;,
+  enabled: boolean;
   interval: number;
   collectionInterval?: number;
   retentionPeriod?: number;
   alerting?: boolean;
   interface PerformanceMetrics {
-  responseTime: number;,
+  responseTime: number;
   throughput: number;
   errorRate: number;
   averageResponseTime?: number;
   successRate?: number;
   totalCost?: number;
   interface CacheMetrics {
-  hitRate: number;,
+  hitRate: number;
   size: number;
   memoryUsage?: number;
   interface ResourceUsage {
-  memory: number;,
+  memory: number;
   cpu: number;
-  disk: number;,
+  disk: number;
   network: number;
   interface ResourceOptimizationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   monitoringInterval: number;
-  optimizationThresholds: {,
-  memoryUsage: number;,
+  optimizationThresholds: {
+  memoryUsage: number;
   cpuUsage: number;
-  diskUsage: number;,
+  diskUsage: number;
   responseTime: number;
 };
-  strategies: {,
+  strategies: {
   memoryOptimization: boolean;
-  cpuOptimization: boolean;,
+  cpuOptimization: boolean;
   cacheOptimization: boolean;
   modelCompression: boolean;
   modelPooling?: boolean;
@@ -107,9 +107,9 @@ interface LoadBalancerConfig {
 // Utility functions for performance optimization
 
 // Performance analysis utilities
-export const analyzePerformanceMetrics = (metrics: PerformanceMetrics): {,
+export const analyzePerformanceMetrics = (metrics: PerformanceMetrics): {
   averageResponseTime: number;
-  successRateAverage: number;,
+  successRateAverage: number;
   costTrend: 'increasing' | 'decreasing' | 'stable';
   recommendations: string;
 } => {
@@ -161,7 +161,7 @@ export const calculateResourceEfficiency = (usage: ResourceUsage, performance: P
 };
 
 export interface OptimizationCategories {
-  categories: {,
+  categories: {
   caching: { score: number; recommendations: string };
     performance: { score: number; recommendations: string };
     resources: { score: number; recommendations: string };
@@ -213,7 +213,7 @@ export cacheMetrics: { hitRate: number; memoryUsage?: number },
   if (resourceScore < 60) priorityActions.push('Optimize resource usage');
   return {
     overallScore,
-    categories: {,
+    categories: {
   caching: { score: cacheScore, recommendations: cacheRecommendations },
       performance: { score: performanceScore, recommendations: perfAnalysis.recommendations },
       resources: { score: resourceScore, recommendations: ['Monitor resource utilization trends'] }

@@ -7,80 +7,80 @@ import { NodeMetadataManager, HistoricalEra, Genre, Style } from '../historical/
 import { DataSourceManager } from '../external-data/DataSourceManager';
 
 export interface MedievalClothing {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   socialClass: 'peasant' | 'merchant' | 'noble' | 'clergy' | 'royal';
-  gender: 'male' | 'female' | 'unisex';,
+  gender: 'male' | 'female' | 'unisex';
   materials: string;
-  colors: string;,
-  period: {,
+  colors: string;
+  period: {
   start: number; // Year,
   end: number;   // Year,
 };
-  regions: string;,
+  regions: string;
   seasonality: 'all' | 'spring' | 'summer' | 'autumn' | 'winter';
-  occasions: string;,
+  occasions: string;
   historicalAccuracy: 'high' | 'medium' | 'low';
   sources: string;
 }
 export interface MedievalMaterial {
-  id: string;,
+  id: string;
   name: string;
-  type: 'fabric' | 'leather' | 'metal' | 'fur' | 'other';,
+  type: 'fabric' | 'leather' | 'metal' | 'fur' | 'other';
   availability: 'common' | 'uncommon' | 'rare' | 'luxury';
-  cost: 'low' | 'medium' | 'high' | 'extreme';,
+  cost: 'low' | 'medium' | 'high' | 'extreme';
   durability: number; // 1-10 scale,
-  socialStatus: 'any' | 'common' | 'merchant' | 'noble' | 'royal';,
+  socialStatus: 'any' | 'common' | 'merchant' | 'noble' | 'royal';
   tradingSources: string;
-  primaryUses: string;,
+  primaryUses: string;
   historicalNotes: string;
 }
 export interface MedievalLocation {
-  id: string;,
+  id: string;
   name: string;
-  type: 'castle' | 'village' | 'town' | 'monastery' | 'forest' | 'field' | 'road' | 'tavern';,
+  type: 'castle' | 'village' | 'town' | 'monastery' | 'forest' | 'field' | 'road' | 'tavern';
   description: string;
-  socialContext: string;,
+  socialContext: string;
   typicalActivities: string;
-  socialClasses: string;,
+  socialClasses: string;
   timeOfDay: 'dawn' | 'morning' | 'midday' | 'afternoon' | 'evening' | 'night' | 'any';
-  season: 'spring' | 'summer' | 'autumn' | 'winter' | 'any';,
+  season: 'spring' | 'summer' | 'autumn' | 'winter' | 'any';
   geographicalRegion: string;
   politicalContext: string;
 }
 export interface MedievalCharacter {
-  id: string;,
+  id: string;
   name: string;
   title?: string;
-  profession: string;,
+  profession: string;
   socialClass: 'peasant' | 'merchant' | 'craftsman' | 'minor_noble' | 'major_noble' | 'clergy' | 'royal';
-  gender: 'male' | 'female';,
+  gender: 'male' | 'female';
   age: number;
-  description: string;,
+  description: string;
   typicalClothing: string;
-  skills: string;,
+  skills: string;
   possessions: string;
-  socialConnections: string;,
+  socialConnections: string;
   historicalContext: string;
 }
 export interface MedievalScene {
-  id: string;,
+  id: string;
   title: string;
-  setting: MedievalLocation;,
+  setting: MedievalLocation;
   characters: MedievalCharacter;
-  timeContext: {,
-  season: string;,
+  timeContext: {
+  season: string;
   timeOfDay: string;
   weather?: string;
 };
-  activities: string;,
+  activities: string;
   socialDynamics: string;
-  historicalElements: string;,
+  historicalElements: string;
   sensoryDetails: {;
-  sights: string;,
+  sights: string;
   sounds: string;
-  smells: string;,
+  smells: string;
   textures: string;
 };
   narrativeHooks: string;
@@ -338,7 +338,7 @@ export class MedievalDemo {
   this.characterDatabase.get('sir_gareth')!,
   this.characterDatabase.get('elena_weaver')!
   ],
-  timeContext: {,
+  timeContext: {
   season: 'autumn',
   timeOfDay: 'afternoon',
   weather: 'crisp and clear',
@@ -346,7 +346,7 @@ export class MedievalDemo {
   activities: ['setting tables', 'arranging tapestries', 'preparing entertainment'],
         socialDynamics: ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
         historicalElements: ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
-        sensoryDetails: {,
+        sensoryDetails: {
   sights: ['colorful banners', 'polished armor', 'golden candlelight'],
   sounds: ['bustling servants', 'clanking metal', 'minstrel practice'],
   smells: ['roasting meat', 'wood smoke', 'fresh rushes'],
@@ -359,7 +359,7 @@ export class MedievalDemo {
   title: 'Dawn Prayer in Monastery',
   setting: this.locationDatabase.get('monastery_scriptorium')!,
   characters: [this.characterDatabase.get('brother_aldric')!],
-  timeContext: {,
+  timeContext: {
   season: 'winter',
   timeOfDay: 'dawn',
   weather: 'frost on windows',
@@ -367,7 +367,7 @@ export class MedievalDemo {
   activities: ['morning prayers', 'manuscript copying', 'contemplation'],
         socialDynamics: ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
         historicalElements: ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
-        sensoryDetails: {,
+        sensoryDetails: {
   sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
   sounds: ['chanted prayers', 'scratching quills', 'turning pages'],
   smells: ['incense', 'parchment', 'cold stone'],
@@ -408,7 +408,7 @@ export class MedievalDemo {
   /**
   * Get clothing appropriate for character and context
   */
-  public getAppropriateClothing(character: MedievalCharacter, context: {,)
+  public getAppropriateClothing(character: MedievalCharacter, context: {)
   occasion?: string;
   season?: string;
   socialSetting?: string;
@@ -439,11 +439,11 @@ export class MedievalDemo {
   socialClasses?: string;
   activities?: string;
 }): {
-    isValid: boolean;,
+    isValid: boolean;
   violations: string;
     suggestions: string;
-    const violations: string = [];
-    const suggestions: string = [];
+    const violations: string[] = [];
+    const suggestions: string[] = [];
     // Validate materials for time period
     if (content.materials) {
       content.materials.forEach(material => {)
@@ -490,7 +490,7 @@ export class MedievalDemo {
           `${clothing.name}: ${clothing.description} (${clothing.socialClass})`}
         );
       case 'activity':
-        const activities: string = [];
+        const activities: string[] = [];
         this.sceneDatabase.forEach(scene => {)
   activities.push(...scene.activities);
         });
@@ -500,16 +500,16 @@ export class MedievalDemo {
   /**
    * Create demo scenario with full medieval context
    */
-  public createDemoScenario(theme: string = 'daily_life'): {,
+  public createDemoScenario(theme: string = 'daily_life'): {
   scene: MedievalScene;
-    characters: MedievalCharacter;,
+    characters: MedievalCharacter;
   clothing: MedievalClothing;
-    materials: MedievalMaterial;,
+    materials: MedievalMaterial;
   historicalContext: string;
     promptSuggestions: string;
     const scene = this.generateMedievalScene({ theme }) || Array.from(this.sceneDatabase.values())[0];
     const characters = scene.characters;
-    const clothing: MedievalClothing = [];
+    const clothing: MedievalClothing[] = [];
     characters.forEach(character => {)
   const charClothing = this.getAppropriateClothing(character, {)
   season: scene.timeContext.season,
@@ -567,7 +567,7 @@ manuscript illustrations, and documented practices of the time.
    */
   public async integrateWithMetadata(nodeId: string, sceneId: string): Promise<void> {
     const scene = this.sceneDatabase.get(sceneId);
-    if (!scene) return;
+    if (!scene) return (
     // Apply medieval era metadata
     await this.metadataManager.setNodeEra(nodeId, 'medieval');
     // Add appropriate tags
@@ -590,10 +590,10 @@ manuscript illustrations, and documented practices of the time.
   /**
   * Get all medieval content for external use
   */
-  public getAllMedievalContent(): {,
-  clothing: MedievalClothing;,
+  public getAllMedievalContent(): {
+  clothing: MedievalClothing;
   materials: MedievalMaterial;
-  locations: MedievalLocation;,
+  locations: MedievalLocation;
   characters: MedievalCharacter;
   scenes: MedievalScene;
   return {

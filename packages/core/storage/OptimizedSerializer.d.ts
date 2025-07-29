@@ -57,7 +57,7 @@ export declare class OptimizedSerializer {
     getMetrics(): {
         averageSerializationTime: number;
         totalSerializations: number;
-        compressionStats: {,
+        compressionStats: {
             averageRatio: number;
             timeSaved: number;
         };

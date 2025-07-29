@@ -54,9 +54,11 @@ export function createQuickSecuritySetup() {
                         systemHealth: 90,
                     },
                     // Create with custom configuration
-                    const: security = UnifiedSecurityProtectionFactory.createUnifiedProtection() },
+                    const: security = UnifiedSecurityProtectionFactory.createUnifiedProtection()
+                },
                 SecurityProfile, : .PRODUCTION,
-                customConfig } };
+                customConfig
+            } };
         ;
         console.log('Created custom security protection with hierarchical mode');
         console.log('and weighted average coordination strategy');

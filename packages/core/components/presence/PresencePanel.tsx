@@ -5,10 +5,10 @@ export interface PresenceUser {
   userId: string;
   userName?: string;
   userAvatar?: string;
-  status: 'active' | 'idle' | 'away' | 'offline';,
+  status: 'active' | 'idle' | 'away' | 'offline';
   lastSeen: number;
-  cursor?: {,
-  x: number;,
+  cursor?: {
+  x: number;
   y: number;
   nodeId?: string;
 };
@@ -18,7 +18,7 @@ export interface PresenceUser {
   focusedNodeId?: string;
 }
 export interface PresencePanelProps {
-  users: PresenceUser;,
+  users: PresenceUser;
   currentUserId: string;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
@@ -68,7 +68,7 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
       return 'Editing node';
     if (user.selection && user.selection.length > 0) {
       return `Selected ${user.selection.length} item${user.selection.length > 1 ? 's' : ''}`;}
-    return 'Viewing';
+    return 'Viewing'
   };
   if (!showDetailedView) {
     // Compact view - just avatars
@@ -202,13 +202,13 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
   );
 };
 interface UserPresenceItemProps {
-  user: PresenceUser;,
+  user: PresenceUser;
   isCurrentUser: boolean;
   isFollowing: boolean;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
   onUnfollowUser?: () => void;
-  formatLastSeen: (timestamp: number) => string;,
+  formatLastSeen: (timestamp: number) => string;
   getActivityText: (user: PresenceUser) => string;
   const UserPresenceItem: React.FC<UserPresenceItemProps> = ({,)
   user,

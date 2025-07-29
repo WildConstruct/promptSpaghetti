@@ -14,52 +14,52 @@ export enum ConnectionState {
   POOR = 'poor',
   UNKNOWN = 'unknown'
   export interface ConnectionMetrics {
-  latency: number;,
+  latency: number;
   packetLoss: number;
-  bandwidth: number;,
+  bandwidth: number;
   jitter: number;
-  lastMeasurement: number;,
+  lastMeasurement: number;
   measurementCount: number;
 }
 export interface NetworkInfo {
-  type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';,
+  type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
   effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
-  downlink: number;,
+  downlink: number;
   rtt: number;
   saveData: boolean;
 }
 export interface ConnectionStateData {
-  state: ConnectionState;,
+  state: ConnectionState;
   quality: ConnectionQuality;
-  isOnline: boolean;,
+  isOnline: boolean;
   lastConnected: number | null;
-  disconnectedAt: number | null;,
+  disconnectedAt: number | null;
   reconnectAttempts: number;
-  totalDowntime: number;,
+  totalDowntime: number;
   metrics: ConnectionMetrics;
-  networkInfo: NetworkInfo | null;,
+  networkInfo: NetworkInfo | null;
   stateHistory: Array<{,
-  state: ConnectionState;,
+  state: ConnectionState;
   timestamp: number;
   reason?: string;
 }>;
 }
 export interface ConnectionStateConfig {
-  pingInterval: number;,
+  pingInterval: number;
   qualityCheckInterval: number;
-  latencyThreshold: {,
-  excellent: number;,
+  latencyThreshold: {
+  excellent: number;
   good: number;
   fair: number;
 };
-  packetLossThreshold: {,
+  packetLossThreshold: {
   excellent: number;
-  good: number;,
+  good: number;
   fair: number;
 };
-  maxHistorySize: number;,
+  maxHistorySize: number;
   offlineDetectionTimeout: number;
-  onlineCheckUrl: string;,
+  onlineCheckUrl: string;
   enableNetworkInfoAPI: boolean;
   enablePerformanceMonitoring: boolean;
 }
@@ -78,12 +78,12 @@ export class ConnectionStateManager extends EventEmitter {
   this.config = {
   pingInterval: 5000, // 5 seconds,
   qualityCheckInterval: 10000, // 10 seconds,
-  latencyThreshold: {,
+  latencyThreshold: {
   excellent: 50,  // < 50ms,
   good: 150,      // < 150ms,
   fair: 300       // < 300ms,
 },
-  packetLossThreshold: {,
+  packetLossThreshold: {
   excellent: 0.01, // < 1%,
   good: 0.05,      // < 5%,
   fair: 0.15       // < 15%,
@@ -103,7 +103,7 @@ export class ConnectionStateManager extends EventEmitter {
   disconnectedAt: null,
   reconnectAttempts: 0,
   totalDowntime: 0,
-  metrics: {,
+  metrics: {
   latency: 0,
   packetLoss: 0,
   bandwidth: 0,
@@ -299,7 +299,7 @@ export class ConnectionStateManager extends EventEmitter {
   disconnectedAt: null,
   reconnectAttempts: 0,
   totalDowntime: 0,
-  metrics: {,
+  metrics: {
   latency: 0,
   packetLoss: 0,
   bandwidth: 0,

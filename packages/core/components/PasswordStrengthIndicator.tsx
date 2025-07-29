@@ -29,22 +29,22 @@ export interface PasswordStrengthIndicatorProps {
   debounceMs?: number;
 }
 export interface PasswordStrengthDisplayProps {
-  result: PasswordValidationResult;,
+  result: PasswordValidationResult;
   showDetails: boolean;
-  showSuggestions: boolean;,
+  showSuggestions: boolean;
   showCrackTime: boolean;
-  showEntropy: boolean;,
+  showEntropy: boolean;
   compact: boolean;
   theme: 'light' | 'dark';
   // ========================================
   // Strength Meter Component
   // ========================================
   const StrengthMeter: React.FC<{,
-  score: number;,
+  score: number;
   strength: PasswordValidationResult['strength'];
-  compact: boolean;,
-  theme: 'light' | 'dark';
-}> = ({ score, strength, compact, theme }) => {
+  compact: boolean;
+  theme: 'light' | 'dark'
+  }> = ({ score, strength, compact, theme }) => {
   const getStrengthColor = (strength: PasswordValidationResult['strength']): string => {,
   const colors = {
   'very-weak': '#dc2626', // red-600,
@@ -121,10 +121,10 @@ export interface PasswordStrengthDisplayProps {
 // ========================================
 const RuleResultsDisplay: React.FC<{,
   ruleResults: PasswordValidationResult['ruleResults'];
-  passedRules: number;,
+  passedRules: number;
   totalRules: number;
-  theme: 'light' | 'dark';
-}> = ({ ruleResults, passedRules, totalRules, theme }) => {
+  theme: 'light' | 'dark'
+  }> = ({ ruleResults, passedRules, totalRules, theme }) => {
   if (ruleResults.length === 0) return null;
   return;
     <div className="space-y-2">
@@ -160,8 +160,8 @@ const RuleResultsDisplay: React.FC<{,
 // ========================================
 const SuggestionsDisplay: React.FC<{,
   suggestions: string;
-  theme: 'light' | 'dark';
-}> = ({ suggestions, theme }) => {
+  theme: 'light' | 'dark'
+  }> = ({ suggestions, theme }) => {
   if (suggestions.length === 0) return null;
   return;
     <div className="space-y-2">
@@ -188,10 +188,10 @@ const SuggestionsDisplay: React.FC<{,
 // ========================================
 const AdditionalInfoDisplay: React.FC<{,
   result: PasswordValidationResult;
-  showCrackTime: boolean;,
+  showCrackTime: boolean;
   showEntropy: boolean;
-  theme: 'light' | 'dark';
-}> = ({ result, showCrackTime, showEntropy, theme }) => {
+  theme: 'light' | 'dark'
+  }> = ({ result, showCrackTime, showEntropy, theme }) => {
   if (!showCrackTime && !showEntropy) return null;
   return;
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-200">

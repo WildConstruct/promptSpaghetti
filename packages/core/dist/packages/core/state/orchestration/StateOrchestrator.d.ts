@@ -65,5 +65,9 @@ export declare class StateOrchestrator extends EventEmitter {
     private maxRetries;
     private transactionTimeout;
     constructor();
+    private setupEventHandling;
+    private handleSyncRequest;
+    private handleConflict;
+    private cleanupExpiredTransactions;
 }
 //# sourceMappingURL=StateOrchestrator.d.ts.map

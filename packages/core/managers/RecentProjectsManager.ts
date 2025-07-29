@@ -5,7 +5,7 @@
 import type { ProjectMetadata } from '../schemas/psgSchema';
 
 export interface RecentProjectEntry {
-  id: string;,
+  id: string;
   name: string;
   filePath?: string;
   lastAccessDate: string;
@@ -14,7 +14,7 @@ export interface RecentProjectEntry {
   fileSize?: number;
 }
 export interface RecentProjectsData {
-  projects: RecentProjectEntry;,
+  projects: RecentProjectEntry;
   version: string;
 }
 export class RecentProjectsManager {
@@ -155,9 +155,9 @@ export class RecentProjectsManager {
   /**
    * Get project metadata for display
    */
-  static getProjectDisplayInfo(entry: RecentProjectEntry): {,
+  static getProjectDisplayInfo(entry: RecentProjectEntry): {
   name: string;
-  lastAccessed: string;,
+  lastAccessed: string;
   size: string;
   author?: string;
   const lastAccessed = this.formatDate(new Date(entry.lastAccessDate));

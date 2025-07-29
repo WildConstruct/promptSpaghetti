@@ -26,7 +26,7 @@ export function withHelp<P extends object>()
 // Enhanced input field with integrated help
 
 export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  helpId: string;,
+  helpId: string;
   helpTitle: string;
   helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
@@ -124,7 +124,7 @@ export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputEl
 // Enhanced button with integrated help
 
 export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  helpId: string;,
+  helpId: string;
   helpTitle: string;
   helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
@@ -204,12 +204,12 @@ export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButto
 // Section wrapper with help integration
 
 export interface HelpfulSectionProps {
-  helpId: string;,
+  helpId: string;
   helpTitle: string;
   helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
   helpExamples?: string;
-  title: string;,
+  title: string;
   children: React.ReactNode;
   collapsible?: boolean;
   defaultExpanded?: boolean;

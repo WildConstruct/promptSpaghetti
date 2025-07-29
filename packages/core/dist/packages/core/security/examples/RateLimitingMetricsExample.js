@@ -166,7 +166,8 @@ export function BasicMetricsExample() {
                         metricsService, : .startMetricsCollection(),
                         // Demonstrate visualization data generation
                         console, : .log('Generating visualization data...'),
-                        setTimeout() { } }()
+                        setTimeout() { }
+                    }()
                 };
             {
                 // Get time series data
@@ -371,7 +372,8 @@ export function AlertManagementExample() {
                 // Start monitoring
                 metricsService, : .startMetricsCollection(),
                 // Simulate high load to trigger alerts
-                setTimeout() { } }()
+                setTimeout() { }
+            }()
         };
     {
         console.log('Simulating high load to trigger alerts...');

@@ -138,7 +138,7 @@ describe('TabbedPalette', () => {
       expect(nodeElement).toBeInTheDocument();
       if (nodeElement) {
   fireEvent.dragStart(nodeElement, {)
-  dataTransfer: {,
+  dataTransfer: {
   setData: jest.fn<unknown, unknown>(),
 });
         expect(onDragStart).toHaveBeenCalledWith('Subject');

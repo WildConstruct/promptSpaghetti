@@ -22,32 +22,32 @@ import {
 } from '../types/branching';
 interface UseBranchingReturn {
   // State
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
   // Branch operations
-  createBranch: (request: CreateBranchRequest) => Promise<ProjectBranch>;,
-  updateBranch: (branchId: string, request: UpdateBranchRequest) => Promise<ProjectBranch>;,
-  deleteBranch: (branchId: string) => Promise<void>;,
-  getBranchById: (branchId: string) => Promise<ProjectBranch>;,
+  createBranch: (request: CreateBranchRequest) => Promise<ProjectBranch>;
+  updateBranch: (branchId: string, request: UpdateBranchRequest) => Promise<ProjectBranch>;
+  deleteBranch: (branchId: string) => Promise<void>;
+  getBranchById: (branchId: string) => Promise<ProjectBranch>;
   listBranches: (filter: BranchFilter) => Promise<ProjectBranch>;
   // Commit operations
-  createCommit: (request: CreateCommitRequest) => Promise<BranchCommit>;,
+  createCommit: (request: CreateCommitRequest) => Promise<BranchCommit>;
   getBranchCommits: (branchId: string, limit?: number, offset?: number) => Promise<BranchCommit>;
   // Merge request operations
-  createMergeRequest: (request: CreateMergeRequestRequest) => Promise<BranchMergeRequest>;,
-  updateMergeRequest: (mergeRequestId: string, request: UpdateMergeRequestRequest) => Promise<BranchMergeRequest>;,
-  getMergeRequestById: (mergeRequestId: string) => Promise<BranchMergeRequest>;,
-  listMergeRequests: (filter: MergeRequestFilter) => Promise<BranchMergeRequest>;,
-  closeMergeRequest: (mergeRequestId: string) => Promise<BranchMergeRequest>;,
+  createMergeRequest: (request: CreateMergeRequestRequest) => Promise<BranchMergeRequest>;
+  updateMergeRequest: (mergeRequestId: string, request: UpdateMergeRequestRequest) => Promise<BranchMergeRequest>;
+  getMergeRequestById: (mergeRequestId: string) => Promise<BranchMergeRequest>;
+  listMergeRequests: (filter: MergeRequestFilter) => Promise<BranchMergeRequest>;
+  closeMergeRequest: (mergeRequestId: string) => Promise<BranchMergeRequest>;
   mergeBranch: (request: MergeBranchRequest) => Promise<BranchMergeRequest>;
   // Review operations
-  createReview: (request: CreateReviewRequest) => Promise<BranchMergeReview>;,
-  updateReview: (reviewId: string, request: UpdateReviewRequest) => Promise<BranchMergeReview>;,
+  createReview: (request: CreateReviewRequest) => Promise<BranchMergeReview>;
+  updateReview: (reviewId: string, request: UpdateReviewRequest) => Promise<BranchMergeReview>;
   getMergeRequestReviews: (mergeRequestId: string) => Promise<BranchMergeReview>;
   // Analytics and insights
-  getBranchStats: (projectId: string) => Promise<BranchStatsResponse>;,
+  getBranchStats: (projectId: string) => Promise<BranchStatsResponse>;
   getBranchTimeline: (projectId: string, dateRange?: { start: Date; end: Date }) => Promise<BranchTimelineResponse>;
-  getBranchHierarchy: (projectId: string) => Promise<BranchHierarchy>;,
+  getBranchHierarchy: (projectId: string) => Promise<BranchHierarchy>;
   compareBranches: (sourceBranchId: string, targetBranchId: string) => Promise<BranchComparisonResponse>;
   // Synchronization
   syncBranch: (request: SyncBranchRequest) => Promise<void>;
@@ -66,7 +66,7 @@ export const useBranching = (): UseBranchingReturn => {
   setError(null);
   const response = await fetch(url, {)
   ...options,
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   ...options.headers
 });
@@ -101,7 +101,7 @@ export const useBranching = (): UseBranchingReturn => {
   const deleteBranch = useCallback(async (branchId: string): Promise<void> => {
     return apiCall<void>(`/api/branches/${branchId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
   }, [apiCall]);
   const getBranchById = useCallback(async (branchId: string): Promise<ProjectBranch> => {
@@ -180,7 +180,7 @@ export const useBranching = (): UseBranchingReturn => {
   const closeMergeRequest = useCallback(async (mergeRequestId: string): Promise<BranchMergeRequest> => {
     return apiCall<BranchMergeRequest>(`/api/merge-requests/${mergeRequestId}/close`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
   }, [apiCall]);
   const mergeBranch = useCallback(async (request: MergeBranchRequest): Promise<BranchMergeRequest> => {

@@ -6,16 +6,16 @@
  */
 
 export interface ImageMetadata {
-  width: number;,
+  width: number;
   height: number;
-  format: string;,
+  format: string;
   size: number; // File size in bytes,
   colorDepth?: number;
   hasAlpha?: boolean;
   compressionRatio?: number;
   quality?: number;
   exif?: Record<string, any>;
-  generationInfo?: {,
+  generationInfo?: {
   model?: string;
   prompt?: string;
   seed?: number;
@@ -34,7 +34,7 @@ export interface ImageProcessingOptions {
   removeMetadata?: boolean;
 }
 export interface ImageVariationOptions {
-  count: number;,
+  count: number;
   strength: number; // 0-1,
   seed?: number;
   preserveStyle?: boolean;
@@ -43,14 +43,14 @@ export interface ImageBatchProcessingOptions {
   concurrency?: number;
   outputFormat?: 'jpeg' | 'png' | 'webp';
   quality?: number;
-  resize?: {,
-  width: number;,
+  resize?: {
+  width: number;
   height: number;
 };
   watermark?: {
   text?: string;
   image?: string;
-  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';,
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
   opacity: number;
 };
 }
@@ -125,7 +125,7 @@ export class ImageProcessor {
     } catch (error) {
       throw new Error(`Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   // Image compression and optimization
-  async compress(imageData: string,)
+  async compress(imageData: string)
     quality: number = 80,
     format: 'jpeg' | 'webp' = 'jpeg'): Promise<{ data: string; compressionRatio: number; originalSize: number; compressedSize: number }> {
   const originalSize = this._estimateDataURLSize(imageData);
@@ -143,7 +143,7 @@ export class ImageProcessor {
   compressedSize
 };
   // Image resizing with aspect ratio preservation
-  async resize(imageData: string,)
+  async resize(imageData: string)
     width: number,
     height?: number,
     maintainAspectRatio: boolean = true): Promise<string> {,
@@ -210,8 +210,8 @@ export class ImageProcessor {
   // Image comparison and similarity
   async compareImages(image1: string, image2: string): Promise<{,
   similarity: number; // 0-1,
-  differences: {,
-  colorDifference: number;,
+  differences: {
+  colorDifference: number;
   structuralDifference: number;
   pixelDifference: number;
 };
@@ -243,7 +243,7 @@ export class ImageProcessor {
   const similarity = 1 - pixelDifference;
   return {
   similarity,
-  differences: {,
+  differences: {
   colorDifference,
   structuralDifference,
   pixelDifference
@@ -391,7 +391,7 @@ export class ImageProcessor {
     const { x, y } = this._getWatermarkPosition(position, textWidth, textHeight, canvasWidth, canvasHeight);
     this.ctx.fillText(text, x, y);
     this.ctx.strokeText(text, x, y);
-  private async _drawImageWatermark(watermarkImageData: string,)
+  private async _drawImageWatermark(watermarkImageData: string)
     position: string,
     canvasWidth: number,
     canvasHeight: number): Promise<void> {,
@@ -404,7 +404,7 @@ export class ImageProcessor {
       canvasHeight
     );
     this.ctx!.drawImage(watermarkImage, x, y);
-  private _getWatermarkPosition(position: string,)
+  private _getWatermarkPosition(position: string)
     itemWidth: number,
     itemHeight: number,
     canvasWidth: number,

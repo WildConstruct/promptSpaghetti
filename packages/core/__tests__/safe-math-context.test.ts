@@ -68,8 +68,8 @@ describe('Safe Math Context', () => {
       expect(Object.isSealed(safeMath)).toBe(true);
       // Cannot add new properties
       expect(() => {
-        (safeMath as any).newProp = 'value';
-      }).toThrow();
+        (safeMath as any).newProp = 'value'
+  }).toThrow();
       // Cannot delete existing properties
       expect(() => {
         delete (safeMath as any).min;

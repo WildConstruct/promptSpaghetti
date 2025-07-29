@@ -55,7 +55,7 @@ describe('PricingOptimizer', () => {
   minQuantity: 10000,
   discountPercentage: 10,
   description: '10% discount for high volume usage'],
-  aiOptimization: {,
+  aiOptimization: {
   enabled: true,
   strategy: 'maximize_revenue',
   sensitivityAnalysis: true,
@@ -90,14 +90,14 @@ describe('PricingOptimizer', () => {
   pricePerUnit: 0.3,
   features: ['Premium templates', 'Priority support', 'Custom integrations'],
   discountPercentage: 20],
-  filmIndustryConfig: {,
+  filmIndustryConfig: {
   studioTierMultiplier: 2.5,
-  productionScaleFactors: {,
+  productionScaleFactors: {
   'indie': 0.8,
   'mid_budget': 1.2,
   'blockbuster': 2.0,
 },
-  contentTypeMultipliers: {,
+  contentTypeMultipliers: {
   'script': 1.0,
   'storyboard': 1.5,
   'concept_art': 2.0,
@@ -175,7 +175,7 @@ describe('PricingOptimizer', () => {
   test('should calculate base pricing correctly', async () => {
   const request: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 1500,
   'nodes_processed': 6000,
 };
@@ -190,7 +190,7 @@ describe('PricingOptimizer', () => {
     test('should handle overage charges correctly', async () => {
   const request: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 2000, // 1000 overage,
   'nodes_processed': 8000 // 3000 overage,
 };
@@ -207,7 +207,7 @@ describe('PricingOptimizer', () => {
     test('should apply volume discounts', async () => {
   const request: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 15000, // High volume,
   'nodes_processed': 20000,
 };
@@ -229,7 +229,7 @@ describe('PricingOptimizer', () => {
   const request: PricingCalculationRequest = {,
   modelId: 'film-industry-model',
   userTier: 'studio',
-  usage: {,
+  usage: {
   'api_calls': 1000,
 };
       const result = await optimizer.calculatePricing(request);
@@ -242,7 +242,7 @@ describe('PricingOptimizer', () => {
   const request: PricingCalculationRequest = {,
   modelId: 'film-industry-model',
   productionType: 'blockbuster',
-  usage: {,
+  usage: {
   'api_calls': 1000,
 };
       const result = await optimizer.calculatePricing(request);
@@ -259,7 +259,7 @@ describe('PricingOptimizer', () => {
   ).mockReturnValue(1 as unknown as unknown); // February (0-indexed)
   const request: PricingCalculationRequest = {,
   modelId: 'film-industry-model',
-  usage: {,
+  usage: {
   'api_calls': 1000,
 };
       const result = await optimizer.calculatePricing(request);
@@ -273,7 +273,7 @@ describe('PricingOptimizer', () => {
   const request: PricingCalculationRequest = {,
   modelId: 'film-industry-model',
   contentType: 'concept_art',
-  usage: {,
+  usage: {
   'api_calls': 1000,
 };
       const result = await optimizer.calculatePricing(request);
@@ -285,7 +285,7 @@ describe('PricingOptimizer', () => {
   test('should apply demand-based pricing adjustments', async () => {
   const highDemandRequest: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 5000, // High usage indicating high demand,
   'nodes_processed': 10000,
 };
@@ -296,11 +296,11 @@ describe('PricingOptimizer', () => {
     test('should calculate complexity scores correctly', async () => {
   const complexRequest: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 10000,
 },
   priority: 'emergency',
-        contentType: 'concept_art';
+        contentType: 'concept_art'
   };
       const result = await optimizer.calculatePricing(complexRequest);
       const complexityComponent = result.breakdown.find(b => b.component.includes('Complexity'));
@@ -312,7 +312,7 @@ describe('PricingOptimizer', () => {
   const nonAiModel: PricingModel = {,
   ...basicModel,
   id: 'non-ai-model',
-  aiOptimization: {,
+  aiOptimization: {
   enabled: false,
   strategy: 'maximize_revenue',
   sensitivityAnalysis: false,
@@ -321,7 +321,7 @@ describe('PricingOptimizer', () => {
       optimizer.addPricingModel(nonAiModel);
       const request: PricingCalculationRequest = {,
   modelId: 'non-ai-model',
-  usage: {,
+  usage: {
   'api_calls': 5000,
 };
       const result = await optimizer.calculatePricing(request);
@@ -333,7 +333,7 @@ describe('PricingOptimizer', () => {
   test('should track pricing calculations in analytics', async () => {
   const request: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 1000,
 };
       // Perform multiple calculations
@@ -425,7 +425,7 @@ describe('PricingOptimizer', () => {
   demandLevel: 'high',
   competitiveIntensity: 'medium',
   seasonality: 'low',
-  economicIndicators: {,
+  economicIndicators: {
   gdpGrowth: 0.03,
   inflation: 0.02,
 };
@@ -541,7 +541,7 @@ describe('PricingOptimizer', () => {
     test('should handle extremely high usage values', async () => {
   const request: PricingCalculationRequest = {,
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 1000000,
   'nodes_processed': 5000000,
 };
@@ -558,7 +558,7 @@ describe('PricingOptimizer', () => {
       optimizer.addPricingModel(modelWithoutDiscounts);
       const request: PricingCalculationRequest = {,
   modelId: 'no-discounts-model',
-  usage: {,
+  usage: {
   'api_calls': 50000 // High volume,
 };
       const result = await optimizer.calculatePricing(request);
@@ -579,7 +579,7 @@ describe('PricingOptimizer', () => {
     test('should handle multiple concurrent pricing calculations', async () => {
       const requests = Array.from({ length: 100 }, (_, i) => ({)
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': 1000 + i * 10,
 }));
       const startTime = Date.now();
@@ -598,7 +598,7 @@ describe('PricingOptimizer', () => {
       // Generate a large number of calculations to build substantial analytics
       const requests = Array.from({ length: 1000 }, (_, i) => ({)
   modelId: 'basic-model',
-  usage: {,
+  usage: {
   'api_calls': Math.floor(Math.random() * 10000) + 1000,
 }));
       // Perform calculations in batches to avoid overwhelming the system
@@ -625,7 +625,7 @@ describe('PricingOptimizer', () => {
   competitorTrackingEnabled: false,
   seasonalAdjustmentsEnabled: false,
   demandPredictionEnabled: false,
-  filmIndustryOptimization: {,
+  filmIndustryOptimization: {
   studioTierAdjustments: false,
   productionCycleTracking: false,
   festivalSeasonOptimization: false,

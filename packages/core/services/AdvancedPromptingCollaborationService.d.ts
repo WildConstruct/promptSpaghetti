@@ -27,7 +27,7 @@ export interface MARSRegionTemplate {
     tags: string[];
     defaultNodes: string[];
     vfxCompatible: boolean;
-    marsParameters: {,
+    marsParameters: {
         category: string;
         subcategory: string;
         controlNetMapping?: string;
@@ -41,14 +41,14 @@ export interface ZadaPromptPattern {
     methodology: PromptingMethodology;
     filmGenre: string[];
     complexity: 'simple' | 'intermediate' | 'advanced';
-    elements: {,
+    elements: {
         timeAndSetting: string;
         actions: string;
         locations: string;
         characters: string;
         cinematography: string;
     };
-    accessibility: {,
+    accessibility: {
         directorFriendly: boolean;
         technicalLevel: number;
         humanReadableScore: number;
@@ -81,7 +81,7 @@ export interface VFXPipelineConfig {
     includeZadaPatterns: boolean;
     exportFormat: 'controlnet' | 'stable_diffusion' | 'custom_pipeline';
     targetSoftware: string[];
-    pipelineMetadata: {,
+    pipelineMetadata: {
         project: string;
         sequence: string;
         shot: string;

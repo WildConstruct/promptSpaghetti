@@ -16,7 +16,7 @@ export interface PythonTransformConfig {
   timeout?: number;
   memoryLimit?: string;
   allowedModules?: string;
-  pythonConfig?: {,
+  pythonConfig?: {
   strictMode?: boolean;
   enableCaching?: boolean;
   executorUrl?: string;
@@ -35,7 +35,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   deterministic: true,  // Python execution is deterministic with same inputs,
   cacheable: config.pythonConfig?.enableCaching ?? false,
   stateful: true,  // Track execution statistics,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'medium' as const,
   memoryUsage: 'medium' as const,
 };
@@ -128,14 +128,14 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   id: this.id,
   type: 'pythonTransform',
   config: this.config,
-  data: {,
+  data: {
   code: this.pythonConfig.code,
   timeout: this.pythonConfig.timeout,
   memoryLimit: this.pythonConfig.memoryLimit,
   allowedModules: this.pythonConfig.allowedModules,
   pythonConfig: this.pythonConfig.pythonConfig,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };
@@ -352,10 +352,10 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
   * Get execution statistics
   */
-  getExecutionStats(context: AdvancedExecutionContext): {,
-  executionsRun: number;,
+  getExecutionStats(context: AdvancedExecutionContext): {
+  executionsRun: number;
   successRate: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   securityViolations: number;
   const state = this.getState(context) as any;
   const executions = state?.executions || [];
@@ -380,7 +380,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Store execution metadata for statistics
    */
-  protected storeExecutionMetadata(context: AdvancedExecutionContext,)
+  protected storeExecutionMetadata(context: AdvancedExecutionContext)
     success: boolean,
     executionTime: number,
     securityViolations: number): void {,

@@ -1,13 +1,3 @@
- > ;
-locked ?  : boolean;
-lockedAt ?  : number;
-lockedNote ?  : string;
-debugInfo ?  : {
-    nodeExecutionOrder: string,
-    randomChoices: (Array),
-    performanceBreakdown: (Record),
-    memoryUsage: { used: number, total: number }
-};
 // Generate hash for graph objects for caching
 const generateGraphHash = (graph) => {
     try {

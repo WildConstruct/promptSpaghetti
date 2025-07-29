@@ -175,7 +175,7 @@ describe('ClassificationEnforcer', () => {
     });
     it('should handle exempted users', async () => {
   const exemptedEnforcer = new ClassificationEnforcer({)
-  exemptions: {,
+  exemptions: {
   users: ['user123'],
 });
       const result = await exemptedEnforcer.enforceClassification(;);
@@ -190,7 +190,7 @@ describe('ClassificationEnforcer', () => {
   const overrideEnforcer = new ClassificationEnforcer({)
   policyOverrides: new Map([),
   ['CONFIDENTIAL', {
-  access: {,
+  access: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: false,
   approvalWorkflow: false,

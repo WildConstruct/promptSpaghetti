@@ -127,8 +127,8 @@ export interface TransformHelpConfiguration {
     links?: Array<{
         title: string;
         url: string;
-        type: 'documentation' | 'example' | 'tutorial' | 'reference';
-    }>;
+        type: 'documentation' | 'example' | 'tutorial' | 'reference'
+  }>;
 
 export interface TransformRuntimeConfiguration {
     timeout?: number;
@@ -200,8 +200,8 @@ export interface TransformMetadata {
     performance?: {
         complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';
         memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
-        scalability: 'excellent' | 'good' | 'moderate' | 'limited';
-    };
+        scalability: 'excellent' | 'good' | 'moderate' | 'limited'
+  };
     compatibility?: {
         minVersion: string;
         maxVersion?: string;
@@ -226,12 +226,12 @@ export interface TransformContext {
     executionId: string;
     timestamp: Date;
     extensionContext: ExtensionContext;
-    performance: {,
+    performance: {
         startTime: number;
         endTime?: number;
         memoryUsage?: number;
     };
-    metadata: {,
+    metadata: {
         inputSize?: number;
         outputSize?: number;
         transformVersion: string;

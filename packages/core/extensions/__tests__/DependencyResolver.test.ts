@@ -12,11 +12,11 @@ import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals
 
 // Types for dependency resolution system
 interface DependencyConstraint {
-  name: string;,
+  name: string;
   version: string;
   optional?: boolean;
 interface PluginManifest {
-  id: string;,
+  id: string;
   name: string;
   version: string;
   dependencies?: Record<string, string>;
@@ -24,7 +24,7 @@ interface PluginManifest {
   optionalDependencies?: Record<string, string>;
   engines?: Record<string, string>;
 interface DependencyNode {
-  plugin: PluginManifest;,
+  plugin: PluginManifest;
   dependencies: DependencyNode;
   resolved: boolean;
   circular?: boolean;
@@ -54,29 +54,29 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'utils-plugin',
   name: 'Utils Plugin',
   version: '2.1.0',
-  dependencies: {,
+  dependencies: {
   'base-plugin': '^1.0.0',
 }
       {
   id: 'ui-plugin',
   name: 'UI Plugin',
   version: '1.5.0',
-  dependencies: {,
+  dependencies: {
   'base-plugin': '^1.0.0',
   'utils-plugin': '^2.0.0',
 },
-  peerDependencies: {,
+  peerDependencies: {
   'theme-plugin': '>=1.0.0',
 }
       {
   id: 'advanced-plugin',
   name: 'Advanced Plugin',
   version: '3.0.0',
-  dependencies: {,
+  dependencies: {
   'ui-plugin': '^1.4.0',
   'utils-plugin': '^2.1.0',
 },
-  optionalDependencies: {,
+  optionalDependencies: {
   'analytics-plugin': '^1.0.0'];
   mockAvailablePlugins = new Map()
   mockPlugins.map(plugin => [plugin.id, plugin])
@@ -161,7 +161,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'broken-plugin',
   name: 'Broken Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'nonexistent-plugin': '^1.0.0',
 };
       dependencyResolver.resolveDependencies.mockRejectedValueOnce()
@@ -188,7 +188,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'level-2-a',
   name: 'Level 2 A',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'level-1-a': '^1.0.0',
   'level-1-b': '^1.0.0',
 }
@@ -196,7 +196,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'level-3-a',
   name: 'Level 3 A',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'level-2-a': '^1.0.0',
   'level-1-b': '^1.0.0'  // Also direct dependency];
   dependencyResolver.getInstallationOrder.mockReturnValue([)
@@ -214,7 +214,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'test-plugin',
   name: 'Test Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'base-plugin': '^1.0.0',
   'utils-plugin': '~2.1.0',
   'ui-plugin': '>=1.4.0',
@@ -248,7 +248,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'incompatible-plugin',
   name: 'Incompatible Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'utils-plugin': '^3.0.0' // Available version is 2.1.0,
 };
       dependencyResolver.validateVersionConstraints.mockReturnValue(false as unknown as unknown as unknown as unknown as unknown);
@@ -260,7 +260,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'peer-test-plugin',
   name: 'Peer Test Plugin',
   version: '1.0.0',
-  peerDependencies: {,
+  peerDependencies: {
   'theme-plugin': '>=1.0.0',
 };
       const ecosystem = [;
@@ -287,7 +287,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'engine-test-plugin',
   name: 'Engine Test Plugin',
   version: '1.0.0',
-  engines: {,
+  engines: {
   node: '>=16.0.0',
   npm: '>=7.0.0',
 };
@@ -426,7 +426,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'app-plugin',
   name: 'App Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'ui-framework': '^2.0.0',
   'data-layer': '^1.5.0',
   'auth-plugin': '^1.0.0',
@@ -435,7 +435,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'ui-framework',
   name: 'UI Framework',
   version: '2.1.0',
-  dependencies: {,
+  dependencies: {
   'component-lib': '^1.0.0',
   'styling-engine': '^1.0.0',
 }
@@ -443,7 +443,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'data-layer',
   name: 'Data Layer',
   version: '1.6.0',
-  dependencies: {,
+  dependencies: {
   'orm-plugin': '^2.0.0',
   'cache-plugin': '^1.0.0',
 }
@@ -451,7 +451,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'auth-plugin',
   name: 'Auth Plugin',
   version: '1.2.0',
-  dependencies: {,
+  dependencies: {
   'crypto-utils': '^1.0.0',
 }
         {
@@ -504,10 +504,10 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'main-plugin',
   name: 'Main Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'required-dep': '^1.0.0',
 },
-  optionalDependencies: {,
+  optionalDependencies: {
   'optional-dep': '^1.0.0',
 }
         {
@@ -587,7 +587,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   id: 'malformed-plugin',
   name: 'Malformed Plugin',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'valid-dep': '^1.0.0',
   'invalid-dep': 'not-a-version', // Invalid version spec,
   '': '1.0.0' // Empty dependency name,

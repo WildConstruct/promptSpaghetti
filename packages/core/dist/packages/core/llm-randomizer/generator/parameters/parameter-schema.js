@@ -301,152 +301,98 @@ getSuggestions(parameters, (Partial));
                                                             name: 'Simple Greeting Generator',
                                                             description: 'A basic greeting system that personalizes messages for users',
                                                             category: 'Getting Started',
-                                                            parameters: {},
-                                                            purpose: 'Create a personalized greeting system for users',
-                                                            complexity: 'simple',
-                                                            nodeCount: 3,
-                                                            style: 'balanced',
-                                                            provider: 'openai',
-                                                            temperature: 0.7,
-                                                            maxRetries: 3,
-                                                            nodeTypes: [],
-                                                            specificRequirements: ['Include user name', 'Time-based greetings'],
-                                                            constraints: ['Keep messages under 50 characters'],
-                                                            focusAreas: ['personalization'],
-                                                            includeMetadata: true,
-                                                            validateOutput: true,
-                                                            enablePreview: true,
-                                                            preferredPatterns: [],
-                                                            avoidPatterns: [],
-                                                            qualityLevel: 'standard',
-                                                            diversityScore: 0.5,
-                                                            outputFormat: 'both',
-                                                            includeExplanation: false,
+                                                            parameters: {
+                                                                purpose: 'Create a personalized greeting system for users',
+                                                                complexity: 'simple',
+                                                                nodeCount: 3,
+                                                                style: 'balanced',
+                                                                provider: 'openai',
+                                                                temperature: 0.7,
+                                                                maxRetries: 3,
+                                                                nodeTypes: [],
+                                                                specificRequirements: ['Include user name', 'Time-based greetings'],
+                                                                constraints: ['Keep messages under 50 characters'],
+                                                                focusAreas: ['personalization'],
+                                                                includeMetadata: true,
+                                                                validateOutput: true,
+                                                                enablePreview: true,
+                                                                preferredPatterns: [],
+                                                                avoidPatterns: [],
+                                                                qualityLevel: 'standard',
+                                                                diversityScore: 0.5,
+                                                                outputFormat: 'both',
+                                                                includeExplanation: false,
+                                                            },
+                                                            tags: ['beginner', 'greeting', 'simple'],
+                                                            isDefault: true,
+                                                            createdAt: new Date().toISOString(),
+                                                            updatedAt: new Date().toISOString()
                                                         },
-                                                        tags, ['beginner', 'greeting', 'simple'],
-                                                        isDefault, true,
-                                                        createdAt, new Date().toISOString(),
-                                                        updatedAt, new Date().toISOString()
+                                                        {
+                                                            id: 'creative-storyteller',
+                                                            name: 'Creative Storyteller',
+                                                            description: 'Generate dynamic story elements with creative branching',
+                                                            category: 'Creative Writing',
+                                                            parameters: {
+                                                                purpose: 'Create dynamic story generation with multiple plot branches',
+                                                                complexity: 'moderate',
+                                                                nodeCount: 8,
+                                                                style: 'creative',
+                                                                provider: 'openai',
+                                                                temperature: 0.9,
+                                                                maxRetries: 3,
+                                                                nodeTypes: [],
+                                                                specificRequirements: ['Character development', 'Plot twists', 'Multiple endings'],
+                                                                constraints: ['Family-friendly content', 'Maximum 500 words per branch'],
+                                                                focusAreas: ['narrative', 'creativity'],
+                                                                includeMetadata: true,
+                                                                validateOutput: true,
+                                                                enablePreview: true,
+                                                                preferredPatterns: [],
+                                                                avoidPatterns: [],
+                                                                qualityLevel: 'standard',
+                                                                diversityScore: 0.5,
+                                                                outputFormat: 'both',
+                                                                includeExplanation: true,
+                                                            },
+                                                            tags: ['creative', 'storytelling', 'branching'],
+                                                            isDefault: true,
+                                                            createdAt: new Date().toISOString(),
+                                                            updatedAt: new Date().toISOString()
+                                                        },
+                                                        {
+                                                            id: 'technical-docs',
+                                                            name: 'Technical Documentation',
+                                                            description: 'Generate structured technical documentation with precise formatting',
+                                                            category: 'Professional',
+                                                            parameters: {
+                                                                purpose: 'Create comprehensive technical documentation with structured format',
+                                                                complexity: 'complex',
+                                                                nodeCount: 12,
+                                                                style: 'logical',
+                                                                provider: 'openai',
+                                                                temperature: 0.3,
+                                                                maxRetries: 3,
+                                                                nodeTypes: [],
+                                                                specificRequirements: ['Code examples', 'Step-by-step instructions', 'Error handling'],
+                                                                constraints: ['Technical accuracy', 'Consistent formatting', 'Clear structure'],
+                                                                focusAreas: ['documentation', 'technical-writing'],
+                                                                includeMetadata: true,
+                                                                validateOutput: true,
+                                                                enablePreview: true,
+                                                                preferredPatterns: [],
+                                                                avoidPatterns: [],
+                                                                qualityLevel: 'high',
+                                                                diversityScore: 0.3,
+                                                                outputFormat: 'both',
+                                                                includeExplanation: true,
+                                                            },
+                                                            tags: ['technical', 'documentation', 'structured'],
+                                                            isDefault: true,
+                                                            createdAt: new Date().toISOString(),
+                                                            updatedAt: new Date().toISOString()
+                                                        }
                                                     ];
-                                                }
-                                                {
-                                                    id: 'creative-storyteller',
-                                                        name;
-                                                    'Creative Storyteller',
-                                                        description;
-                                                    'Generate dynamic story elements with creative branching',
-                                                        category;
-                                                    'Creative Writing',
-                                                        parameters;
-                                                    {
-                                                        purpose: 'Create dynamic story generation with multiple plot branches',
-                                                            complexity;
-                                                        'moderate',
-                                                            nodeCount;
-                                                        8,
-                                                            style;
-                                                        'creative',
-                                                            provider;
-                                                        'openai',
-                                                            temperature;
-                                                        0.9,
-                                                            maxRetries;
-                                                        3,
-                                                            nodeTypes;
-                                                        [],
-                                                            specificRequirements;
-                                                        ['Character development', 'Plot twists', 'Multiple endings'],
-                                                            constraints;
-                                                        ['Family-friendly content', 'Maximum 500 words per branch'],
-                                                            focusAreas;
-                                                        ['narrative', 'creativity'],
-                                                            includeMetadata;
-                                                        true,
-                                                            validateOutput;
-                                                        true,
-                                                            enablePreview;
-                                                        true,
-                                                            preferredPatterns;
-                                                        [],
-                                                            avoidPatterns;
-                                                        [],
-                                                            qualityLevel;
-                                                        'standard',
-                                                            diversityScore;
-                                                        0.5,
-                                                            outputFormat;
-                                                        'both',
-                                                            includeExplanation;
-                                                        true,
-                                                        ;
-                                                    }
-                                                    tags: ['creative', 'storytelling', 'branching'],
-                                                        isDefault;
-                                                    true,
-                                                        createdAt;
-                                                    new Date().toISOString(),
-                                                        updatedAt;
-                                                    new Date().toISOString();
-                                                }
-                                                {
-                                                    id: 'technical-docs',
-                                                        name;
-                                                    'Technical Documentation',
-                                                        description;
-                                                    'Generate structured technical documentation with precise formatting',
-                                                        category;
-                                                    'Professional',
-                                                        parameters;
-                                                    {
-                                                        purpose: 'Create comprehensive technical documentation with structured format',
-                                                            complexity;
-                                                        'complex',
-                                                            nodeCount;
-                                                        12,
-                                                            style;
-                                                        'logical',
-                                                            provider;
-                                                        'openai',
-                                                            temperature;
-                                                        0.3,
-                                                            maxRetries;
-                                                        3,
-                                                            nodeTypes;
-                                                        [],
-                                                            specificRequirements;
-                                                        ['Code examples', 'Step-by-step instructions', 'Error handling'],
-                                                            constraints;
-                                                        ['Technical accuracy', 'Consistent formatting', 'Clear structure'],
-                                                            focusAreas;
-                                                        ['documentation', 'technical-writing'],
-                                                            includeMetadata;
-                                                        true,
-                                                            validateOutput;
-                                                        true,
-                                                            enablePreview;
-                                                        true,
-                                                            preferredPatterns;
-                                                        [],
-                                                            avoidPatterns;
-                                                        [],
-                                                            qualityLevel;
-                                                        'high',
-                                                            diversityScore;
-                                                        0.3,
-                                                            outputFormat;
-                                                        'both',
-                                                            includeExplanation;
-                                                        true,
-                                                        ;
-                                                    }
-                                                    tags: ['technical', 'documentation', 'structured'],
-                                                        isDefault;
-                                                    true,
-                                                        createdAt;
-                                                    new Date().toISOString(),
-                                                        updatedAt;
-                                                    new Date().toISOString();
-                                                    ;
                                                 }
                                             }
                                         }

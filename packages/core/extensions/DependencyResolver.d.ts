@@ -35,8 +35,8 @@ export interface DependencyConflict {
     }>;
     resolution?: {
         selectedVersion: string;
-        strategy: 'latest' | 'maxSatisfying' | 'manual';
-    };
+        strategy: 'latest' | 'maxSatisfying' | 'manual'
+  };
 
 export interface CircularDependency {
     cycle: string[];

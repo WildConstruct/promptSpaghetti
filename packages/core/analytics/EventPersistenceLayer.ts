@@ -47,7 +47,7 @@ export interface EventQueryOptions {
   // Event Statistics
 }
 export interface EventStatistics {
-  totalEvents: number;,
+  totalEvents: number;
   eventsByType: { [type: string]: number };
   eventsByCategory: { [category: string]: number };
   eventsBySeverity: { [severity: string]: number };
@@ -60,12 +60,12 @@ export interface EventStatistics {
 export interface EventAggregation {
   groupBy: string;
   timeGranularity?: 'hour' | 'day' | 'week' | 'month';
-  aggregates: {,
-  count: number;,
+  aggregates: {
+  count: number;
   firstSeen: number;
-  lastSeen: number;,
+  lastSeen: number;
   uniqueSources: number;
-  uniqueUsers: number;,
+  uniqueUsers: number;
   uniqueSessions: number;
 };
 /**
@@ -328,7 +328,7 @@ export class DatabaseEventRepository implements EventRepository {
   eventsByCategory,
   eventsBySeverity,
   eventsBySource,
-  timeRange: {,
+  timeRange: {
   earliest: timeResult.earliest || 0,
   latest: timeResult.latest || 0,
 },
@@ -357,7 +357,7 @@ export class DatabaseEventRepository implements EventRepository {
     const results = stmt.all(...params);
     return results.map((row: any) => ({,)
   groupBy: row[groupBy],
-  aggregates: {,
+  aggregates: {
   count: row.count,
   firstSeen: row.firstSeen,
   lastSeen: row.lastSeen,
@@ -624,7 +624,7 @@ class InMemoryEventRepository implements EventRepository {
   groups[key].push(event);
   return Object.entries(groups).map(([key, groupEvents]) => ({)
   groupBy: key,
-  aggregates: {,
+  aggregates: {
   count: groupEvents.length,
   firstSeen: Math.min(...groupEvents.map(e => e.timestamp)),
   lastSeen: Math.max(...groupEvents.map(e => e.timestamp)),
@@ -632,7 +632,7 @@ class InMemoryEventRepository implements EventRepository {
   uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size,
   uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size,
 }));
-  async getTimeSeriesData(metric: string,)
+  async getTimeSeriesData(metric: string)
     granularity: string,
     filter?: EventFilter
   ): Promise<Array<{ timestamp: number; value: number }>> {

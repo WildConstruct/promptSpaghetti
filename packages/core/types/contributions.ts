@@ -54,7 +54,7 @@ export const ContributorLevelSchema = z.enum([)
 // Base Contribution Schema
 // =============================================================================
 
-export const BaseContributionSchema = z.object({)
+export const BaseContributionSchema = z.object({
   id: z.string().uuid(),
   type: ContributionTypeSchema,
   contributorId: z.string().uuid(),
@@ -67,7 +67,7 @@ export const BaseContributionSchema = z.object({)
   category: z.string().optional(),
   // Content
   content: z.record(z.unknown()).default({}),
-  assets: z.array(z.object({,)
+  assets: z.array(z.object({)
   id: z.string(),
   type: z.enum(['image', 'video', 'document', 'code', 'graph']),
   url: z.string().url(),
@@ -84,7 +84,7 @@ export const BaseContributionSchema = z.object({)
   qualityScore: z.number().min(0).max(100).default(0),
   qualityRating: ContributionQualityRatingSchema.optional(),
   moderatorNotes: z.string().optional(),
-  revisionRequests: z.array(z.object({,)
+  revisionRequests: z.array(z.object({)
   id: z.string(),
   moderatorId: z.string(),
   moderatorName: z.string(),
@@ -101,7 +101,7 @@ export const BaseContributionSchema = z.object({)
   shares: z.number().int().default(0),
   // Metadata
   version: z.string().default('1.0.0'),
-  versionHistory: z.array(z.object({,)
+  versionHistory: z.array(z.object({)
   version: z.string(),
   changes: z.string(),
   changedAt: z.date(),
@@ -115,7 +115,7 @@ export const BaseContributionSchema = z.object({)
 // Template Contribution Schema
 // =============================================================================
 
-export const TemplateContributionSchema = BaseContributionSchema.extend({)
+export const TemplateContributionSchema = BaseContributionSchema.extend({
   type: z.literal('template'),
   content: z.object({,)
   graphJson: z.record(z.unknown()),
@@ -123,7 +123,7 @@ export const TemplateContributionSchema = BaseContributionSchema.extend({)
   claudeModel: z.string().default('claude-3-sonnet'),
   tokenEstimate: z.number().int().default(0),
   safetyScore: z.number().min(0).max(1).default(1.0),
-  testCases: z.array(z.object({,)
+  testCases: z.array(z.object({)
   input: z.string(),
   expectedOutput: z.string(),
   actualOutput: z.string().optional(),
@@ -149,7 +149,7 @@ export const TemplateContributionSchema = BaseContributionSchema.extend({)
 // Knowledge Article Contribution Schema
 // =============================================================================
 
-export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend({)
+export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend({
   type: z.literal('knowledge_article'),
   content: z.object({,)
   articleType: z.enum(['guide', 'tutorial', 'reference', 'faq', 'troubleshooting']),
@@ -158,7 +158,7 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
   prerequisites: z.array(z.string()).default([]),
   learningObjectives: z.array(z.string()).default([]),
   // Content Structure
-  sections: z.array(z.object({,)
+  sections: z.array(z.object({)
   id: z.string(),
   title: z.string(),
   content: z.string(),
@@ -166,7 +166,7 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
   type: z.enum(['text', 'code', 'image', 'video', 'interactive']),
 })),
     // Interactive Elements
-    codeExamples: z.array(z.object({,)
+    codeExamples: z.array(z.object({)
   id: z.string(),
   language: z.string(),
   code: z.string(),
@@ -176,7 +176,7 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
     // SEO and Discovery
     keywords: z.array(z.string()).default([]),
     relatedArticles: z.array(z.string()).default([]),
-    externalLinks: z.array(z.object({,)
+    externalLinks: z.array(z.object({)
   title: z.string(),
   url: z.string().url(),
   description: z.string().optional(),
@@ -188,7 +188,7 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
 // Tutorial Contribution Schema
 // =============================================================================
 
-export const TutorialContributionSchema = BaseContributionSchema.extend({)
+export const TutorialContributionSchema = BaseContributionSchema.extend({
   type: z.literal('tutorial'),
   content: z.object({,)
   tutorialType: z.enum(['step_by_step', 'video', 'interactive', 'workshop']),
@@ -197,7 +197,7 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({)
   prerequisites: z.array(z.string()).default([]),
   tools: z.array(z.string()).default([]),
   // Tutorial Structure
-  steps: z.array(z.object({,)
+  steps: z.array(z.object({)
   id: z.string(),
   title: z.string(),
   description: z.string(),
@@ -205,7 +205,7 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({)
   order: z.number().int(),
   estimatedTime: z.number().int(),
   assets: z.array(z.string()).default([]),
-  checkpoints: z.array(z.object({,)
+  checkpoints: z.array(z.object({)
   description: z.string(),
   validation: z.string().optional(),
 })).default([])
@@ -214,7 +214,7 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({)
     deliverables: z.array(z.string()).default([]),
     skillsLearned: z.array(z.string()).default([]),
     // Support Materials
-    downloadableResources: z.array(z.object({,)
+    downloadableResources: z.array(z.object({)
   name: z.string(),
   type: z.string(),
   url: z.string().url(),
@@ -227,7 +227,7 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({)
 // Case Study Contribution Schema
 // =============================================================================
 
-export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
+export const CaseStudyContributionSchema = BaseContributionSchema.extend({
   type: z.literal('case_study'),
   content: z.object({,)
   caseStudyType: z.enum(['success_story', 'implementation', 'roi_analysis', 'comparison', 'innovation']),
@@ -249,7 +249,7 @@ export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
 }),
     results: z.object({,)
   outcomes: z.array(z.string()).default([]),
-  metrics: z.array(z.object({,)
+  metrics: z.array(z.object({)
   name: z.string(),
   before: z.string(),
   after: z.string(),
@@ -263,14 +263,14 @@ export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
 }).optional()
     }),
     // Supporting Materials
-    testimonials: z.array(z.object({,)
+    testimonials: z.array(z.object({)
   author: z.string(),
   role: z.string(),
   company: z.string().optional(),
   quote: z.string(),
   avatar: z.string().url().optional(),
 })).default([]),
-    mediaGallery: z.array(z.object({,)
+    mediaGallery: z.array(z.object({)
   type: z.enum(['before_after', 'screenshot', 'video', 'diagram']),
   url: z.string().url(),
   caption: z.string(),
@@ -283,7 +283,7 @@ export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
 // Pattern Library Contribution Schema
 // =============================================================================
 
-export const PatternLibraryContributionSchema = BaseContributionSchema.extend({)
+export const PatternLibraryContributionSchema = BaseContributionSchema.extend({
   type: z.literal('pattern_library'),
   content: z.object({,)
   patternType: z.enum(['prompt_pattern', 'graph_pattern', 'workflow_pattern', 'integration_pattern']),
@@ -304,20 +304,20 @@ export const PatternLibraryContributionSchema = BaseContributionSchema.extend({)
   knownUses: z.array(z.string()).default([]),
 }),
     // Examples and Variations
-    examples: z.array(z.object({,)
+    examples: z.array(z.object({)
   title: z.string(),
   description: z.string(),
   code: z.string(),
   explanation: z.string(),
 })).default([]),
-    variations: z.array(z.object({,)
+    variations: z.array(z.object({)
   name: z.string(),
   description: z.string(),
   whenToUse: z.string(),
   tradeoffs: z.string(),
 })).default([]),
     // Related Patterns
-    relatedPatterns: z.array(z.object({,)
+    relatedPatterns: z.array(z.object({)
   patternId: z.string(),
   relationship: z.enum(['uses', 'used_by', 'similar_to', 'alternative_to']),
   description: z.string(),
@@ -329,7 +329,7 @@ export const PatternLibraryContributionSchema = BaseContributionSchema.extend({)
 // Community Post Contribution Schema
 // =============================================================================
 
-export const CommunityPostContributionSchema = BaseContributionSchema.extend({)
+export const CommunityPostContributionSchema = BaseContributionSchema.extend({
   type: z.literal('community_post'),
   content: z.object({,)
   postType: z.enum(['discussion', 'question', 'announcement', 'showcase', 'feedback']),
@@ -338,7 +338,7 @@ export const CommunityPostContributionSchema = BaseContributionSchema.extend({)
   isPinned: z.boolean().default(false),
   // Discussion Structure
   body: z.string(),
-  replies: z.array(z.object({,)
+  replies: z.array(z.object({)
   id: z.string(),
   authorId: z.string(),
   authorName: z.string(),
@@ -360,7 +360,7 @@ export const CommunityPostContributionSchema = BaseContributionSchema.extend({)
 // Contribution Request/Response Schemas
 // =============================================================================
 
-export const CreateContributionRequestSchema = z.object({)
+export const CreateContributionRequestSchema = z.object({
   type: ContributionTypeSchema,
   title: z.string().min(5).max(200),
   description: z.string().min(20).max(2000),
@@ -371,7 +371,7 @@ export const CreateContributionRequestSchema = z.object({)
   saveAsDraft: z.boolean().default(false),
 });
 
-export const UpdateContributionRequestSchema = z.object({)
+export const UpdateContributionRequestSchema = z.object({
   title: z.string().min(5).max(200).optional(),
   description: z.string().min(20).max(2000).optional(),
   category: z.string().optional(),
@@ -380,17 +380,17 @@ export const UpdateContributionRequestSchema = z.object({)
   assets: z.array(z.string()).optional(),
 });
 
-export const ContributionReviewRequestSchema = z.object({)
+export const ContributionReviewRequestSchema = z.object({
   action: z.enum(['approve', 'request_revision', 'reject']),
   qualityRating: ContributionQualityRatingSchema.optional(),
   moderatorNotes: z.string().optional(),
-  revisionRequests: z.array(z.object({,)
+  revisionRequests: z.array(z.object({)
   reason: z.string(),
   details: z.string(),
 })).optional()
 });
 
-export const ContributionFilterSchema = z.object({)
+export const ContributionFilterSchema = z.object({
   type: ContributionTypeSchema.optional(),
   status: ContributionStatusSchema.optional(),
   contributorId: z.string().uuid().optional(),
@@ -410,7 +410,7 @@ export const ContributionFilterSchema = z.object({)
 // Contributor Profile Schema
 // =============================================================================
 
-export const ContributorProfileSchema = z.object({)
+export const ContributorProfileSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   // Profile Information
@@ -433,14 +433,14 @@ export const ContributorProfileSchema = z.object({)
   totalLikes: z.number().int().default(0),
   averageQualityScore: z.number().min(0).max(100).default(0),
   // Recognition
-  badges: z.array(z.object({,)
+  badges: z.array(z.object({)
   id: z.string(),
   name: z.string(),
   description: z.string(),
   iconUrl: z.string().url(),
   earnedAt: z.date(),
 })).default([]),
-  achievements: z.array(z.object({,)
+  achievements: z.array(z.object({)
   id: z.string(),
   name: z.string(),
   description: z.string(),

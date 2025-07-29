@@ -18,7 +18,7 @@ import {
 import { TrendingCommentsService } from '../../services/TrendingCommentsService';
 import { TrendingCommentCard } from './TrendingCommentCard';
 interface TrendingCommentsListProps {
-  resourceId: string;,
+  resourceId: string;
   resourceType: CommentableResourceType;
   initialPeriod?: TrendingPeriod;
   initialSortOrder?: CommentSortOrder;
@@ -108,7 +108,7 @@ interface TrendingCommentsListProps {
   break;
   return {
   ...comment,
-  score: {,
+  score: {
   ...comment.score,
   metrics: updatedMetrics,
 };

@@ -13,7 +13,7 @@ export interface DataPartitionConfig {
     name: string;
     description: string;
     data_type: 'security_events' | 'audit_logs' | 'threat_intelligence' | 'compliance_data' | 'user_activity' | 'system_logs' | 'alert_history';
-    partitioning: {,
+    partitioning: {
         strategy: 'time_based' | 'size_based' | 'content_based' | 'hybrid';
         time_based?: {
             interval: 'hourly' | 'daily' | 'weekly' | 'monthly';
@@ -36,7 +36,7 @@ export interface DataPartitionConfig {
             partition_thresholds: Record<string, number>;
         };
     };
-    storage: {,
+    storage: {
         hot_storage: StorageTier;
         warm_storage: StorageTier;
         cold_storage: StorageTier;
@@ -45,14 +45,14 @@ export interface DataPartitionConfig {
         encryption_enabled: boolean;
         replication_factor: number;
     };
-    indexing: {,
+    indexing: {
         primary_indices: string[];
         secondary_indices: string[];
         bloom_filters: boolean;
         index_compression: boolean;
         query_optimization: boolean;
     };
-    lifecycle: {,
+    lifecycle: {
         hot_duration_days: number;
         warm_duration_days: number;
         cold_duration_days: number;
@@ -60,7 +60,7 @@ export interface DataPartitionConfig {
         deletion_after_years?: number;
         auto_transition: boolean;
     };
-    compliance: {,
+    compliance: {
         data_classification: 'public' | 'internal' | 'confidential' | 'restricted';
         regulatory_requirements: string[];
         retention_legal_hold: boolean;
@@ -113,7 +113,7 @@ export interface ArchivalJob {
     name: string;
     description: string;
     partition_config_id: string;
-    config: {,
+    config: {
         source_location: string;
         target_location: string;
         batch_size: number;
@@ -121,13 +121,13 @@ export interface ArchivalJob {
         retry_attempts: number;
         timeout_minutes: number;
     };
-    schedule: {,
+    schedule: {
         type: 'manual' | 'scheduled' | 'event_triggered';
         cron_expression?: string;
         trigger_events?: string[];
         dependencies?: string[];
     };
-    processing: {,
+    processing: {
         validate_data_integrity: boolean;
         create_checksums: boolean;
         compress_data: boolean;
@@ -135,14 +135,14 @@ export interface ArchivalJob {
         deduplicate: boolean;
         index_data: boolean;
     };
-    monitoring: {,
+    monitoring: {
         progress_reporting: boolean;
         error_threshold: number;
         alert_on_failure: boolean;
         notification_recipients: string[];
         metrics_collection: boolean;
     };
-    execution: {,
+    execution: {
         last_run?: number;
         next_scheduled_run?: number;
         total_runs: number;
@@ -164,7 +164,7 @@ export interface ArchivalExecution {
     end_time?: number;
     duration_minutes?: number;
     status: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled' | 'paused';
-    statistics: {,
+    statistics: {
         records_processed: number;
         records_archived: number;
         records_failed: number;
@@ -172,7 +172,7 @@ export interface ArchivalExecution {
         compression_ratio: number;
         dedupe_savings_percentage: number;
     };
-    performance: {,
+    performance: {
         throughput_records_per_second: number;
         throughput_gb_per_hour: number;
         cpu_utilization_percentage: number;
@@ -195,7 +195,7 @@ export interface ArchivalExecution {
         details: string;
         timestamp: number;
     }>;
-    results: {,
+    results: {
         output_locations: string[];
         manifest_files: string[];
         checksum_files: string[];
@@ -209,9 +209,9 @@ export interface DataRetrievalRequest {
     id: string;
     requester: string;
     request_type: 'search' | 'restore' | 'export' | 'compliance_audit';
-    criteria: {,
+    criteria: {
         data_types: string[];
-        time_range: {,
+        time_range: {
             start: number;
             end: number;
         };
@@ -219,7 +219,7 @@ export interface DataRetrievalRequest {
         search_query?: string;
         partition_ids?: string[];
     };
-    options: {,
+    options: {
         output_format: 'json' | 'csv' | 'parquet' | 'avro' | 'native';
         compression: 'none' | 'gzip' | 'lz4' | 'snappy';
         encryption: boolean;
@@ -227,31 +227,31 @@ export interface DataRetrievalRequest {
         max_results: number;
         timeout_minutes: number;
     };
-    justification: {,
+    justification: {
         business_purpose: string;
         legal_basis?: string;
         compliance_requirement?: string;
         urgency: 'low' | 'medium' | 'high' | 'critical';
         estimated_cost: number;
     };
-    approval: {,
+    approval: {
         required: boolean;
         approvers: string[];
         approved_by?: string;
         approved_at?: number;
         approval_notes?: string;
     };
-    execution: {,
+    execution: {
         status: 'pending_approval' | 'approved' | 'queued' | 'processing' | 'completed' | 'failed' | 'expired';
         started_at?: number;
         completed_at?: number;
         estimated_completion?: number;
         progress_percentage: number;
     };
-    cost_tracking: {,
+    cost_tracking: {
         estimated_cost: number;
         actual_cost?: number;
-        cost_breakdown: {,
+        cost_breakdown: {
             retrieval_cost: number;
             processing_cost: number;
             storage_cost: number;
@@ -271,11 +271,11 @@ export interface DataRetrievalRequest {
 export interface PartitionMetrics {
     id: string;
     partition_config_id: string;
-    collection_period: {,
+    collection_period: {
         start: number;
         end: number;
     };
-    storage: {,
+    storage: {
         total_partitions: number;
         hot_storage_gb: number;
         warm_storage_gb: number;
@@ -284,21 +284,21 @@ export interface PartitionMetrics {
         compression_ratio: number;
         deduplication_ratio: number;
     };
-    performance: {,
+    performance: {
         write_throughput_records_per_second: number;
         read_throughput_records_per_second: number;
         query_response_time_p95_ms: number;
         index_efficiency_percentage: number;
         cache_hit_ratio: number;
     };
-    operations: {,
+    operations: {
         partitions_created: number;
         partitions_archived: number;
         partitions_deleted: number;
         failed_operations: number;
         maintenance_operations: number;
     };
-    costs: {,
+    costs: {
         storage_cost_hot: number;
         storage_cost_warm: number;
         storage_cost_cold: number;
@@ -307,7 +307,7 @@ export interface PartitionMetrics {
         processing_costs: number;
         total_monthly_cost: number;
     };
-    quality: {,
+    quality: {
         data_integrity_score: number;
         completeness_percentage: number;
         availability_percentage: number;
@@ -326,19 +326,19 @@ export interface ArchivalEvent {
     partition_config_id?: string;
     job_id?: string;
     execution_id?: string;
-    data_impact: {,
+    data_impact: {
         records_affected: number;
         data_volume_gb: number;
         partitions_affected: string[];
         estimated_recovery_time?: number;
     };
-    context: {,
+    context: {
         triggered_by: string;
         related_events: string[];
         system_state: Record<string, any>;
         performance_metrics: Record<string, number>;
     };
-    response: {,
+    response: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
@@ -346,7 +346,7 @@ export interface ArchivalEvent {
         resolution_notes?: string;
         resolved_at?: number;
     };
-    follow_up: {,
+    follow_up: {
         monitoring_required: boolean;
         escalation_required: boolean;
         compliance_reporting_required: boolean;

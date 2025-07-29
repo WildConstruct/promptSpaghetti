@@ -23,9 +23,9 @@ export class WildConstructVFXExporter implements VFXExporter {
   /**
    * Export graph to VFX-ready format
    */
-  async exportGraph(graph: { nodes: Node; edges: Edge },)
+  async exportGraph(graph: { nodes: Node; edges: Edge })
     executionResults?: {
-  finalPrompt: string;,
+  finalPrompt: string;
   variables: Record<string, string>;
   executionTime: number;
   nodePerformance?: Record<string, number>;
@@ -56,7 +56,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   exportId,
   version: options.formatVersion || '1.2.0', // Updated for reproducibility features,
   timestamp,
-  generator: {,
+  generator: {
   name: 'Wild Construct Prompt Generator' as const,
   version: process.env.npm_package_version || '1.0.0',
   build: process.env.BUILD_NUMBER || 'development',
@@ -64,18 +64,18 @@ export class WildConstructVFXExporter implements VFXExporter {
   coreVersion: '2.1.0', // Core engine version,
   exporterVersion: '1.2.0', // VFX exporter version,
   schemaVersion: '1.2.0', // Export schema version,
-  dependencies: {,
+  dependencies: {
   reactflow: '11.10.1',
   seedrandom: '3.0.5',
   typescript: '5.0.0',
 },
-  project: {,
+  project: {
   name: 'Untitled Project',
   id: this.generateProjectId(),
   scene: 'Main Scene',
   shot: undefined,
 },
-  export: {,
+  export: {
   format: 'vfx-pipeline-v1' as const,
   quality: options.quality,
   includeDebugInfo: options.includeDebugInfo || false,
@@ -86,33 +86,33 @@ export class WildConstructVFXExporter implements VFXExporter {
   minimumVersion: '1.0.0', // Minimum version required to import,
   breaking_changes: [] // List of breaking changes from base version,
 },
-  compatibility: {,
+  compatibility: {
   controlNet: true,
         diffusionModels: ['stable-diffusion', 'sdxl', 'midjourney-v6', 'dall-e-3'],
         animationFramework: true,
         billboardProjection: true,
         // Enhanced compatibility tracking
-        vfxSoftware: {,
+        vfxSoftware: {
   blender: { supported: true, minVersion: '3.6.0' },
           maya: { supported: true, minVersion: '2023' },
           houdini: { supported: true, minVersion: '19.5' },
           nuke: { supported: true, minVersion: '13.0' },
           afterEffects: { supported: true, minVersion: '2023' }
   },
-  renderEngines: {,
+  renderEngines: {
   cycles: true,
   octane: true,
   arnold: true,
   redshift: true,
   vray: true,
 },
-  platforms: {,
+  platforms: {
   windows: { supported: true, minVersion: '10' },
           macos: { supported: true, minVersion: '12.0' },
           linux: { supported: true, distributions: ['ubuntu-20.04', 'centos-8'] }
   }
       // Version migration information
-      versionInfo: {,
+      versionInfo: {
   exportedFrom: options.formatVersion || '1.2.0',
   canUpgradeTo: ['1.3.0', '2.0.0'], // Future versions this can upgrade to,
   deprecatedFeatures: [], // Features that will be removed,
@@ -134,7 +134,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   variables: this.buildVariableData(variables),
   variants: executionResults?.variants || [],
   negativePrompt: this.generateNegativePrompt(finalPrompt),
-  weights: {,
+  weights: {
   overall: 1.0,
   subject: 1.2,
   composition: 1.0,
@@ -201,7 +201,7 @@ export class WildConstructVFXExporter implements VFXExporter {
         dependsOn: this.getNodeDependencies(node.id, graph.edges),
         affects: this.getNodeTargets(node.id, graph.edges),
         // Enhanced reproducibility data
-        reproducibilityData: {,
+        reproducibilityData: {
   originalPosition: node.position,
           originalSize: { width: node.width || 200, height: node.height || 150 },
           creationTimestamp: node.data?.created || new Date().toISOString(),
@@ -209,13 +209,13 @@ export class WildConstructVFXExporter implements VFXExporter {
           configurationHash: this.generateHash(JSON.stringify(fullConfiguration));
   };
     });
-    const vfxConnections: VFXGraphConnection = graph.edges.map(edge => ({,)
+    const vfxConnections: VFXGraphConnection = graph.edges.map(edge => ({)
   id: edge.id,
-  source: {,
+  source: {
   nodeId: edge.source,
   port: edge.sourceHandle || undefined,
 },
-  target: {,
+  target: {
   nodeId: edge.target,
   port: edge.targetHandle || undefined,
 },
@@ -227,7 +227,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   connections: vfxConnections,
   executionPath: graph.nodes.map(n => n.id),
   criticalPath: this.calculateCriticalPath(vfxNodes, vfxConnections),
-  analysis: {,
+  analysis: {
   complexity: this.analyzeComplexity(vfxNodes, vfxConnections),
   variabilityScore: this.calculateVariabilityScore(vfxNodes),
   determinismScore: this.calculateDeterminismScore(vfxNodes),
@@ -319,7 +319,7 @@ export class WildConstructVFXExporter implements VFXExporter {
       options
     );
     return {
-  randomization: {,
+  randomization: {
   masterSeed,
   nodeSeed: nodeSeeds,
   rngState: reproducibilityData.serializedState,
@@ -327,17 +327,17 @@ export class WildConstructVFXExporter implements VFXExporter {
   nodeRngStates: reproducibilityData.nodeStates,
   executionSequence: reproducibilityData.executionSequence,
 },
-  performance: {,
+  performance: {
   totalTime: executionResults?.executionTime || 0,
   nodePerformance: this.buildNodePerformance(executionResults),
   memoryUsage: options?.includePerformanceData ? 1024 * 1024 * 10 : undefined // 10MB placeholder,
 },
-  history: {,
+  history: {
   iterations: executionResults?.iterations || [],
   modifications: [],
 },
-  reproduction: {,
-  environment: {,
+  reproduction: {
+  environment: {
   nodeVersion: process.version,
   platform: process.platform,
   locale: Intl.DateTimeFormat().resolvedOptions().locale,
@@ -359,17 +359,17 @@ export class WildConstructVFXExporter implements VFXExporter {
     const extensions: any = {};
     // Add ControlNet structure if enabled
     extensions.controlNet = {
-  pose: {,
+  pose: {
   enabled: false,
   strength: 0.8,
   poseDescription: 'Natural standing pose',
 },
-  depth: {,
+  depth: {
   enabled: false,
   strength: 0.6,
   depthRange: [0.1, 100.0],
 },
-  canny: {,
+  canny: {
   enabled: false,
   strength: 0.7,
   threshold: [100, 200],
@@ -387,32 +387,32 @@ export class WildConstructVFXExporter implements VFXExporter {
   const width = this.extractNumberFromVariables(variables, ['width', 'resolution_x']) || 1920;
   const height = this.extractNumberFromVariables(variables, ['height', 'resolution_y']) || 1080;
   return {
-  resolution: {,
+  resolution: {
   width,
   height,
   aspectRatio: this.calculateAspectRatio(width, height),
 },
-  camera: {,
+  camera: {
   fov: this.extractNumberFromVariables(variables, ['fov', 'field_of_view']) || 50,
   focal: this.extractNumberFromVariables(variables, ['focal', 'focal_length']) || 85,
   aperture: this.extractNumberFromVariables(variables, ['aperture', 'f_stop']) || 2.8,
 },
-  lighting: {,
+  lighting: {
   timeOfDay: this.extractFromVariables(variables, ['time', 'time_of_day']) as any || undefined,
   weather: this.extractFromVariables(variables, ['weather']) as any || undefined,
   mood: this.extractFromVariables(variables, ['mood', 'lighting_mood']) as any || undefined,
   temperature: this.extractNumberFromVariables(variables, ['temperature', 'color_temp']) || 5500,
   exposure: 0,
 },
-  style: {,
+  style: {
   filmstock: this.extractFromVariables(variables, ['film', 'filmstock']) as any || 'digital',
   colorGrading: 'cinematic',
-  dof: {,
+  dof: {
   enabled: true,
   focusDistance: 10,
   blurRadius: 2,
 },
-  quality: {,
+  quality: {
   samples: 50,
   denoising: 0.7,
   sharpness: 0.5,
@@ -482,7 +482,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   animation: !!exportData.extensions?.animation,
   rendering: !!exportData.rendering?.resolution,
   // Enhanced compatibility checks
-  reproducibility: {,
+  reproducibility: {
   exact: !!(randomization?.rngState && randomization?.reproducibilityHash),
   approximate: !!(randomization?.masterSeed || randomization?.masterSeed === 0),
   configPreserved: nodesWithoutConfig.length === 0,
@@ -562,9 +562,9 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   const masterRng = seedrandom(masterSeed.toString());
   // Capture node-specific RNG states
   const nodeStates: Record<string, {,
-  seed: number;,
+  seed: number;
   state: string;
-  callCount: number;,
+  callCount: number;
   lastValue: number;
 }> = {};
     Object.entries(nodeSeeds).forEach(([nodeId, seed]) => {
@@ -596,17 +596,17 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     const serializedState = options?.includeDebugInfo ? {
   masterRng: this.serializeRngState(masterRng),
   nodeStates,
-  environment: {,
+  environment: {
   nodeVersion: process.version,
   platform: process.platform,
   arch: process.arch,
   locale: Intl.DateTimeFormat().resolvedOptions().locale,
 },
-  dependencies: {,
+  dependencies: {
   seedrandomVersion: '3.0.5', // Would be from package.json,
   runtimeVersion: process.env.npm_package_version || '1.0.0',
 },
-  executionMetadata: {,
+  executionMetadata: {
   totalNodes: Object.keys(nodeSeeds).length,
   executionTime: executionResults?.executionTime || 0,
   memorySnapshot: process.memoryUsage(),
@@ -647,10 +647,10 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   /**
   * Validate reproducibility of an export
   */
-  validateReproducibility(exportData: VFXExportFormat): {,
-  canReproduce: boolean;,
+  validateReproducibility(exportData: VFXExportFormat): {
+  canReproduce: boolean;
   confidence: 'exact' | 'approximate' | 'uncertain';
-  issues: string;,
+  issues: string;
   requirements: string;
   const issues: string = [];
   const requirements: string = [];
@@ -681,10 +681,10 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     // Determine confidence level
     let confidence: 'exact' | 'approximate' | 'uncertain';
     if (issues.length === 0 && randomization.rngState) {
-      confidence = 'exact';
-    } else if (randomization.masterSeed && Object.keys(randomization.nodeSeed).length > 0) {
-      confidence = 'approximate';
-    } else {
+      confidence = 'exact'
+  } else if (randomization.masterSeed && Object.keys(randomization.nodeSeed).length > 0) {
+      confidence = 'approximate'
+  } else {
   confidence = 'uncertain';
   return {
   canReproduce: issues.length < 3, // Allow some minor issues,
@@ -695,14 +695,14 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   /**
    * Reproduce execution from VFX export data
    */
-  async reproduceFromExport(exportData: VFXExportFormat,)
+  async reproduceFromExport(exportData: VFXExportFormat)
     graph?: { nodes: Node; edges: Edge }
   ): Promise<{
   success: boolean;
-  reproductionResult?: {,
-  finalPrompt: string;,
+  reproductionResult?: {
+  finalPrompt: string;
   variables: Record<string, string>;
-  executionTime: number;,
+  executionTime: number;
   matchesOriginal: boolean;
 };
     error?: string;
@@ -782,7 +782,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   nodeType: node.type,
   configurationKeys: Object.keys(config),
   preservationTimestamp: new Date().toISOString(),
-  checksums: {,
+  checksums: {
   choices: config.choices ? this.generateHash(JSON.stringify(config.choices)) : undefined,
   weights: config.weights ? this.generateHash(JSON.stringify(config.weights)) : undefined,
   fullConfig: this.generateHash(JSON.stringify(config)),
@@ -791,9 +791,9 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   /**
    * Calculate weight distribution for WeightedChoice analysis
    */
-  private calculateWeightDistribution(weights: number): {,
+  private calculateWeightDistribution(weights: number): {
   percentages: number;
-    entropy: number;,
+    entropy: number;
   uniformity: number;
     if (weights.length === 0) {
       return { percentages: [], entropy: 0, uniformity: 1 };

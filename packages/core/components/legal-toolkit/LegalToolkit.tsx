@@ -149,24 +149,24 @@ interface LegalToolkitProps {
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            min-height: 700px;,
+            min-height: 700px;
   display: flex;
             flex-direction: column;
           .toolkit-header {
             background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-            color: white;,
+            color: white;
   padding: 2rem;
             text-align: center;
           .toolkit-title {
             font-size: 2rem;
-            font-weight: 700;,
+            font-weight: 700;
   margin: 0 0 0.5rem 0;
           .toolkit-subtitle {
-            font-size: 1.1rem;,
+            font-size: 1.1rem;
   opacity: 0.9;
             margin: 0;
           .progress-section {
-            background: #f8fafc;,
+            background: #f8fafc;
   padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
           .progress-header {
@@ -176,50 +176,50 @@ interface LegalToolkitProps {
             margin-bottom: 0.5rem;
           .progress-label {
             font-size: 0.9rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #374151;
           .progress-percentage {
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #4b5563;
           .progress-bar {
-            width: 100%;,
+            width: 100%;
   height: 8px;
             background: #e5e7eb;
-            border-radius: 4px;,
+            border-radius: 4px;
   overflow: hidden;
           .progress-fill {
-            height: 100%;,
+            height: 100%;
   background: linear-gradient(90deg, #10b981, #34d399);
-            border-radius: 4px;,
+            border-radius: 4px;
   transition: width 0.5s ease;
           .toolkit-navigation {
-            display: flex;,
+            display: flex;
   background: #f9fafb;
             border-bottom: 1px solid #e5e7eb;
             overflow-x: auto;
           .nav-item {
             display: flex;
-            align-items: center;,
+            align-items: center;
   gap: 0.5rem;
-            padding: 1rem 1.5rem;,
+            padding: 1rem 1.5rem;
   background: none;
-            border: none;,
+            border: none;
   cursor: pointer;
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #6b7280;
             transition: all 0.2s;
-            white-space: nowrap;,
+            white-space: nowrap;
   position: relative;
           .nav-item:hover {,
   background: #f3f4f6;
             color: #374151;
           .nav-item.active {
-            background: white;,
+            background: white;
   color: #1e40af;
             font-weight: 600;
             border-bottom: 3px solid #3b82f6;
           .nav-item.disabled {
-            opacity: 0.5;,
+            opacity: 0.5;
   cursor: not-allowed;
           .nav-item.disabled:hover {,
   background: transparent;
@@ -227,37 +227,37 @@ interface LegalToolkitProps {
           .nav-icon {
             font-size: 1.1rem;
           .nav-status {
-            position: absolute;,
+            position: absolute;
   top: 0.5rem;
-            right: 0.5rem;,
+            right: 0.5rem;
   width: 8px;
             height: 8px;
-            border-radius: 50%;,
+            border-radius: 50%;
   background: #10b981;
           .nav-status.incomplete {
             background: #e5e7eb;
           .toolkit-content {
-            flex: 1;,
+            flex: 1;
   display: flex;
             flex-direction: column;
           .view-header {
-            background: #fefefe;,
+            background: #fefefe;
   padding: 1.5rem 2rem;
             border-bottom: 1px solid #e5e7eb;
           .view-title {
             font-size: 1.5rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #111827;
-            margin: 0 0 0.5rem 0;,
+            margin: 0 0 0.5rem 0;
   display: flex;
-            align-items: center;,
+            align-items: center;
   gap: 0.75rem;
           .view-description {
             color: #6b7280;
-            font-size: 0.95rem;,
+            font-size: 0.95rem;
   margin: 0;
           .view-content {
-            flex: 1;,
+            flex: 1;
   padding: 0;
             overflow: auto;
           .summary-view {
@@ -268,21 +268,21 @@ interface LegalToolkitProps {
             gap: 2rem;
             margin-bottom: 2rem;
           .summary-card {
-            background: #f8fafc;,
+            background: #f8fafc;
   padding: 1.5rem;
-            border-radius: 8px;,
+            border-radius: 8px;
   border: 1px solid #e5e7eb;
           .summary-card-title {
             font-size: 1.1rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #111827;
-            margin: 0 0 1rem 0;,
+            margin: 0 0 1rem 0;
   display: flex;
-            align-items: center;,
+            align-items: center;
   gap: 0.5rem;
           .summary-items {
             display: flex;
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .summary-item {
             display: flex;
@@ -292,35 +292,35 @@ interface LegalToolkitProps {
           .summary-label {
             color: #374151;
           .summary-value {
-            font-weight: 600;,
+            font-weight: 600;
   color: #1f2937;
           .workflow-actions {
-            background: #f9fafb;,
+            background: #f9fafb;
   padding: 1.5rem 2rem;
-            border-top: 1px solid #e5e7eb;,
+            border-top: 1px solid #e5e7eb;
   display: flex;
             justify-content: space-between;
             align-items: center;
           .workflow-info {
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #6b7280;
           .workflow-buttons {
-            display: flex;,
+            display: flex;
   gap: 1rem;
           .workflow-btn {
             padding: 0.75rem 1.5rem;
             border-radius: 6px;
-            font-weight: 600;,
+            font-weight: 600;
   cursor: pointer;
-            transition: all 0.2s;,
+            transition: all 0.2s;
   border: none;
           .workflow-btn.primary {
-            background: #3b82f6;,
+            background: #3b82f6;
   color: white;
           .workflow-btn.primary:hover {,
   background: #2563eb;
           .workflow-btn.secondary {
-            background: #e5e7eb;,
+            background: #e5e7eb;
   color: #374151;
           .workflow-btn.secondary:hover {,
   background: #d1d5db;
@@ -330,7 +330,7 @@ interface LegalToolkitProps {
             .summary-grid {
               grid-template-columns: 1fr;
             .workflow-actions {
-              flex-direction: column;,
+              flex-direction: column;
   gap: 1rem;
               align-items: stretch;
             .workflow-buttons {

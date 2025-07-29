@@ -13,7 +13,7 @@ export declare const useInlineEditor: () => {
     deactivateEditor: () => void;
     isNodeBeingEdited: (nodeId: string) => boolean;
 };
-export declare const InlineEditorContext: number;
+export declare const InlineEditorContext: any;
 export declare const InlineEditorProvider: React.FC<{}, children>, React: any, ReactNode: any;
 export declare const useInlineEditorContext: () => any;
 //# sourceMappingURL=InlineEditorManager.d.ts.map

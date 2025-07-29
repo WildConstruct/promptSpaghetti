@@ -10,95 +10,95 @@ import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
 export interface QueryPerformanceProfile {
-  id: string;,
+  id: string;
   query_hash: string;
-  query_text: string;,
+  query_text: string;
   query_type: 'security_search' | 'threat_analysis' | 'compliance_report' | 'audit_log' | 'real_time_monitoring' | 'incident_investigation';
   // Query characteristics
-  characteristics: {,
+  characteristics: {
   complexity_score: number; // 1-10 scale based on query structure,
-  estimated_data_volume_gb: number;,
+  estimated_data_volume_gb: number;
   time_range_hours: number;
-  join_count: number;,
+  join_count: number;
   aggregation_count: number;
-  filter_complexity: number;,
+  filter_complexity: number;
   subquery_count: number;
   index_utilization_score: number; // 0-1 scale,
 };
   // Performance metrics
-  performance_metrics: {,
+  performance_metrics: {
   execution_times_ms: number;
-  avg_execution_time_ms: number;,
+  avg_execution_time_ms: number;
   p50_execution_time_ms: number;
-  p95_execution_time_ms: number;,
+  p95_execution_time_ms: number;
   p99_execution_time_ms: number;
-  cpu_time_ms: number;,
+  cpu_time_ms: number;
   memory_usage_mb: number;
-  io_operations: number;,
+  io_operations: number;
   network_latency_ms: number;
 };
   // Optimization metadata
-  optimization: {,
+  optimization: {
   optimization_applied: boolean;
-  optimization_type: 'none' | 'index_hints' | 'query_rewrite' | 'parallel_execution' | 'result_caching' | 'materialized_view';,
+  optimization_type: 'none' | 'index_hints' | 'query_rewrite' | 'parallel_execution' | 'result_caching' | 'materialized_view';
   optimization_score: number; // Performance improvement percentage,
-  suggested_indices: string;,
+  suggested_indices: string;
   query_rewrite_suggestions: string;
   execution_plan_optimized: boolean;
 };
   // Caching information
-  caching: {,
+  caching: {
   cacheable: boolean;
-  cache_strategy: CacheStrategy;,
+  cache_strategy: CacheStrategy;
   cache_ttl_seconds: number;
-  cache_hit_rate: number;,
+  cache_hit_rate: number;
   cache_size_mb: number;
   invalidation_triggers: string;
 };
   // Usage patterns
-  usage_patterns: {,
+  usage_patterns: {
   frequency_per_hour: number;
-  peak_usage_times: number;,
+  peak_usage_times: number;
   user_groups: string;
-  seasonal_patterns: SeasonalUsagePattern;,
+  seasonal_patterns: SeasonalUsagePattern;
   concurrent_execution_count: number;
 };
-  created_at: number;,
+  created_at: number;
   last_updated: number;
   last_analyzed: number;
 }
 export interface CacheStrategy {
-  strategy_type: 'result_cache' | 'query_cache' | 'partial_cache' | 'adaptive_cache' | 'distributed_cache';,
+  strategy_type: 'result_cache' | 'query_cache' | 'partial_cache' | 'adaptive_cache' | 'distributed_cache';
   cache_level: 'query' | 'page' | 'row' | 'computed_result';
-  invalidation_policy: 'ttl' | 'lru' | 'event_driven' | 'dependency_based' | 'smart_refresh';,
+  invalidation_policy: 'ttl' | 'lru' | 'event_driven' | 'dependency_based' | 'smart_refresh';
   compression_enabled: boolean;
-  encryption_enabled: boolean;,
+  encryption_enabled: boolean;
   replication_factor: number;
   // Adaptive configuration
-  adaptive_settings?: {,
-  hit_rate_threshold: number;,
+  adaptive_settings?: {
+  hit_rate_threshold: number;
   size_threshold_mb: number;
-  frequency_threshold: number;,
+  frequency_threshold: number;
   auto_optimize: boolean;
 };
 }
 export interface SeasonalUsagePattern {
-  pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';,
+  pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   peak_periods: Array<{,
-  start_time: string;,
+  start_time: string;
   end_time: string;
   multiplier: number;
 }>;
-  trend_direction: 'increasing' | 'stable' | 'decreasing';,
+  trend_direction: 'increasing' | 'stable' | 'decreasing';
   confidence_score: number;
 }
 export interface QueryOptimizationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   rule_type: 'index_recommendation' | 'query_rewrite' | 'execution_plan' | 'caching_strategy' | 'partitioning';
   // Rule conditions
-  conditions: {,
+  conditions: {
   query_types: QueryPerformanceProfile['query_type'][];
   complexity_min?: number;
   complexity_max?: number;
@@ -107,61 +107,61 @@ export interface QueryOptimizationRule {
   frequency_min_per_hour?: number;
 };
   // Optimization actions
-  actions: {,
+  actions: {
   optimization_type: QueryPerformanceProfile['optimization']['optimization_type'];
   parameters: Record<string, any>;
-  expected_improvement_percent: number;,
+  expected_improvement_percent: number;
   implementation_cost: 'low' | 'medium' | 'high';
-  risk_level: 'low' | 'medium' | 'high';
-};
+  risk_level: 'low' | 'medium' | 'high'
+  };
   // Rule effectiveness
-  effectiveness: {,
+  effectiveness: {
   applications_count: number;
-  success_rate: number;,
+  success_rate: number;
   avg_improvement_percent: number;
   failure_reasons: string;
 };
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
-  created_by: string;,
+  created_by: string;
   created_at: number;
 }
 export interface QueryExecution {
-  id: string;,
+  id: string;
   query_profile_id: string;
-  executed_at: number;,
+  executed_at: number;
   executed_by: string;
   // Execution context
-  context: {,
-  user_role: string;,
+  context: {
+  user_role: string;
   request_source: string;
-  session_id: string;,
+  session_id: string;
   concurrent_queries: number;
   system_load: number;
 };
   // Performance metrics
-  metrics: {,
+  metrics: {
   execution_time_ms: number;
-  planning_time_ms: number;,
+  planning_time_ms: number;
   cpu_time_ms: number;
-  memory_peak_mb: number;,
+  memory_peak_mb: number;
   memory_avg_mb: number;
-  disk_reads: number;,
+  disk_reads: number;
   disk_writes: number;
-  network_bytes: number;,
+  network_bytes: number;
   rows_examined: number;
   rows_returned: number;
 };
   // Optimization details
-  optimization: {,
+  optimization: {
   optimizations_applied: string;
-  optimization_time_ms: number;,
+  optimization_time_ms: number;
   execution_plan: ExecutionPlan;
-  index_usage: IndexUsage;,
+  index_usage: IndexUsage;
   cache_interactions: CacheInteraction;
 };
   // Quality metrics
-  quality: {,
+  quality: {
   result_accuracy: number; // 0-1 scale,
   result_completeness: number; // 0-1 scale,
   data_freshness_score: number; // 0-1 scale,
@@ -170,83 +170,83 @@ export interface QueryExecution {
   // Status and errors
   status: 'completed' | 'failed' | 'timeout' | 'cancelled';
   error_details?: {
-  error_type: string;,
+  error_type: string;
   error_message: string;
   stack_trace?: string;
 };
   warnings: string;
 }
 export interface ExecutionPlan {
-  plan_id: string;,
+  plan_id: string;
   plan_type: 'sequential' | 'parallel' | 'distributed' | 'cached';
-  estimated_cost: number;,
+  estimated_cost: number;
   estimated_rows: number;
-  steps: ExecutionStep;,
+  steps: ExecutionStep;
   parallelization_factor: number;
-  resource_requirements: {,
-  cpu_cores: number;,
+  resource_requirements: {
+  cpu_cores: number;
   memory_mb: number;
-  storage_mb: number;,
+  storage_mb: number;
   network_bandwidth_mbps: number;
 };
 }
 export interface ExecutionStep {
-  step_id: string;,
+  step_id: string;
   step_type: 'table_scan' | 'index_scan' | 'join' | 'aggregation' | 'sort' | 'filter' | 'cache_lookup';
-  operation_details: string;,
+  operation_details: string;
   estimated_cost: number;
   estimated_rows: number;
   actual_cost?: number;
   actual_rows?: number;
   execution_time_ms?: number;
   // Optimization suggestions
-  optimization_suggestions: string;,
+  optimization_suggestions: string;
   alternative_approaches: string;
 }
 export interface IndexUsage {
-  index_name: string;,
+  index_name: string;
   table_name: string;
-  usage_type: 'full_scan' | 'range_scan' | 'point_lookup' | 'not_used';,
+  usage_type: 'full_scan' | 'range_scan' | 'point_lookup' | 'not_used';
   selectivity: number; // 0-1 scale,
-  cost_estimate: number;,
+  cost_estimate: number;
   rows_estimated: number;
   rows_actual?: number;
   effectiveness_score: number; // 0-1 scale,
 }
 export interface CacheInteraction {
-  cache_type: 'query_cache' | 'result_cache' | 'index_cache' | 'page_cache';,
+  cache_type: 'query_cache' | 'result_cache' | 'index_cache' | 'page_cache';
   cache_key: string;
-  interaction_type: 'hit' | 'miss' | 'write' | 'invalidation';,
+  interaction_type: 'hit' | 'miss' | 'write' | 'invalidation';
   cache_size_mb: number;
-  access_time_ms: number;,
+  access_time_ms: number;
   data_freshness: number; // 0-1 scale,
 }
 export interface PerformanceAlert {
-  id: string;,
+  id: string;
   alert_type: 'slow_query' | 'high_resource_usage' | 'cache_miss_spike' | 'optimization_opportunity' | 'performance_regression';
   severity: 'info' | 'warning' | 'critical';
   // Alert details
   query_profile_id?: string;
-  title: string;,
+  title: string;
   description: string;
   detected_at: number;
   // Performance context
-  context: {,
-  current_metric_value: number;,
+  context: {
+  current_metric_value: number;
   threshold_value: number;
-  measurement_unit: string;,
+  measurement_unit: string;
   trend_direction: 'improving' | 'stable' | 'degrading';
-  impact_assessment: 'low' | 'medium' | 'high' | 'critical';
-};
+  impact_assessment: 'low' | 'medium' | 'high' | 'critical'
+  };
   // Recommendations
-  recommendations: {,
+  recommendations: {
   immediate_actions: string;
-  long_term_improvements: string;,
+  long_term_improvements: string;
   estimated_impact: string;
-  implementation_effort: 'low' | 'medium' | 'high';
-};
+  implementation_effort: 'low' | 'medium' | 'high'
+  };
   // Resolution tracking
-  resolution: {,
+  resolution: {
   acknowledged: boolean;
   acknowledged_by?: string;
   acknowledged_at?: number;
@@ -258,100 +258,100 @@ export interface PerformanceAlert {
 };
 }
 export interface CacheConfiguration {
-  cache_id: string;,
+  cache_id: string;
   cache_name: string;
   cache_type: 'memory' | 'disk' | 'distributed' | 'hybrid';
   // Capacity settings
-  capacity: {,
-  max_size_mb: number;,
+  capacity: {
+  max_size_mb: number;
   max_entries: number;
-  memory_allocation_mb: number;,
+  memory_allocation_mb: number;
   disk_allocation_mb: number;
 };
   // Eviction policy
-  eviction: {,
+  eviction: {
   policy: 'lru' | 'lfu' | 'ttl' | 'size_based' | 'intelligent';
-  ttl_seconds: number;,
+  ttl_seconds: number;
   max_idle_time_seconds: number;
   priority_levels: number;
 };
   // Performance settings
-  performance: {,
+  performance: {
   concurrent_access_limit: number;
-  compression_enabled: boolean;,
+  compression_enabled: boolean;
   encryption_enabled: boolean;
-  prefetching_enabled: boolean;,
+  prefetching_enabled: boolean;
   async_write_back: boolean;
 };
   // Monitoring
-  monitoring: {,
+  monitoring: {
   hit_rate_threshold: number;
-  latency_threshold_ms: number;,
+  latency_threshold_ms: number;
   size_alert_threshold_percent: number;
   enable_detailed_metrics: boolean;
 };
   // Partitioning
   partitioning?: {
-  partition_strategy: 'hash' | 'range' | 'geographic' | 'custom';,
+  partition_strategy: 'hash' | 'range' | 'geographic' | 'custom';
   partition_count: number;
   rebalancing_enabled: boolean;
 };
 }
 export interface OptimizationReport {
-  report_id: string;,
+  report_id: string;
   generated_at: number;
-  report_period: {,
-  start_time: number;,
+  report_period: {
+  start_time: number;
   end_time: number;
   duration_hours: number;
 };
   // Performance summary
-  performance_summary: {,
+  performance_summary: {
   total_queries_analyzed: number;
-  avg_query_time_ms: number;,
+  avg_query_time_ms: number;
   query_time_improvement_percent: number;
-  cache_hit_rate_percent: number;,
+  cache_hit_rate_percent: number;
   cache_hit_improvement_percent: number;
   resource_utilization_reduction_percent: number;
 };
   // Top optimization opportunities
   optimization_opportunities: Array<{,
   opportunity_type: string;
-  estimated_impact: string;,
+  estimated_impact: string;
   affected_queries: number;
-  implementation_effort: string;,
+  implementation_effort: string;
   priority_score: number;
 }>;
   // Performance trends
-  trends: {,
+  trends: {
   query_volume_trend: 'increasing' | 'stable' | 'decreasing';
-  performance_trend: 'improving' | 'stable' | 'degrading';,
+  performance_trend: 'improving' | 'stable' | 'degrading';
   cache_efficiency_trend: 'improving' | 'stable' | 'degrading';
-  resource_usage_trend: 'increasing' | 'stable' | 'decreasing';
-};
+  resource_usage_trend: 'increasing' | 'stable' | 'decreasing'
+  };
   // Recommendations
-  recommendations: {,
+  recommendations: {
   high_priority: string;
-  medium_priority: string;,
+  medium_priority: string;
   low_priority: string;
-  infrastructure_changes: string;,
+  infrastructure_changes: string;
   configuration_changes: Record<string, any>;
 };
   // Metrics comparison
-  metrics_comparison: {,
+  metrics_comparison: {
   before_optimization: PerformanceMetrics;
-  after_optimization: PerformanceMetrics;,
+  after_optimization: PerformanceMetrics;
   improvement_details: Record<string, number>;
 };
 }
 export interface PerformanceMetrics {
-  avg_response_time_ms: number;,
+  avg_response_time_ms: number;
   p95_response_time_ms: number;
-  p99_response_time_ms: number;,
+  p99_response_time_ms: number;
   throughput_queries_per_second: number;
-  cache_hit_rate_percent: number;,
+  cache_hit_rate_percent: number;
   cpu_utilization_percent: number;
-  memory_utilization_percent: number;,
+  memory_utilization_percent: number;
   error_rate_percent: number;
 }
 export class SecurityQueryPerformanceOptimizer extends EventEmitter {
@@ -376,23 +376,23 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   name: 'Index Recommendation for Slow Queries',
   description: 'Recommend indices for queries with high execution times',
   rule_type: 'index_recommendation',
-  conditions: {,
+  conditions: {
   query_types: ['security_search', 'threat_analysis', 'audit_log'],
   execution_time_min_ms: 1000,
   frequency_min_per_hour: 5,
 },
-  actions: {,
+  actions: {
   optimization_type: 'index_hints',
-  parameters: {,
+  parameters: {
   index_type: 'btree',
   include_columns: true,
   partial_index: true,
 },
   expected_improvement_percent: 60,
         implementation_cost: 'medium',
-        risk_level: 'low';
+        risk_level: 'low'
   },
-  effectiveness: {,
+  effectiveness: {
   applications_count: 0,
   success_rate: 0,
   avg_improvement_percent: 0,
@@ -409,23 +409,23 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   name: 'Query Rewrite for Complex Joins',
   description: 'Optimize queries with multiple joins and subqueries',
   rule_type: 'query_rewrite',
-  conditions: {,
+  conditions: {
   query_types: ['compliance_report', 'incident_investigation'],
   complexity_min: 6,
   data_volume_min_gb: 1,
 },
-  actions: {,
+  actions: {
   optimization_type: 'query_rewrite',
-  parameters: {,
+  parameters: {
   join_order_optimization: true,
   subquery_to_join_conversion: true,
   predicate_pushdown: true,
 },
   expected_improvement_percent: 40,
         implementation_cost: 'low',
-        risk_level: 'low';
+        risk_level: 'low'
   },
-  effectiveness: {,
+  effectiveness: {
   applications_count: 0,
   success_rate: 0,
   avg_improvement_percent: 0,
@@ -442,22 +442,22 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   name: 'Result Caching for Frequent Queries',
   description: 'Enable result caching for frequently executed queries',
   rule_type: 'caching_strategy',
-  conditions: {,
+  conditions: {
   query_types: ['real_time_monitoring', 'security_search'],
   frequency_min_per_hour: 10,
 },
-  actions: {,
+  actions: {
   optimization_type: 'result_caching',
-  parameters: {,
+  parameters: {
   cache_duration_minutes: 15,
   cache_size_limit_mb: 100,
   invalidation_events: ['data_update', 'schema_change'],
 },
   expected_improvement_percent: 80,
         implementation_cost: 'low',
-        risk_level: 'low';
+        risk_level: 'low'
   },
-  effectiveness: {,
+  effectiveness: {
   applications_count: 0,
   success_rate: 0,
   avg_improvement_percent: 0,
@@ -474,26 +474,26 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   cache_id: 'high_frequency_cache',
   cache_name: 'High Frequency Query Cache',
   cache_type: 'memory',
-  capacity: {,
+  capacity: {
   max_size_mb: 512,
   max_entries: 10000,
   memory_allocation_mb: 512,
   disk_allocation_mb: 0,
 },
-  eviction: {,
+  eviction: {
   policy: 'lfu',
   ttl_seconds: 900, // 15 minutes,
   max_idle_time_seconds: 1800, // 30 minutes,
   priority_levels: 3,
 },
-  performance: {,
+  performance: {
   concurrent_access_limit: 100,
   compression_enabled: true,
   encryption_enabled: true,
   prefetching_enabled: true,
   async_write_back: false,
 },
-  monitoring: {,
+  monitoring: {
   hit_rate_threshold: 0.8,
   latency_threshold_ms: 10,
   size_alert_threshold_percent: 90,
@@ -504,26 +504,26 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   cache_id: 'large_result_cache',
   cache_name: 'Large Result Cache',
   cache_type: 'hybrid',
-  capacity: {,
+  capacity: {
   max_size_mb: 2048,
   max_entries: 1000,
   memory_allocation_mb: 512,
   disk_allocation_mb: 1536,
 },
-  eviction: {,
+  eviction: {
   policy: 'intelligent',
   ttl_seconds: 3600, // 1 hour,
   max_idle_time_seconds: 7200, // 2 hours,
   priority_levels: 5,
 },
-  performance: {,
+  performance: {
   concurrent_access_limit: 50,
   compression_enabled: true,
   encryption_enabled: true,
   prefetching_enabled: false,
   async_write_back: true,
 },
-  monitoring: {,
+  monitoring: {
   hit_rate_threshold: 0.6,
   latency_threshold_ms: 50,
   size_alert_threshold_percent: 85,
@@ -553,7 +553,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   query_hash: queryHash,
         query_text: queryText,
         query_type: queryType,
-        characteristics: {,
+        characteristics: {
   complexity_score: this.calculateComplexityScore(queryText),
   estimated_data_volume_gb: this.estimateDataVolume(queryText),
   time_range_hours: this.extractTimeRange(queryText),
@@ -563,7 +563,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   subquery_count: this.countSubqueries(queryText),
   index_utilization_score: 0 // Will be updated after execution,
 },
-  performance_metrics: {,
+  performance_metrics: {
   execution_times_ms: [],
   avg_execution_time_ms: 0,
   p50_execution_time_ms: 0,
@@ -574,7 +574,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   io_operations: 0,
   network_latency_ms: 0,
 },
-  optimization: {,
+  optimization: {
   optimization_applied: false,
   optimization_type: 'none',
   optimization_score: 0,
@@ -582,7 +582,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   query_rewrite_suggestions: [],
   execution_plan_optimized: false,
 },
-  caching: {,
+  caching: {
   cacheable: this.isCacheable(queryText, queryType),
   cache_strategy: this.determineCacheStrategy(queryType),
   cache_ttl_seconds: this.calculateCacheTTL(queryType),
@@ -590,7 +590,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   cache_size_mb: 0,
   invalidation_triggers: this.determineInvalidationTriggers(queryType),
 },
-  usage_patterns: {,
+  usage_patterns: {
   frequency_per_hour: 0,
   peak_usage_times: [],
   user_groups: [executedBy],
@@ -618,7 +618,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   query_profile_id: profileId,
   executed_at: startTime,
   executed_by: executedBy,
-  context: {,
+  context: {
   user_role: 'analyst',
   request_source: 'web',
   session_id: 'unknown',
@@ -626,7 +626,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   system_load: 0.5,
   ...executionContext
 },
-  metrics: {,
+  metrics: {
   execution_time_ms: 0,
   planning_time_ms: 0,
   cpu_time_ms: 0,
@@ -638,10 +638,10 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   rows_examined: 0,
   rows_returned: 0,
 },
-  optimization: {,
+  optimization: {
   optimizations_applied: [],
         optimization_time_ms: 0,
-        execution_plan: {,
+        execution_plan: {
   plan_id: `plan_${executionId}`}
 },
   plan_type: 'sequential',
@@ -649,7 +649,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
           estimated_rows: 0,
           steps: [],
           parallelization_factor: 1,
-          resource_requirements: {,
+          resource_requirements: {
   cpu_cores: 1,
   memory_mb: 100,
   storage_mb: 0,
@@ -658,7 +658,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   index_usage: [],
         cache_interactions: [];
   },
-  quality: {,
+  quality: {
   result_accuracy: 1.0,
   result_completeness: 1.0,
   data_freshness_score: 1.0,
@@ -806,14 +806,14 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   return !nonCacheablePatterns.some(pattern => pattern.test(queryText));
   private determineCacheStrategy(queryType: QueryPerformanceProfile['query_type']): CacheStrategy {,
   const strategies: Record<QueryPerformanceProfile['query_type'], CacheStrategy> = {,
-  'security_search': {,
+  'security_search': {
   strategy_type: 'result_cache',
   cache_level: 'computed_result',
   invalidation_policy: 'ttl',
   compression_enabled: true,
   encryption_enabled: true,
   replication_factor: 2,
-  adaptive_settings: {,
+  adaptive_settings: {
   hit_rate_threshold: 0.7,
   size_threshold_mb: 50,
   frequency_threshold: 5,
@@ -850,7 +850,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   compression_enabled: true,
   encryption_enabled: true,
   replication_factor: 2,
-  adaptive_settings: {,
+  adaptive_settings: {
   hit_rate_threshold: 0.8,
   size_threshold_mb: 100,
   frequency_threshold: 10,
@@ -915,7 +915,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   if (rule.conditions.frequency_min_per_hour && profile.usage_patterns.frequency_per_hour < rule.conditions.frequency_min_per_hour) {
   return false;
   return true;
-  private async applyOptimizationRule(rule: QueryOptimizationRule,)
+  private async applyOptimizationRule(rule: QueryOptimizationRule)
   profile: QueryPerformanceProfile,
   execution: QueryExecution): Promise<string | null> {,
   try {
@@ -1096,7 +1096,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   estimated_rows: Math.max(...steps.map(step => step.estimated_rows)),
   steps,
   parallelization_factor: execution.optimization.optimizations_applied.includes('parallel') ? 4 : 1,
-  resource_requirements: {,
+  resource_requirements: {
   cpu_cores: execution.optimization.optimizations_applied.includes('parallel') ? 4 : 1,
   memory_mb: execution.metrics.memory_peak_mb,
   storage_mb: 0,
@@ -1219,7 +1219,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
         this.generateOptimizationAlert(profile, 'high_resource_usage', 'warning')
           'High Memory Usage',
           `Query is consuming high memory (${avgMemoryUsage.toFixed(0)}MB average)`);}
-  private generateOptimizationAlert(profile: QueryPerformanceProfile,)
+  private generateOptimizationAlert(profile: QueryPerformanceProfile)
     alertType: PerformanceAlert['alert_type'],
     severity: PerformanceAlert['severity'],
     title: string,
@@ -1233,20 +1233,20 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   title,
   description,
   detected_at: Date.now(),
-  context: {,
+  context: {
   current_metric_value: profile.performance_metrics.avg_execution_time_ms,
   threshold_value: 2000,
   measurement_unit: 'milliseconds',
   trend_direction: 'stable',
   impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low',
 },
-  recommendations: {,
+  recommendations: {
   immediate_actions: this.generateImmediateRecommendations(profile, alertType),
   long_term_improvements: this.generateLongTermRecommendations(profile, alertType),
   estimated_impact: this.estimateOptimizationImpact(profile, alertType),
   implementation_effort: this.estimateImplementationEffort(profile, alertType),
 },
-  resolution: {,
+  resolution: {
   acknowledged: false,
   resolved: false,
 };
@@ -1408,12 +1408,12 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
     return {
   report_id: reportId,
   generated_at: Date.now(),
-  report_period: {,
+  report_period: {
   start_time: startTime,
   end_time: endTime,
   duration_hours: periodHours,
 },
-  performance_summary: {,
+  performance_summary: {
   total_queries_analyzed: Math.floor(totalQueries),
   avg_query_time_ms: avgQueryTime,
   query_time_improvement_percent: Math.max(0, improvementDetails.response_time_improvement),
@@ -1422,24 +1422,24 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
   resource_utilization_reduction_percent: 10 // Estimated,
 },
   optimization_opportunities: opportunities,
-      trends: {,
+      trends: {
   query_volume_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.throughput_queries_per_second)),
   performance_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.avg_response_time_ms), true),
   cache_efficiency_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.cache_hit_rate_percent)),
   resource_usage_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.cpu_utilization_percent)),
 },
-  recommendations: {,
+  recommendations: {
   high_priority: opportunities.filter(o => o.priority_score >= 8).map(o => o.opportunity_type),
   medium_priority: opportunities.filter(o => o.priority_score >= 5 && o.priority_score < 8).map(o => o.opportunity_type),
   low_priority: opportunities.filter(o => o.priority_score < 5).map(o => o.opportunity_type),
   infrastructure_changes: ['Consider adding read replicas for query distribution', 'Implement connection pooling'],
-  configuration_changes: {,
+  configuration_changes: {
   query_timeout: 30000,
   max_memory_per_query: 512,
   enable_parallel_execution: true,
   cache_size_mb: 1024,
 },
-  metrics_comparison: {,
+  metrics_comparison: {
   before_optimization: baselineMetrics,
   after_optimization: currentMetrics,
   improvement_details: improvementDetails,
@@ -1522,9 +1522,9 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
         return;
     throw new Error(`Alert ${alertId} not found`);}
   getSystemStatus(): {
-  total_profiles: number;,
+  total_profiles: number;
   active_optimizations: number;
-  avg_performance_score: number;,
+  avg_performance_score: number;
   cache_efficiency: number;
   alert_count: number;
   const profiles = Array.from(this.queryProfiles.values());

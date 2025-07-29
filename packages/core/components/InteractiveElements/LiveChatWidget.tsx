@@ -12,34 +12,34 @@ import {
   ActivationContext
 } from '../../services/Epic16InteractiveElementsService';
 interface LiveChatWidgetProps {
-  element: LiveChatElement;,
+  element: LiveChatElement;
   interactiveService: Epic16InteractiveElementsService;
-  userId: string;,
+  userId: string;
   userName: string;
   userAvatar?: string;
   isMinimized?: boolean;
   onMinimize?: () => void;
   onClose?: () => void;
   interface ChatMessage {
-  id: string;,
+  id: string;
   userId: string;
   userName: string;
   userAvatar?: string;
-  message: string;,
+  message: string;
   timestamp: Date;
   type: 'text' | 'file' | 'system' | 'emoji';
   attachments?: ChatAttachment;
   edited?: boolean;
   editedAt?: Date;
   interface ChatAttachment {
-  id: string;,
+  id: string;
   name: string;
-  size: number;,
+  size: number;
   type: string;
   url: string;
   thumbnail?: string;
   interface TypingUser {
-  userId: string;,
+  userId: string;
   userName: string;
   timestamp: Date;
   export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({,)
@@ -86,7 +86,7 @@ interface LiveChatWidgetProps {
         message: `Welcome to the chat, ${userName}! Feel free to ask questions or share your thoughts.`}
 },
   timestamp: new Date(),
-        type: 'system';
+        type: 'system'
   };
       setMessages([welcomeMessage]);
       // Simulate other users online
@@ -124,7 +124,7 @@ interface LiveChatWidgetProps {
       userAvatar,
       message: currentMessage.trim(),
       timestamp: new Date(),
-      type: 'text';
+      type: 'text'
   };
     setMessages(prev => [...prev, newMessage]);
     setCurrentMessage('');
@@ -134,7 +134,7 @@ interface LiveChatWidgetProps {
   type: InteractionType.CUSTOM,
       user_id: userId,
       timestamp: new Date(),
-      context: {,
+      context: {
   page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
@@ -146,12 +146,12 @@ interface LiveChatWidgetProps {
         session_id: 'session-' + Date.now(),
         ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'message_sent',
   message_length: currentMessage.length,
   message_type: 'text',
 },
-  result: {,
+  result: {
   success: true,
         conversion: false,
         data: { message_id: newMessage.id }
@@ -176,7 +176,7 @@ interface LiveChatWidgetProps {
           userAvatar: '/avatars/support-bot.png',
           message: responses[Math.floor(Math.random() * responses.length)],
           timestamp: new Date(),
-          type: 'text';
+          type: 'text'
   };
         setMessages(prev => [...prev, responseMessage]);
       }, 1000 + Math.random() * 2000);

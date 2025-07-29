@@ -432,7 +432,8 @@ export class ConflictResolver extends EventEmitter {
                                                                                                             },
                                                                                                             generateId() {
                                                                                                                 return `conflict-resolve-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                                                                                                            } }
+                                                                                                            }
+                                                                                                        }
                                                                                                     } };
                                                                                             }
                                                                                         }

@@ -13,7 +13,7 @@ export interface UserTrustData {
     email: string;
     userType: 'creator' | 'buyer' | 'both';
     trustScore: TrustScore;
-    verificationStatus: {,
+    verificationStatus: {
         email: boolean;
         phone: boolean;
         identity: boolean;

@@ -292,7 +292,7 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                     < div, key = { template, : .id }, style = {}, {
                     background: 'white',
                     border: `2px solid ${template.color}20`
-                }), ", borderRadius: 8, padding: 16, position: 'relative'; }} >", _jsx("div", { style: {
+                }), ", borderRadius: 8, padding: 16, position: 'relative' }} >", _jsx("div", { style: {
                         position: 'absolute',
                         top: -1,
                         right: -1,

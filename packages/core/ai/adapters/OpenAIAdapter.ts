@@ -39,16 +39,16 @@ export interface OpenAIRequestOptions {
   tool_choice?: string | object;
 }
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant' | 'tool';,
+  role: 'system' | 'user' | 'assistant' | 'tool';
   content: string;
   name?: string;
   tool_calls?: unknown;
   tool_call_id?: string;
 }
 export interface OpenAIResponse {
-  id: string;,
+  id: string;
   object: string;
-  created: number;,
+  created: number;
   model: string;
   choices: Array<{,
   index: number;
@@ -56,9 +56,9 @@ export interface OpenAIResponse {
   text?: string;
   finish_reason: string;
 }>;
-  usage: {,
+  usage: {
   prompt_tokens: number;
-  completion_tokens: number;,
+  completion_tokens: number;
   total_tokens: number;
 };
 }
@@ -76,7 +76,7 @@ export class OpenAIAdapter extends BaseAIModel {
       costPerToken: OpenAIAdapter.getModelCostPerToken(modelName),
       averageLatency: OpenAIAdapter.getModelAverageLatency(modelName),
       maxConcurrency: 50,
-      rateLimit: {,
+      rateLimit: {
   requestsPerMinute: 3500,
   tokensPerMinute: 90000,
 },
@@ -91,7 +91,7 @@ export class OpenAIAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: true,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   temperature: { type: 'number', min: 0, max: 2, default: 1 },
         max_tokens: { type: 'number', min: 1, max: 4096, default: 1000 },
         top_p: { type: 'number', min: 0, max: 1, default: 1 },
@@ -155,7 +155,7 @@ export class OpenAIAdapter extends BaseAIModel {
   estimatedCost: inputCost + outputCost,
   currency: 'USD',
   confidence: 0.9,
-  breakdown: {,
+  breakdown: {
   inputCost,
   outputCost,
   processingCost: 0,
@@ -199,7 +199,7 @@ export class OpenAIAdapter extends BaseAIModel {
     try {
       const response = await fetch(`${this.apiEndpoint}/models`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
 }
           'Content-Type': 'application/json',
@@ -213,7 +213,7 @@ export class OpenAIAdapter extends BaseAIModel {
     const url = `${this.apiEndpoint}${endpoint}`;}
     const response = await fetch(url, {)
   method: 'POST',
-      headers: {,
+      headers: {
         'Authorization': `Bearer ${this.config.apiKey}`}
 }
         'Content-Type': 'application/json',

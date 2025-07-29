@@ -446,7 +446,7 @@ export const ExportStatisticsSchema = z.object({)
   exports_by_type: z.record(ExportTypeSchema, z.number().int().min(0)),
   total_size: z.number().int().min(0),
   average_processing_time: z.number().min(0),
-  most_used_templates: z.array(z.object({,)
+  most_used_templates: z.array(z.object({)
   template_id: z.string().uuid(),
   template_name: z.string(),
   usage_count: z.number().int().min(0),
@@ -500,18 +500,18 @@ export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;
 
 // Helper types for API responses
 export type ExportTemplateWithStats = ExportTemplate & {
-  recent_jobs: ExportJob;,
+  recent_jobs: ExportJob;
   avg_processing_time: number;
   success_rate: number;
 };
 
 export type ExportJobWithTemplate = ExportJob & {
-  template: ExportTemplate | null;,
+  template: ExportTemplate | null;
   share: ExportShare | null;
 };
 
 export type ExportScheduleWithStats = ExportSchedule & {
-  template: ExportTemplate;,
+  template: ExportTemplate;
   recent_jobs: ExportJob;
   next_scheduled_run: string;
 };

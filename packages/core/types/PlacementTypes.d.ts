@@ -80,8 +80,8 @@ export interface PlacementStyling {
     border?: {
         width: number;
         color: string;
-        style: 'solid' | 'dashed' | 'dotted';
-    };
+        style: 'solid' | 'dashed' | 'dotted'
+  };
     animation?: PlacementAnimation;
     customCss?: string;
 
@@ -354,7 +354,7 @@ export interface PlacementAnalytics {
     activeSlots: number;
     totalPlacements: number;
     activePlacements: number;
-    overallPerformance: {,
+    overallPerformance: {
         totalImpressions: number;
         totalClicks: number;
         averageCTR: number;
@@ -394,7 +394,7 @@ export interface PlacementPreview {
     slotId: string;
     placements: ContentPlacement[];
     previewMode: 'live' | 'staged' | 'test';
-    viewerContext: {,
+    viewerContext: {
         userSegment?: string;
         deviceType: 'desktop' | 'mobile' | 'tablet';
         location?: string;
@@ -413,7 +413,7 @@ export interface PlacementPreview {
 export interface RenderedPlacement {
     placementId: string;
     slotPosition: number;
-    content: {,
+    content: {
         id: string;
         type: ContentType;
         title: string;

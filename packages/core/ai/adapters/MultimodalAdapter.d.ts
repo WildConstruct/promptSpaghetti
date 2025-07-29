@@ -74,7 +74,7 @@ export interface MultimodalAnalysis {
     metadata: Record<string, unknown>;
 
 export interface MultimodalUnderstandingResult {
-    understanding: {,
+    understanding: {
         summary: string;
         key_insights: string[];
         content_analysis: MultimodalAnalysis[];
@@ -85,7 +85,7 @@ export interface MultimodalUnderstandingResult {
             confidence: number;
         }>;
     };
-    extracted_data: {,
+    extracted_data: {
         text_content?: string[];
         transcriptions?: Array<{
             text: string;
@@ -109,14 +109,14 @@ export interface MultimodalUnderstandingResult {
             relevance: number;
         }>;
     };
-    metadata: {,
+    metadata: {
         model: string;
         processing_time: number;
         input_count: number;
         modalities_processed: string[];
         total_tokens: number;
     };
-    usage: {,
+    usage: {
         input_tokens: number;
         output_tokens: number;
         total_cost: number;

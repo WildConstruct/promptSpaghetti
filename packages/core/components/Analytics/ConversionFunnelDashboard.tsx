@@ -10,7 +10,7 @@ import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 
 export interface ConversionFunnelDashboardProps {
-  conversionData: unknown;,
+  conversionData: unknown;
   timeRange: { startTime: number; endTime: number };
   loading: boolean;
 }
@@ -194,7 +194,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
       <style>{`
         .conversion-funnel-dashboard {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
@@ -202,7 +202,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           align-items: center;
         .funnel-option {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .summary-grid {
           display: grid;
@@ -211,43 +211,43 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           margin-bottom: 1.5rem;
         .summary-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .summary-subtitle {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .funnel-visualization h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .funnel-steps {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .funnel-step {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .step-info {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .step-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .step-stats {
-          display: flex;,
+          display: flex;
   gap: 1rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .step-bar {
-          height: 24px;,
+          height: 24px;
   background: #f3f4f6;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .step-fill {
-          height: 100%;,
+          height: 100%;
   background: linear-gradient(90deg, #3b82f6, #1d4ed8);
           transition: width 0.3s ease;
         .dropoff-indicator {
@@ -256,41 +256,41 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
         .segment-breakdown h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .segment-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
           gap: 1rem;
         .segment-card {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
           text-align: center;
         .segment-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           text-transform: capitalize;
           margin-bottom: 0.5rem;
         .segment-rate {
           font-size: 1.5rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .segment-details {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 3rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }

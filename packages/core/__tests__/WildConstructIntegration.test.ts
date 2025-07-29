@@ -19,7 +19,7 @@ import { CrowdGenerationPipeline, type CrowdGenerationRequest } from '../service
 // Mock API responses for external integrations
 const mockAPIResponse = {
   status: 200,
-  data: {,
+  data: {
   success: true,
   timestamp: '2025-07-22T10:00:00Z',
 };
@@ -34,18 +34,18 @@ const medievalEra: Era = {,
   accuracy: 'high',
 };
 const testCrowdRequest: CrowdGenerationRequest = {,
-  scene: {,
+  scene: {
   era: medievalEra,
   region: 'England',
   location: 'castle courtyard',
   timeOfDay: 'morning',
   season: 'spring',
 },
-  crowd: {,
+  crowd: {
   size: 50,
   density: 'moderate',
-  demographics: {,
-  socialClasses: {,
+  demographics: {
+  socialClasses: {
   peasant: 0.6,
   artisan: 0.2,
   merchant: 0.1,
@@ -53,17 +53,17 @@ const testCrowdRequest: CrowdGenerationRequest = {,
   clergy: 0.02,
   royal: 0.0,
 },
-  ageDistribution: {,
+  ageDistribution: {
   children: 0.25,
   youth: 0.35,
   adults: 0.35,
   elderly: 0.05,
 },
-  genderRatio: {,
+  genderRatio: {
   male: 0.6,
   female: 0.4,
 },
-  activity: {,
+  activity: {
   primary: 'market day',
   secondary: ['trading', 'conversation'],
   mood: 'busy',
@@ -73,17 +73,17 @@ const testCrowdRequest: CrowdGenerationRequest = {,
   frequency: 'common',
 }]
   },
-  constraints: {,
+  constraints: {
   historicalAccuracy: 'strict',
   socialMixing: true,
   genderMixing: true,
   culturalSensitivity: true,
 },
-  output: {,
+  output: {
   format: 'json',
   includeMetadata: true,
-  vfxPipeline: {,
-  project: {,
+  vfxPipeline: {
+  project: {
   id: 'test-medieval-scene',
   name: 'Medieval Castle Scene',
   scene: 'courtyard',
@@ -99,46 +99,46 @@ describe('Wild Construct Integration Framework', () => {
   const crowdData: WildConstructCrowdControl = {,
   enabled: true,
   version: '1.0.0',
-  crowdData: {,
-  era: {,
+  crowdData: {
+  era: {
   name: medievalEra.name,
   period: [medievalEra.startYear, medievalEra.endYear],
   region: medievalEra.regions,
 },
-  demographics: {,
+  demographics: {
   totalPopulation: 50,
-  socialClasses: {,
-  peasant: {,
+  socialClasses: {
+  peasant: {
   percentage: 0.6,
   occupations: ['farmer', 'laborer', 'servant'],
   clothingStyles: ['rough_tunic', 'simple_hood', 'leather_boots'],
 },
-  merchant: {,
+  merchant: {
   percentage: 0.1,
   occupations: ['trader', 'shopkeeper'],
   clothingStyles: ['fine_tunic', 'belt_pouch', 'felt_hat'],
 },
-  ageDistribution: {,
+  ageDistribution: {
   children: 0.25,
   adults: 0.7,
   elderly: 0.05,
 },
-  genderRatio: {,
+  genderRatio: {
   male: 0.6,
   female: 0.4,
 },
-  behavior: {,
+  behavior: {
   activities: ['trading', 'walking', 'talking'],
   interactions: ['merchant-customer', 'social-greeting'],
   socialMixing: true,
   culturalPatterns: ['class_hierarchy', 'gender_roles'],
 },
-  validation: {,
+  validation: {
   historicalAccuracy: 0.92,
   constraintViolations: [],
   suggestions: [],
 },
-  pipeline: {,
+  pipeline: {
   format: 'json',
   memoryEstimate: 250,
   renderComplexity: 'medium',
@@ -162,7 +162,7 @@ describe('Wild Construct Integration Framework', () => {
     it('should handle crowd generation pipeline errors', async () => {
   const invalidRequest = {
   ...testCrowdRequest,
-  crowd: {,
+  crowd: {
   ...testCrowdRequest.crowd,
   size: -1 // Invalid size,
 };
@@ -186,26 +186,26 @@ describe('Wild Construct Integration Framework', () => {
   const backdropData: WildConstructBackdrop = {,
   enabled: true,
   version: '1.0.0',
-  environment: {,
-  era: {,
+  environment: {
+  era: {
   name: 'High Middle Ages',
   architecturalStyle: ['romanesque', 'early_gothic'],
   materials: ['stone', 'timber', 'thatch'],
   colors: ['earth_tones', 'natural_pigments'],
 },
-  location: {,
+  location: {
   type: 'urban',
   description: 'Medieval castle courtyard with stone walls and timber buildings',
   authenticity: 0.95,
   socialContext: 'noble court',
 },
-  atmosphere: {,
+  atmosphere: {
   timeOfDay: 'morning',
   season: 'spring',
   weather: 'partly cloudy',
   mood: 'bustling activity',
 },
-  assets: {,
+  assets: {
   buildings: [,
   {
   id: 'great_hall',
@@ -230,10 +230,10 @@ describe('Wild Construct Integration Framework', () => {
   vegetation: [],
   terrain: [],
 },
-  scene3D: {,
+  scene3D: {
   coordinate: [0, 0, 0],
   scale: [1, 1, 1],
-  lighting: {,
+  lighting: {
   ambientColor: [0.3, 0.3, 0.35],
   directionalLights: [{,
   direction: [-0.5, -1, -0.3],
@@ -284,13 +284,13 @@ describe('Wild Construct Integration Framework', () => {
   const meteorData: WildConstructMeteor = {,
   enabled: true,
   version: '1.0.0',
-  atmosphere: {,
-  era: {,
+  atmosphere: {
+  era: {
   name: 'High Middle Ages',
   climateData: ['medieval_warm_period', 'seasonal_variation'],
   seasonalPatterns: ['spring_rains', 'summer_dry', 'winter_cold'],
 },
-  weather: {,
+  weather: {
   condition: 'partly_cloudy',
   temperature: 15, // Celsius,
   humidity: 0.65,
@@ -298,7 +298,7 @@ describe('Wild Construct Integration Framework', () => {
   precipitation: 0.1,
   visibility: 5000 // meters,
 },
-  effects: {,
+  effects: {
   particles: [,
   {
   type: 'mist',
@@ -306,12 +306,12 @@ describe('Wild Construct Integration Framework', () => {
   size: 0.5,
   velocity: [0.5, 0, 0.2],
   color: [0.8, 0.85, 0.9, 0.4]],
-  volumetrics: {,
+  volumetrics: {
   enabled: true,
   scattering: 0.15,
   absorption: 0.05,
 },
-  historicalAccuracy: {,
+  historicalAccuracy: {
   score: 0.88,
   factors: ['medieval_climate', 'seasonal_appropriateness'],
   references: ['climate_history_studies', 'archaeological_evidence'],
@@ -353,14 +353,14 @@ describe('Wild Construct Integration Framework', () => {
   const maestroData: WildConstructMaestro = {,
   enabled: true,
   version: '1.0.0',
-  orchestration: {,
-  sceneComposition: {,
+  orchestration: {
+  sceneComposition: {
   foreground: ['crowd', 'market_stalls', 'cart'],
   midground: ['buildings', 'well', 'trees'],
   background: ['castle_walls', 'towers', 'sky'],
   depth: 100 // meters,
 },
-  timing: {,
+  timing: {
   duration: 30, // seconds,
   keyMoments: [,
   {
@@ -378,26 +378,26 @@ describe('Wild Construct Integration Framework', () => {
   event: 'bell_rings_noon',
   priority: 'medium'];
   },
-  coordination: {,
+  coordination: {
   crowdControl: true,
   backdrop: true,
   meteor: true,
   dependencies: ['crowd_generation', 'weather_effects'],
 },
-  historicalContext: {,
+  historicalContext: {
   narrative: 'Daily market activity in a medieval castle courtyard',
   culturalSignificance: 'Shows feudal social hierarchy and trade',
   historicalEvents: ['market_day_traditions', 'guild_activities'],
   accuracy: 0.91,
 },
-  rendering: {,
+  rendering: {
   renderOrder: ['backdrop', 'meteor', 'crowd', 'particles'],
-  compositing: {,
+  compositing: {
   layers: ['background', 'midground', 'foreground', 'effects'],
   blendModes: ['normal', 'multiply', 'screen', 'overlay'],
   masks: ['depth_mask', 'character_mask'],
 },
-  postProcessing: {,
+  postProcessing: {
   colorGrading: true,
   filmGrain: true,
   vignette: false,
@@ -439,25 +439,25 @@ describe('Wild Construct Integration Framework', () => {
   const utdgData: WildConstructUTDG = {,
   enabled: true,
   version: '1.0.0',
-  graph: {,
+  graph: {
   nodes: [,
   {
   id: 'wool_fabric',
   type: 'material',
   content: 'coarse medieval wool fabric',
-  historicalData: {,
+  historicalData: {
   era: 'High Middle Ages',
   region: ['England', 'Northern Europe'],
   authenticity: 0.95,
   source: 'Museum of London textile collection',
   tags: ['wool', 'peasant', 'everyday', 'natural'],
 },
-  relationships: {,
+  relationships: {
   compatible: ['linen_undergarment', 'leather_belt'],
   incompatible: ['silk_fabric', 'synthetic_fiber'],
   variations: ['fine_wool', 'coarse_wool', 'dyed_wool'],
 },
-  vfxProperties: {,
+  vfxProperties: {
   roughness: 0.8,
   metallic: 0.0,
   albedo: [0.4, 0.35, 0.25]],
@@ -469,7 +469,7 @@ describe('Wild Construct Integration Framework', () => {
   relationship: 'enhances',
   strength: 0.9,
   historicalBasis: 'Wool was primary fabric for peasant clothing'],
-  metadata: {,
+  metadata: {
   creationDate: '2025-07-22T10:00:00Z',
   lastModified: '2025-07-22T10:00:00Z',
   accuracy: 0.92,
@@ -478,8 +478,8 @@ describe('Wild Construct Integration Framework', () => {
   regions: ['Western Europe'],
   dataProvenance: ['Museum collections', 'Archaeological finds'],
 },
-  historical: {,
-  era: {,
+  historical: {
+  era: {
   name: 'High Middle Ages',
   period: [1000, 1300],
   regions: ['Western Europe', 'England'],
@@ -491,7 +491,7 @@ describe('Wild Construct Integration Framework', () => {
   rule: 'No synthetic materials before 19th century',
   enforcement: 'strict',
   context: 'Material availability constraints'],
-  validation: {,
+  validation: {
   overallScore: 0.92,
   violations: [],
 },
@@ -503,18 +503,18 @@ describe('Wild Construct Integration Framework', () => {
   url: 'https://www.museumoflondon.org.uk',
   reliability: 0.95,
   coverage: ['Medieval London', 'Textile history']],
-  vfxMetadata: {,
+  vfxMetadata: {
   textureCategories: ['fabric', 'leather', 'metal', 'organic'],
   materialProperties: [,
   {
   name: 'medieval_wool',
-  values: {,
+  values: {
   roughness: 0.8,
   subsurface: 0.1,
   specular: 0.2,
 },
   historicalBasis: 'Natural wool fiber properties'],
-          compatibilityFlags: {,
+          compatibilityFlags: {
   maya: true,
   blender: true,
   houdini: true,
@@ -561,27 +561,27 @@ describe('Wild Construct Integration Framework', () => {
   describe('End-to-End Integration Tests', () => {
   it('should coordinate all Wild Construct systems', async () => {
   const vfxExport: VFXExportFormat = {,
-  metadata: {,
+  metadata: {
   exportId: 'test-medieval-scene-001',
   version: '1.0.0',
   timestamp: '2025-07-22T10:00:00Z',
-  generator: {,
+  generator: {
   name: 'Wild Construct Prompt Generator',
   version: '1.0.0',
   build: 'test',
 },
-  project: {,
+  project: {
   name: 'Medieval Castle Scene',
   id: 'medieval-demo',
   scene: 'courtyard',
 },
-  export: {,
+  export: {
   format: 'vfx-pipeline-v1',
   quality: 'production',
   includeDebugInfo: false,
   includeHistoricalData: true,
 },
-  compatibility: {,
+  compatibility: {
   controlNet: true,
   diffusionModels: ['SD1.5', 'SDXL'],
   animationFramework: true,
@@ -590,68 +590,68 @@ describe('Wild Construct Integration Framework', () => {
   prompt: {} as any,
         graph: {} as any,
         execution: {} as any,
-        extensions: {,
-  wildConstruct: {,
-  crowdControl: {,
+        extensions: {
+  wildConstruct: {
+  crowdControl: {
   enabled: true,
   version: '1.0.0',
-  pipeline: {,
+  pipeline: {
   format: 'json',
   memoryEstimate: 250,
   renderComplexity: 'medium',
   polyCount: 500000,
   textureSize: 100,
 } as WildConstructCrowdControl,
-            backdrop: {,
+            backdrop: {
   enabled: true,
   version: '1.0.0',
-  scene3D: {,
+  scene3D: {
   coordinate: [0, 0, 0],
   scale: [1, 1, 1],
-  lighting: {,
+  lighting: {
   ambientColor: [0.3, 0.3, 0.35],
   directionalLights: [],
 } as WildConstructBackdrop,
-            meteor: {,
+            meteor: {
   enabled: true,
   version: '1.0.0',
 } as WildConstructMeteor,
-            maestro: {,
+            maestro: {
   enabled: true,
   version: '1.0.0',
-  rendering: {,
+  rendering: {
   renderOrder: ['backdrop', 'crowd', 'effects'],
-  compositing: {,
+  compositing: {
   layers: ['background', 'foreground'],
   blendModes: ['normal'],
   masks: ['depth_mask'],
 },
-  postProcessing: {,
+  postProcessing: {
   colorGrading: true,
   filmGrain: false,
   vignette: false,
   historicalFilmLook: 'natural',
 } as WildConstructMaestro,
-            utdg: {,
+            utdg: {
   enabled: true,
   version: '1.0.0',
-  historical: {,
-  era: {,
+  historical: {
+  era: {
   name: 'High Middle Ages',
   period: [1000, 1300],
   regions: ['Western Europe'],
   accuracy: 'high',
 },
   constraints: [],
-                validation: {,
+                validation: {
   overallScore: 0.9,
   violations: [],
 },
   dataSources: [],
-              vfxMetadata: {,
+              vfxMetadata: {
   textureCategories: ['fabric'],
   materialProperties: [],
-  compatibilityFlags: {,
+  compatibilityFlags: {
   maya: true,
   blender: true,
   houdini: true,
@@ -693,7 +693,7 @@ describe('Wild Construct Integration Framework', () => {
         expect(scenario).toMatch(/^(CrowdControl|Backdrop|Meteor|Maestro|UTDG)/);
       // Test graceful degradation
       const partialVfxExport = {
-        extensions: {,
+        extensions: {
   wildConstruct: {;
   crowdControl: { enabled: false, version: '1.0.0' },
             backdrop: { enabled: true, version: '1.0.0' },
@@ -761,7 +761,7 @@ export class IntegrationTestUtils {
       regions: ['Test Region'],
       culturalContext: `Mock ${name} era for testing`}
 },
-  accuracy: 'high';
+  accuracy: 'high'
   };
   static validateHistoricalAccuracy(accuracy: number): boolean {
     return accuracy >= 0.8 && accuracy <= 1.0;

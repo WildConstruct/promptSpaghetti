@@ -13,7 +13,7 @@ import {
 import TicketManagementDashboard from './TicketManagementDashboard';
 import TicketDetailsView from './TicketDetailsView';
 interface Epic16TicketIntegrationProps {
-  userId: string;,
+  userId: string;
   userRole: 'user' | 'agent' | 'admin';
   config?: Partial<TicketIntegrationConfig>;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
@@ -31,9 +31,9 @@ interface Epic16TicketIntegrationProps {
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [view, setView] = useState<'dashboard' | 'details' | 'settings'>('dashboard');
   const [notifications, setNotifications] = useState<Array<{
-  id: string;,
+  id: string;
   type: 'success' | 'error' | 'info' | 'warning';
-  message: string;,
+  message: string;
   timestamp: Date;
 }>>([]);
   // Set up event listeners for service events
@@ -297,9 +297,9 @@ interface IntegrationSettingsProps {
 // Notification System Component
 interface NotificationSystemProps {
   notifications: Array<{,
-  id: string;,
+  id: string;
   type: 'success' | 'error' | 'info' | 'warning';
-  message: string;,
+  message: string;
   timestamp: Date;
 }>;
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {

@@ -52,47 +52,47 @@ export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pendi
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
 export interface SystemService {
-  id: string;,
+  id: string;
   name: string;
-  displayName: string;,
+  displayName: string;
   description: string;
-  status: ServiceStatus;,
+  status: ServiceStatus;
   health: number; // 0-100,
   uptime: number; // milliseconds,
-  lastRestart: Date;,
+  lastRestart: Date;
   autoRestart: boolean;
   dependencies: string;
   port?: number;
   url?: string;
-  logs: ServiceLog;,
+  logs: ServiceLog;
   metrics: ServiceMetrics;
 }
 export interface ServiceLog {
-  id: string;,
+  id: string;
   timestamp: Date;
-  level: 'info' | 'warn' | 'error' | 'debug';,
+  level: 'info' | 'warn' | 'error' | 'debug';
   message: string;
   service: string;
   details?: Record<string, any>;
 }
 export interface ServiceMetrics {
-  cpuUsage: number;,
+  cpuUsage: number;
   memoryUsage: number;
-  requestCount: number;,
+  requestCount: number;
   errorRate: number;
-  responseTime: number;,
+  responseTime: number;
   throughput: number;
 }
 export interface SystemOverview {
-  overallStatus: SystemStatus;,
+  overallStatus: SystemStatus;
   totalServices: number;
-  runningServices: number;,
+  runningServices: number;
   erroredServices: number;
-  systemLoad: number;,
+  systemLoad: number;
   memoryUsage: number;
-  diskUsage: number;,
+  diskUsage: number;
   networkLatency: number;
-  uptime: number;,
+  uptime: number;
   activeUsers: number;
   backgroundJobs: number;
 }
@@ -102,27 +102,27 @@ export interface StatusControlsProps {
   onServiceAction?: (serviceId: string, action: string) => void;
   onSystemAction?: (action: string) => void;
   const SERVICE_STATUS_CONFIG = {
-  running: {,
+  running: {
   color: 'text-green-600 bg-green-100',
   icon: CheckCircle,
   actions: ['stop', 'restart', 'pause'],
 },
-  stopped: {,
+  stopped: {
   color: 'text-gray-600 bg-gray-100',
   icon: StopCircle,
   actions: ['start'],
 },
-  error: {,
+  error: {
   color: 'text-red-600 bg-red-100',
   icon: XCircle,
   actions: ['restart', 'stop'],
 },
-  starting: {,
+  starting: {
   color: 'text-yellow-600 bg-yellow-100',
   icon: PlayCircle,
   actions: [],
 },
-  stopping: {,
+  stopping: {
   color: 'text-orange-600 bg-orange-100',
   icon: PauseCircle,
   actions: [],
@@ -190,7 +190,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   port: 80,
   url: 'http://localhost',
   logs: [],
-  metrics: {,
+  metrics: {
   cpuUsage: 5.2,
   memoryUsage: 128,
   requestCount: 1250,
@@ -212,7 +212,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   port: 8000,
   url: 'http://localhost:8000',
   logs: [],
-  metrics: {,
+  metrics: {
   cpuUsage: 12.8,
   memoryUsage: 256,
   requestCount: 2840,
@@ -233,7 +233,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   dependencies: [],
   port: 5432,
   logs: [],
-  metrics: {,
+  metrics: {
   cpuUsage: 8.5,
   memoryUsage: 512,
   requestCount: 5600,
@@ -254,7 +254,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   dependencies: [],
   port: 6379,
   logs: [],
-  metrics: {,
+  metrics: {
   cpuUsage: 0,
   memoryUsage: 0,
   requestCount: 0,
@@ -621,32 +621,32 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       )}
       <style>{`
         .status-controls {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .controls-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         .header-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           align-items: center;
         .overview-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .system-status-card {
           margin-bottom: 1rem;
@@ -656,11 +656,11 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           align-items: center;
         .status-title {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .system-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .metrics-grid {
           display: grid;
@@ -668,21 +668,21 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-status {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .metric-status.running {
           color: #059669;
@@ -690,51 +690,51 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           color: #3b82f6;
         .load-bar,
         .memory-bar {
-          height: 4px;,
+          height: 4px;
   background: #e5e7eb;
-          border-radius: 2px;,
+          border-radius: 2px;
   overflow: hidden;
           margin-top: 0.25rem;
         .load-fill {
-          height: 100%;,
+          height: 100%;
   background: #059669;
           transition: width 0.3s ease;
         .memory-fill {
-          height: 100%;,
+          height: 100%;
   background: #8b5cf6;
           transition: width 0.3s ease;
         .alerts-section {
           margin-top: 1rem;
         .alerts-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .alert-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
           padding: 0.75rem;
           border-radius: 6px;
           font-size: 0.875rem;
         .alert-item.error {
-          background: #fef2f2;,
+          background: #fef2f2;
   color: #991b1b;
           border: 1px solid #fecaca;
         .alert-item.warning {
-          background: #fffbeb;,
+          background: #fffbeb;
   color: #92400e;
           border: 1px solid #fed7aa;
         .alert-item.info {
-          background: #eff6ff;,
+          background: #eff6ff;
   color: #1e40af;
           border: 1px solid #bfdbfe;
         .alert-item.success {
-          background: #f0fdf4;,
+          background: #f0fdf4;
   color: #166534;
           border: 1px solid #bbf7d0;
         .services-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .services-header {
           display: flex;
@@ -742,10 +742,10 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           align-items: center;
         .services-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .services-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .services-grid {
           display: grid;
@@ -753,37 +753,37 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           gap: 1rem;
         .processes-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .processes-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .process-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         .process-info {
           flex: 1;
         .process-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .process-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .process-actions {
-          display: flex;,
+          display: flex;
   gap: 0.25rem;
         @media (max-width: 768px) {
           .controls-header {
             flex-direction: column;
             align-items: stretch;
           .system-status-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .metrics-grid {
@@ -792,7 +792,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
             grid-template-columns: 1fr;
           .process-item {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.75rem;
         @media (max-width: 480px) {
           .metrics-grid {
@@ -804,9 +804,9 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
 
 // Service Card Component
 interface ServiceCardProps {
-  service: SystemService;,
-  onAction: (serviceId: string, action: string) => void;,
-  onSelect: (service: SystemService) => void;,
+  service: SystemService;
+  onAction: (serviceId: string, action: string) => void;
+  onSelect: (service: SystemService) => void;
   adminLevel: string;
   const ServiceCard: React.FC<ServiceCardProps> = ({ ),
   service,
@@ -908,18 +908,18 @@ interface ServiceCardProps {
           align-items: flex-start;
           margin-bottom: 1rem;
         .service-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .service-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           line-height: 1.4;
         .service-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
@@ -933,7 +933,7 @@ interface ServiceCardProps {
   color: #1f2937;
           font-weight: 500;
         .service-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           flex-wrap: wrap;
       `}</style>
@@ -943,9 +943,9 @@ interface ServiceCardProps {
 
 // Service Detail Modal Component
 interface ServiceDetailModalProps {
-  service: SystemService;,
+  service: SystemService;
   onClose: () => void;
-  onAction: (serviceId: string, action: string) => void;,
+  onAction: (serviceId: string, action: string) => void;
   adminLevel: string;
   const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({,)
   service,
@@ -1059,7 +1059,7 @@ interface ServiceDetailModalProps {
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;,
+          position: fixed;
   inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
@@ -1068,35 +1068,35 @@ interface ServiceDetailModalProps {
           z-index: 1000;
         .modal-content {
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   width: 90vw;
           max-width: 700px;
-          max-height: 80vh;,
+          max-height: 80vh;
   overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .modal-title h2 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .modal-body {
           padding: 1.5rem;
         .service-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
           margin-bottom: 1.5rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
@@ -1114,16 +1114,16 @@ interface ServiceDetailModalProps {
           color: #1f2937;
         .dependencies-section h3 {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
         .dependencies-list {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;,
+          justify-content: flex-end;
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

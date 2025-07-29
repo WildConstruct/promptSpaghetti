@@ -6,7 +6,7 @@ import React from 'react';
 import { useReactFlow } from 'reactflow';
 import { UserPresence } from './collaborativeGraphStore';
 interface UserCursorProps {
-  user: UserPresence;,
+  user: UserPresence;
   position: { x: number; y: number };
   nodeId?: string;
 /**
@@ -21,7 +21,7 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
   zIndex: 1000,
   transform: 'translate(-2px, -2px)',
 };
-  return;
+  return (
     <div style={cursorStyle}>
       {/* Cursor pointer */}
       <svg width="16" height="16" viewBox="0 0 16 16">
@@ -53,10 +53,10 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
   );
 };
 interface NodeSelectionOverlayProps {
-  nodeId: string;,
+  nodeId: string;
   users: UserPresence;
   nodePosition: { x: number; y: number };
-  nodeWidth: number;,
+  nodeWidth: number;
   nodeHeight: number;
 /**
  * Selection overlay for nodes being edited by other users
@@ -98,7 +98,7 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
 };
   const userNames = users.map(u => u.name).join(', ');
   const isMultiple = users.length > 1;
-  return;
+  return (
     <div style={overlayStyle}>
       <div style={labelStyle}>
         {isMultiple ? `${users.length} users` : userNames}
@@ -109,7 +109,7 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
 interface CollaborativePresenceProps {
   userCursors: Array<{,
   userId: string;
-    user: UserPresence;,
+    user: UserPresence;
   position: { x: number; y: number };
     nodeId?: string;
   }>;
@@ -135,7 +135,7 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
   height: node.height || 100 // Default height,
 };
   };
-  return;
+  return (
     <div 
       className={className}
       style={{
@@ -160,7 +160,7 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
       {Array.from(remoteSelections.entries()).map(([nodeId, users]) => {
         const nodeRect = getNodeRect(nodeId);
         if (!nodeRect) return null;
-        return;
+        return (
           <NodeSelectionOverlay
             key={nodeId}
             nodeId={nodeId}
@@ -175,14 +175,14 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
   );
 };
 interface CollaborationStatusProps {
-  isCollaborative: boolean;,
+  isCollaborative: boolean;
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   connectedUserCount: number;
   className?: string;
   /**
   * Connection status indicator component
   */
-  export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({,)
+  export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
   isCollaborative,
   connectionStatus,
   connectedUserCount,
@@ -203,7 +203,7 @@ interface CollaborationStatusProps {
     case 'connecting': return 'Connecting...';
     case 'disconnected': return 'Disconnected';
     case 'error': return 'Connection error';
-    default: return 'Unknown';
+    default: return 'Unknown'
   };
   const statusStyle: React.CSSProperties = {,
   display: 'flex',
@@ -226,7 +226,7 @@ interface CollaborationStatusProps {
   animation: 'pulse 2s infinite',
 }
   };
-  return;
+  return (
     <div className={className} style={statusStyle}>
       <div style={dotStyle} />
       <span>{getStatusText()}</span>
@@ -241,7 +241,7 @@ interface UserAvatarsProps {
   /**
   * Connected users avatar list
   */
-  export const UserAvatars: React.FC<UserAvatarsProps> = ({,)
+  export const UserAvatars: React.FC<UserAvatarsProps> = ({
   connectedUsers,
   localUserId,
   maxVisible = 5,
@@ -278,7 +278,7 @@ interface UserAvatarsProps {
       .toUpperCase()
       .slice(0, 2);
   };
-  return;
+  return (
     <div className={className} style={containerStyle}>
       {users.map(user => ()
         <div
@@ -289,7 +289,7 @@ interface UserAvatarsProps {
           {getInitials(user.name)}
         </div>
       ))}
-      {extraCount > 0 && ()
+      {extraCount > 0 && (
         <div
           style={avatarStyle('#6b7280')}
           title={`${extraCount} more user${extraCount !== 1 ? 's' : ''}`}

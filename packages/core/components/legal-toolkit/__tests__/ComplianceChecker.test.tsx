@@ -18,7 +18,7 @@ const mockDocument: LegalDocument = {,
   title: 'Privacy Policy',
   type: 'policy',
   content: 'This privacy policy describes how we collect, use, and protect personal information. We collect personal data including names, email addresses, and usage analytics. Data is stored securely and shared with third parties only as described herein.',
-  metadata: {,
+  metadata: {
   jurisdiction: 'US-CA',
   practiceArea: ['privacy law', 'data protection'],
   parties: ['Tech Company Inc.'],

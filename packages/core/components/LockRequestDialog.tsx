@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
 interface LockRequestDialogProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onRequest: (resourceId: string, lockType: string, reason?: string) => void;
   resourceId?: string | null;

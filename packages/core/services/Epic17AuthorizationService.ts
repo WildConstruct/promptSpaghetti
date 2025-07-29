@@ -15,23 +15,23 @@ import { EventEmitter } from 'events';
 export interface AuthorizationContext {
   user: UserContext;
   resource?: ResourceContext;
-  action: string;,
+  action: string;
   environment: EnvironmentContext;
   requestContext?: RequestMetadata;
   additionalData?: Record<string, any>;
 }
 export interface UserContext {
-  id: string;,
+  id: string;
   email: string;
-  roles: string;,
+  roles: string;
   groups: string;
-  permissions: Permission;,
+  permissions: Permission;
   attributes: Record<string, any>;
   sessionId?: string;
   lastLogin?: Date;
 }
 export interface ResourceContext {
-  type: ResourceType;,
+  type: ResourceType;
   id: string;
   owner?: string;
   attributes: Record<string, any>;
@@ -52,9 +52,9 @@ export enum ResourceType {
   ORGANIZATION = 'organization',
   WORKSPACE = 'workspace'
   export interface Permission {
-  id: string;,
+  id: string;
   name: string;
-  resource: ResourceType | '*';,
+  resource: ResourceType | '*';
   actions: string;
   conditions?: PermissionCondition;
   scope: PermissionScope;
@@ -63,9 +63,9 @@ export enum ResourceType {
   expiresAt?: Date;
 }
 export interface PermissionCondition {
-  type: ConditionType;,
+  type: ConditionType;
   operator: ConditionOperator;
-  value: any;,
+  value: any;
   attribute: string;
 }
 export enum ConditionType {
@@ -91,36 +91,36 @@ export enum ConditionType {
   RESOURCE = 'resource',       // Specific resource
   SELF = 'self'               // Own resources only
   export interface EnvironmentContext {
-  environment: 'development' | 'staging' | 'production';,
+  environment: 'development' | 'staging' | 'production';
   region: string;
-  version: string;,
+  version: string;
   featureFlags: Record<string, boolean>;
   maintenanceMode?: boolean;
   debugMode?: boolean;
 }
 export interface RequestMetadata {
-  ip: string;,
+  ip: string;
   userAgent: string;
-  timestamp: Date;,
+  timestamp: Date;
   requestId: string;
-  method: string;,
+  method: string;
   path: string;
   headers: Record<string, string>;
   // Role and permission management
 }
 export interface Role {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   level: number; // Hierarchy level (higher = more privileged),
-  permissions: Permission;,
+  permissions: Permission;
   inheritedRoles: string;
-  conditions: RoleCondition;,
+  conditions: RoleCondition;
   active: boolean;
   metadata: RoleMetadata;
 }
 export interface RoleCondition {
-  type: 'time_based' | 'attribute_based' | 'context_based';,
+  type: 'time_based' | 'attribute_based' | 'context_based';
   rule: string;
   parameters: Record<string, any>;
 }
@@ -129,73 +129,73 @@ export interface RoleMetadata {
   department?: string;
   epic?: string;
   story?: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   approvalRequired: boolean;
-  auditLevel: 'basic' | 'detailed' | 'comprehensive';,
+  auditLevel: 'basic' | 'detailed' | 'comprehensive';
   created: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModified: Date;
   modifiedBy: string;
   // Authorization results
 }
 export interface AuthorizationResult {
-  granted: boolean;,
+  granted: boolean;
   reason: string;
-  decision: AuthorizationDecision;,
+  decision: AuthorizationDecision;
   appliedPolicies: string;
-  conditions: EvaluatedCondition;,
+  conditions: EvaluatedCondition;
   metadata: AuthorizationMetadata;
 }
 export interface AuthorizationDecision {
-  result: 'allow' | 'deny' | 'conditional';,
+  result: 'allow' | 'deny' | 'conditional';
   confidence: number; // 0-1,
   riskScore: number; // 0-1,
-  recommendedActions: string;,
+  recommendedActions: string;
   alternatives: AlternativeAction;
 }
 export interface EvaluatedCondition {
-  conditionId: string;,
+  conditionId: string;
   type: ConditionType;
-  result: boolean;,
+  result: boolean;
   value: any;
-  reason: string;,
+  reason: string;
   evaluationTime: number; // milliseconds,
 }
 export interface AlternativeAction {
-  action: string;,
+  action: string;
   description: string;
-  requiredConditions: string;,
-  riskLevel: 'low' | 'medium' | 'high';
-}
+  requiredConditions: string;
+  riskLevel: 'low' | 'medium' | 'high'
+  }
 export interface AuthorizationMetadata {
-  evaluationId: string;,
+  evaluationId: string;
   userId: string;
   resource?: string;
-  action: string;,
+  action: string;
   timestamp: Date;
   executionTime: number; // milliseconds,
-  cacheHit: boolean;,
+  cacheHit: boolean;
   policyVersion: string;
   debugInfo?: Record<string, any>;
   // Policy management
 }
 export interface AuthorizationPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   version: string;
   priority: number; // Higher = evaluated first,
-  target: PolicyTarget;,
+  target: PolicyTarget;
   conditions: PolicyCondition;
-  effect: 'allow' | 'deny';,
+  effect: 'allow' | 'deny';
   obligations: PolicyObligation;
-  active: boolean;,
+  active: boolean;
   metadata: PolicyMetadata;
 }
 export interface PolicyTarget {
-  users: string;,
+  users: string;
   roles: string;
-  resources: ResourceSelector;,
+  resources: ResourceSelector;
   actions: string;
   environments: string;
 }
@@ -207,19 +207,19 @@ export interface ResourceSelector {
   namespace?: string;
 }
 export interface PolicyCondition {
-  id: string;,
+  id: string;
   type: ConditionType;
-  expression: string;,
+  expression: string;
   parameters: Record<string, any>;
   required: boolean;
 }
 export interface PolicyObligation {
-  type: 'log_access' | 'require_mfa' | 'limit_time' | 'require_approval';,
+  type: 'log_access' | 'require_mfa' | 'limit_time' | 'require_approval';
   parameters: Record<string, any>;
   priority: number;
 }
 export interface PolicyMetadata {
-  category: string;,
+  category: string;
   tags: string;
   owner: string;
   reviewedBy?: string;
@@ -228,33 +228,33 @@ export interface PolicyMetadata {
   approvedAt?: Date;
   effectiveDate: Date;
   expirationDate?: Date;
-  created: Date;,
+  created: Date;
   lastModified: Date;
   // Service configuration
 }
 export interface AuthorizationConfig {
-  evaluation: {,
-  enableCaching: boolean;,
+  evaluation: {
+  enableCaching: boolean;
   cacheTimeToLive: number; // seconds,
   evaluationTimeout: number; // milliseconds,
-  maxPolicyDepth: number;,
+  maxPolicyDepth: number;
   strictMode: boolean;
 };
-  audit: {,
+  audit: {
   enableAuditLogging: boolean;
-  logLevel: 'basic' | 'detailed' | 'comprehensive';,
+  logLevel: 'basic' | 'detailed' | 'comprehensive';
   auditAllDecisions: boolean;
   sensitiveDataRedaction: boolean;
 };
-  permissions: {,
+  permissions: {
   defaultDenyMode: boolean;
-  inheritanceEnabled: boolean;,
+  inheritanceEnabled: boolean;
   dynamicPermissions: boolean;
   permissionCascading: boolean;
 };
-  security: {,
+  security: {
   encryptSensitiveData: boolean;
-  requireMfaForHighRisk: boolean;,
+  requireMfaForHighRisk: boolean;
   sessionValidation: boolean;
   ipWhitelisting: boolean;
 };
@@ -275,7 +275,7 @@ export class Epic17AuthorizationService extends EventEmitter {
   constructor(config: Partial<AuthorizationConfig> = {}) {
   super();
   this.config = {
-  evaluation: {,
+  evaluation: {
   enableCaching: true,
   cacheTimeToLive: 300, // 5 minutes,
   evaluationTimeout: 1000, // 1 second,
@@ -283,21 +283,21 @@ export class Epic17AuthorizationService extends EventEmitter {
   strictMode: true,
   ...config.evaluation
 },
-  audit: {,
+  audit: {
   enableAuditLogging: true,
   logLevel: 'detailed',
   auditAllDecisions: true,
   sensitiveDataRedaction: true,
   ...config.audit
 },
-  permissions: {,
+  permissions: {
   defaultDenyMode: true,
   inheritanceEnabled: true,
   dynamicPermissions: true,
   permissionCascading: true,
   ...config.permissions
 },
-  security: {,
+  security: {
   encryptSensitiveData: true,
   requireMfaForHighRisk: true,
   sessionValidation: true,
@@ -354,7 +354,7 @@ export class Epic17AuthorizationService extends EventEmitter {
   const errorResult: AuthorizationResult = {,
   granted: false,
   reason: error instanceof Error ? error.message : 'Authorization evaluation failed',
-  decision: {,
+  decision: {
   result: 'deny',
   confidence: 0,
   riskScore: 1.0,
@@ -363,7 +363,7 @@ export class Epic17AuthorizationService extends EventEmitter {
 },
   appliedPolicies: [],
         conditions: [],
-        metadata: {,
+        metadata: {
           evaluationId,
           userId: context.user.id,
           resource: context.resource?.id,
@@ -393,7 +393,7 @@ export class Epic17AuthorizationService extends EventEmitter {
         tags: [];
   } : undefined,
       action,
-      environment: {,
+      environment: {
   environment: 'production', // Default
         region: 'us-west-2', // Default
         version: '1.0.0',
@@ -496,14 +496,14 @@ export class Epic17AuthorizationService extends EventEmitter {
   const hasDirectPermission = await this.checkDirectPermissions(context);
   if (hasDirectPermission) {
   confidence = Math.max(confidence, 0.9);
-  finalDecision = 'allow';
-} else if (this.config.permissions.defaultDenyMode) {
+  finalDecision = 'allow'
+  } else if (this.config.permissions.defaultDenyMode) {
   finalDecision = 'deny';
   riskScore = 0.5;
   return {
   granted: finalDecision === 'allow',
   reason: this.generateDecisionReason(finalDecision, appliedPolicies, evaluatedConditions),
-  decision: {,
+  decision: {
   result: finalDecision as 'allow' | 'deny',
   confidence,
   riskScore,
@@ -639,8 +639,7 @@ export class Epic17AuthorizationService extends EventEmitter {
     switch (permission.scope) {
     case PermissionScope.GLOBAL:
       return true;
-    case PermissionScope.SELF:
-      return context.resource?.owner === context.user.id;,
+    case PermissionScope.SELF: return context.resource?.owner === context.user.id;
   default:
       return true; // Other scopes need more complex implementation
   private async getUserRoles(userId: string): Promise<Role> {

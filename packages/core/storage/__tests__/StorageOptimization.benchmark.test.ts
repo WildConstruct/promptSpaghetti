@@ -20,7 +20,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   type: 'WeightedChoice',
         position: { x: (i % 50) * 100, y: Math.floor(i / 50) * 100 },
-        data: {,
+        data: {
   label: `Node ${i}`}
 },
   type: 'WeightedChoice',
@@ -37,7 +37,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   target: `node-${i+1}`}
 },
-  type: 'default';
+  type: 'default'
   });
       // Add some branching connections
       if (i % 10 === 0 && i + 10 < 1000) {
@@ -48,7 +48,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   target: `node-${i+10}`}
 },
-  type: 'default';
+  type: 'default'
   });
   });
   describe('Node Lookup Performance', () => {
@@ -123,7 +123,7 @@ describe('Storage Optimization Benchmarks', () => {
   describe('Serialization Performance', () => {
   it('should demonstrate serialization optimization', async () => {
   const testData = {
-  metadata: {,
+  metadata: {
   name: 'Large Test Graph',
   version: '1.0.0',
   createdAt: new Date().toISOString(),
@@ -199,7 +199,7 @@ describe('Storage Optimization Benchmarks', () => {
         // Update 100 nodes at once
         for (let i = 0; i < 100; i++) {
           const updates = {
-            data: {,
+            data: {
   label: `Updated Node ${i}`}
 },
   timestamp: Date.now();

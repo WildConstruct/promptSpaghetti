@@ -10,7 +10,7 @@ import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 
 export interface DirectorAnalyticsViewProps {
-  conversionData: unknown;,
+  conversionData: unknown;
   performanceData: unknown;
   timeRange: { startTime: number; endTime: number };
   userId?: number;
@@ -31,7 +31,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
   collaborationEvents: 0,
   exportGenerations: 0,
   workflowEfficiency: 0,
-  creativeOutputMetrics: {,
+  creativeOutputMetrics: {
   nodesPerProject: 0,
   connectionsPerProject: 0,
   previewGenerations: 0,
@@ -51,7 +51,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
   collaborationEvents: Math.floor(Math.random() * 12) + 3,
   exportGenerations: Math.floor(Math.random() * 20) + 8,
   workflowEfficiency: Math.random() * 30 + 70,
-  creativeOutputMetrics: {,
+  creativeOutputMetrics: {
   nodesPerProject: Math.random() * 20 + 15,
   connectionsPerProject: Math.random() * 18 + 12,
   previewGenerations: Math.random() * 25 + 20,
@@ -274,7 +274,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
       <style>{`
         .director-analytics-view {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .director-overview {
           display: grid;
@@ -284,16 +284,16 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           text-align: center;
         .score-value, .count-value, .complexity-value, .collab-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .score-label, .count-label, .complexity-label, .collab-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.25rem;
         .creative-workflow-section h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .workflow-grid {
           display: grid;
@@ -301,31 +301,31 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           gap: 1rem;
         .workflow-metric {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
         .metric-icon {
           font-size: 1.5rem;
         .metric-value {
           font-size: 1.2rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .metric-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .workflow-insights h4, .template-recommendations h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .insights-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .insight-card {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
           border-left: 4px solid;
@@ -339,7 +339,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           align-items: center;
           margin-bottom: 0.5rem;
         .insight-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .insight-description {
           color: #6b7280;
@@ -350,7 +350,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 1rem;
         .template-card {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
         .template-header {
@@ -359,7 +359,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           align-items: center;
           margin-bottom: 0.5rem;
         .template-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .template-description {
           color: #6b7280;
@@ -370,26 +370,26 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           justify-content: space-between;
           align-items: center;
         .usage-stat {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           font-size: 0.875rem;
         .usage-label {
           color: #9ca3af;
         .usage-value {
-          font-weight: 600;,
+          font-weight: 600;
   color: #059669;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 3rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }

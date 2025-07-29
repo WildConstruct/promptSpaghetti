@@ -19,7 +19,7 @@ describe('ConversionArchitectureManager', () => {
         category: 'revenue',
         value: 25.00,
         properties: { templateId: 'tpl-001' },
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: 'https://example.com',
 };
@@ -66,7 +66,7 @@ describe('ConversionArchitectureManager', () => {
         type: 'template_viewed',
         category: 'activation',
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -123,7 +123,7 @@ describe('ConversionArchitectureManager', () => {
         category: 'revenue',
         value: 50,
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -159,7 +159,7 @@ describe('ConversionArchitectureManager', () => {
         category: 'revenue',
         value: 25,
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -276,7 +276,7 @@ describe('ConversionArchitectureManager', () => {
         type: 'template_viewed',
         category: 'activation',
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -308,7 +308,7 @@ describe('ConversionArchitectureManager', () => {
         category: 'revenue',
         value: 50,
         properties: {},
-        metadata: {,
+        metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -374,7 +374,7 @@ describe('Attribution Models', () => {
       category: 'revenue',
       value: 30,
       properties: {},
-      metadata: {,
+      metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };
@@ -429,7 +429,7 @@ describe('Attribution Models', () => {
       category: 'revenue',
       value: 100,
       properties: {},
-      metadata: {,
+      metadata: {
   userAgent: 'test-agent',
   referrer: '',
 };

@@ -86,7 +86,7 @@ export class GraphStoreBridge {
         type: node.type || 'default',
         position: node.position,
         data: node.data || {},
-        metadata: {,
+        metadata: {
   created: Date.now(),
   updated: Date.now(),
   version: 1,
@@ -107,7 +107,7 @@ export class GraphStoreBridge {
         targetHandle: edge.targetHandle,
         type: edge.type || 'default',
         data: edge.data || {},
-        metadata: {,
+        metadata: {
   created: Date.now(),
   updated: Date.now(),
   version: 1,

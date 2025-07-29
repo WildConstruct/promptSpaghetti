@@ -39,8 +39,16 @@ export declare class Epic16PrerequisiteRunner {
      */
     getQuickStatus(): Promise<{
         status: 'healthy' | 'degraded' | 'critical';
-    }, message>;
-    string: any;
-    details: any;
+        message: string;
+        details: any;
+    }>;
+    catch(error: any): {
+        status: string;
+        message: string;
+    };
+    details: {
+        error: String;
+        (error: any): any;
+    };
 }
 //# sourceMappingURL=Epic16PrerequisiteRunner.d.ts.map

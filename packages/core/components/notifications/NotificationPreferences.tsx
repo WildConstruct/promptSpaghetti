@@ -374,11 +374,11 @@ interface NotificationPreferencesProps {
   );
 };
 interface NotificationTypeSectionProps {
-  title: string;,
+  title: string;
   description: string;
-  icon: string;,
-  preferences: {,
-  enabled: boolean;,
+  icon: string;
+  preferences: {
+  enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
 };
   onChange: (updates: unknown) => void;

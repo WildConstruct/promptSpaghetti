@@ -11,15 +11,15 @@ import React, { useState, useEffect } from 'react';
 // Widget Configuration Types
 
 export interface WidgetConfig {
-  id: string;,
+  id: string;
   title: string;
-  type: 'metric' | 'chart' | 'list' | 'status' | 'alert';,
+  type: 'metric' | 'chart' | 'list' | 'status' | 'alert';
   size: 'small' | 'medium' | 'large' | 'full-width';
   refreshInterval?: number;
-  requiredPermissions: string;,
+  requiredPermissions: string;
   dataSource: string;
   interface MonitoringWidgetProps {
-  config: WidgetConfig;,
+  config: WidgetConfig;
   userRole: string;
   data?: unknown;
   onAction?: (widgetId: string, action: string, params?: Record<string, unknown>) => void;
@@ -39,7 +39,7 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
     if (score >= 95) return 'Excellent';
     if (score >= 85) return 'Good';
     if (score >= 70) return 'Warning';
-    return 'Critical';
+    return 'Critical'
   };
   return;
     <div className={`health-widget ${className}`} style={{},}
@@ -119,9 +119,9 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
 export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const resources = data?.resources || {};
   const ResourceBar = ({ label, value, unit, threshold }: {)
-  label: string;,
+  label: string;
   value: number;
-    unit: string;,
+    unit: string;
   threshold: { warning: number; critical: number };
   }) => {
     const getColor = () => {
@@ -203,12 +203,12 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
 export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const metrics = data?.api || {};
   const MetricCard = ({ title, value, unit, trend, trendDirection }: {)
-  title: string;,
+  title: string;
   value: number;
   unit: string;
   trend?: number;
-  trendDirection?: 'up' | 'down' | 'stable';
-}) => ()
+  trendDirection?: 'up' | 'down' | 'stable'
+  }) => ()
     <div style={{
   backgroundColor: '#f9fafb',
   borderRadius: '6px',
@@ -288,10 +288,10 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
   const security = data?.security || {};
   const threats = security.threats || [];
   const SecurityMetric = ({ label, value, status }: {)
-  label: string;,
+  label: string;
   value: number | string;
-  status: 'good' | 'warning' | 'critical';
-}) => {
+  status: 'good' | 'warning' | 'critical'
+  }) => {
   const statusColors = {
   good: '#10b981',
   warning: '#f59e0b',

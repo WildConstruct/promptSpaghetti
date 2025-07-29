@@ -48,7 +48,7 @@ interface ContributorVisualizationProps {
   visible?: boolean;
   onClose?: () => void;
 interface ContributorCardProps {
-  contributor: ContributorStatsResponse['contributors'][0];,
+  contributor: ContributorStatsResponse['contributors'][0];
   projectId: string;
   onViewDetails: (contributorId: string) => void;
 const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => {
@@ -231,8 +231,8 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
   case 'delete':,
   return 'error';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -395,7 +395,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
 // Placeholder components for detailed views
 const ContributorDetails: React.FC<{,
   projectId: string;
-  contributorId: string;,
+  contributorId: string;
   onBack: () => void;
 }> = ({ projectId, contributorId, onBack }) => {
   return;

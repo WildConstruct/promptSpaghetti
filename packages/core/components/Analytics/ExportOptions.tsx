@@ -11,13 +11,13 @@ import { Download, FileText, Table, Image, Settings } from 'lucide-react';
  * Export configuration interface
  */
 interface ExportConfig {
-  format: 'json' | 'csv' | 'html' | 'pdf';,
+  format: 'json' | 'csv' | 'html' | 'pdf';
   includeHeatMap: boolean;
-  includeCostAnalysis: boolean;,
+  includeCostAnalysis: boolean;
   includePatterns: boolean;
-  includeRecommendations: boolean;,
-  dateRange: {,
-  startTime: number;,
+  includeRecommendations: boolean;
+  dateRange: {
+  startTime: number;
   endTime: number;
 };
   customName?: string;
@@ -26,7 +26,7 @@ interface ExportConfig {
  */
 
 export interface ExportOptionsProps {
-  analyticsClient: AnalyticsClient;,
+  analyticsClient: AnalyticsClient;
   timeRange: { startTime: number; endTime: number };
   className?: string;
 /**
@@ -66,7 +66,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
   const timestamp = new Date(value).getTime();
   setExportConfig(prev => ({)
   ...prev,
-  dateRange: {,
+  dateRange: {
   ...prev.dateRange,
   [field]: timestamp,
 }));
@@ -368,7 +368,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
 const styles = `;
   .export-options {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .export-options button {
     transition: all 0.2s ease-in-out;
@@ -376,7 +376,7 @@ const styles = `;
   transform: translateY(-1px);
   .export-options button:disabled {,
   opacity: 0.6;
-    cursor: not-allowed;,
+    cursor: not-allowed;
   transform: none;
   @media (max-width: 768px) {
     .export-options {

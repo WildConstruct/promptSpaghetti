@@ -52,44 +52,44 @@ export enum DataSensitivityLevel {
   */
   export interface DataHandlingRequirements {
   /** Minimum access control requirements */
-  accessControl: {,
-  authentication: 'none' | 'basic' | 'strong' | 'mfa';,
+  accessControl: {
+  authentication: 'none' | 'basic' | 'strong' | 'mfa';
   authorization: 'none' | 'role-based' | 'attribute-based' | 'need-to-know';
-  monitoring: 'none' | 'basic' | 'enhanced' | 'continuous';
-};
+  monitoring: 'none' | 'basic' | 'enhanced' | 'continuous'
+  };
   /** Encryption requirements */
-  encryption: {,
+  encryption: {
   atRest: boolean;
-  inTransit: boolean;,
+  inTransit: boolean;
   algorithm: string;
-  keyManagement: 'none' | 'basic' | 'advanced' | 'hsm';,
+  keyManagement: 'none' | 'basic' | 'advanced' | 'hsm';
   keyRotation: string;
 };
   /** Data retention and disposal */
-  retention: {,
+  retention: {
   maximumPeriod: string;
-  archivalRequired: boolean;,
+  archivalRequired: boolean;
   disposalMethod: 'standard' | 'secure' | 'cryptographic-erasure' | 'physical-destruction';
   verificationRequired: boolean;
 };
   /** Audit and compliance requirements */
-  audit: {,
+  audit: {
   logAccess: boolean;
-  logModification: boolean;,
+  logModification: boolean;
   reviewFrequency: string;
   complianceFrameworks: string;
 };
   /** Transfer and sharing restrictions */
-  transfer: {,
+  transfer: {
   allowedChannels: string;
-  approvalRequired: boolean;,
+  approvalRequired: boolean;
   encryptionRequired: boolean;
   geographicRestrictions: string;
 };
   /** Backup and recovery */
-  backup: {,
+  backup: {
   encryptionRequired: boolean;
-  offlineStorage: boolean;,
+  offlineStorage: boolean;
   crossBorderRestrictions: boolean;
   retentionAlignment: boolean;
 };
@@ -97,21 +97,21 @@ export enum DataSensitivityLevel {
  * Comprehensive data sensitivity level definitions with handling requirements
  */
 const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
-  level: DataSensitivityLevel;,
+  level: DataSensitivityLevel;
   name: string;
-  description: string;,
+  description: string;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
-  examples: string;,
+  examples: string;
   handlingRequirements: DataHandlingRequirements;
-  complianceFrameworks: string;,
-  markingRequirements: {,
-  required: boolean;,
+  complianceFrameworks: string;
+  markingRequirements: {
+  required: boolean;
   label: string;
-  color: string;,
+  color: string;
   displayFormat: string;
 };
 }> = {
-  [DataSensitivityLevel.PUBLIC]: {,
+  [DataSensitivityLevel.PUBLIC]: {
   level: DataSensitivityLevel.PUBLIC,
   name: 'Public',
   description: 'Information that is intended for public disclosure and can be shared freely without restriction.',
@@ -123,45 +123,45 @@ const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
   'Open source code and documentation',
   'Public research papers and reports'
   ],
-  handlingRequirements: {,
-  accessControl: {,
+  handlingRequirements: {
+  accessControl: {
   authentication: 'none',
   authorization: 'none',
   monitoring: 'basic',
 },
-  encryption: {,
+  encryption: {
   atRest: false,
   inTransit: false,
   algorithm: 'none',
   keyManagement: 'none',
   keyRotation: 'N/A',
 },
-  retention: {,
+  retention: {
   maximumPeriod: 'indefinite',
   archivalRequired: false,
   disposalMethod: 'standard',
   verificationRequired: false,
 },
-  audit: {,
+  audit: {
   logAccess: false,
   logModification: true,
   reviewFrequency: 'annual',
   complianceFrameworks: [],
 },
-  transfer: {,
+  transfer: {
   allowedChannels: ['any'],
   approvalRequired: false,
   encryptionRequired: false,
   geographicRestrictions: [],
 },
-  backup: {,
+  backup: {
   encryptionRequired: false,
   offlineStorage: false,
   crossBorderRestrictions: false,
   retentionAlignment: false,
 },
   complianceFrameworks: [],
-    markingRequirements: {,
+    markingRequirements: {
   required: false,
   label: 'PUBLIC',
   color: '#28a745',
@@ -179,45 +179,45 @@ const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
   'Non-sensitive operational data',
   'Vendor contracts (non-confidential terms)'
   ],
-  handlingRequirements: {,
-  accessControl: {,
+  handlingRequirements: {
+  accessControl: {
   authentication: 'basic',
   authorization: 'role-based',
   monitoring: 'basic',
 },
-  encryption: {,
+  encryption: {
   atRest: false,
   inTransit: true,
   algorithm: 'TLS 1.3',
   keyManagement: 'basic',
   keyRotation: 'annual',
 },
-  retention: {,
+  retention: {
   maximumPeriod: '7 years',
   archivalRequired: false,
   disposalMethod: 'secure',
   verificationRequired: false,
 },
-  audit: {,
+  audit: {
   logAccess: true,
   logModification: true,
   reviewFrequency: 'semi-annual',
   complianceFrameworks: [],
 },
-  transfer: {,
+  transfer: {
   allowedChannels: ['secure-email', 'secure-file-share', 'vpn'],
   approvalRequired: false,
   encryptionRequired: true,
   geographicRestrictions: [],
 },
-  backup: {,
+  backup: {
   encryptionRequired: false,
   offlineStorage: false,
   crossBorderRestrictions: false,
   retentionAlignment: true,
 },
   complianceFrameworks: ['ISO27001', 'SOC2'],
-    markingRequirements: {,
+    markingRequirements: {
   required: true,
   label: 'INTERNAL',
   color: '#17a2b8',
@@ -236,45 +236,45 @@ const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
   'Employee performance reviews',
   'Strategic business plans'
   ],
-  handlingRequirements: {,
-  accessControl: {,
+  handlingRequirements: {
+  accessControl: {
   authentication: 'strong',
   authorization: 'attribute-based',
   monitoring: 'enhanced',
 },
-  encryption: {,
+  encryption: {
   atRest: true,
   inTransit: true,
   algorithm: 'AES-256-GCM',
   keyManagement: 'advanced',
   keyRotation: 'quarterly',
 },
-  retention: {,
+  retention: {
   maximumPeriod: '5 years',
   archivalRequired: true,
   disposalMethod: 'secure',
   verificationRequired: true,
 },
-  audit: {,
+  audit: {
   logAccess: true,
   logModification: true,
   reviewFrequency: 'quarterly',
   complianceFrameworks: ['SOC2', 'ISO27001'],
 },
-  transfer: {,
+  transfer: {
   allowedChannels: ['encrypted-email', 'secure-portal', 'encrypted-storage'],
   approvalRequired: true,
   encryptionRequired: true,
   geographicRestrictions: ['data-residency-compliance'],
 },
-  backup: {,
+  backup: {
   encryptionRequired: true,
   offlineStorage: true,
   crossBorderRestrictions: true,
   retentionAlignment: true,
 },
   complianceFrameworks: ['GDPR', 'SOX', 'ISO27001', 'SOC2'],
-    markingRequirements: {,
+    markingRequirements: {
   required: true,
   label: 'CONFIDENTIAL',
   color: '#fd7e14',
@@ -294,45 +294,45 @@ const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
   'Social Security Numbers and government IDs',
   'Biometric data and personal identifiers'
   ],
-  handlingRequirements: {,
-  accessControl: {,
+  handlingRequirements: {
+  accessControl: {
   authentication: 'mfa',
   authorization: 'need-to-know',
   monitoring: 'continuous',
 },
-  encryption: {,
+  encryption: {
   atRest: true,
   inTransit: true,
   algorithm: 'AES-256-GCM',
   keyManagement: 'hsm',
   keyRotation: 'monthly',
 },
-  retention: {,
+  retention: {
   maximumPeriod: 'minimal-necessary',
   archivalRequired: false,
   disposalMethod: 'cryptographic-erasure',
   verificationRequired: true,
 },
-  audit: {,
+  audit: {
   logAccess: true,
   logModification: true,
   reviewFrequency: 'monthly',
   complianceFrameworks: ['GDPR', 'HIPAA', 'PCI-DSS', 'NIST'],
 },
-  transfer: {,
+  transfer: {
   allowedChannels: ['zero-trust-network', 'encrypted-api'],
   approvalRequired: true,
   encryptionRequired: true,
   geographicRestrictions: ['strict-data-residency', 'no-third-countries'],
 },
-  backup: {,
+  backup: {
   encryptionRequired: true,
   offlineStorage: true,
   crossBorderRestrictions: true,
   retentionAlignment: true,
 },
   complianceFrameworks: ['GDPR', 'HIPAA', 'PCI-DSS', 'NIST-800-53', 'SOX'],
-    markingRequirements: {,
+    markingRequirements: {
   required: true,
   label: 'RESTRICTED',
   color: '#dc3545',
@@ -363,10 +363,10 @@ export interface DataElementClassification {
   /** Next review date */
   reviewDate: Date;
   /** Additional metadata */
-  metadata: {,
-  dataCategory: string;,
+  metadata: {
+  dataCategory: string;
   sourceSystem: string;
-  businessOwner: string;,
+  businessOwner: string;
   technicalOwner: string;
   complianceRequirements: string;
 };
@@ -409,9 +409,9 @@ class DataSensitivityUtils {
   /**
   * Validate if a sensitivity level assignment is appropriate for the data type
   */
-  static validateSensitivityAssignment(dataType: string,)
+  static validateSensitivityAssignment(dataType: string)
   proposedLevel: DataSensitivityLevel,
-  context?: Record<string, any>): {,
+  context?: Record<string, any>): {
   valid: boolean;
   recommendedLevel?: DataSensitivityLevel;
   reasons: string;
@@ -470,11 +470,11 @@ class DataSensitivityUtils {
   /**
    * Generate security markings for data based on sensitivity level
    */
-  static generateSecurityMarkings(level: DataSensitivityLevel): {,
+  static generateSecurityMarkings(level: DataSensitivityLevel): {
   label: string;
-    color: string;,
+    color: string;
   displayFormat: string;
-    htmlBadge: string;,
+    htmlBadge: string;
   textMarking: string;
     const definition = DATA_SENSITIVITY_DEFINITIONS[level];
     const marking = definition.markingRequirements;
@@ -489,9 +489,9 @@ class DataSensitivityUtils {
   /**
    * Validate data element classification
    */
-  static validateClassification(classification: DataElementClassification): {,
+  static validateClassification(classification: DataElementClassification): {
   valid: boolean;
-  errors: string;,
+  errors: string;
   warnings: string;
   const errors: string = [];
   const warnings: string = [];
@@ -524,7 +524,7 @@ class DataSensitivityUtils {
  * Data sensitivity level assignment recommendations
  */
 const DATA_SENSITIVITY_GUIDELINES = {
-  decisionTree: {,
+  decisionTree: {
   questions: [,
   {
   id: 'public_availability',
@@ -549,7 +549,7 @@ const DATA_SENSITIVITY_GUIDELINES = {
   question: 'Could unauthorized disclosure harm the business or competitive position?',
   yesAction: 'assign_confidential',
   noAction: 'assign_internal'],
-  actions: {,
+  actions: {
   assign_public: DataSensitivityLevel.PUBLIC,
   assign_internal: DataSensitivityLevel.INTERNAL,
   assign_confidential: DataSensitivityLevel.CONFIDENTIAL,

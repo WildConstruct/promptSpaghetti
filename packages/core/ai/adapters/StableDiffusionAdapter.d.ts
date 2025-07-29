@@ -62,7 +62,7 @@ export interface StableDiffusionGenerationResult {
         base64: string;
         url?: string;
         seed: number;
-        metadata: {,
+        metadata: {
             model: string;
             sampler: string;
             steps: number;
@@ -74,7 +74,7 @@ export interface StableDiffusionGenerationResult {
     negativePrompt?: string;
     parameters: Record<string, any>;
     generationTime: number;
-    usage: {,
+    usage: {
         computeUnits: number;
         estimatedCost: number;
     };

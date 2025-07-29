@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useCorrectionsStore } from '../../correctionsStore';
 import { EditorFieldProps } from './BaseNodeEditor';
 interface CorrectionSuggestion {
-  id: string;,
+  id: string;
   ruleId: string;
-  ruleName: string;,
+  ruleName: string;
   original: string;
-  suggested: string;,
+  suggested: string;
   start: number;
-  end: number;,
+  end: number;
   confidence: number;
   interface EnhancedTextAreaEditorProps extends EditorFieldProps {
   rows?: number;

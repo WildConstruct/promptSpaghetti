@@ -10,7 +10,7 @@ import { ResultExportService, ExportFormat, ResultExportOptions } from '../servi
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { professionalColors } from '../styles/professional-design-system';
 interface ExportOptionsDialogProps {
-  open: boolean;,
+  open: boolean;
   onClose: () => void;
   results: PreviewResultWithPath;
   selectedIndices?: number;
@@ -204,14 +204,14 @@ interface ExportOptionsDialogProps {
   fontSize: 10,
   padding: '2px 6px',
   borderRadius: 4,
-  background: {,
+  background: {
   text: '#e5e7eb',
   data: '#dbeafe',
   film: '#fef3c7',
   vfx: '#f3e8ff',
   analysis: '#ecfdf5',
 }[format.category],
-                    color: {,
+                    color: {
   text: '#374151',
   data: '#1e40af',
   film: '#92400e',

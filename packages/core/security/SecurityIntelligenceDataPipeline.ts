@@ -17,15 +17,15 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 // ==========================================
 
 export interface DataPipelineConfig {
-  enableRealTimeProcessing: boolean;,
+  enableRealTimeProcessing: boolean;
   batchProcessingInterval: number; // minutes,
-  maxBatchSize: number;,
+  maxBatchSize: number;
   enableDataValidation: boolean;
-  enableDataEnrichment: boolean;,
+  enableDataEnrichment: boolean;
   enableDataTransformation: boolean;
-  retentionPeriodDays: number;,
+  retentionPeriodDays: number;
   enableErrorRecovery: boolean;
-  parallelProcessingThreads: number;,
+  parallelProcessingThreads: number;
   dataQualityThresholds: DataQualityThresholds;
   outputFormats: OutputFormat;
 }
@@ -45,17 +45,17 @@ export enum OutputFormat {
   KAFKA = 'kafka',
   DATABASE = 'database'
   export interface PipelineStage {
-  stageId: string;,
+  stageId: string;
   stageName: string;
-  stageType: StageType;,
+  stageType: StageType;
   enabled: boolean;
-  priority: number;,
+  priority: number;
   configuration: Record<string, unknown>;
-  inputSchema: DataSchema;,
+  inputSchema: DataSchema;
   outputSchema: DataSchema;
-  transformations: DataTransformation;,
+  transformations: DataTransformation;
   validationRules: ValidationRule;
-  errorHandling: ErrorHandlingStrategy;,
+  errorHandling: ErrorHandlingStrategy;
   performanceMetrics: StageMetrics;
 }
 export enum StageType {
@@ -68,15 +68,15 @@ export enum StageType {
   OUTPUT = 'output',
   ARCHIVAL = 'archival'
   export interface DataSchema {
-  schemaId: string;,
+  schemaId: string;
   version: string;
-  fields: SchemaField;,
+  fields: SchemaField;
   constraints: SchemaConstraint;
 }
 export interface SchemaField {
-  name: string;,
+  name: string;
   type: FieldType;
-  required: boolean;,
+  required: boolean;
   nullable: boolean;
   defaultValue?: unknown;
   description?: string;
@@ -94,9 +94,9 @@ export enum FieldType {
   IP_ADDRESS = 'ip_address',
   EMAIL = 'email'
   export interface SchemaConstraint {
-  constraintType: ConstraintType;,
+  constraintType: ConstraintType;
   field: string;
-  value: unknown;,
+  value: unknown;
   errorMessage: string;
 }
 export enum ConstraintType {
@@ -109,9 +109,9 @@ export enum ConstraintType {
   NOT_NULL = 'not_null',
   CUSTOM = 'custom'
   export interface DataTransformation {
-  transformationId: string;,
+  transformationId: string;
   transformationType: TransformationType;
-  inputFields: string;,
+  inputFields: string;
   outputFields: string;
   parameters: Record<string, unknown>;
   condition?: string; // JavaScript expression,
@@ -131,13 +131,13 @@ export enum TransformationType {
   HASH = 'hash',
   CLASSIFY = 'classify'
   export interface ValidationRule {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  ruleType: ValidationRuleType;,
+  ruleType: ValidationRuleType;
   field: string;
-  condition: string;,
+  condition: string;
   errorMessage: string;
-  severity: ValidationSeverity;,
+  severity: ValidationSeverity;
   enabled: boolean;
 }
 export enum ValidationRuleType {
@@ -155,11 +155,11 @@ export enum ValidationRuleType {
   ERROR = 'error',
   CRITICAL = 'critical'
   export interface ErrorHandlingStrategy {
-  onValidationError: ErrorAction;,
+  onValidationError: ErrorAction;
   onTransformationError: ErrorAction;
-  onOutputError: ErrorAction;,
+  onOutputError: ErrorAction;
   maxRetryAttempts: number;
-  retryDelayMs: number;,
+  retryDelayMs: number;
   deadLetterQueue: boolean;
   alertOnError: boolean;
 }
@@ -171,31 +171,31 @@ export enum ErrorAction {
   LOG_AND_CONTINUE = 'log_and_continue',
   APPLY_DEFAULT = 'apply_default'
   export interface StageMetrics {
-  recordsProcessed: number;,
+  recordsProcessed: number;
   recordsSuccessful: number;
-  recordsFailed: number;,
+  recordsFailed: number;
   averageProcessingTime: number;
-  throughputPerSecond: number;,
+  throughputPerSecond: number;
   errorRate: number;
   lastProcessedAt?: Date;
   performanceTrends: PerformanceTrend;
 }
 export interface PerformanceTrend {
-  timestamp: Date;,
+  timestamp: Date;
   metric: string;
-  value: number;,
-  trend: 'increasing' | 'decreasing' | 'stable';
-}
+  value: number;
+  trend: 'increasing' | 'decreasing' | 'stable'
+  }
 export interface PipelineExecution {
-  executionId: string;,
+  executionId: string;
   pipelineId: string;
   startTime: Date;
   endTime?: Date;
-  status: ExecutionStatus;,
+  status: ExecutionStatus;
   inputRecordCount: number;
-  outputRecordCount: number;,
+  outputRecordCount: number;
   stageExecutions: StageExecution;
-  errors: ExecutionError;,
+  errors: ExecutionError;
   metrics: ExecutionMetrics;
 }
 export enum ExecutionStatus {
@@ -206,27 +206,27 @@ export enum ExecutionStatus {
   CANCELLED = 'cancelled',
   RETRYING = 'retrying'
   export interface StageExecution {
-  stageId: string;,
+  stageId: string;
   stageName: string;
   startTime: Date;
   endTime?: Date;
-  status: ExecutionStatus;,
+  status: ExecutionStatus;
   inputCount: number;
-  outputCount: number;,
+  outputCount: number;
   duration: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   cpuUsage: number;
   errors: string;
 }
 export interface ExecutionError {
-  errorId: string;,
+  errorId: string;
   timestamp: Date;
-  stageId: string;,
+  stageId: string;
   errorType: ErrorType;
   errorMessage: string;
   recordId?: string;
   stackTrace?: string;
-  retryCount: number;,
+  retryCount: number;
   resolved: boolean;
 }
 export enum ErrorType {
@@ -239,20 +239,20 @@ export enum ErrorType {
   TIMEOUT_ERROR = 'timeout_error',
   UNKNOWN_ERROR = 'unknown_error'
   export interface ExecutionMetrics {
-  totalDuration: number;,
+  totalDuration: number;
   recordThroughput: number;
-  averageRecordSize: number;,
+  averageRecordSize: number;
   peakMemoryUsage: number;
-  totalCpuTime: number;,
+  totalCpuTime: number;
   networkBytesTransferred: number;
   diskBytesWritten: number;
 }
 export interface DataSource {
-  sourceId: string;,
+  sourceId: string;
   sourceName: string;
-  sourceType: SourceType;,
+  sourceType: SourceType;
   connectionConfig: ConnectionConfig;
-  schema: DataSchema;,
+  schema: DataSchema;
   enabled: boolean;
   schedule?: ProcessingSchedule;
   lastProcessed?: Date;
@@ -271,7 +271,7 @@ export enum SourceType {
   WMI = 'wmi'
   export interface ConnectionConfig {
   endpoint?: string;
-  credentials?: {,
+  credentials?: {
   username?: string;
   password?: string;
   apiKey?: string;
@@ -280,11 +280,11 @@ export enum SourceType {
   timeout?: number;
   maxConnections?: number;
   retryConfig?: {
-  maxRetries: number;,
+  maxRetries: number;
   backoffMs: number;
 };
   ssl?: {
-  enabled: boolean;,
+  enabled: boolean;
   verifyHostname: boolean;
   certificatePath?: string;
 };
@@ -304,21 +304,21 @@ export enum ScheduleType {
   INTERVAL = 'interval',
   EVENT_DRIVEN = 'event_driven'
   export interface SourceMetrics {
-  recordsIngested: number;,
+  recordsIngested: number;
   bytesIngested: number;
   lastIngestedAt?: Date;
-  ingestRate: number;,
+  ingestRate: number;
   errorCount: number;
   averageLatency: number;
 }
 export interface DataDestination {
-  destinationId: string;,
+  destinationId: string;
   destinationName: string;
-  destinationType: DestinationType;,
+  destinationType: DestinationType;
   connectionConfig: ConnectionConfig;
-  outputFormat: OutputFormat;,
+  outputFormat: OutputFormat;
   schema: DataSchema;
-  enabled: boolean;,
+  enabled: boolean;
   metrics: DestinationMetrics;
 }
 export enum DestinationType {
@@ -332,21 +332,21 @@ export enum DestinationType {
   CLOUD_STORAGE = 'cloud_storage',
   SEARCH_INDEX = 'search_index'
   export interface DestinationMetrics {
-  recordsWritten: number;,
+  recordsWritten: number;
   bytesWritten: number;
   lastWrittenAt?: Date;
-  writeRate: number;,
+  writeRate: number;
   errorCount: number;
   averageLatency: number;
 }
 export interface PipelineAlert {
-  alertId: string;,
+  alertId: string;
   timestamp: Date;
-  alertType: PipelineAlertType;,
+  alertType: PipelineAlertType;
   severity: ValidationSeverity;
   pipelineId: string;
   stageId?: string;
-  message: string;,
+  message: string;
   details: Record<string, unknown>;
   acknowledged: boolean;
   acknowledgedBy?: string;
@@ -442,7 +442,7 @@ export enum PipelineAlertType {
   public addDataSource(source: Omit<DataSource, 'metrics'>): void {,
   const sourceWithMetrics: DataSource = {,
   ...source,
-  metrics: {,
+  metrics: {
   recordsIngested: 0,
   bytesIngested: 0,
   ingestRate: 0,
@@ -454,7 +454,7 @@ export enum PipelineAlertType {
   public addDataDestination(destination: Omit<DataDestination, 'metrics'>): void {
   const destinationWithMetrics: DataDestination = {,
   ...destination,
-  metrics: {,
+  metrics: {
   recordsWritten: 0,
   bytesWritten: 0,
   writeRate: 0,
@@ -716,7 +716,7 @@ export enum PipelineAlertType {
   outputRecordCount: 0,
   stageExecutions: [],
   errors: [],
-  metrics: {,
+  metrics: {
   totalDuration: 0,
   recordThroughput: 0,
   averageRecordSize: 0,
@@ -797,7 +797,7 @@ export enum PipelineAlertType {
       if (isValid) {
   validData.push(record);
   return validData;
-  private async transformData(data: any,)
+  private async transformData(data: any)
   transformations: DataTransformation,
   stageExecution: StageExecution): Promise<any> {,
   let transformedData = [...data];
@@ -870,7 +870,7 @@ export enum PipelineAlertType {
   // In a real implementation, this would use ML models for classification
   return data.map(record => ({)
   ...record,
-  classification: {,
+  classification: {
   category: 'security_event',
   confidence: 0.85,
   model: transformation.parameters.model || 'default',
@@ -952,7 +952,7 @@ export enum PipelineAlertType {
     this.createAlert(PipelineAlertType.PIPELINE_FAILURE, ValidationSeverity.ERROR)
       `Pipeline execution failed: ${error.message}`, { executionId, stage, error: error.message });}
     this.emit('executionError', { executionId, stage, error });
-  private createAlert(type: PipelineAlertType,)
+  private createAlert(type: PipelineAlertType)
     severity: ValidationSeverity,
     message: string,
     details: Record<string,
@@ -1014,13 +1014,13 @@ export enum PipelineAlertType {
 // ==========================================
 
 export interface PipelineMetrics {
-  totalExecutions: number;,
+  totalExecutions: number;
   successfulExecutions: number;
-  failedExecutions: number;,
+  failedExecutions: number;
   averageExecutionTime: number;
-  throughputPerHour: number;,
+  throughputPerHour: number;
   errorRate: number;
-  queueSize: number;,
+  queueSize: number;
   activeExecutions: number;
   stageMetrics: Map<string, StageMetrics>;
   // ==========================================
@@ -1039,7 +1039,7 @@ export class SecurityIntelligenceDataPipelineFactory {
   retentionPeriodDays: 30,
   enableErrorRecovery: true,
   parallelProcessingThreads: 4,
-  dataQualityThresholds: {,
+  dataQualityThresholds: {
   completeness: 95,
   accuracy: 90,
   consistency: 85,
@@ -1063,7 +1063,7 @@ export class SecurityIntelligenceDataPipelineFactory {
   ...this.createDefaultConfig(),
   enableDataValidation: true,
   enableDataEnrichment: true,
-  dataQualityThresholds: {,
+  dataQualityThresholds: {
   completeness: 99,
   accuracy: 95,
   consistency: 95,

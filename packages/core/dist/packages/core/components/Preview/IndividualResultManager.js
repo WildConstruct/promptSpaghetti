@@ -28,15 +28,14 @@ import { usePreviewSeeds } from '../../usePreviewSeeds';
 const [showAnalytics, setShowAnalytics] = useState(false);
 const [resultAnalytics, setResultAnalytics] = useState(new Map());
 const [actionMenuIndex, setActionMenuIndex] = useState(null);
-const [lockDialog, setLockDialog] = useState < {
-    visible: boolean,
-    resultIndex: number,
-    note: string
-} > ({
-    visible: false,
-    resultIndex: -1,
-    note: '',
-});
+const [lockDialog, setLockDialog] = useState({});
+visible: false,
+    resultIndex;
+-1,
+    note;
+'',
+;
+;
 const menuRef = useRef(null);
 // Calculate analytics for a result
 const calculateAnalytics = useCallback((content, index) => {

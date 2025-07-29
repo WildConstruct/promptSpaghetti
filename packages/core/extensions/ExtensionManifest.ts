@@ -136,7 +136,7 @@ export class ExtensionManifestParser {
   return {
   success: false,
   error: 'Schema validation failed',
-  details: result.error.issues.map(issue => ({,)
+  details: result.error.issues.map(issue => ({)
   path: issue.path.join('.'),
   message: issue.message,
   code: issue.code,
@@ -148,7 +148,7 @@ export class ExtensionManifestParser {
   return {
   success: false,
   error: 'Logical validation failed',
-  details: additionalValidation.errors.map(error => ({,)
+  details: additionalValidation.errors.map(error => ({)
   path: '',
   message: error,
   code: 'custom',
@@ -200,7 +200,7 @@ export class ExtensionManifestParser {
   /**
    * Validate manifest dependencies
    */
-  public validateDependencies(manifest: ExtensionManifest,)
+  public validateDependencies(manifest: ExtensionManifest)
     availableExtensions: Map<string, ExtensionManifest>
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -224,7 +224,7 @@ export class ExtensionManifestParser {
   /**
    * Check compatibility with system
    */
-  public checkCompatibility(manifest: ExtensionManifest,)
+  public checkCompatibility(manifest: ExtensionManifest)
     systemVersion: string,
     platform: string): ExtensionValidationResult {,
     const errors: string = [];
@@ -257,32 +257,32 @@ export class ExtensionManifestParser {
   name: options.name,
   version: options.version || '1.0.0',
   description: options.description || 'Extension description',
-  author: {,
+  author: {
   name: options.author || 'Author Name',
   email: options.authorEmail,
   url: options.authorUrl,
 },
   extension_type: options.extensionType,
       main: options.main || 'index.js',
-      dependencies: {,
+      dependencies: {
   system: options.systemVersion || '1.0.0',
 },
   permissions: options.permissions || [],
-      capabilities: {,
+      capabilities: {
   provides: options.provides || [],
   requires: options.requires || [],
 },
-  metadata: {,
+  metadata: {
   license: options.license || 'MIT',
   keywords: options.keywords || [],
   categories: options.categories || [],
 },
-  compatibility: {,
+  compatibility: {
   min_system_version: options.minSystemVersion || '1.0.0',
   platforms: options.platforms || ['web'],
 },
-  security: {,
-  sandbox: {,
+  security: {
+  sandbox: {
   enabled: true,
 };
     // Add type-specific configurations
@@ -471,12 +471,12 @@ export class ExtensionManifestValidator {
   data?: T;
   error?: string;
   details?: Array<{,
-  path: string;,
+  path: string;
   message: string;
   code: string;
 }>;
 interface ManifestTemplateOptions {
-  id: string;,
+  id: string;
   name: string;
   version?: string;
   description?: string;
@@ -500,7 +500,7 @@ interface ManifestTemplateOptions {
   transforms?: string;
   storageProviders?: string;
 interface ValidationContext {
-  systemVersion: string;,
+  systemVersion: string;
   platform: string;
   availableExtensions: Map<string, ExtensionManifest>;
   grantedPermissions: string;

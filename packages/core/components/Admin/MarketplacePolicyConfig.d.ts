@@ -23,7 +23,7 @@ export interface MarketplacePolicyTemplate {
     rules: PolicyRule[];
     defaultSeverity: 'low' | 'medium' | 'high' | 'critical';
     isSystemTemplate: boolean;
-    configurable: {,
+    configurable: {
         thresholds: Record<string, number>;
         timeframes: Record<string, number>;
         actions: string[];

@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
 export interface WeightVisualizationProps {
-  options: WeightControlOption;,
+  options: WeightControlOption;
   type: 'pie' | 'bar';
   width?: number;
   height?: number;

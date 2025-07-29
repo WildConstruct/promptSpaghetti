@@ -11,7 +11,7 @@ export const ConflictStatusSchema = z.enum(['unresolved', 'resolved', 'ignored']
 export const SyncOperationTypeSchema = z.enum(['pull', 'push', 'merge', 'rebase', 'sync']);
 export const SyncOperationStatusSchema = z.enum(['pending', 'in_progress', 'completed', 'failed', 'cancelled']);
 
-export const ProjectBranchSchema = z.object({)
+export const ProjectBranchSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   name: z.string().min(1).max(255),
@@ -45,7 +45,7 @@ export const ProjectBranchSchema = z.object({)
   metadata: z.record(z.unknown()).default({})
 });
 
-export const BranchCommitSchema = z.object({)
+export const BranchCommitSchema = z.object({
   id: z.string().uuid(),
   branchId: z.string().uuid(),
   snapshotId: z.string().uuid(),
@@ -64,7 +64,7 @@ export const BranchCommitSchema = z.object({)
   commitMetadata: z.record(z.unknown()).default({})
 });
 
-export const BranchMergeRequestSchema = z.object({)
+export const BranchMergeRequestSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   sourceBranchId: z.string().uuid(),
@@ -100,7 +100,7 @@ export const BranchMergeRequestSchema = z.object({)
   metadata: z.record(z.unknown()).default({})
 });
 
-export const BranchMergeReviewSchema = z.object({)
+export const BranchMergeReviewSchema = z.object({
   id: z.string().uuid(),
   mergeRequestId: z.string().uuid(),
   reviewerId: z.string().uuid(),
@@ -112,7 +112,7 @@ export const BranchMergeReviewSchema = z.object({)
   updatedAt: z.date(),
 });
 
-export const BranchPermissionSchema = z.object({)
+export const BranchPermissionSchema = z.object({
   id: z.string().uuid(),
   branchId: z.string().uuid(),
   userId: z.string().uuid().optional(),
@@ -129,7 +129,7 @@ export const BranchPermissionSchema = z.object({)
   expiresAt: z.date().optional(),
 });
 
-export const BranchConflictSchema = z.object({)
+export const BranchConflictSchema = z.object({
   id: z.string().uuid(),
   sourceBranchId: z.string().uuid(),
   targetBranchId: z.string().uuid(),
@@ -145,7 +145,7 @@ export const BranchConflictSchema = z.object({)
   resolvedBy: z.string().uuid().optional(),
 });
 
-export const BranchSyncOperationSchema = z.object({)
+export const BranchSyncOperationSchema = z.object({
   id: z.string().uuid(),
   branchId: z.string().uuid(),
   operationType: SyncOperationTypeSchema,
@@ -185,7 +185,7 @@ export type BranchConflict = z.infer<typeof BranchConflictSchema>;
 export type BranchSyncOperation = z.infer<typeof BranchSyncOperationSchema>;
 
 // Request/response types
-export const CreateBranchRequestSchema = z.object({)
+export const CreateBranchRequestSchema = z.object({
   projectId: z.string().uuid(),
   name: z.string().min(1).max(255),
   displayName: z.string().max(255).optional(),
@@ -199,7 +199,7 @@ export const CreateBranchRequestSchema = z.object({)
   deleteOnMerge: z.boolean().default(false),
 });
 
-export const UpdateBranchRequestSchema = z.object({)
+export const UpdateBranchRequestSchema = z.object({
   displayName: z.string().max(255).optional(),
   description: z.string().optional(),
   protectionLevel: ProtectionLevelSchema.optional(),
@@ -210,7 +210,7 @@ export const UpdateBranchRequestSchema = z.object({)
   metadata: z.record(z.unknown()).optional(),
 });
 
-export const CreateCommitRequestSchema = z.object({)
+export const CreateCommitRequestSchema = z.object({
   branchId: z.string().uuid(),
   snapshotId: z.string().uuid(),
   commitMessage: z.string().optional(),
@@ -218,7 +218,7 @@ export const CreateCommitRequestSchema = z.object({)
   commitMetadata: z.record(z.unknown()).default({})
 });
 
-export const CreateMergeRequestRequestSchema = z.object({)
+export const CreateMergeRequestRequestSchema = z.object({
   projectId: z.string().uuid(),
   sourceBranchId: z.string().uuid(),
   targetBranchId: z.string().uuid(),
@@ -232,7 +232,7 @@ export const CreateMergeRequestRequestSchema = z.object({)
   deleteSourceBranch: z.boolean().default(false),
 });
 
-export const UpdateMergeRequestRequestSchema = z.object({)
+export const UpdateMergeRequestRequestSchema = z.object({
   title: z.string().min(1).max(500).optional(),
   description: z.string().optional(),
   assignedTo: z.string().uuid().optional(),
@@ -244,32 +244,32 @@ export const UpdateMergeRequestRequestSchema = z.object({)
   metadata: z.record(z.unknown()).optional(),
 });
 
-export const CreateReviewRequestSchema = z.object({)
+export const CreateReviewRequestSchema = z.object({
   mergeRequestId: z.string().uuid(),
   status: ReviewStatusSchema,
   reviewMessage: z.string().optional(),
 });
 
-export const UpdateReviewRequestSchema = z.object({)
+export const UpdateReviewRequestSchema = z.object({
   status: ReviewStatusSchema.optional(),
   reviewMessage: z.string().optional(),
 });
 
-export const MergeBranchRequestSchema = z.object({)
+export const MergeBranchRequestSchema = z.object({
   mergeRequestId: z.string().uuid(),
   mergeStrategy: z.enum(['merge', 'squash', 'rebase']).default('merge'),
   commitMessage: z.string().optional(),
   deleteSourceBranch: z.boolean().default(false),
 });
 
-export const SyncBranchRequestSchema = z.object({)
+export const SyncBranchRequestSchema = z.object({
   branchId: z.string().uuid(),
   sourceBranchId: z.string().uuid(),
   operationType: SyncOperationTypeSchema,
   conflictResolution: z.record(z.unknown()).optional(),
 });
 
-export const BranchFilterSchema = z.object({)
+export const BranchFilterSchema = z.object({
   projectId: z.string().uuid().optional(),
   branchType: BranchTypeSchema.optional(),
   status: BranchStatusSchema.optional(),
@@ -285,7 +285,7 @@ export const BranchFilterSchema = z.object({)
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 
-export const MergeRequestFilterSchema = z.object({)
+export const MergeRequestFilterSchema = z.object({
   projectId: z.string().uuid().optional(),
   sourceBranchId: z.string().uuid().optional(),
   targetBranchId: z.string().uuid().optional(),
@@ -314,14 +314,14 @@ export type BranchFilter = z.infer<typeof BranchFilterSchema>;
 export type MergeRequestFilter = z.infer<typeof MergeRequestFilterSchema>;
 
 // Response types
-export const BranchStatsResponseSchema = z.object({)
+export const BranchStatsResponseSchema = z.object({
   totalBranches: z.number().int(),
   activeBranches: z.number().int(),
   mergedBranches: z.number().int(),
   abandonedBranches: z.number().int(),
   byType: z.record(z.number().int()),
   byStatus: z.record(z.number().int()),
-  recentActivity: z.array(z.object({,)
+  recentActivity: z.array(z.object({)
   branchId: z.string().uuid(),
   branchName: z.string(),
   activityType: z.string(),
@@ -331,10 +331,10 @@ export const BranchStatsResponseSchema = z.object({)
 }))
 });
 
-export const BranchTimelineResponseSchema = z.object({)
-  timeline: z.array(z.object({,)
+export const BranchTimelineResponseSchema = z.object({
+  timeline: z.array(z.object({)
   date: z.date(),
-  events: z.array(z.object({,)
+  events: z.array(z.object({)
   id: z.string().uuid(),
   type: z.string(),
   branchId: z.string().uuid(),
@@ -364,7 +364,7 @@ export const BranchTimelineResponseSchema = z.object({)
   }
 });
 
-export const BranchComparisonResponseSchema = z.object({)
+export const BranchComparisonResponseSchema = z.object({
   sourceBranch: ProjectBranchSchema,
   targetBranch: ProjectBranchSchema,
   commonAncestor: BranchCommitSchema.optional(),
@@ -383,29 +383,29 @@ export type BranchComparisonResponse = z.infer<typeof BranchComparisonResponseSc
 // Utility types
 
 export interface BranchContext {
-  projectId: string;,
+  projectId: string;
   branchId: string;
-  userId: string;,
-  userPermissions: {,
-  canRead: boolean;,
+  userId: string;
+  userPermissions: {
+  canRead: boolean;
   canWrite: boolean;
-  canMerge: boolean;,
+  canMerge: boolean;
   canDelete: boolean;
   canAdmin: boolean;
 };
 }
 export interface MergeContext {
-  mergeRequestId: string;,
+  mergeRequestId: string;
   sourceBranchId: string;
-  targetBranchId: string;,
+  targetBranchId: string;
   userId: string;
   strategy: 'merge' | 'squash' | 'rebase';
   conflictResolution?: Record<string, any>;
 }
 export interface BranchHierarchy {
-  branch: ProjectBranch;,
+  branch: ProjectBranch;
   children: BranchHierarchy;
-  depth: number;,
+  depth: number;
   path: string;
 }
 export interface BranchMetrics {
@@ -413,10 +413,10 @@ export interface BranchMetrics {
   contributorsPerDay: Record<string, number>;
   mergeRequestsPerDay: Record<string, number>;
   conflictsPerDay: Record<string, number>;
-  averageMergeTime: number;,
+  averageMergeTime: number;
   mergeSuccessRate: number;
-  mostActiveContributor: {,
-  userId: string;,
+  mostActiveContributor: {
+  userId: string;
   userName: string;
   commits: number;
 };
@@ -492,28 +492,28 @@ export const MERGE_STRATEGY_DESCRIPTIONS = {
 // Event types for real-time updates
 
 export interface BranchEvent {
-  type: 'branch_created' | 'branch_updated' | 'branch_deleted' | 'branch_merged';,
+  type: 'branch_created' | 'branch_updated' | 'branch_deleted' | 'branch_merged';
   branchId: string;
-  projectId: string;,
+  projectId: string;
   userId: string;
-  data: any;,
+  data: any;
   timestamp: Date;
 }
 export interface MergeRequestEvent {
-  type: 'merge_request_created' | 'merge_request_updated' | 'merge_request_merged' | 'merge_request_closed';,
+  type: 'merge_request_created' | 'merge_request_updated' | 'merge_request_merged' | 'merge_request_closed';
   mergeRequestId: string;
-  projectId: string;,
+  projectId: string;
   userId: string;
-  data: any;,
+  data: any;
   timestamp: Date;
 }
 export interface BranchNotification {
-  type: 'branch_conflict' | 'merge_request_review' | 'branch_merged' | 'branch_updated';,
+  type: 'branch_conflict' | 'merge_request_review' | 'branch_merged' | 'branch_updated';
   title: string;
-  message: string;,
+  message: string;
   branchId: string;
-  projectId: string;,
+  projectId: string;
   userId: string;
-  data: any;,
+  data: any;
   timestamp: Date;
 }

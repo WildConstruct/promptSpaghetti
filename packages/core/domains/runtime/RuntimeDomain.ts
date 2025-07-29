@@ -104,11 +104,11 @@ export interface ExecutionHistoryFilters {
   offset?: number;
 }
 export interface QueueStatus {
-  queueSize: number;,
+  queueSize: number;
   running: number;
-  completed: number;,
+  completed: number;
   failed: number;
-  paused: boolean;,
+  paused: boolean;
   averageWaitTime: number;
   estimatedProcessingTime: number;
 }
@@ -120,244 +120,244 @@ export interface NodeSearchFilters {
   capabilities?: string;
 }
 export interface ProfileResult {
-  executionId: string;,
+  executionId: string;
   totalTime: number;
-  nodeProfiles: NodeProfile;,
+  nodeProfiles: NodeProfile;
   memoryProfile: MemoryProfile;
-  cpuProfile: CpuProfile;,
+  cpuProfile: CpuProfile;
   recommendations: string;
 }
 export interface NodeProfile {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
-  executionTime: number;,
+  executionTime: number;
   memoryUsage: number;
-  cpuUsage: number;,
+  cpuUsage: number;
   cacheHits: number;
   cacheMisses: number;
 }
 export interface MemoryProfile {
-  peakUsage: number;,
+  peakUsage: number;
   averageUsage: number;
-  allocations: number;,
+  allocations: number;
   deallocations: number;
   gcTime: number;
 }
 export interface CpuProfile {
-  totalTime: number;,
+  totalTime: number;
   userTime: number;
-  systemTime: number;,
+  systemTime: number;
   idleTime: number;
   samples: CpuSample;
 }
 export interface CpuSample {
-  timestamp: number;,
+  timestamp: number;
   usage: number;
   function: string;
 }
 export interface PerformanceAnalysis {
-  executionId: string;,
+  executionId: string;
   bottlenecks: PerformanceBottleneck;
-  recommendations: PerformanceRecommendation;,
+  recommendations: PerformanceRecommendation;
   score: number;
   metrics: PerformanceMetrics;
 }
 export interface PerformanceBottleneck {
-  type: 'cpu' | 'memory' | 'io' | 'network' | 'serialization';,
+  type: 'cpu' | 'memory' | 'io' | 'network' | 'serialization';
   nodeId: string;
-  impact: number;,
+  impact: number;
   description: string;
   suggestion: string;
 }
 export interface PerformanceRecommendation {
-  type: 'optimization' | 'caching' | 'parallelization' | 'resource_allocation';,
+  type: 'optimization' | 'caching' | 'parallelization' | 'resource_allocation';
   priority: 'low' | 'medium' | 'high';
-  description: string;,
+  description: string;
   expectedImprovement: number;
-  effort: 'low' | 'medium' | 'high';
-}
+  effort: 'low' | 'medium' | 'high'
+  }
 export interface PerformanceMetrics {
-  throughput: number;,
+  throughput: number;
   latency: number;
-  resourceUtilization: number;,
+  resourceUtilization: number;
   efficiency: number;
 }
 export interface OptimizedGraph {
-  original: Graph;,
+  original: Graph;
   optimized: Graph;
-  optimizations: GraphOptimization;,
+  optimizations: GraphOptimization;
   estimatedImprovement: number;
 }
 export interface GraphOptimization {
-  type: 'node_elimination' | 'node_fusion' | 'parallelization' | 'caching';,
+  type: 'node_elimination' | 'node_fusion' | 'parallelization' | 'caching';
   description: string;
-  impact: number;,
+  impact: number;
   nodes: string;
 }
 export interface BenchmarkResult {
-  nodeType: string;,
+  nodeType: string;
   iterations: number;
-  totalTime: number;,
+  totalTime: number;
   averageTime: number;
-  minTime: number;,
+  minTime: number;
   maxTime: number;
-  standardDeviation: number;,
+  standardDeviation: number;
   throughput: number;
 }
 export interface ReportCriteria {
   period: { start: Date; end: Date };
-  includeNodeMetrics: boolean;,
+  includeNodeMetrics: boolean;
   includeBottlenecks: boolean;
-  includeRecommendations: boolean;,
-  format: 'summary' | 'detailed' | 'executive';
-}
+  includeRecommendations: boolean;
+  format: 'summary' | 'detailed' | 'executive'
+  }
 export interface PerformanceReport {
-  criteria: ReportCriteria;,
+  criteria: ReportCriteria;
   summary: ReportSummary;
   nodeMetrics: Map<string, NodeMetrics>;
-  bottlenecks: PerformanceBottleneck;,
+  bottlenecks: PerformanceBottleneck;
   recommendations: PerformanceRecommendation;
-  trends: PerformanceTrend;,
+  trends: PerformanceTrend;
   generatedAt: Date;
 }
 export interface ReportSummary {
-  totalExecutions: number;,
+  totalExecutions: number;
   averageExecutionTime: number;
-  successRate: number;,
+  successRate: number;
   topPerformingNodes: string;
   worstPerformingNodes: string;
 }
 export interface PerformanceTrend {
-  metric: string;,
+  metric: string;
   values: { timestamp: Date; value: number }[];
-  trend: 'improving' | 'degrading' | 'stable';,
+  trend: 'improving' | 'degrading' | 'stable';
   changeRate: number;
 }
 export interface CacheStats {
-  size: number;,
+  size: number;
   hits: number;
-  misses: number;,
+  misses: number;
   hitRate: number;
-  evictions: number;,
+  evictions: number;
   memoryUsage: number;
 }
 export interface CacheExport {
-  entries: CacheEntry;,
+  entries: CacheEntry;
   metadata: CacheMetadata;
   exportedAt: Date;
 }
 export interface CacheEntry {
-  key: string;,
+  key: string;
   value: any;
-  ttl: number;,
+  ttl: number;
   createdAt: Date;
   lastAccessed: Date;
 }
 export interface CacheMetadata {
-  version: string;,
+  version: string;
   totalEntries: number;
-  totalSize: number;,
+  totalSize: number;
   strategy: string;
 }
 export interface SecurityValidation {
-  allowed: boolean;,
+  allowed: boolean;
   risks: SecurityRisk;
-  requirements: string;,
+  requirements: string;
   recommendations: string;
 }
 export interface SecurityRisk {
-  type: string;,
+  type: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   mitigation: string;
 }
 export interface SecurityAlert {
-  type: string;,
+  type: string;
   severity: string;
-  description: string;,
+  description: string;
   evidence: any;
   timestamp: Date;
   // Main domain interface
 }
 export interface IRuntimeDomain {
   // React Components
-  components: {,
-  RuntimeDashboard: React.ComponentType<RuntimeDashboardProps>;,
+  components: {
+  RuntimeDashboard: React.ComponentType<RuntimeDashboardProps>;
   ExecutionQueue: React.ComponentType<ExecutionQueueProps>;
   NodeRegistry: React.ComponentType<NodeRegistryProps>;
   // Specific runtime components
-  ExecutionMonitor: React.ComponentType<any>;,
+  ExecutionMonitor: React.ComponentType<any>;
   PerformanceMetrics: React.ComponentType<any>;
-  NodeEditor: React.ComponentType<any>;,
+  NodeEditor: React.ComponentType<any>;
   ValidationResults: React.ComponentType<any>;
 };
   // React Hooks
-  hooks: {,
+  hooks: {
   useRuntime: () => {,
-  state: RuntimeDomainState;,
+  state: RuntimeDomainState;
   executeGraph: (graph: Graph, seeds: number, options?: ExecutionOptions) => Promise<ExecutionRecord>;
-  queueExecution: (graph: Graph, seeds: number) => Promise<string>;,
-  cancelExecution: (taskId: string) => Promise<void>;,
+  queueExecution: (graph: Graph, seeds: number) => Promise<string>;
+  cancelExecution: (taskId: string) => Promise<void>;
   getMetrics: () => Promise<RuntimeMetrics>;
 };
     useExecutionQueue: () => {,
   queue: ExecutionTask;
-  running: ExecutionInstance;,
+  running: ExecutionInstance;
   completed: ExecutionRecord;
-  queueSize: number;,
+  queueSize: number;
   isProcessing: boolean;
-  pauseQueue: () => Promise<void>;,
+  pauseQueue: () => Promise<void>;
   resumeQueue: () => Promise<void>;
 };
     useNodeRegistry: () => {,
   nodes: NodeDefinition;
-  loading: boolean;,
-  registerNode: (definition: NodeDefinition) => Promise<void>;,
-  getNode: (nodeType: string) => NodeDefinition | null;,
+  loading: boolean;
+  registerNode: (definition: NodeDefinition) => Promise<void>;
+  getNode: (nodeType: string) => NodeDefinition | null;
   searchNodes: (query: string) => NodeDefinition;
 };
     usePerformanceMetrics: () => {,
   metrics: RuntimeMetrics | null;
   nodeMetrics: Map<string, NodeMetrics>;
-  loading: boolean;,
+  loading: boolean;
   refreshMetrics: () => Promise<void>;
-  startProfiling: (executionId: string) => Promise<void>;,
+  startProfiling: (executionId: string) => Promise<void>;
   stopProfiling: (executionId: string) => Promise<ProfileResult>;
 };
     useValidation: () => {,
-  validateGraph: (graph: Graph) => Promise<ValidationResult>;,
-  validateNode: (node: any, definition: NodeDefinition) => Promise<ValidationResult>;,
+  validateGraph: (graph: Graph) => Promise<ValidationResult>;
+  validateNode: (node: any, definition: NodeDefinition) => Promise<ValidationResult>;
   getValidationRules: (nodeType: string) => Promise<any>;
 };
   };
   // Domain Services
-  services: {,
+  services: {
   execution: IExecutionService;
-  nodeRegistry: INodeRegistryService;,
+  nodeRegistry: INodeRegistryService;
   validation: IValidationService;
-  performance: IPerformanceService;,
+  performance: IPerformanceService;
   cache: ICacheService;
   security: ISecurityService;
 };
   // Event System
   events: RuntimeDomainEvents & {,
-  subscribe: (event: keyof RuntimeDomainEvents, callback: Function) => () => void;,
+  subscribe: (event: keyof RuntimeDomainEvents, callback: Function) => () => void;
   emit: (event: keyof RuntimeDomainEvents, ...args: any) => void;
 };
   // Configuration
-  config: {,
+  config: {
   getConfig: () => RuntimeConfig;
-  updateConfig: (config: Partial<RuntimeConfig>) => void;,
+  updateConfig: (config: Partial<RuntimeConfig>) => void;
   resetConfig: () => void;
 };
   // Utilities
-  utils: {,
-  createExecutionContext: (graph: Graph, seed: number) => ExecutionContext;,
+  utils: {
+  createExecutionContext: (graph: Graph, seed: number) => ExecutionContext;
   measureExecution: <T>(fn: () => Promise<T>) => Promise<{ result: T; metrics: ExecutionMetrics }>;
-    optimizeGraph: (graph: Graph) => Promise<OptimizedGraph>;,
-  validateNodeDefinition: (definition: NodeDefinition) => ValidationResult;,
+    optimizeGraph: (graph: Graph) => Promise<OptimizedGraph>;
+  validateNodeDefinition: (definition: NodeDefinition) => ValidationResult;
   generateNodeId: () => string;
-    serializeResults: (results: any) => string;,
+    serializeResults: (results: any) => string;
   deserializeResults: (data: string) => any;
   };
 

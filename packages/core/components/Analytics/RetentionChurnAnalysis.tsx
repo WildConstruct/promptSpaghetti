@@ -14,7 +14,7 @@ import {
 // Core interfaces
 
 export interface RetentionChurnAnalysisProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   retentionConfig: RetentionAnalysisConfig;
   churnPredictionConfig: ChurnPredictionConfig;
   onChurnAlert?: (alert: ChurnAlert) => void;
@@ -22,39 +22,39 @@ export interface RetentionChurnAnalysisProps {
   onExport?: (data: RetentionChurnExportData) => void;
 }
 export interface RetentionAnalysisConfig {
-  cohortDefinition: CohortDefinition;,
+  cohortDefinition: CohortDefinition;
   retentionPeriods: RetentionPeriod;
-  segmentation: RetentionSegmentation;,
+  segmentation: RetentionSegmentation;
   benchmarks: RetentionBenchmark;
 }
 export interface ChurnPredictionConfig {
-  predictionModels: ChurnPredictionModel;,
+  predictionModels: ChurnPredictionModel;
   riskFactors: ChurnRiskFactor;
-  interventionStrategies: ChurnInterventionStrategy;,
+  interventionStrategies: ChurnInterventionStrategy;
   evaluationMetrics: ChurnModelMetric;
   // Data structures
 }
 export interface RetentionData {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  cohortSize: number;,
+  cohortSize: number;
   acquisitionDate: number;
-  retentionRates: RetentionRateData;,
+  retentionRates: RetentionRateData;
   segments: SegmentRetentionData;
 }
 export interface RetentionRateData {
-  period: number;,
+  period: number;
   retainedUsers: number;
-  retentionRate: number;,
+  retentionRate: number;
   benchmark: number;
   variance: number;
 }
 export interface ChurnPredictionData {
-  userId: string;,
+  userId: string;
   churnProbability: number;
-  riskLevel: ChurnRiskLevel;,
+  riskLevel: ChurnRiskLevel;
   riskFactors: ActiveRiskFactor;
-  predictions: ChurnPrediction;,
+  predictions: ChurnPrediction;
   recommendedActions: ChurnPreventionAction;
 }
 export type ChurnRiskLevel = 'low' | 'medium' | 'high' | 'critical';
@@ -62,7 +62,7 @@ export type ChurnRiskLevel = 'low' | 'medium' | 'high' | 'critical';
 export interface ChurnPrediction {
   timeHorizon: number; // days,
   probability: number;
-  confidence: number;,
+  confidence: number;
   model: string;
 
 // Mock data generators
@@ -195,7 +195,7 @@ export const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> = ({)
   retentionData,
   churnPredictions,
   analysisTimestamp: Date.now(),
-  metadata: {,
+  metadata: {
   totalCohorts: retentionData.length,
   totalUsers: churnPredictions.length,
   highRiskUsers: churnPredictions.filter(p => p.riskLevel === 'high' || p.riskLevel === 'critical').length,
@@ -452,90 +452,90 @@ export const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> = ({)
 // Supporting interfaces (condensed)
 
 export interface CohortDefinition {
-  timeRange: 'daily' | 'weekly' | 'monthly';,
+  timeRange: 'daily' | 'weekly' | 'monthly';
   criteria: CohortCriteria;
 }
 export interface CohortCriteria {
-  field: string;,
+  field: string;
   operator: string;
   value: Error;
 }
 export interface RetentionPeriod {
-  days: number;,
+  days: number;
   label: string;
 }
 export interface RetentionSegmentation {
-  enabled: boolean;,
+  enabled: boolean;
   segments: string;
 }
 export interface RetentionBenchmark {
-  period: number;,
+  period: number;
   value: number;
   source: string;
 }
 export interface ChurnPredictionModel {
-  modelId: string;,
+  modelId: string;
   name: string;
-  accuracy: number;,
+  accuracy: number;
   features: string;
 }
 export interface ChurnRiskFactor {
-  factor: string;,
+  factor: string;
   weight: number;
   category: string;
 }
 export interface ChurnInterventionStrategy {
-  strategyId: string;,
+  strategyId: string;
   name: string;
-  effectiveness: number;,
+  effectiveness: number;
   cost: string;
 }
 export interface ChurnModelMetric {
-  metric: string;,
+  metric: string;
   target: number;
   current: number;
 }
 export interface SegmentRetentionData {
-  segment: string;,
+  segment: string;
   retentionRates: RetentionRateData;
 }
 export interface ActiveRiskFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  trend: string;,
+  trend: string;
   daysActive: number;
 }
 export interface ChurnPreventionAction {
-  action: string;,
+  action: string;
   priority: string;
-  expectedImpact: number;,
+  expectedImpact: number;
   cost: string;
   timeline: string;
 }
 export interface RetentionInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  message: string;,
+  message: string;
   severity: string;
   recommendations: string;
 }
 export interface ChurnAlert {
-  alertId: string;,
+  alertId: string;
   severity: string;
-  type: string;,
+  type: string;
   message: string;
-  timestamp: number;,
+  timestamp: number;
   affectedUsers: number;
   recommendedActions: string;
 }
 export interface RetentionChurnExportData {
-  retentionData: RetentionData;,
+  retentionData: RetentionData;
   churnPredictions: ChurnPredictionData;
-  analysisTimestamp: number;,
-  metadata: {,
-  totalCohorts: number;,
+  analysisTimestamp: number;
+  metadata: {
+  totalCohorts: number;
   totalUsers: number;
-  highRiskUsers: number;,
+  highRiskUsers: number;
   averageRetention30d: number;
 };
 }

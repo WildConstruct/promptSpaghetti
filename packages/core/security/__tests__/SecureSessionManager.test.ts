@@ -40,12 +40,12 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         deviceFingerprint: 'fp_12345',
         requestHeaders: { 'x-requested-endpoint': '/api/auth' },
-        geolocation: {,
+        geolocation: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
 },
-  securityFlags: {,
+  securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -79,7 +79,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'TestAgent',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -93,7 +93,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_secure',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -116,7 +116,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'SuspiciousAgent',
         deviceFingerprint: 'fp_suspicious',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: true,
   isNewDevice: true,
   hasVpn: true,
@@ -136,7 +136,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_valid',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -156,7 +156,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -174,7 +174,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -194,7 +194,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_original',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -217,7 +217,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -245,7 +245,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -270,7 +270,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -299,7 +299,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -315,7 +315,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -335,7 +335,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -361,7 +361,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -377,7 +377,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -410,7 +410,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -432,7 +432,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -457,7 +457,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -480,7 +480,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: { 'x-requested-endpoint': '/api/profile' },
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -506,7 +506,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -546,7 +546,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -564,7 +564,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -582,7 +582,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -608,7 +608,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -617,7 +617,7 @@ describe('SecureSessionManager', () => {
       const { session, token } = await manager.createSession('user123', normalContext);
       const suspiciousContext: SessionContext = {
   ...normalContext,
-  securityFlags: {,
+  securityFlags: {
   ...normalContext.securityFlags,
   isSuspiciousLocation: true,
 };
@@ -632,7 +632,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,
@@ -670,7 +670,7 @@ describe('SecureSessionManager', () => {
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
-        securityFlags: {,
+        securityFlags: {
   isSuspiciousLocation: false,
   isNewDevice: false,
   hasVpn: false,

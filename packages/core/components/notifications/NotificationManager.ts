@@ -5,49 +5,49 @@
 import { Notification } from './NotificationCenter';
 
 export interface NotificationPreferences {
-  in_app_enabled: boolean;,
+  in_app_enabled: boolean;
   email_enabled: boolean;
   push_enabled: boolean;
   // Event type preferences
-  comments: {,
-  enabled: boolean;,
+  comments: {
+  enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
   mentions_only: boolean;
 };
-  collaboration: {,
+  collaboration: {
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];,
+  channels: ('in_app' | 'email' | 'push')[];
   presence_updates: boolean;
 };
-  workspace: {,
+  workspace: {
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];,
+  channels: ('in_app' | 'email' | 'push')[];
   member_changes: boolean;
 };
-  approvals: {,
+  approvals: {
   enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
 };
-  system: {,
+  system: {
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];,
+  channels: ('in_app' | 'email' | 'push')[];
   maintenance_only: boolean;
 };
   // Timing preferences
-  quiet_hours: {,
+  quiet_hours: {
   enabled: boolean;
   start_time: string; // HH:MM format,
-  end_time: string;,
+  end_time: string;
   timezone: string;
 };
-  digest: {,
+  digest: {
   enabled: boolean;
-  frequency: 'hourly' | 'daily' | 'weekly';,
+  frequency: 'hourly' | 'daily' | 'weekly';
   time: string; // HH:MM format,
 };
 }
 export interface NotificationFilter {
-  filter: 'all' | 'unread' | 'mentions' | 'workspace';,
+  filter: 'all' | 'unread' | 'mentions' | 'workspace';
   sort_by: 'newest' | 'priority' | 'type';
   limit?: number;
   offset?: number;
@@ -55,7 +55,7 @@ export interface NotificationFilter {
   end_date?: string;
 }
 export interface NotificationStats {
-  total: number;,
+  total: number;
   unread: number;
   by_type: Record<string, number>;
   by_priority: Record<string, number>;
@@ -260,37 +260,37 @@ export class NotificationManager {
   in_app_enabled: true,
   email_enabled: true,
   push_enabled: false,
-  comments: {,
+  comments: {
   enabled: true,
   channels: ['in_app', 'email'],
   mentions_only: false,
 },
-  collaboration: {,
+  collaboration: {
   enabled: true,
   channels: ['in_app'],
   presence_updates: false,
 },
-  workspace: {,
+  workspace: {
   enabled: true,
   channels: ['in_app', 'email'],
   member_changes: true,
 },
-  approvals: {,
+  approvals: {
   enabled: true,
   channels: ['in_app', 'email'],
 },
-  system: {,
+  system: {
   enabled: true,
   channels: ['in_app'],
   maintenance_only: true,
 },
-  quiet_hours: {,
+  quiet_hours: {
   enabled: false,
   start_time: '22:00',
   end_time: '08:00',
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 },
-  digest: {,
+  digest: {
   enabled: false,
   frequency: 'daily',
   time: '09:00',

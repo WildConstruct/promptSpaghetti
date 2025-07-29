@@ -280,7 +280,7 @@ describe('ClassificationAccessControlService', () => {
   describe('Policy Management', () => {
   it('should update access policies', async () => {
   const updates = {
-  requirements: {,
+  requirements: {
   authenticationLevel: 'BIOMETRIC' as const,
   authorizationRequired: true,
   approvalWorkflow: false,
@@ -322,7 +322,7 @@ describe('ClassificationAccessControlService', () => {
       const timeCondition = {
   type: 'TIME_RESTRICTION' as const,
   description: 'Business hours only',
-  parameters: {,
+  parameters: {
   startHour: 9,
   endHour: 17,
   businessDaysOnly: true,
@@ -340,7 +340,7 @@ describe('ClassificationAccessControlService', () => {
       const timeCondition = {
   type: 'TIME_RESTRICTION' as const,
   description: 'Business hours only',
-  parameters: {,
+  parameters: {
   startHour: 9,
   endHour: 17,
   businessDaysOnly: true,
@@ -355,7 +355,7 @@ describe('ClassificationAccessControlService', () => {
   const purposeCondition = {
   type: 'PURPOSE_LIMITATION' as const,
   description: 'Purpose restricted',
-  parameters: {,
+  parameters: {
   allowedPurposes: ['data analysis', 'reporting'],
 },
   mandatory: true;
@@ -374,7 +374,7 @@ describe('ClassificationAccessControlService', () => {
   const exportRestriction = {
   type: 'EXPORT_RESTRICTED' as const,
   description: 'Export not allowed',
-  parameters: {,
+  parameters: {
   allowExport: false,
 },
   mandatory: true;

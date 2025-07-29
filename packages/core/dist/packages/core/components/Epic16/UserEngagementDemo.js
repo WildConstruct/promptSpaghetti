@@ -99,183 +99,153 @@ export const UserEngagementDemo = ({
                     content: '<p>Great job! You now know how to browse and download templates. Next, try the template creation tutorial to learn how to build your own.</p>',
                     type: 'completion'
                 }],
-            completionRewards: {},
-            xp: 200,
-            badge: 'Marketplace Explorer',
-            certificate: 'Getting Started Certificate',
-        },
-        tags, ['beginner', 'basics', 'marketplace'],
-        rating, 4.8,
-        completionCount, 1247,
-        createdAt, new Date('2024-01-01'),
-        updatedAt, new Date('2024-07-01')
-    ];
-}
-{
-    id: 'template-creation-advanced',
-        title;
-    'Advanced Template Creation',
-        description;
-    'Master the art of creating professional templates that users love.',
-        category;
-    'template-creation',
-        difficulty;
-    'advanced',
-        estimatedTime;
-    45,
-        prerequisites;
-    ['getting-started-basics'],
-        steps;
-    [,
-        {
-            id: 'design-principles',
-            title: 'Design Principles',
-            description: 'Learn the fundamental principles of effective template design',
-            content: '<p>Great templates follow key design principles: clarity, consistency, flexibility, and user-friendliness.</p>',
-            type: 'introduction',
-            duration: 300,
+            completionRewards: {
+                xp: 200,
+                badge: 'Marketplace Explorer',
+                certificate: 'Getting Started Certificate',
+            },
+            tags: ['beginner', 'basics', 'marketplace'],
+            rating: 4.8,
+            completionCount: 1247,
+            createdAt: new Date('2024-01-01'),
+            updatedAt: new Date('2024-07-01')
         },
         {
-            id: 'advanced-features',
-            title: 'Advanced Template Features',
-            description: 'Implement dynamic content, variables, and conditional logic',
-            content: '<p>Use variables and conditional logic to create templates that adapt to different use cases and data inputs.</p>',
-            type: 'demonstration',
-            duration: 600,
-            tips: [,
-                'Use descriptive variable names',
-                'Test with different data sets',
-                'Provide fallback content for empty variables'
-            ]
-        },
-        {
-            id: 'practice-exercise',
-            title: 'Build Your Template',
-            description: 'Create a professional template using advanced features',
-            content: '<p>Now it\'s your turn! Create a template incorporating the principles and features you\'ve learned.</p>',
-            type: 'practice',
-            duration: 1200,
-            requirements: [,
-                'Include at least 3 variables',
-                'Use conditional logic',
-                'Add proper documentation'
-            ]
-        },
-        {
-            id: 'publishing',
-            title: 'Publishing to Marketplace',
-            description: 'Learn how to publish and promote your template',
-            content: '<p>Publishing your template makes it available to the community. Include good descriptions, tags, and examples.</p>',
-            type: 'demonstration',
-            duration: 400,
-        },
-        {
-            id: 'completion',
-            title: 'Template Master!',
-            description: 'You\'ve mastered advanced template creation',
-            content: '<p>Excellent work! You\'re now ready to create professional-grade templates that will help users worldwide.</p>',
-            type: 'completion'
-        }],
-        completionRewards;
-    {
-        xp: 750,
-            badge;
-        'Template Master',
-            certificate;
-        'Advanced Template Creation Certificate',
-        ;
-    }
-    tags: ['advanced', 'creation', 'design', 'publishing'],
-        rating;
-    4.9,
-        completionCount;
-    342,
-        createdAt;
-    new Date('2024-02-15'),
-        updatedAt;
-    new Date('2024-07-10');
-}
-{
-    id: 'collaboration-workflows',
-        title;
-    'Team Collaboration Workflows',
-        description;
-    'Learn how to collaborate effectively with team members on template projects.',
-        category;
-    'collaboration',
-        difficulty;
-    'intermediate',
-        estimatedTime;
-    30,
-        prerequisites;
-    ['getting-started-basics'],
-        steps;
-    [,
-        {
-            id: 'team-setup',
-            title: 'Setting Up Your Team',
-            description: 'Create teams and manage permissions',
-            content: '<p>Organize your team members and set appropriate permissions for different roles and responsibilities.</p>',
-            type: 'demonstration',
-            duration: 360,
-        },
-        {
-            id: 'shared-libraries',
-            title: 'Shared Template Libraries',
-            description: 'Create and manage shared template collections',
-            content: '<p>Build shared libraries that your entire team can access and contribute to for consistent branding and messaging.</p>',
-            type: 'interaction',
-            duration: 480,
-            actions: [,
+            id: 'template-creation-advanced',
+            title: 'Advanced Template Creation',
+            description: 'Master the art of creating professional templates that users love.',
+            category: 'template-creation',
+            difficulty: 'advanced',
+            estimatedTime: 45,
+            prerequisites: ['getting-started-basics'],
+            steps: [,
                 {
-                    id: 'create-library',
-                    type: 'click',
-                    selector: '.create-library-button',
-                    message: 'Create a new shared library',
-                    completed: false,
+                    id: 'design-principles',
+                    title: 'Design Principles',
+                    description: 'Learn the fundamental principles of effective template design',
+                    content: '<p>Great templates follow key design principles: clarity, consistency, flexibility, and user-friendliness.</p>',
+                    type: 'introduction',
+                    duration: 300,
                 },
                 {
-                    id: 'invite-members',
-                    type: 'click',
-                    selector: '.invite-button',
-                    message: 'Invite team members to the library',
-                    completed: false
-                }]
+                    id: 'advanced-features',
+                    title: 'Advanced Template Features',
+                    description: 'Implement dynamic content, variables, and conditional logic',
+                    content: '<p>Use variables and conditional logic to create templates that adapt to different use cases and data inputs.</p>',
+                    type: 'demonstration',
+                    duration: 600,
+                    tips: [,
+                        'Use descriptive variable names',
+                        'Test with different data sets',
+                        'Provide fallback content for empty variables'
+                    ]
+                },
+                {
+                    id: 'practice-exercise',
+                    title: 'Build Your Template',
+                    description: 'Create a professional template using advanced features',
+                    content: '<p>Now it\'s your turn! Create a template incorporating the principles and features you\'ve learned.</p>',
+                    type: 'practice',
+                    duration: 1200,
+                    requirements: [,
+                        'Include at least 3 variables',
+                        'Use conditional logic',
+                        'Add proper documentation'
+                    ]
+                },
+                {
+                    id: 'publishing',
+                    title: 'Publishing to Marketplace',
+                    description: 'Learn how to publish and promote your template',
+                    content: '<p>Publishing your template makes it available to the community. Include good descriptions, tags, and examples.</p>',
+                    type: 'demonstration',
+                    duration: 400,
+                },
+                {
+                    id: 'completion',
+                    title: 'Template Master!',
+                    description: 'You\'ve mastered advanced template creation',
+                    content: '<p>Excellent work! You\'re now ready to create professional-grade templates that will help users worldwide.</p>',
+                    type: 'completion'
+                }],
+            completionRewards: {
+                xp: 750,
+                badge: 'Template Master',
+                certificate: 'Advanced Template Creation Certificate',
+            },
+            tags: ['advanced', 'creation', 'design', 'publishing'],
+            rating: 4.9,
+            completionCount: 342,
+            createdAt: new Date('2024-02-15'),
+            updatedAt: new Date('2024-07-10')
         },
         {
-            id: 'version-control',
-            title: 'Template Version Control',
-            description: 'Manage template versions and track changes',
-            content: '<p>Use version control features to track changes, maintain history, and collaborate safely on template updates.</p>',
-            type: 'demonstration',
-            duration: 420,
-        },
-        {
-            id: 'completion',
-            title: 'Collaboration Expert!',
-            description: 'You\'ve mastered team collaboration workflows',
-            content: '<p>Great job! You can now effectively collaborate with team members on template projects.</p>',
-            type: 'completion'
-        }],
-        completionRewards;
-    {
-        xp: 500,
-            badge;
-        'Collaboration Expert',
-            certificate;
-        'Team Collaboration Certificate',
-        ;
-    }
-    tags: ['collaboration', 'teams', 'workflow', 'intermediate'],
-        rating;
-    4.7,
-        completionCount;
-    589,
-        createdAt;
-    new Date('2024-03-01'),
-        updatedAt;
-    new Date('2024-07-05');
-    ;
+            id: 'collaboration-workflows',
+            title: 'Team Collaboration Workflows',
+            description: 'Learn how to collaborate effectively with team members on template projects.',
+            category: 'collaboration',
+            difficulty: 'intermediate',
+            estimatedTime: 30,
+            prerequisites: ['getting-started-basics'],
+            steps: [,
+                {
+                    id: 'team-setup',
+                    title: 'Setting Up Your Team',
+                    description: 'Create teams and manage permissions',
+                    content: '<p>Organize your team members and set appropriate permissions for different roles and responsibilities.</p>',
+                    type: 'demonstration',
+                    duration: 360,
+                },
+                {
+                    id: 'shared-libraries',
+                    title: 'Shared Template Libraries',
+                    description: 'Create and manage shared template collections',
+                    content: '<p>Build shared libraries that your entire team can access and contribute to for consistent branding and messaging.</p>',
+                    type: 'interaction',
+                    duration: 480,
+                    actions: [,
+                        {
+                            id: 'create-library',
+                            type: 'click',
+                            selector: '.create-library-button',
+                            message: 'Create a new shared library',
+                            completed: false,
+                        },
+                        {
+                            id: 'invite-members',
+                            type: 'click',
+                            selector: '.invite-button',
+                            message: 'Invite team members to the library',
+                            completed: false
+                        }]
+                },
+                {
+                    id: 'version-control',
+                    title: 'Template Version Control',
+                    description: 'Manage template versions and track changes',
+                    content: '<p>Use version control features to track changes, maintain history, and collaborate safely on template updates.</p>',
+                    type: 'demonstration',
+                    duration: 420,
+                },
+                {
+                    id: 'completion',
+                    title: 'Collaboration Expert!',
+                    description: 'You\'ve mastered team collaboration workflows',
+                    content: '<p>Great job! You can now effectively collaborate with team members on template projects.</p>',
+                    type: 'completion'
+                }],
+            completionRewards: {
+                xp: 500,
+                badge: 'Collaboration Expert',
+                certificate: 'Team Collaboration Certificate',
+            },
+            tags: ['collaboration', 'teams', 'workflow', 'intermediate'],
+            rating: 4.7,
+            completionCount: 589,
+            createdAt: new Date('2024-03-01'),
+            updatedAt: new Date('2024-07-05')
+        }
+    ];
     useEffect(() => {
         // Initialize some mock tutorial progress
         setUserTutorialProgress({});

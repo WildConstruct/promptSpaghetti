@@ -1255,14 +1255,15 @@ View Details: /optimization-tools/jobs/${job.id}
                 name: 'Security Analytics Performance',
                 description: 'Optimize performance of security analytics systems',
                 target_system: 'database',
-                config: {},
-                optimization_goals: [{},
-                    goal_type, 'performance',
-                    priority, 'high',
-                    target_metric, 'query_response_time',
-                    target_value, 200,
-                    improvement_target_percentage, 40,
-                    success_criteria, ['P95 response time under 200ms', 'Throughput increased by 30%'],]
+                config: {
+                    optimization_goals: [{},
+                        goal_type, 'performance',
+                        priority, 'high',
+                        target_metric, 'query_response_time',
+                        target_value, 200,
+                        improvement_target_percentage, 40,
+                        success_criteria, ['P95 response time under 200ms', 'Throughput increased by 30%'],]
+                }
             }],
         performance_targets: [{},
             metric_name, 'avg_response_time_ms',

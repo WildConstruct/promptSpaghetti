@@ -6,47 +6,47 @@ import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types
 import { VFXPipelineMetadata } from '../types/VFXExport';
 
 export interface CrowdGenerationRequest {
-  scene: {,
-  era: Era;,
+  scene: {
+  era: Era;
   region: string;
   location: string; // e.g., "castle courtyard", "marketplace", "cathedral",
-  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';,
-  season: 'spring' | 'summer' | 'autumn' | 'winter';
-};
-  crowd: {,
+  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
+  season: 'spring' | 'summer' | 'autumn' | 'winter'
+  };
+  crowd: {
   size: number;
-  density: 'sparse' | 'moderate' | 'dense';,
+  density: 'sparse' | 'moderate' | 'dense';
   demographics: CrowdDemographics;
   activity: CrowdActivity;
 };
-  constraints: {,
+  constraints: {
   historicalAccuracy: 'strict' | 'moderate' | 'creative';
   socialMixing: boolean; // Can different social classes interact?,
   genderMixing: boolean; // Era-appropriate gender interactions,
   culturalSensitivity: boolean;
 };
-  output: {,
+  output: {
   format: 'json' | 'xml' | 'csv';
-  includeMetadata: boolean;,
+  includeMetadata: boolean;
   vfxPipeline: VFXPipelineMetadata;
 };
 }
 export interface CrowdDemographics {
-  socialClasses: {,
+  socialClasses: {
   peasant: number; // 0-1 percentage,
-  artisan: number;,
+  artisan: number;
   merchant: number;
-  noble: number;,
+  noble: number;
   clergy: number;
   royal: number;
 };
-  ageDistribution: {,
+  ageDistribution: {
   children: number; // 0-12 years,
   youth: number;    // 13-25 years,
   adults: number;   // 26-55 years,
   elderly: number;  // 56+ years,
 };
-  genderRatio: {,
+  genderRatio: {
   male: number;
   female: number;
   nonBinary?: number; // For appropriate historical periods,
@@ -55,80 +55,80 @@ export interface CrowdDemographics {
 export interface CrowdActivity {
   primary: string; // e.g., "market day", "religious ceremony", "royal procession",
   secondary: string; // Background activities,
-  mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';,
+  mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';
   interactions: InteractionType;
 }
 export interface InteractionType {
-  type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';,
+  type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
   participants: string; // Social classes involved,
-  frequency: 'rare' | 'occasional' | 'common';
-}
+  frequency: 'rare' | 'occasional' | 'common'
+  }
 export interface CrowdGenerationResult {
-  individuals: CrowdIndividual;,
+  individuals: CrowdIndividual;
   groups: CrowdGroup;
-  interactions: CrowdInteraction;,
+  interactions: CrowdInteraction;
   validation: ValidationResult;
   metadata: CrowdMetadata;
 }
 export interface CrowdIndividual {
-  id: string;,
-  demographics: {,
-  age: number;,
+  id: string;
+  demographics: {
+  age: number;
   gender: 'male' | 'female';
-  socialClass: string;,
+  socialClass: string;
   occupation: string;
 };
-  appearance: {,
+  appearance: {
   clothing: HistoricalItem;
-  accessories: HistoricalItem;,
+  accessories: HistoricalItem;
   physicalTraits: string;
 };
-  behavior: {,
+  behavior: {
   activity: string;
-  posture: string;,
+  posture: string;
   movement: string;
   interactions: string;
 };
-  position: {,
+  position: {
   x: number;
-  y: number;,
+  y: number;
   z: number;
   facing: number; // degrees,
 };
   historicalAccuracy: number; // 0-1 score
 }
 export interface CrowdGroup {
-  id: string;,
+  id: string;
   type: 'family' | 'guild' | 'religious' | 'merchant' | 'nobility';
   members: string; // Individual IDs,
-  activity: string;,
+  activity: string;
   formation: 'circle' | 'line' | 'cluster' | 'processional';
   relationship: string;
 }
 export interface CrowdInteraction {
-  id: string;,
+  id: string;
   type: InteractionType['type'];
-  participants: string;,
+  participants: string;
   duration: number; // seconds,
-  intensity: 'subtle' | 'moderate' | 'prominent';,
+  intensity: 'subtle' | 'moderate' | 'prominent';
   historicalContext: string;
 }
 export interface CrowdMetadata {
-  generation: {,
-  timestamp: string;,
+  generation: {
+  timestamp: string;
   processingTime: number;
-  algorithm: string;,
+  algorithm: string;
   version: string;
 };
-  validation: {,
+  validation: {
   overallAccuracy: number;
-  constraintViolations: number;,
+  constraintViolations: number;
   historicalConsistency: number;
 };
-  vfx: {,
+  vfx: {
   renderComplexity: 'low' | 'medium' | 'high';
   memoryEstimate: number; // MB,
-  polyCount: number;,
+  polyCount: number;
   textureSize: number; // MB,
 };
 /**
@@ -196,7 +196,7 @@ export class CrowdGenerationPipeline {
   era: request.scene.era,
   region: [request.scene.region],
   category: 'clothing',
-  filters: {,
+  filters: {
   occasion: this.mapActivityToOccasion(request.crowd.activity.primary),
   gender: 'unisex' // Will be filtered per individual,
 },
@@ -246,18 +246,18 @@ export class CrowdGenerationPipeline {
       const individual: CrowdIndividual = {,
   id: `individual_${i}`}
 },
-  demographics: {,
+  demographics: {
   age: demographics.age,
   gender: demographics.gender,
   socialClass: demographics.socialClass,
   occupation
 },
-  appearance: {,
+  appearance: {
   clothing: clothing.items,
   accessories: clothing.accessories,
   physicalTraits: this.generatePhysicalTraits(demographics),
 },
-  behavior: {,
+  behavior: {
   activity: behavior.primary,
   posture: behavior.posture,
   movement: behavior.movement,
@@ -271,7 +271,7 @@ export class CrowdGenerationPipeline {
   /**
    * Stage 3: Form social groups within the crowd
    */
-  private async formGroups(individuals: CrowdIndividual,)
+  private async formGroups(individuals: CrowdIndividual)
     request: CrowdGenerationRequest,
     context: HistoricalContext): Promise<CrowdGroup> {,
   const groups: CrowdGroup = [];
@@ -289,7 +289,7 @@ export class CrowdGenerationPipeline {
   /**
   * Stage 4: Generate realistic crowd interactions,
   */
-  private async generateInteractions(individuals: CrowdIndividual,)
+  private async generateInteractions(individuals: CrowdIndividual)
   groups: CrowdGroup,
   request: CrowdGenerationRequest): Promise<CrowdInteraction> {,
   const interactions: CrowdInteraction = [];
@@ -309,7 +309,7 @@ export class CrowdGenerationPipeline {
   /**
   * Stage 5: Validate historical accuracy of generated crowd,
   */
-  private async validateHistoricalAccuracy(individuals: CrowdIndividual,)
+  private async validateHistoricalAccuracy(individuals: CrowdIndividual)
   groups: CrowdGroup,
   interactions: CrowdInteraction,
   request: CrowdGenerationRequest): Promise<ValidationResult> {,
@@ -347,29 +347,29 @@ export class CrowdGenerationPipeline {
   overallScore: overallAccuracy / individuals.length,
   violations,
   suggestions: await this.generateSuggestions(violations),
-  metadata: {,
+  metadata: {
   rulesApplied: violations.length,
   processingTime: Date.now(),
 };
   /**
    * Generate comprehensive metadata for the crowd
    */
-  private generateMetadata(request: CrowdGenerationRequest,)
+  private generateMetadata(request: CrowdGenerationRequest)
     validation: ValidationResult,
     processingTime: number): CrowdMetadata {,
   return {
-  generation: {,
+  generation: {
   timestamp: new Date().toISOString(),
   processingTime,
   algorithm: 'Historical Crowd Generation v1.0',
   version: '1.0.0',
 },
-  validation: {,
+  validation: {
   overallAccuracy: validation.overallScore,
   constraintViolations: validation.violations.length,
   historicalConsistency: this.calculateConsistencyScore(validation),
 },
-  vfx: {,
+  vfx: {
   renderComplexity: this.calculateRenderComplexity(request.crowd.size),
   memoryEstimate: this.estimateMemoryUsage(request.crowd.size),
   polyCount: request.crowd.size * 10000, // Estimated,
@@ -401,9 +401,12 @@ export class CrowdGenerationPipeline {
 };
   // Additional helper methods would be implemented here...
   private sampleAge(ageDistribution: any): number { return 25; }
-  private sampleGender(genderRatio: any): string { return 'male'; }
-  private sampleSocialClass(socialClasses: any): string { return 'peasant'; }
-  private selectOccupation(demographics: any, context: any): string { return 'farmer'; }
+  private sampleGender(genderRatio: any): string { return 'male'
+  }
+  private sampleSocialClass(socialClasses: any): string { return 'peasant'
+  }
+  private selectOccupation(demographics: any, context: any): string { return 'farmer'
+  }
   private generatePhysicalTraits(demographics: any): string { return []; }
   private formFamilyGroups(individuals: any, context: any): CrowdGroup { return []; }
   private formGuildGroups(individuals: any, context: any): CrowdGroup { return []; }
@@ -411,16 +414,17 @@ export class CrowdGenerationPipeline {
   private createInteraction(type: any, individuals: any, groups: any): CrowdInteraction | null { return null; }
   private generateSuggestions(violations: any): any { return []; }
   private calculateConsistencyScore(validation: any): number { return 0.9; }
-  private calculateRenderComplexity(size: number): 'low' | 'medium' | 'high' { return 'medium'; }
+  private calculateRenderComplexity(size: number): 'low' | 'medium' | 'high' { return 'medium'
+  }
   private estimateMemoryUsage(size: number): number { return size * 5; }
   private getValidOccupations(request: any): any { return []; }
   private getBehaviorPatterns(request: any): any { return []; }
 
 // Supporting classes and interfaces
 interface HistoricalContext {
-  clothing: HistoricalItem;,
+  clothing: HistoricalItem;
   socialStructure: any;
-  culturalRules: any;,
+  culturalRules: any;
   validOccupations: any;
   behaviorPatterns: any;
 class CrowdGenerationError extends Error {
@@ -435,11 +439,11 @@ class HistoricalDataService {
   async getCulturalRules(era: Era, region: string): Promise<any> { return {}; }
 class ConstraintValidator {
   async validateIndividual(individual: any, era: Era, constraints: any): Promise<any> { return { violations: [] }; }
-  async validateGroup(group: any,)
+  async validateGroup(group: any)
     individuals: any,
     era: Era,
     constraints: any): Promise<any> { return { violations: [] }; }
-  async validateInteraction(interaction: any,)
+  async validateInteraction(interaction: any)
     individuals: any,
     era: Era,
     constraints: any): Promise<any> { return { violations: [] }; }

@@ -25,13 +25,13 @@ export interface PolicyManagementHookConfig {
 }
 export interface PolicyEvaluationOptions {
   userId?: string;
-  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';,
+  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
   entityId: string;
-  operation: {,
-  type: string;,
+  operation: {
+  type: string;
   parameters: Record<string, any>;
-  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-};
+  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  };
   contentContext?: {
   historicalPeriod?: string;
   culturalContext?: string;
@@ -129,13 +129,13 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
         userId: evaluationOptions.userId,
         entityType: evaluationOptions.entityType,
         entityId: evaluationOptions.entityId,
-        sessionData: {,
+        sessionData: {
   ipAddress: '127.0.0.1', // This would come from actual session,
   userAgent: navigator.userAgent,
   geolocation: undefined,
   authenticationMethod: 'session',
 },
-  operation: {,
+  operation: {
   type: evaluationOptions.operation.type,
   parameters: evaluationOptions.operation.parameters,
   riskLevel: evaluationOptions.operation.riskLevel || 'MEDIUM',
@@ -162,11 +162,11 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     const results = await evaluatePolicies({)
   entityType: 'TEMPLATE',
       entityId: templateId,
-      operation: {,
+      operation: {
   type: 'historical_accuracy_check',
         parameters: { historicalPeriod, culturalContext }
   },
-  contentContext: {,
+  contentContext: {
   historicalPeriod,
   culturalContext,
   accuracyLevel: 'STRICT',
@@ -190,10 +190,10 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
   userId,
       entityType: 'USER',
       entityId: userId,
-      operation: {,
+      operation: {
   type: operation,
         parameters: { dataType, dataClassification },
-        riskLevel: 'MEDIUM';
+        riskLevel: 'MEDIUM'
   });
     const nonCompliant = results.filter(r => r.result === 'DENY');
     const frameworks = results.flatMap(r => ;);
@@ -234,7 +234,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
         acc[policy.type] = (acc[policy.type] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
-      evaluationMetrics: {,
+      evaluationMetrics: {
   totalEvaluations: evaluationResults.length,
   deniedRequests: evaluationResults.filter(r => r.result === 'DENY').length,
   restrictedRequests: evaluationResults.filter(r => r.result === 'RESTRICT').length,

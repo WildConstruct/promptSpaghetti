@@ -25,7 +25,7 @@ export interface EventSchemaDefinition {
     name: string;
     version: string;
     description: string;
-    metadata: {,
+    metadata: {
         createdAt: number;
         updatedAt: number;
         createdBy: string;
@@ -33,7 +33,7 @@ export interface EventSchemaDefinition {
         isActive: boolean;
         deprecated?: boolean;
     };
-    baseRequirements: {,
+    baseRequirements: {
         requiredFields: string[];
         optionalFields: string[];
         forbiddenFields: string[];
@@ -41,7 +41,7 @@ export interface EventSchemaDefinition {
     properties: Map<string, PropertySchemaDefinition>;
     globalConstraints: GlobalConstraint[];
     transformations: SchemaTransformation[];
-    validation: {,
+    validation: {
         strictMode: boolean;
         allowUnknownProperties: boolean;
         validatePropertyTypes: boolean;
@@ -53,7 +53,7 @@ export interface EventSchemaDefinition {
         overrides: PropertyOverride[];
         extensions: PropertyExtension[];
     };
-    performance: {,
+    performance: {
         cacheValidationResults: boolean;
         enableLazyValidation: boolean;
         batchValidation: boolean;
@@ -64,25 +64,25 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
     id: string;
     name: string;
     description: string;
-    typeInfo: {,
+    typeInfo: {
         baseType: PropertyType;
         subType?: string;
         format?: string;
         encoding?: string;
         precision?: number;
     };
-    validation: {,
+    validation: {
         enabled: boolean;
         level: 'strict' | 'lenient' | 'permissive';
         customRules: ValidationRule[];
-        performance: {,
+        performance: {
             timeout: number;
-            priority: 'high' | 'medium' | 'low';
-        };
+            priority: 'high' | 'medium' | 'low'
+  };
     };
     transformationPipeline: PropertyTransformationStep[];
     relationships: PropertyRelationshipDefinition[];
-    metadata: {,
+    metadata: {
         businessContext: string;
         dataSource: string;
         updateFrequency: string;
@@ -96,13 +96,13 @@ export interface PropertyTransformationStep {
     type: 'normalize' | 'validate' | 'enrich' | 'sanitize' | 'encrypt' | 'custom';
     order: number;
     enabled: boolean;
-    config: {,
+    config: {
         operation: string;
         parameters: Record<string, unknown>;
         conditions?: ConditionLogic;
-        errorHandling: 'skip' | 'warn' | 'fail' | 'default';
-    };
-    performance: {,
+        errorHandling: 'skip' | 'warn' | 'fail' | 'default'
+  };
+    performance: {
         timeout: number;
         retries: number;
         cacheable: boolean;
@@ -112,19 +112,19 @@ export interface ValidationRule {
     id: string;
     name: string;
     description: string;
-    rule: {,
+    rule: {
         type: 'format' | 'range' | 'pattern' | 'custom' | 'cross_field' | 'temporal';
         condition: ConditionLogic;
         errorMessage: string;
         warningMessage?: string;
     };
-    execution: {,
+    execution: {
         priority: number;
         dependencies: string[];
         asyncValidation: boolean;
         cacheResults: boolean;
     };
-    errorHandling: {,
+    errorHandling: {
         severity: 'critical' | 'major' | 'minor';
         action: 'block' | 'warn' | 'log';
         suggestedFix?: string;
@@ -142,7 +142,7 @@ export interface RelationshipSpec {
     condition: ConditionLogic;
     transformation?: string;
     validation?: string;
-    metadata: {,
+    metadata: {
         description: string;
         businessReason: string;
         examples: string[];
@@ -175,12 +175,12 @@ export interface CustomValidator {
     id: string;
     name: string;
     description: string;
-    validator: {,
+    validator: {
         functionBody: string;
         parameters: ValidatorParameter[];
         returnType: 'boolean' | 'ValidationResult' | 'Promise<ValidationResult>';
     };
-    execution: {,
+    execution: {
         timeout: number;
         sandboxed: boolean;
         allowedAPIs: string[];
@@ -231,7 +231,7 @@ export interface SchemaValidationResult {
     fieldResults: Map<string, FieldValidationResult>;
     globalConstraintResults: GlobalConstraintResult[];
     transformationResults: TransformationResult[];
-    performance: {,
+    performance: {
         totalTime: number;
         validationTime: number;
         transformationTime: number;
@@ -239,7 +239,7 @@ export interface SchemaValidationResult {
     };
     errors: ValidationError[];
     warnings: ValidationWarning[];
-    metadata: {,
+    metadata: {
         schemaVersion: string;
         validationTimestamp: number;
         validatorVersion: string;
@@ -292,7 +292,7 @@ export interface TransformationResult {
     success: boolean;
     inputFields: string[];
     outputFields: string[];
-    performance: {,
+    performance: {
         executionTime: number;
         memoryUsed: number;
     };

@@ -15,10 +15,10 @@ import {
 } from '../../types/SentimentAnalysisTypes';
 import { SentimentAnalysisService } from '../../services/SentimentAnalysisService';
 interface SentimentDashboardProps {
-  resourceId: string;,
+  resourceId: string;
   resourceType: string;
-  timeRange?: {,
-  start: Date;,
+  timeRange?: {
+  start: Date;
   end: Date;
 };
   refreshInterval?: number; // Auto-refresh interval in milliseconds
@@ -131,7 +131,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600';
+              fontWeight: '600'
   }}
           >
             {sentimentDistribution.positive.percentage > 10 && 
@@ -147,7 +147,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600';
+              fontWeight: '600'
   }}
           >
             {sentimentDistribution.neutral.percentage > 10 && 
@@ -163,7 +163,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
               justifyContent: 'center',
               color: 'white',
               fontSize: '12px',
-              fontWeight: '600';
+              fontWeight: '600'
   }}
           >
             {sentimentDistribution.negative.percentage > 10 && 
@@ -374,7 +374,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   borderRadius: '8px',
           padding: '12px',
           marginBottom: '16px',
-          textAlign: 'center';
+          textAlign: 'center'
   }}>
           <div style={{
   fontSize: '16px',
@@ -683,7 +683,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
                       rec.priority === 'high' ? '#fed7aa' :
                         rec.priority === 'medium' ? '#bfdbfe' : '#e5e7eb'}`,
                     borderRadius: '6px',
-                    fontSize: '12px';
+                    fontSize: '12px'
   }}
                 >
                   <div style={{

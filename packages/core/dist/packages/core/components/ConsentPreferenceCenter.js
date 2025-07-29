@@ -412,7 +412,8 @@ const ConsentPreferenceCenter = ({
                                                 ...prev.categories[category],
                                                 enabled,
                                                 lastModified: new Date(),
-                                            } });
+                                            }
+                                        });
                                         ;
                                     };
                                     const updateCommunicationPreference = ();
@@ -428,7 +429,8 @@ const ConsentPreferenceCenter = ({
                                         [channel]: {
                                             ...prev.communications[channel],
                                             ...updates
-                                        } });
+                                        }
+                                    });
                                     ;
                                 }
                                 ;

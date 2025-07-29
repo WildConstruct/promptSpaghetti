@@ -4,9 +4,9 @@ import { ErrorFactory } from '../../errors/ErrorFactory';
 import { DatabaseConnectionError } from '../../errors/index';
 
 export interface DatabaseConfig {
-  host: string;,
+  host: string;
   port: number;
-  database: string;,
+  database: string;
   user: string;
   password: string;
   ssl?: boolean;
@@ -18,7 +18,7 @@ export class DatabaseConnection {
   private pool: Pool;
   private isConnected: boolean = false;
   constructor(config: DatabaseConfig) {,
-  this.pool = new Pool({)
+  this.pool = new Pool({
   ...config,
   max: config.max || 20,
   idleTimeoutMillis: config.idleTimeoutMillis || 30000,
@@ -86,10 +86,10 @@ export class DatabaseConnection {
     } finally {
   client.release();
   async healthCheck(): Promise<{,
-  status: 'healthy' | 'unhealthy';,
+  status: 'healthy' | 'unhealthy';
   latency: number;
-  connections: {,
-  total: number;,
+  connections: {
+  total: number;
   idle: number;
   waiting: number;
 };
@@ -101,7 +101,7 @@ export class DatabaseConnection {
   return {
   status: 'healthy',
   latency,
-  connections: {,
+  connections: {
   total: this.pool.totalCount,
   idle: this.pool.idleCount,
   waiting: this.pool.waitingCount,
@@ -110,7 +110,7 @@ export class DatabaseConnection {
   return {
   status: 'unhealthy',
   latency: Date.now() - start,
-  connections: {,
+  connections: {
   total: this.pool.totalCount,
   idle: this.pool.idleCount,
   waiting: this.pool.waitingCount,
@@ -134,7 +134,7 @@ export const ValidationHelpers = {
 // Query builder utilities
 export class QueryBuilder {
   private query: string = '';
-  private params: any = [];
+  private params: any[] = [];
   private paramCount: number = 0;
   constructor(baseQuery?: string) {
     if (baseQuery) {

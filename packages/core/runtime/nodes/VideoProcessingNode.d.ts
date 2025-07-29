@@ -17,7 +17,7 @@ export interface VideoConfig {
 export interface VideoMetadata {
     duration: number;
     format: string;
-    resolution: {,
+    resolution: {
         width: number;
         height: number;
     };

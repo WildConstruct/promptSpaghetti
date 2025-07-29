@@ -9,7 +9,7 @@ import { UTDGNode, MedievalClothing, Era, SocialClass } from '../types/UTDG';
  * Medieval-specific content types and constants
  */
 export declare const MEDIEVAL_PERIODS: {
-    EARLY_MEDIEVAL: {,
+    EARLY_MEDIEVAL: {
         readonly name: "Early Medieval";
         readonly period: {
             readonly start: 476;
@@ -19,7 +19,7 @@ export declare const MEDIEVAL_PERIODS: {
         readonly accuracy: "high";
         readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism";
     };
-    HIGH_MEDIEVAL: {,
+    HIGH_MEDIEVAL: {
         readonly name: "High Medieval";
         readonly period: {
             readonly start: 1000;
@@ -29,7 +29,7 @@ export declare const MEDIEVAL_PERIODS: {
         readonly accuracy: "high";
         readonly description: "High medieval period of cathedral building, crusades, and scholasticism";
     };
-    LATE_MEDIEVAL: {,
+    LATE_MEDIEVAL: {
         readonly name: "Late Medieval";
         readonly period: {
             readonly start: 1300;
@@ -66,8 +66,8 @@ export declare class MedievalDemoDatabase {
     getMaterials(criteria?: {)
         era?: Era;
         fabric_type?: string;
-        availability?: 'common' | 'expensive' | 'rare';
-    }): UTDGNode[];
+        availability?: 'common' | 'expensive' | 'rare'
+  }): UTDGNode[];
     /**
      * Get accessories by criteria
      */
@@ -84,8 +84,8 @@ export declare class MedievalDemoDatabase {
         social_class: SocialClass;
         gender: 'male' | 'female';
         occasion?: 'daily' | 'ceremonial' | 'work' | 'travel';
-        season?: 'spring' | 'summer' | 'autumn' | 'winter';
-    }): {
+        season?: 'spring' | 'summer' | 'autumn' | 'winter'
+  }): {
         outfit: (MedievalClothing | UTDGNode)[];
         description: string;
         historical_notes: string[];
@@ -120,15 +120,15 @@ export declare class MedievalDemoDatabase {
 export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({)
     id: string;
     rule: string;
-    eras: {,
+    eras: {
         name: string;
-        period: {,
+        period: {
             start: number;
             end: number;
         };
         region: string[];
-        accuracy: "high";
-    }[];
+        accuracy: "high"
+  }[];
     enforcement: "strict";
     message: string;
     historical_basis: string;
@@ -136,15 +136,15 @@ export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({)
 } | {
     id: string;
     rule: string;
-    eras: {,
+    eras: {
         name: string;
-        period: {,
+        period: {
             start: number;
             end: number;
         };
         region: string[];
-        accuracy: "high";
-    }[];
+        accuracy: "high"
+  }[];
     enforcement: "warning";
     message: string;
     historical_basis: string;
@@ -152,15 +152,15 @@ export declare const MEDIEVAL_DEMO_CONSTRAINTS: ({)
 } | {
     id: string;
     rule: string;
-    eras: {,
+    eras: {
         name: string;
-        period: {,
+        period: {
             start: number;
             end: number;
         };
         region: string[];
-        accuracy: "high";
-    }[];
+        accuracy: "high"
+  }[];
     social_classes: readonly ["peasant", "artisan", "merchant", "noble"];
     enforcement: "suggestion";
     message: string;

@@ -50,8 +50,8 @@ export interface UserAttributes {
     featureUsage: Record<string, {
         count: number;
         lastUsed: Date;
-        frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily';
-    }>;
+        frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily'
+  }>;
     clickThroughRates: Record<string, number>;
     conversionRates: Record<string, number>;
     engagementScore: number;
@@ -78,7 +78,7 @@ export interface BehaviorEvent {
     sessionId?: string;
     userId: string;
     properties: Record<string, any>;
-    context: {,
+    context: {
         page?: string;
         feature?: string;
         source?: string;
@@ -97,8 +97,8 @@ export interface SegmentCondition {
     isEnabled: boolean;
     timeWindow?: {
         value: number;
-        unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
-    };
+        unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months'
+  };
     aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
     threshold?: number;
     comparison?: 'absolute' | 'relative' | 'percentile';
@@ -146,8 +146,8 @@ export interface UserSegment {
         systemId: string;
         segmentId: string;
         lastSync?: Date;
-        syncStatus: 'pending' | 'syncing' | 'synced' | 'failed';
-    }>;
+        syncStatus: 'pending' | 'syncing' | 'synced' | 'failed'
+  }>;
     validationRules: Array<{,
         rule: string;
         description: string;
@@ -166,7 +166,7 @@ export interface UserSegment {
         startDate?: Date;
         endDate?: Date;
         activeDays: number[];
-        activeHours: {,
+        activeHours: {
             start: string;
             end: string;
             timezone: string;
@@ -188,15 +188,15 @@ export interface UserCohort {
     cohortType: 'acquisition' | 'behavioral' | 'revenue' | 'feature_adoption' | 'custom';
     timeGranularity: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     definitionEvent: BehaviorEvent;
-    definitionTimeframe: {,
+    definitionTimeframe: {
         start: Date;
         end: Date;
     };
     analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
-    analysisWindow: {,
+    analysisWindow: {
         value: number;
-        unit: 'days' | 'weeks' | 'months';
-    };
+        unit: 'days' | 'weeks' | 'months'
+  };
     cohortData: Array<{,
         cohortPeriod: string;
         userCount: number;
@@ -213,7 +213,7 @@ export interface UserCohort {
 
 export interface SegmentAnalytics {
     segmentId: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -244,13 +244,13 @@ export interface SegmentAnalytics {
     }>;
     activityHeatmap: Record<string, number>;
     weeklyPattern: Record<string, number>;
-    benchmarkComparison: {,
+    benchmarkComparison: {
         metric: string;
         segmentValue: number;
         benchmarkValue: number;
         percentageDifference: number;
-        significance: 'higher' | 'lower' | 'similar';
-    }[];
+        significance: 'higher' | 'lower' | 'similar'
+  }[];
 
 export interface SegmentRule {
     id: string;
@@ -264,7 +264,7 @@ export interface SegmentRule {
     schedule?: string;
     maxExecutionsPerHour: number;
     timeoutMs: number;
-    retryPolicy: {,
+    retryPolicy: {
         maxRetries: number;
         backoffStrategy: 'linear' | 'exponential';
         baseDelayMs: number;
@@ -487,11 +487,11 @@ export declare const SegmentConditionSchema: z.ZodObject<{
         unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
     }, "strip", z.ZodTypeAny, {
         value: number;
-        unit: "days" | "minutes" | "hours" | "weeks" | "months";
-    }, {
+        unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }, {
         value: number;
-        unit: "days" | "minutes" | "hours" | "weeks" | "months";
-    }>>;
+        unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }>>;
     aggregation: z.ZodOptional<z.ZodEnum<["sum", "avg", "count", "min", "max", "distinct", "percentile"]>>;
     threshold: z.ZodOptional<z.ZodNumber>;
     comparison: z.ZodOptional<z.ZodEnum<["absolute", "relative", "percentile"]>>;
@@ -515,8 +515,8 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     timeWindow?: {
         value: number;
-        unit: "days" | "minutes" | "hours" | "weeks" | "months";
-    } | undefined;
+        unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
     logicalOperator?: "AND" | "OR" | "NOT" | undefined;
     lastEvaluated?: Date | undefined;
 }, {
@@ -533,8 +533,8 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     timeWindow?: {
         value: number;
-        unit: "days" | "minutes" | "hours" | "weeks" | "months";
-    } | undefined;
+        unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
     logicalOperator?: "AND" | "OR" | "NOT" | undefined;
     lastEvaluated?: Date | undefined;
     evaluationCount?: number | undefined;
@@ -558,11 +558,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
             unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
         }, "strip", z.ZodTypeAny, {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        }, {
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }, {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        }>>;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }>>;
         aggregation: z.ZodOptional<z.ZodEnum<["sum", "avg", "count", "min", "max", "distinct", "percentile"]>>;
         threshold: z.ZodOptional<z.ZodNumber>;
         comparison: z.ZodOptional<z.ZodEnum<["absolute", "relative", "percentile"]>>;
@@ -586,8 +586,8 @@ export declare const UserSegmentSchema: z.ZodObject<{
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }, {
@@ -604,8 +604,8 @@ export declare const UserSegmentSchema: z.ZodObject<{
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
@@ -712,7 +712,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
         }>;
     }, "strip", z.ZodTypeAny, {
         activeDays: number[];
-        activeHours: {,
+        activeHours: {
             start: string;
             end: string;
             timezone: string;
@@ -721,7 +721,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
         endDate?: Date | undefined;
     }, {
         activeDays: number[];
-        activeHours: {,
+        activeHours: {
             start: string;
             end: string;
             timezone: string;
@@ -759,7 +759,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     category: "custom" | "experimental" | "lifecycle" | "revenue" | "engagement" | "behavioral" | "demographic" | "geographic";
     tags: string[];
     color: string;
-    conditions: {,
+    conditions: {
         id: string;
         isEnabled: boolean;
         type: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
@@ -775,13 +775,13 @@ export declare const UserSegmentSchema: z.ZodObject<{
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }[];
     dependencies: string[];
-    insights: {,
+    insights: {
         description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
@@ -795,7 +795,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     joinLogic: "complex" | "all" | "any";
     isDynamic: boolean;
     isPrivate: boolean;
-    userCountHistory: {,
+    userCountHistory: {
         date: Date;
         count: number;
     }[];
@@ -812,7 +812,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
         syncStatus: "pending" | "failed" | "synced" | "syncing";
         lastSync?: Date | undefined;
     }>;
-    validationRules: {,
+    validationRules: {
         description: string;
         rule: string;
         isRequired: boolean;
@@ -825,7 +825,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     conversionRate?: number | undefined;
     schedule?: {
         activeDays: number[];
-        activeHours: {,
+        activeHours: {
             start: string;
             end: string;
             timezone: string;
@@ -851,7 +851,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     category: "custom" | "experimental" | "lifecycle" | "revenue" | "engagement" | "behavioral" | "demographic" | "geographic";
     tags: string[];
     color: string;
-    conditions: {,
+    conditions: {
         id: string;
         type: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         operator: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
@@ -865,15 +865,15 @@ export declare const UserSegmentSchema: z.ZodObject<{
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
         matchRate?: number | undefined;
     }[];
     dependencies: string[];
-    insights: {,
+    insights: {
         description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
@@ -883,7 +883,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     }[];
     createdBy: string;
     userCount: number;
-    userCountHistory: {,
+    userCountHistory: {
         date: Date;
         count: number;
     }[];
@@ -897,7 +897,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
         lastSync?: Date | undefined;
         syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
     }>;
-    validationRules: {,
+    validationRules: {
         description: string;
         rule: string;
         isRequired?: boolean | undefined;
@@ -911,7 +911,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
     conversionRate?: number | undefined;
     schedule?: {
         activeDays: number[];
-        activeHours: {,
+        activeHours: {
             start: string;
             end: string;
             timezone: string;
@@ -942,7 +942,7 @@ export declare class SegmentUtils {
     /**
      * Evaluate if a user matches segment conditions
      */
-    static evaluateUserForSegment(userAttributes: UserAttributes,)
+    static evaluateUserForSegment(userAttributes: UserAttributes)
       segment: UserSegment,
       behaviorHistory?: BehaviorEvent[]
     ): {
@@ -1149,11 +1149,11 @@ declare const _default: {
             unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
         }, "strip", z.ZodTypeAny, {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        }, {
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }, {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        }>>;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }>>;
         aggregation: z.ZodOptional<z.ZodEnum<["sum", "avg", "count", "min", "max", "distinct", "percentile"]>>;
         threshold: z.ZodOptional<z.ZodNumber>;
         comparison: z.ZodOptional<z.ZodEnum<["absolute", "relative", "percentile"]>>;
@@ -1177,8 +1177,8 @@ declare const _default: {
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }, {
@@ -1195,8 +1195,8 @@ declare const _default: {
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
-            unit: "days" | "minutes" | "hours" | "weeks" | "months";
-        } | undefined;
+            unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
@@ -1220,11 +1220,11 @@ declare const _default: {
                 unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
             }, "strip", z.ZodTypeAny, {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            }, {
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }, {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            }>>;
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  }>>;
             aggregation: z.ZodOptional<z.ZodEnum<["sum", "avg", "count", "min", "max", "distinct", "percentile"]>>;
             threshold: z.ZodOptional<z.ZodNumber>;
             comparison: z.ZodOptional<z.ZodEnum<["absolute", "relative", "percentile"]>>;
@@ -1248,8 +1248,8 @@ declare const _default: {
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            } | undefined;
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
         }, {
@@ -1266,8 +1266,8 @@ declare const _default: {
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            } | undefined;
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
             evaluationCount?: number | undefined;
@@ -1374,7 +1374,7 @@ declare const _default: {
             }>;
         }, "strip", z.ZodTypeAny, {
             activeDays: number[];
-            activeHours: {,
+            activeHours: {
                 start: string;
                 end: string;
                 timezone: string;
@@ -1383,7 +1383,7 @@ declare const _default: {
             endDate?: Date | undefined;
         }, {
             activeDays: number[];
-            activeHours: {,
+            activeHours: {
                 start: string;
                 end: string;
                 timezone: string;
@@ -1421,7 +1421,7 @@ declare const _default: {
         category: "custom" | "experimental" | "lifecycle" | "revenue" | "engagement" | "behavioral" | "demographic" | "geographic";
         tags: string[];
         color: string;
-        conditions: {,
+        conditions: {
             id: string;
             isEnabled: boolean;
             type: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
@@ -1437,13 +1437,13 @@ declare const _default: {
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            } | undefined;
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
         }[];
         dependencies: string[];
-        insights: {,
+        insights: {
             description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
@@ -1457,7 +1457,7 @@ declare const _default: {
         joinLogic: "complex" | "all" | "any";
         isDynamic: boolean;
         isPrivate: boolean;
-        userCountHistory: {,
+        userCountHistory: {
             date: Date;
             count: number;
         }[];
@@ -1474,7 +1474,7 @@ declare const _default: {
             syncStatus: "pending" | "failed" | "synced" | "syncing";
             lastSync?: Date | undefined;
         }>;
-        validationRules: {,
+        validationRules: {
             description: string;
             rule: string;
             isRequired: boolean;
@@ -1487,7 +1487,7 @@ declare const _default: {
         conversionRate?: number | undefined;
         schedule?: {
             activeDays: number[];
-            activeHours: {,
+            activeHours: {
                 start: string;
                 end: string;
                 timezone: string;
@@ -1513,7 +1513,7 @@ declare const _default: {
         category: "custom" | "experimental" | "lifecycle" | "revenue" | "engagement" | "behavioral" | "demographic" | "geographic";
         tags: string[];
         color: string;
-        conditions: {,
+        conditions: {
             id: string;
             type: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
             operator: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
@@ -1527,15 +1527,15 @@ declare const _default: {
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
-                unit: "days" | "minutes" | "hours" | "weeks" | "months";
-            } | undefined;
+                unit: "days" | "minutes" | "hours" | "weeks" | "months"
+  } | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
             evaluationCount?: number | undefined;
             matchRate?: number | undefined;
         }[];
         dependencies: string[];
-        insights: {,
+        insights: {
             description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
@@ -1545,7 +1545,7 @@ declare const _default: {
         }[];
         createdBy: string;
         userCount: number;
-        userCountHistory: {,
+        userCountHistory: {
             date: Date;
             count: number;
         }[];
@@ -1559,7 +1559,7 @@ declare const _default: {
             lastSync?: Date | undefined;
             syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
         }>;
-        validationRules: {,
+        validationRules: {
             description: string;
             rule: string;
             isRequired?: boolean | undefined;
@@ -1573,7 +1573,7 @@ declare const _default: {
         conversionRate?: number | undefined;
         schedule?: {
             activeDays: number[];
-            activeHours: {,
+            activeHours: {
                 start: string;
                 end: string;
                 timezone: string;

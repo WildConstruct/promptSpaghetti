@@ -8,14 +8,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 export interface SearchFilters {
   priceRange: [number, number]; // in cents
-  tags: string;,
+  tags: string;
   rating: number; // minimum rating
   compatibility: string; // Claude models
   isAiGenerated?: boolean;
   sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
   creatorId?: string;
 interface SearchSuggestion {
-  text: string;,
+  text: string;
   type: 'query' | 'tag' | 'creator' | 'template';
   count?: number;
   icon?: string;

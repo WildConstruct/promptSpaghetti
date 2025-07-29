@@ -200,9 +200,10 @@ export class Epic16HelpIntegrationArchitecture {
                 title: 'Welcome to the Prompt Template Marketplace',
                 content: 'Discover professional AI prompt templates created by the community',
                 level: 'beginner',
-                context: {},
-                triggerElements: ['marketplace-home'],
-                actions: ['first-visit'],
+                context: {
+                    triggerElements: ['marketplace-home'],
+                    actions: ['first-visit'],
+                }
             },
             {
                 id: 'template-search-help',
@@ -211,9 +212,10 @@ export class Epic16HelpIntegrationArchitecture {
                 content: 'Use advanced search filters to find templates that match your specific needs',
                 filmTerminology: 'Like finding the right script or storyboard template for your project',
                 level: 'intermediate',
-                context: {},
-                triggerElements: ['search-input', 'filter-panel'],
-                actions: ['search-initiated'],
+                context: {
+                    triggerElements: ['search-input', 'filter-panel'],
+                    actions: ['search-initiated'],
+                }
             },
             {
                 id: 'purchase-workflow',
@@ -226,9 +228,10 @@ export class Epic16HelpIntegrationArchitecture {
                     'Import template directly into graph editor'
                 ],
                 level: 'intermediate',
-                context: {},
-                triggerElements: ['purchase-button', 'checkout-form'],
-                actions: ['purchase-initiated'],
+                context: {
+                    triggerElements: ['purchase-button', 'checkout-form'],
+                    actions: ['purchase-initiated'],
+                }
             },
             {
                 id: 'template-publishing',
@@ -237,9 +240,10 @@ export class Epic16HelpIntegrationArchitecture {
                 content: 'Publish your created templates to help the community and earn revenue',
                 filmTerminology: 'Like sharing your production techniques with other filmmakers',
                 level: 'advanced',
-                context: {},
-                triggerElements: ['publish-template'],
-                actions: ['export-to-marketplace']
+                context: {
+                    triggerElements: ['publish-template'],
+                    actions: ['export-to-marketplace']
+                }
             }
         ];
         // Index marketplace help content

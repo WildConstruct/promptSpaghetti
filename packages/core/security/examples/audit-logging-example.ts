@@ -67,7 +67,7 @@ async function basicAuditLogging() {
   resourceType: 'customer_database',
   resourceId: 'prod_customers',
   dataClassification: DataClassificationLevel.RESTRICTED,
-  metadata: {,
+  metadata: {
   grantedTo: 'user789',
   permissions: ['read', 'export'],
   expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
@@ -259,7 +259,7 @@ async function auditEventsExample() {
   console.log('\n=== Audit Events and Alerts ===\n');
   const auditLogger = createAuditLogger({)
   alertOnAnomaly: true,
-  alertThresholds: {,
+  alertThresholds: {
   failedAccessAttempts: 3,
   sensitiveDataAccess: 5,
   highRiskOperations: 2,
@@ -342,7 +342,7 @@ async function workflowAuditExample() {
   resourceId: step.step,
   dataClassification: step.classification,
   success: true,
-  metadata: {,
+  metadata: {
   workflowId: 'ml_training_workflow_001',
   stepName: step.step,
   outputResource: step.resource,

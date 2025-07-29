@@ -18,8 +18,8 @@ export interface UserAvatarListProps {
         userId: string;
         userName?: string;
         userAvatar?: string;
-        status: 'active' | 'idle' | 'away' | 'offline';
-    }>;
+        status: 'active' | 'idle' | 'away' | 'offline'
+  }>;
     maxVisible?: number;
     size?: 'small' | 'medium' | 'large';
     showOverflow?: boolean;

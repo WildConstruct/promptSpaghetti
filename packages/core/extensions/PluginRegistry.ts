@@ -16,38 +16,38 @@ import { join } from 'path';
 import * as semver from 'semver';
 
 export interface RemotePlugin {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   version: string;
-  author: string;,
+  author: string;
   downloadUrl: string;
   repository?: string;
   homepage?: string;
   keywords: string;
   dependencies?: Record<string, string>;
-  verified: boolean;,
+  verified: boolean;
   downloads: number;
-  rating: number;,
+  rating: number;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface PluginUpdate {
-  pluginId: string;,
+  pluginId: string;
   currentVersion: string;
-  availableVersion: string;,
+  availableVersion: string;
   updateType: 'patch' | 'minor' | 'major';
   changelog?: string;
   breaking: boolean;
 }
 export interface PluginRegistryConfig {
-  cacheDirectory: string;,
+  cacheDirectory: string;
   autoUpdateCheck: boolean;
-  allowRemoteSources: boolean;,
+  allowRemoteSources: boolean;
   remoteRegistries: string;
   updateCheckInterval: number; // milliseconds,
   maxCacheAge: number; // milliseconds,
-  enableTelemetry: boolean;,
+  enableTelemetry: boolean;
   developmentMode: boolean;
 }
 export interface PluginInstallOptions {
@@ -66,18 +66,18 @@ export interface PluginSearchOptions {
   limit?: number;
   offset?: number;
   sortBy?: 'name' | 'downloads' | 'rating' | 'updated';
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export interface PluginRegistryStats {
-  totalPlugins: number;,
+  totalPlugins: number;
   activePlugins: number;
-  inactivePlugins: number;,
+  inactivePlugins: number;
   errorPlugins: number;
-  totalDependencies: number;,
+  totalDependencies: number;
   resolvedDependencies: number;
   unresolvedDependencies: number;
   updateCheckLastRun?: Date;
-  availableUpdates: number;,
+  availableUpdates: number;
   cacheSize: number;
 }
 export class PluginRegistry extends EventEmitter {

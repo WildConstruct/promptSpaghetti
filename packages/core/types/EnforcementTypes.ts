@@ -16,38 +16,38 @@ import { TrustScore, RiskFactor } from './TrustTypes';
 // =============================================================================
 
 export interface EnforcementAction {
-  actionId: string;,
+  actionId: string;
   actionType: EnforcementActionType;
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   status: ActionStatus;
   // Target information
-  targetType: TargetType;,
+  targetType: TargetType;
   targetId: string;
   targetDetails?: TargetDetails;
   // Action details
-  reason: ViolationReason;,
+  reason: ViolationReason;
   description: string;
   evidence: Evidence;
   duration?: ActionDuration;
   // Execution information
-  executionType: ExecutionType;,
+  executionType: ExecutionType;
   executedBy: string; // user ID or 'system',
-  executedAt: Date;,
+  executedAt: Date;
   effectiveFrom: Date;
   effectiveUntil?: Date;
   // Review and appeal
-  reviewStatus: ReviewStatus;,
+  reviewStatus: ReviewStatus;
   appealable: boolean;
   appealDeadline?: Date;
   // Metadata
-  policyVersion: string;,
+  policyVersion: string;
   escalationLevel: number;
   relatedActions: string; // related action IDs,
   tags: string;
   // Audit trail
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModifiedBy: string;
 }
 export type EnforcementActionType = 
@@ -99,14 +99,14 @@ export interface TargetDetails {
   creator?: string;
   category?: string;
   currentStatus?: string;
-  impactLevel?: 'user' | 'community' | 'marketplace';
-}
+  impactLevel?: 'user' | 'community' | 'marketplace'
+  }
 export interface ViolationReason {
   category: ViolationCategory;
   subcategory?: string;
-  specificReason: string;,
+  specificReason: string;
   policyReference: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   automatedDetection: boolean;
   communityReported: boolean;
 }
@@ -126,9 +126,9 @@ export type ViolationCategory =
   | 'technical_violation';
 
 export interface Evidence {
-  evidenceId: string;,
+  evidenceId: string;
   type: EvidenceType;
-  source: EvidenceSource;,
+  source: EvidenceSource;
   description: string;
   data: any; // Flexible evidence data,
   confidence: number; // 0-100,
@@ -160,11 +160,11 @@ export type EvidenceSource =
   | 'external_api';
 
 export interface EvidenceAttachment {
-  attachmentId: string;,
+  attachmentId: string;
   fileName: string;
-  fileType: string;,
+  fileType: string;
   fileSize: number;
-  url: string;,
+  url: string;
   checksum: string;
   uploadedAt: Date;
 }
@@ -179,24 +179,24 @@ export interface ActionDuration {
   // =============================================================================
 }
 export interface EnforcementPolicy {
-  policyId: string;,
+  policyId: string;
   name: string;
-  version: string;,
+  version: string;
   description: string;
   // Policy scope
-  scope: PolicyScope;,
+  scope: PolicyScope;
   applicableTargets: TargetType;
   // Violation rules
   violationRules: ViolationRule;
   // Action mapping
   actionMatrix: ActionMatrix;
   // Configuration
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
   effectiveFrom: Date;
   effectiveUntil?: Date;
   // Metadata
-  createdBy: string;,
+  createdBy: string;
   approvedBy: string;
   lastModified: Date;
 }
@@ -208,25 +208,25 @@ export interface PolicyScope {
   excludedEntities?: string;
 }
 export interface ViolationRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
   description: string;
   // Detection criteria
-  triggers: RuleTrigger;,
+  triggers: RuleTrigger;
   conditions: RuleCondition;
   // Thresholds
   thresholds: RuleThreshold;
   // Actions
   actions: RuleAction;
   // Configuration
-  enabled: boolean;,
+  enabled: boolean;
   severity: ActionSeverity;
   escalationPath: string;
 }
 export interface RuleTrigger {
-  type: TriggerType;,
+  type: TriggerType;
   source: string;
-  event: string;,
+  event: string;
   parameters: Record<string, any>;
 }
 export type TriggerType = 
@@ -238,9 +238,9 @@ export type TriggerType =
   | 'external_signal';
 
 export interface RuleCondition {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
-  value: any;,
+  value: any;
   weight: number;
 }
 export type ConditionOperator = 
@@ -257,23 +257,23 @@ export type ConditionOperator =
   | 'not_exists';
 
 export interface RuleThreshold {
-  metric: string;,
+  metric: string;
   threshold: number;
   timeWindow: number; // minutes,
-  aggregation: 'count' | 'sum' | 'average' | 'max' | 'min';
-}
+  aggregation: 'count' | 'sum' | 'average' | 'max' | 'min'
+  }
 export interface RuleAction {
-  actionType: EnforcementActionType;,
+  actionType: EnforcementActionType;
   severity: ActionSeverity;
   duration?: ActionDuration;
   escalationDelay?: number; // minutes,
-  requiresManualReview: boolean;,
+  requiresManualReview: boolean;
   notificationRequired: boolean;
 }
 export interface ActionMatrix {
-  firstOffense: EnforcementActionType;,
+  firstOffense: EnforcementActionType;
   repeatOffense: EnforcementActionType;
-  severeThreat: EnforcementActionType;,
+  severeThreat: EnforcementActionType;
   communityHarm: EnforcementActionType;
   legalViolation: EnforcementActionType;
   // =============================================================================
@@ -281,44 +281,44 @@ export interface ActionMatrix {
   // =============================================================================
 }
 export interface EnforcementWorkflow {
-  workflowId: string;,
+  workflowId: string;
   name: string;
   description: string;
   // Workflow configuration
-  trigger: WorkflowTrigger;,
+  trigger: WorkflowTrigger;
   steps: WorkflowStep;
   // Execution settings
-  executionMode: 'automatic' | 'semi_automatic' | 'manual';,
+  executionMode: 'automatic' | 'semi_automatic' | 'manual';
   parallelExecution: boolean;
-  maxRetries: number;,
+  maxRetries: number;
   timeout: number; // minutes,
   // Approval requirements
-  requiresApproval: boolean;,
+  requiresApproval: boolean;
   approvalLevel: ApprovalLevel;
   approvers: string;
   // Status and metrics
-  enabled: boolean;,
+  enabled: boolean;
   successRate: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   totalExecutions: number;
   // Metadata
-  createdAt: Date;,
+  createdAt: Date;
   lastModified: Date;
   version: string;
 }
 export interface WorkflowTrigger {
-  type: 'violation_detected' | 'trust_score_threshold' | 'manual_request' | 'scheduled' | 'external_event';,
+  type: 'violation_detected' | 'trust_score_threshold' | 'manual_request' | 'scheduled' | 'external_event';
   conditions: TriggerCondition;
   debounceTime?: number; // minutes to wait before retriggering,
 }
 export interface TriggerCondition {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
-  value: any;,
+  value: any;
   required: boolean;
 }
 export interface WorkflowStep {
-  stepId: string;,
+  stepId: string;
   name: string;
   type: StepType;
   // Step configuration
@@ -329,9 +329,9 @@ export interface WorkflowStep {
   retryPolicy?: RetryPolicy;
   timeout?: number; // minutes,
   // Execution tracking
-  executionCount: number;,
+  executionCount: number;
   successCount: number;
-  failureCount: number;,
+  failureCount: number;
   averageExecutionTime: number;
 }
 export type StepType = 
@@ -345,14 +345,14 @@ export type StepType =
   | 'rollback';
 
 export interface StepAction {
-  actionType: string;,
+  actionType: string;
   parameters: Record<string, any>;
-  failureHandling: 'continue' | 'retry' | 'abort' | 'escalate';
-}
+  failureHandling: 'continue' | 'retry' | 'abort' | 'escalate'
+  }
 export interface StepCondition {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
-  value: any;,
+  value: any;
   onMatch: 'continue' | 'skip' | 'branch';
   branchTo?: string; // step ID,
 }
@@ -362,9 +362,9 @@ export interface NextStep {
   delay?: number; // minutes,
 }
 export interface RetryPolicy {
-  maxRetries: number;,
+  maxRetries: number;
   retryDelay: number; // minutes,
-  backoffMultiplier: number;,
+  backoffMultiplier: number;
   retryConditions: string;
 }
 export type ApprovalLevel = 'admin' | 'senior_admin' | 'legal' | 'security_team' | 'multi_level';
@@ -374,22 +374,22 @@ export type ApprovalLevel = 'admin' | 'senior_admin' | 'legal' | 'security_team'
 // =============================================================================
 
 export interface ViolationReport {
-  reportId: string;,
+  reportId: string;
   reportType: ReportType;
   // Target information
-  targetType: TargetType;,
+  targetType: TargetType;
   targetId: string;
   targetSnapshot?: any; // snapshot of target at time of report,
   // Violation details
-  violationType: ViolationCategory;,
+  violationType: ViolationCategory;
   description: string;
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   confidence: number; // 0-100,
   // Reporter information
-  reportedBy: ReporterInfo;,
+  reportedBy: ReporterInfo;
   reportedAt: Date;
   // Detection details
-  detectionMethod: DetectionMethod;,
+  detectionMethod: DetectionMethod;
   evidence: Evidence;
   relatedReports: string;
   // Processing status
@@ -398,7 +398,7 @@ export interface ViolationReport {
   investigationNotes?: InvestigationNote;
   resolution?: ReportResolution;
   // Metadata
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   tags: string;
   externalReferences: string;
 }
@@ -412,10 +412,10 @@ export type ReportType =
   | 'admin_investigation';
 
 export interface ReporterInfo {
-  reporterId: string;,
+  reporterId: string;
   reporterType: 'user' | 'moderator' | 'admin' | 'system' | 'external';
   credibility: number; // 0-100,
-  previousReports: number;,
+  previousReports: number;
   reportAccuracyRate: number; // 0-100,
   isVerified: boolean;
 }
@@ -436,19 +436,19 @@ export type ReportStatus =
   | 'insufficient_evidence';
 
 export interface InvestigationNote {
-  noteId: string;,
+  noteId: string;
   investigatorId: string;
-  note: string;,
+  note: string;
   timestamp: Date;
   visibility: 'internal' | 'public' | 'legal';
   attachments?: EvidenceAttachment;
 }
 export interface ReportResolution {
-  outcome: ResolutionOutcome;,
+  outcome: ResolutionOutcome;
   actions: string; // enforcement action IDs,
-  reasonCode: string;,
+  reasonCode: string;
   explanation: string;
-  resolvedBy: string;,
+  resolvedBy: string;
   resolvedAt: Date;
   appealable: boolean;
   appealDeadline?: Date;
@@ -468,18 +468,18 @@ export type ResolutionOutcome =
 export interface EnforcementAppeal {
   appealId: string;
   // Appeal target
-  enforcementActionId: string;,
+  enforcementActionId: string;
   enforcementAction: EnforcementAction;
   // Appellant information
-  appellantId: string;,
+  appellantId: string;
   appellantType: 'target' | 'affected_party' | 'third_party';
   // Appeal details
-  appealReason: AppealReason;,
+  appealReason: AppealReason;
   description: string;
-  evidence: Evidence;,
+  evidence: Evidence;
   requestedOutcome: RequestedOutcome;
   // Processing information
-  status: AppealStatus;,
+  status: AppealStatus;
   submittedAt: Date;
   reviewDeadline: Date;
   // Review details
@@ -495,16 +495,16 @@ export interface EnforcementAppeal {
   followUpActions?: string;
   compensationAwarded?: Compensation;
   // Metadata
-  priority: 'normal' | 'expedited' | 'urgent';,
+  priority: 'normal' | 'expedited' | 'urgent';
   publicVisibility: boolean;
   legalImplications: boolean;
 }
 export interface AppealReason {
-  category: AppealCategory;,
+  category: AppealCategory;
   specificReason: string;
-  claimsInnocence: boolean;,
+  claimsInnocence: boolean;
   claimsError: boolean;
-  claimsDisproportion: boolean;,
+  claimsDisproportion: boolean;
   claimsBias: boolean;
   newEvidence: boolean;
 }
@@ -519,7 +519,7 @@ export type AppealCategory =
   | 'changed_circumstances';
 
 export interface RequestedOutcome {
-  action: 'complete_reversal' | 'partial_reversal' | 'action_modification' | 'compensation' | 'policy_clarification';,
+  action: 'complete_reversal' | 'partial_reversal' | 'action_modification' | 'compensation' | 'policy_clarification';
   specificRequest: string;
   justification: string;
 }
@@ -535,16 +535,16 @@ export type AppealStatus =
   | 'withdrawn';
 
 export interface ReviewNote {
-  reviewerId: string;,
+  reviewerId: string;
   note: string;
-  timestamp: Date;,
+  timestamp: Date;
   category: 'procedural' | 'factual' | 'legal' | 'policy' | 'recommendation';
   confidential: boolean;
 }
 export interface AppealDecision {
-  outcome: 'approved' | 'denied' | 'partially_approved' | 'remanded';,
+  outcome: 'approved' | 'denied' | 'partially_approved' | 'remanded';
   reasoning: string;
-  evidenceConsidered: string;,
+  evidenceConsidered: string;
   policyReferences: string;
   precedentCases?: string;
   // Modifications if partially approved
@@ -557,108 +557,108 @@ export interface Compensation {
   type: 'monetary' | 'service_credit' | 'fee_waiver' | 'priority_review' | 'public_apology';
   amount?: number;
   currency?: string;
-  description: string;,
+  description: string;
   processingTime: number; // days,
   // =============================================================================
   // Enforcement Analytics and Reporting
   // =============================================================================
 }
 export interface EnforcementAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   generatedAt: Date;
   // Overall metrics
   overallMetrics: EnforcementOverallMetrics;
   // Action breakdown
-  actionBreakdown: ActionBreakdown;,
+  actionBreakdown: ActionBreakdown;
   violationBreakdown: ViolationBreakdown;
   // Effectiveness metrics
   effectivenessMetrics: EffectivenessMetrics;
   // Trends and patterns
-  trends: EnforcementTrends;,
+  trends: EnforcementTrends;
   patterns: ViolationPattern;
   // Appeal metrics
   appealMetrics: AppealMetrics;
   // Insights and recommendations
-  insights: EnforcementInsight;,
+  insights: EnforcementInsight;
   recommendations: EnforcementRecommendation;
 }
 export interface AnalyticsPeriod {
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
   timeRange: TimeRange;
 }
 export interface EnforcementOverallMetrics {
-  totalActions: number;,
+  totalActions: number;
   totalViolations: number;
   totalAppeals: number;
   // Action distribution
-  automaticActions: number;,
+  automaticActions: number;
   manualActions: number;
   // Resolution metrics
   averageResolutionTime: number; // hours,
   appealSuccessRate: number; // percentage,
   // Community impact
-  affectedUsers: number;,
+  affectedUsers: number;
   affectedTemplates: number;
   communityTrustImpact: number; // -100 to 100,
 }
 export interface ActionBreakdown {
-  byType: ActionTypeMetrics;,
+  byType: ActionTypeMetrics;
   bySeverity: ActionSeverityMetrics;
-  byStatus: ActionStatusMetrics;,
+  byStatus: ActionStatusMetrics;
   byExecutionType: ExecutionTypeMetrics;
 }
 export interface ActionTypeMetrics {
-  actionType: EnforcementActionType;,
+  actionType: EnforcementActionType;
   count: number;
-  percentage: number;,
+  percentage: number;
   averageDuration: number; // hours,
   successRate: number; // percentage,
   appealRate: number; // percentage,
 }
 export interface ActionSeverityMetrics {
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   count: number;
-  percentage: number;,
+  percentage: number;
   averageResolutionTime: number; // hours,
   escalationRate: number; // percentage,
 }
 export interface ActionStatusMetrics {
-  status: ActionStatus;,
+  status: ActionStatus;
   count: number;
-  percentage: number;,
+  percentage: number;
   averageTimeInStatus: number; // hours,
 }
 export interface ExecutionTypeMetrics {
-  executionType: ExecutionType;,
+  executionType: ExecutionType;
   count: number;
-  percentage: number;,
+  percentage: number;
   accuracyRate: number; // percentage,
   overrideRate: number; // percentage,
 }
 export interface ViolationBreakdown {
-  byCategory: ViolationCategoryMetrics;,
+  byCategory: ViolationCategoryMetrics;
   bySource: ViolationSourceMetrics;
   byConfidence: ConfidenceMetrics;
 }
 export interface ViolationCategoryMetrics {
-  category: ViolationCategory;,
+  category: ViolationCategory;
   count: number;
-  percentage: number;,
+  percentage: number;
   averageSeverity: ActionSeverity;
   resolutionRate: number; // percentage,
   falsePositiveRate: number; // percentage,
 }
 export interface ViolationSourceMetrics {
-  source: EvidenceSource;,
+  source: EvidenceSource;
   count: number;
-  percentage: number;,
+  percentage: number;
   accuracy: number; // percentage,
   averageConfidence: number; // 0-100,
 }
 export interface ConfidenceMetrics {
   confidenceRange: string; // e.g., "80-90%",
-  count: number;,
+  count: number;
   accuracyRate: number; // percentage,
   falsePositiveRate: number; // percentage,
 }
@@ -674,39 +674,39 @@ export interface EffectivenessMetrics {
   averageResolutionTime: number; // hours from action to resolution,
 }
 export interface EnforcementTrends {
-  violationTrend: 'increasing' | 'stable' | 'decreasing';,
+  violationTrend: 'increasing' | 'stable' | 'decreasing';
   actionTrend: 'increasing' | 'stable' | 'decreasing';
   appealTrend: 'increasing' | 'stable' | 'decreasing';
   // Trend data
-  monthlyViolations: number;,
+  monthlyViolations: number;
   monthlyActions: number;
   monthlyAppeals: number;
   // Seasonal patterns
   seasonalPatterns: SeasonalPattern;
   // Prediction
-  predictedViolations: number;,
+  predictedViolations: number;
   predictionConfidence: number; // 0-100,
 }
 export interface ViolationPattern {
-  patternId: string;,
+  patternId: string;
   description: string;
-  frequency: number;,
+  frequency: number;
   severity: ActionSeverity;
-  affectedUsers: number;,
+  affectedUsers: number;
   detectionAccuracy: number; // percentage,
   preventionStrategy: string;
 }
 export interface SeasonalPattern {
-  period: 'weekly' | 'monthly' | 'quarterly' | 'yearly';,
+  period: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
   pattern: number;
   strength: number; // 0-100,
   description: string;
 }
 export interface AppealMetrics {
-  totalAppeals: number;,
+  totalAppeals: number;
   appealRate: number; // percentage of actions appealed,
   // Outcome distribution
-  appealsApproved: number;,
+  appealsApproved: number;
   appealsDenied: number;
   appealsPartiallyApproved: number;
   // Time metrics
@@ -717,25 +717,25 @@ export interface AppealMetrics {
   overturnRate: number; // percentage of actions overturned,
 }
 export interface EnforcementInsight {
-  insightId: string;,
+  insightId: string;
   type: 'trend' | 'anomaly' | 'pattern' | 'risk' | 'opportunity';
-  title: string;,
+  title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';,
+  impact: 'low' | 'medium' | 'high' | 'critical';
   confidence: number; // 0-100,
-  actionable: boolean;,
+  actionable: boolean;
   recommendedActions: string;
   generatedAt: Date;
 }
 export interface EnforcementRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   category: 'policy' | 'automation' | 'process' | 'training' | 'technology';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   expectedImpact: string;
-  implementationEffort: 'low' | 'medium' | 'high';,
+  implementationEffort: 'low' | 'medium' | 'high';
   timeline: string;
-  successMetrics: string;,
+  successMetrics: string;
   generatedAt: Date;
 }

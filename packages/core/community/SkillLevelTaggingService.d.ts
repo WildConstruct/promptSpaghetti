@@ -27,7 +27,7 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
         perceived_difficulty: number;
         level_appropriateness: 'too_easy' | 'just_right' | 'too_hard';
         suggested_level?: SkillLevel;
-        learning_effectiveness: {,
+        learning_effectiveness: {
             helped_learn_skill: boolean;
             clear_explanations: boolean;
             good_examples: boolean;

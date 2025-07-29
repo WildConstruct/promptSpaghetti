@@ -26,73 +26,73 @@ const mockEpic1Analytics = {
 describe('ConversionAnalyticsInfrastructure', () => {
   let infrastructure: ConversionAnalyticsInfrastructure;
   let mockEvent: FlexibleConversionEvent;
-  let config: {,
-  dataWarehouse: DataWarehouseConfig;,
+  let config: {
+  dataWarehouse: DataWarehouseConfig;
   api: AnalyticsAPIConfig;
   processing: ProcessingConfig;
 };
   beforeEach(() => {
   config = {
-  dataWarehouse: {,
+  dataWarehouse: {
   connectionString: 'test://localhost',
   schemaName: 'conversion_analytics',
   tablePrefix: 'conv_',
-  partitioning: {,
+  partitioning: {
   strategy: 'time',
   field: 'timestamp',
   interval: 'day',
 },
-  retention: {,
+  retention: {
   rawEvents: 90,
   aggregatedMetrics: 365,
   archivedData: 2555,
 },
-  indexing: {,
+  indexing: {
   timeIndex: true,
   userIndex: true,
   funnelIndex: true,
   customIndices: ['user_id', 'funnel_id'],
 },
-  api: {,
-  caching: {,
+  api: {
+  caching: {
   enabled: true,
   ttl: 300,
   maxSize: 1000,
   strategy: 'lru',
 },
-  rateLimiting: {,
+  rateLimiting: {
   enabled: true,
   requestsPerMinute: 100,
   burstLimit: 20,
 },
-  optimization: {,
+  optimization: {
   queryTimeout: 30000,
   maxConcurrentQueries: 10,
   enableQueryPlanning: true,
   precomputeMetrics: ['conversion_rate', 'user_count'],
 },
-  processing: {,
-  validation: {,
+  processing: {
+  validation: {
   strict: true,
   requiredFields: ['id', 'userId', 'timestamp', 'type'],
   customRules: [],
 },
-  enrichment: {,
+  enrichment: {
   enableUserEnrichment: true,
   enableTemplateEnrichment: true,
   enableLocationEnrichment: false,
 },
-  transformation: {,
+  transformation: {
   normalizeTimestamps: true,
   calculateDerivedFields: true,
   applyPrivacyFilters: true,
 },
-  aggregation: {,
+  aggregation: {
   enableRealTimeAggregation: true,
   aggregationWindows: ['1h', '1d', '1w'],
   customAggregations: [],
 },
-  storage: {,
+  storage: {
   primaryStorage: 'postgresql',
   archiveStorage: 's3',
   retentionPeriod: 2555,
@@ -110,24 +110,24 @@ describe('ConversionAnalyticsInfrastructure', () => {
   type: 'template_purchased',
   category: 'revenue',
   value: 25.00,
-  properties: {,
+  properties: {
   templateId: 'tpl-001',
   funnelId: 'marketplace-discovery',
   stepId: 'template-purchase',
   stepOrder: 4,
 },
-  metadata: {,
+  metadata: {
   userAgent: 'test-agent',
   referrer: 'https://example.com',
 },
   deviceFingerprint: 'test-fingerprint',
       crossDeviceUserId: undefined,
-      attributionData: {,
+      attributionData: {
   touchpoints: [],
-  primaryAttribution: {,
+  primaryAttribution: {
   name: 'first_touch',
   weight: 1.0,
-  touchpoint: {,
+  touchpoint: {
   id: 'tp-001',
   timestamp: Date.now(),
   channel: 'direct',
@@ -140,37 +140,37 @@ describe('ConversionAnalyticsInfrastructure', () => {
   },
   assistedAttribution: [];
   },
-  privacyConsent: {,
+  privacyConsent: {
   tracking: true,
   analytics: true,
   personalization: true,
   crossDevice: false,
 },
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: 'stream-123',
   batchId: 'batch-456',
   processed: false,
   latency: 0,
 },
-  flexibleProperties: {,
-  templateId: {,
+  flexibleProperties: {
+  templateId: {
   value: 'tpl-001',
   type: 'string',
-  metadata: {,
+  metadata: {
   source: 'event',
   confidence: 1.0,
   lastUpdated: Date.now(),
   validationStatus: 'valid',
 },
   schemaVersion: '1.0.0',
-      validation: {,
+      validation: {
   isValid: true,
   score: 95,
   errors: [],
   warnings: [],
   appliedRules: ['required_fields'],
 },
-  funnelContext: {,
+  funnelContext: {
   funnelId: 'marketplace-discovery',
   stepId: 'template-purchase',
   stepOrder: 4,
@@ -178,7 +178,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   previousSteps: ['entry_point', 'engagement'],
   isBacktracking: false,
 },
-  userContext: {,
+  userContext: {
   segmentIds: ['premium_user'],
   cohortIds: ['cohort-2024-01'],
   lifetimeValue: 150.00,
@@ -187,7 +187,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   profileCompleteness: 0.9,
   lastActivity: Date.now() - 86400000,
 },
-  templateContext: {,
+  templateContext: {
   templateId: 'tpl-001',
   templateType: 'character-development',
   creatorId: 'creator-123',
@@ -197,7 +197,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   popularity: 1500,
   tags: ['character', 'development'],
 },
-  sessionContext: {,
+  sessionContext: {
   isNewSession: false,
   sessionDuration: 1800000,
   pageViewCount: 12,
@@ -286,7 +286,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   startDate: Date.now() - 86400000, // 24 hours ago,
   endDate: Date.now(),
   metrics: ['conversion_rate', 'user_count'],
-  aggregation: {,
+  aggregation: {
   interval: 'hour',
 };
       const results = await infrastructure.queryMetrics(query);
@@ -304,7 +304,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   field: 'userContext.segmentIds',
   operator: 'contains',
   value: 'premium_user'],
-  aggregation: {,
+  aggregation: {
   interval: 'day',
   fillGaps: true,
 };
@@ -328,7 +328,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
   field: 'funnelContext.funnelId',
   operator: 'equals',
   value: 'marketplace-discovery'],
-  aggregation: {,
+  aggregation: {
   interval: 'week',
   timeZone: 'UTC',
   fillGaps: true,
@@ -366,11 +366,11 @@ describe('ConversionAnalyticsInfrastructure', () => {
   it('should handle data export requests', async () => {
   const exportRequest = {
   format: 'json' as const,
-  query: {,
+  query: {
   startDate: Date.now() - 86400000,
   endDate: Date.now(),
   metrics: ['conversion_rate', 'user_count'],
-  aggregation: {,
+  aggregation: {
   interval: 'hour' as const,
 },
   compression: 'gzip' as const,
@@ -386,11 +386,11 @@ describe('ConversionAnalyticsInfrastructure', () => {
   for (const format of formats) {
   const exportRequest = {
   format,
-  query: {,
+  query: {
   startDate: Date.now() - 86400000,
   endDate: Date.now(),
   metrics: ['user_count'],
-  aggregation: {,
+  aggregation: {
   interval: 'day' as const,
 };
         const result = await infrastructure.exportData(exportRequest);
@@ -469,27 +469,27 @@ describe('ConversionProcessingPipeline', () => {
   let processingConfig: ProcessingConfig;
   beforeEach(() => {
   processingConfig = {
-  validation: {,
+  validation: {
   strict: true,
   requiredFields: ['id', 'userId', 'timestamp', 'type'],
   customRules: [],
 },
-  enrichment: {,
+  enrichment: {
   enableUserEnrichment: true,
   enableTemplateEnrichment: true,
   enableLocationEnrichment: false,
 },
-  transformation: {,
+  transformation: {
   normalizeTimestamps: true,
   calculateDerivedFields: true,
   applyPrivacyFilters: true,
 },
-  aggregation: {,
+  aggregation: {
   enableRealTimeAggregation: true,
   aggregationWindows: ['1h', '1d'],
   customAggregations: [],
 },
-  storage: {,
+  storage: {
   primaryStorage: 'postgresql',
   archiveStorage: 's3',
   retentionPeriod: 90,
@@ -519,7 +519,7 @@ describe('ConversionProcessingPipeline', () => {
 describe('Configuration Validation', () => {
   it('should handle different configuration scenarios', () => {
     const minimalConfig = {
-      dataWarehouse: {,
+      dataWarehouse: {
   connectionString: 'minimal://config',
         schemaName: 'test',
         tablePrefix: 'test_',
@@ -527,12 +527,12 @@ describe('Configuration Validation', () => {
         retention: { rawEvents: 30, aggregatedMetrics: 90, archivedData: 365 },
         indexing: { timeIndex: true, userIndex: true, funnelIndex: true, customIndices: [] }
   },
-  api: {,
+  api: {
   caching: { enabled: false, ttl: 0, maxSize: 0, strategy: 'lru' as const },
         rateLimiting: { enabled: false, requestsPerMinute: 0, burstLimit: 0 },
         optimization: { queryTimeout: 30000, maxConcurrentQueries: 1, enableQueryPlanning: false, precomputeMetrics: [] }
   },
-  processing: {,
+  processing: {
   validation: { strict: false, requiredFields: [], customRules: [] },
         enrichment: { enableUserEnrichment: false, enableTemplateEnrichment: false, enableLocationEnrichment: false },
         transformation: { normalizeTimestamps: false, calculateDerivedFields: false, applyPrivacyFilters: false },

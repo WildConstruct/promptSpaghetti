@@ -7,7 +7,7 @@ import { Edge, getBezierPath, EdgeProps } from 'reactflow';
 
 export interface AnnotatedEdge extends Edge {
   label?: string;
-  labelStyle?: {,
+  labelStyle?: {
   fontSize?: number;
   color?: string;
   backgroundColor?: string;
@@ -20,7 +20,7 @@ export interface AnnotatedEdge extends Edge {
   showLabel?: boolean;
   interactive?: boolean; // Whether label can be edited by clicking
 interface ConnectionLabelProps {
-  edge: AnnotatedEdge;,
+  edge: AnnotatedEdge;
   x: number;
   y: number;
   onLabelChange?: (edgeId: string, newLabel: string) => void;
@@ -180,8 +180,8 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
 
 // Connection label editing interface
 interface ConnectionLabelEditorProps {
-  edge: AnnotatedEdge | null;,
-  onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;,
+  edge: AnnotatedEdge | null;
+  onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
   onClose: () => void;
   export const ConnectionLabelEditor: React.FC<ConnectionLabelEditorProps> = ({,)
   edge,
@@ -200,7 +200,7 @@ interface ConnectionLabelEditorProps {
   if (!edge) return;
   const updates: Partial<AnnotatedEdge> = {,
   label: label.trim(),
-  labelStyle: {,
+  labelStyle: {
   ...edge.labelStyle,
   fontSize,
   color,
@@ -391,13 +391,13 @@ interface ConnectionLabelEditorProps {
 };
 
 // Utility functions for connection annotations
-export const createAnnotatedEdge = (baseEdge: Edge,)
+export const createAnnotatedEdge = (baseEdge: Edge)
   label?: string,
   options?: Partial<AnnotatedEdge>
 ): AnnotatedEdge => ({)
   ...baseEdge,
   label: label || '',
-  labelStyle: {,
+  labelStyle: {
   fontSize: 12,
   color: '#e2e8f0',
   backgroundColor: 'rgba(45, 55, 72, 0.9)',
@@ -413,7 +413,7 @@ export const createAnnotatedEdge = (baseEdge: Edge,)
   ...options
 });
 
-export const updateEdgeLabel = (edges: AnnotatedEdge,)
+export const updateEdgeLabel = (edges: AnnotatedEdge)
   edgeId: string,
   updates: Partial<AnnotatedEdge>): AnnotatedEdge => {,
   return edges.map(edge =>)

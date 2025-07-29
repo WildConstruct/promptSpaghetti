@@ -9,7 +9,7 @@ import { PerformanceMonitor, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
 
 export interface SecurityAnalyticsMetrics {
-    threatDetectionMetrics: {,
+    threatDetectionMetrics: {
         threatsDetected: number;
         falsePositives: number;
         truePositives: number;
@@ -17,28 +17,28 @@ export interface SecurityAnalyticsMetrics {
         detectionAccuracy: number;
         timeToDetection: number;
     };
-    complianceMetrics: {,
+    complianceMetrics: {
         complianceViolations: number;
         auditTrailEntries: number;
         dataAccessEvents: number;
         policyEnforcements: number;
         complianceScore: number;
     };
-    accessControlMetrics: {,
+    accessControlMetrics: {
         authenticationAttempts: number;
         failedAuthentications: number;
         privilegeEscalations: number;
         sessionAnomalies: number;
         accessViolations: number;
     };
-    dataProtectionMetrics: {,
+    dataProtectionMetrics: {
         encryptionOperations: number;
         dataClassificationEvents: number;
         dataLeakageIncidents: number;
         backupIntegrityChecks: number;
         dataRetentionActions: number;
     };
-    incidentResponseMetrics: {,
+    incidentResponseMetrics: {
         incidentCount: number;
         meanTimeToDetection: number;
         meanTimeToResponse: number;
@@ -76,7 +76,7 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
     relatedEvents: string[];
 
 export interface SecurityAnalyticsConfig {
-    performanceConfig: {,
+    performanceConfig: {
         enableMemoryTracking: boolean;
         enableContextTracking: boolean;
         enableAggregation: boolean;
@@ -84,7 +84,7 @@ export interface SecurityAnalyticsConfig {
         slowExecutionThreshold: number;
         memoryThreshold: number;
     };
-    securityConfig: {,
+    securityConfig: {
         enableThreatDetection: boolean;
         enableComplianceMonitoring: boolean;
         enableAccessControlTracking: boolean;
@@ -99,7 +99,7 @@ export interface SecurityAnalyticsConfig {
         systemHealthThreshold: number;
         alertCorrelationWindow: number;
     };
-    integrationConfig: {,
+    integrationConfig: {
         siemIntegration: boolean;
         complianceIntegration: boolean;
         auditIntegration: boolean;
@@ -153,7 +153,7 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
     getSecurityDashboardData(): {
         overallSecurityHealth: number;
         criticalAlerts: number;
-        systemsStatus: {,
+        systemsStatus: {
             healthy: number;
             degraded: number;
             critical: number;
@@ -161,7 +161,7 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
         };
         threatLevel: number;
         complianceScore: number;
-        incidentStats: {,
+        incidentStats: {
             activeIncidents: number;
             meanDetectionTime: number;
             meanResponseTime: number;
@@ -184,18 +184,18 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
         start: number;
         end: number;
     }): {
-        summary: {,
+        summary: {
             totalEvents: number;
             threatsDetected: number;
             complianceViolations: number;
             incidentsResolved: number;
             averageResponseTime: number;
         };
-        trends: {,
+        trends: {
             threatTrend: 'increasing' | 'stable' | 'decreasing';
             complianceTrend: 'improving' | 'stable' | 'degrading';
-            performanceTrend: 'improving' | 'stable' | 'degrading';
-        };
+            performanceTrend: 'improving' | 'stable' | 'degrading'
+  };
         recommendations: string[];
     };
     /**

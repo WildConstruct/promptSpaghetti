@@ -17,7 +17,7 @@ global.WebSocket = jest.fn().mockImplementation(() => ({)
 
 // Mock navigator
 Object.defineProperty(global, 'navigator', {)
-  value: {,
+  value: {
   onLine: true,
   userAgent: 'test-agent',
   language: 'en-US',
@@ -28,7 +28,7 @@ Object.defineProperty(global, 'navigator', {)
 
 // Mock document
 Object.defineProperty(global, 'document', {)
-  value: {,
+  value: {
   referrer: 'https://example.com',
   hidden: false,
   addEventListener: jest.fn(),
@@ -39,8 +39,8 @@ Object.defineProperty(global, 'document', {)
 
 // Mock window
 Object.defineProperty(global, 'window', {)
-  value: {,
-  location: {,
+  value: {
+  location: {
   href: 'https://test.com/page',
   pathname: '/page',
   search: '?utm_source=test&utm_medium=cpc',
@@ -94,9 +94,9 @@ describe('ConversionTrackingSDK', () => {
         properties: {},
         metadata: {},
         deviceFingerprint: 'test-fingerprint',
-        attributionData: {,
+        attributionData: {
   touchpoints: [],
-          primaryAttribution: {,
+          primaryAttribution: {
   name: 'direct',
             weight: 1.0,
             touchpoint: {} as any,
@@ -104,13 +104,13 @@ describe('ConversionTrackingSDK', () => {
   },
   assistedAttribution: [];
   },
-  privacyConsent: {,
+  privacyConsent: {
   tracking: true,
   analytics: true,
   personalization: true,
   crossDevice: false,
 },
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: 'stream-123',
   batchId: 'batch-456',
   processed: false,

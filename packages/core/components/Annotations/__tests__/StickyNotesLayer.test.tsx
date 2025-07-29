@@ -121,7 +121,7 @@ describe('StickyNotesLayer Component', () => {
       expect(defaultProps.onNotesChange).toHaveBeenCalledWith([)
         ...mockNotes,
         expect.objectContaining({)
-  position: {,
+  position: {
   x: (400 - (-100)) / 0.8,  // (clientX - offsetX) / zoom,
   y: (300 - (-50)) / 0.8    // (clientY - offsetY) / zoom,
 }

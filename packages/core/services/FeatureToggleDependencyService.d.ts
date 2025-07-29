@@ -73,7 +73,7 @@ export interface ToggleNode {
     level: number;
     dependencies: string[];
     dependents: string[];
-    metadata: {,
+    metadata: {
         epic?: string;
         story?: string;
         tags: string[];
@@ -90,7 +90,7 @@ export interface DependencyEdge {
     relationship: DependencyRelationship;
     strength: number;
     status: 'valid' | 'invalid' | 'warning' | 'conflict';
-    metadata: {,
+    metadata: {
         reason: string;
         validated: Date;
         violations: number;
@@ -223,25 +223,25 @@ export interface RiskFactor {
     mitigation: string[];
 
 export interface DependencyServiceConfig {
-    detection: {,
+    detection: {
         autoDetectDependencies: boolean;
         detectionPatterns: string[];
         confidenceThreshold: number;
         maxDependencyDepth: number;
     };
-    validation: {,
+    validation: {
         validateOnActivation: boolean;
         allowCircularDependencies: boolean;
         maxCircularDepth: number;
         strictMode: boolean;
     };
-    visualization: {,
+    visualization: {
         maxNodesInGraph: number;
         clusteringEnabled: boolean;
         layoutAlgorithm: 'hierarchical' | 'force' | 'circular' | 'dagre';
         showMetadata: boolean;
     };
-    analysis: {,
+    analysis: {
         analyzeInterval: number;
         riskAssessmentEnabled: boolean;
         impactAnalysisDepth: number;

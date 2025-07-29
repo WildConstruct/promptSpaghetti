@@ -17,8 +17,8 @@ import {
   DEFAULT_STICKY_NOTE 
 } from '../../types/CollaborationTypes';
 interface StickyNotesLayerProps {
-  notes: StickyNoteType;,
-  onNotesChange: (notes: StickyNoteType) => void;,
+  notes: StickyNoteType;
+  onNotesChange: (notes: StickyNoteType) => void;
   canvasSize: { width: number; height: number };
   canvasOffset: { x: number; y: number };
   zoom: number;
@@ -34,7 +34,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
   const handleNoteAction = useCallback((action: StickyNoteAction) => {
   const noteId = action.noteId;
   switch (action.type) {
-  case 'create': {,
+  case 'create': {
   const newNote: StickyNoteType = {,
   ...DEFAULT_STICKY_NOTE,
   id: generateNoteId(),
@@ -137,7 +137,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
   const duplicatedNote: StickyNoteType = {,
   ...note,
   id: generateNoteId(),
-  position: {,
+  position: {
   x: note.position.x + 20,
   y: note.position.y + 20,
 },

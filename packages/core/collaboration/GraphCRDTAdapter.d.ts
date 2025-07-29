@@ -145,7 +145,7 @@ export declare class GraphCRDTAdapter {
 /**
  * Factory function to create collaborative graph adapter
  */
-export declare function createCollaborativeGraph(options: CollaborativeGraphOptions,)
+export declare function createCollaborativeGraph(options: CollaborativeGraphOptions)
   initialGraph?: Graph
 ): GraphCRDTAdapter;
 //# sourceMappingURL=GraphCRDTAdapter.d.ts.map

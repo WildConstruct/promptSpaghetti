@@ -8,38 +8,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 export interface ReactionType {
-  id: string;,
+  id: string;
   emoji: string;
-  label: string;,
+  label: string;
   category: 'positive' | 'neutral' | 'negative';
   weight: number; // For analytics scoring,
   description: string;
 }
 export interface ReactionData {
-  reactionId: string;,
+  reactionId: string;
   contentId: string;
-  contentType: 'template' | 'comment' | 'review' | 'project' | 'user';,
+  contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
   userId: string;
-  reactionType: string;,
+  reactionType: string;
   timestamp: Date;
   metadata?: Record<string, unknown>;
 }
 export interface ReactionSummary {
-  contentId: string;,
+  contentId: string;
   totalReactions: number;
   reactionCounts: Record<string, number>;
   userReaction?: string;
   topReactions: Array<{,
-  type: string;,
+  type: string;
   emoji: string;
-  count: number;,
+  count: number;
   percentage: number;
 }>;
   sentimentScore: number; // -1 to 1 scale,
-  engagementLevel: 'low' | 'medium' | 'high' | 'viral';
-}
+  engagementLevel: 'low' | 'medium' | 'high' | 'viral'
+  }
 export interface ReactionButtonProps {
-  contentId: string;,
+  contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
   userId?: string;
   onReaction?: (reaction: ReactionData) => Promise<void>;
@@ -153,7 +153,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
     reactionCounts: {},
     topReactions: [],
     sentimentScore: 0,
-    engagementLevel: 'low';
+    engagementLevel: 'low'
   });
   const [showPicker, setShowPicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -190,7 +190,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
           userId,
           reactionType: isRemoving ? '' : reactionType, // Empty string for removal
           timestamp: new Date(),
-          metadata: {,
+          metadata: {
   action: isRemoving ? 'remove' : 'add',
   previousReaction: summary.userReaction,
 };
@@ -218,19 +218,19 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
   }, [disabled, userId, showPicker]);
   // Component sizing
   const sizeStyles = {
-  small: {,
+  small: {
   fontSize: '12px',
   padding: '4px 6px',
   gap: '4px',
   emojiSize: '14px',
 },
-  medium: {,
+  medium: {
   fontSize: '14px',
   padding: '6px 8px',
   gap: '6px',
   emojiSize: '16px',
 },
-  large: {,
+  large: {
   fontSize: '16px',
   padding: '8px 12px',
   gap: '8px',
@@ -342,8 +342,8 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
   e.currentTarget.style.backgroundColor = isUserReaction ? '#dbeafe' : '#f3f4f6';
 }}
                 onMouseOut={(e) => {
-  e.currentTarget.style.backgroundColor = isUserReaction ? '#eff6ff' : 'transparent';
-}}
+  e.currentTarget.style.backgroundColor = isUserReaction ? '#eff6ff' : 'transparent'
+  }}
               >
                 <span style={{
   fontSize: currentSize.emojiSize,
@@ -417,7 +417,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
           fontSize: `calc(${currentSize.fontSize} * 0.9)`}
 },
   color: '#6b7280',
-          fontWeight: '500';
+          fontWeight: '500'
   }}>
           {summary.totalReactions > 0 && `+${summary.totalReactions}`}
         </span>
@@ -520,7 +520,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
                 color: isUserReaction ? '#3b82f6' : '#6b7280',
                 backgroundColor: isUserReaction ? '#dbeafe' : '#f3f4f6',
                 padding: '1px 4px',
-                borderRadius: '8px';
+                borderRadius: '8px'
   }}>
                 {count}
               </span>
@@ -611,7 +611,7 @@ function generateMockSummary(contentId: string, userId?: string): ReactionSummar
     sentimentScore,
     engagementLevel
   };
-function updateSummaryAfterReaction(currentSummary: ReactionSummary,)
+function updateSummaryAfterReaction(currentSummary: ReactionSummary)
   reactionType: string,
   isRemoving: boolean): ReactionSummary {,
   const newCounts = { ...currentSummary.reactionCounts };

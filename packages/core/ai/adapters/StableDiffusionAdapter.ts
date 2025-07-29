@@ -39,11 +39,11 @@ export interface StableDiffusionRequestOptions {
   inpaint_full_res?: boolean;
   // LoRA and ControlNet
   lora_models?: Array<{,
-  name: string;,
+  name: string;
   strength: number;
 }>;
   controlnet?: Array<{
-  model: string;,
+  model: string;
   image: string;
   strength: number;
   guidance_start?: number;
@@ -68,11 +68,11 @@ export interface StableDiffusionGenerationResult {
   images: Array<{,
   base64: string;
   url?: string;
-  seed: number;,
-  metadata: {,
-  model: string;,
+  seed: number;
+  metadata: {
+  model: string;
   sampler: string;
-  steps: number;,
+  steps: number;
   cfg_scale: number;
   size: string;
 };
@@ -80,14 +80,14 @@ export interface StableDiffusionGenerationResult {
   originalPrompt: string;
   negativePrompt?: string;
   parameters: Record<string, any>;
-  generationTime: number;,
+  generationTime: number;
   usage: {;
-  computeUnits: number;,
+  computeUnits: number;
   estimatedCost: number;
 };
 }
 export interface ModelInfo {
-  name: string;,
+  name: string;
   filename: string;
   type: 'checkpoint' | 'lora' | 'controlnet' | 'embedding' | 'vae';
   size?: number;
@@ -109,7 +109,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       costPerRequest: StableDiffusionAdapter.getEstimatedCost(config.apiType),
       averageLatency: StableDiffusionAdapter.getEstimatedLatency(config.apiType),
       maxConcurrency: config.apiType === 'stability-ai' ? 10 : 3,
-      rateLimit: {,
+      rateLimit: {
   requestsPerMinute: config.apiType === 'stability-ai' ? 150 : 30,
   tokensPerMinute: 5000,
 },
@@ -124,7 +124,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       supportsBatch: true,
       supportsStreaming: false,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   steps: { type: 'number', min: 1, max: 150, default: 20 },
         cfg_scale: { type: 'number', min: 1, max: 30, default: 7 },
         width: { type: 'number', min: 64, max: 2048, default: 512, step: 64 },
@@ -180,7 +180,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.7,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: estimatedCost,
   processingCost: 0,
@@ -199,7 +199,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       this.updateConfiguration({ name: modelName });
     } else {
       throw new Error(`Model switching not supported for ${this.config.apiType}`);}
-  async img2img(initImage: string,)
+  async img2img(initImage: string)
     prompt: string,
     options?: Partial<StableDiffusionRequestOptions>
   ): Promise<StableDiffusionGenerationResult> {
@@ -210,7 +210,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
   ...options
 };
     return this.process(prompt, img2imgOptions);
-  async inpaint(initImage: string,)
+  async inpaint(initImage: string)
     mask: string,
     prompt: string,
     options?: Partial<StableDiffusionRequestOptions>
@@ -224,7 +224,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
   ...options
 };
     return this.process(prompt, inpaintOptions);
-  async upscale(image: string,)
+  async upscale(image: string)
     upscaler: string = 'ESRGAN_4x',
     scale: number = 2): Promise<StableDiffusionGenerationResult> {,
   if (this.config.apiType !== 'automatic1111') {
@@ -250,7 +250,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       images: [{,
   base64: response.image,
         seed: 0,
-        metadata: {,
+        metadata: {
   model: upscaler,
           sampler: 'upscale',
           steps: 0,
@@ -260,7 +260,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       originalPrompt: 'Upscale',
       parameters: payload,
       generationTime: 0,
-      usage: {,
+      usage: {
   computeUnits: scale * 10,
   estimatedCost: 0.01 * scale,
 };
@@ -469,14 +469,14 @@ export class StableDiffusionAdapter extends BaseAIModel {
   seed: options.seed,
   batch_size: options.batch_size,
 };
-  private _processGenerationResponse(response: StableDiffusionResponse,)
+  private _processGenerationResponse(response: StableDiffusionResponse)
     prompt: string,
     options: StableDiffusionRequestOptions,
     generationTime: number): StableDiffusionGenerationResult {,
     const images = response.images.map((base64, index) => ({)
   base64,
       seed: this._extractSeedFromResponse(response, index),
-      metadata: {,
+      metadata: {
   model: this.config.defaultModel || 'stable-diffusion',
         sampler: options.sampler_name || 'Unknown',
         steps: options.steps || 20,
@@ -490,7 +490,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
   negativePrompt: options.negative_prompt,
   parameters: response.parameters || options,
   generationTime,
-  usage: {,
+  usage: {
   computeUnits,
   estimatedCost: (computeUnits / 100) * (this._metadata.costPerRequest || 0.01),
 };

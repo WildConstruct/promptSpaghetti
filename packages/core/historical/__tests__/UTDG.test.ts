@@ -114,14 +114,14 @@ describe('UTDG Historical Data Integration Foundation', () => {
   id: 'test_peasant_silk',
   type: 'material',
   content: 'Expensive silk fabric',
-  metadata: {,
+  metadata: {
   era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
   authenticity: 0.9,
   source: 'test',
   tags: ['silk', 'luxury'],
   social_class: ['peasant'],
 },
-  relationships: {,
+  relationships: {
   compatible: [],
   incompatible: [],
   variations: [],
@@ -207,13 +207,13 @@ describe('UTDG Type System', () => {
   id: 'test_node_001',
   type: 'material',
   content: 'Test historical material',
-  metadata: {,
+  metadata: {
   era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
   authenticity: 0.8,
   source: 'test source',
   tags: ['test', 'material'],
 },
-  relationships: {,
+  relationships: {
   compatible: [],
   incompatible: [],
   variations: [],

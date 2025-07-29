@@ -4,9 +4,9 @@
  */
 
 export interface ExtensionPointDocumentation {
-  name: string;,
+  name: string;
   description: string;
-  interface: string;,
+  interface: string;
   examples: string;
   version: string;
 }

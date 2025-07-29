@@ -319,7 +319,8 @@ export class DataValidationSystem {
                         try {
                             // Get events for validation
                             const events = await this.eventRepository.findMany({});
-                            filter: { }
+                            filter: {
+                            }
                         }
                         finally {
                         }

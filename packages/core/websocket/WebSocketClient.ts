@@ -8,11 +8,11 @@ import {
 } from '../../../server/src/websocket/types';
 
 export interface WebSocketClientConfig {
-  url: string;,
+  url: string;
   reconnectInterval: number;
-  maxReconnectAttempts: number;,
+  maxReconnectAttempts: number;
   heartbeatInterval: number;
-  connectionTimeout: number;,
+  connectionTimeout: number;
   enableOfflineQueue: boolean;
   authToken?: string;
 }
@@ -26,7 +26,7 @@ export class WebSocketClient extends EventEmitter {
   private ws: WebSocket | null = null;
   private config: WebSocketClientConfig;
   private state: ConnectionState;
-  private messageQueue: WSMessage = [];
+  private messageQueue: WSMessage[] = [];
   private heartbeatInterval: number | null = null;
   private reconnectTimeout: number | null = null;
   private connectionTimeout: number | null = null;
@@ -44,7 +44,7 @@ export class WebSocketClient extends EventEmitter {
    */
   async connect(documentId: string, userId?: string): Promise<void> {
     if (this.state.status === 'connecting' || this.state.status === 'connected') {
-      return;
+      return (
     this.documentId = documentId;
     this.userId = userId || 'anonymous';
     this.state.status = 'connecting';
@@ -68,7 +68,7 @@ export class WebSocketClient extends EventEmitter {
   * Send graph update
   */
   sendGraphUpdate(update: GraphUpdatePayload): boolean {,
-  return this.sendMessage({)
+  return this.sendMessage({
   type: 'graph_update',
   payload: update,
   timestamp: Date.now(),
@@ -79,7 +79,7 @@ export class WebSocketClient extends EventEmitter {
    * Send presence update
    */
   sendPresenceUpdate(presence: PresenceUpdatePayload): boolean {
-  return this.sendMessage({)
+  return this.sendMessage({
   type: 'presence_update',
   payload: presence,
   timestamp: Date.now(),
@@ -90,7 +90,7 @@ export class WebSocketClient extends EventEmitter {
    * Send cursor position update
    */
   sendCursorUpdate(x: number, y: number, nodeId?: string, viewportBounds?: any): boolean {
-    return this.sendMessage({)
+    return this.sendMessage({
   type: 'cursor_update',
       payload: { x, y, nodeId, viewportBounds },
       timestamp: Date.now(),
@@ -101,7 +101,7 @@ export class WebSocketClient extends EventEmitter {
    * Send selection update
    */
   sendSelectionUpdate(nodeIds: string, edgeIds?: string, selectionBox?: any): boolean {
-    return this.sendMessage({)
+    return this.sendMessage({
   type: 'selection_update',
       payload: { nodeIds, edgeIds, selectionBox },
       timestamp: Date.now(),
@@ -112,7 +112,7 @@ export class WebSocketClient extends EventEmitter {
    * Send activity update
    */
   sendActivityUpdate(currentTool?: string, isTyping?: boolean, focusedNodeId?: string): boolean {
-    return this.sendMessage({)
+    return this.sendMessage({
   type: 'activity_update',
       payload: { currentTool, isTyping, focusedNodeId },
       timestamp: Date.now(),
@@ -123,7 +123,7 @@ export class WebSocketClient extends EventEmitter {
    * Request presence data
    */
   requestPresenceData(): boolean {
-    return this.sendMessage({)
+    return this.sendMessage({
   type: 'presence_request',
       payload: {},
       timestamp: Date.now(),
@@ -134,9 +134,9 @@ export class WebSocketClient extends EventEmitter {
    * Send authentication request
    */
   sendAuthRequest(token: string): boolean {
-  return this.sendMessage({)
+  return this.sendMessage({
   type: 'auth_request',
-  payload: {,
+  payload: {
   token,
   documentId: this.documentId || '',
   permissions: ['read', 'write'],
@@ -210,43 +210,43 @@ export class WebSocketClient extends EventEmitter {
   try {
   const message = WSMessageSchema.parse(JSON.parse(data));
   switch (message.type) {
-  case 'connect':,
+  case 'connect':
   this.handleConnectMessage(message);
   break;
-  case 'auth_response':,
+  case 'auth_response':
   this.handleAuthResponse(message);
   break;
-  case 'graph_update':,
+  case 'graph_update':
   this.emit('graph_update', message.payload);
   break;
-  case 'presence_update':,
+  case 'presence_update':
   this.emit('presence_update', message.payload);
   break;
-  case 'user_join':,
+  case 'user_join':
   this.emit('user_join', message.payload);
   break;
-  case 'user_leave':,
+  case 'user_leave':
   this.emit('user_leave', message.payload);
   break;
-  case 'presence_sync':,
+  case 'presence_sync':
   this.emit('presence_sync', message.payload);
   break;
-  case 'cursor_update':,
+  case 'cursor_update':
   this.emit('cursor_update', message.payload);
   break;
-  case 'selection_update':,
+  case 'selection_update':
   this.emit('selection_update', message.payload);
   break;
-  case 'activity_update':,
+  case 'activity_update':
   this.emit('activity_update', message.payload);
   break;
-  case 'user_status_changed':,
+  case 'user_status_changed':
   this.emit('user_status_changed', message.payload);
   break;
-  case 'pong':,
+  case 'pong':
   // Heartbeat response received
   break;
-  case 'error':,
+  case 'error':
   this.emit('error', message.payload);
   break;
   default:,
@@ -305,7 +305,7 @@ export class WebSocketClient extends EventEmitter {
   */
   private scheduleReconnect(): void {,
   this.state.reconnectAttempts++;
-  const delay = Math.min(;);
+  const delay = Math.min(;
   this.config.reconnectInterval * Math.pow(2, this.state.reconnectAttempts - 1),
   30000 // Max 30 seconds
   );
@@ -345,7 +345,7 @@ export class WebSocketClient extends EventEmitter {
    */
   private processMessageQueue(): void {
     if (this.messageQueue.length === 0) {
-      return;
+      return (
     const messages = [...this.messageQueue];
     this.messageQueue = [];
     for (const message of messages) {
@@ -360,7 +360,7 @@ export class WebSocketClient extends EventEmitter {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
     this.heartbeatInterval = window.setInterval(() => {
-      this.sendMessage({)
+      this.sendMessage({
   type: 'ping',
         payload: { timestamp: Date.now() },
         timestamp: Date.now();

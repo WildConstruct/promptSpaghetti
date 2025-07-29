@@ -17,21 +17,25 @@ export interface IntegratedFileBrowserProps {
   height?: string;
   showCreateControls?: boolean;
   currentProject?: string;
-  interface FileContextMenuAction {
-  id: string;,
+}
+
+interface FileContextMenuAction {
+  id: string;
   label: string;
-  icon: string;,
+  icon: string;
   action: (file: PSGFile) => void;
   separator?: boolean;
   destructive?: boolean;
-  interface FolderViewState {
-  viewMode: 'list' | 'grid' | 'details';,
+}
+
+interface FolderViewState {
+  viewMode: 'list' | 'grid' | 'details';
   sortBy: 'name' | 'modified' | 'size' | 'type';
-  sortDirection: 'asc' | 'desc';,
+  sortDirection: 'asc' | 'desc';
   showHidden: boolean;
   filterText: string;
 }
-export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
+export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
   onFileSelected,
   onProjectLoad,
   onNewProject,
@@ -46,11 +50,11 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   const [favoriteFiles, setFavoriteFiles] = useState<PSGFile>([]);
   const [selectedFile, setSelectedFile] = useState<PSGFile | null>(null);
   const [contextMenu, setContextMenu] = useState<{
-  x: number;,
+  x: number;
   y: number;
   file: PSGFile;
 } | null>(null);
-  const [viewState, setViewState] = useState<FolderViewState>({)
+  const [viewState, setViewState] = useState<FolderViewState>({
   viewMode: 'grid',
   sortBy: 'modified',
   sortDirection: 'desc',
@@ -58,7 +62,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   filterText: '',
 });
   const [currentFolder, setCurrentFolder] = useState<string>('/');
-  const [breadcrumbs, setBreadcrumbs] = useState<Array<{ name: string; path: string }>>([)
+  const [breadcrumbs, setBreadcrumbs] = useState<Array<{ name: string; path: string }>>([
     { name: 'Projects', path: '/' }
   ]);
   const [loading, setLoading] = useState(false);
@@ -67,7 +71,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   tertiary: '#f1f5f9',
@@ -78,7 +82,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   hover: '#f3f4f6',
   selection: '#dbeafe',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   tertiary: '#0f172a',
@@ -89,7 +93,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   hover: '#374151',
   selection: '#1e3a8a',
 },
-  cinema: {,
+  cinema: {
   background: 'var(--color-bg-primary, #1e1e1e)',
   secondary: 'var(--color-bg-secondary, #2a2a2a)',
   tertiary: 'var(--color-bg-tertiary, #353535)',
@@ -99,6 +103,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   accent: 'var(--color-accent-orange, #ff7c00)',
   hover: 'var(--color-ui-hover, #2d2d2d)',
   selection: 'var(--color-ui-selection, #ff7c0040)',
+  }
 };
     return themes[theme];
   };
@@ -113,7 +118,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
     setLoading(true);
     try {
       // Mock file loading - in real implementation would fetch from server/filesystem
-      const mockFiles = [;
+      const mockFiles = [
         projectManager.getMockFile('Character Development Graph'),
         projectManager.getMockFile('Story Structure Template'),
         projectManager.getMockFile('Dialogue Generation System'),
@@ -125,9 +130,10 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
       ];
       setFiles(mockFiles);
     } catch (error) {
-  console.error('Failed to load files:', error);
-} finally {
+      console.error('Failed to load files:', error);
+    } finally {
       setLoading(false);
+    }
   }, [currentFolder, projectManager]);
   const loadRecentFiles = useCallback(() => {
     setRecentFiles(projectManager.getRecentFiles(10));
@@ -140,29 +146,31 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   let filtered = files;
   // Apply text filter
   if (viewState.filterText) {
-  const query = viewState.filterText.toLowerCase();
-  filtered = files.filter(file => )
-  file.name.toLowerCase().includes(query) ||
-  file.metadata.description?.toLowerCase().includes(query) ||
-  file.metadata.tags.some(tag => tag.toLowerCase().includes(query))
-  );
+    const query = viewState.filterText.toLowerCase();
+    filtered = files.filter(file =>
+      file.name.toLowerCase().includes(query) ||
+      file.metadata.description?.toLowerCase().includes(query) ||
+      file.metadata.tags.some(tag => tag.toLowerCase().includes(query))
+    );
+  }
   // Apply sorting
   filtered.sort((a, b) => {
   let comparison = 0;
   switch (viewState.sortBy) {
-  case 'name':,
+  case 'name':
   comparison = a.name.localeCompare(b.name);
   break;
-  case 'modified':,
+  case 'modified':
   comparison = new Date(a.lastModified).getTime() - new Date(b.lastModified).getTime();
   break;
-  case 'size':,
+  case 'size':
   comparison = a.size - b.size;
   break;
-  case 'type':,
-  comparison = a.name.split('.').pop()?.localeCompare(b.name.split('.').pop() || '') || 0;
-  break;
-  return viewState.sortDirection === 'desc' ? -comparison : comparison;
+  case 'type':
+      comparison = a.name.split('.').pop()?.localeCompare(b.name.split('.').pop() || '') || 0;
+      break;
+    }
+    return viewState.sortDirection === 'desc' ? -comparison : comparison;
 });
     return filtered;
   }, [files, viewState]);
@@ -178,7 +186,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   }, [projectManager, loadRecentFiles, onProjectLoad]);
   const handleFileContextMenu = useCallback((e: React.MouseEvent, file: PSGFile) => {
   e.preventDefault();
-  setContextMenu({)
+  setContextMenu({
   x: e.clientX,
   y: e.clientY,
   file
@@ -191,81 +199,87 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
     setContextMenu(null);
   }, [projectManager, loadFavoriteFiles]);
   const handleFileDelete = useCallback((file: PSGFile) => {
-    if (confirm(`Are you sure you want to delete "${file.name}"? This action cannot be undone.`)) {}
+    if (confirm(`Are you sure you want to delete "${file.name}"? This action cannot be undone.`)) {
       // Mock deletion - in real implementation would delete from server/filesystem
       setFiles(prev => prev.filter(f => f.id !== file.id));
       if (selectedFile?.id === file.id) {
         setSelectedFile(null);
+      }
       onFileAction?.('delete', file);
+    }
     setContextMenu(null);
   }, [selectedFile, onFileAction]);
   const handleFileRename = useCallback((file: PSGFile) => {
     const newName = prompt('Enter new file name:', file.name.replace('.psg', ''));
     if (newName && newName !== file.name.replace('.psg', '')) {
       // Mock rename - in real implementation would rename on server/filesystem
-      file.name = `${newName}.psg`;}
+      file.name = `${newName}.psg`;
       file.metadata.title = newName;
       setFiles(prev => [...prev]);
       onFileAction?.('rename', file);
+    }
     setContextMenu(null);
   }, [onFileAction]);
   const handleFileDuplicate = useCallback((file: PSGFile) => {
     // Mock duplication - in real implementation would duplicate on server/filesystem
     const duplicatedFile = {
       ...file,
-      id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
-},
-  name: file.name.replace('.psg', ' Copy.psg'),
-      metadata: {,
-  ...file.metadata,
-  title: file.metadata.title + ' Copy',
-  created: new Date(),
-};
+      id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      name: file.name.replace('.psg', ' Copy.psg'),
+      metadata: {
+        ...file.metadata,
+        title: file.metadata.title + ' Copy',
+        created: new Date()
+      }
+    };
     setFiles(prev => [duplicatedFile, ...prev]);
     onFileAction?.('duplicate', file);
     setContextMenu(null);
   }, [onFileAction]);
   // Context menu actions
-  const contextMenuActions: FileContextMenuAction = [
+  const contextMenuActions: FileContextMenuAction[] = [
     {
   id: 'open',
   label: 'Open',
   icon: '📂',
-  action: handleFileDoubleClick,
-}
+      action: handleFileDoubleClick
+    },
     {
   id: 'favorite',
   label: contextMenu?.file.isFavorite ? 'Remove from Favorites' : 'Add to Favorites',
   icon: contextMenu?.file.isFavorite ? '⭐' : '☆',
-  action: handleToggleFavorite,
-}
+      action: handleToggleFavorite
+    },
     { id: 'sep1', label: '', icon: '', action: () => {}, separator: true },
     {
   id: 'rename',
   label: 'Rename',
   icon: '✏️',
-  action: handleFileRename,
-}
+      action: handleFileRename
+    },
     {
   id: 'duplicate',
   label: 'Duplicate',
   icon: '📄',
-  action: handleFileDuplicate,
-}
+      action: handleFileDuplicate
+    },
     { id: 'sep2', label: '', icon: '', action: () => {}, separator: true },
     {
-  id: 'delete',
-  label: 'Delete',
-  icon: '🗑️',
-  action: handleFileDelete,
-  destructive: true];
+      id: 'delete',
+      label: 'Delete',
+      icon: '🗑️',
+      action: handleFileDelete,
+      destructive: true
+    }
+  ];
   // Close context menu on click outside
   useEffect(() => {
-  const handleClickOutside = () => setContextMenu(null);
-  if (contextMenu) {
-  document.addEventListener('click', handleClickOutside);
-  return () => document.removeEventListener('click', handleClickOutside);
-}, [contextMenu]);
+    const handleClickOutside = () => setContextMenu(null);
+    if (contextMenu) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [contextMenu]);
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
     const k = 1024;
@@ -274,15 +288,15 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
   const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('en-US', {)
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-}).format(new Date(date));
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(date));
   };
-  return;
+  return (
     <div style={{
   display: 'flex',
   flexDirection: 'column',
@@ -299,9 +313,8 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
         justifyContent: 'space-between',
         padding: '12px 16px',
         backgroundColor: styles.secondary,
-        borderBottom: `1px solid ${styles.border}`}
-},
-  gap: '12px';
+        borderBottom: `1px solid ${styles.border}`,
+        gap: '12px'
   }}>
         {/* Search */}
         <div style={{ flex: 1, maxWidth: '300px' }}>
@@ -319,7 +332,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   borderRadius: '6px',
               color: styles.text,
               fontSize: '13px',
-              outline: 'none';
+              outline: 'none'
   }}
           />
         </div>
@@ -339,7 +352,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
 },
   borderRadius: '4px',
               color: styles.text,
-              fontSize: '12px';
+              fontSize: '12px'
   }}
           >
             <option value="name-asc">Name A-Z</option>
@@ -408,7 +421,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
   padding: '16px 0',
           display: 'flex',
           flexDirection: 'column',
-          gap: '8px';
+          gap: '8px'
   }}>
           {/* Quick Access */}
           <div style={{ padding: '0 16px' }}>
@@ -535,9 +548,8 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
           <div style={{
             padding: '12px 16px',
             backgroundColor: styles.tertiary,
-            borderBottom: `1px solid ${styles.border}`}
-},
-  display: 'flex',
+            borderBottom: `1px solid ${styles.border}`,
+            display: 'flex',
             alignItems: 'center',
             gap: '8px',
             fontSize: '13px',
@@ -619,7 +631,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                       display: 'flex',
                       flexDirection: viewState.viewMode === 'grid' ? 'column' : 'row',
                       alignItems: viewState.viewMode === 'grid' ? 'center' : 'center',
-                      gap: viewState.viewMode === 'grid' ? '8px' : '12px';
+                      gap: viewState.viewMode === 'grid' ? '8px' : '12px'
   }}
                     onMouseOver={(e) => {
                       if (selectedFile?.id !== file.id) {
@@ -627,8 +639,8 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                     }}
                     onMouseOut={(e) => {
                       if (selectedFile?.id !== file.id) {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                        e.currentTarget.style.backgroundColor = 'transparent'
+  }}
                   >
                     {/* File Icon/Thumbnail */}
                     <div style={{
@@ -712,7 +724,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
             zIndex: 10000,
             padding: '4px 0',
-            minWidth: '180px';
+            minWidth: '180px'
   }}
           onClick={(e) => e.stopPropagation()}
         >

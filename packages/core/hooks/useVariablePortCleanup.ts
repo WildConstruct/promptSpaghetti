@@ -29,7 +29,7 @@ interface VariablePortCleanupOptions {
    */
   onEdgesCleanedUp?: (cleanedEdges: Edge) => void;
 interface VariablePortInfo {
-  nodeId: string;,
+  nodeId: string;
   portId: string;
   variableName: string;
 /**
@@ -69,7 +69,7 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
   /**
    * Get all valid handle IDs from current nodes
    */
-  const getValidHandleIds = useCallback((nodes: Node): {,
+  const getValidHandleIds = useCallback((nodes: Node): {
   handleIds: Set<string>,
   variablePorts: Map<string, VariablePortInfo>,
 } => {
@@ -131,7 +131,7 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
   ...edge,
   targetHandle: bestMatch.portId,
   // Add migration metadata
-  data: {,
+  data: {
   ...edge.data,
   migrated: true,
   originalTargetHandle: edge.targetHandle,

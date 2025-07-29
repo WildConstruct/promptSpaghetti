@@ -82,7 +82,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('tracks execution order', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node1 = new TestAdvancedNode('node1', 'data1');
       const node2 = new TestAdvancedNode('node2', 'data2');
@@ -93,7 +93,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('implements caching when enabled', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node = new TestAdvancedNode('cached', 'data', { cacheable: true });
       const result1 = node.run(ctx);
@@ -105,7 +105,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('skips caching when disabled', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node = new TestAdvancedNode('uncached', 'data', { cacheable: false });
       node.run(ctx);
@@ -114,7 +114,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('manages state correctly', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node = new StatefulTestNode('stateful');
       expect(node.run(ctx)).toBe(0);
@@ -138,18 +138,18 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       const node = new TestAdvancedNode('rng', 'data');
       const ctx1 = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'seed1';
+        seed: 'seed1'
   });
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'seed2';
+        seed: 'seed2'
   });
       expect(node.run(ctx1)).not.toBe(node.run(ctx2));
     });
     it('records performance metrics', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node = new TestAdvancedNode('perf', 'data');
       node.run(ctx);
@@ -170,7 +170,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
   deterministic: false,
   cacheable: true,
   stateful: false,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 });
@@ -198,7 +198,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       const node = new TestAdvancedNode('specific', 'data');
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'base';
+        seed: 'base'
   });
       // Access protected method through inheritance
       class TestableNode extends TestAdvancedNode {
@@ -227,7 +227,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('clears execution state', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       // Add some state
       ctx.nodeStates.set('node1', { count: 5 });
@@ -248,7 +248,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('detects infinite loops', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       ctx.evaluationDepth = 999;
       expect(AdvancedExecutionUtils.detectInfiniteLoop(ctx, 'node1')).toBe(false);
@@ -258,7 +258,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('calculates execution statistics', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       // Simulate execution
       ctx.executionMeta.nodeExecutionOrder.push('node1', 'node2', 'node3');
@@ -274,7 +274,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('handles optional inputs and outputs', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       ctx.inputs = { input1: 'value1' };
       ctx.outputs = { output1: 'result1' };
@@ -360,7 +360,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
   const validData: AdvancedNodeData = {,
   id: 'node-id',
   type: 'NodeType',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: true,
@@ -397,7 +397,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect();
         SerializationHelpers.validateSerializedData({)
   ...validData,
-  config: {,
+  config: {
   deterministic: 'yes',
   cacheable: false,
   stateful: true,
@@ -440,7 +440,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       const node = new TestNodeWithIO('io-test');
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       expect(node.run(ctx)).toBe('test-output');
     });
@@ -449,7 +449,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('handles high evaluation depth', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       for (let i = 0; i < 1000; i++) {
         ctx.evaluationDepth = i;
@@ -460,7 +460,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('handles large cache sizes', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node = new TestAdvancedNode('cache-test', 'data');
       // Simulate many cache entries
@@ -474,7 +474,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('handles concurrent state modifications', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       const node1 = new StatefulTestNode('node1');
       const node2 = new StatefulTestNode('node2');
@@ -489,7 +489,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('measures very fast operations', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test';
+        seed: 'test'
   });
       class FastNode extends TestAdvancedNode {
   measureFast(ctx: AdvancedExecutionContext) {,

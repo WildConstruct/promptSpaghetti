@@ -28,7 +28,7 @@ import { DataClassificationHelpers } from './DataClassificationHelpers';
  */
 
 export interface ClassificationAwareRequest extends Request {
-  classification?: {,
+  classification?: {
   level: DataClassificationLevel;
   dataId?: string;
   enforcement?: EnforcementResult;
@@ -257,8 +257,8 @@ async function extractClassificationFromPath(req: Request): Promise<DataClassifi
   // Handle special cases
   let finalOperation = operation;
   if (req.path.includes('/export')) {
-  finalOperation = 'export';
-} else if (req.path.includes('/share')) {
+  finalOperation = 'export'
+  } else if (req.path.includes('/share')) {
   finalOperation = 'share';
   return {
   operation: finalOperation,
@@ -303,7 +303,7 @@ function extractCurrentControls(()
   /**
   * Handle enforcement denial
   */
-  function handleEnforcementDenial(req: ClassificationAwareRequest,)
+  function handleEnforcementDenial(req: ClassificationAwareRequest)
   res: Response,
   result: EnforcementResult,
   config: ClassificationEnforcementMiddlewareConfig): void {,
@@ -321,7 +321,7 @@ function extractCurrentControls(()
   /**
   * Setup response monitoring
   */
-  function setupResponseMonitoring(req: ClassificationAwareRequest,)
+  function setupResponseMonitoring(req: ClassificationAwareRequest)
   res: Response,
   result: EnforcementResult): void {,
   const originalSend = res.send;
@@ -344,7 +344,7 @@ function extractCurrentControls(()
 /**
  * Handle middleware errors
  */
-function handleMiddlewareError(error: Error,)
+function handleMiddlewareError(error: Error)
   req: Request,
   res: Response,
   config: ClassificationEnforcementMiddlewareConfig): void {,
@@ -404,7 +404,7 @@ function generateRequestId(): string {
  */
 export function enforceClassification()
   classification: DataClassificationLevel,
-  options: {,
+  options: {
   allowedOperations?: OperationContext['operation'][];
   requiredControls?: string;
   customValidation?: (req: Request) => boolean;

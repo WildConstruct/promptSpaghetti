@@ -4,25 +4,25 @@
  */
 
 export interface ComplianceCheck {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: 'security' | 'privacy' | 'regulatory' | 'operational';
-  framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';,
+  framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  autoFix: boolean;,
+  autoFix: boolean;
   frequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
   check: (context: ComplianceContext) => Promise<ComplianceResult>;
 }
 export interface ComplianceContext {
   timestamp: Date;
   userId?: string;
-  systemComponent: string;,
+  systemComponent: string;
   environment: 'development' | 'staging' | 'production';
   data?: Record<string, unknown>;
 }
 export interface ComplianceResult {
-  checkId: string;,
+  checkId: string;
   status: 'compliant' | 'non_compliant' | 'warning' | 'error';
   score: number; // 0-100,
   message: string;
@@ -32,47 +32,47 @@ export interface ComplianceResult {
   timestamp: Date;
 }
 export interface ComplianceEvidence {
-  type: 'log' | 'configuration' | 'data' | 'certificate' | 'audit_trail';,
+  type: 'log' | 'configuration' | 'data' | 'certificate' | 'audit_trail';
   source: string;
-  content: string;,
+  content: string;
   timestamp: Date;
 }
 export interface RemediationAction {
-  id: string;,
+  id: string;
   description: string;
-  automated: boolean;,
+  automated: boolean;
   priority: 'low' | 'medium' | 'high' | 'critical';
   estimatedTime: string;
   execute?: () => Promise<void>;
 }
 export interface ComplianceDashboard {
-  overallScore: number;,
+  overallScore: number;
   frameworkScores: Record<string, number>;
-  recentViolations: ComplianceViolation;,
+  recentViolations: ComplianceViolation;
   trendData: ComplianceTrend;
   upcomingAudits: UpcomingAudit;
 }
 export interface ComplianceViolation {
-  id: string;,
+  id: string;
   checkId: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  detectedAt: Date;,
+  detectedAt: Date;
   status: 'open' | 'investigating' | 'resolved' | 'accepted';
   assignedTo?: string;
   dueDate?: Date;
 }
 export interface ComplianceTrend {
-  framework: string;,
+  framework: string;
   period: string;
-  score: number;,
+  score: number;
   previousScore: number;
-  trend: 'improving' | 'stable' | 'declining';
-}
+  trend: 'improving' | 'stable' | 'declining'
+  }
 export interface UpcomingAudit {
-  framework: string;,
+  framework: string;
   type: 'internal' | 'external';
-  scheduledDate: Date;,
+  scheduledDate: Date;
   preparationStatus: 'not_started' | 'in_progress' | 'ready';
   requiredEvidence: string;
 }
@@ -361,7 +361,7 @@ export class ComplianceMonitor {
       severity: check.severity,
       description: result.message,
       detectedAt: new Date(),
-      status: 'open';
+      status: 'open'
   };
     this.violations.push(violation);
     // Send alerts for critical violations
@@ -877,34 +877,34 @@ export class ComplianceMonitor {
 // Enhanced Compliance Dashboard with Baseline Integration
 
 export interface EnhancedComplianceDashboard extends ComplianceDashboard {
-  baselineTracking: {,
+  baselineTracking: {
   overallBaselineHealth: number; // 0-100,
-  baselinesMet: number;,
+  baselinesMet: number;
   totalBaselines: number;
-  criticalDeviations: number;,
+  criticalDeviations: number;
   frameworkBaselines: Record<string, {,
-  baselinesMet: number;,
+  baselinesMet: number;
   totalBaselines: number;
-  averagePerformance: number;,
-  status: 'healthy' | 'warning' | 'critical';
-}>;
+  averagePerformance: number;
+  status: 'healthy' | 'warning' | 'critical'
+  }>;
   };
-  historicalTrends: {,
+  historicalTrends: {
   improvingMetrics: number;
-  decliningMetrics: number;,
+  decliningMetrics: number;
   stableMetrics: number;
-  forecastAlerts: {,
-  metric: string;,
+  forecastAlerts: {
+  metric: string;
   framework: string;
-  predictedIssue: string;,
+  predictedIssue: string;
   timeframe: string;
-  risk: 'low' | 'medium' | 'high';
-}[];
+  risk: 'low' | 'medium' | 'high'
+  }[];
   };
-  auditReadiness: {,
+  auditReadiness: {
   overallReadiness: number; // 0-100,
   frameworkReadiness: Record<string, {,
-  score: number;,
+  score: number;
   status: 'ready' | 'needs_preparation' | 'not_ready';
   missingEvidence: string;
   nextAuditDue?: Date;
@@ -938,20 +938,20 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
       // Return basic dashboard if integration not available
       return {
         ...baseDashboard,
-        baselineTracking: {,
+        baselineTracking: {
   overallBaselineHealth: 0,
           baselinesMet: 0,
           totalBaselines: 0,
           criticalDeviations: 0,
           frameworkBaselines: {}
   },
-  historicalTrends: {,
+  historicalTrends: {
   improvingMetrics: 0,
   decliningMetrics: 0,
   stableMetrics: 0,
   forecastAlerts: [],
 },
-  auditReadiness: {,
+  auditReadiness: {
   overallReadiness: 0,
           frameworkReadiness: {}
       };
@@ -1008,27 +1008,27 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
       console.error('Error generating enhanced dashboard:', error);
       return {
         ...baseDashboard,
-        baselineTracking: {,
+        baselineTracking: {
   overallBaselineHealth: 0,
           baselinesMet: 0,
           totalBaselines: 0,
           criticalDeviations: 0,
           frameworkBaselines: {}
   },
-  historicalTrends: {,
+  historicalTrends: {
   improvingMetrics: 0,
   decliningMetrics: 0,
   stableMetrics: 0,
   forecastAlerts: [],
 },
-  auditReadiness: {,
+  auditReadiness: {
   overallReadiness: 0,
           frameworkReadiness: {}
       };
   /**
    * Record compliance measurement and update baselines
    */
-  async recordComplianceMeasurement(framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL',)
+  async recordComplianceMeasurement(framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL')
     metricName: string,
     actualValue: number,
     context?: Record<string, unknown>

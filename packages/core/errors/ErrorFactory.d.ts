@@ -51,14 +51,14 @@ export declare class ErrorFactory {
     /**
      * Create a graph execution error with node context
      */
-    static createGraphExecutionError(message: string,)
+    static createGraphExecutionError(message: string)
       cause?: Error,
       options?: ErrorFactoryOptions
     ): GraphExecutionError;
     /**
      * Create a node execution error with specific node context
      */
-    static createNodeExecutionError(nodeId: string,)
+    static createNodeExecutionError(nodeId: string)
       operation: string,
       message: string,
       cause?: Error,
@@ -67,7 +67,7 @@ export declare class ErrorFactory {
     /**
      * Create a database connection error with retry logic
      */
-    static createDatabaseConnectionError(message: string,)
+    static createDatabaseConnectionError(message: string)
       cause?: Error,
       options?: ErrorFactoryOptions
     ): DatabaseConnectionError;
@@ -86,34 +86,34 @@ export declare class ErrorFactory {
     /**
      * Create MFA configuration errors
      */
-    static createMFAConfigurationError(type: 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config',)
+    static createMFAConfigurationError(type: 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config')
       details?: string,
       options?: ErrorFactoryOptions
     ): MFAError;
     /**
      * Create MFA verification errors
      */
-    static createMFAVerificationError(type: 'expired' | 'invalid_code' | 'too_many_attempts' | 'method_not_active' | 'rate_limit',)
+    static createMFAVerificationError(type: 'expired' | 'invalid_code' | 'too_many_attempts' | 'method_not_active' | 'rate_limit')
       options?: ErrorFactoryOptions
     ): MFAError;
     /**
      * Create project locked error with lock context
      */
-    static createProjectLockedError(projectId?: string,)
+    static createProjectLockedError(projectId?: string)
       lockedBy?: string,
       options?: ErrorFactoryOptions
     ): ProjectLockedError;
     /**
      * Create permission denied errors
      */
-    static createPermissionDeniedError(resource: string,)
+    static createPermissionDeniedError(resource: string)
       action: string,
       options?: ErrorFactoryOptions
     ): AuthenticationError;
     /**
      * Create workflow state transition errors
      */
-    static createWorkflowStateError(message?: string,)
+    static createWorkflowStateError(message?: string)
       fromState?: string,
       toState?: string,
       options?: ErrorFactoryOptions
@@ -121,7 +121,7 @@ export declare class ErrorFactory {
     /**
      * Create API errors from HTTP responses
      */
-    static createAPIError(statusCode: number,)
+    static createAPIError(statusCode: number)
       message: string,
       endpoint?: string,
       responseBody?: any,
@@ -130,7 +130,7 @@ export declare class ErrorFactory {
     /**
      * Create network/fetch errors
      */
-    static createNetworkError(message: string,)
+    static createNetworkError(message: string)
       endpoint?: string,
       cause?: Error,
       options?: ErrorFactoryOptions
@@ -138,7 +138,7 @@ export declare class ErrorFactory {
     /**
      * Create validation errors for fields
      */
-    static createValidationError(field: string,)
+    static createValidationError(field: string)
       value: any,
       expected: string,
       options?: ErrorFactoryOptions
@@ -150,7 +150,7 @@ export declare class ErrorFactory {
     /**
      * Create configuration errors
      */
-    static createConfigurationError(message: string,)
+    static createConfigurationError(message: string)
       configKey?: string,
       options?: ErrorFactoryOptions
     ): ConfigurationError;

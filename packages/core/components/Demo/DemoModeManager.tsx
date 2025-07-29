@@ -8,11 +8,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
 export interface DemoModeConfig {
-  screenshotMode: boolean;,
+  screenshotMode: boolean;
   presentationFocus: boolean;
-  performanceMode: boolean;,
+  performanceMode: boolean;
   accessibilityMode: boolean;
-  brandingVisible: boolean;,
+  brandingVisible: boolean;
   debugElementsHidden: boolean;
 }
 export interface DemoModeManagerProps {
@@ -169,7 +169,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
 
 // Demo control panel for development/presentation setup
 interface DemoControlPanelProps {
-  config: DemoModeConfig;,
+  config: DemoModeConfig;
   onConfigChange: (updates: Partial<DemoModeConfig>) => void;
 const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigChange }) => {
   const [panelVisible, setPanelVisible] = useState(false);

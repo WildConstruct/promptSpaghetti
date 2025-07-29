@@ -34,7 +34,8 @@ export const CreatorAttributionDashboard = ({
         finally {
         }
     }, headers, {
-        'Authorization': `Bearer ${getAuthToken()}` });
+        'Authorization': `Bearer ${getAuthToken()}`
+    });
 }
 ;
 if (!response.ok) {
@@ -106,7 +107,7 @@ const renderStatsCards = () => {
 toFixed(2);
 pending `}
 },
-  color: 'green';
+  color: 'green'
   }
       {
   icon: Users,

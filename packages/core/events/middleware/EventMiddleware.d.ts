@@ -65,8 +65,8 @@ export declare const createPerformanceMiddleware: (options?: {)
 export declare const createDeduplicationMiddleware: (options: {)
     keyGenerator: (event: BaseEvent) => string;
     windowMs: number;
-    strategy?: "drop" | "merge" | "latest";
-}) => EventMiddleware;
+    strategy?: "drop" | "merge" | "latest"
+  }) => EventMiddleware;
 /**
  * Circuit breaker middleware
  */

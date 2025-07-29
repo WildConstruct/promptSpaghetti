@@ -32,15 +32,15 @@ import { Node, Graph } from '../graphSchema';
  */
 
 export interface GraphNodeCRDT {
-  id: string;,
+  id: string;
   type: string;
   position: { x: number; y: number };
   data: Record<string, any>;
-  inputs: string;,
+  inputs: string;
   metadata: {;
-  version: number;,
+  version: number;
   lastModified: string;
-  modifiedBy: string;,
+  modifiedBy: string;
   created: string;
   createdBy: string;
 };
@@ -49,16 +49,16 @@ export interface GraphNodeCRDT {
  */
 }
 export interface GraphEdgeCRDT {
-  id: string;,
+  id: string;
   sourceNodeId: string;
   targetNodeId: string;
   sourcePort?: string;
   targetPort?: string;
-  type: 'data' | 'control' | 'conditional';,
-  metadata: {,
-  version: number;,
+  type: 'data' | 'control' | 'conditional';
+  metadata: {
+  version: number;
   lastModified: string;
-  modifiedBy: string;,
+  modifiedBy: string;
   created: string;
   createdBy: string;
   [key: string]: any;
@@ -68,13 +68,13 @@ export interface GraphEdgeCRDT {
  */
 }
 export interface OperationRecord {
-  operationId: string;,
+  operationId: string;
   type: string;
   nodeId?: string;
   edgeId?: string;
-  timestamp: number;,
+  timestamp: number;
   userId: string;
-  applied: boolean;,
+  applied: boolean;
   reverted: boolean;
   conflicted: boolean;
   // =============================================================================
@@ -200,7 +200,7 @@ export class GraphCRDT {
         position: operation.position,
         data: operation.initialData || {},
         inputs: [],
-        metadata: {,
+        metadata: {
   version: 1,
   lastModified: new Date(operation.timestamp).toISOString(),
   modifiedBy: operation.userId,
@@ -301,7 +301,7 @@ export class GraphCRDT {
   sourcePort: operation.sourcePort,
   targetPort: operation.targetPort,
   type: operation.edgeType,
-  metadata: {,
+  metadata: {
   version: 1,
   lastModified: new Date(operation.timestamp).toISOString(),
   modifiedBy: operation.userId,
@@ -449,7 +449,7 @@ export class GraphCRDT {
    * Remove all edges connected to a node
    */
   private removeNodeEdges(nodeId: string): void {
-  const edgesToRemove: string = [];
+  const edgesToRemove: string[] = [];
   this.edges.forEach((edge, edgeId) => {
   if (edge.sourceNodeId === nodeId || edge.targetNodeId === nodeId) {
   edgesToRemove.push(edgeId);
@@ -488,7 +488,7 @@ export class GraphCRDT {
   * Get document state as standard Graph object
   */
   getGraph(): Graph {,
-  const nodes: Node = [];
+  const nodes: Node[] = [];
   this.nodes.forEach((nodeCRDT) => {
   const node: Node = {,
   id: nodeCRDT.id,
@@ -506,7 +506,7 @@ export class GraphCRDT {
    * Get all edges as array
    */
   getEdges(): GraphEdge {
-    const edges: GraphEdge = [];
+    const edges: GraphEdge[] = [];
     this.edges.forEach((edgeCRDT) => {
       const edge: GraphEdge = {,
   id: edgeCRDT.id,
@@ -554,7 +554,7 @@ export class GraphCRDT {
   /**
   * Set event handlers
   */
-  setEventHandlers(handlers: {,)
+  setEventHandlers(handlers: {)
   onOperationApplied?: (operation: MutationOperation) => void;
   onConflictDetected?: (conflictType: ConflictType, operations: MutationOperation) => void;
   onStateChanged?: (documentId: string) => void;

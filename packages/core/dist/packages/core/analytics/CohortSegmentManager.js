@@ -512,11 +512,12 @@ export class CohortSegmentManager {
                                 userCount: Math.floor(users.length * 0.3),
                                 riskScore: 0.65,
                                 recommendedActions: ['Welcome email series', 'Onboarding tutorial'],
-                                expectedImpact: {},
-                                retentionImprovement: 0.15,
-                                revenueImpact: 1250.0,
-                                costOfIntervention: 200.0,
-                                roi: 5.25
+                                expectedImpact: {
+                                    retentionImprovement: 0.15,
+                                    revenueImpact: 1250.0,
+                                    costOfIntervention: 200.0,
+                                    roi: 5.25
+                                }
                             }]
                     },
                     async generateCohortComparison(cohort, options) {
@@ -758,13 +759,14 @@ export class CohortSegmentManager {
                                                                 targetPerformance: 0.25,
                                                                 improvementPotential: 0.07,
                                                                 recommendedActions: ['Improve onboarding flow', 'Add social proof'],
-                                                                estimatedImpact: {},
-                                                                revenueImpact: 5000,
-                                                                conversionImprovement: 0.07,
-                                                                retentionImprovement: 0.05,
-                                                            },
-                                                            implementationEffort, 'medium',
-                                                            priority, 'high'],
+                                                                estimatedImpact: {
+                                                                    revenueImpact: 5000,
+                                                                    conversionImprovement: 0.07,
+                                                                    retentionImprovement: 0.05,
+                                                                },
+                                                                implementationEffort: 'medium',
+                                                                priority: 'high'
+                                                            }],
                                                         targeting: [,
                                                             {
                                                                 channel: 'facebook',
@@ -829,7 +831,8 @@ export class CohortSegmentManager {
                                                     // Additional interfaces for cross-segment analysis
                                                     ,
                                                     // Additional interfaces for cross-segment analysis
-                                                    interface, AnalysisOptions } }
+                                                    interface, AnalysisOptions }
+                                            }
                                         };
                                         {
                                             useCache ?  : boolean;
@@ -846,7 +849,8 @@ export class CohortSegmentManager {
                                 };
                             }
                         };
-                    } } }
+                    } }
+            }
         };
     }
 }

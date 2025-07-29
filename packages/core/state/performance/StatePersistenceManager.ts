@@ -25,7 +25,7 @@ export type StorageBackend =
   | 'OPFS';         // Origin Private File System
 
 export interface PersistenceRule {
-  strategy: PersistenceStrategy;,
+  strategy: PersistenceStrategy;
   storage: StorageBackend;
   debounceMs?: number;
   interval?: string;
@@ -42,7 +42,7 @@ export interface PersistenceRule {
   priority?: 'low' | 'normal' | 'high' | 'critical';
   persistOnShutdown?: boolean;
   validateOnLoad?: boolean;
-  backup?: {,
+  backup?: {
   enabled: boolean;
   interval?: string;
   maxBackups?: number;
@@ -50,13 +50,13 @@ export interface PersistenceRule {
 };
 }
 export interface PersistenceTask {
-  id: string;,
+  id: string;
   domain: string;
-  data: any;,
+  data: any;
   timestamp: number;
-  strategy: PersistenceStrategy;,
+  strategy: PersistenceStrategy;
   storage: StorageBackend;
-  priority: 'low' | 'normal' | 'high' | 'critical';,
+  priority: 'low' | 'normal' | 'high' | 'critical';
   retryCount: number;
   maxRetries: number;
   scheduled?: number;
@@ -74,22 +74,22 @@ export interface StorageAdapter {
   supports(feature: string): boolean;
 }
 export interface PersistenceMetrics {
-  totalWrites: number;,
+  totalWrites: number;
   totalReads: number;
-  writeLatency: number;,
+  writeLatency: number;
   readLatency: number;
-  failureCount: number;,
+  failureCount: number;
   retryCount: number;
-  compressionRatio: number;,
+  compressionRatio: number;
   storageUsage: Map<StorageBackend, number>;
-  lastBackup: number;,
+  lastBackup: number;
   dataCorruption: number;
   recoveryTime: number;
 }
 export interface BackupMetadata {
-  timestamp: number;,
+  timestamp: number;
   domain: string;
-  size: number;,
+  size: number;
   checksum: string;
   version: string;
   compressionRatio?: number;
@@ -135,7 +135,7 @@ export class StatePersistenceManager extends EventEmitter {
   retryDelay: 1000,
   auditTrail: true,
   validateOnLoad: true,
-  backup: {,
+  backup: {
   enabled: true,
   interval: '1h',
   maxBackups: 24,
@@ -152,7 +152,7 @@ export class StatePersistenceManager extends EventEmitter {
   encryption: false,
   retryAttempts: 2,
   validateOnLoad: true,
-  backup: {,
+  backup: {
   enabled: true,
   interval: '6h',
   maxBackups: 4,
@@ -168,7 +168,7 @@ export class StatePersistenceManager extends EventEmitter {
   retryDelay: 2000,
   priority: 'critical',
   conflictResolution: 'manual',
-  backup: {,
+  backup: {
   enabled: true,
   interval: '1h',
   maxBackups: 168, // 1 week of hourly backups,
@@ -182,7 +182,7 @@ export class StatePersistenceManager extends EventEmitter {
   persistOnShutdown: true,
   compression: false,
   retryAttempts: 1,
-  backup: {,
+  backup: {
   enabled: false,
 });
     // Performance: Batch updates for analytics
@@ -193,7 +193,7 @@ export class StatePersistenceManager extends EventEmitter {
   storage: 'INDEXED_DB',
   compression: true,
   ttl: '30d',
-  backup: {,
+  backup: {
   enabled: true,
   interval: '24h',
   maxBackups: 7,
@@ -363,7 +363,7 @@ export class StatePersistenceManager extends EventEmitter {
     const batchData = {
   batch: true,
   timestamp: Date.now(),
-  items: tasks.map(task => ({,)
+  items: tasks.map(task => ({)
   key: task.metadata?.key || task.domain,
   data: task.data,
   timestamp: task.timestamp,

@@ -7,21 +7,21 @@
  */
 
 export interface ProfessionalColorPalette {
-    background: {,
+    background: {
         primary: string;
         secondary: string;
         tertiary: string;
         elevated: string;
         inverse: string;
     };
-    text: {,
+    text: {
         primary: string;
         secondary: string;
         tertiary: string;
         inverse: string;
         accent: string;
     };
-    accent: {,
+    accent: {
         orange: string;
         blue: string;
         cyan: string;
@@ -30,7 +30,7 @@ export interface ProfessionalColorPalette {
         red: string;
         yellow: string;
     };
-    nodes: {,
+    nodes: {
         text: string;
         logic: string;
         output: string;
@@ -38,7 +38,7 @@ export interface ProfessionalColorPalette {
         advanced: string;
         transform: string;
     };
-    ui: {,
+    ui: {
         border: string;
         borderHover: string;
         borderActive: string;
@@ -48,12 +48,12 @@ export interface ProfessionalColorPalette {
     };
 
 export interface ProfessionalTypography {
-    fontFamilies: {,
+    fontFamilies: {
         primary: string;
         mono: string;
         heading: string;
     };
-    fontSizes: {,
+    fontSizes: {
         xs: string;
         sm: string;
         base: string;
@@ -62,25 +62,25 @@ export interface ProfessionalTypography {
         '2xl': string;
         '3xl': string;
     };
-    fontWeights: {,
+    fontWeights: {
         normal: number;
         medium: number;
         semibold: number;
         bold: number;
     };
-    lineHeights: {,
+    lineHeights: {
         tight: number;
         normal: number;
         relaxed: number;
     };
-    letterSpacing: {,
+    letterSpacing: {
         tight: string;
         normal: string;
         wide: string;
     };
 
 export interface ProfessionalShadows {
-    elevation: {,
+    elevation: {
         none: string;
         sm: string;
         md: string;
@@ -88,13 +88,13 @@ export interface ProfessionalShadows {
         xl: string;
         '2xl': string;
     };
-    node: {,
+    node: {
         default: string;
         hover: string;
         selected: string;
         focus: string;
     };
-    glow: {,
+    glow: {
         subtle: string;
         medium: string;
         strong: string;

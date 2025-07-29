@@ -40,44 +40,44 @@ import {
 // Drawing annotation types
 
 export interface DrawingAnnotation {
-  id: string;,
+  id: string;
   type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
   points: Array<{ x: number; y: number }>;
-  style: DrawingStyle;,
+  style: DrawingStyle;
   layer: number;
-  author: VFXUser;,
+  author: VFXUser;
   timestamp: string;
-  visible: boolean;,
+  visible: boolean;
   locked: boolean;
   text?: string; // For text annotations
   transform?: {
-    rotation: number;,
+    rotation: number;
   scale: { x: number; y: number };
   };
 }
 export interface DrawingStyle {
-  color: string;,
+  color: string;
   thickness: number;
   opacity: number;
   fillColor?: string;
   fillOpacity?: number;
   dashPattern?: number;
-  lineCap: 'round' | 'square' | 'butt';,
+  lineCap: 'round' | 'square' | 'butt';
   lineJoin: 'round' | 'miter' | 'bevel';
   fontSize?: number; // For text,
   fontFamily?: string;
-  fontWeight?: 'normal' | 'bold';
-}
+  fontWeight?: 'normal' | 'bold'
+  }
 export interface VFXUser {
-  id: string;,
+  id: string;
   name: string;
-  role: string;,
+  role: string;
   color: string; // User's drawing color,
 }
 export interface DrawingCanvasProps {
-  width: number;,
+  width: number;
   height: number;
-  annotations: DrawingAnnotation;,
+  annotations: DrawingAnnotation;
   currentUser: VFXUser;
   backgroundImageUrl?: string;
   onAnnotationsChange: (annotations: DrawingAnnotation) => void;
@@ -701,7 +701,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                     backgroundImage: `url(${backgroundImageUrl})`}
 },
   backgroundSize: 'cover',
-                    backgroundPosition: 'center';
+                    backgroundPosition: 'center'
   }}
                 />
               )}

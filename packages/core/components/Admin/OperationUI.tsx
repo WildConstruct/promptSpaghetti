@@ -151,9 +151,9 @@ export const OperationUI: React.FC<OperationUIProps> = ({)
 
 // Operation Header Component
 interface OperationHeaderProps {
-  operationType: OperationType;,
+  operationType: OperationType;
   execution: OperationExecution | null;
-  onToggleParameters: () => void;,
+  onToggleParameters: () => void;
   showParameters: boolean;
   const OperationHeader: React.FC<OperationHeaderProps> = ({,)
   operationType,
@@ -166,9 +166,9 @@ interface OperationHeaderProps {
   case RiskLevel.LOW: return 'green';
   case RiskLevel.MEDIUM: return 'yellow';
   case RiskLevel.HIGH: return 'orange';
-  case RiskLevel.CRITICAL: return 'red';,
-  default: return 'gray';
-};
+  case RiskLevel.CRITICAL: return 'red';
+  default: return 'gray'
+  };
   return;
     <div className="operation-header">
       <div className="operation-title">
@@ -205,10 +205,10 @@ interface OperationHeaderProps {
 
 // Dynamic Parameters Form Component
 interface OperationParametersFormProps {
-  parameters: OperationParameter;,
+  parameters: OperationParameter;
   values: Record<string, any>;
   errors: Record<string, string>;
-  onChange: (name: string, value: Error) => void;,
+  onChange: (name: string, value: Error) => void;
   readonly: boolean;
   showAdvanced: boolean;
   const OperationParametersForm: React.FC<OperationParametersFormProps> = ({,)
@@ -274,10 +274,10 @@ interface OperationParametersFormProps {
 
 // Individual Parameter Input Component
 interface ParameterInputProps {
-  parameter: OperationParameter;,
+  parameter: OperationParameter;
   value: Error;
   error?: string;
-  onChange: (value: Error) => void;,
+  onChange: (value: Error) => void;
   readonly: boolean;
   const ParameterInput: React.FC<ParameterInputProps> = ({,)
   parameter,
@@ -412,11 +412,11 @@ interface ParameterInputProps {
 
 // Operation Actions Component
 interface OperationActionsProps {
-  operationType: OperationType;,
+  operationType: OperationType;
   canExecute: boolean;
-  isExecuting: boolean;,
+  isExecuting: boolean;
   execution: OperationExecution | null;
-  onExecute: () => void;,
+  onExecute: () => void;
   onCancel: () => void;
   const OperationActions: React.FC<OperationActionsProps> = ({,)
   operationType,
@@ -489,7 +489,7 @@ interface OperationActionsProps {
 
 // Operation Progress Component
 interface OperationProgressProps {
-  execution: OperationExecution;,
+  execution: OperationExecution;
   operationType: OperationType;
   onCancel: () => void;
   const OperationProgress: React.FC<OperationProgressProps> = ({,)
@@ -510,9 +510,9 @@ interface OperationProgressProps {
   case ExecutionStatus.RUNNING: return 'blue';
   case ExecutionStatus.COMPLETED: return 'green';
   case ExecutionStatus.FAILED: return 'red';
-  case ExecutionStatus.CANCELLED: return 'gray';,
-  default: return 'gray';
-};
+  case ExecutionStatus.CANCELLED: return 'gray';
+  default: return 'gray'
+  };
   return;
     <div className="operation-progress">
       <div className="progress-header">
@@ -620,8 +620,7 @@ function validateParameterType(value: Error, type: ParameterType): boolean {
     return typeof value === 'boolean';
   case ParameterType.ARRAY:
     return Array.isArray(value);
-  case ParameterType.OBJECT:
-    return typeof value === 'object' && value !== null && !Array.isArray(value);,
+  case ParameterType.OBJECT: return typeof value === 'object' && value !== null && !Array.isArray(value);
   default:
     return true;
 function validateConstraint(_____value: Error, _____constraint: unknown): { isValid: boolean; message: string } {

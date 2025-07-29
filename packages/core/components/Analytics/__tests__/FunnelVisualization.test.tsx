@@ -24,7 +24,7 @@ const mockAnalyticsInfrastructure = {
   getRealTimeMetrics: jest.fn().mockResolvedValue({,)
   funnelId: 'test-funnel',
   timestamp: Date.now(),
-  metrics: {,
+  metrics: {
   activeUsers: 100,
   conversionsLastHour: 15,
   conversionRate: 15.0,
@@ -50,7 +50,7 @@ const mockFunnelDefinition: ConversionFunnelDefinition = {,
   description: 'Test funnel for marketplace conversion',
   category: 'acquisition',
   version: '1.0.0',
-  configuration: {,
+  configuration: {
   timeWindow: 86400000,
   allowBacktracking: false,
   requireSequentialSteps: true,
@@ -66,19 +66,19 @@ const mockFunnelDefinition: ConversionFunnelDefinition = {,
   type: 'entry_point',
   isRequired: true,
   isTerminal: false,
-  eventCriteria: {,
+  eventCriteria: {
   eventType: 'page_view',
   propertyMatchers: [],
 },
   conditions: [],
       timeConstraints: {},
-      successMetrics: {,
+      successMetrics: {
   expectedCompletionRate: 90,
   averageTimeToComplete: 30000,
   criticalSuccessFactors: [],
 },
   branches: [],
-      metadata: {,
+      metadata: {
   businessValue: 1,
   complexity: 'low',
   dependencies: [],
@@ -92,19 +92,19 @@ const mockFunnelDefinition: ConversionFunnelDefinition = {,
   type: 'engagement',
   isRequired: true,
   isTerminal: false,
-  eventCriteria: {,
+  eventCriteria: {
   eventType: 'template_browse',
   propertyMatchers: [],
 },
   conditions: [],
       timeConstraints: {},
-      successMetrics: {,
+      successMetrics: {
   expectedCompletionRate: 70,
   averageTimeToComplete: 120000,
   criticalSuccessFactors: [],
 },
   branches: [],
-      metadata: {,
+      metadata: {
   businessValue: 2,
   complexity: 'medium',
   dependencies: [],
@@ -118,25 +118,25 @@ const mockFunnelDefinition: ConversionFunnelDefinition = {,
   type: 'conversion',
   isRequired: true,
   isTerminal: true,
-  eventCriteria: {,
+  eventCriteria: {
   eventType: 'template_purchased',
   propertyMatchers: [],
 },
   conditions: [],
       timeConstraints: {},
-      successMetrics: {,
+      successMetrics: {
   expectedCompletionRate: 15,
   averageTimeToComplete: 300000,
   criticalSuccessFactors: [],
 },
   branches: [],
-      metadata: {,
+      metadata: {
   businessValue: 10,
         complexity: 'high',
         dependencies: [],
         optimizationOpportunities: []],
   conditionalPaths: [],
-  successCriteria: {,
+  successCriteria: {
   primary: {;
   stepId: 'step-3',
       requirements: { operator: 'AND', conditions: [] },
@@ -145,13 +145,13 @@ const mockFunnelDefinition: ConversionFunnelDefinition = {,
   secondary: [],
     scoreCalculation: { method: 'weighted' }
   },
-  analytics: {,
+  analytics: {
   enableRealTimeTracking: true,
   retentionPeriod: 90,
   cohortTrackingEnabled: true,
   segmentationRules: [],
 },
-  metadata: {,
+  metadata: {
   createdAt: Date.now(),
   updatedAt: Date.now(),
   createdBy: 'test-user',
@@ -166,20 +166,20 @@ const mockSegments: UserSegment = [
   id: 'segment-1',
   name: 'Premium Users',
   description: 'Users with premium accounts',
-  definition: {,
+  definition: {
   rules: [],
   operator: 'AND',
   updateFrequency: 'daily',
   isStatic: false,
 },
-  state: {,
+  state: {
   currentSize: 1500,
   lastUpdated: Date.now(),
   growthRate: 5.2,
   churnRate: 2.1,
   status: 'active',
 },
-  performance: {,
+  performance: {
   averageConversionRate: 25.8,
   averageTimeToConvert: 72000000,
   averageLifetimeValue: 1250,
@@ -188,7 +188,7 @@ const mockSegments: UserSegment = [
   behaviorPatterns: [],
 },
   funnelMetrics: new Map(),
-    metadata: {,
+    metadata: {
   businessValue: 'high',
       targetingPriority: 10,
       customAttributes: {}
@@ -198,29 +198,29 @@ const mockCohorts: ConversionCohort = [
     id: 'cohort-1',
     name: 'January 2024 Cohort',
     description: 'Users who joined in January 2024',
-    definition: {,
+    definition: {
   criteriaEvent: 'user_registered',
       criteriaConditions: { operator: 'AND', conditions: [] },
       timeWindow: 2592000000;
   },
-  analysis: {,
+  analysis: {
   retentionPeriods: [7, 14, 30, 60, 90],
   analysisWindow: 90,
   metricCalculations: [],
 },
-  state: {,
+  state: {
   currentSize: 2500,
   creationDate: Date.now() - 5184000000,
   lastAnalysisDate: Date.now(),
   status: 'active',
   completionRate: 18.5,
 },
-  performance: {,
+  performance: {
   conversionRates: [],
   retentionRates: [],
   averageTimeToConvert: 86400000,
   topDropOffPoints: [],
-  valueMetrics: {,
+  valueMetrics: {
   totalRevenue: 125000,
   averageOrderValue: 50,
   lifetimeValue: 85,
@@ -228,7 +228,7 @@ const mockCohorts: ConversionCohort = [
   costPerAcquisition: 25,
   returnOnInvestment: 2.0,
 },
-  metadata: {,
+  metadata: {
   businessContext: 'First cohort of 2024',
       hypothesis: 'New year users have higher conversion intent',
       expectedOutcome: 'Higher than average conversion rate',
@@ -450,7 +450,7 @@ describe('FunnelVisualization', () => {
 });
 describe('FunnelConfiguration', () => {
   const configProps = {
-  initialFunnel: {,
+  initialFunnel: {
   name: 'Test Funnel',
   description: 'Test Description',
   category: 'acquisition' as const,
@@ -547,14 +547,14 @@ describe('FunnelComparison', () => {
   analyticsInfrastructure: mockAnalyticsInfrastructure,
   primaryFunnel: mockFunnelDefinition,
   comparisonMode: 'time_period' as const,
-  comparisonConfig: {,
+  comparisonConfig: {
   mode: 'time_period' as const,
-  baseline: {,
+  baseline: {
   id: 'baseline',
   name: 'Last Month',
   description: 'Previous month performance',
 },
-  comparison: {,
+  comparison: {
   id: 'comparison',
   name: 'This Month',
   description: 'Current month performance',

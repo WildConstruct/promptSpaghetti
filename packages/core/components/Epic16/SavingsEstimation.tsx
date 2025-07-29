@@ -28,32 +28,32 @@ interface SavingsInputs {
   templateQualityScore: number; // 1-10 quality score,
   manualQualityScore: number; // 1-10 quality score,
   interface SavingsBreakdown {
-  tokenSavings: {,
-  templateTokenCost: number;,
+  tokenSavings: {
+  templateTokenCost: number;
   manualTokenCost: number;
-  netTokenSavings: number;,
+  netTokenSavings: number;
   tokenEfficiency: number;
 };
-  timeSavings: {,
+  timeSavings: {
   templateTimeSpent: number;
-  manualTimeSpent: number;,
+  manualTimeSpent: number;
   netTimeSavings: number;
   timeEfficiency: number;
 };
-  qualitySavings: {,
+  qualitySavings: {
   templateQualityValue: number;
-  manualQualityValue: number;,
+  manualQualityValue: number;
   qualityImprovement: number;
 };
-  totalSavings: {,
+  totalSavings: {
   monthlySavings: number;
-  yearlySavings: number;,
+  yearlySavings: number;
   totalProjectSavings: number;
   savingsPerUse: number;
 };
-  productivity: {,
+  productivity: {
   productivityGain: number;
-  capacityIncrease: number;,
+  capacityIncrease: number;
   errorReduction: number;
 };
 interface SavingsEstimationProps {
@@ -85,7 +85,7 @@ interface SavingsEstimationProps {
 });
   // Industry presets
   const industryPresets = {
-  content: {,
+  content: {
   monthlyUsage: 40,
   templateTokens: 800,
   templateAccuracy: 92,
@@ -98,7 +98,7 @@ interface SavingsEstimationProps {
   templateQualityScore: 8.2,
   manualQualityScore: 6.0,
 },
-  development: {,
+  development: {
   monthlyUsage: 60,
   templateTokens: 1500,
   templateAccuracy: 98,
@@ -111,7 +111,7 @@ interface SavingsEstimationProps {
   templateQualityScore: 9.0,
   manualQualityScore: 7.0,
 },
-  marketing: {,
+  marketing: {
   monthlyUsage: 30,
   templateTokens: 1000,
   templateAccuracy: 90,
@@ -124,7 +124,7 @@ interface SavingsEstimationProps {
   templateQualityScore: 8.0,
   manualQualityScore: 5.5,
 },
-  research: {,
+  research: {
   monthlyUsage: 20,
   templateTokens: 2000,
   templateAccuracy: 96,
@@ -175,30 +175,30 @@ interface SavingsEstimationProps {
   const capacityIncrease = manualTimeHours > 0 ? ((manualTimeHours - templateTimeHours) / manualTimeHours) * 100 : 0;
   const errorReduction = ((inputs.templateAccuracy - inputs.manualAccuracy) / inputs.manualAccuracy) * 100;
   const breakdown: SavingsBreakdown = {,
-  tokenSavings: {,
+  tokenSavings: {
   templateTokenCost,
   manualTokenCost,
   netTokenSavings,
   tokenEfficiency
 },
-  timeSavings: {,
+  timeSavings: {
   templateTimeSpent: templateTimeCost,
   manualTimeSpent: manualTimeCost,
   netTimeSavings,
   timeEfficiency
 },
-  qualitySavings: {,
+  qualitySavings: {
         templateQualityValue,
         manualQualityValue,
         qualityImprovement
   },
-  totalSavings: {,
+  totalSavings: {
         monthlySavings,
         yearlySavings,
         totalProjectSavings,
         savingsPerUse
   },
-  productivity: {,
+  productivity: {
         productivityGain,
         capacityIncrease,
         errorReduction

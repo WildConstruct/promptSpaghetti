@@ -8,7 +8,7 @@ export interface GraphData {
     nodes: Array<{,
         id: string;
         type: string;
-        position: {,
+        position: {
             x: number;
             y: number;
         };
@@ -44,8 +44,8 @@ export interface NodeChange {
         field: string;
         old_value: unknown;
         new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
+        change_type: 'added' | 'removed' | 'modified'
+  }>;
     position_changed: boolean;
     visual_changes: Record<string, unknown>;
 
@@ -60,8 +60,8 @@ export interface EdgeChange {
         field: string;
         old_value: unknown;
         new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
+        change_type: 'added' | 'removed' | 'modified'
+  }>;
     connection_changed: boolean;
 
 export interface NodeMatchResult {
@@ -116,7 +116,7 @@ export interface DetailedComparison extends GraphComparison {
     target_data: GraphData;
     node_matches: NodeMatchResult[];
     edge_matches: EdgeMatchResult[];
-    algorithm_metadata: {,
+    algorithm_metadata: {
         steps_executed: string[];
         performance_metrics: Record<string, number>;
         confidence_distribution: Record<string, number>;
@@ -175,7 +175,7 @@ export interface ComparisonStatistics {
     avg_similarity: number;
     comparison_types: Record<string, number>;
     recent_comparisons: number;
-    similarity_distribution: {,
+    similarity_distribution: {
         high: number;
         medium: number;
         low: number;

@@ -306,7 +306,7 @@ export const vikingVillage: VFXScene = {,
     id: `viking-${asset.id}`}
   })),
   composition: sampleComposition,
-  accuracy: {,
+  accuracy: {
   ...sampleAccuracyMetrics,
   overall: 87,
   expertValidated: false,
@@ -332,7 +332,7 @@ export const romanForum: VFXScene = {,
     id: `roman-${asset.id}`}
   })),
   composition: sampleComposition,
-  accuracy: {,
+  accuracy: {
   ...sampleAccuracyMetrics,
   overall: 94,
   architecture: 98,
@@ -358,7 +358,7 @@ export const generateRandomScene = (id: string, name: string, period: string): V
   characters: sampleCharacters.slice(0, Math.floor(Math.random() * 6) + 2),
   assets: sampleAssets.slice(0, Math.floor(Math.random() * 5) + 3),
   composition: sampleComposition,
-  accuracy: {,
+  accuracy: {
   overall: Math.floor(Math.random() * 20) + 80, // 80-99%,
   architecture: Math.floor(Math.random() * 15) + 85,
   clothing: Math.floor(Math.random() * 15) + 85,

@@ -8,12 +8,12 @@ import { CommentItem } from './CommentItem';
 import { CommentForm } from './CommentForm';
 import { useCommentReplies } from '../../hooks/useCommentReplies';
 interface CommentThreadProps {
-  comment: Comment;,
+  comment: Comment;
   workspaceId: string;
-  userId: string;,
-  onReply: (content: string) => Promise<void>;,
+  userId: string;
+  onReply: (content: string) => Promise<void>;
   onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
-  onDelete: (commentId: string) => Promise<void>;,
+  onDelete: (commentId: string) => Promise<void>;
   onResolve: (commentId: string, resolved: boolean) => Promise<void>;
   compact?: boolean;
   isLast?: boolean;

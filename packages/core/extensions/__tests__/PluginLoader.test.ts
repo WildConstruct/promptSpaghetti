@@ -40,7 +40,7 @@ const mockPluginManifest = {
   description: 'Test plugin for unit testing',
   main: 'index',
   dependencies: {},
-  engines: {,
+  engines: {
   node: '>=14.0.0',
 },
   permissions: ['read', 'write'],
@@ -318,7 +318,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
     it('should check version compatibility', () => {
   const incompatiblePlugin = {
   ...mockPluginManifest,
-  engines: {,
+  engines: {
   node: '>=20.0.0' // Incompatible version,
 };
       pluginLoader.validatePlugin.mockReturnValueOnce(false);

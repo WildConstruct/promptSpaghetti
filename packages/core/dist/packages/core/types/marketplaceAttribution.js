@@ -48,24 +48,18 @@ AuthorTypeSchema.options,
 // =============================================================================
 // Template Attribution Schemas
 // =============================================================================
-export const TemplateAttributionSchema = z.object({});
-id: z.string().uuid(),
-    templateId;
-z.string().uuid(),
-    templateVersionId;
-z.string().uuid().optional(),
+export const TemplateAttributionSchema = z.object({
+    id: z.string().uuid(),
+    templateId: z.string().uuid(),
+    templateVersionId: z.string().uuid().optional(),
     // Primary attribution
-    primaryCreatorId;
-z.string().uuid(),
-    primaryCreatorName;
-z.string(),
-    primaryCreatorEmail;
-z.string().email(),
-    creationDate;
-z.date(),
+    primaryCreatorId: z.string().uuid(),
+    primaryCreatorName: z.string(),
+    primaryCreatorEmail: z.string().email(),
+    creationDate: z.date(),
     // Collaboration attribution
-    collaborators;
-z.array(z.object({}), userId, z.string().uuid(), userName, z.string(), userEmail, z.string().email(), contributionType, z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']), contributionPercentage, z.number().min(0).max(100), contributionDescription, z.string().optional(), joinedAt, z.date(), verifiedAt, z.date().optional());
+    collaborators: z.array(z.object({}), userId, z.string().uuid(), userName, z.string(), userEmail, z.string().email(), contributionType, z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']), contributionPercentage, z.number().min(0).max(100), contributionDescription, z.string().optional(), joinedAt, z.date(), verifiedAt, z.date().optional())
+});
 ([]),
     // Source attribution
     derivedFrom;
@@ -118,22 +112,19 @@ z.date();
 // =============================================================================
 // Revenue Attribution Schemas
 // =============================================================================
-export const RevenueAttributionSchema = z.object({});
-id: z.string().uuid(),
-    templateId;
-z.string().uuid(),
-    purchaseId;
-z.string().uuid(),
+export const RevenueAttributionSchema = z.object({
+    id: z.string().uuid(),
+    templateId: z.string().uuid(),
+    purchaseId: z.string().uuid(),
     // Revenue details
-    totalRevenue;
-z.number().min(0),
-    currency;
-z.string().length(3).default('USD'),
+    totalRevenue: z.number().min(0),
+    currency: z.string().length(3).default('USD'),
     // Attribution breakdown
-    attributions;
-z.array(z.object({}), recipientId, z.string().uuid(), recipientType, z.enum(['creator', 'collaborator', 'original_creator', 'platform']), attribution, z.enum(['primary_creator', 'collaborator', 'derived_from', 'platform_fee']), percentage, z.number().min(0).max(100), amountCents, z.number().int().min(0), status, z.enum(['pending', 'released', 'held', 'disputed', 'refunded']), releasedAt, z.date().optional(), holdReason, z.string().optional());
+    attributions: z.array(z.object({}), recipientId, z.string().uuid(), recipientType, z.enum(['creator', 'collaborator', 'original_creator', 'platform']), attribution, z.enum(['primary_creator', 'collaborator', 'derived_from', 'platform_fee']), percentage, z.number().min(0).max(100), amountCents, z.number().int().min(0), status, z.enum(['pending', 'released', 'held', 'disputed', 'refunded']), releasedAt, z.date().optional(), holdReason, z.string().optional())
+}), 
 // Purchase context
-purchaseDate: z.date(),
+purchaseDate;
+(),
     buyerId;
 z.string().uuid(),
     templateVersion;
@@ -160,116 +151,81 @@ z.date();
 // =============================================================================
 // Creator Attribution Profile Schemas
 // =============================================================================
-export const CreatorAttributionProfileSchema = z.object({});
-id: z.string().uuid(),
-    userId;
-z.string().uuid(),
+export const CreatorAttributionProfileSchema = z.object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
     // Creator identification
-    displayName;
-z.string(),
-    profileBio;
-z.string().optional(),
-    profileUrl;
-z.string().url().optional(),
-    verificationBadges;
-z.array(z.enum(['verified_creator', 'top_seller', 'collaboration_leader', 'innovation_award'])).default([]),
+    displayName: z.string(),
+    profileBio: z.string().optional(),
+    profileUrl: z.string().url().optional(),
+    verificationBadges: z.array(z.enum(['verified_creator', 'top_seller', 'collaboration_leader', 'innovation_award'])).default([]),
     // Attribution statistics
-    createdTemplates;
-z.number().int().default(0),
-    collaboratedTemplates;
-z.number().int().default(0),
-    derivedTemplates;
-z.number().int().default(0),
-    totalRevenue;
-z.number().default(0),
-    totalSales;
-z.number().int().default(0),
+    createdTemplates: z.number().int().default(0),
+    collaboratedTemplates: z.number().int().default(0),
+    derivedTemplates: z.number().int().default(0),
+    totalRevenue: z.number().default(0),
+    totalSales: z.number().int().default(0),
     // Collaboration metrics
-    collaborationScore;
-z.number().min(0).max(100).default(0),
-    averageCollaborators;
-z.number().default(0),
-    successfulCollaborations;
-z.number().int().default(0),
+    collaborationScore: z.number().min(0).max(100).default(0),
+    averageCollaborators: z.number().default(0),
+    successfulCollaborations: z.number().int().default(0),
     // Attribution preferences
-    attributionSettings;
-z.object({});
-showRealName: z.boolean().default(true),
-    showRevenue;
-z.boolean().default(false),
-    showCollaborations;
-z.boolean().default(true),
-    allowDerivations;
-z.boolean().default(true),
-    requireAttribution;
-z.boolean().default(true),
-    defaultRevenueShare;
-z.number().min(0).max(100).default(100),
-;
+    attributionSettings: z.object({}),
+    showRealName: z.boolean().default(true),
+    showRevenue: z.boolean().default(false),
+    showCollaborations: z.boolean().default(true),
+    allowDerivations: z.boolean().default(true),
+    requireAttribution: z.boolean().default(true),
+    defaultRevenueShare: z.number().min(0).max(100).default(100),
+}), 
 // Reputation metrics
-attributionReputation: z.object({});
-accuracyScore: z.number().min(0).max(100).default(100),
-    responsivenessScore;
-z.number().min(0).max(100).default(100),
-    collaborationScore;
-z.number().min(0).max(100).default(100),
-    overallRating;
-z.number().min(0).max(5).default(0),
-    totalRatings;
-z.number().int().default(0),
-;
-createdAt: z.date(),
+attributionReputation;
+({
+    accuracyScore: z.number().min(0).max(100).default(100),
+    responsivenessScore: z.number().min(0).max(100).default(100),
+    collaborationScore: z.number().min(0).max(100).default(100),
+    overallRating: z.number().min(0).max(5).default(0),
+    totalRatings: z.number().int().default(0),
+}),
+    createdAt;
+z.date(),
     updatedAt;
 z.date();
 ;
 // =============================================================================
 // Attribution Analytics Schemas
 // =============================================================================
-export const MarketplaceAttributionAnalyticsSchema = z.object({});
-id: z.string().uuid(),
-    creatorId;
-z.string().uuid().optional(),
-    templateId;
-z.string().uuid().optional(),
-    analysisType;
-z.enum(['creator_performance', 'template_attribution', 'revenue_distribution', 'collaboration_patterns']),
+export const MarketplaceAttributionAnalyticsSchema = z.object({
+    id: z.string().uuid(),
+    creatorId: z.string().uuid().optional(),
+    templateId: z.string().uuid().optional(),
+    analysisType: z.enum(['creator_performance', 'template_attribution', 'revenue_distribution', 'collaboration_patterns']),
     // Time period
-    periodStart;
-z.date(),
-    periodEnd;
-z.date(),
+    periodStart: z.date(),
+    periodEnd: z.date(),
     // Analytics data
-    metrics;
-z.object({});
-// Creator metrics
-templatesCreated: z.number().int().default(0),
-    collaborationsInitiated;
-z.number().int().default(0),
-    revenueGenerated;
-z.number().default(0),
-    attributionAccuracy;
-z.number().min(0).max(100).default(100),
+    metrics: z.object({})
+    // Creator metrics
+    ,
+    // Creator metrics
+    templatesCreated: z.number().int().default(0),
+    collaborationsInitiated: z.number().int().default(0),
+    revenueGenerated: z.number().default(0),
+    attributionAccuracy: z.number().min(0).max(100).default(100),
     // Template metrics
-    totalViews;
-z.number().int().default(0),
-    totalPurchases;
-z.number().int().default(0),
-    averageRating;
-z.number().min(0).max(5).default(0),
-    derivativesCreated;
-z.number().int().default(0),
+    totalViews: z.number().int().default(0),
+    totalPurchases: z.number().int().default(0),
+    averageRating: z.number().min(0).max(5).default(0),
+    derivativesCreated: z.number().int().default(0),
     // Attribution metrics
-    attributionClaims;
-z.number().int().default(0),
-    resolvedClaims;
-z.number().int().default(0),
-    disputedAttributions;
-z.number().int().default(0),
-    verificationRate;
-z.number().min(0).max(100).default(100),
-;
+    attributionClaims: z.number().int().default(0),
+    resolvedClaims: z.number().int().default(0),
+    disputedAttributions: z.number().int().default(0),
+    verificationRate: z.number().min(0).max(100).default(100),
+}), 
 // Breakdown data
-breakdown: z.record(z.unknown()).default({}),
+breakdown;
+(z.unknown()).default({}),
     // Insights
     insights;
 z.array(z.object({}), type, z.enum(['trend', 'anomaly', 'recommendation', 'alert']), title, z.string(), description, z.string(), confidence, z.number().min(0).max(1), actionable, z.boolean().default(false), metadata, z.record(z.unknown()).default({}));
@@ -283,65 +239,45 @@ z.date();
 // Extended Attribution Schemas
 // =============================================================================
 // Extended change attribution for marketplace
-export const MarketplaceChangeAttributionSchema = ChangeAttributionSchema.extend({});
-resourceType: MarketplaceResourceTypeSchema,
-    changeType;
-MarketplaceChangeTypeSchema,
-    authorType;
-MarketplaceAuthorTypeSchema,
+export const MarketplaceChangeAttributionSchema = ChangeAttributionSchema.extend({
+    resourceType: MarketplaceResourceTypeSchema,
+    changeType: MarketplaceChangeTypeSchema,
+    authorType: MarketplaceAuthorTypeSchema,
     // Marketplace-specific fields
-    templateId;
-z.string().uuid().optional(),
-    purchaseId;
-z.string().uuid().optional(),
-    revenueAmount;
-z.number().optional(),
-    attributionClaim;
-z.string().uuid().optional(),
-    collaborationContext;
-z.object({});
-isCollaborative: z.boolean().default(false),
-    collaborators;
-z.array(z.string().uuid()).default([]),
-    contributionType;
-z.enum(['creation', 'editing', 'review', 'publishing']).optional(),
-;
-optional();
+    templateId: z.string().uuid().optional(),
+    purchaseId: z.string().uuid().optional(),
+    revenueAmount: z.number().optional(),
+    attributionClaim: z.string().uuid().optional(),
+    collaborationContext: z.object({}),
+    isCollaborative: z.boolean().default(false),
+    collaborators: z.array(z.string().uuid()).default([]),
+    contributionType: z.enum(['creation', 'editing', 'review', 'publishing']).optional(),
+}).optional();
 ;
 // Extended filter for marketplace attribution
-export const MarketplaceAttributionFilterSchema = AttributionFilterSchema.extend({});
-resourceType: MarketplaceResourceTypeSchema.optional(),
-    changeType;
-MarketplaceChangeTypeSchema.optional(),
-    authorType;
-MarketplaceAuthorTypeSchema.optional(),
-    templateId;
-z.string().uuid().optional(),
-    creatorId;
-z.string().uuid().optional(),
-    revenueRange;
-z.object({});
-min: z.number().min(0).optional(),
-    max;
-z.number().min(0).optional(),
-;
-optional(),
-    verificationStatus;
-z.enum(['verified', 'unverified', 'disputed']).optional(),
+export const MarketplaceAttributionFilterSchema = AttributionFilterSchema.extend({
+    resourceType: MarketplaceResourceTypeSchema.optional(),
+    changeType: MarketplaceChangeTypeSchema.optional(),
+    authorType: MarketplaceAuthorTypeSchema.optional(),
+    templateId: z.string().uuid().optional(),
+    creatorId: z.string().uuid().optional(),
+    revenueRange: z.object({}),
+    min: z.number().min(0).optional(),
+    max: z.number().min(0).optional(),
+}).optional(), verificationStatus;
+(['verified', 'unverified', 'disputed']).optional(),
     collaborationType;
 z.enum(['creation', 'editing', 'review', 'publishing']).optional();
 ;
 // =============================================================================
 // Request/Response Schemas
 // =============================================================================
-export const CreateTemplateAttributionRequestSchema = z.object({});
-templateId: z.string().uuid(),
-    templateVersionId;
-z.string().uuid().optional(),
-    primaryCreatorId;
-z.string().uuid(),
-    collaborators;
-z.array(z.object({}), userId, z.string().uuid(), contributionType, z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']), contributionPercentage, z.number().min(0).max(100), contributionDescription, z.string().optional());
+export const CreateTemplateAttributionRequestSchema = z.object({
+    templateId: z.string().uuid(),
+    templateVersionId: z.string().uuid().optional(),
+    primaryCreatorId: z.string().uuid(),
+    collaborators: z.array(z.object({}), userId, z.string().uuid(), contributionType, z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']), contributionPercentage, z.number().min(0).max(100), contributionDescription, z.string().optional())
+});
 ([]),
     derivedFrom;
 z.object({});
@@ -357,22 +293,18 @@ z.enum(['manual', 'git_history', 'session_tracking', 'ai_analysis', 'user_declar
     sourceMetadata;
 z.record(z.unknown()).default({});
 ;
-export const CreateAttributionClaimRequestSchema = z.object({});
-templateId: z.string().uuid(),
-    claimType;
-z.enum(['ownership', 'collaboration', 'derivation', 'inspiration']),
-    claimDescription;
-z.string(),
-    evidenceUrls;
-z.array(z.string().url()).default([]),
-    metadata;
-z.record(z.unknown()).default({});
-;
-export const UpdateRevenueAttributionRequestSchema = z.object({});
-purchaseId: z.string().uuid(),
-    attributionOverrides;
-z.array(z.object({}), recipientId, z.string().uuid(), newPercentage, z.number().min(0).max(100), reason, z.string());
-optional(),
+export const CreateAttributionClaimRequestSchema = z.object({
+    templateId: z.string().uuid(),
+    claimType: z.enum(['ownership', 'collaboration', 'derivation', 'inspiration']),
+    claimDescription: z.string(),
+    evidenceUrls: z.array(z.string().url()).default([]),
+    metadata: z.record(z.unknown()).default({})
+});
+export const UpdateRevenueAttributionRequestSchema = z.object({
+    purchaseId: z.string().uuid(),
+    attributionOverrides: z.array(z.object({}), recipientId, z.string().uuid(), newPercentage, z.number().min(0).max(100), reason, z.string())
+}), optional;
+(),
     verificationRequired;
 z.boolean().optional(),
     notes;
@@ -381,10 +313,10 @@ z.string().optional();
 // =============================================================================
 // Response Schemas
 // =============================================================================
-export const TemplateAttributionResponseSchema = z.object({});
-attribution: TemplateAttributionSchema,
-    relatedTemplates;
-z.array(z.object({}), templateId, z.string().uuid(), title, z.string(), relationship, z.enum(['original', 'derivative', 'similar']), attributionScore, z.number().min(0).max(1));
+export const TemplateAttributionResponseSchema = z.object({
+    attribution: TemplateAttributionSchema,
+    relatedTemplates: z.array(z.object({}), templateId, z.string().uuid(), title, z.string(), relationship, z.enum(['original', 'derivative', 'similar']), attributionScore, z.number().min(0).max(1))
+});
 ([]),
     revenueStatistics;
 z.object({});
@@ -398,20 +330,16 @@ z.number().int(),
 ;
 optional();
 ;
-export const CreatorDashboardResponseSchema = z.object({});
-profile: CreatorAttributionProfileSchema,
-    templates;
-z.array(z.object({}), templateId, z.string().uuid(), title, z.string(), attribution, TemplateAttributionSchema, revenue, z.object({}), total, z.number(), pending, z.number(), released, z.number()),
-    performance;
-z.object({});
-views: z.number().int(),
-    purchases;
-z.number().int(),
-    rating;
-z.number().min(0).max(5),
-    derivatives;
-z.number().int(),
-;
+export const CreatorDashboardResponseSchema = z.object({
+    profile: CreatorAttributionProfileSchema,
+    templates: z.array(z.object({}), templateId, z.string().uuid(), title, z.string(), attribution, TemplateAttributionSchema, revenue, z.object({}), total, z.number(), pending, z.number(), released, z.number())
+}), performance;
+({
+    views: z.number().int(),
+    purchases: z.number().int(),
+    rating: z.number().min(0).max(5),
+    derivatives: z.number().int(),
+});
 collaborations: z.array(z.object({}), templateId, z.string().uuid(), title, z.string(), role, z.enum(['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']), contribution, z.number().min(0).max(100), revenue, z.number(), status, z.enum(['active', 'completed', 'disputed']));
 analytics: MarketplaceAttributionAnalyticsSchema.optional();
 ;

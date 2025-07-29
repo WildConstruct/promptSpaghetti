@@ -79,7 +79,7 @@ export class WildConstructVFXExporter {
                     backwardsCompatible: ['1.0.0', '1.1.0'], // Versions this export can work with,
                     minimumVersion: '1.0.0', // Minimum version required to import,
                     breaking_changes: [] // List of breaking changes from base version,
-                 },
+                },
                 compatibility: {
                     controlNet: true,
                     diffusionModels: ['stable-diffusion', 'sdxl', 'midjourney-v6', 'dall-e-3'],
@@ -287,7 +287,9 @@ export class WildConstructVFXExporter {
                     }(),
                     nodes: VFXGraphNode,
                     connections: VFXGraphConnection,
-                    'simple':  | 'moderate' | 'complex' } }
+                    'simple':  | 'moderate' | 'complex'
+                }
+            }
         };
         {
             const nodeCount = nodes.length;
@@ -428,7 +430,8 @@ export class WildConstructVFXExporter {
                                 weather: this.extractFromVariables(variables, ['weather']) || undefined,
                                 mood: this.extractFromVariables(variables, ['mood', 'lighting_mood']) || undefined,
                                 temperature: this.extractNumberFromVariables(variables, ['temperature', 'color_temp']) || 5500,
-                                exposure: 0, },
+                                exposure: 0,
+                            },
                             style: {
                                 filmstock: this.extractFromVariables(variables, ['film', 'filmstock']) || 'digital',
                                 colorGrading: 'cinematic',
@@ -546,7 +549,8 @@ export class WildConstructVFXExporter {
                                 }, : .push('Execution time exceeds 5 seconds - may impact real-time usage'),
                                 // Graph complexity warnings
                                 const: complexity = exportData.graph?.analysis?.complexity,
-                                if(complexity) { } } === 'complex'
+                                if(complexity) { }
+                            } === 'complex'
                         };
                         {
                             warnings.push('Complex graph may require significant computational resources for reproduction');
@@ -825,7 +829,8 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
                             finalPrompt: string,
                             variables: (Record),
                             executionTime: number,
-                            matchesOriginal: boolean },
+                            matchesOriginal: boolean
+                        },
                         error: string
                     } > {
                         try: {

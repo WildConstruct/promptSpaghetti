@@ -36,7 +36,7 @@ export class ExtensionInterfaceValidator {
   /**
    * Validate extension interface compatibility
    */
-  public validateInterfaceCompatibility(extension: any,)
+  public validateInterfaceCompatibility(extension: any)
     requiredInterface: string,
     version?: string
   ): ExtensionValidationResult {
@@ -68,7 +68,7 @@ export class ExtensionInterfaceValidator {
   /**
    * Validate method signatures
    */
-  public validateMethodSignatures(extension: any,)
+  public validateMethodSignatures(extension: any)
     expectedSignatures: Record<string, MethodSignature>
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -95,7 +95,7 @@ export class ExtensionInterfaceValidator {
   /**
    * Validate extension configuration
    */
-  public validateExtensionConfiguration(extension: any,)
+  public validateExtensionConfiguration(extension: any)
     configSchema?: z.ZodSchema<any>
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -129,7 +129,7 @@ export class ExtensionInterfaceValidator {
   /**
    * Validate extension dependencies
    */
-  public validateExtensionDependencies(extension: any,)
+  public validateExtensionDependencies(extension: any)
     availableExtensions: Map<string, BaseExtension>
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -390,23 +390,23 @@ interface MethodSignature {
   returnType?: string;
   async?: boolean;
 interface ExtensionValidationReport {
-  extensionId: string;,
+  extensionId: string;
   extensionName: string;
-  version: string;,
+  version: string;
   timestamp: Date;
-  overallValid: boolean;,
+  overallValid: boolean;
   validations: ValidationResult;
 interface ValidationResult {
-  name: string;,
+  name: string;
   valid: boolean;
-  errors: string;,
+  errors: string;
   warnings: string;
 interface RuntimeTypeInfo {
-  type: string;,
+  type: string;
   constructor: string;
-  prototype: string;,
+  prototype: string;
   methods: string;
-  properties: string;,
+  properties: string;
   isExtension: boolean;
 
 // Export singletons

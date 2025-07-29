@@ -21,13 +21,13 @@ export interface NodeCreationOptions {
   template?: string;
 }
 export interface NodeTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   nodeType: string;
-  defaultConfig: AdvancedNodeConfig;,
+  defaultConfig: AdvancedNodeConfig;
   defaultData: any;
-  category: string;,
+  category: string;
   tags: string;
 }
 export interface NodeFactoryConfig {
@@ -52,9 +52,9 @@ export class NodeFactory {
   private templates = new Map<string, NodeTemplate>();
   private nodeCache = new Map<string, FrameworkNode>();
   private creationHistory: Array<{,
-  timestamp: number;,
+  timestamp: number;
   nodeType: string;
-  nodeId: string;,
+  nodeId: string;
   success: boolean;
   error?: string;
 }> = [];
@@ -75,7 +75,7 @@ export class NodeFactory {
   /**
    * Create a new node with optional validation and optimization
    */
-  async createNode(type: string,)
+  async createNode(type: string)
     id: string,
     config: AdvancedNodeConfig,
     data: any,
@@ -115,9 +115,9 @@ export class NodeFactory {
   /**
   * Create node from template
   */
-  async createFromTemplate(templateId: string,)
+  async createFromTemplate(templateId: string)
   nodeId: string,
-  overrides: {,
+  overrides: {
   config?: Partial<AdvancedNodeConfig>;
   data?: any;
 } = {}
@@ -135,9 +135,9 @@ export class NodeFactory {
   /**
    * Bulk create multiple nodes
    */
-  async createNodeBatch(specs: Array<{,)
+  async createNodeBatch(specs: Array<{)
   type: string;
-  id: string;,
+  id: string;
   config: AdvancedNodeConfig;
   data: any;
   options?: NodeCreationOptions;
@@ -218,7 +218,7 @@ export class NodeFactory {
   /**
    * Create node with best practices applied
    */
-  async createOptimizedNode(type: string,)
+  async createOptimizedNode(type: string)
     id: string,
     config: AdvancedNodeConfig,
     data: any): Promise<FrameworkNode> {,
@@ -226,7 +226,7 @@ export class NodeFactory {
     return this.createNode(type, id, config, data, {)
   validate: true,
       optimize: true,
-      lifecycleHooks: {,
+      lifecycleHooks: {
   beforeExecute: async (node, context) => {
           // Add performance monitoring
           console.debug(`Executing node ${node.id} of type ${type}`);}
@@ -239,11 +239,11 @@ export class NodeFactory {
    * Get factory statistics
    */
   getStatistics(): {
-    totalCreated: number;,
+    totalCreated: number;
   successfulCreations: number;
-    failedCreations: number;,
+    failedCreations: number;
   successRate: number;
-    averageCreationTime: number;,
+    averageCreationTime: number;
   typeDistribution: Record<string, number>;
     recentFailures: Array<{ nodeType: string; nodeId: string; error: string; timestamp: number }>;
     const total = this.creationHistory.length;
@@ -294,7 +294,7 @@ export class NodeFactory {
     } catch (error) {
       throw new Error(`Failed to import templates: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   // Private helper methods
-  private async validateNodeData(type: string,)
+  private async validateNodeData(type: string)
     id: string,
     config: AdvancedNodeConfig,
     data: any): Promise<void> {,
@@ -336,7 +336,7 @@ export class NodeFactory {
         optimized.normalizedMatrix = this.normalizeTransitionMatrix(optimized.transitionMatrix);
       break;
     return optimized;
-  private normalizeTransitionMatrix(matrix: Record<string,)
+  private normalizeTransitionMatrix(matrix: Record<string)
     Record<string,
     number>>
   ): Record<string, Record<string, number>> {

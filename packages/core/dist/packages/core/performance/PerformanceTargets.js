@@ -253,7 +253,26 @@ export const performanceTargets = {
                                                                                 /**
                                                                                  * Environment-specific target adjustments
                                                                                  */
-                                                                                const: environmentAdjustments } < string, number } >>  } } } } } } } } } } } } } } } } }
+                                                                                const: environmentAdjustments
+                                                                            } < string, number
+                                                                        } >> 
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }, { development: { 
 // More lenient targets for development environment
 multiplier_warning: , 1.5: , multiplier_critical: , 2.0: , }, staging: { 

@@ -145,7 +145,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
   status: 'pending',
   isActive: true,
   isVerified: false,
-  profile: {,
+  profile: {
   timezone: 'UTC',
   language: 'en',
 },
@@ -153,7 +153,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         permissions: [],
         systemAccess: 'basic',
         mfaEnabled: false,
-        securityClearance: 'public';
+        securityClearance: 'public'
   }, userId || 'admin');
       loadData();
     } catch (error) {
@@ -475,20 +475,20 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       )}
       <style>{`
         .system-access-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -497,29 +497,29 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         .users-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
         .search-filters {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .search-bar {
-          position: relative;,
+          position: relative;
   display: flex;
           align-items: center;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
           z-index: 1;
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
         .action-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .users-grid {
           display: grid;
@@ -527,7 +527,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           gap: 1rem;
         .stats-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .stats-grid {
           display: grid;
@@ -535,21 +535,21 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           gap: 1rem;
         .stat-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .stat-icon {
           padding: 0.75rem;
-          border-radius: 8px;,
+          border-radius: 8px;
   background: #f3f4f6;
         .stat-info {
           flex: 1;
         .stat-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-bottom: 0.25rem;
         .stat-value {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .stat-change {
@@ -558,36 +558,36 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         .stat-change.positive {
           color: #059669;
         .stat-description {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .access-level-chart,
         .status-chart {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .chart-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .chart-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           min-width: 120px;
           font-size: 0.875rem;
           font-weight: 500;
         .chart-bar {
-          flex: 1;,
+          flex: 1;
   height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .chart-fill {
-          height: 100%;,
+          height: 100%;
   transition: width 0.3s ease;
         .chart-value {
           min-width: 40px;
@@ -596,7 +596,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           font-size: 0.875rem;
         .requests-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .requests-header {
           display: flex;
@@ -604,10 +604,10 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           align-items: center;
         .requests-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .empty-state {
-          text-align: center;,
+          text-align: center;
   padding: 4rem 2rem;
           color: #6b7280;
         .empty-state h3 {
@@ -618,7 +618,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
             align-items: stretch;
           .users-controls {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.75rem;
           .search-filters {
             flex-direction: column;
@@ -641,9 +641,9 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
 
 // User Card Component
 interface UserCardProps {
-  user: SystemUser;,
-  onSelect: (user: SystemUser) => void;,
-  onAssignRole: (userId: string, roleId: string) => void;,
+  user: SystemUser;
+  onSelect: (user: SystemUser) => void;
+  onAssignRole: (userId: string, roleId: string) => void;
   onRevokeRole: (userId: string, roleId: string) => void;
   currentUserId?: string;
   const UserCard: React.FC<UserCardProps> = ({ ),
@@ -733,7 +733,7 @@ interface UserCardProps {
           align-items: flex-start;
           margin-bottom: 1rem;
         .user-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .user-email {
@@ -745,14 +745,14 @@ interface UserCardProps {
           font-size: 0.75rem;
         .user-badges {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           align-items: flex-end;
         .user-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
@@ -767,7 +767,7 @@ interface UserCardProps {
           color: #1f2937;
           text-align: right;
         .user-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
       `}</style>
     </Card>
@@ -776,8 +776,8 @@ interface UserCardProps {
 
 // Access Request Card Component
 interface AccessRequestCardProps {
-  request: AccessRequest;,
-  onApprove: (requestId: string) => void;,
+  request: AccessRequest;
+  onApprove: (requestId: string) => void;
   onReject: (requestId: string) => void;
   const AccessRequestCard: React.FC<AccessRequestCardProps> = ({,)
   request,
@@ -858,7 +858,7 @@ interface AccessRequestCardProps {
           align-items: flex-start;
           margin-bottom: 1rem;
         .request-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .request-requester,
@@ -867,11 +867,11 @@ interface AccessRequestCardProps {
           font-size: 0.875rem;
         .request-badges {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           align-items: flex-end;
         .request-details {
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
@@ -881,7 +881,7 @@ interface AccessRequestCardProps {
         .request-details p:last-child {
           margin-bottom: 0;
         .request-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .approve-btn {
           background: #059669;
@@ -902,7 +902,7 @@ interface AccessRequestCardProps {
 
 // User Detail Modal Component
 interface UserDetailModalProps {
-  user: SystemUser;,
+  user: SystemUser;
   onClose: () => void;
   onUpdate: () => void;
   currentUserId?: string;
@@ -1012,7 +1012,7 @@ interface UserDetailModalProps {
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;,
+          position: fixed;
   inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
@@ -1021,34 +1021,34 @@ interface UserDetailModalProps {
           z-index: 1000;
         .modal-content {
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   width: 90vw;
           max-width: 800px;
-          max-height: 80vh;,
+          max-height: 80vh;
   overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .modal-body {
           padding: 1.5rem;
         .user-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
         .detail-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
@@ -1064,12 +1064,12 @@ interface UserDetailModalProps {
           color: #1f2937;
         .roles-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .role-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 0.5rem;
           background: #f3f4f6;
           border-radius: 4px;
@@ -1079,7 +1079,7 @@ interface UserDetailModalProps {
           font-size: 0.75rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;,
+          justify-content: flex-end;
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

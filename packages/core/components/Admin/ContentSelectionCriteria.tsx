@@ -67,43 +67,43 @@ export interface ContentCriteria {
   diversification_rules?: DiversificationRule;
 }
 export interface DiversificationRule {
-  attribute: string;,
+  attribute: string;
   max_percentage: number;
   enforce_uniqueness: boolean;
 }
 export interface SelectionCriteriaTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: 'quality' | 'performance' | 'diversity' | 'trending' | 'seasonal' | 'custom';
-  criteria: ContentCriteria;,
+  criteria: ContentCriteria;
   is_system_template: boolean;
-  usage_count: number;,
+  usage_count: number;
   created_by: string;
   created_at: Date;
   last_used?: Date;
 }
 export interface ContentSelectionPreview {
-  total_matches: number;,
+  total_matches: number;
   sample_content: Array<{,
-  id: string;,
+  id: string;
   title: string;
-  creator: string;,
+  creator: string;
   rating: number;
-  downloads: number;,
+  downloads: number;
   category: string;
   match_reasons: string;
 }>;
   category_distribution: Record<string, number>;
   creator_distribution: Record<string, number>;
-  quality_stats: {,
+  quality_stats: {
   avg_rating: number;
-  avg_downloads: number;,
+  avg_downloads: number;
   avg_engagement: number;
 };
-  performance_prediction: {,
+  performance_prediction: {
   expected_ctr: number;
-  expected_conversion_rate: number;,
+  expected_conversion_rate: number;
   confidence_level: number;
 };
 }
@@ -121,7 +121,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   name: 'Trending Content',
   description: 'High-performing content with recent engagement',
   category: 'trending',
-  criteria: {,
+  criteria: {
   min_rating: 4.0,
   min_download_count: 100,
   published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
@@ -140,7 +140,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       name: 'Premium Quality',
       description: 'Highest quality content from top creators',
       category: 'quality',
-      criteria: {,
+      criteria: {
   min_rating: 4.5,
         quality_score_threshold: 90,
         creator_tiers: ['premium', 'verified'],
@@ -176,24 +176,24 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   downloads: 1890,
   category: 'Events',
   match_reasons: ['Quality score', 'Recent engagement', 'Trending']],
-  category_distribution: {,
+  category_distribution: {
   'Business': 45,
   'Events': 32,
   'Marketing': 28,
   'Creative': 25,
   'Educational': 18,
 },
-  creator_distribution: {,
+  creator_distribution: {
   'Premium': 67,
   'Verified': 89,
   'Community': 31,
 },
-  quality_stats: {,
+  quality_stats: {
   avg_rating: 4.6,
   avg_downloads: 1845,
   avg_engagement: 82.5,
 },
-  performance_prediction: {,
+  performance_prediction: {
   expected_ctr: 3.8,
   expected_conversion_rate: 12.4,
   confidence_level: 0.85,
@@ -771,11 +771,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </Tabs>
       <style>{`
         .content-selection-criteria {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .criteria-header {
           display: flex;
@@ -783,7 +783,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -791,15 +791,15 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           font-size: 1rem;
         .criteria-builder {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .builder-sections {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .builder-section .section-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-size: 1.125rem;
         .filter-grid {
@@ -808,15 +808,15 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           gap: 1rem;
         .filter-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .filter-item.span-2 {
           grid-column: span 2;
         .filter-item label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .criteria-input {
-          padding: 0.5rem 0.75rem;,
+          padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -826,48 +826,48 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .input-with-unit {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .input-with-unit .criteria-input {
           flex: 1;
         .input-unit {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           font-weight: 500;
         .multi-select {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .checkbox-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.375rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           cursor: pointer;
         .checkbox-label input[type="checkbox"] {
-          width: 1rem;,
+          width: 1rem;
   height: 1rem;
         .checkbox-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .builder-actions {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
           justify-content: flex-end;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         .templates-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .templates-header h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .templates-grid {
@@ -879,179 +879,179 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .template-info h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .template-info p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .template-stats {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .stat-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         .template-preview h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .criteria-tags {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.375rem;
           margin-bottom: 1rem;
         .criteria-tag {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
-          background: #f3f4f6;,
+          background: #f3f4f6;
   color: #374151;
           display: flex;
           align-items: center;
         .template-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           justify-content: flex-end;
         .preview-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .preview-header h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .preview-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .preview-metrics {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
         .metric-card .card-content {
-          text-align: center;,
+          text-align: center;
   padding: 1.5rem;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.5rem;
         .preview-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .sample-content-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .sample-content-item {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .content-info h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .content-meta {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .content-meta span {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .category-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
         .content-stats {
-          display: flex;,
+          display: flex;
   gap: 1rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           margin-bottom: 0.5rem;
         .match-reasons {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.25rem;
         .reason-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
-          background: #eff6ff;,
+          background: #eff6ff;
   color: #1e40af;
         .distribution-charts {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .chart-section h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.75rem 0;
         .distribution-bars {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .distribution-bar {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .bar-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           min-width: 80px;
         .bar-container {
-          flex: 1;,
+          flex: 1;
   height: 20px;
           background: #f3f4f6;
-          border-radius: 10px;,
+          border-radius: 10px;
   overflow: hidden;
         .bar-fill {
-          height: 100%;,
+          height: 100%;
   background: #3b82f6;
           transition: width 0.3s ease;
         .bar-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           font-weight: 600;
           min-width: 30px;
           text-align: right;
         .prediction-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .prediction-item {
           display: flex;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .prediction-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .prediction-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         @media (max-width: 1200px) {
@@ -1065,7 +1065,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
             grid-column: span 1;
         @media (max-width: 768px) {
           .criteria-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
           .preview-metrics {
             grid-template-columns: 1fr;

@@ -28,8 +28,8 @@ Object.defineProperty(window, 'removeEventListener', {)
 
 // Mock FileReader for drag-and-drop tests
 class MockFileReader {
-  result: string | null = null;,
-  onload: ((event: unknown) => void) | null = null;,
+  result: string | null = null;
+  onload: ((event: unknown) => void) | null = null;
   onerror: ((event: unknown) => void) | null = null;
   readAsText(file: File) {
     setTimeout(() => {
@@ -187,7 +187,7 @@ describe('User Interaction Integration Tests', () => {
       const mockFile = new File([''], 'test-project.psg', { type: 'application/json' });
       const dragEvent = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
       await handleDrop(dragEvent);
@@ -211,7 +211,7 @@ describe('User Interaction Integration Tests', () => {
       const txtFile = new File([''], 'document.txt', { type: 'text/plain' });
       const dragEvent = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [txtFile],
 } as any;
       await handleDrop(dragEvent);

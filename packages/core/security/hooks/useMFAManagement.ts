@@ -20,14 +20,14 @@ import { mfaRetryHandler, MFAOperation, OperationResult } from '../services/MFAR
 // Types
 
 export interface MFAMethod {
-  id: string;,
+  id: string;
   type: 'totp' | 'sms' | 'email' | 'backup_codes';
-  name: string;,
+  name: string;
   enabled: boolean;
-  primary: boolean;,
+  primary: boolean;
   configuredAt: Date;
   lastUsed?: Date;
-  configuration?: {,
+  configuration?: {
   phoneNumber?: string;
   email?: string;
   appName?: string;
@@ -35,44 +35,44 @@ export interface MFAMethod {
 };
 }
 export interface BackupCode {
-  id: string;,
+  id: string;
   code: string;
   used: boolean;
   usedAt?: Date;
 }
 export interface TrustedDevice {
-  id: string;,
+  id: string;
   name: string;
-  type: 'desktop' | 'mobile' | 'tablet';,
+  type: 'desktop' | 'mobile' | 'tablet';
   browser: string;
-  location: string;,
+  location: string;
   addedAt: Date;
-  lastAccess: Date;,
+  lastAccess: Date;
   current: boolean;
 }
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
-  description: string;,
+  description: string;
   timestamp: Date;
-  ipAddress: string;,
+  ipAddress: string;
   location: string;
-  riskLevel: 'low' | 'medium' | 'high';
-}
+  riskLevel: 'low' | 'medium' | 'high'
+  }
 export interface MFASettings {
-  requireMFA: boolean;,
+  requireMFA: boolean;
   allowBackupCodes: boolean;
-  trustedDeviceExpiry: number;,
+  trustedDeviceExpiry: number;
   maxTrustedDevices: number;
-  sessionTimeout: number;,
+  sessionTimeout: number;
   emailNotifications: boolean;
   smsNotifications: boolean;
 }
 export interface MFAStatus {
-  enabled: boolean;,
+  enabled: boolean;
   methodsConfigured: number;
   primaryMethod?: string;
-  backupCodesRemaining: number;,
+  backupCodesRemaining: number;
   trustedDevicesCount: number;
   lastSecurityEvent?: SecurityEvent;
 }
@@ -89,45 +89,45 @@ export interface UseMFAManagementOptions {
 }
 export interface UseMFAManagementReturn {
   // State
-  mfaMethods: MFAMethod;,
+  mfaMethods: MFAMethod;
   backupCodes: BackupCode;
-  trustedDevices: TrustedDevice;,
+  trustedDevices: TrustedDevice;
   securityEvents: SecurityEvent;
-  settings: MFASettings;,
+  settings: MFASettings;
   status: MFAStatus;
-  loading: boolean;,
+  loading: boolean;
   error: Error | null;
   // Retry and timeout state
-  retryCount: number;,
+  retryCount: number;
   isRetrying: boolean;
-  lastRetryError: Error | null;,
+  lastRetryError: Error | null;
   operationTimeout: boolean;
   // MFA Method Management
-  enableMethod: (methodId: string) => Promise<void>;,
-  disableMethod: (methodId: string) => Promise<void>;,
+  enableMethod: (methodId: string) => Promise<void>;
+  disableMethod: (methodId: string) => Promise<void>;
   setupTOTP: (userId: string) => Promise<{ secret: string; qrCode: string }>;
-  setupSMS: (phoneNumber: string) => Promise<void>;,
-  setupEmail: (email: string) => Promise<void>;,
-  removeMethod: (methodId: string) => Promise<void>;,
+  setupSMS: (phoneNumber: string) => Promise<void>;
+  setupEmail: (email: string) => Promise<void>;
+  removeMethod: (methodId: string) => Promise<void>;
   setPrimaryMethod: (methodId: string) => Promise<void>;
   // Backup Code Management
-  generateBackupCodes: () => Promise<BackupCode>;,
+  generateBackupCodes: () => Promise<BackupCode>;
   downloadBackupCodes: () => void;
   markBackupCodeUsed: (codeId: string) => Promise<void>;
   // Trusted Device Management
   addTrustedDevice: (device: Omit<TrustedDevice, 'id' | 'addedAt'>) => Promise<void>;
-  removeTrustedDevice: (deviceId: string) => Promise<void>;,
+  removeTrustedDevice: (deviceId: string) => Promise<void>;
   refreshDeviceAccess: (deviceId: string) => Promise<void>;
   // Settings Management
-  updateSettings: (newSettings: Partial<MFASettings>) => Promise<void>;,
+  updateSettings: (newSettings: Partial<MFASettings>) => Promise<void>;
   resetSettings: () => Promise<void>;
   // Security Events
   getSecurityEvents: (limit?: number, offset?: number) => Promise<SecurityEvent>;
   clearSecurityEvents: () => Promise<void>;
   // Utility Functions
-  validateMFACode: (code: string, methodType: string) => Promise<boolean>;,
+  validateMFACode: (code: string, methodType: string) => Promise<boolean>;
   testNotifications: () => Promise<void>;
-  exportSecurityData: () => Promise<Blob>;,
+  exportSecurityData: () => Promise<Blob>;
   refresh: () => Promise<void>;
 }
 export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManagementReturn => {
@@ -370,7 +370,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
   timestamp: new Date(),
         ipAddress: '192.168.1.100',
         location: 'San Francisco, CA',
-        riskLevel: 'low';
+        riskLevel: 'low'
   };
       setSecurityEvents(prev => [event, ...prev]);
       onSecurityEvent?.(event);
@@ -405,7 +405,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
   timestamp: new Date(),
         ipAddress: '192.168.1.100',
         location: 'San Francisco, CA',
-        riskLevel: 'medium';
+        riskLevel: 'medium'
   };
       setSecurityEvents(prev => [event, ...prev]);
       onSecurityEvent?.(event);
@@ -669,7 +669,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
         timestamp: new Date(),
         ipAddress: '192.168.1.100',
         location: 'San Francisco, CA',
-        riskLevel: 'low';
+        riskLevel: 'low'
   };
       setSecurityEvents(prev => [event, ...prev]);
       onSecurityEvent?.(event);

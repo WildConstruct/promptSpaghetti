@@ -17,7 +17,7 @@ const mockBlob = jest.fn(() => ({}));
 // Mock DOM methods
 global.document = {
   createElement: mockCreateElement,
-  body: {,
+  body: {
   appendChild: mockAppendChild,
   removeChild: mockRemoveChild,
 } as any;

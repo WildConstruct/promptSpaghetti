@@ -8,31 +8,31 @@
 // Authentication and Authorization types
 
 export interface User {
-  id: string;,
+  id: string;
   email: string;
-  name: string;,
+  name: string;
   role: UserRole;
-  permissions: Permission;,
+  permissions: Permission;
   status: UserStatus;
-  profile: UserProfile;,
+  profile: UserProfile;
   security: UserSecurityInfo;
   metadata: UserMetadata;
 }
 export interface UserRole {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   permissions: Permission;
-  isSystemRole: boolean;,
+  isSystemRole: boolean;
   hierarchy: number;
   inheritsFrom?: string;
 }
 export interface Permission {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   resource: string;
-  action: PermissionAction;,
+  action: PermissionAction;
   scope: PermissionScope;
   conditions?: PermissionCondition;
 }
@@ -41,59 +41,59 @@ export type PermissionScope = 'global' | 'organization' | 'team' | 'project' | '
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending' | 'locked';
 
 export interface UserProfile {
-  firstName: string;,
+  firstName: string;
   lastName: string;
   avatar?: string;
-  timezone: string;,
+  timezone: string;
   locale: string;
   preferences: Record<string, any>;
 }
 export interface UserSecurityInfo {
   lastLogin?: Date;
-  lastPasswordChange: Date;,
+  lastPasswordChange: Date;
   failedLoginAttempts: number;
   mfaEnabled: boolean;
   mfaMethod?: 'totp' | 'sms' | 'email';
-  securityQuestions: SecurityQuestion;,
+  securityQuestions: SecurityQuestion;
   trustedDevices: TrustedDevice;
 }
 export interface UserMetadata {
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModifiedBy: string;
   version: number;
 }
 export interface SecurityQuestion {
-  id: string;,
+  id: string;
   question: string;
-  answerHash: string;,
+  answerHash: string;
   createdAt: Date;
 }
 export interface TrustedDevice {
-  id: string;,
+  id: string;
   deviceId: string;
-  deviceName: string;,
+  deviceName: string;
   userAgent: string;
   ipAddress: string;
   location?: string;
-  trustedAt: Date;,
+  trustedAt: Date;
   lastUsed: Date;
   // Access Control types
 }
 export interface AccessRequest {
-  userId: string;,
+  userId: string;
   resource: string;
   action: PermissionAction;
   context?: AccessContext;
   timestamp: Date;
 }
 export interface AccessContext {
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   location?: string;
   deviceId?: string;
-  sessionId: string;,
+  sessionId: string;
   requestId: string;
 }
 export interface AccessResponse {
@@ -104,21 +104,21 @@ export interface AccessResponse {
   auditId: string;
 }
 export interface PermissionCondition {
-  type: 'time' | 'location' | 'device' | 'custom';,
+  type: 'time' | 'location' | 'device' | 'custom';
   operator: 'equals' | 'contains' | 'in' | 'not_in' | 'greater_than' | 'less_than';
-  value: any;,
+  value: any;
   description: string;
   // Audit and Monitoring types
 }
 export interface AuditLog {
   id: string;
   userId?: string;
-  action: AuditAction;,
+  action: AuditAction;
   resource: string;
   resourceId?: string;
-  details: AuditDetails;,
+  details: AuditDetails;
   outcome: AuditOutcome;
-  timestamp: Date;,
+  timestamp: Date;
   metadata: AuditMetadata;
 }
 export type AuditAction = 
@@ -136,7 +136,7 @@ export interface AuditDetails {
   additionalData?: Record<string, any>;
 }
 export interface AuditMetadata {
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   sessionId?: string;
   requestId: string;
@@ -146,13 +146,13 @@ export interface AuditMetadata {
   // Security Monitoring types
 }
 export interface SecurityAlert {
-  id: string;,
+  id: string;
   type: SecurityAlertType;
-  severity: SecuritySeverity;,
+  severity: SecuritySeverity;
   title: string;
-  description: string;,
+  description: string;
   source: string;
-  details: SecurityAlertDetails;,
+  details: SecurityAlertDetails;
   status: AlertStatus;
   userId?: string;
   timestamp: Date;
@@ -169,33 +169,33 @@ export type SecuritySeverity = 'low' | 'medium' | 'high' | 'critical';
 export type AlertStatus = 'open' | 'investigating' | 'resolved' | 'false_positive';
 
 export interface SecurityAlertDetails {
-  affectedResources: string;,
+  affectedResources: string;
   riskScore: number;
-  indicators: SecurityIndicator;,
+  indicators: SecurityIndicator;
   timeline: SecurityEvent;
-  recommendations: string;,
+  recommendations: string;
   relatedAlerts: string;
 }
 export interface SecurityIndicator {
-  type: string;,
+  type: string;
   value: string;
-  confidence: number;,
+  confidence: number;
   source: string;
 }
 export interface SecurityEvent {
-  timestamp: Date;,
+  timestamp: Date;
   event: string;
   details: string;
   // Compliance and Policy types
 }
 export interface SecurityPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   type: PolicyType;
-  rules: PolicyRule;,
+  rules: PolicyRule;
   enforcement: PolicyEnforcement;
-  scope: PolicyScope;,
+  scope: PolicyScope;
   status: PolicyStatus;
   metadata: PolicyMetadata;
 }
@@ -205,83 +205,83 @@ export type PolicyScope = 'global' | 'organization' | 'team' | 'project';
 export type PolicyStatus = 'active' | 'draft' | 'deprecated' | 'disabled';
 
 export interface PolicyRule {
-  id: string;,
+  id: string;
   name: string;
-  condition: string;,
+  condition: string;
   action: PolicyAction;
   parameters: Record<string, any>;
   enabled: boolean;
 }
 export interface PolicyAction {
-  type: 'allow' | 'deny' | 'require_approval' | 'log' | 'notify';,
+  type: 'allow' | 'deny' | 'require_approval' | 'log' | 'notify';
   parameters: Record<string, any>;
 }
 export interface PolicyMetadata {
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModifiedBy: string;
-  version: number;,
+  version: number;
   complianceFrameworks: string;
   // Data Classification types
 }
 export interface DataClassification {
-  id: string;,
+  id: string;
   name: string;
-  level: ClassificationLevel;,
+  level: ClassificationLevel;
   description: string;
-  handlingRules: DataHandlingRule;,
+  handlingRules: DataHandlingRule;
   retentionPolicy: RetentionPolicy;
   accessControls: ClassificationAccessControl;
 }
 export type ClassificationLevel = 'public' | 'internal' | 'confidential' | 'restricted' | 'top_secret';
 
 export interface DataHandlingRule {
-  type: 'storage' | 'transmission' | 'processing' | 'disposal';,
+  type: 'storage' | 'transmission' | 'processing' | 'disposal';
   requirements: string;
-  restrictions: string;,
+  restrictions: string;
   approvals: string;
 }
 export interface RetentionPolicy {
-  retentionPeriod: number;,
+  retentionPeriod: number;
   retentionUnit: 'days' | 'months' | 'years';
-  disposalMethod: 'secure_delete' | 'archive' | 'anonymize';,
+  disposalMethod: 'secure_delete' | 'archive' | 'anonymize';
   legalHoldExempt: boolean;
 }
 export interface ClassificationAccessControl {
-  role: string;,
+  role: string;
   permissions: PermissionAction;
   conditions: PermissionCondition;
   // Encryption and Security Measures
 }
 export interface EncryptionConfig {
-  algorithm: string;,
+  algorithm: string;
   keySize: number;
-  mode: string;,
+  mode: string;
   keyRotationInterval: number;
   keyEscrow: boolean;
 }
 export interface SecurityMetrics {
-  authentication: {,
-  successfulLogins: number;,
+  authentication: {
+  successfulLogins: number;
   failedLogins: number;
-  mfaAdoption: number;,
+  mfaAdoption: number;
   passwordCompliance: number;
 };
-  authorization: {,
+  authorization: {
   accessViolations: number;
-  privilegeEscalations: number;,
+  privilegeEscalations: number;
   permissionChanges: number;
 };
-  monitoring: {,
+  monitoring: {
   alertsGenerated: number;
-  alertsResolved: number;,
+  alertsResolved: number;
   averageResolutionTime: number;
   falsePositiveRate: number;
 };
-  compliance: {,
+  compliance: {
   policyViolations: number;
-  complianceScore: number;,
+  complianceScore: number;
   auditFindings: number;
   remediationTime: number;
 };
@@ -289,54 +289,54 @@ export interface SecurityMetrics {
 // Domain Events
 }
 export interface SecurityDomainEvents {
-  onUserAuthenticated: (user: User, context: AccessContext) => void;,
-  onAuthenticationFailed: (attempt: AccessRequest, reason: string) => void;,
-  onAccessGranted: (request: AccessRequest, response: AccessResponse) => void;,
-  onAccessDenied: (request: AccessRequest, response: AccessResponse) => void;,
-  onSecurityViolation: (violation: SecurityAlert) => void;,
-  onPolicyViolation: (policy: SecurityPolicy, violation: PolicyRule) => void;,
-  onAuditLogCreated: (auditLog: AuditLog) => void;,
-  onPermissionChanged: (userId: string, oldPermissions: Permission, newPermissions: Permission) => void;,
+  onUserAuthenticated: (user: User, context: AccessContext) => void;
+  onAuthenticationFailed: (attempt: AccessRequest, reason: string) => void;
+  onAccessGranted: (request: AccessRequest, response: AccessResponse) => void;
+  onAccessDenied: (request: AccessRequest, response: AccessResponse) => void;
+  onSecurityViolation: (violation: SecurityAlert) => void;
+  onPolicyViolation: (policy: SecurityPolicy, violation: PolicyRule) => void;
+  onAuditLogCreated: (auditLog: AuditLog) => void;
+  onPermissionChanged: (userId: string, oldPermissions: Permission, newPermissions: Permission) => void;
   onSecurityMetricsUpdated: (metrics: SecurityMetrics) => void;
   // Security State
 }
 export interface SecurityDomainState {
-  currentUser: User | null;,
+  currentUser: User | null;
   userPermissions: Permission;
-  activeSession: UserSession | null;,
+  activeSession: UserSession | null;
   securityAlerts: SecurityAlert;
-  auditLogs: AuditLog;,
+  auditLogs: AuditLog;
   securityPolicies: SecurityPolicy;
-  metrics: SecurityMetrics;,
+  metrics: SecurityMetrics;
   loading: boolean;
   error: string | null;
 }
 export interface UserSession {
-  id: string;,
+  id: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   startedAt: Date;
-  lastActivity: Date;,
+  lastActivity: Date;
   expiresAt: Date;
-  riskScore: number;,
+  riskScore: number;
   flags: SessionFlag;
 }
 export interface SessionFlag {
-  type: 'suspicious' | 'elevated_risk' | 'new_device' | 'unusual_location';,
+  type: 'suspicious' | 'elevated_risk' | 'new_device' | 'unusual_location';
   reason: string;
   timestamp: Date;
   // Component Props
 }
 export interface SecurityDashboardProps {
-  userId: string;,
+  userId: string;
   permissions: Permission;
   onSecurityEvent?: (event: SecurityAlert) => void;
   className?: string;
 }
 export interface AccessControlProps {
-  resource: string;,
+  resource: string;
   action: PermissionAction;
   children: React.ReactNode;
   fallback?: React.ReactNode;

@@ -34,14 +34,14 @@ export interface DALLERequestOptions {
   user?: string;
 }
 export interface ImagePromptOptimization {
-  originalPrompt: string;,
+  originalPrompt: string;
   optimizedPrompt: string;
-  optimizations: string;,
+  optimizations: string;
   styleEnhancements: string;
   qualityImprovements: string;
 }
 export interface DALLEResponse {
-  created: number;,
+  created: number;
   data: Array<{,
   url?: string;
   b64_json?: string;
@@ -53,8 +53,8 @@ export interface ImageGenerationResult {
   url?: string;
   base64?: string;
   revisedPrompt?: string;
-  metadata: {,
-  size: string;,
+  metadata: {
+  size: string;
   quality: string;
   style?: string;
   model: string;
@@ -62,7 +62,7 @@ export interface ImageGenerationResult {
   }>;
   originalPrompt: string;
   optimizedPrompt?: string;
-  usage: {,
+  usage: {
   promptTokens: number;
   totalCost: number;
 };
@@ -83,7 +83,7 @@ export class DALLEAdapter extends BaseAIModel {
       costPerRequest: DALLEAdapter.getModelCostPerRequest(modelName),
       averageLatency: DALLEAdapter.getModelAverageLatency(modelName),
       maxConcurrency: 5, // DALL-E has strict rate limits
-      rateLimit: {,
+      rateLimit: {
   requestsPerMinute: modelName === 'dall-e-3' ? 5 : 50,
   tokensPerMinute: 1000,
 },
@@ -98,27 +98,27 @@ export class DALLEAdapter extends BaseAIModel {
   supportsBatch: false,
   supportsStreaming: false,
   supportsAsync: true,
-  customParameters: {,
-  size: {,
+  customParameters: {
+  size: {
   type: 'enum',
   values: modelName === 'dall-e-3' ,
   ? ['1024x1024', '1792x1024', '1024x1792']
   : ['256x256', '512x512', '1024x1024'],
   default: '1024x1024',
 },
-  quality: {,
+  quality: {
   type: 'enum',
   values: ['standard', 'hd'],
   default: 'standard',
   available: modelName === 'dall-e-3',
 },
-  style: {,
+  style: {
   type: 'enum',
   values: ['vivid', 'natural'],
   default: 'vivid',
   available: modelName === 'dall-e-3',
 },
-  n: {,
+  n: {
   type: 'number',
   min: 1,
   max: modelName === 'dall-e-3' ? 1 : 10,
@@ -188,7 +188,7 @@ export class DALLEAdapter extends BaseAIModel {
   estimatedCost: totalCost,
   currency: 'USD',
   confidence: 0.95,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: totalCost,
   processingCost: 0,
@@ -253,7 +253,7 @@ export class DALLEAdapter extends BaseAIModel {
     try {
       const response = await fetch(`${this.apiEndpoint}/models`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
 }
           'Content-Type': 'application/json',
@@ -271,7 +271,7 @@ export class DALLEAdapter extends BaseAIModel {
       try {
         const response = await fetch(url, {)
   method: 'POST',
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.config.apiKey}`}
 }
             'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ export class DALLEAdapter extends BaseAIModel {
     // General validations
     if (payload.prompt.length > 4000) {
   throw new Error('Prompt exceeds maximum length of 4000 characters');
-  private _processImageResponse(response: DALLEResponse,)
+  private _processImageResponse(response: DALLEResponse)
   optimization: ImagePromptOptimization,
   payload: any,
   generationTime: number): ImageGenerationResult {,
@@ -328,7 +328,7 @@ export class DALLEAdapter extends BaseAIModel {
   url: item.url,
   base64: item.b64_json,
   revisedPrompt: item.revised_prompt,
-  metadata: {,
+  metadata: {
   size: payload.size,
   quality: payload.quality || 'standard',
   style: payload.style,
@@ -340,7 +340,7 @@ export class DALLEAdapter extends BaseAIModel {
   images,
   originalPrompt: optimization.originalPrompt,
   optimizedPrompt: optimization.optimizedPrompt,
-  usage: {,
+  usage: {
   promptTokens,
   totalCost: (this._metadata.costPerRequest || 0) * images.length,
 }

@@ -109,8 +109,7 @@ export var RetryStrategy;
                                 return true;
                                 return false;
                             }
-                        case CircuitBreakerStateEnum.HALF_OPEN:
-                            return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
+                        case CircuitBreakerStateEnum.HALF_OPEN: return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
                         default:
                             return true;
                         /**
@@ -493,7 +492,8 @@ export var RetryStrategy;
                                                                                             maxAttempts: 2,
                                                                                             timeoutMs: 5000,
                                                                                             retryableErrors: [FailureType.NETWORK_ERROR, FailureType.TIMEOUT],
-                                                                                        }[MFAOperation.SMS_SEND] }
+                                                                                        }[MFAOperation.SMS_SEND]
+                                                                                    }
                                                                                 };
                                                                                 {
                                                                                 }

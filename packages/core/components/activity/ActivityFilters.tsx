@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
 interface ActivityFiltersProps {
-  filters: ActivityEventFilter;,
+  filters: ActivityEventFilter;
   eventTypes: string;
   onFilterChange: (filters: Partial<ActivityEventFilter>) => void;
   className?: string;

@@ -599,12 +599,12 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         name?: string;
         version?: string;
         author?: string;
+        created?: string;
         vfx?: {
             exportFormat?: "controlnet-compatible";
             targetPipeline?: "custom" | "stable-diffusion" | "midjourney" | "dalle";
             compatibilityVersion?: string;
         };
-        created?: string;
         debug?: {
             seed?: number;
             originGraphGuid?: string;
@@ -613,12 +613,12 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         name?: string;
         version?: string;
         author?: string;
+        created?: string;
         vfx?: {
             exportFormat?: "controlnet-compatible";
             targetPipeline?: "custom" | "stable-diffusion" | "midjourney" | "dalle";
             compatibilityVersion?: string;
         };
-        created?: string;
         debug?: {
             seed?: number;
             originGraphGuid?: string;
@@ -1271,12 +1271,12 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         name?: string;
         version?: string;
         author?: string;
+        created?: string;
         vfx?: {
             exportFormat?: "controlnet-compatible";
             targetPipeline?: "custom" | "stable-diffusion" | "midjourney" | "dalle";
             compatibilityVersion?: string;
         };
-        created?: string;
         debug?: {
             seed?: number;
             originGraphGuid?: string;
@@ -1420,12 +1420,12 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         name?: string;
         version?: string;
         author?: string;
+        created?: string;
         vfx?: {
             exportFormat?: "controlnet-compatible";
             targetPipeline?: "custom" | "stable-diffusion" | "midjourney" | "dalle";
             compatibilityVersion?: string;
         };
-        created?: string;
         debug?: {
             seed?: number;
             originGraphGuid?: string;

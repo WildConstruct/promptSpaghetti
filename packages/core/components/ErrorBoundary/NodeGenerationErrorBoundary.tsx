@@ -11,12 +11,12 @@ export interface NodeGenerationErrorBoundaryProps {
   children: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   fallback?: (error: Error, retry: () => void) => ReactNode;
-  theme?: 'light' | 'dark' | 'cinema';
-}
+  theme?: 'light' | 'dark' | 'cinema'
+  }
 export interface NodeGenerationErrorBoundaryState {
-  hasError: boolean;,
+  hasError: boolean;
   error: Error | null;
-  errorInfo: ErrorInfo | null;,
+  errorInfo: ErrorInfo | null;
   retryCount: number;
   /**
   * Error boundary component for node generation operations
@@ -94,7 +94,7 @@ export class NodeGenerationErrorBoundary extends Component<
   private getThemeStyles = () => {
   const theme = this.props.theme || 'cinema';
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   border: '#e5e7eb',
@@ -105,7 +105,7 @@ export class NodeGenerationErrorBoundary extends Component<
   warning: '#f59e0b',
   success: '#10b981',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   border: '#4b5563',
@@ -116,7 +116,7 @@ export class NodeGenerationErrorBoundary extends Component<
   warning: '#fbbf24',
   success: '#34d399',
 },
-  cinema: {,
+  cinema: {
   background: '#1a1a1a',
   secondary: '#0d1117',
   border: '#ff7c00',
@@ -295,7 +295,7 @@ export class NodeGenerationErrorBoundary extends Component<
   borderRadius: '6px',
               color: styles.text,
               fontSize: '14px',
-              cursor: 'pointer';
+              cursor: 'pointer'
   }}
           >
             🔄 Reset
@@ -310,7 +310,7 @@ export class NodeGenerationErrorBoundary extends Component<
   borderRadius: '6px',
               color: styles.warning,
               fontSize: '14px',
-              cursor: 'pointer';
+              cursor: 'pointer'
   }}
           >
             🔄 Reload Page

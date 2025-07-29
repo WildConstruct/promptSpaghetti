@@ -10,11 +10,11 @@ import { ZodSchema, ZodTypeAny, z } from 'zod';
  */
 
 interface NodeData {
-  id: string;,
+  id: string;
   type: string;
   data: Record<string, unknown>;
   export interface InspectorSidebarProps {
-  node: NodeData | null;,
+  node: NodeData | null;
   schema: ZodSchema<Record<string, unknown>> | null;
   onChange: (partial: Record<string, unknown>) => void;
 }

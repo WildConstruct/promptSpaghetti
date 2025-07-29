@@ -60,90 +60,90 @@ export enum ComplianceFramework {
   NOT_ASSESSED = 'not_assessed',
   IN_REMEDIATION = 'in_remediation'
   export interface ComplianceRequirement {
-  id: string;,
+  id: string;
   framework: ComplianceFramework;
-  category: string;,
+  category: string;
   requirement: string;
-  description: string;,
+  description: string;
   status: ComplianceStatus;
   lastAssessment: Date;
   nextAssessment?: Date;
-  responsible: string;,
+  responsible: string;
   evidence: Evidence;
-  findings: Finding;,
+  findings: Finding;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
 }
 export interface Evidence {
-  id: string;,
+  id: string;
   type: 'document' | 'screenshot' | 'log' | 'certificate' | 'policy';
-  title: string;,
+  title: string;
   description: string;
   lastUpdated: Date;
   validUntil?: Date;
-  location: string;,
+  location: string;
   owner: string;
-  status: 'current' | 'outdated' | 'missing';
-}
+  status: 'current' | 'outdated' | 'missing'
+  }
 export interface Finding {
-  id: string;,
+  id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  type: 'gap' | 'weakness' | 'deficiency' | 'observation';,
+  type: 'gap' | 'weakness' | 'deficiency' | 'observation';
   title: string;
-  description: string;,
+  description: string;
   recommendation: string;
-  identifiedDate: Date;,
+  identifiedDate: Date;
   targetResolution: Date;
-  status: 'open' | 'in_progress' | 'resolved' | 'accepted_risk';,
+  status: 'open' | 'in_progress' | 'resolved' | 'accepted_risk';
   owner: string;
   estimatedEffort: string;
 }
 export interface AuditCycle {
-  id: string;,
+  id: string;
   framework: ComplianceFramework;
-  type: 'internal' | 'external' | 'certification';,
+  type: 'internal' | 'external' | 'certification';
   auditor: string;
-  plannedStart: Date;,
+  plannedStart: Date;
   plannedEnd: Date;
   actualStart?: Date;
   actualEnd?: Date;
-  status: 'planned' | 'in_progress' | 'completed' | 'cancelled';,
+  status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
   scope: string;
   findings: Finding;
   reportUrl?: string;
 }
 export interface ComplianceMetrics {
-  overallScore: number;,
+  overallScore: number;
   byFramework: Record<ComplianceFramework, {,
-  score: number;,
+  score: number;
   compliantRequirements: number;
-  totalRequirements: number;,
+  totalRequirements: number;
   criticalGaps: number;
   lastAudit: Date;
   nextAudit?: Date;
 }>;
-  riskProfile: {,
+  riskProfile: {
   high: number;
-  medium: number;,
+  medium: number;
   low: number;
   accepted: number;
 };
-  auditStatus: {,
+  auditStatus: {
   upcoming: AuditCycle;
-  active: AuditCycle;,
+  active: AuditCycle;
   recentlyCompleted: AuditCycle;
 };
-  evidenceHealth: {,
+  evidenceHealth: {
   current: number;
-  outdated: number;,
+  outdated: number;
   missing: number;
   expiringWithin30Days: number;
 };
 }
 export interface ComplianceSecurityDashboardProps {
-  metrics: ComplianceMetrics;,
+  metrics: ComplianceMetrics;
   requirements: ComplianceRequirement;
-  frameworks: ComplianceFramework;,
+  frameworks: ComplianceFramework;
   auditCycles: AuditCycle;
   theme?: DashboardTheme;
   refreshInterval?: number;
@@ -175,7 +175,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   // Theme configuration
   const themeStyles = useMemo(() => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   surface: '#f8fafc',
   border: '#e2e8f0',
@@ -187,7 +187,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   error: '#ef4444',
   critical: '#dc2626',
 },
-  dark: {,
+  dark: {
   background: '#0f172a',
   surface: '#1e293b',
   border: '#334155',
@@ -199,7 +199,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   error: '#f87171',
   critical: '#ef4444',
 },
-  cinema: {,
+  cinema: {
   background: '#0a0a0a',
   surface: '#1a1a1a',
   border: '#333333',
@@ -242,7 +242,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   case ComplianceStatus.PARTIALLY_COMPLIANT: return themeStyles.warning;
   case ComplianceStatus.NON_COMPLIANT: return themeStyles.error;
   case ComplianceStatus.IN_REMEDIATION: return themeStyles.primary;
-  case ComplianceStatus.NOT_ASSESSED: return themeStyles.textSecondary;,
+  case ComplianceStatus.NOT_ASSESSED: return themeStyles.textSecondary;
   default: return themeStyles.textSecondary;
 }, [themeStyles]);
   // Get framework display name
@@ -285,7 +285,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
 },
   borderRadius: '8px',
         padding: '16px',
-        textAlign: 'center';
+        textAlign: 'center'
   }}>
         <h4 style={{
   margin: '0 0 12px 0',
@@ -402,7 +402,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             borderRadius: '4px',
             fontWeight: 600,
             textTransform: 'uppercase',
-            whiteSpace: 'nowrap';
+            whiteSpace: 'nowrap'
   }}>
             {requirement.status.replace('_', ' ')}
           </span>
@@ -536,7 +536,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   borderRadius: '8px',
           padding: '24px',
           marginBottom: '24px',
-          textAlign: 'center';
+          textAlign: 'center'
   }}>
           <h2 style={{
   margin: '0 0 16px 0',
@@ -585,7 +585,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-            padding: '16px';
+            padding: '16px'
   }}>
             <h4 style={{
   margin: '0 0 8px 0',
@@ -608,7 +608,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-            padding: '16px';
+            padding: '16px'
   }}>
             <h4 style={{
   margin: '0 0 8px 0',
@@ -631,7 +631,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-            padding: '16px';
+            padding: '16px'
   }}>
             <h4 style={{
   margin: '0 0 8px 0',
@@ -654,7 +654,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-            padding: '16px';
+            padding: '16px'
   }}>
             <h4 style={{
   margin: '0 0 8px 0',
@@ -698,7 +698,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   borderRadius: '4px',
                 padding: '6px 8px',
                 color: themeStyles.text,
-                fontSize: '12px';
+                fontSize: '12px'
   }}
             >
               <option value="all">All Frameworks</option>
@@ -727,7 +727,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   borderRadius: '4px',
                 padding: '6px 8px',
                 color: themeStyles.text,
-                fontSize: '12px';
+                fontSize: '12px'
   }}
             >
               <option value="all">All Statuses</option>
@@ -752,7 +752,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
           border: `1px solid ${themeStyles.border}`}
 },
   borderRadius: '8px',
-          padding: '20px';
+          padding: '20px'
   }}>
           <h3 style={{
   margin: '0 0 16px 0',
@@ -801,7 +801,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             maxWidth: '800px',
             width: '90%',
             maxHeight: '80vh',
-            overflowY: 'auto';
+            overflowY: 'auto'
   }}>
             <div style={{
   display: 'flex',
@@ -879,7 +879,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
                           finding.severity === 'medium' ? themeStyles.warning : themeStyles.success}`,
                       borderRadius: '4px',
                       marginBottom: '8px',
-                      fontSize: '12px';
+                      fontSize: '12px'
   }}>
                       <div style={{ fontWeight: 600, marginBottom: '4px' }}>{finding.title}</div>
                       <div style={{ color: themeStyles.textSecondary, marginBottom: '8px' }}>

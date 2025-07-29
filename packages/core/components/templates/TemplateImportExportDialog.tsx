@@ -29,7 +29,7 @@ import {
   FiRefreshCw
 } from 'react-icons/fi';
 interface TemplateImportExportDialogProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   mode: 'import' | 'export';
   template?: ProjectTemplate;
@@ -40,13 +40,13 @@ interface TemplateImportExportDialogProps {
   type ImportStep = 'source' | 'options' | 'validation' | 'preview' | 'import' | 'complete';
   type ExportStep = 'format' | 'options' | 'bundle' | 'export' | 'complete';
   interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   warnings: string;
   errors: string;
-  templateInfo?: {,
-  name: string;,
+  templateInfo?: {
+  name: string;
   version: string;
-  author: string;,
+  author: string;
   dependencies: number;
 };
 
@@ -148,7 +148,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   valid: true,
   warnings: ['Template uses deprecated node type "LegacyTransform"'],
   errors: [],
-  templateInfo: {,
+  templateInfo: {
   name: 'Sample Workflow Template',
   version: '2.1.0',
   author: 'Template Creator',
@@ -185,7 +185,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   // Mock import result - in real implementation, would call TemplateVersionManager
   const mockResult: TemplateImportResult = {,
   success: true,
-  imported_version: {,
+  imported_version: {
   id: 'version-123',
   version_number: '2.1.0',
   template_id: 'template-456',
@@ -391,7 +391,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.merge_strategy}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both';
+                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both'
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -408,7 +408,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.resolve_conflicts}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip';
+                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip'
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -425,7 +425,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.version_bump || 'patch'}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom';
+                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom'
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -584,7 +584,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={exportOptions.format}
               onChange={(e) => setExportOptions(prev => ({ )
                 ...prev, 
-                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle';
+                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle'
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >

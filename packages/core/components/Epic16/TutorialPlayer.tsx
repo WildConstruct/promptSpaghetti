@@ -43,9 +43,9 @@ import {
 // Epic 16 theme imports removed
 
 export interface TutorialStep {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   content: string;
   type: 'introduction' | 'demonstration' | 'interaction' | 'practice' | 'quiz' | 'completion';
   duration?: number; // in seconds,
@@ -57,7 +57,7 @@ export interface TutorialStep {
   actions?: TutorialAction;
 }
 export interface TutorialAction {
-  id: string;,
+  id: string;
   type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
   selector?: string;
   value?: string;
@@ -65,29 +65,29 @@ export interface TutorialAction {
   completed: boolean;
 }
 export interface Tutorial {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: 'getting-started' | 'template-creation' | 'marketplace' | 'collaboration' | 'advanced';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';,
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: number; // in minutes,
   prerequisites?: string;
-  steps: TutorialStep;,
-  completionRewards: {,
+  steps: TutorialStep;
+  completionRewards: {
   xp: number;
   badge?: string;
   certificate?: string;
 };
-  tags: string;,
+  tags: string;
   rating: number;
-  completionCount: number;,
+  completionCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface TutorialProgress {
-  tutorialId: string;,
+  tutorialId: string;
   currentStepIndex: number;
-  completed: boolean;,
+  completed: boolean;
   startedAt: Date;
   completedAt?: Date;
   timeSpent: number; // in seconds,
@@ -96,7 +96,7 @@ export interface TutorialProgress {
 }
 export interface TutorialPlayerProps {
   tutorial?: Tutorial;
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onComplete?: (tutorial: Tutorial, progress: TutorialProgress) => void;
   onStepComplete?: (stepId: string, tutorial: Tutorial) => void;
@@ -605,7 +605,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 // Tutorial Browser Component
 
 export interface TutorialBrowserProps {
-  tutorials: Tutorial;,
+  tutorials: Tutorial;
   onSelectTutorial: (tutorial: Tutorial) => void;
   onStartTutorial?: (tutorial: Tutorial) => void;
   userProgress?: { [tutorialId: string]: TutorialProgress };

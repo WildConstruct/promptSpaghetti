@@ -150,7 +150,7 @@ _jsxs("div", { ref: menuRef, style: {
                             padding: '6px 8px',
                             background: info.background,
                             border: `1px solid ${info.border}`
-                        }, ", borderRadius: 4, cursor: 'pointer', fontSize: 10, color: info.text, fontWeight: 500, transition: 'all 0.15s ease', textAlign: 'left'; }} onMouseEnter=", (e) => {
+                        }, ", borderRadius: 4, cursor: 'pointer', fontSize: 10, color: info.text, fontWeight: 500, transition: 'all 0.15s ease', textAlign: 'left' }} onMouseEnter=", (e) => {
                             e.currentTarget.style.transform = 'scale(1.05)';
                             e.currentTarget.style.boxShadow = `0 2px 8px ${info.shadow}`;
                         }, "} onMouseLeave=", (e) => {

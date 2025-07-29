@@ -1,3 +1,4 @@
+import { Edge } from '../graphSchema';
 import { GraphSyncHandler } from '../../crdt-research/src/graph-sync';
 export class GraphCRDTAdapter {
     syncHandler;
@@ -36,7 +37,8 @@ export class GraphCRDTAdapter {
             metadata: {
                 originalType: node.type,
                 inputs: node.inputs || [],
-                ...this.extractNodeMetadata(node) },
+                ...this.extractNodeMetadata(node)
+            },
             /**
              * Convert existing Edge to CRDTEdge
              */
@@ -288,129 +290,124 @@ export class GraphCRDTAdapter {
                                             updateNode(nodeId, string, updates, (Partial));
                                             void {
                                                 const: existingNode = this.yGraph.getNode(nodeId),
-                                                if(, existingNode) { }, return: ,
-                                                const: crdtUpdates
-                                            };
-                                            {
-                                                data: { }
-                                            }
-                                        }, ...existingNode.data, ...this.extractNodeData(updates)
-                                    },
-                                        metadata;
-                                    { }
-                                }
-                            }
-                        }, ...existingNode.metadata, lastModified: Date.now()
-                    }
-                };
-                this.isUpdating = true;
-                this.yGraph.updateNode(nodeId, crdtUpdates);
-                this.isUpdating = false;
-                this.syncToGraph();
-                /**
-                 * Public API: Delete a node collaboratively
-                 */
-                deleteNode(nodeId, string);
-                void {
-                    this: .isUpdating = true,
-                    this: .yGraph.deleteNode(nodeId),
-                    this: .isUpdating = false,
-                    this: .syncToGraph(),
-                    /**
-                     * Public API: Add an edge collaboratively
-                     */
-                    addEdge(edge) {
-                        const sourceNode = this.currentGraph.nodes.find(n => n.id === edge.source);
-                        const targetNode = this.currentGraph.nodes.find(n => n.id === edge.target);
-                        if (sourceNode && targetNode) {
-                            const crdtEdge = this.toCRDTEdge(edge, sourceNode, targetNode);
-                            this.isUpdating = true;
-                            this.yGraph.addEdge(crdtEdge);
-                            this.isUpdating = false;
-                            this.syncToGraph();
-                            /**
-                             * Public API: Delete an edge collaboratively
-                             */
-                            deleteEdge(edgeId, string);
-                            void {
-                                this: .isUpdating = true,
-                                this: .yGraph.deleteEdge(edgeId),
-                                this: .isUpdating = false,
-                                this: .syncToGraph(),
-                                /**
-                                 * Public API: Update node position (for React Flow integration)
-                                 */
-                                updateNodePosition(nodeId, position) {
-                                    this.isUpdating = true;
-                                    this.yGraph.updateNode(nodeId, { position });
-                                    this.isUpdating = false;
-                                    // Don't sync to graph for position-only updates to avoid feedback loops
-                                    /**
-                                     * Public API: Set user presence
-                                     */
-                                    setUserPresence(presence, {});
-                                    cursor ?  : { nodeId: string, position: { x: number, y: number } };
-                                    selection ?  : string;
-                                    name ?  : string;
-                                    color ?  : string;
-                                }, void: {
-                                    this: .syncHandler.setLocalPresence(presence),
-                                    /**
-                                    * Public API: Get sync state,
-                                    */
-                                    getSyncState() {
-                                        return this.syncHandler.getSyncState();
-                                        /**
-                                        * Public API: Apply remote update,
-                                        */
-                                        applyRemoteUpdate(update, Uint8Array);
-                                        void {
-                                            this: .syncHandler.applyUpdate(update),
-                                            /**
-                                            * Public API: Get document state for initial sync,
-                                            */
-                                            getDocumentState() {
-                                                return this.syncHandler.getStateAsUpdate();
+                                                if(, existingNode) { },
+                                                : .isUpdating = true,
+                                                this: .yGraph.updateNode(nodeId, crdtUpdates),
+                                                this: .isUpdating = false,
+                                                this: .syncToGraph(),
                                                 /**
-                                                * Public API: Create snapshot,
-                                                */
-                                                createSnapshot();
-                                                Uint8Array;
-                                                {
-                                                    return this.syncHandler.createSnapshot();
+                                                 * Public API: Delete a node collaboratively
+                                                 */
+                                                deleteNode(nodeId) {
+                                                    this.isUpdating = true;
+                                                    this.yGraph.deleteNode(nodeId);
+                                                    this.isUpdating = false;
+                                                    this.syncToGraph();
                                                     /**
-                                                    * Public API: Get performance metrics,
-                                                    */
-                                                    getMetrics();
+                                                     * Public API: Add an edge collaboratively
+                                                     */
+                                                    addEdge(edge, Edge);
+                                                    void {
+                                                        const: sourceNode = this.currentGraph.nodes.find(n => n.id === edge.source),
+                                                        const: targetNode = this.currentGraph.nodes.find(n => n.id === edge.target),
+                                                        if(sourceNode) { }
+                                                    } && targetNode;
                                                     {
-                                                        return {
-                                                            documentSize: this.syncHandler.getDocumentSize(),
-                                                            nodeCount: this.yGraph.getNodes().length,
-                                                            edgeCount: this.yGraph.getEdges().length,
-                                                            syncState: this.syncHandler.getSyncState(),
-                                                        };
+                                                        const crdtEdge = this.toCRDTEdge(edge, sourceNode, targetNode);
+                                                        this.isUpdating = true;
+                                                        this.yGraph.addEdge(crdtEdge);
+                                                        this.isUpdating = false;
+                                                        this.syncToGraph();
                                                         /**
-                                                         * Cleanup resources
+                                                         * Public API: Delete an edge collaboratively
                                                          */
-                                                        destroy();
+                                                        deleteEdge(edgeId, string);
                                                         void {
-                                                            this: .syncHandler.destroy(),
+                                                            this: .isUpdating = true,
+                                                            this: .yGraph.deleteEdge(edgeId),
+                                                            this: .isUpdating = false,
+                                                            this: .syncToGraph(),
                                                             /**
-                                                             * Factory function to create collaborative graph adapter
+                                                             * Public API: Update node position (for React Flow integration)
                                                              */
-                                                            function: createCollaborativeGraph(options, CollaborativeGraphOptions),
-                                                            initialGraph: Graph,
-                                                            GraphCRDTAdapter
+                                                            updateNodePosition(nodeId, position) {
+                                                                this.isUpdating = true;
+                                                                this.yGraph.updateNode(nodeId, { position });
+                                                                this.isUpdating = false;
+                                                                // Don't sync to graph for position-only updates to avoid feedback loops
+                                                                /**
+                                                                 * Public API: Set user presence
+                                                                 */
+                                                                setUserPresence(presence, {});
+                                                                cursor ?  : { nodeId: string, position: { x: number, y: number } };
+                                                                selection ?  : string;
+                                                                name ?  : string;
+                                                                color ?  : string;
+                                                            }, void: {
+                                                                this: .syncHandler.setLocalPresence(presence),
+                                                                /**
+                                                                * Public API: Get sync state,
+                                                                */
+                                                                getSyncState() {
+                                                                    return this.syncHandler.getSyncState();
+                                                                    /**
+                                                                    * Public API: Apply remote update,
+                                                                    */
+                                                                    applyRemoteUpdate(update, Uint8Array);
+                                                                    void {
+                                                                        this: .syncHandler.applyUpdate(update),
+                                                                        /**
+                                                                        * Public API: Get document state for initial sync,
+                                                                        */
+                                                                        getDocumentState() {
+                                                                            return this.syncHandler.getStateAsUpdate();
+                                                                            /**
+                                                                            * Public API: Create snapshot,
+                                                                            */
+                                                                            createSnapshot();
+                                                                            Uint8Array;
+                                                                            {
+                                                                                return this.syncHandler.createSnapshot();
+                                                                                /**
+                                                                                * Public API: Get performance metrics,
+                                                                                */
+                                                                                getMetrics();
+                                                                                {
+                                                                                    return {
+                                                                                        documentSize: this.syncHandler.getDocumentSize(),
+                                                                                        nodeCount: this.yGraph.getNodes().length,
+                                                                                        edgeCount: this.yGraph.getEdges().length,
+                                                                                        syncState: this.syncHandler.getSyncState(),
+                                                                                    };
+                                                                                    /**
+                                                                                     * Cleanup resources
+                                                                                     */
+                                                                                    destroy();
+                                                                                    void {
+                                                                                        this: .syncHandler.destroy(),
+                                                                                        /**
+                                                                                         * Factory function to create collaborative graph adapter
+                                                                                         */
+                                                                                        function: createCollaborativeGraph(options, CollaborativeGraphOptions),
+                                                                                        initialGraph: Graph,
+                                                                                        GraphCRDTAdapter
+                                                                                    };
+                                                                                    {
+                                                                                        return new GraphCRDTAdapter(options, initialGraph);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } };
+                                                                }
+                                                            }
                                                         };
-                                                        {
-                                                            return new GraphCRDTAdapter(options, initialGraph);
-                                                        }
                                                     }
                                                 }
-                                            } };
-                                    }
+                                            };
+                                        }
+                                    };
                                 }
-                            };
+                            }
                         }
                     }
                 };

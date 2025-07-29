@@ -110,6 +110,14 @@ export declare class MedievalDemo {
      * Load medieval scenes database
      */
     private loadSceneDatabase;
-    narrativeHooks: ['unexpected guest arrival', 'political tension', 'romance brewing'];
+    /**
+     * Generate historically accurate medieval scene
+     */
+    generateMedievalScene(options: {}): any;
+    socialClass?: string;
+    location?: string;
+    timeOfDay?: string;
+    season?: string;
+    theme?: string;
 }
 //# sourceMappingURL=MedievalDemo.d.ts.map

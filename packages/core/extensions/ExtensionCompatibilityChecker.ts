@@ -257,7 +257,7 @@ export class ExtensionCompatibilityChecker {
   /**
    * Check transitive dependencies
    */
-  private checkTransitiveDependencies(extension: ExtensionManifest,)
+  private checkTransitiveDependencies(extension: ExtensionManifest)
     context: CompatibilityContext,
     visited: string = []): CompatibilityCheck {,
     const issues: CompatibilityIssue = [];
@@ -438,42 +438,42 @@ export class ExtensionCompatibilityChecker {
 // Types and Interfaces
 
 export interface CompatibilityContext {
-  systemVersion: string;,
+  systemVersion: string;
   platform: string;
   availableExtensions: Map<string, ExtensionManifest>;
   grantedPermissions: string;
   browserInfo?: Record<string, string>;
 }
 export interface ExtensionCompatibilityResult {
-  compatible: boolean;,
+  compatible: boolean;
   issues: CompatibilityIssue;
-  warnings: string;,
+  warnings: string;
   recommendations: string;
-  systemCheck: CompatibilityCheck;,
+  systemCheck: CompatibilityCheck;
   dependencyCheck: CompatibilityCheck;
-  platformCheck: CompatibilityCheck;,
+  platformCheck: CompatibilityCheck;
   permissionCheck: CompatibilityCheck;
   securityCheck: CompatibilityCheck;
   interface CompatibilityCheck {
-  compatible: boolean;,
+  compatible: boolean;
   issues: CompatibilityIssue;
   warnings: string;
   interface CompatibilityRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   check: (extension: ExtensionManifest) => {,
-  compatible: boolean;,
+  compatible: boolean;
   issues: CompatibilityIssue;
 };
 interface PlatformFeature {
-  id: string;,
+  id: string;
   name: string;
   available: boolean;
   version?: string;
   description?: string;
   interface SystemCapabilities {
-  available: string;,
+  available: string;
   version: string;
   platform: string;
   // Export singleton

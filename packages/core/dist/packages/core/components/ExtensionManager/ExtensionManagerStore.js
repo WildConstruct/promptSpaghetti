@@ -22,144 +22,116 @@ const mockInstalledExtensions = [
         description: 'Essential text processing and manipulation utilities',
         author: 'PromptSpaghetti Team',
         extension_type: 'transform',
-        capabilities: {},
-        provides: ['text-transform', 'string-manipulation'],
-        requires: ['runtime-nodes'],
-    },
-    dependencies, {},
-    system_version, '^1.0.0',
-];
-permissions: ['data-processing'],
-    runtime;
-{
-    entry_point: 'dist/index.js',
-        node_types;
-    ['TextCleanup', 'TextFormat', 'TextSplit'],
-    ;
-}
-{
-    manifest_version: '1.0',
-        id;
-    'advanced-math',
-        name;
-    'Advanced Math Operations',
-        version;
-    '2.1.0',
-        description;
-    'Complex mathematical operations and statistical functions',
-        author;
-    'MathUtils Inc',
-        extension_type;
-    'node',
-        capabilities;
-    {
-        provides: ['math-operations', 'statistics'],
-            requires;
-        ['runtime-nodes', 'advanced-nodes'],
-        ;
-    }
-    dependencies: {
-        system_version: '^1.0.0',
-        ;
-    }
-    permissions: ['data-processing'],
-        runtime;
-    {
-        entry_point: 'dist/math.js',
-            node_types;
-        ['MathCalculator', 'StatisticsAnalyzer', 'DataVisualizer'];
-        ;
-        const mockAvailableExtensions = [
-            ...mockInstalledExtensions,
-            {
-                manifest_version: '1.0',
-                id: 'data-connectors',
-                name: 'Data Connectors',
-                version: '1.0.0',
-                description: 'Connect to external data sources and APIs',
-                author: 'DataFlow Systems',
-                extension_type: 'storage',
-                capabilities: {},
-                provides: ['data-storage', 'api-integration'],
-                requires: ['network-access'],
-            },
-            dependencies, {},
-            system_version, '^1.0.0',
-        ];
-    }
-    permissions: ['network', 'data-storage'],
-        runtime;
-    {
-        entry_point: 'dist/connectors.js',
-            storage_providers;
-        ['RestAPI', 'GraphQL', 'Database'],
-        ;
-    }
-    {
-        manifest_version: '1.0',
-            id;
-        'ui-themes',
-            name;
-        'UI Theme Pack',
-            version;
-        '3.0.0',
-            description;
-        'Additional themes and visual customizations',
-            author;
-        'Design Studio',
-            extension_type;
-        'ui',
-            capabilities;
-        {
-            provides: ['themes', 'ui-components'],
-                requires;
-            ['ui-components'],
-            ;
-        }
+        capabilities: {
+            provides: ['text-transform', 'string-manipulation'],
+            requires: ['runtime-nodes'],
+        },
         dependencies: {
             system_version: '^1.0.0',
-            ;
+        },
+        permissions: ['data-processing'],
+        runtime: {
+            entry_point: 'dist/index.js',
+            node_types: ['TextCleanup', 'TextFormat', 'TextSplit'],
         }
-        permissions: ['ui-components'],
-            ui;
-        {
-            themes: ['dark-pro', 'light-minimal', 'high-contrast'],
-                components;
-            ['ThemeSelector', 'ColorPicker'];
-            ;
+    },
+    {
+        manifest_version: '1.0',
+        id: 'advanced-math',
+        name: 'Advanced Math Operations',
+        version: '2.1.0',
+        description: 'Complex mathematical operations and statistical functions',
+        author: 'MathUtils Inc',
+        extension_type: 'node',
+        capabilities: {
+            provides: ['math-operations', 'statistics'],
+            requires: ['runtime-nodes', 'advanced-nodes'],
+        },
+        dependencies: {
+            system_version: '^1.0.0',
+        },
+        permissions: ['data-processing'],
+        runtime: {
+            entry_point: 'dist/math.js',
+            node_types: ['MathCalculator', 'StatisticsAnalyzer', 'DataVisualizer']
         }
-        export const useExtensionManagerStore = create((set, get) => ({})
-        // Initial state
-        , 
-        // Initial state
-        installedExtensions, [], availableExtensions, [], extensionStatuses, new Map(), extensionConfigurations, new Map(), isLoading, false, error, null, selectedExtensionId, null, 
-        // Load installed extensions
-        loadInstalledExtensions, async () => {
-            set({ isLoading: true, error: null });
-            try {
-                // In a real implementation, this would fetch from the extension registry
-                await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
-                const extensions = mockInstalledExtensions;
-                const statuses = new Map();
-                // Initialize statuses for installed extensions
-                for (const ext of extensions) {
-                    statuses.set(ext.id, {});
-                }
-            }
-            finally {
-            }
-        }, ...createDefaultStatus(ext), enabled, ext.id === 'core-text-utils', // Enable core utils by default,
-        loaded, true);
     }
-    ;
-    set({});
-    installedExtensions: extensions,
-        extensionStatuses;
-    statuses,
-        isLoading;
-    false,
-    ;
-}
+];
+const mockAvailableExtensions = [
+    ...mockInstalledExtensions,
+    {
+        manifest_version: '1.0',
+        id: 'data-connectors',
+        name: 'Data Connectors',
+        version: '1.0.0',
+        description: 'Connect to external data sources and APIs',
+        author: 'DataFlow Systems',
+        extension_type: 'storage',
+        capabilities: {
+            provides: ['data-storage', 'api-integration'],
+            requires: ['network-access'],
+        },
+        dependencies: {
+            system_version: '^1.0.0',
+        },
+        permissions: ['network', 'data-storage'],
+        runtime: {
+            entry_point: 'dist/connectors.js',
+            storage_providers: ['RestAPI', 'GraphQL', 'Database'],
+        }
+    },
+    {
+        manifest_version: '1.0',
+        id: 'ui-themes',
+        name: 'UI Theme Pack',
+        version: '3.0.0',
+        description: 'Additional themes and visual customizations',
+        author: 'Design Studio',
+        extension_type: 'ui',
+        capabilities: {
+            provides: ['themes', 'ui-components'],
+            requires: ['ui-components'],
+        },
+        dependencies: {
+            system_version: '^1.0.0',
+        },
+        permissions: ['ui-components'],
+        ui: {
+            themes: ['dark-pro', 'light-minimal', 'high-contrast'],
+            components: ['ThemeSelector', 'ColorPicker']
+        }
+    }
+];
+export const useExtensionManagerStore = create((set, get) => ({})
+// Initial state
+, 
+// Initial state
+installedExtensions, [], availableExtensions, [], extensionStatuses, new Map(), extensionConfigurations, new Map(), isLoading, false, error, null, selectedExtensionId, null, 
+// Load installed extensions
+loadInstalledExtensions, async () => {
+    set({ isLoading: true, error: null });
+    try {
+        // In a real implementation, this would fetch from the extension registry
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+        const extensions = mockInstalledExtensions;
+        const statuses = new Map();
+        // Initialize statuses for installed extensions
+        for (const ext of extensions) {
+            statuses.set(ext.id, {});
+        }
+    }
+    finally {
+    }
+}, ...createDefaultStatus(ext), enabled, ext.id === 'core-text-utils', // Enable core utils by default,
+loaded, true);
+;
+set({});
+installedExtensions: extensions,
+    extensionStatuses;
+statuses,
+    isLoading;
+false,
+;
 ;
 try { }
 catch (error) {

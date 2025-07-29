@@ -26,7 +26,7 @@ const ALERT_TYPE_ICONS = {
  * Alert item props
  */
 interface AlertItemProps {
-  alert: unknown;,
+  alert: unknown;
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
 /**
@@ -141,9 +141,9 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
  * Alert summary card props
  */
 interface AlertSummaryProps {
-  alerts: unknown;,
+  alerts: unknown;
   title: string;
-  icon: React.ReactNode;,
+  icon: React.ReactNode;
   color: string;
 /**
  * Alert summary card component
@@ -178,7 +178,7 @@ const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, co
  */
 
 export interface AlertsPanelProps {
-  alerts: unknown;,
+  alerts: unknown;
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
   showSummary?: boolean;

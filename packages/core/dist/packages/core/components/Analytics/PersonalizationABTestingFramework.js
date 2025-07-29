@@ -99,17 +99,19 @@ results: Math.random() > 0.5 ? {
             metricId: 'click_through_rate',
             value: Math.random() * 0.15 + 0.05,
             standardError: Math.random() * 0.01 + 0.005,
-            confidenceInterval: {},
-            lower: Math.random() * 0.05 + 0.05,
-            upper: Math.random() * 0.05 + 0.15,
+            confidenceInterval: {
+                lower: Math.random() * 0.05 + 0.05,
+                upper: Math.random() * 0.05 + 0.15,
+            }
         },
         {
             metricId: 'conversion_rate',
             value: Math.random() * 0.08 + 0.02,
             standardError: Math.random() * 0.005 + 0.002,
-            confidenceInterval: {},
-            lower: Math.random() * 0.02 + 0.02,
-            upper: Math.random() * 0.02 + 0.08
+            confidenceInterval: {
+                lower: Math.random() * 0.02 + 0.02,
+                upper: Math.random() * 0.02 + 0.08
+            }
         }], confidence, Math.random() * 0.3 + 0.7, statisticalPower, Math.random() * 0.2 + 0.8)
 } : ;
 statisticalSignificance: {

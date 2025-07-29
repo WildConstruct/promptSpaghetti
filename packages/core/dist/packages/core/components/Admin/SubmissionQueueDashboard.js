@@ -70,7 +70,7 @@ const loadQueueMetrics = async () => {
     try {
       const response = await fetch('/api/submissions/bulk-assign', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `;
     Bearer;

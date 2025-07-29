@@ -12,11 +12,11 @@
 import React, { useState } from 'react';
 import { StickyNote, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
 interface StickyNoteToolbarProps {
-  selectedNotes: StickyNote;,
-  onColorChange: (color: StickyNoteColor) => void;,
-  onCategoryChange: (category: StickyNoteCategory) => void;,
-  onCreate: (color: StickyNoteColor, category: StickyNoteCategory, content: string) => void;,
-  onSettingsChange: (settings: unknown) => void;,
+  selectedNotes: StickyNote;
+  onColorChange: (color: StickyNoteColor) => void;
+  onCategoryChange: (category: StickyNoteCategory) => void;
+  onCreate: (color: StickyNoteColor, category: StickyNoteCategory, content: string) => void;
+  onSettingsChange: (settings: unknown) => void;
   settings: unknown;
   className?: string;
 const COLORS: { value: StickyNoteColor; label: string; bg: string; border: string }[] = [
@@ -184,8 +184,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
                     e.currentTarget.style.borderColor = color.border;
                   }}
                   onMouseLeave={(e) => {
-  e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent';
-}}
+  e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent'
+  }}
                 />
               ))}
             </div>
@@ -215,8 +215,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
   e.currentTarget.style.backgroundColor =
   hasSelection && selectedNotes.every(n => n.appearance.category === category.value)
   ? '#EBF8FF'
-  : 'transparent';
-}}
+  : 'transparent'
+  }}
                 >
                   <span>{category.icon}</span>
                   <span>{category.label}</span>
@@ -249,8 +249,8 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
                   e.currentTarget.style.backgroundColor = '#F9FAFB';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+                  e.currentTarget.style.backgroundColor = 'transparent'
+  }}
               >
                 <span>{template.icon}</span>
                 <span>{template.content}</span>

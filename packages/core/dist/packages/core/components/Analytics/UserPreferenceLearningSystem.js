@@ -16,20 +16,22 @@ preferenceVector: {
             value: Math.random(),
             confidence: Math.random() * 0.3 + 0.7,
             evidence: [],
-            temporal: {},
-            trend: Math.random() > 0.5 ? 'increasing' : 'stable',
-            seasonality: Math.random() > 0.7,
-            changePoints: [],
+            temporal: {
+                trend: Math.random() > 0.5 ? 'increasing' : 'stable',
+                seasonality: Math.random() > 0.7,
+                changePoints: [],
+            }
         },
         {
             dimension: 'visual_style',
             value: Math.random(),
             confidence: Math.random() * 0.3 + 0.7,
             evidence: [],
-            temporal: {},
-            trend: Math.random() > 0.5 ? 'decreasing' : 'stable',
-            seasonality: Math.random() > 0.7,
-            changePoints: []
+            temporal: {
+                trend: Math.random() > 0.5 ? 'decreasing' : 'stable',
+                seasonality: Math.random() > 0.7,
+                changePoints: []
+            }
         }],
         embeddings;
     Array.from({ length: 50 }, () => Math.random() * 2 - 1),
@@ -153,7 +155,8 @@ const handleExport = useCallback(() => {
             models,
             learningMetrics: {
                 totalUsers: userProfiles.length,
-                averageConfidence: userProfiles.reduce(), }(sum),
+                averageConfidence: userProfiles.reduce(),
+            }(sum),
             p };
     }
 });

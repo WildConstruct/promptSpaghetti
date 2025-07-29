@@ -45,7 +45,7 @@ export interface IndividualExportData {
 export interface BatchExportData {
     results: PreviewResultWithPath[];
     selectedIndices: number[];
-    aggregateStats: {,
+    aggregateStats: {
         totalResults: number;
         averageExecutionTime: number;
         uniqueSeeds: number[];

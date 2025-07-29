@@ -49,7 +49,7 @@ import {
 } from 'lucide-react';
 
 export interface PolicyManagementDashboardProps {
-  userId: string;,
+  userId: string;
   userRole: string;
   className?: string;
 }
@@ -120,7 +120,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   case PolicyStatus.INACTIVE: return 'bg-gray-100 text-gray-800';
   case PolicyStatus.PENDING: return 'bg-yellow-100 text-yellow-800';
   case PolicyStatus.DEPRECATED: return 'bg-red-100 text-red-800';
-  case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';,
+  case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';
   default: return 'bg-gray-100 text-gray-800';
 };
   const getSeverityColor = (severity: string) => {
@@ -540,13 +540,13 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       )}
       <style>{`
         .policy-management-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;,
+          -webkit-box-orient: vertical;
   overflow: hidden;
         .policy-overview .grid {
           gap: 1rem;

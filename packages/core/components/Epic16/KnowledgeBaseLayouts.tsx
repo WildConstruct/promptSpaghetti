@@ -35,65 +35,65 @@ import type { Article, ArticleCategory, ArticleAuthor } from './ArticleManagemen
 // Additional types for knowledge base layouts
 
 export interface KnowledgeBaseSection {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   icon: React.ComponentType<{ className?: string }>;
-  articles: Article;,
+  articles: Article;
   color: string;
   featured: boolean;
 }
 export interface LearningPath {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: number; // in minutes,
   steps: LearningPathStep;
   prerequisites?: string;
   completionRate: number; // percentage of users who complete,
-  enrolledCount: number;,
+  enrolledCount: number;
   completedCount: number;
-  tags: string;,
+  tags: string;
   author: ArticleAuthor;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
 }
 export interface LearningPathStep {
-  id: string;,
+  id: string;
   title: string;
-  type: 'article' | 'video' | 'quiz' | 'exercise' | 'template';,
+  type: 'article' | 'video' | 'quiz' | 'exercise' | 'template';
   resourceId: string; // ID of the actual resource,
-  estimatedTime: number;,
+  estimatedTime: number;
   required: boolean;
   completed?: boolean;
   order: number;
 }
 export interface SearchResult {
-  id: string;,
+  id: string;
   title: string;
-  excerpt: string;,
+  excerpt: string;
   type: 'article' | 'learning-path' | 'template' | 'tutorial';
-  url: string;,
+  url: string;
   relevanceScore: number;
-  category: string;,
+  category: string;
   tags: string;
   matchedTerms: string;
 }
 export interface KnowledgeBaseStats {
-  totalArticles: number;,
+  totalArticles: number;
   totalViews: number;
-  totalCategories: number;,
+  totalCategories: number;
   totalAuthors: number;
-  recentlyUpdated: Article;,
+  recentlyUpdated: Article;
   popularArticles: Article;
   featuredContent: Article;
   // Props for different layout components
 }
 export interface KnowledgeBaseHeroProps {
-  stats: KnowledgeBaseStats;,
-  onSearch: (query: string) => void;,
-  onBrowseCategory: (categoryId: string) => void;,
+  stats: KnowledgeBaseStats;
+  onSearch: (query: string) => void;
+  onBrowseCategory: (categoryId: string) => void;
   featuredSections: KnowledgeBaseSection;
 }
 export interface ArticleCardProps {
@@ -110,7 +110,7 @@ export interface ArticleCardProps {
   className?: string;
 }
 export interface CategoryBrowserProps {
-  categories: ArticleCategory;,
+  categories: ArticleCategory;
   onSelectCategory: (category: ArticleCategory) => void;
   layout?: 'grid' | 'list' | 'tree';
   showArticleCount?: boolean;
@@ -699,13 +699,13 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
 // Main Knowledge Base Layout Component
 
 export interface KnowledgeBaseLayoutProps {
-  articles: Article;,
+  articles: Article;
   categories: ArticleCategory;
   learningPaths?: LearningPath;
   stats: KnowledgeBaseStats;
   layout?: 'grid' | 'list' | 'masonry';
-  onSearch: (query: string) => void;,
-  onSelectCategory: (category: ArticleCategory) => void;,
+  onSearch: (query: string) => void;
+  onSelectCategory: (category: ArticleCategory) => void;
   onSelectArticle: (article: Article) => void;
   onSelectLearningPath?: (path: LearningPath) => void;
   className?: string;

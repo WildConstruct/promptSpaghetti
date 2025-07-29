@@ -19,35 +19,35 @@ import {
 } from './AdaptiveRateLimitingIntegration';
 
 export interface UnifiedSecurityConfig {
-    rateLimiting: {,
+    rateLimiting: {
         enabled: boolean;
         strictMode: boolean;
         customEndpoints?: Record<string, any>;
     };
-    throttling: {,
+    throttling: {
         enabled: boolean;
         analyticsEnabled: boolean;
         defaultRules: boolean;
     };
-    integration: {,
+    integration: {
         mode: IntegrationMode;
         strategy: CoordinationStrategy;
         fallback: FallbackBehavior;
-        priorities: {,
+        priorities: {
             rateLimiting: number;
             throttling: number;
         };
     };
-    analytics: {,
+    analytics: {
         enableUsagePatterns: boolean;
         enableScalingAnalytics: boolean;
         enableCrossSystemLearning: boolean;
         enableAnalyticsInsights: boolean;
     };
-    monitoring: {,
+    monitoring: {
         enableMetrics: boolean;
         enableHealthChecks: boolean;
-        alertThresholds: {,
+        alertThresholds: {
             errorRate: number;
             responseTime: number;
             systemHealth: number;

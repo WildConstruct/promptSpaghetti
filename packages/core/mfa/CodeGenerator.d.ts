@@ -55,8 +55,8 @@ declare const SECURITY_CONFIG: {
     readonly ALPHABETS: {
         readonly numeric: "0123456789";
         readonly alphanumeric: "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-        readonly alphabetic: "ABCDEFGHJKMNPQRSTUVWXYZ";
-    };
+        readonly alphabetic: "ABCDEFGHJKMNPQRSTUVWXYZ"
+  };
 };
 /**
  * Secure verification code generator with cryptographic best practices
@@ -166,7 +166,7 @@ declare const _default: {
     VerificationCodeFactory: typeof VerificationCodeFactory;
     codeGenerator: SecureCodeGenerator;
     verificationCodeFactory: VerificationCodeFactory;
-    CodeUtils: {,
+    CodeUtils: {
         /**
          * Format a code for display (add hyphens, spaces, etc.)
          */

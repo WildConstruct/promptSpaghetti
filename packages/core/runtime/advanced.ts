@@ -4,7 +4,7 @@ import { RuntimeNode, ExecutionContext } from './types';
 import seedrandom from 'seedrandom';
 
 export interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string;
 }
@@ -16,18 +16,18 @@ export interface AdvancedNodeConfig {
   /** Whether this node maintains state between executions */
   stateful: boolean;
   /** Optional performance hints */
-  performanceHints?: {,
+  performanceHints?: {
   expectedExecutionTime?: 'fast' | 'medium' | 'slow';
-  memoryUsage?: 'low' | 'medium' | 'high';
-};
+  memoryUsage?: 'low' | 'medium' | 'high'
+  };
 }
 export interface AdvancedNodeData {
-  id: string;,
+  id: string;
   type: string;
-  config: AdvancedNodeConfig;,
+  config: AdvancedNodeConfig;
   data: Record<string, unknown>;
-  metadata?: {,
-  version: string;,
+  metadata?: {
+  version: string;
   created: string;
   lastModified?: string;
 };
@@ -45,10 +45,10 @@ export interface AdvancedExecutionContext extends ExecutionContext {
   /** Pseudorandom number generator function for deterministic execution */
   prng: () => number;
   /** Execution metadata and debugging info */
-  executionMeta: {,
-  startTime: number;,
+  executionMeta: {
+  startTime: number;
   executionId: string;
-  nodeExecutionOrder: string;,
+  nodeExecutionOrder: string;
   performanceMetrics: Map<string, number>;
 };
   /** Optional inputs for nodes */
@@ -147,15 +147,15 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   */
   export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
   variables: Record<string, unknown>;
-  seed: string | number;,
+  seed: string | number;
   nodeStates: Map<string, unknown>;
-  evaluationDepth: number;,
+  evaluationDepth: number;
   cache: Map<string, unknown>;
-  prng: () => number;,
-  executionMeta: {,
-  startTime: number;,
+  prng: () => number;
+  executionMeta: {
+  startTime: number;
   executionId: string;
-  nodeExecutionOrder: string;,
+  nodeExecutionOrder: string;
   performanceMetrics: Map<string, number>;
 };
   inputs?: Record<string, unknown>;
@@ -193,7 +193,7 @@ export class AdvancedExecutionUtils {
       evaluationDepth: 0,
       cache: new Map(),
       prng: seedrandom(String(basicCtx.seed)),
-      executionMeta: {,
+      executionMeta: {
   startTime: performance.now(),
         executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`}
 },
@@ -219,10 +219,10 @@ export class AdvancedExecutionUtils {
   /**
   * Get execution statistics from the context
   */
-  static getExecutionStats(ctx: AdvancedExecutionContext): {,
-  totalDuration: number;,
+  static getExecutionStats(ctx: AdvancedExecutionContext): {
+  totalDuration: number;
   nodesExecuted: number;
-  cacheHits: number;,
+  cacheHits: number;
   statefulness: number;
   const totalDuration = performance.now() - ctx.executionMeta.startTime;
   const nodesExecuted = ctx.executionMeta.nodeExecutionOrder.length;
@@ -299,7 +299,7 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
   * Standard node data serialization helpers
   */
   export class SerializationHelpers {
-  static createAdvancedNodeData(id: string,)
+  static createAdvancedNodeData(id: string)
   type: string,
   config: AdvancedNodeConfig,
   data: Record<string, unknown>): AdvancedNodeData {,
@@ -308,7 +308,7 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
   type,
   config,
   data,
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };

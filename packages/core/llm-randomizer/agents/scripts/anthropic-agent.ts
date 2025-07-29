@@ -4,19 +4,19 @@
 import { validateFormat } from '../../serialization/validator';
 
 export interface AnthropicAgentConfig {
-  apiKey: string;,
+  apiKey: string;
   model: string;
-  temperature: number;,
+  temperature: number;
   maxTokens: number;
-  maxRetries: number;,
+  maxRetries: number;
   retryTemperatureReduction: number;
   useXmlFormatting: boolean;
   stopSequences?: string;
 }
 export interface ClaudeGenerationRequest {
-  purpose: string;,
+  purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
-  nodeCount: number;,
+  nodeCount: number;
   nodeTypes: string;
   specificRequirements?: string;
   focusAreas?: string;
@@ -31,10 +31,10 @@ export interface ClaudeGenerationResult {
   warnings?: string;
   attempts: number;
   reasoning?: string;
-  metadata: {,
-  model: string;,
+  metadata: {
+  model: string;
   temperature: number;
-  tokenCount: number;,
+  tokenCount: number;
   generationTime: number;
 };
 }
@@ -69,7 +69,7 @@ export class AnthropicGraphAgent {
   reasoning,
   warnings: validation.warnings.map(w => w.message),
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -84,7 +84,7 @@ export class AnthropicGraphAgent {
   errors: validation.errors.map(e => e.message),
   reasoning,
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -104,7 +104,7 @@ export class AnthropicGraphAgent {
   success: false,
   errors: ['Maximum retry attempts exceeded'],
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: 0,

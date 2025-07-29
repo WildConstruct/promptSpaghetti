@@ -333,7 +333,8 @@ export var ConditionType;
                                                                                             confidence,
                                                                                             riskScore,
                                                                                             recommendedActions: this.generateRecommendations(context, finalDecision),
-                                                                                            alternatives: this.generateAlternatives(context), },
+                                                                                            alternatives: this.generateAlternatives(context),
+                                                                                        },
                                                                                         appliedPolicies,
                                                                                         conditions: evaluatedConditions,
                                                                                         metadata: {} // Will be filled by caller
@@ -544,8 +545,7 @@ export var ConditionType;
                         switch (permission.scope) {
                             case PermissionScope.GLOBAL:
                                 return true;
-                            case PermissionScope.SELF:
-                                return context.resource?.owner === context.user.id;
+                            case PermissionScope.SELF: return context.resource?.owner === context.user.id;
                             default:
                                 return true;
                         }

@@ -139,7 +139,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     enabled: boolean;
     alerting: boolean;
     unit: string;
-    measurements: {,
+    measurements: {
         id: string;
         name: string;
         value: number;
@@ -172,7 +172,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     enabled: boolean;
     alerting: boolean;
     unit: string;
-    measurements: {,
+    measurements: {
         id: string;
         name: string;
         value: number;
@@ -267,7 +267,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {,
+        measurements: {
             id: string;
             name: string;
             value: number;
@@ -300,7 +300,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {,
+        measurements: {
             id: string;
             name: string;
             value: number;
@@ -334,7 +334,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
-    baselines: {,
+    baselines: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -352,7 +352,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {,
+        measurements: {
             id: string;
             name: string;
             value: number;
@@ -378,7 +378,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
-    baselines: {,
+    baselines: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -396,7 +396,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         enabled: boolean;
         alerting: boolean;
         unit: string;
-        measurements: {,
+        measurements: {
             id: string;
             name: string;
             value: number;
@@ -488,7 +488,7 @@ export declare class PerformanceBaselineManager {
      * Generate baseline report
      */
     generateReport(): {
-        summary: {,
+        summary: {
             totalBaselines: number;
             activeBaselines: number;
             categories: Record<BaselineCategory, number>;

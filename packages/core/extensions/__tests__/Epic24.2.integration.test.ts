@@ -15,9 +15,9 @@ import os from 'os';
 
 // Mock comprehensive extension system
 interface ExtensionSystem {
-  loader: unknown;,
+  loader: unknown;
   lifecycle: unknown;
-  resolver: unknown;,
+  resolver: unknown;
   registry: unknown;
   eventSystem: unknown;
   // High-level operations
@@ -46,13 +46,13 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   systemEvents = [];
   // Mock comprehensive extension system
   extensionSystem = {
-  loader: {,
+  loader: {
   loadPlugin: jest.fn<unknown, unknown>(),
   unloadPlugin: jest.fn<unknown, unknown>(),
   validatePlugin: jest.fn<unknown, unknown>(),
   getCachedPlugin: jest.fn<unknown, unknown>(),
 },
-  lifecycle: {,
+  lifecycle: {
   registerExtension: jest.fn<unknown, unknown>(),
   activateExtension: jest.fn<unknown, unknown>(),
   deactivateExtension: jest.fn<unknown, unknown>(),
@@ -60,18 +60,18 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   getExtensionState: jest.fn<unknown, unknown>(),
   addEventListener: jest.fn<unknown, unknown>(),
 },
-  resolver: {,
+  resolver: {
   resolveDependencies: jest.fn<unknown, unknown>(),
   detectCircularDependencies: jest.fn<unknown, unknown>(),
   resolveConflicts: jest.fn<unknown, unknown>(),
 },
-  registry: {,
+  registry: {
   register: jest.fn<unknown, unknown>(),
   unregister: jest.fn<unknown, unknown>(),
   findByName: jest.fn<unknown, unknown>(),
   getAllRegistered: jest.fn<unknown, unknown>(),
 },
-  eventSystem: {,
+  eventSystem: {
   emit: jest.fn<unknown, unknown>(),
   on: jest.fn<unknown, unknown>(),
   off: jest.fn<unknown, unknown>(),
@@ -115,11 +115,11 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   version: '1.0.0',
   description: 'Sample extension for integration testing',
   main: 'index',
-  dependencies: {,
+  dependencies: {
   'base-utils': '^1.0.0',
 },
   permissions: ['read', 'write'],
-        category: 'productivity';
+        category: 'productivity'
   };
       await fs.writeFile()
         path.join(extensionSource, 'package.json'),
@@ -227,14 +227,14 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   id: 'ui-extension',
   name: 'UI Extension',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'base-extension': '^1.0.0',
 }
         {
           id: 'advanced-extension',
           name: 'Advanced Extension',
           version: '1.0.0',
-          dependencies: {,
+          dependencies: {
             'base-extension': '^1.0.0',
             'ui-extension': '^1.0.0'
       ];
@@ -299,14 +299,14 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   id: 'old-extension',
   name: 'Old Extension',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'shared-lib': '1.0.0'  // Requires old version,
 }
         {
   id: 'new-extension',
   name: 'New Extension',
   version: '1.0.0',
-  dependencies: {,
+  dependencies: {
   'shared-lib': '^2.0.0'  // Requires new version];
   extensionSystem.installMultiple.mockImplementationOnce(async (sources: string) => {,
   const plugins = conflictingExtensions;

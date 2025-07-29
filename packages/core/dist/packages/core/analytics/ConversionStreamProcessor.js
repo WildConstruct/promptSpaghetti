@@ -14,11 +14,7 @@
  */
 import { EventEmitter } from 'events';
  > ;
-consumerMetrics: Map < string, {
-    processedEvents: number,
-    errorCount: number,
-    avgProcessingTime: number
-} > ;
+consumerMetrics: Map;
 deadLetterQueue: {
     size: number;
     oldestEvent: number;

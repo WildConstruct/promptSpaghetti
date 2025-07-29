@@ -9,16 +9,16 @@
  */
 
 export interface ContentItem {
-  id: string;,
+  id: string;
   title: string;
-  type: ContentType;,
+  type: ContentType;
   status: ContentStatus;
-  content: ContentData;,
+  content: ContentData;
   metadata: ContentMetadata;
-  scheduling: ContentScheduling;,
+  scheduling: ContentScheduling;
   performance: ContentPerformance;
   // Lifecycle tracking
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   createdBy: string;
   lastModifiedBy?: string;
@@ -37,9 +37,9 @@ export interface ContentData {
   customData?: Record<string, any>;
 }
 export interface MediaAsset {
-  id: string;,
+  id: string;
   filename: string;
-  url: string;,
+  url: string;
   type: 'image' | 'video' | 'document' | 'audio';
   size: number;
   dimensions?: { width: number; height: number };
@@ -65,7 +65,7 @@ export interface ContentMetadata {
   parentContent?: string;
   childContent?: string;
   // Professional workflow
-  workflow?: {,
+  workflow?: {
   stage: 'draft' | 'review' | 'approved' | 'rejected' | 'final';
   assignee?: string;
   reviewer?: string;
@@ -76,9 +76,9 @@ export interface ContentMetadata {
 };
 }
 export interface WorkflowNote {
-  id: string;,
+  id: string;
   author: string;
-  message: string;,
+  message: string;
   type: 'comment' | 'review' | 'approval' | 'rejection';
   timestamp: Date;
 }
@@ -101,7 +101,7 @@ export interface ContentScheduling {
   blocks?: string; // content IDs that this blocks from publishing,
 }
 export interface RecurrencePattern {
-  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
+  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
   interval: number; // Every N days/weeks/months,
   daysOfWeek?: number; // 0=Sunday, 1=Monday, etc.,
   daysOfMonth?: number; // 1-31,
@@ -111,13 +111,13 @@ export interface RecurrencePattern {
   customPattern?: string; // Cron-like expression,
 }
 export interface PromotionSchedule {
-  id: string;,
+  id: string;
   type: 'homepage' | 'category' | 'search' | 'social' | 'email';
-  location: string;,
+  location: string;
   startDate: Date;
-  endDate: Date;,
+  endDate: Date;
   priority: number;
-  targeting?: {,
+  targeting?: {
   audience?: string;
   demographics?: Record<string, any>;
   behavioral?: Record<string, any>;
@@ -125,28 +125,28 @@ export interface PromotionSchedule {
 };
 }
 export interface ScheduleCondition {
-  type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';,
+  type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
   parameters: Record<string, any>;
   description: string;
 }
 export interface ContentPerformance {
-  views: number;,
+  views: number;
   engagement: number;
-  shares: number;,
+  shares: number;
   likes: number;
   comments: number;
   conversionRate?: number;
   revenue?: number;
   // Time-based metrics
   metrics?: Array<{,
-  timestamp: Date;,
+  timestamp: Date;
   views: number;
-  engagement: number;,
+  engagement: number;
   shares: number;
 }>;
   // A/B testing results
   variants?: Array<{
-  id: string;,
+  id: string;
   name: string;
   traffic: number; // percentage,
   performance: ContentPerformance;
@@ -191,20 +191,20 @@ export interface ContentFilter {
   workflowStage?: string;
 }
 export interface ScheduleBatch {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  contentIds: string;,
+  contentIds: string;
   operation: BatchOperation;
-  schedule: BatchSchedule;,
+  schedule: BatchSchedule;
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-  progress: {,
-  total: number;,
+  progress: {
+  total: number;
   completed: number;
-  failed: number;,
+  failed: number;
   errors: BatchError;
 };
-  createdAt: Date;,
+  createdAt: Date;
   createdBy: string;
   executedAt?: Date;
   completedAt?: Date;
@@ -216,42 +216,42 @@ export interface BatchOperation {
 export interface BatchSchedule {
   executeAt?: Date;
   timezone: string;
-  staggering?: {,
-  enabled: boolean;,
+  staggering?: {
+  enabled: boolean;
   interval: number; // minutes between each item,
   randomization?: boolean; // add random delay,
 };
 }
 export interface BatchError {
-  contentId: string;,
+  contentId: string;
   error: string;
   timestamp: Date;
 }
 export interface SchedulingStats {
-  totalContent: number;,
+  totalContent: number;
   scheduledContent: number;
-  publishedToday: number;,
+  publishedToday: number;
   unpublishedToday: number;
   upcomingSchedules: Array<{,
-  date: Date;,
+  date: Date;
   count: number;
   items: Array<{,
-  id: string;,
+  id: string;
   title: string;
-  type: ContentType;,
+  type: ContentType;
   operation: string;
 }>;
   }>;
-  performanceMetrics: {,
+  performanceMetrics: {
   averageViewsPerPost: number;
   topPerformingContent: Array<{,
-  id: string;,
+  id: string;
   title: string;
-  views: number;,
+  views: number;
   engagement: number;
 }>;
     contentTypePerformance: Record<ContentType, {
-  count: number;,
+  count: number;
   averageViews: number;
   averageEngagement: number;
 }>;
@@ -275,7 +275,7 @@ export class ContentSchedulingService {
   /**
   * Content Management
   */
-  async createContent(contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>,)
+  async createContent(contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>)
   createdBy: string): Promise<ContentItem> {,
   const content: ContentItem = {,
   ...contentData,
@@ -283,7 +283,7 @@ export class ContentSchedulingService {
   createdAt: new Date(),
   updatedAt: new Date(),
   createdBy,
-  performance: {,
+  performance: {
   views: 0,
   engagement: 0,
   shares: 0,
@@ -293,7 +293,7 @@ export class ContentSchedulingService {
     this.content.set(content.id, content);
     this.notifyListeners('content_created', content);
     return content;
-  async updateContent(contentId: string,)
+  async updateContent(contentId: string)
     updates: Partial<ContentItem>,
     updatedBy: string): Promise<ContentItem | null> {,
   const content = this.content.get(contentId);
@@ -314,7 +314,7 @@ export class ContentSchedulingService {
   // Mark as deleted instead of hard delete
   const deletedContent = await this.updateContent(contentId, {)
   status: 'deleted',
-  scheduling: {,
+  scheduling: {
   ...content.scheduling,
   deleteAt: new Date(),
 }, deletedBy);
@@ -325,7 +325,7 @@ export class ContentSchedulingService {
   /**
   * Scheduling Operations
   */
-  async scheduleContent(contentId: string,)
+  async scheduleContent(contentId: string)
   scheduling: ContentScheduling,
   scheduledBy: string): Promise<boolean> {,
   const content = this.content.get(contentId);
@@ -343,7 +343,7 @@ export class ContentSchedulingService {
   if (!content) return false;
   const updatedContent = await this.updateContent(contentId, {)
   status: 'published',
-  scheduling: {,
+  scheduling: {
   ...content.scheduling,
   publishAt: new Date(),
 }, publishedBy);
@@ -356,7 +356,7 @@ export class ContentSchedulingService {
   if (!content) return false;
   const updatedContent = await this.updateContent(contentId, {)
   status: 'unpublished',
-  scheduling: {,
+  scheduling: {
   ...content.scheduling,
   unpublishAt: new Date(),
 }, unpublishedBy);
@@ -367,7 +367,7 @@ export class ContentSchedulingService {
   /**
   * Batch Operations
   */
-  async createBatch(name: string,)
+  async createBatch(name: string)
   contentIds: string,
   operation: BatchOperation,
   schedule: BatchSchedule,
@@ -379,7 +379,7 @@ export class ContentSchedulingService {
   operation,
   schedule,
   status: 'pending',
-  progress: {,
+  progress: {
   total: contentIds.length,
   completed: 0,
   failed: 0,
@@ -560,7 +560,7 @@ export class ContentSchedulingService {
   publishedToday: publishedToday.length,
   unpublishedToday: unpublishedToday.length,
   upcomingSchedules: upcomingArray,
-  performanceMetrics: {,
+  performanceMetrics: {
   averageViewsPerPost,
   topPerformingContent,
   contentTypePerformance
@@ -672,7 +672,7 @@ export class ContentSchedulingService {
   private sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
   export interface SchedulingEvent {
-  type: string;,
+  type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance

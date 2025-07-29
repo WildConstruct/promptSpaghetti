@@ -37,7 +37,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
   const filteredRules = useMemo(() => {
     if (!searchQuery) return rules;
     const query = searchQuery.toLowerCase();
-    return rules.filter(rule =>)
+    return rules.filter(rule =>
       rule.name.toLowerCase().includes(query) ||
       rule.description?.toLowerCase().includes(query) ||
       rule.findPattern.toLowerCase().includes(query) ||

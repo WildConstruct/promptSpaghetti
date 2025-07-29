@@ -4,9 +4,9 @@
  */
 
 export interface VersionSnapshot {
-  id: string;,
+  id: string;
   project_id: string;
-  branch_name: string;,
+  branch_name: string;
   version_number: number;
   version_tag?: string;
   // Metadata
@@ -14,19 +14,19 @@ export interface VersionSnapshot {
   description?: string;
   changelog?: string;
   // Storage
-  s3_uri: string;,
+  s3_uri: string;
   size_bytes: number;
-  checksum: string;,
+  checksum: string;
   compression_format: string;
   // Author and timing
-  created_by: string;,
+  created_by: string;
   created_at: string;
   // Type and context
   snapshot_type: 'manual' | 'auto' | 'milestone' | 'backup';
   trigger_event?: string;
   parent_snapshot_id?: string;
   // Statistics
-  node_count: number;,
+  node_count: number;
   edge_count: number;
   complexity_score?: number;
   // Workflow
@@ -34,69 +34,69 @@ export interface VersionSnapshot {
   approval_status?: string;
 }
 export interface VersionDiff {
-  id: string;,
+  id: string;
   from_snapshot_id: string;
-  to_snapshot_id: string;,
+  to_snapshot_id: string;
   diff_type: 'incremental' | 'full' | 'structural';
-  diff_format: 'json' | 'binary' | 'text';,
+  diff_format: 'json' | 'binary' | 'text';
   diff_data: any;
-  diff_summary: {,
-  total_changes: number;,
+  diff_summary: {
+  total_changes: number;
   added: number;
-  removed: number;,
+  removed: number;
   modified: number;
   complexity: number;
 };
-  similarity_score: number;,
+  similarity_score: number;
   created_at: string;
 }
 export interface Branch {
-  id: string;,
+  id: string;
   project_id: string;
   name: string;
   description?: string;
   branch_type: 'main' | 'feature' | 'hotfix' | 'experiment' | 'archive';
   head_snapshot_id?: string;
-  is_active: boolean;,
+  is_active: boolean;
   is_protected: boolean;
   parent_branch_id?: string;
   merge_base_snapshot_id?: string;
-  created_by: string;,
+  created_by: string;
   created_at: string;
-  updated_at: string;,
+  updated_at: string;
   visibility: 'private' | 'workspace' | 'public';
   total_commits: number;
 }
 export interface ChangeEvent {
-  id: string;,
+  id: string;
   project_id: string;
   snapshot_id?: string;
-  event_type: string;,
+  event_type: string;
   event_data: any;
-  event_sequence: number;,
+  event_sequence: number;
   author_id: string;
   author_name: string;
   session_id?: string;
-  occurred_at: string;,
+  occurred_at: string;
   recorded_at: string;
   client_info?: any;
   workspace_id?: string;
-  affected_nodes: string;,
+  affected_nodes: string;
   affected_properties: string;
   change_magnitude: number;
   workflow_state?: string;
   approval_required: boolean;
 }
 export interface VersionAnnotation {
-  id: string;,
+  id: string;
   snapshot_id: string;
   annotation_type: 'comment' | 'review' | 'approval' | 'flag';
   title?: string;
   content_markdown: string;
   content_html?: string;
-  author_id: string;,
+  author_id: string;
   created_at: string;
-  updated_at: string;,
+  updated_at: string;
   status: 'active' | 'resolved' | 'archived';
   priority: 'low' | 'normal' | 'high' | 'critical';
   target_element_id?: string;
@@ -128,7 +128,7 @@ export interface SnapshotCreationOptions {
 export class VersionHistoryManager {
   private snapshots = new Map<string, VersionSnapshot>();
   private branches = new Map<string, Branch>();
-  private changeEvents: ChangeEvent = [];
+  private changeEvents: ChangeEvent[] = [];
   private currentSessionId: string;
   constructor();
     private apiClient: any,
@@ -157,9 +157,9 @@ export class VersionHistoryManager {
       // Update local cache
       this.snapshots.set(snapshot.id, snapshot);
       // Record change event
-      await this.recordChangeEvent({)
+      await this.recordChangeEvent({
   event_type: 'snapshot_created',
-  event_data: {,
+  event_data: {
   snapshot_id: snapshot.id,
   snapshot_type: snapshot.snapshot_type,
   version_number: snapshot.version_number,
@@ -213,7 +213,7 @@ export class VersionHistoryManager {
       await this.apiClient.delete(`/api/version-snapshots/${snapshotId}`);}
       this.snapshots.delete(snapshotId);
       // Record change event
-      await this.recordChangeEvent({)
+      await this.recordChangeEvent({
   event_type: 'snapshot_deleted',
         event_data: { snapshot_id: snapshotId },
         affected_nodes: [],
@@ -249,14 +249,14 @@ export class VersionHistoryManager {
   console.error('Failed to compute diff:', error);
   throw error;
   // Branch Management
-  async createBranch(name: string,)
-  options: {,
+  async createBranch(name: string)
+  options: {
   description?: string;
   branch_type?: 'feature' | 'hotfix' | 'experiment';
   parent_branch_id?: string;
   base_snapshot_id?: string;
-  visibility?: 'private' | 'workspace' | 'public';
-} = {}
+  visibility?: 'private' | 'workspace' | 'public'
+  } = {}
   ): Promise<Branch> {
   try {
   const branchData = {
@@ -273,9 +273,9 @@ export class VersionHistoryManager {
       const branch = response.data;
       this.branches.set(branch.id, branch);
       // Record change event
-      await this.recordChangeEvent({)
+      await this.recordChangeEvent({
   event_type: 'branch_created',
-  event_data: {,
+  event_data: {
   branch_id: branch.id,
   branch_name: branch.name,
   branch_type: branch.branch_type,
@@ -307,9 +307,9 @@ export class VersionHistoryManager {
       const branch = response.data.branch;
       this.branches.set(branch.id, branch);
       // Record change event
-      await this.recordChangeEvent({)
+      await this.recordChangeEvent({
   event_type: 'branch_switched',
-  event_data: {,
+  event_data: {
   branch_name: branchName,
   head_snapshot_id: branch.head_snapshot_id,
 },
@@ -320,9 +320,9 @@ export class VersionHistoryManager {
     } catch (error) {
   console.error('Failed to switch branch:', error);
   throw error;
-  async mergeBranch(sourceBranchId: string,)
+  async mergeBranch(sourceBranchId: string)
   targetBranchId: string,
-  options: {,
+  options: {
   merge_message?: string;
   strategy?: 'merge' | 'squash' | 'rebase';
   delete_source?: boolean;
@@ -339,9 +339,9 @@ export class VersionHistoryManager {
       const mergeSnapshot = response.data;
       this.snapshots.set(mergeSnapshot.id, mergeSnapshot);
       // Record change event
-      await this.recordChangeEvent({)
+      await this.recordChangeEvent({
   event_type: 'branch_merged',
-  event_data: {,
+  event_data: {
   source_branch_id: sourceBranchId,
   target_branch_id: targetBranchId,
   merge_snapshot_id: mergeSnapshot.id,
@@ -355,10 +355,10 @@ export class VersionHistoryManager {
   console.error('Failed to merge branch:', error);
   throw error;
   // Change Event Tracking
-  async recordChangeEvent(event: {,)
-  event_type: string;,
+  async recordChangeEvent(event: {)
+  event_type: string;
   event_data: any;
-  affected_nodes: string;,
+  affected_nodes: string;
   change_magnitude: number;
   workflow_state?: string;
   approval_required?: boolean;
@@ -384,7 +384,7 @@ export class VersionHistoryManager {
     } catch (error) {
   console.error('Failed to record change event:', error);
   throw error;
-  async getChangeEvents(filter: {,)
+  async getChangeEvents(filter: {)
   start_date?: string;
   end_date?: string;
   author_id?: string;
@@ -408,8 +408,8 @@ export class VersionHistoryManager {
       console.error('Failed to get change events:', error);
       throw error;
   // Annotation Management
-  async addAnnotation(snapshotId: string,)
-    annotation: {,
+  async addAnnotation(snapshotId: string)
+    annotation: {
       annotation_type?: 'comment' | 'review' | 'approval' | 'flag';
       title?: string;
       content_markdown: string;
@@ -456,7 +456,7 @@ export class VersionHistoryManager {
     return graphData?.nodes?.map((node: any) => node.id) || [];
   private extractAffectedProperties(eventData: any): string {
     // Extract property names from event data
-    const properties: string = [];
+    const properties: string[] = [];
     if (eventData.property_changes) {
       properties.push(...Object.keys(eventData.property_changes));
     if (eventData.modified_properties) {
@@ -470,9 +470,9 @@ export class VersionHistoryManager {
     return Math.min(10, Math.log10(nodeCount + edgeCount + 1) * 2);
   // Statistics and Analytics
   async getVersionStatistics(): Promise<{
-    total_snapshots: number;,
+    total_snapshots: number;
   total_branches: number;
-    total_changes: number;,
+    total_changes: number;
   most_active_authors: Array<{ author_id: string; change_count: number }>;
     change_frequency: Array<{ date: string; count: number }>;
     branch_activity: Array<{ branch_name: string; snapshot_count: number }>;
@@ -486,7 +486,7 @@ export class VersionHistoryManager {
   // Cleanup and Maintenance
   startNewSession(): void {,
   this.currentSessionId = crypto.randomUUID();
-  async cleanupOldData(options: {,)
+  async cleanupOldData(options: {)
   days_old?: number;
   keep_milestones?: boolean;
   keep_tagged_versions?: boolean;

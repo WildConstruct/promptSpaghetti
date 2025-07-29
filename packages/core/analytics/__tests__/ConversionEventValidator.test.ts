@@ -17,18 +17,18 @@ describe('ConversionEventValidator', () => {
       category: 'revenue',
       value: 25.00,
       properties: { templateId: 'tpl-001' },
-      metadata: {,
+      metadata: {
   userAgent: 'test-agent',
   referrer: 'https://example.com',
 },
   deviceFingerprint: 'test-fingerprint',
       crossDeviceUserId: 'cross-user-123',
-      attributionData: {,
+      attributionData: {
   touchpoints: [],
-  primaryAttribution: {,
+  primaryAttribution: {
   name: 'first_touch',
   weight: 1.0,
-  touchpoint: {,
+  touchpoint: {
   id: 'tp-001',
   timestamp: Date.now(),
   channel: 'direct',
@@ -41,13 +41,13 @@ describe('ConversionEventValidator', () => {
   },
   assistedAttribution: [];
   },
-  privacyConsent: {,
+  privacyConsent: {
   tracking: true,
   analytics: true,
   personalization: true,
   crossDevice: false,
 },
-  realTimeProcessing: {,
+  realTimeProcessing: {
   streamId: 'stream-123',
   batchId: 'batch-456',
   processed: false,
@@ -111,7 +111,7 @@ describe('ConversionEventValidator', () => {
     it('should require analytics consent for processing', async () => {
   const eventWithoutAnalyticsConsent = {
   ...mockEvent,
-  privacyConsent: {,
+  privacyConsent: {
   ...mockEvent.privacyConsent,
   analytics: false,
 };
@@ -123,7 +123,7 @@ describe('ConversionEventValidator', () => {
   const eventWithCrossDeviceNoConsent = {
   ...mockEvent,
   crossDeviceUserId: 'cross-user-123',
-  privacyConsent: {,
+  privacyConsent: {
   ...mockEvent.privacyConsent,
   crossDevice: false,
 };
@@ -162,7 +162,7 @@ describe('ConversionEventValidator', () => {
         userId: mockEvent.userId,
         sessionId: mockEvent.sessionId,
         recentEvents: [],
-        deviceProfile: {,
+        deviceProfile: {
   fingerprint: 'shared-device',
           firstSeen: Date.now() - 86400000,
           lastSeen: Date.now(),

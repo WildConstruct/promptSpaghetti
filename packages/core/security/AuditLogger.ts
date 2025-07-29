@@ -49,7 +49,7 @@ import {
 
 export interface AuditLogEntry {
   // Core identifiers
-  id: string;,
+  id: string;
   timestamp: Date;
   correlationId: string;
   // Actor information
@@ -58,9 +58,9 @@ export interface AuditLogEntry {
   systemId?: string;
   serviceAccount?: boolean;
   // Operation details
-  operation: AuditOperation;,
+  operation: AuditOperation;
   resourceType: string;
-  resourceId: string;,
+  resourceId: string;
   dataClassification: DataClassificationLevel;
   // Access context
   ipAddress?: string;
@@ -222,7 +222,7 @@ export enum AuditLogLevel {
   /**
    * Log a data access operation
    */
-  async logDataAccess(context: OperationContext,)
+  async logDataAccess(context: OperationContext)
     resourceType: string,
     resourceId: string,
     classification: DataClassificationLevel,
@@ -246,7 +246,7 @@ export enum AuditLogLevel {
   authorized: success,
   success,
   sensitiveAccess: this.isSensitiveAccess(classification),
-  metadata: {,
+  metadata: {
   ...metadata,
   purpose: context.purpose,
   requestedAt: context.requestedAt,
@@ -452,9 +452,9 @@ export enum AuditLogLevel {
   * Audit statistics structure
   */
   export interface AuditStatistics {
-  totalOperations: number;,
+  totalOperations: number;
   operationCounts: Record<string, number>;
-  failureRate: number;,
+  failureRate: number;
   sensitiveAccessCount: number;
   averageResponseTime: number;
   /**

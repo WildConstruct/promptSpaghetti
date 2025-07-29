@@ -25,11 +25,11 @@ export interface PolicyEvaluationOptions {
     userId?: string;
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
     entityId: string;
-    operation: {,
+    operation: {
         type: string;
         parameters: Record<string, any>;
-        riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    };
+        riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  };
     contentContext?: {
         historicalPeriod?: string;
         culturalContext?: string;
@@ -80,7 +80,7 @@ export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) 
         activePolicies: number;
         byDomain: Record<string, number>;
         byType: Record<string, number>;
-        evaluationMetrics: {,
+        evaluationMetrics: {
             totalEvaluations: number;
             deniedRequests: number;
             restrictedRequests: number;

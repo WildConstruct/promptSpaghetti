@@ -111,7 +111,7 @@ const getPerformanceInfo = (count) => {
                                     width: '100px',
                                     padding: '8px 12px',
                                     border: `1px solid ${uiColors.ui.border}`
-                                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none', textAlign: 'center'; }} onFocus=", (e) => {
+                                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none', textAlign: 'center' }} onFocus=", (e) => {
                                 e.target.style.borderColor = uiColors.accent.primary;
                             }, "onBlur=", (e) => {
                                 e.target.style.borderColor = uiColors.ui.border;
@@ -152,7 +152,7 @@ const getPerformanceInfo = (count) => {
                                 ? presetPerf.color + '20'
                                 : uiColors.ui.hover,
                                 border) }, index);
-                    }), ": isSelected, ? `1px solid $", presetPerf.color, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '60px'; }} title=", `${presetValue} variants - ${presetPerf.description}`, "onMouseEnter=", (e) => {
+                    }), ": isSelected, ? `1px solid $", presetPerf.color, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '60px' }} title=", `${presetValue} variants - ${presetPerf.description}`, "onMouseEnter=", (e) => {
                         if (!isSelected) {
                             e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                         }

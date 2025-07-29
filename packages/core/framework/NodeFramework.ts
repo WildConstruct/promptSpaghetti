@@ -25,12 +25,12 @@ export interface NodeDefinition {
   /** Default configuration */
   defaultConfig: Partial<AdvancedNodeConfig>;
   /** Input/Output port definitions */
-  ports: {,
-  inputs: IOPortDefinition;,
+  ports: {
+  inputs: IOPortDefinition;
   outputs: IOPortDefinition;
 };
   /** Node-specific metadata */
-  metadata: {,
+  metadata: {
   author?: string;
   tags: string;
   deprecated?: boolean;
@@ -71,26 +71,26 @@ export interface NodeFrameworkConfig {
   enableHotReload: boolean;
 }
 export interface NodeMetrics {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
-  executionCount: number;,
+  executionCount: number;
   totalExecutionTime: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   lastExecutionTime: number;
   errorCount: number;
   lastError?: Error;
-  memoryUsage: number;,
+  memoryUsage: number;
   cacheHits: number;
   cacheMisses: number;
 }
 export interface NodeFrameworkMetrics {
-  totalNodes: number;,
+  totalNodes: number;
   activeNodes: number;
-  registeredTypes: number;,
+  registeredTypes: number;
   totalExecutions: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   errorRate: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   cacheEfficiency: number;
   /**
   * Enhanced node base class with framework integration
@@ -312,7 +312,7 @@ export class NodeRegistry {
   /**
   * Search nodes by criteria
   */
-  searchNodes(criteria: {,)
+  searchNodes(criteria: {)
   category?: NodeDefinition['category'];
   tags?: string;
   author?: string;
@@ -511,7 +511,7 @@ export class NodeFramework extends EventEmitter {
  */
 
 export interface NodeFrameworkExtension {
-  name: string;,
+  name: string;
   version: string;
   description: string;
   initialize(framework: NodeFramework): Promise<void> | void;

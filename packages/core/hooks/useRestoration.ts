@@ -14,19 +14,19 @@ import {
 } from '../types/restoration';
 interface UseRestorationReturn {
   // State
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
   // Actions
-  generatePreview: (request: RestorationPreviewRequest) => Promise<RestorationPreviewResponse>;,
-  createRestoration: (request: CreateRestorationAttemptRequest) => Promise<RestorationAttempt>;,
-  getProgress: (restorationAttemptId: string) => Promise<RestorationProgressResponse>;,
-  resolveConflict: (request: ConflictResolutionRequest) => Promise<ConflictResolutionResult>;,
-  cancelRestoration: (restorationAttemptId: string) => Promise<void>;,
-  getStats: (projectId: string) => Promise<RestorationStatsResponse>;,
-  createBookmark: (request: RestorationBookmarkRequest) => Promise<RestorationBookmark>;,
-  getBookmarks: (projectId: string) => Promise<RestorationBookmark>;,
-  deleteBookmark: (bookmarkId: string) => Promise<void>;,
-  listRestorations: (filter: RestorationFilter) => Promise<RestorationAttempt>;,
+  generatePreview: (request: RestorationPreviewRequest) => Promise<RestorationPreviewResponse>;
+  createRestoration: (request: CreateRestorationAttemptRequest) => Promise<RestorationAttempt>;
+  getProgress: (restorationAttemptId: string) => Promise<RestorationProgressResponse>;
+  resolveConflict: (request: ConflictResolutionRequest) => Promise<ConflictResolutionResult>;
+  cancelRestoration: (restorationAttemptId: string) => Promise<void>;
+  getStats: (projectId: string) => Promise<RestorationStatsResponse>;
+  createBookmark: (request: RestorationBookmarkRequest) => Promise<RestorationBookmark>;
+  getBookmarks: (projectId: string) => Promise<RestorationBookmark>;
+  deleteBookmark: (bookmarkId: string) => Promise<void>;
+  listRestorations: (filter: RestorationFilter) => Promise<RestorationAttempt>;
   getRestorationDetails: (restorationAttemptId: string) => Promise<any>;
   // Utility
   clearError: () => void;
@@ -43,7 +43,7 @@ export const useRestoration = (): UseRestorationReturn => {
   setError(null);
   const response = await fetch(url, {)
   ...options,
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   ...options.headers
 });
@@ -85,7 +85,7 @@ export const useRestoration = (): UseRestorationReturn => {
   const cancelRestoration = useCallback(async (restorationAttemptId: string): Promise<void> => {
     return apiCall<void>(`/api/restoration/attempts/${restorationAttemptId}/cancel`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
   }, [apiCall]);
   const getStats = useCallback(async (projectId: string): Promise<RestorationStatsResponse> => {
@@ -103,7 +103,7 @@ export const useRestoration = (): UseRestorationReturn => {
   const deleteBookmark = useCallback(async (bookmarkId: string): Promise<void> => {
     return apiCall<void>(`/api/restoration/bookmarks/${bookmarkId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
   }, [apiCall]);
   const listRestorations = useCallback(async (filter: RestorationFilter): Promise<RestorationAttempt> => {

@@ -23,7 +23,7 @@ export interface CorrectionRule {
     updatedAt: Date;
 }
 interface CorrectionsState {
-    rules: CorrectionRule;
+    rules: CorrectionRule[];
     isEnabled: boolean;
     addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => void;
     updateRule: (id: string, updates: Partial<CorrectionRule>) => void;
@@ -32,8 +32,8 @@ interface CorrectionsState {
     reorderRules: (fromIndex: number, toIndex: number) => void;
     clearAllRules: () => void;
     applyCorrections: (text: string) => string;
-    getActiveRules: () => CorrectionRule;
-    getDraftRules: () => CorrectionRule;
+    getActiveRules: () => CorrectionRule[];
+    getDraftRules: () => CorrectionRule[];
     exportRules: (format: 'json' | 'yaml' | 'csv', options?: ExportOptions) => Promise<{
         success: boolean;
         data?: Blob;
@@ -46,6 +46,20 @@ interface CorrectionsState {
         error?: string;
     }>;
 }
-export declare const useCorrectionsStore: import("zustand").UseBoundStore<import("zustand").StoreApi<CorrectionsState>>;
+export declare const useCorrectionsStore: import("zustand").UseBoundStore<Omit<Omit<import("zustand").StoreApi<CorrectionsState>, "setState"> & {
+    setState<A extends string | {
+        type: string;
+    }>(partial: CorrectionsState | Partial<CorrectionsState> | ((state: CorrectionsState) => CorrectionsState | Partial<CorrectionsState>), replace?: boolean, action?: A): void;
+}, "persist"> & {
+    persist: {
+        setOptions: (options: Partial<import("zustand/middleware").PersistOptions<CorrectionsState, CorrectionsState>>) => void;
+        clearStorage: () => void;
+        rehydrate: () => Promise<void> | void;
+        hasHydrated: () => boolean;
+        onHydrate: (fn: (state: CorrectionsState) => void) => () => void;
+        onFinishHydration: (fn: (state: CorrectionsState) => void) => () => void;
+        getOptions: () => Partial<import("zustand/middleware").PersistOptions<CorrectionsState, CorrectionsState>>;
+    };
+}>;
 export {};
 //# sourceMappingURL=correctionsStore.d.ts.map

@@ -289,7 +289,7 @@ if (!promotionData) {
             _jsx("style", { children: `
         .promotion-preview {
           background: #fff;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 24px;
         .preview-header {
           display: flex;
@@ -304,12 +304,12 @@ if (!promotionData) {
           align-items: center;
           margin-bottom: 16px;
         .slot-mockup {
-          position: relative;,
+          position: relative;
   margin: 20px 0;
         .preview-controls {
-          position: absolute;,
+          position: absolute;
   bottom: -40px;
-          left: 50%;,
+          left: 50%;
   transform: translateX(-50%);
           background: rgba(255, 255, 255, 0.9);
           padding: 8px 12px;
@@ -317,9 +317,9 @@ if (!promotionData) {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         .content-preview-card {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
-          padding: 16px;,
+          padding: 16px;
   background: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -347,13 +347,13 @@ if (!promotionData) {
           border-color: #1890ff;
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         .promotion-preview-empty {
-          text-align: center;,
+          text-align: center;
   padding: 60px 20px;
           background: #fafafa;
           border-radius: 8px;
         @media (max-width: 768px) {
           .slot-mockup {
-            width: 100% !important;,
+            width: 100% !important;
   height: 300px !important;
           .content-preview-card {
             flex-direction: column;

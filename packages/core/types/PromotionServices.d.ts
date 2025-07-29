@@ -215,8 +215,8 @@ export interface PromotionConflictCheck {
         conflicting_promotion_id: string;
         conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
         description: string;
-        severity: 'blocking' | 'warning';
-    }>;
+        severity: 'blocking' | 'warning'
+  }>;
     recommendations: string[];
 
 export interface BulkOperationResult {

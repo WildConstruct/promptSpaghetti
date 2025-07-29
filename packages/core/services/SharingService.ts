@@ -28,7 +28,7 @@ export class SharingService {
   private baseUrl: string;
   private analyticsEnabled: boolean;
   private socialIntegrations: Map<SocialPlatform, SocialIntegration>;
-  constructor(config: {,)
+  constructor(config: {)
   baseUrl: string;
   analyticsEnabled?: boolean;
   socialIntegrations?: SocialIntegration;
@@ -55,7 +55,7 @@ export class SharingService {
       description: validatedRequest.description,
       permissions: validatedRequest.permissions ?? this.getDefaultPermissions(),
       customization: validatedRequest.customization ?? {},
-      metadata: {,
+      metadata: {
   createdBy: 'current-user', // TODO: Get from auth context,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -89,7 +89,7 @@ export class SharingService {
       shortCode,
       fullUrl,
       shortUrl,
-      socialTags: {,
+      socialTags: {
   openGraph: {;
   title: config.title,
           description: config.description || `Check out this ${config.resourceType} on Prompt Spaghetti`}
@@ -99,24 +99,24 @@ export class SharingService {
           siteName: 'Prompt Spaghetti',
           image: config.thumbnailUrl;
   },
-  twitter: {,
+  twitter: {
   card: 'summary_large_image',
           title: config.title,
           description: config.description || `Interactive ${config.resourceType} template`}
 },
   image: config.thumbnailUrl;
   },
-  schema: {,
+  schema: {
   type: 'WebApplication',
           name: config.title,
           description: config.description || `Prompt engineering ${config.resourceType}`}
 },
   url: fullUrl,
-          author: {,
+          author: {
   type: 'Person',
   name: config.metadata.createdBy,
 },
-  analytics: {,
+  analytics: {
   trackingEnabled: this.analyticsEnabled,
   utmSource: 'prompt-spaghetti',
   utmMedium: 'share',
@@ -161,9 +161,9 @@ export class SharingService {
   /**
    * Generate embed codes for different formats
    */
-  private generateEmbedCodes(shareLink: ShareLink, config: ShareConfig): {,
+  private generateEmbedCodes(shareLink: ShareLink, config: ShareConfig): {
   basic: string;
-    responsive: string;,
+    responsive: string;
   customizable: string;
     const width = config.customization?.layout?.width || 800;
     const height = config.customization?.layout?.height || 600;
@@ -190,7 +190,7 @@ export class SharingService {
   /**
    * Track sharing analytics event
    */
-  async trackAnalyticsEvent(shareLinkId: string,)
+  async trackAnalyticsEvent(shareLinkId: string)
     eventType: ShareAnalyticsEvent['eventType'],
     contextData: Partial<ShareAnalyticsEvent> = {}
   ): Promise<void> {
@@ -224,7 +224,7 @@ export class SharingService {
   const mockMetrics: ShareMetrics = {,
   shareLinkId,
   timeRange,
-  metrics: {,
+  metrics: {
   totalViews: 245,
   uniqueViews: 189,
   totalShares: 34,
@@ -237,25 +237,25 @@ export class SharingService {
   viralCoefficient: 0.18,
   engagementScore: 73,
 },
-  breakdowns: {,
-  byPlatform: {,
+  breakdowns: {
+  byPlatform: {
   'twitter': 45,
   'linkedin': 23,
   'discord': 18,
   'direct': 159,
 },
-  byGeography: {,
+  byGeography: {
   'US': 98,
   'GB': 34,
   'CA': 28,
   'other': 85,
 },
-  byDevice: {,
+  byDevice: {
   'desktop': 167,
   'mobile': 62,
   'tablet': 16,
 },
-  trends: {,
+  trends: {
   viewsOverTime: [],
   sharesOverTime: [],
   engagementOverTime: [],
@@ -264,7 +264,7 @@ export class SharingService {
   /**
    * Create a collection of shareable resources
    */
-  async createShareCollection(name: string,)
+  async createShareCollection(name: string)
     description: string,
     resourceIds: string,
     shareConfig: Partial<CreateShareRequest>): Promise<ShareCollection> {,
@@ -273,7 +273,7 @@ export class SharingService {
       name,
       description,
       resourceIds,
-      shareConfig: {,
+      shareConfig: {
   id: uuidv4(),
         resourceId: '', // Collections don't have single resource ID
         resourceType: 'collection',
@@ -283,16 +283,16 @@ export class SharingService {
         description,
         permissions: shareConfig.permissions || this.getDefaultPermissions(),
         customization: shareConfig.customization || {},
-        metadata: {,
+        metadata: {
   createdBy: 'current-user',
   createdAt: new Date(),
   updatedAt: new Date(),
   version: '1.0.0',
 },
-  organization: {,
+  organization: {
   sequence: resourceIds,
         grouping: {},
-        navigation: {,
+        navigation: {
   showIndex: true,
   showProgress: true,
   allowJumping: true,
@@ -318,12 +318,12 @@ export class SharingService {
   * Get share analytics dashboard data
   */
   async getShareDashboard(userId: string): Promise<{,
-  totalShares: number;,
+  totalShares: number;
   totalViews: number;
   topPerformers: Array<{,
-  resourceId: string;,
+  resourceId: string;
   title: string;
-  views: number;,
+  views: number;
   shares: number;
 }>;
     recentActivity: ShareAnalyticsEvent;

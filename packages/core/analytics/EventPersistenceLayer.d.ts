@@ -79,19 +79,19 @@ export interface EventQueryOptions {
 
 export interface EventStatistics {
     totalEvents: number;
-    eventsByType: {,
+    eventsByType: {
         [type: string]: number;
     };
-    eventsByCategory: {,
+    eventsByCategory: {
         [category: string]: number;
     };
-    eventsBySeverity: {,
+    eventsBySeverity: {
         [severity: string]: number;
     };
-    eventsBySource: {,
+    eventsBySource: {
         [source: string]: number;
     };
-    timeRange: {,
+    timeRange: {
         earliest: number;
         latest: number;
     };
@@ -100,7 +100,7 @@ export interface EventStatistics {
 export interface EventAggregation {
     groupBy: string;
     timeGranularity?: 'hour' | 'day' | 'week' | 'month';
-    aggregates: {,
+    aggregates: {
         count: number;
         firstSeen: number;
         lastSeen: number;

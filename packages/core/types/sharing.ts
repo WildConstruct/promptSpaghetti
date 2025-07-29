@@ -11,45 +11,45 @@ export type ShareStatus = 'active' | 'expired' | 'revoked' | 'pending';
 // User information for sharing
 
 export interface UserInfo {
-  id: string;,
+  id: string;
   email: string;
   name: string;
   avatar?: string;
   // Collaborator with permissions
 }
 export interface Collaborator extends UserInfo {
-  role: SharePermission;,
+  role: SharePermission;
   addedAt: Date;
-  permissions: string;,
+  permissions: string;
   invitedBy: string;
   acceptedAt?: Date;
   // Sharing configuration
   export interface SharingConfig {
-  accessLevel: ShareAccessLevel;,
+  accessLevel: ShareAccessLevel;
   permissions: SharePermission;
-  collaborators: Collaborator;,
+  collaborators: Collaborator;
   shareUrl: string;
   shareToken: string;
   expiresAt?: Date;
-  passwordProtected: boolean;,
+  passwordProtected: boolean;
   allowDownload: boolean;
-  allowCopy: boolean;,
+  allowCopy: boolean;
   trackAnalytics: boolean;
   notifyOnAccess: boolean;
   // Share security settings
 }
 export interface ShareSecurityConfig {
-  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';,
+  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
   encryptionRequired: boolean;
-  auditingEnabled: boolean;,
-  retentionPolicy: {,
+  auditingEnabled: boolean;
+  retentionPolicy: {
   maxShareDuration: number; // days,
-  autoExpire: boolean;,
+  autoExpire: boolean;
   dataRetentionDays: number;
 };
-  accessControls: {,
+  accessControls: {
   ipWhitelist: string;
-  geoRestrictions: string;,
+  geoRestrictions: string;
   requireAuthentication: boolean;
   maxConcurrentUsers?: number;
   sessionTimeout?: number; // minutes,
@@ -58,98 +58,98 @@ export interface ShareSecurityConfig {
 // Core shared content interface
 }
 export interface SharedContent {
-  id: string;,
+  id: string;
   type: 'graph' | 'template' | 'bundle' | 'dataset';
   title: string;
   description?: string;
   content: any; // The actual shared content,
-  metadata: SharedContentMetadata;,
+  metadata: SharedContentMetadata;
   sharing: SharingConfig;
-  security: ShareSecurityConfig;,
+  security: ShareSecurityConfig;
   analytics: ShareAnalytics;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   status: ShareStatus;
   // Metadata for shared content
 }
 export interface SharedContentMetadata {
-  exportId: string;,
+  exportId: string;
   version: string;
-  author: UserInfo;,
+  author: UserInfo;
   tags: string;
   category?: string;
   language?: string;
   contentSize: number; // bytes,
-  checksumMd5: string;,
+  checksumMd5: string;
   versionControl: VersionControl;
   annotations: ContentAnnotations;
   // Version control for shared content
 }
 export interface VersionControl {
-  currentVersion: string;,
+  currentVersion: string;
   versions: ContentVersion;
   isLatest: boolean;
   changesFromPrevious?: string;
   mergeConflicts?: MergeConflict;
 }
 export interface ContentVersion {
-  version: string;,
+  version: string;
   timestamp: Date;
-  author: UserInfo;,
+  author: UserInfo;
   changes: string;
-  size: number;,
+  size: number;
   checksum: string;
 }
 export interface MergeConflict {
-  path: string;,
+  path: string;
   type: 'content' | 'metadata' | 'permissions';
   conflictingVersions: string;
   resolution?: 'auto' | 'manual';
   // Content annotations
 }
 export interface ContentAnnotations {
-  connectionLabels: ConnectionLabel;,
+  connectionLabels: ConnectionLabel;
   stickyNotes: StickyNote;
-  regions: AnnotationRegion;,
+  regions: AnnotationRegion;
   comments: ShareComment;
 }
 export interface ConnectionLabel {
-  id: string;,
+  id: string;
   sourceNodeId: string;
-  targetNodeId: string;,
+  targetNodeId: string;
   label: string;
   color?: string;
-  author: UserInfo;,
+  author: UserInfo;
   createdAt: Date;
 }
 export interface StickyNote {
-  id: string;,
+  id: string;
   x: number;
-  y: number;,
+  y: number;
   width: number;
-  height: number;,
+  height: number;
   content: string;
-  color: string;,
+  color: string;
   author: UserInfo;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
 }
 export interface AnnotationRegion {
-  id: string;,
+  id: string;
   x: number;
-  y: number;,
+  y: number;
   width: number;
-  height: number;,
+  height: number;
   title: string;
   description?: string;
-  color: string;,
+  color: string;
   author: UserInfo;
   createdAt: Date;
 }
 export interface ShareComment {
-  id: string;,
+  id: string;
   content: string;
-  author: UserInfo;,
+  author: UserInfo;
   createdAt: Date;
   updatedAt?: Date;
   parentId?: string; // For threaded comments
@@ -162,67 +162,67 @@ export interface ShareComment {
 // Analytics and tracking
 }
 export interface ShareAnalytics {
-  views: ShareView;,
+  views: ShareView;
   downloads: ShareDownload;
-  collaborations: CollaborationEvent;,
+  collaborations: CollaborationEvent;
   totalViews: number;
-  uniqueViewers: number;,
+  uniqueViewers: number;
   averageViewDuration: number; // seconds,
-  peakConcurrentUsers: number;,
+  peakConcurrentUsers: number;
   geographicDistribution: GeographicStats;
-  deviceStats: DeviceStats;,
+  deviceStats: DeviceStats;
   conversionMetrics: ConversionMetrics;
 }
 export interface ShareView {
-  id: string;,
+  id: string;
   viewerInfo: ViewerInfo;
-  timestamp: Date;,
+  timestamp: Date;
   duration: number; // seconds,
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   referrer?: string;
   geolocation?: GeoLocation;
 }
 export interface ShareDownload {
-  id: string;,
+  id: string;
   downloadedBy: ViewerInfo;
-  timestamp: Date;,
+  timestamp: Date;
   format: string;
-  size: number;,
+  size: number;
   ipAddress: string;
   success: boolean;
   errorReason?: string;
 }
 export interface CollaborationEvent {
-  id: string;,
+  id: string;
   type: 'comment' | 'edit' | 'annotation' | 'permission_change';
-  user: UserInfo;,
+  user: UserInfo;
   timestamp: Date;
-  details: any;,
-  impact: 'minor' | 'major' | 'breaking';
-}
+  details: any;
+  impact: 'minor' | 'major' | 'breaking'
+  }
 export interface ViewerInfo {
   id?: string; // null for anonymous viewers,
   email?: string;
   name?: string;
-  isAuthenticated: boolean;,
+  isAuthenticated: boolean;
   sessionId: string;
 }
 export interface GeoLocation {
-  country: string;,
+  country: string;
   region: string;
-  city: string;,
+  city: string;
   coordinates: { lat: number; lng: number };
 }
 export interface GeographicStats {
-  country: string;,
+  country: string;
   views: number;
   uniqueViewers: number;
 }
 export interface DeviceStats {
-  deviceType: 'desktop' | 'tablet' | 'mobile';,
+  deviceType: 'desktop' | 'tablet' | 'mobile';
   operatingSystem: string;
-  browser: string;,
+  browser: string;
   views: number;
 }
 export interface ConversionMetrics {
@@ -233,7 +233,7 @@ export interface ConversionMetrics {
   // API request/response types
 }
 export interface CreateShareRequest {
-  contentId: string;,
+  contentId: string;
   contentType: SharedContent['type'];
   title: string;
   description?: string;
@@ -242,9 +242,9 @@ export interface CreateShareRequest {
   collaborators?: string; // user IDs to invite,
 }
 export interface CreateShareResponse {
-  success: boolean;,
+  success: boolean;
   shareId: string;
-  shareUrl: string;,
+  shareUrl: string;
   shareToken: string;
   expiresAt?: Date;
   error?: string;
@@ -258,36 +258,36 @@ export interface UpdateShareRequest {
 export interface ShareAccessRequest {
   shareToken: string;
   password?: string;
-  userAgent: string;,
+  userAgent: string;
   ipAddress: string;
 }
 export interface ShareAccessResponse {
   success: boolean;
   content?: SharedContent;
-  permissions: SharePermission;,
+  permissions: SharePermission;
   requiresPassword: boolean;
   error?: string;
-  analytics?: {,
-  viewCount: number;,
+  analytics?: {
+  viewCount: number;
   lastAccessed: Date;
 };
 }
 export interface SharePermissionRequest {
-  shareId: string;,
+  shareId: string;
   userId: string;
   permission: SharePermission;
   message?: string;
 }
 export interface ShareAnalyticsRequest {
   shareId: string;
-  timeRange?: {,
-  start: Date;,
+  timeRange?: {
+  start: Date;
   end: Date;
 };
   metrics?: ('views' | 'downloads' | 'collaborations')[];
 }
 export interface ShareAnalyticsResponse {
-  success: boolean;,
+  success: boolean;
   analytics: ShareAnalytics;
   error?: string;
   // Error types
@@ -312,20 +312,20 @@ export class ShareError extends Error {
   // Configuration types
   export interface SharingSystemConfig {
   maxShareDuration: number; // days,
-  defaultAccessLevel: ShareAccessLevel;,
+  defaultAccessLevel: ShareAccessLevel;
   allowAnonymousSharing: boolean;
-  requireEmailVerification: boolean;,
+  requireEmailVerification: boolean;
   maxCollaborators: number;
-  allowPasswordProtection: boolean;,
+  allowPasswordProtection: boolean;
   trackAnalyticsByDefault: boolean;
-  defaultRetentionDays: number;,
+  defaultRetentionDays: number;
   maxFileSizeForSharing: number; // bytes,
-  supportedFormats: string;,
+  supportedFormats: string;
   encryptionRequired: boolean;
   // Event types for real-time updates
 }
 export interface ShareEvent {
-  type: ShareEventType;,
+  type: ShareEventType;
   shareId: string;
   timestamp: Date;
   user?: UserInfo;

@@ -7,7 +7,7 @@ import { ExtensionManifest, parseExtensionManifest } from '../../extensions/Exte
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
 export interface ExtensionInstallDialogProps {
-  onInstall: (extension: ExtensionManifest) => Promise<void>;,
+  onInstall: (extension: ExtensionManifest) => Promise<void>;
   onCancel: () => void;
 }
 export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
@@ -77,19 +77,19 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
   description: 'Development extension loaded from local path',
   author: 'Developer',
   extension_type: 'node' as const,
-  capabilities: {,
+  capabilities: {
   provides: ['test-functionality'],
   requires: ['runtime-nodes'],
 },
-  dependencies: {,
+  dependencies: {
   system_version: '^1.0.0',
 },
   permissions: ['data-processing'],
-        runtime: {,
+        runtime: {
   entry_point: 'dist/index',
   node_types: ['TestNode'],
 },
-  development: {,
+  development: {
   path: devPath,
   auto_reload: true,
 };

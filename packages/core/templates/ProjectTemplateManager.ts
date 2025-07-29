@@ -4,43 +4,43 @@
  */
 
 export interface ProjectTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: string;
-  tags: string;,
+  tags: string;
   version: string;
   preview_image?: string;
-  author: {,
-  id: string;,
+  author: {
+  id: string;
   name: string;
   avatar?: string;
 };
-  created_at: string;,
+  created_at: string;
   updated_at: string;
-  usage_count: number;,
+  usage_count: number;
   rating: number;
-  is_public: boolean;,
+  is_public: boolean;
   is_featured: boolean;
   // Template content
   graph_data: any; // The actual graph structure,
   variables: TemplateVariable;
   customization_points: CustomizationPoint;
   // Metadata
-  complexity_level: 'beginner' | 'intermediate' | 'advanced';,
+  complexity_level: 'beginner' | 'intermediate' | 'advanced';
   estimated_time: number; // minutes
-  prerequisites: string;,
+  prerequisites: string;
   learning_objectives: string;
 }
 export interface TemplateVariable {
-  id: string;,
+  id: string;
   name: string;
-  label: string;,
+  label: string;
   type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
-  description: string;,
+  description: string;
   default_value: any;
   required: boolean;
-  validation?: {,
+  validation?: {
   min?: number;
   max?: number;
   pattern?: string;
@@ -48,32 +48,32 @@ export interface TemplateVariable {
 };
 }
 export interface CustomizationPoint {
-  id: string;,
+  id: string;
   name: string;
-  type: 'node_properties' | 'graph_structure' | 'styling' | 'behavior';,
+  type: 'node_properties' | 'graph_structure' | 'styling' | 'behavior';
   target_nodes: string;
-  properties: string;,
+  properties: string;
   description: string;
-  ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle';
-}
+  ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle'
+  }
 export interface TemplateCategory {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   icon: string;
   color: string;
   parent_id?: string;
 }
 export interface TemplateUsageAnalytics {
-  template_id: string;,
+  template_id: string;
   total_uses: number;
-  unique_users: number;,
+  unique_users: number;
   success_rate: number;
-  average_rating: number;,
+  average_rating: number;
   completion_rate: number;
-  most_used_customizations: string;,
-  trend_data: {,
-  date: string;,
+  most_used_customizations: string;
+  trend_data: {
+  date: string;
   uses: number;
 }[];
 }
@@ -384,7 +384,7 @@ export class ProjectTemplateManager {
   const bundle = {
   template,
   dependencies: this.extractDependencies(template),
-  metadata: {,
+  metadata: {
   created_at: new Date().toISOString(),
   version: '1.0.0',
 };

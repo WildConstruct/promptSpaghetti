@@ -5,66 +5,66 @@
  */
 
 export interface ComplianceBaseline {
-  id: string;,
+  id: string;
   framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
-  category: 'security' | 'privacy' | 'regulatory' | 'operational';,
+  category: 'security' | 'privacy' | 'regulatory' | 'operational';
   name: string;
-  description: string;,
+  description: string;
   targetValue: number; // 0-100,
   toleranceThreshold: number; // acceptable deviation percentage,
-  measurementUnit: 'percentage' | 'count' | 'time' | 'score';,
+  measurementUnit: 'percentage' | 'count' | 'time' | 'score';
   measurementFrequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
-  baselineEstablishedAt: Date;,
+  baselineEstablishedAt: Date;
   lastUpdatedAt: Date;
   isActive: boolean;
 }
 export interface ComplianceMeasurement {
-  id: string;,
+  id: string;
   baselineId: string;
-  actualValue: number;,
+  actualValue: number;
   targetValue: number;
   deviation: number; // percentage deviation from baseline,
-  status: 'above_baseline' | 'at_baseline' | 'below_baseline' | 'critical_deviation';,
+  status: 'above_baseline' | 'at_baseline' | 'below_baseline' | 'critical_deviation';
   measuredAt: Date;
   context?: Record<string, any>;
   notes?: string;
 }
 export interface BaselineTrend {
-  baselineId: string;,
+  baselineId: string;
   framework: string;
-  category: string;,
+  category: string;
   name: string;
-  measurements: ComplianceMeasurement;,
+  measurements: ComplianceMeasurement;
   trendDirection: 'improving' | 'stable' | 'declining' | 'critical';
-  averageDeviation: number;,
+  averageDeviation: number;
   consistencyScore: number; // 0-100, how consistent measurements are,
-  lastMeasurement: ComplianceMeasurement;,
+  lastMeasurement: ComplianceMeasurement;
   recommendedActions: string;
 }
 export interface BaselineDashboard {
   overallHealthScore: number; // 0-100,
   frameworkHealth: Record<string, {,
-  score: number;,
+  score: number;
   status: 'healthy' | 'warning' | 'critical';
-  baselinesTracked: number;,
+  baselinesTracked: number;
   baselinesMet: number;
   criticalDeviations: number;
 }>;
-  recentDeviations: ComplianceMeasurement;,
+  recentDeviations: ComplianceMeasurement;
   trendAnalysis: BaselineTrend;
-  improvementOpportunities: {,
+  improvementOpportunities: {
   baselineId: string;
-  name: string;,
+  name: string;
   currentGap: number;
-  potentialImpact: string;,
+  potentialImpact: string;
   difficulty: 'low' | 'medium' | 'high';
   estimatedTimeframe: string;
 }[];
-  alerts: {,
+  alerts: {
   id: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
-  baselineId: string;,
+  baselineId: string;
   triggeredAt: Date;
   acknowledged: boolean;
 }[];
@@ -286,7 +286,7 @@ export class ComplianceBaselineTracker {
   /**
    * Record a new measurement against a baseline
    */
-  async recordMeasurement(baselineId: string,)
+  async recordMeasurement(baselineId: string)
     actualValue: number,
     context?: Record<string, any>,
     notes?: string
@@ -421,7 +421,7 @@ export class ComplianceBaselineTracker {
   /**
    * Update baseline target or tolerance
    */
-  async updateBaseline(baselineId: string,)
+  async updateBaseline(baselineId: string)
     updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>
   ): Promise<void> {
     const baseline = this.baselines.get(baselineId);
@@ -459,8 +459,8 @@ export class ComplianceBaselineTracker {
   /**
   * Export baseline data for reporting
   */
-  exportBaselineData(framework?: string, daysPeriod: number = 30): {,
-  baselines: ComplianceBaseline;,
+  exportBaselineData(framework?: string, daysPeriod: number = 30): {
+  baselines: ComplianceBaseline;
   measurements: ComplianceMeasurement;
   summary: Record<string, any>;
   const baselines = Array.from(this.baselines.values());
@@ -489,10 +489,10 @@ export class ComplianceBaselineTracker {
   private determineStatus(deviation: number, toleranceThreshold: number): ComplianceMeasurement['status'] {,
   const absDeviation = Math.abs(deviation);
   if (absDeviation <= toleranceThreshold) {
-  return deviation >= 0 ? 'above_baseline' : 'at_baseline';
-} else if (absDeviation <= toleranceThreshold * 2) {
-      return 'below_baseline';
-    } else {
+  return deviation >= 0 ? 'above_baseline' : 'at_baseline'
+  } else if (absDeviation <= toleranceThreshold * 2) {
+      return 'below_baseline'
+  } else {
   return 'critical_deviation';
   private calculateConsistencyScore(measurements: ComplianceMeasurement): number {,
   if (measurements.length < 2) return 100;
@@ -510,12 +510,12 @@ export class ComplianceBaselineTracker {
   const trendValue = last.actualValue - first.actualValue;
   const criticalCount = recentMeasurements.filter(m => m.status === 'critical_deviation').length;
   if (criticalCount >= recentMeasurements.length / 2) {
-  return 'critical';
-} else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
-      return 'stable';
-    } else if (trendValue > 0) {
-      return 'improving';
-    } else {
+  return 'critical'
+  } else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
+      return 'stable'
+  } else if (trendValue > 0) {
+      return 'improving'
+  } else {
       return 'declining';
   private generateRecommendations(baseline: ComplianceBaseline, )
     measurements: ComplianceMeasurement, 
@@ -585,9 +585,9 @@ export class ComplianceBaselineTracker {
   }
       .sort((a, b) => b.currentGap - a.currentGap)
       .slice(0, 10);
-  private async createAlert(alertData: {,)
+  private async createAlert(alertData: {)
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;,
+  message: string;
   baselineId: string;
   measurement: ComplianceMeasurement;
 }): Promise<void> {

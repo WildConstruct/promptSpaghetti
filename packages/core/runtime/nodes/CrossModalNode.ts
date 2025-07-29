@@ -9,14 +9,14 @@ import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, MultimodalAdapter } from '../../ai';
 
 export interface CrossModalConfig {
-  provider: 'openai' | 'anthropic' | 'google' | 'custom';,
+  provider: 'openai' | 'anthropic' | 'google' | 'custom';
   apiKey: string;
   baseURL?: string;
   model?: string;
   defaultParameters?: Record<string, any>;
 }
 export interface MultimodalInput {
-  type: 'text' | 'image' | 'audio' | 'video';,
+  type: 'text' | 'image' | 'audio' | 'video';
   content: string | ArrayBuffer | File | Blob;
   metadata?: {
     role?: 'user' | 'assistant' | 'system';
@@ -26,25 +26,25 @@ export interface MultimodalInput {
   };
 }
 export interface CrossModalAnalysis {
-  content_understanding: {,
+  content_understanding: {
   overall_summary: string;
-    key_themes: string;,
+    key_themes: string;
   sentiment: { score: number; label: string };
     complexity_score: number;
   };
   modality_insights: Array<{,
   modality: string;
-  confidence: number;,
+  confidence: number;
   key_elements: string;
   dominant_features: string;
 }>;
   cross_modal_connections: Array<{,
   connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
-  modalities: string;,
+  modalities: string;
   strength: number;
   description: string;
 }>;
-  extracted_information: {,
+  extracted_information: {
   entities: Array<{ name: string; type: string; confidence: number }>;
     topics: Array<{ topic: string; relevance: number }>;
     emotions: Array<{ emotion: string; intensity: number; source: string }>;
@@ -98,17 +98,17 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
       // Create comprehensive analysis
       const analysis = this._createCrossModalAnalysis(result, multimodalInputs);
       return {
-  outputs: {,
+  outputs: {
   understanding: result.understanding,
   analysis,
   extracted_data: result.extracted_data,
-  metadata: {,
+  metadata: {
   ...result.metadata,
   processing_time: processingTime,
   node_execution_time: processingTime,
 },
   executionTime: processingTime,
-        tokensUsed: {,
+        tokensUsed: {
   input: result.usage.input_tokens,
   output: result.usage.output_tokens,
 },
@@ -130,7 +130,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
   console.warn(`Failed to initialize multimodal adapter:`, error);
   private _createCrossModalAnalysis(result: Record<string, unknown>, inputs: MultimodalInput): CrossModalAnalysis {,
   return {
-  content_understanding: {,
+  content_understanding: {
   overall_summary: result.understanding.summary,
   key_themes: result.understanding.key_insights,
   sentiment: this._calculateOverallSentiment(result.extracted_data.emotions || []),
@@ -143,7 +143,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
   dominant_features: this._extractDominantFeatures(input.type, result),
 })),
       cross_modal_connections: result.understanding.cross_modal_connections || [],
-      extracted_information: {,
+      extracted_information: {
   entities: result.extracted_data.entities || [],
   topics: result.extracted_data.topics || [],
   emotions: result.extracted_data.emotions || [],
@@ -255,14 +255,14 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
       const comparisonResult = this._analyzeComparison(result, contentA, contentB, comparisonAspects);
       const similarityScores = includeSimilarityScore ? this._calculateSimilarityScores(result, comparisonAspects) : {};
       return {
-  outputs: {,
+  outputs: {
   comparison_result: comparisonResult,
   similarity_scores: similarityScores,
   differences: comparisonResult.differences,
   similarities: comparisonResult.similarities,
 },
   executionTime: processingTime,
-        tokensUsed: {,
+        tokensUsed: {
   input: result.usage.input_tokens,
   output: result.usage.output_tokens,
 },
@@ -282,7 +282,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
       await this.adapter.initialize();
     } catch (error) {
   console.warn(`Failed to initialize multimodal adapter:`, error);
-  private _analyzeComparison(result: Record<string,)
+  private _analyzeComparison(result: Record<string)
   unknown>,
   contentA: MultimodalInput,
   contentB: MultimodalInput,
@@ -420,13 +420,13 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   );
   const processingTime = Date.now() - startTime;
   return {
-  outputs: {,
+  outputs: {
   adapted_content: adaptedContent,
   adaptation_plan: adaptationPlan,
   recommendations: adaptationPlan.recommendations,
 },
   executionTime: processingTime,
-        tokensUsed: {,
+        tokensUsed: {
   input: sourceAnalysis.usage.input_tokens,
   output: sourceAnalysis.usage.output_tokens,
 },
@@ -446,7 +446,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
       await this.adapter.initialize();
     } catch (error) {
   console.warn(`Failed to initialize multimodal adapter:`, error);
-  private _createAdaptationPlan(sourceContent: MultimodalInput,)
+  private _createAdaptationPlan(sourceContent: MultimodalInput)
   analysis: unknown,
   targetModality: string,
   style: string,
@@ -455,13 +455,13 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   const sourceModalities = [...new Set(sourceContent.map(c => c.type))];
   const keyElements = this._extractKeyElements(analysis);
   return {
-  source_analysis: {,
+  source_analysis: {
   modalities: sourceModalities,
   key_themes: analysis.understanding.key_insights,
   emotional_tone: this._determineEmotionalTone(analysis.extracted_data.emotions || []),
   complexity_level: this._assessComplexity(analysis),
 },
-  target_specification: {,
+  target_specification: {
   modality: targetModality,
   style,
   audience,
@@ -497,7 +497,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   if (complexityScore < 1) return 'low';
   if (complexityScore < 3) return 'medium';
   return 'high';
-  private _determineAdaptationStrategy(sourceModalities: string,)
+  private _determineAdaptationStrategy(sourceModalities: string)
   targetModality: string,
   style: string): string {,
   const strategies = {
@@ -516,7 +516,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   private _identifyPotentialChallenges(sourceModalities: string, targetModality: string): string {,
   const challenges: string = [];
   const difficultyMatrix: Record<string, Record<string, string>> = {,
-  'text': {,
+  'text': {
   'image': ['Visual metaphor creation', 'Layout design'],
   'audio': ['Voice selection', 'Pacing'],
   'video': ['Visual storytelling', 'Timing'],
@@ -541,7 +541,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
         challenges.push(...difficultyMatrix[source][targetModality]);
     });
     return [...new Set(challenges)];
-  private _generateRecommendations(sourceModalities: string,)
+  private _generateRecommendations(sourceModalities: string)
     targetModality: string,
     style: string,
     constraints: Record<string, any>
@@ -579,7 +579,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     if (constraints.budget) {
   recommendations.push('Consider cost-effective production methods');
   return recommendations;
-  private _estimateAdaptationEffort(sourceModalities: string,)
+  private _estimateAdaptationEffort(sourceModalities: string)
   targetModality: string,
   constraints: Record<string, any>): 'low' | 'medium' | 'high' {,
   let effortScore = 0;
@@ -610,14 +610,14 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     if (Object.keys(constraints).length > 2) {
       return `${timeline} (extended due to constraints)`;}
     return timeline;
-  private _generateAdaptedContentSpec(analysis: unknown,)
+  private _generateAdaptedContentSpec(analysis: unknown)
     targetModality: string,
     plan: unknown): unknown {,
   return {
   target_modality: targetModality,
   content_outline: this._generateContentOutline(analysis, targetModality),
   technical_specifications: this._generateTechnicalSpecs(targetModality, plan.target_specification.constraints),
-  creative_direction: {,
+  creative_direction: {
   tone: plan.source_analysis.emotional_tone,
   style: plan.target_specification.style,
   key_messages: plan.key_elements_to_preserve,
@@ -630,7 +630,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   const summary = analysis.understanding.summary;
   const keyInsights = analysis.understanding.key_insights || [];
   const outlines: Record<string, any> = {,
-  'text': {,
+  'text': {
   structure: 'narrative',
   sections: ['introduction', 'main_content', 'conclusion'],
   key_points: keyInsights,
@@ -657,7 +657,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     return outlines[targetModality] || outlines['text'];
   private _generateTechnicalSpecs(targetModality: string, constraints: Record<string, any>): unknown {
   const specs: Record<string, any> = {,
-  'text': {,
+  'text': {
   format: 'markdown',
   encoding: 'UTF-8',
   max_length: constraints.max_length || 2000,

@@ -101,7 +101,15 @@ export declare const ENVIRONMENT_CONFIGURATIONS: {
                         SECURITY_OFFICER: {
                             exemptionType: "CLASSIFICATION";
                             reason: string;
-                            conditions: any[];
+                            conditions: {
+                                type: "TIME_RANGE";
+                                specification: {
+                                    start: string;
+                                    end: string;
+                                    timezone: string;
+                                };
+                                required: boolean;
+                            }[];
                             auditRequired: boolean;
                         };
                         COMPLIANCE_OFFICER: {

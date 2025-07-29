@@ -20,28 +20,28 @@ import { TrustScore } from './TrustTypes';
 
 export interface BasePolicy {
   readonly id: string;
-  readonly type: PolicyType;,
+  readonly type: PolicyType;
   name: string;
-  description: string;,
+  description: string;
   version: string;
   // Status and lifecycle
-  status: PolicyStatus;,
+  status: PolicyStatus;
   enabled: boolean;
   // Scope and applicability
-  scope: PolicyScope;,
+  scope: PolicyScope;
   priority: number; // Higher numbers = higher priority,
   // Temporal configuration
   effectiveFrom: Date;
   effectiveUntil?: Date;
   timezone?: string;
   // Metadata and tracking
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModifiedBy: string;
   tags: string;
   // Compliance and auditing
-  complianceFrameworks: ComplianceFramework;,
+  complianceFrameworks: ComplianceFramework;
   auditRequired: boolean;
   lastAuditDate?: Date;
   nextAuditDate?: Date;
@@ -89,7 +89,7 @@ export type OrganizationType = 'startup' | 'sme' | 'enterprise' | 'non_profit' |
 export type Environment = 'development' | 'staging' | 'production' | 'test';
 
 export interface PolicyCondition {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
   value: any;
   weight?: number; // For weighted condition evaluation,
@@ -118,13 +118,13 @@ export type ComplianceFramework =
  */
 
 export interface SecurityPolicy extends BasePolicy {
-  readonly type: 'security';,
+  readonly type: 'security';
   securityLevel: SecurityLevel;
   threatCategories: ThreatCategory;
   // Security configuration
-  authenticationRequired: boolean;,
+  authenticationRequired: boolean;
   multiFactorRequired: boolean;
-  encryptionRequired: boolean;,
+  encryptionRequired: boolean;
   auditLoggingLevel: AuditLevel;
   // Access controls
   allowedIpRanges?: string;
@@ -142,7 +142,7 @@ export interface SecurityPolicy extends BasePolicy {
   export type ThreatCategory = 'authentication' | 'authorization' | 'data_breach' | 'ddos' | 'malware' | 'social_engineering';
   export type AuditLevel = 'none' | 'basic' | 'detailed' | 'comprehensive';
   export interface RateLimitConfig {
-  enabled: boolean;,
+  enabled: boolean;
   maxRequests: number;
   timeWindow: number; // seconds,
   burstAllowance?: number;
@@ -158,7 +158,7 @@ export interface SecurityHeadersConfig {
   strictTransportSecurity?: string;
 }
 export interface AlertThreshold {
-  metric: string;,
+  metric: string;
   threshold: number;
   timeWindow: number; // minutes,
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -167,22 +167,22 @@ export interface AlertThreshold {
   */
 }
 export interface PrivacyPolicy extends BasePolicy {
-  readonly type: 'privacy';,
+  readonly type: 'privacy';
   privacyLevel: PrivacyLevel;
   dataCategories: DataCategory;
   // Data processing
-  legalBases: LegalBasis;,
+  legalBases: LegalBasis;
   processingPurposes: ProcessingPurpose;
   retentionPeriod: RetentionConfig;
   // User rights
-  userRights: UserRight;,
+  userRights: UserRight;
   consentRequired: boolean;
   consentGranular: boolean;
   // Data sharing
-  thirdPartySharing: ThirdPartyConfig;,
+  thirdPartySharing: ThirdPartyConfig;
   internationalTransfers: TransferConfig;
   // Subject access rights
-  dataPortabilityEnabled: boolean;,
+  dataPortabilityEnabled: boolean;
   deletionRightEnabled: boolean;
   rectificationRightEnabled: boolean;
   export type PrivacyLevel = 'basic' | 'standard' | 'enhanced' | 'strict';
@@ -193,7 +193,7 @@ export interface PrivacyPolicy extends BasePolicy {
   export interface RetentionConfig {
   defaultPeriod: number; // days,
   categorySpecific?: Record<DataCategory, number>;
-  automaticDeletion: boolean;,
+  automaticDeletion: boolean;
   backupRetention: number; // days,
 }
 export interface ThirdPartyConfig {
@@ -212,7 +212,7 @@ export interface TransferConfig {
   */
 }
 export interface ContentPolicy extends BasePolicy {
-  readonly type: 'content';,
+  readonly type: 'content';
   contentTypes: ContentType;
   moderationLevel: ModerationLevel;
   // Content rules
@@ -220,11 +220,11 @@ export interface ContentPolicy extends BasePolicy {
   requiredContent?: RequirementRule;
   qualityStandards: QualityStandard;
   // Moderation configuration
-  autoModeration: boolean;,
+  autoModeration: boolean;
   humanReviewRequired: boolean;
   communityReporting: boolean;
   // Actions and consequences
-  violationActions: ViolationAction;,
+  violationActions: ViolationAction;
   appealProcess: AppealConfig;
   // Age and region restrictions
   ageRestrictions?: AgeRestriction;
@@ -232,57 +232,57 @@ export interface ContentPolicy extends BasePolicy {
   export type ContentType = 'text' | 'image' | 'video' | 'audio' | 'document' | 'code' | 'template' | 'prompt';
   export type ModerationLevel = 'permissive' | 'standard' | 'strict' | 'custom';
   export interface ProhibitionRule {
-  ruleId: string;,
+  ruleId: string;
   category: string;
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   patterns?: string; // regex patterns,
   keywords?: string;
   mlDetection?: boolean;
 }
 export interface RequirementRule {
-  ruleId: string;,
+  ruleId: string;
   requirement: string;
-  mandatory: boolean;,
-  validationMethod: 'automatic' | 'manual' | 'hybrid';
-}
+  mandatory: boolean;
+  validationMethod: 'automatic' | 'manual' | 'hybrid'
+  }
 export interface QualityStandard {
-  standardId: string;,
+  standardId: string;
   name: string;
-  criteria: QualityCriteria;,
+  criteria: QualityCriteria;
   minScore: number; // 0-100,
   weight: number;
 }
 export interface QualityCriteria {
-  criterion: string;,
+  criterion: string;
   weight: number;
   evaluationMethod: 'automatic' | 'manual' | 'hybrid';
   threshold?: number;
 }
 export interface ViolationAction {
-  actionType: 'warning' | 'removal' | 'restriction' | 'suspension' | 'termination';,
+  actionType: 'warning' | 'removal' | 'restriction' | 'suspension' | 'termination';
   severity: 'low' | 'medium' | 'high' | 'critical';
   automatic: boolean;
   escalationPath?: string;
 }
 export interface AppealConfig {
-  appealAllowed: boolean;,
+  appealAllowed: boolean;
   timeLimit: number; // days,
   reviewLevels: AppealLevel;
   automaticReview?: boolean;
 }
 export interface AppealLevel {
-  level: string;,
+  level: string;
   reviewerType: 'system' | 'moderator' | 'admin' | 'panel';
   timeLimit: number; // hours,
 }
 export interface AgeRestriction {
-  minAge: number;,
+  minAge: number;
   contentType: ContentType;
   verificationRequired: boolean;
 }
 export interface RegionalRestriction {
-  region: string;,
+  region: string;
   restricted: boolean;
   reason: string;
   alternativeContent?: string;
@@ -294,48 +294,48 @@ export interface RegionalRestriction {
   */
 }
 export interface PolicyTemplate {
-  templateId: string;,
+  templateId: string;
   name: string;
-  description: string;,
+  description: string;
   policyType: PolicyType;
   version: string;
   // Template configuration
-  template: Partial<BasePolicy>;,
+  template: Partial<BasePolicy>;
   requiredFields: string;
-  optionalFields: string;,
+  optionalFields: string;
   fieldValidations: FieldValidation;
   // Usage and customization
   customizable: boolean;
   industrySpecific?: string;
   complianceFrameworks: ComplianceFramework;
   // Template metadata
-  createdAt: Date;,
+  createdAt: Date;
   createdBy: string;
-  popularity: number;,
+  popularity: number;
   usage_count: number;
   // Versioning
   parentTemplateId?: string;
   childTemplates?: string;
 }
 export interface FieldValidation {
-  field: string;,
+  field: string;
   validationType: 'required' | 'format' | 'range' | 'custom';
-  validation: any;,
+  validation: any;
   errorMessage: string;
   /**
   * Policy Assignment Interface
   */
 }
 export interface PolicyAssignment {
-  assignmentId: string;,
+  assignmentId: string;
   policyId: string;
   policy?: BasePolicy; // Populated when needed,
   // Assignment target
-  targetType: AssignmentTargetType;,
+  targetType: AssignmentTargetType;
   targetId: string;
   targetName?: string;
   // Assignment configuration
-  assignmentType: AssignmentType;,
+  assignmentType: AssignmentType;
   priority: number;
   // Inheritance and conflict resolution
   inheritsFrom?: string; // parent assignment IDs,
@@ -348,7 +348,7 @@ export interface PolicyAssignment {
   overridable: boolean;
   overrides?: PolicyOverride;
   // Metadata
-  assignedBy: string;,
+  assignedBy: string;
   assignedAt: Date;
   reason?: string;
   notes?: string;
@@ -367,7 +367,7 @@ export type AssignmentType = 'direct' | 'inherited' | 'computed' | 'default';
 export type AssignmentStatus = 'pending' | 'active' | 'suspended' | 'revoked' | 'expired';
 
 export interface ConflictResolution {
-  strategy: ConflictStrategy;,
+  strategy: ConflictStrategy;
   priorityRules: PriorityRule;
   customLogic?: string;
 }
@@ -379,14 +379,14 @@ export type ConflictStrategy =
   | 'custom';
 
 export interface PriorityRule {
-  condition: string;,
+  condition: string;
   priorityModifier: number;
   description: string;
 }
 export interface PolicyOverride {
-  overrideId: string;,
+  overrideId: string;
   field: string;
-  originalValue: any;,
+  originalValue: any;
   overrideValue: any;
   reason: string;
   approvedBy?: string;
@@ -396,17 +396,17 @@ export interface PolicyOverride {
   */
 }
 export interface PolicyEvaluation {
-  evaluationId: string;,
+  evaluationId: string;
   policyId: string;
   // Evaluation context
-  context: EvaluationContext;,
+  context: EvaluationContext;
   requestedAction: string;
   // Evaluation result
-  result: EvaluationResult;,
+  result: EvaluationResult;
   decision: PolicyDecision;
   confidence: number; // 0-100,
   // Detailed information
-  applicablePolicies: string;,
+  applicablePolicies: string;
   conflictsDetected: PolicyConflict;
   overridesApplied: PolicyOverride;
   // Performance and caching
@@ -414,7 +414,7 @@ export interface PolicyEvaluation {
   cached: boolean;
   cacheExpiration?: Date;
   // Audit trail
-  evaluatedAt: Date;,
+  evaluatedAt: Date;
   evaluatedBy: string;
   traceData?: EvaluationTrace;
 }
@@ -423,7 +423,7 @@ export interface EvaluationContext {
   organizationId?: string;
   contentType?: ContentType;
   contentId?: string;
-  action: string;,
+  action: string;
   environment: Environment;
   timestamp: Date;
   additionalData?: Record<string, any>;
@@ -431,7 +431,7 @@ export interface EvaluationContext {
 export type PolicyDecision = 'allow' | 'deny' | 'conditional' | 'review_required';
 
 export interface EvaluationResult {
-  decision: PolicyDecision;,
+  decision: PolicyDecision;
   reasons: string;
   conditions?: string;
   requirements?: string;
@@ -443,9 +443,9 @@ export interface EvaluationResult {
   metadata?: Record<string, any>;
 }
 export interface PolicyConflict {
-  conflictType: 'priority' | 'contradiction' | 'ambiguity';,
+  conflictType: 'priority' | 'contradiction' | 'ambiguity';
   involvedPolicies: string;
-  description: string;,
+  description: string;
   resolution: string;
   resolutionConfidence: number; // 0-100,
 }
@@ -453,7 +453,7 @@ export interface EvaluationTrace {
   step: string;
   policyId?: string;
   condition?: string;
-  result: boolean | string;,
+  result: boolean | string;
   duration: number; // milliseconds,
   details?: any;
   // =============================================================================
@@ -464,34 +464,34 @@ export interface EvaluationTrace {
   */
 }
 export interface PolicyAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   generatedAt: Date;
   // Usage metrics
-  policyUsage: PolicyUsageMetrics;,
+  policyUsage: PolicyUsageMetrics;
   evaluationMetrics: EvaluationMetrics;
   // Performance metrics
   performanceMetrics: PerformanceMetrics;
   // Compliance metrics
   complianceMetrics: ComplianceMetrics;
   // Trends and insights
-  trends: PolicyTrend;,
+  trends: PolicyTrend;
   insights: PolicyInsight;
   recommendations: PolicyRecommendation;
 }
 export interface AnalyticsPeriod {
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
   timeRange: TimeRange;
 }
 export interface PolicyUsageMetrics {
-  policyId: string;,
+  policyId: string;
   policyName: string;
-  evaluationCount: number;,
+  evaluationCount: number;
   allowCount: number;
-  denyCount: number;,
+  denyCount: number;
   conditionalCount: number;
   // Performance
-  averageEvaluationTime: number;,
+  averageEvaluationTime: number;
   cacheHitRate: number;
   // Quality
   accuracyRate?: number;
@@ -499,7 +499,7 @@ export interface PolicyUsageMetrics {
   falseNegativeRate?: number;
 }
 export interface EvaluationMetrics {
-  totalEvaluations: number;,
+  totalEvaluations: number;
   averageEvaluationTime: number;
   peakEvaluationsPerSecond: number;
   // Decision distribution
@@ -508,13 +508,13 @@ export interface EvaluationMetrics {
   conditionalRate: number; // percentage,
   reviewRequiredRate: number; // percentage,
   // Cache metrics
-  overallCacheHitRate: number;,
+  overallCacheHitRate: number;
   cacheSize: number;
   cacheEvictions: number;
 }
 export interface PerformanceMetrics {
   averageLatency: number; // milliseconds,
-  p50Latency: number;,
+  p50Latency: number;
   p95Latency: number;
   p99Latency: number;
   // Error rates
@@ -528,7 +528,7 @@ export interface ComplianceMetrics {
   overallComplianceScore: number; // 0-100,
   frameworkScores: Record<ComplianceFramework, number>;
   // Violation tracking
-  violationCount: number;,
+  violationCount: number;
   violationsByFramework: Record<ComplianceFramework, number>;
   violationTrend: 'improving' | 'stable' | 'degrading';
   // Audit readiness
@@ -537,27 +537,27 @@ export interface ComplianceMetrics {
   lastAuditFindings: number;
 }
 export interface PolicyTrend {
-  trendType: 'usage' | 'performance' | 'compliance' | 'violations';,
+  trendType: 'usage' | 'performance' | 'compliance' | 'violations';
   direction: 'increasing' | 'stable' | 'decreasing';
-  magnitude: 'slight' | 'moderate' | 'significant' | 'dramatic';,
+  magnitude: 'slight' | 'moderate' | 'significant' | 'dramatic';
   confidence: number; // 0-100,
-  timeframe: string;,
+  timeframe: string;
   description: string;
 }
 export interface PolicyInsight {
-  insightType: 'optimization' | 'risk' | 'opportunity' | 'anomaly';,
+  insightType: 'optimization' | 'risk' | 'opportunity' | 'anomaly';
   title: string;
-  description: string;,
+  description: string;
   impact: 'low' | 'medium' | 'high' | 'critical';
-  actionable: boolean;,
+  actionable: boolean;
   relatedPolicies: string;
 }
 export interface PolicyRecommendation {
-  category: 'optimization' | 'security' | 'compliance' | 'performance' | 'user_experience';,
+  category: 'optimization' | 'security' | 'compliance' | 'performance' | 'user_experience';
   priority: 'low' | 'medium' | 'high' | 'critical';
-  title: string;,
+  title: string;
   description: string;
-  expectedImpact: string;,
+  expectedImpact: string;
   implementationComplexity: 'low' | 'medium' | 'high';
   estimatedEffort: string;
   dueDate?: Date;
@@ -566,18 +566,18 @@ export interface PolicyRecommendation {
   // =============================================================================
 }
 export interface PolicyValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
-  severity: 'error' | 'warning';,
+  severity: 'error' | 'warning';
   code: string;
 }
 export interface ValidationWarning {
-  field: string;,
+  field: string;
   message: string;
   code: string;
   suggestion?: string;
@@ -594,9 +594,9 @@ export interface PolicySearchCriteria {
   text?: string; // Full-text search,
 }
 export interface PolicySearchResult {
-  policies: BasePolicy;,
+  policies: BasePolicy;
   totalCount: number;
-  pageSize: number;,
+  pageSize: number;
   currentPage: number;
   hasMore: boolean;
   /**
@@ -604,23 +604,23 @@ export interface PolicySearchResult {
   */
 }
 export interface PolicyDiff {
-  policyId: string;,
+  policyId: string;
   oldVersion: string;
-  newVersion: string;,
+  newVersion: string;
   changes: PolicyChange;
   summary: DiffSummary;
 }
 export interface PolicyChange {
-  changeType: 'added' | 'removed' | 'modified';,
+  changeType: 'added' | 'removed' | 'modified';
   field: string;
   oldValue?: any;
   newValue?: any;
   path: string;
 }
 export interface DiffSummary {
-  totalChanges: number;,
+  totalChanges: number;
   addedFields: number;
-  removedFields: number;,
+  removedFields: number;
   modifiedFields: number;
   significanceLevel: 'minor' | 'major' | 'breaking';
   /**
@@ -628,9 +628,9 @@ export interface DiffSummary {
   */
 }
 export interface PolicyExport {
-  exportId: string;,
+  exportId: string;
   exportedAt: Date;
-  exportedBy: string;,
+  exportedBy: string;
   format: ExportFormat;
   policies: BasePolicy;
   assignments?: PolicyAssignment;
@@ -641,26 +641,26 @@ export type ExportFormat = 'json' | 'yaml' | 'csv' | 'xml';
 export interface ExportMetadata {
   version: string;
   description?: string;
-  includeAssignments: boolean;,
+  includeAssignments: boolean;
   includeHistory: boolean;
   filters?: PolicySearchCriteria;
 }
 export interface PolicyImport {
-  importId: string;,
+  importId: string;
   importedAt: Date;
-  importedBy: string;,
+  importedBy: string;
   source: string;
-  status: ImportStatus;,
+  status: ImportStatus;
   result: ImportResult;
 }
 export type ImportStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'partially_completed';
 
 export interface ImportResult {
-  totalPolicies: number;,
+  totalPolicies: number;
   successfullyImported: number;
-  failed: number;,
+  failed: number;
   skipped: number;
-  errors: ImportError;,
+  errors: ImportError;
   warnings: ImportWarning;
 }
 export interface ImportError {

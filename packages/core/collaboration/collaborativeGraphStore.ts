@@ -8,7 +8,7 @@ import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
 
 export interface UserPresence {
-  userId: string;,
+  userId: string;
   name: string;
   color: string;
   cursor?: {
@@ -22,7 +22,7 @@ export interface CollaborativeGraphState {
   // Core graph state
   graph: Graph;
   // Collaboration state
-  isCollaborative: boolean;,
+  isCollaborative: boolean;
   collaborationEnabled: boolean;
   documentId?: string;
   userId?: string;
@@ -30,33 +30,33 @@ export interface CollaborativeGraphState {
   connectedUsers: Map<string, UserPresence>;
   localPresence?: UserPresence;
   // Connection state
-  isConnected: boolean;,
+  isConnected: boolean;
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   lastSyncTime?: number;
   // CRDT adapter (internal)
   crdtAdapter?: GraphCRDTAdapter;
   // Actions
-  enableCollaboration: (options: CollaborativeGraphOptions) => Promise<void>;,
+  enableCollaboration: (options: CollaborativeGraphOptions) => Promise<void>;
   disableCollaboration: () => void;
   // Graph operations (collaborative when enabled)
-  setGraph: (graph: Graph) => void;,
+  setGraph: (graph: Graph) => void;
   addNode: (node: Node, position?: { x: number; y: number }) => void;
-  updateNode: (nodeId: string, updates: Partial<Node>) => void;,
-  deleteNode: (nodeId: string) => void;,
-  addEdge: (edge: Edge) => void;,
+  updateNode: (nodeId: string, updates: Partial<Node>) => void;
+  deleteNode: (nodeId: string) => void;
+  addEdge: (edge: Edge) => void;
   deleteEdge: (edgeId: string) => void;
   // Position updates (for React Flow)
   updateNodePosition: (nodeId: string, position: { x: number; y: number }) => void;
   // Presence updates
-  updateLocalPresence: (presence: Partial<UserPresence>) => void;,
+  updateLocalPresence: (presence: Partial<UserPresence>) => void;
   updateUserCursor: (nodeId?: string, position?: { x: number; y: number }) => void;
   updateUserSelection: (nodeIds: string) => void;
   // Sync operations
-  applyRemoteUpdate: (update: Uint8Array) => void;,
+  applyRemoteUpdate: (update: Uint8Array) => void;
   getDocumentState: () => Uint8Array | null;
   createSnapshot: () => Uint8Array | null;
   // Metrics and diagnostics
-  getMetrics: () => any;,
+  getMetrics: () => any;
   getSyncState: () => any;
 }
 export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
@@ -72,7 +72,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
     enableCollaboration: async (options: CollaborativeGraphOptions) => {,
       const currentGraph = get().graph;
       // Create CRDT adapter
-      const crdtAdapter = new GraphCRDTAdapter(;);
+      const crdtAdapter = new GraphCRDTAdapter(;
         {
           ...options,
           onGraphChange: (graph: Graph) => {,
@@ -100,14 +100,14 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
   }
         currentGraph
       );
-      set({)
+      set({
   crdtAdapter,
   isCollaborative: true,
   collaborationEnabled: true,
   documentId: options.documentId,
   userId: options.userId,
   connectionStatus: 'connecting',
-  localPresence: {,
+  localPresence: {
   userId: options.userId,
   name: 'You',
   color: '#0066cc',
@@ -119,7 +119,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       const { crdtAdapter } = get();
       if (crdtAdapter) {
   crdtAdapter.destroy();
-  set({)
+  set({
   crdtAdapter: undefined,
   isCollaborative: false,
   collaborationEnabled: false,
@@ -221,7 +221,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       if (localPresence && userId) {
         const newPresence = { ...localPresence, ...presence, lastSeen: Date.now() };
         if (crdtAdapter) {
-  crdtAdapter.setUserPresence({)
+  crdtAdapter.setUserPresence({
   cursor: newPresence.cursor,
   selection: newPresence.selection,
   name: newPresence.name,
@@ -232,14 +232,14 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
     // Update user cursor position
     updateUserCursor: (nodeId?: string, position?: { x: number; y: number }) => {
       const { updateLocalPresence } = get();
-      updateLocalPresence({)
+      updateLocalPresence({
   cursor: { nodeId, position }
       });
   }
     // Update user selection
     updateUserSelection: (nodeIds: string) => {,
       const { updateLocalPresence } = get();
-      updateLocalPresence({)
+      updateLocalPresence({
   selection: nodeIds,
 });
   }

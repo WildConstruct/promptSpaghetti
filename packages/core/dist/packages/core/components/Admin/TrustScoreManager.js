@@ -296,38 +296,38 @@ div >
 return;
 _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _jsxs("div", { className: "manager-layout", children: [_jsx("div", { className: "users-section", children: renderUserList() }), _jsx("div", { className: "details-section", children: renderUserDetails() })] }), _jsx("style", { children: `
         .trust-score-manager {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1.5rem;
         .manager-layout {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
         .users-section {
           display: flex;
           flex-direction: column;
         .details-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .list-header {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .list-controls {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
         .search-bar {
-          position: relative;,
+          position: relative;
   flex: 1;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
-          top: 50%;,
+          top: 50%;
   transform: translateY(-50%);
           z-index: 1;
         .search-input {
-          width: 100%;,
+          width: 100%;
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -337,29 +337,29 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .filter-select {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   background: white;
           min-width: 150px;
         .users-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
           max-height: 600px;
           overflow-y: auto;
         .user-item {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   cursor: pointer;
           transition: all 0.2s ease;
         .user-item:hover {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #f8fafc;
         .user-item.selected {
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   background: #eff6ff;
         .user-header {
           display: flex;
@@ -368,16 +368,16 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           margin-bottom: 0.75rem;
         .user-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .user-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .user-email {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .user-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .user-metrics {
           display: flex;
@@ -385,37 +385,37 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           align-items: center;
         .trust-score-display {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .score-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .score-value {
           font-weight: 600;
         .score-grade {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .verification-indicators {
-          display: flex;,
+          display: flex;
   gap: 0.25rem;
         .risk-flags {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-top: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #dc2626;
         .user-details-placeholder {
-          height: 400px;,
+          height: 400px;
   display: flex;
           align-items: center;
           justify-content: center;
         .placeholder-content {
-          text-align: center;,
+          text-align: center;
   color: #6b7280;
         .user-details-panel {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .profile-header {
           display: flex;
@@ -423,7 +423,7 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           align-items: center;
         .profile-info h3 {
           font-size: 1.25rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .profile-info p {
@@ -434,36 +434,36 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
         .score-display {
           display: flex;
           align-items: baseline;
-          justify-content: center;,
+          justify-content: center;
   gap: 0.25rem;
         .score-number {
           font-size: 2rem;
           font-weight: 700;
         .score-max {
-          font-size: 1rem;,
+          font-size: 1rem;
   color: #9ca3af;
         .score-grade {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #6b7280;
           margin-top: 0.25rem;
         .profile-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
           margin-bottom: 1.5rem;
         .detail-item {
           display: flex;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         .detail-label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .detail-value {
           color: #1f2937;
         .verification-status h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
         .verification-grid {
@@ -472,24 +472,24 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           gap: 0.5rem;
         .verification-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           padding: 0.5rem;
           border-radius: 6px;
           font-size: 0.875rem;
         .verification-item.verified {
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #065f46;
         .verification-item.unverified {
-          background: #fee2e2;,
+          background: #fee2e2;
   color: #991b1b;
         .risk-section h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 1.5rem 0 0.75rem 0;
         .risk-flags-list {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .adjustment-header {
           display: flex;
@@ -497,17 +497,17 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           align-items: center;
         .adjustment-form {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .form-group label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .form-select, .form-input, .form-textarea {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -516,15 +516,15 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .form-helper {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .adjustment-preview {
-          background: #f9fafb;,
+          background: #f9fafb;
   border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 1rem;
         .adjustment-preview h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.75rem;
         .preview-item {
@@ -542,16 +542,16 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
   background: #047857;
           border-color: #047857;
         .adjustment-info {
-          text-align: center;,
+          text-align: center;
   padding: 2rem;
         .info-message {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
-          text-align: left;,
+          text-align: left;
   background: #eff6ff;
           border: 1px solid #bfdbfe;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 1rem;
         @media (max-width: 1200px) {
           .manager-layout {
@@ -562,7 +562,7 @@ _jsxs("div", { className: `trust-score-manager ${className}`, children: ["}", _j
           .search-bar {
             order: 2;
           .profile-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .verification-grid {

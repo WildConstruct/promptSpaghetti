@@ -17,27 +17,27 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 // ==========================================
 
 export interface CorrelationConfig {
-  enableRealTimeCorrelation: boolean;,
+  enableRealTimeCorrelation: boolean;
   correlationTimeWindow: number; // minutes,
   similarityThreshold: number; // 0-1,
-  enableAdvancedPatternRecognition: boolean;,
+  enableAdvancedPatternRecognition: boolean;
   maxCorrelationDepth: number;
-  enableCrossSystemCorrelation: boolean;,
+  enableCrossSystemCorrelation: boolean;
   retentionPeriodDays: number;
-  enableMachineLearning: boolean;,
+  enableMachineLearning: boolean;
   correlationRules: CorrelationRule;
 }
 export interface CorrelationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   ruleType: CorrelationRuleType;
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
-  conditions: CorrelationCondition;,
+  conditions: CorrelationCondition;
   actions: CorrelationAction;
   timeWindow: number; // minutes,
-  threshold: number;,
+  threshold: number;
   lastUpdated: Date;
   triggeredCount: number;
 }
@@ -51,9 +51,9 @@ export enum CorrelationRuleType {
   ANOMALY_CLUSTERING = 'anomaly_clustering',
   THREAT_CHAIN = 'threat_chain'
   export interface CorrelationCondition {
-  field: string;,
+  field: string;
   operator: CorrelationOperator;
-  value: unknown;,
+  value: unknown;
   weight: number;
   required: boolean;
 }
@@ -69,9 +69,9 @@ export enum CorrelationOperator {
   SIMILAR_TO = 'similar_to',
   PATTERN_MATCH = 'pattern_match'
   export interface CorrelationAction {
-  actionType: CorrelationActionType;,
+  actionType: CorrelationActionType;
   parameters: Record<string, unknown>;
-  priority: number;,
+  priority: number;
   enabled: boolean;
 }
 export enum CorrelationActionType {
@@ -84,19 +84,19 @@ export enum CorrelationActionType {
   TRIGGER_AUTOMATION = 'trigger_automation',
   NOTIFY_STAKEHOLDERS = 'notify_stakeholders'
   export interface CorrelatedEventGroup {
-  groupId: string;,
+  groupId: string;
   createdAt: Date;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   groupType: EventGroupType;
-  severity: AnomalySeverity;,
+  severity: AnomalySeverity;
   confidence: number;
-  riskScore: number;,
+  riskScore: number;
   events: SecurityEvent;
-  correlationEvidence: CorrelationEvidence;,
+  correlationEvidence: CorrelationEvidence;
   timeline: EventTimeline;
-  affectedSystems: string;,
+  affectedSystems: string;
   affectedUsers: string;
-  threatIndicators: ThreatIndicator;,
+  threatIndicators: ThreatIndicator;
   recommendations: GroupRecommendation;
   status: GroupStatus;
 }
@@ -110,11 +110,11 @@ export enum EventGroupType {
   SUSPICIOUS_ACTIVITY = 'suspicious_activity',
   COORDINATED_ATTACK = 'coordinated_attack'
   export interface CorrelationEvidence {
-  evidenceType: EvidenceType;,
+  evidenceType: EvidenceType;
   strength: number; // 0-1,
-  description: string;,
+  description: string;
   sources: string;
-  confidence: number;,
+  confidence: number;
   supportingData: Record<string, unknown>;
 }
 export enum EvidenceType {
@@ -127,21 +127,21 @@ export enum EvidenceType {
   BEHAVIORAL_CORRELATION = 'behavioral_correlation',
   STATISTICAL_CORRELATION = 'statistical_correlation'
   export interface EventTimeline {
-  timestamp: Date;,
+  timestamp: Date;
   eventId: string;
-  eventType: string;,
+  eventType: string;
   description: string;
-  impact: number;,
+  impact: number;
   source: string;
 }
 export interface ThreatIndicator {
-  indicator: string;,
+  indicator: string;
   indicatorType: IndicatorType;
-  confidence: number;,
+  confidence: number;
   severity: AnomalySeverity;
-  firstSeen: Date;,
+  firstSeen: Date;
   lastSeen: Date;
-  frequency: number;,
+  frequency: number;
   associatedThreats: ThreatType;
 }
 export enum IndicatorType {
@@ -154,9 +154,9 @@ export enum IndicatorType {
   ATTACK_SIGNATURE = 'attack_signature',
   GEOLOCATION = 'geolocation'
   export interface GroupRecommendation {
-  recommendationType: RecommendationType;,
+  recommendationType: RecommendationType;
   priority: number;
-  description: string;,
+  description: string;
   actionItems: string;
   estimatedEffort: number; // hours,
   riskReduction: number; // 0-100,
@@ -177,84 +177,84 @@ export enum RecommendationType {
   FALSE_POSITIVE = 'false_positive',
   ARCHIVED = 'archived'
   export interface CorrelationAnalytics {
-  totalEventsProcessed: number;,
+  totalEventsProcessed: number;
   correlatedEventsCount: number;
-  activeGroupsCount: number;,
+  activeGroupsCount: number;
   averageGroupSize: number;
-  correlationAccuracy: number;,
+  correlationAccuracy: number;
   falsePositiveRate: number;
-  processingLatency: number;,
+  processingLatency: number;
   ruleEffectiveness: Map<string, RuleEffectiveness>;
   threatPatternStats: Map<ThreatType, PatternStats>;
 }
 export interface RuleEffectiveness {
-  ruleId: string;,
+  ruleId: string;
   triggeredCount: number;
-  accuracyRate: number;,
+  accuracyRate: number;
   falsePositiveRate: number;
-  averageConfidence: number;,
+  averageConfidence: number;
   lastTriggered: Date;
 }
 export interface PatternStats {
-  threatType: ThreatType;,
+  threatType: ThreatType;
   detectionCount: number;
-  averageSeverity: number;,
+  averageSeverity: number;
   averageConfidence: number;
-  commonAttributes: string;,
+  commonAttributes: string;
   firstDetected: Date;
   lastDetected: Date;
 }
 export interface CorrelationReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  timeRange: {,
-  start: Date;,
+  timeRange: {
+  start: Date;
   end: Date;
 };
-  summary: CorrelationSummary;,
+  summary: CorrelationSummary;
   topThreats: ThreatSummary;
-  correlationTrends: CorrelationTrend;,
+  correlationTrends: CorrelationTrend;
   rulePerformance: RulePerformanceMetrics;
   recommendations: SystemRecommendation;
 }
 export interface CorrelationSummary {
-  totalEvents: number;,
+  totalEvents: number;
   correlatedEvents: number;
-  activeGroups: number;,
+  activeGroups: number;
   resolvedGroups: number;
-  highSeverityGroups: number;,
+  highSeverityGroups: number;
   averageCorrelationTime: number;
   correlationEfficiency: number;
 }
 export interface ThreatSummary {
-  threatType: ThreatType;,
+  threatType: ThreatType;
   eventCount: number;
-  groupCount: number;,
+  groupCount: number;
   averageSeverity: number;
-  trendDirection: 'increasing' | 'decreasing' | 'stable';,
+  trendDirection: 'increasing' | 'decreasing' | 'stable';
   keyIndicators: string;
 }
 export interface CorrelationTrend {
-  timeframe: string;,
+  timeframe: string;
   metric: string;
-  value: number;,
+  value: number;
   changePercent: number;
-  significance: 'high' | 'medium' | 'low';
-}
+  significance: 'high' | 'medium' | 'low'
+  }
 export interface RulePerformanceMetrics {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  executionCount: number;,
+  executionCount: number;
   successRate: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   impactScore: number;
 }
 export interface SystemRecommendation {
-  category: 'rules' | 'performance' | 'coverage' | 'accuracy';,
+  category: 'rules' | 'performance' | 'coverage' | 'accuracy';
   priority: number;
-  title: string;,
+  title: string;
   description: string;
-  expectedBenefit: string;,
+  expectedBenefit: string;
   implementationEffort: 'low' | 'medium' | 'high';
   // ==========================================
   // MAIN CORRELATION ENGINE CLASS
@@ -499,7 +499,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
 });
     const optionalScore = totalWeight > 0 ? matchedWeight / totalWeight : 1;
     return optionalScore >= this.config.similarityThreshold;
-  private evaluateCondition(condition: CorrelationCondition,)
+  private evaluateCondition(condition: CorrelationCondition)
     event: SecurityEvent,
     allEvents: SecurityEvent): boolean {,
     const fieldValue = this.getFieldValue(event, condition.field);
@@ -641,7 +641,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         description: event.description || `${event.type} event`}
 },
   impact: this.calculateEventImpact(event),
-        source: event.source || 'unknown';
+        source: event.source || 'unknown'
   }));
   private calculateEventImpact(event: SecurityEvent): number {
     const severityScores = { low: 25, medium: 50, high: 75, critical: 100 };
@@ -721,8 +721,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         return EventGroupType.COORDINATED_ATTACK;
       case CorrelationRuleType.ANOMALY_CLUSTERING:
         return EventGroupType.ANOMALY_CLUSTER;
-      case CorrelationRuleType.BEHAVIORAL_PATTERN:
-        return EventGroupType.SUSPICIOUS_ACTIVITY;,
+      case CorrelationRuleType.BEHAVIORAL_PATTERN: return EventGroupType.SUSPICIOUS_ACTIVITY;
   default:
         const criticalCount = events.filter(e => e.severity === 'critical').length;
         return criticalCount > 0 ? EventGroupType.SECURITY_INCIDENT : EventGroupType.THREAT_PATTERN;
@@ -771,9 +770,9 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
 };
   private analyzeTopThreats(groups: CorrelatedEventGroup): ThreatSummary {
   const threatStats = new Map<ThreatType, {
-  eventCount: number;,
+  eventCount: number;
   groupCount: number;
-  severitySum: number;,
+  severitySum: number;
   indicators: Set<string>;
 }>();
     groups.forEach(group => {)
@@ -848,7 +847,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         description: `${ineffectiveRules.length} correlation rules have not triggered recently`}
 },
   expectedBenefit: 'Improved correlation accuracy and performance',
-        implementationEffort: 'low';
+        implementationEffort: 'low'
   });
     // Performance recommendations
     if (this.analytics.processingLatency > 5000) {

@@ -6,45 +6,45 @@
  */
 
 export interface CacheConfig {
-  maxSize: number;,
+  maxSize: number;
   maxMemoryMB: number;
   defaultTTL: number; // Time to live in milliseconds,
-  evictionPolicy: 'LRU' | 'LFU' | 'TTL' | 'ADAPTIVE' | 'HYBRID';,
+  evictionPolicy: 'LRU' | 'LFU' | 'TTL' | 'ADAPTIVE' | 'HYBRID';
   compressionEnabled: boolean;
   persistToDisk: boolean;
   diskCachePath?: string;
-  metrics: {,
-  enabled: boolean;,
+  metrics: {
+  enabled: boolean;
   reportingInterval: number;
 };
 }
 export interface CacheItem<T = any> {
-  key: string;,
+  key: string;
   value: T;
-  size: number;,
+  size: number;
   createdAt: number;
-  lastAccessed: number;,
+  lastAccessed: number;
   accessCount: number;
-  ttl: number;,
+  ttl: number;
   priority: number;
-  compressed: boolean;,
-  metadata: {,
-  modelType: string;,
+  compressed: boolean;
+  metadata: {
+  modelType: string;
   inputHash: string;
-  responseTime: number;,
+  responseTime: number;
   cost: number;
 };
 
 export interface CacheMetrics {
-  hitRate: number;,
+  hitRate: number;
   missRate: number;
-  evictionRate: number;,
+  evictionRate: number;
   memoryUsage: number;
-  diskUsage: number;,
+  diskUsage: number;
   averageResponseTime: number;
-  totalRequests: number;,
+  totalRequests: number;
   cacheSize: number;
-  compressionRatio: number;,
+  compressionRatio: number;
   costSavings: number;
 }
 export interface EvictionStrategy {
@@ -158,9 +158,9 @@ export class LRUEvictionStrategy implements EvictionStrategy {
   value = await this.decompress(value);
   this.recordHit(Date.now() - startTime);
   return value as T;
-  async set<T>(key: string,)
+  async set<T>(key: string)
   value: T,
-  options: {,
+  options: {
   ttl?: number;
   priority?: number;
   metadata?: Partial<CacheItem['metadata']>;
@@ -185,7 +185,7 @@ export class LRUEvictionStrategy implements EvictionStrategy {
   ttl: options.ttl || this.config.defaultTTL,
   priority: options.priority || 1,
   compressed,
-  metadata: {,
+  metadata: {
   modelType: 'unknown',
   inputHash: this.hashInput(key),
   responseTime: 0,
@@ -212,7 +212,7 @@ export class LRUEvictionStrategy implements EvictionStrategy {
   totalSize += item.size;
   return totalSize;
   async optimize(): Promise<{,
-  itemsEvicted: number;,
+  itemsEvicted: number;
   memoryFreed: number;
   optimizationTime: number;
 }> {

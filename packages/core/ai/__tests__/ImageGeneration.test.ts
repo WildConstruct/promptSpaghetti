@@ -200,7 +200,7 @@ describe('Image Generation System', () => {
   ok: true,
   json: () => Promise.resolve({,)
   images: ['iVBORw0KGgoAAAANS...'], // Base64 image data,
-  parameters: {,
+  parameters: {
   prompt: 'A serene lake at sunset',
   steps: 20,
   cfg_scale: 7,

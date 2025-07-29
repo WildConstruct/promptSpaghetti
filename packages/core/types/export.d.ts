@@ -1317,7 +1317,7 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     page_size: "A4" | "A3" | "Letter" | "Legal";
     include_images: boolean;
     font_size: number;
-    margins: {,
+    margins: {
         top: number;
         bottom: number;
         left: number;
@@ -1662,7 +1662,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
     total_size: number;
     average_processing_time: number;
-    most_used_templates: {,
+    most_used_templates: {
         usage_count: number;
         template_id: string;
         template_name: string;
@@ -1676,7 +1676,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
     total_size: number;
     average_processing_time: number;
-    most_used_templates: {,
+    most_used_templates: {
         usage_count: number;
         template_id: string;
         template_name: string;

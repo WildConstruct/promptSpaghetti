@@ -58,32 +58,32 @@ export enum UserAgentType {
 // Challenge Event
 
 export interface ChallengeEvent {
-  id: string;,
+  id: string;
   sessionId: string;
   userId?: string;
-  challengeType: ChallengeType;,
+  challengeType: ChallengeType;
   challengeId: string;
-  timestamp: Date;,
+  timestamp: Date;
   outcome: ChallengeOutcome;
-  difficultyLevel: DifficultyLevel;,
+  difficultyLevel: DifficultyLevel;
   attemptNumber: number;
   timeToComplete: number; // milliseconds,
   context: {;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
     userAgentType: UserAgentType;
     deviceFingerprint?: string;
     geolocation?: {
-      country: string;,
+      country: string;
   region: string;
       city: string;
       coordinates?: { lat: number; lon: number };
     };
-    browserInfo: {,
+    browserInfo: {
   name: string;
-  version: string;,
+  version: string;
   platform: string;
-  mobile: boolean;,
+  mobile: boolean;
   touchSupport: boolean;
   screenResolution: string;
 };
@@ -93,33 +93,33 @@ export interface ChallengeEvent {
   latency?: number;
 };
   };
-  challengeData: {,
+  challengeData: {
   variant?: string; // For A/B testing,
   parameters: Record<string, any>;
   metadata: Record<string, any>;
 };
-  userBehavior: {,
+  userBehavior: {
     mouseMovements?: number;
     keystrokes?: number;
     clickPatterns?: Array<{ x: number; y: number; timestamp: number }>;
     focusEvents?: number;
     scrollEvents?: number;
-    totalInteractionTime: number;,
+    totalInteractionTime: number;
   hesitationTime: number; // Time before first interaction
     typingSpeed?: number; // chars per minute
     mouseVelocity?: number;
   };
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: number; // 0-100,
-  indicators: string;,
+  indicators: string;
   automationDetected: boolean;
   anomalousPattern: boolean;
   vpnDetected?: boolean;
   proxyDetected?: boolean;
 };
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: boolean;
-  highContrastMode: boolean;,
+  highContrastMode: boolean;
   assistiveTechUsed: string;
   accommodationsApplied: string;
 };
@@ -127,41 +127,41 @@ export interface ChallengeEvent {
 // Challenge Statistics
 }
 export interface ChallengeStatistics {
-  challengeType: ChallengeType;,
-  period: {,
-  start: Date;,
+  challengeType: ChallengeType;
+  period: {
+  start: Date;
   end: Date;
 };
-  metrics: {,
+  metrics: {
   totalAttempts: number;
-  successRate: number;,
+  successRate: number;
   averageCompletionTime: number;
-  abandonmentRate: number;,
+  abandonmentRate: number;
   timeoutRate: number;
   errorRate: number;
 };
   byDifficulty: Record<DifficultyLevel, {
-  attempts: number;,
+  attempts: number;
   successRate: number;
   averageTime: number;
 }>;
   byUserType: Record<UserAgentType, {
-  attempts: number;,
+  attempts: number;
   successRate: number;
   fraudScore: number;
 }>;
-  fraudDetection: {,
+  fraudDetection: {
   botAttempts: number;
-  suspiciousActivities: number;,
+  suspiciousActivities: number;
   preventedAttacks: number;
   falsePositives: number;
 };
-  accessibility: {,
+  accessibility: {
   assistedCompletions: number;
   accommodationUsage: Record<string, number>;
   accessibilitySuccessRate: number;
 };
-  optimization: {,
+  optimization: {
   recommendedDifficulty: DifficultyLevel;
   performanceScore: number; // 0-100,
   userExperienceScore: number; // 0-100,
@@ -171,7 +171,7 @@ export interface ChallengeStatistics {
 // Telemetry Query
 }
 export interface TelemetryQuery {
-  startTime: Date;,
+  startTime: Date;
   endTime: Date;
   challengeTypes?: ChallengeType;
   outcomes?: ChallengeOutcome;
@@ -190,34 +190,34 @@ export interface TelemetryQuery {
   // A/B Test Configuration
 }
 export interface ABTestConfig {
-  id: string;,
+  id: string;
   name: string;
-  challengeType: ChallengeType;,
+  challengeType: ChallengeType;
   variants: Array<{,
-  id: string;,
+  id: string;
   name: string;
   parameters: Record<string, any>;
   trafficPercentage: number;
 }>;
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
-  targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';,
+  targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';
   isActive: boolean;
 
 // Fraud Pattern
 }
 export interface FraudPattern {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   conditions: Array<{,
-  field: string;,
+  field: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
   value: any;
 }>;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   actions: Array<{;
-  type: 'block' | 'challenge' | 'monitor' | 'flag';,
+  type: 'block' | 'challenge' | 'monitor' | 'flag';
   parameters: Record<string, any>;
 }>;
   confidence: number; // 0-1,
@@ -261,7 +261,7 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
    * Start tracking a challenge session
    */
-  public startChallengeSession(sessionId: string,)
+  public startChallengeSession(sessionId: string)
     challengeType: ChallengeType,
     context: Partial<ChallengeEvent['context']>): void {,
   const sessionData = {
@@ -277,7 +277,7 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
    * Record challenge completion
    */
-  public recordChallengeCompletion(sessionId: string,)
+  public recordChallengeCompletion(sessionId: string)
     challengeId: string,
     outcome: ChallengeOutcome,
     timeToComplete: number,
@@ -296,11 +296,11 @@ export class ChallengeTelemetryService extends EventEmitter {
   difficultyLevel: session.difficulty || DifficultyLevel.MEDIUM,
   attemptNumber: session.attemptCount,
   timeToComplete,
-  context: {,
+  context: {
   ipAddress: 'unknown',
   userAgent: 'unknown',
   userAgentType: UserAgentType.UNKNOWN,
-  browserInfo: {,
+  browserInfo: {
   name: 'unknown',
   version: 'unknown',
   platform: 'unknown',
@@ -310,19 +310,19 @@ export class ChallengeTelemetryService extends EventEmitter {
 }
         ...session.context
   },
-  challengeData: {,
+  challengeData: {
   parameters: session.parameters || {},
         metadata: session.metadata || {}
   }
       userBehavior,
-      fraudIndicators: {,
+      fraudIndicators: {
   riskScore: 0,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
   ...fraudIndicators
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -332,7 +332,7 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
    * Get challenge statistics
    */
-  public getChallengeStatistics(challengeType: ChallengeType,)
+  public getChallengeStatistics(challengeType: ChallengeType)
     startTime: Date,
     endTime: Date): ChallengeStatistics {,
     const cacheKey = `${challengeType}_${startTime.getTime()}_${endTime.getTime()}`;}
@@ -397,10 +397,10 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
   * Detect fraud patterns in real-time
   */
-  public analyzeFraudPattern(event: ChallengeEvent): {,
-  isfraudulent: boolean;,
+  public analyzeFraudPattern(event: ChallengeEvent): {
+  isfraudulent: boolean;
   patterns: string;
-  riskScore: number;,
+  riskScore: number;
   recommendations: string;
   const patterns: string = [];
   let riskScore = event.fraudIndicators.riskScore;
@@ -505,16 +505,16 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
    * Get A/B test results
    */
-  public getABTestResults(testId: string): {,
+  public getABTestResults(testId: string): {
   test: ABTestConfig;
   results: Array<{,
-  variantId: string;,
+  variantId: string;
   variantName: string;
-  sampleSize: number;,
+  sampleSize: number;
   successRate: number;
-  averageTime: number;,
+  averageTime: number;
   conversionRate: number;
-  confidenceLevel: number;,
+  confidenceLevel: number;
   isStatisticallySignificant: boolean;
 }>;
     recommendation: string;
@@ -559,14 +559,14 @@ export class ChallengeTelemetryService extends EventEmitter {
    * Get real-time dashboard data
    */
   public getDashboardData(): {
-  overview: {,
-  totalChallenges: number;,
+  overview: {
+  totalChallenges: number;
   successRate: number;
-  averageCompletionTime: number;,
+  averageCompletionTime: number;
   fraudAttempts: number;
   activeABTests: number;
 };
-    recentActivity: ChallengeEvent;,
+    recentActivity: ChallengeEvent;
   topChallengeTypes: Array<{ type: ChallengeType; count: number; successRate: number }>;
     fraudAlerts: Array<{ level: string; description: string; timestamp: Date }>;
     performanceMetrics: Array<{ metric: string; value: number; trend: 'up' | 'down' | 'stable' }>;
@@ -619,7 +619,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       .sort((a, b) => b.attempts - a.attempts)
       .slice(0, 10);
     return {
-  overview: {,
+  overview: {
   totalChallenges,
   successRate,
   averageCompletionTime,
@@ -637,7 +637,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       geographicDistribution
     };
   // Private helper methods
-  private calculateStatistics(challengeType: ChallengeType,)
+  private calculateStatistics(challengeType: ChallengeType)
     events: ChallengeEvent,
     startTime: Date,
     endTime: Date): ChallengeStatistics {,
@@ -689,7 +689,7 @@ export class ChallengeTelemetryService extends EventEmitter {
     return {
       challengeType,
       period: { start: startTime, end: endTime },
-      metrics: {,
+      metrics: {
         totalAttempts,
         successRate,
         averageCompletionTime,
@@ -699,18 +699,18 @@ export class ChallengeTelemetryService extends EventEmitter {
   }
       byDifficulty,
       byUserType,
-      fraudDetection: {,
+      fraudDetection: {
   botAttempts: byUserType[UserAgentType.BOT_CONFIRMED]?.attempts || 0,
   suspiciousActivities: events.filter(e => e.fraudIndicators.riskScore > 50).length,
   preventedAttacks: events.filter(e => e.fraudIndicators.riskScore > 80).length,
   falsePositives: 0 // Would need manual verification,
 },
-  accessibility: {,
+  accessibility: {
   assistedCompletions: events.filter(e => e.accessibility.assistiveTechUsed.length > 0).length,
         accommodationUsage: {},
         accessibilitySuccessRate: 0 // Would calculate from accessibility events;
   },
-  optimization: {,
+  optimization: {
         recommendedDifficulty,
         performanceScore,
         userExperienceScore,

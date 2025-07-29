@@ -35,7 +35,7 @@ export interface ElevenLabsRequestOptions {
     };
 
 export interface ElevenLabsGenerationResult {
-    audio: {,
+    audio: {
         data: ArrayBuffer;
         format: string;
         duration: number;
@@ -43,7 +43,7 @@ export interface ElevenLabsGenerationResult {
         channels: number;
         bit_depth: number;
     };
-    metadata: {,
+    metadata: {
         voice_id: string;
         voice_name: string;
         model_id: string;
@@ -53,7 +53,7 @@ export interface ElevenLabsGenerationResult {
         generation_time: number;
         request_id?: string;
     };
-    usage: {,
+    usage: {
         characters: number;
         cost: number;
         quota_remaining?: number;
@@ -70,7 +70,7 @@ export interface ElevenLabsVoice {
         hash: string;
     }>;
     category: 'premade' | 'cloned' | 'generated' | 'professional';
-    fine_tuning: {,
+    fine_tuning: {
         is_allowed_to_fine_tune: boolean;
         finetuning_requested: boolean;
         finetuning_state: string;
@@ -80,7 +80,7 @@ export interface ElevenLabsVoice {
             accepted: boolean;
             similarity: number;
             levenshtein_distance: number;
-            recording: {,
+            recording: {
                 recording_id: string;
                 mime_type: string;
                 size_bytes: number;
@@ -90,7 +90,7 @@ export interface ElevenLabsVoice {
         verification_failures: string[];
         verification_attempts_count: number;
         slice_ids: string[];
-        manual_verification: {,
+        manual_verification: {
             extra_text: string;
             request_time_unix: number;
             files: Array<{,

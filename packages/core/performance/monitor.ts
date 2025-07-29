@@ -4,27 +4,27 @@
  */
 
 export interface PerformanceMetric {
-  name: string;,
+  name: string;
   values: number;
-  average: number;,
+  average: number;
   min: number;
-  max: number;,
+  max: number;
   p95: number;
-  p99: number;,
+  p99: number;
   count: number;
   lastUpdated: number;
 }
 export interface PerformanceAlert {
-  metric: string;,
+  metric: string;
   threshold: number;
-  currentValue: number;,
+  currentValue: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: number;
 }
 export interface PerformanceConfig {
-  maxSamples: number;,
+  maxSamples: number;
   alertThresholds: Record<string, number>;
-  enableLogging: boolean;,
+  enableLogging: boolean;
   enableAlerts: boolean;
 }
 export class PerformanceMonitor {
@@ -35,7 +35,7 @@ export class PerformanceMonitor {
   constructor(config: Partial<PerformanceConfig> = {}) {
   this.config = {
   maxSamples: 1000,
-  alertThresholds: {,
+  alertThresholds: {
   'graph-execution': 1000, // 1 second,
   'component-render': 100,  // 100ms,
   'api-response': 200,      // 200ms,

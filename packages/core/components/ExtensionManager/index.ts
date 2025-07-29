@@ -84,7 +84,7 @@ export const ExtensionManagerUtils = {
     if (status.hasErrors) return 'Error';
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
-    return 'Disabled';
+    return 'Disabled'
   }
   /**
    * Format download count for display

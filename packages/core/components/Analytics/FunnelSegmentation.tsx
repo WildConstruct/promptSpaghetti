@@ -34,7 +34,7 @@ import {
 // Segmentation interfaces
 
 export interface FunnelSegmentationProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   funnelId: string;
   timeRange: { start: number; end: number };
   availableSegments?: UserSegment;
@@ -44,13 +44,13 @@ export interface FunnelSegmentationProps {
   onSegmentAnalysis?: (analysis: SegmentAnalysisResult) => void;
 }
 export interface SegmentFilter {
-  id: string;,
+  id: string;
   name: string;
-  type: SegmentFilterType;,
+  type: SegmentFilterType;
   conditions: SegmentCondition;
-  operator: 'AND' | 'OR';,
+  operator: 'AND' | 'OR';
   isActive: boolean;
-  createdAt: number;,
+  createdAt: number;
   lastModified: number;
 }
 export type SegmentFilterType = 
@@ -64,13 +64,13 @@ export type SegmentFilterType =
   | 'custom';
 
 export interface SegmentCondition {
-  id: string;,
+  id: string;
   field: string;
-  operator: SegmentOperator;,
+  operator: SegmentOperator;
   value: Error;
-  displayName: string;,
-  dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
-}
+  displayName: string;
+  dataType: 'string' | 'number' | 'boolean' | 'date' | 'array'
+  }
 export type SegmentOperator = 
   | 'equals'
   | 'not_equals'
@@ -88,82 +88,82 @@ export type SegmentOperator =
   | 'regex_match';
 
 export interface SegmentAnalysisResult {
-  segmentId: string;,
+  segmentId: string;
   segmentName: string;
-  totalUsers: number;,
+  totalUsers: number;
   funnelPerformance: SegmentFunnelPerformance;
-  behaviorPatterns: BehavioralPattern;,
+  behaviorPatterns: BehavioralPattern;
   demographics: DemographicBreakdown;
-  valueMetrics: SegmentValueMetrics;,
+  valueMetrics: SegmentValueMetrics;
   comparisons: SegmentComparison;
   insights: SegmentInsight;
 }
 export interface SegmentFunnelPerformance {
-  conversionRate: number;,
+  conversionRate: number;
   averageTimeToConvert: number;
-  dropOffPoints: DropOffAnalysis;,
+  dropOffPoints: DropOffAnalysis;
   pathAnalysis: PathAnalysis;
   stepPerformance: StepSegmentPerformance;
 }
 export interface StepSegmentPerformance {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  entries: number;,
+  entries: number;
   conversions: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageTimeSpent: number;
   exitReasons: ExitReason;
 }
 export interface DropOffAnalysis {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  dropOffRate: number;,
+  dropOffRate: number;
   dropOffCount: number;
-  primaryReasons: DropOffReason;,
+  primaryReasons: DropOffReason;
   recoveryOpportunities: string;
 }
 export interface DropOffReason {
-  reason: string;,
+  reason: string;
   percentage: number;
-  count: number;,
+  count: number;
   category: 'technical' | 'user_experience' | 'content' | 'external';
-  severity: 'high' | 'medium' | 'low';
-}
+  severity: 'high' | 'medium' | 'low'
+  }
 export interface PathAnalysis {
-  pathId: string;,
+  pathId: string;
   pathName: string;
-  steps: string;,
+  steps: string;
   userCount: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageTimeToComplete: number;
   isOptimal: boolean;
 }
 export interface BehavioralPattern {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   pattern: string;
-  frequency: number;,
+  frequency: number;
   conversionImpact: number;
-  timePattern: TimePattern;,
-  strength: 'strong' | 'moderate' | 'weak';
-}
+  timePattern: TimePattern;
+  strength: 'strong' | 'moderate' | 'weak'
+  }
 export interface TimePattern {
-  preferredDays: number;,
+  preferredDays: number;
   preferredHours: number;
-  sessionDuration: number;,
+  sessionDuration: number;
   visitFrequency: number;
   seasonality?: SeasonalityData;
 }
 export interface SeasonalityData {
-  pattern: 'weekly' | 'monthly' | 'quarterly';,
+  pattern: 'weekly' | 'monthly' | 'quarterly';
   peaks: Array<{ period: string; multiplier: number }>;
   confidence: number;
 }
 export interface DemographicBreakdown {
-  geography: GeographicDistribution;,
+  geography: GeographicDistribution;
   devices: DeviceDistribution;
-  acquisition: AcquisitionChannelDistribution;,
+  acquisition: AcquisitionChannelDistribution;
   userLifecycle: UserLifecycleDistribution;
 }
 export interface GeographicDistribution {
@@ -187,58 +187,58 @@ export interface UserLifecycleDistribution {
   engagementLevel: Array<{ level: string; percentage: number; conversionRate: number }>;
 }
 export interface SegmentValueMetrics {
-  averageLifetimeValue: number;,
+  averageLifetimeValue: number;
   averageOrderValue: number;
-  totalRevenue: number;,
+  totalRevenue: number;
   costPerAcquisition: number;
-  returnOnInvestment: number;,
+  returnOnInvestment: number;
   churnRate: number;
 }
 export interface SegmentComparison {
-  comparedToSegment: string;,
+  comparedToSegment: string;
   conversionRateDelta: number;
-  lifetimeValueDelta: number;,
+  lifetimeValueDelta: number;
   engagementDelta: number;
   significance: number;
 }
 export interface SegmentInsight {
-  type: 'opportunity' | 'risk' | 'trend' | 'anomaly';,
+  type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
   severity: 'high' | 'medium' | 'low';
-  title: string;,
+  title: string;
   description: string;
-  impact: number;,
+  impact: number;
   confidence: number;
-  recommendations: string;,
+  recommendations: string;
   evidence: Record<string, any>;
 }
 export interface SegmentRuleBuilder {
-  fieldDefinitions: FieldDefinition;,
+  fieldDefinitions: FieldDefinition;
   operators: OperatorDefinition;
   templates: SegmentTemplate;
 }
 export interface FieldDefinition {
-  path: string;,
+  path: string;
   displayName: string;
-  dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';,
+  dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
   category: string;
   description: string;
   possibleValues?: unknown;
   validation?: FieldValidation;
 }
 export interface OperatorDefinition {
-  operator: SegmentOperator;,
+  operator: SegmentOperator;
   displayName: string;
-  supportedTypes: string;,
+  supportedTypes: string;
   description: string;
-  requiresValue: boolean;,
+  requiresValue: boolean;
   multiValue: boolean;
 }
 export interface SegmentTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: SegmentFilterType;
-  conditions: SegmentCondition;,
+  conditions: SegmentCondition;
   operator: 'AND' | 'OR';
   tags: string;
 }
@@ -378,7 +378,7 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
   startDate: timeRange.start,
   endDate: timeRange.end,
   metrics: ['conversion_rate', 'user_count', 'revenue', 'average_time_to_convert'],
-  filters: filter.conditions.map(condition => ({,)
+  filters: filter.conditions.map(condition => ({)
   field: condition.field,
   operator: mapOperatorToQuery(condition.operator),
   value: condition.value,
@@ -484,8 +484,8 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
  * Segmentation Header Component
  */
 interface SegmentationHeaderProps {
-  viewMode: 'segments' | 'cohorts' | 'custom';,
-  onViewModeChange: (mode: 'segments' | 'cohorts' | 'custom') => void;,
+  viewMode: 'segments' | 'cohorts' | 'custom';
+  onViewModeChange: (mode: 'segments' | 'cohorts' | 'custom') => void;
   onShowRuleBuilder: () => void;
   activeFiltersCount: number;
   const SegmentationHeader: React.FC<SegmentationHeaderProps> = ({,)
@@ -528,10 +528,10 @@ interface SegmentationHeaderProps {
  * Segment Selection Component
  */
 interface SegmentSelectionProps {
-  availableSegments: UserSegment;,
+  availableSegments: UserSegment;
   activeFilters: SegmentFilter;
-  onFilterAdd: (filter: SegmentFilter) => void;,
-  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;,
+  onFilterAdd: (filter: SegmentFilter) => void;
+  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;
   onFilterRemove: (filterId: string) => void;
   const SegmentSelection: React.FC<SegmentSelectionProps> = ({,)
   availableSegments,
@@ -558,7 +558,7 @@ interface SegmentSelectionProps {
           value: segment.id,
           displayName: `User in segment "${segment.name}"`}
 },
-  dataType: 'array';
+  dataType: 'array'
   }],
         operator: 'AND',
         isActive: true,
@@ -622,7 +622,7 @@ interface SegmentSelectionProps {
  * Cohort Selection Component
  */
 interface CohortSelectionProps {
-  availableCohorts: ConversionCohort;,
+  availableCohorts: ConversionCohort;
   activeFilters: SegmentFilter;
   onFilterAdd: (filter: SegmentFilter) => void;
   const CohortSelection: React.FC<CohortSelectionProps> = ({,)
@@ -644,7 +644,7 @@ interface CohortSelectionProps {
         value: cohort.id,
         displayName: `User in cohort "${cohort.name}"`}
 },
-  dataType: 'array';
+  dataType: 'array'
   }],
       operator: 'AND',
       isActive: true,
@@ -696,10 +696,10 @@ interface CohortSelectionProps {
  * Custom Segment Builder Component
  */
 interface CustomSegmentBuilderProps {
-  ruleBuilder: SegmentRuleBuilder;,
+  ruleBuilder: SegmentRuleBuilder;
   activeFilters: SegmentFilter;
-  onFilterAdd: (filter: SegmentFilter) => void;,
-  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;,
+  onFilterAdd: (filter: SegmentFilter) => void;
+  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;
   onFilterRemove: (filterId: string) => void;
   const CustomSegmentBuilder: React.FC<CustomSegmentBuilderProps> = ({,)
   ruleBuilder,
@@ -760,9 +760,9 @@ interface CustomSegmentBuilderProps {
  * Active Filters Panel Component
  */
 interface ActiveFiltersPanelProps {
-  filters: SegmentFilter;,
-  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;,
-  onFilterRemove: (filterId: string) => void;,
+  filters: SegmentFilter;
+  onFilterUpdate: (filterId: string, updates: Partial<SegmentFilter>) => void;
+  onFilterRemove: (filterId: string) => void;
   loading: boolean;
   const ActiveFiltersPanel: React.FC<ActiveFiltersPanelProps> = ({,)
   filters,
@@ -818,7 +818,7 @@ interface ActiveFiltersPanelProps {
  * Segment Analysis Results Component
  */
 interface SegmentAnalysisResultsProps {
-  analyses: SegmentAnalysisResult;,
+  analyses: SegmentAnalysisResult;
   selectedSegment: UserSegment | null;
   onSegmentSelect: (segment: UserSegment | null) => void;
   const SegmentAnalysisResults: React.FC<SegmentAnalysisResultsProps> = ({,)
@@ -846,7 +846,7 @@ interface SegmentAnalysisResultsProps {
  * Segment Analysis Card Component
  */
 interface SegmentAnalysisCardProps {
-  analysis: SegmentAnalysisResult;,
+  analysis: SegmentAnalysisResult;
   isSelected: boolean;
   onSelect: () => void;
   const SegmentAnalysisCard: React.FC<SegmentAnalysisCardProps> = ({,)
@@ -935,7 +935,7 @@ async function processSegmentAnalysis(()
   segmentId: filter.id,
   segmentName: filter.name,
   totalUsers: 500,
-  funnelPerformance: {,
+  funnelPerformance: {
   conversionRate: 18.5,
   averageTimeToConvert: 72000000,
   dropOffPoints: [],
@@ -943,13 +943,13 @@ async function processSegmentAnalysis(()
   stepPerformance: [],
 },
   behaviorPatterns: [],
-    demographics: {,
+    demographics: {
   geography: { countries: [], regions: [], cities: [] },
       devices: { types: [], browsers: [], operatingSystems: [] },
       acquisition: { channels: [], sources: [], campaigns: [] },
       userLifecycle: { stages: [], tenure: [], engagementLevel: [] }
   },
-  valueMetrics: {,
+  valueMetrics: {
   averageLifetimeValue: 1250,
   averageOrderValue: 85,
   totalRevenue: 42500,

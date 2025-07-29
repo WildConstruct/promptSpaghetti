@@ -21,31 +21,31 @@ const createDefaultNote = (;);
   id,
   position,
   size: { width: 200, height: 150 },
-  content: {,
+  content: {
   text: content,
   format: 'plain',
 },
-  appearance: {,
+  appearance: {
   color: 'yellow',
   opacity: 1,
   zIndex: 1000,
 },
-  metadata: {,
+  metadata: {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  author: {,
+  author: {
   id: 'current-user',
   name: 'Current User',
 },
   version: 1;
   },
-  behavior: {,
+  behavior: {
   draggable: true,
   resizable: true,
   editable: true,
   minimized: false,
 },
-  collaboration: {,
+  collaboration: {
   locked: false,
   comments: [],
   mentions: [],
@@ -59,7 +59,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
     selection: [],
     activeNote: undefined,
     filter: {},
-    settings: {,
+    settings: {
   showAll: true,
   ghostMode: false,
   snapToGrid: false,
@@ -89,7 +89,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   const updatedNote = {
   ...note,
   ...updates,
-  metadata: {,
+  metadata: {
   ...note.metadata,
   updatedAt: new Date().toISOString(),
   version: note.metadata.version + 1,
@@ -127,17 +127,17 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
       const duplicatedNote = {
   ...note,
   id: newId,
-  position: {,
+  position: {
   x: note.position.x + 20,
   y: note.position.y + 20,
 },
-  metadata: {,
+  metadata: {
   ...note.metadata,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   version: 1,
 },
-  appearance: {,
+  appearance: {
   ...note.appearance,
   zIndex: Math.max(...Object.values(get().notes).map(n => n.appearance.zIndex)) + 1,
 };
@@ -156,24 +156,24 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   y: Math.round(position.y / gridSize) * gridSize,
 };
       set(state => ({)
-  notes: {,
+  notes: {
   ...state.notes,
-  [id]: {,
+  [id]: {
   ...state.notes[id],
   position: finalPosition,
-  metadata: {,
+  metadata: {
   ...state.notes[id].metadata,
   updatedAt: new Date().toISOString(),
 }));
   },
   resizeNote: (id, size) => {
   set(state => ({)
-  notes: {,
+  notes: {
   ...state.notes,
-  [id]: {,
+  [id]: {
   ...state.notes[id],
   size,
-  metadata: {,
+  metadata: {
   ...state.notes[id].metadata,
   updatedAt: new Date().toISOString(),
 }));
@@ -181,11 +181,11 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   bringToFront: (id) => {,
   const maxZ = Math.max(...Object.values(get().notes).map(n => n.appearance.zIndex));
   set(state => ({)
-  notes: {,
+  notes: {
   ...state.notes,
-  [id]: {,
+  [id]: {
   ...state.notes[id],
-  appearance: {,
+  appearance: {
   ...state.notes[id].appearance,
   zIndex: maxZ + 1,
 }));
@@ -193,11 +193,11 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   sendToBack: (id) => {,
   const minZ = Math.min(...Object.values(get().notes).map(n => n.appearance.zIndex));
   set(state => ({)
-  notes: {,
+  notes: {
   ...state.notes,
-  [id]: {,
+  [id]: {
   ...state.notes[id],
-  appearance: {,
+  appearance: {
   ...state.notes[id].appearance,
   zIndex: minZ - 1,
 }));
@@ -248,7 +248,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         name,
         notes: noteIds,
         position: { x: minX - 20, y: minY - 20 },
-        appearance: {,
+        appearance: {
   backgroundColor: 'rgba(59, 130, 246, 0.1)',
   borderColor: '#3B82F6',
   collapsed: false,
@@ -260,18 +260,18 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   },
   addToGroup: (groupId, noteId) => {
   set(state => ({)
-  groups: {,
+  groups: {
   ...state.groups,
-  [groupId]: {,
+  [groupId]: {
   ...state.groups[groupId],
   notes: [...state.groups[groupId].notes, noteId],
 }));
   },
   removeFromGroup: (groupId, noteId) => {
   set(state => ({)
-  groups: {,
+  groups: {
   ...state.groups,
-  [groupId]: {,
+  [groupId]: {
   ...state.groups[groupId],
   notes: state.groups[groupId].notes.filter(id => id !== noteId),
 }));
@@ -349,7 +349,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
     // Collaboration
     lockNote: (id) => {,
   get().updateNote(id, {)
-  collaboration: {,
+  collaboration: {
   ...get().notes[id].collaboration,
   locked: true,
   lockedBy: 'current-user',
@@ -357,7 +357,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
   },
   unlockNote: (id) => {,
   get().updateNote(id, {)
-  collaboration: {,
+  collaboration: {
   ...get().notes[id].collaboration,
   locked: false,
   lockedBy: undefined,
@@ -370,7 +370,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         id: `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
 },
   text: comment,
-        author: {,
+        author: {
   id: 'current-user',
   name: 'Current User',
 },
@@ -378,7 +378,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         resolved: false;
   };
       get().updateNote(noteId, {)
-  collaboration: {,
+  collaboration: {
   ...note.collaboration,
   comments: [...note.collaboration.comments, newComment],
 });
@@ -390,7 +390,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         comment.id === commentId ? { ...comment, resolved: true } : comment
       );
       get().updateNote(noteId, {)
-  collaboration: {,
+  collaboration: {
   ...note.collaboration,
   comments: updatedComments,
 });

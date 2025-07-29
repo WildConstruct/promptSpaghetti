@@ -50,7 +50,7 @@ export interface AnthropicResponse {
     model: string;
     stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
     stop_sequence?: string;
-    usage: {,
+    usage: {
         input_tokens: number;
         output_tokens: number;
     };

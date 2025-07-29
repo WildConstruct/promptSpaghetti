@@ -107,10 +107,7 @@ Promise;
 getUserSegments(userId, string);
 Promise;
 getSegmentUsers(segmentId, string, options ?  : { limit: number, offset: number });
-Promise < {
-    users: SegmentMembership,
-    totalCount: number
-} > ;
+Promise;
 // Analytics and insights
 getSegmentAnalytics(segmentId, string, timeRange ?  : { start: Date, end: Date });
 Promise;
@@ -147,9 +144,5 @@ Promise < {
     warnings: string
 } > ;
 getSystemHealth();
-Promise < {
-    status: 'healthy' | 'degraded' | 'unhealthy',
-    metrics: (Record),
-    issues: string
-} > ;
+Promise;
 export {};

@@ -28,9 +28,9 @@ interface TemplateVersionHistoryProps {
   onVersionExport?: (version: TemplateVersion) => void;
   className?: string;
 interface VersionNode {
-  version: TemplateVersion;,
+  version: TemplateVersion;
   level: number;
-  isLast: boolean;,
+  isLast: boolean;
   hasBranches: boolean;
 
 export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => {
@@ -148,7 +148,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       const mockComparison: VersionComparisonResult = {,
   from_version: versions.find(v => v.id === selectedArray[0])!,
         to_version: versions.find(v => v.id === selectedArray[1])!,
-        diff: {,
+        diff: {
   metadata_changes: [,
             { field: 'name', old_value: 'Old Name', new_value: 'New Name', change_type: 'modified' }
           ],
@@ -156,7 +156,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
             { variable_id: 'var-1', change_type: 'added', new_variable: { id: 'var-1', name: 'new_var' } as any }
           ],
           customization_changes: [],
-          graph_changes: {,
+          graph_changes: {
   nodes_added: 2,
   nodes_removed: 1,
   nodes_modified: 3,
@@ -164,7 +164,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
   edges_removed: 0,
   edges_modified: 2,
 },
-  compatibility: {,
+  compatibility: {
   breaking_changes: false,
   api_changes: true,
   schema_changes: false,

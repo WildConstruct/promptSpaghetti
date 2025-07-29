@@ -28,10 +28,10 @@ export interface PrerequisiteRunnerOptions {
   colors?: boolean;
   // Configuration
   configFile?: string;
-  environment?: 'development' | 'staging' | 'production';
-}
+  environment?: 'development' | 'staging' | 'production'
+  }
 export interface PrerequisiteRunnerResult {
-  success: boolean;,
+  success: boolean;
   report: PrerequisiteReport;
   autoFixResults?: Record<string, boolean>;
   outputPath?: string;
@@ -98,7 +98,7 @@ export class Epic16PrerequisiteRunner {
    * Run quick status check for monitoring
    */
   public async getQuickStatus(): Promise<{
-  status: 'healthy' | 'degraded' | 'critical';,
+  status: 'healthy' | 'degraded' | 'critical';
   message: string;
   details: any;
 }> {
@@ -140,7 +140,7 @@ export class Epic16PrerequisiteRunner {
   retryAttempts: 2,
   saveReports: true,
   reportRetentionDays: 30,
-  services: {,
+  services: {
   authService: process.env.EPIC11_AUTH_SERVICE_URL,
   analyticsService: process.env.EPIC13_ANALYTICS_SERVICE_URL,
   elasticSearch: process.env.ELASTICSEARCH_URL,
@@ -149,7 +149,7 @@ export class Epic16PrerequisiteRunner {
   stripe: process.env.STRIPE_SECRET_KEY,
   claude: process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY,
 },
-  environment: this.options.environment || 'development';
+  environment: this.options.environment || 'development'
   };
   private setupEventListeners(): void {
     if (this.options.verbose) {

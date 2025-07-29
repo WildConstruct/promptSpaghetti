@@ -15,9 +15,10 @@ const demoAuthors = [
         email: 'sarah.chen@example.com',
         role: 'admin',
         bio: 'AI researcher and prompt engineering expert with 10+ years of experience.',
-        socialLinks: {},
-        twitter: 'https://twitter.com/sarahchen',
-        linkedin: 'https://linkedin.com/in/sarahchen',
+        socialLinks: {
+            twitter: 'https://twitter.com/sarahchen',
+            linkedin: 'https://linkedin.com/in/sarahchen',
+        }
     },
     {
         id: 'author-2',
@@ -25,8 +26,9 @@ const demoAuthors = [
         email: 'marcus.r@example.com',
         role: 'editor',
         bio: 'Technical writer specializing in AI and machine learning documentation.',
-        socialLinks: {},
-        github: 'https://github.com/marcusr',
+        socialLinks: {
+            github: 'https://github.com/marcusr',
+        }
     },
     {
         id: 'author-3',
@@ -143,455 +145,353 @@ const demoArticles = [
         difficulty: 'beginner',
         featured: true,
         relatedArticles: ['article-2', 'article-3'],
-        seo: {},
-        metaTitle: 'Getting Started with Prompt Engineering - Complete Beginner Guide',
-        metaDescription: 'Learn prompt engineering fundamentals with this comprehensive guide. Perfect for beginners looking to master AI prompts.',
-        keywords: ['prompt engineering', 'AI prompts', 'beginner guide', 'getting started'],
+        seo: {
+            metaTitle: 'Getting Started with Prompt Engineering - Complete Beginner Guide',
+            metaDescription: 'Learn prompt engineering fundamentals with this comprehensive guide. Perfect for beginners looking to master AI prompts.',
+            keywords: ['prompt engineering', 'AI prompts', 'beginner guide', 'getting started'],
+        },
+        analytics: {
+            averageRating: 4.7,
+            ratingCount: 124,
+            completionRate: 78,
+            bounceRate: 22,
+        }
     },
-    analytics, {},
-    averageRating, 4.7,
-    ratingCount, 124,
-    completionRate, 78,
-    bounceRate, 22,
-];
-{
-    id: 'article-2',
-        title;
-    'Advanced Template Optimization Techniques',
-        content;
-    `# Advanced Template Optimization Techniques,
-  Take your template creation to the next level with these advanced optimization strategies...`,
-        excerpt;
-    'Discover advanced techniques for optimizing your prompt templates for better performance and reliability.',
-        slug;
-    'advanced-template-optimization',
-        status;
-    'published',
-        category;
-    demoCategories[3],
-        tags;
-    ['advanced', 'optimization', 'templates', 'performance'],
-        author;
-    demoAuthors[1],
-        createdAt;
-    new Date('2024-01-10'),
-        updatedAt;
-    new Date('2024-01-22'),
-        publishedAt;
-    new Date('2024-01-12'),
-        viewCount;
-    892,
-        likeCount;
-    67,
-        shareCount;
-    15,
-        bookmarkCount;
-    89,
-        readTime;
-    12,
-        difficulty;
-    'advanced',
-        featured;
-    true,
-        seo;
     {
-        metaTitle: 'Advanced Template Optimization Techniques',
-            metaDescription;
-        'Master advanced prompt template optimization with proven techniques for better performance.',
-            keywords;
-        ['template optimization', 'advanced prompts', 'performance tuning'],
-        ;
-    }
-    analytics: {
-        averageRating: 4.5,
-            ratingCount;
-        76,
-            completionRate;
-        65,
-            bounceRate;
-        28,
-        ;
-    }
+        id: 'article-2',
+        title: 'Advanced Template Optimization Techniques',
+        content: `# Advanced Template Optimization Techniques,
+  Take your template creation to the next level with these advanced optimization strategies...`,
+        excerpt: 'Discover advanced techniques for optimizing your prompt templates for better performance and reliability.',
+        slug: 'advanced-template-optimization',
+        status: 'published',
+        category: demoCategories[3],
+        tags: ['advanced', 'optimization', 'templates', 'performance'],
+        author: demoAuthors[1],
+        createdAt: new Date('2024-01-10'),
+        updatedAt: new Date('2024-01-22'),
+        publishedAt: new Date('2024-01-12'),
+        viewCount: 892,
+        likeCount: 67,
+        shareCount: 15,
+        bookmarkCount: 89,
+        readTime: 12,
+        difficulty: 'advanced',
+        featured: true,
+        seo: {
+            metaTitle: 'Advanced Template Optimization Techniques',
+            metaDescription: 'Master advanced prompt template optimization with proven techniques for better performance.',
+            keywords: ['template optimization', 'advanced prompts', 'performance tuning'],
+        },
+        analytics: {
+            averageRating: 4.5,
+            ratingCount: 76,
+            completionRate: 65,
+            bounceRate: 28,
+        }
+    },
     {
         id: 'article-3',
-            title;
-        'Marketplace Success Strategies',
-            content;
-        `# Marketplace Success Strategies,
+        title: 'Marketplace Success Strategies',
+        content: `# Marketplace Success Strategies,
   Learn how to maximize your success selling templates on the marketplace...`,
-            excerpt;
-        'Proven strategies for creating, pricing, and marketing your templates for marketplace success.',
-            slug;
-        'marketplace-success-strategies',
-            status;
-        'published',
-            category;
-        demoCategories[4],
-            tags;
-        ['marketplace', 'selling', 'marketing', 'success'],
-            author;
-        demoAuthors[2],
-            createdAt;
-        new Date('2024-01-08'),
-            updatedAt;
-        new Date('2024-01-25'),
-            publishedAt;
-        new Date('2024-01-10'),
-            viewCount;
-        654,
-            likeCount;
-        45,
-            shareCount;
-        12,
-            bookmarkCount;
-        78,
-            readTime;
-        10,
-            difficulty;
-        'intermediate',
-            featured;
-        false,
-            seo;
-        {
+        excerpt: 'Proven strategies for creating, pricing, and marketing your templates for marketplace success.',
+        slug: 'marketplace-success-strategies',
+        status: 'published',
+        category: demoCategories[4],
+        tags: ['marketplace', 'selling', 'marketing', 'success'],
+        author: demoAuthors[2],
+        createdAt: new Date('2024-01-08'),
+        updatedAt: new Date('2024-01-25'),
+        publishedAt: new Date('2024-01-10'),
+        viewCount: 654,
+        likeCount: 45,
+        shareCount: 12,
+        bookmarkCount: 78,
+        readTime: 10,
+        difficulty: 'intermediate',
+        featured: false,
+        seo: {
             metaTitle: 'Marketplace Success Strategies for Template Creators',
-                metaDescription;
-            'Learn proven strategies for selling templates and building a successful marketplace presence.',
-                keywords;
-            ['marketplace success', 'template selling', 'creator strategies'],
-            ;
-        }
+            metaDescription: 'Learn proven strategies for selling templates and building a successful marketplace presence.',
+            keywords: ['marketplace success', 'template selling', 'creator strategies'],
+        },
         analytics: {
             averageRating: 4.3,
-                ratingCount;
-            52,
-                completionRate;
-            72,
-                bounceRate;
-            25,
-            ;
+            ratingCount: 52,
+            completionRate: 72,
+            bounceRate: 25,
         }
-        {
-            id: 'article-4',
-                title;
-            'Building Your First Template',
-                content;
-            `# Building Your First Template,
+    },
+    {
+        id: 'article-4',
+        title: 'Building Your First Template',
+        content: `# Building Your First Template,
   A step-by-step guide to creating your first reusable prompt template...`,
-                excerpt;
-            'Step-by-step tutorial for creating your first effective and reusable prompt template.',
-                slug;
-            'building-first-template',
-                status;
-            'published',
-                category;
-            demoCategories[1],
-                tags;
-            ['template-creation', 'beginner', 'tutorial', 'step-by-step'],
-                author;
-            demoAuthors[0],
-                createdAt;
-            new Date('2024-01-12'),
-                updatedAt;
-            new Date('2024-01-19'),
-                publishedAt;
-            new Date('2024-01-14'),
-                viewCount;
-            1089,
-                likeCount;
-            78,
-                shareCount;
-            19,
-                bookmarkCount;
-            134,
-                readTime;
-            15,
-                difficulty;
-            'beginner',
-                featured;
-            false,
-                seo;
-            {
-                metaTitle: 'Building Your First Template - Step by Step Guide',
-                    metaDescription;
-                'Create your first prompt template with this comprehensive step-by-step tutorial.',
-                    keywords;
-                ['template creation', 'first template', 'beginner tutorial'],
-                ;
-            }
-            analytics: {
-                averageRating: 4.6,
-                    ratingCount;
-                98,
-                    completionRate;
-                81,
-                    bounceRate;
-                19,
-                ;
-            }
-            {
-                id: 'article-5',
-                    title;
-                'Common Prompt Engineering Mistakes',
-                    content;
-                `# Common Prompt Engineering Mistakes,
-  Avoid these common pitfalls when creating prompts...`,
-                    excerpt;
-                'Learn about the most common mistakes in prompt engineering and how to avoid them.',
-                    slug;
-                'common-prompt-mistakes',
-                    status;
-                'published',
-                    category;
-                demoCategories[5],
-                    tags;
-                ['troubleshooting', 'mistakes', 'best-practices', 'common-issues'],
-                    author;
-                demoAuthors[1],
-                    createdAt;
-                new Date('2024-01-05'),
-                    updatedAt;
-                new Date('2024-01-21'),
-                    publishedAt;
-                new Date('2024-01-07'),
-                    viewCount;
-                743,
-                    likeCount;
-                56,
-                    shareCount;
-                14,
-                    bookmarkCount;
-                67,
-                    readTime;
-                7,
-                    difficulty;
-                'intermediate',
-                    featured;
-                false,
-                    seo;
-                {
-                    metaTitle: 'Common Prompt Engineering Mistakes to Avoid',
-                        metaDescription;
-                    'Avoid these common prompt engineering mistakes and improve your results.',
-                        keywords;
-                    ['prompt mistakes', 'common errors', 'troubleshooting prompts'],
-                    ;
-                }
-                analytics: {
-                    averageRating: 4.2,
-                        ratingCount;
-                    67,
-                        completionRate;
-                    69,
-                        bounceRate;
-                    31;
-                    ;
-                    const demoLearningPaths = [
-                        {
-                            id: 'path-1',
-                            title: 'Complete Prompt Engineering Mastery',
-                            description: 'Master prompt engineering from basics to advanced techniques with this comprehensive learning path.',
-                            difficulty: 'beginner',
-                            estimatedTime: 180,
-                            steps: [,
-                                {
-                                    id: 'step-1',
-                                    title: 'Getting Started with Prompt Engineering',
-                                    type: 'article',
-                                    resourceId: 'article-1',
-                                    estimatedTime: 8,
-                                    required: true,
-                                    completed: true,
-                                    order: 1,
-                                },
-                                {
-                                    id: 'step-2',
-                                    title: 'Building Your First Template',
-                                    type: 'article',
-                                    resourceId: 'article-4',
-                                    estimatedTime: 15,
-                                    required: true,
-                                    completed: false,
-                                    order: 2,
-                                },
-                                {
-                                    id: 'step-3',
-                                    title: 'Template Creation Workshop',
-                                    type: 'exercise',
-                                    resourceId: 'workshop-1',
-                                    estimatedTime: 45,
-                                    required: true,
-                                    completed: false,
-                                    order: 3,
-                                },
-                                {
-                                    id: 'step-4',
-                                    title: 'Advanced Optimization Techniques',
-                                    type: 'article',
-                                    resourceId: 'article-2',
-                                    estimatedTime: 12,
-                                    required: false,
-                                    completed: false,
-                                    order: 4
-                                }],
-                            prerequisites: [],
-                            completionRate: 65,
-                            enrolledCount: 234,
-                            completedCount: 152,
-                            tags: ['prompt-engineering', 'complete-course', 'beginner-friendly'],
-                            author: demoAuthors[0],
-                            createdAt: new Date('2024-01-01'),
-                            updatedAt: new Date('2024-01-20'),
-                        },
-                        {
-                            id: 'path-2',
-                            title: 'Marketplace Creator Bootcamp',
-                            description: 'Learn everything you need to become a successful template creator and seller.',
-                            difficulty: 'intermediate',
-                            estimatedTime: 120,
-                            steps: [,
-                                {
-                                    id: 'step-5',
-                                    title: 'Understanding the Marketplace',
-                                    type: 'article',
-                                    resourceId: 'article-3',
-                                    estimatedTime: 10,
-                                    required: true,
-                                    completed: false,
-                                    order: 1,
-                                },
-                                {
-                                    id: 'step-6',
-                                    title: 'Creating Marketable Templates',
-                                    type: 'template',
-                                    resourceId: 'template-1',
-                                    estimatedTime: 30,
-                                    required: true,
-                                    completed: false,
-                                    order: 2
-                                }],
-                            prerequisites: ['path-1'],
-                            completionRate: 72,
-                            enrolledCount: 189,
-                            completedCount: 136,
-                            tags: ['marketplace', 'selling', 'business'],
-                            author: demoAuthors[2],
-                            createdAt: new Date('2024-01-05'),
-                            updatedAt: new Date('2024-01-18')
-                        }
-                    ];
-                    const demoStats = {
-                        totalArticles: demoArticles.length,
-                        totalViews: demoArticles.reduce((sum, article) => sum + article.viewCount, 0),
-                        totalCategories: demoCategories.length,
-                        totalAuthors: demoAuthors.length,
-                        recentlyUpdated: demoArticles.slice(0, 3),
-                        popularArticles: [...demoArticles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
-                        featuredContent: demoArticles.filter(a => a.featured),
-                    };
-                    export const KnowledgeBaseDemo = ({
-                        initialMode = 'browse',
-                        currentUser = demoAuthors[0],
-                        className = ''
-                    });
-                    {
-                        const [mode, setMode] = useState(initialMode);
-                        const [articles, setArticles] = useState(demoArticles);
-                        const [categories, setCategories] = useState(demoCategories);
-                        // Mock API functions for demonstration
-                        const handleCreateArticle = async (articleData) => {
-                            const newArticle = {
-                                id: `article-${Date.now()}` };
-                        }, title;
-                         || 'New Article',
-                            content;
-                        articleData.content || '',
-                            excerpt;
-                        articleData.excerpt || '',
-                            slug;
-                        articleData.title?.toLowerCase().replace(/\s+/g, '-') || 'new-article',
-                            status;
-                        articleData.status || 'draft',
-                            category;
-                        articleData.category || categories[0],
-                            tags;
-                        articleData.tags || [],
-                            author;
-                        currentUser,
-                            createdAt;
-                        new Date(),
-                            updatedAt;
-                        new Date(),
-                            viewCount;
-                        0,
-                            likeCount;
-                        0,
-                            shareCount;
-                        0,
-                            bookmarkCount;
-                        0,
-                            readTime;
-                        Math.ceil((articleData.content?.length || 0) / 200),
-                            difficulty;
-                        articleData.difficulty || 'beginner',
-                            featured;
-                        articleData.featured || false,
-                            seo;
-                        articleData.seo || {},
-                            analytics;
-                        {
-                            averageRating: 0,
-                                ratingCount;
-                            0,
-                                completionRate;
-                            0,
-                                bounceRate;
-                            0,
-                            ;
-                        }
-                        ;
-                        setArticles(prev => [newArticle, ...prev]);
-                        return newArticle;
-                    }
-                    ;
-                    const handleUpdateArticle = async (id, articleData) => {
-                        const updatedArticle = {
-                            ...articles.find(a => a.id === id),
-                            ...articleData,
-                            updatedAt: new Date(),
-                        };
-                        setArticles(prev => prev.map(a => a.id === id ? updatedArticle : a));
-                        return updatedArticle;
-                    };
-                    const handleDeleteArticle = async (id) => {
-                        setArticles(prev => prev.filter(a => a.id !== id));
-                    };
-                    const handlePublishArticle = async (id) => {
-                        await handleUpdateArticle(id, {});
-                        status: 'published',
-                            publishedAt;
-                        new Date(),
-                        ;
-                    };
-                }
-                ;
-                const handleArchiveArticle = async (id) => {
-                    await handleUpdateArticle(id, { status: 'archived' });
-                };
-                const handleDuplicateArticle = async (id) => {
-                    const original = articles.find(a => a.id === id);
-                    return await handleCreateArticle({});
-                };
-                original,
-                    title;
-                `${original.title} (Copy)`;
-            }
+        excerpt: 'Step-by-step tutorial for creating your first effective and reusable prompt template.',
+        slug: 'building-first-template',
+        status: 'published',
+        category: demoCategories[1],
+        tags: ['template-creation', 'beginner', 'tutorial', 'step-by-step'],
+        author: demoAuthors[0],
+        createdAt: new Date('2024-01-12'),
+        updatedAt: new Date('2024-01-19'),
+        publishedAt: new Date('2024-01-14'),
+        viewCount: 1089,
+        likeCount: 78,
+        shareCount: 19,
+        bookmarkCount: 134,
+        readTime: 15,
+        difficulty: 'beginner',
+        featured: false,
+        seo: {
+            metaTitle: 'Building Your First Template - Step by Step Guide',
+            metaDescription: 'Create your first prompt template with this comprehensive step-by-step tutorial.',
+            keywords: ['template creation', 'first template', 'beginner tutorial'],
+        },
+        analytics: {
+            averageRating: 4.6,
+            ratingCount: 98,
+            completionRate: 81,
+            bounceRate: 19,
         }
-        status: 'draft',
-            publishedAt;
-        undefined;
+    },
+    {
+        id: 'article-5',
+        title: 'Common Prompt Engineering Mistakes',
+        content: `# Common Prompt Engineering Mistakes,
+  Avoid these common pitfalls when creating prompts...`,
+        excerpt: 'Learn about the most common mistakes in prompt engineering and how to avoid them.',
+        slug: 'common-prompt-mistakes',
+        status: 'published',
+        category: demoCategories[5],
+        tags: ['troubleshooting', 'mistakes', 'best-practices', 'common-issues'],
+        author: demoAuthors[1],
+        createdAt: new Date('2024-01-05'),
+        updatedAt: new Date('2024-01-21'),
+        publishedAt: new Date('2024-01-07'),
+        viewCount: 743,
+        likeCount: 56,
+        shareCount: 14,
+        bookmarkCount: 67,
+        readTime: 7,
+        difficulty: 'intermediate',
+        featured: false,
+        seo: {
+            metaTitle: 'Common Prompt Engineering Mistakes to Avoid',
+            metaDescription: 'Avoid these common prompt engineering mistakes and improve your results.',
+            keywords: ['prompt mistakes', 'common errors', 'troubleshooting prompts'],
+        },
+        analytics: {
+            averageRating: 4.2,
+            ratingCount: 67,
+            completionRate: 69,
+            bounceRate: 31
+        }
+    }
+];
+const demoLearningPaths = [
+    {
+        id: 'path-1',
+        title: 'Complete Prompt Engineering Mastery',
+        description: 'Master prompt engineering from basics to advanced techniques with this comprehensive learning path.',
+        difficulty: 'beginner',
+        estimatedTime: 180,
+        steps: [,
+            {
+                id: 'step-1',
+                title: 'Getting Started with Prompt Engineering',
+                type: 'article',
+                resourceId: 'article-1',
+                estimatedTime: 8,
+                required: true,
+                completed: true,
+                order: 1,
+            },
+            {
+                id: 'step-2',
+                title: 'Building Your First Template',
+                type: 'article',
+                resourceId: 'article-4',
+                estimatedTime: 15,
+                required: true,
+                completed: false,
+                order: 2,
+            },
+            {
+                id: 'step-3',
+                title: 'Template Creation Workshop',
+                type: 'exercise',
+                resourceId: 'workshop-1',
+                estimatedTime: 45,
+                required: true,
+                completed: false,
+                order: 3,
+            },
+            {
+                id: 'step-4',
+                title: 'Advanced Optimization Techniques',
+                type: 'article',
+                resourceId: 'article-2',
+                estimatedTime: 12,
+                required: false,
+                completed: false,
+                order: 4
+            }],
+        prerequisites: [],
+        completionRate: 65,
+        enrolledCount: 234,
+        completedCount: 152,
+        tags: ['prompt-engineering', 'complete-course', 'beginner-friendly'],
+        author: demoAuthors[0],
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-20'),
+    },
+    {
+        id: 'path-2',
+        title: 'Marketplace Creator Bootcamp',
+        description: 'Learn everything you need to become a successful template creator and seller.',
+        difficulty: 'intermediate',
+        estimatedTime: 120,
+        steps: [,
+            {
+                id: 'step-5',
+                title: 'Understanding the Marketplace',
+                type: 'article',
+                resourceId: 'article-3',
+                estimatedTime: 10,
+                required: true,
+                completed: false,
+                order: 1,
+            },
+            {
+                id: 'step-6',
+                title: 'Creating Marketable Templates',
+                type: 'template',
+                resourceId: 'template-1',
+                estimatedTime: 30,
+                required: true,
+                completed: false,
+                order: 2
+            }],
+        prerequisites: ['path-1'],
+        completionRate: 72,
+        enrolledCount: 189,
+        completedCount: 136,
+        tags: ['marketplace', 'selling', 'business'],
+        author: demoAuthors[2],
+        createdAt: new Date('2024-01-05'),
+        updatedAt: new Date('2024-01-18')
+    }
+];
+const demoStats = {
+    totalArticles: demoArticles.length,
+    totalViews: demoArticles.reduce((sum, article) => sum + article.viewCount, 0),
+    totalCategories: demoCategories.length,
+    totalAuthors: demoAuthors.length,
+    recentlyUpdated: demoArticles.slice(0, 3),
+    popularArticles: [...demoArticles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
+    featuredContent: demoArticles.filter(a => a.featured),
+};
+export const KnowledgeBaseDemo = ({
+    initialMode = 'browse',
+    currentUser = demoAuthors[0],
+    className = ''
+});
+{
+    const [mode, setMode] = useState(initialMode);
+    const [articles, setArticles] = useState(demoArticles);
+    const [categories, setCategories] = useState(demoCategories);
+    // Mock API functions for demonstration
+    const handleCreateArticle = async (articleData) => {
+        const newArticle = {
+            id: `article-${Date.now()}` };
+    }, title;
+     || 'New Article',
+        content;
+    articleData.content || '',
+        excerpt;
+    articleData.excerpt || '',
+        slug;
+    articleData.title?.toLowerCase().replace(/\s+/g, '-') || 'new-article',
+        status;
+    articleData.status || 'draft',
+        category;
+    articleData.category || categories[0],
+        tags;
+    articleData.tags || [],
+        author;
+    currentUser,
+        createdAt;
+    new Date(),
+        updatedAt;
+    new Date(),
+        viewCount;
+    0,
+        likeCount;
+    0,
+        shareCount;
+    0,
+        bookmarkCount;
+    0,
+        readTime;
+    Math.ceil((articleData.content?.length || 0) / 200),
+        difficulty;
+    articleData.difficulty || 'beginner',
+        featured;
+    articleData.featured || false,
+        seo;
+    articleData.seo || {},
+        analytics;
+    {
+        averageRating: 0,
+            ratingCount;
+        0,
+            completionRate;
+        0,
+            bounceRate;
+        0,
+        ;
     }
     ;
+    setArticles(prev => [newArticle, ...prev]);
+    return newArticle;
 }
+;
+const handleUpdateArticle = async (id, articleData) => {
+    const updatedArticle = {
+        ...articles.find(a => a.id === id),
+        ...articleData,
+        updatedAt: new Date(),
+    };
+    setArticles(prev => prev.map(a => a.id === id ? updatedArticle : a));
+    return updatedArticle;
+};
+const handleDeleteArticle = async (id) => {
+    setArticles(prev => prev.filter(a => a.id !== id));
+};
+const handlePublishArticle = async (id) => {
+    await handleUpdateArticle(id, {});
+    status: 'published',
+        publishedAt;
+    new Date(),
+    ;
+};
+;
+const handleArchiveArticle = async (id) => {
+    await handleUpdateArticle(id, { status: 'archived' });
+};
+const handleDuplicateArticle = async (id) => {
+    const original = articles.find(a => a.id === id);
+    return await handleCreateArticle({});
+};
+original,
+    title;
+`${original.title} (Copy)`;
+status: 'draft',
+    publishedAt;
+undefined;
+;
 ;
 const handleUploadAttachment = async (file) => {
     // Mock file upload

@@ -39,7 +39,7 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
   onChange({)
   sequence: newSequence,
   // Ensure weights array matches sequence length for weighted pattern
-  patternConfig: {,
+  patternConfig: {
   ...patternConfig,
   weights: patternType === 'weighted' ,
   ? newSequence.map((_, index) => weights[index] || 1)
@@ -63,14 +63,14 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
   const newWeights = [...weights];
   newWeights[index] = Math.max(0, weight);
   onChange({)
-  patternConfig: {,
+  patternConfig: {
   ...patternConfig,
   weights: newWeights,
 });
   };
   const handleAllowRepeatsChange = (value: unknown) => {
   onChange({)
-  patternConfig: {,
+  patternConfig: {
   ...patternConfig,
   allowRepeats: Boolean(value),
 });

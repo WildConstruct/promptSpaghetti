@@ -12,7 +12,7 @@ interface CompressedGraphData {
     compressed: true;
     node_data: Uint8Array;
     edge_data: Uint8Array;
-    metadata: {,
+    metadata: {
         node_count: number;
         edge_count: number;
         compression_ratio: number;
@@ -86,13 +86,13 @@ export declare class OptimizedGraphStorage {
         nodeCount: number;
         edgeCount: number;
         nodeTypes: Record<string, number>;
-        connectivityStats: {,
+        connectivityStats: {
             leafNodes: number;
             rootNodes: number;
             isolatedNodes: number;
             averageConnections: number;
         };
-        memoryUsage: {,
+        memoryUsage: {
             estimatedBytes: number;
             cacheHitRatio?: number;
         };

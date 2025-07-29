@@ -411,7 +411,7 @@ const renderGeneralSettings = () => ();
 _jsxs("div", { children: [_jsx("div", { style: {
                 background: themeStyles.surface,
                 border: `1px solid ${themeStyles.border}`
-            } }), ", borderRadius: '8px', padding: '20px', marginBottom: '16px'; }}>", _jsx("h3", { style: {
+            } }), ", borderRadius: '8px', padding: '20px', marginBottom: '16px' }}>", _jsx("h3", { style: {
                 color: themeStyles.text,
                 fontSize: '16px',
                 fontWeight: 500,
@@ -471,7 +471,7 @@ _jsxs("div", { children: [_jsx("div", { style: {
                         padding: '8px',
                         background: themeStyles.background,
                         border: `1px solid ${themeStyles.border}`
-                    } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px'; }} />", _jsx("div", { style: {
+                    } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px' }} />", _jsx("div", { style: {
                         color: themeStyles.textMuted,
                         fontSize: '12px',
                         marginTop: '4px',
@@ -487,7 +487,7 @@ const renderAlertThresholds = () => ();
 _jsxs("div", { children: [_jsx("div", { style: {
                 background: themeStyles.surface,
                 border: `1px solid ${themeStyles.border}`
-            } }), ", borderRadius: '8px', padding: '20px', marginBottom: '16px'; }}>", _jsx("h3", { style: {
+            } }), ", borderRadius: '8px', padding: '20px', marginBottom: '16px' }}>", _jsx("h3", { style: {
                 color: themeStyles.text,
                 fontSize: '16px',
                 fontWeight: 500,
@@ -506,7 +506,7 @@ _jsxs("div", { children: [_jsx("div", { style: {
                                 padding: '8px',
                                 background: themeStyles.background,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px'; }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
+                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px' }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
                                 display: 'block',
                                 color: themeStyles.text,
                                 fontSize: '14px',
@@ -516,7 +516,7 @@ _jsxs("div", { children: [_jsx("div", { style: {
                                 padding: '8px',
                                 background: themeStyles.background,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px'; }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
+                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px' }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
                                 display: 'block',
                                 color: themeStyles.text,
                                 fontSize: '14px',
@@ -526,7 +526,7 @@ _jsxs("div", { children: [_jsx("div", { style: {
                                 padding: '8px',
                                 background: themeStyles.background,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px'; }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
+                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px' }} />"] }), _jsxs("div", { children: [_jsx("label", { style: {
                                 display: 'block',
                                 color: themeStyles.text,
                                 fontSize: '14px',
@@ -536,7 +536,7 @@ _jsxs("div", { children: [_jsx("div", { style: {
                                 padding: '8px',
                                 background: themeStyles.background,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px'; }} />"] })] })] });
+                            } }), ", borderRadius: '4px', color: themeStyles.text, fontSize: '14px' }} />"] })] })] });
 div >
 ;
 ;
@@ -557,7 +557,7 @@ _jsxs("div", { style: {
                         padding: '8px 16px',
                         background: 'transparent',
                         border: `1px solid ${themeStyles.border}`
-                    } }), ", borderRadius: '6px', color: themeStyles.textSecondary, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px'; }} > \uD83D\uDD0D Validate Configuration"] }), state.hasUnsavedChanges && ()
+                    } }), ", borderRadius: '6px', color: themeStyles.textSecondary, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }} > \uD83D\uDD0D Validate Configuration"] }), state.hasUnsavedChanges && ()
             < span, " style=", {
             color: themeStyles.warning,
             fontSize: '12px',
@@ -646,11 +646,11 @@ _jsxs("div", { style: {
                     < div, " style=", {
                     background: themeStyles.surface,
                     border: `1px solid ${themeStyles.border}`
-                }, ", borderRadius: '8px', padding: '40px', textAlign: 'center'; }}>", _jsx("h3", { style: { color: themeStyles.text, marginBottom: '8px' }, children: "\uD83E\uDD16 Response Automation" }), _jsx("p", { style: { color: themeStyles.textSecondary, margin: '0' }, children: "Automated response configuration coming soon..." })] }), ")}", state.activeTab === 'notifications' && ()
+                }, ", borderRadius: '8px', padding: '40px', textAlign: 'center' }}>", _jsx("h3", { style: { color: themeStyles.text, marginBottom: '8px' }, children: "\uD83E\uDD16 Response Automation" }), _jsx("p", { style: { color: themeStyles.textSecondary, margin: '0' }, children: "Automated response configuration coming soon..." })] }), ")}", state.activeTab === 'notifications' && ()
             < div, " style=", {
             background: themeStyles.surface,
             border: `1px solid ${themeStyles.border}`
-        }, ", borderRadius: '8px', padding: '40px', textAlign: 'center'; }}>", _jsx("h3", { style: { color: themeStyles.text, marginBottom: '8px' }, children: "\uD83D\uDCE7 Notification Channels" }), _jsx("p", { style: { color: themeStyles.textSecondary, margin: '0' }, children: "Notification management interface coming soon..." })] });
+        }, ", borderRadius: '8px', padding: '40px', textAlign: 'center' }}>", _jsx("h3", { style: { color: themeStyles.text, marginBottom: '8px' }, children: "\uD83D\uDCE7 Notification Channels" }), _jsx("p", { style: { color: themeStyles.textSecondary, margin: '0' }, children: "Notification management interface coming soon..." })] });
 {
     state.activeTab === 'compliance' && ()
         < div;

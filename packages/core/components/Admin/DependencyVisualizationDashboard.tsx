@@ -23,18 +23,18 @@ interface DashboardProps {
   onDependencyCreate?: (source: string, target: string) => void;
   onConflictResolve?: (conflictId: string, resolution: string) => void;
   interface ViewMode {
-  mode: 'graph' | 'tree' | 'matrix' | 'analysis';,
+  mode: 'graph' | 'tree' | 'matrix' | 'analysis';
   layout: 'hierarchical' | 'force' | 'circular' | 'dagre';
-  showMetadata: boolean;,
+  showMetadata: boolean;
   showConflicts: boolean;
-  showCriticalPath: boolean;,
+  showCriticalPath: boolean;
   clusterView: boolean;
   interface FilterState {
-  toggleTypes: string;,
+  toggleTypes: string;
   riskLevels: string;
-  dependencyTypes: DependencyType;,
+  dependencyTypes: DependencyType;
   epics: string;
-  stories: string;,
+  stories: string;
   searchTerm: string;
   export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({,)
   dependencyService,
@@ -382,11 +382,11 @@ interface DashboardProps {
 
 // Sub-components (simplified implementations)
 interface GraphVisualizationProps {
-  graph: DependencyGraph | null;,
+  graph: DependencyGraph | null;
   viewMode: ViewMode;
-  selectedNode: string | null;,
+  selectedNode: string | null;
   hoveredNode: string | null;
-  onNodeClick: (nodeId: string) => void;,
+  onNodeClick: (nodeId: string) => void;
   onNodeHover: (nodeId: string | null) => void;
   onDependencyCreate?: (source: string, target: string) => void;
   const GraphVisualization: React.FC<GraphVisualizationProps> = ({,)

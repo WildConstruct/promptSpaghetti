@@ -78,11 +78,11 @@ export enum KeyType {
   ARGON2ID = 'argon2id'
   // Key metadata
   export interface KeyMetadata {
-  id: string;,
+  id: string;
   name: string;
-  type: KeyType;,
+  type: KeyType;
   purpose: KeyPurpose;
-  algorithm: KeyAlgorithm;,
+  algorithm: KeyAlgorithm;
   status: KeyStatus;
   tier: StorageTier;
   // Lifecycle
@@ -93,7 +93,7 @@ export enum KeyType {
   retiredAt?: Date;
   lastUsed?: Date;
   // Security properties
-  keySize: number;,
+  keySize: number;
   version: number;
   parentKeyId?: string; // For derived keys,
   wrappedBy?: string;   // ID of wrapping key,
@@ -103,14 +103,14 @@ export enum KeyType {
   // Compliance and audit
   createdBy: string;
   approvedBy?: string;
-  complianceLevel: 'low' | 'medium' | 'high' | 'critical';,
+  complianceLevel: 'low' | 'medium' | 'high' | 'critical';
   auditTrail: KeyAuditEvent;
   // Access control
-  authorizedUsers: string;,
+  authorizedUsers: string;
   authorizedServices: string;
   accessPolicy: KeyAccessPolicy;
   // Technical metadata
-  encoding: 'base64' | 'hex' | 'buffer';,
+  encoding: 'base64' | 'hex' | 'buffer';
   compressed: boolean;
   checksumSHA256: string;
   // Custom metadata
@@ -128,7 +128,7 @@ export interface CryptographicKey {
   // Key derivation parameters
 }
 export interface KeyDerivationParameters {
-  algorithm: KeyAlgorithm;,
+  algorithm: KeyAlgorithm;
   salt: Buffer;
   iterations?: number;
   memoryFactor?: number;
@@ -138,27 +138,27 @@ export interface KeyDerivationParameters {
   // Key access policy
 }
 export interface KeyAccessPolicy {
-  requireMultiAuth: boolean;,
+  requireMultiAuth: boolean;
   minApprovals: number;
-  timeRestrictions?: {,
-  allowedHours: number;,
+  timeRestrictions?: {
+  allowedHours: number;
   allowedDays: number;
   timezone: string;
 };
   locationRestrictions?: {
-  allowedCountries: string;,
+  allowedCountries: string;
   allowedNetworks: string;
 };
-  requireSecureChannel: boolean;,
+  requireSecureChannel: boolean;
   maxConcurrentAccess: number;
   sessionTimeout: number;
 
 // Key audit events
 }
 export interface KeyAuditEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
-  event: 'created' | 'accessed' | 'modified' | 'rotated' | 'revoked' | 'expired' | 'backed_up' | 'restored';,
+  event: 'created' | 'accessed' | 'modified' | 'rotated' | 'revoked' | 'expired' | 'backed_up' | 'restored';
   userId: string;
   serviceId?: string;
   ipAddress: string;
@@ -168,7 +168,7 @@ export interface KeyAuditEvent {
   // Key generation options
 }
 export interface KeyGenerationOptions {
-  type: KeyType;,
+  type: KeyType;
   purpose: KeyPurpose;
   algorithm: KeyAlgorithm;
   keySize?: number;
@@ -206,29 +206,29 @@ export interface KeySearchCriteria {
 }
 export interface KeyManagementConfig {
   // Storage configuration
-  defaultTier: StorageTier;,
+  defaultTier: StorageTier;
   hotCacheSize: number;
-  warmStorageEncryption: boolean;,
+  warmStorageEncryption: boolean;
   coldStorageLocation: string;
   // Security configuration
-  masterKeyRotationDays: number;,
+  masterKeyRotationDays: number;
   defaultKeyExpirationDays: number;
-  requireKeyApproval: boolean;,
+  requireKeyApproval: boolean;
   enableHSMIntegration: boolean;
   hsmConfig?: HSMConfiguration;
   // Performance configuration
-  cacheEnabled: boolean;,
+  cacheEnabled: boolean;
   cacheTTL: number;
   backgroundRotationEnabled: boolean;
   // Compliance configuration
-  auditRetentionDays: number;,
+  auditRetentionDays: number;
   complianceMode: boolean;
-  encryptionAtRest: boolean;,
+  encryptionAtRest: boolean;
   keyDerivationComplexity: 'low' | 'medium' | 'high';
   // Monitoring
-  performanceMonitoring: boolean;,
-  alertThresholds: {,
-  keyUsageRate: number;,
+  performanceMonitoring: boolean;
+  alertThresholds: {
+  keyUsageRate: number;
   failureRate: number;
   responseTime: number;
 };
@@ -236,9 +236,9 @@ export interface KeyManagementConfig {
 // HSM configuration
 }
 export interface HSMConfiguration {
-  provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';,
+  provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
   endpoint: string;
-  credentials: {,
+  credentials: {
   username?: string;
   password?: string;
   certificatePath?: string;
@@ -250,14 +250,14 @@ export interface HSMConfiguration {
 // Performance metrics
 }
 export interface KeyPerformanceMetrics {
-  operationsPerSecond: number;,
+  operationsPerSecond: number;
   averageResponseTime: number;
-  errorRate: number;,
+  errorRate: number;
   cacheHitRate: number;
-  activeKeyCount: number;,
+  activeKeyCount: number;
   totalKeyCount: number;
   storageUtilization: Record<StorageTier, number>;
-  hotPathOperations: number;,
+  hotPathOperations: number;
   slowPathOperations: number;
   /**
   * Key Management Service
@@ -542,7 +542,7 @@ export class KeyManagementService extends EventEmitter {
   cacheHitRate: 0,
   activeKeyCount: 0,
   totalKeyCount: 0,
-  storageUtilization: {,
+  storageUtilization: {
   [StorageTier.HOT]: 0,
   [StorageTier.WARM]: 0,
   [StorageTier.COLD]: 0,
@@ -606,7 +606,7 @@ export class KeyManagementService extends EventEmitter {
       auditTrail: [],
       authorizedUsers: [],
       authorizedServices: [],
-      accessPolicy: {,
+      accessPolicy: {
   requireMultiAuth: false,
   minApprovals: 1,
   requireSecureChannel: true,
@@ -631,8 +631,7 @@ export class KeyManagementService extends EventEmitter {
       return this.generateECKeyPair(options);
     case KeyType.HMAC:
       return this.generateHMACKey(options);
-    case KeyType.DERIVATION:
-      return this.generateDerivationKey(options);,
+    case KeyType.DERIVATION: return this.generateDerivationKey(options);
   default:
       throw new Error(`Unsupported key type: ${options.type}`);}
   private async generateSymmetricKey(options: KeyGenerationOptions): Promise<Partial<CryptographicKey>> {
@@ -803,11 +802,10 @@ export class KeyManagementService extends EventEmitter {
     case KeyAlgorithm.ECDH_P256:
       return 256;
     case KeyAlgorithm.ECDSA_P384:
-    case KeyAlgorithm.ECDH_P384:
-      return 384;,
+    case KeyAlgorithm.ECDH_P384: return 384;
   default:
       return 256;
-  private async logKeyEvent(key: CryptographicKey,)
+  private async logKeyEvent(key: CryptographicKey)
     event: KeyAuditEvent['event'],
     details: Record<string,
     any>

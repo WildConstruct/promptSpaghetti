@@ -36,5 +36,6 @@ export interface ExtensionManagerState {
     clearError: () => void;
     setSelectedExtension: (extensionId: string | null) => void;
 }
+export declare const useExtensionManagerStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ExtensionManagerState>>;
 export type ExtensionManagerStore = ReturnType<typeof useExtensionManagerStore>;
 //# sourceMappingURL=ExtensionManagerStore.d.ts.map

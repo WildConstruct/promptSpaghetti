@@ -11,15 +11,15 @@ import { RateLimitConfig, RateLimitKeyGenerator, RateLimitScope } from './RateLi
 // ========================================
 
 export interface DynamicRateLimitRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
   priority: number; // Higher priority rules are checked first,
   // Matching criteria
   conditions: RateLimitCondition;
   // Rate limit parameters
-  windowMs: number;,
+  windowMs: number;
   maxRequests: number;
   // Optional advanced settings
   burstLimit?: number;        // Allow bursts up to this limit,
@@ -39,7 +39,7 @@ export interface DynamicRateLimitRule {
   logViolations?: boolean;
 }
 export interface RateLimitCondition {
-  type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';,
+  type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';
   operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'regex' | 'in' | 'range' | 'exists';
   field?: string;             // Field name for header/query/body conditions,
   value?: any;                // Value to compare against,
@@ -56,7 +56,7 @@ export interface RateLimitAction {
   parameters?: Record<string, any>;
 }
 export interface RateLimitSchedule {
-  timezone: string;,
+  timezone: string;
   rules: ScheduleRule;
 }
 export interface ScheduleRule {
@@ -67,15 +67,15 @@ export interface ScheduleRule {
   maxRequests?: number;       // Override max requests for this schedule,
 }
 export interface RateLimitProfile {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   rules: DynamicRateLimitRule;
   defaultRule?: Partial<DynamicRateLimitRule>;
-  metadata: {,
-  version: string;,
+  metadata: {
+  version: string;
   createdAt: Date;
-  updatedAt: Date;,
+  updatedAt: Date;
   author: string;
   tags: string;
 };
@@ -358,7 +358,7 @@ export class RateLimitConfigurationManager {
           scope: RateLimitScope.IP,
           action: { type: 'block' }
       ],
-      metadata: {,
+      metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -401,7 +401,7 @@ export class RateLimitConfigurationManager {
           scope: RateLimitScope.USER,
           action: { type: 'block' }
       ],
-      metadata: {,
+      metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -418,7 +418,7 @@ export class RateLimitConfigurationManager {
   this.validateProfile(profile);
   this.profiles.set(profile.id, {)
   ...profile,
-  metadata: {,
+  metadata: {
   ...profile.metadata,
   updatedAt: new Date(),
 });
@@ -583,8 +583,7 @@ export class RateLimitConfigurationManager {
       return RateLimitKeyGenerator.byUser;
     case RateLimitScope.ENDPOINT:
       return RateLimitKeyGenerator.byEndpoint;
-    case RateLimitScope.GLOBAL:
-      return () => 'global';,
+    case RateLimitScope.GLOBAL: return () => 'global';
   default:
       return RateLimitKeyGenerator.byIP;
   private createActionHandler(action: RateLimitAction): (context: any, info: any) => void {
@@ -674,7 +673,7 @@ export class RateLimitConfigurationPresets {
           scope: RateLimitScope.IP,
           action: { type: 'throttle', delayMs: 100 }
       ],
-      metadata: {,
+      metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -719,7 +718,7 @@ export class RateLimitConfigurationPresets {
           scope: RateLimitScope.USER,
           action: { type: 'block' }
       ],
-      metadata: {,
+      metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),

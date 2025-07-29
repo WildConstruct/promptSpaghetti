@@ -40,33 +40,33 @@ describe('BreachNotificationService', () => {
     // Mock Math.random for deterministic IDs
     jest.spyOn(Math, 'random').mockReturnValue(0.123456789 as unknown as unknown);
     service = new BreachNotificationService({)
-  detection: {,
+  detection: {
   enabled: true,
   autoClassification: true,
   riskThreshold: BreachSeverity.MEDIUM,
   monitoringSources: ['test_logs'],
 },
-  notifications: {,
-  gdpr: {,
+  notifications: {
+  gdpr: {
   enabled: true,
   supervisoryAuthority: 'Test ICO',
   contactEmail: 'test-dpo@company.com',
   autoFile: false,
   deadline: 72,
 },
-  internal: {,
+  internal: {
   securityTeam: ['security@test.com'],
   management: ['ceo@test.com'],
   legal: ['legal@test.com'],
   dpo: 'dpo@test.com',
 },
-  external: {,
-  customers: {,
+  external: {
+  customers: {
   enabled: true,
   highRiskThreshold: BreachSeverity.HIGH,
   template: 'customer_notification',
 },
-  media: {,
+  media: {
   enabled: false,
   criticalThreshold: BreachSeverity.CRITICAL,
   contactList: [],
@@ -436,9 +436,9 @@ describe('BreachNotificationService', () => {
     test('should handle missing configuration gracefully', () => {
       const minimalService = new BreachNotificationService({)
   detection: { enabled: false },
-        notifications: {,
+        notifications: {
   gdpr: { enabled: false },
-          internal: {,
+          internal: {
   securityTeam: [],
   management: [],
   legal: [],
@@ -505,32 +505,32 @@ describe('BreachNotificationService', () => {
   describe('Integration and Configuration', () => {
   test('should support custom configuration overrides', () => {
   const customService = new BreachNotificationService({)
-  notifications: {,
-  gdpr: {,
+  notifications: {
+  gdpr: {
   enabled: true,
   supervisoryAuthority: 'Custom Authority',
   contactEmail: 'custom-dpo@test.com',
   deadline: 24, // Custom 24-hour deadline,
   autoFile: true,
 },
-  internal: {,
+  internal: {
   securityTeam: ['custom-security@test.com'],
   management: ['custom-management@test.com'],
   legal: ['custom-legal@test.com'],
   dpo: 'custom-dpo@test.com',
 },
-  external: {,
-  customers: {,
+  external: {
+  customers: {
   enabled: true,
   highRiskThreshold: BreachSeverity.HIGH,
   template: 'customer_template',
 },
-  media: {,
+  media: {
   enabled: false,
   criticalThreshold: BreachSeverity.CRITICAL,
   contactList: [],
 },
-  automation: {,
+  automation: {
   containmentActions: false,
   evidenceCollection: true,
   reportGeneration: true,

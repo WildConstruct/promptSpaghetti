@@ -85,8 +85,9 @@ const loadMFAMethods = async () => {
             primary: true,
             configuredAt: new Date('2024-01-15'),
             lastUsed: new Date('2024-07-19'),
-            configuration: {},
-            appName: 'Google Authenticator',
+            configuration: {
+                appName: 'Google Authenticator',
+            }
         },
         {
             id: 'sms-1',
@@ -95,8 +96,9 @@ const loadMFAMethods = async () => {
             enabled: false,
             primary: false,
             configuredAt: new Date('2024-02-01'),
-            configuration: {},
-            phoneNumber: '+1 (555) 123-4567',
+            configuration: {
+                phoneNumber: '+1 (555) 123-4567',
+            }
         },
         {
             id: 'email-1',
@@ -106,8 +108,9 @@ const loadMFAMethods = async () => {
             primary: false,
             configuredAt: new Date('2024-01-10'),
             lastUsed: new Date('2024-07-18'),
-            configuration: {},
-            email: 'user@example.com'
+            configuration: {
+                email: 'user@example.com'
+            }
         }
     ];
     setMFAMethods(methods);

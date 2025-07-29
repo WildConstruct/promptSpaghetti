@@ -168,7 +168,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   operator: 'OR',
   highlight: true,
 } : undefined,
-        output: {,
+        output: {
   page: 1,
   limit: 50,
   sortBy: 'timestamp',
@@ -179,15 +179,15 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       // This would call the AuditFilteringService
       const mockResults: FilteredSearchResponse = {,
   events: generateMockEvents(20),
-  pagination: {,
+  pagination: {
   page: 1,
   limit: 50,
   total: 150,
   totalPages: 3,
 },
-  summary: {,
+  summary: {
   totalEvents: 150,
-  eventsByCategory: {,
+  eventsByCategory: {
   authentication: 45,
   authorization: 32,
   data_modification: 28,
@@ -197,24 +197,24 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   performance: 3,
   error: 1,
 },
-  eventsBySeverity: {,
+  eventsBySeverity: {
   low: 85,
   medium: 45,
   high: 15,
   critical: 5,
 },
   uniqueActors: 12,
-          timeRange: {,
+          timeRange: {
   start: new Date(Date.now() - 24 * 60 * 60 * 1000),
   end: new Date(),
 },
-  performance: {,
+  performance: {
   queryTime: 234,
   totalRecords: 1250,
   filteredRecords: 150,
   cacheHit: false,
 },
-  filterSummary: {,
+  filterSummary: {
   appliedFilters: Object.keys(filter).filter(key => ),
   filter[key as keyof AdvancedSearchFilter] !== undefined
   ),
@@ -264,7 +264,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`}
 },
   userAgent: 'Mozilla/5.0 (compatible)',
-        metadata: {,
+        metadata: {
   source: 'admin_panel',
   version: '1.0.0',
 },

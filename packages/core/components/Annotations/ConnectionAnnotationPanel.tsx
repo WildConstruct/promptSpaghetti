@@ -5,22 +5,22 @@ import React, { useState, useCallback } from 'react';
 import { AnnotatedEdge, ConnectionLabelEditor } from './ConnectionAnnotations';
 import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
 interface ConnectionAnnotationPanelProps {
-  edges: AnnotatedEdge;,
+  edges: AnnotatedEdge;
   selectedEdgeId: string | null;
-  labelEditMode: boolean;,
+  labelEditMode: boolean;
   smartPositioning: boolean;
-  showAllLabels: boolean;,
+  showAllLabels: boolean;
   onAddLabel: (edgeId: string, label: string, options?: Partial<AnnotatedEdge>) => void;
-  onUpdateLabel: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;,
-  onRemoveLabel: (edgeId: string) => void;,
-  onToggleLabel: (edgeId: string) => void;,
-  onSelectEdge: (edgeId: string | null) => void;,
+  onUpdateLabel: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
+  onRemoveLabel: (edgeId: string) => void;
+  onToggleLabel: (edgeId: string) => void;
+  onSelectEdge: (edgeId: string | null) => void;
   onShowAllLabelsToggle: () => void;
-  onHideAllLabels: () => void;,
+  onHideAllLabels: () => void;
   onClearAllLabels: () => void;
-  onOptimizePositions: () => void;,
-  onSetLabelEditMode: (enabled: boolean) => void;,
-  onSetSmartPositioning: (enabled: boolean) => void;,
+  onOptimizePositions: () => void;
+  onSetLabelEditMode: (enabled: boolean) => void;
+  onSetSmartPositioning: (enabled: boolean) => void;
   getVisibleLabelsCount: () => number;
   export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps> = ({,)
   edges,
@@ -367,7 +367,7 @@ interface ConnectionAnnotationPanelProps {
                   border: `1px solid ${selectedEdgeId === edge.id ? '#4299e1' : '#4a5568'}`}
 },
   borderRadius: 4,
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
                 onClick={() => onSelectEdge(edge.id)}
               >
@@ -458,9 +458,9 @@ interface ConnectionAnnotationPanelProps {
 // Compact connection annotation toolbar for the main UI
 export const ConnectionAnnotationToolbar: React.FC<{,
   visible: boolean;
-  onToggle: () => void;,
+  onToggle: () => void;
   labelEditMode: boolean;
-  onSetLabelEditMode: (enabled: boolean) => void;,
+  onSetLabelEditMode: (enabled: boolean) => void;
   visibleLabelsCount: number;
   totalLabelsCount: number;
 }> = ({)

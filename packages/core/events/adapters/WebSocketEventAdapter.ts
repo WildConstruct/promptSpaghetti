@@ -182,7 +182,7 @@ export class WebSocketEventAdapter {
       source: 'websocket-adapter',
       userId: message.userId,
       sessionId: message.sessionId,
-      metadata: {,
+      metadata: {
         category,
         priority,
         originalType: message.type,
@@ -205,7 +205,7 @@ export class WebSocketEventAdapter {
   return null;
   return {
   type: wsType,
-  data: {,
+  data: {
   ...event.metadata?.wsData,
   eventId: event.id,
   eventTimestamp: event.timestamp,
@@ -218,7 +218,7 @@ export class WebSocketEventAdapter {
   /**
    * Publish collaboration event through both systems
    */
-  public publishCollaborationEvent(type: CollaborationEventType,)
+  public publishCollaborationEvent(type: CollaborationEventType)
     data: any,
     userId?: string,
     sessionId?: string
@@ -229,7 +229,7 @@ export class WebSocketEventAdapter {
   type === CollaborationEventType.USER_JOINED ? 'task_assigned' :,
   type === CollaborationEventType.DOCUMENT_EDITED ? 'task_started' : 'task_completed',
   {
-  data: {,
+  data: {
   collaborationType: type,
   ...data
 }
@@ -249,8 +249,8 @@ export class WebSocketEventAdapter {
   /**
   * Get adapter statistics
   */
-  public getStats(): {,
-  subscribedEventTypes: number;,
+  public getStats(): {
+  subscribedEventTypes: number;
   hasCollaborationService: boolean;
   eventBusStats: any;
   return {

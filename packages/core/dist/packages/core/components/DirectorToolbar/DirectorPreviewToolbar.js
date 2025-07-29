@@ -103,28 +103,28 @@ _jsx("style", { children: `
         .director-preview-toolbar {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #444;
-          border-radius: 8px;,
+          border-radius: 8px;
   color: #fff;
           padding: 16px;
           margin-bottom: 16px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         .toolbar-main {
-          display: flex;,
+          display: flex;
   gap: 24px;
           align-items: flex-start;
         .toolbar-main.compact {
-          flex-direction: column;,
+          flex-direction: column;
   gap: 12px;
         .toolbar-section {
           flex: 1;
           min-width: 0;
         .section-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           margin-bottom: 12px;
           font-weight: 600;
-          font-size: 14px;,
+          font-size: 14px;
   color: #ffd700;
         .section-icon {
           font-size: 16px;
@@ -132,19 +132,19 @@ _jsx("style", { children: `
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .controls-row, .metrics-row, .settings-row {
-          display: flex;,
+          display: flex;
   gap: 12px;
           align-items: center;
           flex-wrap: wrap;
         .preview-btn {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           background: linear-gradient(135deg, #444 0%, #555 100%);
-          border: 1px solid #666;,
+          border: 1px solid #666;
   color: #fff;
           padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           transition: all 0.2s ease;
           font-size: 13px;
@@ -160,28 +160,28 @@ _jsx("style", { children: `
           font-size: 14px;
         .toggle-control {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           cursor: pointer;
           font-size: 13px;
         .toggle-control input[type="checkbox"] {
           display: none;
         .toggle-slider {
-          width: 32px;,
+          width: 32px;
   height: 16px;
           background: #444;
-          border-radius: 8px;,
+          border-radius: 8px;
   position: relative;
           transition: background 0.2s ease;
         .toggle-slider::after {,
   content: '';
-          position: absolute;,
+          position: absolute;
   width: 12px;
-          height: 12px;,
+          height: 12px;
   background: #fff;
-          border-radius: 50%;,
+          border-radius: 50%;
   top: 2px;
-          left: 2px;,
+          left: 2px;
   transition: transform 0.2s ease;
         .toggle-control input[type="checkbox"]:checked + .toggle-slider {
           background: #ffd700;
@@ -189,37 +189,37 @@ _jsx("style", { children: `
   transform: translateX(16px);
         .count-selector {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           font-size: 13px;
         .count-select {
-          background: #333;,
+          background: #333;
   border: 1px solid #555;
-          color: #fff;,
+          color: #fff;
   padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
         .metric {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 2px;
           min-width: 60px;
         .metric-value {
           font-weight: 600;
-          font-size: 16px;,
+          font-size: 16px;
   color: #fff;
         .metric-label {
-          font-size: 10px;,
+          font-size: 10px;
   color: #aaa;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .setting-control {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           cursor: pointer;
-          font-size: 12px;,
+          font-size: 12px;
   color: #ccc;
         .setting-control input[type="checkbox"] {
           accent-color: #ffd700;
@@ -227,7 +227,7 @@ _jsx("style", { children: `
           flex: 0 0 100%;
         .error-display {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           background: rgba(255, 107, 107, 0.1);
           border: 1px solid rgba(255, 107, 107, 0.3);
@@ -238,20 +238,20 @@ _jsx("style", { children: `
           flex-shrink: 0;
         .error-text {
           color: #ff6b6b;
-          font-size: 12px;,
+          font-size: 12px;
   flex: 1;
         .error-dismiss {
-          background: none;,
+          background: none;
   border: none;
-          color: #ff6b6b;,
+          color: #ff6b6b;
   cursor: pointer;
-          padding: 0;,
+          padding: 0;
   width: 16px;
-          height: 16px;,
+          height: 16px;
   display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 50%;,
+          border-radius: 50%;
   transition: background 0.2s ease;
         .error-dismiss:hover {,
   background: rgba(255, 107, 107, 0.2);

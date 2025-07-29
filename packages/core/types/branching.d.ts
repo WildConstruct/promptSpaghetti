@@ -704,7 +704,7 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         userName: string;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
-    recentActivity: {,
+    recentActivity: {
         userId: string;
         branchId: string;
         branchName: string;
@@ -719,7 +719,7 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
     byType: Record<string, number>;
     byStatus: Record<string, number>;
 }, {
-    recentActivity: {,
+    recentActivity: {
         userId: string;
         branchId: string;
         branchName: string;
@@ -767,7 +767,7 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         }>, "many">;
     }, "strip", z.ZodTypeAny, {
         date: Date;
-        events: {,
+        events: {
             id: string;
             description: string;
             type: string;
@@ -779,7 +779,7 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         }[];
     }, {
         date: Date;
-        events: {,
+        events: {
             id: string;
             description: string;
             type: string;
@@ -830,7 +830,7 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         totalEvents: number;
-        dateRange: {,
+        dateRange: {
             start: Date;
             end: Date;
         };
@@ -846,7 +846,7 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         } | undefined;
     }, {
         totalEvents: number;
-        dateRange: {,
+        dateRange: {
             start: Date;
             end: Date;
         };
@@ -862,9 +862,9 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         } | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    summary: {,
+    summary: {
         totalEvents: number;
-        dateRange: {,
+        dateRange: {
             start: Date;
             end: Date;
         };
@@ -879,9 +879,9 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
             userName: string;
         } | undefined;
     };
-    timeline: {,
+    timeline: {
         date: Date;
-        events: {,
+        events: {
             id: string;
             description: string;
             type: string;
@@ -893,9 +893,9 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
         }[];
     }[];
 }, {
-    summary: {,
+    summary: {
         totalEvents: number;
-        dateRange: {,
+        dateRange: {
             start: Date;
             end: Date;
         };
@@ -910,9 +910,9 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
             userName: string;
         } | undefined;
     };
-    timeline: {,
+    timeline: {
         date: Date;
-        events: {,
+        events: {
             id: string;
             description: string;
             type: string;
@@ -1164,7 +1164,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
     estimatedMergeTime: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     behind: number;
-    conflicts: {,
+    conflicts: {
         id: string;
         detectedAt: Date;
         sourceBranchId: string;
@@ -1177,7 +1177,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         resolvedBy?: string | undefined;
     }[];
     canMerge: boolean;
-    sourceBranch: {,
+    sourceBranch: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -1204,7 +1204,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         mergedBy?: string | undefined;
         mergedIntoBranchId?: string | undefined;
     };
-    targetBranch: {,
+    targetBranch: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -1250,7 +1250,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
     estimatedMergeTime?: number | undefined;
 }, {
     behind: number;
-    conflicts: {,
+    conflicts: {
         id: string;
         detectedAt: Date;
         sourceBranchId: string;
@@ -1263,7 +1263,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         resolvedBy?: string | undefined;
     }[];
     canMerge: boolean;
-    sourceBranch: {,
+    sourceBranch: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -1290,7 +1290,7 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         commitCount?: number | undefined;
         contributorCount?: number | undefined;
     };
-    targetBranch: {,
+    targetBranch: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -1343,7 +1343,7 @@ export interface BranchContext {
     projectId: string;
     branchId: string;
     userId: string;
-    userPermissions: {,
+    userPermissions: {
         canRead: boolean;
         canWrite: boolean;
         canMerge: boolean;
@@ -1372,7 +1372,7 @@ export interface BranchMetrics {
     conflictsPerDay: Record<string, number>;
     averageMergeTime: number;
     mergeSuccessRate: number;
-    mostActiveContributor: {,
+    mostActiveContributor: {
         userId: string;
         userName: string;
         commits: number;

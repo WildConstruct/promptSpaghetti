@@ -2,7 +2,7 @@ import React from 'react';
 import { EditorFieldProps } from './BaseNodeEditor';
 
 export interface SelectOption {
-  value: string | number;,
+  value: string | number;
   label: string;
   disabled?: boolean;
   group?: string;

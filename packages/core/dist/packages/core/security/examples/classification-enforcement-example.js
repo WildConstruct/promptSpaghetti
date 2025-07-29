@@ -245,14 +245,15 @@ requiredControls: ['auth-standard', 'audit-standard'],
                             policyOverrides;
                         new Map([]),
                             ['INTERNAL', {
-                                    access: {},
-                                    authenticationLevel: 'STANDARD',
-                                    authorizationRequired: false,
-                                    approvalWorkflow: false,
-                                    timeRestrictions: false,
-                                    purposeLimitation: false,
-                                    auditLogging: 'STANDARD',
-                                    exportRestrictions: false,
+                                    access: {
+                                        authenticationLevel: 'STANDARD',
+                                        authorizationRequired: false,
+                                        approvalWorkflow: false,
+                                        timeRestrictions: false,
+                                        purposeLimitation: false,
+                                        auditLogging: 'STANDARD',
+                                        exportRestrictions: false,
+                                    }
                                 }];
                         exemptions: {
                             users: ['admin-user', 'system-user'],

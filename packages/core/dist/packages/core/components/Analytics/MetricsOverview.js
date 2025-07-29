@@ -221,7 +221,7 @@ const styles = `;
   transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   .performance-metric-card {
-    padding: 1rem;,
+    padding: 1rem;
   border: 1px solid #e5e7eb;
     border-radius: 8px;
   .metric-header {
@@ -230,19 +230,19 @@ const styles = `;
     align-items: center;
     margin-bottom: 0.5rem;
   .metric-name {
-    font-weight: 500;,
+    font-weight: 500;
   color: #374151;
     text-transform: capitalize;
   .metric-values {
     display: flex;
-    flex-direction: column;,
+    flex-direction: column;
   gap: 0.25rem;
   .current-value {
     font-size: 1.2rem;
-    font-weight: 600;,
+    font-weight: 600;
   color: #1f2937;
   .average-value {
-    font-size: 0.875rem;,
+    font-size: 0.875rem;
   color: #9ca3af;
   .metric-card .progress {
     transition: all 0.3s ease-in-out;

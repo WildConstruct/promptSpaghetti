@@ -29,21 +29,21 @@ export interface UseRealTimeStateOptions {
   domains?: string;
 }
 export interface UseRealTimeStateReturn {
-  isConnected: boolean;,
+  isConnected: boolean;
   isConnecting: boolean;
-  connectionState: ConnectionState;,
+  connectionState: ConnectionState;
   latency: number;
   connect: (userId: string, sessionId?: string) => Promise<void>;
-  disconnect: () => Promise<void>;,
+  disconnect: () => Promise<void>;
   error: Error | null;
 }
 export interface UseStateSubscriptionOptions extends SubscriptionOptions {
   enabled?: boolean;
   suspense?: boolean;
   export interface UseStateSubscriptionReturn<T> {
-  data: T | null;,
+  data: T | null;
   isLoading: boolean;
-  error: Error | null;,
+  error: Error | null;
   lastUpdated: number | null;
   subscription: StateSubscription | null;
   export interface UseOptimisticMutationOptions {
@@ -54,12 +54,12 @@ export interface UseStateSubscriptionOptions extends SubscriptionOptions {
   retryDelay?: number | ((attempt: number) => number);
 }
 export interface UseOptimisticMutationReturn<TVariables, TData> {
-  mutate: (variables: TVariables) => Promise<TData>;,
-  mutateAsync: (variables: TVariables) => Promise<TData>;,
+  mutate: (variables: TVariables) => Promise<TData>;
+  mutateAsync: (variables: TVariables) => Promise<TData>;
   isLoading: boolean;
-  error: Error | null;,
+  error: Error | null;
   data: TData | null;
-  reset: () => void;,
+  reset: () => void;
   optimisticUpdates: OptimisticUpdate;
 
 export interface UseDomainStateOptions<T> {
@@ -69,10 +69,10 @@ export interface UseDomainStateOptions<T> {
   suspense?: boolean;
 
 export interface UseDomainStateReturn<T> {
-  state: T;,
-  setState: (updater: (prev: T) => T | Partial<T>) => void;,
+  state: T;
+  setState: (updater: (prev: T) => T | Partial<T>) => void;
   isLoading: boolean;
-  error: Error | null;,
+  error: Error | null;
   lastModified: number;
 
 // Main real-time state hook
@@ -131,7 +131,7 @@ export function useRealTimeState(options: UseRealTimeStateOptions = {})
 };
 
 // State subscription hook
-export function useStateSubscription<T = any>(domain: string,)
+export function useStateSubscription<T = any>(domain: string)
   filters: SubscriptionFilter = [],
   options: UseStateSubscriptionOptions = {}
 ): UseStateSubscriptionReturn<T> {

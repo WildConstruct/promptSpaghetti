@@ -93,14 +93,14 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     dataClassification: "public" | "internal" | "restricted" | "confidential";
-    retentionPolicy: {,
+    retentionPolicy: {
         maxShareDuration: number;
         autoExpire: boolean;
         dataRetentionDays: number;
     };
     encryptionRequired: boolean;
     auditingEnabled: boolean;
-    accessControls: {,
+    accessControls: {
         requireAuthentication: boolean;
         ipWhitelist: string[];
         geoRestrictions: string[];
@@ -109,14 +109,14 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
     };
 }, {
     dataClassification: "public" | "internal" | "restricted" | "confidential";
-    retentionPolicy: {,
+    retentionPolicy: {
         maxShareDuration: number;
         autoExpire: boolean;
         dataRetentionDays: number;
     };
     encryptionRequired: boolean;
     auditingEnabled: boolean;
-    accessControls: {,
+    accessControls: {
         requireAuthentication: boolean;
         sessionTimeout?: number | undefined;
         ipWhitelist?: string[] | undefined;
@@ -169,7 +169,7 @@ export declare const SharingConfigSchema: z.ZodObject<{
     notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     permissions: "view" | "edit" | "admin" | "comment";
-    collaborators: {,
+    collaborators: {
         id: string;
         name: string;
         email: string;
@@ -236,7 +236,7 @@ export declare const ContentVersionSchema: z.ZodObject<{
     checksum: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -248,7 +248,7 @@ export declare const ContentVersionSchema: z.ZodObject<{
     changes: string[];
 }, {
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -301,7 +301,7 @@ export declare const VersionControlSchema: z.ZodObject<{
         checksum: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -313,7 +313,7 @@ export declare const VersionControlSchema: z.ZodObject<{
         changes: string[];
     }, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -343,9 +343,9 @@ export declare const VersionControlSchema: z.ZodObject<{
         resolution?: "auto" | "manual" | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    versions: {,
+    versions: {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -366,9 +366,9 @@ export declare const VersionControlSchema: z.ZodObject<{
         resolution?: "auto" | "manual" | undefined;
     }[] | undefined;
 }, {
-    versions: {,
+    versions: {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -416,7 +416,7 @@ export declare const ConnectionLabelSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     label: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -429,7 +429,7 @@ export declare const ConnectionLabelSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     label: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -469,7 +469,7 @@ export declare const StickyNoteSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -485,7 +485,7 @@ export declare const StickyNoteSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -527,7 +527,7 @@ export declare const AnnotationRegionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     createdAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -543,7 +543,7 @@ export declare const AnnotationRegionSchema: z.ZodObject<{
 }, {
     id: string;
     createdAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -610,7 +610,7 @@ export declare const ShareCommentSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     createdAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -634,7 +634,7 @@ export declare const ShareCommentSchema: z.ZodObject<{
 }, {
     id: string;
     createdAt: Date;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -684,7 +684,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         label: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -697,7 +697,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         label: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -737,7 +737,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -753,7 +753,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -795,7 +795,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -811,7 +811,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     }, {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -878,7 +878,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -902,7 +902,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     }, {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -925,11 +925,11 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         } | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    stickyNotes: {,
+    stickyNotes: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -942,11 +942,11 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         height: number;
         color: string;
     }[];
-    connectionLabels: {,
+    connectionLabels: {
         id: string;
         createdAt: Date;
         label: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -956,10 +956,10 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         targetNodeId: string;
         color?: string | undefined;
     }[];
-    regions: {,
+    regions: {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -973,10 +973,10 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         title: string;
         description?: string | undefined;
     }[];
-    comments: {,
+    comments: {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1003,7 +1003,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1020,7 +1020,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
         id: string;
         createdAt: Date;
         label: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1033,7 +1033,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     regions?: {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1050,7 +1050,7 @@ export declare const ContentAnnotationsSchema: z.ZodObject<{
     comments?: {
         id: string;
         createdAt: Date;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1123,7 +1123,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             checksum: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1135,7 +1135,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             changes: string[];
         }, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1165,9 +1165,9 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             resolution?: "auto" | "manual" | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        versions: {,
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1188,9 +1188,9 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             resolution?: "auto" | "manual" | undefined;
         }[] | undefined;
     }, {
-        versions: {,
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1239,7 +1239,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1252,7 +1252,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1292,7 +1292,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1308,7 +1308,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1350,7 +1350,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1366,7 +1366,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         }, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1433,7 +1433,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1457,7 +1457,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         }, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1480,11 +1480,11 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             } | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        stickyNotes: {,
+        stickyNotes: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1497,11 +1497,11 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             height: number;
             color: string;
         }[];
-        connectionLabels: {,
+        connectionLabels: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1511,10 +1511,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             targetNodeId: string;
             color?: string | undefined;
         }[];
-        regions: {,
+        regions: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1528,10 +1528,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             title: string;
             description?: string | undefined;
         }[];
-        comments: {,
+        comments: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1558,7 +1558,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1575,7 +1575,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1588,7 +1588,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         regions?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1605,7 +1605,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         comments?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1631,18 +1631,18 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     tags: string[];
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
         avatar?: string | undefined;
     };
-    annotations: {,
-        stickyNotes: {,
+    annotations: {
+        stickyNotes: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1655,11 +1655,11 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             height: number;
             color: string;
         }[];
-        connectionLabels: {,
+        connectionLabels: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1669,10 +1669,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             targetNodeId: string;
             color?: string | undefined;
         }[];
-        regions: {,
+        regions: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1686,10 +1686,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             title: string;
             description?: string | undefined;
         }[];
-        comments: {,
+        comments: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1715,10 +1715,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
     exportId: string;
     contentSize: number;
     checksumMd5: string;
-    versionControl: {,
-        versions: {,
+    versionControl: {
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1743,18 +1743,18 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
     language?: string | undefined;
 }, {
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
         avatar?: string | undefined;
     };
-    annotations: {,
+    annotations: {
         stickyNotes?: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1771,7 +1771,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1784,7 +1784,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         regions?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1801,7 +1801,7 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
         comments?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1827,10 +1827,10 @@ export declare const SharedContentMetadataSchema: z.ZodObject<{
     exportId: string;
     contentSize: number;
     checksumMd5: string;
-    versionControl: {,
-        versions: {,
+    versionControl: {
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -1873,7 +1873,7 @@ export declare const GeoLocationSchema: z.ZodObject<{
     region: string;
     country: string;
     city: string;
-    coordinates: {,
+    coordinates: {
         lat: number;
         lng: number;
     };
@@ -1881,7 +1881,7 @@ export declare const GeoLocationSchema: z.ZodObject<{
     region: string;
     country: string;
     city: string;
-    coordinates: {,
+    coordinates: {
         lat: number;
         lng: number;
     };
@@ -1949,7 +1949,7 @@ export declare const ShareViewSchema: z.ZodObject<{
         region: string;
         country: string;
         city: string;
-        coordinates: {,
+        coordinates: {
             lat: number;
             lng: number;
         };
@@ -1957,7 +1957,7 @@ export declare const ShareViewSchema: z.ZodObject<{
         region: string;
         country: string;
         city: string;
-        coordinates: {,
+        coordinates: {
             lat: number;
             lng: number;
         };
@@ -1968,7 +1968,7 @@ export declare const ShareViewSchema: z.ZodObject<{
     duration: number;
     ipAddress: string;
     userAgent: string;
-    viewerInfo: {,
+    viewerInfo: {
         sessionId: string;
         isAuthenticated: boolean;
         id?: string | undefined;
@@ -1980,7 +1980,7 @@ export declare const ShareViewSchema: z.ZodObject<{
         region: string;
         country: string;
         city: string;
-        coordinates: {,
+        coordinates: {
             lat: number;
             lng: number;
         };
@@ -1991,7 +1991,7 @@ export declare const ShareViewSchema: z.ZodObject<{
     duration: number;
     ipAddress: string;
     userAgent: string;
-    viewerInfo: {,
+    viewerInfo: {
         sessionId: string;
         isAuthenticated: boolean;
         id?: string | undefined;
@@ -2003,7 +2003,7 @@ export declare const ShareViewSchema: z.ZodObject<{
         region: string;
         country: string;
         city: string;
-        coordinates: {,
+        coordinates: {
             lat: number;
             lng: number;
         };
@@ -2043,7 +2043,7 @@ export declare const ShareDownloadSchema: z.ZodObject<{
     size: number;
     timestamp: Date;
     ipAddress: string;
-    downloadedBy: {,
+    downloadedBy: {
         sessionId: string;
         isAuthenticated: boolean;
         id?: string | undefined;
@@ -2058,7 +2058,7 @@ export declare const ShareDownloadSchema: z.ZodObject<{
     size: number;
     timestamp: Date;
     ipAddress: string;
-    downloadedBy: {,
+    downloadedBy: {
         sessionId: string;
         isAuthenticated: boolean;
         id?: string | undefined;
@@ -2093,7 +2093,7 @@ export declare const CollaborationEventSchema: z.ZodObject<{
     id: string;
     type: "edit" | "comment" | "annotation" | "permission_change";
     timestamp: Date;
-    user: {,
+    user: {
         id: string;
         name: string;
         email: string;
@@ -2105,7 +2105,7 @@ export declare const CollaborationEventSchema: z.ZodObject<{
     id: string;
     type: "edit" | "comment" | "annotation" | "permission_change";
     timestamp: Date;
-    user: {,
+    user: {
         id: string;
         name: string;
         email: string;
@@ -2204,7 +2204,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -2212,7 +2212,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -2223,7 +2223,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2235,7 +2235,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -2246,7 +2246,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2258,7 +2258,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -2298,7 +2298,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2313,7 +2313,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2348,7 +2348,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -2360,7 +2360,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -2419,13 +2419,13 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         averageTimeToAction: number;
     }>;
 }, "strip", z.ZodTypeAny, {
-    views: {,
+    views: {
         id: string;
         timestamp: Date;
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2437,20 +2437,20 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
         } | undefined;
     }[];
-    downloads: {,
+    downloads: {
         id: string;
         success: boolean;
         format: string;
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2459,17 +2459,17 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         };
         errorReason?: string | undefined;
     }[];
-    conversionMetrics: {,
+    conversionMetrics: {
         viewToDownload: number;
         viewToCollaboration: number;
         viewToSignup: number;
         averageTimeToAction: number;
     };
-    collaborations: {,
+    collaborations: {
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -2482,19 +2482,19 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
     averageViewDuration: number;
     uniqueViewers: number;
     peakConcurrentUsers: number;
-    geographicDistribution: {,
+    geographicDistribution: {
         country: string;
         views: number;
         uniqueViewers: number;
     }[];
-    deviceStats: {,
+    deviceStats: {
         browser: string;
         deviceType: "mobile" | "desktop" | "tablet";
         views: number;
         operatingSystem: string;
     }[];
 }, {
-    conversionMetrics: {,
+    conversionMetrics: {
         viewToDownload: number;
         viewToCollaboration: number;
         viewToSignup: number;
@@ -2510,7 +2510,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2522,7 +2522,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -2535,7 +2535,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -2548,7 +2548,7 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -2625,7 +2625,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 checksum: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2637,7 +2637,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 changes: string[];
             }, {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2667,9 +2667,9 @@ export declare const SharedContentSchema: z.ZodObject<{
                 resolution?: "auto" | "manual" | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
-            versions: {,
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2690,9 +2690,9 @@ export declare const SharedContentSchema: z.ZodObject<{
                 resolution?: "auto" | "manual" | undefined;
             }[] | undefined;
         }, {
-            versions: {,
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2741,7 +2741,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2754,7 +2754,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2794,7 +2794,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2810,7 +2810,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2852,7 +2852,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2868,7 +2868,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             }, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2935,7 +2935,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2959,7 +2959,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             }, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2982,11 +2982,11 @@ export declare const SharedContentSchema: z.ZodObject<{
                 } | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
-            stickyNotes: {,
+            stickyNotes: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -2999,11 +2999,11 @@ export declare const SharedContentSchema: z.ZodObject<{
                 height: number;
                 color: string;
             }[];
-            connectionLabels: {,
+            connectionLabels: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3013,10 +3013,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 targetNodeId: string;
                 color?: string | undefined;
             }[];
-            regions: {,
+            regions: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3030,10 +3030,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 title: string;
                 description?: string | undefined;
             }[];
-            comments: {,
+            comments: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3060,7 +3060,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3077,7 +3077,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3090,7 +3090,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             regions?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3107,7 +3107,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             comments?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3133,18 +3133,18 @@ export declare const SharedContentSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         tags: string[];
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
-            stickyNotes: {,
+        annotations: {
+            stickyNotes: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3157,11 +3157,11 @@ export declare const SharedContentSchema: z.ZodObject<{
                 height: number;
                 color: string;
             }[];
-            connectionLabels: {,
+            connectionLabels: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3171,10 +3171,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 targetNodeId: string;
                 color?: string | undefined;
             }[];
-            regions: {,
+            regions: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3188,10 +3188,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 title: string;
                 description?: string | undefined;
             }[];
-            comments: {,
+            comments: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3217,10 +3217,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3245,18 +3245,18 @@ export declare const SharedContentSchema: z.ZodObject<{
         language?: string | undefined;
     }, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
+        annotations: {
             stickyNotes?: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3273,7 +3273,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3286,7 +3286,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             regions?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3303,7 +3303,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             comments?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3329,10 +3329,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3402,7 +3402,7 @@ export declare const SharedContentSchema: z.ZodObject<{
         notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         permissions: "view" | "edit" | "admin" | "comment";
-        collaborators: {,
+        collaborators: {
             id: string;
             name: string;
             email: string;
@@ -3483,14 +3483,14 @@ export declare const SharedContentSchema: z.ZodObject<{
         }>;
     }, "strip", z.ZodTypeAny, {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             ipWhitelist: string[];
             geoRestrictions: string[];
@@ -3499,14 +3499,14 @@ export declare const SharedContentSchema: z.ZodObject<{
         };
     }, {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             sessionTimeout?: number | undefined;
             ipWhitelist?: string[] | undefined;
@@ -3559,7 +3559,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -3567,7 +3567,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -3578,7 +3578,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3590,7 +3590,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -3601,7 +3601,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3613,7 +3613,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -3653,7 +3653,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3668,7 +3668,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3703,7 +3703,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -3715,7 +3715,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -3774,13 +3774,13 @@ export declare const SharedContentSchema: z.ZodObject<{
             averageTimeToAction: number;
         }>;
     }, "strip", z.ZodTypeAny, {
-        views: {,
+        views: {
             id: string;
             timestamp: Date;
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3792,20 +3792,20 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
             } | undefined;
         }[];
-        downloads: {,
+        downloads: {
             id: string;
             success: boolean;
             format: string;
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3814,17 +3814,17 @@ export declare const SharedContentSchema: z.ZodObject<{
             };
             errorReason?: string | undefined;
         }[];
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
             averageTimeToAction: number;
         };
-        collaborations: {,
+        collaborations: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -3837,19 +3837,19 @@ export declare const SharedContentSchema: z.ZodObject<{
         averageViewDuration: number;
         uniqueViewers: number;
         peakConcurrentUsers: number;
-        geographicDistribution: {,
+        geographicDistribution: {
             country: string;
             views: number;
             uniqueViewers: number;
         }[];
-        deviceStats: {,
+        deviceStats: {
             browser: string;
             deviceType: "mobile" | "desktop" | "tablet";
             views: number;
             operatingSystem: string;
         }[];
     }, {
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
@@ -3865,7 +3865,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3877,7 +3877,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -3890,7 +3890,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -3903,7 +3903,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -3933,21 +3933,21 @@ export declare const SharedContentSchema: z.ZodObject<{
     updatedAt: Date;
     status: "active" | "expired" | "pending" | "revoked";
     type: "template" | "bundle" | "graph" | "dataset";
-    metadata: {,
+    metadata: {
         tags: string[];
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
-            stickyNotes: {,
+        annotations: {
+            stickyNotes: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3960,11 +3960,11 @@ export declare const SharedContentSchema: z.ZodObject<{
                 height: number;
                 color: string;
             }[];
-            connectionLabels: {,
+            connectionLabels: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3974,10 +3974,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 targetNodeId: string;
                 color?: string | undefined;
             }[];
-            regions: {,
+            regions: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -3991,10 +3991,10 @@ export declare const SharedContentSchema: z.ZodObject<{
                 title: string;
                 description?: string | undefined;
             }[];
-            comments: {,
+            comments: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4020,10 +4020,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4048,16 +4048,16 @@ export declare const SharedContentSchema: z.ZodObject<{
         language?: string | undefined;
     };
     title: string;
-    security: {,
+    security: {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             ipWhitelist: string[];
             geoRestrictions: string[];
@@ -4065,14 +4065,14 @@ export declare const SharedContentSchema: z.ZodObject<{
             maxConcurrentUsers?: number | undefined;
         };
     };
-    analytics: {,
-        views: {,
+    analytics: {
+        views: {
             id: string;
             timestamp: Date;
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -4084,20 +4084,20 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
             } | undefined;
         }[];
-        downloads: {,
+        downloads: {
             id: string;
             success: boolean;
             format: string;
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -4106,17 +4106,17 @@ export declare const SharedContentSchema: z.ZodObject<{
             };
             errorReason?: string | undefined;
         }[];
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
             averageTimeToAction: number;
         };
-        collaborations: {,
+        collaborations: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -4129,21 +4129,21 @@ export declare const SharedContentSchema: z.ZodObject<{
         averageViewDuration: number;
         uniqueViewers: number;
         peakConcurrentUsers: number;
-        geographicDistribution: {,
+        geographicDistribution: {
             country: string;
             views: number;
             uniqueViewers: number;
         }[];
-        deviceStats: {,
+        deviceStats: {
             browser: string;
             deviceType: "mobile" | "desktop" | "tablet";
             views: number;
             operatingSystem: string;
         }[];
     };
-    sharing: {,
+    sharing: {
         permissions: "view" | "edit" | "admin" | "comment";
-        collaborators: {,
+        collaborators: {
             id: string;
             name: string;
             email: string;
@@ -4172,20 +4172,20 @@ export declare const SharedContentSchema: z.ZodObject<{
     updatedAt: Date;
     status: "active" | "expired" | "pending" | "revoked";
     type: "template" | "bundle" | "graph" | "dataset";
-    metadata: {,
+    metadata: {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
+        annotations: {
             stickyNotes?: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4202,7 +4202,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4215,7 +4215,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             regions?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4232,7 +4232,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             comments?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4258,10 +4258,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -4287,16 +4287,16 @@ export declare const SharedContentSchema: z.ZodObject<{
         language?: string | undefined;
     };
     title: string;
-    security: {,
+    security: {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             sessionTimeout?: number | undefined;
             ipWhitelist?: string[] | undefined;
@@ -4304,8 +4304,8 @@ export declare const SharedContentSchema: z.ZodObject<{
             maxConcurrentUsers?: number | undefined;
         };
     };
-    analytics: {,
-        conversionMetrics: {,
+    analytics: {
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
@@ -4321,7 +4321,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -4333,7 +4333,7 @@ export declare const SharedContentSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -4346,7 +4346,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -4359,7 +4359,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -4380,7 +4380,7 @@ export declare const SharedContentSchema: z.ZodObject<{
             operatingSystem: string;
         }[] | undefined;
     };
-    sharing: {,
+    sharing: {
         permissions: "view" | "edit" | "admin" | "comment";
         accessLevel: "private" | "public" | "restricted";
         shareUrl: string;
@@ -4573,7 +4573,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     title: string;
     contentType: "template" | "bundle" | "graph" | "dataset";
     contentId: string;
-    sharing: {,
+    sharing: {
         permissions?: "view" | "edit" | "admin" | "comment" | undefined;
         expiresAt?: Date | undefined;
         collaborators?: {
@@ -4619,7 +4619,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     title: string;
     contentType: "template" | "bundle" | "graph" | "dataset";
     contentId: string;
-    sharing: {,
+    sharing: {
         permissions?: "view" | "edit" | "admin" | "comment" | undefined;
         expiresAt?: Date | undefined;
         collaborators?: {
@@ -5005,7 +5005,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     checksum: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5017,7 +5017,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     changes: string[];
                 }, {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5047,9 +5047,9 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     resolution?: "auto" | "manual" | undefined;
                 }>, "many">>;
             }, "strip", z.ZodTypeAny, {
-                versions: {,
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5070,9 +5070,9 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     resolution?: "auto" | "manual" | undefined;
                 }[] | undefined;
             }, {
-                versions: {,
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5121,7 +5121,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5134,7 +5134,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5174,7 +5174,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5190,7 +5190,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5232,7 +5232,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5248,7 +5248,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 }, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5315,7 +5315,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 }, "strip", z.ZodTypeAny, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5339,7 +5339,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 }, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5362,11 +5362,11 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     } | undefined;
                 }>, "many">>;
             }, "strip", z.ZodTypeAny, {
-                stickyNotes: {,
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5379,11 +5379,11 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5393,10 +5393,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5410,10 +5410,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5440,7 +5440,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5457,7 +5457,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5470,7 +5470,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5487,7 +5487,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5513,18 +5513,18 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             tags: string[];
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
-                stickyNotes: {,
+            annotations: {
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5537,11 +5537,11 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5551,10 +5551,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5568,10 +5568,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5597,10 +5597,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5625,18 +5625,18 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             language?: string | undefined;
         }, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
+            annotations: {
                 stickyNotes?: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5653,7 +5653,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5666,7 +5666,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5683,7 +5683,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5709,10 +5709,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -5782,7 +5782,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
             permissions: "view" | "edit" | "admin" | "comment";
-            collaborators: {,
+            collaborators: {
                 id: string;
                 name: string;
                 email: string;
@@ -5863,14 +5863,14 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }>;
         }, "strip", z.ZodTypeAny, {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 ipWhitelist: string[];
                 geoRestrictions: string[];
@@ -5879,14 +5879,14 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             };
         }, {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 sessionTimeout?: number | undefined;
                 ipWhitelist?: string[] | undefined;
@@ -5939,7 +5939,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -5947,7 +5947,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -5958,7 +5958,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -5970,7 +5970,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -5981,7 +5981,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -5993,7 +5993,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -6033,7 +6033,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6048,7 +6048,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6083,7 +6083,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6095,7 +6095,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6154,13 +6154,13 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 averageTimeToAction: number;
             }>;
         }, "strip", z.ZodTypeAny, {
-            views: {,
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6172,20 +6172,20 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6194,17 +6194,17 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6217,19 +6217,19 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         }, {
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -6245,7 +6245,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6257,7 +6257,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -6270,7 +6270,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6283,7 +6283,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6313,21 +6313,21 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             tags: string[];
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
-                stickyNotes: {,
+            annotations: {
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6340,11 +6340,11 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6354,10 +6354,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6371,10 +6371,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6400,10 +6400,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6428,16 +6428,16 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 ipWhitelist: string[];
                 geoRestrictions: string[];
@@ -6445,14 +6445,14 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            views: {,
+        analytics: {
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6464,20 +6464,20 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6486,17 +6486,17 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6509,21 +6509,21 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
-            collaborators: {,
+            collaborators: {
                 id: string;
                 name: string;
                 email: string;
@@ -6552,20 +6552,20 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
+            annotations: {
                 stickyNotes?: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6582,7 +6582,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6595,7 +6595,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6612,7 +6612,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6638,10 +6638,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6667,16 +6667,16 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 sessionTimeout?: number | undefined;
                 ipWhitelist?: string[] | undefined;
@@ -6684,8 +6684,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            conversionMetrics: {,
+        analytics: {
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -6701,7 +6701,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6713,7 +6713,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -6726,7 +6726,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6739,7 +6739,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -6760,7 +6760,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 operatingSystem: string;
             }[] | undefined;
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
             accessLevel: "private" | "public" | "restricted";
             shareUrl: string;
@@ -6810,21 +6810,21 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             tags: string[];
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
-                stickyNotes: {,
+            annotations: {
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6837,11 +6837,11 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6851,10 +6851,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6868,10 +6868,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6897,10 +6897,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -6925,16 +6925,16 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 ipWhitelist: string[];
                 geoRestrictions: string[];
@@ -6942,14 +6942,14 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            views: {,
+        analytics: {
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6961,20 +6961,20 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -6983,17 +6983,17 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -7006,21 +7006,21 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
-            collaborators: {,
+            collaborators: {
                 id: string;
                 name: string;
                 email: string;
@@ -7059,20 +7059,20 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
+            annotations: {
                 stickyNotes?: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -7089,7 +7089,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -7102,7 +7102,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -7119,7 +7119,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -7145,10 +7145,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -7174,16 +7174,16 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 sessionTimeout?: number | undefined;
                 ipWhitelist?: string[] | undefined;
@@ -7191,8 +7191,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            conversionMetrics: {,
+        analytics: {
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -7208,7 +7208,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -7220,7 +7220,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -7233,7 +7233,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -7246,7 +7246,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -7267,7 +7267,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 operatingSystem: string;
             }[] | undefined;
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
             accessLevel: "private" | "public" | "restricted";
             shareUrl: string;
@@ -7389,7 +7389,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7397,7 +7397,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7408,7 +7408,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7420,7 +7420,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7431,7 +7431,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7443,7 +7443,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7483,7 +7483,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7498,7 +7498,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7533,7 +7533,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7545,7 +7545,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7604,13 +7604,13 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             averageTimeToAction: number;
         }>;
     }, "strip", z.ZodTypeAny, {
-        views: {,
+        views: {
             id: string;
             timestamp: Date;
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7622,20 +7622,20 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
             } | undefined;
         }[];
-        downloads: {,
+        downloads: {
             id: string;
             success: boolean;
             format: string;
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7644,17 +7644,17 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             };
             errorReason?: string | undefined;
         }[];
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
             averageTimeToAction: number;
         };
-        collaborations: {,
+        collaborations: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7667,19 +7667,19 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         averageViewDuration: number;
         uniqueViewers: number;
         peakConcurrentUsers: number;
-        geographicDistribution: {,
+        geographicDistribution: {
             country: string;
             views: number;
             uniqueViewers: number;
         }[];
-        deviceStats: {,
+        deviceStats: {
             browser: string;
             deviceType: "mobile" | "desktop" | "tablet";
             views: number;
             operatingSystem: string;
         }[];
     }, {
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
@@ -7695,7 +7695,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7707,7 +7707,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7720,7 +7720,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7733,7 +7733,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7757,14 +7757,14 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
     error: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     success: boolean;
-    analytics: {,
-        views: {,
+    analytics: {
+        views: {
             id: string;
             timestamp: Date;
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7776,20 +7776,20 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
             } | undefined;
         }[];
-        downloads: {,
+        downloads: {
             id: string;
             success: boolean;
             format: string;
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7798,17 +7798,17 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             };
             errorReason?: string | undefined;
         }[];
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
             averageTimeToAction: number;
         };
-        collaborations: {,
+        collaborations: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7821,12 +7821,12 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         averageViewDuration: number;
         uniqueViewers: number;
         peakConcurrentUsers: number;
-        geographicDistribution: {,
+        geographicDistribution: {
             country: string;
             views: number;
             uniqueViewers: number;
         }[];
-        deviceStats: {,
+        deviceStats: {
             browser: string;
             deviceType: "mobile" | "desktop" | "tablet";
             views: number;
@@ -7836,8 +7836,8 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
     error?: string | undefined;
 }, {
     success: boolean;
-    analytics: {,
-        conversionMetrics: {,
+    analytics: {
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
@@ -7853,7 +7853,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7865,7 +7865,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -7878,7 +7878,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -7891,7 +7891,7 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -7999,8 +7999,8 @@ export declare function validateShareContent(content: unknown, type: string): bo
 export declare function validateShareToken(token: string): boolean;
 export declare function validatePassword(password: string): {
     valid: boolean;
-    strength: 'weak' | 'medium' | 'strong';
-};
+    strength: 'weak' | 'medium' | 'strong'
+  };
 export declare const SharingSchemas: {
     ShareAccessLevel: z.ZodEnum<["public", "restricted", "private"]>;
     SharePermission: z.ZodEnum<["view", "comment", "edit", "admin"]>;
@@ -8099,7 +8099,7 @@ export declare const SharingSchemas: {
         notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         permissions: "view" | "edit" | "admin" | "comment";
-        collaborators: {,
+        collaborators: {
             id: string;
             name: string;
             email: string;
@@ -8180,14 +8180,14 @@ export declare const SharingSchemas: {
         }>;
     }, "strip", z.ZodTypeAny, {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             ipWhitelist: string[];
             geoRestrictions: string[];
@@ -8196,14 +8196,14 @@ export declare const SharingSchemas: {
         };
     }, {
         dataClassification: "public" | "internal" | "restricted" | "confidential";
-        retentionPolicy: {,
+        retentionPolicy: {
             maxShareDuration: number;
             autoExpire: boolean;
             dataRetentionDays: number;
         };
         encryptionRequired: boolean;
         auditingEnabled: boolean;
-        accessControls: {,
+        accessControls: {
             requireAuthentication: boolean;
             sessionTimeout?: number | undefined;
             ipWhitelist?: string[] | undefined;
@@ -8304,7 +8304,7 @@ export declare const SharingSchemas: {
                     checksum: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8316,7 +8316,7 @@ export declare const SharingSchemas: {
                     changes: string[];
                 }, {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8346,9 +8346,9 @@ export declare const SharingSchemas: {
                     resolution?: "auto" | "manual" | undefined;
                 }>, "many">>;
             }, "strip", z.ZodTypeAny, {
-                versions: {,
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8369,9 +8369,9 @@ export declare const SharingSchemas: {
                     resolution?: "auto" | "manual" | undefined;
                 }[] | undefined;
             }, {
-                versions: {,
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8420,7 +8420,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8433,7 +8433,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8473,7 +8473,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8489,7 +8489,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8531,7 +8531,7 @@ export declare const SharingSchemas: {
                 }, "strip", z.ZodTypeAny, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8547,7 +8547,7 @@ export declare const SharingSchemas: {
                 }, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8614,7 +8614,7 @@ export declare const SharingSchemas: {
                 }, "strip", z.ZodTypeAny, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8638,7 +8638,7 @@ export declare const SharingSchemas: {
                 }, {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8661,11 +8661,11 @@ export declare const SharingSchemas: {
                     } | undefined;
                 }>, "many">>;
             }, "strip", z.ZodTypeAny, {
-                stickyNotes: {,
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8678,11 +8678,11 @@ export declare const SharingSchemas: {
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8692,10 +8692,10 @@ export declare const SharingSchemas: {
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8709,10 +8709,10 @@ export declare const SharingSchemas: {
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8739,7 +8739,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8756,7 +8756,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8769,7 +8769,7 @@ export declare const SharingSchemas: {
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8786,7 +8786,7 @@ export declare const SharingSchemas: {
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8812,18 +8812,18 @@ export declare const SharingSchemas: {
         }, "strip", z.ZodTypeAny, {
             tags: string[];
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
-                stickyNotes: {,
+            annotations: {
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8836,11 +8836,11 @@ export declare const SharingSchemas: {
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8850,10 +8850,10 @@ export declare const SharingSchemas: {
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8867,10 +8867,10 @@ export declare const SharingSchemas: {
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8896,10 +8896,10 @@ export declare const SharingSchemas: {
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8924,18 +8924,18 @@ export declare const SharingSchemas: {
             language?: string | undefined;
         }, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
+            annotations: {
                 stickyNotes?: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8952,7 +8952,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8965,7 +8965,7 @@ export declare const SharingSchemas: {
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -8982,7 +8982,7 @@ export declare const SharingSchemas: {
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9008,10 +9008,10 @@ export declare const SharingSchemas: {
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9081,7 +9081,7 @@ export declare const SharingSchemas: {
             notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
             permissions: "view" | "edit" | "admin" | "comment";
-            collaborators: {,
+            collaborators: {
                 id: string;
                 name: string;
                 email: string;
@@ -9162,14 +9162,14 @@ export declare const SharingSchemas: {
             }>;
         }, "strip", z.ZodTypeAny, {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 ipWhitelist: string[];
                 geoRestrictions: string[];
@@ -9178,14 +9178,14 @@ export declare const SharingSchemas: {
             };
         }, {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 sessionTimeout?: number | undefined;
                 ipWhitelist?: string[] | undefined;
@@ -9238,7 +9238,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -9246,7 +9246,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -9257,7 +9257,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9269,7 +9269,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -9280,7 +9280,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9292,7 +9292,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -9332,7 +9332,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9347,7 +9347,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9382,7 +9382,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -9394,7 +9394,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -9453,13 +9453,13 @@ export declare const SharingSchemas: {
                 averageTimeToAction: number;
             }>;
         }, "strip", z.ZodTypeAny, {
-            views: {,
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9471,20 +9471,20 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9493,17 +9493,17 @@ export declare const SharingSchemas: {
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -9516,19 +9516,19 @@ export declare const SharingSchemas: {
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         }, {
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -9544,7 +9544,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9556,7 +9556,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -9569,7 +9569,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9582,7 +9582,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -9612,21 +9612,21 @@ export declare const SharingSchemas: {
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             tags: string[];
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
-                stickyNotes: {,
+            annotations: {
+                stickyNotes: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9639,11 +9639,11 @@ export declare const SharingSchemas: {
                     height: number;
                     color: string;
                 }[];
-                connectionLabels: {,
+                connectionLabels: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9653,10 +9653,10 @@ export declare const SharingSchemas: {
                     targetNodeId: string;
                     color?: string | undefined;
                 }[];
-                regions: {,
+                regions: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9670,10 +9670,10 @@ export declare const SharingSchemas: {
                     title: string;
                     description?: string | undefined;
                 }[];
-                comments: {,
+                comments: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9699,10 +9699,10 @@ export declare const SharingSchemas: {
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9727,16 +9727,16 @@ export declare const SharingSchemas: {
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 ipWhitelist: string[];
                 geoRestrictions: string[];
@@ -9744,14 +9744,14 @@ export declare const SharingSchemas: {
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            views: {,
+        analytics: {
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9763,20 +9763,20 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -9785,17 +9785,17 @@ export declare const SharingSchemas: {
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -9808,21 +9808,21 @@ export declare const SharingSchemas: {
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
-            collaborators: {,
+            collaborators: {
                 id: string;
                 name: string;
                 email: string;
@@ -9851,20 +9851,20 @@ export declare const SharingSchemas: {
         updatedAt: Date;
         status: "active" | "expired" | "pending" | "revoked";
         type: "template" | "bundle" | "graph" | "dataset";
-        metadata: {,
+        metadata: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
                 avatar?: string | undefined;
             };
-            annotations: {,
+            annotations: {
                 stickyNotes?: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9881,7 +9881,7 @@ export declare const SharingSchemas: {
                     id: string;
                     createdAt: Date;
                     label: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9894,7 +9894,7 @@ export declare const SharingSchemas: {
                 regions?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9911,7 +9911,7 @@ export declare const SharingSchemas: {
                 comments?: {
                     id: string;
                     createdAt: Date;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9937,10 +9937,10 @@ export declare const SharingSchemas: {
             exportId: string;
             contentSize: number;
             checksumMd5: string;
-            versionControl: {,
-                versions: {,
+            versionControl: {
+                versions: {
                     version: string;
-                    author: {,
+                    author: {
                         id: string;
                         name: string;
                         email: string;
@@ -9966,16 +9966,16 @@ export declare const SharingSchemas: {
             language?: string | undefined;
         };
         title: string;
-        security: {,
+        security: {
             dataClassification: "public" | "internal" | "restricted" | "confidential";
-            retentionPolicy: {,
+            retentionPolicy: {
                 maxShareDuration: number;
                 autoExpire: boolean;
                 dataRetentionDays: number;
             };
             encryptionRequired: boolean;
             auditingEnabled: boolean;
-            accessControls: {,
+            accessControls: {
                 requireAuthentication: boolean;
                 sessionTimeout?: number | undefined;
                 ipWhitelist?: string[] | undefined;
@@ -9983,8 +9983,8 @@ export declare const SharingSchemas: {
                 maxConcurrentUsers?: number | undefined;
             };
         };
-        analytics: {,
-            conversionMetrics: {,
+        analytics: {
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -10000,7 +10000,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -10012,7 +10012,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -10025,7 +10025,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -10038,7 +10038,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -10059,7 +10059,7 @@ export declare const SharingSchemas: {
                 operatingSystem: string;
             }[] | undefined;
         };
-        sharing: {,
+        sharing: {
             permissions: "view" | "edit" | "admin" | "comment";
             accessLevel: "private" | "public" | "restricted";
             shareUrl: string;
@@ -10135,7 +10135,7 @@ export declare const SharingSchemas: {
                 checksum: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10147,7 +10147,7 @@ export declare const SharingSchemas: {
                 changes: string[];
             }, {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10177,9 +10177,9 @@ export declare const SharingSchemas: {
                 resolution?: "auto" | "manual" | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
-            versions: {,
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10200,9 +10200,9 @@ export declare const SharingSchemas: {
                 resolution?: "auto" | "manual" | undefined;
             }[] | undefined;
         }, {
-            versions: {,
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10251,7 +10251,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10264,7 +10264,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10304,7 +10304,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10320,7 +10320,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10362,7 +10362,7 @@ export declare const SharingSchemas: {
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10378,7 +10378,7 @@ export declare const SharingSchemas: {
             }, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10445,7 +10445,7 @@ export declare const SharingSchemas: {
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10469,7 +10469,7 @@ export declare const SharingSchemas: {
             }, {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10492,11 +10492,11 @@ export declare const SharingSchemas: {
                 } | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
-            stickyNotes: {,
+            stickyNotes: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10509,11 +10509,11 @@ export declare const SharingSchemas: {
                 height: number;
                 color: string;
             }[];
-            connectionLabels: {,
+            connectionLabels: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10523,10 +10523,10 @@ export declare const SharingSchemas: {
                 targetNodeId: string;
                 color?: string | undefined;
             }[];
-            regions: {,
+            regions: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10540,10 +10540,10 @@ export declare const SharingSchemas: {
                 title: string;
                 description?: string | undefined;
             }[];
-            comments: {,
+            comments: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10570,7 +10570,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10587,7 +10587,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10600,7 +10600,7 @@ export declare const SharingSchemas: {
             regions?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10617,7 +10617,7 @@ export declare const SharingSchemas: {
             comments?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10643,18 +10643,18 @@ export declare const SharingSchemas: {
     }, "strip", z.ZodTypeAny, {
         tags: string[];
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
-            stickyNotes: {,
+        annotations: {
+            stickyNotes: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10667,11 +10667,11 @@ export declare const SharingSchemas: {
                 height: number;
                 color: string;
             }[];
-            connectionLabels: {,
+            connectionLabels: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10681,10 +10681,10 @@ export declare const SharingSchemas: {
                 targetNodeId: string;
                 color?: string | undefined;
             }[];
-            regions: {,
+            regions: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10698,10 +10698,10 @@ export declare const SharingSchemas: {
                 title: string;
                 description?: string | undefined;
             }[];
-            comments: {,
+            comments: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10727,10 +10727,10 @@ export declare const SharingSchemas: {
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10755,18 +10755,18 @@ export declare const SharingSchemas: {
         language?: string | undefined;
     }, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
             avatar?: string | undefined;
         };
-        annotations: {,
+        annotations: {
             stickyNotes?: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10783,7 +10783,7 @@ export declare const SharingSchemas: {
                 id: string;
                 createdAt: Date;
                 label: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10796,7 +10796,7 @@ export declare const SharingSchemas: {
             regions?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10813,7 +10813,7 @@ export declare const SharingSchemas: {
             comments?: {
                 id: string;
                 createdAt: Date;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10839,10 +10839,10 @@ export declare const SharingSchemas: {
         exportId: string;
         contentSize: number;
         checksumMd5: string;
-        versionControl: {,
-            versions: {,
+        versionControl: {
+            versions: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
@@ -10893,7 +10893,7 @@ export declare const SharingSchemas: {
             checksum: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -10905,7 +10905,7 @@ export declare const SharingSchemas: {
             changes: string[];
         }, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -10935,9 +10935,9 @@ export declare const SharingSchemas: {
             resolution?: "auto" | "manual" | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        versions: {,
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -10958,9 +10958,9 @@ export declare const SharingSchemas: {
             resolution?: "auto" | "manual" | undefined;
         }[] | undefined;
     }, {
-        versions: {,
+        versions: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11009,7 +11009,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11022,7 +11022,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11062,7 +11062,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11078,7 +11078,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11120,7 +11120,7 @@ export declare const SharingSchemas: {
         }, "strip", z.ZodTypeAny, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11136,7 +11136,7 @@ export declare const SharingSchemas: {
         }, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11203,7 +11203,7 @@ export declare const SharingSchemas: {
         }, "strip", z.ZodTypeAny, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11227,7 +11227,7 @@ export declare const SharingSchemas: {
         }, {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11250,11 +11250,11 @@ export declare const SharingSchemas: {
             } | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        stickyNotes: {,
+        stickyNotes: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11267,11 +11267,11 @@ export declare const SharingSchemas: {
             height: number;
             color: string;
         }[];
-        connectionLabels: {,
+        connectionLabels: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11281,10 +11281,10 @@ export declare const SharingSchemas: {
             targetNodeId: string;
             color?: string | undefined;
         }[];
-        regions: {,
+        regions: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11298,10 +11298,10 @@ export declare const SharingSchemas: {
             title: string;
             description?: string | undefined;
         }[];
-        comments: {,
+        comments: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11328,7 +11328,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11345,7 +11345,7 @@ export declare const SharingSchemas: {
             id: string;
             createdAt: Date;
             label: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11358,7 +11358,7 @@ export declare const SharingSchemas: {
         regions?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11375,7 +11375,7 @@ export declare const SharingSchemas: {
         comments?: {
             id: string;
             createdAt: Date;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -11443,7 +11443,7 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -11451,7 +11451,7 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -11462,7 +11462,7 @@ export declare const SharingSchemas: {
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11474,7 +11474,7 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -11485,7 +11485,7 @@ export declare const SharingSchemas: {
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11497,7 +11497,7 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -11537,7 +11537,7 @@ export declare const SharingSchemas: {
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11552,7 +11552,7 @@ export declare const SharingSchemas: {
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11587,7 +11587,7 @@ export declare const SharingSchemas: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -11599,7 +11599,7 @@ export declare const SharingSchemas: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -11658,13 +11658,13 @@ export declare const SharingSchemas: {
             averageTimeToAction: number;
         }>;
     }, "strip", z.ZodTypeAny, {
-        views: {,
+        views: {
             id: string;
             timestamp: Date;
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11676,20 +11676,20 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
             } | undefined;
         }[];
-        downloads: {,
+        downloads: {
             id: string;
             success: boolean;
             format: string;
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11698,17 +11698,17 @@ export declare const SharingSchemas: {
             };
             errorReason?: string | undefined;
         }[];
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
             averageTimeToAction: number;
         };
-        collaborations: {,
+        collaborations: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -11721,19 +11721,19 @@ export declare const SharingSchemas: {
         averageViewDuration: number;
         uniqueViewers: number;
         peakConcurrentUsers: number;
-        geographicDistribution: {,
+        geographicDistribution: {
             country: string;
             views: number;
             uniqueViewers: number;
         }[];
-        deviceStats: {,
+        deviceStats: {
             browser: string;
             deviceType: "mobile" | "desktop" | "tablet";
             views: number;
             operatingSystem: string;
         }[];
     }, {
-        conversionMetrics: {,
+        conversionMetrics: {
             viewToDownload: number;
             viewToCollaboration: number;
             viewToSignup: number;
@@ -11749,7 +11749,7 @@ export declare const SharingSchemas: {
             duration: number;
             ipAddress: string;
             userAgent: string;
-            viewerInfo: {,
+            viewerInfo: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11761,7 +11761,7 @@ export declare const SharingSchemas: {
                 region: string;
                 country: string;
                 city: string;
-                coordinates: {,
+                coordinates: {
                     lat: number;
                     lng: number;
                 };
@@ -11774,7 +11774,7 @@ export declare const SharingSchemas: {
             size: number;
             timestamp: Date;
             ipAddress: string;
-            downloadedBy: {,
+            downloadedBy: {
                 sessionId: string;
                 isAuthenticated: boolean;
                 id?: string | undefined;
@@ -11787,7 +11787,7 @@ export declare const SharingSchemas: {
             id: string;
             type: "edit" | "comment" | "annotation" | "permission_change";
             timestamp: Date;
-            user: {,
+            user: {
                 id: string;
                 name: string;
                 email: string;
@@ -11852,7 +11852,7 @@ export declare const SharingSchemas: {
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -11860,7 +11860,7 @@ export declare const SharingSchemas: {
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -11871,7 +11871,7 @@ export declare const SharingSchemas: {
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -11883,7 +11883,7 @@ export declare const SharingSchemas: {
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -11894,7 +11894,7 @@ export declare const SharingSchemas: {
         duration: number;
         ipAddress: string;
         userAgent: string;
-        viewerInfo: {,
+        viewerInfo: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -11906,7 +11906,7 @@ export declare const SharingSchemas: {
             region: string;
             country: string;
             city: string;
-            coordinates: {,
+            coordinates: {
                 lat: number;
                 lng: number;
             };
@@ -11946,7 +11946,7 @@ export declare const SharingSchemas: {
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -11961,7 +11961,7 @@ export declare const SharingSchemas: {
         size: number;
         timestamp: Date;
         ipAddress: string;
-        downloadedBy: {,
+        downloadedBy: {
             sessionId: string;
             isAuthenticated: boolean;
             id?: string | undefined;
@@ -11996,7 +11996,7 @@ export declare const SharingSchemas: {
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -12008,7 +12008,7 @@ export declare const SharingSchemas: {
         id: string;
         type: "edit" | "comment" | "annotation" | "permission_change";
         timestamp: Date;
-        user: {,
+        user: {
             id: string;
             name: string;
             email: string;
@@ -12184,7 +12184,7 @@ export declare const SharingSchemas: {
         title: string;
         contentType: "template" | "bundle" | "graph" | "dataset";
         contentId: string;
-        sharing: {,
+        sharing: {
             permissions?: "view" | "edit" | "admin" | "comment" | undefined;
             expiresAt?: Date | undefined;
             collaborators?: {
@@ -12230,7 +12230,7 @@ export declare const SharingSchemas: {
         title: string;
         contentType: "template" | "bundle" | "graph" | "dataset";
         contentId: string;
-        sharing: {,
+        sharing: {
             permissions?: "view" | "edit" | "admin" | "comment" | undefined;
             expiresAt?: Date | undefined;
             collaborators?: {
@@ -12616,7 +12616,7 @@ export declare const SharingSchemas: {
                         checksum: z.ZodString;
                     }, "strip", z.ZodTypeAny, {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12628,7 +12628,7 @@ export declare const SharingSchemas: {
                         changes: string[];
                     }, {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12658,9 +12658,9 @@ export declare const SharingSchemas: {
                         resolution?: "auto" | "manual" | undefined;
                     }>, "many">>;
                 }, "strip", z.ZodTypeAny, {
-                    versions: {,
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12681,9 +12681,9 @@ export declare const SharingSchemas: {
                         resolution?: "auto" | "manual" | undefined;
                     }[] | undefined;
                 }, {
-                    versions: {,
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12732,7 +12732,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12745,7 +12745,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12785,7 +12785,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12801,7 +12801,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12843,7 +12843,7 @@ export declare const SharingSchemas: {
                     }, "strip", z.ZodTypeAny, {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12859,7 +12859,7 @@ export declare const SharingSchemas: {
                     }, {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12926,7 +12926,7 @@ export declare const SharingSchemas: {
                     }, "strip", z.ZodTypeAny, {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12950,7 +12950,7 @@ export declare const SharingSchemas: {
                     }, {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12973,11 +12973,11 @@ export declare const SharingSchemas: {
                         } | undefined;
                     }>, "many">>;
                 }, "strip", z.ZodTypeAny, {
-                    stickyNotes: {,
+                    stickyNotes: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -12990,11 +12990,11 @@ export declare const SharingSchemas: {
                         height: number;
                         color: string;
                     }[];
-                    connectionLabels: {,
+                    connectionLabels: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13004,10 +13004,10 @@ export declare const SharingSchemas: {
                         targetNodeId: string;
                         color?: string | undefined;
                     }[];
-                    regions: {,
+                    regions: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13021,10 +13021,10 @@ export declare const SharingSchemas: {
                         title: string;
                         description?: string | undefined;
                     }[];
-                    comments: {,
+                    comments: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13051,7 +13051,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13068,7 +13068,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13081,7 +13081,7 @@ export declare const SharingSchemas: {
                     regions?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13098,7 +13098,7 @@ export declare const SharingSchemas: {
                     comments?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13124,18 +13124,18 @@ export declare const SharingSchemas: {
             }, "strip", z.ZodTypeAny, {
                 tags: string[];
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
-                    stickyNotes: {,
+                annotations: {
+                    stickyNotes: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13148,11 +13148,11 @@ export declare const SharingSchemas: {
                         height: number;
                         color: string;
                     }[];
-                    connectionLabels: {,
+                    connectionLabels: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13162,10 +13162,10 @@ export declare const SharingSchemas: {
                         targetNodeId: string;
                         color?: string | undefined;
                     }[];
-                    regions: {,
+                    regions: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13179,10 +13179,10 @@ export declare const SharingSchemas: {
                         title: string;
                         description?: string | undefined;
                     }[];
-                    comments: {,
+                    comments: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13208,10 +13208,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13236,18 +13236,18 @@ export declare const SharingSchemas: {
                 language?: string | undefined;
             }, {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
+                annotations: {
                     stickyNotes?: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13264,7 +13264,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13277,7 +13277,7 @@ export declare const SharingSchemas: {
                     regions?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13294,7 +13294,7 @@ export declare const SharingSchemas: {
                     comments?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13320,10 +13320,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13393,7 +13393,7 @@ export declare const SharingSchemas: {
                 notifyOnAccess: z.ZodDefault<z.ZodBoolean>;
             }, "strip", z.ZodTypeAny, {
                 permissions: "view" | "edit" | "admin" | "comment";
-                collaborators: {,
+                collaborators: {
                     id: string;
                     name: string;
                     email: string;
@@ -13474,14 +13474,14 @@ export declare const SharingSchemas: {
                 }>;
             }, "strip", z.ZodTypeAny, {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     ipWhitelist: string[];
                     geoRestrictions: string[];
@@ -13490,14 +13490,14 @@ export declare const SharingSchemas: {
                 };
             }, {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     sessionTimeout?: number | undefined;
                     ipWhitelist?: string[] | undefined;
@@ -13550,7 +13550,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -13558,7 +13558,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -13569,7 +13569,7 @@ export declare const SharingSchemas: {
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13581,7 +13581,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -13592,7 +13592,7 @@ export declare const SharingSchemas: {
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13604,7 +13604,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -13644,7 +13644,7 @@ export declare const SharingSchemas: {
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13659,7 +13659,7 @@ export declare const SharingSchemas: {
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13694,7 +13694,7 @@ export declare const SharingSchemas: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -13706,7 +13706,7 @@ export declare const SharingSchemas: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -13765,13 +13765,13 @@ export declare const SharingSchemas: {
                     averageTimeToAction: number;
                 }>;
             }, "strip", z.ZodTypeAny, {
-                views: {,
+                views: {
                     id: string;
                     timestamp: Date;
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13783,20 +13783,20 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
                     } | undefined;
                 }[];
-                downloads: {,
+                downloads: {
                     id: string;
                     success: boolean;
                     format: string;
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13805,17 +13805,17 @@ export declare const SharingSchemas: {
                     };
                     errorReason?: string | undefined;
                 }[];
-                conversionMetrics: {,
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
                     averageTimeToAction: number;
                 };
-                collaborations: {,
+                collaborations: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -13828,19 +13828,19 @@ export declare const SharingSchemas: {
                 averageViewDuration: number;
                 uniqueViewers: number;
                 peakConcurrentUsers: number;
-                geographicDistribution: {,
+                geographicDistribution: {
                     country: string;
                     views: number;
                     uniqueViewers: number;
                 }[];
-                deviceStats: {,
+                deviceStats: {
                     browser: string;
                     deviceType: "mobile" | "desktop" | "tablet";
                     views: number;
                     operatingSystem: string;
                 }[];
             }, {
-                conversionMetrics: {,
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
@@ -13856,7 +13856,7 @@ export declare const SharingSchemas: {
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13868,7 +13868,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -13881,7 +13881,7 @@ export declare const SharingSchemas: {
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -13894,7 +13894,7 @@ export declare const SharingSchemas: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -13924,21 +13924,21 @@ export declare const SharingSchemas: {
             updatedAt: Date;
             status: "active" | "expired" | "pending" | "revoked";
             type: "template" | "bundle" | "graph" | "dataset";
-            metadata: {,
+            metadata: {
                 tags: string[];
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
-                    stickyNotes: {,
+                annotations: {
+                    stickyNotes: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13951,11 +13951,11 @@ export declare const SharingSchemas: {
                         height: number;
                         color: string;
                     }[];
-                    connectionLabels: {,
+                    connectionLabels: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13965,10 +13965,10 @@ export declare const SharingSchemas: {
                         targetNodeId: string;
                         color?: string | undefined;
                     }[];
-                    regions: {,
+                    regions: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -13982,10 +13982,10 @@ export declare const SharingSchemas: {
                         title: string;
                         description?: string | undefined;
                     }[];
-                    comments: {,
+                    comments: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14011,10 +14011,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14039,16 +14039,16 @@ export declare const SharingSchemas: {
                 language?: string | undefined;
             };
             title: string;
-            security: {,
+            security: {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     ipWhitelist: string[];
                     geoRestrictions: string[];
@@ -14056,14 +14056,14 @@ export declare const SharingSchemas: {
                     maxConcurrentUsers?: number | undefined;
                 };
             };
-            analytics: {,
-                views: {,
+            analytics: {
+                views: {
                     id: string;
                     timestamp: Date;
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14075,20 +14075,20 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
                     } | undefined;
                 }[];
-                downloads: {,
+                downloads: {
                     id: string;
                     success: boolean;
                     format: string;
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14097,17 +14097,17 @@ export declare const SharingSchemas: {
                     };
                     errorReason?: string | undefined;
                 }[];
-                conversionMetrics: {,
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
                     averageTimeToAction: number;
                 };
-                collaborations: {,
+                collaborations: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -14120,21 +14120,21 @@ export declare const SharingSchemas: {
                 averageViewDuration: number;
                 uniqueViewers: number;
                 peakConcurrentUsers: number;
-                geographicDistribution: {,
+                geographicDistribution: {
                     country: string;
                     views: number;
                     uniqueViewers: number;
                 }[];
-                deviceStats: {,
+                deviceStats: {
                     browser: string;
                     deviceType: "mobile" | "desktop" | "tablet";
                     views: number;
                     operatingSystem: string;
                 }[];
             };
-            sharing: {,
+            sharing: {
                 permissions: "view" | "edit" | "admin" | "comment";
-                collaborators: {,
+                collaborators: {
                     id: string;
                     name: string;
                     email: string;
@@ -14163,20 +14163,20 @@ export declare const SharingSchemas: {
             updatedAt: Date;
             status: "active" | "expired" | "pending" | "revoked";
             type: "template" | "bundle" | "graph" | "dataset";
-            metadata: {,
+            metadata: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
+                annotations: {
                     stickyNotes?: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14193,7 +14193,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14206,7 +14206,7 @@ export declare const SharingSchemas: {
                     regions?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14223,7 +14223,7 @@ export declare const SharingSchemas: {
                     comments?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14249,10 +14249,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14278,16 +14278,16 @@ export declare const SharingSchemas: {
                 language?: string | undefined;
             };
             title: string;
-            security: {,
+            security: {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     sessionTimeout?: number | undefined;
                     ipWhitelist?: string[] | undefined;
@@ -14295,8 +14295,8 @@ export declare const SharingSchemas: {
                     maxConcurrentUsers?: number | undefined;
                 };
             };
-            analytics: {,
-                conversionMetrics: {,
+            analytics: {
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
@@ -14312,7 +14312,7 @@ export declare const SharingSchemas: {
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14324,7 +14324,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -14337,7 +14337,7 @@ export declare const SharingSchemas: {
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14350,7 +14350,7 @@ export declare const SharingSchemas: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -14371,7 +14371,7 @@ export declare const SharingSchemas: {
                     operatingSystem: string;
                 }[] | undefined;
             };
-            sharing: {,
+            sharing: {
                 permissions: "view" | "edit" | "admin" | "comment";
                 accessLevel: "private" | "public" | "restricted";
                 shareUrl: string;
@@ -14421,21 +14421,21 @@ export declare const SharingSchemas: {
             updatedAt: Date;
             status: "active" | "expired" | "pending" | "revoked";
             type: "template" | "bundle" | "graph" | "dataset";
-            metadata: {,
+            metadata: {
                 tags: string[];
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
-                    stickyNotes: {,
+                annotations: {
+                    stickyNotes: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14448,11 +14448,11 @@ export declare const SharingSchemas: {
                         height: number;
                         color: string;
                     }[];
-                    connectionLabels: {,
+                    connectionLabels: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14462,10 +14462,10 @@ export declare const SharingSchemas: {
                         targetNodeId: string;
                         color?: string | undefined;
                     }[];
-                    regions: {,
+                    regions: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14479,10 +14479,10 @@ export declare const SharingSchemas: {
                         title: string;
                         description?: string | undefined;
                     }[];
-                    comments: {,
+                    comments: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14508,10 +14508,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14536,16 +14536,16 @@ export declare const SharingSchemas: {
                 language?: string | undefined;
             };
             title: string;
-            security: {,
+            security: {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     ipWhitelist: string[];
                     geoRestrictions: string[];
@@ -14553,14 +14553,14 @@ export declare const SharingSchemas: {
                     maxConcurrentUsers?: number | undefined;
                 };
             };
-            analytics: {,
-                views: {,
+            analytics: {
+                views: {
                     id: string;
                     timestamp: Date;
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14572,20 +14572,20 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
                     } | undefined;
                 }[];
-                downloads: {,
+                downloads: {
                     id: string;
                     success: boolean;
                     format: string;
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14594,17 +14594,17 @@ export declare const SharingSchemas: {
                     };
                     errorReason?: string | undefined;
                 }[];
-                conversionMetrics: {,
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
                     averageTimeToAction: number;
                 };
-                collaborations: {,
+                collaborations: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -14617,21 +14617,21 @@ export declare const SharingSchemas: {
                 averageViewDuration: number;
                 uniqueViewers: number;
                 peakConcurrentUsers: number;
-                geographicDistribution: {,
+                geographicDistribution: {
                     country: string;
                     views: number;
                     uniqueViewers: number;
                 }[];
-                deviceStats: {,
+                deviceStats: {
                     browser: string;
                     deviceType: "mobile" | "desktop" | "tablet";
                     views: number;
                     operatingSystem: string;
                 }[];
             };
-            sharing: {,
+            sharing: {
                 permissions: "view" | "edit" | "admin" | "comment";
-                collaborators: {,
+                collaborators: {
                     id: string;
                     name: string;
                     email: string;
@@ -14670,20 +14670,20 @@ export declare const SharingSchemas: {
             updatedAt: Date;
             status: "active" | "expired" | "pending" | "revoked";
             type: "template" | "bundle" | "graph" | "dataset";
-            metadata: {,
+            metadata: {
                 version: string;
-                author: {,
+                author: {
                     id: string;
                     name: string;
                     email: string;
                     avatar?: string | undefined;
                 };
-                annotations: {,
+                annotations: {
                     stickyNotes?: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14700,7 +14700,7 @@ export declare const SharingSchemas: {
                         id: string;
                         createdAt: Date;
                         label: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14713,7 +14713,7 @@ export declare const SharingSchemas: {
                     regions?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14730,7 +14730,7 @@ export declare const SharingSchemas: {
                     comments?: {
                         id: string;
                         createdAt: Date;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14756,10 +14756,10 @@ export declare const SharingSchemas: {
                 exportId: string;
                 contentSize: number;
                 checksumMd5: string;
-                versionControl: {,
-                    versions: {,
+                versionControl: {
+                    versions: {
                         version: string;
-                        author: {,
+                        author: {
                             id: string;
                             name: string;
                             email: string;
@@ -14785,16 +14785,16 @@ export declare const SharingSchemas: {
                 language?: string | undefined;
             };
             title: string;
-            security: {,
+            security: {
                 dataClassification: "public" | "internal" | "restricted" | "confidential";
-                retentionPolicy: {,
+                retentionPolicy: {
                     maxShareDuration: number;
                     autoExpire: boolean;
                     dataRetentionDays: number;
                 };
                 encryptionRequired: boolean;
                 auditingEnabled: boolean;
-                accessControls: {,
+                accessControls: {
                     requireAuthentication: boolean;
                     sessionTimeout?: number | undefined;
                     ipWhitelist?: string[] | undefined;
@@ -14802,8 +14802,8 @@ export declare const SharingSchemas: {
                     maxConcurrentUsers?: number | undefined;
                 };
             };
-            analytics: {,
-                conversionMetrics: {,
+            analytics: {
+                conversionMetrics: {
                     viewToDownload: number;
                     viewToCollaboration: number;
                     viewToSignup: number;
@@ -14819,7 +14819,7 @@ export declare const SharingSchemas: {
                     duration: number;
                     ipAddress: string;
                     userAgent: string;
-                    viewerInfo: {,
+                    viewerInfo: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14831,7 +14831,7 @@ export declare const SharingSchemas: {
                         region: string;
                         country: string;
                         city: string;
-                        coordinates: {,
+                        coordinates: {
                             lat: number;
                             lng: number;
                         };
@@ -14844,7 +14844,7 @@ export declare const SharingSchemas: {
                     size: number;
                     timestamp: Date;
                     ipAddress: string;
-                    downloadedBy: {,
+                    downloadedBy: {
                         sessionId: string;
                         isAuthenticated: boolean;
                         id?: string | undefined;
@@ -14857,7 +14857,7 @@ export declare const SharingSchemas: {
                     id: string;
                     type: "edit" | "comment" | "annotation" | "permission_change";
                     timestamp: Date;
-                    user: {,
+                    user: {
                         id: string;
                         name: string;
                         email: string;
@@ -14878,7 +14878,7 @@ export declare const SharingSchemas: {
                     operatingSystem: string;
                 }[] | undefined;
             };
-            sharing: {,
+            sharing: {
                 permissions: "view" | "edit" | "admin" | "comment";
                 accessLevel: "private" | "public" | "restricted";
                 shareUrl: string;
@@ -15000,7 +15000,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15008,7 +15008,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15019,7 +15019,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15031,7 +15031,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15042,7 +15042,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15054,7 +15054,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15094,7 +15094,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15109,7 +15109,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15144,7 +15144,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -15156,7 +15156,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -15215,13 +15215,13 @@ export declare const SharingSchemas: {
                 averageTimeToAction: number;
             }>;
         }, "strip", z.ZodTypeAny, {
-            views: {,
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15233,20 +15233,20 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15255,17 +15255,17 @@ export declare const SharingSchemas: {
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -15278,19 +15278,19 @@ export declare const SharingSchemas: {
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
                 operatingSystem: string;
             }[];
         }, {
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -15306,7 +15306,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15318,7 +15318,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15331,7 +15331,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15344,7 +15344,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -15368,14 +15368,14 @@ export declare const SharingSchemas: {
         error: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         success: boolean;
-        analytics: {,
-            views: {,
+        analytics: {
+            views: {
                 id: string;
                 timestamp: Date;
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15387,20 +15387,20 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
                 } | undefined;
             }[];
-            downloads: {,
+            downloads: {
                 id: string;
                 success: boolean;
                 format: string;
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15409,17 +15409,17 @@ export declare const SharingSchemas: {
                 };
                 errorReason?: string | undefined;
             }[];
-            conversionMetrics: {,
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
                 averageTimeToAction: number;
             };
-            collaborations: {,
+            collaborations: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;
@@ -15432,12 +15432,12 @@ export declare const SharingSchemas: {
             averageViewDuration: number;
             uniqueViewers: number;
             peakConcurrentUsers: number;
-            geographicDistribution: {,
+            geographicDistribution: {
                 country: string;
                 views: number;
                 uniqueViewers: number;
             }[];
-            deviceStats: {,
+            deviceStats: {
                 browser: string;
                 deviceType: "mobile" | "desktop" | "tablet";
                 views: number;
@@ -15447,8 +15447,8 @@ export declare const SharingSchemas: {
         error?: string | undefined;
     }, {
         success: boolean;
-        analytics: {,
-            conversionMetrics: {,
+        analytics: {
+            conversionMetrics: {
                 viewToDownload: number;
                 viewToCollaboration: number;
                 viewToSignup: number;
@@ -15464,7 +15464,7 @@ export declare const SharingSchemas: {
                 duration: number;
                 ipAddress: string;
                 userAgent: string;
-                viewerInfo: {,
+                viewerInfo: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15476,7 +15476,7 @@ export declare const SharingSchemas: {
                     region: string;
                     country: string;
                     city: string;
-                    coordinates: {,
+                    coordinates: {
                         lat: number;
                         lng: number;
                     };
@@ -15489,7 +15489,7 @@ export declare const SharingSchemas: {
                 size: number;
                 timestamp: Date;
                 ipAddress: string;
-                downloadedBy: {,
+                downloadedBy: {
                     sessionId: string;
                     isAuthenticated: boolean;
                     id?: string | undefined;
@@ -15502,7 +15502,7 @@ export declare const SharingSchemas: {
                 id: string;
                 type: "edit" | "comment" | "annotation" | "permission_change";
                 timestamp: Date;
-                user: {,
+                user: {
                     id: string;
                     name: string;
                     email: string;

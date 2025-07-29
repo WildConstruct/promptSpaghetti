@@ -6,328 +6,53 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Extends existing EmbeddableContent system with advanced customization capabilities.
  */
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { PaintBrushIcon, EyeIcon, CodeBracketIcon, SwatchIcon, CubeIcon, SparklesIcon, BoltIcon, PhotoIcon, Squares2X2Icon, ListBulletIcon, SunIcon, MoonIcon, ComputerDesktopIcon as AutoIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon, ShareIcon, Cog6ToothIcon, UserIcon, TagIcon, FlagIcon } from '@heroicons/react/24/outline';
+import { PaintBrushIcon, EyeIcon, CodeBracketIcon, SwatchIcon, CubeIcon, SparklesIcon, BoltIcon, PhotoIcon, Squares2X2Icon, SunIcon, MoonIcon, ComputerDesktopIcon as AutoIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon, ShareIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { PREVIEW_SIZES } from './EmbeddedTemplatePreview';
-branding: {
-    showLogo: false,
-        showTitle;
-    true,
-        showAuthor;
-    true,
-        showPoweredBy;
-    false,
-    ;
-}
-social: {
-    showLikes: true,
-        showShares;
-    true,
-        showComments;
-    false,
-        showRating;
-    true,
-        showDownloads;
-    false,
-        enableInteraction;
-    true,
-        showAuthorInfo;
-    true,
-        showStats;
-    true,
-    ;
-}
-{
-    id: 'blog-embed',
-        name;
-    'Blog Embed',
-        description;
-    'Great for embedding in blog posts and articles',
-        thumbnail;
-    '/presets/blog-embed.png',
-        category;
-    'blog',
-        popular;
-    true,
-        customization;
-    {
-        size: {
-            width: 800, height;
-            400, responsive;
-            true;
-        }
-        theme: {
-            name: 'light', colors;
-            { }
-            fonts: { }
-        }
-        features: {
-            showPreview: true,
-                showMetadata;
-            true,
-                showActions;
-            true,
-                showComments;
-            true,
-                enableInteraction;
-            true,
-                enableSharing;
-            true,
-                enablePurchase;
-            true,
-                showRating;
-            true,
-            ;
-        }
-        layout: {
-            orientation: 'vertical',
-                showHeader;
-            true,
-                showFooter;
-            true,
-                showSidebar;
-            false,
-                contentAlignment;
-            'center',
-                spacing;
-            'normal',
-                borderRadius;
-            8,
-                shadow;
-            'lg',
-            ;
-        }
-        branding: {
-            showLogo: true,
-                showTitle;
-            true,
-                showAuthor;
-            true,
-                showPoweredBy;
-            true,
-            ;
-        }
-        social: {
-            showLikes: true,
-                showShares;
-            true,
-                showComments;
-            true,
-                showRating;
-            true,
-                showDownloads;
-            true,
-                enableInteraction;
-            true,
-                showAuthorInfo;
-            true,
-                showStats;
-            true,
-            ;
-        }
-        {
-            id: 'sidebar-widget',
-                name;
-            'Sidebar Widget',
-                description;
-            'Compact widget for website sidebars',
-                thumbnail;
-            '/presets/sidebar-widget.png',
-                category;
-            'blog',
-                popular;
-            false,
-                customization;
-            {
-                size: {
-                    width: 300, height;
-                    400, responsive;
-                    true;
-                }
-                theme: {
-                    name: 'light', colors;
-                    { }
-                    fonts: { }
-                }
-                features: {
-                    showPreview: true,
-                        showMetadata;
-                    false,
-                        showActions;
-                    true,
-                        showComments;
-                    false,
-                        enableInteraction;
-                    true,
-                        enableSharing;
-                    false,
-                        enablePurchase;
-                    true,
-                        showRating;
-                    false,
-                    ;
-                }
-                layout: {
-                    orientation: 'vertical',
-                        showHeader;
-                    true,
-                        showFooter;
-                    false,
-                        showSidebar;
-                    false,
-                        contentAlignment;
-                    'center',
-                        spacing;
-                    'tight',
-                        borderRadius;
-                    6,
-                        shadow;
-                    'sm',
-                    ;
-                }
-                branding: {
-                    showLogo: false,
-                        showTitle;
-                    true,
-                        showAuthor;
-                    false,
-                        showPoweredBy;
-                    false,
-                    ;
-                }
-                social: {
-                    showLikes: false,
-                        showShares;
-                    false,
-                        showComments;
-                    false,
-                        showRating;
-                    false,
-                        showDownloads;
-                    true,
-                        enableInteraction;
-                    true,
-                        showAuthorInfo;
-                    false,
-                        showStats;
-                    false;
-                    ;
-                    // Widget library for drag and drop
-                    const WIDGET_LIBRARY = [
-                        {
-                            id: 'header',
-                            type: 'header',
-                            name: 'Header',
-                            description: 'Template title and branding',
-                            icon: TagIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'preview',
-                            type: 'preview',
-                            name: 'Preview',
-                            description: 'Template preview content',
-                            icon: PhotoIcon,
-                            configurable: true,
-                            required: true,
-                        },
-                        {
-                            id: 'metadata',
-                            type: 'metadata',
-                            name: 'Metadata',
-                            description: 'Template description and details',
-                            icon: ListBulletIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'actions',
-                            type: 'actions',
-                            name: 'Action Buttons',
-                            description: 'Like, share, purchase buttons',
-                            icon: BoltIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'stats',
-                            type: 'stats',
-                            name: 'Statistics',
-                            description: 'Downloads, likes, ratings',
-                            icon: BarChart3,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'author',
-                            type: 'author',
-                            name: 'Author Info',
-                            description: 'Template creator information',
-                            icon: UserIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'footer',
-                            type: 'footer',
-                            name: 'Footer',
-                            description: 'Powered by and additional links',
-                            icon: FlagIcon,
-                            configurable: true,
-                            required: false
-                        }
-                    ];
-                    // Preset selector component
-                }
-                export const PresetSelector, EmbedPreset;
-                selectedPreset ?  : string;
-                onPresetSelect: (preset) => void ;
-            }
-             > ;
-            ({ presets, selectedPreset, onPresetSelect }) => {
-                const [activeCategory, setActiveCategory] = useState('all');
-                const categories = useMemo(() => {
-                    const cats = ['all', ...new Set(presets.map(p => p.category))];
-                    return cats.map(cat => ({}), id, cat, label, cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1), count, cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length);
-                });
-            }, [presets];
-            ;
-            const filteredPresets = useMemo(() => {
-                return activeCategory === 'all'
-                    ? presets
-                    : presets.filter(preset => preset.category === activeCategory);
-            }, [presets, activeCategory]);
-            return;
-            _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsx("h3", { className: "font-semibold text-gray-900 mb-4", children: "Choose a Preset" }), _jsxs("div", { className: "flex items-center gap-2 mb-4 border-b border-gray-200", children: [categories.map((category) => ()
-                                < button, key = { category, : .id }, onClick = {}()), " => setActiveCategory(category.id)} className=", `px-3 py-2 text-sm font-medium border-b-2 ${activeCategory === category.id
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                            }`, ">", category.label, " (", category.count, ")"] }), "))}"] });
-            { /* Preset grid */ }
-            _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [filteredPresets.map((preset) => ()
-                        < button, key = { preset, : .id }, onClick = {}()), " => onPresetSelect(preset)} className=", `text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300',
-                    }`, ">", _jsx("div", { className: "aspect-video bg-gray-100 rounded mb-3 flex items-center justify-center", children: _jsx(PhotoIcon, { className: "h-8 w-8 text-gray-400" }) }), _jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsx("h4", { className: "font-medium text-gray-900", children: preset.name }), preset.popular && ()
-                                < span, " className=\"px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full\"> Popular"] }), ")}"] })
-                ,
-                    _jsx("p", { className: "text-sm text-gray-600", children: preset.description })
-                        ,
-                            _jsxs("div", { className: "flex items-center gap-2 mt-2 text-xs text-gray-500", children: [_jsx("span", { className: "capitalize", children: preset.category }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [preset.customization.size.width, "\u00D7", preset.customization.size.height] })] });
-            button >
-            ;
-        }
-        div >
-        ;
-        div >
-        ;
-        ;
-    }
-    ;
-    // Visual layout builder component
-    export const VisualLayoutBuilder, EmbedWidget;
-    onWidgetsChange: (widgets) => void ;
-    previewSize: PreviewSize;
-}
+export const PresetSelector, EmbedPreset;
+selectedPreset ?  : string;
+onPresetSelect: (preset) => void ;
+ > ;
+({ presets, selectedPreset, onPresetSelect }) => {
+    const [activeCategory, setActiveCategory] = useState('all');
+    const categories = useMemo(() => {
+        const cats = ['all', ...new Set(presets.map(p => p.category))];
+        return cats.map(cat => ({}), id, cat, label, cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1), count, cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length);
+    });
+}, [presets];
+;
+const filteredPresets = useMemo(() => {
+    return activeCategory === 'all'
+        ? presets
+        : presets.filter(preset => preset.category === activeCategory);
+}, [presets, activeCategory]);
+return;
+_jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsx("h3", { className: "font-semibold text-gray-900 mb-4", children: "Choose a Preset" }), _jsxs("div", { className: "flex items-center gap-2 mb-4 border-b border-gray-200", children: [categories.map((category) => ()
+                    < button, key = { category, : .id }, onClick = {}()), " => setActiveCategory(category.id)} className=", `px-3 py-2 text-sm font-medium border-b-2 ${activeCategory === category.id
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                }`, ">", category.label, " (", category.count, ")"] }), "))}"] });
+{ /* Preset grid */ }
+_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [filteredPresets.map((preset) => ()
+            < button, key = { preset, : .id }, onClick = {}()), " => onPresetSelect(preset)} className=", `text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300',
+        }`, ">", _jsx("div", { className: "aspect-video bg-gray-100 rounded mb-3 flex items-center justify-center", children: _jsx(PhotoIcon, { className: "h-8 w-8 text-gray-400" }) }), _jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsx("h4", { className: "font-medium text-gray-900", children: preset.name }), preset.popular && ()
+                    < span, " className=\"px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full\"> Popular"] }), ")}"] })
+    ,
+        _jsx("p", { className: "text-sm text-gray-600", children: preset.description })
+            ,
+                _jsxs("div", { className: "flex items-center gap-2 mt-2 text-xs text-gray-500", children: [_jsx("span", { className: "capitalize", children: preset.category }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [preset.customization.size.width, "\u00D7", preset.customization.size.height] })] });
+button >
+;
+div >
+;
+div >
+;
+;
+;
+// Visual layout builder component
+export const VisualLayoutBuilder, EmbedWidget;
+onWidgetsChange: (widgets) => void ;
+previewSize: PreviewSize;
  > ;
 ({ widgets, onWidgetsChange, previewSize }) => {
     const [selectedWidget, setSelectedWidget] = useState(null);
@@ -537,11 +262,11 @@ export const EmbedCustomizationInterface = ({
                                 < div, key = { key }, className = "flex items-center gap-3" >
                                 (_jsx("label", { className: "w-20 text-sm text-gray-600 capitalize", children: key })
                                     ,
-                                        _jsx("input", { type: "color", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(,
-                                            ) })), ...customization.branding, customColors), ": ", (,
-                            ), "...customization.branding.customColors, [key]: e.target.value, })} className=\"w-12 h-8 border border-gray-300 rounded cursor-pointer\" />", _jsx("input", { type: "text", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(,
-                                ) }), "...customization.branding, customColors: ", (,
-                            ), "...customization.branding.customColors, [key]: e.target.value, })} className=\"flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }), "))}"] }), ")}"] });
+                                        _jsx("input", { type: "color", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(customization.branding,
+                                                customColors) }))), ": ", ...(customization.branding.customColors,
+                                [key]), ": e.target.value, })} className=\"w-12 h-8 border border-gray-300 rounded cursor-pointer\" />", _jsx("input", { type: "text", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(customization.branding,
+                                    customColors) }), ": ", ...(customization.branding.customColors,
+                                [key]), ": e.target.value, })} className=\"flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }), "))}"] }), ")}"] });
     div >
         { /* Typography & Spacing */}
         < div;

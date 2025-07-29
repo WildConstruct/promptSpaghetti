@@ -7,30 +7,30 @@
  */
 import React from 'react';
 interface SavingsBreakdown {
-    tokenSavings: {,
+    tokenSavings: {
         templateTokenCost: number;
         manualTokenCost: number;
         netTokenSavings: number;
         tokenEfficiency: number;
     };
-    timeSavings: {,
+    timeSavings: {
         templateTimeSpent: number;
         manualTimeSpent: number;
         netTimeSavings: number;
         timeEfficiency: number;
     };
-    qualitySavings: {,
+    qualitySavings: {
         templateQualityValue: number;
         manualQualityValue: number;
         qualityImprovement: number;
     };
-    totalSavings: {,
+    totalSavings: {
         monthlySavings: number;
         yearlySavings: number;
         totalProjectSavings: number;
         savingsPerUse: number;
     };
-    productivity: {,
+    productivity: {
         productivityGain: number;
         capacityIncrease: number;
         errorReduction: number;

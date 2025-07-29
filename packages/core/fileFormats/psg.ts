@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { Node, Edge } from 'reactflow';
 
 // Project metadata schema - information about the project itself
-export const ProjectMetadataSchema = z.object({)
+export const ProjectMetadataSchema = z.object({
   name: z.string().min(1).max(100, 'Project name must be between 1-100 characters'),
   description: z.string().optional(),
   author: z.string().optional(),
@@ -20,7 +20,7 @@ export const ProjectMetadataSchema = z.object({)
 });
 
 // Graph content schema - the actual node/edge data
-export const GraphContentSchema = z.object({)
+export const GraphContentSchema = z.object({
   nodes: z.array(z.unknown()), // Using z.unknown() to allow for flexible node data structures,
   edges: z.array(z.unknown()), // Using z.unknown() to allow for flexible edge data structures,
   seed: z.number().optional(),
@@ -32,7 +32,7 @@ export const GraphContentSchema = z.object({)
 });
 
 // Editor settings schema - UI and editor preferences
-export const EditorSettingsSchema = z.object({)
+export const EditorSettingsSchema = z.object({
   autoSave: z.boolean().default(true),
   autoSaveInterval: z.number().min(1000).max(60000).default(5000),
   theme: z.enum(['light', 'dark']).default('light'),
@@ -44,7 +44,7 @@ export const EditorSettingsSchema = z.object({)
 });
 
 // Export metadata schema - information about how/when the file was exported
-export const ExportMetadataSchema = z.object({)
+export const ExportMetadataSchema = z.object({
   exportedBy: z.string().default('PromptScape GraphEditor'),
   exportDate: z.string().datetime(),
   exportVersion: z.string().default('1.0.0'),
@@ -56,7 +56,7 @@ export const ExportMetadataSchema = z.object({)
 });
 
 // Complete .psg file format schema
-export const PSGFileSchema = z.object({)
+export const PSGFileSchema = z.object({
   metadata: ProjectMetadataSchema,
   graph: GraphContentSchema,
   settings: EditorSettingsSchema.default({}),
@@ -74,7 +74,7 @@ export type PSGFile = z.infer<typeof PSGFileSchema>;
 /**
  * Creates a new .psg file from graph data
  */
-export function createPSGFile(nodes: Node,)
+export function createPSGFile(nodes: Node)
   edges: Edge,
   metadata: Partial<ProjectMetadata>,
   settings?: Partial<EditorSettings>,
@@ -83,7 +83,7 @@ export function createPSGFile(nodes: Node,)
 ): PSGFile {
   const now = new Date().toISOString();
   return {
-  metadata: {,
+  metadata: {
   name: metadata.name || 'Untitled Project',
   description: metadata.description,
   author: metadata.author,
@@ -93,13 +93,13 @@ export function createPSGFile(nodes: Node,)
   version: metadata.version || '1.0.0',
   fileFormatVersion: '1.0.0',
 },
-  graph: {,
+  graph: {
       nodes,
       edges,
       seed,
       viewport
   },
-  settings: {,
+  settings: {
   autoSave: true,
   autoSaveInterval: 5000,
   theme: 'light',
@@ -110,12 +110,12 @@ export function createPSGFile(nodes: Node,)
   showConnectionLabels: true,
   ...settings
 },
-  exportMetadata: {,
+  exportMetadata: {
   exportedBy: 'PromptScape GraphEditor',
   exportDate: now,
   exportVersion: '1.0.0',
   format: 'psg' as const,
-  compatibility: {,
+  compatibility: {
   minVersion: '1.0.0',
 };
 /**
@@ -137,7 +137,7 @@ export function validatePSGFile(data: unknown): PSGFile {
   INVALID_EDGE_DATA = 'INVALID_EDGE_DATA',
   SECURITY_VIOLATION = 'SECURITY_VIOLATION'
   export interface PSGError {
-  type: PSGErrorType;,
+  type: PSGErrorType;
   message: string;
   details?: unknown;
   suggestions?: string;
@@ -150,11 +150,11 @@ export function parsePSGFile(jsonString: string, options: {)
   strictValidation?: boolean;
   allowLegacyFormat?: boolean;
 } = {}): {
-  success: true;,
+  success: true;
   data: PSGFile;
   warnings?: string;
 } | {
-  success: false;,
+  success: false;
   error: PSGError;
   const {
   maxFileSize = 10 * 1024 * 1024, // 10MB default limit
@@ -166,7 +166,7 @@ export function parsePSGFile(jsonString: string, options: {)
     if (jsonString.length > maxFileSize) {
       return {
         success: false,
-        error: {,
+        error: {
   type: PSGErrorType.FILE_TOO_LARGE,
           message: `File size (${(jsonString.length / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (${(maxFileSize / 1024 / 1024).toFixed(1)}MB)`}
 },
@@ -179,7 +179,7 @@ export function parsePSGFile(jsonString: string, options: {)
     } catch (syntaxError) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.INVALID_JSON,
   message: 'File contains invalid JSON syntax',
   details: syntaxError instanceof Error ? syntaxError.message : String(syntaxError),
@@ -189,7 +189,7 @@ export function parsePSGFile(jsonString: string, options: {)
     if (!parsed || typeof parsed !== 'object') {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.CORRUPTED_DATA,
   message: 'File does not contain a valid project structure',
   suggestions: ['Verify this is a valid .psg file', 'Check if file was corrupted during transfer'],
@@ -199,7 +199,7 @@ export function parsePSGFile(jsonString: string, options: {)
     if (securityViolations.length > 0) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.SECURITY_VIOLATION,
   message: 'File contains potentially dangerous content',
   details: securityViolations,
@@ -211,7 +211,7 @@ export function parsePSGFile(jsonString: string, options: {)
     if (missingFields.length > 0) {
       return {
         success: false,
-        error: {,
+        error: {
   type: PSGErrorType.MISSING_REQUIRED_FIELDS,
           message: `Missing required fields: ${missingFields.join(', ')}`}
 },
@@ -223,7 +223,7 @@ export function parsePSGFile(jsonString: string, options: {)
     if (consistencyErrors.length > 0) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.CORRUPTED_DATA,
   message: 'File contains inconsistent or corrupted data',
   details: consistencyErrors,
@@ -242,7 +242,7 @@ export function parsePSGFile(jsonString: string, options: {)
 }));
         return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.INVALID_SCHEMA,
   message: 'File format does not match expected structure',
   details: formattedErrors,
@@ -259,10 +259,10 @@ export function parsePSGFile(jsonString: string, options: {)
     if (!compatibility.compatible) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.VERSION_INCOMPATIBLE,
   message: 'File version is not compatible with current application version',
-  details: {,
+  details: {
   fileVersion: validated.metadata.fileFormatVersion,
   currentVersion: '1.0.0',
   compatibility
@@ -285,7 +285,7 @@ export function parsePSGFile(jsonString: string, options: {)
   } catch (error) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.CORRUPTED_DATA,
   message: 'Unexpected error occurred while parsing file',
   details: error instanceof Error ? {,
@@ -298,13 +298,13 @@ export function parsePSGFile(jsonString: string, options: {)
 /**
  * Updates the modified timestamp and increments version if needed
  */
-export function updatePSGFileMetadata(psgFile: PSGFile,)
+export function updatePSGFileMetadata(psgFile: PSGFile)
   changes?: Partial<ProjectMetadata>
 ): PSGFile {
   const now = new Date().toISOString();
   return {
   ...psgFile,
-  metadata: {,
+  metadata: {
   ...psgFile.metadata,
   ...changes,
   modified: now,
@@ -312,16 +312,16 @@ export function updatePSGFileMetadata(psgFile: PSGFile,)
 /**
  * Extracts a lightweight summary of a .psg file for listing purposes
  */
-export function extractPSGFileSummary(psgFile: PSGFile): {,
+export function extractPSGFileSummary(psgFile: PSGFile): {
   id: string;
   name: string;
   description?: string;
   author?: string;
-  tags: string;,
+  tags: string;
   created: string;
-  modified: string;,
+  modified: string;
   nodeCount: number;
-  edgeCount: number;,
+  edgeCount: number;
   fileSize: number;
   const content = JSON.stringify(psgFile);
   return {
@@ -350,11 +350,11 @@ export export
 /**
  * Version compatibility checker
  */
-export function checkPSGCompatibility(psgFile: PSGFile, currentVersion: string = '1.0.0'): {,
+export function checkPSGCompatibility(psgFile: PSGFile, currentVersion: string = '1.0.0'): {
   compatible: boolean;
-  warnings: string;,
+  warnings: string;
   requiresUpgrade: boolean;
-  const warnings: string = [];
+  const warnings: string[] = [];
   let compatible = true;
   let requiresUpgrade = false;
   const fileFormatVersion = psgFile.metadata.fileFormatVersion;
@@ -393,9 +393,9 @@ function compareVersions(a: string, b: string): number {
  * Security validation to prevent dangerous content
  */
 function checkForSecurityViolations(data: unknown): string {
-  const violations: string = [];
+  const violations: string[] = [];
   const checkObject = (obj: unknown, path: string = ''): void => {
-    if (!obj || typeof obj !== 'object') return;
+    if (!obj || typeof obj !== 'object') return (
     for (const key in obj) {
       const currentPath = path ? `${path}.${key}` : key;}
       // Check for dangerous property names
@@ -426,7 +426,7 @@ function checkForSecurityViolations(data: unknown): string {
  * Validates internal data consistency
  */
 function validateDataConsistency(data: unknown): string {
-  const errors: string = [];
+  const errors: string[] = [];
   try {
     // Check if nodes reference valid IDs
     if (data.graph?.nodes && data.graph?.edges) {
@@ -456,7 +456,7 @@ function validateDataConsistency(data: unknown): string {
  * Validates data integrity and returns warnings for potential issues
  */
 function validateDataIntegrity(psgFile: PSGFile): string {
-  const warnings: string = [];
+  const warnings: string[] = [];
   try {
   // Check graph complexity
   const nodeCount = psgFile.graph.nodes.length;
@@ -496,11 +496,11 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
   pretty?: boolean;
   validate?: boolean;
 } = {}): {
-  success: true;,
+  success: true;
   data: string;
   warnings?: string;
 } | {
-  success: false;,
+  success: false;
   error: PSGError;
   const { pretty = false, validate = true } = options;
   try {
@@ -510,14 +510,14 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
   // Update timestamps
   const updatedFile = {
   ...psgFile,
-  exportMetadata: {,
+  exportMetadata: {
   ...psgFile.exportMetadata,
   exportDate: new Date().toISOString(),
 };
     const jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0);
     // Check serialized size
     const sizeInMB = jsonString.length / (1024 * 1024);
-    const warnings: string = [];
+    const warnings: string[] = [];
     if (sizeInMB > 5) {
       warnings.push(`Large file size (${sizeInMB.toFixed(1)}MB) may affect loading performance`);}
     return {
@@ -529,7 +529,7 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
   if (error instanceof z.ZodError) {
   return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.INVALID_SCHEMA,
   message: 'Data validation failed during serialization',
   details: error.errors,
@@ -537,7 +537,7 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
 };
     return {
   success: false,
-  error: {,
+  error: {
   type: PSGErrorType.CORRUPTED_DATA,
   message: 'Failed to serialize project data',
   details: error instanceof Error ? error.message : String(error),

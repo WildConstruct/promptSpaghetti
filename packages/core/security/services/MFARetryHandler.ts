@@ -50,50 +50,50 @@ export enum RetryStrategy {
   HALF_OPEN = 'half_open'
   // Configuration interfaces
   export interface RetryConfig {
-  maxAttempts: number;,
+  maxAttempts: number;
   strategy: RetryStrategy;
-  baseDelayMs: number;,
+  baseDelayMs: number;
   maxDelayMs: number;
-  backoffMultiplier: number;,
+  backoffMultiplier: number;
   jitterMs: number;
-  timeoutMs: number;,
+  timeoutMs: number;
   retryableErrors: FailureType;
   customDelayFunction?: (attempt: number, baseDelay: number) => number;
 }
 export interface CircuitBreakerConfig {
-  failureThreshold: number;,
+  failureThreshold: number;
   resetTimeoutMs: number;
-  monitoringWindowMs: number;,
+  monitoringWindowMs: number;
   halfOpenMaxAttempts: number;
 }
 export interface MFARetryConfig {
-  operationConfigs: {,
+  operationConfigs: {
   [key in MFAOperation]: RetryConfig;
 };
-  circuitBreaker: CircuitBreakerConfig;,
+  circuitBreaker: CircuitBreakerConfig;
   globalTimeoutMs: number;
-  enableMetrics: boolean;,
+  enableMetrics: boolean;
   enableLogging: boolean;
 
 // Operation context
 }
 export interface OperationContext {
-  operationId: string;,
+  operationId: string;
   operation: MFAOperation;
   userId: string;
   sessionId?: string;
-  startTime: Date;,
+  startTime: Date;
   attempt: number;
   metadata: Record<string, any>;
   // Retry attempt data
 }
 export interface RetryAttempt {
-  attempt: number;,
+  attempt: number;
   startTime: Date;
   endTime?: Date;
   delayMs: number;
   error?: Error;
-  success: boolean;,
+  success: boolean;
   timeoutReached: boolean;
   // Operation result
 }
@@ -101,35 +101,35 @@ export interface OperationResult<T = any> {
   success: boolean;
   data?: T;
   error?: Error;
-  attempts: RetryAttempt;,
+  attempts: RetryAttempt;
   totalDurationMs: number;
-  circuitBreakerTriggered: boolean;,
+  circuitBreakerTriggered: boolean;
   rateLimited: boolean;
   // Circuit breaker state
   interface CircuitBreakerStateData {
-  state: CircuitBreakerStateEnum;,
+  state: CircuitBreakerStateEnum;
   failureCount: number;
   lastFailureTime?: Date;
   nextAttemptTime?: Date;
   halfOpenAttempts: number;
   // Metrics
   export interface RetryMetrics {
-  totalOperations: number;,
+  totalOperations: number;
   successfulOperations: number;
-  failedOperations: number;,
+  failedOperations: number;
   totalRetries: number;
-  averageAttempts: number;,
+  averageAttempts: number;
   averageDuration: number;
-  circuitBreakerTrips: number;,
-  operationMetrics: {,
-  [key in MFAOperation]: {,
-  count: number;,
+  circuitBreakerTrips: number;
+  operationMetrics: {
+  [key in MFAOperation]: {
+  count: number;
   successRate: number;
-  averageAttempts: number;,
+  averageAttempts: number;
   averageDuration: number;
 };
   };
-  errorMetrics: {,
+  errorMetrics: {
   [key in FailureType]: number;
 };
 /**
@@ -185,8 +185,7 @@ export class MFARetryHandler extends EventEmitter {
         circuitBreaker.halfOpenAttempts = 0;
         return true;
       return false;
-    case CircuitBreakerStateEnum.HALF_OPEN:
-      return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;,
+    case CircuitBreakerStateEnum.HALF_OPEN: return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
   default:
       return true;
   /**
@@ -424,7 +423,7 @@ export class MFARetryHandler extends EventEmitter {
   error,
   timestamp: new Date(),
 });
-  private updateMetrics(operation: MFAOperation,)
+  private updateMetrics(operation: MFAOperation)
     success: boolean,
     attempts: number,
     durationMs: number): void {,
@@ -476,8 +475,8 @@ export class MFARetryHandler extends EventEmitter {
   ]
 };
     return {
-  operationConfigs: {,
-  [MFAOperation.TOTP_VERIFICATION]: {,
+  operationConfigs: {
+  [MFAOperation.TOTP_VERIFICATION]: {
   ...defaultRetryConfig,
   maxAttempts: 2,
   timeoutMs: 5000,
@@ -549,7 +548,7 @@ export class MFARetryHandler extends EventEmitter {
 }
         ...config.operationConfigs
   },
-  circuitBreaker: {,
+  circuitBreaker: {
   failureThreshold: 5,
   resetTimeoutMs: 60000, // 1 minute,
   monitoringWindowMs: 300000, // 5 minutes,

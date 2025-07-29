@@ -98,7 +98,7 @@ const mockDocument: LegalDocument = {,
   title: 'Test Contract',
   type: 'contract',
   content: 'This is a test contract content for legal analysis.',
-  metadata: {,
+  metadata: {
   jurisdiction: 'US-CA',
   practiceArea: ['contract law', 'commercial law'],
   parties: ['Party A', 'Party B'],
@@ -123,7 +123,7 @@ const mockAnalysis: ContractAnalysis = {,
     standardCompliance: true,
     position: { start: 0, end: 100 }
   }],
-  riskAssessment: {,
+  riskAssessment: {
   overallRisk: 'medium',
   riskFactors: [{,
   type: 'termination',

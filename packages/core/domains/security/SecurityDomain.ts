@@ -110,16 +110,16 @@ export interface AuditLogFilters {
 }
 export interface AuditReportCriteria {
   period: { start: Date; end: Date };
-  scope: string;,
+  scope: string;
   includeDetails: boolean;
-  format: 'summary' | 'detailed' | 'compliance';
-}
+  format: 'summary' | 'detailed' | 'compliance'
+  }
 export interface AuditReport {
-  id: string;,
+  id: string;
   criteria: AuditReportCriteria;
-  summary: ReportSummary;,
+  summary: ReportSummary;
   findings: ReportFinding;
-  recommendations: string;,
+  recommendations: string;
   generatedAt: Date;
   generatedBy: string;
 }
@@ -132,183 +132,183 @@ export interface SecurityAlertFilters {
   dateRange?: { start: Date; end: Date };
 }
 export interface SecurityScanResult {
-  scanId: string;,
+  scanId: string;
   startedAt: Date;
-  completedAt: Date;,
+  completedAt: Date;
   scope: string;
-  findings: SecurityFinding;,
+  findings: SecurityFinding;
   summary: ScanSummary;
 }
 export interface RiskAssessment {
-  userId: string;,
+  userId: string;
   riskScore: number;
-  factors: RiskFactor;,
+  factors: RiskFactor;
   recommendations: string;
   validUntil: Date;
 }
 export interface AnomalyDetection {
-  type: string;,
+  type: string;
   description: string;
-  severity: string;,
+  severity: string;
   confidence: number;
-  evidence: any;,
+  evidence: any;
   timestamp: Date;
 }
 export interface PolicyEvaluationResult {
-  policyId: string;,
+  policyId: string;
   allowed: boolean;
-  matchedRules: string;,
+  matchedRules: string;
   violations: PolicyViolation;
   recommendations: string;
 }
 export interface PolicyViolation {
-  ruleId: string;,
+  ruleId: string;
   description: string;
-  severity: string;,
+  severity: string;
   evidence: any;
 }
 export interface EnforcementAction {
-  action: string;,
+  action: string;
   parameters: Record<string, any>;
-  executedAt: Date;,
+  executedAt: Date;
   result: string;
 }
 export interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
-  warnings: string;,
+  warnings: string;
   suggestions: string;
 }
 export interface EncryptionContext {
-  purpose: string;,
+  purpose: string;
   retention: number;
   classification: string;
 }
 export interface EncryptedData {
-  data: string;,
+  data: string;
   algorithm: string;
-  keyId: string;,
+  keyId: string;
   iv: string;
   timestamp: Date;
 }
 export interface KeyRotationResult {
-  rotatedKeys: number;,
+  rotatedKeys: number;
   failedRotations: string;
   completedAt: Date;
 }
 export interface ReportSummary {
-  totalEvents: number;,
+  totalEvents: number;
   uniqueUsers: number;
-  criticalEvents: number;,
+  criticalEvents: number;
   policyViolations: number;
 
   timeRange: { start: Date; end: Date };
 }
 export interface ReportFinding {
-  type: string;,
+  type: string;
   severity: string;
-  description: string;,
+  description: string;
   count: number;
   examples: AuditLog;
 }
 export interface SecurityFinding {
-  type: string;,
+  type: string;
   severity: string;
-  resource: string;,
+  resource: string;
   description: string;
-  remediation: string;,
+  remediation: string;
   evidence: any;
 }
 export interface ScanSummary {
-  totalChecks: number;,
+  totalChecks: number;
   passed: number;
-  failed: number;,
+  failed: number;
   criticalFindings: number;
-  highFindings: number;,
+  highFindings: number;
   mediumFindings: number;
   lowFindings: number;
 }
 export interface RiskFactor {
-  type: string;,
+  type: string;
   description: string;
-  weight: number;,
+  weight: number;
   value: any;
   // Main domain interface
 }
 export interface ISecurityDomain {
   // React Components
-  components: {,
-  SecurityDashboard: React.ComponentType<SecurityDashboardProps>;,
+  components: {
+  SecurityDashboard: React.ComponentType<SecurityDashboardProps>;
   AccessControl: React.ComponentType<AccessControlProps>;
   AuditLogViewer: React.ComponentType<AuditLogViewerProps>;
   // Specific security components
-  LoginForm: React.ComponentType<any>;,
+  LoginForm: React.ComponentType<any>;
   PermissionGate: React.ComponentType<any>;
-  SecurityAlerts: React.ComponentType<any>;,
+  SecurityAlerts: React.ComponentType<any>;
   RoleManager: React.ComponentType<any>;
   PolicyEditor: React.ComponentType<any>;
 };
   // React Hooks
-  hooks: {,
+  hooks: {
   useAuth: () => {,
-  user: User | null;,
+  user: User | null;
   permissions: Permission;
-  isAuthenticated: boolean;,
-  login: (credentials: any) => Promise<void>;,
+  isAuthenticated: boolean;
+  login: (credentials: any) => Promise<void>;
   logout: () => Promise<void>;
   checkPermission: (resource: string, action: PermissionAction) => boolean;
 };
     usePermissions: () => {,
   permissions: Permission;
-  loading: boolean;,
-  hasPermission: (resource: string, action: PermissionAction) => boolean;,
-  hasRole: (roleName: string) => boolean;,
+  loading: boolean;
+  hasPermission: (resource: string, action: PermissionAction) => boolean;
+  hasRole: (roleName: string) => boolean;
   refreshPermissions: () => Promise<void>;
 };
     useAuditLogs: () => {,
   logs: AuditLog;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  fetchLogs: (filters?: AuditLogFilters) => Promise<void>;,
+  fetchLogs: (filters?: AuditLogFilters) => Promise<void>;
   exportLogs: (format: string) => Promise<void>;
 };
     useSecurityAlerts: () => {,
   alerts: SecurityAlert;
-  unreadCount: number;,
+  unreadCount: number;
   loading: boolean;
-  acknowledgeAlert: (alertId: string) => Promise<void>;,
+  acknowledgeAlert: (alertId: string) => Promise<void>;
   resolveAlert: (alertId: string, resolution: string) => Promise<void>;
 };
     useSecurityMetrics: () => {,
   metrics: SecurityMetrics | null;
-  loading: boolean;,
+  loading: boolean;
   refreshMetrics: () => Promise<void>;
   getMetricsForPeriod: (period: string) => Promise<SecurityMetrics>;
 };
   };
   // Domain Services
-  services: {,
+  services: {
   authentication: IAuthenticationService;
-  authorization: IAuthorizationService;,
+  authorization: IAuthorizationService;
   audit: IAuditService;
-  monitoring: ISecurityMonitoringService;,
+  monitoring: ISecurityMonitoringService;
   policyManagement: IPolicyManagementService;
-  dataClassification: IDataClassificationService;,
+  dataClassification: IDataClassificationService;
   encryption: IEncryptionService;
 };
   // Event System
   events: SecurityDomainEvents & {,
-  subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;,
+  subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;
   emit: (event: keyof SecurityDomainEvents, ...args: any) => void;
 };
   // Utilities
-  utils: {,
-  validatePassword: (password: string) => ValidationResult;,
+  utils: {
+  validatePassword: (password: string) => ValidationResult;
   generateSecurePassword: (length?: number) => string;
-  calculateRiskScore: (factors: RiskFactor) => number;,
-  formatPermission: (permission: Permission) => string;,
-  hashSensitiveData: (data: string) => Promise<string>;,
-  maskSensitiveData: (data: string, type: string) => string;,
+  calculateRiskScore: (factors: RiskFactor) => number;
+  formatPermission: (permission: Permission) => string;
+  hashSensitiveData: (data: string) => Promise<string>;
+  maskSensitiveData: (data: string, type: string) => string;
   validateCompliance: (data: any, framework: string) => ValidationResult;
 };
 
@@ -318,33 +318,33 @@ export interface SecurityDomainFactory {
   create(config?: SecurityDomainConfig): ISecurityDomain;
 }
 export interface SecurityDomainConfig {
-  encryption: {,
-  algorithm: string;,
+  encryption: {
+  algorithm: string;
   keySize: number;
   keyRotationInterval: number;
 };
-  authentication: {,
+  authentication: {
   sessionTimeout: number;
-  maxFailedAttempts: number;,
+  maxFailedAttempts: number;
   passwordPolicy: PasswordPolicy;
 };
-  audit: {,
+  audit: {
   retentionPeriod: number;
-  realTimeLogging: boolean;,
+  realTimeLogging: boolean;
   includeRequestBodies: boolean;
 };
-  monitoring: {,
+  monitoring: {
   alertThresholds: Record<string, number>;
-  anomalyDetection: boolean;,
+  anomalyDetection: boolean;
   riskScoringEnabled: boolean;
 };
 }
 export interface PasswordPolicy {
-  minLength: number;,
+  minLength: number;
   requireUppercase: boolean;
-  requireLowercase: boolean;,
+  requireLowercase: boolean;
   requireNumbers: boolean;
-  requireSpecialChars: boolean;,
+  requireSpecialChars: boolean;
   prohibitCommonPasswords: boolean;
   historyCount: number;
   // Event constants for cross-domain communication

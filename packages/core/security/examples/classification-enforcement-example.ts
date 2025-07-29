@@ -64,7 +64,7 @@ app.get('/api/internal/reports/:id')
 }),
   (req: Request, res: Response) => {
     res.json({)
-  report: {,
+  report: {
   id: req.params.id,
         title: 'Monthly Sales Report',
         data: { /* ... */ }
@@ -81,7 +81,7 @@ app.get('/api/confidential/customer/:id')
   if (decision?.conditions) {
   console.log('Access granted with conditions:', decision.conditions);
   res.json({)
-  customer: {,
+  customer: {
   id: req.params.id,
   name: 'ACME Corp',
   revenue: 1000000,
@@ -216,7 +216,7 @@ function createCustomEnforcer() {
   gracePeriodDays: 30,
   policyOverrides: new Map([),
   ['INTERNAL', {
-  access: {,
+  access: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: false,
   approvalWorkflow: false,
@@ -226,7 +226,7 @@ function createCustomEnforcer() {
   exportRestrictions: false,
 }]
     ]),
-    exemptions: {,
+    exemptions: {
   users: ['admin-user', 'system-user'],
   roles: ['security-admin', 'data-steward'],
 });

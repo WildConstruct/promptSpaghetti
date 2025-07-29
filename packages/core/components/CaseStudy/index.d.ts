@@ -51,27 +51,27 @@ export declare const CASE_STUDY_FILTER_PRESETS: {
 export declare const CASE_STUDY_SORT_PRESETS: {
     readonly newest: {
         readonly field: "publishedAt";
-        readonly direction: "desc";
-    };
+        readonly direction: "desc"
+  };
     readonly oldest: {
         readonly field: "publishedAt";
-        readonly direction: "asc";
-    };
+        readonly direction: "asc"
+  };
     readonly mostViewed: {
         readonly field: "views";
-        readonly direction: "desc";
-    };
+        readonly direction: "desc"
+  };
     readonly mostLiked: {
         readonly field: "likes";
-        readonly direction: "desc";
-    };
+        readonly direction: "desc"
+  };
     readonly mostHelpful: {
         readonly field: "helpfulVotes";
-        readonly direction: "desc";
-    };
+        readonly direction: "desc"
+  };
     readonly alphabetical: {
         readonly field: "title";
-        readonly direction: "asc";
-    };
+        readonly direction: "asc"
+  };
 };
 //# sourceMappingURL=index.d.ts.map

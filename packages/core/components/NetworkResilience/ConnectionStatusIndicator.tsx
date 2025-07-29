@@ -53,10 +53,9 @@ interface ConnectionStatusIndicatorProps {
       return 'Disconnected';
     case ConnectionState.OFFLINE:
       return 'Offline';
-    case ConnectionState.FAILED:
-      return 'Connection Failed';,
+    case ConnectionState.FAILED: return 'Connection Failed';
   default:
-      return 'Unknown';
+      return 'Unknown'
   };
   const getStatusColor = () => {
   if (status.isOnline) {
@@ -114,7 +113,7 @@ interface ConnectionStatusIndicatorProps {
 },
   borderRadius: '8px',
         cursor: onClick ? 'pointer' : 'default',
-        minWidth: '200px';
+        minWidth: '200px'
   }}
     >
       <div className="flex items-center justify-between">

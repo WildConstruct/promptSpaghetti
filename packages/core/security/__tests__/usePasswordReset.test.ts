@@ -11,13 +11,13 @@ import { verificationCodeManager } from '../VerificationCodeManager';
 
 // Mock the password reset managers
 jest.mock('../PasswordResetTokenManager', () => ({)
-  passwordResetTokenManager: {,
+  passwordResetTokenManager: {
   generateToken: jest.fn<unknown, unknown>(),
   validateToken: jest.fn<unknown, unknown>(),
   useToken: jest.fn<unknown, unknown>(),
 }));
 jest.mock('../VerificationCodeManager', () => ({)
-  verificationCodeManager: {,
+  verificationCodeManager: {
   generateCode: jest.fn<unknown, unknown>(),
   validateCode: jest.fn<unknown, unknown>(),
   useCode: jest.fn<unknown, unknown>(),
@@ -132,7 +132,7 @@ describe('usePasswordReset', () => {
   strength: PasswordStrength.STRONG,
   score: 100,
   feedback: ['Custom validation passed'],
-  requirements: {,
+  requirements: {
   length: true,
   uppercase: true,
   lowercase: true,
@@ -246,7 +246,7 @@ describe('usePasswordReset', () => {
 } as unknown as unknown);
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
   valid: true,
-  token: {,
+  token: {
   id: 'mock-token-id',
   userId: 'user-123',
   email: 'test@example.com',

@@ -27,117 +27,117 @@ export type MARSZoneType =
   | 'post_processing';
 
 export interface FilmIndustryUser {
-  id: string;,
+  id: string;
   name: string;
-  role: FilmIndustryRole;,
+  role: FilmIndustryRole;
   department: string;
-  permissions: string;,
+  permissions: string;
   isOnline: boolean;
   currentSession?: string;
 }
 export interface MARSRegionTemplate {
-  id: string;,
+  id: string;
   zoneType: MARSZoneType;
-  title: string;,
+  title: string;
   description: string;
-  color: string;,
+  color: string;
   tags: string;
-  defaultNodes: string;,
+  defaultNodes: string;
   vfxCompatible: boolean;
-  marsParameters: {,
-  category: string;,
+  marsParameters: {
+  category: string;
   subcategory: string;
   controlNetMapping?: string;
 };
 }
 export interface ZadaPromptPattern {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   pattern: string;
-  methodology: PromptingMethodology;,
+  methodology: PromptingMethodology;
   filmGenre: string;
-  complexity: 'simple' | 'intermediate' | 'advanced';,
-  elements: {,
-  timeAndSetting: string;,
+  complexity: 'simple' | 'intermediate' | 'advanced';
+  elements: {
+  timeAndSetting: string;
   actions: string;
-  locations: string;,
+  locations: string;
   characters: string;
   cinematography: string;
 };
-  accessibility: {,
+  accessibility: {
   directorFriendly: boolean;
   technicalLevel: number; // 1-10,
   humanReadableScore: number; // 1-10,
 };
 }
 export interface PromptingMethodologySession {
-  sessionId: string;,
+  sessionId: string;
   title: string;
-  methodology: PromptingMethodology;,
+  methodology: PromptingMethodology;
   participants: FilmIndustryUser;
-  currentPattern: ZadaPromptPattern | null;,
+  currentPattern: ZadaPromptPattern | null;
   marsRegions: MARSRegionTemplate;
-  collaborativeEdits: MethodologyEdit;,
+  collaborativeEdits: MethodologyEdit;
   vfxExportConfig: VFXPipelineConfig;
-  createdAt: Date;,
+  createdAt: Date;
   lastModified: Date;
 }
 export interface MethodologyEdit {
-  id: string;,
+  id: string;
   sessionId: string;
-  userId: string;,
+  userId: string;
   timestamp: Date;
-  type: 'pattern_edit' | 'mars_region_add' | 'zada_element_edit' | 'vfx_config_update';,
+  type: 'pattern_edit' | 'mars_region_add' | 'zada_element_edit' | 'vfx_config_update';
   data: any;
   conflictResolution?: string;
 }
 export interface VFXPipelineConfig {
-  includeAnnotations: boolean;,
+  includeAnnotations: boolean;
   includeMarsStructure: boolean;
-  includeZadaPatterns: boolean;,
+  includeZadaPatterns: boolean;
   exportFormat: 'controlnet' | 'stable_diffusion' | 'custom_pipeline';
-  targetSoftware: string;,
-  pipelineMetadata: {,
-  project: string;,
+  targetSoftware: string;
+  pipelineMetadata: {
+  project: string;
   sequence: string;
-  shot: string;,
+  shot: string;
   version: string;
 };
 }
 export interface FilmIndustryWorkflowTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   targetRole: FilmIndustryRole;
-  methodology: PromptingMethodology;,
+  methodology: PromptingMethodology;
   phases: WorkflowPhase;
-  marsZones: MARSZoneType;,
+  marsZones: MARSZoneType;
   zadaElements: string;
   estimatedDuration: number; // minutes,
-  complexity: 'simple' | 'intermediate' | 'advanced';
-}
+  complexity: 'simple' | 'intermediate' | 'advanced'
+  }
 export interface WorkflowPhase {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   duration: number;
-  requiredRoles: FilmIndustryRole;,
+  requiredRoles: FilmIndustryRole;
   deliverables: string;
   methodology: PromptingMethodology;
   marsConfiguration?: MARSRegionTemplate;
   zadaPattern?: ZadaPromptPattern;
 }
 export interface CollaborationComment {
-  id: string;,
+  id: string;
   userId: string;
-  userName: string;,
+  userName: string;
   role: FilmIndustryRole;
-  timestamp: Date;,
+  timestamp: Date;
   content: string;
-  type: 'general' | 'technical' | 'creative' | 'retake_needed' | 'client_feedback' | 'pipeline_note';,
+  type: 'general' | 'technical' | 'creative' | 'retake_needed' | 'client_feedback' | 'pipeline_note';
   targetType: 'pattern' | 'mars_region' | 'zada_element' | 'vfx_config';
-  targetId: string;,
+  targetId: string;
   resolved: boolean;
   priority: 'low' | 'medium' | 'high' | 'critical';
   /**
@@ -175,7 +175,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   tags: ['[CAM]', 'cinematography', 'shots'],
   defaultNodes: ['shot_type', 'camera_angle', 'lens_choice'],
   vfxCompatible: true,
-  marsParameters: {,
+  marsParameters: {
   category: 'CAM',
   subcategory: 'camera_work',
   controlNetMapping: 'pose_guidance',
@@ -189,7 +189,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   tags: ['[SUBJ]', 'characters', 'actors'],
   defaultNodes: ['primary_subject', 'secondary_subjects', 'interactions'],
   vfxCompatible: true,
-  marsParameters: {,
+  marsParameters: {
   category: 'SUBJ',
   subcategory: 'character_work',
   controlNetMapping: 'depth_maps',
@@ -203,7 +203,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   tags: ['[FX]', 'lighting', 'effects'],
   defaultNodes: ['lighting_setup', 'color_grade', 'special_fx'],
   vfxCompatible: true,
-  marsParameters: {,
+  marsParameters: {
   category: 'FX',
   subcategory: 'visual_effects',
   controlNetMapping: 'edge_detection',
@@ -217,7 +217,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   tags: ['!FOCAL', 'focus', 'attention'],
   defaultNodes: ['primary_focus', 'secondary_focus', 'background'],
   vfxCompatible: true,
-  marsParameters: {,
+  marsParameters: {
   category: 'FOCAL',
   subcategory: 'focus_control',
   controlNetMapping: 'depth_hints'];
@@ -234,14 +234,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         methodology: 'zada',
         filmGenre: ['drama', 'thriller', 'romance'],
         complexity: 'intermediate',
-        elements: {,
+        elements: {
   timeAndSetting: 'modern office during lunch break',
   actions: 'discussing a critical business decision',
   locations: 'conference room with city skyline view',
   characters: 'two executives with conflicting perspectives',
   cinematography: 'close-up shots alternating with wide establishing shots',
 },
-  accessibility: {,
+  accessibility: {
   directorFriendly: true,
   technicalLevel: 3,
   humanReadableScore: 9,
@@ -254,14 +254,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         methodology: 'zada',
         filmGenre: ['action', 'thriller', 'sci-fi'],
         complexity: 'advanced',
-        elements: {,
+        elements: {
   timeAndSetting: 'nighttime during a thunderstorm',
   actions: 'chase through crowded market streets',
   locations: 'narrow alleyways and rooftops',
   characters: 'protagonist being pursued by antagonists',
   cinematography: 'handheld camera with rapid cuts and dynamic angles',
 },
-  accessibility: {,
+  accessibility: {
   directorFriendly: true,
   technicalLevel: 4,
   humanReadableScore: 8,
@@ -274,14 +274,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         methodology: 'hybrid',
         filmGenre: ['sci-fi', 'fantasy', 'drama'],
         complexity: 'advanced',
-        elements: {,
+        elements: {
   timeAndSetting: 'golden hour in futuristic cityscape',
   actions: 'make a crucial discovery about their mission',
   locations: 'high-tech laboratory with panoramic windows',
   characters: 'research team led by brilliant scientist',
   cinematography: 'smooth dolly movement with lens flares',
 },
-  accessibility: {,
+  accessibility: {
   directorFriendly: true,
   technicalLevel: 7,
   humanReadableScore: 6];
@@ -331,7 +331,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   this.templates.set(workflow.id, workflow);
 });
   // Session Management
-  async createCollaborationSession(title: string,)
+  async createCollaborationSession(title: string)
     methodology: PromptingMethodology,
     creatorId: string): Promise<PromptingMethodologySession> {,
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -344,13 +344,13 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
   currentPattern: null,
   marsRegions: Array.from(this.marsRegionTemplates.values()),
   collaborativeEdits: [],
-  vfxExportConfig: {,
+  vfxExportConfig: {
   includeAnnotations: true,
   includeMarsStructure: methodology === 'mars' || methodology === 'hybrid',
   includeZadaPatterns: methodology === 'zada' || methodology === 'hybrid',
   exportFormat: 'controlnet',
   targetSoftware: ['Houdini', 'Maya', 'Nuke'],
-  pipelineMetadata: {,
+  pipelineMetadata: {
   project: 'Wild Construct Demo',
   sequence: 'SEQ_001',
   shot: 'SHOT_001',
@@ -374,7 +374,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
       this.emit('user_joined', { sessionId, user });
     return true;
   // Pattern Management
-  async createZadaPattern(sessionId: string,)
+  async createZadaPattern(sessionId: string)
     userId: string,
     patternData: Partial<ZadaPromptPattern>): Promise<ZadaPromptPattern> {,
     const session = this.sessions.get(sessionId);
@@ -416,7 +416,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
     session.lastModified = new Date();
     this.emit('zada_pattern_created', { sessionId, pattern, userId });
     return pattern;
-  async createMARSRegion(sessionId: string,)
+  async createMARSRegion(sessionId: string)
     userId: string,
     regionData: Partial<MARSRegionTemplate>): Promise<MARSRegionTemplate> {,
     const session = this.sessions.get(sessionId);
@@ -458,7 +458,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
     if (!session) {
       throw new Error('Session not found');
     const vfxExport = {
-      metadata: {,
+      metadata: {
   exportId: `vfx_${Date.now()}`}
 }
         sessionId,
@@ -468,13 +468,13 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         pipelineConfig: session.vfxExportConfig;
   },
   marsStructure: session.vfxExportConfig.includeMarsStructure ? {,
-  regions: session.marsRegions.map(region => ({,)
+  regions: session.marsRegions.map(region => ({)
   id: region.id,
   type: region.zoneType,
   marsCategory: region.marsParameters.category,
   controlNetMapping: region.marsParameters.controlNetMapping,
   nodes: region.defaultNodes,
-  vfxMetadata: {,
+  vfxMetadata: {
   compatible: region.vfxCompatible,
   tags: region.tags,
   color: region.color,
@@ -487,14 +487,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
 } : null,
       annotations: session.vfxExportConfig.includeAnnotations ? {,
   collaborativeEdits: session.collaborativeEdits,
-  participants: session.participants.map(p => ({,)
+  participants: session.participants.map(p => ({)
   id: p.id,
   name: p.name,
   role: p.role,
   department: p.department,
 }))
       } : null,
-      pipelineIntegration: {,
+      pipelineIntegration: {
   targetSoftware: session.vfxExportConfig.targetSoftware,
   exportFormat: session.vfxExportConfig.exportFormat,
   compatibilityNotes: [,

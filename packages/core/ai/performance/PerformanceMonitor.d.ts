@@ -50,18 +50,18 @@ export interface MonitoringConfig {
     enabled: boolean;
     collectionInterval: number;
     retentionPeriod: number;
-    alerting: {,
+    alerting: {
         enabled: boolean;
         email?: string[];
         webhook?: string;
         slackChannel?: string;
     };
     thresholds: PerformanceThreshold[];
-    sampling: {,
+    sampling: {
         enabled: boolean;
         rate: number;
     };
-    storage: {,
+    storage: {
         type: 'memory' | 'disk' | 'database';
         path?: string;
         maxSize?: number;
@@ -77,7 +77,7 @@ export interface ModelPerformanceData {
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
 
 export interface PerformanceReport {
-    summary: {,
+    summary: {
         totalModels: number;
         healthyModels: number;
         totalRequests: number;
@@ -85,7 +85,7 @@ export interface PerformanceReport {
         totalCost: number;
         successRate: number;
     };
-    trends: {,
+    trends: {
         responseTimeTrend: Array<{,
             timestamp: number;
             value: number;

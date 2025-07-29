@@ -95,7 +95,7 @@ export class ExtensionManifestManager {
   /**
    * Validate manifest with context
    */
-  public validateManifest(manifest: ExtensionManifest,)
+  public validateManifest(manifest: ExtensionManifest)
     systemVersion: string = '1.0.0',
     platform: string = 'web',
     grantedPermissions: string = []): ExtensionValidationResult {,
@@ -161,7 +161,7 @@ export class ExtensionManifestManager {
   /**
    * Check manifest compatibility
    */
-  public checkCompatibility(manifest: ExtensionManifest,)
+  public checkCompatibility(manifest: ExtensionManifest)
     systemVersion: string,
     platform: string): ExtensionValidationResult {,
     return extensionManifestParser.checkCompatibility(manifest, systemVersion, platform);
@@ -351,10 +351,10 @@ export class ExtensionManifestBuilder {
   private manifest: Partial<ExtensionManifest> = {};
   constructor() {
   this.manifest.manifest_version = '1.0';
-  public setBasicInfo(info: {,)
-  id: string;,
+  public setBasicInfo(info: {)
+  id: string;
   name: string;
-  version: string;,
+  version: string;
   description: string;
 }): ExtensionManifestBuilder {
   this.manifest.id = info.id;
@@ -362,7 +362,7 @@ export class ExtensionManifestBuilder {
   this.manifest.version = info.version;
   this.manifest.description = info.description;
   return this;
-  public setAuthor(author: {,)
+  public setAuthor(author: {)
   name: string;
   email?: string;
   url?: string;
@@ -375,7 +375,7 @@ export class ExtensionManifestBuilder {
   public setMain(main: string): ExtensionManifestBuilder {,
   this.manifest.main = main;
   return this;
-  public setDependencies(dependencies: {,)
+  public setDependencies(dependencies: {)
   system?: string;
   extensions?: Record<string, string>;
   npm?: Record<string, string>;
@@ -385,14 +385,14 @@ export class ExtensionManifestBuilder {
   public setPermissions(permissions: string): ExtensionManifestBuilder {,
   this.manifest.permissions = permissions;
   return this;
-  public setCapabilities(capabilities: {,)
+  public setCapabilities(capabilities: {)
   provides?: string;
   requires?: string;
   optional?: string;
 }): ExtensionManifestBuilder {
   this.manifest.capabilities = capabilities;
   return this;
-  public setUI(ui: {,)
+  public setUI(ui: {)
   icon?: string;
   category?: string;
   themes?: string;
@@ -401,7 +401,7 @@ export class ExtensionManifestBuilder {
 }): ExtensionManifestBuilder {
   this.manifest.ui = ui;
   return this;
-  public setRuntime(runtime: {,)
+  public setRuntime(runtime: {)
   node_types?: string;
   transforms?: string;
   storage_providers?: string;
@@ -409,7 +409,7 @@ export class ExtensionManifestBuilder {
 }): ExtensionManifestBuilder {
   this.manifest.runtime = runtime;
   return this;
-  public setMetadata(metadata: {,)
+  public setMetadata(metadata: {)
   license?: string;
   repository?: string;
   homepage?: string;
@@ -419,16 +419,16 @@ export class ExtensionManifestBuilder {
 }): ExtensionManifestBuilder {
   this.manifest.metadata = metadata;
   return this;
-  public setCompatibility(compatibility: {,)
+  public setCompatibility(compatibility: {)
   min_system_version?: string;
   max_system_version?: string;
   platforms?: string;
 }): ExtensionManifestBuilder {
   this.manifest.compatibility = compatibility;
   return this;
-  public setSecurity(security: {,)
+  public setSecurity(security: {)
   content_security_policy?: string;
-  sandbox?: {,
+  sandbox?: {
   enabled?: boolean;
   permissions?: string;
 };
@@ -447,9 +447,9 @@ export class ExtensionManifestBuilder {
   return JSON.stringify(this.build(), null, 2);
   // Types and Interfaces
   interface CachedManifest {
-  manifest: ExtensionManifest;,
+  manifest: ExtensionManifest;
   filePath: string;
-  loadedAt: Date;,
+  loadedAt: Date;
   lastModified: Date;
   interface ManifestLoadResult {
   success: boolean;
@@ -457,32 +457,32 @@ export class ExtensionManifestBuilder {
   source?: 'cache' | 'file';
   error?: string;
   details?: Array<{,
-  path: string;,
+  path: string;
   message: string;
   code: string;
 }>;
 interface ManifestBatchLoadResult {
-  success: boolean;,
+  success: boolean;
   results: ManifestLoadResult;
-  errors: string;,
+  errors: string;
   totalFound: number;
   totalLoaded: number;
 interface ManifestDependencyInfo {
   manifest?: ExtensionManifest;
-  dependencies: ExtensionManifest;,
+  dependencies: ExtensionManifest;
   dependents: ExtensionManifest;
-  missingDependencies: string;,
+  missingDependencies: string;
   circularDependencies: string;
 interface ManifestStatistics {
-  total: number;,
+  total: number;
   byType: Record<string, number>;
   byVersion: Record<string, number>;
   byAuthor: Record<string, number>;
-  totalDependencies: number;,
+  totalDependencies: number;
   averageDependencies: number;
-  mostPopularDependencies: string;,
+  mostPopularDependencies: string;
   oldestVersion: string;
-  newestVersion: string;,
+  newestVersion: string;
   cached: number;
 
 // Export singletons

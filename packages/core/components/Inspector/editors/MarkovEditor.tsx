@@ -5,7 +5,7 @@ import { TextAreaEditor } from '../TextAreaEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 interface MarkovTransition {
-  from: string;,
+  from: string;
   to: string;
   probability: number;
 

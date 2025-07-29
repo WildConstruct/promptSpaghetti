@@ -9,7 +9,7 @@
 import React, { useState } from 'react';
 import { ShareConfig, ShareLink, SocialPlatform } from '../../types/sharingTypes';
 interface SharePreviewProps {
-  shareConfig: ShareConfig;,
+  shareConfig: ShareConfig;
   shareLink: ShareLink;
   selectedPlatform?: SocialPlatform | 'embed' | 'opengraph';
   export const SharePreview: React.FC<SharePreviewProps> = ({,)
@@ -41,7 +41,7 @@ interface SharePreviewProps {
           backgroundImage: `url(${shareConfig.thumbnailUrl})`}
 },
   backgroundSize: 'cover',
-          backgroundPosition: 'center';
+          backgroundPosition: 'center'
   }}></div>
       )}
       <div style={{ padding: '16px' }}>
@@ -88,7 +88,7 @@ interface SharePreviewProps {
           backgroundImage: `url(${shareConfig.thumbnailUrl})`}
 },
   backgroundSize: 'cover',
-          backgroundPosition: 'center';
+          backgroundPosition: 'center'
   }}></div>
       )}
       <div style={{ padding: '12px' }}>
@@ -135,7 +135,7 @@ interface SharePreviewProps {
           backgroundImage: `url(${shareConfig.thumbnailUrl})`}
 },
   backgroundSize: 'cover',
-          backgroundPosition: 'center';
+          backgroundPosition: 'center'
   }}></div>
       )}
       <div style={{ padding: '12px' }}>
@@ -207,7 +207,7 @@ interface SharePreviewProps {
 },
   backgroundSize: 'cover',
             backgroundPosition: 'center',
-            borderRadius: '4px';
+            borderRadius: '4px'
   }}></div>
         )}
       </div>
@@ -341,7 +341,7 @@ interface SharePreviewProps {
               fontWeight: '500',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px';
+              gap: '6px'
   }}
           >
             <span>{option.icon}</span>

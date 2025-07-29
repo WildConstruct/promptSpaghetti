@@ -19,14 +19,14 @@ export enum Epic16ReportCategory {
   PDF = 'pdf',
   CSV = 'csv'
   export interface ReportCategoryDefinition {
-  id: Epic16ReportCategory;,
+  id: Epic16ReportCategory;
   name: string;
-  description: string;,
+  description: string;
   audience: ReportAudience;
   format: ReportFormat;
 }
 export const EPIC16_REPORT_CATEGORIES: Record<Epic16ReportCategory, ReportCategoryDefinition> = {
-  [Epic16ReportCategory.CREATOR_PERFORMANCE]: {,
+  [Epic16ReportCategory.CREATOR_PERFORMANCE]: {
   id: Epic16ReportCategory.CREATOR_PERFORMANCE,
   name: 'Creator Performance',
   description: 'Analytics for creator success metrics and template performance',

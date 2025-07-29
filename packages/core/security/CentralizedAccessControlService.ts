@@ -43,64 +43,64 @@ import {
 import { DataClassifier, ClassificationResult } from './DataClassifier';
 
 export interface AccessControlConfig {
-  enableRBAC: boolean;,
+  enableRBAC: boolean;
   enableABAC: boolean;
-  enableDelegation: boolean;,
+  enableDelegation: boolean;
   enableInheritance: boolean;
-  cacheDecisions: boolean;,
+  cacheDecisions: boolean;
   cacheTTL: number; // milliseconds,
-  auditAllDecisions: boolean;,
+  auditAllDecisions: boolean;
   realTimeMonitoring: boolean;
-  strictCompliance: boolean;,
+  strictCompliance: boolean;
   emergencyBypass: boolean;
-  performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE';
-}
+  performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE'
+  }
 export interface AccessControlMetrics {
-  totalRequests: number;,
+  totalRequests: number;
   approvedRequests: number;
-  deniedRequests: number;,
+  deniedRequests: number;
   cacheHitRate: number;
-  averageDecisionTime: number;,
+  averageDecisionTime: number;
   p95DecisionTime: number;
-  rbacDecisions: number;,
+  rbacDecisions: number;
   abacDecisions: number;
-  delegatedDecisions: number;,
+  delegatedDecisions: number;
   emergencyAccess: number;
   complianceViolations: number;
 }
 export interface CacheEntry {
-  decision: AccessDecision;,
+  decision: AccessDecision;
   timestamp: Date;
-  ttl: number;,
+  ttl: number;
   requestHash: string;
 }
 export interface AuditLogEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  requestId: string;,
+  requestId: string;
   userId: string;
-  resourceId: string;,
+  resourceId: string;
   operation: DataOperation;
-  decision: 'PERMIT' | 'DENY' | 'INDETERMINATE';,
+  decision: 'PERMIT' | 'DENY' | 'INDETERMINATE';
   reason: string;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   classification: DataClassificationLevel;
-  delegated: boolean;,
+  delegated: boolean;
   emergency: boolean;
-  obligations: PolicyObligation;,
+  obligations: PolicyObligation;
   decisionTime: number;
   metadata: Record<string, any>;
 }
 export interface SecurityAlert {
-  id: string;,
+  id: string;
   type: 'UNAUTHORIZED_ACCESS' | 'POLICY_VIOLATION' | 'ANOMALOUS_BEHAVIOR' | 'DELEGATION_ABUSE' | 'EMERGENCY_ACCESS';
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   timestamp: Date;
-  userId: string;,
+  userId: string;
   resourceId: string;
-  description: string;,
+  description: string;
   context: Record<string, any>;
-  requiresResponse: boolean;,
+  requiresResponse: boolean;
   autoRemediation: boolean;
   /**
   * Main Access Control Service Implementation
@@ -243,7 +243,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Get audit log entries
    */
-  public getAuditLog(limit: number = 100,)
+  public getAuditLog(limit: number = 100)
     offset: number = 0,
     filters?: Partial<AuditLogEntry>
   ): AuditLogEntry {
@@ -321,7 +321,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   });
     decision.monitoring.push({)
   type: 'REALTIME',
-  specification: {,
+  specification: {
   metrics: ['all_actions'],
   frequency: 'continuous',
   retention: 90,
@@ -357,7 +357,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   inheritanceChain: [],
   delegatedPermissions: [],
   riskScore: subject.riskScore,
-  validationStatus: {,
+  validationStatus: {
   isValid: true,
   lastValidated: new Date(),
   validatedBy: 'access_control_service',
@@ -387,7 +387,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Combine RBAC and ABAC decisions
    */
-  private async combineDecisions(request: AccessRequest,)
+  private async combineDecisions(request: AccessRequest)
     rbacDecision: RBACDecision | null,
     abacDecision: ABACDecision | null,
     effectivePermissions: EffectivePermissions): Promise<AccessDecision> {,
@@ -437,7 +437,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   monitoring,
   auditRequired: this.config.auditAllDecisions || request.object.classification !== 'PUBLIC',
   riskLevel: this.calculateRiskLevel(request, effectivePermissions),
-  metadata: {,
+  metadata: {
   evaluationTime: Date.now(),
   policiesEvaluated: abacDecision?.matchedPolicies || [],
   rolesEvaluated: rbacDecision?.matchedRoles || [],
@@ -453,7 +453,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   case 'RESTRICTED':,
   monitoring.push({)
   type: 'REALTIME',
-  specification: {,
+  specification: {
   metrics: ['access_time', 'data_volume', 'user_behavior'],
   frequency: 'continuous',
   retention: 90,
@@ -470,7 +470,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       case 'CONFIDENTIAL':
         monitoring.push({)
   type: 'BATCH',
-  specification: {,
+  specification: {
   metrics: ['access_patterns', 'export_activities'],
   frequency: 'hourly',
   retention: 30,
@@ -487,7 +487,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       case 'INTERNAL':
         monitoring.push({)
   type: 'AUDIT',
-  specification: {,
+  specification: {
   metrics: ['basic_access'],
   frequency: 'daily',
   retention: 7,
@@ -662,7 +662,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Create access decision object
    */
-  private createDecision(decision: 'PERMIT' | 'DENY' | 'INDETERMINATE',)
+  private createDecision(decision: 'PERMIT' | 'DENY' | 'INDETERMINATE')
     reason: string,
     request: AccessRequest): AccessDecision {,
     return {
@@ -674,7 +674,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       monitoring: [],
       auditRequired: true,
       riskLevel: this.calculateRiskLevel(request, {} as EffectivePermissions),
-      metadata: {,
+      metadata: {
   evaluationTime: Date.now(),
   policiesEvaluated: [],
   rolesEvaluated: [],
@@ -684,7 +684,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Record access decision in audit log
    */
-  private recordDecision(request: AccessRequest,)
+  private recordDecision(request: AccessRequest)
     decision: AccessDecision,
     decisionTime: number,
     emergency: boolean): void {,
@@ -703,7 +703,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   emergency,
   obligations: decision.obligations,
   decisionTime,
-  metadata: {,
+  metadata: {
   userAgent: request.subject.device.browser || 'unknown',
   ipAddress: request.environment.network?.ipAddress || 'unknown',
   location: request.subject.location,
@@ -748,7 +748,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Emit security alert
    */
-  private emitSecurityAlert(type: SecurityAlert['type'],)
+  private emitSecurityAlert(type: SecurityAlert['type'])
     severity: SecurityAlert['severity'],
     request: AccessRequest,
     description: string): void {,
@@ -760,7 +760,7 @@ export class CentralizedAccessControlService extends EventEmitter {
   userId: request.subject.userId,
   resourceId: request.object.dataId,
   description,
-  context: {,
+  context: {
   operation: request.action.operation,
   classification: request.object.classification,
   userAgent: request.subject.device.browser,

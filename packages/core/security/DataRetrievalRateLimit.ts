@@ -38,120 +38,120 @@ export enum DataEndpointCategory {
   DATA_BACKUP = 'data_backup',
   DATA_SYNC = 'data_sync'
   export interface DataRetrievalLimits {
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   operation: DataOperation;
-  limits: {,
-  requestsPerMinute: number;,
+  limits: {
+  requestsPerMinute: number;
   requestsPerHour: number;
-  requestsPerDay: number;,
+  requestsPerDay: number;
   bytesPerMinute: number;
-  bytesPerHour: number;,
+  bytesPerHour: number;
   recordsPerMinute: number;
-  recordsPerHour: number;,
+  recordsPerHour: number;
   concurrentRequests: number;
 };
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy;
-  baseDelay: number;,
+  baseDelay: number;
   maxDelay: number;
   multiplier: number;
 };
-  adaptiveFactors: {,
+  adaptiveFactors: {
   userRiskMultiplier: number;
-  timeOfDayMultiplier: number;,
+  timeOfDayMultiplier: number;
   locationMultiplier: number;
   deviceTrustMultiplier: number;
 };
 }
 export interface DataAccessAttempt {
-  userId: string;,
+  userId: string;
   resourceId: string;
-  operation: DataOperation;,
+  operation: DataOperation;
   classification: DataClassificationLevel;
-  timestamp: Date;,
+  timestamp: Date;
   bytesRequested: number;
-  recordsRequested: number;,
+  recordsRequested: number;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   success: boolean;
-  rateLimited: boolean;,
+  rateLimited: boolean;
   riskScore: number;
 }
 export interface RetrievalMetrics {
-  totalRequests: number;,
+  totalRequests: number;
   totalBytesTransferred: number;
-  totalRecordsAccessed: number;,
+  totalRecordsAccessed: number;
   rateLimitedRequests: number;
-  averageRequestSize: number;,
+  averageRequestSize: number;
   topDataUsers: UserDataUsage;
   classificationBreakdown: Record<DataClassificationLevel, number>;
   operationBreakdown: Record<DataOperation, number>;
-  peakUsageTimes: TimeUsagePattern;,
+  peakUsageTimes: TimeUsagePattern;
   suspiciousActivity: SuspiciousActivity;
 }
 export interface UserDataUsage {
-  userId: string;,
+  userId: string;
   requestCount: number;
-  bytesAccessed: number;,
+  bytesAccessed: number;
   recordsAccessed: number;
-  classificationsAccessed: DataClassificationLevel;,
+  classificationsAccessed: DataClassificationLevel;
   lastAccess: Date;
-  riskScore: number;,
+  riskScore: number;
   anomalyScore: number;
 }
 export interface TimeUsagePattern {
-  hour: number;,
+  hour: number;
   dayOfWeek: number;
-  requestCount: number;,
+  requestCount: number;
   averageRiskScore: number;
   topOperations: DataOperation;
 }
 export interface SuspiciousActivity {
-  userId: string;,
+  userId: string;
   activityType: 'UNUSUAL_VOLUME' | 'OFF_HOURS_ACCESS' | 'PRIVILEGE_ESCALATION' | 'BULK_DOWNLOAD' | 'RAPID_REQUESTS';
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
-  timestamp: Date;,
+  timestamp: Date;
   evidence: Record<string, any>;
   riskScore: number;
 }
 export interface DataRetrievalConfig {
-  enableVolumeTracking: boolean;,
+  enableVolumeTracking: boolean;
   enableBehaviorAnalysis: boolean;
-  enableAdaptiveLimits: boolean;,
+  enableAdaptiveLimits: boolean;
   enableAnomalyDetection: boolean;
-  quotaEnforcement: boolean;,
+  quotaEnforcement: boolean;
   globalLimits: GlobalDataLimits;
   classificationLimits: Record<DataClassificationLevel, DataRetrievalLimits>;
-  alertThresholds: AlertThresholds;,
+  alertThresholds: AlertThresholds;
   exemptions: DataAccessExemption;
 }
 export interface GlobalDataLimits {
-  maxConcurrentUsers: number;,
+  maxConcurrentUsers: number;
   maxDailyBytes: number;
-  maxDailyRecords: number;,
+  maxDailyRecords: number;
   maxRequestRate: number; // requests per second globally,
-  emergencyThrottle: {,
-  enabled: boolean;,
+  emergencyThrottle: {
+  enabled: boolean;
   thresholdCpuPercent: number;
-  thresholdMemoryPercent: number;,
+  thresholdMemoryPercent: number;
   throttlePercent: number;
 };
 }
 export interface AlertThresholds {
-  volumeSpike: {,
-  percentIncrease: number;,
+  volumeSpike: {
+  percentIncrease: number;
   timeWindow: number; // minutes,
 };
-  userQuotaUsage: {,
+  userQuotaUsage: {
   warningPercent: number;
   criticalPercent: number;
 };
-  classificationAccess: {,
+  classificationAccess: {
   restrictedAccessCount: number;
   timeWindow: number; // minutes,
 };
-  anomalyScore: {,
+  anomalyScore: {
   warningThreshold: number;
   criticalThreshold: number;
 };
@@ -161,16 +161,16 @@ export interface DataAccessExemption {
   userId?: string;
   role?: string;
   ipAddress?: string;
-  reason: string;,
+  reason: string;
   exemptionType: 'RATE_LIMIT' | 'QUOTA' | 'CLASSIFICATION' | 'TIME_RESTRICTION';
   expiresAt?: Date;
-  conditions: ExemptionCondition;,
+  conditions: ExemptionCondition;
   approvedBy: string;
-  approvedAt: Date;,
+  approvedAt: Date;
   auditRequired: boolean;
 }
 export interface ExemptionCondition {
-  type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';,
+  type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';
   specification: Record<string, any>;
   required: boolean;
   /**
@@ -302,7 +302,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
     this.userQuotas.delete(userId);
     this.emit('quotaReset', { userId, timestamp: new Date() });
   // Private helper methods...
-  private async checkRateLimits(subject: SubjectAttributes,)
+  private async checkRateLimits(subject: SubjectAttributes)
     limits: DataRetrievalLimits,
     requestDetails: DataRequestDetails): Promise<{ result: RateLimitResult; reason?: string; retryAfter?: number }> {
     // Use the existing rate limiting service with extended endpoint categories
@@ -322,7 +322,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
   retryAfter: blocked.retryAfter;
   };
     return { result: RateLimitResult.ALLOWED };
-  private async checkVolumeLimits(subject: SubjectAttributes,)
+  private async checkVolumeLimits(subject: SubjectAttributes)
     object: ObjectAttributes,
     requestDetails: DataRequestDetails): Promise<{ allowed: boolean; reason?: string; retryAfter?: number }> {
     if (!this.config.enableVolumeTracking) {
@@ -347,7 +347,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
   retryAfter: 3600 - Math.floor((now.getTime() - oneHourAgo.getTime()) / 1000),
 };
     return { allowed: true };
-  private async checkQuotaLimits(subject: SubjectAttributes,)
+  private async checkQuotaLimits(subject: SubjectAttributes)
     object: ObjectAttributes,
     requestDetails: DataRequestDetails): Promise<{ allowed: boolean; reason?: string; retryAfter?: number }> {
     const quota = this.userQuotas.get(subject.userId);
@@ -368,7 +368,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
   retryAfter: this.getSecondsUntilMidnight(),
 };
     return { allowed: true };
-  private async checkForAnomalies(subject: SubjectAttributes,)
+  private async checkForAnomalies(subject: SubjectAttributes)
     object: ObjectAttributes,
     operation: DataOperation,
     requestDetails: DataRequestDetails): Promise<AnomalyCheck> {,
@@ -404,13 +404,13 @@ export class DataRetrievalRateLimit extends EventEmitter {
   isAnomalous: anomalies.length > 0,
   severity,
   description: anomalies.join(', '),
-  evidence: {,
+  evidence: {
   requestSize: requestDetails.estimatedBytes,
   accessTime: currentHour,
   classification: object.classification,
   recentRequestCount: recentRequests.length,
 };
-  private async checkForWarnings(subject: SubjectAttributes,)
+  private async checkForWarnings(subject: SubjectAttributes)
     object: ObjectAttributes,
     requestDetails: DataRequestDetails): Promise<string> {,
     const warnings: string = [];
@@ -428,7 +428,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
     operation: DataOperation,
   ): DataRetrievalLimits {
   return this.config.classificationLimits[classification] || this.getDefaultLimits();
-  private async applyAdaptiveFactors(baseLimits: DataRetrievalLimits,)
+  private async applyAdaptiveFactors(baseLimits: DataRetrievalLimits)
   subject: SubjectAttributes,
   object: ObjectAttributes): Promise<DataRetrievalLimits> {,
   if (!this.config.enableAdaptiveLimits) {
@@ -458,7 +458,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
   return {
   classification: DataClassificationLevel.INTERNAL,
   operation: 'READ',
-  limits: {,
+  limits: {
   requestsPerMinute: 60,
   requestsPerHour: 1000,
   requestsPerDay: 10000,
@@ -468,13 +468,13 @@ export class DataRetrievalRateLimit extends EventEmitter {
   recordsPerHour: 10000,
   concurrentRequests: 5,
 },
-  backoff: {,
+  backoff: {
   strategy: BackoffStrategy.EXPONENTIAL,
   baseDelay: 1,
   maxDelay: 300,
   multiplier: 2,
 },
-  adaptiveFactors: {,
+  adaptiveFactors: {
   userRiskMultiplier: 0.8,
   timeOfDayMultiplier: 0.5,
   locationMultiplier: 0.3,
@@ -484,24 +484,25 @@ export class DataRetrievalRateLimit extends EventEmitter {
   private initializeMetrics(): void { /* Implementation */ }
   private loadExemptions(): void { /* Implementation */ }
   private startPeriodicTasks(): void { /* Implementation */ }
-  private recordAccess(subject: unknown,)
+  private recordAccess(subject: unknown)
     object: unknown,
     operation: unknown,
     details: unknown,
     success: boolean,
     rateLimited: boolean,
     reason: string): void { /* Implementation */ }
-  private createDecision(decision: string,)
+  private createDecision(decision: string)
     reason: string,
     exemptionId?: string,
     retryAfter?: number,
     warnings?: string
   ): DataRetrievalDecision { return {} as any; }
-  private checkExemptions(subject: unknown,)
+  private checkExemptions(subject: unknown)
     object: unknown,
     operation: unknown): Promise<DataAccessExemption | null> { return Promise.resolve(null); }
   private updateUserQuota(userId: string, details: unknown): Promise<void> { return Promise.resolve(); }
-  private getEndpointFromOperation(operation: DataOperation): string { return 'data_access'; }
+  private getEndpointFromOperation(operation: DataOperation): string { return 'data_access'
+  }
   private getTypicalRequestSize(history: DataAccessAttempt): number { return 1048576; }
   private isClassificationEscalation(()
     recent: DataClassificationLevel,
@@ -514,44 +515,44 @@ export class DataRetrievalRateLimit extends EventEmitter {
 // Supporting interfaces
 
 export interface DataRequestDetails {
-  operation: DataOperation;,
+  operation: DataOperation;
   estimatedBytes: number;
-  estimatedRecords: number;,
+  estimatedRecords: number;
   requestType: 'SINGLE' | 'BATCH' | 'STREAM';
   context: Record<string, any>;
 }
 export interface DataRetrievalDecision {
-  decision: 'ALLOW' | 'DENY';,
+  decision: 'ALLOW' | 'DENY';
   reason: string;
   exemptionId?: string;
   retryAfter?: number;
   warnings?: string;
-  quotaRemaining?: {,
-  bytes: number;,
+  quotaRemaining?: {
+  bytes: number;
   records: number;
   requests: number;
 };
-  metadata: {,
+  metadata: {
   timestamp: Date;
-  evaluationTime: number;,
+  evaluationTime: number;
   appliedLimits: string;
 };
 }
 export interface UserQuota {
-  userId: string;,
+  userId: string;
   dailyByteLimit: number;
-  dailyRecordLimit: number;,
+  dailyRecordLimit: number;
   dailyRequestLimit: number;
-  bytesUsed: number;,
+  bytesUsed: number;
   recordsUsed: number;
-  requestsUsed: number;,
+  requestsUsed: number;
   resetAt: Date;
   lastUpdated: Date;
 }
 export interface AnomalyCheck {
-  isAnomalous: boolean;,
+  isAnomalous: boolean;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  description: string;,
+  description: string;
   evidence: Record<string, any>;
 }
 export default DataRetrievalRateLimit;

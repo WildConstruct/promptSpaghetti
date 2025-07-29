@@ -44,7 +44,7 @@ export interface PreviewCache {
     graphHash: string;
     timestamp: number;
     results: PreviewResult[];
-    performanceStats: {,
+    performanceStats: {
         totalTime: number;
         averageTime: number;
     } | null;
@@ -62,7 +62,7 @@ export interface PreviewStateStore {
     error: string | null;
     results: PreviewResult[];
     aggregateError: string | null;
-    performanceStats: {,
+    performanceStats: {
         totalTime: number;
         averageTime: number;
     } | null;
@@ -117,7 +117,7 @@ export interface PreviewStateStore {
     restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 
 export declare }, "subscribe"> & {
-    subscribe: {,
+    subscribe: {
         (listener: (selectedState: PreviewStateStore, previousSelectedState: PreviewStateStore) => void): () => void;
         <U>(selector: (state: PreviewStateStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;

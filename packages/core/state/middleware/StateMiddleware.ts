@@ -9,9 +9,9 @@ import { StateChange, StateMiddleware, ValidationResult, ValidationError } from 
 // Enhanced middleware types
 
 export interface MiddlewareContext<T> {
-  state: T;,
+  state: T;
   prevState: T;
-  change: StateChange<T>;,
+  change: StateChange<T>;
   domain: string;
   userId?: string;
   metadata: Record<string, any>;
@@ -21,7 +21,7 @@ export interface MiddlewareContext<T> {
   metadata?: Record<string, any>;
   warnings?: string;
   export interface AsyncMiddleware<T> {
-  name: string;,
+  name: string;
   order: number;
   beforeUpdate?: (context: MiddlewareContext<T>) => Promise<MiddlewareResult<T>>;
   afterUpdate?: (context: MiddlewareContext<T>) => Promise<void>;
@@ -32,7 +32,7 @@ export interface MiddlewareContext<T> {
   order = 100;
   constructor();
   private validators: Array<(state: T) => ValidationResult>,
-  private options: {,
+  private options: {
   failOnError?: boolean;
   failOnWarning?: boolean;
   logValidation?: boolean;
@@ -63,7 +63,7 @@ export interface MiddlewareContext<T> {
   order = 50;
   constructor();
   private auditLogger: (entry: AuditEntry) => Promise<void>,
-  private options: {,
+  private options: {
   includeStateSnapshot?: boolean;
   sensitiveFields?: string;
   maxPayloadSize?: number;
@@ -78,7 +78,7 @@ export interface MiddlewareContext<T> {
   userId: change.userId,
   source: change.source,
   payload: this.sanitizePayload(change.payload),
-  metadata: {,
+  metadata: {
   hasStateSnapshot: !!this.options.includeStateSnapshot,
   payloadSize: JSON.stringify(change.payload).length,
 };
@@ -116,7 +116,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   duration: 0,
   memoryBefore: this.getMemoryUsage(),
   memoryAfter: 0,
-  metadata: {,
+  metadata: {
   stateSize: JSON.stringify(state).length,
   payloadSize: JSON.stringify(change.payload).length,
 };
@@ -175,7 +175,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   order = 200; // High priority
   constructor();
   private securityRules: SecurityRule,
-  private options: {,
+  private options: {
   blockOnViolation?: boolean;
   logViolations?: boolean;
   alertOnCritical?: boolean;
@@ -215,7 +215,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   order = 75;
   constructor();
   private transformers: Array<(state: T, change: StateChange<T>) => T>,
-  private options: {,
+  private options: {
   skipOnError?: boolean;
   logTransformations?: boolean;
 } = {}
@@ -292,7 +292,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   return new AuditMiddleware(auditLogger, options);
   static createPerformanceMiddleware<T>(): PerformanceMiddleware<T> {,
   return new PerformanceMiddleware();
-  static createSecurityMiddleware<T>(rules: SecurityRule,)
+  static createSecurityMiddleware<T>(rules: SecurityRule)
   options?: any): SecurityMiddleware<T> {,
   return new SecurityMiddleware(rules, options);
   static createTransformationMiddleware<T>()
@@ -303,49 +303,49 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   return new CachingMiddleware();
   // Supporting types and interfaces
   export interface AuditEntry {
-  id: string;,
+  id: string;
   timestamp: number;
-  changeId: string;,
+  changeId: string;
   changeType: string;
   userId?: string;
-  source: string;,
+  source: string;
   payload: any;
   stateSnapshot?: any;
   prevStateSnapshot?: any;
   metadata: Record<string, any>;
 }
 export interface PerformanceMetric {
-  changeId: string;,
+  changeId: string;
   changeType: string;
-  startTime: number;,
+  startTime: number;
   endTime: number;
-  duration: number;,
+  duration: number;
   memoryBefore: number;
-  memoryAfter: number;,
+  memoryAfter: number;
   metadata: Record<string, any>;
 }
 export interface PerformanceStats {
-  averageDuration: number;,
+  averageDuration: number;
   maxDuration: number;
-  minDuration: number;,
+  minDuration: number;
   totalOperations: number;
   operationsPerSecond: number;
 }
 export interface SecurityRule {
-  name: string;,
+  name: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  message: string;,
+  message: string;
   condition: (state: any, change: StateChange<any>) => boolean;
 }
 export interface SecurityViolation {
-  rule: string;,
+  rule: string;
   severity: string;
-  message: string;,
+  message: string;
   change: string;
   timestamp: number;
 }
 export interface CacheEntry<T> {
-  state: T;,
+  state: T;
   timestamp: number;
   change: string;
   // Error classes

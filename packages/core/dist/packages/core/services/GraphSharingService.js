@@ -221,7 +221,9 @@ export class GraphSharingService {
                                 validateIntegrity: boolean,
                                 mergeConflicts: 'overwrite' | 'merge' | 'ask',
                                 preserveAnnotations: boolean
-                            } = {} } } };
+                            } = {}
+                        }
+                    } };
                 Promise < {
                     success: boolean,
                     graph: { nodes: Node, edges: AnnotatedEdge },

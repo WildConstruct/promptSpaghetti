@@ -12,76 +12,76 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { StickyNote as StickyNoteType, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
 interface StickyNoteProps {
-  note: StickyNoteType;,
+  note: StickyNoteType;
   selected: boolean;
-  editing: boolean;,
+  editing: boolean;
   ghostMode: boolean;
-  onUpdate: (updates: Partial<StickyNoteType>) => void;,
+  onUpdate: (updates: Partial<StickyNoteType>) => void;
   onSelect: (multiSelect?: boolean) => void;
-  onStartEdit: () => void;,
+  onStartEdit: () => void;
   onStopEdit: () => void;
-  onDelete: () => void;,
+  onDelete: () => void;
   onMove: (position: { x: number; y: number }) => void;
   onResize: (size: { width: number; height: number }) => void;
   onBringToFront: () => void;
   className?: string;
 const COLOR_THEMES: Record<StickyNoteColor, {
-  background: string;,
+  background: string;
   border: string;
-  text: string;,
+  text: string;
   shadow: string;
   header: string;
 }> = {
-  yellow: {,
+  yellow: {
   background: '#FEF3C7',
   border: '#F59E0B',
   text: '#92400E',
   shadow: 'rgba(245, 158, 11, 0.2)',
   header: '#F59E0B',
 },
-  blue: {,
+  blue: {
   background: '#DBEAFE',
   border: '#3B82F6',
   text: '#1E40AF',
   shadow: 'rgba(59, 130, 246, 0.2)',
   header: '#3B82F6',
 },
-  green: {,
+  green: {
   background: '#D1FAE5',
   border: '#10B981',
   text: '#047857',
   shadow: 'rgba(16, 185, 129, 0.2)',
   header: '#10B981',
 },
-  red: {,
+  red: {
   background: '#FEE2E2',
   border: '#EF4444',
   text: '#DC2626',
   shadow: 'rgba(239, 68, 68, 0.2)',
   header: '#EF4444',
 },
-  purple: {,
+  purple: {
   background: '#EDE9FE',
   border: '#8B5CF6',
   text: '#7C3AED',
   shadow: 'rgba(139, 92, 246, 0.2)',
   header: '#8B5CF6',
 },
-  orange: {,
+  orange: {
   background: '#FED7AA',
   border: '#F97316',
   text: '#C2410C',
   shadow: 'rgba(249, 115, 22, 0.2)',
   header: '#F97316',
 },
-  pink: {,
+  pink: {
   background: '#FCE7F3',
   border: '#EC4899',
   text: '#BE185D',
   shadow: 'rgba(236, 72, 153, 0.2)',
   header: '#EC4899',
 },
-  gray: {,
+  gray: {
   background: '#F3F4F6',
   border: '#6B7280',
   text: '#374151',
@@ -257,7 +257,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
   fontFamily: 'system-ui, -apple-system, sans-serif',
     transition: isDragging || isResizing ? 'none' : 'opacity 0.2s ease, box-shadow 0.2s ease',
     userSelect: editing ? 'auto' : 'none',
-    overflow: 'hidden';
+    overflow: 'hidden'
   };
   const headerStyle: React.CSSProperties = {,
   display: 'flex',

@@ -16,21 +16,21 @@ import {
   AIRecommendation
 } from '../../services/Epic16KnowledgeBaseService';
 interface KnowledgeBaseArticleViewerProps {
-  article: KnowledgeBaseArticle;,
+  article: KnowledgeBaseArticle;
   knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
   onArticleSelect?: (articleId: string) => void;
   onClose?: () => void;
   interface ViewerState {
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  showTableOfContents: boolean;,
+  showTableOfContents: boolean;
   activeSection: string;
-  userRating: number;,
+  userRating: number;
   userFeedback: string;
-  feedbackType: FeedbackType;,
+  feedbackType: FeedbackType;
   showFeedbackForm: boolean;
-  recommendations: AIRecommendation;,
+  recommendations: AIRecommendation;
   readingProgress: number;
   export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps> = ({,)
   article,

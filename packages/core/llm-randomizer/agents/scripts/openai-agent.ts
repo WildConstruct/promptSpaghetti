@@ -4,19 +4,19 @@
 import { validateFormat } from '../../serialization/validator';
 
 export interface OpenAIAgentConfig {
-  apiKey: string;,
+  apiKey: string;
   model: string;
-  temperature: number;,
+  temperature: number;
   maxTokens: number;
   seed?: number;
-  useJsonMode: boolean;,
+  useJsonMode: boolean;
   maxRetries: number;
   retryTemperatureReduction: number;
 }
 export interface GraphGenerationRequest {
-  purpose: string;,
+  purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
-  nodeCount: number;,
+  nodeCount: number;
   nodeTypes: string;
   specificRequirements?: string;
   focusAreas?: string;
@@ -28,11 +28,11 @@ export interface GenerationResult {
   graph?: string;
   errors?: string;
   warnings?: string;
-  attempts: number;,
-  metadata: {,
-  model: string;,
+  attempts: number;
+  metadata: {
+  model: string;
   temperature: number;
-  tokenCount: number;,
+  tokenCount: number;
   generationTime: number;
 };
 }
@@ -65,7 +65,7 @@ export class OpenAIGraphAgent {
   graph: graphContent,
   warnings: validation.warnings.map(w => w.message),
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -79,7 +79,7 @@ export class OpenAIGraphAgent {
   success: false,
   errors: validation.errors.map(e => e.message),
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -99,7 +99,7 @@ export class OpenAIGraphAgent {
   success: false,
   errors: ['Maximum retry attempts exceeded'],
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: 0,

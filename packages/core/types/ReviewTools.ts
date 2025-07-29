@@ -17,14 +17,14 @@ import { ActionSeverity } from './EnforcementTypes';
 // =============================================================================
 
 export interface ReviewItem {
-  reviewId: string;,
+  reviewId: string;
   reviewType: ReviewType;
-  sourceSystem: SourceSystem;,
+  sourceSystem: SourceSystem;
   sourceId: string;
-  priority: ReviewPriority;,
+  priority: ReviewPriority;
   status: ReviewStatus;
   // Content
-  title: string;,
+  title: string;
   description: string;
   data: any; // The actual item being reviewed,
   metadata: ReviewMetadata;
@@ -33,18 +33,18 @@ export interface ReviewItem {
   assignedAt?: Date;
   assignedBy?: string;
   // Review process
-  reviewCriteria: ReviewCriteria;,
+  reviewCriteria: ReviewCriteria;
   decisions: ReviewDecision;
-  notes: ReviewNote;,
+  notes: ReviewNote;
   evidence: ReviewEvidence;
   // Timeline
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   dueDate?: Date;
   completedAt?: Date;
   // Relationships
   parentReviewId?: string;
-  childReviewIds: string;,
+  childReviewIds: string;
   relatedReviewIds: string;
   dependencies: ReviewDependency;
   // Configuration
@@ -104,12 +104,12 @@ export type ReviewStatus =
   | 'cancelled';
 
 export interface ReviewMetadata {
-  sourceData: any;,
+  sourceData: any;
   businessContext: string;
   riskLevel: ActionSeverity;
   confidenceScore?: number;
   automatedRecommendation?: string;
-  tags: string;,
+  tags: string;
   flagged: boolean;
   flagReason?: string;
   estimatedReviewTime: number; // minutes,
@@ -118,12 +118,12 @@ export interface ReviewMetadata {
 export type ReviewComplexity = 'simple' | 'moderate' | 'complex' | 'expert_required';
 
 export interface ReviewCriteria {
-  criteriaId: string;,
+  criteriaId: string;
   name: string;
-  description: string;,
+  description: string;
   category: CriteriaCategory;
   weight: number; // 0-1, contribution to overall score,
-  required: boolean;,
+  required: boolean;
   type: CriteriaType;
   validOptions?: CriteriaOption;
   condition?: string; // Conditional criteria,
@@ -145,19 +145,19 @@ export type CriteriaType =
   | 'checklist';
 
 export interface CriteriaOption {
-  value: string;,
+  value: string;
   label: string;
-  score: number;,
+  score: number;
   impact: string;
 }
 export interface ReviewDecision {
-  decisionId: string;,
+  decisionId: string;
   reviewerId: string;
-  decision: DecisionType;,
+  decision: DecisionType;
   confidence: number; // 0-100,
-  reasoning: string;,
+  reasoning: string;
   criteriaEvaluations: CriteriaEvaluation;
-  recommendedActions: string;,
+  recommendedActions: string;
   timestamp: Date;
   overridden?: boolean;
   overriddenBy?: string;
@@ -173,18 +173,18 @@ export type DecisionType =
   | 'request_more_info';
 
 export interface CriteriaEvaluation {
-  criteriaId: string;,
+  criteriaId: string;
   score: number;
   passed: boolean;
   notes?: string;
   evidence?: string;
 }
 export interface ReviewNote {
-  noteId: string;,
+  noteId: string;
   reviewerId: string;
-  noteType: NoteType;,
+  noteType: NoteType;
   content: string;
-  timestamp: Date;,
+  timestamp: Date;
   visibility: NoteVisibility;
   attachments?: string;
   replyTo?: string;
@@ -193,11 +193,11 @@ export type NoteType = 'observation' | 'question' | 'concern' | 'recommendation'
 export type NoteVisibility = 'reviewers_only' | 'internal' | 'public' | 'submitter_visible';
 
 export interface ReviewEvidence {
-  evidenceId: string;,
+  evidenceId: string;
   type: EvidenceType;
-  source: string;,
+  source: string;
   description: string;
-  data: any;,
+  data: any;
   confidence: number;
   verifiedBy?: string;
   verifiedAt?: Date;
@@ -213,9 +213,9 @@ export type EvidenceType =
   | 'audit_trail';
 
 export interface ReviewDependency {
-  dependencyId: string;,
+  dependencyId: string;
   type: DependencyType;
-  targetReviewId: string;,
+  targetReviewId: string;
   condition: string;
   blocking: boolean;
   resolvedAt?: Date;
@@ -231,13 +231,13 @@ export type DependencyType =
 // =============================================================================
 
 export interface ReviewAssignment {
-  assignmentId: string;,
+  assignmentId: string;
   reviewId: string;
-  reviewerId: string;,
+  reviewerId: string;
   assignedBy: string;
-  assignedAt: Date;,
+  assignedAt: Date;
   dueDate: Date;
-  priority: ReviewPriority;,
+  priority: ReviewPriority;
   estimatedTime: number; // minutes,
   status: AssignmentStatus;
   acceptedAt?: Date;
@@ -255,11 +255,11 @@ export type AssignmentStatus =
   | 'expired';
 
 export interface WorklogEntry {
-  entryId: string;,
+  entryId: string;
   timestamp: Date;
-  action: WorklogAction;,
+  action: WorklogAction;
   timeSpent: number; // minutes,
-  description: string;,
+  description: string;
   status: string;
 }
 export type WorklogAction = 
@@ -273,11 +273,11 @@ export type WorklogAction =
   | 'completed_review';
 
 export interface ReviewerProfile {
-  reviewerId: string;,
+  reviewerId: string;
   name: string;
-  email: string;,
+  email: string;
   role: ReviewerRole;
-  specializations: ReviewSpecialization;,
+  specializations: ReviewSpecialization;
   permissions: ReviewPermission;
   // Performance metrics
   performance: ReviewerPerformance;
@@ -299,7 +299,7 @@ export type ReviewerRole =
   | 'admin';
 
 export interface ReviewSpecialization {
-  area: SpecializationArea;,
+  area: SpecializationArea;
   level: ExpertiseLevel;
   certifiedAt?: Date;
   expiresAt?: Date;
@@ -317,9 +317,9 @@ export type SpecializationArea =
 export type ExpertiseLevel = 'basic' | 'intermediate' | 'advanced' | 'expert';
 
 export interface ReviewPermission {
-  permission: PermissionType;,
+  permission: PermissionType;
   scope: PermissionScope;
-  grantedAt: Date;,
+  grantedAt: Date;
   grantedBy: string;
   expiresAt?: Date;
 }
@@ -342,7 +342,7 @@ export type PermissionScope =
   | 'emergency_only';
 
 export interface ReviewerPerformance {
-  totalReviews: number;,
+  totalReviews: number;
   accuracyScore: number; // 0-100,
   averageReviewTime: number; // minutes,
   throughput: number; // reviews per day,
@@ -350,20 +350,20 @@ export interface ReviewerPerformance {
   consistencyScore: number; // 0-100,
   overrideRate: number; // % of decisions overridden,
   appealSuccessRate: number; // % of appeals that succeeded,
-  lastEvaluationDate: Date;,
-  performanceTrend: 'improving' | 'stable' | 'declining';
-}
+  lastEvaluationDate: Date;
+  performanceTrend: 'improving' | 'stable' | 'declining'
+  }
 export interface ReviewerWorkload {
-  currentAssignments: number;,
+  currentAssignments: number;
   maxConcurrentReviews: number;
-  averageWorkingHours: number;,
+  averageWorkingHours: number;
   capacityUtilization: number; // 0-100%,
-  pendingReviews: number;,
+  pendingReviews: number;
   overdueReviews: number;
   estimatedBacklog: number; // hours,
 }
 export interface ReviewerAvailability {
-  status: AvailabilityStatus;,
+  status: AvailabilityStatus;
   workingHours: TimeSlot;
   timeZone: string;
   unavailableUntil?: Date;
@@ -379,37 +379,37 @@ export interface TimeSlot {
   endTime: string; // HH:mm format,
 }
 export interface ReviewerPreferences {
-  preferredReviewTypes: ReviewType;,
+  preferredReviewTypes: ReviewType;
   maxReviewComplexity: ReviewComplexity;
-  notificationSettings: NotificationSettings;,
+  notificationSettings: NotificationSettings;
   autoAcceptAssignments: boolean;
   workloadPreferences: WorkloadPreferences;
 }
 export interface NotificationSettings {
-  emailNotifications: boolean;,
+  emailNotifications: boolean;
   slackNotifications: boolean;
-  pushNotifications: boolean;,
+  pushNotifications: boolean;
   urgentOnly: boolean;
-  digestFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
-}
+  digestFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly'
+  }
 export interface WorkloadPreferences {
-  preferredBatchSize: number;,
+  preferredBatchSize: number;
   breaksBetweenReviews: boolean;
-  complexReviewsFirst: boolean;,
+  complexReviewsFirst: boolean;
   balanceByType: boolean;
   // =============================================================================
   // Review Workflow and Orchestration
   // =============================================================================
 }
 export interface ReviewWorkflow {
-  workflowId: string;,
+  workflowId: string;
   name: string;
-  description: string;,
+  description: string;
   reviewType: ReviewType;
-  version: string;,
+  version: string;
   enabled: boolean;
   // Workflow definition
-  steps: WorkflowStep;,
+  steps: WorkflowStep;
   conditions: WorkflowCondition;
   escalationRules: EscalationRule;
   // Configuration
@@ -418,16 +418,16 @@ export interface ReviewWorkflow {
   metadata: WorkflowMetadata;
 }
 export interface WorkflowStep {
-  stepId: string;,
+  stepId: string;
   name: string;
-  description: string;,
+  description: string;
   type: StepType;
-  order: number;,
+  order: number;
   required: boolean;
   // Step configuration
   config: StepConfig;
   // Conditions
-  enterConditions: string;,
+  enterConditions: string;
   exitConditions: string;
   // Assignment
   assignmentRules: AssignmentRule;
@@ -447,18 +447,18 @@ export type StepType =
   | 'automated_action';
 
 export interface StepConfig {
-  requiredCriteria: string;,
+  requiredCriteria: string;
   optionalCriteria: string;
   minScore?: number;
   consensusThreshold?: number;
-  autoAdvance: boolean;,
+  autoAdvance: boolean;
   allowSkip: boolean;
   requireEvidence: boolean;
 }
 export interface WorkflowCondition {
-  conditionId: string;,
+  conditionId: string;
   expression: string;
-  description: string;,
+  description: string;
   type: ConditionType;
   priority: number;
 }
@@ -469,16 +469,16 @@ export type ConditionType =
   | 'completion_condition';
 
 export interface EscalationRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  description: string;,
+  description: string;
   triggers: EscalationTrigger;
-  actions: EscalationAction;,
+  actions: EscalationAction;
   delay: number; // minutes,
   enabled: boolean;
 }
 export interface EscalationTrigger {
-  type: TriggerType;,
+  type: TriggerType;
   condition: string;
   threshold?: number;
   timeWindow?: number; // minutes,
@@ -492,7 +492,7 @@ export type TriggerType =
   | 'system_alert';
 
 export interface EscalationAction {
-  action: ActionType;,
+  action: ActionType;
   parameters: Record<string, any>;
   delay: number; // minutes,
   notify: boolean;
@@ -508,24 +508,24 @@ export type ActionType =
   | 'pause_review';
 
 export interface WorkflowConfig {
-  maxReviewers: number;,
+  maxReviewers: number;
   consensusThreshold: number; // % agreement required,
   qualityGate: number; // minimum quality score,
-  timeoutBehavior: TimeoutBehavior;,
+  timeoutBehavior: TimeoutBehavior;
   retryPolicy: RetryPolicy;
   notificationSchedule: NotificationSchedule;
 }
 export type TimeoutBehavior = 'escalate' | 'auto_approve' | 'auto_reject' | 'reassign' | 'extend';
 
 export interface RetryPolicy {
-  maxRetries: number;,
+  maxRetries: number;
   retryDelay: number; // minutes,
-  backoffStrategy: 'linear' | 'exponential' | 'fixed';
-}
+  backoffStrategy: 'linear' | 'exponential' | 'fixed'
+  }
 export interface NotificationSchedule {
-  recipient: NotificationRecipient;,
+  recipient: NotificationRecipient;
   timing: NotificationTiming;
-  method: NotificationMethod;,
+  method: NotificationMethod;
   template: string;
 }
 export type NotificationRecipient = 'reviewer' | 'manager' | 'submitter' | 'admin' | 'stakeholder';
@@ -533,16 +533,16 @@ export type NotificationTiming = 'immediate' | 'delayed' | 'daily_digest' | 'esc
 export type NotificationMethod = 'email' | 'slack' | 'sms' | 'push' | 'dashboard';
 
 export interface WorkflowMetadata {
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
-  lastModified: Date;,
+  lastModified: Date;
   modifiedBy: string;
   version: string;
   deployedAt?: Date;
   statistics: WorkflowStatistics;
 }
 export interface WorkflowStatistics {
-  totalExecutions: number;,
+  totalExecutions: number;
   averageCompletionTime: number; // minutes,
   successRate: number; // %,
   escalationRate: number; // %,
@@ -550,11 +550,11 @@ export interface WorkflowStatistics {
   lastUpdated: Date;
 }
 export interface AssignmentRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  type: AssignmentType;,
+  type: AssignmentType;
   conditions: AssignmentCondition;
-  weightings: AssignmentWeighting;,
+  weightings: AssignmentWeighting;
   fallbackStrategy: FallbackStrategy;
   enabled: boolean;
 }
@@ -567,16 +567,16 @@ export type AssignmentType =
   | 'manual_only';
 
 export interface AssignmentCondition {
-  field: string;,
+  field: string;
   operator: string;
-  value: any;,
+  value: any;
   weight: number;
 }
 export interface AssignmentWeighting {
-  factor: WeightingFactor;,
+  factor: WeightingFactor;
   weight: number; // 0-1,
-  direction: 'prefer' | 'avoid';
-}
+  direction: 'prefer' | 'avoid'
+  }
 export type WeightingFactor = 
   | 'workload'
   | 'expertise'
@@ -597,7 +597,7 @@ export type FallbackStrategy =
 // =============================================================================
 
 export interface ReviewAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   generatedAt: Date;
   // Overview metrics
   overallMetrics: ReviewOverallMetrics;
@@ -610,57 +610,57 @@ export interface ReviewAnalytics {
   // Reviewer metrics
   reviewerMetrics: ReviewerMetrics;
   // Trends and insights
-  trends: ReviewTrends;,
+  trends: ReviewTrends;
   insights: ReviewInsight;
   recommendations: ReviewRecommendation;
 }
 export interface AnalyticsPeriod {
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
   timeRange: TimeRange;
 }
 export interface ReviewOverallMetrics {
-  totalReviews: number;,
+  totalReviews: number;
   completedReviews: number;
-  approvedReviews: number;,
+  approvedReviews: number;
   rejectedReviews: number;
-  escalatedReviews: number;,
+  escalatedReviews: number;
   overdueReviews: number;
   averageCompletionTime: number; // hours,
   completionRate: number; // %,
   throughput: number; // reviews per day,
 }
 export interface ReviewPerformanceMetrics {
-  byType: TypePerformanceMetrics;,
+  byType: TypePerformanceMetrics;
   byPriority: PriorityPerformanceMetrics;
-  byComplexity: ComplexityPerformanceMetrics;,
+  byComplexity: ComplexityPerformanceMetrics;
   bottlenecks: PerformanceBottleneck;
 }
 export interface TypePerformanceMetrics {
-  reviewType: ReviewType;,
+  reviewType: ReviewType;
   count: number;
   averageTime: number; // hours,
   completionRate: number; // %,
   qualityScore: number; // 0-100,
 }
 export interface PriorityPerformanceMetrics {
-  priority: ReviewPriority;,
+  priority: ReviewPriority;
   count: number;
   averageTime: number; // hours,
   slaCompliance: number; // %,
   escalationRate: number; // %,
 }
 export interface ComplexityPerformanceMetrics {
-  complexity: ReviewComplexity;,
+  complexity: ReviewComplexity;
   count: number;
   averageTime: number; // hours,
   accuracyRate: number; // %,
   reviewerSatisfaction: number; // 0-100,
 }
 export interface PerformanceBottleneck {
-  type: BottleneckType;,
+  type: BottleneckType;
   location: string;
-  impact: string;,
+  impact: string;
   severity: ActionSeverity;
   recommendation: string;
 }
@@ -682,27 +682,27 @@ export interface ReviewQualityMetrics {
   qualityTrends: QualityTrend;
 }
 export interface QualityTrend {
-  date: Date;,
+  date: Date;
   qualityScore: number;
-  consistencyScore: number;,
+  consistencyScore: number;
   volume: number;
 }
 export interface ReviewWorkflowMetrics {
-  byWorkflow: WorkflowMetrics;,
+  byWorkflow: WorkflowMetrics;
   stepPerformance: StepPerformance;
   escalationAnalysis: EscalationAnalysis;
 }
 export interface WorkflowMetrics {
-  workflowId: string;,
+  workflowId: string;
   name: string;
-  executionCount: number;,
+  executionCount: number;
   averageCompletionTime: number; // hours,
   successRate: number; // %,
   escalationRate: number; // %,
   efficiency: number; // 0-100,
 }
 export interface StepPerformance {
-  stepId: string;,
+  stepId: string;
   stepName: string;
   averageTime: number; // minutes,
   timeoutRate: number; // %,
@@ -710,73 +710,73 @@ export interface StepPerformance {
   bottleneckScore: number; // 0-100,
 }
 export interface EscalationAnalysis {
-  totalEscalations: number;,
+  totalEscalations: number;
   escalationRate: number; // %,
-  byTrigger: EscalationByTrigger;,
+  byTrigger: EscalationByTrigger;
   resolutionTime: number; // hours,
   preventableEscalations: number;
 }
 export interface EscalationByTrigger {
-  trigger: TriggerType;,
+  trigger: TriggerType;
   count: number;
-  percentage: number;,
+  percentage: number;
   averageResolutionTime: number; // hours,
 }
 export interface ReviewerMetrics {
-  activeReviewers: number;,
+  activeReviewers: number;
   reviewerPerformance: ReviewerPerformanceMetrics;
-  workloadDistribution: WorkloadDistribution;,
+  workloadDistribution: WorkloadDistribution;
   trainingNeeds: TrainingNeed;
 }
 export interface ReviewerPerformanceMetrics {
-  reviewerId: string;,
+  reviewerId: string;
   reviewerName: string;
-  totalReviews: number;,
+  totalReviews: number;
   averageTime: number; // hours,
   qualityScore: number; // 0-100,
   throughput: number; // reviews per day,
-  specializations: string;,
-  trend: 'improving' | 'stable' | 'declining';
-}
+  specializations: string;
+  trend: 'improving' | 'stable' | 'declining'
+  }
 export interface WorkloadDistribution {
-  reviewerId: string;,
+  reviewerId: string;
   currentWorkload: number;
-  capacity: number;,
+  capacity: number;
   utilizationRate: number; // %,
   backlogHours: number;
 }
 export interface TrainingNeed {
-  reviewerId: string;,
+  reviewerId: string;
   area: SpecializationArea;
-  priority: 'low' | 'medium' | 'high';,
+  priority: 'low' | 'medium' | 'high';
   reason: string;
   suggestedTraining: string;
 }
 export interface ReviewTrends {
-  volumeTrend: 'increasing' | 'stable' | 'decreasing';,
+  volumeTrend: 'increasing' | 'stable' | 'decreasing';
   qualityTrend: 'improving' | 'stable' | 'declining';
   efficiencyTrend: 'improving' | 'stable' | 'declining';
   // Time series data
-  dailyVolumes: number;,
+  dailyVolumes: number;
   dailyQualityScores: number;
   dailyCompletionTimes: number;
   // Seasonal patterns
   seasonalPatterns: SeasonalPattern;
 }
 export interface SeasonalPattern {
-  period: 'hourly' | 'daily' | 'weekly' | 'monthly';,
+  period: 'hourly' | 'daily' | 'weekly' | 'monthly';
   pattern: number;
-  confidence: number;,
+  confidence: number;
   description: string;
 }
 export interface ReviewInsight {
-  insightId: string;,
+  insightId: string;
   type: InsightType;
-  title: string;,
+  title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';,
+  impact: 'low' | 'medium' | 'high' | 'critical';
   confidence: number;
-  actionable: boolean;,
+  actionable: boolean;
   relatedData: any;
   generatedAt: Date;
 }
@@ -789,13 +789,13 @@ export type InsightType =
   | 'process_optimization';
 
 export interface ReviewRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   category: RecommendationCategory;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   expectedImpact: string;
-  implementation: ImplementationGuide;,
+  implementation: ImplementationGuide;
   successMetrics: string;
   generatedAt: Date;
 }
@@ -808,9 +808,9 @@ export type RecommendationCategory =
   | 'process_standardization';
 
 export interface ImplementationGuide {
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   timeline: string;
-  resources: string;,
+  resources: string;
   prerequisites: string;
   risks: string;
   // =============================================================================
@@ -818,60 +818,60 @@ export interface ImplementationGuide {
   // =============================================================================
 }
 export interface ReviewSystemConfig {
-  enabled: boolean;,
+  enabled: boolean;
   globalSettings: GlobalReviewSettings;
-  workflowSettings: WorkflowSettings;,
+  workflowSettings: WorkflowSettings;
   assignmentSettings: AssignmentSettings;
-  qualitySettings: QualitySettings;,
+  qualitySettings: QualitySettings;
   performanceSettings: PerformanceSettings;
   integrationSettings: IntegrationSettings;
 }
 export interface GlobalReviewSettings {
   defaultReviewTimeout: number; // hours,
-  maxConcurrentReviews: number;,
+  maxConcurrentReviews: number;
   enableAutoAssignment: boolean;
-  enableEscalation: boolean;,
+  enableEscalation: boolean;
   enableQualityGates: boolean;
   auditRetentionDays: number;
 }
 export interface WorkflowSettings {
-  enableVersionControl: boolean;,
+  enableVersionControl: boolean;
   requireApprovalForChanges: boolean;
-  enableWorkflowTesting: boolean;,
+  enableWorkflowTesting: boolean;
   maxWorkflowComplexity: number;
   enableConditionalLogic: boolean;
 }
 export interface AssignmentSettings {
-  defaultAssignmentStrategy: AssignmentType;,
+  defaultAssignmentStrategy: AssignmentType;
   enableLoadBalancing: boolean;
-  enableExpertiseMatching: boolean;,
+  enableExpertiseMatching: boolean;
   enableAvailabilityChecking: boolean;
   maxAssignmentRetries: number;
 }
 export interface QualitySettings {
-  enableQualityGates: boolean;,
+  enableQualityGates: boolean;
   minQualityScore: number;
-  enableConsistencyChecking: boolean;,
+  enableConsistencyChecking: boolean;
   enableBiasDetection: boolean;
   qualityReviewFrequency: number; // days,
 }
 export interface PerformanceSettings {
-  enablePerformanceTracking: boolean;,
+  enablePerformanceTracking: boolean;
   performanceReviewCycle: number; // days,
-  enableRealTimeMetrics: boolean;,
+  enableRealTimeMetrics: boolean;
   alertThresholds: PerformanceAlertThresholds;
 }
 export interface PerformanceAlertThresholds {
-  overdueReviewsThreshold: number;,
+  overdueReviewsThreshold: number;
   qualityScoreThreshold: number;
   throughputDeclineThreshold: number; // %,
   escalationRateThreshold: number; // %,
 }
 export interface IntegrationSettings {
-  enableSlackNotifications: boolean;,
+  enableSlackNotifications: boolean;
   enableEmailNotifications: boolean;
-  enableWebhooks: boolean;,
+  enableWebhooks: boolean;
   enableApiAccess: boolean;
-  enableSSOIntegration: boolean;,
+  enableSSOIntegration: boolean;
   enableAuditLogging: boolean;
 }

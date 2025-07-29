@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
 import { useCorrectionsStore } from '../correctionsStore';
-{
+export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, autoHideDuration = 5000 }) => {
     const { notifications, dismissNotification, clearNotifications } = useCorrectionsStore();
     const [visibleNotifications, setVisibleNotifications] = useState([]);
     useEffect(() => {
@@ -20,9 +20,7 @@ import { useCorrectionsStore } from '../correctionsStore';
     return () => {
         timers.forEach(timer => clearTimeout(timer));
     };
-}
-[visibleNotifications, autoHideDuration, dismissNotification];
-;
+}, [visibleNotifications, autoHideDuration, dismissNotification];
 const getPositionStyles = () => {
     const baseStyles = {
         position: 'fixed',
@@ -128,10 +126,10 @@ if (visibleNotifications.length === 0) {
     _jsxs(_Fragment, { children: [_jsx("style", { children: `
         @keyframes slideIn {
           from {
-            transform: translateX(100%);,
+            transform: translateX(100%);
   opacity: 0;
           to {
-            transform: translateX(0);,
+            transform: translateX(0);
   opacity: 1;
         @keyframes fadeOut {
           from {

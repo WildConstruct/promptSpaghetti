@@ -213,8 +213,9 @@ args: unknown;
             };
         }), [editorActions, onProviderError];
         return;
-        _jsxs(_Fragment, { children: [children({}), "registry: safeRegistry, editorContext: ", (,
-                ), "...editorContext, // Add provider error information to context providerErrors: Array.from(providerErrors.entries()).map(([id, error]) => (", (, ), ") providerId: id, error: error.message, })) } as EditorStateContext & ", providerErrors, ": Array", _jsx(, { ...providerId }), ": string; error: string }> }, editorActions: safeEditorActions, isLoading })}", providerErrors.size > 0 && ()
+        _jsxs(_Fragment, { children: [children({}), "registry: safeRegistry, editorContext: ", ...(editorContext,
+                    // Add provider error information to context
+                    providerErrors), ": Array.from(providerErrors.entries()).map(([id, error]) => (", (, ), ") providerId: id, error: error.message, })) } as EditorStateContext & ", providerErrors, ": Array", _jsx(, { ...providerId }), ": string; error: string }> }, editorActions: safeEditorActions, isLoading })}", providerErrors.size > 0 && ()
                     < div, " className=\"provider-errors\" style=", {
                     position: 'fixed',
                     top: '10px',
@@ -255,16 +256,14 @@ args: unknown;
 export const withEditorProviders = () => Component, React, ComponentType, T, providerConfig, Omit, EditorProviderWrapperProps;
 ;
 () => {
-    return React.forwardRef < any, T & {
-        initialNodes: Node,
-        initialEdges: Edge,
-        selectedNodeId: string | null,
-        validationErrors: unknown
-    } > ((props, ref) => {
+    return React.forwardRef((props, ref) => {
         const { initialNodes, initialEdges, selectedNodeId, validationErrors, ...componentProps } = props;
         return;
         _jsxs(EditorProviderWrapper, { initialNodes: initialNodes, initialEdges: initialEdges, selectedNodeId: selectedNodeId, validationErrors: validationErrors, ...providerConfig, children: [({ registry, editorContext, editorActions, isLoading }) => ()
                     < Component, ...componentProps, "ref=", ref, "registry=", registry, "editorContext=", editorContext, "editorActions=", editorActions, "isProviderLoading=", isLoading, "/> )}"] });
-        ;
     });
 };
+;
+;
+;
+;

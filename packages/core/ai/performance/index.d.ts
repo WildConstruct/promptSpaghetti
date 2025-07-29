@@ -31,16 +31,16 @@ export declare     successRateAverage: number;
     recommendations: string[];
 };
 export declare export interface OptimizationCategories {
-    categories: {,
-        caching: {,
+    categories: {
+        caching: {
             score: number;
             recommendations: string[];
         };
-        performance: {,
+        performance: {
             score: number;
             recommendations: string[];
         };
-        resources: {,
+        resources: {
             score: number;
             recommendations: string[];
         };

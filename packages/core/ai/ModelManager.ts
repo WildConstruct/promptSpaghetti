@@ -8,41 +8,41 @@ import { BaseAIModel, AIRequest, AIResponse, AIModelStatus, HealthStatus, CostEs
 import AIModelFactory, { ModelRegistration, FactoryConfig } from './AIModelFactory';
 
 export interface CacheConfig {
-  maxSize: number;,
+  maxSize: number;
   ttl: number; // Time to live in milliseconds,
   evictionPolicy: 'lru' | 'lfu' | 'ttl' | 'hybrid';
   enablePersistence?: boolean;
   persistencePath?: string;
 }
 export interface LoadBalancingConfig {
-  strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';,
+  strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
   healthCheckInterval: number;
-  maxConcurrentRequests: number;,
+  maxConcurrentRequests: number;
   enableFailover: boolean;
   failoverThreshold: number;
 }
 export interface ModelPool {
-  id: string;,
+  id: string;
   models: BaseAIModel;
-  loadBalancer: LoadBalancer;,
+  loadBalancer: LoadBalancer;
   healthMonitor: HealthMonitor;
-  currentLoad: number;,
+  currentLoad: number;
   lastUsed: Date;
 }
 export interface ModelPerformanceMetrics {
-  modelId: string;,
+  modelId: string;
   averageLatency: number;
-  throughput: number;,
+  throughput: number;
   errorRate: number;
-  concurrentRequests: number;,
+  concurrentRequests: number;
   totalRequests: number;
-  costPerRequest: number;,
+  costPerRequest: number;
   lastUpdated: Date;
 }
 export interface WarmupStrategy {
-  enabled: boolean;,
+  enabled: boolean;
   concurrency: number;
-  sampleRequests: unknown;,
+  sampleRequests: unknown;
   timeout: number;
 }
 export class ModelCache {

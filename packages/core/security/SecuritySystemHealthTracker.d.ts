@@ -13,18 +13,18 @@ export interface SecuritySystemNode {
     name: string;
     description: string;
     type: 'primary' | 'secondary' | 'backup' | 'load_balancer' | 'database' | 'cache' | 'api_gateway' | 'monitoring';
-    configuration: {,
+    configuration: {
         endpoint: string;
         port: number;
         protocol: 'http' | 'https' | 'tcp' | 'grpc';
-        authentication: {,
+        authentication: {
             type: 'none' | 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'certificate';
             credentials?: Record<string, string>;
         };
         connection_timeout_ms: number;
         read_timeout_ms: number;
     };
-    health_checks: {,
+    health_checks: {
         enabled: boolean;
         check_interval_ms: number;
         timeout_ms: number;
@@ -38,49 +38,49 @@ export interface SecuritySystemNode {
             weight: number;
         }>;
     };
-    performance: {,
+    performance: {
         metrics_collection: boolean;
         collection_interval_ms: number;
         retention_days: number;
-        thresholds: {,
-            response_time_ms: {,
+        thresholds: {
+            response_time_ms: {
                 warning: number;
                 critical: number;
             };
-            cpu_usage_percent: {,
+            cpu_usage_percent: {
                 warning: number;
                 critical: number;
             };
-            memory_usage_percent: {,
+            memory_usage_percent: {
                 warning: number;
                 critical: number;
             };
-            disk_usage_percent: {,
+            disk_usage_percent: {
                 warning: number;
                 critical: number;
             };
-            network_latency_ms: {,
+            network_latency_ms: {
                 warning: number;
                 critical: number;
             };
-            error_rate_percent: {,
+            error_rate_percent: {
                 warning: number;
                 critical: number;
             };
         };
     };
-    availability: {,
+    availability: {
         target_uptime_percent: number;
         maintenance_window: MaintenanceWindow[];
         planned_downtime_tolerance_minutes: number;
         unplanned_downtime_tolerance_minutes: number;
     };
-    dependencies: {,
+    dependencies: {
         hard_dependencies: string[];
         soft_dependencies: string[];
         dependency_check_interval_ms: number;
     };
-    current_state: {,
+    current_state: {
         status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
         last_check_time: number;
         uptime_start: number;
@@ -125,7 +125,7 @@ export interface HealthCheckResult {
     response_time_ms?: number;
     error_message?: string;
     raw_response?: string;
-    metrics: {,
+    metrics: {
         cpu_usage?: number;
         memory_usage?: number;
         disk_usage?: number;
@@ -134,20 +134,20 @@ export interface HealthCheckResult {
         thread_count?: number;
         queue_size?: number;
     };
-    health_impact: {,
+    health_impact: {
         weight: number;
         contribution_to_health_score: number;
-        severity: 'info' | 'warning' | 'critical';
-    };
+        severity: 'info' | 'warning' | 'critical'
+  };
 
 export interface AvailabilityReport {
     system_id: string;
-    reporting_period: {,
+    reporting_period: {
         start_time: number;
         end_time: number;
         duration_hours: number;
     };
-    availability: {,
+    availability: {
         uptime_minutes: number;
         downtime_minutes: number;
         availability_percent: number;
@@ -163,7 +163,7 @@ export interface AvailabilityReport {
         impact_level: 'low' | 'medium' | 'high' | 'critical';
         root_cause?: string;
     }>;
-    performance_summary: {,
+    performance_summary: {
         avg_response_time_ms: number;
         p95_response_time_ms: number;
         p99_response_time_ms: number;
@@ -172,12 +172,12 @@ export interface AvailabilityReport {
         failed_checks: number;
         total_checks: number;
     };
-    trends: {,
+    trends: {
         availability_trend: 'improving' | 'stable' | 'degrading';
         performance_trend: 'improving' | 'stable' | 'degrading';
         reliability_score: number;
-        recommendation_priority: 'low' | 'medium' | 'high';
-    };
+        recommendation_priority: 'low' | 'medium' | 'high'
+  };
 
 export interface SystemAlert {
     id: string;
@@ -187,15 +187,15 @@ export interface SystemAlert {
     title: string;
     description: string;
     detected_at: number;
-    context: {,
+    context: {
         current_value?: number;
         threshold_value?: number;
         measurement_unit?: string;
         affected_checks: string[];
         dependency_impact: string[];
-        estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical';
-    };
-    resolution: {,
+        estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  };
+    resolution: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
@@ -205,7 +205,7 @@ export interface SystemAlert {
         resolution_notes?: string;
         auto_resolved: boolean;
     };
-    notifications: {,
+    notifications: {
         email_sent: boolean;
         slack_sent: boolean;
         webhook_sent: boolean;
@@ -214,7 +214,7 @@ export interface SystemAlert {
     };
 
 export interface HealthTrackerConfig {
-    global_settings: {,
+    global_settings: {
         default_check_interval_ms: number;
         default_timeout_ms: number;
         default_retry_attempts: number;
@@ -222,14 +222,14 @@ export interface HealthTrackerConfig {
         enable_dependency_checking: boolean;
         enable_predictive_analysis: boolean;
     };
-    alerting: {,
+    alerting: {
         enabled: boolean;
         alert_aggregation_window_ms: number;
         suppress_duplicate_alerts: boolean;
         auto_resolve_timeout_ms: number;
         escalation_rules: EscalationRule[];
     };
-    reporting: {,
+    reporting: {
         generate_daily_reports: boolean;
         generate_weekly_reports: boolean;
         generate_monthly_reports: boolean;
@@ -237,7 +237,7 @@ export interface HealthTrackerConfig {
         include_trends: boolean;
         include_recommendations: boolean;
     };
-    data_retention: {,
+    data_retention: {
         health_check_results_days: number;
         availability_reports_days: number;
         alert_history_days: number;
@@ -247,13 +247,13 @@ export interface HealthTrackerConfig {
 export interface EscalationRule {
     id: string;
     name: string;
-    conditions: {,
+    conditions: {
         severity_levels: SystemAlert['severity'][];
         system_types: SecuritySystemNode['type'][];
         consecutive_failures?: number;
         duration_minutes?: number;
     };
-    actions: {,
+    actions: {
         notify_users: string[];
         create_incident: boolean;
         auto_failover: boolean;

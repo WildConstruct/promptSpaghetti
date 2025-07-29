@@ -104,7 +104,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
 },
   borderRadius: 6,
                   background: isSelected ? 'rgba(66, 153, 225, 0.1)' : '#2d3748',
-                  overflow: 'hidden';
+                  overflow: 'hidden'
   }}
               >
                 {/* Path Header */}

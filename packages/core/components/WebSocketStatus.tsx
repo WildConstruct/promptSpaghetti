@@ -56,8 +56,8 @@ interface WebSocketStatusProps {
   case 'error':,
   return 'Connection Error';
   default:,
-  return 'Unknown';
-};
+  return 'Unknown'
+  };
   const formatTime = (timestamp?: number): string => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);

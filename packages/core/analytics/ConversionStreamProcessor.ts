@@ -16,53 +16,53 @@ import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
 
 export interface StreamEvent {
-  id: string;,
+  id: string;
   type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
-  payload: EnhancedConversionEvent;,
+  payload: EnhancedConversionEvent;
   partition: number;
-  offset: number;,
+  offset: number;
   timestamp: number;
   headers: Record<string, string>;
   retryCount: number;
 }
 export interface StreamPartition {
-  id: number;,
+  id: number;
   events: StreamEvent;
-  offset: number;,
+  offset: number;
   lastProcessed: number;
-  consumerCount: number;,
+  consumerCount: number;
   lag: number;
 }
 export interface StreamConsumer {
-  id: string;,
+  id: string;
   groupId: string;
-  assignedPartitions: number;,
+  assignedPartitions: number;
   lastHeartbeat: number;
   processedOffset: Map<number, number>;
-  isActive: boolean;,
+  isActive: boolean;
   processingRate: number;
 }
 export interface StreamMetrics {
-  totalEvents: number;,
+  totalEvents: number;
   eventsPerSecond: number;
-  averageLatency: number;,
+  averageLatency: number;
   partitionMetrics: Map<number, {,
-  events: number;,
+  events: number;
   lag: number;
   throughput: number;
 }>;
   consumerMetrics: Map<string, {
-  processedEvents: number;,
+  processedEvents: number;
   errorCount: number;
   avgProcessingTime: number;
 }>;
-  deadLetterQueue: {,
+  deadLetterQueue: {
   size: number;
   oldestEvent: number;
 };
 }
 export interface ProcessingResult {
-  success: boolean;,
+  success: boolean;
   eventId: string;
   processingTime: number;
   error?: string;
@@ -163,7 +163,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   partition,
   offset: this.getNextOffset(partition),
   timestamp: Date.now(),
-  headers: {,
+  headers: {
   'content-type': 'application/json',
   'source': 'conversion-architecture',
   ...headers
@@ -198,7 +198,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   /**
    * Register stream consumer
    */
-  public registerConsumer(consumerId: string,)
+  public registerConsumer(consumerId: string)
     groupId: string,
     partitions: number = []): StreamConsumer {,
   // Auto-assign partitions if not specified
@@ -339,7 +339,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   if (!this.config.deadLetterQueue.enabled) return;
   this.deadLetterQueue.push({)
   ...event,
-  headers: {,
+  headers: {
   ...event.headers,
   'dlq-reason': reason,
   'dlq-timestamp': Date.now().toString(),

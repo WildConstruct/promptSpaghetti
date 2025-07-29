@@ -190,7 +190,7 @@ export class AuditManagementAPI {
       // Format response
       const response = {
   events: result.events.map(this.formatAuditEventForAPI),
-  pagination: {,
+  pagination: {
   page: result.page,
   limit: internalQuery.limit,
   total_count: result.totalCount,
@@ -360,13 +360,13 @@ export class AuditManagementAPI {
       const health = {
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        components: {,
+        components: {
   audit_storage: { status: 'healthy', response_time_ms: 2 },
           chain_integrity: { status: 'healthy', last_verification: new Date().toISOString() },
           event_processing: { status: 'healthy', queue_length: 0 },
           analytics_engine: { status: 'healthy', cache_hit_ratio: 0.95 }
   },
-  metrics: {,
+  metrics: {
   events_processed_last_hour: 1250,
   average_processing_time_ms: 15,
   error_rate_percentage: 0.02,
@@ -385,7 +385,7 @@ export class AuditManagementAPI {
    * Export audit data
    * POST /api/audit/export
    */
-  async exportAuditData(request: {,)
+  async exportAuditData(request: {)
   format: 'csv' | 'json' | 'pdf';
   query?: AuditQueryRequestType;
   include_metadata?: boolean;
@@ -461,7 +461,7 @@ export class AuditManagementAPI {
   event_volume_trend: 'increasing',
   risk_score_trend: 'stable',
   compliance_trend: 'improving',
-  predictions: {,
+  predictions: {
   next_week_volume: analytics.total_events * 1.15,
   risk_forecast: 'stable',
 };

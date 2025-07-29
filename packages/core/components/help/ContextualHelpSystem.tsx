@@ -5,9 +5,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 
 export interface HelpContent {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: 'basic' | 'advanced' | 'debug' | 'onboarding';
   trigger?: 'hover' | 'click' | 'focus' | 'manual';
   position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
@@ -16,10 +16,10 @@ export interface HelpContent {
   examples?: string;
   shortcut?: string;
   relatedFeatures?: string;
-  priority?: 'high' | 'medium' | 'low';
-}
+  priority?: 'high' | 'medium' | 'low'
+  }
 export interface ContextualTooltipProps {
-  content: HelpContent;,
+  content: HelpContent;
   children: React.ReactNode;
   disabled?: boolean;
   delay?: number;
@@ -276,11 +276,11 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
 
 // Progressive onboarding system
 interface ProgressiveOnboardingProps {
-  steps: any;,
+  steps: any;
   currentStep: number;
-  onNext: () => void;,
+  onNext: () => void;
   onPrevious: () => void;
-  onSkip: () => void;,
+  onSkip: () => void;
   onComplete: () => void;
   if (!currentContent) return null;
   return;

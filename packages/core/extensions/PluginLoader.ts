@@ -16,10 +16,10 @@ import { createRequire } from 'module';
 import * as semver from 'semver';
 
 export interface PluginSource {
-  type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';,
+  type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
   location: string;
   version?: string;
-  credentials?: {,
+  credentials?: {
   token?: string;
   username?: string;
   password?: string;
@@ -31,17 +31,17 @@ export interface PluginSource {
 };
 }
 export interface LoadedPlugin {
-  manifest: ExtensionManifest;,
+  manifest: ExtensionManifest;
   source: PluginSource;
-  exports: any;,
+  exports: any;
   sandbox: PluginSandbox;
-  loadedAt: Date;,
+  loadedAt: Date;
   dependencies: string;
   status: 'loaded' | 'active' | 'inactive' | 'error';
   error?: Error;
 }
 export interface PluginLoadOptions {
-  enableSandbox: boolean;,
+  enableSandbox: boolean;
   allowRemoteSources: boolean;
   maxConcurrentLoads: number;
   cacheDirectory?: string;
@@ -52,7 +52,7 @@ export interface PluginLoadOptions {
 export interface PluginRegistry {
   plugins: Map<string, LoadedPlugin>;
   manifests: Map<string, ExtensionManifest>;
-  dependencyGraph: DependencyGraph;,
+  dependencyGraph: DependencyGraph;
   loadOrder: LoadOrder;
 }
 export class PluginLoader {
@@ -134,8 +134,8 @@ export class PluginLoader {
           result.set(pluginId, plugin);
           // Activate plugin after loading
           await this.lifecycleManager.activateExtension(plugin.manifest.id);
-          plugin.status = 'active';
-        } catch (error) {
+          plugin.status = 'active'
+  } catch (error) {
           console.error(`Failed to load plugin ${pluginId}:`, error);}
           // Create error plugin entry
           const errorPlugin: LoadedPlugin = {,

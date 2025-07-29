@@ -20,7 +20,7 @@ export interface UnifiedDashboardConfig {
 
 export interface DashboardOverview {
     timestamp: Date;
-    summary: {,
+    summary: {
         totalItems: number;
         pendingReview: number;
         autoApproved: number;
@@ -28,24 +28,24 @@ export interface DashboardOverview {
         escalated: number;
         appealed: number;
     };
-    queues: {,
+    queues: {
         highPriority: number;
         mediumPriority: number;
         lowPriority: number;
         automated: number;
     };
-    performance: {,
+    performance: {
         avgProcessingTime: number;
         throughputLast24h: number;
         moderatorEfficiency: number;
         slaCompliance: number;
     };
     alerts: ModerationAlert[];
-    trends: {,
+    trends: {
         volumeTrend: 'increasing' | 'decreasing' | 'stable';
         violationTrend: 'increasing' | 'decreasing' | 'stable';
-        performanceTrend: 'improving' | 'declining' | 'stable';
-    };
+        performanceTrend: 'improving' | 'declining' | 'stable'
+  };
 
 export interface ModerationAlert {
     id: string;
@@ -66,7 +66,7 @@ export interface ModerationWorkload {
     accuracy: number;
     specializations: string[];
     performanceRating: number;
-    availabilityWindow: {,
+    availabilityWindow: {
         start: string;
         end: string;
         timezone: string;
@@ -102,13 +102,13 @@ export interface BulkModerationAction {
     scheduledFor?: Date;
 
 export interface DashboardMetrics {
-    realTime: {,
+    realTime: {
         activeModerators: number;
         itemsBeingReviewed: number;
         averageWaitTime: number;
         systemLoad: number;
     };
-    historical: {,
+    historical: {
         dailyVolume: Array<{,
             date: string;
             volume: number;
@@ -123,10 +123,10 @@ export interface DashboardMetrics {
         }>;
         violationTypes: Record<string, number>;
     };
-    predictions: {,
+    predictions: {
         expectedVolume24h: number;
         estimatedBacklog: number;
-        resourceNeeds: {,
+        resourceNeeds: {
             additionalModerators: number;
             peakHours: string[];
         };

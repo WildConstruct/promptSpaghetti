@@ -50,7 +50,7 @@ interface ConstraintValidationPanelProps {
   id: node.id,
   type: 'style', // Default type for regular nodes,
   content: getNodeContent(node),
-  metadata: {,
+  metadata: {
   era: selectedEra ? [selectedEra] : [HISTORICAL_ERAS.MODERN_EARLY],
   authenticity: 0.5,
   source: 'graph_editor',
@@ -58,7 +58,7 @@ interface ConstraintValidationPanelProps {
   social_class: extractSocialClass(node),
   daily_use: true,
 },
-  relationships: {,
+  relationships: {
   compatible: node.inputs || [],
   incompatible: [],
   variations: [],
@@ -246,7 +246,7 @@ interface ConstraintValidationPanelProps {
   );
 };
 interface ConstraintItemProps {
-  type: 'violation' | 'warning' | 'suggestion';,
+  type: 'violation' | 'warning' | 'suggestion';
   constraint: ConstraintViolation | ConstraintWarning | ConstraintSuggestion;
   onNodeClick?: (nodeIds: string) => void;
   onOverride?: (constraintId: string) => void;

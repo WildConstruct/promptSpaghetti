@@ -5,17 +5,17 @@
 import React from 'react';
 
 export interface FilterOptions {
-  status: 'all' | 'enabled' | 'disabled';,
+  status: 'all' | 'enabled' | 'disabled';
   type: 'all' | 'node' | 'ui' | 'transform' | 'storage';
-  sortBy: 'name' | 'version' | 'lastUpdated' | 'size';
-}
+  sortBy: 'name' | 'version' | 'lastUpdated' | 'size'
+  }
 export interface ExtensionSearchFilterProps {
-  searchQuery: string;,
-  onSearchChange: (query: string) => void;,
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
   filterOptions: FilterOptions;
-  onFilterChange: (options: FilterOptions) => void;,
-  viewMode: 'installed' | 'marketplace';
-}
+  onFilterChange: (options: FilterOptions) => void;
+  viewMode: 'installed' | 'marketplace'
+  }
 export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
   searchQuery,
   onSearchChange,

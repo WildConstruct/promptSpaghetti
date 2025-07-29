@@ -75,7 +75,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
     examples: ['Character: {character_name}', '{mood} character in {location}'],
     relatedFeatures: ['variable-system', 'template-engine'],
-    priority: 'medium';
+    priority: 'medium'
   });
   return;
     <div className="variable-editor">

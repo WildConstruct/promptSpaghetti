@@ -6,7 +6,7 @@
 export interface GraphNode {
     id: string;
     type: string;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -34,11 +34,11 @@ export interface DiffChange {
     new_value?: unknown;
     property_path?: string;
     position_change?: {
-        from: {,
+        from: {
             x: number;
             y: number;
         };
-        to: {,
+        to: {
             x: number;
             y: number;
         };
@@ -51,7 +51,7 @@ export interface GraphDiff {
     from_snapshot_id: string;
     to_snapshot_id: string;
     changes: DiffChange[];
-    summary: {,
+    summary: {
         total_changes: number;
         added_nodes: number;
         removed_nodes: number;
@@ -64,9 +64,9 @@ export interface GraphDiff {
         similarity_score: number;
         complexity_score: number;
     };
-    visualization_data: {,
+    visualization_data: {
         changed_regions: Array<{,
-            bounds: {,
+            bounds: {
                 x: number;
                 y: number;
                 width: number;
@@ -76,11 +76,11 @@ export interface GraphDiff {
             intensity: number;
         }>;
         change_paths: Array<{,
-            from_position: {,
+            from_position: {
                 x: number;
                 y: number;
             };
-            to_position: {,
+            to_position: {
                 x: number;
                 y: number;
             };

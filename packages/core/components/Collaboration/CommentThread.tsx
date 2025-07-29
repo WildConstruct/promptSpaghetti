@@ -19,7 +19,7 @@ import { CommentEditor } from './CommentEditor';
 import { CommentMentions } from './CommentMentions';
 import { Comment, CommentStatus } from '../../types/CommentTypes';
 interface CommentThreadProps {
-  resourceId: string;,
+  resourceId: string;
   resourceType: 'project' | 'resource' | 'node' | 'region';
   workspaceId?: string;
   userId: string;

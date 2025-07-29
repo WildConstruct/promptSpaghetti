@@ -161,7 +161,7 @@ export const useUserSegments = () => {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/user-segments/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       if (!response.ok) {
         throw new Error('Failed to delete segment');
@@ -337,7 +337,7 @@ export const useAudienceManagement = () => {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/targeting/audiences/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       if (!response.ok) {
         throw new Error('Failed to delete audience');

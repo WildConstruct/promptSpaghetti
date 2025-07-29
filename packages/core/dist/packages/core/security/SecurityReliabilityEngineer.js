@@ -678,68 +678,61 @@ Promise < void  > {
                                 name: 'Security Alert Processing Availability',
                                 description: 'Availability of security alert processing system',
                                 service: 'security-alerts',
-                                definition: {},
-                                metric_type: 'availability',
-                                target_value: 99.9,
-                                measurement_window: 3600000, // 1 hour,
-                                evaluation_period: 'monthly',
-                            },
-                            alerting, {},
-                            burn_rate_alerts, [,
-                                {
-                                    id: 'fast_burn',
-                                    name: 'Fast Burn Rate',
-                                    short_window: 300000, // 5 minutes,
-                                    long_window: 3600000, // 1 hour,
-                                    burn_rate_threshold: 14.4,
-                                    severity: 'critical',
-                                    notification_channels: ['#security-alerts', 'security-oncall@company.com']
-                                }],
-                            budget_exhaustion_threshold, 10,
-                            multi_window_alerting, true,
-                            escalation_policy, ['security-team@company.com', 'incident-commander@company.com'],]
-                    },
-                        created_by;
-                    'system',
-                        enabled;
-                    true;
-                    ;
-                    defaultSLOs.forEach(async (slo) => {
-                        await this.createSLO(slo);
-                    });
-                    startMetricsCollection();
-                    void {
-                        // Collect metrics every 5 minutes
-                        setInterval(async) { }
-                    }();
-                    {
-                        const services = ['security-alerts', 'threat-detection', 'incident-response', 'data-integrity'];
-                        for (const service of services) {
-                            try {
-                                await this.collectServiceMetrics(service);
-                            }
-                            catch (error) {
-                                console.error(`Failed to collect metrics for ${service}:`, error);
-                            }
-                        }
-                        300000;
-                        ;
-                        startErrorBudgetMonitoring();
-                        void {
+                                definition: {
+                                    metric_type: 'availability',
+                                    target_value: 99.9,
+                                    measurement_window: 3600000, // 1 hour,
+                                    evaluation_period: 'monthly',
+                                },
+                                alerting: {
+                                    burn_rate_alerts: [,
+                                        {
+                                            id: 'fast_burn',
+                                            name: 'Fast Burn Rate',
+                                            short_window: 300000, // 5 minutes,
+                                            long_window: 3600000, // 1 hour,
+                                            burn_rate_threshold: 14.4,
+                                            severity: 'critical',
+                                            notification_channels: ['#security-alerts', 'security-oncall@company.com']
+                                        }],
+                                    budget_exhaustion_threshold: 10,
+                                    multi_window_alerting: true,
+                                    escalation_policy: ['security-team@company.com', 'incident-commander@company.com'],
+                                },
+                                created_by: 'system',
+                                enabled: true
+                            }],
+                        defaultSLOs, : .forEach(async (slo) => {
+                            await this.createSLO(slo);
+                        }),
+                        startMetricsCollection() {
+                            // Collect metrics every 5 minutes
+                            setInterval(async () => {
+                                const services = ['security-alerts', 'threat-detection', 'incident-response', 'data-integrity'];
+                                for (const service of services) {
+                                    try {
+                                        await this.collectServiceMetrics(service);
+                                    }
+                                    catch (error) {
+                                        console.error(`Failed to collect metrics for ${service}:`, error);
+                                    }
+                                }
+                                300000;
+                            });
+                        },
+                        startErrorBudgetMonitoring() {
                             // Check error budgets every minute
-                            setInterval(async) { }
-                        }();
-                        {
-                            for (const [sloId] of this.slos) {
-                                try {
-                                    await this.checkErrorBudgetAlerts(sloId);
+                            setInterval(async () => {
+                                for (const [sloId] of this.slos) {
+                                    try {
+                                        await this.checkErrorBudgetAlerts(sloId);
+                                    }
+                                    catch (error) {
+                                        console.error(`Failed to check error budget for ${sloId}:`, error);
+                                    }
                                 }
-                                catch (error) {
-                                    console.error(`Failed to check error budget for ${sloId}:`, error);
-                                }
-                            }
-                            60000;
-                            ;
+                                60000;
+                            });
                             // Public API methods
                             getSLOs();
                             ServiceLevelObjective;
@@ -803,7 +796,7 @@ Promise < void  > {
                                 }
                             }
                         }
-                    }
+                    };
                 }
             }
         }

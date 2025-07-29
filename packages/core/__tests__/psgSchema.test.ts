@@ -16,7 +16,7 @@ describe('PSG Schema Validation', () => {
   const validPsgFile = {
   fileType: 'psg',
   formatVersion: PSG_FORMAT_VERSION,
-  metadata: {,
+  metadata: {
   name: 'Test Project',
   description: 'A test project',
   version: '1.0.0',
@@ -26,7 +26,7 @@ describe('PSG Schema Validation', () => {
   tags: ['test', 'example'],
   fileFormatVersion: PSG_FORMAT_VERSION,
 },
-  settings: {,
+  settings: {
   autoSave: true,
   backupInterval: 5,
   maxBackups: 10,
@@ -36,7 +36,7 @@ describe('PSG Schema Validation', () => {
   showMinimap: true,
   autoLayout: false,
 },
-  graph: {,
+  graph: {
   nodes: [],
 },
   exportedAt: '2025-01-01T00:00:00.000Z';
@@ -60,7 +60,7 @@ describe('PSG Schema Validation', () => {
   const minimalFile = {
   fileType: 'psg',
   formatVersion: PSG_FORMAT_VERSION,
-  metadata: {,
+  metadata: {
   name: 'Minimal Project',
   createdAt: '2025-01-01T00:00:00.000Z',
   lastModified: '2025-01-01T00:00:00.000Z',
@@ -192,7 +192,7 @@ describe('PSG Schema Validation', () => {
     test('validates empty collaboration data', () => {
       const collaborationData = {
         stickyNotes: [],
-        annotations: {,
+        annotations: {
   nodeLabels: {},
           regionGroups: [],
           connectionLabels: {}
@@ -212,7 +212,7 @@ describe('PSG Schema Validation', () => {
           author: 'Test Author',
           timestamp: '2025-01-01T00:00:00.000Z';
   }],
-        annotations: {,
+        annotations: {
   nodeLabels: { 'node1': 'Custom Label' },
           regionGroups: [{,
   id: 'region1',

@@ -76,41 +76,41 @@ export enum VerificationStep {
   ABANDONED = 'abandoned'
   // Verification session data
   export interface VerificationSession {
-  id: string;,
+  id: string;
   userId: string;
-  deviceFingerprint: DeviceFingerprint;,
+  deviceFingerprint: DeviceFingerprint;
   location: LocationData;
   // Session state
-  currentStep: VerificationStep;,
+  currentStep: VerificationStep;
   outcome: VerificationOutcome | null;
-  riskScore: number;,
+  riskScore: number;
   riskLevel: RiskLevel;
   // Timestamps
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   expiresAt: Date;
   completedAt?: Date;
   // Verification data
-  challenges: DeviceChallenge;,
+  challenges: DeviceChallenge;
   completedChallenges: string;
-  requiredChallenges: ChallengeType;,
+  requiredChallenges: ChallengeType;
   attempts: VerificationAttempt;
   // Device data
   deviceName?: string;
-  verificationMethod: VerificationMethod;,
+  verificationMethod: VerificationMethod;
   requestedTrustLevel: TrustLevel;
   // Context
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   sessionContext: Record<string, any>;
   metadata: Record<string, any>;
   // Security flags
-  flags: {,
-  suspiciousActivity: boolean;,
+  flags: {
+  suspiciousActivity: boolean;
   vpnDetected: boolean;
-  proxyDetected: boolean;,
+  proxyDetected: boolean;
   repeatedAttempts: boolean;
-  deviceSpoofing: boolean;,
+  deviceSpoofing: boolean;
   locationInconsistent: boolean;
   timeZoneManipulation: boolean;
 };
@@ -118,24 +118,24 @@ export enum VerificationStep {
 // Device challenge
 }
 export interface DeviceChallenge {
-  id: string;,
+  id: string;
   type: ChallengeType;
-  status: 'pending' | 'completed' | 'failed' | 'expired';,
+  status: 'pending' | 'completed' | 'failed' | 'expired';
   createdAt: Date;
   expiresAt: Date;
   completedAt?: Date;
   // Challenge data
-  challengeData: {,
+  challengeData: {
   code?: string;
   question?: string;
   expectedResponse?: string;
   deliveryAddress?: string; // email or phone,
-  attempts: number;,
+  attempts: number;
   maxAttempts: number;
 };
   // Response data
   responseData?: {
-  userResponse: string;,
+  userResponse: string;
   timestamp: Date;
   metadata: Record<string, any>;
 };
@@ -144,45 +144,45 @@ export interface DeviceChallenge {
 // Verification attempt
 }
 export interface VerificationAttempt {
-  id: string;,
+  id: string;
   timestamp: Date;
   step: VerificationStep;
   challengeId?: string;
   success: boolean;
   failureReason?: string;
-  duration: number;,
+  duration: number;
   metadata: Record<string, any>;
   // Verification configuration
 }
 export interface VerificationConfig {
-  sessionTimeoutMinutes: number;,
+  sessionTimeoutMinutes: number;
   maxAttemptsPerChallenge: number;
   maxVerificationAttempts: number;
   // Risk thresholds
-  riskThresholds: {,
-  lowRisk: number;,
+  riskThresholds: {
+  lowRisk: number;
   mediumRisk: number;
-  highRisk: number;,
+  highRisk: number;
   requireManualReview: number;
 };
   // Challenge requirements by risk level
-  challengeRequirements: {,
+  challengeRequirements: {
   [key in RiskLevel]: ChallengeType;
 };
   // Feature flags
-  enableBehavioralAnalysis: boolean;,
+  enableBehavioralAnalysis: boolean;
   enableLocationValidation: boolean;
-  enableDeviceSpoofDetection: boolean;,
+  enableDeviceSpoofDetection: boolean;
   enableAutomaticApproval: boolean;
   requireDoubleVerification: boolean;
 
 // Verification request
 }
 export interface DeviceVerificationRequestData {
-  userId: string;,
+  userId: string;
   fingerprintContext: FingerprintContext;
   location?: LocationData;
-  verificationMethod: VerificationMethod;,
+  verificationMethod: VerificationMethod;
   requestedTrustLevel: TrustLevel;
   deviceName?: string;
   metadata?: Record<string, any>;
@@ -202,13 +202,13 @@ export class DeviceVerificationService extends EventEmitter {
   sessionTimeoutMinutes: 30,
   maxAttemptsPerChallenge: 3,
   maxVerificationAttempts: 5,
-  riskThresholds: {,
+  riskThresholds: {
   lowRisk: 20,
   mediumRisk: 50,
   highRisk: 80,
   requireManualReview: 95,
 },
-  challengeRequirements: {,
+  challengeRequirements: {
   [RiskLevel.LOW]: [ChallengeType.EMAIL_CODE],
   [RiskLevel.MEDIUM]: [ChallengeType.EMAIL_CODE, ChallengeType.SMS_CODE],
   [RiskLevel.HIGH]: [ChallengeType.EMAIL_CODE, ChallengeType.SMS_CODE, ChallengeType.CAPTCHA],
@@ -239,7 +239,7 @@ export class DeviceVerificationService extends EventEmitter {
   // Assess risk
   const riskAssessment = location ;
   ? this.fingerprintService.assessRisk(fingerprint, location)
-  : {,
+  : {
   deviceId: fingerprint.id,
   overallRisk: RiskLevel.MEDIUM,
   riskScore: 50,
@@ -272,7 +272,7 @@ export class DeviceVerificationService extends EventEmitter {
         userAgent: request.fingerprintContext.userAgent,
         sessionContext: {},
         metadata: request.metadata || {},
-        flags: {,
+        flags: {
   suspiciousActivity: false,
   vpnDetected: location?.network.vpnDetected || false,
   proxyDetected: location?.network.proxyDetected || false,
@@ -411,7 +411,7 @@ export class DeviceVerificationService extends EventEmitter {
   /**
    * Admin override verification
    */
-  public adminOverride(sessionId: string,)
+  public adminOverride(sessionId: string)
     approved: boolean,
     adminUserId: string,
     reason: string): boolean {,
@@ -510,7 +510,7 @@ export class DeviceVerificationService extends EventEmitter {
   status: 'pending',
   createdAt: new Date(),
   expiresAt,
-  challengeData: {,
+  challengeData: {
   attempts: 0,
   maxAttempts: this.config.maxAttemptsPerChallenge,
 },
@@ -556,12 +556,12 @@ export class DeviceVerificationService extends EventEmitter {
   type: EmailType.DEVICE_VERIFICATION,
       recipient: challenge.challengeData.deliveryAddress!,
       subject: 'Device Verification Code',
-      content: {,
+      content: {
   text: `Your device verification code is: ${codeResult.code}`}
 },
   html: `<p>Your device verification code is: <strong>${codeResult.code}</strong></p>`}
   },
-  metadata: {,
+  metadata: {
   userId: session.userId,
   sessionId: session.id,
 };
@@ -642,7 +642,7 @@ export class DeviceVerificationService extends EventEmitter {
   deviceFingerprint: session.deviceFingerprint,
   location: session.location,
   verificationMethod: session.verificationMethod,
-  metadata: {,
+  metadata: {
   verificationSessionId: session.id,
   riskScore: session.riskScore,
   verificationTimestamp: new Date(),
@@ -701,7 +701,7 @@ export class DeviceVerificationService extends EventEmitter {
       return RiskLevel.MEDIUM;
     } else {
       return RiskLevel.LOW;
-  private addAttempt(session: VerificationSession,)
+  private addAttempt(session: VerificationSession)
     step: VerificationStep,
     success: boolean,
     challengeId?: string,
@@ -726,19 +726,19 @@ export class DeviceVerificationService extends EventEmitter {
   source: 'ip',
   accuracy: 5000,
   confidence: 80,
-  coordinates: {,
+  coordinates: {
   latitude: 37.7749,
   longitude: -122.4194,
   accuracy: 5000,
 },
-  address: {,
+  address: {
   country: 'United States',
   countryCode: 'US',
   region: 'California',
   regionCode: 'CA',
   city: 'San Francisco',
 },
-  network: {,
+  network: {
   ipAddress,
   isp: 'Internet Provider',
   timezone: 'America/Los_Angeles',
@@ -748,7 +748,7 @@ export class DeviceVerificationService extends EventEmitter {
   hostingProvider: false,
   datacenter: false,
 },
-  metadata: {,
+  metadata: {
   language: 'en',
   currency: 'USD',
   callingCode: '+1',

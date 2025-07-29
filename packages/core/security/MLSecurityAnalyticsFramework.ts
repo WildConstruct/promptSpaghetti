@@ -16,48 +16,48 @@ import { UserBehaviorAnalytics, UserBehaviorEvent, BehaviorAnomaly } from './Use
 // ==========================================
 
 export interface SecurityAnalyticsConfig {
-  enablePredictiveAnalytics: boolean;,
+  enablePredictiveAnalytics: boolean;
   enableBehaviorAnalytics: boolean;
-  enableCrossCorrelation: boolean;,
+  enableCrossCorrelation: boolean;
   alertThreshold: number;
-  autoResponseEnabled: boolean;,
+  autoResponseEnabled: boolean;
   epic1Integration: Epic1IntegrationConfig;
-  epic17Integration: Epic17IntegrationConfig;,
+  epic17Integration: Epic17IntegrationConfig;
   mlModelConfig: MLModelConfig;
 }
 export interface Epic1IntegrationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   analyticsEndpoint: string;
-  metricsCollectionInterval: number;,
+  metricsCollectionInterval: number;
   enableDataStreaming: boolean;
   dataRetentionDays: number;
 }
 export interface Epic17IntegrationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   securityApiEndpoint: string;
-  enableRealTimeAlerts: boolean;,
+  enableRealTimeAlerts: boolean;
   autoExecuteResponses: boolean;
   auditLoggingEnabled: boolean;
 }
 export interface MLModelConfig {
-  modelUpdateFrequency: number;,
+  modelUpdateFrequency: number;
   enableOnlineLearning: boolean;
-  featureEngineeringEnabled: boolean;,
+  featureEngineeringEnabled: boolean;
   enableEnsembleModels: boolean;
   crossValidationEnabled: boolean;
 }
 export interface SecurityIntelligence {
-  id: string;,
+  id: string;
   timestamp: Date;
-  type: SecurityIntelligenceType;,
+  type: SecurityIntelligenceType;
   severity: SecuritySeverity;
-  confidence: number;,
+  confidence: number;
   sources: SecurityIntelligenceSource;
-  correlatedEvents: (SecurityEvent | UserBehaviorEvent)[];,
+  correlatedEvents: (SecurityEvent | UserBehaviorEvent)[];
   predictions: ThreatPrediction;
-  anomalies: BehaviorAnomaly;,
+  anomalies: BehaviorAnomaly;
   riskScore: number;
-  businessImpact: number;,
+  businessImpact: number;
   recommendedActions: SecurityAction;
   autoResolved: boolean;
   resolutionTime?: Date;
@@ -75,17 +75,17 @@ export enum SecurityIntelligenceType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface SecurityIntelligenceSource {
-  sourceType: 'predictive' | 'behavioral' | 'external';,
+  sourceType: 'predictive' | 'behavioral' | 'external';
   sourceId: string;
-  weight: number;,
+  weight: number;
   confidence: number;
 }
 export interface SecurityAction {
-  actionId: string;,
+  actionId: string;
   actionType: SecurityActionType;
-  target: string;,
+  target: string;
   parameters: Record<string, unknown>;
-  priority: number;,
+  priority: number;
   estimatedEffectiveness: number;
   requiresApproval: boolean;
   executedAt?: Date;
@@ -103,19 +103,19 @@ export enum SecurityActionType {
   UPDATE_SECURITY_POLICY = 'update_security_policy',
   TRIGGER_INCIDENT_RESPONSE = 'trigger_incident_response'
   export interface SecurityMetrics {
-  totalEvents: number;,
+  totalEvents: number;
   threatsDetected: number;
-  anomaliesDetected: number;,
+  anomaliesDetected: number;
   accuracyRate: number;
-  falsePositiveRate: number;,
+  falsePositiveRate: number;
   responseTime: number;
-  systemHealth: number;,
+  systemHealth: number;
   modelPerformance: ModelPerformanceMetrics;
 }
 export interface ModelPerformanceMetrics {
-  predictiveAccuracy: number;,
+  predictiveAccuracy: number;
   behavioralAccuracy: number;
-  crossCorrelationEffectiveness: number;,
+  crossCorrelationEffectiveness: number;
   trainingDataQuality: number;
   featureImportance: Record<string, number>;
   // ==========================================
@@ -140,21 +140,21 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   enableCrossCorrelation: true,
   alertThreshold: 0.7,
   autoResponseEnabled: false,
-  epic1Integration: {,
+  epic1Integration: {
   enabled: true,
   analyticsEndpoint: '/api/analytics',
   metricsCollectionInterval: 60000,
   enableDataStreaming: true,
   dataRetentionDays: 90,
 },
-  epic17Integration: {,
+  epic17Integration: {
   enabled: true,
   securityApiEndpoint: '/api/security',
   enableRealTimeAlerts: true,
   autoExecuteResponses: false,
   auditLoggingEnabled: true,
 },
-  mlModelConfig: {,
+  mlModelConfig: {
   modelUpdateFrequency: 86400000, // 24 hours,
   enableOnlineLearning: true,
   featureEngineeringEnabled: true,
@@ -366,8 +366,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   try {
   await this.executeSecurityAction(action);
   action.executedAt = new Date();
-  action.executionResult = 'success';
-} catch (error) {
+  action.executionResult = 'success'
+  } catch (error) {
           action.executionResult = `failed: ${error.message}`;}
           console.error('Action execution failed:', error);
   // ==========================================
@@ -493,12 +493,12 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   falsePositiveRate: 0.15,
   responseTime: 30, // seconds,
   systemHealth: 95,
-  modelPerformance: {,
+  modelPerformance: {
   predictiveAccuracy: 0.87,
   behavioralAccuracy: 0.82,
   crossCorrelationEffectiveness: 0.78,
   trainingDataQuality: 0.91,
-  featureImportance: {,
+  featureImportance: {
   'temporal_patterns': 0.25,
   'geographic_patterns': 0.20,
   'access_patterns': 0.30,
@@ -576,14 +576,14 @@ export class Epic31SecurityAnalytics {
   enableCrossCorrelation: true,
   alertThreshold: 0.7,
   autoResponseEnabled: false, // Start with manual approval,
-  epic1Integration: {,
+  epic1Integration: {
   enabled: true,
   analyticsEndpoint: '/api/analytics',
   metricsCollectionInterval: 60000,
   enableDataStreaming: true,
   dataRetentionDays: 90,
 },
-  epic17Integration: {,
+  epic17Integration: {
   enabled: true,
   securityApiEndpoint: '/api/security',
   enableRealTimeAlerts: true,

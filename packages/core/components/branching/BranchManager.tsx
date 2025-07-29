@@ -69,11 +69,11 @@ interface BranchManagerProps {
   onBranchUpdate?: (branch: ProjectBranch) => void;
   onBranchDelete?: (branchId: string) => void;
   interface BranchNodeProps {
-  branch: ProjectBranch;,
-  onEdit: (branch: ProjectBranch) => void;,
-  onDelete: (branchId: string) => void;,
-  onCreateChild: (parentId: string) => void;,
-  onSelect: (branchId: string) => void;,
+  branch: ProjectBranch;
+  onEdit: (branch: ProjectBranch) => void;
+  onDelete: (branchId: string) => void;
+  onCreateChild: (parentId: string) => void;
+  onSelect: (branchId: string) => void;
   isSelected: boolean;
   const BranchNode: React.FC<BranchNodeProps> = ({ ),
   branch,
@@ -96,8 +96,8 @@ interface BranchManagerProps {
   case 'experiment':,
   return 'orange';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const getBranchStatusColor = (status: BranchStatus) => {
   switch (status) {
   case 'active':,
@@ -109,8 +109,8 @@ interface BranchManagerProps {
   case 'archived':,
   return 'default';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const getProtectionIcon = (level: ProtectionLevel) => {
     switch (level) {
     case 'locked':

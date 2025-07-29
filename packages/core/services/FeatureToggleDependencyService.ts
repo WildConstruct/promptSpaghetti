@@ -13,15 +13,15 @@ import { EventEmitter } from 'events';
 // Core dependency interfaces
 
 export interface ToggleDependency {
-  id: string;,
+  id: string;
   sourceToggleId: string;
-  targetToggleId: string;,
+  targetToggleId: string;
   dependencyType: DependencyType;
-  relationship: DependencyRelationship;,
+  relationship: DependencyRelationship;
   strength: number; // 0.0-1.0 indicating dependency strength,
-  reason: string;,
+  reason: string;
   autoDetected: boolean;
-  metadata: DependencyMetadata;,
+  metadata: DependencyMetadata;
   created: Date;
   lastValidated: Date;
 }
@@ -41,16 +41,16 @@ export enum DependencyType {
   category: string;
   epic?: string;
   story?: string;
-  tags: string;,
+  tags: string;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
-  businessImpact: string;,
+  businessImpact: string;
   technicalNotes: string;
   overrideHistory: DependencyOverride;
 }
 export interface DependencyOverride {
-  id: string;,
+  id: string;
   actor: string;
-  reason: string;,
+  reason: string;
   timestamp: Date;
   duration?: number; // seconds,
   approved: boolean;
@@ -58,68 +58,68 @@ export interface DependencyOverride {
   // Dependency analysis and visualization
 }
 export interface DependencyGraph {
-  nodes: ToggleNode;,
+  nodes: ToggleNode;
   edges: DependencyEdge;
-  clusters: DependencyCluster;,
+  clusters: DependencyCluster;
   criticalPaths: CriticalPath;
-  conflicts: DependencyConflict;,
+  conflicts: DependencyConflict;
   metrics: GraphMetrics;
 }
 export interface ToggleNode {
-  id: string;,
+  id: string;
   toggleId: string;
-  name: string;,
+  name: string;
   type: string;
-  status: 'active' | 'inactive' | 'staged' | 'error';,
+  status: 'active' | 'inactive' | 'staged' | 'error';
   level: number; // Hierarchical level in dependency tree,
   dependencies: string; // IDs of dependent toggles,
   dependents: string; // IDs of toggles that depend on this,
-  metadata: {,
+  metadata: {
   epic?: string;
   story?: string;
-  tags: string;,
+  tags: string;
   riskScore: number;
   activationCount: number;
   lastActivated?: Date;
 };
 }
 export interface DependencyEdge {
-  id: string;,
+  id: string;
   source: string;
-  target: string;,
+  target: string;
   type: DependencyType;
-  relationship: DependencyRelationship;,
+  relationship: DependencyRelationship;
   strength: number;
-  status: 'valid' | 'invalid' | 'warning' | 'conflict';,
-  metadata: {,
-  reason: string;,
+  status: 'valid' | 'invalid' | 'warning' | 'conflict';
+  metadata: {
+  reason: string;
   validated: Date;
   violations: number;
 };
 }
 export interface DependencyCluster {
-  id: string;,
+  id: string;
   name: string;
-  toggles: string;,
+  toggles: string;
   type: 'feature' | 'epic' | 'story' | 'system';
   strength: number; // Average internal dependency strength,
   external: string; // Dependencies outside this cluster,
 }
 export interface CriticalPath {
-  id: string;,
+  id: string;
   toggles: string;
-  length: number;,
+  length: number;
   risk: 'low' | 'medium' | 'high' | 'critical';
   estimatedActivationTime: number; // minutes,
-  bottlenecks: string;,
+  bottlenecks: string;
   alternatives: string[];
 }
 export interface DependencyConflict {
-  id: string;,
+  id: string;
   type: ConflictType;
-  severity: 'warning' | 'error' | 'critical';,
+  severity: 'warning' | 'error' | 'critical';
   toggles: string;
-  description: string;,
+  description: string;
   resolution: ConflictResolution;
   impact: ConflictImpact;
 }
@@ -130,43 +130,43 @@ export enum ConflictType {
   RESOURCE_CONFLICT = 'resource_conflict',
   BUSINESS_LOGIC = 'business_logic'
   export interface ConflictResolution {
-  id: string;,
+  id: string;
   type: 'remove_dependency' | 'change_type' | 'add_condition' | 'manual_override';
-  description: string;,
+  description: string;
   automated: boolean;
   confidence: number; // 0.0-1.0,
   impact: string;
 }
 export interface ConflictImpact {
-  affectedToggles: number;,
+  affectedToggles: number;
   userImpact: 'none' | 'minimal' | 'moderate' | 'significant';
   businessRisk: 'low' | 'medium' | 'high' | 'critical';
   estimatedDowntime?: number; // minutes,
 }
 export interface GraphMetrics {
-  totalToggles: number;,
+  totalToggles: number;
   totalDependencies: number;
-  averageDependencies: number;,
+  averageDependencies: number;
   maxDependencyDepth: number;
-  circularDependencies: number;,
+  circularDependencies: number;
   conflictCount: number;
   healthScore: number; // 0-100,
   lastAnalyzed: Date;
   // Analysis and validation interfaces
 }
 export interface DependencyAnalysis {
-  graph: DependencyGraph;,
+  graph: DependencyGraph;
   violations: DependencyViolation;
-  recommendations: DependencyRecommendation;,
+  recommendations: DependencyRecommendation;
   impactAssessment: ImpactAssessment;
   riskFactors: RiskFactor;
 }
 export interface DependencyViolation {
-  id: string;,
+  id: string;
   type: ViolationType;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   toggles: string;
-  dependencies: string;,
+  dependencies: string;
   description: string;
   detected: Date;
   resolved?: Date;
@@ -179,13 +179,13 @@ export enum ViolationType {
   ORPHANED_TOGGLE = 'orphaned_toggle',
   INCONSISTENT_RELATIONSHIP = 'inconsistent_relationship'
   export interface DependencyRecommendation {
-  id: string;,
+  id: string;
   type: RecommendationType;
-  priority: 'low' | 'medium' | 'high' | 'urgent';,
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   toggles: string;
-  action: string;,
+  action: string;
   rationale: string;
-  expectedBenefit: string;,
+  expectedBenefit: string;
   estimatedEffort: number; // hours,
   automated: boolean;
 }
@@ -197,24 +197,24 @@ export enum RecommendationType {
   OPTIMIZE_PATH = 'optimize_path',
   RESOLVE_CONFLICT = 'resolve_conflict'
   export interface ImpactAssessment {
-  directImpact: ToggleImpact;,
+  directImpact: ToggleImpact;
   indirectImpact: ToggleImpact;
-  userSegments: string;,
+  userSegments: string;
   systemComponents: string;
-  estimatedUsers: number;,
+  estimatedUsers: number;
   riskScore: number;
   mitigation: string;
 }
 export interface ToggleImpact {
-  toggleId: string;,
+  toggleId: string;
   impactType: 'activation' | 'deactivation' | 'modification' | 'dependency_change';
-  severity: 'minimal' | 'moderate' | 'significant' | 'critical';,
+  severity: 'minimal' | 'moderate' | 'significant' | 'critical';
   description: string;
-  affectedFeatures: string;,
+  affectedFeatures: string;
   userExperienceChange: string;
 }
 export interface RiskFactor {
-  category: 'technical' | 'business' | 'user_experience' | 'compliance';,
+  category: 'technical' | 'business' | 'user_experience' | 'compliance';
   risk: string;
   probability: number; // 0.0-1.0,
   impact: number; // 0.0-1.0,
@@ -223,27 +223,27 @@ export interface RiskFactor {
   // Service configuration
 }
 export interface DependencyServiceConfig {
-  detection: {,
-  autoDetectDependencies: boolean;,
+  detection: {
+  autoDetectDependencies: boolean;
   detectionPatterns: string;
-  confidenceThreshold: number;,
+  confidenceThreshold: number;
   maxDependencyDepth: number;
 };
-  validation: {,
+  validation: {
   validateOnActivation: boolean;
-  allowCircularDependencies: boolean;,
+  allowCircularDependencies: boolean;
   maxCircularDepth: number;
   strictMode: boolean;
 };
-  visualization: {,
+  visualization: {
   maxNodesInGraph: number;
-  clusteringEnabled: boolean;,
+  clusteringEnabled: boolean;
   layoutAlgorithm: 'hierarchical' | 'force' | 'circular' | 'dagre';
   showMetadata: boolean;
 };
-  analysis: {,
+  analysis: {
   analyzeInterval: number; // minutes,
-  riskAssessmentEnabled: boolean;,
+  riskAssessmentEnabled: boolean;
   impactAnalysisDepth: number;
   recommendationEngine: boolean;
 };
@@ -263,7 +263,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   constructor(config: Partial<DependencyServiceConfig> = {}) {
   super();
   this.config = {
-  detection: {,
+  detection: {
   autoDetectDependencies: true,
   detectionPatterns: [,
   'depends on', 'requires', 'needs', 'after', 'once', 'when',
@@ -274,21 +274,21 @@ export class FeatureToggleDependencyService extends EventEmitter {
   maxDependencyDepth: 10,
   ...config.detection
 },
-  validation: {,
+  validation: {
   validateOnActivation: true,
   allowCircularDependencies: false,
   maxCircularDepth: 3,
   strictMode: false,
   ...config.validation
 },
-  visualization: {,
+  visualization: {
   maxNodesInGraph: 200,
   clusteringEnabled: true,
   layoutAlgorithm: 'hierarchical',
   showMetadata: true,
   ...config.visualization
 },
-  analysis: {,
+  analysis: {
   analyzeInterval: 15,
   riskAssessmentEnabled: true,
   impactAnalysisDepth: 3,
@@ -335,7 +335,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
    */
   async validateToggleActivation(toggleId: string): Promise<{,
   canActivate: boolean;
-  blockers: string;,
+  blockers: string;
   warnings: string;
   requirements: string;
 }> {
@@ -397,7 +397,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   level: 0, // Will be calculated,
   dependencies: [],
   dependents: [],
-  metadata: {,
+  metadata: {
   epic: toggle.epic,
   story: toggle.story,
   tags: toggle.tags || [],
@@ -419,7 +419,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   relationship: dependency.relationship,
   strength: dependency.strength,
   status: await this.validateDependencyStatus(dependency),
-  metadata: {,
+  metadata: {
   reason: dependency.reason,
   validated: dependency.lastValidated,
   violations: await this.countDependencyViolations(dependency.id),
@@ -524,7 +524,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   clusters: [],
   criticalPaths: [],
   conflicts: [],
-  metrics: {,
+  metrics: {
   totalToggles: 0,
   totalDependencies: 0,
   averageDependencies: 0,
@@ -538,7 +538,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     return `dep_${sourceId}_${targetId}_${Date.now()}`;}
   private async validateDependency(dependency: ToggleDependency): Promise<{,
   isValid: boolean;
-  hasErrors: boolean;,
+  hasErrors: boolean;
   errors: string;
   warnings: string;
 }> {
@@ -716,7 +716,8 @@ export class FeatureToggleDependencyService extends EventEmitter {
   private generateRecommendations(graph: DependencyGraph, violations: DependencyViolation): DependencyRecommendation { return []; }
   private async assessImpact(toggleIds: string): Promise<ImpactAssessment> { return {} as ImpactAssessment; }
   private analyzeRiskFactors(graph: DependencyGraph, violations: DependencyViolation): RiskFactor { return []; }
-  private calculateImpactSeverity(dependency: ToggleDependency): 'minimal' | 'moderate' | 'significant' | 'critical' { return 'minimal'; }
+  private calculateImpactSeverity(dependency: ToggleDependency): 'minimal' | 'moderate' | 'significant' | 'critical' { return 'minimal'
+  }
   private async getToggleFeatures(toggleId: string): Promise<string> { return []; }
   private describeUserImpact(dependency: ToggleDependency, action: string): string { return ''; }
   private async getCascadingImpact(toggleId: string, depth: number): Promise<ToggleImpact> { return []; }
@@ -728,7 +729,8 @@ export class FeatureToggleDependencyService extends EventEmitter {
   private calculateClusterStrength(toggles: string, edges: DependencyEdge): number { return 0.5; }
   private findExternalDependencies(toggles: string, edges: DependencyEdge): string { return []; }
   private findLongestPath(nodeId: string, nodes: ToggleNode, edges: DependencyEdge): string { return []; }
-  private assessPathRisk(path: string, nodes: ToggleNode): 'low' | 'medium' | 'high' | 'critical' { return 'low'; }
+  private assessPathRisk(path: string, nodes: ToggleNode): 'low' | 'medium' | 'high' | 'critical' { return 'low'
+  }
   private estimateActivationTime(path: string): number { return 0; }
   private identifyBottlenecks(path: string, edges: DependencyEdge): string { return []; }
   private findAlternativePaths(path: string, nodes: ToggleNode, edges: DependencyEdge): string[] { return []; }

@@ -14,7 +14,7 @@ import {
   StickyNoteAction
 } from '../../types/CollaborationTypes';
 interface StickyNoteProps {
-  note: StickyNoteType;,
+  note: StickyNoteType;
   onAction: (action: StickyNoteAction) => void;
   onContextMenu?: (e: React.MouseEvent, noteId: string) => void;
   selected?: boolean;

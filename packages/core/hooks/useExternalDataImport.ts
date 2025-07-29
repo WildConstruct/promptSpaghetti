@@ -16,13 +16,13 @@ interface UseExternalDataImportProps {
   onError?: (error: Error) => void;
   onSuccess?: (results: QueryResult) => void;
 interface ExternalDataImportState {
-  isLoading: boolean;,
+  isLoading: boolean;
   hasError: boolean;
-  error: Error | null;,
+  error: Error | null;
   lastQuery: HistoricalQuery | null;
-  lastResults: QueryResult;,
+  lastResults: QueryResult;
   availableDataSources: DataSource;
-  enabledSourcesCount: number;,
+  enabledSourcesCount: number;
   cacheHitRate: number;
   lastUpdateTime: string | null;
 interface UseExternalDataImportReturn {
@@ -30,20 +30,20 @@ interface UseExternalDataImportReturn {
   state: ExternalDataImportState;
   // Data operations
   queryData: (query: HistoricalQuery, sourceIds?: string) => Promise<QueryResult>;
-  refreshData: () => Promise<void>;,
+  refreshData: () => Promise<void>;
   clearCache: () => void;
   // Data source management
-  addDataSource: (source: DataSource) => void;,
-  updateDataSource: (sourceId: string, updates: Partial<DataSource>) => void;,
-  removeDataSource: (sourceId: string) => void;,
-  toggleDataSource: (sourceId: string) => void;,
+  addDataSource: (source: DataSource) => void;
+  updateDataSource: (sourceId: string, updates: Partial<DataSource>) => void;
+  removeDataSource: (sourceId: string) => void;
+  toggleDataSource: (sourceId: string) => void;
   getDataSource: (sourceId: string) => DataSource | null;
   // Real-time updates
-  startRealTimeUpdates: () => void;,
+  startRealTimeUpdates: () => void;
   stopRealTimeUpdates: () => void;
   // Utility functions
   validateQuery: (query: HistoricalQuery) => { valid: boolean; errors: string };
-  getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string;,
+  getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string;
   exportResults: (format: 'json' | 'csv') => string;
 
 export const useExternalDataImport = ({)
@@ -346,7 +346,7 @@ export const useQueryBuilder = () => {
       limit: query.limit || 50,
       offset: query.offset || 0,
       sortBy: query.sortBy,
-      sortOrder: query.sortOrder || 'desc';
+      sortOrder: query.sortOrder || 'desc'
   };
   }, [query, isValid]);
   return {

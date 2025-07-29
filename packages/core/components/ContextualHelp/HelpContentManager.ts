@@ -14,31 +14,31 @@
 import { HelpContent } from './ContextualHelpSystem';
 
 export interface UserProfile {
-  id: string;,
+  id: string;
   level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
-  viewedContent: Set<string>;,
+  viewedContent: Set<string>;
   completedTours: Set<string>;
-  preferences: {,
-  showFilmTerminology: boolean;,
+  preferences: {
+  showFilmTerminology: boolean;
   autoTriggerHelp: boolean;
   preferredComplexity: 'simple' | 'detailed' | 'comprehensive';
-  filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor';
-};
-  progress: {,
+  filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor'
+  };
+  progress: {
   nodesCreated: number;
-  connectionsBuilt: number;,
+  connectionsBuilt: number;
   previewsGenerated: number;
-  projectsCompleted: number;,
+  projectsCompleted: number;
   advancedFeaturesUsed: string;
 };
   lastActivity: Date;
 }
 export interface LearningPath {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   targetRole: string;
-  steps: {,
+  steps: {
   contentId: string;
   requiredProgress?: Record<string, number>;
   unlockConditions?: string;
@@ -70,13 +70,13 @@ export class HelpContentManager {
   level: 'beginner',
   viewedContent: new Set(),
   completedTours: new Set(),
-  preferences: {,
+  preferences: {
   showFilmTerminology: true,
   autoTriggerHelp: true,
   preferredComplexity: 'simple',
   filmIndustryRole: 'director',
 },
-  progress: {,
+  progress: {
   nodesCreated: 0,
   connectionsBuilt: 0,
   previewsGenerated: 0,
@@ -109,7 +109,7 @@ export class HelpContentManager {
         ],
         relatedFeatures: ['Canvas', 'Node Palette', 'Preview System'],
         level: 'beginner',
-        context: {,
+        context: {
   conditions: { nodeCount: 0 }
   }
       {
@@ -124,7 +124,7 @@ export class HelpContentManager {
   'Connect it to other nodes to build complexity'
   ],
   level: 'beginner',
-  context: {,
+  context: {
   nodeTypes: ['Output'],
   actions: ['node-creation'],
 }
@@ -142,7 +142,7 @@ export class HelpContentManager {
   ],
   relatedFeatures: ['Weight Controls', 'Preview System', 'Variance Analysis'],
   level: 'intermediate',
-  context: {,
+  context: {
   nodeTypes: ['WeightedChoice'],
   actions: ['weight-adjustment'],
 }
@@ -159,7 +159,7 @@ export class HelpContentManager {
   'Use conditional connections for smart narrative flow'
   ],
   level: 'beginner',
-  context: {,
+  context: {
   actions: ['connection-creation', 'edge-editing'],
 }
       {
@@ -176,7 +176,7 @@ export class HelpContentManager {
   ],
   relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Creative Analysis'],
   level: 'intermediate',
-  context: {,
+  context: {
   actions: ['preview-generation'],
   triggerElements: ['preview-button', 'director-toolbar'],
 }
@@ -193,7 +193,7 @@ export class HelpContentManager {
           'Combine with WeightedChoice for sophisticated narrative control'
         ],
         level: 'advanced',
-        context: {,
+        context: {
   nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
           conditions: { hasConditionals: true }
   }
@@ -211,7 +211,7 @@ export class HelpContentManager {
         ],
         relatedFeatures: ['Project Export', 'Bundle Generation', 'Version Control'],
         level: 'professional',
-        context: {,
+        context: {
   actions: ['project-export', 'bundle-export'],
           conditions: { projectsCompleted: 1 }
     ];
@@ -247,7 +247,7 @@ export class HelpContentManager {
   this.learningPaths.set(path.id, path);
     });
   // Public API Methods
-  public getContextualHelp(context: {,)
+  public getContextualHelp(context: {)
   nodeCount: number;
   edgeCount: number;
   selectedNodeType?: string;
@@ -319,15 +319,15 @@ export class HelpContentManager {
   progress.connectionsBuilt >= 3 &&
   progress.previewsGenerated >= 2 &&
   viewedCount >= 3) {
-  newLevel = 'intermediate';
-} else if (this.userProfile.level === 'intermediate') {
+  newLevel = 'intermediate'
+  } else if (this.userProfile.level === 'intermediate') {
       if (progress.nodesCreated >= 15 && )
           progress.connectionsBuilt >= 10 && 
           progress.previewsGenerated >= 10 &&
           progress.advancedFeaturesUsed.length >= 2 &&
           viewedCount >= 5) {
-        newLevel = 'advanced';
-    } else if (this.userProfile.level === 'advanced') {
+        newLevel = 'advanced'
+  } else if (this.userProfile.level === 'advanced') {
       if (progress.projectsCompleted >= 2 && )
           progress.advancedFeaturesUsed.length >= 4 &&
           viewedCount >= 8) {

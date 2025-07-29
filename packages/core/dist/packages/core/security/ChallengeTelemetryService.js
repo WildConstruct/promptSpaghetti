@@ -61,49 +61,25 @@ export var ChallengeType;
             BOT_CONFIRMED = 'bot_confirmed',
             UNKNOWN = 'unknown';
          > ;
-        byUserType: Record < UserAgentType, {
-            attempts: number,
-            successRate: number,
-            fraudScore: number
-        } > ;
-        fraudDetection: {
-            botAttempts: number;
-            suspiciousActivities: number;
-            preventedAttacks: number;
-            falsePositives: number;
-        }
-        ;
-        accessibility: {
-            assistedCompletions: number;
-            accommodationUsage: Record;
-            accessibilitySuccessRate: number;
-        }
-        ;
-        optimization: {
-            recommendedDifficulty: DifficultyLevel;
-            performanceScore: number; // 0-100,
-            userExperienceScore: number; // 0-100,
-            securityScore: number; // 0-100,
-        }
-        ;
-        // Telemetry Query
+        startDate: Date;
+        endDate: Date;
+        targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';
+        isActive: boolean;
+        // Fraud Pattern
     }
      > ;
-    startDate: Date;
-    endDate: Date;
-    targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    actions: Array < {
+        type: 'block' | 'challenge' | 'monitor' | 'flag',
+        parameters: (Record)
+    } > ;
+    confidence: number; // 0-1,
+    lastUpdated: Date;
     isActive: boolean;
-    // Fraud Pattern
+    /**
+     * Comprehensive challenge telemetry service
+     */
 }
- > ;
-severity: 'low' | 'medium' | 'high' | 'critical';
-actions: Array < {
-    type: 'block' | 'challenge' | 'monitor' | 'flag',
-    parameters: (Record)
-} > ;
-confidence: number; // 0-1,
-lastUpdated: Date;
-isActive: boolean;
 export class ChallengeTelemetryService extends EventEmitter {
     events = new Map();
     statistics = new Map();

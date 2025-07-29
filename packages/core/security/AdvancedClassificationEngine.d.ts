@@ -84,13 +84,13 @@ export interface DataFlow {
 export interface ClassificationContext {
     source: string;
     purpose: string;
-    userContext: {,
+    userContext: {
         userId: string;
         role: string;
         department: string;
         clearanceLevel: string;
     };
-    environmentContext: {,
+    environmentContext: {
         system: string;
         network: string;
         location: string;
@@ -188,7 +188,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
         end: Date;
     }): {
         framework: ComplianceFramework;
-        period: {,
+        period: {
             start: Date;
             end: Date;
         };

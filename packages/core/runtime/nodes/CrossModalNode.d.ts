@@ -28,10 +28,10 @@ export interface MultimodalInput {
     };
 
 export interface CrossModalAnalysis {
-    content_understanding: {,
+    content_understanding: {
         overall_summary: string;
         key_themes: string[];
-        sentiment: {,
+        sentiment: {
             score: number;
             label: string;
         };
@@ -49,7 +49,7 @@ export interface CrossModalAnalysis {
         strength: number;
         description: string;
     }>;
-    extracted_information: {,
+    extracted_information: {
         entities: Array<{,
             name: string;
             type: string;

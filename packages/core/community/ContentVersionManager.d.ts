@@ -12,7 +12,7 @@ export interface CommunityContent {
     title: string;
     subtitle?: string;
     slug: string;
-    content: {,
+    content: {
         markdown: string;
         html?: string;
         summary: string;
@@ -23,13 +23,13 @@ export interface CommunityContent {
     category: string;
     tags: string[];
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    seo: {,
+    seo: {
         metaTitle: string;
         metaDescription: string;
         keywords: string[];
         canonicalUrl?: string;
     };
-    editorial: {,
+    editorial: {
         status: 'draft' | 'review' | 'approved' | 'published' | 'archived';
         assignedEditor?: string;
         reviewNotes?: string;
@@ -125,7 +125,7 @@ export interface ContentContributor {
 
 export interface ContentQualityScore {
     overall_score: number;
-    dimensions: {,
+    dimensions: {
         accuracy: number;
         clarity: number;
         completeness: number;
@@ -133,7 +133,7 @@ export interface ContentQualityScore {
         originality: number;
         engagement: number;
     };
-    automated_checks: {,
+    automated_checks: {
         grammar_score: number;
         readability_score: number;
         seo_score: number;
@@ -220,21 +220,21 @@ export interface ContentVersionDiff {
         field: string;
         old_value: unknown;
         new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
+        change_type: 'added' | 'removed' | 'modified'
+  }>;
     media_changes: Array<{,
         media_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_media?: ContentMediaAttachment;
         new_media?: ContentMediaAttachment;
     }>;
-    structure_changes: {,
+    structure_changes: {
         sections_added: number;
         sections_removed: number;
         sections_reordered: number;
         toc_changes: boolean;
     };
-    editorial_changes: {,
+    editorial_changes: {
         status_change?: {
             from: string;
             to: string;
@@ -262,13 +262,13 @@ export declare class ContentVersionManager {
         branch_name?: string;
         revision_type?: 'major' | 'minor' | 'patch' | 'editorial';
         change_summary?: string;
-        target_status?: 'draft' | 'review';
-    }): Promise<ContentVersion>;
+        target_status?: 'draft' | 'review'
+  }): Promise<ContentVersion>;
     submitForReview(versionId: string, options?: {)
         reviewer_id?: string;
         review_notes?: string;
-        priority?: 'low' | 'normal' | 'high' | 'urgent';
-    }): Promise<ContentVersion>;
+        priority?: 'low' | 'normal' | 'high' | 'urgent'
+  }): Promise<ContentVersion>;
     publishVersion(versionId: string, options?: {)
         release_notes?: string;
         visibility?: 'private' | 'team' | 'community' | 'public';
@@ -309,8 +309,8 @@ export declare class ContentVersionManager {
         to_version: ContentVersion;
         diff: ContentVersionDiff;
         similarity_score: number;
-        change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite';
-    }>;
+        change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite'
+  }>;
     getVersionHistory(options?: {)
         include_drafts?: boolean;
         branch_name?: string;
@@ -337,7 +337,7 @@ export interface ContentBundle {
     content: ContentVersion;
     related_content: ContentVersion[];
     media_assets: ContentMediaAttachment[];
-    documentation: {,
+    documentation: {
         readme: string;
         changelog: string;
         usage_guide?: string;

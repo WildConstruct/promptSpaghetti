@@ -19,7 +19,7 @@ const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): A
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'test-exec-123',
   nodeExecutionOrder: [],

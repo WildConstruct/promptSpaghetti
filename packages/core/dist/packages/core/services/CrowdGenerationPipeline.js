@@ -313,9 +313,15 @@ Promise < CrowdGroup > {
                             ,
                             // Additional helper methods would be implemented here...
                             sampleAge(ageDistribution) { return 25; },
-                            sampleGender(genderRatio) { return 'male'; },
-                            sampleSocialClass(socialClasses) { return 'peasant'; },
-                            selectOccupation(demographics, context) { return 'farmer'; },
+                            sampleGender(genderRatio) {
+                                return 'male';
+                            },
+                            sampleSocialClass(socialClasses) {
+                                return 'peasant';
+                            },
+                            selectOccupation(demographics, context) {
+                                return 'farmer';
+                            },
                             generatePhysicalTraits(demographics) { return []; },
                             formFamilyGroups(individuals, context) { return []; },
                             formGuildGroups(individuals, context) { return []; },
@@ -323,7 +329,9 @@ Promise < CrowdGroup > {
                             createInteraction(type, individuals, groups) { return null; },
                             generateSuggestions(violations) { return []; },
                             calculateConsistencyScore(validation) { return 0.9; },
-                            calculateRenderComplexity(size) { return 'medium'; },
+                            calculateRenderComplexity(size) {
+                                return 'medium';
+                            },
                             estimateMemoryUsage(size) { return size * 5; },
                             getValidOccupations(request) { return []; },
                             getBehaviorPatterns(request) { return []; }

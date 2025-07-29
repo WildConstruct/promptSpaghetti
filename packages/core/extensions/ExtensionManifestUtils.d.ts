@@ -100,8 +100,8 @@ interface ManifestComparison {
         field: string;
         oldValue: string;
         newValue: string;
-        type: 'added' | 'removed' | 'modified';
-    }>;
+        type: 'added' | 'removed' | 'modified'
+  }>;
 interface ManifestWizardQuestion {
     key: string;
     prompt: string;

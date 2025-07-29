@@ -295,7 +295,7 @@ export interface HeatmapData {
     element: string;
     interactionType: string;
     frequency: number;
-    coordinates: {,
+    coordinates: {
         x: number;
         y: number;
     };

@@ -41,45 +41,45 @@ export interface UseSecurityAlertingConfigOptions {
   onSaveError?: (error: Error) => void;
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
-  severity: 'error' | 'warning' | 'info';,
+  severity: 'error' | 'warning' | 'info';
   code: string;
 }
 export interface ConfigurationState {
-  config: SecurityAlertingConfig;,
+  config: SecurityAlertingConfig;
   originalConfig: SecurityAlertingConfig;
-  isLoading: boolean;,
+  isLoading: boolean;
   isSaving: boolean;
-  isValidating: boolean;,
+  isValidating: boolean;
   hasUnsavedChanges: boolean;
-  lastSaved: Date | null;,
+  lastSaved: Date | null;
   validationErrors: ValidationError;
-  validationWarnings: ValidationError;,
+  validationWarnings: ValidationError;
   securityScore: number;
   configVersion: number;
 }
 export interface UseSecurityAlertingConfigReturn {
-  state: ConfigurationState;,
-  actions: {,
-  updateConfig: (config: Partial<SecurityAlertingConfig>) => void;,
-  updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void;,
-  addCorrelationRule: (rule: CorrelationRule) => void;,
-  removeCorrelationRule: (ruleId: string) => void;,
-  updateResponseAutomation: (automation: Partial<ResponseAutomation>) => void;,
+  state: ConfigurationState;
+  actions: {
+  updateConfig: (config: Partial<SecurityAlertingConfig>) => void;
+  updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void;
+  addCorrelationRule: (rule: CorrelationRule) => void;
+  removeCorrelationRule: (ruleId: string) => void;
+  updateResponseAutomation: (automation: Partial<ResponseAutomation>) => void;
   validateConfig: () => Promise<boolean>;
-  saveConfig: () => Promise<boolean>;,
+  saveConfig: () => Promise<boolean>;
   resetConfig: () => void;
-  revertChanges: () => void;,
+  revertChanges: () => void;
   exportConfig: () => string;
   importConfig: (configJson: string) => boolean;
 };
-  utils: {,
+  utils: {
   getConfigDiff: () => Partial<SecurityAlertingConfig>;
   getValidationSummary: () => {,
-  hasErrors: boolean;,
+  hasErrors: boolean;
   hasWarnings: boolean;
-  errorCount: number;,
+  errorCount: number;
   warningCount: number;
   score: number;
 };
@@ -87,11 +87,11 @@ export interface UseSecurityAlertingConfigReturn {
   };
 }
 export interface ConfigRecommendation {
-  field: string;,
+  field: string;
   current: any;
-  recommended: any;,
+  recommended: any;
   reason: string;
-  impact: 'security' | 'performance' | 'compliance';,
+  impact: 'security' | 'performance' | 'compliance';
   priority: 'high' | 'medium' | 'low';
   // Default configuration
   const DEFAULT_CONFIG: SecurityAlertingConfig = {,
@@ -103,7 +103,7 @@ export interface ConfigRecommendation {
   patternAnalysisWindow: 300000, // 5 minutes,
   threatIntelligenceUpdate: 3600000, // 1 hour,
   machinelearningEnabled: false,
-  escalationThresholds: {,
+  escalationThresholds: {
   criticalAlertCount: 5,
   highAlertCount: 20,
   correlatedAlertCount: 10,
@@ -114,7 +114,7 @@ export interface ConfigRecommendation {
   riskScoreThreshold: 75,
 },
   correlationRules: [],
-  responseAutomation: {,
+  responseAutomation: {
   enabledActions: [],
   approvalRequired: true,
   maxAutomatedActions: 5,
@@ -125,7 +125,7 @@ export interface ConfigRecommendation {
  * Hook for managing security alerting configuration
  */
 }
-export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig,)
+export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig)
   options: UseSecurityAlertingConfigOptions = {}
 ): UseSecurityAlertingConfigReturn => {
   const {
@@ -176,7 +176,7 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Security alerting configuration changed',
-  details: {,
+  details: {
   configId,
   field,
   oldValue,
@@ -353,7 +353,7 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   type: SecurityEventType.SECURITY_ALERT,
   level: LogLevel.INFO,
   message: 'Security alerting configuration saved',
-  details: {,
+  details: {
   configId,
   configVersion: state.configVersion,
   timestamp: new Date().toISOString(),
@@ -402,7 +402,7 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   const exportConfig = useCallback((): string => {
   return JSON.stringify({)
   config: state.config,
-  metadata: {,
+  metadata: {
   version: state.configVersion,
   exported: new Date().toISOString(),
   configId
@@ -501,7 +501,7 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   }, []);
   return {
   state,
-  actions: {,
+  actions: {
   updateConfig,
   updateEscalationThresholds,
   addCorrelationRule,
@@ -514,7 +514,7 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   exportConfig,
   importConfig
 },
-  utils: {,
+  utils: {
       getConfigDiff,
       getValidationSummary,
       getRecommendations

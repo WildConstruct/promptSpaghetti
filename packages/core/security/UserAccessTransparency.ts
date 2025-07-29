@@ -20,24 +20,24 @@ import {
 import { AuditLogEntry } from './CentralizedAccessControlService';
 
 export interface TransparencyConfig {
-  enableRealTimeNotifications: boolean;,
+  enableRealTimeNotifications: boolean;
   enableDataUsageTracking: boolean;
-  enableThirdPartyDisclosures: boolean;,
+  enableThirdPartyDisclosures: boolean;
   enablePrivacyScoring: boolean;
-  enableAutoDataInventory: boolean;,
+  enableAutoDataInventory: boolean;
   retentionPolicyVisibility: boolean;
-  consentManagementEnabled: boolean;,
+  consentManagementEnabled: boolean;
   dsarAutomationEnabled: boolean;
-  dataPortabilityEnabled: boolean;,
+  dataPortabilityEnabled: boolean;
   notificationChannels: NotificationChannel;
 }
 export interface NotificationChannel {
-  type: 'EMAIL' | 'SMS' | 'PUSH' | 'WEBHOOK' | 'IN_APP';,
+  type: 'EMAIL' | 'SMS' | 'PUSH' | 'WEBHOOK' | 'IN_APP';
   endpoint: string;
-  enabled: boolean;,
+  enabled: boolean;
   events: TransparencyEventType;
-  frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY';
-}
+  frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY'
+  }
 export enum TransparencyEventType {
   DATA_ACCESSED = 'data_accessed',
   DATA_MODIFIED = 'data_modified',
@@ -51,126 +51,126 @@ export enum TransparencyEventType {
   DATA_BREACH = 'data_breach',
   COMPLIANCE_VIOLATION = 'compliance_violation'
   export interface UserDataInventory {
-  userId: string;,
+  userId: string;
   generatedAt: Date;
-  dataCategories: DataCategory;,
+  dataCategories: DataCategory;
   totalDataPoints: number;
-  sensitiveDataCount: number;,
+  sensitiveDataCount: number;
   retentionSummary: RetentionSummary;
-  thirdPartySharing: ThirdPartySharing;,
+  thirdPartySharing: ThirdPartySharing;
   complianceStatus: ComplianceStatus;
   privacyScore: PrivacyScore;
 }
 export interface DataCategory {
-  category: string;,
+  category: string;
   description: string;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   dataPoints: DataPoint;
-  lawfulBasis: LawfulBasis;,
+  lawfulBasis: LawfulBasis;
   retentionPeriod: RetentionPeriod;
-  processingPurposes: ProcessingPurpose;,
+  processingPurposes: ProcessingPurpose;
   thirdPartyAccess: boolean;
   userControl: UserControlLevel;
 }
 export interface DataPoint {
-  id: string;,
+  id: string;
   fieldName: string;
   dataType: 'PERSONAL' | 'SENSITIVE' | 'FINANCIAL' | 'HEALTH' | 'BIOMETRIC' | 'BEHAVIORAL';
   value?: string; // Encrypted or masked,
-  source: string;,
+  source: string;
   collectedAt: Date;
-  lastAccessed: Date;,
+  lastAccessed: Date;
   accessCount: number;
-  modificationHistory: DataModification;,
+  modificationHistory: DataModification;
   consentStatus: ConsentStatus;
 }
 export interface DataModification {
-  modifiedAt: Date;,
+  modifiedAt: Date;
   modifiedBy: string;
-  operation: DataOperation;,
+  operation: DataOperation;
   reason: string;
-  approvalRequired: boolean;,
+  approvalRequired: boolean;
   approved: boolean;
   approvedBy?: string;
 }
 export interface LawfulBasis {
-  basis: 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_INTERESTS' | 'PUBLIC_TASK' | 'LEGITIMATE_INTERESTS';,
+  basis: 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_INTERESTS' | 'PUBLIC_TASK' | 'LEGITIMATE_INTERESTS';
   description: string;
   validFrom: Date;
   validUntil?: Date;
-  evidence: string;,
+  evidence: string;
   userNotified: boolean;
 }
 export interface RetentionPeriod {
   duration: number; // days,
-  reason: string;,
+  reason: string;
   automaticDeletion: boolean;
   deletionDate?: Date;
   extensionReason?: string;
   userRequested: boolean;
 }
 export interface ProcessingPurpose {
-  purpose: string;,
+  purpose: string;
   description: string;
-  lawfulBasis: LawfulBasis;,
+  lawfulBasis: LawfulBasis;
   dataMinimization: boolean;
-  userConsent: ConsentStatus;,
+  userConsent: ConsentStatus;
   canOptOut: boolean;
   necessaryForService: boolean;
 }
 export interface ConsentStatus {
   granted: boolean;
   grantedAt?: Date;
-  granularity: 'GLOBAL' | 'PURPOSE_SPECIFIC' | 'DATA_SPECIFIC';,
+  granularity: 'GLOBAL' | 'PURPOSE_SPECIFIC' | 'DATA_SPECIFIC';
   withdrawable: boolean;
   withdrawnAt?: Date;
-  version: string;,
+  version: string;
   evidence: ConsentEvidence;
 }
 export interface ConsentEvidence {
-  type: 'EXPLICIT' | 'IMPLIED' | 'PRECHECK' | 'COOKIE' | 'API';,
+  type: 'EXPLICIT' | 'IMPLIED' | 'PRECHECK' | 'COOKIE' | 'API';
   timestamp: Date;
-  method: string;,
+  method: string;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   context: Record<string, any>;
 }
 export interface RetentionSummary {
-  totalDataPoints: number;,
+  totalDataPoints: number;
   averageRetentionDays: number;
-  nearExpirationCount: number;,
+  nearExpirationCount: number;
   expiredDataCount: number;
-  userRequestedDeletions: number;,
+  userRequestedDeletions: number;
   automaticDeletions: number;
   upcomingDeletions: UpcomingDeletion;
 }
 export interface UpcomingDeletion {
-  dataId: string;,
+  dataId: string;
   dataType: string;
-  scheduledDate: Date;,
+  scheduledDate: Date;
   reason: string;
-  preventable: boolean;,
+  preventable: boolean;
   notificationSent: boolean;
 }
 export interface ThirdPartySharing {
-  thirdPartyId: string;,
+  thirdPartyId: string;
   thirdPartyName: string;
-  sharingPurpose: string;,
+  sharingPurpose: string;
   dataShared: string;
-  sharingDate: Date;,
+  sharingDate: Date;
   legalBasis: string;
-  userConsent: boolean;,
+  userConsent: boolean;
   dataProcessingAgreement: boolean;
   retentionByThirdParty: number; // days,
-  userRights: ThirdPartyUserRights;,
+  userRights: ThirdPartyUserRights;
   contactInfo: ContactInfo;
 }
 export interface ThirdPartyUserRights {
-  canAccess: boolean;,
+  canAccess: boolean;
   canRectify: boolean;
-  canErase: boolean;,
+  canErase: boolean;
   canPortability: boolean;
-  canObject: boolean;,
+  canObject: boolean;
   canRestrictProcessing: boolean;
   contactMethod: string;
 }
@@ -182,93 +182,93 @@ export interface ContactInfo {
   website?: string;
 }
 export interface ComplianceStatus {
-  overall: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT' | 'UNKNOWN';,
+  overall: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT' | 'UNKNOWN';
   frameworks: FrameworkCompliance;
-  violations: ComplianceViolation;,
+  violations: ComplianceViolation;
   pendingActions: ComplianceAction;
-  lastAssessment: Date;,
+  lastAssessment: Date;
   nextAssessment: Date;
 }
 export interface FrameworkCompliance {
-  framework: 'GDPR' | 'CCPA' | 'HIPAA' | 'PCI_DSS' | 'SOX' | 'ISO27001';,
+  framework: 'GDPR' | 'CCPA' | 'HIPAA' | 'PCI_DSS' | 'SOX' | 'ISO27001';
   status: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT';
   score: number; // 0-100,
-  requirements: RequirementStatus;,
+  requirements: RequirementStatus;
   lastAudit: Date;
   nextAudit: Date;
 }
 export interface RequirementStatus {
-  requirement: string;,
+  requirement: string;
   status: 'MET' | 'PARTIAL' | 'NOT_MET' | 'NOT_APPLICABLE';
   evidence: string;
   gap?: string;
   remediation?: string;
 }
 export interface ComplianceViolation {
-  id: string;,
+  id: string;
   framework: string;
-  requirement: string;,
+  requirement: string;
   description: string;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   detectedAt: Date;
   resolvedAt?: Date;
-  remediation: string;,
+  remediation: string;
   userImpact: string;
   notificationRequired: boolean;
 }
 export interface ComplianceAction {
-  id: string;,
+  id: string;
   type: 'DATA_DELETION' | 'CONSENT_UPDATE' | 'POLICY_UPDATE' | 'NOTIFICATION' | 'AUDIT';
-  description: string;,
+  description: string;
   dueDate: Date;
-  assignedTo: string;,
+  assignedTo: string;
   userActionRequired: boolean;
-  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
-}
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+  }
 export interface PrivacyScore {
   overall: number; // 0-100,
-  categories: {,
-  dataMinimization: number;,
+  categories: {
+  dataMinimization: number;
   consentHealth: number;
-  securityPosture: number;,
+  securityPosture: number;
   thirdPartyRisk: number;
-  retentionCompliance: number;,
+  retentionCompliance: number;
   userControl: number;
 };
-  trends: PrivacyTrend;,
+  trends: PrivacyTrend;
   recommendations: PrivacyRecommendation;
   lastCalculated: Date;
 }
 export interface PrivacyTrend {
-  metric: string;,
+  metric: string;
   change: number; // percentage change,
-  period: 'WEEK' | 'MONTH' | 'QUARTER';,
-  direction: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-}
+  period: 'WEEK' | 'MONTH' | 'QUARTER';
+  direction: 'IMPROVING' | 'DEGRADING' | 'STABLE'
+  }
 export interface PrivacyRecommendation {
-  id: string;,
+  id: string;
   category: 'DATA_MINIMIZATION' | 'CONSENT' | 'SECURITY' | 'RETENTION' | 'THIRD_PARTY';
-  title: string;,
+  title: string;
   description: string;
-  impact: 'LOW' | 'MEDIUM' | 'HIGH';,
+  impact: 'LOW' | 'MEDIUM' | 'HIGH';
   effort: 'LOW' | 'MEDIUM' | 'HIGH';
   userAction: boolean;
   actionUrl?: string;
 }
 export interface UserAccessActivity {
-  timestamp: Date;,
+  timestamp: Date;
   activityType: TransparencyEventType;
-  actor: ActivityActor;,
+  actor: ActivityActor;
   dataAccessed: AccessedData;
-  purpose: string;,
+  purpose: string;
   legalBasis: string;
-  automated: boolean;,
+  automated: boolean;
   location: AccessLocation;
-  userNotified: boolean;,
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-}
+  userNotified: boolean;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  }
 export interface ActivityActor {
-  type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';,
+  type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';
   id: string;
   name: string;
   role?: string;
@@ -276,28 +276,28 @@ export interface ActivityActor {
   justification?: string;
 }
 export interface AccessedData {
-  dataId: string;,
+  dataId: string;
   dataType: string;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   sensitive: boolean;
-  operation: DataOperation;,
+  operation: DataOperation;
   recordCount: number;
   byteSize: number;
 }
 export interface AccessLocation {
-  country: string;,
+  country: string;
   region: string;
-  ipAddress: string;,
+  ipAddress: string;
   withinEU: boolean;
-  withinApprovedRegions: boolean;,
+  withinApprovedRegions: boolean;
   requiresDataTransferSafeguards: boolean;
 }
 export interface DataSubjectAccessRequest {
-  requestId: string;,
+  requestId: string;
   userId: string;
-  requestType: 'ACCESS' | 'RECTIFICATION' | 'ERASURE' | 'PORTABILITY' | 'RESTRICTION' | 'OBJECTION';,
+  requestType: 'ACCESS' | 'RECTIFICATION' | 'ERASURE' | 'PORTABILITY' | 'RESTRICTION' | 'OBJECTION';
   requestedAt: Date;
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED' | 'PARTIALLY_COMPLETED';,
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED' | 'PARTIALLY_COMPLETED';
   completionDeadline: Date;
   requestDetails: DSARRequestDetails;
   response?: DSARResponse;
@@ -306,30 +306,30 @@ export interface DataSubjectAccessRequest {
 }
 export interface DSARRequestDetails {
   dataCategories?: string;
-  timeRange?: {,
-  start: Date;,
+  timeRange?: {
+  start: Date;
   end: Date;
 };
   specificData?: string;
   reason?: string;
-  identityVerified: boolean;,
+  identityVerified: boolean;
   urgency: 'STANDARD' | 'URGENT' | 'EMERGENCY';
-  preferredFormat?: 'JSON' | 'XML' | 'CSV' | 'PDF' | 'HUMAN_READABLE';
-}
+  preferredFormat?: 'JSON' | 'XML' | 'CSV' | 'PDF' | 'HUMAN_READABLE'
+  }
 export interface DSARResponse {
-  responseId: string;,
+  responseId: string;
   generatedAt: Date;
-  format: string;,
+  format: string;
   fileSize: number;
   downloadUrl?: string;
-  expiresAt: Date;,
+  expiresAt: Date;
   dataIncluded: string;
-  dataExcluded: string;,
+  dataExcluded: string;
   exclusionReasons: string;
   additionalInfo?: string;
 }
 export interface DSARProcessingStep {
-  step: string;,
+  step: string;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
   startedAt: Date;
   completedAt?: Date;
@@ -337,65 +337,65 @@ export interface DSARProcessingStep {
   automatedProcessing: boolean;
 }
 export interface TransparencySettings {
-  userId: string;,
+  userId: string;
   notificationPreferences: NotificationPreferences;
-  privacySettings: PrivacySettings;,
+  privacySettings: PrivacySettings;
   consentPreferences: ConsentPreferences;
-  dataRetentionPreferences: DataRetentionPreferences;,
+  dataRetentionPreferences: DataRetentionPreferences;
   accessControlPreferences: AccessControlPreferences;
   lastUpdated: Date;
 }
 export interface NotificationPreferences {
-  realTimeNotifications: boolean;,
+  realTimeNotifications: boolean;
   emailNotifications: boolean;
-  pushNotifications: boolean;,
+  pushNotifications: boolean;
   smsNotifications: boolean;
-  frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';,
+  frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
   eventTypes: TransparencyEventType;
-  quietHours: {,
-  enabled: boolean;,
+  quietHours: {
+  enabled: boolean;
   start: string; // HH:MM,
   end: string; // HH:MM,
   timezone: string;
 };
 }
 export interface PrivacySettings {
-  dataMinimizationEnabled: boolean;,
+  dataMinimizationEnabled: boolean;
   automaticDataDeletion: boolean;
-  thirdPartyDataSharingOptOut: boolean;,
+  thirdPartyDataSharingOptOut: boolean;
   marketingOptOut: boolean;
-  analyticsOptOut: boolean;,
+  analyticsOptOut: boolean;
   personalizationOptOut: boolean;
-  dataPortabilityEnabled: boolean;,
+  dataPortabilityEnabled: boolean;
   privacyScoreVisible: boolean;
 }
 export interface ConsentPreferences {
-  granularConsent: boolean;,
+  granularConsent: boolean;
   automaticConsentRenewal: boolean;
-  consentReminders: boolean;,
+  consentReminders: boolean;
   explicitConsentRequired: boolean;
-  purposeLimitationStrict: boolean;,
+  purposeLimitationStrict: boolean;
   consentWithdrawalEasy: boolean;
 }
 export interface DataRetentionPreferences {
-  minimumRetention: boolean;,
+  minimumRetention: boolean;
   customRetentionPeriods: CustomRetentionPeriod;
-  automaticDeletionReminders: boolean;,
+  automaticDeletionReminders: boolean;
   dataArchivingPreference: 'DELETE' | 'ARCHIVE' | 'USER_CHOICE';
   retentionExtensionNotifications: boolean;
 }
 export interface CustomRetentionPeriod {
-  dataCategory: string;,
+  dataCategory: string;
   retentionDays: number;
-  reason: string;,
+  reason: string;
   userRequested: boolean;
 }
 export interface AccessControlPreferences {
-  requireExplicitApproval: boolean;,
+  requireExplicitApproval: boolean;
   restrictedDataAccess: 'NEVER' | 'WITH_APPROVAL' | 'EMERGENCY_ONLY';
-  thirdPartyAccessRestrictions: boolean;,
+  thirdPartyAccessRestrictions: boolean;
   accessTimeRestrictions: boolean;
-  locationRestrictions: boolean;,
+  locationRestrictions: boolean;
   deviceRestrictions: boolean;
 }
 export enum UserControlLevel {
@@ -589,7 +589,7 @@ export enum UserControlLevel {
   // Implementation would calculate privacy score based on various factors
   return {
   overall: 85,
-  categories: {,
+  categories: {
   dataMinimization: 90,
   consentHealth: 85,
   securityPosture: 88,
@@ -602,7 +602,7 @@ export enum UserControlLevel {
       lastCalculated: new Date();
   };
   // Additional helper methods would be implemented here...
-  private fetchUserAccessActivities(userId: string,)
+  private fetchUserAccessActivities(userId: string)
     timeRange?: { start: Date; end: Date },
     limit?: number
   ): Promise<UserAccessActivity> { return Promise.resolve([]); }
@@ -617,24 +617,24 @@ export enum UserControlLevel {
   private isInQuietHours(quietHours: { start: string; end: string }): boolean { return false; }
   private queueNotification(notification: TransparencyNotification): void { this.notificationQueue.push(notification); }
   private deliverNotification(notification: TransparencyNotification): Promise<void> { return Promise.resolve(); }
-  private gatherUserDataForExport(userId: string,)
+  private gatherUserDataForExport(userId: string)
     categories?: string
   ): Promise<Record<string, unknown>> { return Promise.resolve({}); }
-  private generateDataExport(data: Record<string,)
+  private generateDataExport(data: Record<string)
     unknown>,
     format: string): Promise<DSARResponse> { return Promise.resolve({} as DSARResponse); }
   private startPeriodicTasks(): void { /* Implementation */ }
   private processNotificationQueue(): void { /* Implementation */ }
 
 export interface TransparencyNotification {
-  id: string;,
+  id: string;
   userId: string;
-  eventType: TransparencyEventType;,
+  eventType: TransparencyEventType;
   title: string;
-  message: string;,
+  message: string;
   severity: 'INFO' | 'WARNING' | 'CRITICAL';
   data: Record<string, any>;
-  timestamp: Date;,
+  timestamp: Date;
   delivered: boolean;
   deliveredAt?: Date;
   channels: NotificationChannel;

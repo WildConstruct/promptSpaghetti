@@ -55,43 +55,43 @@ export interface StableVideoRequestOptions {
   loop_video?: boolean;
 }
 export interface StableVideoGenerationResult {
-  video: {,
+  video: {
   frames: string; // Base64 encoded frames,
   url?: string;
   data?: ArrayBuffer;
-  format: string;,
+  format: string;
   duration: number;
-  resolution: {,
-  width: number;,
+  resolution: {
+  width: number;
   height: number;
 };
-    fps: number;,
+    fps: number;
   frame_count: number;
     size: number;
   };
-  metadata: {,
+  metadata: {
   model: string;
-  input_image: string;,
+  input_image: string;
   motion_bucket_id: number;
-  cond_aug: number;,
+  cond_aug: number;
   seed: number;
-  steps: number;,
+  steps: number;
   cfg_scale: number;
   generation_time: number;
   memory_usage?: number;
 };
-  usage: {,
+  usage: {
   compute_units: number;
-  estimated_cost: number;,
+  estimated_cost: number;
   processing_time: number;
 };
 }
 export interface SVDModelInfo {
-  name: string;,
+  name: string;
   type: 'svd' | 'svd-xt';
-  max_frames: number;,
+  max_frames: number;
   resolution: string;
-  description: string;,
+  description: string;
   memory_requirements: string;
 }
 export class StableVideoAdapter extends BaseAIModel {
@@ -107,7 +107,7 @@ export class StableVideoAdapter extends BaseAIModel {
   costPerRequest: StableVideoAdapter.getEstimatedCost(config.apiType),
   averageLatency: StableVideoAdapter.getEstimatedLatency(config.apiType),
   maxConcurrency: config.apiType === 'stability-ai' ? 5 : 2,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: config.apiType === 'stability-ai' ? 20 : 10,
   tokensPerMinute: 2000,
 },
@@ -122,7 +122,7 @@ export class StableVideoAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: false,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   motion_bucket_id: { type: 'number', min: 1, max: 255, default: 127 },
         cond_aug: { type: 'number', min: 0, max: 1, default: 0.02 },
         num_frames: { type: 'number', min: 14, max: 25, default: 14 },
@@ -182,13 +182,13 @@ export class StableVideoAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.7,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: estimatedCost,
   processingCost: 0,
 };
   // Stable Video Diffusion specific methods
-  async generateImageToVideo(imageData: string,)
+  async generateImageToVideo(imageData: string)
     motionIntensity: number = 127,
     numFrames: number = 14,
     options?: Partial<StableVideoRequestOptions>
@@ -200,7 +200,7 @@ export class StableVideoAdapter extends BaseAIModel {
   ...options
 };
     return this.process(imageData, svdOptions);
-  async generateVideoLoop(imageData: string,)
+  async generateVideoLoop(imageData: string)
     options?: Partial<StableVideoRequestOptions>
   ): Promise<StableVideoGenerationResult> {
   const loopOptions: StableVideoRequestOptions = {,
@@ -211,7 +211,7 @@ export class StableVideoAdapter extends BaseAIModel {
   ...options
 };
     return this.process(imageData, loopOptions);
-  async generateHighQualityVideo(imageData: string,)
+  async generateHighQualityVideo(imageData: string)
     options?: Partial<StableVideoRequestOptions>
   ): Promise<StableVideoGenerationResult> {
   const hqOptions: StableVideoRequestOptions = {,
@@ -467,7 +467,7 @@ export class StableVideoAdapter extends BaseAIModel {
   width: options.width || 576,
   height: options.height || 1024,
 };
-  private _processVideoResult(response: any,)
+  private _processVideoResult(response: any)
     imageData: string,
     options: Omit<StableVideoRequestOptions, 'image'>,
     generationTime: number): StableVideoGenerationResult {,
@@ -486,11 +486,11 @@ export class StableVideoAdapter extends BaseAIModel {
   );
   const estimatedCost = computeUnits * (this._metadata.costPerRequest || 0.02);
   return {
-  video: {,
+  video: {
   frames,
   format: 'frames', // Individual frames,
   duration: (options.num_frames || 14) / (options.fps || 6),
-  resolution: {,
+  resolution: {
   width: options.width || 576,
   height: options.height || 1024,
 },
@@ -498,7 +498,7 @@ export class StableVideoAdapter extends BaseAIModel {
         frame_count: frames.length,
         size: this._estimateVideoSize(frames);
   },
-  metadata: {,
+  metadata: {
   model: options.model || 'svd-xt',
   input_image: imageData,
   motion_bucket_id: options.motion_bucket_id || 127,
@@ -508,7 +508,7 @@ export class StableVideoAdapter extends BaseAIModel {
   cfg_scale: options.cfg_scale || 2.5,
   generation_time: generationTime,
 },
-  usage: {,
+  usage: {
   compute_units: computeUnits,
   estimated_cost: estimatedCost,
   processing_time: generationTime,

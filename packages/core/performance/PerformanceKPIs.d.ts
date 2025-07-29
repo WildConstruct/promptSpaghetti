@@ -12,7 +12,7 @@ export interface KPIDefinition {
     target: number;
     warning: number;
     critical: number;
-    measurement: {,
+    measurement: {
         method: string;
         frequency: 'realtime' | 'interval' | 'on-demand';
         source: string;
@@ -29,19 +29,19 @@ export interface KPISnapshot {
     metadata?: Record<string, any>;
 
 export interface KPIThresholds {
-    excellent: {,
+    excellent: {
         min: number;
         max?: number;
     };
-    good: {,
+    good: {
         min: number;
         max: number;
     };
-    warning: {,
+    warning: {
         min: number;
         max: number;
     };
-    critical: {,
+    critical: {
         min?: number;
         max: number;
     };

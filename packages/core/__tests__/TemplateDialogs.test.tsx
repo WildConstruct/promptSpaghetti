@@ -9,7 +9,7 @@ import { TemplateSaveData, Template } from '../types/TemplateTypes';
 
 // Mock the template service
 jest.mock('../services/TemplateService', () => ({)
-  templateService: {,
+  templateService: {
   searchTemplates: jest.fn<unknown, unknown>(),
   instantiateTemplate: jest.fn<unknown, unknown>(),
   deleteTemplate: jest.fn<unknown, unknown>(),
@@ -310,21 +310,21 @@ describe('TemplateBrowser', () => {
           comment: 'Great template!',
           timestamp: '2023-01-01T00:00:00.000Z',
           helpful: 3],
-      graph: {,
+      graph: {
   nodes: [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         edges: [],
-        annotations: {,
+        annotations: {
   stickyNotes: [],
           nodeLabels: {},
           regionGroups: [],
           connectionLabels: {},
-          metadata: {,
+          metadata: {
   author: 'test',
   created: '2023-01-01',
   modified: '2023-01-01',
   version: '1.0.0',
 },
-  metadata: {,
+  metadata: {
   created: '2023-01-01T00:00:00.000Z',
   lastModified: '2023-01-01T00:00:00.000Z',
   usageCount: 10,
@@ -344,24 +344,24 @@ describe('TemplateBrowser', () => {
       author: 'author2',
       rating: 3.8,
       reviews: [],
-      graph: {,
+      graph: {
   nodes: [,
           { id: 'n1', type: 'WeightedChoice', position: { x: 0, y: 0 }, data: {} },
           { id: 'n2', type: 'Output', position: { x: 100, y: 0 }, data: {} }
         ],
         edges: [{ id: 'e1', source: 'n1', target: 'n2', type: 'step' }],
-        annotations: {,
+        annotations: {
   stickyNotes: [],
           nodeLabels: {},
           regionGroups: [],
           connectionLabels: {},
-          metadata: {,
+          metadata: {
   author: 'test',
   created: '2023-01-01',
   modified: '2023-01-01',
   version: '1.0.0',
 },
-  metadata: {,
+  metadata: {
   created: '2023-01-02T00:00:00.000Z',
         lastModified: '2023-01-02T00:00:00.000Z',
         usageCount: 5,

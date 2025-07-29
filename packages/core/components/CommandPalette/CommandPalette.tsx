@@ -31,8 +31,8 @@ export interface GenerationFlow {
   steps: GenerationStep[];
   estimatedTime: string;
   complexity: 'simple' | 'moderate' | 'advanced';
-  outputType: 'single_node' | 'node_chain' | 'complete_graph';
-}
+  outputType: 'single_node' | 'node_chain' | 'complete_graph'
+  }
 
 export interface GenerationStep {
   id: string;
@@ -83,8 +83,8 @@ interface GenerationWizardProps {
   onStepChange: (step: number) => void;
   onExecute: () => void;
   onCancel: () => void;
-  theme: 'light' | 'dark' | 'cinema';
-}
+  theme: 'light' | 'dark' | 'cinema'
+  }
 
 const GenerationWizard: React.FC<GenerationWizardProps> = ({
   flow,

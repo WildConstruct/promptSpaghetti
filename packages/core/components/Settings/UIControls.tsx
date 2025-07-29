@@ -8,23 +8,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface UIControlsProps {
-  settings: UISettings;,
+  settings: UISettings;
   onChange: (settings: UISettings) => void;
   /**
   * UI Settings Controls Component
@@ -261,7 +261,7 @@ export const UIControls: React.FC<UIControlsProps> = ({)
   borderRadius: '6px',
                         cursor: 'pointer',
                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        textAlign: 'center';
+                        textAlign: 'center'
   }}
                       onMouseEnter={(e) => {
                         if (!isSelected) {
@@ -409,7 +409,7 @@ export const UIControls: React.FC<UIControlsProps> = ({)
         borderRadius: '6px',
         border: `1px solid ${uiColors.ui.border}`}
 },
-  marginTop: '16px';
+  marginTop: '16px'
   }}>
         <div style={{
   display: 'flex',

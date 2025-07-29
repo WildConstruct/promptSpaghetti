@@ -14,14 +14,14 @@ import {
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
 interface TicketDetailsViewProps {
-  ticket: MarketplaceTicket;,
+  ticket: MarketplaceTicket;
   ticketService: Epic16TicketIntegrationService;
-  userId: string;,
+  userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onClose?: () => void;
   onTicketUpdate?: (ticket: MarketplaceTicket) => void;
   interface CommentFormData {
-  content: string;,
+  content: string;
   visibility: 'public' | 'internal' | 'private';
   attachments: File;
   export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({,)
@@ -50,7 +50,7 @@ interface TicketDetailsViewProps {
            (currentTicket.metadata.userId === userId);
   }, [userRole, currentTicket.assignedTo, currentTicket.metadata.userId, userId]);
   const canViewInternal = useMemo(() => {
-    return userRole === 'admin' || userRole === 'agent';
+    return userRole === 'admin' || userRole === 'agent'
   }, [userRole]);
   // SLA calculations
   const slaStatus = useMemo(() => {
@@ -494,7 +494,7 @@ const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment
 // Modal Components (simplified implementations)
 const StatusUpdateModal: React.FC<{,
   currentStatus: TicketStatus;
-  onStatusUpdate: (status: TicketStatus) => void;,
+  onStatusUpdate: (status: TicketStatus) => void;
   onClose: () => void;
 }> = ({ currentStatus, onStatusUpdate, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
@@ -537,7 +537,7 @@ const StatusUpdateModal: React.FC<{,
 };
 const AssignmentModal: React.FC<{
   currentAssignee?: string;
-  onAssign: (assigneeId: string) => void;,
+  onAssign: (assigneeId: string) => void;
   onClose: () => void;
 }> = ({ currentAssignee, onAssign, onClose }) => {
   const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
@@ -579,7 +579,7 @@ const AssignmentModal: React.FC<{
   );
 };
 const EscalationModal: React.FC<{,
-  onEscalate: (reason: string) => void;,
+  onEscalate: (reason: string) => void;
   onClose: () => void;
 }> = ({ onEscalate, onClose }) => {
   const [reason, setReason] = useState('');

@@ -54,23 +54,23 @@ export interface Workspace {
 
 export interface WorkspaceSettings {
     visibility: 'private' | 'internal' | 'public';
-    features: {,
+    features: {
         real_time_collaboration: boolean;
         version_history: boolean;
         comments: boolean;
         notifications: boolean;
         integrations: boolean;
     };
-    limits: {,
+    limits: {
         max_projects: number;
         max_members: number;
         storage_quota_mb: number;
     };
-    permissions: {,
+    permissions: {
         who_can_invite: 'owners' | 'admins' | 'members';
         who_can_create_projects: 'owners' | 'admins' | 'members';
-        default_project_visibility: 'private' | 'workspace' | 'public';
-    };
+        default_project_visibility: 'private' | 'workspace' | 'public'
+  };
 
 export interface Project {
     id: ProjectId;
@@ -86,13 +86,13 @@ export interface Project {
 
 export interface ProjectSettings {
     visibility: 'private' | 'workspace' | 'public';
-    features: {,
+    features: {
         auto_save: boolean;
         version_control: boolean;
         real_time_sync: boolean;
         notifications: boolean;
     };
-    collaboration: {,
+    collaboration: {
         max_concurrent_editors: number;
         conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins';
         presence_timeout_ms: number;

@@ -19,7 +19,7 @@ const mockText = 'This contract establishes consideration for services provided.
         jurisdiction: 'US',
         source: 'Legal Dictionary'],
     confidence: 92,
-    context: 'liability';
+    context: 'liability'
   }
   {
     term: 'force majeure',

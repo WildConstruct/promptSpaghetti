@@ -9,18 +9,18 @@
 import React from 'react';
 
 export interface MonitoringMetrics {
-    system: {,
+    system: {
         cpu: number;
         memory: number;
         disk: number;
-        network: {,
+        network: {
             inbound: number;
             outbound: number;
         };
         uptime: number;
         lastUpdated: string;
     };
-    api: {,
+    api: {
         requestsPerSecond: number;
         averageLatency: number;
         errorRate: number;
@@ -28,14 +28,14 @@ export interface MonitoringMetrics {
         totalRequests: number;
         failedRequests: number;
     };
-    security: {,
+    security: {
         activeThreats: number;
         blockedAttempts: number;
         suspiciousActivity: number;
         lastIncident: string | null;
         complianceScore: number;
     };
-    performance: {,
+    performance: {
         responseTime: number;
         throughput: number;
         availability: number;

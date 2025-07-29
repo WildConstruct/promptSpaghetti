@@ -1,9 +1,9 @@
 import React from 'react';
 import { Edge, Node } from 'reactflow';
 interface RestorePromptProps {
-  show: boolean;,
+  show: boolean;
   draft: { nodes: Node; edges: Edge } | null;
-  onRestore: (nodes: Node, edges: Edge) => void;,
+  onRestore: (nodes: Node, edges: Edge) => void;
   onDismiss: () => void;
 
 export const RestorePrompt: React.FC<RestorePromptProps> = ({)

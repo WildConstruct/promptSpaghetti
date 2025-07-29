@@ -30,7 +30,13 @@ export interface NotificationPreferences {
     email_enabled: boolean;
     push_enabled: boolean;
     in_app_enabled: boolean;
-    type_preferences: {};
+    type_preferences: {
+        [key in NotificationType]?: {
+            in_app?: boolean;
+            email?: boolean;
+            push?: boolean;
+        };
+    };
     quiet_hours: {
         enabled: boolean;
         start: string;

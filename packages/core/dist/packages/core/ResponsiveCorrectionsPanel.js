@@ -4,7 +4,7 @@ import { useCorrectionsEnabled } from './correctionsStore';
 import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
 import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
-{
+export const ResponsiveCorrectionsPanel = ({ isOpen, onClose }) => {
     const isEnabled = useCorrectionsEnabled();
     const [isMobile, setIsMobile] = useState(false);
     const [showStats, setShowStats] = useState(false);
@@ -19,15 +19,8 @@ import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboar
     // Don't render if corrections are not enabled
     if (!isEnabled)
         return null;
-    return;
-    _jsxs(_Fragment, { children: [isMobile ? ()
-                < MobileCorrectionsPanel
-                :
-            , "isOpen=", isOpen, "onClose=", onClose, "/> ) : ()", _jsx(CorrectionsManagerPanel, { isOpen: isOpen, onClose: onClose }), ")}", showStats && ()
-                < CorrectionsStatsDashboard, "isOpen=", showStats, "onClose=", () => setShowStats(false), "/> )}"] });
-    ;
-}
-;
+    return (_jsxs(_Fragment, { children: [isMobile ? (_jsx(MobileCorrectionsPanel, { isOpen: isOpen, onClose: onClose })) : (_jsx(CorrectionsManagerPanel, { isOpen: isOpen, onClose: onClose })), showStats && (_jsx(CorrectionsStatsDashboard, { isOpen: showStats, onClose: () => setShowStats(false) }))] }));
+};
 // Hook for managing corrections panel state
 export const useCorrectionsPanel = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -75,7 +75,7 @@ export interface MidjourneyGenerationResult {
     }>;
     originalPrompt: string;
     processedPrompt: string;
-    metadata: {,
+    metadata: {
         version: string;
         aspectRatio: string;
         stylize: number;
@@ -84,7 +84,7 @@ export interface MidjourneyGenerationResult {
         seed?: number;
         generationTime: number;
     };
-    usage: {,
+    usage: {
         credits: number;
         estimatedCost: number;
     };

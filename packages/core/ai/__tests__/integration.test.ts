@@ -40,7 +40,7 @@ describe('AI Multi-Model Integration', () => {
             choices: [{,
   index: 0,
               message: { role: 'assistant', content: 'Hello from OpenAI!' },
-              finish_reason: 'stop';
+              finish_reason: 'stop'
   }],
             usage: { prompt_tokens: 5, completion_tokens: 3, total_tokens: 8 }
   }
@@ -239,14 +239,14 @@ describe('AI Multi-Model Integration', () => {
   name: 'Testing',
   description: 'Custom testing environment',
   models: [],
-  defaults: {,
+  defaults: {
   timeout: 5000,
   retries: 1,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 50,
   tokensPerMinute: 5000,
 },
-  features: {,
+  features: {
   enableCaching: false,
   enableLoadBalancing: false,
   enableHealthChecks: false,
@@ -264,11 +264,11 @@ describe('AI Multi-Model Integration', () => {
   configManager.createTemplate('custom-openai', {)
   provider: AIModelProvider.OPENAI,
   type: AIModelType.TEXT,
-  parameters: {,
+  parameters: {
   temperature: 0.5,
   max_tokens: 2000,
 },
-  capabilities: {,
+  capabilities: {
   inputTypes: ['text'],
   outputTypes: ['text'],
   supportsStreaming: true,

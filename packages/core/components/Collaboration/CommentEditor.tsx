@@ -17,7 +17,7 @@ import { CommentMentions } from './CommentMentions';
 
 interface CommentEditorProps {
   initialContent?: string;
-  onSave: (content: string, mentions: string) => void;,
+  onSave: (content: string, mentions: string) => void;
   onCancel: () => void;
   placeholder?: string;
   submitLabel?: string;

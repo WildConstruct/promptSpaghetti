@@ -40,32 +40,32 @@ export interface MidjourneyRequestOptions {
   stop?: number; // 10-100,
 }
 export interface MidjourneyJobStatus {
-  id: string;,
+  id: string;
   status: 'pending' | 'running' | 'completed' | 'failed';
   progress: number; // 0-100,
   imageUrl?: string;
   thumbnailUrl?: string;
-  prompt: string;,
+  prompt: string;
   originalPrompt: string;
   revisedPrompt?: string;
   createdAt: Date;
   completedAt?: Date;
   error?: string;
-  metadata?: {,
-  version: string;,
+  metadata?: {
+  version: string;
   aspectRatio: string;
-  stylize: number;,
+  stylize: number;
   chaos: number;
   quality: number;
   seed?: number;
 };
 }
 export interface MidjourneyResponse {
-  success: boolean;,
+  success: boolean;
   jobId: string;
   status: 'submitted' | 'in-progress' | 'completed' | 'failed';
   message?: string;
-  result?: {,
+  result?: {
   imageUrl: string;
   thumbnailUrl?: string;
   upscaledImages?: string;
@@ -76,7 +76,7 @@ export interface MidjourneyResponse {
   error?: string;
 }
 export interface MidjourneyGenerationResult {
-  jobId: string;,
+  jobId: string;
   status: 'completed' | 'failed';
   images: Array<{,
   url: string;
@@ -84,18 +84,18 @@ export interface MidjourneyGenerationResult {
   type: 'main' | 'upscaled' | 'variation';
   index?: number;
 }>;
-  originalPrompt: string;,
+  originalPrompt: string;
   processedPrompt: string;
-  metadata: {,
+  metadata: {
   version: string;
-  aspectRatio: string;,
+  aspectRatio: string;
   stylize: number;
-  chaos: number;,
+  chaos: number;
   quality: number;
   seed?: number;
   generationTime: number;
 };
-  usage: {,
+  usage: {
   credits: number;
   estimatedCost: number;
 };
@@ -114,7 +114,7 @@ export class MidjourneyAdapter extends BaseAIModel {
   costPerRequest: 0.10, // Estimated cost per generation,
   averageLatency: 60000, // ~60 seconds average,
   maxConcurrency: 3, // Limited concurrent jobs,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 10,
   tokensPerMinute: 1000,
 },
@@ -129,30 +129,30 @@ export class MidjourneyAdapter extends BaseAIModel {
   supportsBatch: false,
   supportsStreaming: false,
   supportsAsync: true,
-  customParameters: {,
-  version: {,
+  customParameters: {
+  version: {
   type: 'enum',
   values: ['v5', 'v5.1', 'v5.2', 'v6'],
   default: 'v6',
 },
-  aspectRatio: {,
+  aspectRatio: {
   type: 'enum',
   values: ['1:1', '2:3', '3:2', '4:5', '5:4', '9:16', '16:9'],
   default: '1:1',
 },
-  stylize: {,
+  stylize: {
   type: 'number',
   min: 0,
   max: 1000,
   default: 100,
 },
-  chaos: {,
+  chaos: {
   type: 'number',
   min: 0,
   max: 100,
   default: 0,
 },
-  quality: {,
+  quality: {
   type: 'enum',
   values: [0.25, 0.5, 1, 2],
   default: 1,
@@ -212,7 +212,7 @@ export class MidjourneyAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.8,
-  breakdown: {,
+  breakdown: {
   inputCost: 0,
   outputCost: estimatedCost,
   processingCost: 0,
@@ -354,7 +354,7 @@ export class MidjourneyAdapter extends BaseAIModel {
   error: response.error,
   metadata: response.metadata,
 };
-  private _processJobResult(status: MidjourneyJobStatus,)
+  private _processJobResult(status: MidjourneyJobStatus)
     originalPrompt: string,
     processedPrompt: string,
     options?: MidjourneyRequestOptions,
@@ -373,7 +373,7 @@ export class MidjourneyAdapter extends BaseAIModel {
   images,
   originalPrompt,
   processedPrompt,
-  metadata: {,
+  metadata: {
   version: options?.version || 'v6',
   aspectRatio: options?.aspectRatio || '1:1',
   stylize: options?.stylize || 100,
@@ -382,7 +382,7 @@ export class MidjourneyAdapter extends BaseAIModel {
   seed: options?.seed,
   generationTime
 },
-  usage: {,
+  usage: {
   credits: 1,
   estimatedCost: this._metadata.costPerRequest || 0.10,
 };
@@ -438,7 +438,7 @@ class MidjourneyPromptTemplater {
     if (options?.stop !== undefined && options.stop !== 100) {
       prompt += ` --stop ${options.stop}`;}
     return prompt;
-  parsePromptParameters(prompt: string): {,
+  parsePromptParameters(prompt: string): {
   cleanPrompt: string;
     parameters: Partial<MidjourneyRequestOptions>;
     const parameters: Partial<MidjourneyRequestOptions> = {};

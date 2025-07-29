@@ -244,86 +244,73 @@ export class StateOrchestrator extends EventEmitter {
                         ...event,
                         domain, 'admin-dashboard',
                         type, 'UPDATE_METRICS',
-                        payload, {},
-                        path, 'metrics.graphActivity',
-                        value, {},
-                        lastModified, event.timestamp,
-                        executionCount, 1,];
+                        payload, {
+                            path: 'metrics.graphActivity',
+                            value: {
+                                lastModified: event.timestamp,
+                                executionCount: 1,
+                            },
+                            operation: 'update'
+                        }],
+                        priority;
+                    100;
                 },
-                operation: 'update'
+                // Security → All Domains coordination
+                this: .addCoordinationRule({}),
+                name: 'security-to-all',
+                sourceDomain: 'security',
+                targetDomains: ['graph-editor', 'admin-dashboard', 'runtime'],
+                eventTypes: ['ACCESS_REVOKED', 'SECURITY_VIOLATION'],
+                transform: (event) => {
+                    return ['graph-editor', 'admin-dashboard', 'runtime'].map(domain => ({}), ...event, domain, type, 'SECURITY_UPDATE', payload, {
+                        path: 'security.status',
+                        value: event.payload,
+                        operation: 'update',
+                    });
+                    ;
+                },
+                priority: 200
             },
-            priority: 100
+            // Runtime → Graph Editor coordination
+            this: .addCoordinationRule({}),
+            name: 'runtime-to-graph',
+            sourceDomain: 'runtime',
+            targetDomains: ['graph-editor'],
+            eventTypes: ['EXECUTION_COMPLETED', 'VALIDATION_FAILED'],
+            transform: (event) => [{},
+                ...event,
+                domain, 'graph-editor',
+                type, 'UPDATE_EXECUTION_STATE',
+                payload, {
+                    path: 'execution.status',
+                    value: event.payload,
+                    operation: 'update',
+                }],
+            priority: 150
         };
         ;
-        // Security → All Domains coordination
-        this.addCoordinationRule({});
-        name: 'security-to-all',
-            sourceDomain;
-        'security',
-            targetDomains;
-        ['graph-editor', 'admin-dashboard', 'runtime'],
-            eventTypes;
-        ['ACCESS_REVOKED', 'SECURITY_VIOLATION'],
-            transform;
-        (event) => {
-            return ['graph-editor', 'admin-dashboard', 'runtime'].map(domain => ({}), ...event, domain, type, 'SECURITY_UPDATE', payload, {
-                path: 'security.status',
-                value: event.payload,
-                operation: 'update',
-            });
-            ;
-        },
-            priority;
-        200;
+        // Event handling setup
+    }
+    // Event handling setup
+    setupEventHandling() {
+        // Handle global events from event bus
+        globalEventBus.on('domain:requestSync', this.handleSyncRequest.bind(this));
+        globalEventBus.on('domain:conflict', this.handleConflict.bind(this));
+        // Cleanup expired transactions
+        setInterval(() => {
+            this.cleanupExpiredTransactions();
+        }, 5000);
+    }
+    handleSyncRequest(event) {
+        // Handle explicit sync requests between domains
+        this.handleCrossDomainEvent(event).catch(error => { });
+        console.error('Failed to handle sync request:', error);
     }
     ;
-}
-// Runtime → Graph Editor coordination
-this.addCoordinationRule({});
-name: 'runtime-to-graph',
-    sourceDomain;
-'runtime',
-    targetDomains;
-['graph-editor'],
-    eventTypes;
-['EXECUTION_COMPLETED', 'VALIDATION_FAILED'],
-    transform;
-(event) => [{},
-    ...event,
-    domain, 'graph-editor',
-    type, 'UPDATE_EXECUTION_STATE',
-    payload, {},
-    path, 'execution.status',
-    value, event.payload,
-    operation, 'update',
-],
-    priority;
-150;
-;
-setupEventHandling();
-void {
-    // Handle global events from event bus
-    globalEventBus, : .on('domain:requestSync', this.handleSyncRequest.bind(this)),
-    globalEventBus, : .on('domain:conflict', this.handleConflict.bind(this)),
-    // Cleanup expired transactions
-    setInterval() { }
-}();
-{
-    this.cleanupExpiredTransactions();
-}
-5000;
-;
-handleSyncRequest(event, any);
-void {
-    // Handle explicit sync requests between domains
-    this: .handleCrossDomainEvent(event).catch(error => { }),
-    console, : .error('Failed to handle sync request:', error)
-};
-;
-handleConflict(event, any);
-void {
-    // Handle conflict resolution requests
-    this: .emit('conflictDetected', event),
+    handleConflict(event) {
+        // Handle conflict resolution requests
+        this.emit('conflictDetected', event);
+    }
     cleanupExpiredTransactions() {
         const now = Date.now();
         for (const [transactionId, transaction] of this.activeTransactions) {
@@ -333,92 +320,96 @@ void {
             this.rollbackTransaction(transaction).catch(error => { });
             console.error(`Failed to rollback expired transaction ${transactionId}:`, error);
         }
+    }
+    ;
+}
+this.activeTransactions.delete(transactionId);
+// Public coordination rule management
+addCoordinationRule(rule, StateCoordinationRule);
+void {
+    this: .coordinationRules.push(rule),
+    this: .coordinationRules.sort((a, b) => b.priority - a.priority),
+    removeCoordinationRule(name) {
+        this.coordinationRules = this.coordinationRules.filter(rule => rule.name !== name);
+        getCoordinationRules();
+        StateCoordinationRule;
+        {
+            return [...this.coordinationRules];
+            // Utility methods
+        }
+        // Utility methods
+    }
+    // Utility methods
+    ,
+    // Utility methods
+    generateChangeId() {
+        return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     },
-    this: .activeTransactions.delete(transactionId),
-    // Public coordination rule management
-    addCoordinationRule(rule) {
-        this.coordinationRules.push(rule);
-        this.coordinationRules.sort((a, b) => b.priority - a.priority);
-        removeCoordinationRule(name, string);
-        void {
-            this: .coordinationRules = this.coordinationRules.filter(rule => rule.name !== name),
-            getCoordinationRules() {
-                return [...this.coordinationRules];
-                // Utility methods
-            }
-            // Utility methods
-            ,
-            // Utility methods
-            generateChangeId() {
-                return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            },
-            generateTransactionId() {
-                return `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            }
-            // Domain query methods
-            ,
-            // Domain query methods
-            getDomain(name) {
-                return this.domains.get(name);
-                getRegisteredDomains();
-                string;
+    generateTransactionId() {
+        return `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+    // Domain query methods
+    ,
+    // Domain query methods
+    getDomain(name) {
+        return this.domains.get(name);
+        getRegisteredDomains();
+        string;
+        {
+            return Array.from(this.domains.keys());
+            getDomainCount();
+            number;
+            {
+                return this.domains.size;
+                // Health and debugging
+                getHealthStatus();
+                any;
                 {
-                    return Array.from(this.domains.keys());
-                    getDomainCount();
-                    number;
+                    return {
+                        registeredDomains: this.getRegisteredDomains(),
+                        activeTransactions: this.activeTransactions.size,
+                        coordinationRules: this.coordinationRules.length,
+                        queuedEvents: this.eventQueue.length,
+                        isProcessing: this.isProcessingQueue,
+                    };
+                    // Domain dependency resolution
+                    async;
+                    resolveDomainDependencies();
+                    Promise < string > {
+                        const: loadOrder, string = [],
+                        const: dependencies = new Map(),
+                        // Build dependency graph from domain metadata
+                        // This would integrate with the domain registry system
+                        return: loadOrder,
+                        // Error classes
+                        class: CrossDomainSyncError, extends: Error
+                    };
                     {
-                        return this.domains.size;
-                        // Health and debugging
-                        getHealthStatus();
-                        any;
+                        constructor(message, string, public, cause ?  : Error);
                         {
-                            return {
-                                registeredDomains: this.getRegisteredDomains(),
-                                activeTransactions: this.activeTransactions.size,
-                                coordinationRules: this.coordinationRules.length,
-                                queuedEvents: this.eventQueue.length,
-                                isProcessing: this.isProcessingQueue,
-                            };
-                            // Domain dependency resolution
-                            async;
-                            resolveDomainDependencies();
-                            Promise < string > {
-                                const: loadOrder, string = [],
-                                const: dependencies = new Map(),
-                                // Build dependency graph from domain metadata
-                                // This would integrate with the domain registry system
-                                return: loadOrder,
-                                // Error classes
-                                class: CrossDomainSyncError, extends: Error
-                            };
-                            {
-                                constructor(message, string, public, cause ?  : Error);
-                                {
+                            super(message);
+                            this.name = 'CrossDomainSyncError';
+                            export class TransactionError extends Error {
+                                transactionId;
+                                cause;
+                                constructor(message, transactionId, cause) {
                                     super(message);
-                                    this.name = 'CrossDomainSyncError';
-                                    export class TransactionError extends Error {
-                                        transactionId;
-                                        cause;
-                                        constructor(message, transactionId, cause) {
-                                            super(message);
-                                            this.transactionId = transactionId;
-                                            this.cause = cause;
-                                            this.name = 'TransactionError';
-                                            // Global state orchestrator instance
-                                            export const globalStateOrchestrator = new StateOrchestrator();
-                                            // React hooks for state orchestration
-                                            export function useStateOrchestrator() {
-                                                return globalStateOrchestrator;
-                                                domains: string,
-                                                    selector;
-                                                (states) => T;
-                                                T | null;
-                                                {
-                                                    // This would be implemented with React hooks for cross-domain state access
-                                                    // Returns combined state from multiple domains
-                                                    return null;
-                                                }
-                                            }
+                                    this.transactionId = transactionId;
+                                    this.cause = cause;
+                                    this.name = 'TransactionError';
+                                    // Global state orchestrator instance
+                                    export const globalStateOrchestrator = new StateOrchestrator();
+                                    // React hooks for state orchestration
+                                    export function useStateOrchestrator() {
+                                        return globalStateOrchestrator;
+                                        domains: string,
+                                            selector;
+                                        (states) => T;
+                                        T | null;
+                                        {
+                                            // This would be implemented with React hooks for cross-domain state access
+                                            // Returns combined state from multiple domains
+                                            return null;
                                         }
                                     }
                                 }
@@ -427,6 +418,6 @@ void {
                     }
                 }
             }
-        };
+        }
     }
 };

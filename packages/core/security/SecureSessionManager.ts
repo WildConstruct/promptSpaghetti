@@ -42,70 +42,70 @@ export enum SessionSecurityLevel {
   export interface SessionConfiguration {
   maxAge: number; // milliseconds,
   rotationInterval: number; // milliseconds,
-  securityLevel: SessionSecurityLevel;,
+  securityLevel: SessionSecurityLevel;
   allowMultipleDevices: boolean;
-  maxConcurrentSessions: number;,
+  maxConcurrentSessions: number;
   requireReauthentication: boolean;
   reauthenticationInterval: number; // milliseconds,
-  enableActivityTracking: boolean;,
+  enableActivityTracking: boolean;
   enableAnomalyDetection: boolean;
-  encryptionSettings: {,
-  algorithm: string;,
+  encryptionSettings: {
+  algorithm: string;
   keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
-  iterations: number;,
+  iterations: number;
   saltLength: number;
 };
 
 // Session Data
 }
 export interface SecureSession {
-  id: string;,
+  id: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   createdAt: Date;
-  lastActivity: Date;,
+  lastActivity: Date;
   expiresAt: Date;
-  state: SessionState;,
+  state: SessionState;
   securityLevel: SessionSecurityLevel;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
-  fingerprint: string;,
+  fingerprint: string;
   encryptedToken: string;
   tokenHash: string;
   refreshToken?: string;
-  csrfToken: string;,
+  csrfToken: string;
   mfaVerified: boolean;
   mfaExpiresAt?: Date;
-  metadata: {,
-  deviceInfo: {,
-  type: 'desktop' | 'mobile' | 'tablet' | 'unknown';,
+  metadata: {
+  deviceInfo: {
+  type: 'desktop' | 'mobile' | 'tablet' | 'unknown';
   os: string;
-  browser: string;,
+  browser: string;
   version: string;
 };
-    location: {,
+    location: {
       country?: string;
       region?: string;
       city?: string;
       coordinates?: { lat: number; lon: number };
     };
-    security: {,
+    security: {
   isVpn: boolean;
-  isProxy: boolean;,
+  isProxy: boolean;
   riskScore: number;
-  trustLevel: 'low' | 'medium' | 'high';
-};
+  trustLevel: 'low' | 'medium' | 'high'
+  };
   };
   activities: Array<{,
   timestamp: Date;
-  action: string;,
+  action: string;
   endpoint: string;
-  riskScore: number;,
+  riskScore: number;
   anomalyDetected: boolean;
 }>;
   rotationHistory: Array<{,
   timestamp: Date;
-  oldTokenHash: string;,
+  oldTokenHash: string;
   newTokenHash: string;
   reason: string;
 }>;
@@ -113,18 +113,18 @@ export interface SecureSession {
 // Session Context
 }
 export interface SessionContext {
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
-  deviceFingerprint: string;,
+  deviceFingerprint: string;
   requestHeaders: Record<string, string>;
-  geolocation?: {,
-  country: string;,
+  geolocation?: {
+  country: string;
   region: string;
   city: string;
 };
-  securityFlags: {,
+  securityFlags: {
   isSuspiciousLocation: boolean;
-  isNewDevice: boolean;,
+  isNewDevice: boolean;
   hasVpn: boolean;
   hasProxy: boolean;
 };
@@ -134,16 +134,16 @@ export interface SessionContext {
 export interface SessionValidationResult {
   isValid: boolean;
   session?: SecureSession;
-  requiresRotation: boolean;,
+  requiresRotation: boolean;
   requiresReauthentication: boolean;
   securityIssues: Array<{,
-  type: 'warning' | 'critical';,
+  type: 'warning' | 'critical';
   description: string;
   recommendation: string;
 }>;
   anomalies: Array<{,
   type: string;
-  severity: 'low' | 'medium' | 'high';,
+  severity: 'low' | 'medium' | 'high';
   description: string;
   confidence: number;
 }>;
@@ -151,16 +151,16 @@ export interface SessionValidationResult {
 // Activity Pattern
 }
 export interface ActivityPattern {
-  userId: string;,
+  userId: string;
   deviceId: string;
-  pattern: {,
-  typicalHours: number;,
+  pattern: {
+  typicalHours: number;
   typicalDays: number;
-  commonLocations: string;,
+  commonLocations: string;
   usualEndpoints: string;
   averageSessionDuration: number;
 };
-  lastUpdated: Date;,
+  lastUpdated: Date;
   confidence: number;
 /**
  * Comprehensive secure session management service
@@ -219,10 +219,10 @@ export class SecureSessionManager extends EventEmitter {
       csrfToken,
       mfaVerified,
       mfaExpiresAt: mfaVerified ? new Date(now.getTime() + (30 * 60 * 1000)) : undefined, // 30 min MFA validity
-      metadata: {,
+      metadata: {
   deviceInfo: this.parseDeviceInfo(context.userAgent),
         location: context.geolocation || {},
-        security: {,
+        security: {
   isVpn: context.securityFlags.hasVpn,
   isProxy: context.securityFlags.hasProxy,
   riskScore: this.calculateRiskScore(context),
@@ -405,9 +405,9 @@ export class SecureSessionManager extends EventEmitter {
    * Get session statistics
    */
   public getSessionStatistics(): {
-    total: number;,
+    total: number;
   active: number;
-    expired: number;,
+    expired: number;
   revoked: number;
     bySecurityLevel: Record<SessionSecurityLevel, number>;
     byDevice: Record<string, number>;
@@ -560,7 +560,7 @@ export class SecureSessionManager extends EventEmitter {
   pattern = {
   userId,
   deviceId,
-  pattern: {,
+  pattern: {
   typicalHours: [],
   typicalDays: [],
   commonLocations: [],
@@ -613,7 +613,7 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 0,
   enableActivityTracking: true,
   enableAnomalyDetection: false,
-  encryptionSettings: {,
+  encryptionSettings: {
   algorithm: 'aes-256-gcm',
   keyDerivation: 'pbkdf2',
   iterations: 10000,
@@ -630,7 +630,7 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 2 * 60 * 60 * 1000, // 2 hours,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {,
+  encryptionSettings: {
   algorithm: 'aes-256-gcm',
   keyDerivation: 'scrypt',
   iterations: 16384,
@@ -647,7 +647,7 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 60 * 60 * 1000, // 1 hour,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {,
+  encryptionSettings: {
   algorithm: 'aes-256-gcm',
   keyDerivation: 'argon2',
   iterations: 100000,
@@ -664,7 +664,7 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 30 * 60 * 1000, // 30 minutes,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {,
+  encryptionSettings: {
   algorithm: 'aes-256-gcm',
   keyDerivation: 'argon2',
   iterations: 200000,

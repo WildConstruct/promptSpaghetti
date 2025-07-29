@@ -243,7 +243,7 @@ const themeOptions = [];
                                     ? uiColors.accent.primary + '20'
                                     : uiColors.ui.hover,
                                     border) }, option.value);
-                        }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'center'; }} onMouseEnter=", (e) => {
+                        }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'center' }} onMouseEnter=", (e) => {
                             if (!isSelected) {
                                 e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                             }

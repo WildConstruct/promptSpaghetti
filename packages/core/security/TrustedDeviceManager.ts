@@ -47,44 +47,44 @@ export enum TrustStatus {
   NONE = 'none'         // No trust
   // Trusted device record
   export interface TrustedDevice {
-  id: string;,
+  id: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   fingerprintId: string;
-  name: string;,
+  name: string;
   type: 'desktop' | 'mobile' | 'tablet' | 'other';
-  browser: string;,
+  browser: string;
   platform: string;
   // Trust information
-  trustStatus: TrustStatus;,
+  trustStatus: TrustStatus;
   trustLevel: TrustLevel;
   trustScore: number; // 0-100,
-  verificationMethod: VerificationMethod;,
+  verificationMethod: VerificationMethod;
   verifiedAt: Date;
   verificationToken?: string;
   // Timestamps
-  createdAt: Date;,
+  createdAt: Date;
   lastUsed: Date;
-  lastVerified: Date;,
+  lastVerified: Date;
   expiresAt: Date;
   revokedAt?: Date;
   // Location and risk
   primaryLocation?: LocationData;
   lastLocation?: LocationData;
-  riskLevel: RiskLevel;,
+  riskLevel: RiskLevel;
   riskFactors: string;
   // Usage statistics
-  loginCount: number;,
+  loginCount: number;
   failedAttempts: number;
   suspiciousActivities: number;
   // Configuration
-  settings: {,
-  requireLocationCheck: boolean;,
+  settings: {
+  requireLocationCheck: boolean;
   allowRoaming: boolean;
   maxLocationRadius: number; // km,
-  notifyOnNewLogin: boolean;,
+  notifyOnNewLogin: boolean;
   autoRenew: boolean;
-  requirePeriodicVerification: boolean;,
+  requirePeriodicVerification: boolean;
   verificationIntervalDays: number;
 };
   metadata: Record<string, any>;
@@ -92,9 +92,9 @@ export enum TrustStatus {
 // Device verification request
 }
 export interface DeviceVerificationRequest {
-  userId: string;,
+  userId: string;
   deviceFingerprint: DeviceFingerprint;
-  location: LocationData;,
+  location: LocationData;
   verificationMethod: VerificationMethod;
   challenge?: string;
   metadata?: Record<string, any>;
@@ -103,35 +103,35 @@ export interface DeviceVerificationRequest {
 export interface TrustDecision {
   trusted: boolean;
   device?: TrustedDevice;
-  reason: string;,
+  reason: string;
   riskScore: number;
   requiresVerification: boolean;
   verificationMethods?: VerificationMethod;
-  factors: {,
-  deviceMatch: boolean;,
+  factors: {
+  deviceMatch: boolean;
   locationMatch: boolean;
-  riskAcceptable: boolean;,
+  riskAcceptable: boolean;
   notExpired: boolean;
-  notRevoked: boolean;,
+  notRevoked: boolean;
   recentlyVerified: boolean;
 };
 
 // Configuration
 }
 export interface TrustedDeviceConfig {
-  maxDevicesPerUser: number;,
+  maxDevicesPerUser: number;
   defaultTrustDurationDays: number;
-  defaultVerificationIntervalDays: number;,
+  defaultVerificationIntervalDays: number;
   maxLocationRadiusKm: number;
-  requireLocationCheck: boolean;,
+  requireLocationCheck: boolean;
   allowRoaming: boolean;
-  autoExpireInactiveDays: number;,
-  riskThreshold: {,
+  autoExpireInactiveDays: number;
+  riskThreshold: {
   full: number;    // Risk score threshold for full trust,
   partial: number; // Risk score threshold for partial trust,
   deny: number;    // Risk score above which to deny trust,
 };
-  verificationMethods: VerificationMethod;,
+  verificationMethods: VerificationMethod;
   enableAnomalyDetection: boolean;
   enableAutoRenewal: boolean;
 /**
@@ -152,7 +152,7 @@ export class TrustedDeviceManager extends EventEmitter {
   requireLocationCheck: true,
   allowRoaming: false,
   autoExpireInactiveDays: 90,
-  riskThreshold: {,
+  riskThreshold: {
   full: 20,
   partial: 50,
   deny: 80,
@@ -187,7 +187,7 @@ export class TrustedDeviceManager extends EventEmitter {
   riskScore: 100,
   requiresVerification: true,
   verificationMethods: this.config.verificationMethods,
-  factors: {,
+  factors: {
   deviceMatch: false,
   locationMatch: false,
   riskAcceptable: false,
@@ -231,7 +231,7 @@ export class TrustedDeviceManager extends EventEmitter {
   riskScore: 100,
   requiresVerification: true,
   verificationMethods: this.config.verificationMethods,
-  factors: {,
+  factors: {
   deviceMatch: false,
   locationMatch: false,
   riskAcceptable: false,
@@ -287,7 +287,7 @@ export class TrustedDeviceManager extends EventEmitter {
   loginCount: 0,
   failedAttempts: 0,
   suspiciousActivities: 0,
-  settings: {,
+  settings: {
   requireLocationCheck: this.config.requireLocationCheck,
   allowRoaming: this.config.allowRoaming,
   maxLocationRadius: this.config.maxLocationRadiusKm,
@@ -401,7 +401,7 @@ export class TrustedDeviceManager extends EventEmitter {
 });
     return device;
   // Private methods
-  private findMatchingDevice(devices: TrustedDevice,)
+  private findMatchingDevice(devices: TrustedDevice)
     fingerprint: DeviceFingerprint,
     location?: LocationData
   ): TrustedDevice | null {
@@ -431,7 +431,7 @@ export class TrustedDeviceManager extends EventEmitter {
         return 0;
       })[0];
     return matches[0];
-  private evaluateTrustFactors(device: TrustedDevice,)
+  private evaluateTrustFactors(device: TrustedDevice)
     fingerprint: DeviceFingerprint,
     location?: LocationData
   ): TrustDecision['factors'] {

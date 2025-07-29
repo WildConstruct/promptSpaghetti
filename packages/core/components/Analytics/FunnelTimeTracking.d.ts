@@ -21,7 +21,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelTimeTrackingProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -99,7 +99,7 @@ export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile'
 export interface ForecastData {
     timestamp: number;
     predictedValue: number;
-    confidenceInterval: {,
+    confidenceInterval: {
         lower: number;
         upper: number;
     };
@@ -236,12 +236,12 @@ export interface BottleneckSolution {
     implementationTime: number;
 
 export interface ComparativePeriodAnalysis {
-    baselinePeriod: {,
+    baselinePeriod: {
         start: number;
         end: number;
         label: string;
     };
-    comparisonPeriod: {,
+    comparisonPeriod: {
         start: number;
         end: number;
         label: string;
@@ -295,28 +295,28 @@ export interface RealTimeMetrics {
     lastUpdated: number;
 
 export interface TimeTrackingExportData {
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
     granularity: TimeGranularity;
     data: TimeTrackingData;
-    charts: {,
+    charts: {
         timeline: string;
         trends: string;
         seasonality: string;
         anomalies: string;
     };
-    insights: {,
+    insights: {
         trends: TrendInsight[];
         seasonal: SeasonalRecommendation[];
         anomalies: PerformanceAnomaly[];
     };
-    metadata: {,
+    metadata: {
         exportedAt: number;
         dataQuality: number;
-        analysisDepth: 'basic' | 'standard' | 'comprehensive';
-    };
+        analysisDepth: 'basic' | 'standard' | 'comprehensive'
+  };
 /**
  * Main Funnel Time Tracking Component
  */

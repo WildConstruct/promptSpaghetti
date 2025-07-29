@@ -15,14 +15,14 @@ import {
   KnowledgeBaseArticle
 } from '../../services/Epic16HelpRequestService';
 interface HelpRequestDashboardProps {
-  helpService: Epic16HelpRequestService;,
+  helpService: Epic16HelpRequestService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onRequestSelect?: (request: HelpRequest) => void;
 interface HelpRequestFilters {
-  status: HelpRequestStatus;,
+  status: HelpRequestStatus;
   category: HelpCategory;
-  priority: HelpPriority;,
+  priority: HelpPriority;
   type: HelpRequestType;
   assignedTo?: string;
   dateRange?: { start: Date; end: Date };
@@ -502,14 +502,14 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
 
 // Help Request List Item Component
 interface HelpRequestListItemProps {
-  request: HelpRequest;,
+  request: HelpRequest;
   onSelect: () => void;
-  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void;,
-  onEscalate: (requestId: string, reason: string) => void;,
+  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void;
+  onEscalate: (requestId: string, reason: string) => void;
   currentUserId: string;
-  userRole: 'user' | 'agent' | 'admin';,
+  userRole: 'user' | 'agent' | 'admin';
   selected: boolean;
-  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode;,
+  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode;
   renderPriorityBadge: (priority: HelpPriority) => React.ReactNode;
   const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({,)
   request,

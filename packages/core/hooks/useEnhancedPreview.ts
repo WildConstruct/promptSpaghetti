@@ -19,15 +19,15 @@ export interface EnhancedPreviewConfig {
 }
 export interface VarianceAnalysis {
   // Content analysis
-  wordCountVariance: number;,
+  wordCountVariance: number;
   lengthDistribution: { min: number; max: number; avg: number; std: number };
   // Similarity metrics
-  averageSimilarity: number;,
+  averageSimilarity: number;
   uniquenessScore: number;
   diversityIndex: number;
   // Content classification
   contentTypes: Record<string, number>;
-  detectedThemes: string;,
+  detectedThemes: string;
   toneVariation: number;
   // Creative metrics for film industry
   creativityScore: number; // 0-100 scale,
@@ -35,19 +35,19 @@ export interface VarianceAnalysis {
   genreConsistency: number; // 0-100 scale
 }
 export interface PreviewPerformanceStats {
-  totalExecutionTime: number;,
+  totalExecutionTime: number;
   averageExecutionTime: number;
-  fastestExecution: number;,
+  fastestExecution: number;
   slowestExecution: number;
   throughput: number; // results per second,
   failureRate: number;
   cacheHitRate?: number;
   interface EnhancedPreviewState {
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  results: EnhancedPreviewResult;,
+  results: EnhancedPreviewResult;
   selectedResultIds: Set<string>;
-  performanceStats: PreviewPerformanceStats | null;,
+  performanceStats: PreviewPerformanceStats | null;
   varianceAnalysis: VarianceAnalysis | null;
 }
 export const useEnhancedPreviewResultManagement = () => {
@@ -80,10 +80,10 @@ export const useEnhancedPreviewResultManagement = () => {
     const actionCount = (text.match(actionMarkers) || []).length;
     const descriptionCount = (text.match(descriptionMarkers) || []).length;
     if (dialogueCount > actionCount && dialogueCount > descriptionCount) {
-      contentType = 'dialogue';
-    } else if (actionCount > dialogueCount && actionCount > descriptionCount) {
-      contentType = 'action';
-    } else if (descriptionCount > dialogueCount && descriptionCount > actionCount) {
+      contentType = 'dialogue'
+  } else if (actionCount > dialogueCount && actionCount > descriptionCount) {
+      contentType = 'action'
+  } else if (descriptionCount > dialogueCount && descriptionCount > actionCount) {
   contentType = 'description';
   return {
   createdAt: new Date(),
@@ -201,7 +201,7 @@ export const useEnhancedPreviewResultManagement = () => {
   // Execute preview with performance tracking
   const response = await fetch('/preview', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -363,7 +363,7 @@ export const useEnhancedPreviewResultManagement = () => {
   r.id === resultId
   ? {
   ...r,
-  metadata: {,
+  metadata: {
   ...r.metadata,
   rating: rating as 1 | 2 | 3 | 4 | 5 ,
   : r,
@@ -376,7 +376,7 @@ export const useEnhancedPreviewResultManagement = () => {
   r.id === resultId
   ? {
   ...r,
-  metadata: {,
+  metadata: {
   ...r.metadata,
   notes: note ,
   : r,
@@ -389,7 +389,7 @@ export const useEnhancedPreviewResultManagement = () => {
   r.id === resultId
   ? {
   ...r,
-  metadata: {,
+  metadata: {
   ...r.metadata,
   tags
   : r,

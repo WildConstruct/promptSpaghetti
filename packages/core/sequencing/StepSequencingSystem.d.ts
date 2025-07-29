@@ -57,7 +57,7 @@ export interface StepAction {
 
 export interface StepValidation {
     required: boolean;
-    validators: {,
+    validators: {
         type: 'required' | 'format' | 'range' | 'custom';
         message: string;
         parameters?: Record<string, unknown>;
@@ -116,7 +116,7 @@ export interface SequenceDefinition {
     exitPoints: string[];
     globalTimeout?: number;
     concurrencyLimit?: number;
-    metadata: {,
+    metadata: {
         category: string;
         tags: string[];
         estimatedTotalDuration: number;
@@ -175,11 +175,11 @@ export interface ProgressMilestone {
 export interface ExecutionPerformance {
     totalDuration: number;
     averageStepDuration: number;
-    fastestStep: {,
+    fastestStep: {
         id: string;
         duration: number;
     };
-    slowestStep: {,
+    slowestStep: {
         id: string;
         duration: number;
     };
@@ -188,7 +188,7 @@ export interface ExecutionPerformance {
     effectiveSuccessRate: number;
 
 export interface SequencingConfig {
-    execution: {,
+    execution: {
         defaultTimeout: number;
         maxConcurrentExecutions: number;
         enableProgressPersistence: boolean;
@@ -196,13 +196,13 @@ export interface SequencingConfig {
         enableRollback: boolean;
         autoRetryOnFailure: boolean;
     };
-    validation: {,
+    validation: {
         validateDependencies: boolean;
         validateConditions: boolean;
         strictValidation: boolean;
         allowCircularDependencies: boolean;
     };
-    performance: {,
+    performance: {
         trackExecutionMetrics: boolean;
         optimizeExecutionOrder: boolean;
         enableCaching: boolean;

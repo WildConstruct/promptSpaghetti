@@ -55,26 +55,26 @@ export const CASE_STUDY_DEFAULTS = {
 
 // Filter presets for common use cases
 export const CASE_STUDY_FILTER_PRESETS = {
-  featured: {,
+  featured: {
   featuredOnly: true,
   status: ['featured' as const],
 },
-  beginner: {,
+  beginner: {
   difficulty: ['beginner' as const],
 },
-  advanced: {,
+  advanced: {
   difficulty: ['advanced' as const, 'expert' as const],
 },
-  templateSuccess: {,
+  templateSuccess: {
   type: ['template-success' as const],
 },
-  roiAnalysis: {,
+  roiAnalysis: {
   type: ['roi-analysis' as const],
 },
-  industryShowcase: {,
+  industryShowcase: {
   type: ['industry-showcase' as const],
 },
-  recentlyPublished: {,
+  recentlyPublished: {
   publishedAfter: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
 } as const;
 

@@ -12,7 +12,7 @@ export interface CategoryPerformanceConfig {
     enableDynamicThresholds: boolean;
     enablePredictiveScaling: boolean;
     categories: Record<string, CategoryConfig>;
-    globalSettings: {,
+    globalSettings: {
         maxConcurrentOperations: number;
         memoryThreshold: number;
         cpuThreshold: number;
@@ -23,19 +23,19 @@ export interface CategoryConfig {
     name: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
     optimizationStrategy: 'throughput' | 'latency' | 'memory' | 'balanced';
-    resourceLimits: {,
+    resourceLimits: {
         maxMemoryMB: number;
         maxExecutionTimeMs: number;
         maxConcurrentNodes: number;
         queueLimit: number;
     };
-    cacheStrategy: {,
+    cacheStrategy: {
         enabled: boolean;
         ttlMs: number;
         maxSize: number;
-        evictionPolicy: 'lru' | 'lfu' | 'ttl';
-    };
-    scalingRules: {,
+        evictionPolicy: 'lru' | 'lfu' | 'ttl'
+  };
+    scalingRules: {
         scaleUpThreshold: number;
         scaleDownThreshold: number;
         cooldownMs: number;
@@ -65,7 +65,7 @@ export interface OptimizationAction {
     action: 'scale_up' | 'scale_down' | 'cache_optimize' | 'throttle' | 'priority_boost';
     reason: string;
     parameters: Record<string, any>;
-    expectedImpact: {,
+    expectedImpact: {
         performanceGain: number;
         resourceCost: number;
         confidence: number;

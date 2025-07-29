@@ -204,8 +204,7 @@ DependencyGraph;
                                                                                                 DependencyConflict;
                                                                                                 {
                                                                                                     const conflicts = [];
-                                                                                                    const dependencyVersions = new Map < string, Array;
-                                                                                                     > ();
+                                                                                                    const dependencyVersions = new Map();
                                                                                                     // Collect all version requirements
                                                                                                     for (const manifest of manifests) {
                                                                                                         if (manifest.dependencies) {

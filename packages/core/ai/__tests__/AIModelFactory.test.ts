@@ -113,7 +113,7 @@ describe('AIModelFactory', () => {
             choices: [{,
   index: 0,
               message: { role: 'assistant', content: 'Hello!' },
-              finish_reason: 'stop';
+              finish_reason: 'stop'
   }],
             usage: { prompt_tokens: 5, completion_tokens: 1, total_tokens: 6 }
   }
@@ -231,7 +231,7 @@ describe('AIModelFactory', () => {
           json: () => Promise.resolve({,)
   output: 'Generated text response',
             usage: { tokens: 10 },
-            status: 'success';
+            status: 'success'
   }
         } as Response)
       );
@@ -241,11 +241,11 @@ describe('AIModelFactory', () => {
   id: 'test-custom',
   provider: AIModelProvider.CUSTOM,
   modelName: 'custom-model',
-  config: {,
+  config: {
   baseURL: 'https://api.example.com',
   apiKey: 'test-key',
 },
-  requestMapping: {,
+  requestMapping: {
   inputPath: 'prompt',
   outputPath: 'output',
   usagePath: 'usage',

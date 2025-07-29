@@ -45,7 +45,8 @@ const generateComplexDemoGraph = useCallback((nodeCount) => {
     }
 }, type, 'default', position, { x, y }, data, {
     nodeType: category,
-    label: `${category} ${i + 1}` });
+    label: `${category} ${i + 1}`
+});
 (category === 'WeightedChoice' && {
     choices: [,
         { text: 'Option A', weight: 0.4 },
@@ -318,7 +319,7 @@ div >
                                 < div, key = { index }, style = {}, {
                                 background: result.passedThreshold ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
                                 border: `1px solid ${result.passedThreshold ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)'}`
-                            }), ", borderRadius: '4px', padding: '8px', marginBottom: '8px', fontSize: '10px'; }} >", _jsxs("div", { style: { fontWeight: 500, marginBottom: 4 }, children: [result.nodeCount, " nodes (", result.edgeCount, " edges)", _jsx("span", { style: {
+                            }), ", borderRadius: '4px', padding: '8px', marginBottom: '8px', fontSize: '10px' }} >", _jsxs("div", { style: { fontWeight: 500, marginBottom: 4 }, children: [result.nodeCount, " nodes (", result.edgeCount, " edges)", _jsx("span", { style: {
                                             float: 'right',
                                             color: result.passedThreshold ? '#4CAF50' : '#f44336',
                                         }, children: result.passedThreshold ? '✓' : '✗' })] }), _jsxs("div", { children: ["FPS: ", result.fps.toFixed(1), " | Render: ", result.renderTime.toFixed(1), "ms"] }), _jsxs("div", { children: ["Memory: ", (result.memoryUsage * 100).toFixed(1), "%"] }), result.recommendations.length > 0 && ()

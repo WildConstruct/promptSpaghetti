@@ -35,106 +35,106 @@ export enum RiskLevel {
   COMPLIANCE_VIOLATION = 'compliance_violation'
   // Analytics Interfaces
   export interface SecurityPattern {
-  id: string;,
+  id: string;
   name: string;
-  category: ThreatCategory;,
+  category: ThreatCategory;
   description: string;
-  indicators: string;,
+  indicators: string;
   riskScore: number;
-  confidence: number;,
+  confidence: number;
   firstSeen: Date;
-  lastSeen: Date;,
+  lastSeen: Date;
   occurrences: number;
-  relatedEvents: string;,
+  relatedEvents: string;
   mitigationStrategies: string;
 }
 export interface BehavioralBaseline {
-  userId: string;,
+  userId: string;
   normalPatterns: {;
   loginTimes: { hour: number; frequency: number }[];
     ipAddresses: { ip: string; frequency: number }[];
     devices: { deviceId: string; frequency: number }[];
     actions: { action: string; frequency: number }[];
   };
-  riskProfile: {,
+  riskProfile: {
   baselineRisk: number;
-  recentDeviations: number;,
+  recentDeviations: number;
   trustedScore: number;
 };
   lastUpdated: Date;
 }
 export interface SecurityInsight {
-  id: string;,
+  id: string;
   type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
-  category: ThreatCategory;,
+  category: ThreatCategory;
   title: string;
-  description: string;,
+  description: string;
   severity: RiskLevel;
-  confidence: number;,
+  confidence: number;
   impact: 'low' | 'medium' | 'high' | 'critical';
   timeframe: { start: Date; end: Date };
-  evidence: {,
+  evidence: {
   eventIds: string;
-  patterns: string;,
+  patterns: string;
   metrics: Record<string, number>;
 };
-  recommendations: {,
+  recommendations: {
   immediate: string;
-  shortTerm: string;,
+  shortTerm: string;
   longTerm: string;
 };
   generatedAt: Date;
 }
 export interface SecurityMetricsSummary {
   period: { start: Date; end: Date };
-  overallRisk: {,
+  overallRisk: {
   level: RiskLevel;
-    score: number;,
+    score: number;
   trend: 'increasing' | 'decreasing' | 'stable';
     contributors: Array<{ factor: string; impact: number }>;
   };
-  eventVolume: {,
+  eventVolume: {
   total: number;
   byType: Record<SecurityEventType, number>;
   bySeverity: Record<string, number>;
-  hourlyDistribution: number;,
-  trends: {,
-  weekOverWeek: number;,
+  hourlyDistribution: number;
+  trends: {
+  weekOverWeek: number;
   monthOverMonth: number;
 };
   };
-  threatLandscape: {,
+  threatLandscape: {
   activeThreats: number;
-    newPatterns: number;,
+    newPatterns: number;
   topCategories: Array<{ category: ThreatCategory; count: number }>;
     geographicHotspots: Array<{ location: string; riskScore: number }>;
   };
-  userBehavior: {,
+  userBehavior: {
   anomalousUsers: number;
     highRiskUsers: Array<{ userId: string; riskScore: number }>;
     behavioralDeviations: number;
   };
-  systemHealth: {,
+  systemHealth: {
   securityPosture: number; // 0-100 score,
-  vulnerabilityExposure: number;,
+  vulnerabilityExposure: number;
   complianceScore: number;
   incidentResponseTime: number;
 };
 }
 export interface AlertConfiguration {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
-  conditions: {,
+  description: string;
+  conditions: {
   eventTypes?: SecurityEventType;
   thresholds?: Record<string, number>;
   timeWindow?: number; // minutes,
   userScope?: string;
   riskLevel?: RiskLevel;
 };
-  actions: {,
+  actions: {
   notify: string; // email addresses,
-  escalate: boolean;,
+  escalate: boolean;
   autoResponse: string;
 };
   enabled: boolean;
@@ -200,7 +200,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   /**
    * Get real-time security insights
    */
-  public getSecurityInsights(category?: ThreatCategory,)
+  public getSecurityInsights(category?: ThreatCategory)
     severity?: RiskLevel,
     limit: number = 50): SecurityInsight {,
     let insights = this.insights;
@@ -222,9 +222,9 @@ export class SecurityEventAnalytics extends EventEmitter {
   /**
    * Get user behavioral analysis
    */
-  public getUserBehaviorAnalysis(userId: string): {,
+  public getUserBehaviorAnalysis(userId: string): {
   baseline: BehavioralBaseline | null;
-    currentRisk: number;,
+    currentRisk: number;
   recentAnomalies: Array<{ type: string; severity: RiskLevel; timestamp: Date }>;
     recommendations: string;
     const baseline = this.baselines.get(userId);
@@ -250,7 +250,7 @@ export class SecurityEventAnalytics extends EventEmitter {
    */
   public generateExecutiveReport(period: { start: Date; end: Date })
   ): {
-    executiveSummary: string;,
+    executiveSummary: string;
   keyMetrics: Record<string, string | number>;
     topThreats: Array<{ threat: string; impact: string; status: string }>;
     recommendations: Array<{ priority: string; action: string; timeline: string }>;
@@ -261,7 +261,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     const criticalInsights = this.getSecurityInsights(undefined, RiskLevel.CRITICAL);
     return {
   executiveSummary: this.generateExecutiveSummary(summary),
-  keyMetrics: {,
+  keyMetrics: {
   'Overall Risk Level': summary?.overallRisk.level.toUpperCase() || 'UNKNOWN',
   'Security Events (24h)': summary?.eventVolume.total || 0,
   'Active Threats': summary?.threatLandscape.activeThreats || 0,
@@ -269,7 +269,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   'Security Posture Score': summary?.systemHealth.securityPosture || 0,
   'Compliance Score': summary?.systemHealth.complianceScore || 0,
 },
-  topThreats: topPatterns.map(pattern => ({,)
+  topThreats: topPatterns.map(pattern => ({)
   threat: pattern.name,
   impact: this.formatRiskLevel(pattern.riskScore),
   status: pattern.occurrences > 5 ? 'Active' : 'Monitoring',
@@ -340,7 +340,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   byType,
   bySeverity,
   hourlyDistribution,
-  trends: {,
+  trends: {
   weekOverWeek: this.calculateWeekOverWeekTrend(),
   monthOverMonth: this.calculateMonthOverMonthTrend(),
 };
@@ -606,19 +606,19 @@ export class SecurityEventAnalytics extends EventEmitter {
   severity: percentChange > 50 ? RiskLevel.HIGH : RiskLevel.MEDIUM,
         confidence: 0.80,
         impact: percentChange > 50 ? 'high' : 'medium',
-        timeframe: {,
+        timeframe: {
   start: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
   end: new Date(),
 },
-  evidence: {,
+  evidence: {
   eventIds: recentLogs.slice(0, 10).map(log => log.id),
   patterns: [],
-  metrics: {,
+  metrics: {
   recentCount,
   olderCount,
   percentChange
 },
-  recommendations: {,
+  recommendations: {
   immediate: percentChange > 0 ? ,
   ['Review recent security events', 'Check for ongoing attacks'] :,
   ['Validate security monitoring is functioning', 'Review detection coverage'],
@@ -653,19 +653,19 @@ export class SecurityEventAnalytics extends EventEmitter {
   severity: count > avgActivity + 3 * stdDev ? RiskLevel.HIGH : RiskLevel.MEDIUM,
           confidence: 0.75,
           impact: 'medium',
-          timeframe: {,
+          timeframe: {
   start: new Date(Date.now() - 24 * 60 * 60 * 1000),
   end: new Date(),
 },
-  evidence: {,
+  evidence: {
   eventIds: logs.filter(log => log.timestamp.getHours() === hour).slice(0, 5).map(log => log.id),
   patterns: [],
-  metrics: {,
+  metrics: {
   hourlyCount: count,
   averageCount: avgActivity,
   deviationLevel: (count - avgActivity) / stdDev,
 },
-  recommendations: {,
+  recommendations: {
   immediate: ['Investigate events during this time period', 'Check for coordinated attacks'],
   shortTerm: ['Review access patterns', 'Update alerting thresholds'],
   longTerm: ['Implement behavioral analytics', 'Enhance anomaly detection'],
@@ -693,19 +693,19 @@ export class SecurityEventAnalytics extends EventEmitter {
   severity: pattern.riskScore > 80 ? RiskLevel.CRITICAL : RiskLevel.HIGH,
         confidence: pattern.confidence,
         impact: pattern.riskScore > 80 ? 'critical' : 'high',
-        timeframe: {,
+        timeframe: {
   start: pattern.firstSeen,
   end: new Date(),
 },
-  evidence: {,
+  evidence: {
   eventIds: pattern.relatedEvents.slice(-5),
   patterns: [pattern.id],
-  metrics: {,
+  metrics: {
   occurrences: pattern.occurrences,
   riskScore: pattern.riskScore,
   confidence: pattern.confidence,
 },
-  recommendations: {,
+  recommendations: {
   immediate: pattern.mitigationStrategies.slice(0, 2),
   shortTerm: pattern.mitigationStrategies.slice(2),
   longTerm: ['Implement advanced threat detection', 'Enhance security monitoring'],
@@ -730,16 +730,16 @@ export class SecurityEventAnalytics extends EventEmitter {
   severity: RiskLevel.CRITICAL,
         confidence: 0.95,
         impact: 'critical',
-        timeframe: {,
+        timeframe: {
   start: new Date(Date.now() - 24 * 60 * 60 * 1000),
   end: new Date(),
 },
-  evidence: {,
+  evidence: {
   eventIds: logs.filter(log => log.severity === 'critical').map(log => log.id),
           patterns: [],
           metrics: { criticalEvents, failedEvents }
   },
-  recommendations: {,
+  recommendations: {
   immediate: [,
   'Initiate incident response procedures',
   'Review critical security events',
@@ -880,13 +880,13 @@ export class SecurityEventAnalytics extends EventEmitter {
   if (!baseline) {
   baseline = {
   userId,
-  normalPatterns: {,
+  normalPatterns: {
   loginTimes: [],
   ipAddresses: [],
   devices: [],
   actions: [],
 },
-  riskProfile: {,
+  riskProfile: {
   baselineRisk: 30,
   recentDeviations: 0,
   trustedScore: 50,
@@ -957,11 +957,11 @@ export class SecurityEventAnalytics extends EventEmitter {
   id: 'critical-events-alert',
       name: 'Critical Security Events',
       description: 'Alert when critical security events are detected',
-      conditions: {,
+      conditions: {
   thresholds: { critical_events: 3 },
         timeWindow: 60 // 1 hour;
   },
-  actions: {,
+  actions: {
   notify: ['security-team@company.com'],
   escalate: true,
   autoResponse: ['initiate-incident-response'],
@@ -973,11 +973,11 @@ export class SecurityEventAnalytics extends EventEmitter {
   id: 'new-threat-pattern',
       name: 'New Threat Pattern Detected',
       description: 'Alert when new threat patterns are identified',
-      conditions: {,
+      conditions: {
   thresholds: { new_patterns: 1 },
         riskLevel: RiskLevel.HIGH;
   },
-  actions: {,
+  actions: {
   notify: ['security-analysts@company.com'],
   escalate: false,
   autoResponse: ['enhanced-monitoring'],

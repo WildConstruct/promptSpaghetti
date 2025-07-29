@@ -36,7 +36,7 @@ jest.mock('reactflow', () => ({)
 jest.mock('../../../graphStore');
 const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphStore>;
 const mockGraphStore = {
-  annotations: {,
+  annotations: {
   connectionLabels: [,
       {
         id: 'label-1',
@@ -66,7 +66,7 @@ const mockGraphStore = {
   author: 'Test Author',
   timestamp: '2024-01-01T12:00:00Z',
   lastModified: '2024-01-01T12:00:00Z'],
-  connectionAnnotationPreferences: {,
+  connectionAnnotationPreferences: {
   defaultLabelStyle: 'default',
   defaultVisualStyle: 'solid',
   defaultColor: '#6b7280',
@@ -79,7 +79,7 @@ const mockGraphStore = {
   maxLabelLength: 100,
   highlightOnHover: true,
 },
-  connectionAnnotationPreferences: {,
+  connectionAnnotationPreferences: {
   defaultLabelStyle: 'default',
   defaultVisualStyle: 'solid',
   defaultColor: '#6b7280',
@@ -167,7 +167,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
     test('shows instructions when no labels exist', () => {
   const emptyStore = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionLabels: [],
 };
@@ -292,7 +292,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
     test('handles different position types correctly', () => {
   const storeWithDifferentPositions = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionLabels: [,
   {
@@ -338,7 +338,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
     test('shows direction arrows when configured', () => {
   const storeWithArrows = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionAnnotations: [,
   {
@@ -470,7 +470,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   test('handles missing connection data gracefully', () => {
   const storeWithInvalidConnections = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionLabels: [,
   {
@@ -493,7 +493,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
     test('handles empty annotations gracefully', () => {
   const emptyStore = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionLabels: [],
   connectionAnnotations: [],
@@ -587,7 +587,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   }));
       const storeWithManyLabels = {
   ...mockGraphStore,
-  annotations: {,
+  annotations: {
   ...mockGraphStore.annotations,
   connectionLabels: manyLabels,
 };

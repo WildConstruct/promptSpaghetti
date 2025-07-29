@@ -4,7 +4,7 @@ describe('Graph type', () => {
   const graph: Graph = {,
   nodes: [],
   edges: [],
-  meta: {,
+  meta: {
   version: '0.0.1',
 };
     expect(graph.nodes).toBeDefined();

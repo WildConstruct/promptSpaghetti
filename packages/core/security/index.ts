@@ -394,8 +394,8 @@ export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashbo
 export export export export 
 // Security event severity mapping utilities
 export if (threatLevel >= 3) return 'medium';
-  return 'low';
-};
+  return 'low'
+  };
   // Base severity score
   const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
   score += severityScores[event.severity] || 1;
@@ -418,10 +418,10 @@ export if (threatLevel >= 3) return 'medium';
 
 export timeRange: { start: number; end: number }
 ): {
-  summary: {,
-  total_events: number;,
+  summary: {
+  total_events: number;
   critical_count: number;
-  resolved_count: number;,
+  resolved_count: number;
   avg_response_time: number;
 };
   top_threats: Array<{ type: string; count: number }>;
@@ -470,7 +470,7 @@ export timeRange: { start: number; end: number }
   if (unresolvedCount > filteredEvents.length * 0.2) {
   recommendations.push('High number of unresolved events - ensure adequate staffing');
   return {
-  summary: {,
+  summary: {
   total_events: filteredEvents.length,
   critical_count: criticalEvents.length,
   resolved_count: resolvedEvents.length,

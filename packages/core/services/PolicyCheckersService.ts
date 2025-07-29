@@ -26,23 +26,23 @@ export type PolicySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type PolicyCheckStatus = 'passed' | 'failed' | 'warning' | 'requires_review';
 
 export interface PolicyCheckResult {
-  checkId: string;,
+  checkId: string;
   policyType: PolicyType;
-  policyName: string;,
+  policyName: string;
   status: PolicyCheckStatus;
   severity: PolicySeverity;
   score?: number; // 0-100 compliance score,
-  message: string;,
+  message: string;
   details: Record<string, any>;
-  violations: PolicyViolation;,
+  violations: PolicyViolation;
   recommendations: string;
-  timestamp: string;,
+  timestamp: string;
   executionTimeMs: number;
 }
 export interface PolicyViolation {
-  id: string;,
+  id: string;
   ruleId: string;
-  ruleName: string;,
+  ruleName: string;
   description: string;
   severity: PolicySeverity;
   field?: string;
@@ -52,14 +52,14 @@ export interface PolicyViolation {
   context?: Record<string, any>;
 }
 export interface PolicyCheckRequest {
-  id: string;,
+  id: string;
   resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
-  resourceId: string;,
+  resourceId: string;
   data: Record<string, any>;
-  context: {,
+  context: {
   userId?: string;
   userRole?: string;
-  source: string;,
+  source: string;
   timestamp: string;
   metadata?: Record<string, any>;
 };
@@ -67,14 +67,14 @@ export interface PolicyCheckRequest {
   skipCache?: boolean;
 }
 export interface PolicyRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   policyType: PolicyType;
-  enabled: boolean;,
+  enabled: boolean;
   severity: PolicySeverity;
   // Rule Configuration
-  conditions: RuleCondition;,
+  conditions: RuleCondition;
   actions: RuleAction;
   // Execution Settings
   executeOnCreate?: boolean;
@@ -84,26 +84,26 @@ export interface PolicyRule {
   timeout?: number; // milliseconds,
   cacheDuration?: number; // seconds,
   // Metadata
-  version: string;,
+  version: string;
   createdAt: string;
-  updatedAt: string;,
+  updatedAt: string;
   createdBy: string;
 }
 export interface RuleCondition {
-  id: string;,
+  id: string;
   field: string;
-  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'matches' | 'greater_than' | 'less_than' | 'in' | 'not_in';,
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'matches' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: any;
   caseSensitive?: boolean;
 }
 export interface RuleAction {
-  id: string;,
+  id: string;
   type: 'block' | 'warn' | 'flag' | 'require_review' | 'auto_fix' | 'notify';
   parameters?: Record<string, any>;
   // Policy Checker Interface
 }
 export interface PolicyChecker {
-  name: string;,
+  name: string;
   type: PolicyType;
   version: string;
   check(request: PolicyCheckRequest): Promise<PolicyCheckResult>;
@@ -170,16 +170,16 @@ export class PolicyCheckersService {
 });
     return results[0];
   // Validate content against all applicable policies
-  async validateContent(content: {,)
+  async validateContent(content: {)
   id: string;
-  type: string;,
+  type: string;
   data: Record<string, any>;
   author?: string;
   metadata?: Record<string, any>;
 }): Promise<{
-  isValid: boolean;,
+  isValid: boolean;
   overallScore: number;
-  results: PolicyCheckResult;,
+  results: PolicyCheckResult;
   criticalViolations: PolicyViolation;
   requiredActions: string;
 }> {
@@ -189,11 +189,11 @@ export class PolicyCheckersService {
   resourceType: 'content',
       resourceId: content.id,
       data: content.data,
-      context: {,
+      context: {
   userId: content.author,
   source: 'content_validation',
   timestamp: new Date().toISOString(),
-  metadata: {,
+  metadata: {
   contentType: content.type,
   ...content.metadata
 },
@@ -221,14 +221,14 @@ export class PolicyCheckersService {
       requiredActions
     };
   // Validate user action against policies
-  async validateUserAction(action: {,)
+  async validateUserAction(action: {)
   userId: string;
-  userRole: string;,
+  userRole: string;
   action: string;
   resource?: string;
   context?: Record<string, any>;
 }): Promise<{
-  allowed: boolean;,
+  allowed: boolean;
   reasons: string;
   results: PolicyCheckResult;
 }> {
@@ -237,12 +237,12 @@ export class PolicyCheckersService {
 },
   resourceType: 'user',
       resourceId: action.userId,
-      data: {,
+      data: {
   action: action.action,
   resource: action.resource,
   ...action.context
 },
-  context: {,
+  context: {
   userId: action.userId,
   userRole: action.userRole,
   source: 'user_action_validation',
@@ -259,9 +259,9 @@ export class PolicyCheckersService {
     return { allowed, reasons, results };
   // Get policy checker statistics
   async getStatistics(): Promise<{
-    totalCheckers: number;,
+    totalCheckers: number;
   checksExecutedToday: number;
-    averageExecutionTime: number;,
+    averageExecutionTime: number;
   topViolationTypes: Array<{ type: string; count: number }>;
     complianceScore: number;
   }> {
@@ -305,7 +305,7 @@ export class PolicyCheckersService {
       severity: 'critical',
       message: `Policy check failed: ${error.message}`}
 },
-  details: {,
+  details: {
   error: error.message,
   stack: error.stack,
   requestId: request.id,
@@ -316,13 +316,13 @@ export class PolicyCheckersService {
   ruleId: 'system_error',
         ruleName: 'System Error',
         description: 'Policy check execution failed',
-        severity: 'critical';
+        severity: 'critical'
   }],
       recommendations: ['Review system logs', 'Contact administrator'],
       timestamp: new Date().toISOString(),
       executionTimeMs: 0;
   };
-  private async logPolicyCheckExecution(request: PolicyCheckRequest,)
+  private async logPolicyCheckExecution(request: PolicyCheckRequest)
     results: PolicyCheckResult,
     totalExecutionTimeMs: number): Promise<void> {,
     // Log to audit system
@@ -335,7 +335,7 @@ export class PolicyCheckersService {
       totalViolations: violations.length,
       criticalViolations: criticalViolations.length,
       executionTimeMs: totalExecutionTimeMs,
-      results: results.map(r => ({,)
+      results: results.map(r => ({)
   type: r.policyType,
   status: r.status,
   score: r.score,
@@ -379,8 +379,8 @@ class ContentQualityPolicyChecker implements PolicyChecker {
       score: qualityScore,
       message: `Content quality score: ${qualityScore}/100`}
 },
-  details: {,
-  qualityMetrics: {,
+  details: {
+  qualityMetrics: {
   readability: qualityScore + 5,
   completeness: qualityScore - 3,
   accuracy: qualityScore + 2,
@@ -415,7 +415,7 @@ class ContentQualityPolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 class ContentSafetyPolicyChecker implements PolicyChecker {
   name = 'Content Safety Policy Checker';
@@ -435,7 +435,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
   ruleId: 'content_safety_standard',
         ruleName: 'Content Safety Standard',
         description: 'Content contains potentially unsafe elements',
-        severity: safetyScore < 70 ? 'critical' : 'medium';
+        severity: safetyScore < 70 ? 'critical' : 'medium'
   });
       recommendations.push('Review content for harmful or inappropriate material');
     return {
@@ -448,8 +448,8 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
       score: safetyScore,
       message: `Content safety score: ${safetyScore}/100`}
 },
-  details: {,
-  safetyAnalysis: {,
+  details: {
+  safetyAnalysis: {
   toxicity: safetyScore < 85,
   harassment: false,
   hate: false,
@@ -485,7 +485,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 class SecurityCompliancePolicyChecker implements PolicyChecker {
   name = 'Security Compliance Policy Checker';
@@ -496,7 +496,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
   const startTime = Date.now();
   // Use existing compliance monitor
   const complianceResult = await this.complianceMonitor.runComplianceCheck();
-  const violations: PolicyViolation = complianceResult.violations.map(v => ({,)
+  const violations: PolicyViolation = complianceResult.violations.map(v => ({)
   id: v.id,
   ruleId: v.checkType,
   ruleName: v.checkType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
@@ -514,7 +514,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       score: Math.round(complianceResult.compliancePercentage),
       message: `Security compliance: ${Math.round(complianceResult.compliancePercentage)}%`}
 },
-  details: {,
+  details: {
   complianceResult,
   checksPerformed: complianceResult.results.length,
 }
@@ -549,7 +549,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 class AccessControlPolicyChecker implements PolicyChecker {
   name = 'Access Control Policy Checker';
@@ -568,7 +568,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
   ruleId: 'valid_user_role',
         ruleName: 'Valid User Role Required',
         description: 'User does not have valid role for this action',
-        severity: 'critical';
+        severity: 'critical'
   });
     return {
       checkId: `access-control-${Date.now()}`}
@@ -578,7 +578,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
       status: hasValidAccess ? 'passed' : 'failed',
       severity: hasValidAccess ? 'info' : 'critical',
       message: hasValidAccess ? 'Access control validated' : 'Access control violation',
-      details: {,
+      details: {
   userRole: request.context.userRole,
   requiredRoles: ['admin', 'moderator', 'user'],
 }
@@ -611,7 +611,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 class DataProtectionPolicyChecker implements PolicyChecker {
   name = 'Data Protection Policy Checker';
@@ -629,7 +629,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
   ruleId: 'gdpr_compliance',
         ruleName: 'GDPR Compliance',
         description: 'Data handling does not fully comply with GDPR requirements',
-        severity: 'medium';
+        severity: 'medium'
   });
     return {
       checkId: `data-protection-${Date.now()}`}
@@ -641,7 +641,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
       score,
       message: `Data protection compliance: ${score}%`}
 },
-  details: {,
+  details: {
   gdprCompliance: score >= 90,
   dataEncryption: true,
   consentManagement: score >= 85,
@@ -676,7 +676,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 class RegulatoryCompliancePolicyChecker implements PolicyChecker {
   name = 'Regulatory Compliance Policy Checker';
@@ -695,7 +695,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
   ruleId: 'soc2_compliance',
         ruleName: 'SOC2 Compliance',
         description: 'Minor SOC2 compliance gaps detected',
-        severity: 'low';
+        severity: 'low'
   });
     return {
       checkId: `regulatory-compliance-${Date.now()}`}
@@ -707,7 +707,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
       score,
       message: `Regulatory compliance: ${score}%`}
 },
-  details: {,
+  details: {
   soc2Compliance: score >= 95,
   auditTrails: true,
   dataRetention: true,
@@ -741,7 +741,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
       version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      createdBy: 'system';
+      createdBy: 'system'
   }];
 
 export default PolicyCheckersService;

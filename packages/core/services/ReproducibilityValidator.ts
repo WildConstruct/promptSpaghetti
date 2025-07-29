@@ -13,43 +13,43 @@ export interface ReproducibilityValidationOptions {
   requirePerformanceData?: boolean;    // Require performance metrics,
 }
 export interface ReproducibilityValidationReport {
-  isValid: boolean;,
+  isValid: boolean;
   exactReproducible: boolean;
-  approximateReproducible: boolean;,
+  approximateReproducible: boolean;
   errors: ValidationError;
-  warnings: ValidationWarning;,
+  warnings: ValidationWarning;
   suggestions: ValidationSuggestion;
-  integrity: {,
-  configurationValid: boolean;,
+  integrity: {
+  configurationValid: boolean;
   seedsValid: boolean;
-  versionCompatible: boolean;,
+  versionCompatible: boolean;
   checksumValid: boolean;
 };
-  performance: {,
+  performance: {
   estimatedReproductionTime: number;
-  complexityScore: number;,
+  complexityScore: number;
   memoryRequirement: number;
 };
 }
 export interface ValidationError {
-  code: string;,
+  code: string;
   message: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
   field?: string;
   suggestion?: string;
 }
 export interface ValidationWarning {
-  code: string;,
+  code: string;
   message: string;
   impact: 'reproducibility' | 'performance' | 'compatibility' | 'quality';
   suggestion?: string;
 }
 export interface ValidationSuggestion {
-  code: string;,
+  code: string;
   message: string;
-  category: 'optimization' | 'enhancement' | 'compatibility' | 'debugging';,
-  priority: 'high' | 'medium' | 'low';
-}
+  category: 'optimization' | 'enhancement' | 'compatibility' | 'debugging';
+  priority: 'high' | 'medium' | 'low'
+  }
 export class ReproducibilityValidator {
   private static instance: ReproducibilityValidator;
   static getInstance(): ReproducibilityValidator {
@@ -70,13 +70,13 @@ export class ReproducibilityValidator {
   errors: [],
   warnings: [],
   suggestions: [],
-  integrity: {,
+  integrity: {
   configurationValid: false,
   seedsValid: false,
   versionCompatible: false,
   checksumValid: false,
 },
-  performance: {,
+  performance: {
   estimatedReproductionTime: 0,
   complexityScore: 0,
   memoryRequirement: 0,
@@ -96,7 +96,7 @@ export class ReproducibilityValidator {
     // Final validation assessment
     this.assessOverallValidity(report, options);
     return report;
-  private validateRandomizationState(exportData: VFXExportFormat,)
+  private validateRandomizationState(exportData: VFXExportFormat)
     report: ReproducibilityValidationReport,
     options: ReproducibilityValidationOptions): void {,
   const randomization = exportData.execution.randomization;
@@ -179,7 +179,7 @@ export class ReproducibilityValidator {
     // Validate per-node RNG states if present
     if (randomization.nodeRngStates) {
       this.validateNodeRngStates(randomization.nodeRngStates, exportData, report);
-  private validateNodeRngStates(nodeRngStates: Record<string, any>,)
+  private validateNodeRngStates(nodeRngStates: Record<string, any>)
     exportData: VFXExportFormat,
     report: ReproducibilityValidationReport): void {,
     Object.entries(nodeRngStates).forEach(([nodeId, state]) => {
@@ -204,10 +204,10 @@ export class ReproducibilityValidator {
   code: 'INVALID_RNG_CALL_COUNT',
           message: `Invalid RNG call count for node ${nodeId}`}
 },
-  impact: 'reproducibility';
+  impact: 'reproducibility'
   });
     });
-  private validateNodeConfigurations(exportData: VFXExportFormat,)
+  private validateNodeConfigurations(exportData: VFXExportFormat)
     report: ReproducibilityValidationReport,
     options: ReproducibilityValidationOptions): void {,
     let configurationsValid = true;
@@ -255,14 +255,14 @@ export class ReproducibilityValidator {
   code: 'INCOMPLETE_POSITION_DATA',
         message: `Node ${node.id} missing position/size data`}
 },
-  impact: 'quality';
+  impact: 'quality'
   });
     if (!reprData.configurationHash) {
       report.warnings.push({)
   code: 'MISSING_CONFIGURATION_HASH',
         message: `Node ${node.id} missing configuration hash`}
 },
-  impact: 'reproducibility';
+  impact: 'reproducibility'
   });
     } else {
       // Validate configuration hash if both exist
@@ -276,7 +276,7 @@ export class ReproducibilityValidator {
   impact: 'reproducibility',
             suggestion: 'Recalculate configuration hash or check for data corruption';
   });
-  private validateVersionCompatibility(exportData: VFXExportFormat,)
+  private validateVersionCompatibility(exportData: VFXExportFormat)
     report: ReproducibilityValidationReport,
     options: ReproducibilityValidationOptions): void {,
   const metadata = exportData.metadata;
@@ -313,7 +313,7 @@ export class ReproducibilityValidator {
   code: 'MISSING_CRITICAL_DEPENDENCY',
             message: `Critical dependency ${dep} version not recorded`}
 },
-  impact: 'reproducibility';
+  impact: 'reproducibility'
   });
       });
     // Check reproduction environment
@@ -328,7 +328,7 @@ export class ReproducibilityValidator {
     report.integrity.versionCompatible = report.errors.filter(e => )
       e.code.includes('VERSION') || e.code.includes('COMPATIBILITY')
     ).length === 0;
-  private validateDataIntegrity(exportData: VFXExportFormat,)
+  private validateDataIntegrity(exportData: VFXExportFormat)
     report: ReproducibilityValidationReport,
     options: ReproducibilityValidationOptions): void {,
   if (!options.validateChecksums) {
@@ -364,14 +364,14 @@ export class ReproducibilityValidator {
   code: 'ORPHANED_CONNECTION_SOURCE',
           message: `Connection references non-existent source node: ${conn.source.nodeId}`}
 },
-  impact: 'quality';
+  impact: 'quality'
   });
       if (!nodeIds.has(conn.target.nodeId)) {
         report.warnings.push({)
   code: 'ORPHANED_CONNECTION_TARGET',
           message: `Connection references non-existent target node: ${conn.target.nodeId}`}
 },
-  impact: 'quality';
+  impact: 'quality'
   });
     });
     // Check execution path validity
@@ -383,7 +383,7 @@ export class ReproducibilityValidator {
   code: 'INVALID_EXECUTION_PATH',
             message: `Execution path references non-existent node: ${nodeId}`}
 },
-  impact: 'reproducibility';
+  impact: 'reproducibility'
   });
       });
   private calculatePerformanceEstimates(()
@@ -423,7 +423,7 @@ export class ReproducibilityValidator {
   const nodeCount = exportData.graph.nodes.length;
   const additionalMemory = nodeCount * 1024; // 1KB per node;
   return baseMemory + additionalMemory;
-  private generateSuggestions(exportData: VFXExportFormat,)
+  private generateSuggestions(exportData: VFXExportFormat)
   report: ReproducibilityValidationReport,
   options: ReproducibilityValidationOptions): void {,
   // Performance optimization suggestions
@@ -486,9 +486,9 @@ export class ReproducibilityValidator {
     exportData: VFXExportFormat,
     originalGraph: { nodes: Node; edges: Edge }
   ): Promise<{
-  success: boolean;,
+  success: boolean;
   identicalResults: boolean;
-  differences: string;,
+  differences: string;
   reproductionTime: number;
 }> {
   const startTime = Date.now();

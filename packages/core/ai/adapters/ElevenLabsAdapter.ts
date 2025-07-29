@@ -29,7 +29,7 @@ export interface ElevenLabsRequestOptions {
   voice_id?: string;
   model_id?: string;
   // Voice settings
-  voice_settings?: {,
+  voice_settings?: {
   stability: number; // 0-1,
   similarity_boost: number; // 0-1,
   style?: number; // 0-1 (for v2 models),
@@ -51,79 +51,79 @@ export interface ElevenLabsRequestOptions {
 };
 }
 export interface ElevenLabsGenerationResult {
-  audio: {,
-  data: ArrayBuffer;,
+  audio: {
+  data: ArrayBuffer;
   format: string;
-  duration: number;,
+  duration: number;
   sample_rate: number;
-  channels: number;,
+  channels: number;
   bit_depth: number;
 };
-  metadata: {,
+  metadata: {
   voice_id: string;
-  voice_name: string;,
+  voice_name: string;
   model_id: string;
-  text_length: number;,
+  text_length: number;
   audio_length: number;
-  voice_settings: unknown;,
+  voice_settings: unknown;
   generation_time: number;
   request_id?: string;
 };
-  usage: {,
+  usage: {
   characters: number;
   cost: number;
   quota_remaining?: number;
 };
 }
 export interface ElevenLabsVoice {
-  voice_id: string;,
+  voice_id: string;
   name: string;
   samples?: Array<{,
-  sample_id: string;,
+  sample_id: string;
   file_name: string;
-  mime_type: string;,
+  mime_type: string;
   size_bytes: number;
   hash: string;
 }>;
-  category: 'premade' | 'cloned' | 'generated' | 'professional';,
+  category: 'premade' | 'cloned' | 'generated' | 'professional';
   fine_tuning: {;
-  is_allowed_to_fine_tune: boolean;,
+  is_allowed_to_fine_tune: boolean;
   finetuning_requested: boolean;
-  finetuning_state: string;,
+  finetuning_state: string;
   verification_attempts: Array<{,
-  text: string;,
+  text: string;
   date_unix: number;
-  accepted: boolean;,
+  accepted: boolean;
   similarity: number;
-  levenshtein_distance: number;,
-  recording: {,
-  recording_id: string;,
+  levenshtein_distance: number;
+  recording: {
+  recording_id: string;
   mime_type: string;
-  size_bytes: number;,
+  size_bytes: number;
   upload_date_unix: number;
 };
     }>;
-    verification_failures: string;,
+    verification_failures: string;
   verification_attempts_count: number;
-    slice_ids: string;,
+    slice_ids: string;
   manual_verification: {;
-  extra_text: string;,
+  extra_text: string;
   request_time_unix: number;
   files: Array<{,
-  file_id: string;,
+  file_id: string;
   file_name: string;
-  mime_type: string;,
+  mime_type: string;
   size_bytes: number;
   upload_date_unix: number;
 }>;
     };
   };
   labels: Record<string, string>;
-  description: string;,
+  description: string;
   preview_url: string;
   available_for_tiers: string;
   settings?: {
-  stability: number;,
+  stability: number;
   similarity_boost: number;
   style?: number;
   use_speaker_boost?: boolean;
@@ -133,9 +133,9 @@ export interface ElevenLabsVoice {
   history_item_sample_id?: string;
   original_voice_id?: string;
   public_owner_id?: string;
-  liked_by_count: number;,
+  liked_by_count: number;
   cloned_by_count: number;
-  name: string;,
+  name: string;
   description: string;
   labels: Record<string, string>;
   review_status: string;
@@ -145,21 +145,21 @@ export interface ElevenLabsVoice {
   high_quality_base_model_ids: string;
 }
 export interface ElevenLabsModel {
-  model_id: string;,
+  model_id: string;
   name: string;
-  can_be_finetuned: boolean;,
+  can_be_finetuned: boolean;
   can_do_text_to_speech: boolean;
-  can_do_voice_conversion: boolean;,
+  can_do_voice_conversion: boolean;
   can_use_style: boolean;
-  can_use_speaker_boost: boolean;,
+  can_use_speaker_boost: boolean;
   serves_pro_voices: boolean;
-  token_cost_factor: number;,
+  token_cost_factor: number;
   description: string;
-  requires_alpha_access: boolean;,
+  requires_alpha_access: boolean;
   max_characters_request_free_user: number;
-  max_characters_request_subscribed_user: number;,
+  max_characters_request_subscribed_user: number;
   languages: Array<{,
-  language_id: string;,
+  language_id: string;
   name: string;
 }>;
 }
@@ -178,7 +178,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   costPerRequest: 0.18 / 1000, // $0.18 per 1K characters (Starter tier),
   averageLatency: 2500,
   maxConcurrency: 5,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 120,
   tokensPerMinute: 20000,
 },
@@ -193,13 +193,13 @@ export class ElevenLabsAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: true,
       supportsAsync: true,
-      customParameters: {,
+      customParameters: {
   voice_id: { type: 'string', description: 'Voice ID from available voices' },
         stability: { type: 'number', min: 0, max: 1, default: 0.5 },
         similarity_boost: { type: 'number', min: 0, max: 1, default: 0.5 },
         style: { type: 'number', min: 0, max: 1, default: 0 },
         use_speaker_boost: { type: 'boolean', default: true },
-        output_format: {,
+        output_format: {
   type: 'string',
   options: ['mp3_44100_128', 'mp3_22050_32', 'pcm_16000', 'pcm_22050', 'pcm_24000', 'pcm_44100'],
   default: 'mp3_44100_128',
@@ -242,7 +242,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   // Get voice information
   const voiceInfo = await this._getVoiceInfo(processedOptions.voice_id!);
   const result: ElevenLabsGenerationResult = {,
-  audio: {,
+  audio: {
   data: audioData,
   format: processedOptions.output_format!,
   duration: this._estimateAudioDuration(text),
@@ -250,7 +250,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   channels: 1, // ElevenLabs produces mono audio,
   bit_depth: this._getBitDepth(processedOptions.output_format!),
 },
-  metadata: {,
+  metadata: {
   voice_id: processedOptions.voice_id!,
   voice_name: voiceInfo?.name || 'Unknown',
   model_id: processedOptions.model_id!,
@@ -259,7 +259,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   voice_settings: processedOptions.voice_settings,
   generation_time: generationTime,
 },
-  usage: {,
+  usage: {
   characters: text.length,
   cost: this._calculateCost(text.length),
   quota_remaining: this.quotaInfo?.character_limit - this.quotaInfo?.character_count,
@@ -280,7 +280,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   estimatedCost,
   currency: 'USD',
   confidence: 0.95,
-  breakdown: {,
+  breakdown: {
   inputCost: estimatedCost,
   outputCost: 0,
   processingCost: 0,
@@ -293,7 +293,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   async getQuotaInfo(): Promise<any> {,
   await this._loadQuotaInfo();
   return this.quotaInfo;
-  async createCustomVoice(name: string,)
+  async createCustomVoice(name: string)
   audioFiles: File,
   description?: string,
   labels?: Record<string, string>): Promise<ElevenLabsVoice> {,
@@ -317,7 +317,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     // Refresh voice list
     await this._loadAvailableVoices();
     return newVoice;
-  async cloneVoice(name: string,)
+  async cloneVoice(name: string)
     audioSample: File,
     description?: string
   ): Promise<ElevenLabsVoice> {
@@ -339,7 +339,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       throw new Error(`Failed to update voice settings: ${response.status} ${response.statusText} - ${errorData?.detail?.message || 'Unknown error'}`);}
-  async generateWithStream(text: string,)
+  async generateWithStream(text: string)
     voiceId: string,
     options?: Partial<ElevenLabsRequestOptions>
   ): Promise<ReadableStream> {
@@ -354,7 +354,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
 }
       {
   method: 'POST',
-  headers: {,
+  headers: {
   'Accept': 'audio/mpeg',
   'Content-Type': 'application/json',
   'xi-api-key': this.config.apiKey,
@@ -429,7 +429,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
       if (input.content) return input.content;
       if (input.message) return input.message;
     return JSON.stringify(input);
-  private _processOptions(options?: ElevenLabsRequestOptions,)
+  private _processOptions(options?: ElevenLabsRequestOptions)
     text?: string
   ): Required<Pick<ElevenLabsRequestOptions, 'voice_id' | 'model_id' | 'output_format' | 'text'>> & Omit<ElevenLabsRequestOptions, 'text'> & { text: string } {
   // Use first available voice as default, or Rachel if no voices loaded

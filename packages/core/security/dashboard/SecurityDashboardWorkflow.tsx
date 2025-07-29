@@ -55,16 +55,16 @@ import './SecurityDashboardWorkflow.css';
 // Security Dashboard Workflow Types
 
 export interface SecurityWorkflowEvent {
-  id: string;,
+  id: string;
   type: SecurityEventType;
-  severity: SecuritySeverity;,
+  severity: SecuritySeverity;
   source: string;
-  timestamp: Date;,
+  timestamp: Date;
   description: string;
   metadata: Record<string, any>;
   workflowState?: string;
   assignedTo?: string;
-  escalationLevel: number;,
+  escalationLevel: number;
   complianceFrameworks: string;
   automatedActions: SecurityAction;
 }
@@ -86,10 +86,10 @@ export enum SecurityEventType {
   LOW = 'low',
   INFO = 'info'
   export interface SecurityAction {
-  type: SecurityActionType;,
+  type: SecurityActionType;
   target: string;
   parameters: Record<string, any>;
-  timestamp: Date;,
+  timestamp: Date;
   executedBy: string;
   status: 'pending' | 'executing' | 'completed' | 'failed';
   result?: string;
@@ -104,30 +104,30 @@ export enum SecurityActionType {
   ESCALATE_ALERT = 'escalate_alert',
   COLLECT_EVIDENCE = 'collect_evidence'
   export interface SecurityWorkflowConfig {
-  enableAutoTransitions: boolean;,
+  enableAutoTransitions: boolean;
   enableAutomatedActions: boolean;
-  enableRealTimeUpdates: boolean;,
+  enableRealTimeUpdates: boolean;
   escalationThresholds: Record<SecuritySeverity, number>; // minutes,
-  autoApprovalRules: AutoApprovalRule;,
+  autoApprovalRules: AutoApprovalRule;
   complianceRequirements: ComplianceRequirement;
 }
 export interface AutoApprovalRule {
-  id: string;,
+  id: string;
   name: string;
   conditions: Record<string, any>;
-  maxSeverity: SecuritySeverity;,
+  maxSeverity: SecuritySeverity;
   approvedActions: SecurityActionType;
   requiredRole?: SecurityRole;
 }
 export interface ComplianceRequirement {
-  framework: string;,
+  framework: string;
   alertTypes: SecurityEventType;
-  responseTimeMinutes: number;,
+  responseTimeMinutes: number;
   requiredDocumentation: string;
   notificationRequired: boolean;
 }
 export interface SecurityDashboardWorkflowProps {
-  workspaceId: string;,
+  workspaceId: string;
   userId: string;
   userRole: SecurityRole;
   dashboardType?: DashboardType;
@@ -179,7 +179,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   enableAutoTransitions: true,
   enableAutomatedActions: true,
   enableRealTimeUpdates: true,
-  escalationThresholds: {,
+  escalationThresholds: {
   [SecuritySeverity.CRITICAL]: 15, // 15 minutes,
   [SecuritySeverity.HIGH]: 60,     // 1 hour,
   [SecuritySeverity.MEDIUM]: 240,  // 4 hours,
@@ -253,7 +253,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       title: `Security ${type.charAt(0).toUpperCase() + type.slice(1)} Dashboard`}
 },
   description: 'Real-time security monitoring and workflow management',
-      layout: {,
+      layout: {
   type: 'grid',
         columns: 12,
         gap: 16,
@@ -265,7 +265,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         ]
   },
   widgets: createWidgetsForDashboard(type, role),
-      permissions: {,
+      permissions: {
   view: [role],
   edit: [SecurityRole.SECURITY_ADMIN],
   delete: [SecurityRole.SECURITY_ADMIN],
@@ -276,7 +276,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   refreshInterval: 30000, // 30 seconds
       autoRefresh: true,
       theme: 'cinema' as any,
-      metadata: {,
+      metadata: {
   version: '1.0.0',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -285,14 +285,14 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   tags: ['security', 'workflow', 'monitoring'],
   category: 'security_operations',
   organization: workspaceId,
-  compliance: {,
+  compliance: {
   frameworks: ['GDPR', 'SOX', 'ISO27001'],
   requirements: ['audit_trail', 'access_control'],
   auditRequired: true,
   retentionPeriod: 2555, // 7 years,
   dataResidency: ['US', 'EU'],
 },
-  usage: {,
+  usage: {
   viewCount: 0,
   lastViewed: new Date(),
   popularWidgets: [],
@@ -313,19 +313,19 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         title: 'Active Security Alerts',
         position: { x: 0, y: 0, order: 1 },
         size: { width: 8, height: 4, resizable: true },
-        config: {,
+        config: {
   showWorkflowStatus: true,
   enableQuickActions: true,
   maxRows: 50,
   autoRefresh: true,
 },
-  dataSource: {,
+  dataSource: {
   type: 'realtime' as any,
           source: 'security-events-stream',
           endpoint: '/api/security/events/stream',
           caching: { enabled: true, ttl: 30 }
   },
-  permissions: {,
+  permissions: {
   view: [role],
   configure: [SecurityRole.SECURITY_ADMIN],
   export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
@@ -339,18 +339,18 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         title: 'Incident Workflow Status',
         position: { x: 8, y: 0, order: 2 },
         size: { width: 4, height: 4, resizable: true },
-        config: {,
+        config: {
   chartType: 'donut',
   showPercentages: true,
   enableDrillDown: true,
 },
-  dataSource: {,
+  dataSource: {
   type: 'batch' as any,
           source: 'workflow-statistics',
           endpoint: '/api/workflow/statistics',
           caching: { enabled: true, ttl: 300 }
   },
-  permissions: {,
+  permissions: {
   view: [role],
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
@@ -365,18 +365,18 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         title: 'Automated Response Actions',
         position: { x: 0, y: 4, order: 3 },
         size: { width: 6, height: 3, resizable: true },
-        config: {,
+        config: {
   showExecutionDetails: true,
   enableActionApproval: true,
   maxItems: 25,
 },
-  dataSource: {,
+  dataSource: {
   type: 'realtime' as any,
           source: 'security-actions-stream',
           endpoint: '/api/security/actions/stream',
           caching: { enabled: true, ttl: 60 }
   },
-  permissions: {,
+  permissions: {
   view: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
   configure: [SecurityRole.SECURITY_ADMIN],
   export: [SecurityRole.SECURITY_ADMIN],
@@ -442,7 +442,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         {
           comment: `Auto-created for ${event.type} event`}
 },
-  metadata: {,
+  metadata: {
   securityEvent: event,
             autoCreated: true,
             timestamp: new Date().toISOString());
@@ -478,7 +478,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
             parameters: { eventId: event.id, reason: event.description },
             timestamp: new Date(),
             executedBy: 'system',
-            status: 'pending';
+            status: 'pending'
   };
           // Execute the action (simplified example)
           await executeSecurityAction(action);

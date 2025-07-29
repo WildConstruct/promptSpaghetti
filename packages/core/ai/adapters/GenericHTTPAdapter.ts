@@ -43,10 +43,10 @@ export interface HTTPRequestMapping {
   statusPath?: string; // JSONPath for status information,
 }
 export interface GenericHTTPResponse {
-  status: number;,
+  status: number;
   data: unknown;
   headers: Record<string, string>;
-  usage?: {,
+  usage?: {
   input_tokens?: number;
   output_tokens?: number;
   total_tokens?: number;
@@ -134,7 +134,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
   estimatedCost: cost,
   currency: 'USD',
   confidence: 0.5, // Lower confidence for generic adapters,
-  breakdown: {,
+  breakdown: {
   inputCost: cost * 0.4,
   outputCost: cost * 0.6,
   processingCost: 0,
@@ -157,7 +157,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
         throw new Error(`Health check failed: ${response.status} ${response.statusText}`);}
     } catch (error) {
       throw new Error(`Failed to connect to HTTP API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
-  private async _makeRequest(endpoint: string,)
+  private async _makeRequest(endpoint: string)
     payload: any,
     options?: HTTPRequestOptions
   ): Promise<GenericHTTPResponse> {
@@ -165,7 +165,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
     const method = options?.method || 'POST';
     const fetchOptions: RequestInit = {
   method,
-  headers: {,
+  headers: {
   ...this._buildHeaders(),
   ...options?.headers
 },

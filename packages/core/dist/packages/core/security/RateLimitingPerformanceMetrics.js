@@ -355,535 +355,511 @@ PerformanceMetrics['responseTime'];
                                                     description: 'Average response time over time',
                                                     dataSource: 'timeseries',
                                                     refreshInterval: 5,
-                                                    config: {},
-                                                    chartType: 'line',
-                                                    timeRange: '1h',
-                                                    aggregation: 'avg',
-                                                    metrics: ['responseTime'],
+                                                    config: {
+                                                        chartType: 'line',
+                                                        timeRange: '1h',
+                                                        aggregation: 'avg',
+                                                        metrics: ['responseTime'],
+                                                    },
+                                                    position: { x: 0, y: 0, width: 6, height: 4 }
                                                 },
-                                                position, { x: 0, y: 0, width: 6, height: 4 }
+                                                {
+                                                    widgetId: 'throughput-gauge',
+                                                    widgetType: 'gauge',
+                                                    title: 'Request Throughput',
+                                                    description: 'Current requests per second',
+                                                    dataSource: 'current',
+                                                    refreshInterval: 1,
+                                                    config: {
+                                                        metrics: ['throughput'],
+                                                    },
+                                                    position: { x: 6, y: 0, width: 3, height: 4 }
+                                                },
+                                                {
+                                                    widgetId: 'block-rate-gauge',
+                                                    widgetType: 'gauge',
+                                                    title: 'Block Rate',
+                                                    description: 'Percentage of requests blocked',
+                                                    dataSource: 'current',
+                                                    refreshInterval: 1,
+                                                    config: {
+                                                        metrics: ['blockRate'],
+                                                    },
+                                                    position: { x: 9, y: 0, width: 3, height: 4 }
+                                                },
+                                                {
+                                                    widgetId: 'endpoint-heatmap',
+                                                    widgetType: 'heatmap',
+                                                    title: 'Endpoint Activity Heatmap',
+                                                    description: 'Request activity by endpoint and time',
+                                                    dataSource: 'heatmap',
+                                                    refreshInterval: 30,
+                                                    config: {
+                                                        timeRange: '24h',
+                                                    },
+                                                    position: { x: 0, y: 4, width: 8, height: 6 }
+                                                },
+                                                {
+                                                    widgetId: 'threat-distribution',
+                                                    widgetType: 'chart',
+                                                    title: 'Threat Level Distribution',
+                                                    description: 'Distribution of threat levels',
+                                                    dataSource: 'distribution',
+                                                    refreshInterval: 10,
+                                                    config: {
+                                                        chartType: 'pie',
+                                                        metrics: ['threatLevelDistribution'],
+                                                    },
+                                                    position: { x: 8, y: 4, width: 4, height: 6 }
+                                                },
+                                                {
+                                                    widgetId: 'geographic-map',
+                                                    widgetType: 'map',
+                                                    title: 'Request Origins',
+                                                    description: 'Geographic distribution of requests',
+                                                    dataSource: 'geospatial',
+                                                    refreshInterval: 60,
+                                                    config: {},
+                                                    position: { x: 0, y: 10, width: 12, height: 8 }
+                                                }
                                             ];
-                                        }
-                                    };
-                                    {
-                                        widgetId: 'throughput-gauge',
-                                            widgetType;
-                                        'gauge',
-                                            title;
-                                        'Request Throughput',
-                                            description;
-                                        'Current requests per second',
-                                            dataSource;
-                                        'current',
-                                            refreshInterval;
-                                        1,
-                                            config;
-                                        {
-                                            metrics: ['throughput'],
-                                            ;
-                                        }
-                                        position: {
-                                            x: 6, y;
-                                            0, width;
-                                            3, height;
-                                            4;
-                                        }
-                                    }
-                                    {
-                                        widgetId: 'block-rate-gauge',
-                                            widgetType;
-                                        'gauge',
-                                            title;
-                                        'Block Rate',
-                                            description;
-                                        'Percentage of requests blocked',
-                                            dataSource;
-                                        'current',
-                                            refreshInterval;
-                                        1,
-                                            config;
-                                        {
-                                            metrics: ['blockRate'],
-                                            ;
-                                        }
-                                        position: {
-                                            x: 9, y;
-                                            0, width;
-                                            3, height;
-                                            4;
-                                        }
-                                    }
-                                    {
-                                        widgetId: 'endpoint-heatmap',
-                                            widgetType;
-                                        'heatmap',
-                                            title;
-                                        'Endpoint Activity Heatmap',
-                                            description;
-                                        'Request activity by endpoint and time',
-                                            dataSource;
-                                        'heatmap',
-                                            refreshInterval;
-                                        30,
-                                            config;
-                                        {
-                                            timeRange: '24h',
-                                            ;
-                                        }
-                                        position: {
-                                            x: 0, y;
-                                            4, width;
-                                            8, height;
-                                            6;
-                                        }
-                                    }
-                                    {
-                                        widgetId: 'threat-distribution',
-                                            widgetType;
-                                        'chart',
-                                            title;
-                                        'Threat Level Distribution',
-                                            description;
-                                        'Distribution of threat levels',
-                                            dataSource;
-                                        'distribution',
-                                            refreshInterval;
-                                        10,
-                                            config;
-                                        {
-                                            chartType: 'pie',
-                                                metrics;
-                                            ['threatLevelDistribution'],
-                                            ;
-                                        }
-                                        position: {
-                                            x: 8, y;
-                                            4, width;
-                                            4, height;
-                                            6;
-                                        }
-                                    }
-                                    {
-                                        widgetId: 'geographic-map',
-                                            widgetType;
-                                        'map',
-                                            title;
-                                        'Request Origins',
-                                            description;
-                                        'Geographic distribution of requests',
-                                            dataSource;
-                                        'geospatial',
-                                            refreshInterval;
-                                        60,
-                                            config;
-                                        { }
-                                        position: {
-                                            x: 0, y;
-                                            10, width;
-                                            12, height;
-                                            8;
-                                        }
-                                        ;
-                                        defaultWidgets.forEach(widget => { });
-                                        this.dashboardWidgets.set(widget.widgetId, widget);
-                                    }
-                                    ;
-                                    addWidget(widget, DashboardWidget);
-                                    void {
-                                        this: .dashboardWidgets.set(widget.widgetId, widget),
-                                        this: .emit('widgetAdded', {}),
-                                        widgetId: widget.widgetId,
-                                        timestamp: new Date(),
-                                    };
-                                    ;
-                                    removeWidget(widgetId, string);
-                                    boolean;
-                                    {
-                                        const removed = this.dashboardWidgets.delete(widgetId);
-                                        if (removed) {
-                                            this.emit('widgetRemoved', {});
-                                            widgetId,
+                                            defaultWidgets.forEach(widget => { });
+                                            this.dashboardWidgets.set(widget.widgetId, widget);
+                                        },
+                                        /**
+                                         * Add or update a dashboard widget
+                                         */
+                                        addWidget(widget) {
+                                            this.dashboardWidgets.set(widget.widgetId, widget);
+                                            this.emit('widgetAdded', {});
+                                            widgetId: widget.widgetId,
                                                 timestamp;
                                             new Date(),
                                             ;
-                                        }
-                                        ;
-                                        return removed;
-                                        getWidgets();
-                                        DashboardWidget;
-                                        {
-                                            return Array.from(this.dashboardWidgets.values());
-                                            getWidgetData(widgetId, string);
-                                            any;
-                                            {
-                                                const widget = this.dashboardWidgets.get(widgetId);
-                                                if (!widget)
-                                                    return null;
-                                                switch (widget.dataSource) {
-                                                    case 'timeseries':
-                                                        return this.generateTimeSeriesData(widget.config.timeRange);
-                                                    case 'heatmap':
-                                                        return this.generateHeatmapData();
-                                                    case 'geospatial':
-                                                        return this.generateGeospatialData();
-                                                    case 'distribution':
-                                                        return this.generateDistributionData();
-                                                    case 'current':
-                                                        return this.currentMetrics;
-                                                    default:
-                                                        return null;
-                                                        checkAlertConditions();
-                                                        void {
-                                                            const: thresholds = this.config.alerting.alertThresholds,
-                                                            const: metrics = this.currentMetrics,
-                                                            // Check response time alerts
-                                                            if(metrics) { }, : .responseTime.average > thresholds.highResponseTime
-                                                        };
-                                                        {
-                                                            this.createAlert({});
-                                                            alertId: `response-time-${Date.now()}`;
-                                                        }
-                                                }
-                                                alertType: 'performance',
-                                                    severity;
-                                                metrics.responseTime.average > thresholds.highResponseTime * 2 ? 'critical' : 'high',
-                                                    condition;
-                                                'High Response Time',
-                                                    currentValue;
-                                                metrics.responseTime.average,
-                                                    threshold;
-                                                thresholds.highResponseTime,
-                                                    affectedEndpoints;
-                                                ['all'],
-                                                    recommendedActions;
-                                                [,
-                                                    'Check system resources',
-                                                    'Review rate limiting rules',
-                                                    'Consider scaling infrastructure'
-                                                ];
+                                        },
+                                        /**
+                                         * Remove a dashboard widget
+                                         */
+                                        removeWidget(widgetId) {
+                                            const removed = this.dashboardWidgets.delete(widgetId);
+                                            if (removed) {
+                                                this.emit('widgetRemoved', {});
+                                                widgetId,
+                                                    timestamp;
+                                                new Date(),
+                                                ;
                                             }
                                             ;
-                                            // Check throughput alerts
-                                            if (metrics.throughput.requestsPerSecond < thresholds.lowThroughput) {
-                                                this.createAlert({});
-                                                alertId: `throughput-${Date.now()}`;
-                                            }
+                                            return removed;
+                                            /**
+                                             * Get all dashboard widgets
+                                             */
                                         }
+                                        /**
+                                         * Get all dashboard widgets
+                                         */
+                                        ,
+                                        /**
+                                         * Get all dashboard widgets
+                                         */
+                                        getWidgets() {
+                                            return Array.from(this.dashboardWidgets.values());
+                                            /**
+                                             * Get widget data for rendering
+                                             */
+                                        }
+                                        /**
+                                         * Get widget data for rendering
+                                         */
+                                        ,
+                                        /**
+                                         * Get widget data for rendering
+                                         */
+                                        getWidgetData(widgetId) {
+                                            const widget = this.dashboardWidgets.get(widgetId);
+                                            if (!widget)
+                                                return null;
+                                            switch (widget.dataSource) {
+                                                case 'timeseries':
+                                                    return this.generateTimeSeriesData(widget.config.timeRange);
+                                                case 'heatmap':
+                                                    return this.generateHeatmapData();
+                                                case 'geospatial':
+                                                    return this.generateGeospatialData();
+                                                case 'distribution':
+                                                    return this.generateDistributionData();
+                                                case 'current':
+                                                    return this.currentMetrics;
+                                                default:
+                                                    return null;
+                                                // ========================================
+                                                // Alert Management
+                                                // ========================================
+                                                /**
+                                                 * Check for alert conditions
+                                                 */
+                                            }
+                                            // ========================================
+                                            // Alert Management
+                                            // ========================================
+                                            /**
+                                             * Check for alert conditions
+                                             */
+                                        }
+                                        // ========================================
+                                        // Alert Management
+                                        // ========================================
+                                        /**
+                                         * Check for alert conditions
+                                         */
+                                        ,
+                                        // ========================================
+                                        // Alert Management
+                                        // ========================================
+                                        /**
+                                         * Check for alert conditions
+                                         */
+                                        checkAlertConditions() {
+                                            const thresholds = this.config.alerting.alertThresholds;
+                                            const metrics = this.currentMetrics;
+                                            // Check response time alerts
+                                            if (metrics.responseTime.average > thresholds.highResponseTime) {
+                                                this.createAlert({});
+                                                alertId: `response-time-${Date.now()}`;
+                                            }
+                                        },
                                         alertType: 'performance',
-                                            severity;
-                                        'medium',
-                                            condition;
-                                        'Low Throughput',
-                                            currentValue;
-                                        metrics.throughput.requestsPerSecond,
-                                            threshold;
-                                        thresholds.lowThroughput,
-                                            affectedEndpoints;
-                                        ['all'],
-                                            recommendedActions;
-                                        [,
-                                            'Check for system bottlenecks',
-                                            'Review rate limiting configuration',
-                                            'Monitor resource utilization'
-                                        ];
-                                    }
+                                        severity: metrics.responseTime.average > thresholds.highResponseTime * 2 ? 'critical' : 'high',
+                                        condition: 'High Response Time',
+                                        currentValue: metrics.responseTime.average,
+                                        threshold: thresholds.highResponseTime,
+                                        affectedEndpoints: ['all'],
+                                        recommendedActions: [,
+                                            'Check system resources',
+                                            'Review rate limiting rules',
+                                            'Consider scaling infrastructure'
+                                        ]
+                                    };
                                     ;
-                                    // Check error rate alerts
-                                    if (metrics.errorRates.errorRate > thresholds.highErrorRate) {
+                                    // Check throughput alerts
+                                    if (metrics.throughput.requestsPerSecond < thresholds.lowThroughput) {
                                         this.createAlert({});
-                                        alertId: `error-rate-${Date.now()}`;
+                                        alertId: `throughput-${Date.now()}`;
                                     }
                                 }
-                                alertType: 'security',
+                                alertType: 'performance',
                                     severity;
-                                'high',
+                                'medium',
                                     condition;
-                                'High Error Rate',
+                                'Low Throughput',
                                     currentValue;
-                                metrics.errorRates.errorRate,
+                                metrics.throughput.requestsPerSecond,
                                     threshold;
-                                thresholds.highErrorRate,
+                                thresholds.lowThroughput,
                                     affectedEndpoints;
                                 ['all'],
                                     recommendedActions;
                                 [,
-                                    'Review error logs',
-                                    'Check application health',
-                                    'Investigate potential attacks'
+                                    'Check for system bottlenecks',
+                                    'Review rate limiting configuration',
+                                    'Monitor resource utilization'
                                 ];
                         }
                         ;
-                        // Check block rate alerts
-                        if (metrics.errorRates.blockRate > thresholds.highBlockRate) {
+                        // Check error rate alerts
+                        if (metrics.errorRates.errorRate > thresholds.highErrorRate) {
                             this.createAlert({});
-                            alertId: `block-rate-${Date.now()}`;
+                            alertId: `error-rate-${Date.now()}`;
                         }
                     }
                     alertType: 'security',
                         severity;
-                    metrics.errorRates.blockRate > thresholds.highBlockRate * 2 ? 'critical' : 'high',
+                    'high',
                         condition;
-                    'High Block Rate',
+                    'High Error Rate',
                         currentValue;
-                    metrics.errorRates.blockRate,
+                    metrics.errorRates.errorRate,
                         threshold;
-                    thresholds.highBlockRate,
+                    thresholds.highErrorRate,
                         affectedEndpoints;
                     ['all'],
                         recommendedActions;
                     [,
-                        'Review rate limiting rules',
-                        'Investigate potential attacks',
-                        'Consider adjusting thresholds',
-                        'Check for false positives'
+                        'Review error logs',
+                        'Check application health',
+                        'Investigate potential attacks'
                     ];
                 }
                 ;
-                createAlert(alertData, (Omit));
-                void {
-                    const: alert, AlertCondition = {
-                        ...alertData,
-                        timestamp: new Date(),
-                        metadata: {
-                            systemUptime: Date.now() - this.startTime.getTime(),
-                            metricsCount: this.metricsHistory.length,
-                        },
-                        this: .activeAlerts.set(alert.alertId, alert),
-                        this: .emit('alertCreated', alert),
-                        /**
-                         * Get all active alerts
-                         */
-                        getActiveAlerts() {
-                            return Array.from(this.activeAlerts.values());
-                            /**
-                             * Acknowledge an alert
-                             */
-                        }
-                        /**
-                         * Acknowledge an alert
-                         */
-                        ,
-                        /**
-                         * Acknowledge an alert
-                         */
-                        acknowledgeAlert(alertId) {
-                            const alert = this.activeAlerts.get(alertId);
-                            if (alert) {
-                                this.activeAlerts.delete(alertId);
-                                this.emit('alertAcknowledged', { alertId, timestamp: new Date() });
-                                return true;
-                                return false;
-                                // ========================================
-                                // Utility Methods
-                                // ========================================
-                                /**
-                                 * Create empty metrics object
-                                 */
-                            }
-                            // ========================================
-                            // Utility Methods
-                            // ========================================
-                            /**
-                             * Create empty metrics object
-                             */
-                        }
-                        // ========================================
-                        // Utility Methods
-                        // ========================================
-                        /**
-                         * Create empty metrics object
-                         */
-                        ,
-                        // ========================================
-                        // Utility Methods
-                        // ========================================
-                        /**
-                         * Create empty metrics object
-                         */
-                        createEmptyMetrics() {
-                            return {
-                                timestamp: new Date(),
-                                responseTime: {
-                                    average: 0,
-                                    p50: 0,
-                                    p95: 0,
-                                    p99: 0,
-                                    max: 0,
-                                },
-                                throughput: {
-                                    requestsPerSecond: 0,
-                                    allowedPerSecond: 0,
-                                    blockedPerSecond: 0,
-                                    throttledPerSecond: 0,
-                                },
-                                errorRates: {
-                                    totalRequests: 0,
-                                    blockedRequests: 0,
-                                    errorRequests: 0,
-                                    blockRate: 0,
-                                    errorRate: 0,
-                                },
-                                resourceUtilization: {
-                                    memoryUsage: 0,
-                                    cpuUsage: 0,
-                                    cacheHitRate: 0,
-                                    activeConnections: 0,
-                                },
-                                threatMetrics: {
-                                    threatDistribution: {
-                                        [ThreatLevel.LOW]: 0,
-                                        [ThreatLevel.MEDIUM]: 0,
-                                        [ThreatLevel.HIGH]: 0,
-                                        [ThreatLevel.CRITICAL]: 0,
-                                    },
-                                    suspiciousActivities: 0,
-                                    blockedThreats: 0,
-                                    adaptiveAdjustments: 0
-                                },
-                                /**
-                                 * Clean up old metrics data
-                                 */
-                                cleanupOldMetrics() {
-                                    const cutoffTime = new Date();
-                                    cutoffTime.setHours(cutoffTime.getHours() - this.config.metricsRetentionPeriod);
-                                    this.metricsHistory = this.metricsHistory.filter();
-                                    metric => metric.timestamp > cutoffTime;
-                                    ;
-                                    /**
-                                    * Set up event listeners for rate limiting service
-                                    */
-                                }
-                                /**
-                                * Set up event listeners for rate limiting service
-                                */
-                                ,
-                                /**
-                                * Set up event listeners for rate limiting service
-                                */
-                                setupEventListeners() {
-                                    // Listen for rate limiting events
-                                    this.rateLimitingService.on('rateLimitExceeded', (data) => {
-                                        this.emit('rateLimitEvent', {});
-                                        type: 'exceeded',
-                                            data,
-                                            timestamp;
-                                        new Date(),
-                                        ;
-                                    });
-                                },
-                                this: .rateLimitingService.on('attemptRecorded', (attempt) => {
-                                    this.emit('rateLimitEvent', {});
-                                    type: 'attempt',
-                                        data;
-                                    attempt,
-                                        timestamp;
-                                    new Date(),
-                                    ;
-                                })
-                            };
-                            ;
-                            // Listen for throttling events if available
-                            if (this.throttlingEngine) {
-                                this.throttlingEngine.on('throttlingApplied', (data) => {
-                                    this.emit('throttlingEvent', {});
-                                    type: 'applied',
-                                        data,
-                                        timestamp;
-                                    new Date(),
-                                    ;
-                                });
-                            }
-                            ;
-                            /**
-                             * Get comprehensive system status
-                             */
-                        }
-                        /**
-                         * Get comprehensive system status
-                         */
-                        ,
-                        return: {
-                            status: this.activeAlerts.size === 0 ? 'healthy' : ,
-                            this: .activeAlerts.size < 3 ? 'warning' : 'critical',
-                            uptime: Date.now() - this.startTime.getTime(),
-                            metrics: this.currentMetrics,
-                            alerts: this.getActiveAlerts(),
-                            systemInfo: {
-                                version: '1.0.0',
-                                environment: process.env.NODE_ENV || 'development',
-                                configuredEndpoints: 0, // Would be populated from actual configuration,
-                                metricsCollected: this.metricsHistory.length,
-                            },
-                            /**
-                             * Export metrics data for external analysis
-                             */
-                            exportMetrics(format = 'json') {
-                                if (format === 'csv') {
-                                    // Convert metrics to CSV format
-                                    const headers = [];
-                                    'timestamp',
-                                        'responseTime_avg',
-                                        'responseTime_p95',
-                                        'throughput_rps',
-                                        'blockRate',
-                                        'errorRate',
-                                        'memoryUsage',
-                                        'cpuUsage';
-                                    ;
-                                    const rows = this.metricsHistory.map(metric => []);
-                                    metric.timestamp.toISOString(),
-                                        metric.responseTime.average.toFixed(2),
-                                        metric.responseTime.p95.toFixed(2),
-                                        metric.throughput.requestsPerSecond.toFixed(2),
-                                        metric.errorRates.blockRate.toFixed(2),
-                                        metric.errorRates.errorRate.toFixed(2),
-                                        metric.resourceUtilization.memoryUsage.toFixed(2),
-                                        metric.resourceUtilization.cpuUsage.toFixed(2);
-                                    ;
-                                    return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-                                    return JSON.stringify({});
-                                    exportTimestamp: new Date().toISOString(),
-                                        metricsCount;
-                                    this.metricsHistory.length,
-                                        timeRange;
-                                    {
-                                        start: this.metricsHistory[0]?.timestamp,
-                                            end;
-                                        this.metricsHistory[this.metricsHistory.length - 1]?.timestamp,
-                                        ;
-                                    }
-                                    metrics: this.metricsHistory,
-                                        currentMetrics;
-                                    this.currentMetrics,
-                                        alerts;
-                                    this.getActiveAlerts(),
-                                        configuration;
-                                    this.config;
-                                }
-                                null, 2;
-                                ;
-                                /**
-                                 * Cleanup resources
-                                 */
-                            }
-                            /**
-                             * Cleanup resources
-                             */
-                            ,
-                            /**
-                             * Cleanup resources
-                             */
-                            destroy() {
-                                this.stopMetricsCollection();
-                                this.removeAllListeners();
-                                this.metricsHistory = [];
-                                this.activeAlerts.clear();
-                                this.dashboardWidgets.clear();
-                                export default RateLimitingPerformanceMetrics;
-                            }
-                        } }
-                };
+                // Check block rate alerts
+                if (metrics.errorRates.blockRate > thresholds.highBlockRate) {
+                    this.createAlert({});
+                    alertId: `block-rate-${Date.now()}`;
+                }
             }
+            alertType: 'security',
+                severity;
+            metrics.errorRates.blockRate > thresholds.highBlockRate * 2 ? 'critical' : 'high',
+                condition;
+            'High Block Rate',
+                currentValue;
+            metrics.errorRates.blockRate,
+                threshold;
+            thresholds.highBlockRate,
+                affectedEndpoints;
+            ['all'],
+                recommendedActions;
+            [,
+                'Review rate limiting rules',
+                'Investigate potential attacks',
+                'Consider adjusting thresholds',
+                'Check for false positives'
+            ];
         }
+        ;
+        createAlert(alertData, (Omit));
+        void {
+            const: alert, AlertCondition = {
+                ...alertData,
+                timestamp: new Date(),
+                metadata: {
+                    systemUptime: Date.now() - this.startTime.getTime(),
+                    metricsCount: this.metricsHistory.length,
+                },
+                this: .activeAlerts.set(alert.alertId, alert),
+                this: .emit('alertCreated', alert),
+                /**
+                 * Get all active alerts
+                 */
+                getActiveAlerts() {
+                    return Array.from(this.activeAlerts.values());
+                    /**
+                     * Acknowledge an alert
+                     */
+                }
+                /**
+                 * Acknowledge an alert
+                 */
+                ,
+                /**
+                 * Acknowledge an alert
+                 */
+                acknowledgeAlert(alertId) {
+                    const alert = this.activeAlerts.get(alertId);
+                    if (alert) {
+                        this.activeAlerts.delete(alertId);
+                        this.emit('alertAcknowledged', { alertId, timestamp: new Date() });
+                        return true;
+                        return false;
+                        // ========================================
+                        // Utility Methods
+                        // ========================================
+                        /**
+                         * Create empty metrics object
+                         */
+                    }
+                    // ========================================
+                    // Utility Methods
+                    // ========================================
+                    /**
+                     * Create empty metrics object
+                     */
+                }
+                // ========================================
+                // Utility Methods
+                // ========================================
+                /**
+                 * Create empty metrics object
+                 */
+                ,
+                // ========================================
+                // Utility Methods
+                // ========================================
+                /**
+                 * Create empty metrics object
+                 */
+                createEmptyMetrics() {
+                    return {
+                        timestamp: new Date(),
+                        responseTime: {
+                            average: 0,
+                            p50: 0,
+                            p95: 0,
+                            p99: 0,
+                            max: 0,
+                        },
+                        throughput: {
+                            requestsPerSecond: 0,
+                            allowedPerSecond: 0,
+                            blockedPerSecond: 0,
+                            throttledPerSecond: 0,
+                        },
+                        errorRates: {
+                            totalRequests: 0,
+                            blockedRequests: 0,
+                            errorRequests: 0,
+                            blockRate: 0,
+                            errorRate: 0,
+                        },
+                        resourceUtilization: {
+                            memoryUsage: 0,
+                            cpuUsage: 0,
+                            cacheHitRate: 0,
+                            activeConnections: 0,
+                        },
+                        threatMetrics: {
+                            threatDistribution: {
+                                [ThreatLevel.LOW]: 0,
+                                [ThreatLevel.MEDIUM]: 0,
+                                [ThreatLevel.HIGH]: 0,
+                                [ThreatLevel.CRITICAL]: 0,
+                            },
+                            suspiciousActivities: 0,
+                            blockedThreats: 0,
+                            adaptiveAdjustments: 0
+                        },
+                        /**
+                         * Clean up old metrics data
+                         */
+                        cleanupOldMetrics() {
+                            const cutoffTime = new Date();
+                            cutoffTime.setHours(cutoffTime.getHours() - this.config.metricsRetentionPeriod);
+                            this.metricsHistory = this.metricsHistory.filter();
+                            metric => metric.timestamp > cutoffTime;
+                            ;
+                            /**
+                            * Set up event listeners for rate limiting service
+                            */
+                        }
+                        /**
+                        * Set up event listeners for rate limiting service
+                        */
+                        ,
+                        /**
+                        * Set up event listeners for rate limiting service
+                        */
+                        setupEventListeners() {
+                            // Listen for rate limiting events
+                            this.rateLimitingService.on('rateLimitExceeded', (data) => {
+                                this.emit('rateLimitEvent', {});
+                                type: 'exceeded',
+                                    data,
+                                    timestamp;
+                                new Date(),
+                                ;
+                            });
+                        },
+                        this: .rateLimitingService.on('attemptRecorded', (attempt) => {
+                            this.emit('rateLimitEvent', {});
+                            type: 'attempt',
+                                data;
+                            attempt,
+                                timestamp;
+                            new Date(),
+                            ;
+                        })
+                    };
+                    ;
+                    // Listen for throttling events if available
+                    if (this.throttlingEngine) {
+                        this.throttlingEngine.on('throttlingApplied', (data) => {
+                            this.emit('throttlingEvent', {});
+                            type: 'applied',
+                                data,
+                                timestamp;
+                            new Date(),
+                            ;
+                        });
+                    }
+                    ;
+                    /**
+                     * Get comprehensive system status
+                     */
+                }
+                /**
+                 * Get comprehensive system status
+                 */
+                ,
+                return: {
+                    status: this.activeAlerts.size === 0 ? 'healthy' : ,
+                    this: .activeAlerts.size < 3 ? 'warning' : 'critical',
+                    uptime: Date.now() - this.startTime.getTime(),
+                    metrics: this.currentMetrics,
+                    alerts: this.getActiveAlerts(),
+                    systemInfo: {
+                        version: '1.0.0',
+                        environment: process.env.NODE_ENV || 'development',
+                        configuredEndpoints: 0, // Would be populated from actual configuration,
+                        metricsCollected: this.metricsHistory.length,
+                    },
+                    /**
+                     * Export metrics data for external analysis
+                     */
+                    exportMetrics(format = 'json') {
+                        if (format === 'csv') {
+                            // Convert metrics to CSV format
+                            const headers = [];
+                            'timestamp',
+                                'responseTime_avg',
+                                'responseTime_p95',
+                                'throughput_rps',
+                                'blockRate',
+                                'errorRate',
+                                'memoryUsage',
+                                'cpuUsage';
+                            ;
+                            const rows = this.metricsHistory.map(metric => []);
+                            metric.timestamp.toISOString(),
+                                metric.responseTime.average.toFixed(2),
+                                metric.responseTime.p95.toFixed(2),
+                                metric.throughput.requestsPerSecond.toFixed(2),
+                                metric.errorRates.blockRate.toFixed(2),
+                                metric.errorRates.errorRate.toFixed(2),
+                                metric.resourceUtilization.memoryUsage.toFixed(2),
+                                metric.resourceUtilization.cpuUsage.toFixed(2);
+                            ;
+                            return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+                            return JSON.stringify({});
+                            exportTimestamp: new Date().toISOString(),
+                                metricsCount;
+                            this.metricsHistory.length,
+                                timeRange;
+                            {
+                                start: this.metricsHistory[0]?.timestamp,
+                                    end;
+                                this.metricsHistory[this.metricsHistory.length - 1]?.timestamp,
+                                ;
+                            }
+                            metrics: this.metricsHistory,
+                                currentMetrics;
+                            this.currentMetrics,
+                                alerts;
+                            this.getActiveAlerts(),
+                                configuration;
+                            this.config;
+                        }
+                        null, 2;
+                        ;
+                        /**
+                         * Cleanup resources
+                         */
+                    }
+                    /**
+                     * Cleanup resources
+                     */
+                    ,
+                    /**
+                     * Cleanup resources
+                     */
+                    destroy() {
+                        this.stopMetricsCollection();
+                        this.removeAllListeners();
+                        this.metricsHistory = [];
+                        this.activeAlerts.clear();
+                        this.dashboardWidgets.clear();
+                        export default RateLimitingPerformanceMetrics;
+                    }
+                } }
+        };
     }
 }

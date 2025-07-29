@@ -71,11 +71,21 @@ export interface RecommendationMetrics {
     };
     algorithm_performance: Record<string, {
         precision: number;
-    }, recall>;
-    number: any;
-    f1_score: number;
-    latency_ms: number;
-    cache_hit_rate: number;
+        recall: number;
+        f1_score: number;
+        latency_ms: number;
+        cache_hit_rate: number;
+    }>;
+    featured_content_performance: {
+        impressions: number;
+        clicks: number;
+        conversions: number;
+        revenue: number;
+        top_performing_content: Array<{}, id>;
+        string: any;
+        title: string;
+        performance_score: number;
+    };
 }
 export interface RecommendationEngineAdminProps {
     className?: string;

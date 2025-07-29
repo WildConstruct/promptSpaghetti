@@ -111,7 +111,7 @@ export class AllocationService {
   /**
    * Get assignments for multiple experiments
    */
-  async bulkAssignUser(userId: string,)
+  async bulkAssignUser(userId: string)
     experimentIds: string,
     sessionId?: string,
     debugMode = false
@@ -137,14 +137,14 @@ export class AllocationService {
           variantId: 'control',
           variant: { id: 'control', name: 'Control', description: 'Default control variant' },
           assigned: false,
-          reason: 'assignment_error';
+          reason: 'assignment_error'
   };
     });
     return results;
   /**
    * Force assign a user to a specific variant (for debugging/testing)
    */
-  async forceAssignUser(userId: string,)
+  async forceAssignUser(userId: string)
     experimentId: string,
     variantId: string,
     reason: string,
@@ -313,7 +313,7 @@ export class AllocationService {
 };
     await this.metrics.recordOverride(request.userId, experiment.id, request.overrideVariant!, 'debug_override');
     return this.createSuccessResponse(assignment, variant, 'debug_override', true, experiment);
-  private createSuccessResponse(assignment: UserAssignment,)
+  private createSuccessResponse(assignment: UserAssignment)
     variant: ExperimentVariant,
     reason: string,
     debugMode = false,
@@ -353,7 +353,7 @@ export class AllocationService {
 /**
  * Factory function to create allocation service with Redis cache
  */
-export function createAllocationService(config: AllocationServiceConfig,)
+export function createAllocationService(config: AllocationServiceConfig)
   storage: AssignmentStorage,
   metrics: AssignmentMetrics,
   cache?: AllocationCache

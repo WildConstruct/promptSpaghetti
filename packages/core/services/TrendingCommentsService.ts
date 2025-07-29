@@ -33,7 +33,7 @@ export class TrendingCommentsService {
   private cacheEnabled: boolean;
   private scoreCache: Map<string, { score: CommentScore; timestamp: number }>;
   private trendingCache: Map<string, { results: TrendingResults; timestamp: number }>;
-  constructor(config: {,)
+  constructor(config: {)
   baseUrl: string;
   algorithms?: TrendingAlgorithmConfig;
   defaultAlgorithm?: string;
@@ -66,13 +66,13 @@ export class TrendingCommentsService {
   if (cachedResults && this.cacheEnabled) {
   return {
   results: cachedResults,
-  pagination: {,
+  pagination: {
   total: cachedResults.trendingComments.length,
   limit: validatedRequest.limit,
   offset: validatedRequest.offset,
   hasMore: cachedResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
 },
-  meta: {,
+  meta: {
   requestId,
   processingTime: Date.now() - startTime,
   cacheStatus: 'hit',
@@ -90,17 +90,17 @@ export class TrendingCommentsService {
   validatedRequest.offset + validatedRequest.limit
   );
   return {
-  results: {,
+  results: {
   ...trendingResults,
   trendingComments: paginatedComments,
 },
-  pagination: {,
+  pagination: {
   total: trendingResults.trendingComments.length,
   limit: validatedRequest.limit,
   offset: validatedRequest.offset,
   hasMore: trendingResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
 },
-  meta: {,
+  meta: {
   requestId,
   processingTime: Date.now() - startTime,
   cacheStatus: 'miss',
@@ -110,7 +110,7 @@ export class TrendingCommentsService {
   /**
    * Calculate trending score for a single comment
    */
-  async calculateCommentScore(comment: TrendingComment,)
+  async calculateCommentScore(comment: TrendingComment)
     engagements: CommentEngagement,
     algorithmId?: string
   ): Promise<CommentScore> {
@@ -154,7 +154,7 @@ export class TrendingCommentsService {
   /**
    * Track comment engagement event
    */
-  async trackEngagement(commentId: string,)
+  async trackEngagement(commentId: string)
     userId: string,
     engagementType: CommentEngagementType,
     contextData?: Record<string, unknown>
@@ -209,7 +209,7 @@ export class TrendingCommentsService {
   return {
   resourceId,
   timeRange,
-  metrics: {,
+  metrics: {
   totalComments: 0,
   totalEngagements: 0,
   uniqueCommenters: 0,
@@ -219,24 +219,24 @@ export class TrendingCommentsService {
   responseRate: 0,
   moderationRate: 0,
 },
-  trends: {,
+  trends: {
   commentVelocity: [],
   engagementTrends: [],
   sentimentTrends: [],
   topicEvolution: [],
 },
-  breakdowns: {,
+  breakdowns: {
   byEngagementType: {},
         byUserType: {},
         byTimeOfDay: Array(24).fill(0),
         byDayOfWeek: Array(7).fill(0),
         byLanguage: {},
-        bySentiment: {,
+        bySentiment: {
   positive: 0,
   neutral: 0,
   negative: 0,
 },
-  insights: {,
+  insights: {
   mostEngagedTopics: [],
   influentialCommenters: [],
   emergingTrends: [],
@@ -285,7 +285,7 @@ export class TrendingCommentsService {
   qualifiedComments: qualifiedComments.length,
   trendingComments: sortedComments,
   summary,
-  metadata: {,
+  metadata: {
   calculationTimeMs: 0,
   cacheHit: false,
   dataFreshness: 0,
@@ -578,7 +578,7 @@ export class TrendingCommentsService {
   description: 'Balanced algorithm considering engagement, recency, and quality',
   version: '1.0.0',
   enabled: true,
-  weights: {,
+  weights: {
   engagementWeight: 0.4,
   recencyWeight: 0.25,
   qualityWeight: 0.15,
@@ -586,7 +586,7 @@ export class TrendingCommentsService {
   controversyWeight: 0.05,
   viralityWeight: 0.05,
 },
-  parameters: {,
+  parameters: {
   timeDecayHalfLife: 24,
   minEngagementThreshold: 3,
   controversyBoostFactor: 1.2,
@@ -596,13 +596,13 @@ export class TrendingCommentsService {
   maxCommentAge: 168,
   boostNewAuthors: true,
 },
-  moderationRules: {,
-  autoFlag: {,
+  moderationRules: {
+  autoFlag: {
   toxicityThreshold: 0.8,
   spamThreshold: 0.7,
   offTopicThreshold: 0.8,
 },
-  autoPromote: {,
+  autoPromote: {
   qualityThreshold: 90,
   engagementThreshold: 20,
   authorReputationThreshold: 500,
@@ -635,7 +635,7 @@ export class TrendingCommentsService {
         replyCount: Math.floor(Math.random() * 5),
         replyTree: [],
         visibility: 'public',
-        language: 'en';
+        language: 'en'
   });
     return comments;
   private generateMockCommentContent(): string {

@@ -108,7 +108,7 @@ const sampleVFXUser: VFXTeamMember = {,
   color: '#ff7c00',
   avatar: 'https://example.com/avatar.jpg',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: true,
@@ -125,7 +125,7 @@ const sampleTeam: VFXTeamMember = [
   email: 'jane@wildconstruct.com',
   color: '#3b82f6',
   isOnline: false,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -140,7 +140,7 @@ const sampleTeam: VFXTeamMember = [
   email: 'alex@wildconstruct.com',
   color: '#10b981',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -213,7 +213,7 @@ const sampleChecklist: VFXChecklist = {,
   updatedAt: '2025-07-22T14:30:00Z',
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['medieval', 'castle', 'establishing'],
-  metadata: {,
+  metadata: {
   totalItems: 1,
   completedItems: 0,
   overallProgress: 25,
@@ -774,7 +774,7 @@ describe('VFX Checklist System Components', () => {
     it('should handle invalid user permissions', () => {
   const limitedUser = {
   ...sampleVFXUser,
-  permissions: {,
+  permissions: {
   canCreate: false,
   canEdit: false,
   canDelete: false,

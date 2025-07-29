@@ -81,12 +81,12 @@ export interface CodeExample {
 export interface StepValidation {
     type: 'automatic' | 'manual' | 'quiz' | 'checklist';
     criteria: ValidationCriteria[];
-    feedback: {,
+    feedback: {
         success: string;
         failure: string;
         partial: string;
     };
-    retries: {,
+    retries: {
         allowed: number;
         unlimited: boolean;
     };

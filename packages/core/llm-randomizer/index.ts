@@ -32,11 +32,11 @@ export interface LLMRandomizerWorkflow {
   validateAndSerialize: (graph: any) => Promise<string>;
   // 4. Full round-trip workflow
   fullWorkflow: (request: any, provider?: string) => Promise<{,
-  success: boolean;,
+  success: boolean;
   originalRequest: any;
-  llmOutput: string;,
+  llmOutput: string;
   parsedGraph: any;
-  serializedGraph: string;,
+  serializedGraph: string;
   errors: any;
   warnings: any;
 }>;

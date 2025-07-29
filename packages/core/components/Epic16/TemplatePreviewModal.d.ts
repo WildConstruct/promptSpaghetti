@@ -26,9 +26,8 @@ interface TemplatePreviewModalProps {
     currentUser?: {
         id: string;
         name: string;
-        tier: 'free' | 'pro' | 'enterprise';
-
-    };
+        tier: 'free' | 'pro' | 'enterprise'
+  };
 
 export declare const TemplatePreviewModal: React.FC<TemplatePreviewModalProps>;
 export default TemplatePreviewModal;

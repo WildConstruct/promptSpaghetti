@@ -10,18 +10,18 @@ import { EventEmitter } from 'events';
 // Core help request interfaces
 
 export interface HelpRequest {
-  id: string;,
+  id: string;
   type: HelpRequestType;
-  category: HelpCategory;,
+  category: HelpCategory;
   subcategory: string;
-  priority: HelpPriority;,
+  priority: HelpPriority;
   status: HelpRequestStatus;
   // Request details
-  title: string;,
+  title: string;
   description: string;
   context: RequestContext;
   // User information
-  userId: string;,
+  userId: string;
   userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   // Routing and assignment
@@ -36,11 +36,11 @@ export interface HelpRequest {
   satisfactionRating?: number;
   feedback?: string;
   // Metadata
-  tags: string;,
+  tags: string;
   attachments: HelpAttachment;
   relatedRequests: string;
   // Timestamps
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   firstResponseAt?: Date;
   resolvedAt?: Date;
@@ -92,87 +92,87 @@ export enum HelpRequestType {
   REOPENED = 'reopened'
   export interface RequestContext {
   // User context
-  userAgent: string;,
+  userAgent: string;
   ipAddress: string;
-  location: {,
-  country: string;,
+  location: {
+  country: string;
   region: string;
   timezone: string;
 };
   // Session context
-  sessionId: string;,
+  sessionId: string;
   pageUrl: string;
-  referrer: string;,
+  referrer: string;
   userJourney: string;
   // Application context
-  feature: string;,
+  feature: string;
   section: string;
   templateId?: string;
   marketplaceListingId?: string;
   // Technical context
-  browserInfo: {,
+  browserInfo: {
   name: string;
-  version: string;,
+  version: string;
   platform: string;
 };
   screenResolution: string;
   errorLogs?: string;
   // Business context
-  subscriptionPlan: string;,
+  subscriptionPlan: string;
   accountAge: number; // days
-  previousTickets: number;,
+  previousTickets: number;
   successfulTransactions: number;
 }
 export interface RoutingDecision {
-  strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';,
+  strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';
   confidence: number;
-  reasoning: string;,
+  reasoning: string;
   estimatedResolutionTime: number; // minutes,
   recommendedAgent?: string;
   fallbackStrategy?: string;
 }
 export interface HelpResponse {
-  id: string;,
+  id: string;
   type: 'auto' | 'agent' | 'system' | 'knowledge_base';
-  content: string;,
+  content: string;
   author: string;
-  visibility: 'public' | 'internal';,
+  visibility: 'public' | 'internal';
   helpful: boolean | null;
-  attachments: string;,
+  attachments: string;
   timestamp: Date;
 }
 export interface HelpAttachment {
-  id: string;,
+  id: string;
   filename: string;
-  contentType: string;,
+  contentType: string;
   size: number;
-  url: string;,
+  url: string;
   uploadedBy: string;
-  uploadedAt: Date;,
+  uploadedAt: Date;
   processed: boolean;
-  metadata: {,
-  isScreenshot: boolean;,
+  metadata: {
+  isScreenshot: boolean;
   containsPersonalInfo: boolean;
   category: string;
 };
 }
 export interface HelpSLA {
-  responseTime: {,
+  responseTime: {
   target: number; // minutes,
   actual?: number;
-  deadline: Date;,
+  deadline: Date;
   breached: boolean;
 };
-  resolutionTime: {,
+  resolutionTime: {
   target: number; // minutes,
   actual?: number;
-  deadline: Date;,
+  deadline: Date;
   breached: boolean;
 };
   escalationThreshold: number; // minutes
 }
 export interface HelpAnalytics {
-  viewCount: number;,
+  viewCount: number;
   interactionCount: number;
   timeToFirstResponse?: number; // minutes,
   totalResolutionTime?: number; // minutes,
@@ -183,22 +183,22 @@ export interface HelpAnalytics {
   // Knowledge base integration
 }
 export interface KnowledgeBaseArticle {
-  id: string;,
+  id: string;
   title: string;
-  summary: string;,
+  summary: string;
   content: string;
-  category: HelpCategory;,
+  category: HelpCategory;
   tags: string;
-  relevanceScore: number;,
+  relevanceScore: number;
   helpfulnessRating: number;
-  viewCount: number;,
+  viewCount: number;
   lastUpdated: Date;
   url: string;
 }
 export interface KnowledgeBaseSearch {
   query: string;
   categories?: HelpCategory;
-  filters?: {,
+  filters?: {
   minRating?: number;
   language?: string;
   userType?: string;
@@ -208,64 +208,64 @@ export interface KnowledgeBaseSearch {
 // Smart routing interfaces
 }
 export interface RoutingRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   conditions: RoutingCondition;
-  action: RoutingAction;,
+  action: RoutingAction;
   priority: number;
   active: boolean;
 }
 export interface RoutingCondition {
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
-  value: any;,
+  value: any;
   weight: number;
 }
 export interface RoutingAction {
-  type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles';,
+  type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles';
   target: string;
   parameters: Record<string, any>;
   // Service configuration
 }
 export interface HelpRequestConfig {
-  autoResolution: {,
-  enabled: boolean;,
+  autoResolution: {
+  enabled: boolean;
   confidenceThreshold: number;
   maxAttempts: number;
 };
-  knowledgeBase: {,
+  knowledgeBase: {
   enabled: boolean;
-  searchEndpoint: string;,
+  searchEndpoint: string;
   minRelevanceScore: number;
   maxSuggestions: number;
 };
-  routing: {,
+  routing: {
   enableSmartRouting: boolean;
-  defaultQueue: string;,
+  defaultQueue: string;
   escalationRules: EscalationRule;
 };
-  sla: {,
+  sla: {
   responseTargets: Record<HelpPriority, number>; // minutes,
   resolutionTargets: Record<HelpPriority, number>; // minutes,
   businessHoursOnly: boolean;
 };
-  analytics: {,
+  analytics: {
   trackUserJourney: boolean;
-  enableSentimentAnalysis: boolean;,
+  enableSentimentAnalysis: boolean;
   collectFeedback: boolean;
 };
-  integrations: {,
+  integrations: {
   ticketSystem: boolean;
-  communityForum: boolean;,
+  communityForum: boolean;
   chatbot: boolean;
   emailSupport: boolean;
 };
 }
 export interface EscalationRule {
-  trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';,
+  trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';
   condition: string;
-  escalateTo: string;,
+  escalateTo: string;
   delayMinutes: number;
   /**
   * Epic 16 Help Request Service
@@ -283,31 +283,31 @@ export class Epic16HelpRequestService extends EventEmitter {
   constructor(config: Partial<HelpRequestConfig> = {}) {
   super();
   this.config = {
-  autoResolution: {,
+  autoResolution: {
   enabled: true,
   confidenceThreshold: 0.85,
   maxAttempts: 3,
 },
-  knowledgeBase: {,
+  knowledgeBase: {
   enabled: true,
   searchEndpoint: '/api/knowledge-base/search',
   minRelevanceScore: 0.7,
   maxSuggestions: 5,
 },
-  routing: {,
+  routing: {
   enableSmartRouting: true,
   defaultQueue: 'general_support',
   escalationRules: [],
 },
-  sla: {,
-  responseTargets: {,
+  sla: {
+  responseTargets: {
   [HelpPriority.CRITICAL]: 15,   // 15 minutes,
   [HelpPriority.URGENT]: 30,     // 30 minutes,
   [HelpPriority.HIGH]: 60,       // 1 hour,
   [HelpPriority.MEDIUM]: 240,    // 4 hours,
   [HelpPriority.LOW]: 480        // 8 hours,
 },
-  resolutionTargets: {,
+  resolutionTargets: {
   [HelpPriority.CRITICAL]: 240,  // 4 hours,
   [HelpPriority.URGENT]: 480,    // 8 hours,
   [HelpPriority.HIGH]: 1440,     // 24 hours,
@@ -316,12 +316,12 @@ export class Epic16HelpRequestService extends EventEmitter {
 },
   businessHoursOnly: true;
   },
-  analytics: {,
+  analytics: {
   trackUserJourney: true,
   enableSentimentAnalysis: true,
   collectFeedback: true,
 },
-  integrations: {,
+  integrations: {
   ticketSystem: true,
   communityForum: true,
   chatbot: true,
@@ -345,12 +345,12 @@ export class Epic16HelpRequestService extends EventEmitter {
   responses: [],
   suggestedArticles: [],
   sla: this.calculateSLA(requestData.priority),
-  analytics: {,
+  analytics: {
   viewCount: 1,
   interactionCount: 0,
   resolutionSource: 'agent',
 },
-  routingDecision: {,
+  routingDecision: {
   strategy: 'support_agent',
   confidence: 0.5,
   reasoning: 'Initial submission - pending triage',
@@ -587,7 +587,7 @@ export class Epic16HelpRequestService extends EventEmitter {
     limit?: number;
     offset?: number;
   } = {}): Promise<{
-  requests: HelpRequest;,
+  requests: HelpRequest;
   total: number;
   hasMore: boolean;
 }> {
@@ -624,14 +624,14 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Get help request analytics
    */
   async getAnalytics(timeRange: { start: Date; end: Date }): Promise<{
-  totalRequests: number;,
+  totalRequests: number;
   requestsByStatus: Record<HelpRequestStatus, number>;
   requestsByCategory: Record<HelpCategory, number>;
-  averageResponseTime: number;,
+  averageResponseTime: number;
   averageResolutionTime: number;
-  slaBreachRate: number;,
+  slaBreachRate: number;
   autoResolutionRate: number;
-  customerSatisfaction: number;,
+  customerSatisfaction: number;
   deflectionRate: number;
 }> {
     const requests = Array.from(this.requests.values()).filter(r =>;);
@@ -688,12 +688,12 @@ export class Epic16HelpRequestService extends EventEmitter {
   const responseTarget = this.config.sla.responseTargets[priority];
   const resolutionTarget = this.config.sla.resolutionTargets[priority];
   return {
-  responseTime: {,
+  responseTime: {
   target: responseTarget,
   deadline: new Date(now.getTime() + responseTarget * 60000),
   breached: false,
 },
-  resolutionTime: {,
+  resolutionTime: {
   target: resolutionTarget,
   deadline: new Date(now.getTime() + resolutionTarget * 60000),
   breached: false,
@@ -754,7 +754,7 @@ export class Epic16HelpRequestService extends EventEmitter {
         conditions: [,
           { field: 'userTier', operator: 'in', value: ['premium', 'enterprise'], weight: 1.0 }
         ],
-        action: {,
+        action: {
   type: 'assign_to_agent',
           target: 'senior_agent_queue',
           parameters: { estimatedTime: 30 }
@@ -770,7 +770,7 @@ export class Epic16HelpRequestService extends EventEmitter {
           { field: 'category', operator: 'equals', value: HelpCategory.TECHNICAL, weight: 0.8 },
           { field: 'type', operator: 'equals', value: HelpRequestType.TECHNICAL_ISSUE, weight: 0.9 }
         ],
-        action: {,
+        action: {
   type: 'assign_to_agent',
           target: 'technical_specialist',
           parameters: { estimatedTime: 45 }
@@ -785,7 +785,7 @@ export class Epic16HelpRequestService extends EventEmitter {
         conditions: [,
           { field: 'category', operator: 'equals', value: HelpCategory.BILLING, weight: 1.0 }
         ],
-        action: {,
+        action: {
   type: 'assign_to_agent',
           target: 'finance_team',
           parameters: { estimatedTime: 60 }

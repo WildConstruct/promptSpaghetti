@@ -421,7 +421,8 @@ const handleItemUpdate = useCallback((itemId, updates) => {
         updatedAt;
     new Date().toISOString(),
         metadata;
-    { }
+    {
+    }
 }, ...prev.metadata, completedItems, prev.items.filter(item => ), item.id === itemId ? updates.status === 'approved' : item.status === 'approved').length, lastActivity;
 ().toISOString(),
 ;

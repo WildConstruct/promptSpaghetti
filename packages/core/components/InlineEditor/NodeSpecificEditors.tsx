@@ -2,8 +2,8 @@ import React, { useState, useCallback, useRef } from 'react';
 import { NodeData } from '../../types/NodeTypes';
 import { NodeSpecificRichEditor } from './RichTextEditor';
 interface NodeEditorProps {
-  data: NodeData;,
-  onChange: (field: string, value: any) => void;,
+  data: NodeData;
+  onChange: (field: string, value: any) => void;
   errors: Record<string, string>;
   theme?: 'light' | 'dark' | 'cinema';
   // WeightedChoice Node Editor with drag-and-drop weight adjustment
@@ -143,7 +143,7 @@ interface NodeEditorProps {
               border: `1px solid ${colors.border}`}
 },
   borderRadius: 6,
-              cursor: 'move';
+              cursor: 'move'
   }}
           >
             <div style={{
@@ -191,7 +191,7 @@ interface NodeEditorProps {
   borderRadius: 4,
                   color: colors.text,
                   fontSize: 12,
-                  textAlign: 'center';
+                  textAlign: 'center'
   }}
                 min="0"
               />

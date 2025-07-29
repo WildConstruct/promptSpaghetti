@@ -36,47 +36,47 @@ class BrowserEventEmitter {
   HIPAA = 'hipaa',
   PCI_DSS = 'pci_dss'
   export interface ClassificationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: DataCategory;
-  level: ClassificationLevel;,
+  level: ClassificationLevel;
   patterns: RegExp;
   keywords: string;
   contextRules?: ContextRule;
-  complianceRequirements: ComplianceFramework;,
+  complianceRequirements: ComplianceFramework;
   priority: number;
   enabled: boolean;
 }
 export interface ContextRule {
-  field: string;,
+  field: string;
   condition: 'equals' | 'contains' | 'matches' | 'exists';
   value?: string | RegExp;
 }
 export interface ClassificationResult {
-  level: ClassificationLevel;,
+  level: ClassificationLevel;
   category: DataCategory;
-  confidence: number;,
+  confidence: number;
   matchedRules: string;
-  complianceRequirements: ComplianceFramework;,
+  complianceRequirements: ComplianceFramework;
   encryptionRequired: boolean;
-  retentionPeriod: string;,
+  retentionPeriod: string;
   accessControls: string;
   reasoning: string;
 }
 export interface DataElement {
-  id: string;,
+  id: string;
   fieldName: string;
-  value: any;,
+  value: any;
   dataType: string;
   context: Record<string, any>;
-  source: string;,
+  source: string;
   timestamp: Date;
 }
 export interface ClassificationMetadata {
-  classifiedAt: Date;,
+  classifiedAt: Date;
   classifiedBy: string;
-  version: string;,
+  version: string;
   reviewDate: Date;
   lastModified: Date;
   approvedBy?: string;
@@ -195,11 +195,11 @@ export class DataClassifier extends BrowserEventEmitter {
   /**
    * Get encryption requirements for classification level
    */
-  public getEncryptionRequirements(level: ClassificationLevel): {,
+  public getEncryptionRequirements(level: ClassificationLevel): {
   atRest: boolean;
-  inTransit: boolean;,
+  inTransit: boolean;
   algorithm: string;
-  keyRotation: string;,
+  keyRotation: string;
   keyStorage: string;
   switch (level) {
   case ClassificationLevel.RESTRICTED:,
@@ -237,9 +237,9 @@ export class DataClassifier extends BrowserEventEmitter {
   /**
    * Get retention requirements for classification level
    */
-  public getRetentionRequirements(level: ClassificationLevel, category: DataCategory): {,
+  public getRetentionRequirements(level: ClassificationLevel, category: DataCategory): {
   period: string;
-  disposal: string;,
+  disposal: string;
   archival: boolean;
   if (category === DataCategory.PII) {
   return {
@@ -397,7 +397,7 @@ export class DataClassifier extends BrowserEventEmitter {
         priority: 10,
         enabled: true];
     defaultRules.forEach(rule => this.addRule(rule));
-  private evaluateRule(rule: ClassificationRule, data: DataElement): {,
+  private evaluateRule(rule: ClassificationRule, data: DataElement): {
   matches: boolean;
     reasons: string;
     const reasons: string = [];
@@ -437,7 +437,7 @@ export class DataClassifier extends BrowserEventEmitter {
           matches = true;
           reasons.push(`Context rule matched: ${contextRule.field} ${contextRule.condition} ${contextRule.value}`);}
     return { matches, reasons };
-  private determineClassification(matchedRules: ClassificationRule,)
+  private determineClassification(matchedRules: ClassificationRule)
     data: DataElement,
     reasoning: string): ClassificationResult {,
     if (matchedRules.length === 0) {
@@ -548,26 +548,26 @@ export class ClassificationPolicyManager {
 // Supporting interfaces
 
 export interface ClassificationPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   applicableFrameworks: ComplianceFramework;
-  encryptionRequired: boolean;,
+  encryptionRequired: boolean;
   requiredAccessControls: string;
-  retentionRequirements: {,
-  minimumPeriod: string;,
+  retentionRequirements: {
+  minimumPeriod: string;
   maximumPeriod: string;
   disposalMethod: string;
 };
-  auditRequirements: {,
+  auditRequirements: {
   frequency: string;
   scope: string;
 };
 }
 export interface ComplianceValidationResult {
-  compliant: boolean;,
+  compliant: boolean;
   violations: string;
-  policy: string;,
+  policy: string;
   timestamp: Date;
   // Export default instance
 }

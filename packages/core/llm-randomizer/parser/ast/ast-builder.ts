@@ -4,7 +4,7 @@
 import { Token, TokenType, LexerPosition } from '../lexer/graph-lexer';
 
 export interface ASTNode {
-  type: string;,
+  type: string;
   position: LexerPosition;
   children?: ASTNode;
 }
@@ -13,30 +13,30 @@ export interface GraphAST extends ASTNode {
   version?: string;
   checksum?: string;
   metadata?: MetadataNode;
-  nodes: NodeDefinitionAST;,
+  nodes: NodeDefinitionAST;
   edges: EdgeDefinitionAST;
   export interface MetadataNode extends ASTNode {
-  type: 'Metadata';,
+  type: 'Metadata';
   properties: Record<string, any>;
   export interface NodeDefinitionAST extends ASTNode {
-  type: 'NodeDefinition';,
+  type: 'NodeDefinition';
   id: string;
   nodeType: string;
   properties?: Record<string, any>;
   inputs?: string;
   export interface EdgeDefinitionAST extends ASTNode {
-  type: 'EdgeDefinition';,
+  type: 'EdgeDefinition';
   source: string;
   target: string;
   export interface PropertyNode extends ASTNode {
-  type: 'Property';,
+  type: 'Property';
   key: string;
   value: any;
   export interface ArrayNode extends ASTNode {
-  type: 'Array';,
+  type: 'Array';
   elements: any;
   export interface ParseError {
-  message: string;,
+  message: string;
   position: LexerPosition;
   severity: 'error' | 'warning';
   suggestion?: string;
@@ -293,8 +293,7 @@ export class ASTBuilder {
       return null;
     case TokenType.ARRAY_START:
       return this.parseArray();
-    case TokenType.INDENT:
-      return this.parseObject();,
+    case TokenType.INDENT: return this.parseObject();
   default:
       this.addError(`Unexpected token in value: ${token.value}`, 'error');}
       this.advance();

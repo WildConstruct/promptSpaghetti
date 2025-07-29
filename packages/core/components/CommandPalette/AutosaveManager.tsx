@@ -301,8 +301,8 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
       case 'error': return 'Error';
       case 'restored': return 'Restored';
       case 'cleared': return 'Cleared';
-      default: return 'Ready';
-    }
+      default: return 'Ready'
+  }
   };
   const formatTime = (timestamp: number) => {
     const now = Date.now();

@@ -8,33 +8,33 @@
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
 export interface VarianceMetrics {
-  overallVariance: 'low' | 'medium' | 'high';,
+  overallVariance: 'low' | 'medium' | 'high';
   varianceScore: number; // 0-1 scale,
-  diversityMetrics: {,
-  outputLengthVariance: number;,
+  diversityMetrics: {
+  outputLengthVariance: number;
   vocabularyDiversity: number;
-  structuralDiversity: number;,
+  structuralDiversity: number;
   executionPathDiversity: number;
 };
-  creativeRange: {,
+  creativeRange: {
   uniqueElements: string;
-  commonElements: string;,
+  commonElements: string;
   repetitionRate: number;
   creativityScore: number;
 };
   suggestions: VarianceSuggestion;
 }
 export interface VarianceSuggestion {
-  type: 'increase' | 'decrease' | 'optimize';,
+  type: 'increase' | 'decrease' | 'optimize';
   category: 'weights' | 'structure' | 'content' | 'execution';
-  message: string;,
+  message: string;
   impact: 'low' | 'medium' | 'high';
   actionable: boolean;
 }
 export interface DiversityIndicator {
-  metric: string;,
+  metric: string;
   value: number;
-  level: 'low' | 'medium' | 'high';,
+  level: 'low' | 'medium' | 'high';
   description: string;
   color: string;
 }
@@ -130,21 +130,21 @@ export class VarianceAnalysisService {
    */
   getVarianceLevelInfo(level: 'low' | 'medium' | 'high') {
   const info = {
-  low: {,
+  low: {
   color: '#ef4444',
   background: '#fef2f2',
   border: '#fecaca',
   icon: '🔴',
   description: 'Results are very similar - consider adding more randomization',
 },
-  medium: {,
+  medium: {
   color: '#f59e0b',
   background: '#fffbeb',
   border: '#fed7aa',
   icon: '🟡',
   description: 'Good balance of consistency and variety',
 },
-  high: {,
+  high: {
   color: '#10b981',
   background: '#f0fdf4',
   border: '#bbf7d0',
@@ -156,13 +156,13 @@ export class VarianceAnalysisService {
   return {
   overallVariance: 'low',
   varianceScore: 0,
-  diversityMetrics: {,
+  diversityMetrics: {
   outputLengthVariance: 0,
   vocabularyDiversity: 0,
   structuralDiversity: 0,
   executionPathDiversity: 0,
 },
-  creativeRange: {,
+  creativeRange: {
   uniqueElements: [],
   commonElements: [],
   repetitionRate: 1,
@@ -299,7 +299,7 @@ export class VarianceAnalysisService {
   if (score < 0.3) return 'low';
   if (score < 0.7) return 'medium';
   return 'high';
-  private generateVarianceSuggestions(diversityMetrics: VarianceMetrics['diversityMetrics'],)
+  private generateVarianceSuggestions(diversityMetrics: VarianceMetrics['diversityMetrics'])
   creativeRange: VarianceMetrics['creativeRange'],
   overallVariance: 'low' | 'medium' | 'high',
   executionPaths: any): VarianceSuggestion {,

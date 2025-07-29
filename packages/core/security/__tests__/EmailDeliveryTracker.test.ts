@@ -33,11 +33,11 @@ describe('EmailDeliveryTracker', () => {
   type: EmailType.ACCOUNT_VERIFICATION,
   recipient: 'test@example.com',
   subject: 'Verify your account',
-  content: {,
+  content: {
   html: '<p>Please verify your account</p>',
   text: 'Please verify your account',
 },
-  metadata: {,
+  metadata: {
   userId: 'user-123',
   sessionId: 'session-456',
 };
@@ -65,10 +65,10 @@ describe('EmailDeliveryTracker', () => {
   type: EmailType.PASSWORD_RESET,
   recipient: 'fail@example.com',
   subject: 'Reset your password',
-  content: {,
+  content: {
   text: 'Reset link here',
 },
-  metadata: {,
+  metadata: {
   userId: 'user-fail',
 };
       const emailId = await failingTracker.sendEmail(request);
@@ -87,10 +87,10 @@ describe('EmailDeliveryTracker', () => {
   type: EmailType.MFA_CODE,
   recipient: 'mfa@example.com',
   subject: 'Your MFA code',
-  content: {,
+  content: {
   text: 'Your code is: 123456',
 },
-  metadata: {,
+  metadata: {
   userId: 'user-mfa',
 };
       const emailId = await tracker.sendEmail(request);
@@ -382,7 +382,7 @@ describe('EmailDeliveryTracker', () => {
   error: 'Network timeout',
 }],
         tracking: { opens: [], clicks: [], unsubscribes: [] },
-        providerData: {,
+        providerData: {
   htmlContent: '<p>Reset your password</p>',
   textContent: 'Reset your password',
 };
@@ -440,7 +440,7 @@ describe('EmailDeliveryTracker', () => {
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, {)
-  bounceInfo: {,
+  bounceInfo: {
   type: BounceType.HARD,
   subType: BounceSubType.NO_EMAIL,
   reason: 'Invalid email address',
@@ -461,7 +461,7 @@ describe('EmailDeliveryTracker', () => {
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, {)
-  bounceInfo: {,
+  bounceInfo: {
   type: BounceType.HARD,
   subType: BounceSubType.NO_EMAIL,
   reason: 'Invalid email address',
@@ -502,8 +502,8 @@ describe('EmailDeliveryTracker', () => {
     test('should use custom provider configuration', () => {
   const customTracker = new EmailDeliveryTracker({)
   defaultProvider: EmailProvider.AWS_SES,
-  providerConfigs: {,
-  [EmailProvider.AWS_SES]: {,
+  providerConfigs: {
+  [EmailProvider.AWS_SES]: {
   apiKey: 'aws-key-123',
   endpoint: 'https://email.us-east-1.amazonaws.com',
 });

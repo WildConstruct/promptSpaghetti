@@ -12,7 +12,7 @@ interface PreviewResult {
   // Epic 8.5-5: Weight impact information
   executionPath?: { steps: unknown; randomizationPoints: unknown };
   weightChoices?: Array<{
-  nodeId: string;,
+  nodeId: string;
   selectedOption: unknown;
   availableOptions: unknown;
   weights?: number;
@@ -29,7 +29,7 @@ export function usePreviewSeeds() {
   const [results, setResults] = useState<PreviewResult>([]);
   const [aggregateError, setAggregateError] = useState<string | null>(null);
   const [performanceStats, setPerformanceStats] = useState<{
-  totalTime: number;,
+  totalTime: number;
   averageTime: number;
 } | null>(null);
   // Epic 8.5 Task 3: Individual result management state
@@ -68,7 +68,7 @@ export function usePreviewSeeds() {
   // Call the real preview API endpoint
   const response = await fetch('/preview', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -151,7 +151,7 @@ export function usePreviewSeeds() {
   try {
   const response = await fetch('/preview', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),

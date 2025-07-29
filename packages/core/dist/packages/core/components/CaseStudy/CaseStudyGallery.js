@@ -343,106 +343,106 @@ _jsx("style", { children: `
         .header-main h2 {
           margin: 0 0 4px 0;
           font-size: 28px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .header-main p {
           margin: 0;
-          font-size: 16px;,
+          font-size: 16px;
   color: #6b7280;
         .header-controls {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
         .layout-toggle {
-          display: flex;,
+          display: flex;
   border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   overflow: hidden;
         .layout-btn {
-          background: #ffffff;,
+          background: #ffffff;
   border: none;
-          padding: 8px;,
+          padding: 8px;
   cursor: pointer;
-          color: #6b7280;,
+          color: #6b7280;
   transition: all 0.2s ease;
         .layout-btn:hover {,
   background: #f9fafb;
         .layout-btn.active {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: #ffffff;
         .results-count {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           font-weight: 500;
         .gallery-controls {
-          background: #f8fafc;,
+          background: #f8fafc;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 16px;
-          margin-bottom: 24px;,
+          margin-bottom: 24px;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 16px;
         .search-section {
           display: flex;
           align-items: center;
         .search-input {
-          position: relative;,
+          position: relative;
   flex: 1;
           max-width: 400px;
         .search-icon {
-          position: absolute;,
+          position: absolute;
   left: 12px;
-          top: 50%;,
+          top: 50%;
   transform: translateY(-50%);
           color: #9ca3af;
         .search-input input {
-          width: 100%;,
+          width: 100%;
   padding: 10px 12px 10px 36px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
         .search-clear {
-          position: absolute;,
+          position: absolute;
   right: 12px;
-          top: 50%;,
+          top: 50%;
   transform: translateY(-50%);
-          background: none;,
+          background: none;
   border: none;
-          font-size: 18px;,
+          font-size: 18px;
   color: #9ca3af;
-          cursor: pointer;,
+          cursor: pointer;
   padding: 0;
-          width: 20px;,
+          width: 20px;
   height: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
         .filters-section {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 12px;
           align-items: center;
         .filter-select, .sort-select {
-          padding: 8px 12px;,
+          padding: 8px 12px;
   border: 1px solid #d1d5db;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: #ffffff;
-          font-size: 14px;,
+          font-size: 14px;
   cursor: pointer;
         .filter-checkbox {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #4b5563;
           cursor: pointer;
         .clear-filters, .clear-filters-button {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   border: 1px solid #d1d5db;
           padding: 8px 16px;
           border-radius: 6px;
-          font-size: 14px;,
+          font-size: 14px;
   cursor: pointer;
           transition: all 0.2s ease;
         .clear-filters:hover, .clear-filters-button:hover {,
@@ -458,7 +458,7 @@ _jsx("style", { children: `
           gap: 24px;
         .case-studies-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 16px;
         .case-studies-list .case-study-card.list-item {
           max-width: none;
@@ -466,32 +466,32 @@ _jsx("style", { children: `
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   padding: 60px 20px;
           text-align: center;
         .loading-spinner {
-          width: 40px;,
+          width: 40px;
   height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
           margin-bottom: 16px;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         .error-state h3, .empty-state h3 {
-          margin: 0 0 8px 0;,
+          margin: 0 0 8px 0;
   color: #1f2937;
         .error-state p, .empty-state p {
-          margin: 0 0 16px 0;,
+          margin: 0 0 16px 0;
   color: #6b7280;
         .retry-button {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: #ffffff;
-          border: none;,
+          border: none;
   padding: 10px 20px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           transition: background 0.2s ease;
         .retry-button:hover {,
@@ -499,34 +499,34 @@ _jsx("style", { children: `
         .gallery-pagination {
           display: flex;
           justify-content: center;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           margin-top: 32px;
         .page-btn {
-          background: #ffffff;,
+          background: #ffffff;
   border: 1px solid #d1d5db;
           padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-          font-size: 14px;,
+          font-size: 14px;
   transition: all 0.2s ease;
         .page-btn:hover:not(:disabled) {,
   background: #f9fafb;
           border-color: #9ca3af;
         .page-btn.active {
           background: #3b82f6;
-          border-color: #3b82f6;,
+          border-color: #3b82f6;
   color: #ffffff;
         .page-btn:disabled {,
   opacity: 0.5;
           cursor: not-allowed;
         .page-numbers {
-          display: flex;,
+          display: flex;
   gap: 4px;
         @media (max-width: 768px) {
           .gallery-header {
             flex-direction: column;
-            align-items: flex-start;,
+            align-items: flex-start;
   gap: 16px;
           .header-controls {
             width: 100%;
@@ -539,7 +539,7 @@ _jsx("style", { children: `
           .filter-select, .sort-select {
             width: 100%;
           .case-studies-grid {
-            grid-template-columns: 1fr;,
+            grid-template-columns: 1fr;
   gap: 16px;
           .page-numbers {
             display: none;

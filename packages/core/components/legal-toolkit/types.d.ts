@@ -42,7 +42,7 @@ export interface ContractClause {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     standardCompliance: boolean;
     suggestions?: string[];
-    position: {,
+    position: {
         start: number;
         end: number;
     };
@@ -138,7 +138,7 @@ export interface TerminologyValidatorProps {
 
 export interface TermValidationResult {
     term: string;
-    position: {,
+    position: {
         start: number;
         end: number;
     };

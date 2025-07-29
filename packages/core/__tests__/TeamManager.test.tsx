@@ -67,7 +67,7 @@ describe('TeamManager', () => {
   role: 'owner' as const,
   joinedAt: new Date('2023-01-01'),
   invitedBy: 'user-1',
-  user: {,
+  user: {
   id: 'user-1',
   email: 'owner@example.com',
   displayName: 'Team Owner',
@@ -81,7 +81,7 @@ describe('TeamManager', () => {
   role: 'member' as const,
   joinedAt: new Date('2023-01-02'),
   invitedBy: 'user-1',
-  user: {,
+  user: {
   id: 'user-2',
   email: 'member@example.com',
   displayName: 'Team Member',

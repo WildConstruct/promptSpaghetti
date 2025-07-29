@@ -7,24 +7,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
 interface PreviewResult {
-  output: string;,
+  output: string;
   cost: number;
-  qualityScore: number;,
+  qualityScore: number;
   tokens: number;
-  model: string;,
+  model: string;
   executionTime: number;
   interface TemplatePreviewModalProps {
-  template: MarketplaceTemplate;,
+  template: MarketplaceTemplate;
   isOpen: boolean;
-  onClose: () => void;,
+  onClose: () => void;
   onPurchase: (template: MarketplaceTemplate) => void;
   onPreviewGenerate?: (template: MarketplaceTemplate, input: string, model?: string) => Promise<PreviewResult>;
   isPurchased?: boolean;
-  currentUser?: {,
-  id: string;,
+  currentUser?: {
+  id: string;
   name: string;
-  tier: 'free' | 'pro' | 'enterprise';
-};
+  tier: 'free' | 'pro' | 'enterprise'
+  };
 
 export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
   template,

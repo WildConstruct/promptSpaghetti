@@ -18,9 +18,9 @@ import {
 } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
 interface ShareModalProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  resourceId: string;,
+  resourceId: string;
   resourceType: ShareableResourceType;
   resourceTitle: string;
   resourceDescription?: string;

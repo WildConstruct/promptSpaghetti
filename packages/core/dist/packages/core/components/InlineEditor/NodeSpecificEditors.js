@@ -105,7 +105,7 @@ const getThemeColors = () => {
                         padding: 8,
                         background: draggedIndex === index ? colors.accent + '20' : colors.background,
                         border: `1px solid ${colors.border}`
-                    }, ", borderRadius: 6, cursor: 'move'; }} >", _jsx("div", { style: {
+                    }, ", borderRadius: 6, cursor: 'move' }} >", _jsx("div", { style: {
                             width: 8,
                             height: 16,
                             background: colors.border,
@@ -121,7 +121,7 @@ const getThemeColors = () => {
                                     padding: 4,
                                     background: colors.background,
                                     border: `1px solid ${colors.border}`
-                                } }), ", borderRadius: 4, color: colors.text, fontSize: 12, textAlign: 'center'; }} min=\"0\" />", _jsx("span", { style: { fontSize: 12, color: colors.text, opacity: 0.7 }, children: "%" })] }), _jsx("button", { onClick: () => removeChoice(index), style: {
+                                } }), ", borderRadius: 4, color: colors.text, fontSize: 12, textAlign: 'center' }} min=\"0\" />", _jsx("span", { style: { fontSize: 12, color: colors.text, opacity: 0.7 }, children: "%" })] }), _jsx("button", { onClick: () => removeChoice(index), style: {
                             background: colors.danger,
                             color: 'white',
                             border: 'none',

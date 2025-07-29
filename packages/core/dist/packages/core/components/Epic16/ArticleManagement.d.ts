@@ -107,7 +107,10 @@ export declare const ArticleList: React.FC<{}, articles>, Article: any;
 export declare const ArticleEditor: React.FC<{
     article?: Article;
     categories: ArticleCategory;
-}, onSave>;
+    onSave: (article: Partial<Article>) => Promise<void>;
+    onCancel: () => void;
+    onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
+}>;
 export declare const ArticleManagement: React.FC<ArticleManagementProps>;
 export default ArticleManagement;
 //# sourceMappingURL=ArticleManagement.d.ts.map

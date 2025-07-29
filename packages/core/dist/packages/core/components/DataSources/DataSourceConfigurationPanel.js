@@ -71,7 +71,8 @@ const addTag = useCallback((tag) => {
     if (!editingSource || editingSource.metadata.tags.includes(tag))
         return;
     updateEditingSource({});
-    metadata: { }
+    metadata: {
+    }
 }, ...editingSource.metadata, tags, [...editingSource.metadata.tags, tag]);
 ;
 [editingSource, updateEditingSource];
@@ -80,7 +81,8 @@ const removeTag = useCallback((tag) => {
     if (!editingSource)
         return;
     updateEditingSource({});
-    metadata: { }
+    metadata: {
+    }
 }, ...editingSource.metadata, tags, editingSource.metadata.tags.filter(t => t !== tag));
 ;
 [editingSource, updateEditingSource];
@@ -134,7 +136,7 @@ _jsxs("div", { style: {
                                     marginBottom: 8,
                                     background: selectedSourceId === source.id ? '#2d3748' : 'transparent',
                                     border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`
-                                }), ", borderRadius: 6, cursor: 'pointer'; }} onClick=", () => setSelectedSourceId(source.id), ">", _jsxs("div", { style: {
+                                }), ", borderRadius: 6, cursor: 'pointer' }} onClick=", () => setSelectedSourceId(source.id), ">", _jsxs("div", { style: {
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'flex-start',

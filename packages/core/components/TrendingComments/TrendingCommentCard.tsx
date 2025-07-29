@@ -9,7 +9,7 @@
 import React, { useState } from 'react';
 import { TrendingComment } from '../../types/TrendingCommentsTypes';
 interface TrendingCommentCardProps {
-  comment: TrendingComment;,
+  comment: TrendingComment;
   rank: number;
   onEngagement: (commentId: string, engagementType: string) => void;
   showReplies?: boolean;
@@ -123,7 +123,7 @@ interface TrendingCommentCardProps {
           backgroundImage: comment.authorAvatarUrl ? `url(${comment.authorAvatarUrl})` : undefined}
 },
   backgroundSize: 'cover',
-          backgroundPosition: 'center';
+          backgroundPosition: 'center'
   }}>
           {!comment.authorAvatarUrl && comment.authorDisplayName.charAt(0).toUpperCase()}
         </div>
@@ -289,7 +289,7 @@ interface TrendingCommentCardProps {
   cursor: 'pointer',
   fontSize: '12px',
   color: '#6b7280',
-  ':hover': {,
+  ':hover': {
   backgroundColor: '#f3f4f6',
 }}
           >

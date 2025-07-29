@@ -32,13 +32,13 @@ export { createDefaultMiddleware, MiddlewareFactory } from './middleware/StateMi
 // State management configuration
 
 export interface StateSystemConfig {
-  enableValidation: boolean;,
+  enableValidation: boolean;
   enableHistory: boolean;
-  maxHistorySize: number;,
+  maxHistorySize: number;
   enablePersistence: boolean;
-  enableDebug: boolean;,
+  enableDebug: boolean;
   enableCrossDomainSync: boolean;
-  conflictResolutionStrategy: 'last_writer_wins' | 'merge' | 'user_intervention';,
+  conflictResolutionStrategy: 'last_writer_wins' | 'merge' | 'user_intervention';
   performanceMonitoring: boolean;
   securityRules: boolean;
 }
@@ -64,16 +64,16 @@ export async function initializeStateSystem(config: Partial<StateSystemConfig> =
 
 // State system health check
 export function getStateSystemHealth(): {
-  orchestrator: any;,
+  orchestrator: any;
   conflictResolver: any;
-  domains: string;,
+  domains: string;
   status: 'healthy' | 'degraded' | 'error';
   return {
   orchestrator: globalStateOrchestrator.getHealthStatus(),
-  conflictResolver: {,
+  conflictResolver: {
   activeConflicts: globalConflictResolver.getActiveConflicts().length,
   resolutionHistory: globalConflictResolver.getResolutionHistory().length,
 },
   domains: globalStateOrchestrator.getRegisteredDomains(),
-    status: 'healthy';
+    status: 'healthy'
   };

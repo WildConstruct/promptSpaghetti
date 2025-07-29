@@ -51,13 +51,13 @@ export declare enum DataSensitivityLevel {
 
 export interface DataHandlingRequirements {
     /** Minimum access control requirements */
-    accessControl: {,
+    accessControl: {
         authentication: 'none' | 'basic' | 'strong' | 'mfa';
         authorization: 'none' | 'role-based' | 'attribute-based' | 'need-to-know';
-        monitoring: 'none' | 'basic' | 'enhanced' | 'continuous';
-    };
+        monitoring: 'none' | 'basic' | 'enhanced' | 'continuous'
+  };
     /** Encryption requirements */
-    encryption: {,
+    encryption: {
         atRest: boolean;
         inTransit: boolean;
         algorithm: string;
@@ -65,28 +65,28 @@ export interface DataHandlingRequirements {
         keyRotation: string;
     };
     /** Data retention and disposal */
-    retention: {,
+    retention: {
         maximumPeriod: string;
         archivalRequired: boolean;
         disposalMethod: 'standard' | 'secure' | 'cryptographic-erasure' | 'physical-destruction';
         verificationRequired: boolean;
     };
     /** Audit and compliance requirements */
-    audit: {,
+    audit: {
         logAccess: boolean;
         logModification: boolean;
         reviewFrequency: string;
         complianceFrameworks: string[];
     };
     /** Transfer and sharing restrictions */
-    transfer: {,
+    transfer: {
         allowedChannels: string[];
         approvalRequired: boolean;
         encryptionRequired: boolean;
         geographicRestrictions: string[];
     };
     /** Backup and recovery */
-    backup: {,
+    backup: {
         encryptionRequired: boolean;
         offlineStorage: boolean;
         crossBorderRestrictions: boolean;
@@ -103,7 +103,7 @@ declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
     examples: string[];
     handlingRequirements: DataHandlingRequirements;
     complianceFrameworks: string[];
-    markingRequirements: {,
+    markingRequirements: {
         required: boolean;
         label: string;
         color: string;
@@ -135,7 +135,7 @@ export interface DataElementClassification {
     /** Next review date */
     reviewDate: Date;
     /** Additional metadata */
-    metadata: {,
+    metadata: {
         dataCategory: string;
         sourceSystem: string;
         businessOwner: string;
@@ -173,7 +173,7 @@ declare class DataSensitivityUtils {
     /**
      * Validate if a sensitivity level assignment is appropriate for the data type
      */
-    static validateSensitivityAssignment(dataType: string,)
+    static validateSensitivityAssignment(dataType: string)
       proposedLevel: DataSensitivityLevel,
       context?: Record<string,
       any>
@@ -212,21 +212,21 @@ declare class DataSensitivityUtils {
  * Data sensitivity level assignment recommendations
  */
 declare const DATA_SENSITIVITY_GUIDELINES: {
-    decisionTree: {,
-        questions: {,
+    decisionTree: {
+        questions: {
             id: string;
             question: string;
             yesAction: string;
             noAction: string;
         }[];
-        actions: {,
+        actions: {
             assign_public: DataSensitivityLevel;
             assign_internal: DataSensitivityLevel;
             assign_confidential: DataSensitivityLevel;
             assign_restricted: DataSensitivityLevel;
         };
     };
-    automatedClassificationRules: {,
+    automatedClassificationRules: {
         pattern: RegExp;
         dataType: string;
         recommendedLevel: DataSensitivityLevel;

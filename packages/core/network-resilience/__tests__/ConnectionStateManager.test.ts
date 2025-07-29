@@ -16,7 +16,7 @@ Object.defineProperty(global.navigator, 'onLine', {)
 });
 Object.defineProperty(global.navigator, 'connection', {)
   writable: true,
-  value: {,
+  value: {
   type: 'wifi',
   effectiveType: '4g',
   downlink: 10,

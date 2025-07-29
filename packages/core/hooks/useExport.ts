@@ -26,68 +26,68 @@ import {
   ExportScheduleWithStats
 } from '../types/export';
 interface UseExportState {
-  templates: ExportTemplate;,
+  templates: ExportTemplate;
   jobs: ExportJob;
-  schedules: ExportSchedule;,
+  schedules: ExportSchedule;
   shares: ExportShare;
-  analytics: ExportAnalytics;,
+  analytics: ExportAnalytics;
   formatDefinitions: ExportFormatDefinition;
-  statistics: ExportStatistics | null;,
+  statistics: ExportStatistics | null;
   loading: boolean;
   error: string | null;
 interface UseExportActions {
   // Templates
   fetchTemplates: (options?: { format?: ExportFormat; isPublic?: boolean; limit?: number; offset?: number }) => Promise<void>;
-  createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;,
-  updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;,
-  deleteTemplate: (id: string) => Promise<void>;,
+  createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;
+  updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;
+  deleteTemplate: (id: string) => Promise<void>;
   getTemplateWithStats: (id: string) => Promise<ExportTemplateWithStats>;
   // Jobs
   fetchJobs: (options?: { status?: ExportJobStatus; format?: ExportFormat; userId?: string; limit?: number; offset?: number }) => Promise<void>;
-  createExportJob: (job: CreateExportJob) => Promise<ExportJob>;,
-  updateExportJob: (id: string, updates: UpdateExportJob) => Promise<ExportJob>;,
-  cancelExportJob: (id: string) => Promise<void>;,
-  getJobWithTemplate: (id: string) => Promise<ExportJobWithTemplate>;,
-  getJobProgress: (id: string) => Promise<ExportProgress>;,
+  createExportJob: (job: CreateExportJob) => Promise<ExportJob>;
+  updateExportJob: (id: string, updates: UpdateExportJob) => Promise<ExportJob>;
+  cancelExportJob: (id: string) => Promise<void>;
+  getJobWithTemplate: (id: string) => Promise<ExportJobWithTemplate>;
+  getJobProgress: (id: string) => Promise<ExportProgress>;
   downloadExportFile: (id: string) => Promise<void>;
   // Schedules
-  fetchSchedules: () => Promise<void>;,
-  createSchedule: (schedule: CreateExportSchedule) => Promise<ExportSchedule>;,
-  updateSchedule: (id: string, updates: UpdateExportSchedule) => Promise<ExportSchedule>;,
-  deleteSchedule: (id: string) => Promise<void>;,
+  fetchSchedules: () => Promise<void>;
+  createSchedule: (schedule: CreateExportSchedule) => Promise<ExportSchedule>;
+  updateSchedule: (id: string, updates: UpdateExportSchedule) => Promise<ExportSchedule>;
+  deleteSchedule: (id: string) => Promise<void>;
   getScheduleWithStats: (id: string) => Promise<ExportScheduleWithStats>;
   // Shares
-  fetchShares: (jobId?: string) => Promise<void>;,
-  createShare: (share: CreateExportShare) => Promise<ExportShare>;,
-  updateShare: (id: string, updates: UpdateExportShare) => Promise<ExportShare>;,
+  fetchShares: (jobId?: string) => Promise<void>;
+  createShare: (share: CreateExportShare) => Promise<ExportShare>;
+  updateShare: (id: string, updates: UpdateExportShare) => Promise<ExportShare>;
   deleteShare: (id: string) => Promise<void>;
   // Analytics
   fetchAnalytics: (options?: { startDate?: string; endDate?: string; format?: ExportFormat }) => Promise<void>;
   createAnalytics: (analytics: CreateExportAnalytics) => Promise<ExportAnalytics>;
   // Format Definitions
-  fetchFormatDefinitions: () => Promise<void>;,
-  getFormatDefinition: (formatName: string) => Promise<ExportFormatDefinition>;,
+  fetchFormatDefinitions: () => Promise<void>;
+  getFormatDefinition: (formatName: string) => Promise<ExportFormatDefinition>;
   validateFormatOptions: (),
     formatName: string,
     options: any) => Promise<{ valid: boolean; errors: string; validatedOptions: any }>;
   // Statistics
   fetchStatistics: () => Promise<void>;
   // Collaboration and Sharing
-  getTemplates: (options?: any) => Promise<ExportTemplate>;,
-  getTemplateStats: (id: string) => Promise<any>;,
-  shareTemplate: (id: string, options: any) => Promise<void>;,
-  previewTemplate: (template: ExportTemplate) => Promise<any>;,
-  getTemplateCollaborators: (id: string) => Promise<any>;,
-  getTemplateActivity: (id: string) => Promise<any>;,
-  getTemplateAnalytics: (id: string) => Promise<any>;,
-  inviteCollaborator: (id: string, invite: any) => Promise<any>;,
-  updateCollaboratorRole: (templateId: string, userId: string, role: string) => Promise<void>;,
-  removeCollaborator: (templateId: string, userId: string) => Promise<void>;,
-  updateShareSettings: (id: string, settings: any) => Promise<void>;,
-  generateShareLink: (id: string) => Promise<string>;,
+  getTemplates: (options?: any) => Promise<ExportTemplate>;
+  getTemplateStats: (id: string) => Promise<any>;
+  shareTemplate: (id: string, options: any) => Promise<void>;
+  previewTemplate: (template: ExportTemplate) => Promise<any>;
+  getTemplateCollaborators: (id: string) => Promise<any>;
+  getTemplateActivity: (id: string) => Promise<any>;
+  getTemplateAnalytics: (id: string) => Promise<any>;
+  inviteCollaborator: (id: string, invite: any) => Promise<any>;
+  updateCollaboratorRole: (templateId: string, userId: string, role: string) => Promise<void>;
+  removeCollaborator: (templateId: string, userId: string) => Promise<void>;
+  updateShareSettings: (id: string, settings: any) => Promise<void>;
+  generateShareLink: (id: string) => Promise<string>;
   forkTemplate: (id: string) => Promise<ExportTemplate>;
   // Utilities
-  refetch: () => Promise<void>;,
+  refetch: () => Promise<void>;
   clearError: () => void;
   setLoading: (loading: boolean) => void;
 
@@ -183,7 +183,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/templates/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       const data = await response.json();
       if (!data.success) {
@@ -270,7 +270,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/jobs/${id}/cancel`, {)}
   },
-  method: 'PUT';
+  method: 'PUT'
   });
       const data = await response.json();
       if (!data.success) {
@@ -370,7 +370,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/schedules/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       const data = await response.json();
       if (!data.success) {
@@ -447,7 +447,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/shares/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       const data = await response.json();
       if (!data.success) {
@@ -521,7 +521,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
   }, [handleApiCall]);
   const validateFormatOptions = useCallback(async (formatName: string, options: any): Promise<{,
   valid: boolean;
-  errors: string;,
+  errors: string;
   validatedOptions: any;
 }> => {
     return handleApiCall(async () => {
@@ -661,7 +661,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/templates/${templateId}/collaborators/${userId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       const data = await response.json();
       if (!data.success) {
@@ -685,7 +685,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     return handleApiCall(async () => {
       const response = await fetch(`/api/export/templates/${id}/share-link`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
       const data = await response.json();
       if (!data.success) {
@@ -697,7 +697,7 @@ export type UseExportReturn = UseExportState & UseExportActions;
     return handleApiCall(async () => {
       const response = await fetch(`/api/export/templates/${id}/fork`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
       const data = await response.json();
       if (!data.success) {

@@ -22,7 +22,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelSegmentationProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     funnelId: string;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };

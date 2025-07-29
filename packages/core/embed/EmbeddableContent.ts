@@ -22,17 +22,17 @@ import { EmbedAnalytics } from '../analytics/EmbedAnalytics';
 // Core Embed Interfaces
 
 export interface EmbedConfig {
-  id: string;,
+  id: string;
   type: EmbedType;
   title: string;
   description?: string;
-  version: string;,
+  version: string;
   content: EmbedContent;
-  styling: EmbedStyling;,
+  styling: EmbedStyling;
   behavior: EmbedBehavior;
-  security: SecurityConfig;,
+  security: SecurityConfig;
   analytics: AnalyticsConfig;
-  permissions: PermissionConfig;,
+  permissions: PermissionConfig;
   metadata: EmbedMetadata;
 }
 export type EmbedType = 
@@ -54,22 +54,22 @@ export interface EmbedContent {
   javascript?: string;
   data?: ContentData;
   template?: TemplateConfig;
-  components: ComponentConfig;,
+  components: ComponentConfig;
   layout: LayoutConfig;
   interactions: InteractionConfig;
 }
 export interface ContentData {
   static: Record<string, any>;
-  dynamic: DynamicDataConfig;,
+  dynamic: DynamicDataConfig;
   realTime: boolean;
   refreshInterval?: number; // milliseconds,
-  cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive';,
+  cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive';
   compression: boolean;
 }
 export interface DynamicDataConfig {
-  id: string;,
+  id: string;
   source: DataSource;
-  endpoint: string;,
+  endpoint: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;
   authentication?: AuthConfig;
@@ -78,49 +78,49 @@ export interface DynamicDataConfig {
   errorHandling: ErrorHandlingConfig;
 }
 export interface DataSource {
-  type: 'api' | 'database' | 'file' | 'stream' | 'websocket';,
+  type: 'api' | 'database' | 'file' | 'stream' | 'websocket';
   url: string;
   credentials?: string;
-  timeout: number;,
+  timeout: number;
   retryPolicy: RetryPolicy;
 }
 export interface AuthConfig {
-  type: 'none' | 'api_key' | 'bearer' | 'basic' | 'oauth';,
+  type: 'none' | 'api_key' | 'bearer' | 'basic' | 'oauth';
   credentials: Record<string, string>;
   refreshToken?: string;
   expiryTime?: Date;
 }
 export interface ErrorHandlingConfig {
-  strategy: 'fail' | 'fallback' | 'retry' | 'ignore';,
+  strategy: 'fail' | 'fallback' | 'retry' | 'ignore';
   maxRetries: number;
   backoffMs: number;
   fallbackValue?: any;
   errorMessage?: string;
 }
 export interface RetryPolicy {
-  maxAttempts: number;,
+  maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
-  baseDelay: number;,
+  baseDelay: number;
   maxDelay: number;
   jitter: boolean;
 }
 export interface TemplateConfig {
-  engine: 'mustache' | 'handlebars' | 'react' | 'vue' | 'custom';,
+  engine: 'mustache' | 'handlebars' | 'react' | 'vue' | 'custom';
   template: string;
   partials?: Record<string, string>;
   helpers?: Record<string, string>;
   data?: Record<string, any>;
 }
 export interface ComponentConfig {
-  id: string;,
+  id: string;
   type: ComponentType;
-  name: string;,
+  name: string;
   version: string;
   config: Record<string, any>;
-  styling: ComponentStyling;,
+  styling: ComponentStyling;
   events: ComponentEvent;
   dependencies?: string;
-  async: boolean;,
+  async: boolean;
   lazy: boolean;
 }
 export type ComponentType = 
@@ -155,24 +155,24 @@ export interface ComponentStyling {
 }
 export interface ResponsiveConfig {
   breakpoints: Record<string, number>;
-  rules: ResponsiveRule;,
+  rules: ResponsiveRule;
   strategy: 'mobile-first' | 'desktop-first';
 }
 export interface ResponsiveRule {
-  breakpoint: string;,
+  breakpoint: string;
   styles: Record<string, string>;
   behavior?: Record<string, any>;
 }
 export interface AnimationConfig {
-  trigger: 'load' | 'hover' | 'click' | 'scroll' | 'custom';,
+  trigger: 'load' | 'hover' | 'click' | 'scroll' | 'custom';
   type: 'fade' | 'slide' | 'scale' | 'rotate' | 'bounce' | 'custom';
-  duration: number;,
+  duration: number;
   easing: string;
   delay?: number;
   loop?: boolean | number;
 }
 export interface ComponentEvent {
-  type: string;,
+  type: string;
   handler: string; // JavaScript function as string,
   preventDefault?: boolean;
   stopPropagation?: boolean;
@@ -180,34 +180,34 @@ export interface ComponentEvent {
   throttle?: number;
 }
 export interface LayoutConfig {
-  type: 'fixed' | 'fluid' | 'responsive' | 'adaptive';,
+  type: 'fixed' | 'fluid' | 'responsive' | 'adaptive';
   container: ContainerConfig;
   grid?: GridConfig;
   flexbox?: FlexboxConfig;
-  position: PositionConfig;,
+  position: PositionConfig;
   overflow: OverflowConfig;
 }
 export interface ContainerConfig {
-  width: DimensionValue;,
+  width: DimensionValue;
   height: DimensionValue;
   maxWidth?: DimensionValue;
   maxHeight?: DimensionValue;
   minWidth?: DimensionValue;
   minHeight?: DimensionValue;
-  padding: SpacingValue;,
+  padding: SpacingValue;
   margin: SpacingValue;
 }
 export interface GridConfig {
-  columns: number | 'auto';,
+  columns: number | 'auto';
   rows: number | 'auto';
   gap: SpacingValue;
   areas?: string[];
   autoFlow: 'row' | 'column' | 'row dense' | 'column dense';
 }
 export interface FlexboxConfig {
-  direction: 'row' | 'column' | 'row-reverse' | 'column-reverse';,
+  direction: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   wrap: 'nowrap' | 'wrap' | 'wrap-reverse';
-  justify: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';,
+  justify: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   align: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
   gap: SpacingValue;
 }
@@ -220,14 +220,14 @@ export interface PositionConfig {
   zIndex?: number;
 }
 export interface OverflowConfig {
-  x: 'visible' | 'hidden' | 'scroll' | 'auto';,
-  y: 'visible' | 'hidden' | 'scroll' | 'auto';
-}
+  x: 'visible' | 'hidden' | 'scroll' | 'auto';
+  y: 'visible' | 'hidden' | 'scroll' | 'auto'
+  }
 export type DimensionValue = string | number | 'auto' | 'inherit' | 'initial' | 'unset';
 export type SpacingValue = string | number | { top?: DimensionValue; right?: DimensionValue; bottom?: DimensionValue; left?: DimensionValue };
 
 export interface InteractionConfig {
-  id: string;,
+  id: string;
   trigger: InteractionTrigger;
   action: InteractionAction;
   condition?: string; // JavaScript expression,
@@ -242,7 +242,7 @@ export interface InteractionTrigger {
   threshold?: number; // for scroll,
 }
 export interface InteractionAction {
-  type: 'navigate' | 'submit' | 'toggle' | 'animate' | 'update' | 'emit' | 'custom';,
+  type: 'navigate' | 'submit' | 'toggle' | 'animate' | 'update' | 'emit' | 'custom';
   params: Record<string, any>;
   callback?: string; // JavaScript function as string,
 }
@@ -250,93 +250,93 @@ export interface EmbedStyling {
   theme: ThemeConfig;
   customCSS?: string;
   variables: Record<string, string>;
-  responsive: ResponsiveConfig;,
+  responsive: ResponsiveConfig;
   animations: AnimationConfig;
-  fonts: FontConfig;,
+  fonts: FontConfig;
   colors: ColorPalette;
-  spacing: SpacingScale;,
+  spacing: SpacingScale;
   shadows: ShadowConfig;
   borders: BorderConfig;
 }
 export interface ThemeConfig {
-  name: string;,
+  name: string;
   variant: 'light' | 'dark' | 'auto';
-  colorScheme: ColorScheme;,
+  colorScheme: ColorScheme;
   typography: TypographyConfig;
-  spacing: SpacingConfig;,
+  spacing: SpacingConfig;
   borderRadius: BorderRadiusConfig;
-  shadows: boolean;,
+  shadows: boolean;
   animations: boolean;
 }
 export interface ColorScheme {
-  primary: string;,
+  primary: string;
   secondary: string;
-  success: string;,
+  success: string;
   warning: string;
-  error: string;,
+  error: string;
   info: string;
-  background: string;,
+  background: string;
   surface: string;
-  text: {,
-  primary: string;,
+  text: {
+  primary: string;
   secondary: string;
   disabled: string;
 };
-  border: string;,
+  border: string;
   divider: string;
 }
 export interface TypographyConfig {
-  fontFamily: {,
+  fontFamily: {
   primary: string;
   secondary?: string;
   monospace: string;
 };
-  fontSize: {,
+  fontSize: {
   xs: string;
-  sm: string;,
+  sm: string;
   base: string;
-  lg: string;,
+  lg: string;
   xl: string;
   '2xl': string;
   '3xl': string;
   '4xl': string;
 };
-  fontWeight: {,
+  fontWeight: {
   light: number;
-  normal: number;,
+  normal: number;
   medium: number;
-  semibold: number;,
+  semibold: number;
   bold: number;
 };
-  lineHeight: {,
+  lineHeight: {
   tight: number;
-  normal: number;,
+  normal: number;
   relaxed: number;
 };
 }
 export interface SpacingConfig {
-  scale: 'linear' | 'geometric' | 'custom';,
+  scale: 'linear' | 'geometric' | 'custom';
   base: number;
   values: Record<string, number>;
 }
 export interface BorderRadiusConfig {
-  none: string;,
+  none: string;
   sm: string;
-  base: string;,
+  base: string;
   lg: string;
-  xl: string;,
+  xl: string;
   full: string;
 }
 export interface FontConfig {
-  family: string;,
+  family: string;
   source: 'google' | 'adobe' | 'system' | 'custom';
   url?: string;
-  weights: number;,
+  weights: number;
   styles: ('normal' | 'italic')[];
-  display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
-}
+  display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional'
+  }
 export interface ColorPalette {
-  [key: string]: {,
+  [key: string]: {
   50: string;
   100: string;
   200: string;
@@ -353,7 +353,7 @@ export interface SpacingScale {
   [key: string]: string;
 }
 export interface ShadowConfig {
-  name: string;,
+  name: string;
   value: string;
 }
 export interface BorderConfig {
@@ -362,19 +362,19 @@ export interface BorderConfig {
   color: Record<string, string>;
 }
 export interface EmbedBehavior {
-  responsive: boolean;,
+  responsive: boolean;
   autoResize: boolean;
-  crossDomain: boolean;,
+  crossDomain: boolean;
   sandbox: SandboxConfig;
-  loading: LoadingConfig;,
+  loading: LoadingConfig;
   communication: CommunicationConfig;
-  lifecycle: LifecycleConfig;,
+  lifecycle: LifecycleConfig;
   performance: PerformanceConfig;
 }
 export interface SandboxConfig {
-  enabled: boolean;,
+  enabled: boolean;
   permissions: SandboxPermission;
-  allowedDomains: string;,
+  allowedDomains: string;
   cspDirectives: Record<string, string>;
 }
 export type SandboxPermission = 
@@ -398,20 +398,20 @@ export interface LoadingConfig {
   fallback?: FallbackConfig;
 }
 export interface PlaceholderConfig {
-  type: 'image' | 'text' | 'custom';,
+  type: 'image' | 'text' | 'custom';
   content: string;
   styling?: Record<string, string>;
 }
 export interface SkeletonConfig {
-  enabled: boolean;,
+  enabled: boolean;
   animation: 'pulse' | 'wave' | 'none';
-  color: string;,
+  color: string;
   highlightColor: string;
 }
 export interface SpinnerConfig {
-  type: 'circle' | 'dots' | 'bars' | 'custom';,
+  type: 'circle' | 'dots' | 'bars' | 'custom';
   size: 'sm' | 'md' | 'lg';
-  color: string;,
+  color: string;
   speed: number;
 }
 export interface FallbackConfig {
@@ -421,91 +421,91 @@ export interface FallbackConfig {
   retryText?: string;
 }
 export interface CommunicationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   protocol: 'postMessage' | 'custom';
-  allowedOrigins: string;,
+  allowedOrigins: string;
   messageTypes: string;
   encryption?: EncryptionConfig;
 }
 export interface EncryptionConfig {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: 'AES' | 'RSA';
   keySize: number;
   publicKey?: string;
   privateKey?: string;
 }
 export interface LifecycleConfig {
-  hooks: LifecycleHook;,
+  hooks: LifecycleHook;
   autoMount: boolean;
-  autoDestroy: boolean;,
+  autoDestroy: boolean;
   persistState: boolean;
   stateKey?: string;
 }
 export interface LifecycleHook {
-  stage: 'beforeMount' | 'mounted' | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed';,
+  stage: 'beforeMount' | 'mounted' | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed';
   handler: string; // JavaScript function as string,
   async: boolean;
 }
 export interface PerformanceConfig {
-  lazyLoading: boolean;,
+  lazyLoading: boolean;
   codesplitting: boolean;
-  bundleOptimization: boolean;,
+  bundleOptimization: boolean;
   compression: boolean;
-  caching: CachingConfig;,
+  caching: CachingConfig;
   monitoring: MonitoringConfig;
 }
 export interface CachingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'indexedDB';
   ttl: number; // seconds,
   maxSize: number; // bytes,
   version: string;
 }
 export interface MonitoringConfig {
-  enabled: boolean;,
+  enabled: boolean;
   metrics: string;
   sampling: number; // 0-1,
   reporting: ReportingConfig;
 }
 export interface ReportingConfig {
-  endpoint: string;,
+  endpoint: string;
   batchSize: number;
   flushInterval: number; // milliseconds,
   authentication?: AuthConfig;
 }
 export interface SecurityConfig {
-  csp: CSPConfig;,
+  csp: CSPConfig;
   cors: CORSConfig;
   authentication?: AuthConfig;
   rateLimit?: RateLimitConfig;
-  validation: ValidationConfig;,
+  validation: ValidationConfig;
   sanitization: SanitizationConfig;
 }
 export interface CSPConfig {
-  enabled: boolean;,
+  enabled: boolean;
   directives: Record<string, string>;
   reportUri?: string;
   reportOnly: boolean;
 }
 export interface CORSConfig {
-  enabled: boolean;,
+  enabled: boolean;
   allowedOrigins: string;
-  allowedMethods: string;,
+  allowedMethods: string;
   allowedHeaders: string;
-  credentials: boolean;,
+  credentials: boolean;
   maxAge: number;
 }
 export interface RateLimitConfig {
-  enabled: boolean;,
+  enabled: boolean;
   requests: number;
   windowMs: number;
   skipSuccessfulRequests?: boolean;
   skipFailedRequests?: boolean;
 }
 export interface ValidationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   schemas: Record<string, any>;
-  strict: boolean;,
+  strict: boolean;
   stripUnknown: boolean;
 }
 export interface SanitizationConfig {
@@ -515,51 +515,51 @@ export interface SanitizationConfig {
   jsSanitizer?: JSSanitizerConfig;
 }
 export interface HTMLSanitizerConfig {
-  allowedTags: string;,
+  allowedTags: string;
   allowedAttributes: Record<string, string>;
-  allowedSchemes: string;,
+  allowedSchemes: string;
   allowedClasses: string;
 }
 export interface CSSSanitizerConfig {
-  allowedProperties: string;,
+  allowedProperties: string;
   allowedValues: Record<string, string>;
-  allowedUnits: string;,
+  allowedUnits: string;
   blockedSelectors: string;
 }
 export interface JSSanitizerConfig {
-  allowedFunctions: string;,
+  allowedFunctions: string;
   blockedKeywords: string;
-  maxExecutionTime: number;,
+  maxExecutionTime: number;
   memoryLimit: number;
 }
 export interface AnalyticsConfig {
   enabled: boolean;
   trackingId?: string;
-  events: AnalyticsEvent;,
+  events: AnalyticsEvent;
   sampling: number;
   privacy: PrivacyConfig;
 }
 export interface AnalyticsEvent {
-  name: string;,
+  name: string;
   trigger: string;
   properties?: Record<string, any>;
   category?: string;
   label?: string;
 }
 export interface PrivacyConfig {
-  anonymizeIp: boolean;,
+  anonymizeIp: boolean;
   respectDoNotTrack: boolean;
-  cookieConsent: boolean;,
+  cookieConsent: boolean;
   dataRetention: number; // days,
 }
 export interface PermissionConfig {
-  required: Permission;,
+  required: Permission;
   optional: Permission;
-  requestOnDemand: boolean;,
+  requestOnDemand: boolean;
   gracefulDegradation: boolean;
 }
 export interface Permission {
-  type: PermissionType;,
+  type: PermissionType;
   reason: string;
   fallback?: string;
 }
@@ -574,18 +574,18 @@ export type PermissionType =
   | 'cookies';
 
 export interface EmbedMetadata {
-  name: string;,
+  name: string;
   description: string;
-  version: string;,
+  version: string;
   author: AuthorInfo;
-  license: string;,
+  license: string;
   keywords: string;
-  category: string;,
+  category: string;
   tags: string;
   documentation?: string;
   repository?: string;
   homepage?: string;
-  created: Date;,
+  created: Date;
   updated: Date;
   deprecated?: boolean;
   deprecationMessage?: string;
@@ -865,7 +865,7 @@ export class EmbeddableContent extends EventEmitter {
         --embed-font-family: ${typography.fontFamily.primary};}
         --embed-font-size: ${typography.fontSize.base};}
       .embed-content {
-        background-color: var(--embed-background);,
+        background-color: var(--embed-background);
   color: var(--embed-text);
         font-family: var(--embed-font-family);
         font-size: var(--embed-font-size);
@@ -1079,30 +1079,30 @@ export class EmbedBuilder {
   type,
   title: '',
   version: '1.0.0',
-  content: {,
+  content: {
   components: [],
-  layout: {,
+  layout: {
   type: 'fluid',
-  container: {,
+  container: {
   width: '100%',
   height: 'auto',
   padding: 0,
   margin: 0,
 },
-  position: {,
+  position: {
   type: 'relative',
 },
-  overflow: {,
+  overflow: {
   x: 'hidden',
   y: 'auto',
 },
   interactions: [];
   },
-  styling: {,
-  theme: {,
+  styling: {
+  theme: {
   name: 'default',
   variant: 'light',
-  colorScheme: {,
+  colorScheme: {
   primary: '#007bff',
   secondary: '#6c757d',
   success: '#28a745',
@@ -1111,7 +1111,7 @@ export class EmbedBuilder {
   info: '#17a2b8',
   background: '#ffffff',
   surface: '#f8f9fa',
-  text: {,
+  text: {
   primary: '#212529',
   secondary: '#6c757d',
   disabled: '#adb5bd',
@@ -1119,12 +1119,12 @@ export class EmbedBuilder {
   border: '#dee2e6',
             divider: '#e9ecef';
   },
-  typography: {,
-  fontFamily: {,
+  typography: {
+  fontFamily: {
   primary: 'system-ui, -apple-system, sans-serif',
   monospace: 'Monaco, monospace',
 },
-  fontSize: {,
+  fontSize: {
   xs: '0.75rem',
   sm: '0.875rem',
   base: '1rem',
@@ -1134,24 +1134,24 @@ export class EmbedBuilder {
   '3xl': '1.875rem',
   '4xl': '2.25rem',
 },
-  fontWeight: {,
+  fontWeight: {
   light: 300,
   normal: 400,
   medium: 500,
   semibold: 600,
   bold: 700,
 },
-  lineHeight: {,
+  lineHeight: {
   tight: 1.25,
   normal: 1.5,
   relaxed: 1.75,
 },
-  spacing: {,
+  spacing: {
   scale: 'geometric',
             base: 4,
             values: {}
   },
-  borderRadius: {,
+  borderRadius: {
   none: '0',
   sm: '0.125rem',
   base: '0.25rem',
@@ -1163,8 +1163,8 @@ export class EmbedBuilder {
           animations: true;
   },
   variables: {},
-        responsive: {,
-  breakpoints: {,
+        responsive: {
+  breakpoints: {
   sm: 640,
   md: 768,
   lg: 1024,
@@ -1178,69 +1178,69 @@ export class EmbedBuilder {
         colors: {},
         spacing: {},
         shadows: [],
-        borders: {,
+        borders: {
   width: {},
           style: {},
           color: {}
   },
-  behavior: {,
+  behavior: {
   responsive: true,
         autoResize: true,
         crossDomain: true,
-        sandbox: {,
+        sandbox: {
   enabled: false,
           permissions: ['allow-scripts', 'allow-same-origin'],
           allowedDomains: [],
           cspDirectives: {}
   },
-  loading: {,
+  loading: {
   strategy: 'eager',
   timeout: 30000,
-  fallback: {,
+  fallback: {
   content: 'Failed to load content',
   retry: true,
   retryText: 'Retry',
 },
-  communication: {,
+  communication: {
   enabled: true,
   protocol: 'postMessage',
   allowedOrigins: [],
   messageTypes: [],
 },
-  lifecycle: {,
+  lifecycle: {
   hooks: [],
   autoMount: true,
   autoDestroy: true,
   persistState: false,
 },
-  performance: {,
+  performance: {
   lazyLoading: true,
   codesplitting: false,
   bundleOptimization: true,
   compression: true,
-  caching: {,
+  caching: {
   enabled: true,
   strategy: 'memory',
   ttl: 3600,
   maxSize: 10485760,
   version: '1.0',
 },
-  monitoring: {,
+  monitoring: {
   enabled: true,
   metrics: ['loadTime', 'renderTime', 'interactionLatency'],
   sampling: 1.0,
-  reporting: {,
+  reporting: {
   endpoint: '',
   batchSize: 100,
   flushInterval: 30000,
 },
-  security: {,
+  security: {
   csp: {;
   enabled: false,
           directives: {},
           reportOnly: false;
   },
-  cors: {,
+  cors: {
   enabled: true,
   allowedOrigins: ['*'],
   allowedMethods: ['GET', 'POST'],
@@ -1248,36 +1248,36 @@ export class EmbedBuilder {
   credentials: false,
   maxAge: 86400,
 },
-  validation: {,
+  validation: {
   enabled: true,
           schemas: {},
           strict: false,
           stripUnknown: true;
   },
-  sanitization: {,
+  sanitization: {
   enabled: true,
 },
-  analytics: {,
+  analytics: {
   enabled: false,
   events: [],
   sampling: 1.0,
-  privacy: {,
+  privacy: {
   anonymizeIp: true,
   respectDoNotTrack: true,
   cookieConsent: false,
   dataRetention: 90,
 },
-  permissions: {,
+  permissions: {
   required: [],
   optional: [],
   requestOnDemand: true,
   gracefulDegradation: true,
 },
-  metadata: {,
+  metadata: {
   name: '',
   description: '',
   version: '1.0.0',
-  author: {,
+  author: {
   name: '',
 },
   license: 'MIT',

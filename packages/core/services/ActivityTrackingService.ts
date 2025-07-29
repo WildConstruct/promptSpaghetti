@@ -96,10 +96,10 @@ export class ActivityTrackingService {
   await this.config.streaming.publishActivity(fullActivity);
   return fullActivity;
   // User Activity Tracking
-  async trackUserAction(params: {,)
+  async trackUserAction(params: {)
   userId: string;
   userEmail?: string;
-  action: string;,
+  action: string;
   description: string;
   category: string;
   page?: string;
@@ -116,15 +116,15 @@ export class ActivityTrackingService {
   category: params.category,
   source: 'user-interface',
   severity: params.severity || 'info',
-  metadata: {,
+  metadata: {
   page: params.page,
   component: params.component,
   ...params.metadata
 });
   // System Event Tracking
-  async trackSystemEvent(params: {,)
+  async trackSystemEvent(params: {)
   source: string;
-  action: string;,
+  action: string;
   description: string;
   category: string;
   severity?: ActivitySeverity;
@@ -138,14 +138,14 @@ export class ActivityTrackingService {
   description: params.description,
   category: params.category,
   severity: params.severity || 'info',
-  metadata: {,
+  metadata: {
   systemMetrics: params.systemMetrics,
   ...params.metadata
 });
   // Admin Action Tracking
-  async trackAdminAction(params: {,)
+  async trackAdminAction(params: {)
   adminUserId: string;
-  adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';,
+  adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
   action: string;
   description: string;
   targetUserId?: string;
@@ -164,17 +164,17 @@ export class ActivityTrackingService {
   resourceType: params.resourceType,
   resourceId: params.resourceId,
   severity: params.severity || 'medium',
-  metadata: {,
+  metadata: {
   adminLevel: params.adminLevel,
   targetUserId: params.targetUserId,
   ...params.metadata
 });
   // Security Event Tracking
-  async trackSecurityEvent(params: {,)
+  async trackSecurityEvent(params: {)
   threatType: string;
-  threatLevel: 'low' | 'medium' | 'high' | 'critical';,
+  threatLevel: 'low' | 'medium' | 'high' | 'critical';
   source: string;
-  action: string;,
+  action: string;
   description: string;
   blocked?: boolean;
   ipAddress?: string;
@@ -191,7 +191,7 @@ export class ActivityTrackingService {
   severity: this.mapThreatLevelToSeverity(params.threatLevel),
   ipAddress: params.ipAddress,
   userAgent: params.userAgent,
-  metadata: {,
+  metadata: {
   threatType: params.threatType,
   threatLevel: params.threatLevel,
   blocked: params.blocked,
@@ -199,9 +199,9 @@ export class ActivityTrackingService {
   ...params.metadata
 });
   // API Call Tracking
-  async trackApiCall(params: {,)
+  async trackApiCall(params: {)
   method: string;
-  endpoint: string;,
+  endpoint: string;
   statusCode: number;
   duration: number;
   userId?: string;
@@ -222,7 +222,7 @@ export class ActivityTrackingService {
       duration: params.duration,
       severity,
       status: params.statusCode < 400 ? 'completed' : 'failed',
-      metadata: {,
+      metadata: {
   method: params.method,
   endpoint: params.endpoint,
   statusCode: params.statusCode,
@@ -231,7 +231,7 @@ export class ActivityTrackingService {
   ...params.metadata
 });
   // Performance Event Tracking
-  async trackPerformanceEvent(params: {,)
+  async trackPerformanceEvent(params: {)
   source: string;
   metrics: Record<string, number>;
   thresholdViolations?: string;
@@ -246,7 +246,7 @@ export class ActivityTrackingService {
   category: 'performance',
       source: params.source,
       severity,
-      metadata: {,
+      metadata: {
   metrics: params.metrics,
   thresholdViolations: params.thresholdViolations,
   ...params.metadata

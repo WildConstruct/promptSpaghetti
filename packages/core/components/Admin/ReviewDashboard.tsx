@@ -37,26 +37,26 @@ interface ReviewDashboardProps {
   onAssignmentAction?: (action: AssignmentAction) => void;
   className?: string;
   interface AssignmentAction {
-  type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';,
+  type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';
   reviewId: string;
   reviewerId?: string;
   data?: unknown;
   interface DashboardSummary {
-  totalActiveReviews: number;,
+  totalActiveReviews: number;
   pendingAssignments: number;
-  overdueReviews: number;,
+  overdueReviews: number;
   escalatedReviews: number;
-  averageCompletionTime: number;,
+  averageCompletionTime: number;
   reviewerUtilization: number;
-  qualityScore: number;,
+  qualityScore: number;
   throughput: number;
   interface DashboardFilters {
   reviewType?: ReviewType;
   status?: ReviewStatus;
   priority?: ReviewPriority;
   assignedTo?: string;
-  dateRange?: {,
-  startDate: Date;,
+  dateRange?: {
+  startDate: Date;
   endDate: Date;
 };
   searchQuery?: string;
@@ -103,14 +103,14 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
           title: 'High-risk payment fraud detected',
           description: 'Suspicious payment pattern detected for user account',
           data: { fraudScore: 87, transactionAmount: 2500 },
-          metadata: {,
+          metadata: {
   sourceData: {},
             businessContext: 'Payment fraud investigation',
             riskLevel: 'high',
             tags: ['payment', 'fraud', 'high-value'],
             flagged: true,
             estimatedReviewTime: 45,
-            complexity: 'complex';
+            complexity: 'complex'
   },
   assignedTo: 'reviewer-001',
           assignedAt: new Date('2025-01-20T10:00:00Z'),
@@ -268,9 +268,9 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
 // Overview Tab Component
 const OverviewTab: React.FC<{,
   summary: DashboardSummary | null;
-  escalatedReviews: ReviewItem;,
+  escalatedReviews: ReviewItem;
   overdueReviews: ReviewItem;
-  recentDecisions: ReviewDecision;,
+  recentDecisions: ReviewDecision;
   onReviewSelect: (review: ReviewItem) => void;
 }> = ({ summary, escalatedReviews, overdueReviews, recentDecisions, onReviewSelect }) => {
   if (!summary) return <div>Loading...</div>;
@@ -352,9 +352,9 @@ const OverviewTab: React.FC<{,
 // Queue Tab Component
 const QueueTab: React.FC<{,
   reviews: ReviewItem;
-  filters: DashboardFilters;,
-  onFilterChange: (filters: Partial<DashboardFilters>) => void;,
-  onReviewSelect: (review: ReviewItem) => void;,
+  filters: DashboardFilters;
+  onFilterChange: (filters: Partial<DashboardFilters>) => void;
+  onReviewSelect: (review: ReviewItem) => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, filters, onFilterChange, onReviewSelect, onAssignmentAction }) => {
   return;
@@ -377,7 +377,7 @@ const QueueTab: React.FC<{,
 // Supporting Components
 const SummaryCard: React.FC<{,
   title: string;
-  value: string | number;,
+  value: string | number;
   icon: React.ReactNode;
   trend?: { value: number; direction: 'up' | 'down' };
   className?: string;
@@ -400,7 +400,7 @@ const SummaryCard: React.FC<{,
 };
 const PrioritySection: React.FC<{,
   title: string;
-  icon: React.ReactNode;,
+  icon: React.ReactNode;
   reviews: ReviewItem;
   onReviewSelect: (review: ReviewItem) => void;
   className?: string;
@@ -506,7 +506,7 @@ const ReviewFilters: React.FC<{,
 };
 const ReviewList: React.FC<{,
   reviews: ReviewItem;
-  onReviewSelect: (review: ReviewItem) => void;,
+  onReviewSelect: (review: ReviewItem) => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, onReviewSelect, onAssignmentAction }) => {
   return;
@@ -524,7 +524,7 @@ const ReviewList: React.FC<{,
 };
 const ReviewListItem: React.FC<{,
   review: ReviewItem;
-  onSelect: () => void;,
+  onSelect: () => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ review, onSelect, onAssignmentAction }) => {
   return;

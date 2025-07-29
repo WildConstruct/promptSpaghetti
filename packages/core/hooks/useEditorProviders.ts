@@ -9,31 +9,31 @@ import { useGraphStore } from '../graphStore';
 // Provider hook types
 
 export interface EditorStateContext {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
-  selectedNodeId: string | null;,
+  selectedNodeId: string | null;
   isLoading: boolean;
-  hasUnsavedChanges: boolean;,
+  hasUnsavedChanges: boolean;
   validationErrors: any;
 }
 export interface EditorActions {
-  addNode: (node: Node) => void;,
+  addNode: (node: Node) => void;
   updateNode: (nodeId: string, data: Record<string, unknown>) => void;
-  removeNode: (nodeId: string) => void;,
-  addEdge: (edge: Edge) => void;,
-  removeEdge: (edgeId: string) => void;,
-  selectNode: (nodeId: string | null) => void;,
-  focusNode: (nodeId: string) => void;,
+  removeNode: (nodeId: string) => void;
+  addEdge: (edge: Edge) => void;
+  removeEdge: (edgeId: string) => void;
+  selectNode: (nodeId: string | null) => void;
+  focusNode: (nodeId: string) => void;
   saveGraph: () => Promise<void>;
   loadGraph: (data: { nodes: Node; edges: Edge }) => void;
-  exportGraph: (format?: string) => any;,
+  exportGraph: (format?: string) => any;
   validateGraph: () => void;
   executeGraph: () => Promise<any>;
 }
 export interface ProviderHook {
-  id: string;,
+  id: string;
   name: string;
-  version: string;,
+  version: string;
   priority: number; // Lower number = higher priority,
   // Lifecycle hooks
   onInit?: (context: EditorStateContext, actions: EditorActions) => void;
@@ -59,10 +59,10 @@ export interface ProviderHook {
   customActions?: Record<string, (context: EditorStateContext, ...args: any) => any>;
 }
 export interface ProviderRegistry {
-  register: (hook: ProviderHook) => void;,
-  unregister: (hookId: string) => void;,
+  register: (hook: ProviderHook) => void;
+  unregister: (hookId: string) => void;
   getHooks: () => ProviderHook;
-  getHook: (hookId: string) => ProviderHook | undefined;,
+  getHook: (hookId: string) => ProviderHook | undefined;
   executeHooks: <T extends keyof ProviderHook>(),
   hookName: T,
   ...args: any) => Promise<void>;
@@ -389,7 +389,7 @@ export const createValidationHook = (): ProviderHook => createProviderHook({)
   // Add validation metadata to new nodes
   return {
   ...node,
-  data: {,
+  data: {
   ...node.data,
   _validated: false,
   _validationTimestamp: Date.now(),

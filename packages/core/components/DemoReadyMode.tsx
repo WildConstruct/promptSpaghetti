@@ -220,7 +220,7 @@ interface DemoReadyModeProps {
   height: '100%',
   ...(enabled && {)
   // Hide development elements in demo mode
-  '& [data-dev-only]': {,
+  '& [data-dev-only]': {
   display: 'none !important',
 }
             // Ensure professional appearance

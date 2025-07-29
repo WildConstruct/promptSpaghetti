@@ -11,13 +11,13 @@ import './Chart.css';
 export type ChartType = 'line' | 'bar' | 'pie' | 'area' | 'donut';
 
 export interface ChartDataPoint {
-  label: string;,
+  label: string;
   value: number;
   color?: string;
   metadata?: Record<string, any>;
 }
 export interface ChartSeries {
-  name: string;,
+  name: string;
   data: ChartDataPoint;
   color?: string;
   type?: ChartType; // Override for mixed charts,
@@ -88,9 +88,9 @@ export const Chart: React.FC<ChartProps> = ({)
   className = ''
 }) => {
   const [hoveredPoint, setHoveredPoint] = React.useState<{
-  point: ChartDataPoint;,
+  point: ChartDataPoint;
   series: ChartSeries;
-  x: number;,
+  x: number;
   y: number;
 } | null>(null);
   const chartRef = React.useRef<HTMLDivElement>(null);

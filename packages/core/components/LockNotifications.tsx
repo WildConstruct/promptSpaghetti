@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Bell, Clock, Lock, AlertTriangle, Check, Filter } from 'lucide-react';
 import { LockNotification } from '../types/locking';
 interface LockNotificationsProps {
-  notifications: LockNotification;,
+  notifications: LockNotification;
   onMarkAsRead: (notificationId: string) => void;
   export const LockNotifications: React.FC<LockNotificationsProps> = ({,)
   notifications,

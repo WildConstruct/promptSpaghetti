@@ -20,38 +20,38 @@ import {
 } from '../types/DataClassification';
 
 export interface HandlingRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   classification: DataClassificationLevel;
-  ruleType: 'STORAGE' | 'TRANSMISSION' | 'PROCESSING' | 'ACCESS' | 'MONITORING' | 'RETENTION';,
+  ruleType: 'STORAGE' | 'TRANSMISSION' | 'PROCESSING' | 'ACCESS' | 'MONITORING' | 'RETENTION';
   requirements: Record<string, any>;
-  mandatory: boolean;,
+  mandatory: boolean;
   priority: number;
   effectiveDate: Date;
   expirationDate?: Date;
   complianceFramework: string;
 }
 export interface HandlingRuleViolation {
-  id: string;,
+  id: string;
   ruleId: string;
-  ruleName: string;,
+  ruleName: string;
   classification: DataClassificationLevel;
-  violationType: string;,
+  violationType: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  description: string;,
+  description: string;
   detectedAt: Date;
-  context: OperationContext;,
+  context: OperationContext;
   evidence: Record<string, any>;
-  remediation: string;,
-  status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
-}
+  remediation: string;
+  status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK'
+  }
 export interface ComplianceCheck {
-  ruleId: string;,
+  ruleId: string;
   dataElement: string;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   checkType: string;
-  passed: boolean;,
+  passed: boolean;
   details: Record<string, any>;
   timestamp: Date;
 }
@@ -68,8 +68,8 @@ export class ClassificationHandlingRulesService {
   */
   private initializeDefaultHandlingRequirements(): void {,
   const requirements: Record<DataClassificationLevel, HandlingRequirements> = {,
-  PUBLIC: {,
-  storage: {,
+  PUBLIC: {
+  storage: {
   encryptionRequired: false,
   encryptionAlgorithm: 'none',
   keyRotationDays: 0,
@@ -79,7 +79,7 @@ export class ClassificationHandlingRulesService {
   approvedLocations: ['any'],
   redundancyLevel: 'NONE',
 },
-  transmission: {,
+  transmission: {
   tlsVersion: 'TLS1.2',
   certificatePinning: false,
   networkRestrictions: [],
@@ -87,10 +87,10 @@ export class ClassificationHandlingRulesService {
   compressionAllowed: true,
   endToEndEncryption: false,
 },
-  processing: {,
+  processing: {
   approvedEnvironments: ['dev', 'staging', 'production'],
   loggingRequired: false,
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: true,
   encryptionRequired: false,
   maxTtlSeconds: 3600,
@@ -101,7 +101,7 @@ export class ClassificationHandlingRulesService {
           isolationRequired: false,
           auditTrailRequired: false;
   },
-  access: {,
+  access: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: false,
   approvalWorkflow: false,
@@ -110,7 +110,7 @@ export class ClassificationHandlingRulesService {
   auditLogging: 'STANDARD',
   exportRestrictions: false,
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: false,
   anomalyDetection: false,
   alertThreshold: 'LOW',
@@ -118,8 +118,8 @@ export class ClassificationHandlingRulesService {
   complianceChecks: false,
   incidentResponse: false,
 },
-  INTERNAL: {,
-  storage: {,
+  INTERNAL: {
+  storage: {
   encryptionRequired: true,
   encryptionAlgorithm: 'AES-256',
   keyRotationDays: 90,
@@ -129,7 +129,7 @@ export class ClassificationHandlingRulesService {
   approvedLocations: ['internal_datacenter', 'approved_cloud'],
   redundancyLevel: 'STANDARD',
 },
-  transmission: {,
+  transmission: {
   tlsVersion: 'TLS1.3',
   certificatePinning: true,
   networkRestrictions: ['internal_network'],
@@ -137,10 +137,10 @@ export class ClassificationHandlingRulesService {
   compressionAllowed: false,
   endToEndEncryption: true,
 },
-  processing: {,
+  processing: {
   approvedEnvironments: ['production', 'staging'],
   loggingRequired: true,
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: true,
   encryptionRequired: true,
   maxTtlSeconds: 1800,
@@ -151,7 +151,7 @@ export class ClassificationHandlingRulesService {
           isolationRequired: true,
           auditTrailRequired: true;
   },
-  access: {,
+  access: {
   authenticationLevel: 'STANDARD',
   authorizationRequired: true,
   approvalWorkflow: false,
@@ -160,7 +160,7 @@ export class ClassificationHandlingRulesService {
   auditLogging: 'ENHANCED',
   exportRestrictions: true,
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: true,
   anomalyDetection: true,
   alertThreshold: 'MEDIUM',
@@ -168,8 +168,8 @@ export class ClassificationHandlingRulesService {
   complianceChecks: true,
   incidentResponse: true,
 },
-  CONFIDENTIAL: {,
-  storage: {,
+  CONFIDENTIAL: {
+  storage: {
   encryptionRequired: true,
   encryptionAlgorithm: 'AES-256-GCM',
   keyRotationDays: 30,
@@ -179,7 +179,7 @@ export class ClassificationHandlingRulesService {
   approvedLocations: ['secure_datacenter'],
   redundancyLevel: 'HIGH',
 },
-  transmission: {,
+  transmission: {
   tlsVersion: 'TLS1.3',
   certificatePinning: true,
   networkRestrictions: ['secure_network', 'vpn_required'],
@@ -187,10 +187,10 @@ export class ClassificationHandlingRulesService {
   compressionAllowed: false,
   endToEndEncryption: true,
 },
-  processing: {,
+  processing: {
   approvedEnvironments: ['production'],
   loggingRequired: true,
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: false,
   encryptionRequired: true,
   maxTtlSeconds: 300,
@@ -201,7 +201,7 @@ export class ClassificationHandlingRulesService {
           isolationRequired: true,
           auditTrailRequired: true;
   },
-  access: {,
+  access: {
   authenticationLevel: 'MFA',
   authorizationRequired: true,
   approvalWorkflow: true,
@@ -210,7 +210,7 @@ export class ClassificationHandlingRulesService {
   auditLogging: 'ENHANCED',
   exportRestrictions: true,
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: true,
   anomalyDetection: true,
   alertThreshold: 'HIGH',
@@ -218,8 +218,8 @@ export class ClassificationHandlingRulesService {
   complianceChecks: true,
   incidentResponse: true,
 },
-  RESTRICTED: {,
-  storage: {,
+  RESTRICTED: {
+  storage: {
   encryptionRequired: true,
   encryptionAlgorithm: 'AES-256-GCM',
   keyRotationDays: 7,
@@ -229,7 +229,7 @@ export class ClassificationHandlingRulesService {
   approvedLocations: ['air_gapped_datacenter'],
   redundancyLevel: 'CRITICAL',
 },
-  transmission: {,
+  transmission: {
   tlsVersion: 'TLS1.3',
   certificatePinning: true,
   networkRestrictions: ['air_gapped_network', 'dedicated_channel'],
@@ -237,10 +237,10 @@ export class ClassificationHandlingRulesService {
   compressionAllowed: false,
   endToEndEncryption: true,
 },
-  processing: {,
+  processing: {
   approvedEnvironments: ['isolated_production'],
   loggingRequired: true,
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: false,
   encryptionRequired: true,
   maxTtlSeconds: 0,
@@ -251,7 +251,7 @@ export class ClassificationHandlingRulesService {
           isolationRequired: true,
           auditTrailRequired: true;
   },
-  access: {,
+  access: {
   authenticationLevel: 'STRONG_MFA',
   authorizationRequired: true,
   approvalWorkflow: true,
@@ -260,7 +260,7 @@ export class ClassificationHandlingRulesService {
   auditLogging: 'REALTIME',
   exportRestrictions: true,
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: true,
   anomalyDetection: true,
   alertThreshold: 'CRITICAL',
@@ -282,7 +282,7 @@ export class ClassificationHandlingRulesService {
   description: 'All internal data must be encrypted at rest using AES-256',
   classification: 'INTERNAL',
   ruleType: 'STORAGE',
-  requirements: {,
+  requirements: {
   encryptionRequired: true,
   encryptionAlgorithm: 'AES-256',
   keyManagement: 'enterprise_kms',
@@ -298,7 +298,7 @@ export class ClassificationHandlingRulesService {
   description: 'Confidential data must use TLS 1.3 with certificate pinning',
   classification: 'CONFIDENTIAL',
   ruleType: 'TRANSMISSION',
-  requirements: {,
+  requirements: {
   tlsVersion: 'TLS1.3',
   certificatePinning: true,
   endToEndEncryption: true,
@@ -314,7 +314,7 @@ export class ClassificationHandlingRulesService {
   description: 'Restricted data must be processed in isolated environments',
   classification: 'RESTRICTED',
   ruleType: 'PROCESSING',
-  requirements: {,
+  requirements: {
   isolationRequired: true,
   approvedEnvironments: ['isolated_production'],
   thirdPartyProcessing: false,
@@ -330,7 +330,7 @@ export class ClassificationHandlingRulesService {
   description: 'Access to confidential data requires multi-factor authentication',
   classification: 'CONFIDENTIAL',
   ruleType: 'ACCESS',
-  requirements: {,
+  requirements: {
   authenticationLevel: 'MFA',
   approvalWorkflow: true,
 },
@@ -345,7 +345,7 @@ export class ClassificationHandlingRulesService {
   description: 'Access to restricted data must be monitored in real-time',
   classification: 'RESTRICTED',
   ruleType: 'MONITORING',
-  requirements: {,
+  requirements: {
   realtimeMonitoring: true,
   alertThreshold: 'CRITICAL',
   incidentResponse: true,
@@ -366,7 +366,7 @@ export class ClassificationHandlingRulesService {
   /**
    * Validate data handling against requirements
    */
-  async validateDataHandling(dataId: string,)
+  async validateDataHandling(dataId: string)
     classification: DataClassificationLevel,
     operation: string,
     context: OperationContext): Promise<ValidationResult> {,
@@ -521,7 +521,7 @@ export class ClassificationHandlingRulesService {
   /**
    * Record handling rule violations
    */
-  private async recordViolations(dataId: string,)
+  private async recordViolations(dataId: string)
     classification: DataClassificationLevel,
     errors: string,
     context: OperationContext): Promise<void> {,
@@ -539,13 +539,13 @@ export class ClassificationHandlingRulesService {
         description: error,
         detectedAt: new Date(),
         context,
-        evidence: {,
+        evidence: {
   dataId,
   operation: context.operation,
   environment: context.environment,
 },
   remediation: this.getRemediationSteps(error),
-        status: 'OPEN';
+        status: 'OPEN'
   };
       this.violations.push(violation);
   /**

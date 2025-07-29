@@ -1,37 +1,37 @@
 export interface CorrectionsTheme {
-    colors: {,
+    colors: {
         primary: string;
         secondary: string;
         success: string;
         warning: string;
         error: string;
         info: string;
-        background: {,
+        background: {
             primary: string;
             secondary: string;
             tertiary: string;
             elevated: string;
             overlay: string;
         };
-        text: {,
+        text: {
             primary: string;
             secondary: string;
             disabled: string;
             inverse: string;
         };
-        border: {,
+        border: {
             primary: string;
             secondary: string;
             active: string;
         };
-        status: {,
+        status: {
             active: string;
             inactive: string;
             regex: string;
             priority: string;
         };
     };
-    spacing: {,
+    spacing: {
         xs: string;
         sm: string;
         md: string;
@@ -39,9 +39,9 @@ export interface CorrectionsTheme {
         xl: string;
         xxl: string;
     };
-    typography: {,
+    typography: {
         fontFamily: string;
-        fontSize: {,
+        fontSize: {
             xs: string;
             sm: string;
             md: string;
@@ -49,25 +49,25 @@ export interface CorrectionsTheme {
             xl: string;
             xxl: string;
         };
-        fontWeight: {,
+        fontWeight: {
             normal: number;
             medium: number;
             semibold: number;
             bold: number;
         };
-        lineHeight: {,
+        lineHeight: {
             tight: number;
             normal: number;
             loose: number;
         };
     };
-    shadows: {,
+    shadows: {
         sm: string;
         md: string;
         lg: string;
         xl: string;
     };
-    radius: {,
+    radius: {
         none: string;
         xs: string;
         sm: string;
@@ -76,12 +76,12 @@ export interface CorrectionsTheme {
         xl: string;
         full: string;
     };
-    transitions: {,
+    transitions: {
         fast: string;
         normal: string;
         slow: string;
     };
-    breakpoints: {,
+    breakpoints: {
         mobile: string;
         tablet: string;
         desktop: string;
@@ -101,7 +101,7 @@ export declare export declare             color: string;
             cursor: string;
             transition: string;
         };
-        secondary: {,
+        secondary: {
             backgroundColor: string;
             color: string;
             border: string;
@@ -112,7 +112,7 @@ export declare export declare             color: string;
             cursor: string;
             transition: string;
         };
-        danger: {,
+        danger: {
             backgroundColor: string;
             color: string;
             border: string;
@@ -124,8 +124,8 @@ export declare export declare             color: string;
             transition: string;
         };
     };
-    input: {,
-        base: {,
+    input: {
+        base: {
             backgroundColor: string;
             color: string;
             border: string;
@@ -138,7 +138,7 @@ export declare export declare             color: string;
                 outline: string;
             };
         };
-        search: {,
+        search: {
             backgroundColor: string;
             color: string;
             border: string;
@@ -153,8 +153,8 @@ export declare export declare             color: string;
             };
         };
     };
-    card: {,
-        base: {,
+    card: {
+        base: {
             backgroundColor: string;
             border: string;
             borderRadius: string;
@@ -162,7 +162,7 @@ export declare export declare             color: string;
             boxShadow: string;
             transition: string;
         };
-        elevated: {,
+        elevated: {
             backgroundColor: string;
             border: string;
             borderRadius: string;
@@ -171,8 +171,8 @@ export declare export declare             color: string;
             transition: string;
         };
     };
-    panel: {,
-        base: {,
+    panel: {
+        base: {
             backgroundColor: string;
             color: string;
             borderLeft: string;
@@ -182,24 +182,24 @@ export declare export declare             color: string;
             flexDirection: "column";
             transition: string;
         };
-        mobile: {,
+        mobile: {
             backgroundColor: string;
             color: string;
             height: string;
             width: string;
             overflow: string;
             display: string;
-            flexDirection: "column";
-        };
+            flexDirection: "column"
+  };
     };
-    status: {,
-        active: {,
+    status: {
+        active: {
             color: string;
         };
-        inactive: {,
+        inactive: {
             color: string;
         };
-        regex: {,
+        regex: {
             backgroundColor: string;
             color: string;
             padding: string;
@@ -208,26 +208,26 @@ export declare export declare             color: string;
             fontWeight: number;
         };
     };
-    text: {,
-        heading: {,
+    text: {
+        heading: {
             fontSize: string;
             fontWeight: number;
             color: string;
             lineHeight: number;
         };
-        subheading: {,
+        subheading: {
             fontSize: string;
             fontWeight: number;
             color: string;
             lineHeight: number;
         };
-        body: {,
+        body: {
             fontSize: string;
             fontWeight: number;
             color: string;
             lineHeight: number;
         };
-        caption: {,
+        caption: {
             fontSize: string;
             fontWeight: number;
             color: string;
@@ -241,28 +241,28 @@ export declare const mediaQueries: {
     desktop: string;
 };
 export declare const animations: {
-    fadeIn: {,
-        from: {,
+    fadeIn: {
+        from: {
             opacity: number;
         };
-        to: {,
+        to: {
             opacity: number;
         };
     };
-    slideIn: {,
-        from: {,
+    slideIn: {
+        from: {
             transform: string;
         };
-        to: {,
+        to: {
             transform: string;
         };
     };
-    scaleIn: {,
-        from: {,
+    scaleIn: {
+        from: {
             transform: string;
             opacity: number;
         };
-        to: {,
+        to: {
             transform: string;
             opacity: number;
         };

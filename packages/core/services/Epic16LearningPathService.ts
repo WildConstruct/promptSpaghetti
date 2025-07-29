@@ -10,39 +10,39 @@ import { EventEmitter } from 'events';
 // Core learning path interfaces
 
 export interface LearningPath {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: LearningCategory;
-  difficulty: DifficultyLevel;,
+  difficulty: DifficultyLevel;
   estimatedDuration: number; // minutes,
   // Path structure
-  modules: LearningModule;,
+  modules: LearningModule;
   prerequisites: string; // Other learning path IDs,
   outcomes: LearningOutcome;
   // Content and resources
-  resources: LearningResource;,
+  resources: LearningResource;
   assessments: Assessment;
   certification?: Certification;
   // Personalization
-  targetAudience: TargetAudience;,
+  targetAudience: TargetAudience;
   tags: string;
-  skillsRequired: Skill;,
+  skillsRequired: Skill;
   skillsAcquired: Skill;
   // Engagement
-  interactiveElements: InteractiveElement;,
+  interactiveElements: InteractiveElement;
   progressTracking: ProgressTracking;
   gamification: GamificationElements;
   // Content management
-  author: string;,
+  author: string;
   version: string;
-  status: ContentStatus;,
+  status: ContentStatus;
   lastUpdated: Date;
   publishedAt?: Date;
   // Analytics
   analytics: PathAnalytics;
   // Marketplace integration
-  marketplaceIntegration: MarketplaceIntegration;,
+  marketplaceIntegration: MarketplaceIntegration;
   communityIntegration: CommunityIntegration;
 }
 export enum LearningCategory {
@@ -80,21 +80,21 @@ export enum LearningCategory {
   ARCHIVED = 'archived',
   DEPRECATED = 'deprecated'
   export interface LearningModule {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: ModuleType;
   duration: number; // minutes,
   order: number;
   // Content
-  content: ModuleContent;,
+  content: ModuleContent;
   activities: LearningActivity;
   quiz?: Quiz;
   // Requirements
   prerequisites: string; // Module IDs,
   mandatory: boolean;
   // Tracking
-  completionCriteria: CompletionCriteria;,
+  completionCriteria: CompletionCriteria;
   progressWeight: number; // 0-1,
 }
 export enum ModuleType {
@@ -107,12 +107,12 @@ export enum ModuleType {
   DISCUSSION = 'discussion',
   REVIEW = 'review'
   export interface ModuleContent {
-  id: string;,
+  id: string;
   type: ContentType;
-  title: string;,
+  title: string;
   content: string;
   url?: string;
-  metadata: ContentMetadata;,
+  metadata: ContentMetadata;
   interactive: boolean;
   duration: number; // minutes,
 }
@@ -130,37 +130,37 @@ export enum ContentType {
   CHECKLIST = 'checklist',
   SIMULATION = 'simulation'
   export interface ContentMetadata {
-  transcriptAvailable: boolean;,
+  transcriptAvailable: boolean;
   captionsAvailable: boolean;
-  downloadable: boolean;,
+  downloadable: boolean;
   offlineAccess: boolean;
-  mobileOptimized: boolean;,
+  mobileOptimized: boolean;
   accessibility: AccessibilityFeatures;
-  language: string;,
+  language: string;
   alternativeFormats: string;
 }
 export interface AccessibilityFeatures {
-  screenReaderFriendly: boolean;,
+  screenReaderFriendly: boolean;
   highContrast: boolean;
-  keyboardNavigation: boolean;,
+  keyboardNavigation: boolean;
   audioDescriptions: boolean;
   signLanguage: boolean;
 }
 export interface LearningActivity {
-  id: string;,
+  id: string;
   type: ActivityType;
-  title: string;,
+  title: string;
   description: string;
-  instructions: string;,
+  instructions: string;
   estimatedTime: number; // minutes,
   // Activity configuration
-  config: ActivityConfig;,
+  config: ActivityConfig;
   resources: ActivityResource;
   // Validation
-  validation: ActivityValidation;,
+  validation: ActivityValidation;
   feedback: ActivityFeedback;
   // Tracking
-  attempts: number;,
+  attempts: number;
   completionRequired: boolean;
 }
 export enum ActivityType {
@@ -181,63 +181,63 @@ export enum ActivityType {
   timeLimit?: number; // minutes,
   attemptsAllowed: number;
   passingScore?: number; // percentage,
-  randomizeOptions: boolean;,
+  randomizeOptions: boolean;
   showHints: boolean;
   allowCollaboration: boolean;
 }
 export interface ActivityResource {
-  type: 'template' | 'tool' | 'reference' | 'example';,
+  type: 'template' | 'tool' | 'reference' | 'example';
   name: string;
-  url: string;,
+  url: string;
   description: string;
   downloadable: boolean;
 }
 export interface ActivityValidation {
-  type: 'automatic' | 'manual' | 'peer_review' | 'instructor';,
+  type: 'automatic' | 'manual' | 'peer_review' | 'instructor';
   criteria: ValidationCriteria;
   rubric?: AssessmentRubric;
 }
 export interface ValidationCriteria {
-  name: string;,
+  name: string;
   description: string;
   weight: number; // 0-1,
-  required: boolean;,
+  required: boolean;
   measurable: boolean;
 }
 export interface ActivityFeedback {
-  immediate: FeedbackItem;,
+  immediate: FeedbackItem;
   onCompletion: FeedbackItem;
-  onFailure: FeedbackItem;,
+  onFailure: FeedbackItem;
   personalized: boolean;
   adaptive: boolean;
 }
 export interface FeedbackItem {
-  type: 'text' | 'video' | 'link' | 'tip' | 'correction';,
+  type: 'text' | 'video' | 'link' | 'tip' | 'correction';
   content: string;
   url?: string;
   condition?: string;
 }
 export interface Quiz {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   questions: QuizQuestion;
   timeLimit?: number; // minutes,
   passingScore: number; // percentage,
-  attemptsAllowed: number;,
+  attemptsAllowed: number;
   randomizeQuestions: boolean;
-  showResults: boolean;,
+  showResults: boolean;
   certificateEligible: boolean;
 }
 export interface QuizQuestion {
-  id: string;,
+  id: string;
   type: QuestionType;
   question: string;
   explanation?: string;
-  points: number;,
+  points: number;
   difficulty: DifficultyLevel;
   options?: QuestionOption;
-  correctAnswer: any;,
+  correctAnswer: any;
   hints: string;
   tags: string;
 }
@@ -252,28 +252,28 @@ export enum QuestionType {
   ORDERING = 'ordering',
   HOTSPOT = 'hotspot'
   export interface QuestionOption {
-  id: string;,
+  id: string;
   text: string;
   correct: boolean;
   explanation?: string;
 }
 export interface CompletionCriteria {
-  type: 'time_based' | 'activity_based' | 'score_based' | 'custom';,
+  type: 'time_based' | 'activity_based' | 'score_based' | 'custom';
   requirements: CompletionRequirement;
   allRequired: boolean;
 }
 export interface CompletionRequirement {
-  type: string;,
+  type: string;
   value: any;
-  description: string;,
+  description: string;
   weight: number;
 }
 export interface LearningOutcome {
-  id: string;,
+  id: string;
   description: string;
-  measurable: boolean;,
+  measurable: boolean;
   assessmentMethod: string;
-  skillsAcquired: string;,
+  skillsAcquired: string;
   bloomLevel: BloomLevel;
 }
 export enum BloomLevel {
@@ -284,15 +284,15 @@ export enum BloomLevel {
   EVALUATE = 'evaluate',
   CREATE = 'create'
   export interface LearningResource {
-  id: string;,
+  id: string;
   title: string;
-  type: ResourceType;,
+  type: ResourceType;
   url: string;
-  description: string;,
+  description: string;
   format: string;
   size?: number;
   duration?: number;
-  downloadable: boolean;,
+  downloadable: boolean;
   external: boolean;
   lastUpdated: Date;
 }
@@ -308,9 +308,9 @@ export enum ResourceType {
   CHECKLIST = 'checklist',
   CASE_STUDY = 'case_study'
   export interface Assessment {
-  id: string;,
+  id: string;
   title: string;
-  type: AssessmentType;,
+  type: AssessmentType;
   description: string;
   weight: number; // 0-1 towards final grade,
   passingScore: number; // percentage,
@@ -320,7 +320,7 @@ export enum ResourceType {
   items: AssessmentItem;
   rubric?: AssessmentRubric;
   // Configuration
-  randomizeItems: boolean;,
+  randomizeItems: boolean;
   showFeedback: boolean;
   availableFrom?: Date;
   availableUntil?: Date;
@@ -338,54 +338,54 @@ export enum AssessmentType {
   PROJECT = 'project',
   PRESENTATION = 'presentation'
   export interface AssessmentItem {
-  id: string;,
+  id: string;
   type: string;
-  content: any;,
+  content: any;
   points: number;
   rubricCriteria?: string;
 }
 export interface AssessmentRubric {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   criteria: RubricCriterion;
   levels: RubricLevel;
 }
 export interface RubricCriterion {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   weight: number;
 }
 export interface RubricLevel {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   points: number;
 }
 export interface ProctoringSettings {
-  recordVideo: boolean;,
+  recordVideo: boolean;
   recordAudio: boolean;
-  recordScreen: boolean;,
+  recordScreen: boolean;
   preventCopyPaste: boolean;
-  blockNavigation: boolean;,
+  blockNavigation: boolean;
   requireWebcam: boolean;
-  faceDetection: boolean;,
+  faceDetection: boolean;
   environmentScan: boolean;
 }
 export interface Certification {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   issuer: string;
   validityPeriod: number; // months,
-  renewalRequired: boolean;,
+  renewalRequired: boolean;
   renewalProcess: string;
   // Requirements
-  prerequisites: CertificationRequirement;,
+  prerequisites: CertificationRequirement;
   assessmentRequirements: AssessmentRequirement;
   // Verification
-  verifiable: boolean;,
+  verifiable: boolean;
   blockchainBacked: boolean;
   digitalBadge: DigitalBadge;
   // Recognition
@@ -394,31 +394,31 @@ export interface Certification {
   accreditation: string;
 }
 export interface CertificationRequirement {
-  type: 'course_completion' | 'assessment_score' | 'portfolio_submission' | 'experience';,
+  type: 'course_completion' | 'assessment_score' | 'portfolio_submission' | 'experience';
   description: string;
-  value: any;,
+  value: any;
   mandatory: boolean;
 }
 export interface AssessmentRequirement {
-  assessmentId: string;,
+  assessmentId: string;
   minimumScore: number;
   attemptsAllowed: number;
   timeframe?: number; // days,
 }
 export interface DigitalBadge {
-  id: string;,
+  id: string;
   imageUrl: string;
-  metadataUrl: string;,
+  metadataUrl: string;
   openBadgeCompliant: boolean;
-  shareableUrl: string;,
+  shareableUrl: string;
   verificationUrl: string;
 }
 export interface Skill {
-  id: string;,
+  id: string;
   name: string;
-  category: SkillCategory;,
+  category: SkillCategory;
   level: SkillLevel;
-  description: string;,
+  description: string;
   verifiable: boolean;
   marketValue: number; // 1-10 scale,
 }
@@ -440,11 +440,11 @@ export enum SkillCategory {
   EXPERT = 'expert',
   MASTER = 'master'
   export interface InteractiveElement {
-  id: string;,
+  id: string;
   type: InteractiveType;
-  title: string;,
+  title: string;
   description: string;
-  configuration: InteractiveConfig;,
+  configuration: InteractiveConfig;
   triggers: InteractiveTrigger;
   analytics: InteractiveAnalytics;
 }
@@ -461,83 +461,83 @@ export enum InteractiveType {
   VR_EXPERIENCE = 'vr_experience'
   export interface InteractiveConfig {
   parameters: Record<string, any>;
-  responsive: boolean;,
+  responsive: boolean;
   accessibility: boolean;
-  offlineSupport: boolean;,
+  offlineSupport: boolean;
   mobileOptimized: boolean;
 }
 export interface InteractiveTrigger {
-  event: string;,
+  event: string;
   condition: string;
-  action: string;,
+  action: string;
   parameters: Record<string, any>;
 }
 export interface InteractiveAnalytics {
-  trackInteractions: boolean;,
+  trackInteractions: boolean;
   trackTime: boolean;
-  trackProgress: boolean;,
+  trackProgress: boolean;
   trackErrors: boolean;
   customEvents: string;
 }
 export interface ProgressTracking {
-  enableTracking: boolean;,
+  enableTracking: boolean;
   trackingGranularity: 'module' | 'activity' | 'detailed';
-  syncAcrossDevices: boolean;,
+  syncAcrossDevices: boolean;
   offlineSync: boolean;
   // Analytics
-  trackTimeSpent: boolean;,
+  trackTimeSpent: boolean;
   trackAttempts: boolean;
-  trackPaths: boolean;,
+  trackPaths: boolean;
   trackInteractions: boolean;
   // Reporting
-  generateReports: boolean;,
+  generateReports: boolean;
   reportingInterval: 'real_time' | 'daily' | 'weekly' | 'monthly';
   stakeholderReports: string;
 }
 export interface GamificationElements {
-  enabled: boolean;,
+  enabled: boolean;
   pointsSystem: PointsSystem;
-  badges: Badge;,
+  badges: Badge;
   leaderboards: Leaderboard;
-  achievements: Achievement;,
+  achievements: Achievement;
   challenges: Challenge;
   streaks: StreakTracking;
 }
 export interface PointsSystem {
-  enabled: boolean;,
+  enabled: boolean;
   pointTypes: PointType;
-  conversion: PointConversion;,
+  conversion: PointConversion;
   redemption: PointRedemption;
 }
 export interface PointType {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   icon: string;
-  color: string;,
+  color: string;
   value: number;
 }
 export interface PointConversion {
-  fromType: string;,
+  fromType: string;
   toType: string;
-  ratio: number;,
+  ratio: number;
   conditions: string;
 }
 export interface PointRedemption {
-  item: string;,
+  item: string;
   cost: number;
-  description: string;,
+  description: string;
   availability: 'limited' | 'unlimited';
   conditions: string;
 }
 export interface Badge {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   icon: string;
-  rarity: BadgeRarity;,
+  rarity: BadgeRarity;
   criteria: BadgeCriteria;
-  stackable: boolean;,
+  stackable: boolean;
   shareable: boolean;
 }
 export enum BadgeRarity {
@@ -547,31 +547,31 @@ export enum BadgeRarity {
   EPIC = 'epic',
   LEGENDARY = 'legendary'
   export interface BadgeCriteria {
-  type: string;,
+  type: string;
   condition: string;
   value: any;
   timeframe?: number; // days,
 }
 export interface Leaderboard {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   metric: string;
-  timeframe: 'daily' | 'weekly' | 'monthly' | 'all_time';,
+  timeframe: 'daily' | 'weekly' | 'monthly' | 'all_time';
   scope: 'global' | 'cohort' | 'path' | 'module';
-  maxEntries: number;,
+  maxEntries: number;
   anonymous: boolean;
 }
 export interface Achievement {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   icon: string;
-  category: AchievementCategory;,
+  category: AchievementCategory;
   difficulty: DifficultyLevel;
-  criteria: AchievementCriteria;,
+  criteria: AchievementCriteria;
   rewards: AchievementReward;
-  hidden: boolean;,
+  hidden: boolean;
   oneTime: boolean;
 }
 export enum AchievementCategory {
@@ -583,34 +583,34 @@ export enum AchievementCategory {
   MILESTONE = 'milestone',
   SPECIAL = 'special'
   export interface AchievementCriteria {
-  type: string;,
+  type: string;
   condition: string;
-  value: any;,
+  value: any;
   cumulative: boolean;
 }
 export interface AchievementReward {
-  type: 'points' | 'badge' | 'certificate' | 'unlock' | 'discount' | 'item';,
+  type: 'points' | 'badge' | 'certificate' | 'unlock' | 'discount' | 'item';
   value: any;
   description: string;
 }
 export interface Challenge {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: ChallengeType;
-  difficulty: DifficultyLevel;,
+  difficulty: DifficultyLevel;
   duration: number; // days,
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
   // Requirements
-  eligibilityCriteria: string;,
+  eligibilityCriteria: string;
   prerequisites: string;
   // Rewards
-  rewards: ChallengeReward;,
+  rewards: ChallengeReward;
   leaderboard: boolean;
   // Participation
   maxParticipants?: number;
-  teamBased: boolean;,
+  teamBased: boolean;
   publicResults: boolean;
 }
 export enum ChallengeType {
@@ -622,67 +622,67 @@ export enum ChallengeType {
   COMMUNITY = 'community',
   MILESTONE = 'milestone'
   export interface ChallengeReward {
-  rank: number;,
+  rank: number;
   type: string;
-  value: any;,
+  value: any;
   description: string;
 }
 export interface StreakTracking {
-  enabled: boolean;,
+  enabled: boolean;
   types: StreakType;
-  rewards: StreakReward;,
+  rewards: StreakReward;
   resetConditions: string;
 }
 export interface StreakType {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   activity: string;
-  frequency: 'daily' | 'weekly' | 'custom';,
+  frequency: 'daily' | 'weekly' | 'custom';
   minRequirement: number;
 }
 export interface StreakReward {
-  streakType: string;,
+  streakType: string;
   milestones: StreakMilestone;
 }
 export interface StreakMilestone {
-  days: number;,
+  days: number;
   reward: AchievementReward;
   special: boolean;
 }
 export interface PathAnalytics {
-  enrollments: number;,
+  enrollments: number;
   completions: number;
-  completionRate: number;,
+  completionRate: number;
   averageTimeToComplete: number; // hours,
-  averageScore: number;,
+  averageScore: number;
   satisfactionRating: number;
   // Engagement metrics
   averageTimeSpent: number; // minutes,
-  dropoffPoints: DropoffPoint;,
+  dropoffPoints: DropoffPoint;
   popularModules: ModulePopularity;
   // Demographics
-  audienceBreakdown: AudienceMetrics;,
+  audienceBreakdown: AudienceMetrics;
   deviceUsage: DeviceMetrics;
   geographicDistribution: GeographicMetrics;
   // Performance
-  difficultyRating: number;,
+  difficultyRating: number;
   helpRequestRate: number;
   retakeRate: number;
   // Improvement areas
-  improvementSuggestions: ImprovementSuggestion;,
+  improvementSuggestions: ImprovementSuggestion;
   contentGaps: ContentGap;
 }
 export interface DropoffPoint {
   moduleId: string;
   activityId?: string;
-  percentage: number;,
+  percentage: number;
   commonReasons: string;
 }
 export interface ModulePopularity {
-  moduleId: string;,
+  moduleId: string;
   viewCount: number;
-  completionRate: number;,
+  completionRate: number;
   rating: number;
   timeSpent: number;
 }
@@ -692,9 +692,9 @@ export interface AudienceMetrics {
   byGoal: Record<string, number>;
 }
 export interface DeviceMetrics {
-  desktop: number;,
+  desktop: number;
   mobile: number;
-  tablet: number;,
+  tablet: number;
   preferredPlatform: string;
 }
 export interface GeographicMetrics {
@@ -703,142 +703,142 @@ export interface GeographicMetrics {
   languages: Record<string, number>;
 }
 export interface ImprovementSuggestion {
-  area: string;,
+  area: string;
   issue: string;
-  suggestion: string;,
+  suggestion: string;
   priority: 'high' | 'medium' | 'low';
   impact: string;
 }
 export interface ContentGap {
-  topic: string;,
+  topic: string;
   requestedBy: number;
-  difficulty: DifficultyLevel;,
-  urgency: 'high' | 'medium' | 'low';
-}
+  difficulty: DifficultyLevel;
+  urgency: 'high' | 'medium' | 'low'
+  }
 export interface MarketplaceIntegration {
-  enabled: boolean;,
+  enabled: boolean;
   linkedTemplates: string;
-  sellingOpportunities: SellingOpportunity;,
+  sellingOpportunities: SellingOpportunity;
   buyingRecommendations: BuyingRecommendation;
-  earningPotential: EarningPotential;,
+  earningPotential: EarningPotential;
   marketplaceTools: MarketplaceTool;
 }
 export interface SellingOpportunity {
-  type: 'template' | 'service' | 'consultation' | 'course';,
+  type: 'template' | 'service' | 'consultation' | 'course';
   description: string;
-  potentialEarnings: number;,
+  potentialEarnings: number;
   difficulty: DifficultyLevel;
   timeInvestment: number; // hours,
-  marketDemand: 'high' | 'medium' | 'low';
-}
+  marketDemand: 'high' | 'medium' | 'low'
+  }
 export interface BuyingRecommendation {
-  itemType: 'template' | 'tool' | 'service' | 'course';,
+  itemType: 'template' | 'tool' | 'service' | 'course';
   itemId: string;
-  reason: string;,
+  reason: string;
   relevanceScore: number;
   priceRange: string;
 }
 export interface EarningPotential {
-  skillLevel: SkillLevel;,
+  skillLevel: SkillLevel;
   averageHourlyRate: number;
   marketDemand: number; // 1-10 scale,
   competitionLevel: number; // 1-10 scale,
   growthProjection: string;
 }
 export interface MarketplaceTool {
-  name: string;,
+  name: string;
   description: string;
-  url: string;,
+  url: string;
   type: 'free' | 'premium' | 'trial';
   relevantModules: string;
 }
 export interface CommunityIntegration {
-  enabled: boolean;,
+  enabled: boolean;
   forumLinks: ForumLink;
-  discussionTopics: DiscussionTopic;,
+  discussionTopics: DiscussionTopic;
   mentorshipProgram: MentorshipProgram;
-  peerLearning: PeerLearning;,
+  peerLearning: PeerLearning;
   communityEvents: CommunityEvent;
 }
 export interface ForumLink {
-  title: string;,
-  url: string;
-  relevantModules: string;,
-  activityLevel: 'high' | 'medium' | 'low';
-}
-export interface DiscussionTopic {
-  id: string;,
   title: string;
-  description: string;,
+  url: string;
+  relevantModules: string;
+  activityLevel: 'high' | 'medium' | 'low'
+  }
+export interface DiscussionTopic {
+  id: string;
+  title: string;
+  description: string;
   category: string;
   moduleId?: string;
-  participantCount: number;,
+  participantCount: number;
   messageCount: number;
 }
 export interface MentorshipProgram {
-  enabled: boolean;,
+  enabled: boolean;
   availableMentors: Mentor;
-  matchingCriteria: MatchingCriteria;,
+  matchingCriteria: MatchingCriteria;
   sessionFormats: SessionFormat;
 }
 export interface Mentor {
-  id: string;,
+  id: string;
   name: string;
-  expertise: string;,
+  expertise: string;
   rating: number;
-  availability: string;,
+  availability: string;
   languages: string;
   price?: number;
 }
 export interface MatchingCriteria {
-  type: 'skill' | 'experience' | 'goal' | 'industry' | 'language';,
+  type: 'skill' | 'experience' | 'goal' | 'industry' | 'language';
   weight: number;
   required: boolean;
 }
 export interface SessionFormat {
-  type: '1-on-1' | 'group' | 'workshop' | 'office_hours';,
+  type: '1-on-1' | 'group' | 'workshop' | 'office_hours';
   duration: number; // minutes,
   maxParticipants: number;
   price?: number;
 }
 export interface PeerLearning {
-  enabled: boolean;,
+  enabled: boolean;
   studyGroups: StudyGroup;
-  peerReview: PeerReview;,
+  peerReview: PeerReview;
   collaborativeProjects: CollaborativeProject;
 }
 export interface StudyGroup {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   pathId: string;
-  memberCount: number;,
+  memberCount: number;
   maxMembers: number;
-  schedule: string;,
+  schedule: string;
   language: string;
 }
 export interface PeerReview {
-  enabled: boolean;,
+  enabled: boolean;
   reviewCriteria: string;
-  reviewersPerSubmission: number;,
+  reviewersPerSubmission: number;
   anonymousReview: boolean;
   qualityControl: boolean;
 }
 export interface CollaborativeProject {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   skills: string;
-  teamSize: number;,
+  teamSize: number;
   duration: number; // weeks,
   outcome: string;
 }
 export interface CommunityEvent {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: 'webinar' | 'workshop' | 'challenge' | 'showcase' | 'networking';
-  date: Date;,
+  date: Date;
   duration: number; // minutes,
   capacity?: number;
   price?: number;
@@ -846,11 +846,11 @@ export interface CommunityEvent {
   // User progress and enrollment interfaces
 }
 export interface UserEnrollment {
-  userId: string;,
+  userId: string;
   pathId: string;
-  enrolledAt: Date;,
+  enrolledAt: Date;
   status: EnrollmentStatus;
-  progress: UserProgress;,
+  progress: UserProgress;
   settings: UserSettings;
   analytics: UserAnalytics;
 }
@@ -863,9 +863,9 @@ export enum EnrollmentStatus {
   CERTIFIED = 'certified'
   export interface UserProgress {
   overallProgress: number; // 0-100,
-  currentModule: string;,
+  currentModule: string;
   completedModules: string;
-  completedActivities: string;,
+  completedActivities: string;
   timeSpent: number; // minutes,
   lastAccessed: Date;
   // Module progress
@@ -881,45 +881,45 @@ export enum EnrollmentStatus {
 export interface ModuleProgress {
   progress: number; // 0-100,
   timeSpent: number; // minutes,
-  completedActivities: string;,
+  completedActivities: string;
   lastAccessed: Date;
   attempts: number;
   score?: number;
 }
 export interface QuizAttempt {
-  attemptNumber: number;,
+  attemptNumber: number;
   score: number;
   timeSpent: number; // minutes,
-  completedAt: Date;,
+  completedAt: Date;
   answers: Record<string, any>;
 }
 export interface SkillProgress {
-  currentLevel: SkillLevel;,
+  currentLevel: SkillLevel;
   experience: number;
-  nextLevelRequirement: number;,
+  nextLevelRequirement: number;
   lastUpdated: Date;
-  verificationStatus: 'pending' | 'verified' | 'expired';
-}
+  verificationStatus: 'pending' | 'verified' | 'expired'
+  }
 export interface UserCertification {
-  certificationId: string;,
+  certificationId: string;
   issuedAt: Date;
   expiresAt?: Date;
-  verificationCode: string;,
+  verificationCode: string;
   digitalBadgeUrl: string;
-  status: 'active' | 'expired' | 'revoked';
-}
+  status: 'active' | 'expired' | 'revoked'
+  }
 export interface UserSettings {
-  notifications: NotificationSettings;,
+  notifications: NotificationSettings;
   preferences: LearningPreferences;
-  accessibility: AccessibilitySettings;,
+  accessibility: AccessibilitySettings;
   privacy: PrivacySettings;
 }
 export interface NotificationSettings {
-  email: boolean;,
+  email: boolean;
   push: boolean;
-  sms: boolean;,
+  sms: boolean;
   inApp: boolean;
-  frequency: 'immediate' | 'daily' | 'weekly';,
+  frequency: 'immediate' | 'daily' | 'weekly';
   types: NotificationType;
 }
 export enum NotificationType {
@@ -931,11 +931,11 @@ export enum NotificationType {
   MENTOR_MESSAGES = 'mentor_messages',
   DEADLINES = 'deadlines'
   export interface LearningPreferences {
-  learningStyle: LearningStyle;,
+  learningStyle: LearningStyle;
   pace: 'self_paced' | 'structured' | 'intensive';
-  contentFormat: ContentType;,
+  contentFormat: ContentType;
   language: string;
-  timezone: string;,
+  timezone: string;
   studyTime: StudyTimePreference;
 }
 export enum LearningStyle {
@@ -946,68 +946,68 @@ export enum LearningStyle {
   SOCIAL = 'social',
   SOLITARY = 'solitary'
   export interface StudyTimePreference {
-  day: string;,
+  day: string;
   startTime: string;
-  endTime: string;,
+  endTime: string;
   timezone: string;
 }
 export interface AccessibilitySettings {
-  screenReader: boolean;,
+  screenReader: boolean;
   highContrast: boolean;
-  largeText: boolean;,
+  largeText: boolean;
   reducedMotion: boolean;
-  captionsEnabled: boolean;,
+  captionsEnabled: boolean;
   audioDescriptions: boolean;
   keyboardNavigation: boolean;
 }
 export interface PrivacySettings {
-  profileVisibility: 'public' | 'community' | 'private';,
+  profileVisibility: 'public' | 'community' | 'private';
   progressSharing: boolean;
-  leaderboardParticipation: boolean;,
+  leaderboardParticipation: boolean;
   mentorshipAvailability: boolean;
-  dataCollection: boolean;,
+  dataCollection: boolean;
   marketingCommunications: boolean;
 }
 export interface UserAnalytics {
   totalTimeSpent: number; // minutes,
   averageSessionTime: number; // minutes,
   completionRate: number; // 0-100,
-  streaks: UserStreak;,
+  streaks: UserStreak;
   achievements: UserAchievement;
   badges: UserBadge;
   // Learning patterns
-  preferredTimes: TimePattern;,
+  preferredTimes: TimePattern;
   deviceUsage: Record<string, number>;
   contentPreferences: Record<ContentType, number>;
   // Performance
-  averageScore: number;,
+  averageScore: number;
   improvementRate: number;
-  strengthAreas: string;,
+  strengthAreas: string;
   improvementAreas: string;
 }
 export interface UserStreak {
-  type: string;,
+  type: string;
   current: number;
-  longest: number;,
+  longest: number;
   startDate: Date;
   lastActivity: Date;
 }
 export interface UserAchievement {
-  achievementId: string;,
+  achievementId: string;
   unlockedAt: Date;
   progress: number; // 0-100,
   tier?: number;
 }
 export interface UserBadge {
-  badgeId: string;,
+  badgeId: string;
   earnedAt: Date;
   count: number; // for stackable badges,
   shareCount: number;
 }
 export interface TimePattern {
-  hour: number;,
+  hour: number;
   dayOfWeek: number;
-  frequency: number;,
+  frequency: number;
   avgDuration: number; // minutes,
   /**
   * Epic 16 Learning Path Service
@@ -1034,7 +1034,7 @@ export class Epic16LearningPathService extends EventEmitter {
       ...pathData,
       id: pathId,
       lastUpdated: now,
-      analytics: {,
+      analytics: {
   enrollments: 0,
         completions: 0,
         completionRate: 0,
@@ -1044,18 +1044,18 @@ export class Epic16LearningPathService extends EventEmitter {
         averageTimeSpent: 0,
         dropoffPoints: [],
         popularModules: [],
-        audienceBreakdown: {,
+        audienceBreakdown: {
   byRole: {} as Record<TargetAudience, number>,
           byExperience: {} as Record<DifficultyLevel, number>,
           byGoal: {}
   },
-  deviceUsage: {,
+  deviceUsage: {
   desktop: 0,
   mobile: 0,
   tablet: 0,
   preferredPlatform: 'desktop',
 },
-  geographicDistribution: {,
+  geographicDistribution: {
   countries: {},
           timezones: {},
           languages: {}
@@ -1080,7 +1080,7 @@ export class Epic16LearningPathService extends EventEmitter {
       pathId,
       enrolledAt: new Date(),
       status: EnrollmentStatus.ENROLLED,
-      progress: {,
+      progress: {
   overallProgress: 0,
         currentModule: path.modules[0]?.id || '',
         completedModules: [],
@@ -1093,8 +1093,8 @@ export class Epic16LearningPathService extends EventEmitter {
         skillsProgress: {},
         certifications: [];
   },
-  settings: {,
-  notifications: {,
+  settings: {
+  notifications: {
   email: true,
   push: true,
   sms: false,
@@ -1102,7 +1102,7 @@ export class Epic16LearningPathService extends EventEmitter {
   frequency: 'daily',
   types: [NotificationType.PROGRESS_UPDATES, NotificationType.REMINDERS],
 },
-  preferences: {,
+  preferences: {
   learningStyle: [LearningStyle.VISUAL],
   pace: 'self_paced',
   contentFormat: [ContentType.VIDEO, ContentType.TEXT],
@@ -1110,7 +1110,7 @@ export class Epic16LearningPathService extends EventEmitter {
   timezone: 'UTC',
   studyTime: [],
 },
-  accessibility: {,
+  accessibility: {
   screenReader: false,
   highContrast: false,
   largeText: false,
@@ -1119,7 +1119,7 @@ export class Epic16LearningPathService extends EventEmitter {
   audioDescriptions: false,
   keyboardNavigation: false,
 },
-  privacy: {,
+  privacy: {
   profileVisibility: 'community',
   progressSharing: true,
   leaderboardParticipation: true,
@@ -1129,7 +1129,7 @@ export class Epic16LearningPathService extends EventEmitter {
 }
         ...settings
   },
-  analytics: {,
+  analytics: {
   totalTimeSpent: 0,
         averageSessionTime: 0,
         completionRate: 0,
@@ -1432,7 +1432,7 @@ export class Epic16LearningPathService extends EventEmitter {
         version: '2.1.0',
         status: ContentStatus.PUBLISHED,
         lastUpdated: new Date(),
-        certification: {,
+        certification: {
   id: 'cert_template_creator',
           name: 'Certified Template Creator',
           description: 'Professional certification for template creation mastery',
@@ -1455,7 +1455,7 @@ export class Epic16LearningPathService extends EventEmitter {
       const pathId = `sample_path_${index + 1}`;}
       const learningPath: LearningPath = {,
   id: pathId,
-        analytics: {,
+        analytics: {
   enrollments: Math.floor(Math.random() * 1000) + 100,
           completions: Math.floor(Math.random() * 500) + 50,
           completionRate: 0,
@@ -1465,18 +1465,18 @@ export class Epic16LearningPathService extends EventEmitter {
           averageTimeSpent: 0,
           dropoffPoints: [],
           popularModules: [],
-          audienceBreakdown: {,
+          audienceBreakdown: {
   byRole: {} as Record<TargetAudience, number>,
             byExperience: {} as Record<DifficultyLevel, number>,
             byGoal: {}
   },
-  deviceUsage: {,
+  deviceUsage: {
   desktop: 65,
   mobile: 25,
   tablet: 10,
   preferredPlatform: 'desktop',
 },
-  geographicDistribution: {,
+  geographicDistribution: {
   countries: { 'US': 40, 'UK': 15, 'CA': 12, 'AU': 8, 'DE': 10, 'FR': 8, 'Others': 7 },
             timezones: {},
             languages: { 'en': 85, 'es': 8, 'fr': 4, 'de': 3 }

@@ -722,7 +722,8 @@ export var SecurityIntelligenceType;
                                 }
                             }
                         }
-                    } }
+                    }
+                }
             };
         }
     }

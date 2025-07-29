@@ -13,19 +13,19 @@ import {
 } from '../types/DataClassification';
 
 export interface AuditLogEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  userId: string;,
+  userId: string;
   sessionId: string;
-  requestId: string;,
+  requestId: string;
   action: AuditAction;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   dataId: string;
-  resourceType: 'DOCUMENT' | 'FILE' | 'DATABASE' | 'API' | 'SYSTEM' | 'USER_DATA';,
+  resourceType: 'DOCUMENT' | 'FILE' | 'DATABASE' | 'API' | 'SYSTEM' | 'USER_DATA';
   details: AuditDetails;
-  context: OperationContext;,
+  context: OperationContext;
   outcome: AuditOutcome;
-  metadata: AuditMetadata;,
+  metadata: AuditMetadata;
   complianceFlags: ComplianceFlag;
   riskScore: number;
   correlationId?: string;
@@ -54,7 +54,7 @@ export type AuditAction =
 export interface AuditDetails {
   previousClassification?: DataClassificationLevel;
   newClassification?: DataClassificationLevel;
-  accessMethod: string;,
+  accessMethod: string;
   toolUsed: string;
   businessJustification?: string;
   approvalRequired: boolean;
@@ -62,7 +62,7 @@ export interface AuditDetails {
   automaticAction: boolean;
   dataSize?: number;
   fieldCount?: number;
-  piiDetected: boolean;,
+  piiDetected: boolean;
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIALLY_ENCRYPTED';
   customProperties?: Record<string, any>;
 }
@@ -70,43 +70,43 @@ export interface AuditOutcome {
   success: boolean;
   errorCode?: string;
   errorMessage?: string;
-  warningMessages: string;,
+  warningMessages: string;
   executionTimeMs: number;
-  resourcesAffected: number;,
+  resourcesAffected: number;
   complianceScore: number;
-  violationsDetected: string;,
+  violationsDetected: string;
   remediationRequired: boolean;
 }
 export interface AuditMetadata {
-  sourceIP: string;,
+  sourceIP: string;
   userAgent: string;
-  geolocation?: {,
-  country: string;,
+  geolocation?: {
+  country: string;
   region: string;
-  city: string;,
+  city: string;
   coordinates: [number, number];
 };
   deviceInfo?: {
-  deviceId: string;,
+  deviceId: string;
   deviceType: string;
-  operatingSystem: string;,
+  operatingSystem: string;
   browser: string;
 };
   networkInfo?: {
-  vpnDetected: boolean;,
+  vpnDetected: boolean;
   proxyDetected: boolean;
-  networkQuality: 'HIGH' | 'MEDIUM' | 'LOW';
-};
+  networkQuality: 'HIGH' | 'MEDIUM' | 'LOW'
+  };
   organizationInfo?: {
-  organizationId: string;,
+  organizationId: string;
   department: string;
-  role: string;,
+  role: string;
   accessLevel: string;
 };
 }
 export interface ComplianceFlag {
   framework: string; // GDPR, HIPAA, SOX, PCI-DSS, etc.,
-  requirement: string;,
+  requirement: string;
   status: 'COMPLIANT' | 'NON_COMPLIANT' | 'NEEDS_REVIEW' | 'EXEMPTED';
   evidence?: string;
   assessmentDate: Date;
@@ -127,52 +127,52 @@ export interface AuditQuery {
   limit?: number;
   offset?: number;
   sortBy?: 'timestamp' | 'riskScore' | 'classification' | 'userId';
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export interface AuditReport {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   generatedAt: Date;
-  requestedBy: string;,
+  requestedBy: string;
   parameters: AuditQuery;
-  summary: AuditSummary;,
+  summary: AuditSummary;
   entries: AuditLogEntry;
-  format: 'JSON' | 'CSV' | 'PDF' | 'XML';,
+  format: 'JSON' | 'CSV' | 'PDF' | 'XML';
   retentionPeriod: number; // days,
   expiresAt: Date;
 }
 export interface AuditSummary {
-  totalEntries: number;,
+  totalEntries: number;
   uniqueUsers: number;
-  timeRange: {,
-  start: Date;,
+  timeRange: {
+  start: Date;
   end: Date;
 };
   actionBreakdown: Record<AuditAction, number>;
   classificationBreakdown: Record<DataClassificationLevel, number>;
   complianceBreakdown: Record<string, {
-  compliant: number;,
+  compliant: number;
   nonCompliant: number;
   needsReview: number;
 }>;
-  riskAnalysis: {,
+  riskAnalysis: {
   averageRiskScore: number;
-  highRiskEntries: number;,
+  highRiskEntries: number;
   criticalViolations: number;
 };
-  trendsAnalysis: {,
+  trendsAnalysis: {
   activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
-  riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';,
-  complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-};
+  riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
+  complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE'
+  };
 }
 export interface AuditRetentionPolicy {
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   retentionDays: number;
-  archiveAfterDays: number;,
+  archiveAfterDays: number;
   permanentDeletionAfterDays: number;
-  complianceRequirements: string;,
+  complianceRequirements: string;
   encryptionRequired: boolean;
   backupRequired: boolean;
 }
@@ -190,7 +190,7 @@ export class ClassificationAuditLoggingService {
   */
   private initializeRetentionPolicies(): void {,
   const policies: Record<DataClassificationLevel, AuditRetentionPolicy> = {,
-  PUBLIC: {,
+  PUBLIC: {
   classification: 'PUBLIC',
   retentionDays: 365, // 1 year,
   archiveAfterDays: 90,
@@ -199,7 +199,7 @@ export class ClassificationAuditLoggingService {
   encryptionRequired: false,
   backupRequired: true,
 },
-  INTERNAL: {,
+  INTERNAL: {
   classification: 'INTERNAL',
   retentionDays: 2555, // 7 years,
   archiveAfterDays: 365,
@@ -208,7 +208,7 @@ export class ClassificationAuditLoggingService {
   encryptionRequired: true,
   backupRequired: true,
 },
-  CONFIDENTIAL: {,
+  CONFIDENTIAL: {
   classification: 'CONFIDENTIAL',
   retentionDays: 2555, // 7 years,
   archiveAfterDays: 365,
@@ -217,7 +217,7 @@ export class ClassificationAuditLoggingService {
   encryptionRequired: true,
   backupRequired: true,
 },
-  RESTRICTED: {,
+  RESTRICTED: {
   classification: 'RESTRICTED',
   retentionDays: 3650, // 10 years,
   archiveAfterDays: 730, // 2 years,
@@ -232,7 +232,7 @@ export class ClassificationAuditLoggingService {
   /**
    * Log an audit entry
    */
-  async logAuditEvent(action: AuditAction,)
+  async logAuditEvent(action: AuditAction)
     classification: DataClassificationLevel,
     dataId: string,
     details: Partial<AuditDetails>,
@@ -251,7 +251,7 @@ export class ClassificationAuditLoggingService {
   classification,
   dataId,
   resourceType: this.determineResourceType(dataId),
-  details: {,
+  details: {
   accessMethod: 'API',
   toolUsed: 'PromptSpaghetti',
   approvalRequired: false,
@@ -261,7 +261,7 @@ export class ClassificationAuditLoggingService {
   ...details
 }
       context,
-      outcome: {,
+      outcome: {
   success: true,
   warningMessages: [],
   executionTimeMs: 0,
@@ -271,7 +271,7 @@ export class ClassificationAuditLoggingService {
   remediationRequired: false,
   ...outcome
 },
-  metadata: {,
+  metadata: {
   sourceIP: context.source,
   userAgent: 'Unknown',
   ...metadata
@@ -321,19 +321,19 @@ export class ClassificationAuditLoggingService {
    */
   private getComplianceRequirement(framework: string, action: AuditAction): string {
   const requirements: Record<string, Record<AuditAction, string>> = {,
-  GDPR: {,
+  GDPR: {
   'ACCESS_DATA': 'Article 30 - Records of processing activities',
   'EXPORT_DATA': 'Article 20 - Right to data portability',
   'DELETE_DATA': 'Article 17 - Right to erasure',
   'CLASSIFY_DATA': 'Article 25 - Data protection by design',
   'SHARE_DATA': 'Article 44 - General principle for transfers',
 } as any,
-      HIPAA: {,
+      HIPAA: {
   'ACCESS_DATA': '164.308(a)(1) - Access management',
   'EXPORT_DATA': '164.308(a)(4) - Information transfer',
   'CLASSIFY_DATA': '164.308(a)(7) - Contingency plan',
 } as any,
-      SOC2: {,
+      SOC2: {
   'ACCESS_DATA': 'CC6.1 - Logical access controls',
   'EXPORT_DATA': 'CC6.7 - Data transmission controls',
   'CLASSIFY_DATA': 'CC6.8 - Data classification',
@@ -343,7 +343,7 @@ export class ClassificationAuditLoggingService {
   /**
    * Calculate risk score for the entry
    */
-  private calculateRiskScore(action: AuditAction,)
+  private calculateRiskScore(action: AuditAction)
     classification: DataClassificationLevel,
     success: boolean): number {,
   let riskScore = 0;
@@ -456,7 +456,7 @@ export class ClassificationAuditLoggingService {
   /**
    * Generate audit report
    */
-  async generateAuditReport(name: string,)
+  async generateAuditReport(name: string)
     description: string,
     query: AuditQuery,
     format: AuditReport['format'] = 'JSON',
@@ -522,12 +522,12 @@ export class ClassificationAuditLoggingService {
   actionBreakdown,
   classificationBreakdown,
   complianceBreakdown,
-  riskAnalysis: {,
+  riskAnalysis: {
   averageRiskScore,
   highRiskEntries,
   criticalViolations
 },
-  trendsAnalysis: {,
+  trendsAnalysis: {
   activityTrend: 'STABLE', // Would be calculated based on historical data,
   riskTrend: 'STABLE',
   complianceTrend: 'STABLE',
@@ -646,10 +646,10 @@ export class ClassificationAuditLoggingService {
    * Get audit statistics
    */
   getAuditStatistics(): {
-    totalEntries: number;,
+    totalEntries: number;
   entriesByClassification: Record<DataClassificationLevel, number>;
     entriesByAction: Record<string, number>;
-    averageRiskScore: number;,
+    averageRiskScore: number;
   recentViolations: number;
     const entries = Array.from(this.auditLogs.values());
     const entriesByClassification = {} as Record<DataClassificationLevel, number>;

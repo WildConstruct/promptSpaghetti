@@ -4,19 +4,20 @@
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
 interface SaveProjectDialogProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onSave?: (result: { success: boolean; error?: string }) => void;
+}
 
-export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({)
+export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
   isOpen,
   onClose,
   onSave
 }) => {
   const { saveProject, currentProject } = useGraphStore();
-  const [formData, setFormData] = useState({)
-  name: currentProject?.name || '',
-  description: currentProject?.description || '',
+  const [formData, setFormData] = useState({
+    name: currentProject?.name || '',
+    description: currentProject?.description || '',
   author: currentProject?.author || '',
   tags: currentProject?.tags?.join(', ') || '',
 });

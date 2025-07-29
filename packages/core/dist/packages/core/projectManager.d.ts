@@ -85,6 +85,51 @@ export declare class ProjectManager {
     private favoriteFiles;
     static getInstance(): ProjectManager;
     private constructor();
-    join(: any): any;
+    /**
+     * Generate thumbnail for PSG file
+     */
+    generateThumbnail(file: PSGFile): Promise<string>;
+    /**
+     * Get recent files list
+     */
+    getRecentFiles(limit?: number): PSGFile[];
+    /**
+    * Add file to recent files
+    */
+    addToRecentFiles(file: PSGFile): void;
+    /**
+    * Toggle favorite status
+    */
+    toggleFavorite(fileId: string): boolean;
+    /**
+     * Check if file is favorite
+     */
+    isFavorite(fileId: string): boolean;
+    /**
+     * Get favorite files
+     */
+    getFavoriteFiles(): PSGFile[];
+    /**
+     * Mock file data for development
+     */
+    getMockFile(name: string): PSGFile;
+    private loadUserData;
+    private saveUserData;
+    /**
+     * Static method to save project to device (Story 6.1)
+     */
+    static saveProjectToDevice(graphData: {
+        nodes: Node[];
+        edges: Edge[];
+    }, options: SaveProjectOptions, settings: ProjectSettings): Promise<SaveProjectResult>;
+    /**
+     * Static method to load project from device (Story 6.1)
+     */
+    static loadProjectFromDevice(): Promise<LoadProjectResult>;
+    /**
+     * Sanitize file name to prevent invalid characters
+     */
+    static sanitizeFileName(fileName: string): string;
 }
+export declare const projectManager: ProjectManager;
 //# sourceMappingURL=projectManager.d.ts.map

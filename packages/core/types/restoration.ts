@@ -5,7 +5,7 @@ export const RestorationTypeSchema = z.enum(['full', 'partial', 'selective']);
 export const RestorationStrategySchema = z.enum(['replace', 'merge', 'selective']);
 export const RestorationStatusSchema = z.enum(['pending', 'in_progress', 'completed', 'failed', 'cancelled']);
 
-export const RestorationAttemptSchema = z.object({)
+export const RestorationAttemptSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   sourceSnapshotId: z.string().uuid(),
@@ -32,7 +32,7 @@ export const ConflictTypeSchema = z.enum(['node_modified', 'edge_modified', 'nod
 export const ResourceTypeSchema = z.enum(['node', 'edge', 'property']);
 export const ResolutionStrategySchema = z.enum(['keep_source', 'keep_target', 'keep_current', 'merge', 'skip', 'manual']);
 
-export const RestorationConflictSchema = z.object({)
+export const RestorationConflictSchema = z.object({
   id: z.string().uuid(),
   restorationAttemptId: z.string().uuid(),
   conflictType: ConflictTypeSchema,
@@ -58,7 +58,7 @@ export type RestorationConflict = z.infer<typeof RestorationConflictSchema>;
 export const OperationTypeSchema = z.enum(['create_node', 'update_node', 'delete_node', 'create_edge', 'update_edge', 'delete_edge', 'update_property']);
 export const OperationStatusSchema = z.enum(['pending', 'executed', 'failed', 'skipped']);
 
-export const RestorationOperationSchema = z.object({)
+export const RestorationOperationSchema = z.object({
   id: z.string().uuid(),
   restorationAttemptId: z.string().uuid(),
   operationType: OperationTypeSchema,
@@ -77,7 +77,7 @@ export type OperationStatus = z.infer<typeof OperationStatusSchema>;
 export type RestorationOperation = z.infer<typeof RestorationOperationSchema>;
 
 // Preview session types
-export const RestorationPreviewSessionSchema = z.object({)
+export const RestorationPreviewSessionSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   sourceSnapshotId: z.string().uuid(),
@@ -92,7 +92,7 @@ export const RestorationPreviewSessionSchema = z.object({)
 export type RestorationPreviewSession = z.infer<typeof RestorationPreviewSessionSchema>;
 
 // Bookmark types
-export const RestorationBookmarkSchema = z.object({)
+export const RestorationBookmarkSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   name: z.string().max(255),
@@ -108,7 +108,7 @@ export const RestorationBookmarkSchema = z.object({)
 export type RestorationBookmark = z.infer<typeof RestorationBookmarkSchema>;
 
 // Configuration types
-export const RestorationConfigSchema = z.object({)
+export const RestorationConfigSchema = z.object({
   restorationType: RestorationTypeSchema,
   restorationStrategy: RestorationStrategySchema,
   selectedNodes: z.array(z.string()).optional(),
@@ -122,28 +122,28 @@ export const RestorationConfigSchema = z.object({)
 export type RestorationConfig = z.infer<typeof RestorationConfigSchema>;
 
 // Request/response types
-export const CreateRestorationAttemptRequestSchema = z.object({)
+export const CreateRestorationAttemptRequestSchema = z.object({
   projectId: z.string().uuid(),
   sourceSnapshotId: z.string().uuid(),
   targetSnapshotId: z.string().uuid().optional(),
   config: RestorationConfigSchema,
 });
 
-export const RestorationPreviewRequestSchema = z.object({)
+export const RestorationPreviewRequestSchema = z.object({
   projectId: z.string().uuid(),
   sourceSnapshotId: z.string().uuid(),
   targetSnapshotId: z.string().uuid().optional(),
   config: RestorationConfigSchema,
 });
 
-export const ConflictResolutionRequestSchema = z.object({)
+export const ConflictResolutionRequestSchema = z.object({
   restorationAttemptId: z.string().uuid(),
   conflictId: z.string().uuid(),
   resolutionStrategy: ResolutionStrategySchema,
   resolvedValue: z.record(z.unknown()).optional(),
 });
 
-export const RestorationBookmarkRequestSchema = z.object({)
+export const RestorationBookmarkRequestSchema = z.object({
   projectId: z.string().uuid(),
   name: z.string().max(255),
   description: z.string().optional(),
@@ -158,7 +158,7 @@ export type ConflictResolutionRequest = z.infer<typeof ConflictResolutionRequest
 export type RestorationBookmarkRequest = z.infer<typeof RestorationBookmarkRequestSchema>;
 
 // Response types
-export const RestorationPreviewResponseSchema = z.object({)
+export const RestorationPreviewResponseSchema = z.object({
   sessionId: z.string().uuid(),
   preview: z.object({,)
   nodesToAdd: z.array(z.record(z.unknown())),
@@ -178,7 +178,7 @@ export const RestorationPreviewResponseSchema = z.object({)
   expiresAt: z.date();
   });
 
-export const RestorationProgressResponseSchema = z.object({)
+export const RestorationProgressResponseSchema = z.object({
   restorationAttemptId: z.string().uuid(),
   status: RestorationStatusSchema,
   progressPercentage: z.number().int().min(0).max(100),
@@ -191,12 +191,12 @@ export const RestorationProgressResponseSchema = z.object({)
   estimatedTimeRemaining: z.number().int().optional(),
 });
 
-export const RestorationStatsResponseSchema = z.object({)
+export const RestorationStatsResponseSchema = z.object({
   totalAttempts: z.number().int(),
   successfulAttempts: z.number().int(),
   failedAttempts: z.number().int(),
   averageDuration: z.number().int(),
-  mostCommonConflicts: z.array(z.object({,)
+  mostCommonConflicts: z.array(z.object({)
   conflictType: ConflictTypeSchema,
   count: z.number().int(),
 })),
@@ -210,24 +210,24 @@ export type RestorationStatsResponse = z.infer<typeof RestorationStatsResponseSc
 // Utility types
 
 export interface RestorationContext {
-  projectId: string;,
+  projectId: string;
   userId: string;
   sourceSnapshot: any;
   targetSnapshot?: any;
-  currentState: any;,
+  currentState: any;
   config: RestorationConfig;
 }
 export interface ConflictResolutionResult {
-  conflictId: string;,
+  conflictId: string;
   resolved: boolean;
   resolvedValue?: any;
   strategy: ResolutionStrategy;
   errorMessage?: string;
 }
 export interface RestorationResult {
-  success: boolean;,
+  success: boolean;
   restorationAttemptId: string;
-  operationsExecuted: number;,
+  operationsExecuted: number;
   conflictsResolved: number;
   errorMessage?: string;
   duration: number;
@@ -235,20 +235,20 @@ export interface RestorationResult {
   // Event types for real-time updates
 }
 export interface RestorationEvent {
-  type: 'progress' | 'conflict' | 'completed' | 'failed' | 'cancelled';,
+  type: 'progress' | 'conflict' | 'completed' | 'failed' | 'cancelled';
   restorationAttemptId: string;
-  data: any;,
+  data: any;
   timestamp: Date;
 }
 export interface ConflictEvent {
-  type: 'conflict_detected' | 'conflict_resolved';,
+  type: 'conflict_detected' | 'conflict_resolved';
   conflictId: string;
-  restorationAttemptId: string;,
+  restorationAttemptId: string;
   data: any;
   timestamp: Date;
   // Filter and pagination types
 }
-export const RestorationFilterSchema = z.object({)
+export const RestorationFilterSchema = z.object({
   projectId: z.string().uuid().optional(),
   initiatedBy: z.string().uuid().optional(),
   status: RestorationStatusSchema.optional(),

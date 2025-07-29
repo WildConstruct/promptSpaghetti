@@ -10,7 +10,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 // Core interfaces
 
 export interface UserPreferenceRecommendationAnalyticsProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   preferenceConfig: PreferenceAnalyticsConfig;
   recommendationConfig: RecommendationAnalyticsConfig;
   onPreferenceInsight?: (insight: PreferenceInsight) => void;
@@ -19,15 +19,15 @@ export interface UserPreferenceRecommendationAnalyticsProps {
   // Configuration
 }
 export interface PreferenceAnalyticsConfig {
-  trackingEnabled: boolean;,
+  trackingEnabled: boolean;
   preferenceCategories: PreferenceCategory;
-  learningAlgorithms: PreferenceLearningAlgorithm;,
+  learningAlgorithms: PreferenceLearningAlgorithm;
   updateFrequency: number; // hours,
 }
 export interface RecommendationAnalyticsConfig {
-  algorithms: RecommendationAlgorithm;,
+  algorithms: RecommendationAlgorithm;
   evaluationMetrics: RecommendationMetric;
-  abTestingEnabled: boolean;,
+  abTestingEnabled: boolean;
   personalizationLevel: PersonalizationLevel;
 }
 export type PersonalizationLevel = 'basic' | 'intermediate' | 'advanced' | 'deep';
@@ -35,28 +35,28 @@ export type PersonalizationLevel = 'basic' | 'intermediate' | 'advanced' | 'deep
 // Data structures
 
 export interface UserPreferenceData {
-  userId: string;,
+  userId: string;
   preferences: UserPreference;
-  implicit: ImplicitPreference;,
+  implicit: ImplicitPreference;
   explicit: ExplicitPreference;
-  learningHistory: PreferenceLearningRecord;,
+  learningHistory: PreferenceLearningRecord;
   confidence: PreferenceConfidence;
 }
 export interface UserPreference {
   category: string;
   subcategory?: string;
-  value: Error;,
+  value: Error;
   weight: number; // 0-1,
-  source: PreferenceSource;,
+  source: PreferenceSource;
   timestamp: number;
   confidence: number; // 0-1,
 }
 export type PreferenceSource = 'explicit' | 'implicit' | 'inferred' | 'collaborative';
 
 export interface RecommendationPerformanceData {
-  algorithmId: string;,
+  algorithmId: string;
   metrics: RecommendationPerformanceMetric;
-  abTestResults: ABTestResult;,
+  abTestResults: ABTestResult;
   userFeedback: UserFeedback;
   businessImpact: BusinessImpact;
 
@@ -85,9 +85,9 @@ const generateUserPreferenceData = (): UserPreferenceData => ({)
   implicit: [],
   explicit: [],
   learningHistory: [],
-  confidence: {,
+  confidence: {
   overall: Math.random() * 0.4 + 0.6,
-  byCategory: {,
+  byCategory: {
   'content_type': Math.random() * 0.3 + 0.7,
   'style': Math.random() * 0.3 + 0.7,
   'complexity': Math.random() * 0.3 + 0.7,
@@ -115,7 +115,7 @@ const generateRecommendationPerformance = (): RecommendationPerformanceData => (
   change: (Math.random() - 0.5) * 0.5],
   abTestResults: [],
   userFeedback: [],
-  businessImpact: {,
+  businessImpact: {
   revenueImpact: (Math.random() - 0.5) * 10000,
   engagementIncrease: Math.random() * 20 + 5,
   retentionImprovement: Math.random() * 15 + 2,
@@ -167,7 +167,7 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
   userPreferences,
   recommendationPerformance,
   analysisTimestamp: Date.now(),
-  metadata: {,
+  metadata: {
   totalUsers: userPreferences.length,
   averagePreferenceConfidence: userPreferences.reduce(),
   (sum)
@@ -425,103 +425,103 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
 // Supporting interfaces (condensed)
 
 export interface PreferenceCategory {
-  categoryId: string;,
+  categoryId: string;
   name: string;
-  subcategories: string;,
-  dataType: 'string' | 'number' | 'array' | 'boolean';
-}
+  subcategories: string;
+  dataType: 'string' | 'number' | 'array' | 'boolean'
+  }
 export interface PreferenceLearningAlgorithm {
-  algorithmId: string;,
+  algorithmId: string;
   name: string;
-  type: 'collaborative' | 'content_based' | 'hybrid';,
+  type: 'collaborative' | 'content_based' | 'hybrid';
   accuracy: number;
 }
 export interface RecommendationAlgorithm {
-  algorithmId: string;,
+  algorithmId: string;
   name: string;
-  type: 'collaborative' | 'content_based' | 'hybrid' | 'deep_learning';,
+  type: 'collaborative' | 'content_based' | 'hybrid' | 'deep_learning';
   parameters: Record<string, any>;
 }
 export interface RecommendationMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  target: number;,
+  target: number;
   weight: number;
 }
 export interface ImplicitPreference {
-  category: string;,
+  category: string;
   inferredValue: Error;
-  confidence: number;,
+  confidence: number;
   evidence: string;
 }
 export interface ExplicitPreference {
-  category: string;,
+  category: string;
   declaredValue: Error;
-  timestamp: number;,
-  method: 'survey' | 'settings' | 'feedback';
-}
+  timestamp: number;
+  method: 'survey' | 'settings' | 'feedback'
+  }
 export interface PreferenceLearningRecord {
-  timestamp: number;,
+  timestamp: number;
   changes: PreferenceChange;
-  trigger: string;,
+  trigger: string;
   confidence: number;
 }
 export interface PreferenceChange {
-  category: string;,
+  category: string;
   oldValue: Error;
-  newValue: Error;,
+  newValue: Error;
   reason: string;
 }
 export interface PreferenceConfidence {
-  overall: number;,
+  overall: number;
   byCategory: Record<string, number>;
 }
 export interface RecommendationPerformanceMetric {
-  metric: string;,
+  metric: string;
   value: number;
-  benchmark: number;,
+  benchmark: number;
   change: number;
 }
 export interface ABTestResult {
-  testId: string;,
+  testId: string;
   variant: string;
   metrics: Record<string, number>;
   significance: number;
 }
 export interface UserFeedback {
-  userId: string;,
+  userId: string;
   rating: number;
-  feedback: string;,
+  feedback: string;
   timestamp: number;
 }
 export interface BusinessImpact {
-  revenueImpact: number;,
+  revenueImpact: number;
   engagementIncrease: number;
-  retentionImprovement: number;,
+  retentionImprovement: number;
   costEfficiency: number;
 }
 export interface PreferenceInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  category: string;,
+  category: string;
   message: string;
-  confidence: number;,
+  confidence: number;
   affectedUsers: number;
   recommendations: string;
 }
 export interface RecommendationOptimization {
-  optimizationId: string;,
+  optimizationId: string;
   type: string;
-  algorithm: string;,
+  algorithm: string;
   improvement: number;
   implementation: string;
 }
 export interface PreferenceRecommendationExportData {
-  userPreferences: UserPreferenceData;,
+  userPreferences: UserPreferenceData;
   recommendationPerformance: RecommendationPerformanceData;
-  analysisTimestamp: number;,
-  metadata: {,
-  totalUsers: number;,
+  analysisTimestamp: number;
+  metadata: {
+  totalUsers: number;
   averagePreferenceConfidence: number;
   topPerformingAlgorithm: string;
 };

@@ -148,8 +148,8 @@ export declare const ComplianceReportRequest: z.ZodObject<{
     end_date: string;
     framework: ComplianceFramework;
     include_details: boolean;
-    export_format: "json" | "csv" | "pdf";
-}, {
+    export_format: "json" | "csv" | "pdf"
+  }, {
     start_date: string;
     end_date: string;
     framework: ComplianceFramework;

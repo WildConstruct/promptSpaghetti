@@ -24,7 +24,7 @@ const mockExecutionPath: ExecutionPath = {,
       executionTimeMs: 50,
       inputs: [{ value: 'input1', inputIndex: 0 }],
       output: 'choice1',
-      randomChoice: {,
+      randomChoice: {
   choiceType: 'weighted',
   availableOptions: ['choice1', 'choice2', 'choice3'],
   selectedOption: 'choice1',
@@ -59,10 +59,10 @@ const mockPreviewResults: PreviewResultWithPath = [
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: [],
   executionPath: mockExecutionPath,
-  debugInfo: {,
+  debugInfo: {
   nodeExecutionOrder: ['node1', 'node2'],
   randomChoices: mockExecutionPath.randomizationPoints,
-  performanceBreakdown: {,
+  performanceBreakdown: {
   'WeightedChoice': 50,
   'Concat': 30,
 }
@@ -72,7 +72,7 @@ const mockPreviewResults: PreviewResultWithPath = [
   executionTimeMs: 300,
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: [],
-  executionPath: {,
+  executionPath: {
   ...mockExecutionPath,
   id: 'exec_test_2',
   seed: 67890,
@@ -80,10 +80,10 @@ const mockPreviewResults: PreviewResultWithPath = [
   finalOutput: 'Another output',
   randomizationPoints: mockExecutionPath.randomizationPoints // Ensure it has same randomization points,
 },
-  debugInfo: {,
+  debugInfo: {
   nodeExecutionOrder: ['node1', 'node2'],
       randomChoices: mockExecutionPath.randomizationPoints,
-      performanceBreakdown: {,
+      performanceBreakdown: {
         'WeightedChoice': 50,
         'Concat': 30
 ];
@@ -326,7 +326,7 @@ describe('ExecutionPathVisualization', () => {
           executionTimeMs: 100,
           usedNodeIds: ['node1'],
           usedEdgeIds: [],
-          executionPath: {,
+          executionPath: {
             ...mockExecutionPath,
             randomizationPoints: []];
       render();

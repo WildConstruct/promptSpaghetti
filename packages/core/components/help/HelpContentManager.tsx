@@ -5,21 +5,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HelpContent, BUILT_IN_HELP_CONTENT } from './ContextualHelpSystem';
 
 export interface HelpContextState {
-  helpContent: HelpContent;,
+  helpContent: HelpContent;
   onboardingEnabled: boolean;
-  onboardingStep: number;,
+  onboardingStep: number;
   onboardingComplete: boolean;
-  showHelpHints: boolean;,
-  getHelpContent: (id: string) => HelpContent | undefined;,
-  addHelpContent: (content: HelpContent) => void;,
-  updateHelpContent: (id: string, updates: Partial<HelpContent>) => void;,
-  removeHelpContent: (id: string) => void;,
+  showHelpHints: boolean;
+  getHelpContent: (id: string) => HelpContent | undefined;
+  addHelpContent: (content: HelpContent) => void;
+  updateHelpContent: (id: string, updates: Partial<HelpContent>) => void;
+  removeHelpContent: (id: string) => void;
   startOnboarding: () => void;
-  nextOnboardingStep: () => void;,
+  nextOnboardingStep: () => void;
   previousOnboardingStep: () => void;
-  skipOnboarding: () => void;,
+  skipOnboarding: () => void;
   completeOnboarding: () => void;
-  toggleHelpHints: () => void;,
+  toggleHelpHints: () => void;
   resetHelpSystem: () => void;
   const HelpContext = createContext<HelpContextState | undefined>(undefined);
 }

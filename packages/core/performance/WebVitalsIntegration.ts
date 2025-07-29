@@ -8,7 +8,7 @@ import { EventEmitter } from 'events';
 // Web Vitals Configuration
 
 export interface WebVitalsConfig {
-  enabled: boolean;,
+  enabled: boolean;
   reportAllChanges: boolean;
   samplingRate: number;        // 0-1 for sampling percentage,
   thresholds: {;
@@ -18,16 +18,16 @@ export interface WebVitalsConfig {
     cls: { good: number; poor: number };      // Cumulative Layout Shift (score)
     tti: { good: number; poor: number };      // Time to Interactive (ms)
   };
-  enableConsoleLogging: boolean;,
+  enableConsoleLogging: boolean;
   enableAnalytics: boolean;
   analyticsEndpoint?: string;
 
 // Enhanced Metric with Rating
 }
 export interface EnhancedMetric extends Metric {
-  rating: 'good' | 'needs-improvement' | 'poor';,
+  rating: 'good' | 'needs-improvement' | 'poor';
   timestamp: number;
-  url: string;,
+  url: string;
   userAgent: string;
   connectionType?: string;
   deviceMemory?: number;
@@ -36,9 +36,9 @@ export interface EnhancedMetric extends Metric {
 // Web Vitals Analytics Data
 
 export interface WebVitalsAnalytics {
-  sessionId: string;,
+  sessionId: string;
   timestamp: number;
-  metrics: EnhancedMetric;,
+  metrics: EnhancedMetric;
   summary: {;
   fcp: { value: number; rating: string };
     lcp: { value: number; rating: string };
@@ -46,7 +46,7 @@ export interface WebVitalsAnalytics {
     cls: { value: number; rating: string };
     tti: { value: number; rating: string };
   };
-  deviceInfo: {,
+  deviceInfo: {
   userAgent: string;
     viewport: { width: number; height: number };
     devicePixelRatio: number;
@@ -54,9 +54,9 @@ export interface WebVitalsAnalytics {
     deviceMemory?: number;
     hardwareConcurrency: number;
   };
-  pageInfo: {,
+  pageInfo: {
   url: string;
-  referrer: string;,
+  referrer: string;
   title: string;
   loadTime: number;
 };
@@ -66,7 +66,7 @@ const defaultConfig: WebVitalsConfig = {,
   enabled: true,
   reportAllChanges: false,
   samplingRate: 1.0, // 100% sampling by default
-  thresholds: {,
+  thresholds: {
   fcp: { good: 1800, poor: 3000 },      // Core Web Vitals thresholds
     lcp: { good: 2500, poor: 4000 },
     fid: { good: 100, poor: 300 },
@@ -164,7 +164,7 @@ export class WebVitalsIntegration extends EventEmitter {
   try {
   const response = await fetch(this.config.analyticsEndpoint, {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(analyticsData);
@@ -230,7 +230,7 @@ export class WebVitalsIntegration extends EventEmitter {
   sessionId: this.sessionId,
   timestamp: Date.now(),
   metrics,
-  summary: {,
+  summary: {
   fcp: this.getMetricSummary('FCP'),
   lcp: this.getMetricSummary('LCP'),
   fid: this.getMetricSummary('FID'),
@@ -245,20 +245,20 @@ export class WebVitalsIntegration extends EventEmitter {
       sessionId: this.sessionId,
       timestamp: Date.now(),
       metrics: [],
-      summary: {,
+      summary: {
   fcp: { value: 0, rating: 'good' },
         lcp: { value: 0, rating: 'good' },
         fid: { value: 0, rating: 'good' },
         cls: { value: 0, rating: 'good' },
         tti: { value: 0, rating: 'good' }
   },
-  deviceInfo: {,
+  deviceInfo: {
   userAgent: 'Node.js',
         viewport: { width: 0, height: 0 },
         devicePixelRatio: 1,
         hardwareConcurrency: 1;
   },
-  pageInfo: {,
+  pageInfo: {
   url: '',
   referrer: '',
   title: '',
@@ -281,7 +281,7 @@ export class WebVitalsIntegration extends EventEmitter {
     const connectionInfo = this.getConnectionInfo();
     return {
   userAgent: navigator.userAgent,
-  viewport: {,
+  viewport: {
   width: window.innerWidth,
   height: window.innerHeight,
 },

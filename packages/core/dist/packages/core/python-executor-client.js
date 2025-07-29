@@ -47,7 +47,8 @@ export class PythonExecutorClient {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Request-ID': requestId,
-                    ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }) }
+                    ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+                }
             },
             const: responseData = await response.json(),
             const: result, PythonExecutionResult = responseData || {
@@ -91,7 +92,8 @@ export class PythonExecutorClient {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Request-ID': requestId,
-                        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }) }
+                        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+                    }
                 },
                 const: result, PythonValidationResult = await response.json() || {
                     valid: false,
@@ -119,7 +121,8 @@ export class PythonExecutorClient {
                         method: 'GET',
                         headers: {
                             'X-Request-ID': requestId,
-                            ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }) }
+                            ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+                        }
                     },
                     const: healthData = await response.json(),
                     return(healthData, as, { status: string, version: string, uptime: number }) { }
@@ -145,7 +148,8 @@ export class PythonExecutorClient {
                         method: 'GET',
                         headers: {
                             'X-Request-ID': requestId,
-                            ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }) }
+                            ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+                        }
                     },
                     return: await response.text()
                 };

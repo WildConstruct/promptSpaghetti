@@ -47,7 +47,7 @@ describe('VerificationCodeManager', () => {
     test('should generate codes with different formats', async () => {
   const customManager = new VerificationCodeManager({)
   antiEnumerationDelay: 1,
-  codeFormats: {,
+  codeFormats: {
   [VerificationCodeType.EMAIL_VERIFICATION]: CodeFormat.NUMERIC_4,
   [VerificationCodeType.SMS_VERIFICATION]: CodeFormat.ALPHANUMERIC_6,
   [VerificationCodeType.TOTP_BACKUP]: CodeFormat.NUMERIC_8,
@@ -180,7 +180,7 @@ describe('VerificationCodeManager', () => {
     test('should detect expired codes', async () => {
   const shortLivedManager = new VerificationCodeManager({)
   antiEnumerationDelay: 1,
-  expirationTimes: {,
+  expirationTimes: {
   [VerificationCodeType.EMAIL_VERIFICATION]: 1, // 1 millisecond,
   [VerificationCodeType.SMS_VERIFICATION]: 1,
   [VerificationCodeType.TOTP_BACKUP]: 1,
@@ -217,7 +217,7 @@ describe('VerificationCodeManager', () => {
     test('should track retry attempts and enforce limits', async () => {
   const limitedManager = new VerificationCodeManager({)
   antiEnumerationDelay: 1,
-  retryLimits: {,
+  retryLimits: {
   [VerificationCodeType.EMAIL_VERIFICATION]: 3,
   [VerificationCodeType.SMS_VERIFICATION]: 3,
   [VerificationCodeType.TOTP_BACKUP]: 3,
@@ -732,7 +732,7 @@ describe('VerificationCodeManager', () => {
     test('should clean up expired codes', async () => {
   const quickCleanupManager = new VerificationCodeManager({)
   antiEnumerationDelay: 1,
-  expirationTimes: {,
+  expirationTimes: {
   [VerificationCodeType.EMAIL_VERIFICATION]: 1, // 1 millisecond,
   [VerificationCodeType.SMS_VERIFICATION]: 1,
   [VerificationCodeType.TOTP_BACKUP]: 1,

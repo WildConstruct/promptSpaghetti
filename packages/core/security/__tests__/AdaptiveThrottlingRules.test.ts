@@ -15,7 +15,7 @@ jest.mock('../RateLimitingService', () => ({)
   resetLimits: jest.fn(),
   getStatistics: jest.fn(),
 })),
-  ThreatLevel: {,
+  ThreatLevel: {
   LOW: 'low',
   MEDIUM: 'medium',
   HIGH: 'high',
@@ -788,7 +788,7 @@ describe('AdaptiveThrottlingRulesEngine', () => {
   delay: 500,
   blockPercentage: 10,
   duration: 30000,
-  condition: {,
+  condition: {
   type: 'user_pattern',
   operator: 'greater_than',
   field: 'consecutive_failures',
@@ -799,7 +799,7 @@ describe('AdaptiveThrottlingRulesEngine', () => {
   delay: 2000,
   blockPercentage: 50,
   duration: 60000,
-  condition: {,
+  condition: {
   type: 'user_pattern',
   operator: 'greater_than',
   field: 'consecutive_failures',

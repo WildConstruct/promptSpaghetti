@@ -5,49 +5,49 @@ import { ReconnectionHandler, ReconnectionState, ReconnectionConfig } from './Re
 import { SynchronizationRecovery, DocumentState, SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
 
 export interface NetworkResilienceConfig {
-  enabled: boolean;,
+  enabled: boolean;
   offlineQueue: Partial<OfflineQueueConfig>;
-  connectionState: Partial<ConnectionStateConfig>;,
+  connectionState: Partial<ConnectionStateConfig>;
   reconnection: Partial<ReconnectionConfig>;
-  recovery: Partial<RecoveryConfig>;,
-  notifications: {,
-  enabled: boolean;,
+  recovery: Partial<RecoveryConfig>;
+  notifications: {
+  enabled: boolean;
   showOfflineIndicator: boolean;
-  showConnectionQuality: boolean;,
+  showConnectionQuality: boolean;
   notifyOnReconnect: boolean;
   notifyOnSyncComplete: boolean;
 };
-  persistence: {,
+  persistence: {
   enabled: boolean;
-  storageKey: string;,
+  storageKey: string;
   maxStorageSize: number;
 };
-  performance: {,
+  performance: {
   enableMetrics: boolean;
-  metricsInterval: number;,
+  metricsInterval: number;
   enableProfiling: boolean;
 };
 }
 export interface ResilienceMetrics {
-  uptime: number;,
+  uptime: number;
   totalDowntime: number;
-  connectionAttempts: number;,
+  connectionAttempts: number;
   successfulReconnections: number;
-  queuedOperations: number;,
+  queuedOperations: number;
   syncedOperations: number;
-  pendingOperations: number;,
+  pendingOperations: number;
   averageReconnectTime: number;
-  dataLoss: number;,
+  dataLoss: number;
   conflicts: number;
 }
 export interface NetworkStatus {
-  isOnline: boolean;,
+  isOnline: boolean;
   connectionState: ConnectionState;
-  connectionQuality: ConnectionQuality;,
+  connectionQuality: ConnectionQuality;
   reconnectionState: ReconnectionState;
-  queueSize: number;,
+  queueSize: number;
   pendingSync: boolean;
-  lastSync: number | null;,
+  lastSync: number | null;
   metrics: ResilienceMetrics;
 }
 export class NetworkResilienceManager extends EventEmitter {
@@ -74,19 +74,19 @@ export class NetworkResilienceManager extends EventEmitter {
       connectionState: {},
       reconnection: {},
       recovery: {},
-      notifications: {,
+      notifications: {
   enabled: true,
   showOfflineIndicator: true,
   showConnectionQuality: true,
   notifyOnReconnect: true,
   notifyOnSyncComplete: true,
 },
-  persistence: {,
+  persistence: {
   enabled: true,
   storageKey: 'network-resilience-state',
   maxStorageSize: 50 * 1024 * 1024 // 50MB,
 },
-  performance: {,
+  performance: {
   enableMetrics: true,
   metricsInterval: 30000, // 30 seconds,
   enableProfiling: false,
@@ -358,7 +358,7 @@ export class NetworkResilienceManager extends EventEmitter {
   if (authToken && this.documentId && this.userId) {
   this.websocket?.send(JSON.stringify({)
   type: 'auth_request',
-  payload: {,
+  payload: {
   token: authToken,
   documentId: this.documentId,
   userId: this.userId,

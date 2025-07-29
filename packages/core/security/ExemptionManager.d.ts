@@ -73,7 +73,7 @@ export interface SecurityExemption {
     priority: ExemptionPriority;
     reason: ExemptionReason;
     description: string;
-    requestedBy: {,
+    requestedBy: {
         userId: string;
         userEmail: string;
         role: AdminRole;
@@ -102,10 +102,10 @@ export interface SecurityExemption {
         renewalPeriodDays: number;
         currentRenewals: number;
     };
-    conditions: {,
+    conditions: {
         ipWhitelist?: string[];
         timeRestrictions?: {
-            allowedHours: {,
+            allowedHours: {
                 start: string;
                 end: string;
             }[];
@@ -124,9 +124,9 @@ export interface SecurityExemption {
             requireApproval?: boolean;
         };
     };
-    metadata: {,
+    metadata: {
         businessJustification: string;
-        riskAssessment: {,
+        riskAssessment: {
             level: 'low' | 'medium' | 'high' | 'critical';
             mitigations: string[];
             reviewDate: Date;
@@ -136,7 +136,7 @@ export interface SecurityExemption {
         tags: string[];
     };
     auditTrail: ExemptionAuditEntry[];
-    usage: {,
+    usage: {
         timesUsed: number;
         lastUsed?: Date;
         usageHistory: Array<{,
@@ -150,12 +150,12 @@ export interface ExemptionAuditEntry {
     id: string;
     timestamp: Date;
     action: 'created' | 'approved' | 'denied' | 'revoked' | 'renewed' | 'used' | 'modified' | 'expired';
-    actor: {,
+    actor: {
         userId: string;
         userEmail: string;
         role?: AdminRole;
-        type: 'user' | 'admin' | 'system';
-    };
+        type: 'user' | 'admin' | 'system'
+  };
     details: Record<string, any>;
     ipAddress?: string;
     userAgent?: string;
@@ -299,7 +299,7 @@ export declare class ExemptionManager extends EventEmitter {
         byPriority: Record<ExemptionPriority, number>;
         expiringSoon: number;
         emergencyCount: number;
-        usageStats: {,
+        usageStats: {
             totalUsage: number;
             averageUsagePerExemption: number;
             mostUsedExemptions: Array<{,

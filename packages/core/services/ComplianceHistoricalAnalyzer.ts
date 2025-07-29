@@ -5,90 +5,90 @@
 import { ComplianceBaseline, ComplianceMeasurement, BaselineTrend } from './ComplianceBaselineTracker';
 
 export interface HistoricalDataPoint {
-  timestamp: Date;,
+  timestamp: Date;
   value: number;
-  baseline: number;,
+  baseline: number;
   deviation: number;
-  status: 'compliant' | 'warning' | 'non_compliant';,
+  status: 'compliant' | 'warning' | 'non_compliant';
   framework: string;
-  category: string;,
+  category: string;
   metric: string;
 }
 export interface ComplianceTrendReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  period: {,
-  startDate: Date;,
+  period: {
+  startDate: Date;
   endDate: Date;
   duration: string;
 };
-  framework: string;,
+  framework: string;
   summary: {;
-  totalDataPoints: number;,
+  totalDataPoints: number;
   averageCompliance: number;
-  bestPerformingMetric: string;,
+  bestPerformingMetric: string;
   worstPerformingMetric: string;
-  improvementTrend: 'positive' | 'negative' | 'stable';,
+  improvementTrend: 'positive' | 'negative' | 'stable';
   criticalIncidents: number;
 };
-  metrics: {,
+  metrics: {
   name: string;
-  currentValue: number;,
+  currentValue: number;
   historicalAverage: number;
-  trendDirection: 'up' | 'down' | 'stable';,
+  trendDirection: 'up' | 'down' | 'stable';
   volatility: number; // 0-100 scale,
   complianceRate: number; // percentage of time in compliance,
   recommendations: string;
 }[];
-  keyEvents: {,
+  keyEvents: {
   date: Date;
-  event: string;,
+  event: string;
   impact: 'positive' | 'negative' | 'neutral';
   description: string;
 }[];
-  periodicComparison: {,
+  periodicComparison: {
   currentPeriod: number;
-  previousPeriod: number;,
+  previousPeriod: number;
   change: number;
-  changeType: 'improvement' | 'degradation' | 'stable';
-};
+  changeType: 'improvement' | 'degradation' | 'stable'
+  };
 }
 export interface ComplianceForecasting {
-  baselineId: string;,
+  baselineId: string;
   forecastHorizon: number; // days,
-  predictedValues: {,
-  date: Date;,
+  predictedValues: {
+  date: Date;
   predictedValue: number;
-  confidenceInterval: {,
-  lower: number;,
+  confidenceInterval: {
+  lower: number;
   upper: number;
 };
-    riskLevel: 'low' | 'medium' | 'high';
+    riskLevel: 'low' | 'medium' | 'high'
   }[];
   forecastAccuracy: number; // 0-100,
   assumptions: string;
-  riskFactors: {,
+  riskFactors: {
   factor: string;
-  impact: 'high' | 'medium' | 'low';,
+  impact: 'high' | 'medium' | 'low';
   likelihood: number; // 0-100,
 }[];
 }
 export interface ComplianceAuditTrail {
-  auditId: string;,
-  auditPeriod: {,
-  startDate: Date;,
+  auditId: string;
+  auditPeriod: {
+  startDate: Date;
   endDate: Date;
 };
-  framework: string;,
+  framework: string;
   auditType: 'internal' | 'external' | 'certification';
-  findings: {,
+  findings: {
   category: 'strength' | 'weakness' | 'non_compliance' | 'improvement_opportunity';
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation?: string;
   dueDate?: Date;
-  status: 'open' | 'in_progress' | 'completed' | 'deferred';
-}[];
+  status: 'open' | 'in_progress' | 'completed' | 'deferred'
+  }[];
   overallRating: 'excellent' | 'satisfactory' | 'needs_improvement' | 'non_compliant';
   certificationStatus?: 'certified' | 'conditionally_certified' | 'not_certified';
   nextAuditDue: Date;
@@ -228,7 +228,7 @@ export class ComplianceHistoricalAnalyzer {
   generatedAt: new Date(),
   period,
   framework,
-  summary: {,
+  summary: {
   totalDataPoints,
   averageCompliance: Math.round(averageCompliance * 100) / 100,
   bestPerformingMetric,
@@ -238,7 +238,7 @@ export class ComplianceHistoricalAnalyzer {
 }
       metrics,
       keyEvents,
-      periodicComparison: {,
+      periodicComparison: {
   currentPeriod: Math.round(currentPeriodAvg * 100) / 100,
   previousPeriod: Math.round(previousPeriodAvg * 100) / 100,
   change: Math.round(change * 100) / 100,
@@ -275,11 +275,11 @@ export class ComplianceHistoricalAnalyzer {
   predictedValues.push({)
   date,
   predictedValue: Math.round(predictedValue * 100) / 100,
-  confidenceInterval: {,
+  confidenceInterval: {
   lower: Math.round((predictedValue - margin) * 100) / 100,
   upper: Math.round((predictedValue + margin) * 100) / 100,
 },
-  riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low';
+  riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low'
   });
     // Calculate forecast accuracy based on recent predictions vs actual
     const forecastAccuracy = this.calculateForecastAccuracy(historicalData);
@@ -334,12 +334,12 @@ export class ComplianceHistoricalAnalyzer {
    * Export historical data for external analysis
    */
   exportHistoricalData(framework?: string): {
-  metadata: {,
+  metadata: {
   exportDate: Date;
   framework?: string;
-  totalDataPoints: number;,
-  dateRange: {,
-  earliest: Date;,
+  totalDataPoints: number;
+  dateRange: {
+  earliest: Date;
   latest: Date;
 };
     };
@@ -350,11 +350,11 @@ export class ComplianceHistoricalAnalyzer {
   allData.push(...dataPoints);
   allData.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
   return {
-  metadata: {,
+  metadata: {
   exportDate: new Date(),
   framework,
   totalDataPoints: allData.length,
-  dateRange: {,
+  dateRange: {
   earliest: allData[0]?.timestamp || new Date(),
   latest: allData[allData.length - 1]?.timestamp || new Date(),
 },

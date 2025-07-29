@@ -14,7 +14,7 @@ export interface GraphState {
         stickyNotes?: Array<{
             id: string;
             text: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
@@ -61,7 +61,7 @@ export interface DeserializationResult {
 /**
  * Serializes graph state to .psg format
  */
-export declare function serializeProject(graphState: GraphState,)
+export declare function serializeProject(graphState: GraphState)
   metadata: ProjectMetadata,
   settings: ProjectSettings,
   options?: SerializationOptions

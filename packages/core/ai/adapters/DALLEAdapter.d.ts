@@ -42,7 +42,7 @@ export interface ImageGenerationResult {
         url?: string;
         base64?: string;
         revisedPrompt?: string;
-        metadata: {,
+        metadata: {
             size: string;
             quality: string;
             style?: string;
@@ -51,7 +51,7 @@ export interface ImageGenerationResult {
     }>;
     originalPrompt: string;
     optimizedPrompt?: string;
-    usage: {,
+    usage: {
         promptTokens: number;
         totalCost: number;
     };

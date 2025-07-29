@@ -25,7 +25,7 @@ export const ValidationRuleSchema = z.object({)
 }).optional()
   }),
   validation: z.object({,)
-  rules: z.array(z.object({,)
+  rules: z.array(z.object({)
   field: z.string(),
   operator: z.enum(),
   ['exists',
@@ -42,7 +42,7 @@ export const ValidationRuleSchema = z.object({)
   customFunction: z.string().optional(),
   required: z.boolean().default(false),
 })),
-    crossFieldValidation: z.array(z.object({,)
+    crossFieldValidation: z.array(z.object({)
   fields: z.array(z.string()),
   relationship: z.enum(['sum_equals', 'all_or_none', 'mutually_exclusive', 'sequential', 'custom']),
   expectedValue: z.unknown().optional(),
@@ -56,13 +56,13 @@ export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
 // Validation Result
 
 export interface ValidationResult {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  passed: boolean;,
+  passed: boolean;
   severity: string;
-  message: string;,
+  message: string;
   affectedRecords: string;
-  details: {,
+  details: {
   expectedValue?: unknown;
   actualValue?: unknown;
   field?: string;
@@ -79,57 +79,57 @@ export interface ValidationResult {
 // Consistency Check Result
 }
 export interface ConsistencyCheckResult {
-  checkId: string;,
+  checkId: string;
   checkName: string;
-  category: string;,
+  category: string;
   passed: boolean;
-  severity: string;,
-  summary: {,
-  totalRecords: number;,
+  severity: string;
+  summary: {
+  totalRecords: number;
   validRecords: number;
-  invalidRecords: number;,
+  invalidRecords: number;
   warningRecords: number;
   errorRate: number;
 };
-  violations: ValidationResult;,
+  violations: ValidationResult;
   recommendations: string;
   timestamp: number;
 
 // Data Quality Metrics
 }
 export interface DataQualityMetrics {
-  completeness: {,
+  completeness: {
   score: number;
     missingFields: { [field: string]: number };
     requiredFieldsCoverage: number;
   };
-  accuracy: {,
+  accuracy: {
   score: number;
-  invalidValues: number;,
+  invalidValues: number;
   formatErrors: number;
   typeErrors: number;
 };
-  consistency: {,
+  consistency: {
   score: number;
-  duplicates: number;,
+  duplicates: number;
   contradictions: number;
   referentialIntegrityErrors: number;
 };
-  timeliness: {,
+  timeliness: {
   score: number;
-  lateArrivals: number;,
+  lateArrivals: number;
   futureTimestamps: number;
   timestampGaps: number;
 };
-  integrity: {,
+  integrity: {
   score: number;
-  corruptedRecords: number;,
+  corruptedRecords: number;
   checksumFailures: number;
   structuralErrors: number;
 };
-  overall: {,
+  overall: {
   score: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';,
+  grade: 'A' | 'B' | 'C' | 'D' | 'F';
   issueCount: number;
   recommendation: string;
 };
@@ -159,7 +159,7 @@ export class DataValidationSystem {
       severity: 'critical',
       enabled: true,
       conditions: {},
-      validation: {,
+      validation: {
   rules: [,
           { field: 'id', operator: 'exists', required: true },
           { field: 'type', operator: 'exists', required: true },
@@ -178,7 +178,7 @@ export class DataValidationSystem {
       severity: 'high',
       enabled: true,
       conditions: {},
-      validation: {,
+      validation: {
   rules: [,
   {
   field: 'timestamp',
@@ -201,7 +201,7 @@ export class DataValidationSystem {
       severity: 'medium',
       enabled: true,
       conditions: {},
-      validation: {,
+      validation: {
   rules: [,
   {
   field: 'userId',
@@ -222,7 +222,7 @@ export class DataValidationSystem {
       severity: 'critical',
       enabled: true,
       conditions: {},
-      validation: {,
+      validation: {
   rules: [,
   {
   field: 'data',
@@ -244,10 +244,10 @@ export class DataValidationSystem {
   category: 'completeness',
   severity: 'high',
   enabled: true,
-  conditions: {,
+  conditions: {
   eventTypes: ['graph_execution'],
 },
-  validation: {,
+  validation: {
   rules: [,
           { field: 'data.executionId', operator: 'exists', required: true },
           { field: 'data.graphId', operator: 'exists', required: true },
@@ -266,10 +266,10 @@ export class DataValidationSystem {
   category: 'accuracy',
   severity: 'critical',
   enabled: true,
-  conditions: {,
+  conditions: {
   eventTypes: ['security_event', 'fraud_detection'],
 },
-  validation: {,
+  validation: {
   rules: [,
   {
   field: 'data.riskLevel',
@@ -289,10 +289,10 @@ export class DataValidationSystem {
   category: 'accuracy',
   severity: 'medium',
   enabled: true,
-  conditions: {,
+  conditions: {
   eventTypes: ['performance_metric'],
 },
-  validation: {,
+  validation: {
   rules: [,
           { field: 'data.metric', operator: 'exists', required: true },
           { field: 'data.value', operator: 'exists', required: true },
@@ -331,7 +331,7 @@ export class DataValidationSystem {
   /**
    * Perform comprehensive consistency check
    */
-  async performConsistencyCheck(filter?: EventFilter,)
+  async performConsistencyCheck(filter?: EventFilter)
     timeRange?: { start: number; end: number }
   ): Promise<ConsistencyCheckResult> {
     const checkId = `consistency_check_${Date.now()}`;}
@@ -339,7 +339,7 @@ export class DataValidationSystem {
     try {
   // Get events for validation
   const events = await this.eventRepository.findMany({)
-  filter: {,
+  filter: {
   ...filter,
   startTime: timeRange?.start,
   endTime: timeRange?.end,
@@ -364,7 +364,7 @@ export class DataValidationSystem {
   category: 'consistency',
   passed: errorViolations.length === 0,
   severity: errorViolations.length > 0 ? 'high' : (warningViolations.length > 0 ? 'medium' : 'low'),
-  summary: {,
+  summary: {
   totalRecords,
   validRecords,
   invalidRecords,
@@ -390,11 +390,11 @@ export class DataValidationSystem {
   /**
    * Calculate data quality metrics
    */
-  async calculateDataQualityMetrics(filter?: EventFilter,)
+  async calculateDataQualityMetrics(filter?: EventFilter)
     timeRange?: { start: number; end: number }
   ): Promise<DataQualityMetrics> {
   const events = await this.eventRepository.findMany({)
-  filter: {,
+  filter: {
   ...filter,
   startTime: timeRange?.start,
   endTime: timeRange?.end,
@@ -434,7 +434,7 @@ export class DataValidationSystem {
   consistency,
   timeliness,
   integrity,
-  overall: {,
+  overall: {
   score: Math.round(overallScore * 100) / 100,
   grade,
   issueCount,
@@ -479,7 +479,7 @@ export class DataValidationSystem {
   /**
   * Validate individual field
   */
-  private async validateField(event: UnifiedAnalyticsEvent,)
+  private async validateField(event: UnifiedAnalyticsEvent)
   fieldRule: ValidationRule['validation']['rules'][0],
   validationRule: ValidationRule): Promise<ValidationResult | null> {,
   const fieldValue = this.getNestedProperty(event, fieldRule.field);
@@ -533,7 +533,7 @@ export class DataValidationSystem {
   severity: validationRule.severity,
   message: this.generateValidationMessage(validationRule, fieldRule, passed, fieldValue),
   affectedRecords: [event.id],
-  details: {,
+  details: {
   field: fieldRule.field,
   operator: fieldRule.operator,
   expectedValue,
@@ -545,7 +545,7 @@ export class DataValidationSystem {
   /**
    * Validate cross-field relationships
    */
-  private async validateCrossFields(event: UnifiedAnalyticsEvent,)
+  private async validateCrossFields(event: UnifiedAnalyticsEvent)
     crossFieldRule: NonNullable<ValidationRule['validation']['crossFieldValidation']>[0],
     validationRule: ValidationRule): Promise<ValidationResult | null> {,
     const fieldValues = crossFieldRule.fields.map((field: string) => ;
@@ -600,7 +600,7 @@ export class DataValidationSystem {
   severity: validationRule.severity,
   message,
   affectedRecords: [event.id],
-  details: {,
+  details: {
   expectedValue: crossFieldRule.expectedValue,
   actualValue: fieldValues,
 },
@@ -643,7 +643,7 @@ export class DataValidationSystem {
         message: `Found ${duplicates.length} sets of duplicate events`}
 },
   affectedRecords: duplicates.flatMap(([_, ids]) => ids),
-        details: {,
+        details: {
   duplicateCount: duplicates.length,
   totalDuplicateEvents: duplicates.reduce((sum, [_, ids]) => sum + ids.length, 0),
 },
@@ -673,7 +673,7 @@ export class DataValidationSystem {
         message: `Found ${inconsistentEvents.length} events with potential temporal inconsistencies`}
 },
   affectedRecords: inconsistentEvents,
-        details: {,
+        details: {
   inconsistentEventCount: inconsistentEvents.length,
 },
   timestamp: Date.now();
@@ -704,7 +704,7 @@ export class DataValidationSystem {
         message: `Found ${orphanedEvents.length} events with referential integrity issues`}
 },
   affectedRecords: orphanedEvents,
-        details: {,
+        details: {
   orphanedEventCount: orphanedEvents.length,
 },
   timestamp: Date.now();
@@ -713,7 +713,7 @@ export class DataValidationSystem {
   /**
    * Execute custom validation function
    */
-  private async executeCustomValidation(value: unknown,)
+  private async executeCustomValidation(value: unknown)
     functionName: string,
     event: UnifiedAnalyticsEvent): Promise<boolean> {,
     switch (functionName) {
@@ -730,7 +730,7 @@ export class DataValidationSystem {
   /**
    * Execute custom cross-field validation
    */
-  private async executeCustomCrossFieldValidation(values: unknown,)
+  private async executeCustomCrossFieldValidation(values: unknown)
     functionName: string,
     event: UnifiedAnalyticsEvent): Promise<boolean> {,
     // Custom cross-field validation implementations would go here
@@ -944,7 +944,7 @@ export class DataValidationSystem {
   /**
    * Generate validation message
    */
-  private generateValidationMessage(rule: ValidationRule,)
+  private generateValidationMessage(rule: ValidationRule)
     fieldRule: ValidationRule['validation']['rules'][0],
     passed: boolean,
     actualValue: unknown): string {,
@@ -1057,10 +1057,10 @@ export class DataValidationSystem {
   /**
   * Get validation summary
   */
-  getValidationSummary(): {,
-  totalRules: number;,
+  getValidationSummary(): {
+  totalRules: number;
   enabledRules: number;
-  recentValidations: number;,
+  recentValidations: number;
   recentFailures: number;
   failureRate: number;
   const recentCutoff = Date.now() - (24 * 60 * 60 * 1000); // Last 24 hours;

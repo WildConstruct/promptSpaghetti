@@ -56,9 +56,9 @@ export enum OperationType {
   */
 }
 export interface NodeAddOperation extends GraphOperation {
-  type: OperationType.NODE_ADD;,
-  payload: {,
-  node: Node;,
+  type: OperationType.NODE_ADD;
+  payload: {
+  node: Node;
   position: XYPosition;
   sourceNodeId?: string; // For duplications or connections,
   skipValidation?: boolean;
@@ -69,8 +69,8 @@ export interface NodeAddOperation extends GraphOperation {
  */
 
 export interface NodeDeleteOperation extends GraphOperation {
-  type: OperationType.NODE_DELETE;,
-  payload: {,
+  type: OperationType.NODE_DELETE;
+  payload: {
   nodeId: string;
   preserveConnections?: boolean;
   snapshot: Node; // For undo capability,
@@ -82,9 +82,9 @@ export interface NodeDeleteOperation extends GraphOperation {
  */
 
 export interface NodeUpdateOperation extends GraphOperation {
-  type: OperationType.NODE_UPDATE;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.NODE_UPDATE;
+  payload: {
+  nodeId: string;
   updates: Record<string, unknown>;
   previousValues: Record<string, unknown>; // For undo capability,
   validationOverride?: boolean;
@@ -96,9 +96,9 @@ export interface NodeUpdateOperation extends GraphOperation {
  */
 
 export interface NodeMoveOperation extends GraphOperation {
-  type: OperationType.NODE_MOVE;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.NODE_MOVE;
+  payload: {
+  nodeId: string;
   newPosition: XYPosition;
   previousPosition: XYPosition;
 };
@@ -108,9 +108,9 @@ export interface NodeMoveOperation extends GraphOperation {
  */
 
 export interface NodeDuplicateOperation extends GraphOperation {
-  type: OperationType.NODE_DUPLICATE;,
-  payload: {,
-  sourceNodeId: string;,
+  type: OperationType.NODE_DUPLICATE;
+  payload: {
+  sourceNodeId: string;
   newNode: Node;
   offset: XYPosition;
   copyConnections?: boolean;
@@ -124,8 +124,8 @@ export interface NodeDuplicateOperation extends GraphOperation {
  */
 
 export interface EdgeAddOperation extends GraphOperation {
-  type: OperationType.EDGE_ADD;,
-  payload: {,
+  type: OperationType.EDGE_ADD;
+  payload: {
   edge: Edge;
   skipValidation?: boolean;
   replaceExisting?: boolean;
@@ -136,9 +136,9 @@ export interface EdgeAddOperation extends GraphOperation {
  */
 
 export interface EdgeDeleteOperation extends GraphOperation {
-  type: OperationType.EDGE_DELETE;,
-  payload: {,
-  edgeId: string;,
+  type: OperationType.EDGE_DELETE;
+  payload: {
+  edgeId: string;
   snapshot: Edge; // For undo capability,
 };
 
@@ -147,9 +147,9 @@ export interface EdgeDeleteOperation extends GraphOperation {
  */
 
 export interface EdgeUpdateOperation extends GraphOperation {
-  type: OperationType.EDGE_UPDATE;,
-  payload: {,
-  edgeId: string;,
+  type: OperationType.EDGE_UPDATE;
+  payload: {
+  edgeId: string;
   updates: Partial<Edge>;
   previousValues: Partial<Edge>;
 };
@@ -162,9 +162,9 @@ export interface EdgeUpdateOperation extends GraphOperation {
  */
 
 export interface VariationAddOperation extends GraphOperation {
-  type: OperationType.VARIATION_ADD;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.VARIATION_ADD;
+  payload: {
+  nodeId: string;
   variation: string;
   index?: number; // Insert at specific position,
 };
@@ -174,9 +174,9 @@ export interface VariationAddOperation extends GraphOperation {
  */
 
 export interface VariationDeleteOperation extends GraphOperation {
-  type: OperationType.VARIATION_DELETE;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.VARIATION_DELETE;
+  payload: {
+  nodeId: string;
   index: number;
   snapshot: string; // For undo capability,
 };
@@ -186,11 +186,11 @@ export interface VariationDeleteOperation extends GraphOperation {
  */
 
 export interface VariationUpdateOperation extends GraphOperation {
-  type: OperationType.VARIATION_UPDATE;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.VARIATION_UPDATE;
+  payload: {
+  nodeId: string;
   index: number;
-  newValue: string;,
+  newValue: string;
   previousValue: string;
 };
 
@@ -199,11 +199,11 @@ export interface VariationUpdateOperation extends GraphOperation {
  */
 
 export interface VariationReorderOperation extends GraphOperation {
-  type: OperationType.VARIATION_REORDER;,
-  payload: {,
-  nodeId: string;,
+  type: OperationType.VARIATION_REORDER;
+  payload: {
+  nodeId: string;
   fromIndex: number;
-  toIndex: number;,
+  toIndex: number;
   previousOrder: string; // For undo capability,
 };
 
@@ -215,9 +215,9 @@ export interface VariationReorderOperation extends GraphOperation {
  */
 
 export interface BatchOperation extends GraphOperation {
-  type: OperationType.BATCH_OPERATION;,
-  payload: {,
-  operations: GraphOperation;,
+  type: OperationType.BATCH_OPERATION;
+  payload: {
+  operations: GraphOperation;
   atomicity: 'all_or_nothing' | 'best_effort';
   rollbackOnFailure: boolean;
   description?: string; // Human-readable description for undo,
@@ -231,10 +231,10 @@ export interface BatchOperation extends GraphOperation {
  */
 
 export interface GraphClearOperation extends GraphOperation {
-  type: OperationType.GRAPH_CLEAR;,
-  payload: {,
-  snapshot: {,
-  nodes: Node;,
+  type: OperationType.GRAPH_CLEAR;
+  payload: {
+  snapshot: {
+  nodes: Node;
   edges: Edge;
 };
     preserveHistory?: boolean;
@@ -245,22 +245,22 @@ export interface GraphClearOperation extends GraphOperation {
  */
 
 export interface GraphImportOperation extends GraphOperation {
-  type: OperationType.GRAPH_IMPORT;,
-  payload: {,
-  nodes: Node;,
+  type: OperationType.GRAPH_IMPORT;
+  payload: {
+  nodes: Node;
   edges: Edge;
   merge?: boolean; // Merge with existing vs replace,
-  conflict_resolution?: 'skip' | 'replace' | 'merge';
-};
+  conflict_resolution?: 'skip' | 'replace' | 'merge'
+  };
 
 /**
  * Merge graphs
  */
 
 export interface GraphMergeOperation extends GraphOperation {
-  type: OperationType.GRAPH_MERGE;,
-  payload: {,
-  sourceNodes: Node;,
+  type: OperationType.GRAPH_MERGE;
+  payload: {
+  sourceNodes: Node;
   sourceEdges: Edge;
   strategy: 'append' | 'merge' | 'overlay';
   positionOffset?: XYPosition;
@@ -274,7 +274,7 @@ export interface GraphMergeOperation extends GraphOperation {
  */
 
 export interface OperationResult {
-  success: boolean;,
+  success: boolean;
   operation: GraphOperation;
   snapshot?: GraphSnapshot;
   error?: string;
@@ -288,9 +288,9 @@ export interface OperationResult {
   */
 }
 export interface BatchOperationResult {
-  success: boolean;,
+  success: boolean;
   batchId: string;
-  results: OperationResult;,
+  results: OperationResult;
   rollbackPerformed: boolean;
   error?: string;
   partialSuccess?: boolean;
@@ -327,7 +327,7 @@ export type ValidationSeverity = 'error' | 'warning' | 'info';
  */
 
 export interface ValidationError {
-  type: string;,
+  type: string;
   message: string;
   severity: ValidationSeverity;
   field?: string;
@@ -339,7 +339,7 @@ export interface ValidationError {
   */
 }
 export interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: ValidationError;
   warnings: ValidationError;
   info?: ValidationError;
@@ -351,7 +351,7 @@ export interface ValidationResult {
   */
 }
 export interface GraphState {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   metadata?: Record<string, unknown>;
   version?: number;
@@ -361,9 +361,9 @@ export interface GraphState {
   */
 }
 export interface GraphSnapshot {
-  id: string;,
+  id: string;
   state: GraphState;
-  timestamp: Date;,
+  timestamp: Date;
   operationId: string;
   description?: string;
   checksum?: string; // For integrity verification,
@@ -372,7 +372,7 @@ export interface GraphSnapshot {
   */
 }
 export interface HistoryEntry {
-  operation: GraphOperation;,
+  operation: GraphOperation;
   snapshot: GraphSnapshot;
   timestamp: Date;
   description?: string;
@@ -386,7 +386,7 @@ export interface HistoryEntry {
   */
 }
 export interface ConflictResult {
-  hasConflicts: boolean;,
+  hasConflicts: boolean;
   conflicts: OperationConflict;
   canAutoResolve: boolean;
   resolutionStrategy?: ConflictResolutionStrategy;
@@ -395,9 +395,9 @@ export interface ConflictResult {
   */
 }
 export interface OperationConflict {
-  localOperation: GraphOperation;,
+  localOperation: GraphOperation;
   remoteOperation: GraphOperation;
-  conflictType: ConflictType;,
+  conflictType: ConflictType;
   severity: 'low' | 'medium' | 'high' | 'critical';
   affectedElements: string; // Node/Edge IDs,
   resolutionOptions: ConflictResolutionOption;
@@ -424,7 +424,7 @@ export enum ConflictType {
   * Resolution option for conflicts
   */
   export interface ConflictResolutionOption {
-  strategy: ConflictResolutionStrategy;,
+  strategy: ConflictResolutionStrategy;
   description: string;
   automated: boolean;
   resultPreview?: string;
@@ -439,7 +439,7 @@ export enum ConflictType {
 export interface CollaborativeMessage {
   type: 'GRAPH_MUTATION' | 'CURSOR_UPDATE' | 'SELECTION_CHANGE' | 'PRESENCE_UPDATE';
   operation?: GraphOperation;
-  timestamp: Date;,
+  timestamp: Date;
   userId: string;
   sessionId: string;
   data?: Record<string, unknown>;
@@ -448,12 +448,12 @@ export interface CollaborativeMessage {
   */
 }
 export interface UserPresence {
-  userId: string;,
+  userId: string;
   userName: string;
   avatar?: string;
   cursor?: XYPosition;
   selection?: string; // Selected node/edge IDs,
-  color: string;,
+  color: string;
   lastActivity: Date;
   isActive: boolean;
   // =============================================================================
@@ -464,11 +464,11 @@ export interface UserPresence {
   */
 }
 export interface ValidationConfig {
-  strictMode: boolean;,
+  strictMode: boolean;
   allowDangerousOperations: boolean;
-  customValidators: ValidationFunction;,
+  customValidators: ValidationFunction;
   enableSchemaValidation: boolean;
-  enableStructuralValidation: boolean;,
+  enableStructuralValidation: boolean;
   enableSemanticValidation: boolean;
   /**
   * Custom validation function
@@ -482,10 +482,10 @@ export type ValidationFunction = ()
  */
 
 export interface ConflictResolutionConfig {
-  strategy: ConflictResolutionStrategy;,
+  strategy: ConflictResolutionStrategy;
   autoResolve: boolean;
   maxConflictAge: number; // milliseconds,
-  enableOperationalTransform: boolean;,
+  enableOperationalTransform: boolean;
   conflictDetectionSensitivity: 'low' | 'medium' | 'high';
   /**
   * Complete mutation engine configuration
@@ -493,7 +493,7 @@ export interface ConflictResolutionConfig {
 }
 export interface MutationEngineConfig {
   // History management
-  historyLimit: number;,
+  historyLimit: number;
   enableUndo: boolean;
   enableRedo: boolean;
   // Validation settings
@@ -501,18 +501,18 @@ export interface MutationEngineConfig {
   // Conflict resolution
   conflictResolution: ConflictResolutionConfig;
   // Batch operations
-  batchAtomicity: 'all_or_nothing' | 'best_effort';,
+  batchAtomicity: 'all_or_nothing' | 'best_effort';
   maxBatchSize: number;
   // Performance settings
-  enableSnapshots: boolean;,
+  enableSnapshots: boolean;
   snapshotInterval: number;
   enableCompression: boolean;
   // Collaborative features
-  enableCollaboration: boolean;,
+  enableCollaboration: boolean;
   syncDelay: number;
   maxCollaborators: number;
   // Debug and monitoring
-  enableLogging: boolean;,
+  enableLogging: boolean;
   enableMetrics: boolean;
   logLevel: 'error' | 'warn' | 'info' | 'debug';
   // =============================================================================
@@ -581,48 +581,48 @@ export function isNodeOperation(operation: GraphOperation): operation is
  */
 
 export interface MutationEngineEvents {
-  'operation_executed': {,
-  operation: GraphOperation;,
+  'operation_executed': {
+  operation: GraphOperation;
   result: OperationResult;
   executionTime: number;
 };
   'operation_failed': {
-  operation: GraphOperation;,
+  operation: GraphOperation;
   error: string;
   validationErrors?: ValidationError;
 };
   'batch_executed': {
-  batchId: string;,
+  batchId: string;
   results: OperationResult;
   success: boolean;
 };
   'undo_executed': {
-  operation: GraphOperation;,
+  operation: GraphOperation;
   success: boolean;
 };
   'redo_executed': {
-  operation: GraphOperation;,
+  operation: GraphOperation;
   success: boolean;
 };
   'conflict_detected': {
-  conflict: OperationConflict;,
+  conflict: OperationConflict;
   resolutionStrategy: ConflictResolutionStrategy;
 };
   'conflict_resolved': {
-  conflict: OperationConflict;,
+  conflict: OperationConflict;
   resolution: GraphOperation;
   strategy: ConflictResolutionStrategy;
 };
   'snapshot_created': {
-  snapshot: GraphSnapshot;,
-  reason: 'operation' | 'interval' | 'manual';
-};
+  snapshot: GraphSnapshot;
+  reason: 'operation' | 'interval' | 'manual'
+  };
   'validation_error': {
-  operation: GraphOperation;,
+  operation: GraphOperation;
   errors: ValidationError;
 };
   'state_changed': {
-  previousState: GraphState;,
+  previousState: GraphState;
   newState: GraphState;
   operation: GraphOperation;
 };

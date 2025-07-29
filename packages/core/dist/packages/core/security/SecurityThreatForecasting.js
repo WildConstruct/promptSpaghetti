@@ -1100,12 +1100,13 @@ if (this.config.enableSeasonalDecomposition) {
                                                     expectedDuration: 180, // minutes
                                                     expectedIntensity: 85,
                                                     likelihood: 0.15,
-                                                    impactAssessment: {},
-                                                    businessImpact: 90,
-                                                    technicalImpact: 85,
-                                                    reputationalImpact: 80,
-                                                    financialImpact: 85,
-                                                    complianceImpact: 70
+                                                    impactAssessment: {
+                                                        businessImpact: 90,
+                                                        technicalImpact: 85,
+                                                        reputationalImpact: 80,
+                                                        financialImpact: 85,
+                                                        complianceImpact: 70
+                                                    }
                                                 }
                                             ];
                                             scenarios.forEach(scenario => this.threatScenarios.set(scenario.scenarioId, scenario));

@@ -12,7 +12,7 @@ import {
   CONNECTION_LABEL_STYLES
 } from '../../types/CollaborationTypes';
 interface ConnectionLabelProps {
-  label: ConnectionLabelType;,
+  label: ConnectionLabelType;
   onAction: (action: ConnectionLabelAction) => void;
   canEdit?: boolean;
   showTooltip?: boolean;
@@ -88,7 +88,7 @@ interface ConnectionLabelProps {
   labelId: label.id,
   connectionId: label.connectionId,
   content: newContent || 'Untitled',
-  label: {,
+  label: {
   content: newContent || 'Untitled',
   isEditing: false,
   lastModified: new Date().toISOString(),
@@ -272,8 +272,8 @@ interface ConnectionLabelProps {
 });
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '1';
-          }}
+            e.currentTarget.style.opacity = '1'
+  }}
           onMouseLeave={(e) => {
             e.currentTarget.style.opacity = '0.8';
           }}
@@ -320,10 +320,10 @@ interface ConnectionLabelProps {
           animation: labelFadeIn 0.3s ease-out;
         @keyframes labelFadeIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translate(-50%, -50%) scale(0.8);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translate(-50%, -50%) scale(1);
       `}</style>
     </div>

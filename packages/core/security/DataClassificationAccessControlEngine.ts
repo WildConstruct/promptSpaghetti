@@ -68,7 +68,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (cachedDecision && this.isCacheValid(cachedDecision)) {
   return {
   ...cachedDecision,
-  metadata: {,
+  metadata: {
   ...cachedDecision.metadata,
   cacheHit: true,
   evaluationTime: Date.now() - startTime,
@@ -101,7 +101,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   monitoring: [],
   auditRequired: true,
   riskLevel: 'CRITICAL',
-  metadata: {,
+  metadata: {
   evaluationTime: Date.now() - startTime,
   policiesEvaluated: [],
   rolesEvaluated: [],
@@ -241,7 +241,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (riskLevel === 'HIGH' || riskLevel === 'CRITICAL') {
   monitoring.push({)
   type: 'REALTIME',
-  specification: {,
+  specification: {
   metrics: ['access_attempts', 'data_volume', 'operation_duration'],
   frequency: 'immediate',
   retention: 90,
@@ -263,7 +263,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   monitoring,
   auditRequired: riskLevel === 'HIGH' || riskLevel === 'CRITICAL',
   riskLevel,
-  metadata: {,
+  metadata: {
   evaluationTime: 0, // Will be set by caller,
   policiesEvaluated: [],
   rolesEvaluated: [],
@@ -357,7 +357,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   return false;
   // Check effect
   return permission.effect === 'ALLOW';
-  private checkAccessControlMatrix(classification: DataClassificationLevel,)
+  private checkAccessControlMatrix(classification: DataClassificationLevel)
   operation: DataOperation,
   userRoles: DataClassificationRole): boolean {,
   const matrixEntry = ACCESS_CONTROL_MATRIX[classification]?.[operation];
@@ -419,7 +419,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   return undefined;
   return value;
   private async evaluatePolicy(policy: ABACPolicy, request: AccessRequest): Promise<{,
-  applicable: boolean;,
+  applicable: boolean;
   effect: 'PERMIT' | 'DENY' | 'INDETERMINATE';
   confidence: number;
   conditions?: AccessCondition;
@@ -436,7 +436,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     policy: ClassificationAccessPolicy,
     request: AccessRequest,
   ): Promise<{
-  permitted: boolean;,
+  permitted: boolean;
   conditions: AccessCondition;
 }> {
     // Find applicable access rule

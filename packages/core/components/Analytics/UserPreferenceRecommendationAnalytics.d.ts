@@ -153,7 +153,7 @@ export interface PreferenceRecommendationExportData {
     userPreferences: UserPreferenceData[];
     recommendationPerformance: RecommendationPerformanceData[];
     analysisTimestamp: number;
-    metadata: {,
+    metadata: {
         totalUsers: number;
         averagePreferenceConfidence: number;
         topPerformingAlgorithm: string;

@@ -4,7 +4,7 @@ import React from 'react';
 import { Lock, Clock, AlertTriangle, Users, Activity, TrendingUp } from 'lucide-react';
 import { LockingStatistics, LockConflict } from '../types/locking';
 interface LockStatusOverviewProps {
-  statistics: LockingStatistics;,
+  statistics: LockingStatistics;
   conflicts: LockConflict;
   onConflictClick: (conflict: LockConflict) => void;
   export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({,)
@@ -15,7 +15,7 @@ interface LockStatusOverviewProps {
   const pendingConflicts = conflicts.filter(c => c.status === 'pending');
   const resolvedConflicts = conflicts.filter(c => c.status === 'resolved');
   const StatCard = ({ title, value, icon: Icon, color, subtext }: {)
-  title: string;,
+  title: string;
   value: string | number;
     icon: React.ComponentType<{ className?: string }>;
     color: string;

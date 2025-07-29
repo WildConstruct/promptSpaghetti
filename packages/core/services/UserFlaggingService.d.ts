@@ -49,7 +49,7 @@ export interface ContentFlagSummary {
     moderationPriority: 'low' | 'medium' | 'high' | 'urgent';
 
 export interface FlaggingAnalytics {
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -58,7 +58,7 @@ export interface FlaggingAnalytics {
     uniqueContent: number;
     reportsByReason: Record<string, number>;
     reportsBySeverity: Record<string, number>;
-    resolutionStats: {,
+    resolutionStats: {
         resolved: number;
         dismissed: number;
         pending: number;
@@ -69,12 +69,12 @@ export interface FlaggingAnalytics {
         reportCount: number;
         accuracy: number;
     }>;
-    contentTrends: {,
+    contentTrends: {
         mostFlaggedContentTypes: Record<string, number>;
         flagVolumeByHour: number[];
         flagVolumeByDay: number[];
     };
-    moderationEfficiency: {,
+    moderationEfficiency: {
         avgResponseTimeHours: number;
         accuracyRate: number;
         escalationRate: number;
@@ -89,7 +89,7 @@ export interface FlaggingConfig {
     requireJustification: string[];
     anonymousReporting: boolean;
     notifyContentOwner: boolean;
-    integrationSettings: {,
+    integrationSettings: {
         mlFlaggingWeight: number;
         userFlaggingWeight: number;
         combineScores: boolean;
@@ -134,7 +134,7 @@ export declare class UserFlaggingService {
     }): Promise<{
         reports: UserFlagReport[];
         totalCount: number;
-        stats: {,
+        stats: {
             totalReports: number;
             pendingReports: number;
             resolvedReports: number;

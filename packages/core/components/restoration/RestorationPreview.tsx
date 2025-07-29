@@ -37,7 +37,7 @@ const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { Option } = Select;
 interface RestorationPreviewProps {
-  preview: RestorationPreviewResponse;,
+  preview: RestorationPreviewResponse;
   config: RestorationConfig;
   onConflictResolve: (conflictId: string, strategy: ResolutionStrategy) => void;
   export const RestorationPreview: React.FC<RestorationPreviewProps> = ({,)
@@ -74,8 +74,8 @@ interface RestorationPreviewProps {
   case 'delete':,
   return 'error';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const getRiskLevelColor = (level: string) => {
   switch (level) {
   case 'low':,
@@ -85,8 +85,8 @@ interface RestorationPreviewProps {
   case 'high':,
   return 'error';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const nodeColumns = [;
     {
       title: 'Action',

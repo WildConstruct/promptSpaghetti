@@ -16,7 +16,9 @@ div >
 ;
 if (onClick) {
     return;
-    _jsx("div", { style: { cursor: 'pointer', padding: '4px', borderRadius: '4px' }, onClick: onClick, onMouseEnter: (e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }, onMouseLeave: (e) => { e.currentTarget.style.backgroundColor = 'transparent'; }, children: content });
+    _jsx("div", { style: { cursor: 'pointer', padding: '4px', borderRadius: '4px' }, onClick: onClick, onMouseEnter: (e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }, onMouseLeave: (e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+        }, children: content });
     ;
     return content;
 }

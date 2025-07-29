@@ -10,171 +10,171 @@ import { EventEmitter } from 'events';
 import * as os from 'os';
 
 export interface CapacityPlan {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   service: string;
   // Planning parameters
-  planning_horizon: {,
+  planning_horizon: {
   short_term_days: number; // Operational planning (typically 7-30 days),
   medium_term_days: number; // Tactical planning (typically 90-180 days),
   long_term_days: number; // Strategic planning (typically 365+ days),
 };
   // Capacity requirements
-  requirements: {,
+  requirements: {
   baseline_capacity: ResourceRequirements;
-  peak_capacity: ResourceRequirements;,
+  peak_capacity: ResourceRequirements;
   growth_projections: GrowthProjection;
-  performance_targets: PerformanceTargets;,
+  performance_targets: PerformanceTargets;
   availability_requirements: AvailabilityRequirements;
 };
   // Scaling configuration
-  scaling: {,
+  scaling: {
   auto_scaling_enabled: boolean;
-  scaling_policies: ScalingPolicy;,
+  scaling_policies: ScalingPolicy;
   scaling_cooldown: number; // milliseconds between scaling operations,
-  min_instances: number;,
+  min_instances: number;
   max_instances: number;
-  target_utilization: {,
-  cpu_percentage: number;,
+  target_utilization: {
+  cpu_percentage: number;
   memory_percentage: number;
-  network_percentage: number;,
+  network_percentage: number;
   custom_metrics: CustomMetricTarget;
 };
   };
   // Cost optimization
-  cost_optimization: {,
-  budget_constraints: {,
-  monthly_budget: number;,
+  cost_optimization: {
+  budget_constraints: {
+  monthly_budget: number;
   cost_per_hour_limit: number;
   currency: string;
 };
-    instance_types: InstanceTypeConfig;,
+    instance_types: InstanceTypeConfig;
   reserved_capacity: {;
   percentage: number; // % of baseline to reserve,
-  commitment_period: 'monthly' | 'yearly' | 'multi_year';
-};
-    spot_instances: {,
+  commitment_period: 'monthly' | 'yearly' | 'multi_year'
+  };
+    spot_instances: {
   enabled: boolean;
   max_percentage: number; // % of capacity that can be spot,
-  fallback_strategy: 'on_demand' | 'reserved' | 'scale_down';
-};
+  fallback_strategy: 'on_demand' | 'reserved' | 'scale_down'
+  };
   };
   // Monitoring and alerting
-  monitoring: {,
-  capacity_thresholds: {,
-  warning_percentage: number;,
+  monitoring: {
+  capacity_thresholds: {
+  warning_percentage: number;
   critical_percentage: number;
   forecast_breach_days: number; // Alert when forecast shows breach in N days,
 };
-    metrics_collection: {,
+    metrics_collection: {
   interval_seconds: number;
-  retention_days: number;,
+  retention_days: number;
   custom_metrics: string;
 };
-    alerting: {,
+    alerting: {
   notification_channels: string;
-  escalation_policy: string;,
+  escalation_policy: string;
   alert_suppression_minutes: number;
 };
   };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   last_reviewed: number;
-  next_review_date: number;,
+  next_review_date: number;
   enabled: boolean;
 }
 export interface ResourceRequirements {
-  cpu_cores: number;,
+  cpu_cores: number;
   memory_gb: number;
-  storage_gb: number;,
+  storage_gb: number;
   network_bandwidth_mbps: number;
   iops_required: number;
   gpu_units?: number;
   custom_resources?: Record<string, number>;
 }
 export interface GrowthProjection {
-  period: 'monthly' | 'quarterly' | 'yearly';,
+  period: 'monthly' | 'quarterly' | 'yearly';
   metric: 'transactions' | 'users' | 'data_volume' | 'requests' | 'events';
-  current_value: number;,
+  current_value: number;
   projected_growth_rate: number; // percentage,
   confidence_level: number; // 0-1 scale,
   assumptions: string;
   seasonal_factors?: SeasonalFactor;
 }
 export interface SeasonalFactor {
-  period: 'daily' | 'weekly' | 'monthly' | 'yearly';,
+  period: 'daily' | 'weekly' | 'monthly' | 'yearly';
   pattern: 'cyclical' | 'trending' | 'spike';
   multiplier: number; // Factor to multiply baseline by,
   duration_hours?: number; // For spike patterns,
   description: string;
 }
 export interface PerformanceTargets {
-  response_time_p95_ms: number;,
+  response_time_p95_ms: number;
   response_time_p99_ms: number;
-  throughput_rps: number;,
+  throughput_rps: number;
   error_rate_percentage: number;
-  availability_percentage: number;,
+  availability_percentage: number;
   data_processing_latency_ms: number;
 }
 export interface AvailabilityRequirements {
   target_availability: number; // 99.9%,
-  downtime_budget_minutes_monthly: number;,
-  maintenance_window: {,
-  day_of_week: string;,
+  downtime_budget_minutes_monthly: number;
+  maintenance_window: {
+  day_of_week: string;
   start_time: string;
-  duration_hours: number;,
+  duration_hours: number;
   timezone: string;
 };
-  disaster_recovery: {,
+  disaster_recovery: {
   rto_minutes: number; // Recovery Time Objective,
   rpo_minutes: number; // Recovery Point Objective,
   geographic_redundancy: boolean;
 };
 }
 export interface ScalingPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   type: 'reactive' | 'predictive' | 'scheduled';
   enabled: boolean;
   // Trigger conditions
-  triggers: {,
-  metric_based: MetricTrigger;,
+  triggers: {
+  metric_based: MetricTrigger;
   time_based: TimeTrigger;
   event_based: EventTrigger;
 };
   // Scaling actions
-  actions: {,
+  actions: {
   scale_up: ScalingAction;
-  scale_down: ScalingAction;,
+  scale_down: ScalingAction;
   notification: NotificationAction;
 };
   // Policy constraints
-  constraints: {,
+  constraints: {
   max_scale_up_percentage: number; // Max % increase per scaling operation,
   max_scale_down_percentage: number; // Max % decrease per scaling operation,
-  cooldown_period_seconds: number;,
+  cooldown_period_seconds: number;
   min_stable_period_seconds: number; // Minimum time before considering scale down,
 };
-  created_at: number;,
+  created_at: number;
   last_triggered: number;
   trigger_count: number;
 }
 export interface MetricTrigger {
-  metric_name: string;,
+  metric_name: string;
   comparison: 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal';
-  threshold: number;,
+  threshold: number;
   duration_seconds: number; // How long condition must persist,
-  datapoints_to_alarm: number;,
+  datapoints_to_alarm: number;
   evaluation_periods: number;
 }
 export interface TimeTrigger {
   schedule_type: 'cron' | 'recurring' | 'one_time';
   cron_expression?: string;
-  recurring_pattern?: {,
-  frequency: 'daily' | 'weekly' | 'monthly';,
+  recurring_pattern?: {
+  frequency: 'daily' | 'weekly' | 'monthly';
   times: string; // HH:MM format,
   days_of_week?: string;
   timezone: string;
@@ -183,7 +183,7 @@ export interface TimeTrigger {
   target_capacity: number; // Target instance count or percentage
 }
 export interface EventTrigger {
-  event_type: 'security_incident' | 'high_alert_volume' | 'system_failure' | 'maintenance_mode';,
+  event_type: 'security_incident' | 'high_alert_volume' | 'system_failure' | 'maintenance_mode';
   event_source: string;
   conditions: Record<string, any>;
   scaling_factor: number; // Multiplier for capacity,
@@ -195,183 +195,183 @@ export interface ScalingAction {
   adjustment_type: 'percentage' | 'absolute';
   instance_types?: string;
   availability_zones?: string;
-  termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized';
-}
+  termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized'
+  }
 export interface NotificationAction {
-  channel: 'email' | 'slack' | 'webhook' | 'sms';,
+  channel: 'email' | 'slack' | 'webhook' | 'sms';
   target: string;
-  message_template: string;,
-  severity: 'info' | 'warning' | 'error';
-}
+  message_template: string;
+  severity: 'info' | 'warning' | 'error'
+  }
 export interface CustomMetricTarget {
-  metric_name: string;,
+  metric_name: string;
   target_value: number;
-  comparison: 'less_than' | 'greater_than';,
+  comparison: 'less_than' | 'greater_than';
   weight: number; // Relative importance (0-1),
 }
 export interface InstanceTypeConfig {
-  instance_type: string;,
+  instance_type: string;
   cpu_cores: number;
-  memory_gb: number;,
+  memory_gb: number;
   network_performance: 'low' | 'moderate' | 'high' | 'very_high';
-  storage_type: 'ebs' | 'instance_store';,
+  storage_type: 'ebs' | 'instance_store';
   cost_per_hour: number;
-  spot_availability: boolean;,
+  spot_availability: boolean;
   use_cases: string;
   priority: number; // Lower numbers = higher priority,
 }
 export interface CapacityMetrics {
-  id: string;,
+  id: string;
   service: string;
-  timestamp: number;,
-  collection_period: {,
-  start: number;,
+  timestamp: number;
+  collection_period: {
+  start: number;
   end: number;
 };
   // Current utilization
-  current_utilization: {,
+  current_utilization: {
   cpu_percentage: number;
-  memory_percentage: number;,
+  memory_percentage: number;
   disk_percentage: number;
-  network_percentage: number;,
+  network_percentage: number;
   custom_metrics: Record<string, number>;
 };
   // Performance metrics
-  performance: {,
+  performance: {
   avg_response_time: number;
-  p95_response_time: number;,
+  p95_response_time: number;
   p99_response_time: number;
-  throughput_rps: number;,
+  throughput_rps: number;
   error_rate: number;
-  queue_depth: number;,
+  queue_depth: number;
   active_connections: number;
 };
   // Resource allocation
-  resources: {,
+  resources: {
   allocated_instances: number;
-  running_instances: number;,
+  running_instances: number;
   pending_instances: number;
-  terminating_instances: number;,
+  terminating_instances: number;
   total_cpu_cores: number;
-  total_memory_gb: number;,
+  total_memory_gb: number;
   total_storage_gb: number;
 };
   // Cost tracking
-  cost: {,
+  cost: {
   current_hourly_cost: number;
-  projected_monthly_cost: number;,
+  projected_monthly_cost: number;
   reserved_capacity_utilization: number;
-  spot_instance_percentage: number;,
+  spot_instance_percentage: number;
   cost_per_request: number;
 };
   // Health indicators
-  health: {,
+  health: {
   overall_health_score: number; // 0-100,
-  bottleneck_indicators: string;,
+  bottleneck_indicators: string;
   scaling_recommendations: string;
   cost_optimization_opportunities: string;
 };
 }
 export interface ScalingEvent {
-  id: string;,
+  id: string;
   timestamp: number;
-  service: string;,
+  service: string;
   policy_id: string;
   // Event details
-  event_type: 'scale_up' | 'scale_down' | 'policy_triggered' | 'manual_intervention';,
+  event_type: 'scale_up' | 'scale_down' | 'policy_triggered' | 'manual_intervention';
   trigger_reason: string;
   triggered_by: string; // user, policy, or system,
   // Scaling details
-  scaling_details: {,
-  previous_capacity: number;,
+  scaling_details: {
+  previous_capacity: number;
   target_capacity: number;
-  actual_capacity: number;,
+  actual_capacity: number;
   scaling_duration_seconds: number;
-  instances_added: number;,
+  instances_added: number;
   instances_removed: number;
 };
   // Impact assessment
-  impact: {,
-  performance_change: {,
-  response_time_change_ms: number;,
+  impact: {
+  performance_change: {
+  response_time_change_ms: number;
   throughput_change_rps: number;
   error_rate_change: number;
 };
-    cost_impact: {,
+    cost_impact: {
   hourly_cost_change: number;
   estimated_monthly_impact: number;
 };
-    availability_impact: 'none' | 'minimal' | 'moderate' | 'significant';
+    availability_impact: 'none' | 'minimal' | 'moderate' | 'significant'
   };
   // Validation and success
-  validation: {,
+  validation: {
   scaling_successful: boolean;
-  target_reached: boolean;,
+  target_reached: boolean;
   performance_improved: boolean;
-  issues_encountered: string;,
+  issues_encountered: string;
   rollback_required: boolean;
 };
 }
 export interface CapacityForecast {
-  id: string;,
+  id: string;
   service: string;
-  generated_at: number;,
+  generated_at: number;
   forecast_horizon_days: number;
   // Forecast methodology
-  methodology: {,
-  algorithm: 'linear_regression' | 'exponential_smoothing' | 'arima' | 'machine_learning';,
+  methodology: {
+  algorithm: 'linear_regression' | 'exponential_smoothing' | 'arima' | 'machine_learning';
   confidence_interval: number; // e.g., 95%,
-  historical_data_points: number;,
+  historical_data_points: number;
   seasonal_adjustments: boolean;
   trend_adjustments: boolean;
 };
   // Forecast data
   forecasts: Array<{,
   date: number;
-  predicted_load: number;,
+  predicted_load: number;
   confidence_upper: number;
-  confidence_lower: number;,
+  confidence_lower: number;
   required_capacity: ResourceRequirements;
-  estimated_cost: number;,
+  estimated_cost: number;
   risk_factors: string;
 }>;
   // Capacity recommendations
-  recommendations: {,
+  recommendations: {
   immediate_actions: CapacityRecommendation;
-  short_term_planning: CapacityRecommendation;,
+  short_term_planning: CapacityRecommendation;
   long_term_strategy: CapacityRecommendation;
 };
   // Accuracy tracking
-  accuracy: {,
+  accuracy: {
   last_forecast_accuracy: number; // 0-1 scale,
-  trend_accuracy: number;,
+  trend_accuracy: number;
   peak_prediction_accuracy: number;
   cost_prediction_accuracy: number;
 };
 }
 export interface CapacityRecommendation {
-  id: string;,
+  id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  category: 'scaling' | 'optimization' | 'cost_reduction' | 'performance' | 'reliability';,
+  category: 'scaling' | 'optimization' | 'cost_reduction' | 'performance' | 'reliability';
   title: string;
-  description: string;,
+  description: string;
   rationale: string;
   // Implementation details
-  implementation: {,
-  estimated_effort_hours: number;,
+  implementation: {
+  estimated_effort_hours: number;
   estimated_cost_impact: number;
-  estimated_benefit: string;,
+  estimated_benefit: string;
   prerequisites: string;
-  risks: string;,
+  risks: string;
   rollback_plan: string;
 };
   // Timeline
-  timeline: {,
+  timeline: {
   recommended_start: number;
   estimated_completion: number;
   deadline?: number;
 };
-  status: 'pending' | 'approved' | 'in_progress' | 'completed' | 'rejected';,
+  status: 'pending' | 'approved' | 'in_progress' | 'completed' | 'rejected';
   created_at: number;
   last_updated: number;
 }
@@ -427,7 +427,7 @@ export class SecurityCapacityManager extends EventEmitter {
   description: 'Scale up when CPU utilization is high',
       type: 'reactive',
       enabled: true,
-      triggers: {,
+      triggers: {
   metric_based: [{,
   metric_name: 'cpu_utilization',
   comparison: 'greater_than',
@@ -439,13 +439,13 @@ export class SecurityCapacityManager extends EventEmitter {
         time_based: [],
         event_based: [];
   },
-  actions: {,
-  scale_up: {,
+  actions: {
+  scale_up: {
   action_type: 'instance_count',
   adjustment_value: 2,
   adjustment_type: 'absolute',
 },
-  scale_down: {,
+  scale_down: {
   action_type: 'instance_count',
   adjustment_value: 0,
   adjustment_type: 'absolute',
@@ -454,10 +454,10 @@ export class SecurityCapacityManager extends EventEmitter {
   channel: 'slack',
           target: '#capacity-alerts',
           message_template: 'Scaling up {{service}} due to high CPU utilization ({{cpu_percentage}}%)',
-          severity: 'info';
+          severity: 'info'
   }]
   },
-  constraints: {,
+  constraints: {
   max_scale_up_percentage: 50,
   max_scale_down_percentage: 25,
   cooldown_period_seconds: 300,
@@ -471,7 +471,7 @@ export class SecurityCapacityManager extends EventEmitter {
   description: 'Scale up when memory utilization is high',
       type: 'reactive',
       enabled: true,
-      triggers: {,
+      triggers: {
   metric_based: [{,
   metric_name: 'memory_utilization',
   comparison: 'greater_than',
@@ -483,13 +483,13 @@ export class SecurityCapacityManager extends EventEmitter {
         time_based: [],
         event_based: [];
   },
-  actions: {,
-  scale_up: {,
+  actions: {
+  scale_up: {
   action_type: 'instance_count',
   adjustment_value: 1,
   adjustment_type: 'absolute',
 },
-  scale_down: {,
+  scale_down: {
   action_type: 'instance_count',
   adjustment_value: 0,
   adjustment_type: 'absolute',
@@ -498,10 +498,10 @@ export class SecurityCapacityManager extends EventEmitter {
   channel: 'slack',
           target: '#capacity-alerts',
           message_template: 'Scaling up {{service}} due to high memory utilization ({{memory_percentage}}%)',
-          severity: 'warning';
+          severity: 'warning'
   }]
   },
-  constraints: {,
+  constraints: {
   max_scale_up_percentage: 40,
   max_scale_down_percentage: 20,
   cooldown_period_seconds: 600,
@@ -536,21 +536,21 @@ export class SecurityCapacityManager extends EventEmitter {
   id,
   service,
   timestamp: Date.now(),
-  collection_period: {,
+  collection_period: {
   start: Date.now() - 300000, // Last 5 minutes,
   end: Date.now(),
 },
-  current_utilization: {,
+  current_utilization: {
   cpu_percentage: cpuUtilization,
   memory_percentage: memoryUtilization,
   disk_percentage: 20 + Math.random() * 30,
   network_percentage: 10 + Math.random() * 20,
-  custom_metrics: {,
+  custom_metrics: {
   'alert_processing_rate': 85 + Math.random() * 15,
   'threat_detection_accuracy': 92 + Math.random() * 8,
   'data_ingestion_rate': 75 + Math.random() * 25,
 },
-  performance: {,
+  performance: {
   avg_response_time: 50 + Math.random() * 100,
   p95_response_time: 200 + Math.random() * 300,
   p99_response_time: 500 + Math.random() * 1000,
@@ -559,7 +559,7 @@ export class SecurityCapacityManager extends EventEmitter {
   queue_depth: Math.floor(Math.random() * 100),
   active_connections: currentInstances * (50 + Math.random() * 150),
 },
-  resources: {,
+  resources: {
   allocated_instances: currentInstances,
   running_instances: currentInstances,
   pending_instances: 0,
@@ -568,14 +568,14 @@ export class SecurityCapacityManager extends EventEmitter {
   total_memory_gb: currentInstances * 16,
   total_storage_gb: currentInstances * 100,
 },
-  cost: {,
+  cost: {
   current_hourly_cost: currentInstances * 0.50, // $0.50 per instance per hour,
   projected_monthly_cost: currentInstances * 0.50 * 24 * 30,
   reserved_capacity_utilization: 75 + Math.random() * 25,
   spot_instance_percentage: Math.random() * 30,
   cost_per_request: (currentInstances * 0.50) / Math.max(1, currentInstances * 150),
 },
-  health: {,
+  health: {
   overall_health_score: this.calculateHealthScore(cpuUtilization, memoryUtilization, currentInstances),
   bottleneck_indicators: this.identifyBottlenecks(cpuUtilization, memoryUtilization),
   scaling_recommendations: this.generateScalingRecommendations(service, cpuUtilization, memoryUtilization),
@@ -757,7 +757,7 @@ export class SecurityCapacityManager extends EventEmitter {
       event_type: targetCapacity > currentCapacity ? 'scale_up' : 'scale_down',
       trigger_reason: triggerReason,
       triggered_by: 'system',
-      scaling_details: {,
+      scaling_details: {
   previous_capacity: currentCapacity,
   target_capacity: targetCapacity,
   actual_capacity: targetCapacity, // Assume successful scaling,
@@ -765,19 +765,19 @@ export class SecurityCapacityManager extends EventEmitter {
   instances_added: Math.max(0, targetCapacity - currentCapacity),
   instances_removed: Math.max(0, currentCapacity - targetCapacity),
 },
-  impact: {,
-  performance_change: {,
+  impact: {
+  performance_change: {
   response_time_change_ms: targetCapacity > currentCapacity ? -20 - Math.random() * 30 : 10 + Math.random() * 20,
   throughput_change_rps: (targetCapacity - currentCapacity) * (100 + Math.random() * 100),
   error_rate_change: targetCapacity > currentCapacity ? -0.1 - Math.random() * 0.5 : 0.05 + Math.random() * 0.3,
 },
-  cost_impact: {,
+  cost_impact: {
   hourly_cost_change: (targetCapacity - currentCapacity) * 0.50,
   estimated_monthly_impact: (targetCapacity - currentCapacity) * 0.50 * 24 * 30,
 },
-  availability_impact: 'minimal';
+  availability_impact: 'minimal'
   },
-  validation: {,
+  validation: {
   scaling_successful: true,
   target_reached: true,
   performance_improved: targetCapacity > currentCapacity,
@@ -811,7 +811,7 @@ export class SecurityCapacityManager extends EventEmitter {
   service,
   generated_at: Date.now(),
   forecast_horizon_days: horizonDays,
-  methodology: {,
+  methodology: {
   algorithm: 'linear_regression',
   confidence_interval: 95,
   historical_data_points: historicalDataPoints,
@@ -820,7 +820,7 @@ export class SecurityCapacityManager extends EventEmitter {
 },
   forecasts: this.generateForecastData(service, horizonDays),
       recommendations: await this.generateCapacityRecommendations(service),
-      accuracy: {,
+      accuracy: {
   last_forecast_accuracy: 0.85 + Math.random() * 0.1,
   trend_accuracy: 0.80 + Math.random() * 0.15,
   peak_prediction_accuracy: 0.75 + Math.random() * 0.2,
@@ -856,7 +856,7 @@ export class SecurityCapacityManager extends EventEmitter {
   predicted_load: baseLoad,
   confidence_upper: baseLoad + confidenceSpread,
   confidence_lower: Math.max(1, baseLoad - confidenceSpread),
-  required_capacity: {,
+  required_capacity: {
   cpu_cores: Math.ceil(baseLoad) * 4,
   memory_gb: Math.ceil(baseLoad) * 16,
   storage_gb: Math.ceil(baseLoad) * 100,
@@ -889,7 +889,7 @@ export class SecurityCapacityManager extends EventEmitter {
       title: 'Enable auto-scaling policies',
       description: 'Ensure all critical scaling policies are enabled and tuned',
       rationale: 'Prevents manual intervention during unexpected load spikes',
-      implementation: {,
+      implementation: {
   estimated_effort_hours: 2,
   estimated_cost_impact: 0,
   estimated_benefit: 'Reduced downtime risk by 80%',
@@ -897,7 +897,7 @@ export class SecurityCapacityManager extends EventEmitter {
   risks: ['Potential cost increase if poorly configured'],
   rollback_plan: 'Disable auto-scaling and revert to manual scaling',
 },
-  timeline: {,
+  timeline: {
   recommended_start: Date.now(),
   estimated_completion: Date.now() + (24 * 60 * 60 * 1000),
   deadline: Date.now() + (3 * 24 * 60 * 60 * 1000),
@@ -915,7 +915,7 @@ export class SecurityCapacityManager extends EventEmitter {
       title: 'Optimize instance types based on usage patterns',
       description: 'Analyze current usage and switch to more cost-effective instance types',
       rationale: 'Current CPU utilization patterns suggest compute-optimized instances would be more cost-effective',
-      implementation: {,
+      implementation: {
   estimated_effort_hours: 8,
   estimated_cost_impact: -200, // Cost reduction,
   estimated_benefit: '15-20% cost reduction',
@@ -923,7 +923,7 @@ export class SecurityCapacityManager extends EventEmitter {
   risks: ['Temporary performance impact during migration'],
   rollback_plan: 'Revert to previous instance types within 24 hours',
 },
-  timeline: {,
+  timeline: {
   recommended_start: Date.now() + (7 * 24 * 60 * 60 * 1000),
   estimated_completion: Date.now() + (14 * 24 * 60 * 60 * 1000),
 },
@@ -940,7 +940,7 @@ export class SecurityCapacityManager extends EventEmitter {
       title: 'Implement multi-region deployment',
       description: 'Deploy service across multiple regions for improved reliability and performance',
       rationale: 'Forecast shows significant growth requiring geographic distribution',
-      implementation: {,
+      implementation: {
   estimated_effort_hours: 120,
   estimated_cost_impact: 500, // Initial increase,
   estimated_benefit: 'Improved availability and reduced latency',
@@ -948,7 +948,7 @@ export class SecurityCapacityManager extends EventEmitter {
   risks: ['Increased complexity', 'Initial cost increase'],
   rollback_plan: 'Consolidate to single region if needed',
 },
-  timeline: {,
+  timeline: {
   recommended_start: Date.now() + (30 * 24 * 60 * 60 * 1000),
   estimated_completion: Date.now() + (90 * 24 * 60 * 60 * 1000),
 },
@@ -986,15 +986,15 @@ export class SecurityCapacityManager extends EventEmitter {
   getCapacityStatus(): {
     services: Array<{,
   service: string;
-      current_capacity: number;,
+      current_capacity: number;
   utilization: { cpu: number; memory: number };
-      health_score: number;,
+      health_score: number;
   scaling_status: 'stable' | 'scaling_up' | 'scaling_down' | 'at_limits';
       cost_efficiency: number;
     }>;
-    overall_health: number;,
+    overall_health: number;
   total_monthly_cost: number;
-    scaling_events_last_24h: number;,
+    scaling_events_last_24h: number;
   recommendations_pending: number;
     const services = Array.from(this.capacityPlans.keys()).map(planId => {)
   const plan = this.capacityPlans.get(planId)!;
@@ -1003,13 +1003,13 @@ export class SecurityCapacityManager extends EventEmitter {
   const isScaling = this.activeScaling.get(plan.service) || false;
   let scalingStatus: 'stable' | 'scaling_up' | 'scaling_down' | 'at_limits' = 'stable';
   if (isScaling) {
-  scalingStatus = currentCapacity < plan.scaling.max_instances ? 'scaling_up' : 'scaling_down';
-} else if (currentCapacity >= plan.scaling.max_instances || currentCapacity <= plan.scaling.min_instances) {
+  scalingStatus = currentCapacity < plan.scaling.max_instances ? 'scaling_up' : 'scaling_down'
+  } else if (currentCapacity >= plan.scaling.max_instances || currentCapacity <= plan.scaling.min_instances) {
   scalingStatus = 'at_limits';
   return {
   service: plan.service,
   current_capacity: currentCapacity,
-  utilization: {,
+  utilization: {
   cpu: recentMetrics?.current_utilization.cpu_percentage || 0,
   memory: recentMetrics?.current_utilization.memory_percentage || 0,
 },
@@ -1049,20 +1049,20 @@ export class SecurityCapacityManager extends EventEmitter {
   name: 'Security Alert Processing',
   description: 'Capacity plan for security alert processing service',
   service: 'security-alerts',
-  planning_horizon: {,
+  planning_horizon: {
   short_term_days: 30,
   medium_term_days: 90,
   long_term_days: 365,
 },
-  requirements: {,
-  baseline_capacity: {,
+  requirements: {
+  baseline_capacity: {
   cpu_cores: 8,
   memory_gb: 32,
   storage_gb: 500,
   network_bandwidth_mbps: 1000,
   iops_required: 2000,
 },
-  peak_capacity: {,
+  peak_capacity: {
   cpu_cores: 32,
   memory_gb: 128,
   storage_gb: 2000,
@@ -1077,7 +1077,7 @@ export class SecurityCapacityManager extends EventEmitter {
   confidence_level: 0.85,
   assumptions: ['Business growth continues', 'No major architectural changes'],
 }],
-          performance_targets: {,
+          performance_targets: {
   response_time_p95_ms: 200,
   response_time_p99_ms: 500,
   throughput_rps: 1000,
@@ -1085,27 +1085,27 @@ export class SecurityCapacityManager extends EventEmitter {
   availability_percentage: 99.9,
   data_processing_latency_ms: 100,
 },
-  availability_requirements: {,
+  availability_requirements: {
   target_availability: 99.9,
   downtime_budget_minutes_monthly: 43.2,
-  maintenance_window: {,
+  maintenance_window: {
   day_of_week: 'Sunday',
   start_time: '02:00',
   duration_hours: 4,
   timezone: 'UTC',
 },
-  disaster_recovery: {,
+  disaster_recovery: {
   rto_minutes: 30,
   rpo_minutes: 5,
   geographic_redundancy: true,
 },
-  scaling: {,
+  scaling: {
   auto_scaling_enabled: true,
   scaling_policies: [],
   scaling_cooldown: 300000,
   min_instances: 2,
   max_instances: 20,
-  target_utilization: {,
+  target_utilization: {
   cpu_percentage: 75,
   memory_percentage: 80,
   network_percentage: 70,
@@ -1116,8 +1116,8 @@ export class SecurityCapacityManager extends EventEmitter {
   weight: 0.8,
 }]
   },
-  cost_optimization: {,
-  budget_constraints: {,
+  cost_optimization: {
+  budget_constraints: {
   monthly_budget: 5000,
   cost_per_hour_limit: 10,
   currency: 'USD',
@@ -1133,27 +1133,27 @@ export class SecurityCapacityManager extends EventEmitter {
   use_cases: ['CPU intensive', 'Security processing'],
   priority: 1,
 }],
-          reserved_capacity: {,
+          reserved_capacity: {
   percentage: 60,
   commitment_period: 'yearly',
 },
-  spot_instances: {,
+  spot_instances: {
   enabled: true,
   max_percentage: 30,
   fallback_strategy: 'on_demand',
 },
-  monitoring: {,
-  capacity_thresholds: {,
+  monitoring: {
+  capacity_thresholds: {
   warning_percentage: 75,
   critical_percentage: 90,
   forecast_breach_days: 7,
 },
-  metrics_collection: {,
+  metrics_collection: {
   interval_seconds: 60,
   retention_days: 90,
   custom_metrics: ['alert_processing_rate', 'threat_detection_accuracy'],
 },
-  alerting: {,
+  alerting: {
   notification_channels: ['#capacity-alerts', 'capacity-team@company.com'],
   escalation_policy: ['devops-lead@company.com', 'cto@company.com'],
   alert_suppression_minutes: 15,
@@ -1223,7 +1223,7 @@ export class SecurityCapacityManager extends EventEmitter {
   const config = {
   capacity_plans: Array.from(this.capacityPlans.values()),
   scaling_policies: Array.from(this.scalingPolicies.values()),
-  metadata: {,
+  metadata: {
   exported_at: Date.now(),
   version: '1.0.0',
 };

@@ -40,10 +40,10 @@ export enum ExtensionPointCategory {
   line: z.number().optional(),
   function: z.string().optional(),
 }),
-  interfaces: z.array(z.object({,)
+  interfaces: z.array(z.object({)
   name: z.string(),
   description: z.string(),
-  parameters: z.array(z.object({,)
+  parameters: z.array(z.object({)
   name: z.string(),
   type: z.string(),
   required: z.boolean(),
@@ -54,7 +54,7 @@ export enum ExtensionPointCategory {
     examples: z.array(z.string()).optional();
   })),
   dependencies: z.array(z.string()).optional(),
-  examples: z.array(z.object({,)
+  examples: z.array(z.object({)
   name: z.string(),
   description: z.string(),
   code: z.string(),
@@ -155,7 +155,7 @@ export class ExtensionPointRegistry {
    * Get extension point statistics
    */
   public getStatistics(): {
-    total: number;,
+    total: number;
   byCategory: Record<ExtensionPointCategory, number>;
     byPriority: Record<ExtensionPointPriority, number>;
     byLifecycle: Record<ExtensionPointLifecycle, number>;
@@ -185,9 +185,9 @@ export class ExtensionPointRegistry {
   /**
    * Validate extension point compatibility
    */
-  public validateCompatibility(extensionPointId: string, version: string): {,
+  public validateCompatibility(extensionPointId: string, version: string): {
   compatible: boolean;
-    warnings: string;,
+    warnings: string;
   errors: string;
     const extensionPoint = this.get(extensionPointId);
     if (!extensionPoint) {
@@ -226,7 +226,7 @@ export class ExtensionPointRegistry {
   priority: ExtensionPointPriority.CRITICAL,
   lifecycle: ExtensionPointLifecycle.STABLE,
   version: '1.0.0',
-  location: {,
+  location: {
   file: 'packages/core/runtime/index.ts',
   line: 12,
   function: 'RuntimeNode',
@@ -256,18 +256,18 @@ export class ExtensionPointRegistry {
   run(ctx: ExecutionContext): string {,
   return this.customData + ' processed';
 }`,
-        language: 'typescript';
+        language: 'typescript'
   }],
-      constraints: {,
-  performance: {,
+      constraints: {
+  performance: {
   maxExecutionTime: 5000,
   maxMemoryUsage: 100 * 1024 * 1024,
 },
-  security: {,
+  security: {
   permissions: ['runtime.execute'],
   sandboxed: true,
 },
-  metadata: {,
+  metadata: {
   addedIn: '1.0.0',
 });
     this.register({)
@@ -278,7 +278,7 @@ export class ExtensionPointRegistry {
   priority: ExtensionPointPriority.HIGH,
   lifecycle: ExtensionPointLifecycle.STABLE,
   version: '1.0.0',
-  location: {,
+  location: {
   file: 'packages/core/runtime/advanced.ts',
   line: 61,
   function: 'AdvancedRuntimeNode',
@@ -304,7 +304,7 @@ export class ExtensionPointRegistry {
         ]
       }],
       dependencies: ['runtime.context.advanced', 'runtime.validation'],
-      metadata: {,
+      metadata: {
   addedIn: '1.0.0',
 });
     // UI Extension Points
@@ -316,7 +316,7 @@ export class ExtensionPointRegistry {
   priority: ExtensionPointPriority.HIGH,
   lifecycle: ExtensionPointLifecycle.STABLE,
   version: '1.0.0',
-  location: {,
+  location: {
   file: 'packages/core/components/Inspector/BaseNodeEditor.tsx',
   line: 1,
   function: 'BaseNodeEditor',
@@ -342,7 +342,7 @@ export class ExtensionPointRegistry {
         ]
       }],
       dependencies: ['ui.inspector.context'],
-      metadata: {,
+      metadata: {
   addedIn: '1.0.0',
 });
     // Schema Extension Points
@@ -354,7 +354,7 @@ export class ExtensionPointRegistry {
   priority: ExtensionPointPriority.HIGH,
   lifecycle: ExtensionPointLifecycle.STABLE,
   version: '1.0.0',
-  location: {,
+  location: {
   file: 'packages/core/graphSchema.ts',
   line: 7,
   function: 'NodeTypeEnum',
@@ -374,7 +374,7 @@ export class ExtensionPointRegistry {
         ]
       }],
       dependencies: ['schema.base'],
-      metadata: {,
+      metadata: {
   addedIn: '1.0.0',
 });
     // API Extension Points
@@ -386,7 +386,7 @@ export class ExtensionPointRegistry {
   priority: ExtensionPointPriority.MEDIUM,
   lifecycle: ExtensionPointLifecycle.STABLE,
   version: '1.0.0',
-  location: {,
+  location: {
   file: 'server/src/index.ts',
   line: 1,
   function: 'app',
@@ -412,7 +412,7 @@ export class ExtensionPointRegistry {
         ]
       }],
       dependencies: ['api.authentication'],
-      metadata: {,
+      metadata: {
   addedIn: '1.0.0',
 });
   /**

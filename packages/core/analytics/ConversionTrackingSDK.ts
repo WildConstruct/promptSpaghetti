@@ -19,58 +19,58 @@ import { ConversionEvent, ConversionEventType, ConversionCategory } from './Conv
 
 export interface ConversionTrackingConfig extends AnalyticsClientConfig {
   // Real-time streaming configuration
-  enableRealTimeStreaming: boolean;,
+  enableRealTimeStreaming: boolean;
   streamingEndpoint: string;
-  batchSize: number;,
+  batchSize: number;
   flushInterval: number; // milliseconds,
   // Privacy and consent
-  respectDoNotTrack: boolean;,
+  respectDoNotTrack: boolean;
   requireExplicitConsent: boolean;
   enableCrossDeviceTracking: boolean;
   // Performance and reliability
-  enableOfflineBuffering: boolean;,
+  enableOfflineBuffering: boolean;
   maxOfflineEvents: number;
-  eventValidationRules: EventValidationRule;,
+  eventValidationRules: EventValidationRule;
   deduplicationWindow: number; // milliseconds,
   // Debug and monitoring
   enableDebugLogging: boolean;
   errorReportingEndpoint?: string;
   export interface EventValidationRule {
-  field: string;,
+  field: string;
   type: 'required' | 'pattern' | 'range' | 'custom';
   value?: unknown;
-  validator?: (value: unknown) => boolean;,
+  validator?: (value: unknown) => boolean;
   errorMessage: string;
 }
 export interface QueuedEvent {
-  event: EnhancedConversionEvent;,
+  event: EnhancedConversionEvent;
   timestamp: number;
-  retryCount: number;,
+  retryCount: number;
   queuedOffline: boolean;
 }
 export interface TrackingMetrics {
-  eventsTracked: number;,
+  eventsTracked: number;
   eventsQueued: number;
-  eventsDropped: number;,
+  eventsDropped: number;
   streamingLatency: number;
-  validationErrors: number;,
+  validationErrors: number;
   duplicatesFiltered: number;
-  offlineEvents: number;,
+  offlineEvents: number;
   privacyBlockedEvents: number;
 }
 export interface ConversionContext {
-  sessionId: string;,
+  sessionId: string;
   userId: string;
-  deviceId: string;,
+  deviceId: string;
   timestamp: number;
-  touchpoints: TouchPoint;,
-  privacyConsent: {,
-  tracking: boolean;,
+  touchpoints: TouchPoint;
+  privacyConsent: {
+  tracking: boolean;
   analytics: boolean;
-  personalization: boolean;,
+  personalization: boolean;
   crossDevice: boolean;
 };
-  attribution: {,
+  attribution: {
   source: string;
   medium: string;
   campaign?: string;
@@ -216,14 +216,14 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   type: eventType as ConversionEventType,
   category: this.getCategoryForEventType(eventType) as ConversionCategory,
   value,
-  properties: {,
+  properties: {
   ...properties,
   deviceId: context.deviceId,
   source: context.attribution.source,
   medium: context.attribution.medium,
   campaign: context.attribution.campaign,
 },
-  metadata: {,
+  metadata: {
   userAgent: navigator.userAgent,
   referrer: document.referrer,
   campaignSource: context.attribution.source,
@@ -320,7 +320,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   * Get current tracking metrics
   */
   public getTrackingMetrics(): TrackingMetrics & {,
-  queueSize: number;,
+  queueSize: number;
   offlineBufferSize: number;
   streamingConnected: boolean;
   return {
@@ -444,7 +444,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   const payload = {
   type: 'conversion_events_batch',
   events: events.map(qe => qe.event),
-  metadata: {,
+  metadata: {
   batchId: this.generateBatchId(),
   timestamp: Date.now(),
   source: 'conversion_tracking_sdk',
@@ -468,12 +468,12 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       const fetchResponse = await fetch(`${this.conversionConfig.baseUrl}/analytics/conversion-events/batch`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
   events: events.map(qe => qe.event),
-  metadata: {,
+  metadata: {
   batchId: this.generateBatchId(),
   timestamp: Date.now(),
   source: 'conversion_tracking_sdk',

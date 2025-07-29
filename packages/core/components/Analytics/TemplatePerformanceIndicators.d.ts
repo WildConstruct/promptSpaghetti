@@ -531,7 +531,7 @@ export interface TrendForecast {
 export interface ForecastPeriod {
     timestamp: number;
     predictedValue: number;
-    confidenceInterval: {,
+    confidenceInterval: {
         min: number;
         max: number;
     };
@@ -610,7 +610,7 @@ export interface TemplatePerformanceExportData {
 export interface ExportConfig {
     format: 'json' | 'csv' | 'excel' | 'pdf';
     includeCharts: boolean;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };

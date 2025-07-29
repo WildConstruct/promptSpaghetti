@@ -19,34 +19,34 @@ interface TemplateCollaborationPanelProps {
   projectId?: string;
   className?: string;
 interface CollaborationUser {
-  id: string;,
+  id: string;
   name: string;
   email: string;
   avatar?: string;
-  role: 'owner' | 'editor' | 'viewer';,
+  role: 'owner' | 'editor' | 'viewer';
   joinedAt: string;
   lastActive: string;
 interface CollaborationActivity {
-  id: string;,
+  id: string;
   userId: string;
-  userEmail: string;,
+  userEmail: string;
   action: 'created' | 'updated' | 'shared' | 'forked' | 'used' | 'commented';
-  timestamp: string;,
+  timestamp: string;
   details: string;
   metadata?: Record<string, any>;
 interface TemplateAnalytics {
-  totalUses: number;,
+  totalUses: number;
   uniqueUsers: number;
-  successRate: number;,
+  successRate: number;
   averageRating: number;
-  forkCount: number;,
+  forkCount: number;
   usageByFormat: Record<string, number>;
   usageOverTime: Array<{ date: string; count: number }>;
   topUsers: Array<{ userId: string; email: string; uses: number }>;
 interface ShareSettings {
-  isPublic: boolean;,
+  isPublic: boolean;
   allowForks: boolean;
-  allowComments: boolean;,
+  allowComments: boolean;
   requireApproval: boolean;
   expiresAt?: string;
   shareLink?: string;
@@ -430,7 +430,7 @@ interface ShareSettings {
                             justifyContent: 'center',
                             color: 'white',
                             fontSize: '16px',
-                            fontWeight: '600';
+                            fontWeight: '600'
   }}
                         >
                           {!collaborator.avatar && collaborator.name.charAt(0).toUpperCase()}

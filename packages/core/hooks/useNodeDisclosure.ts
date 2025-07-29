@@ -39,10 +39,10 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
       const lowerName = fieldName.toLowerCase();
       
       if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
-        fieldLevel = 'debug';
-      } else if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
-        fieldLevel = 'advanced';
-      } else {
+        fieldLevel = 'debug'
+  } else if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
+        fieldLevel = 'advanced'
+  } else {
         fieldLevel = 'basic';
 
 

@@ -584,7 +584,8 @@ export var VerificationStep;
                                 recipient: challenge.challengeData.deliveryAddress,
                                 subject: 'Device Verification Code',
                                 content: {
-                                    text: `Your device verification code is: ${codeResult.code}` } }, html;
+                                    text: `Your device verification code is: ${codeResult.code}`
+                                } }, html;
                         }
                     }
                     metadata: {

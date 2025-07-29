@@ -17,9 +17,9 @@ import {
   Zap
 } from 'lucide-react';
 interface FeatureCard {
-  title: string;,
+  title: string;
   description: string;
-  icon: React.ElementType;,
+  icon: React.ElementType;
   status: 'completed' | 'in-progress' | 'planned';
   features: string;
   component?: string;

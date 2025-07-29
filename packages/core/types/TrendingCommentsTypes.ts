@@ -78,7 +78,7 @@ export const TrendingCommentSchema = z.object({)
   contentType: z.enum(['text', 'markdown', 'rich']).default('text'),
   mentions: z.array(z.string().uuid()).default([]), // Mentioned user IDs,
   hashtags: z.array(z.string()).default([]),
-  attachments: z.array(z.object({,)
+  attachments: z.array(z.object({)
   attachmentId: z.string().uuid(),
   type: z.enum(['image', 'video', 'audio', 'document', 'link']),
   url: z.string().url(),
@@ -204,23 +204,23 @@ export const CommentAnalyticsSchema = z.object({)
   moderationRate: z.number().min(0).max(1).default(0) // Flagged/removed percentage,
 }),
   trends: z.object({,)
-  commentVelocity: z.array(z.object({,)
+  commentVelocity: z.array(z.object({)
   timestamp: z.date(),
   count: z.number(),
 })).default([]),
-    engagementTrends: z.array(z.object({,)
+    engagementTrends: z.array(z.object({)
   timestamp: z.date(),
   likes: z.number(),
   replies: z.number(),
   shares: z.number(),
 })).default([]),
-    sentimentTrends: z.array(z.object({,)
+    sentimentTrends: z.array(z.object({)
   timestamp: z.date(),
   positive: z.number(),
   neutral: z.number(),
   negative: z.number(),
 })).default([]),
-    topicEvolution: z.array(z.object({,)
+    topicEvolution: z.array(z.object({)
   topic: z.string(),
   mentions: z.number(),
   sentiment: z.number(),
@@ -244,7 +244,7 @@ export const CommentAnalyticsSchema = z.object({)
   influentialCommenters: z.array(z.string()).default([]), // User IDs,
   emergingTrends: z.array(z.string()).default([]),
   contentRecommendations: z.array(z.string()).default([]),
-  moderationAlerts: z.array(z.object({,)
+  moderationAlerts: z.array(z.object({)
   type: z.string(),
   severity: z.enum(['low', 'medium', 'high', 'critical']),
   message: z.string(),
@@ -305,21 +305,21 @@ export const validateCommentScore = (data: unknown): CommentScore => {
 // Helper types
 
 export interface TrendingSystemConfig {
-  enabledAlgorithms: string;,
+  enabledAlgorithms: string;
   defaultAlgorithm: string;
-  cacheSettings: {,
+  cacheSettings: {
   trendingCacheTTL: number; // minutes,
   scoreCacheTTL: number; // minutes,
   analyticsCacheTTL: number; // minutes,
 };
-  moderationSettings: {,
+  moderationSettings: {
   autoModerationEnabled: boolean;
-  humanReviewThreshold: number;,
+  humanReviewThreshold: number;
   quarantineThreshold: number;
 };
-  performanceSettings: {,
+  performanceSettings: {
   maxCommentsToAnalyze: number;
-  batchSize: number;,
+  batchSize: number;
   maxConcurrentCalculations: number;
 };
 

@@ -60,7 +60,7 @@ export interface TargetingPreview {
         attributes: Record<string, any>;
         matchReasons: string[];
     }>;
-    demographics: {,
+    demographics: {
         age: Record<string, number>;
         location: Record<string, number>;
         userType: Record<string, number>;

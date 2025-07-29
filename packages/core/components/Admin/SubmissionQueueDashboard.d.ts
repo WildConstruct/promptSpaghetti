@@ -14,7 +14,7 @@ export interface QueueSubmission {
     submitter_email: string;
     status: 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
     version_number: number;
-    submission_data: {,
+    submission_data: {
         title: string;
         description: string;
         tags: string[];

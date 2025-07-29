@@ -85,8 +85,8 @@ export interface Project {
   autoSave: boolean;
   backupEnabled: boolean;
   collaborationEnabled: boolean;
-  visibility: 'private' | 'shared' | 'public';
-};
+  visibility: 'private' | 'shared' | 'public'
+  };
   created: Date;
   lastModified: Date;
   owner: string;
@@ -258,21 +258,23 @@ export class ProjectManager {
   compress: false,
   validateOutput: true,
 };
-      const result = serializeProject(;);
+      const result = serializeProject(
         graphData,
         metadata,
         settings,
         serializationOptions
       );
       if (!result.success) {
-  return {
-  success: false,
-  error: result.error,
-  warnings: result.warnings,
-};
+        return {
+          success: false,
+          error: result.error,
+          warnings: result.warnings,
+        };
+      }
+      
       // Create and trigger download
-      const fileName = ProjectManager.sanitizeFileName(;);
-        options.fileName || `${options.name}.psg`}
+      const fileName = ProjectManager.sanitizeFileName(
+        options.fileName || `${options.name}.psg`
       );
       const blob = new Blob([result.data!], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -284,15 +286,17 @@ export class ProjectManager {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       return {
-  success: true,
-  fileName,
-  warnings: result.warnings,
-};
+        success: true,
+        fileName,
+        warnings: result.warnings,
+      };
     } catch (error) {
-  return {
-  success: false,
-  error: error instanceof Error ? error.message : 'Unknown error during save',
-};
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error during save',
+      };
+    }
+  }
   /**
    * Static method to load project from device (Story 6.1)
    */
@@ -306,49 +310,55 @@ export class ProjectManager {
   try {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (!file) {
-  resolve({)
-  success: false,
-  error: 'No file selected',
-});
+              resolve({
+                success: false,
+                error: 'No file selected',
+              });
               return;
+            }
             const content = await file.text();
-            const deserializationOptions: DeserializationOptions = {,
-  skipValidation: false,
+            const deserializationOptions: DeserializationOptions = {
+              skipValidation: false,
   autoMigrate: true,
   preserveIds: true,
 };
             const result = deserializeProject(content, deserializationOptions);
             if (!result.success) {
-  resolve({)
-  success: false,
-  error: result.error,
-  warnings: result.warnings,
-});
+              resolve({
+                success: false,
+                error: result.error,
+                warnings: result.warnings,
+              });
               return;
-            resolve({)
-  success: true,
-  data: result.data,
-  warnings: result.warnings,
-});
+            }
+            resolve({
+              success: true,
+              data: result.data,
+              warnings: result.warnings,
+            });
           } catch (error) {
-  resolve({)
-  success: false,
-  error: error instanceof Error ? error.message : 'Unknown error during load',
-});
+            resolve({
+              success: false,
+              error: error instanceof Error ? error.message : 'Unknown error during load',
+            });
+          }
         };
         input.click();
       } catch (error) {
-  resolve({)
-  success: false,
-  error: error instanceof Error ? error.message : 'Unknown error creating file dialog',
-});
+        resolve({
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error creating file dialog',
+        });
+      }
     });
+  }
+
   /**
    * Sanitize file name to prevent invalid characters
    */
   static sanitizeFileName(fileName: string): string {
     // Remove or replace invalid characters
-    let sanitized = fileName;
+    let sanitized = fileName
       .replace(/[<>:"/\\|?*]/g, '_')  // Replace invalid chars with underscore
       .replace(/\s+/g, '_');          // Replace spaces with underscore
     // Keep multiple underscores for now, then clean up
@@ -357,11 +367,16 @@ export class ProjectManager {
       .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
     // Handle empty result
     if (!sanitized) {
-      sanitized = 'untitled';
+      sanitized = 'untitled'
+  }
+    
     // Ensure .psg extension
     if (!sanitized.toLowerCase().endsWith('.psg')) {
-      return `${sanitized}.psg`;}
+      return `${sanitized}.psg`;
+    }
     return sanitized;
+  }
+}
 
 // Export singleton instance
 export const projectManager = ProjectManager.getInstance();

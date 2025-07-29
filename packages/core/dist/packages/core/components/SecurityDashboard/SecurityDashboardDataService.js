@@ -351,7 +351,8 @@ Promise < ApiResponse < T >> {
 const requestOptions = {
     headers: {
         'Content-Type': 'application/json',
-        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }) }
+        ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+    }
 };
 options?.headers;
 timeout: this.config.timeout,

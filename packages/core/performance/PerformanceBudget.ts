@@ -9,14 +9,14 @@ import { ExecutionMetrics } from '../utils/performance';
 
 export interface PerformanceBudgetConfig {
   // Bundle Size Budgets
-  bundles: {,
+  bundles: {
   main: number;        // Main bundle size in KB,
   vendor: number;      // Vendor bundle size in KB,
   chunks: number;      // Individual chunk size in KB,
   total: number;       // Total bundle size in KB,
 };
   // Runtime Performance Budgets
-  runtime: {,
+  runtime: {
   firstContentfulPaint: number;   // FCP in ms,
   largestContentfulPaint: number; // LCP in ms,
   firstInputDelay: number;        // FID in ms,
@@ -24,28 +24,28 @@ export interface PerformanceBudgetConfig {
   timeToInteractive: number;      // TTI in ms,
 };
   // API Performance Budgets
-  api: {,
+  api: {
   graphExecution: number;         // Graph execution time in ms,
   preview: number;                // Preview generation time in ms,
   validation: number;             // Graph validation time in ms,
   authentication: number;         // Auth response time in ms,
 };
   // Memory Budgets
-  memory: {,
+  memory: {
   initialHeap: number;           // Initial heap size in MB,
   peakHeap: number;              // Peak heap size in MB,
   steadyState: number;           // Steady state heap in MB,
   leakThreshold: number;         // Memory leak threshold in MB/hour,
 };
   // Network Budgets
-  network: {,
+  network: {
   totalRequests: number;         // Max requests for initial load,
   totalTransferSize: number;     // Total transfer size in KB,
   thirdPartyRequests: number;    // Max third-party requests,
   criticalResourceCount: number; // Critical resource count,
 };
   // Build Performance Budgets
-  build: {,
+  build: {
   buildTime: number;             // Build time in seconds,
   typeCheckTime: number;         // TypeScript check time in seconds,
   lintTime: number;              // Linting time in seconds,
@@ -55,42 +55,42 @@ export interface PerformanceBudgetConfig {
 // Performance Budget Violation Types
 }
 export interface BudgetViolation {
-  category: string;,
+  category: string;
   metric: string;
-  budget: number;,
+  budget: number;
   actual: number;
-  threshold: number;,
+  threshold: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  impact: string;,
+  impact: string;
   suggestions: string;
   timestamp: number;
   // Performance Budget Results
 }
 export interface BudgetCheckResult {
-  passed: boolean;,
+  passed: boolean;
   score: number;          // 0-100 performance score,
-  violations: BudgetViolation;,
-  summary: {,
-  total: number;,
+  violations: BudgetViolation;
+  summary: {
+  total: number;
   critical: number;
-  high: number;,
+  high: number;
   medium: number;
   low: number;
 };
-  recommendations: string;,
+  recommendations: string;
   timestamp: number;
 
 // Real-time Performance Metrics
 }
 export interface PerformanceSnapshot {
-  timestamp: number;,
-  bundles: {,
-  main: number;,
+  timestamp: number;
+  bundles: {
+  main: number;
   vendor: number;
-  chunks: number;,
+  chunks: number;
   total: number;
 };
-  runtime: {,
+  runtime: {
   fcp?: number;
   lcp?: number;
   fid?: number;
@@ -98,21 +98,21 @@ export interface PerformanceSnapshot {
   tti?: number;
 };
   api: Record<string, number>;
-  memory: {,
+  memory: {
   used: number;
-  total: number;,
+  total: number;
   peak: number;
   gc: number;
 };
-  network: {,
+  network: {
   requestCount: number;
-  transferSize: number;,
+  transferSize: number;
   thirdParty: number;
 };
   build?: {
-  buildTime: number;,
+  buildTime: number;
   typeCheckTime: number;
-  lintTime: number;,
+  lintTime: number;
   testTime: number;
 };
 /**
@@ -534,10 +534,10 @@ export class PerformanceBudgetManager extends EventEmitter {
   /**
   * Get performance trend analysis
   */
-  getPerformanceTrends(): {,
-  bundleSize: number;,
+  getPerformanceTrends(): {
+  bundleSize: number;
   memoryUsage: number;
-  apiLatency: number;,
+  apiLatency: number;
   violations: number;
   const recent = this.snapshots.slice(-20);
   return {
@@ -569,38 +569,38 @@ export class PerformanceBudgetManager extends EventEmitter {
   this.snapshots = [];
   // Default performance budget configuration for Epic 18
   export const defaultPerformanceBudget: PerformanceBudgetConfig = {,
-  bundles: {,
+  bundles: {
   main: 250,      // 250KB main bundle,
   vendor: 500,    // 500KB vendor bundle,
   chunks: 100,    // 100KB max chunk size,
   total: 1000     // 1MB total bundle size,
 },
-  runtime: {,
+  runtime: {
   firstContentfulPaint: 1500,    // 1.5s FCP,
   largestContentfulPaint: 2500,  // 2.5s LCP,
   firstInputDelay: 100,          // 100ms FID,
   cumulativeLayoutShift: 0.1,    // 0.1 CLS,
   timeToInteractive: 3000        // 3s TTI,
 },
-  api: {,
+  api: {
   graphExecution: 1000,    // 1s graph execution,
   preview: 500,            // 500ms preview generation,
   validation: 100,         // 100ms validation,
   authentication: 200      // 200ms auth,
 },
-  memory: {,
+  memory: {
   initialHeap: 50,         // 50MB initial heap,
   peakHeap: 150,           // 150MB peak heap,
   steadyState: 75,         // 75MB steady state,
   leakThreshold: 5         // 5MB/hour leak threshold,
 },
-  network: {,
+  network: {
   totalRequests: 25,           // 25 total requests,
   totalTransferSize: 1500,     // 1.5MB transfer size,
   thirdPartyRequests: 5,       // 5 third-party requests,
   criticalResourceCount: 10    // 10 critical resources,
 },
-  build: {,
+  build: {
   buildTime: 60,          // 60s build time,
   typeCheckTime: 15,      // 15s type check,
   lintTime: 10,           // 10s linting,

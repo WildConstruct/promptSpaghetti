@@ -110,7 +110,8 @@ const loadPreferences = async () => {
                 [type]: {
                     ...prev.type_preferences[type],
                     [delivery]: enabled,
-                } });
+                }
+            });
             ;
         };
         const updateGlobalDelivery = (delivery, enabled) => {

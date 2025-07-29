@@ -1324,7 +1324,8 @@ ScalingImpact;
             dailyCostChange: costChange * 24,
             monthlyCostChange: costChange * 24 * 30,
             costPerRequestChange: (),
-            costChange } / Math.max(target.throughput * 3600),
+            costChange
+        } / Math.max(target.throughput * 3600),
         1: 
     } - (current.cost / Math.max(current.throughput * 3600, 1));
 }
@@ -1623,7 +1624,11 @@ ScalingImpact;
                                                     const fullConfig = { ...this.createDefaultConfig(), ...config };
                                                     return new ApiScalingAnalyticsIntegration(fullConfig);
                                                     export default ApiScalingAnalyticsIntegration;
-                                                } } } } }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             };
                         }
                     }

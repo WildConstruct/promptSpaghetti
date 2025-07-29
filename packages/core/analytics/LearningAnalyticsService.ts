@@ -475,7 +475,7 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
     case TimeRange.LAST_30D: return 'Last 30 days';
     case TimeRange.LAST_90D: return 'Last 90 days';
     case TimeRange.LAST_YEAR: return 'Last year';
-    case TimeRange.ALL_TIME: return 'All time';,
+    case TimeRange.ALL_TIME: return 'All time';
   default: return 'Custom range';
   // Additional helper methods for specific analytics calculations would be implemented here...
   // These methods handle the complex analytics logic for learning effectiveness,

@@ -46,7 +46,7 @@ describe('SecurityLogger', () => {
   unlockTime: undefined,
   failedAttempts: 5,
   securityEvents: ['failed_login', 'suspicious_ip'],
-  metadata: {,
+  metadata: {
   ipAddress: '192.168.1.1',
   userAgent: 'Mozilla/5.0',
   riskScore: 75,

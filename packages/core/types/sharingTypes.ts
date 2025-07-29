@@ -198,15 +198,15 @@ export const ShareMetricsSchema = z.object({)
     byReferrer: z.record(z.number()).default({})
   }).default({}),
   trends: z.object({,)
-  viewsOverTime: z.array(z.object({,)
+  viewsOverTime: z.array(z.object({)
   timestamp: z.date(),
   value: z.number(),
 })).default([]),
-    sharesOverTime: z.array(z.object({,)
+    sharesOverTime: z.array(z.object({)
   timestamp: z.date(),
   value: z.number(),
 })).default([]),
-    engagementOverTime: z.array(z.object({,)
+    engagementOverTime: z.array(z.object({)
   timestamp: z.date(),
   value: z.number(),
 })).default([])
@@ -307,17 +307,17 @@ const SocialPlatformSchema = z.enum(['twitter', 'linkedin', 'discord', 'slack', 
 // Helper types for convenience
 
 export interface ShareSystemConfig {
-  enabledPlatforms: SocialPlatform;,
+  enabledPlatforms: SocialPlatform;
   defaultPermissions: SharePermission;
-  analyticsRetentionDays: number;,
+  analyticsRetentionDays: number;
   maxSharesPerUser: number;
-  rateLimiting: {,
-  sharesPerHour: number;,
+  rateLimiting: {
+  sharesPerHour: number;
   embedsPerHour: number;
 };
-  customization: {,
+  customization: {
   allowCustomBranding: boolean;
-    allowCustomDomains: boolean;,
+    allowCustomDomains: boolean;
   maxEmbedSize: { width: number; height: number };
   };
 

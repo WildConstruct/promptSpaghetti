@@ -426,7 +426,7 @@ describe('Core Validation - validateConnection', () => {
   id: 'custom',
         type: 'custom',
         position: { x: 100, y: 200 },
-        data: {,
+        data: {
   label: 'Custom Node',
           customProperty: 'value',
           config: { enabled: true }

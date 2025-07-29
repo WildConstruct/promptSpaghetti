@@ -90,7 +90,7 @@ export class ContributionManagementService implements ContributionRepository {
     } catch (error) {
       console.error('Failed to get contribution:', error);
       throw error;
-  async getContributionsByUser(userId: string,)
+  async getContributionsByUser(userId: string)
     status?: ContributionStatus
   ): Promise<ContributionSubmission> {
     try {
@@ -106,7 +106,7 @@ export class ContributionManagementService implements ContributionRepository {
   // ====================================
   // Workflow Management
   // ====================================
-  async advanceWorkflowStage(contributionId: string,)
+  async advanceWorkflowStage(contributionId: string)
     newStage: WorkflowStage,
     notes?: string
   ): Promise<ContributionWorkflow> {
@@ -343,7 +343,7 @@ export class ContributionManagementService implements ContributionRepository {
   // ====================================
   // Private Helper Methods
   // ====================================
-  private async selectWorkflowTemplate(contributorId: string,)
+  private async selectWorkflowTemplate(contributorId: string)
   contributionType: string,
   category: string): Promise<string> {,
   try {
@@ -351,12 +351,12 @@ export class ContributionManagementService implements ContributionRepository {
   const contributorStats = await this.getContributorStatistics(contributorId);
   // Select workflow based on contributor reputation and content complexity
   if (contributorStats.reputation_score >= 85 && contributorStats.acceptance_rate >= 90) {
-  return 'trusted_contributor';
-} else if (contributorStats.total_contributions >= 5 && contributorStats.average_quality_score >= 80) {
-        return 'standard';
-      } else {
-        return 'comprehensive';
-    } catch (error) {
+  return 'trusted_contributor'
+  } else if (contributorStats.total_contributions >= 5 && contributorStats.average_quality_score >= 80) {
+        return 'standard'
+  } else {
+        return 'comprehensive'
+  } catch (error) {
       // Default to comprehensive workflow for new contributors
       return 'comprehensive';
   private initializeWorkflow(templateName: string): ContributionWorkflow {
@@ -389,7 +389,7 @@ export class ContributionManagementService implements ContributionRepository {
       accuracy_rating: 0,
       clarity_rating: 0,
       usefulness_rating: 0,
-      community_votes: {,
+      community_votes: {
   upvotes: 0,
   downvotes: 0,
   expert_endorsements: 0,
@@ -397,7 +397,7 @@ export class ContributionManagementService implements ContributionRepository {
   completion_rate: 0,
       success_rate: 0,
       time_to_complete: 0,
-      feedback_summary: {,
+      feedback_summary: {
   positive_feedback: [],
   improvement_suggestions: [],
   error_reports: [],
@@ -449,7 +449,7 @@ export class ContributionManagementService implements ContributionRepository {
   'post_publication': [],
 };
     return validTransitions[currentStage]?.includes(newStage) || false;
-  private async executeStageActions(contributionId: string,)
+  private async executeStageActions(contributionId: string)
     stage: WorkflowStage,
     workflow: ContributionWorkflow): Promise<void> {,
   switch (stage) {

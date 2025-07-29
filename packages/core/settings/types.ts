@@ -4,7 +4,7 @@ import { z } from 'zod';
 /**
  * Seed override configuration
  */
-export const SeedSettingsSchema = z.object({)
+export const SeedSettingsSchema = z.object({
   enabled: z.boolean().default(false),
   value: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).optional(),
   history: z.array(z.number().int()).max(10).default([]),
@@ -13,11 +13,11 @@ export const SeedSettingsSchema = z.object({)
 /**
  * Sampling temperature configuration for randomness control
  */
-export const TemperatureSettingsSchema = z.object({)
+export const TemperatureSettingsSchema = z.object({
   enabled: z.boolean().default(false),
   value: z.number().min(0.1).max(2.0).default(1.0),
   showIndicator: z.boolean().default(true),
-  presets: z.array(z.object({,)
+  presets: z.array(z.object({)
   name: z.string(),
   value: z.number(),
   description: z.string(),
@@ -30,7 +30,7 @@ export const TemperatureSettingsSchema = z.object({)
 /**
  * Run count configuration for batch execution
  */
-export const RunCountSettingsSchema = z.object({)
+export const RunCountSettingsSchema = z.object({
   value: z.number().int().min(1).max(50).default(5),
   showPerformanceWarning: z.boolean().default(true),
   presets: z.array(z.number().int()).default([1, 3, 5, 10, 20]),
@@ -38,7 +38,7 @@ export const RunCountSettingsSchema = z.object({)
 /**
  * Batch execution configuration
  */
-export const BatchSettingsSchema = z.object({)
+export const BatchSettingsSchema = z.object({
   batchSize: z.number().int().min(1).max(100).default(5),
   outputFormat: z.enum(['individual', 'combined', 'csv', 'json']).default('individual'),
   namingPattern: z.string().default('result-{seed}-{timestamp}'),
@@ -48,7 +48,7 @@ export const BatchSettingsSchema = z.object({)
 /**
  * Performance and debugging settings
  */
-export const PerformanceSettingsSchema = z.object({)
+export const PerformanceSettingsSchema = z.object({
   showExecutionTimes: z.boolean().default(false),
   enableCaching: z.boolean().default(true),
   showMemoryUsage: z.boolean().default(false),
@@ -57,7 +57,7 @@ export const PerformanceSettingsSchema = z.object({)
 /**
  * UI and accessibility settings
  */
-export const UISettingsSchema = z.object({)
+export const UISettingsSchema = z.object({
   theme: z.enum(['auto', 'light', 'dark']).default('auto'),
   showTooltips: z.boolean().default(true),
   enableKeyboardShortcuts: z.boolean().default(true),
@@ -67,7 +67,7 @@ export const UISettingsSchema = z.object({)
 /**
  * Complete settings schema
  */
-export const AdvancedSettingsSchema = z.object({)
+export const AdvancedSettingsSchema = z.object({
   // Core execution settings
   seed: SeedSettingsSchema,
   temperature: TemperatureSettingsSchema,
@@ -84,7 +84,7 @@ export const AdvancedSettingsSchema = z.object({)
 /**
  * Settings group configuration for UI organization
  */
-export const SettingsGroupSchema = z.object({)
+export const SettingsGroupSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().optional(),
@@ -96,7 +96,7 @@ export const SettingsGroupSchema = z.object({)
 /**
  * Individual setting item configuration
  */
-export const SettingItemSchema = z.object({)
+export const SettingItemSchema = z.object({
   key: z.string(),
   groupId: z.string(),
   label: z.string(),
@@ -129,9 +129,9 @@ export type SettingItem = z.infer<typeof SettingItemSchema>;
  */
 
 export interface SettingsChangeEvent {
-  key: string;,
+  key: string;
   value: any;
-  previousValue: any;,
+  previousValue: any;
   timestamp: Date;
   source: 'user' | 'system' | 'import';
   /**
@@ -139,7 +139,7 @@ export interface SettingsChangeEvent {
   */
 }
 export interface SettingsValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string;
   /**
@@ -147,9 +147,9 @@ export interface SettingsValidationResult {
   */
 }
 export interface SettingsExport {
-  settings: AdvancedSettings;,
-  metadata: {,
-  exportedAt: string;,
+  settings: AdvancedSettings;
+  metadata: {
+  exportedAt: string;
   version: string;
   appVersion: string;
 };

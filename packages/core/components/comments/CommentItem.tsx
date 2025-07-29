@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Comment } from '../../types/workspace';
 import { CommentForm } from './CommentForm';
 interface CommentItemProps {
-  comment: Comment;,
+  comment: Comment;
   userId: string;
   onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;

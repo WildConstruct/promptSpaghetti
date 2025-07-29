@@ -74,7 +74,7 @@ describe('Drag and Drop PSG Files', () => {
     };
     const mockSuccessResult = {
       success: true,
-      data: {,
+      data: {
   graph: { nodes: [], edges: [] },
         metadata: { name: 'Test Project' },
         settings: { autoSave: true }
@@ -82,7 +82,7 @@ describe('Drag and Drop PSG Files', () => {
     mockDeserializeProject.mockReturnValue(mockSuccessResult as unknown);
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);
@@ -105,7 +105,7 @@ describe('Drag and Drop PSG Files', () => {
 };
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);
@@ -120,7 +120,7 @@ describe('Drag and Drop PSG Files', () => {
     };
     const mockSuccessResult = {
       success: true,
-      data: {,
+      data: {
   graph: { nodes: [], edges: [] },
         metadata: { name: 'Test Project' },
         settings: { autoSave: true }
@@ -128,7 +128,7 @@ describe('Drag and Drop PSG Files', () => {
     mockDeserializeProject.mockReturnValue(mockSuccessResult as unknown);
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);
@@ -147,7 +147,7 @@ describe('Drag and Drop PSG Files', () => {
     mockDeserializeProject.mockReturnValue(mockFailureResult as unknown);
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);
@@ -162,7 +162,7 @@ describe('Drag and Drop PSG Files', () => {
 };
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);
@@ -171,7 +171,7 @@ describe('Drag and Drop PSG Files', () => {
   test('handles no files dropped', async () => {
   const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [],
 } as any;
     await handleDrop(event);
@@ -202,7 +202,7 @@ describe('Drag and Drop PSG Files', () => {
 } as unknown);
     const mockSuccessResult = {
       success: true,
-      data: {,
+      data: {
   graph: { nodes: [{ id: 'test' }], edges: [{ id: 'edge1' }] },
         metadata: { name: 'Test Project', author: 'Test Author' },
         settings: { autoSave: false, backupInterval: 10 }
@@ -210,7 +210,7 @@ describe('Drag and Drop PSG Files', () => {
     mockDeserializeProject.mockReturnValue(mockSuccessResult as unknown);
     const event = {
   preventDefault: jest.fn<unknown, unknown>(),
-  dataTransfer: {,
+  dataTransfer: {
   files: [mockFile],
 } as any;
     await handleDrop(event);

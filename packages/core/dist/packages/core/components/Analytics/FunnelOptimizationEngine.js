@@ -277,202 +277,176 @@ Promise < OptimizationAnalysisData > {
             timeToImpact: 7,
             affectedSteps: ['step-2'],
             targetedGoals: ['increase_conversion_rate', 'reduce_drop_off'],
-            implementation: {},
-            phases: [,
+            implementation: {
+                phases: [,
+                    {
+                        phase: 'Research & Design',
+                        description: 'User research and UX design improvements',
+                        duration: 7,
+                        deliverables: ['User journey analysis', 'New UX designs', 'Prototype'],
+                        dependencies: [],
+                        resources: ['UX Designer', 'User Researcher'],
+                        milestones: [,
+                            {
+                                name: 'Research Complete',
+                                date: Date.now() + 3 * 86400000,
+                                criteria: ['User interviews completed', 'Pain points identified'],
+                                dependencies: []
+                            }]
+                    },
+                    {
+                        phase: 'Development',
+                        description: 'Implement UX improvements',
+                        duration: 7,
+                        deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search'],
+                        dependencies: ['Research & Design'],
+                        resources: ['Frontend Developer', 'Backend Developer'],
+                        milestones: [,
+                            {
+                                name: 'Development Complete',
+                                date: Date.now() + 10 * 86400000,
+                                criteria: ['Features implemented', 'Testing complete'],
+                                dependencies: ['Research Complete']
+                            }],
+                    }
+                ],
+                resources: [,
+                    {
+                        type: 'design',
+                        hours: 40,
+                        skills: ['UX Design', 'User Research'],
+                        urgency: 'immediate',
+                    },
+                    {
+                        type: 'development',
+                        hours: 80,
+                        skills: ['React', 'TypeScript', 'API Integration'],
+                        urgency: 'soon'
+                    }],
+                timeline: [],
+                risksAndMitigations: [,
+                    {
+                        risk: 'User adoption of new interface',
+                        probability: 0.3,
+                        impact: 40,
+                        mitigation: 'Gradual rollout with user feedback',
+                        contingency: 'Rollback capability with feature flags'
+                    }],
+                successCriteria: [,
+                    {
+                        metric: 'Step 2 conversion rate',
+                        target: 80,
+                        measurement: 'Percentage of users completing template browse',
+                        timeframe: 30,
+                    },
+                    {
+                        metric: 'Time spent on step',
+                        target: 120,
+                        measurement: 'Average seconds spent browsing templates',
+                        timeframe: 30
+                    }]
+            },
+            validation: {
+                hypothesis: 'Improved template browsing UX will increase step conversion rate by 15%',
+                testMethod: 'ab_test',
+                sampleSize: 10000,
+                duration: 14,
+                successMetrics: [,
+                    {
+                        metric: 'conversion_rate',
+                        target: 15,
+                        tolerance: 5,
+                        significance: 0.05
+                    }],
+                stopConditions: [,
+                    {
+                        condition: 'conversion_rate_decrease',
+                        threshold: -5,
+                        action: 'stop'
+                    }]
+            },
+            dependencies: [],
+            alternatives: [,
                 {
-                    phase: 'Research & Design',
-                    description: 'User research and UX design improvements',
-                    duration: 7,
-                    deliverables: ['User journey analysis', 'New UX designs', 'Prototype'],
-                    dependencies: [],
-                    resources: ['UX Designer', 'User Researcher'],
-                    milestones: [,
-                        {
-                            name: 'Research Complete',
-                            date: Date.now() + 3 * 86400000,
-                            criteria: ['User interviews completed', 'Pain points identified'],
-                            dependencies: []
-                        }]
-                },
-                {
-                    phase: 'Development',
-                    description: 'Implement UX improvements',
-                    duration: 7,
-                    deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search'],
-                    dependencies: ['Research & Design'],
-                    resources: ['Frontend Developer', 'Backend Developer'],
-                    milestones: [,
-                        {
-                            name: 'Development Complete',
-                            date: Date.now() + 10 * 86400000,
-                            criteria: ['Features implemented', 'Testing complete'],
-                            dependencies: ['Research Complete']
-                        }],
-                }
-            ],
-            resources: [,
-                {
-                    type: 'design',
-                    hours: 40,
-                    skills: ['UX Design', 'User Research'],
-                    urgency: 'immediate',
-                },
-                {
-                    type: 'development',
-                    hours: 80,
-                    skills: ['React', 'TypeScript', 'API Integration'],
-                    urgency: 'soon'
-                }],
-            timeline: [],
-            risksAndMitigations: [,
-                {
-                    risk: 'User adoption of new interface',
-                    probability: 0.3,
-                    impact: 40,
-                    mitigation: 'Gradual rollout with user feedback',
-                    contingency: 'Rollback capability with feature flags'
-                }],
-            successCriteria: [,
-                {
-                    metric: 'Step 2 conversion rate',
-                    target: 80,
-                    measurement: 'Percentage of users completing template browse',
-                    timeframe: 30,
-                },
-                {
-                    metric: 'Time spent on step',
-                    target: 120,
-                    measurement: 'Average seconds spent browsing templates',
-                    timeframe: 30
+                    title: 'Simplified Quick Browse Mode',
+                    description: 'Add a simplified browse mode for quick decisions',
+                    impactScore: 65,
+                    effortScore: 30,
+                    riskScore: 15,
+                    tradeoffs: ['Lower long-term engagement', 'Simpler to implement']
                 }]
         },
-        validation, {},
-        hypothesis, 'Improved template browsing UX will increase step conversion rate by 15%',
-        testMethod, 'ab_test',
-        sampleSize, 10000,
-        duration, 14,
-        successMetrics, [,
-            {
-                metric: 'conversion_rate',
-                target: 15,
-                tolerance: 5,
-                significance: 0.05
-            }],
-        stopConditions, [,
-            {
-                condition: 'conversion_rate_decrease',
-                threshold: -5,
-                action: 'stop'
-            }]
-    ]
-},
-    dependencies;
-[],
-    alternatives;
-[,
-    {
-        title: 'Simplified Quick Browse Mode',
-        description: 'Add a simplified browse mode for quick decisions',
-        impactScore: 65,
-        effortScore: 30,
-        riskScore: 15,
-        tradeoffs: ['Lower long-term engagement', 'Simpler to implement']
-    }];
-{
-    id: 'rec-002',
-        title;
-    'Add Progressive Template Previews',
-        description;
-    'Implement progressive template loading and preview system to reduce bounce rate and improve engagement',
-        category;
-    'technical_performance',
-        priority;
-    'high',
-        impactScore;
-    70,
-        confidenceScore;
-    0.8,
-        effortScore;
-    45,
-        riskScore;
-    30,
-        roiEstimate;
-    3.1,
-        timeToImplement;
-    10,
-        timeToImpact;
-    5,
-        affectedSteps;
-    ['step-2', 'step-3'],
-        targetedGoals;
-    ['improve_user_experience', 'reduce_time_to_convert'],
-        implementation;
-    {
-        phases: [,
-            {
-                phase: 'Technical Architecture',
-                description: 'Design progressive loading system',
-                duration: 3,
-                deliverables: ['Technical specification', 'Architecture design'],
-                dependencies: [],
-                resources: ['Technical Lead', 'Senior Developer'],
-                milestones: [],
+        {
+            id: 'rec-002',
+            title: 'Add Progressive Template Previews',
+            description: 'Implement progressive template loading and preview system to reduce bounce rate and improve engagement',
+            category: 'technical_performance',
+            priority: 'high',
+            impactScore: 70,
+            confidenceScore: 0.8,
+            effortScore: 45,
+            riskScore: 30,
+            roiEstimate: 3.1,
+            timeToImplement: 10,
+            timeToImpact: 5,
+            affectedSteps: ['step-2', 'step-3'],
+            targetedGoals: ['improve_user_experience', 'reduce_time_to_convert'],
+            implementation: {
+                phases: [,
+                    {
+                        phase: 'Technical Architecture',
+                        description: 'Design progressive loading system',
+                        duration: 3,
+                        deliverables: ['Technical specification', 'Architecture design'],
+                        dependencies: [],
+                        resources: ['Technical Lead', 'Senior Developer'],
+                        milestones: [],
+                    },
+                    {
+                        phase: 'Implementation',
+                        description: 'Build progressive preview system',
+                        duration: 7,
+                        deliverables: ['Preview system', 'Lazy loading', 'Performance optimization'],
+                        dependencies: ['Technical Architecture'],
+                        resources: ['Frontend Developer', 'Backend Developer'],
+                        milestones: []
+                    }],
+                resources: [,
+                    {
+                        type: 'development',
+                        hours: 60,
+                        skills: ['React', 'Performance Optimization', 'CDN'],
+                        urgency: 'soon'
+                    }],
+                timeline: [],
+                risksAndMitigations: [],
+                successCriteria: [,
+                    {
+                        metric: 'Page load time',
+                        target: 2000,
+                        measurement: 'Milliseconds to interactive',
+                        timeframe: 14
+                    }]
             },
-            {
-                phase: 'Implementation',
-                description: 'Build progressive preview system',
-                duration: 7,
-                deliverables: ['Preview system', 'Lazy loading', 'Performance optimization'],
-                dependencies: ['Technical Architecture'],
-                resources: ['Frontend Developer', 'Backend Developer'],
-                milestones: []
-            }],
-            resources;
-        [,
-            {
-                type: 'development',
-                hours: 60,
-                skills: ['React', 'Performance Optimization', 'CDN'],
-                urgency: 'soon'
-            }],
-            timeline;
-        [],
-            risksAndMitigations;
-        [],
-            successCriteria;
-        [,
-            {
-                metric: 'Page load time',
-                target: 2000,
-                measurement: 'Milliseconds to interactive',
-                timeframe: 14
-            }];
-    }
-    validation: {
-        hypothesis: 'Progressive previews will reduce bounce rate by 20%',
-            testMethod;
-        'ab_test',
-            sampleSize;
-        8000,
-            duration;
-        10,
-            successMetrics;
-        [,
-            {
-                metric: 'bounce_rate',
-                target: -20,
-                tolerance: 5,
-                significance: 0.05
-            }],
-            stopConditions;
-        [],
-        ;
-    }
-    dependencies: [],
-        alternatives;
-    [];
-    ;
-    const experimentPlans = [
+            validation: {
+                hypothesis: 'Progressive previews will reduce bounce rate by 20%',
+                testMethod: 'ab_test',
+                sampleSize: 8000,
+                duration: 10,
+                successMetrics: [,
+                    {
+                        metric: 'bounce_rate',
+                        target: -20,
+                        tolerance: 5,
+                        significance: 0.05
+                    }],
+                stopConditions: [],
+            },
+            dependencies: [],
+            alternatives: []
+        }
+    ],
+    const: experimentPlans, ExperimentPlan = [
         {
             id: 'exp-001',
             name: 'Template Browse UX Optimization',
@@ -511,95 +485,85 @@ Promise < OptimizationAnalysisData > {
                     expectedImpact: 15,
                     riskLevel: 'medium'
                 }],
-            trafficAllocation: {},
-            strategy: 'equal',
-            exclusionCriteria: ['Mobile users under 5 sessions'],
-            inclusionCriteria: ['Active template browsers'],
-        },
-        duration, 14,
-        sampleSize, {},
-        minimumDetectableEffect, 15,
-        baselineConversionRate, 65,
-        power, 0.8,
-        significance, 0.05,
-        calculatedSampleSize, 10000,
-        recommendedDuration, 14,
-        confidenceInterval, [0.8, 1.2],
-    ];
-}
-successMetrics: [,
-    {
-        name: 'Step Conversion Rate',
-        type: 'primary',
-        calculation: 'Users completing step / Users entering step',
-        target: 15,
-        minimumDetectableEffect: 10
-    }],
-    guardrailMetrics;
-[,
-    {
-        name: 'Overall Funnel Conversion',
-        threshold: -5,
-        direction: 'decrease',
-        action: 'stop'
-    }],
-    analysisFramework;
-{
-    method: 'frequentist',
-        interimAnalyses;
-    [,
-        {
-            day: 7,
-            purpose: 'Early signal detection',
-            metrics: ['conversion_rate', 'engagement'],
-            decisionCriteria: ['Statistical significance', 'Guardrail violations']
-        }],
-        finalAnalysis;
-    {
-        methods: ['T-test', 'Chi-square'],
-            visualizations;
-        ['Conversion funnel', 'Time series'],
-            segmentAnalysis;
-        ['Device type', 'User segment'],
-            statisticalTests;
-        ['Welch t-test', 'Mann-Whitney U'],
-        ;
-    }
-    reportingSchedule: [,
-        {
-            frequency: 'daily',
-            audience: ['Product Team', 'Engineering'],
-            content: ['Key metrics', 'Guardrails', 'User feedback']
-        }];
-}
-riskAssessment: {
-    businessRisks: [,
-        {
-            risk: 'Decreased conversion rate',
-            probability: 0.2,
-            impact: 50,
-            mitigation: 'Real-time monitoring with automatic stop conditions'
-        }],
-        technicalRisks;
-    [,
-        {
-            risk: 'Performance degradation',
-            probability: 0.3,
-            impact: 30,
-            mitigation: 'Load testing and performance monitoring'
-        }],
-        userExperienceRisks;
-    [,
-        {
-            risk: 'User confusion with new interface',
-            probability: 0.4,
-            impact: 25,
-            mitigation: 'User feedback collection and support documentation'
-        }],
-        mitigationPlans;
-    [];
-    ;
-    return {
+            trafficAllocation: {
+                strategy: 'equal',
+                exclusionCriteria: ['Mobile users under 5 sessions'],
+                inclusionCriteria: ['Active template browsers'],
+            },
+            duration: 14,
+            sampleSize: {
+                minimumDetectableEffect: 15,
+                baselineConversionRate: 65,
+                power: 0.8,
+                significance: 0.05,
+                calculatedSampleSize: 10000,
+                recommendedDuration: 14,
+                confidenceInterval: [0.8, 1.2],
+            },
+            successMetrics: [,
+                {
+                    name: 'Step Conversion Rate',
+                    type: 'primary',
+                    calculation: 'Users completing step / Users entering step',
+                    target: 15,
+                    minimumDetectableEffect: 10
+                }],
+            guardrailMetrics: [,
+                {
+                    name: 'Overall Funnel Conversion',
+                    threshold: -5,
+                    direction: 'decrease',
+                    action: 'stop'
+                }],
+            analysisFramework: {
+                method: 'frequentist',
+                interimAnalyses: [,
+                    {
+                        day: 7,
+                        purpose: 'Early signal detection',
+                        metrics: ['conversion_rate', 'engagement'],
+                        decisionCriteria: ['Statistical significance', 'Guardrail violations']
+                    }],
+                finalAnalysis: {
+                    methods: ['T-test', 'Chi-square'],
+                    visualizations: ['Conversion funnel', 'Time series'],
+                    segmentAnalysis: ['Device type', 'User segment'],
+                    statisticalTests: ['Welch t-test', 'Mann-Whitney U'],
+                },
+                reportingSchedule: [,
+                    {
+                        frequency: 'daily',
+                        audience: ['Product Team', 'Engineering'],
+                        content: ['Key metrics', 'Guardrails', 'User feedback']
+                    }]
+            },
+            riskAssessment: {
+                businessRisks: [,
+                    {
+                        risk: 'Decreased conversion rate',
+                        probability: 0.2,
+                        impact: 50,
+                        mitigation: 'Real-time monitoring with automatic stop conditions'
+                    }],
+                technicalRisks: [,
+                    {
+                        risk: 'Performance degradation',
+                        probability: 0.3,
+                        impact: 30,
+                        mitigation: 'Load testing and performance monitoring'
+                    }],
+                userExperienceRisks: [,
+                    {
+                        risk: 'User confusion with new interface',
+                        probability: 0.4,
+                        impact: 25,
+                        mitigation: 'User feedback collection and support documentation'
+                    }],
+                mitigationPlans: []
+            }
+        }
+    ],
+    return: {
         recommendations,
         experimentPlans,
         impactPredictions: recommendations.map(rec => ({}), recommendationId, rec.id, predictedImpact, [,
@@ -625,19 +589,14 @@ riskAssessment: {
         },
         expectedROI: rec.roiEstimate,
         priority: index + 1
-    };
+    },
     priorities: {
         highImpactLowEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore < 40).map(r => r.id),
-            highImpactHighEffort;
-        recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
-            lowImpactLowEffort;
-        recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
-            lowImpactHighEffort;
-        recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
-        ;
-    }
-    timeline: Array.from({ length: 6 }, (_, i) => ({}), period, `Month ${i + 1}`);
-}
+        highImpactHighEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
+        lowImpactLowEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
+        lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
+    },
+    timeline: Array.from({ length: 6 }, (_, i) => ({}), period, `Month ${i + 1}`) };
 allocations: recommendations.filter((_, index) => index % 6 === i).map((rec, allocIndex) => ({}), recommendationId, rec.id, allocatedBudget, rec.effortScore * 500, allocatedTime, rec.timeToImplement, allocatedResources, [], expectedROI, rec.roiEstimate, priority, allocIndex + 1);
 capacity: {
     available: 100,

@@ -41,7 +41,7 @@ describe('TrustedDeviceManager', () => {
   createdAt: new Date(),
   lastSeen: new Date(),
   seenCount: 1,
-  basic: {,
+  basic: {
   userAgent: testContext.userAgent,
   language: 'en-US',
   platform: 'MacOS',
@@ -50,15 +50,15 @@ describe('TrustedDeviceManager', () => {
   timezone: 'America/Los_Angeles',
   timezoneOffset: -480,
 },
-  enhanced: {,
-  screen: {,
+  enhanced: {
+  screen: {
   width: 1920,
   height: 1080,
   colorDepth: 24,
   pixelRatio: 2,
   orientation: 'landscape',
 },
-  browser: {,
+  browser: {
   name: 'Chrome',
   version: '126',
   engine: 'Blink',
@@ -66,7 +66,7 @@ describe('TrustedDeviceManager', () => {
 },
   plugins: [],
       fonts: [],
-      webgl: {,
+      webgl: {
   vendor: 'Intel',
         renderer: 'Intel Iris',
         version: 'WebGL 2.0',
@@ -74,51 +74,51 @@ describe('TrustedDeviceManager', () => {
         extensions: [],
         parameters: {}
   },
-  canvas: {,
+  canvas: {
   fingerprint: 'canvas-fp-123',
   geometry: 'geo-123',
   text: 'text-123',
 },
-  audio: {,
+  audio: {
   fingerprint: 'audio-fp-123',
   sampleRate: 48000,
   channelCount: 2,
   contextState: 'running',
 },
-  comprehensive: {,
-  hardware: {,
+  comprehensive: {
+  hardware: {
   cpuCores: 8,
   memory: 16,
   touchSupport: false,
   sensors: [],
   bluetooth: true,
   usb: true,
-  webrtc: {,
+  webrtc: {
   supported: true,
   localCandidates: [],
   stunServers: [],
 },
-  network: {,
+  network: {
   connectionType: 'wifi',
   downlink: 100,
   effectiveType: '4g',
   rtt: 50,
 },
-  permissions: {,
+  permissions: {
   camera: 'granted',
   microphone: 'granted',
   location: 'prompt',
   notifications: 'granted',
   persistentStorage: 'granted',
 },
-  storage: {,
+  storage: {
   localStorage: true,
   sessionStorage: true,
   indexedDB: true,
   webSQL: false,
   quota: 1000000,
 },
-  features: {,
+  features: {
   webAssembly: true,
   serviceWorker: true,
   webWorker: true,
@@ -134,12 +134,12 @@ describe('TrustedDeviceManager', () => {
   source: 'ip',
   accuracy: 5000,
   confidence: 85,
-  coordinates: {,
+  coordinates: {
   latitude: 37.7749,
   longitude: -122.4194,
   accuracy: 5000,
 },
-  address: {,
+  address: {
   country: 'United States',
   countryCode: 'US',
   region: 'California',
@@ -147,7 +147,7 @@ describe('TrustedDeviceManager', () => {
   city: 'San Francisco',
   postalCode: '94102',
 },
-  network: {,
+  network: {
   ipAddress: '192.168.1.100',
   isp: 'Comcast',
   timezone: 'America/Los_Angeles',
@@ -157,7 +157,7 @@ describe('TrustedDeviceManager', () => {
   hostingProvider: false,
   datacenter: false,
 },
-  metadata: {,
+  metadata: {
   language: 'en',
   currency: 'USD',
   callingCode: '+1',
@@ -190,7 +190,7 @@ describe('TrustedDeviceManager', () => {
   requireLocationCheck: true,
   allowRoaming: false,
   autoExpireInactiveDays: 90,
-  riskThreshold: {,
+  riskThreshold: {
   full: 20,
   partial: 50,
   deny: 80,
@@ -381,12 +381,12 @@ describe('TrustedDeviceManager', () => {
       // Check trust from different location
       const differentLocation: LocationData = {
   ...testLocation,
-  coordinates: {,
+  coordinates: {
   latitude: 40.7128, // New York,
   longitude: -74.0060,
   accuracy: 5000,
 },
-  address: {,
+  address: {
   ...testLocation.address,
   city: 'New York',
   region: 'New York',
@@ -569,7 +569,7 @@ describe('TrustedDeviceManager', () => {
 };
       const mobileFingerprint: DeviceFingerprint = {
   ...testFingerprint,
-  basic: {,
+  basic: {
   ...testFingerprint.basic,
   userAgent: mobileContext.userAgent,
   platform: 'iPhone',
@@ -591,7 +591,7 @@ describe('TrustedDeviceManager', () => {
 };
       const tabletFingerprint: DeviceFingerprint = {
   ...testFingerprint,
-  basic: {,
+  basic: {
   ...testFingerprint.basic,
   userAgent: tabletContext.userAgent,
   platform: 'iPad',

@@ -8,87 +8,87 @@
 import { ReactionData, ReactionSummary, ReactionType } from '../components/Reactions/ReactionButton';
 
 export interface ReactionAnalytics {
-  contentId: string;,
+  contentId: string;
   timeRange: { start: Date; end: Date };
-  totalReactions: number;,
+  totalReactions: number;
   uniqueReactors: number;
   reactionBreakdown: Record<string, {
-  count: number;,
+  count: number;
   percentage: number;
-  trend: 'increasing' | 'decreasing' | 'stable';
-}>;
-  sentimentAnalysis: {,
+  trend: 'increasing' | 'decreasing' | 'stable'
+  }>;
+  sentimentAnalysis: {
   overallScore: number; // -1 to 1,
-  positivePercentage: number;,
+  positivePercentage: number;
   neutralPercentage: number;
-  negativePercentage: number;,
+  negativePercentage: number;
   emotionalDistribution: Record<string, number>;
 };
-  engagementMetrics: {,
+  engagementMetrics: {
   reactionRate: number; // reactions per view,
   velocityScore: number; // reactions per hour,
   viralityIndicator: number; // share potential,
   retentionScore: number; // sustained engagement,
 };
-  temporalPatterns: {,
+  temporalPatterns: {
   hourlyDistribution: number;
-  dailyDistribution: number;,
+  dailyDistribution: number;
   peakActivityHours: number;
   seasonalTrends?: Array<{,
-  period: string;,
+  period: string;
   count: number;
   change: number;
 }>;
   };
-  comparativeMetrics: {,
+  comparativeMetrics: {
   vsAverageContent: number; // percentage above/below average,
   categoryRanking: number; // percentile within category,
   similarContentComparison: Array<{,
-  contentId: string;,
+  contentId: string;
   similarity: number;
   reactionPattern: string;
 }>;
   };
 }
 export interface ReactionBehaviorInsights {
-  userId: string;,
+  userId: string;
   timeRange: { start: Date; end: Date };
-  totalReactions: number;,
+  totalReactions: number;
   favoriteReactions: string;
   reactionFrequency: Record<string, number>;
   contentAffinity: Array<{,
   contentType: string;
-  reactionCount: number;,
+  reactionCount: number;
   preferredReactions: string;
 }>;
-  behaviorPatterns: {,
+  behaviorPatterns: {
   reactsQuickly: boolean; // reacts within minutes of viewing,
   consideredReactor: boolean; // tends to use thoughtful reactions,
   positivityScore: number; // tends toward positive reactions,
   influencer: boolean; // reactions influence others,
 };
-  engagementTiming: {,
+  engagementTiming: {
   mostActiveHours: number;
   averageResponseTime: number; // minutes,
   burstyBehavior: boolean; // tends to react in batches,
 };
 }
 export interface ReactionTrend {
-  reactionType: string;,
+  reactionType: string;
   timeRange: { start: Date; end: Date };
   trendData: Array<{,
   timestamp: Date;
-  count: number;,
+  count: number;
   cumulativeCount: number;
 }>;
   growthRate: number; // percentage change,
   momentum: 'accelerating' | 'steady' | 'declining' | 'stagnant';
   peakPeriods: Array<{,
   start: Date;
-  end: Date;,
+  end: Date;
   intensity: number;
 }>;
-  seasonality: {,
+  seasonality: {
   hasPattern: boolean;
   cycleLength?: number; // hours/days,
   amplitude?: number;
@@ -96,34 +96,34 @@ export interface ReactionTrend {
 }
 export interface BulkReactionOperation {
   operations: Array<{,
-  contentId: string;,
+  contentId: string;
   userId: string;
-  action: 'add' | 'remove' | 'change';,
+  action: 'add' | 'remove' | 'change';
   reactionType: string;
   previousReaction?: string;
 }>;
-  batchId: string;,
+  batchId: string;
   timestamp: Date;
   metadata?: Record<string, unknown>;
 }
 export interface ReactionModerationAction {
-  actionType: 'hide' | 'remove' | 'flag' | 'approve' | 'escalate';,
+  actionType: 'hide' | 'remove' | 'flag' | 'approve' | 'escalate';
   reactionIds: string;
-  moderatorId: string;,
+  moderatorId: string;
   reason: string;
   metadata?: Record<string, unknown>;
 }
 export interface ReactionConfig {
-  enabledReactions: string;,
+  enabledReactions: string;
   maxReactionsPerUser: number;
   maxReactionsPerContent?: number;
-  enableAnonymousReactions: boolean;,
+  enableAnonymousReactions: boolean;
   enableReactionModeration: boolean;
-  reactionCooldownMs: number;,
+  reactionCooldownMs: number;
   enableRealTimeUpdates: boolean;
-  analyticsRetentionDays: number;,
-  spamDetection: {,
-  enabled: boolean;,
+  analyticsRetentionDays: number;
+  spamDetection: {
+  enabled: boolean;
   maxReactionsPerMinute: number;
   suspiciousPatternThreshold: number;
 };
@@ -156,13 +156,13 @@ export class ReactionService {
   reactionCooldownMs: 1000, // 1 second cooldown,
   enableRealTimeUpdates: true,
   analyticsRetentionDays: 365,
-  spamDetection: {,
+  spamDetection: {
   enabled: true,
   maxReactionsPerMinute: 10,
   suspiciousPatternThreshold: 5,
 },
-  contentTypeSettings: {,
-  'template': {,
+  contentTypeSettings: {
+  'template': {
   enabledReactions: ['love', 'like', 'helpful', 'amazing', 'rocket'],
   maxReactions: 5000,
   requireAuth: false,
@@ -186,7 +186,7 @@ export class ReactionService {
   success: boolean;
   reactionId?: string;
   previousReaction?: string;
-  summary: ReactionSummary;,
+  summary: ReactionSummary;
   message: string;
 }> {
     try {
@@ -250,7 +250,7 @@ export class ReactionService {
    */
   async removeReaction(reactionId: string, userId: string): Promise<{,
   success: boolean;
-  summary: ReactionSummary;,
+  summary: ReactionSummary;
   message: string;
 }> {
     try {
@@ -290,7 +290,7 @@ export class ReactionService {
   /**
    * Get reaction summary for content
    */
-  async getReactionSummary(contentId: string,)
+  async getReactionSummary(contentId: string)
     userId?: string
   ): Promise<ReactionSummary> {
     try {
@@ -339,7 +339,7 @@ export class ReactionService {
   /**
    * Get comprehensive reaction analytics
    */
-  async getReactionAnalytics(contentId: string,)
+  async getReactionAnalytics(contentId: string)
     timeRange?: { start: Date; end: Date }
   ): Promise<ReactionAnalytics> {
   const range = timeRange || {
@@ -370,7 +370,7 @@ export class ReactionService {
   /**
    * Get user behavior insights
    */
-  async getUserBehaviorInsights(userId: string,)
+  async getUserBehaviorInsights(userId: string)
     timeRange?: { start: Date; end: Date }
   ): Promise<ReactionBehaviorInsights> {
   const range = timeRange || {
@@ -402,9 +402,9 @@ export class ReactionService {
    */
   async executeBulkOperations(operations: BulkReactionOperation): Promise<{,
   successful: number;
-  failed: number;,
+  failed: number;
   results: Array<{,
-  contentId: string;,
+  contentId: string;
   success: boolean;
   error?: string;
 }>;
@@ -591,7 +591,7 @@ export class ReactionService {
       reactionCounts: {},
       topReactions: [],
       sentimentScore: 0,
-      engagementLevel: 'low';
+      engagementLevel: 'low'
   };
   private calculateReactionBreakdown(reactions: ReactionData): Record<string, any> {
     const breakdown: Record<string, any> = {};

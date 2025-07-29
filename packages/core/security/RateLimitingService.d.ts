@@ -56,24 +56,24 @@ export interface RateLimitConfig {
 export interface EndpointLimits {
     category: EndpointCategory;
     endpoint: string;
-    limits: {,
+    limits: {
         perSecond: number;
         perMinute: number;
         perHour: number;
         perDay: number;
     };
-    backoff: {,
+    backoff: {
         strategy: BackoffStrategy;
         baseDelay: number;
         maxDelay: number;
         multiplier: number;
     };
-    burst: {,
+    burst: {
         enabled: boolean;
         size: number;
         refillRate: number;
     };
-    adaptiveTriggers: {,
+    adaptiveTriggers: {
         suspiciousActivityThreshold: number;
         threatLevelAdjustments: Record<ThreatLevel, number>;
     };
@@ -83,7 +83,7 @@ export interface RateLimitAttempt {
     endpoint: string;
     timestamp: Date;
     success: boolean;
-    metadata: {,
+    metadata: {
         userAgent?: string;
         location?: string;
         sessionId?: string;
@@ -120,7 +120,7 @@ export interface ThreatContext {
         region: string;
         suspicious: boolean;
     };
-    behaviorPattern: {,
+    behaviorPattern: {
         rapidRequests: boolean;
         unusualTiming: boolean;
         multipleEndpoints: boolean;

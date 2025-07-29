@@ -274,7 +274,8 @@ return {
     statisticalTests,
     insights,
     metadata: {
-        comparisonId: `comparison-${Date.now()}` }
+        comparisonId: `comparison-${Date.now()}`
+    }
 },
     generatedAt;
 Date.now(),

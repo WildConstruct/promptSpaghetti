@@ -100,7 +100,7 @@ _jsxs("div", { ref: sliderRef, className: "slider-container", style: {
                     < div, "className=\"slider-tooltip\" style=", {
                     position: 'absolute',
                     left: `${percentage}%`
-                }, ", bottom: '24px', transform: 'translateX(-50%)', backgroundColor: '#1a202c', color: '#e2e8f0', padding: '4px 8px', borderRadius: 4, fontSize: 12, fontWeight: 500, border: '1px solid #4a5568', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', whiteSpace: 'nowrap', zIndex: 10, pointerEvents: 'none'; }} >", value.toFixed(step < 1 ? 1 : 0), _jsx("div", { style: {
+                }, ", bottom: '24px', transform: 'translateX(-50%)', backgroundColor: '#1a202c', color: '#e2e8f0', padding: '4px 8px', borderRadius: 4, fontSize: 12, fontWeight: 500, border: '1px solid #4a5568', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', whiteSpace: 'nowrap', zIndex: 10, pointerEvents: 'none' }} >", value.toFixed(step < 1 ? 1 : 0), _jsx("div", { style: {
                         position: 'absolute',
                         top: '100%',
                         left: '50%',

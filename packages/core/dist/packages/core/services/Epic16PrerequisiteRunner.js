@@ -85,41 +85,40 @@ export class Epic16PrerequisiteRunner {
          * Run quick status check for monitoring
          */
     }
-    string;
-    details;
-}
- > {
-    try: {
-        const: quickStatus = await this.system.getQuickStatus(),
-        let, message: string,
-        switch(quickStatus) { }, : .overall
+    /**
+     * Run quick status check for monitoring
+     */
+    async getQuickStatus() {
+        try {
+            const quickStatus = await this.system.getQuickStatus();
+            let message;
+            switch (quickStatus.overall) {
+                case 'healthy':
+                    message = '✅ All critical prerequisites are healthy';
+                    break;
+                case 'degraded':
+                    message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
+            }
+            break;
+            'critical';
+            message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
+        }
+        finally {
+        }
+        break;
+        return {
+            status: quickStatus.overall,
+            message,
+            details: quickStatus,
+        };
     }
-};
-{
-    'healthy';
-    message = '✅ All critical prerequisites are healthy';
-    break;
-    'degraded';
-    message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
-}
-break;
-'critical';
-message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
-break;
-return {
-    status: quickStatus.overall,
-    message,
-    details: quickStatus,
-};
-try { }
-catch (error) {
-    return {
-        status: 'critical',
-        message: `❌ Unable to check prerequisite status: ${error instanceof Error ? error.message : String(error)}`
-    };
-}
-details: {
-    error: String(error);
+    catch(error) {
+        return {
+            status: 'critical',
+            message: `❌ Unable to check prerequisite status: ${error instanceof Error ? error.message : String(error)}`
+        };
+    }
+    details;
 }
 ;
 buildSystemConfig();

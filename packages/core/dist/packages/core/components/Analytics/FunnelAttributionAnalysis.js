@@ -140,7 +140,8 @@ ChannelAttributionData => {
         ['discovery',
             'consideration',
             'conversion',
-            'retention']: as, const:  })[Math.floor(Math.random() * 4)],
+            'retention']: as, const: 
+    })[Math.floor(Math.random() * 4)],
         roleDistribution;
     {
         discovery: Math.random() * 0.4,

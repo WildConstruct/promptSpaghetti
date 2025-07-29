@@ -29,7 +29,7 @@ describe('RecentProjectsManager', () => {
   test('adds new project to empty list', () => {
   const entry = {
   name: 'Test Project',
-  metadata: {,
+  metadata: {
   author: 'Test Author',
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
@@ -70,7 +70,7 @@ describe('RecentProjectsManager', () => {
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       const entry = {
   name: 'Test Project',
-  metadata: {,
+  metadata: {
   author: 'New Author',
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
@@ -100,7 +100,7 @@ describe('RecentProjectsManager', () => {
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       const entry = {
   name: 'New Project',
-  metadata: {,
+  metadata: {
   author: 'Author',
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
@@ -119,7 +119,7 @@ describe('RecentProjectsManager', () => {
       });
       const entry = {
   name: 'Test Project',
-  metadata: {,
+  metadata: {
   author: 'Author',
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
@@ -296,7 +296,7 @@ describe('RecentProjectsManager', () => {
   id: 'test_123_abc',
   name: 'Test Project',
   lastAccessDate: '2025-07-24T10:00:00.000Z',
-  metadata: {,
+  metadata: {
   author: 'Test Author',
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
@@ -315,7 +315,7 @@ describe('RecentProjectsManager', () => {
   id: 'test_123_abc',
   name: 'Test Project',
   lastAccessDate: '2025-07-24T10:00:00.000Z',
-  metadata: {,
+  metadata: {
   created: '2025-07-24T10:00:00.000Z',
   modified: '2025-07-24T10:00:00.000Z',
   version: '1.0.0',

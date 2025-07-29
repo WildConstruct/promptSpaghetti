@@ -128,9 +128,29 @@ export interface SegmentAnalytics {
     pageViewsPerSession: number;
     conversionEvents: Record<string, {
         eventCount: number;
-    }, uniqueUsers>;
-    number: any;
-    conversionRate: number;
+        uniqueUsers: number;
+        conversionRate: number;
+    }>;
+    totalRevenue: number;
+    averageRevenuePerUser: number;
+    customerLifetimeValue: number;
+    geographicBreakdown: Record<string, {
+        userCount: number;
+        percentage: number;
+    }>;
+    platformBreakdown: Record<string, {
+        userCount: number;
+        percentage: number;
+    }>;
+    activityHeatmap: Record<string, number>;
+    weeklyPattern: Record<string, number>;
+    benchmarkComparison: {
+        metric: string;
+        segmentValue: number;
+        benchmarkValue: number;
+        percentageDifference: number;
+        significance: 'higher' | 'lower' | 'similar';
+    }[];
 }
 export interface SegmentRule {
     id: string;

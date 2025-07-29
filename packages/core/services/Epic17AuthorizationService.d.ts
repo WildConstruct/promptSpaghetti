@@ -231,26 +231,26 @@ export interface PolicyMetadata {
     lastModified: Date;
 
 export interface AuthorizationConfig {
-    evaluation: {,
+    evaluation: {
         enableCaching: boolean;
         cacheTimeToLive: number;
         evaluationTimeout: number;
         maxPolicyDepth: number;
         strictMode: boolean;
     };
-    audit: {,
+    audit: {
         enableAuditLogging: boolean;
         logLevel: 'basic' | 'detailed' | 'comprehensive';
         auditAllDecisions: boolean;
         sensitiveDataRedaction: boolean;
     };
-    permissions: {,
+    permissions: {
         defaultDenyMode: boolean;
         inheritanceEnabled: boolean;
         dynamicPermissions: boolean;
         permissionCascading: boolean;
     };
-    security: {,
+    security: {
         encryptSensitiveData: boolean;
         requireMfaForHighRisk: boolean;
         sessionValidation: boolean;

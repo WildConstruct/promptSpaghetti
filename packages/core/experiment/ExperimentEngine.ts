@@ -96,7 +96,7 @@ export class ExperimentEngine {
     this.validateExperimentReadiness(experiment);
     const updatedExperiment = await this.updateExperiment(id, {)
   status: 'running' as ExperimentStatus,
-  schedule: {,
+  schedule: {
   ...experiment.schedule,
   startAt: new Date(),
 });
@@ -117,7 +117,7 @@ export class ExperimentEngine {
       );
     const updatedExperiment = await this.updateExperiment(id, {)
   status: 'completed' as ExperimentStatus,
-  schedule: {,
+  schedule: {
   ...experiment.schedule,
   endAt: new Date(),
 });
@@ -348,7 +348,7 @@ export class ExperimentEngine {
 /**
  * Factory function to create experiment engine with default configuration
  */
-export function createExperimentEngine(storage: ExperimentStorage,)
+export function createExperimentEngine(storage: ExperimentStorage)
   metrics: ExperimentMetrics,
   config?: Partial<ABTestingConfig>,
   allocationConfig?: Partial<AllocationServiceConfig>
@@ -369,7 +369,7 @@ export function createExperimentEngine(storage: ExperimentStorage,)
   cacheTtl: 30,
   maxAssignmentLatency: 20,
   enableDebugMode: process.env.NODE_ENV !== 'production',
-  saltStorage: {,
+  saltStorage: {
   currentSalt: process.env.AB_SALT || crypto.randomBytes(32).toString('hex'),
   previousSalts: [],
 }

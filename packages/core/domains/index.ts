@@ -51,7 +51,7 @@ export const createDomainRegistry = (): DomainRegistry => ({)
 
 // Domain metadata
 export const DOMAIN_METADATA = {
-  'graph-editor': {,
+  'graph-editor': {
   name: 'Graph Editor',
   description: 'Visual graph editing and execution',
   version: '1.0.0',
@@ -112,7 +112,7 @@ export type DomainName = keyof typeof DOMAIN_METADATA;
 // Domain status tracking
 
 export interface DomainStatus {
-  name: DomainName;,
+  name: DomainName;
   loaded: boolean;
   initialized: boolean;
   error?: Error;

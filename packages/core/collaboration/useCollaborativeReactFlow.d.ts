@@ -33,7 +33,7 @@ export declare function useCollaborativeReactFlow(): {
     getUserCursors: () => {,
         userId: string;
         user: UserPresence;
-        position: {,
+        position: {
             x: number;
             y: number;
         };

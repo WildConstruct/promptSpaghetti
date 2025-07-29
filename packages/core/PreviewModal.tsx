@@ -171,7 +171,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   'variance-report': 'json',
   'batch-summary': 'json',
 };
-    return extensions[format] || 'json';
+    return extensions[format] || 'json'
   };
   if (!open) return null;
   return (

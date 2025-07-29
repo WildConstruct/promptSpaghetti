@@ -14,15 +14,15 @@ export interface SelectionRect {
     active: boolean;
 }
 export interface MultiSelectionManagerProps {
-    nodes: Node;
-    edges: Edge;
-    selectedNodes: Node;
-    selectedEdges: Edge;
-    onNodesSelect: (nodes: Node) => void;
-    onEdgesSelect: (edges: Edge) => void;
+    nodes: Node[];
+    edges: Edge[];
+    selectedNodes: Node[];
+    selectedEdges: Edge[];
+    onNodesSelect: (nodes: Node[]) => void;
+    onEdgesSelect: (edges: Edge[]) => void;
     onSelectionChange: (selection: {
-        nodes: Node;
-        edges: Edge;
+        nodes: Node[];
+        edges: Edge[];
     }) => void;
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;

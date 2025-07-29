@@ -11,45 +11,45 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 export interface SecuritySystemNode {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   type: 'primary' | 'secondary' | 'backup' | 'load_balancer' | 'database' | 'cache' | 'api_gateway' | 'monitoring';
   // System configuration
-  configuration: {,
-  endpoint: string;,
+  configuration: {
+  endpoint: string;
   port: number;
-  protocol: 'http' | 'https' | 'tcp' | 'grpc';,
-  authentication: {,
+  protocol: 'http' | 'https' | 'tcp' | 'grpc';
+  authentication: {
   type: 'none' | 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'certificate';
   credentials?: Record<string, string>;
 };
-    connection_timeout_ms: number;,
+    connection_timeout_ms: number;
   read_timeout_ms: number;
   };
   // Health check configuration
-  health_checks: {,
+  health_checks: {
   enabled: boolean;
-  check_interval_ms: number;,
+  check_interval_ms: number;
   timeout_ms: number;
-  retry_attempts: number;,
+  retry_attempts: number;
   retry_delay_ms: number;
   // Check types
   checks: Array<{,
-  type: 'ping' | 'http_status' | 'database_query' | 'custom_script' | 'port_check' | 'ssl_cert' | 'disk_space' | 'memory_usage' | 'cpu_usage';,
+  type: 'ping' | 'http_status' | 'database_query' | 'custom_script' | 'port_check' | 'ssl_cert' | 'disk_space' | 'memory_usage' | 'cpu_usage';
   name: string;
   configuration: Record<string, any>;
-  success_criteria: SuccessCriteria;,
+  success_criteria: SuccessCriteria;
   weight: number; // Impact on overall health (0-1),
 }>;
   };
   // Performance monitoring
-  performance: {,
+  performance: {
   metrics_collection: boolean;
-    collection_interval_ms: number;,
+    collection_interval_ms: number;
   retention_days: number;
     // Performance thresholds
-    thresholds: {,
+    thresholds: {
   response_time_ms: { warning: number; critical: number };
       cpu_usage_percent: { warning: number; critical: number };
       memory_usage_percent: { warning: number; critical: number };
@@ -59,32 +59,32 @@ export interface SecuritySystemNode {
     };
   };
   // Availability configuration
-  availability: {,
+  availability: {
   target_uptime_percent: number; // SLA target,
-  maintenance_window: MaintenanceWindow;,
+  maintenance_window: MaintenanceWindow;
   planned_downtime_tolerance_minutes: number;
   unplanned_downtime_tolerance_minutes: number;
 };
   // Dependencies
-  dependencies: {,
+  dependencies: {
   hard_dependencies: string; // System fails if these fail,
   soft_dependencies: string; // Performance degraded if these fail,
   dependency_check_interval_ms: number;
 };
   // Current state
-  current_state: {,
+  current_state: {
   status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
-  last_check_time: number;,
+  last_check_time: number;
   uptime_start: number;
-  consecutive_failures: number;,
+  consecutive_failures: number;
   health_score: number; // 0-100,
-  availability_percent_24h: number;,
+  availability_percent_24h: number;
   availability_percent_7d: number;
   availability_percent_30d: number;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   enabled: boolean;
 }
 export interface SuccessCriteria {
@@ -95,22 +95,22 @@ export interface SuccessCriteria {
   custom_validation?: string; // JavaScript expression,
 }
 export interface MaintenanceWindow {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   start_time: string; // HH:MM format,
   end_time: string; // HH:MM format,
   days_of_week: number; // 0-6 (Sunday-Saturday),
-  timezone: string;,
+  timezone: string;
   recurring: boolean;
   exclude_from_sla: boolean;
 }
 export interface HealthCheckResult {
-  id: string;,
+  id: string;
   system_id: string;
-  check_name: string;,
+  check_name: string;
   check_type: string;
-  executed_at: number;,
+  executed_at: number;
   duration_ms: number;
   // Result details
   success: boolean;
@@ -119,7 +119,7 @@ export interface HealthCheckResult {
   error_message?: string;
   raw_response?: string;
   // Performance metrics
-  metrics: {,
+  metrics: {
   cpu_usage?: number;
   memory_usage?: number;
   disk_usage?: number;
@@ -129,75 +129,75 @@ export interface HealthCheckResult {
   queue_size?: number;
 };
   // Health impact
-  health_impact: {,
+  health_impact: {
   weight: number;
-  contribution_to_health_score: number;,
-  severity: 'info' | 'warning' | 'critical';
-};
+  contribution_to_health_score: number;
+  severity: 'info' | 'warning' | 'critical'
+  };
 }
 export interface AvailabilityReport {
-  system_id: string;,
-  reporting_period: {,
-  start_time: number;,
+  system_id: string;
+  reporting_period: {
+  start_time: number;
   end_time: number;
   duration_hours: number;
 };
   // Availability metrics
-  availability: {,
+  availability: {
   uptime_minutes: number;
-  downtime_minutes: number;,
+  downtime_minutes: number;
   availability_percent: number;
-  target_availability_percent: number;,
+  target_availability_percent: number;
   sla_compliance: boolean;
 };
   // Downtime breakdown
   downtime_incidents: Array<{,
   start_time: number;
-  end_time: number;,
+  end_time: number;
   duration_minutes: number;
-  type: 'planned' | 'unplanned';,
+  type: 'planned' | 'unplanned';
   reason: string;
   impact_level: 'low' | 'medium' | 'high' | 'critical';
   root_cause?: string;
 }>;
   // Performance summary
-  performance_summary: {,
+  performance_summary: {
   avg_response_time_ms: number;
-  p95_response_time_ms: number;,
+  p95_response_time_ms: number;
   p99_response_time_ms: number;
-  error_rate_percent: number;,
+  error_rate_percent: number;
   successful_checks: number;
-  failed_checks: number;,
+  failed_checks: number;
   total_checks: number;
 };
   // Trend analysis
-  trends: {,
+  trends: {
   availability_trend: 'improving' | 'stable' | 'degrading';
-  performance_trend: 'improving' | 'stable' | 'degrading';,
+  performance_trend: 'improving' | 'stable' | 'degrading';
   reliability_score: number; // 0-100,
-  recommendation_priority: 'low' | 'medium' | 'high';
-};
+  recommendation_priority: 'low' | 'medium' | 'high'
+  };
 }
 export interface SystemAlert {
-  id: string;,
+  id: string;
   system_id: string;
-  alert_type: 'availability' | 'performance' | 'health_check_failure' | 'dependency_failure' | 'threshold_breach';,
+  alert_type: 'availability' | 'performance' | 'health_check_failure' | 'dependency_failure' | 'threshold_breach';
   severity: 'info' | 'warning' | 'critical';
   // Alert details
-  title: string;,
+  title: string;
   description: string;
   detected_at: number;
   // Context information
-  context: {,
+  context: {
   current_value?: number;
   threshold_value?: number;
   measurement_unit?: string;
-  affected_checks: string;,
+  affected_checks: string;
   dependency_impact: string;
-  estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical';
-};
+  estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  };
   // Resolution tracking
-  resolution: {,
+  resolution: {
   acknowledged: boolean;
   acknowledged_by?: string;
   acknowledged_at?: number;
@@ -208,57 +208,57 @@ export interface SystemAlert {
   auto_resolved: boolean;
 };
   // Notification tracking
-  notifications: {,
+  notifications: {
   email_sent: boolean;
-  slack_sent: boolean;,
+  slack_sent: boolean;
   webhook_sent: boolean;
-  escalated: boolean;,
+  escalated: boolean;
   escalation_level: number;
 };
 }
 export interface HealthTrackerConfig {
-  global_settings: {,
-  default_check_interval_ms: number;,
+  global_settings: {
+  default_check_interval_ms: number;
   default_timeout_ms: number;
-  default_retry_attempts: number;,
+  default_retry_attempts: number;
   max_concurrent_checks: number;
-  enable_dependency_checking: boolean;,
+  enable_dependency_checking: boolean;
   enable_predictive_analysis: boolean;
 };
-  alerting: {,
+  alerting: {
   enabled: boolean;
-  alert_aggregation_window_ms: number;,
+  alert_aggregation_window_ms: number;
   suppress_duplicate_alerts: boolean;
-  auto_resolve_timeout_ms: number;,
+  auto_resolve_timeout_ms: number;
   escalation_rules: EscalationRule;
 };
-  reporting: {,
+  reporting: {
   generate_daily_reports: boolean;
-  generate_weekly_reports: boolean;,
+  generate_weekly_reports: boolean;
   generate_monthly_reports: boolean;
-  report_recipients: string;,
+  report_recipients: string;
   include_trends: boolean;
   include_recommendations: boolean;
 };
-  data_retention: {,
+  data_retention: {
   health_check_results_days: number;
-  availability_reports_days: number;,
+  availability_reports_days: number;
   alert_history_days: number;
   performance_metrics_days: number;
 };
 }
 export interface EscalationRule {
-  id: string;,
+  id: string;
   name: string;
-  conditions: {,
-  severity_levels: SystemAlert['severity'][];,
+  conditions: {
+  severity_levels: SystemAlert['severity'][];
   system_types: SecuritySystemNode['type'][];
   consecutive_failures?: number;
   duration_minutes?: number;
 };
-  actions: {,
+  actions: {
   notify_users: string;
-  create_incident: boolean;,
+  create_incident: boolean;
   auto_failover: boolean;
   run_automation: boolean;
   automation_script?: string;
@@ -294,7 +294,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   ...system,
   id: systemId,
   created_at: Date.now(),
-  current_state: {,
+  current_state: {
   status: 'unknown',
   last_check_time: 0,
   uptime_start: Date.now(),
@@ -460,7 +460,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   error_message: errorMessage,
   raw_response: rawResponse,
   metrics,
-  health_impact: {,
+  health_impact: {
   weight: check.weight,
   contribution_to_health_score: success ? check.weight * 100 : 0,
   severity: success ? 'info' : (check.weight > 0.5 ? 'critical' : 'warning'),
@@ -477,7 +477,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         success: false,
         error_message: error instanceof Error ? error.message : String(error),
         metrics: {},
-        health_impact: {,
+        health_impact: {
   weight: check.weight,
   contribution_to_health_score: 0,
   severity: check.weight > 0.5 ? 'critical' : 'warning',
@@ -615,7 +615,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
 },
   description: `System health score has dropped to ${healthScore}% with multiple check failures`}
 },
-  context: {,
+  context: {
   current_value: healthScore,
   threshold_value: 25,
   measurement_unit: 'percent',
@@ -631,7 +631,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
 },
   description: `System has failed ${system.current_state.consecutive_failures} consecutive health checks`}
 },
-  context: {,
+  context: {
   current_value: system.current_state.consecutive_failures,
   threshold_value: 3,
   measurement_unit: 'failures',
@@ -647,7 +647,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
           title: `High CPU Usage on ${system.name}`}
 },
   description: `CPU usage has exceeded critical threshold`,
-          context: {,
+          context: {
   current_value: result.metrics.cpu_usage,
   threshold_value: system.performance.thresholds.cpu_usage_percent.critical,
   measurement_unit: 'percent',
@@ -661,7 +661,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
           title: `High Memory Usage on ${system.name}`}
 },
   description: `Memory usage has exceeded critical threshold`,
-          context: {,
+          context: {
   current_value: result.metrics.memory_usage,
   threshold_value: system.performance.thresholds.memory_usage_percent.critical,
   measurement_unit: 'percent',
@@ -674,19 +674,19 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   id: alertId,
   system_id: systemId,
   detected_at: Date.now(),
-  resolution: {,
+  resolution: {
   acknowledged: false,
   resolved: false,
   auto_resolved: false,
 },
-  notifications: {,
+  notifications: {
   email_sent: false,
   slack_sent: false,
   webhook_sent: false,
   escalated: false,
   escalation_level: 0,
 },
-  context: {,
+  context: {
   dependency_impact: [],
   estimated_impact: 'medium',
   affected_checks: [],
@@ -768,12 +768,12 @@ export class SecuritySystemHealthTracker extends EventEmitter {
     const p99Index = Math.floor(responseTimes.length * 0.99);
     return {
   system_id: systemId,
-  reporting_period: {,
+  reporting_period: {
   start_time: startTime,
   end_time: endTime,
   duration_hours: durationHours,
 },
-  availability: {,
+  availability: {
   uptime_minutes: (successfulChecks / totalChecks) * durationHours * 60,
   downtime_minutes: (failedChecks / totalChecks) * durationHours * 60,
   availability_percent: availabilityPercent,
@@ -781,7 +781,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   sla_compliance: availabilityPercent >= system.availability.target_uptime_percent,
 },
   downtime_incidents: [], // Would be populated from actual incident tracking
-      performance_summary: {,
+      performance_summary: {
   avg_response_time_ms: avgResponseTime,
   p95_response_time_ms: responseTimes[p95Index] || 0,
   p99_response_time_ms: responseTimes[p99Index] || 0,
@@ -790,7 +790,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   failed_checks: failedChecks,
   total_checks: totalChecks,
 },
-  trends: {,
+  trends: {
   availability_trend: 'stable', // Would be calculated from historical data,
   performance_trend: 'stable',
   reliability_score: Math.max(0, Math.min(100, availabilityPercent)),
@@ -808,7 +808,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   type: system.type,
   status: system.current_state.status,
   health_score: system.current_state.health_score,
-  availability: {,
+  availability: {
   '24h': system.current_state.availability_percent_24h,
   '7d': system.current_state.availability_percent_7d,
   '30d': system.current_state.availability_percent_30d,
@@ -830,7 +830,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
     const warningSystems = systemsHealth.filter(s => s.status === 'warning').length;
     const criticalSystems = systemsHealth.filter(s => s.status === 'critical').length;
     return {
-  overview: {,
+  overview: {
   total_systems: totalSystems,
   healthy_systems: healthySystems,
   warning_systems: warningSystems,

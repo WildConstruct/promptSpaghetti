@@ -389,8 +389,7 @@ function validateParameterType(value, type) {
             return typeof value === 'boolean';
         case ParameterType.ARRAY:
             return Array.isArray(value);
-        case ParameterType.OBJECT:
-            return typeof value === 'object' && value !== null && !Array.isArray(value);
+        case ParameterType.OBJECT: return typeof value === 'object' && value !== null && !Array.isArray(value);
         default:
             return true;
             function validateConstraint(_____value, _____constraint) {

@@ -81,7 +81,7 @@ export interface ComparisonMetrics {
     complexity: number;
     impactScore: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    performanceImpact: {,
+    performanceImpact: {
         estimated: boolean;
         cpuDelta: number;
         memoryDelta: number;
@@ -95,7 +95,7 @@ export interface ComparisonReport {
     session: ComparisonSession;
     comparison: GraphComparison;
     metrics: ComparisonMetrics;
-    summary: {,
+    summary: {
         title: string;
         description: string;
         recommendations: string[];

@@ -204,7 +204,8 @@ catch (error) {
                                 username: string,
                                 avg_quality: number,
                                 content_count: number
-                            } >  },
+                            } > 
+                        },
                         review_queue: {
                             pending_reviews: number,
                             avg_review_time: number,

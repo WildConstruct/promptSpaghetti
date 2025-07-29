@@ -20,21 +20,21 @@ interface ConsentBannerProps {
   autoHide?: boolean;
   respectDoNotTrack?: boolean;
   interface ConsentPreferences {
-  essential: boolean;,
+  essential: boolean;
   functional: boolean;
-  analytics: boolean;,
+  analytics: boolean;
   marketing: boolean;
-  advertising: boolean;,
+  advertising: boolean;
   socialMedia: boolean;
   personalization: boolean;
   interface ConsentPurpose {
-  id: string;,
+  id: string;
   category: keyof ConsentPreferences;
-  name: string;,
+  name: string;
   description: string;
-  essential: boolean;,
+  essential: boolean;
   examples: string;
-  dataTypes: string;,
+  dataTypes: string;
   retention: string;
   thirdParties: string;
   const defaultConsents: ConsentPreferences = {,

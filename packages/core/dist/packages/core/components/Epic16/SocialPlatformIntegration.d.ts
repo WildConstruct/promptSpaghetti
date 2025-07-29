@@ -138,6 +138,10 @@ export interface SocialCustomizations {
     const: any;
     SOCIAL_PLATFORMS: SocialPlatform;
 }
+export declare const ShareContentGenerator: {
+    generateTitle: (template: Template, platform: string) => string;
+    linkedin: string;
+};
 export declare const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>;
 export default SocialPlatformIntegration;
 //# sourceMappingURL=SocialPlatformIntegration.d.ts.map

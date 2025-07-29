@@ -61,22 +61,22 @@ export interface FunnelStage {
     averageTime: number;
 
 export interface DemographicAnalysis {
-    topAgeGroups: {,
+    topAgeGroups: {
         group: string;
         percentage: number;
         engagement: number;
     }[];
-    topLocations: {,
+    topLocations: {
         location: string;
         shares: number;
         revenue: number;
     }[];
-    topInterests: {,
+    topInterests: {
         interest: string;
         affinity: number;
         conversion: number;
     }[];
-    devicePreferences: {,
+    devicePreferences: {
         device: string;
         usage: number;
         performance: number;
@@ -119,7 +119,7 @@ export interface ShareRecommendation {
     confidence: number;
 
 export interface ShareTrackingFilters {
-    dateRange: {,
+    dateRange: {
         start: Date;
         end: Date;
     };

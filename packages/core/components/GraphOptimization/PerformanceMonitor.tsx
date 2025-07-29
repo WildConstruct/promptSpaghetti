@@ -3,20 +3,20 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 interface ExecutionMetric {
-  timestamp: number;,
+  timestamp: number;
   duration: number; // milliseconds,
   memoryUsage: number; // bytes,
-  nodeCount: number;,
+  nodeCount: number;
   cacheHitRate: number; // percentage,
   outputLength: number;
   interface PerformanceStats {
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   peakMemoryUsage: number;
-  totalExecutions: number;,
+  totalExecutions: number;
   cacheEfficiency: number;
   recentMetrics: ExecutionMetric;
   interface PerformanceMonitorProps {
-  isVisible: boolean;,
+  isVisible: boolean;
   onToggle: () => void;
   onMetricsCollected?: (metrics: ExecutionMetric) => void;
   const MAX_METRICS_HISTORY = 100;

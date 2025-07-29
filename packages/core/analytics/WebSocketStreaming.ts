@@ -51,36 +51,36 @@ export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 
 // Client Connection
 interface ClientConnection {
-  id: string;,
+  id: string;
   ws: WebSocket | any; // WebSocket interface
   authContext?: AuthContext;
   subscriptions: Map<string, SubscriptionConfig>;
-  isAuthenticated: boolean;,
+  isAuthenticated: boolean;
   lastHeartbeat: number;
-  eventQueue: UnifiedAnalyticsEvent;,
+  eventQueue: UnifiedAnalyticsEvent;
   connected: boolean;
   ipAddress?: string;
   userAgent?: string;
 
 // Connection Statistics
 interface ConnectionStats {
-  totalConnections: number;,
+  totalConnections: number;
   activeConnections: number;
-  authenticatedConnections: number;,
+  authenticatedConnections: number;
   totalSubscriptions: number;
-  messagesPerSecond: number;,
+  messagesPerSecond: number;
   bytesPerSecond: number;
   errorRate: number;
 
 // WebSocket Server Configuration
 interface WSServerConfig {
-  port: number;,
+  port: number;
   heartbeatInterval: number;
-  connectionTimeout: number;,
+  connectionTimeout: number;
   maxConnections: number;
-  maxSubscriptionsPerClient: number;,
+  maxSubscriptionsPerClient: number;
   requireAuthentication: boolean;
-  enableCompression: boolean;,
+  enableCompression: boolean;
   enableCors: boolean;
   corsOrigins: string;
 /**
@@ -210,7 +210,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     // Send connection acknowledgment
     await this.sendMessage(client, {)
   type: WSMessageType.CONFIG,
-  payload: {,
+  payload: {
   clientId,
   requireAuthentication: this.config.requireAuthentication,
   maxSubscriptions: this.config.maxSubscriptionsPerClient,
@@ -275,7 +275,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   this.stats.authenticatedConnections++;
   await this.sendMessage(client, {)
   type: WSMessageType.AUTH,
-  payload: {,
+  payload: {
   authenticated: true,
   userId: authContext.userId,
   permissions: authContext.permissions,
@@ -329,7 +329,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       this.stats.totalSubscriptions++;
       await this.sendMessage(client, {)
   type: WSMessageType.SUBSCRIBE,
-  payload: {,
+  payload: {
   subscriptionId: subscriptionConfig.subscriptionId,
   subscribed: true,
   filter: authorizedFilter,
@@ -355,7 +355,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   this.stats.totalSubscriptions--;
   await this.sendMessage(client, {)
   type: WSMessageType.UNSUBSCRIBE,
-  payload: {,
+  payload: {
   subscriptionId,
   unsubscribed: true,
 },
@@ -382,7 +382,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   private async handleConfigRequest(client: ClientConnection): Promise<void> {
   await this.sendMessage(client, {)
   type: WSMessageType.CONFIG,
-  payload: {,
+  payload: {
   clientId: client.id,
   isAuthenticated: client.isAuthenticated,
   subscriptions: Array.from(client.subscriptions.keys()),
@@ -450,7 +450,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
   * Send event to specific client
   */
-  private async sendEventToClient(client: ClientConnection,)
+  private async sendEventToClient(client: ClientConnection)
   event: UnifiedAnalyticsEvent,
   subscriptionId: string,
   config: SubscriptionConfig): Promise<void> {,
@@ -473,16 +473,16 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Flush client event queue
    */
-  private async flushClientQueue(client: ClientConnection,)
+  private async flushClientQueue(client: ClientConnection)
     subscriptionId: string,
     config: SubscriptionConfig): Promise<void> {,
   if (client.eventQueue.length === 0) return;
   const events = client.eventQueue.splice(0, config.batchSize);
   await this.sendMessage(client, {)
   type: WSMessageType.EVENT,
-  payload: {,
+  payload: {
   subscriptionId,
-  events: config.includeMetadata ? events : events.map(e => ({,)
+  events: config.includeMetadata ? events : events.map(e => ({)
   id: e.id,
   type: e.type,
   timestamp: e.timestamp,
@@ -586,9 +586,9 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Get connected clients
    */
   getClients(): Array<{
-  id: string;,
+  id: string;
   isAuthenticated: boolean;
-  subscriptions: number;,
+  subscriptions: number;
   lastHeartbeat: number;
   ipAddress?: string;
 }> {

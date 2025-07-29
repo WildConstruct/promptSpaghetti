@@ -25,26 +25,26 @@ export enum SecurityEventType {
   CRITICAL = 'critical'
   // Security event interface
   export interface SecurityEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
-  type: SecurityEventType;,
+  type: SecurityEventType;
   severity: SecurityEventSeverity;
   source: string;
   userId?: string;
   sessionId?: string;
-  input: {,
+  input: {
   raw: string;
   sanitized?: string;
-  size: number;,
+  size: number;
   type: string;
 };
-  analysis: {,
+  analysis: {
   riskScore: number;
-  threatsDetected: string;,
+  threatsDetected: string;
   confidence: number;
   validationResult: boolean;
 };
-  context: {,
+  context: {
   userAgent?: string;
   ipAddress?: string;
   endpoint?: string;
@@ -55,27 +55,27 @@ export enum SecurityEventType {
 // Alert configuration
 }
 export interface AlertConfig {
-  enabled: boolean;,
+  enabled: boolean;
   severityThreshold: SecurityEventSeverity;
-  rateThreshold: {,
-  events: number;,
+  rateThreshold: {
+  events: number;
   timeWindowMs: number;
 };
   channels: AlertChannel;
 }
 export interface AlertChannel {
-  type: 'webhook' | 'email' | 'slack' | 'console';,
+  type: 'webhook' | 'email' | 'slack' | 'console';
   config: Record<string, any>;
   enabled: boolean;
   // Monitoring statistics
 }
 export interface SecurityMonitoringStats {
-  totalEvents: number;,
+  totalEvents: number;
   eventsByType: Record<SecurityEventType, number>;
   eventsBySeverity: Record<SecurityEventSeverity, number>;
-  averageRiskScore: number;,
+  averageRiskScore: number;
   topThreats: Array<{ threat: string; count: number }>;
-  timeRange: {,
+  timeRange: {
   start: Date;
   end: Date;
 };
@@ -94,7 +94,7 @@ export class SecurityEventMonitor extends EventEmitter {
   this.alertConfig = {
   enabled: true,
   severityThreshold: SecurityEventSeverity.MEDIUM,
-  rateThreshold: {,
+  rateThreshold: {
   events: 10,
   timeWindowMs: 60000 // 1 minute,
 },
@@ -125,19 +125,19 @@ export class SecurityEventMonitor extends EventEmitter {
   type,
   severity,
   source,
-  input: {,
+  input: {
   raw: input.raw,
   size: input.raw.length,
   type: input.type,
   sanitized: SecurityValidation.sanitizeString(input.raw),
 },
-  analysis: {,
+  analysis: {
   riskScore: analysis.riskScore,
   threatsDetected: analysis.threatsDetected,
   confidence: analysis.confidence,
   validationResult: analysis.isSecure,
 },
-  context: {,
+  context: {
   component: source,
   ...context
 }
@@ -275,7 +275,7 @@ export class SecurityEventMonitor extends EventEmitter {
   eventsBySeverity,
   averageRiskScore,
   topThreats,
-  timeRange: {,
+  timeRange: {
   start: startTime,
   end: now,
 };
@@ -303,19 +303,19 @@ export class SecurityEventMonitor extends EventEmitter {
   const stats = this.getStats();
   const recentCritical = this.getRecentEvents(50, SecurityEventSeverity.CRITICAL);
   return {
-  overview: {,
+  overview: {
   totalEvents: stats.totalEvents,
   criticalEvents: stats.eventsBySeverity[SecurityEventSeverity.CRITICAL],
   averageRiskScore: stats.averageRiskScore,
   topThreat: stats.topThreats[0]?.threat || 'None',
 },
-  charts: {,
+  charts: {
   eventsByType: stats.eventsByType,
   eventsBySeverity: stats.eventsBySeverity,
   riskScoreDistribution: this.getRiskScoreDistribution(),
   timelineData: this.getTimelineData(),
 },
-  alerts: {,
+  alerts: {
   recentCritical: recentCritical.slice(0, 10),
   alertConfig: this.alertConfig,
 };
@@ -394,7 +394,7 @@ export class SecurityEventMonitor extends EventEmitter {
   try {
   const response = await fetch(url, {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -402,7 +402,7 @@ export class SecurityEventMonitor extends EventEmitter {
   severity: event.severity,
   type: event.type,
   timestamp: event.timestamp.toISOString(),
-  details: {,
+  details: {
   source: event.source,
   riskScore: event.analysis.riskScore,
   threats: event.analysis.threatsDetected,

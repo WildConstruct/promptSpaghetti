@@ -8,9 +8,9 @@ import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
 interface CommentSystemProps {
-  workspaceId: string;,
+  workspaceId: string;
   targetType: string;
-  targetId: string;,
+  targetId: string;
   userId: string;
   resourceId?: string;
   projectId?: string;
@@ -83,7 +83,7 @@ interface CommentSystemProps {
   const comment = comments.find(c => c.id === commentId);
   if (!comment) return;
   const updates: UpdateComment = {,
-  metadata: {,
+  metadata: {
   ...comment.metadata,
   resolved,
   resolved_by: resolved ? userId : undefined,

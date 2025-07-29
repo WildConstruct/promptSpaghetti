@@ -73,7 +73,7 @@ invalid@character: value
   });
   describe('ASTBuilder', () => {
     test('should build AST from valid tokens', () => {
-      const content = `version: 1.0.0;,;
+      const content = `version: 1.0.0;;
   metadata:
   name: "Test Graph",
 ---NODES---
@@ -161,7 +161,7 @@ invalid_structure
             position: { line: 2, column: 1, offset: 10 },
             id: 'choice1',
             nodeType: 'WeightedChoice',
-            properties: {,
+            properties: {
   choices: [,
                 { value: 'Option A', weight: 0.6 },
                 { value: 'Option B', weight: 0.4 }
@@ -191,7 +191,7 @@ invalid_structure
             type: 'NodeDefinition' as const,
             position: { line: 2, column: 1, offset: 10 },
             id: 'duplicate',
-            nodeType: 'Output';
+            nodeType: 'Output'
   }
           {
             type: 'NodeDefinition' as const,
@@ -273,7 +273,7 @@ invalid_structure
   });
   describe('GraphParser Integration', () => {
   test('should parse complete valid graph', async () => {
-  const content = `version: 1.0.0;,;
+  const content = `version: 1.0.0;;
   metadata:,
   name: "Test Graph",
   description: "Integration test graph",
@@ -399,7 +399,7 @@ invalid_structure
   describe('Round-trip Compatibility', () => {
   test('should parse serializer output correctly', async () => {
   // This test would use the serializer from Story 12.1
-  const serializedContent = `version: 1.0.0;,;
+  const serializedContent = `version: 1.0.0;;
   metadata:,
   name: "Round-trip Test",
   author: "test",

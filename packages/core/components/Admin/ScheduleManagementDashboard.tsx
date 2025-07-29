@@ -51,13 +51,13 @@ import {
   SchedulingStats as ContentStats
 } from '../../services/ContentSchedulingService';
 interface ScheduleItem {
-  id: string;,
+  id: string;
   name: string;
-  type: 'feature_toggle' | 'content';,
+  type: 'feature_toggle' | 'content';
   status: 'pending' | 'active' | 'completed' | 'failed' | 'cancelled';
   nextExecution?: Date;
   lastExecution?: Date;
-  createdAt: Date;,
+  createdAt: Date;
   createdBy: string;
   // Feature toggle specific
   toggleId?: string;
@@ -67,30 +67,30 @@ interface ScheduleItem {
   contentType?: string;
   operation?: string;
   interface ScheduleAnalytics {
-  totalSchedules: number;,
+  totalSchedules: number;
   activeSchedules: number;
-  completedToday: number;,
+  completedToday: number;
   failedToday: number;
   upcomingIn24h: number;
   // Performance metrics
-  successRate: number;,
+  successRate: number;
   averageExecutionTime: number;
   // Type breakdown
-  featureToggleSchedules: number;,
+  featureToggleSchedules: number;
   contentSchedules: number;
   // Recent executions
   recentExecutions: Array<{,
-  id: string;,
+  id: string;
   name: string;
-  type: string;,
+  type: string;
   status: 'success' | 'failed';
-  executedAt: Date;,
+  executedAt: Date;
   duration: number;
 }>;
   // Upcoming schedules
   upcomingSchedules: Array<{,
   id: string;
-  name: string;,
+  name: string;
   type: string;
   nextExecution: Date;
 }>;

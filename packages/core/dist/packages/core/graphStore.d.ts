@@ -11,8 +11,8 @@ export interface GraphState {
     projectSettings: ProjectSettings;
     hasUnsavedChanges: boolean;
     isAutoSaveEnabled: boolean;
-    setNodes: (nodes: Node) => void;
-    setEdges: (edges: Edge) => void;
+    setNodes: (nodes: Node[]) => void;
+    setEdges: (edges: Edge[]) => void;
     addNode: (node: Node) => void;
     addEdge: (edge: Edge) => void;
     updateNode: (nodeId: string, partial: Record<string, unknown>) => void;
@@ -22,7 +22,7 @@ export interface GraphState {
     reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
     duplicateNode: (nodeId: string) => void;
     deleteNode: (nodeId: string) => void;
-    setStickyNotes: (notes: StickyNote) => void;
+    setStickyNotes: (notes: StickyNote[]) => void;
     addStickyNote: (note: StickyNote) => void;
     updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;
     deleteStickyNote: (noteId: string) => void;
@@ -31,16 +31,16 @@ export interface GraphState {
     updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;
     deleteNodeLabelConfig: (labelId: string) => void;
     setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
-    setRegionGroups: (groups: RegionGroup) => void;
+    setRegionGroups: (groups: RegionGroup[]) => void;
     addRegionGroup: (group: RegionGroup) => void;
     updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
     deleteRegionGroup: (groupId: string) => void;
     setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
-    setConnectionLabels: (labels: ConnectionLabel) => void;
+    setConnectionLabels: (labels: ConnectionLabel[]) => void;
     addConnectionLabel: (label: ConnectionLabel) => void;
     updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;
     removeConnectionLabel: (labelId: string) => void;
-    setConnectionAnnotations: (annotations: ConnectionAnnotation) => void;
+    setConnectionAnnotations: (annotations: ConnectionAnnotation[]) => void;
     addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;
     updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;
     removeConnectionAnnotation: (annotationId: string) => void;
@@ -86,10 +86,10 @@ export interface GraphState {
     markProjectSaved: () => void;
     markProjectModified: () => void;
     getGraphData: () => {
-        nodes: Node;
-        edges: Edge;
+        nodes: Node[];
+        edges: Edge[];
     };
-    loadGraphData: (nodes: Node, edges: Edge) => void;
+    loadGraphData: (nodes: Node[], edges: Edge[]) => void;
     saveAsTemplate: (templateData: TemplateSaveData, author: string) => Promise<{
         success: boolean;
         error?: string;
@@ -101,6 +101,5 @@ export interface GraphState {
     }>;
     getTemplateCompatibleData: () => GraphData;
 }
-export declare const useGraphStore: import("zustand").UseBoundStore<import("zustand").StoreApi<GraphState>>, regionGroups: [], // Will be populated when region groups system is implemented,
-connectionLabels: Object.fromEntries;
+export declare const useGraphStore: import("zustand").UseBoundStore<import("zustand").StoreApi<GraphState>>;
 //# sourceMappingURL=graphStore.d.ts.map

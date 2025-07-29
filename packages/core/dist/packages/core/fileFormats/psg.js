@@ -6,87 +6,56 @@
  */
 import { z } from 'zod';
 // Project metadata schema - information about the project itself
-export const ProjectMetadataSchema = z.object({});
-name: z.string().min(1).max(100, 'Project name must be between 1-100 characters'),
-    description;
-z.string().optional(),
-    author;
-z.string().optional(),
-    tags;
-z.array(z.string()).optional(),
-    created;
-z.string().datetime('Invalid created date format').optional(),
-    modified;
-z.string().datetime('Invalid modified date format').optional(),
-    version;
-z.string().default('1.0.0'),
-    fileFormatVersion;
-z.string().default('1.0.0'),
-;
-;
+export const ProjectMetadataSchema = z.object({
+    name: z.string().min(1).max(100, 'Project name must be between 1-100 characters'),
+    description: z.string().optional(),
+    author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    created: z.string().datetime('Invalid created date format').optional(),
+    modified: z.string().datetime('Invalid modified date format').optional(),
+    version: z.string().default('1.0.0'),
+    fileFormatVersion: z.string().default('1.0.0'),
+});
 // Graph content schema - the actual node/edge data
-export const GraphContentSchema = z.object({});
-nodes: z.array(z.unknown()), // Using z.unknown() to allow for flexible node data structures,
-    edges;
-z.array(z.unknown()), // Using z.unknown() to allow for flexible edge data structures,
-    seed;
-z.number().optional(),
-    viewport;
-z.object({});
-x: z.number(),
-    y;
-z.number(),
-    zoom;
-z.number(),
-;
-optional();
+export const GraphContentSchema = z.object({
+    nodes: z.array(z.unknown()), // Using z.unknown() to allow for flexible node data structures,
+    edges: z.array(z.unknown()), // Using z.unknown() to allow for flexible edge data structures,
+    seed: z.number().optional(),
+    viewport: z.object({}),
+    x: z.number(),
+    y: z.number(),
+    zoom: z.number(),
+}).optional();
 ;
 // Editor settings schema - UI and editor preferences
-export const EditorSettingsSchema = z.object({});
-autoSave: z.boolean().default(true),
-    autoSaveInterval;
-z.number().min(1000).max(60000).default(5000),
-    theme;
-z.enum(['light', 'dark']).default('light'),
-    gridVisible;
-z.boolean().default(true),
-    snapToGrid;
-z.boolean().default(false),
-    miniMapVisible;
-z.boolean().default(true),
-    showNodeIcons;
-z.boolean().default(true),
-    showConnectionLabels;
-z.boolean().default(true),
-;
-;
+export const EditorSettingsSchema = z.object({
+    autoSave: z.boolean().default(true),
+    autoSaveInterval: z.number().min(1000).max(60000).default(5000),
+    theme: z.enum(['light', 'dark']).default('light'),
+    gridVisible: z.boolean().default(true),
+    snapToGrid: z.boolean().default(false),
+    miniMapVisible: z.boolean().default(true),
+    showNodeIcons: z.boolean().default(true),
+    showConnectionLabels: z.boolean().default(true),
+});
 // Export metadata schema - information about how/when the file was exported
-export const ExportMetadataSchema = z.object({});
-exportedBy: z.string().default('PromptScape GraphEditor'),
-    exportDate;
-z.string().datetime(),
-    exportVersion;
-z.string().default('1.0.0'),
-    format;
-z.literal('psg'),
-    compatibility;
-z.object({});
-minVersion: z.string().default('1.0.0'),
-    maxVersion;
-z.string().optional(),
-;
-optional();
+export const ExportMetadataSchema = z.object({
+    exportedBy: z.string().default('PromptScape GraphEditor'),
+    exportDate: z.string().datetime(),
+    exportVersion: z.string().default('1.0.0'),
+    format: z.literal('psg'),
+    compatibility: z.object({}),
+    minVersion: z.string().default('1.0.0'),
+    maxVersion: z.string().optional(),
+}).optional();
 ;
 // Complete .psg file format schema
-export const PSGFileSchema = z.object({});
-metadata: ProjectMetadataSchema,
-    graph;
-GraphContentSchema,
-    settings;
-EditorSettingsSchema.default({}),
-    exportMetadata;
-ExportMetadataSchema;
-;
+export const PSGFileSchema = z.object({
+    metadata: ProjectMetadataSchema,
+    graph: GraphContentSchema,
+    settings: EditorSettingsSchema.default({}),
+    exportMetadata: ExportMetadataSchema
+});
 edges: Edge,
     metadata;
 (Partial),
@@ -135,7 +104,8 @@ PSGFile;
             /**
              * Validates a .psg file structure
              */
-            function: validatePSGFile(data, unknown), PSGFile }
+            function: validatePSGFile(data, unknown), PSGFile
+        }
     };
     {
         return PSGFileSchema.parse(data);
@@ -194,7 +164,8 @@ PSGFile;
             success: false,
             error: {
                 type: PSGErrorType.FILE_TOO_LARGE,
-                message: `File size (${(jsonString.length / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (${(maxFileSize / 1024 / 1024).toFixed(1)}MB)` }
+                message: `File size (${(jsonString.length / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (${(maxFileSize / 1024 / 1024).toFixed(1)}MB)`
+            }
         },
             suggestions;
         ['Try reducing the number of nodes', 'Compress or optimize the project', 'Split into smaller projects'];
@@ -248,7 +219,8 @@ PSGFile;
                         success: false,
                         error: {
                             type: PSGErrorType.MISSING_REQUIRED_FIELDS,
-                            message: `Missing required fields: ${missingFields.join(', ')}` }
+                            message: `Missing required fields: ${missingFields.join(', ')}`
+                        }
                     },
                         details;
                     missingFields,
@@ -434,7 +406,7 @@ PSGFile;
                                                         const violations = [];
                                                         const checkObject = (obj, path = '') => {
                                                             if (!obj || typeof obj !== 'object')
-                                                                return;
+                                                                return ();
                                                             for (const key in obj) {
                                                                 const currentPath = path ? `${path}.${key}` : key;
                                                             }
@@ -574,7 +546,7 @@ PSGFile;
                                                                                                                     const: jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0),
                                                                                                                     // Check serialized size
                                                                                                                     const: sizeInMB = jsonString.length / (1024 * 1024),
-                                                                                                                    const: warnings, string = [],
+                                                                                                                    const: warnings, string, []:  = [],
                                                                                                                     if(sizeInMB) { }
                                                                                                                 } > 5, { warnings };
                                                                                                             }, : .push(`Large file size (${sizeInMB.toFixed(1)}MB) may affect loading performance`)

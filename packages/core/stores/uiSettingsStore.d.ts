@@ -46,7 +46,7 @@ interface UISettingsState extends UISettings {
     applyDemoPreset: () => void;
 
 export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<UISettingsState>, "persist"> & {
-    persist: {,
+    persist: {
         setOptions: (options: Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>) => void;
         clearStorage: () => void;
         rehydrate: () => Promise<void> | void;

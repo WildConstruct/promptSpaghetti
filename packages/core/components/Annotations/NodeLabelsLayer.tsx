@@ -16,7 +16,7 @@ import {
   DEFAULT_NODE_LABEL_PREFERENCES
 } from '../../types/CollaborationTypes';
 interface NodeLabelsLayerProps {
-  nodes: Node;,
+  nodes: Node;
   labelConfigs: Record<string, NodeLabelConfig>;
   onLabelConfigsChange: (configs: Record<string, NodeLabelConfig>) => void;
   labelPreferences?: NodeLabelPreferences;
@@ -275,8 +275,8 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
   transition: 'opacity 0.3s ease',
 }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '1';
-          }}
+            e.currentTarget.style.opacity = '1'
+  }}
           onMouseLeave={(e) => {
             e.currentTarget.style.opacity = '0.7';
           }}

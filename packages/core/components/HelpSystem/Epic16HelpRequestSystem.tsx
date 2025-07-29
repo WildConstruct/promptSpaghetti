@@ -13,9 +13,9 @@ import {
 import HelpRequestDashboard from './HelpRequestDashboard';
 import HelpRequestForm from './HelpRequestForm';
 interface Epic16HelpRequestSystemProps {
-  userId: string;,
+  userId: string;
   userRole: 'user' | 'agent' | 'admin';
-  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';,
+  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   config?: Partial<HelpRequestConfig>;
   onConfigChange?: (config: HelpRequestConfig) => void;
@@ -35,9 +35,9 @@ interface Epic16HelpRequestSystemProps {
   const [_____selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [view, setView] = useState<'dashboard' | 'form' | 'settings'>('dashboard');
   const [notifications, setNotifications] = useState<Array<{
-  id: string;,
+  id: string;
   type: 'success' | 'error' | 'info' | 'warning';
-  message: string;,
+  message: string;
   timestamp: Date;
 }>>([]);
   // Set up event listeners for service events
@@ -381,9 +381,9 @@ interface HelpSystemSettingsProps {
 // Notification System Component
 interface NotificationSystemProps {
   notifications: Array<{,
-  id: string;,
+  id: string;
   type: 'success' | 'error' | 'info' | 'warning';
-  message: string;,
+  message: string;
   timestamp: Date;
 }>;
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {

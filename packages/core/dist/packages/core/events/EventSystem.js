@@ -123,12 +123,13 @@ export class EventBus extends EventEmitter {
         */
         subscribe < T;
         BaseEvent = BaseEvent > (filter);
-        EventFilter, ;
+        EventFilter;
         handler: (EventHandler),
             options ?  : {
                 priority: EventPriority,
                 once: boolean,
-                string };
+                string
+            };
         {
             const subscription = {
                 id: crypto.randomUUID(),

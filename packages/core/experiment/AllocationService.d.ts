@@ -89,7 +89,7 @@ export declare class AllocationService {
 /**
  * Factory function to create allocation service with Redis cache
  */
-export declare function createAllocationService(config: AllocationServiceConfig,)
+export declare function createAllocationService(config: AllocationServiceConfig)
   storage: AssignmentStorage,
   metrics: AssignmentMetrics,
   cache?: AllocationCache

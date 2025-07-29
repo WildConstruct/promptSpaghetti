@@ -11,7 +11,7 @@ export interface UTDGNode {
     label: string;
     description: string;
     properties: Record<string, any>;
-    metadata: {,
+    metadata: {
         era?: HistoricalEra;
         genre?: Genre;
         style?: Style;
@@ -62,19 +62,19 @@ export interface UTDGQuery {
     };
 
 export interface UTDGContext {
-    historical: {,
+    historical: {
         era: HistoricalEra;
         year?: number;
         region?: string;
         culturalContext?: string;
     };
-    creative: {,
+    creative: {
         genre: Genre;
         style: Style;
         tone?: string;
         audience?: string;
     };
-    technical: {,
+    technical: {
         accuracy: 'strict' | 'moderate' | 'creative';
         sources: 'academic' | 'popular' | 'mixed';
         validation: boolean;
@@ -86,7 +86,7 @@ export interface UTDGContentSuggestion {
     confidence: number;
     reasoning: string;
     alternatives: any[];
-    historicalAccuracy: {,
+    historicalAccuracy: {
         score: number;
         violations: string[];
         suggestions: string[];
@@ -174,7 +174,7 @@ export declare class UTDGFoundation {
     exportGraph(): {
         nodes: UTDGNode[];
         relationships: UTDGRelationship[];
-        metadata: {,
+        metadata: {
             exportDate: Date;
             version: string;
             stats: any;

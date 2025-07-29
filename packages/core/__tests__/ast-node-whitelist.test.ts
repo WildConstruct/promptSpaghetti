@@ -327,7 +327,8 @@ describe('Real-world Expression Testing', () => {
   });
   it('should block dangerous expressions', () => {
     const dangerousExpressions = [;
-      'function() { return "bad"; }',
+      'function() { return "bad"
+  }',
       'new Date()',
       'x = 5',
       'x++',

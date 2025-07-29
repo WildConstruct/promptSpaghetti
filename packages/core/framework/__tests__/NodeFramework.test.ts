@@ -46,13 +46,13 @@ class TestFrameworkNode extends FrameworkNode {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-      metadata: {,
+      metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: true,
@@ -137,7 +137,7 @@ class TestFrameworkNode extends FrameworkNode {
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'test-exec',
   nodeExecutionOrder: [],
@@ -155,7 +155,7 @@ class TestFrameworkNode extends FrameworkNode {
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'batch-exec',
   nodeExecutionOrder: [],
@@ -181,7 +181,7 @@ class TestFrameworkNode extends FrameworkNode {
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'event-exec',
   nodeExecutionOrder: [],
@@ -215,7 +215,7 @@ class TestFrameworkNode extends FrameworkNode {
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'hook-exec',
   nodeExecutionOrder: [],
@@ -273,7 +273,7 @@ class TestFrameworkNode extends FrameworkNode {
   nodeStates: new Map(),
   evaluationDepth: 0,
   cache: new Map(),
-  executionMeta: {,
+  executionMeta: {
   startTime: Date.now(),
   executionId: 'metrics-exec',
   nodeExecutionOrder: [],
@@ -337,13 +337,13 @@ describe('NodeRegistry', () => {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: false,
@@ -361,13 +361,13 @@ describe('NodeRegistry', () => {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: false,
@@ -385,13 +385,13 @@ describe('NodeRegistry', () => {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: false,
@@ -411,13 +411,13 @@ describe('NodeRegistry', () => {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: false,
@@ -455,13 +455,13 @@ describe('NodeRegistry', () => {
   category: 'basic',
   version: '1.0.0',
   nodeClass: TestFrameworkNode,
-  defaultConfig: {,
+  defaultConfig: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
   ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['test'],
   deprecated: false,
   experimental: false,
@@ -493,7 +493,7 @@ describe('NodeRegistry', () => {
         nodeClass: TestFrameworkNode,
         defaultConfig: { deterministic: true, cacheable: false, stateful: false },
         ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['basic', 'simple'],
   author: 'TestAuthor',
   deprecated: false,
@@ -508,7 +508,7 @@ describe('NodeRegistry', () => {
         nodeClass: TestFrameworkNode,
         defaultConfig: { deterministic: true, cacheable: true, stateful: true },
         ports: { inputs: [], outputs: [] },
-        metadata: {,
+        metadata: {
   tags: ['advanced', 'complex'],
   author: 'TestAuthor',
   deprecated: false,

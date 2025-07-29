@@ -14,24 +14,24 @@ export interface TrustIndicatorConfig {
   cacheTimeout?: number; // milliseconds,
 }
 export interface EnhancedTrustData {
-  trustScore: TrustScore | null;,
+  trustScore: TrustScore | null;
   reputationScore: number;
-  templateCount: number;,
+  templateCount: number;
   downloadCount: number;
-  averageRating: number;,
+  averageRating: number;
   reviewCount: number;
-  verificationStatus: {,
-  email: boolean;,
+  verificationStatus: {
+  email: boolean;
   phone: boolean;
-  identity: boolean;,
+  identity: boolean;
   professional: boolean;
-  portfolio: boolean;,
+  portfolio: boolean;
   social: boolean;
 };
-  badges: string;,
+  badges: string;
   communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
-  trustTrend: 'improving' | 'stable' | 'declining';
-}
+  trustTrend: 'improving' | 'stable' | 'declining'
+  }
 export interface TrustDisplayOptions {
   showScore?: boolean;
   showBadges?: boolean;
@@ -75,7 +75,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   downloadCount: creatorAnalytics?.metrics.totalDownloads || 0,
   averageRating: creatorAnalytics?.metrics.averageRating || 0,
   reviewCount: 0, // Would come from review system,
-  verificationStatus: {,
+  verificationStatus: {
   email: validationSummary?.completedValidations?.includes('email_verification') || false,
   phone: validationSummary?.completedValidations?.includes('phone_verification') || false,
   identity: validationSummary?.completedValidations?.includes('government_id') || false,
@@ -116,7 +116,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
     if (score >= 80) return 'professional';
     if (score >= 65) return 'verified';
     if (score >= 40) return 'basic';
-    return 'unverified';
+    return 'unverified'
   }, []);
   const getTrustLevelColor = useCallback((level: string): string => {
   switch (level) {

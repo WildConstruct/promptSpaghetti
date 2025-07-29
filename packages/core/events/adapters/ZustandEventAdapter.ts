@@ -18,13 +18,13 @@ export interface EventableStore {
   */
 }
 export interface StateChangeEvent extends BaseEvent {
-  type: 'state_changed' | 'store_initialized' | 'store_reset';,
-  metadata: {,
-  storeName: string;,
+  type: 'state_changed' | 'store_initialized' | 'store_reset';
+  metadata: {
+  storeName: string;
   path: string;
-  previousValue: unknown;,
+  previousValue: unknown;
   currentValue: unknown;
-  category: EventCategory;,
+  category: EventCategory;
   priority: EventPriority;
 };
 /**
@@ -83,7 +83,7 @@ export class ZustandEventAdapter {
   timestamp: new Date(),
   id: crypto.randomUUID(),
   source: 'zustand-adapter',
-  metadata: {,
+  metadata: {
   storeName: this.config.storeName,
   path: '',
   previousValue: null,
@@ -151,7 +151,7 @@ export class ZustandEventAdapter {
   timestamp: new Date(),
   id: crypto.randomUUID(),
   source: 'zustand-adapter',
-  metadata: {,
+  metadata: {
   storeName: this.config.storeName,
   path,
   previousValue,
@@ -246,10 +246,10 @@ export class ZustandEventAdapter {
   /**
   * Get adapter statistics
   */
-  public getStats(): {,
-  storeName: string;,
+  public getStats(): {
+  storeName: string;
   subscriptions: number;
-  activeDebounces: number;,
+  activeDebounces: number;
   config: ZustandEventConfig;
   return {
   storeName: this.config.storeName,
@@ -302,7 +302,7 @@ export const ZustandEventUtils = {
   // Example: Update last event info,
   if ('lastEvent' in currentState) {
   store.setState({)
-  lastEvent: {,
+  lastEvent: {
   type: event.type,
   timestamp: event.timestamp,
   source: event.source,

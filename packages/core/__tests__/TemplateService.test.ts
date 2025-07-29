@@ -43,7 +43,7 @@ describe('TemplateService', () => {
         id: 'node-1',
         type: 'WeightedChoice',
         position: { x: 100, y: 200 },
-        data: {,
+        data: {
   nodeType: 'WeightedChoice',
           choices: [,
             { value: 'Option A', weight: 1 },
@@ -113,7 +113,7 @@ describe('TemplateService', () => {
 },
   target: `node-${i + 1}`}
 },
-  type: 'step';
+  type: 'step'
   }));
       const mediumTemplate = await service.createFromGraph(;);
         mediumNodes,
@@ -137,7 +137,7 @@ describe('TemplateService', () => {
 },
   target: `node-${i + 1}`}
 },
-  type: 'step';
+  type: 'step'
   }));
       const complexTemplate = await service.createFromGraph(;);
         complexNodes,
@@ -318,8 +318,8 @@ describe('TemplateService', () => {
   const options: TemplateInstantiationOptions = {,
   preservePositions: true,
   mergeWithCurrent: false,
-  customizationValues: {,
-  [template.graph.nodes[0].id]: {,
+  customizationValues: {
+  [template.graph.nodes[0].id]: {
   customProperty: 'customized value',
 };
       const result = await service.instantiateTemplate(template.id, options);
@@ -414,7 +414,7 @@ describe('TemplateService', () => {
         author: 'test-author',
         rating: 0,
         reviews: [],
-        graph: {,
+        graph: {
   nodes: [,
             {
               id: 'node1',
@@ -434,18 +434,18 @@ describe('TemplateService', () => {
               source: 'node1',
               target: 'node2',
               type: 'step'],
-          annotations: {,
+          annotations: {
   stickyNotes: [],
             nodeLabels: {},
             regionGroups: [],
             connectionLabels: {},
-            metadata: {,
+            metadata: {
   author: 'test',
   created: '2023-01-01',
   modified: '2023-01-01',
   version: '1.0.0',
 },
-  metadata: {,
+  metadata: {
   created: '2023-01-01',
   lastModified: '2023-01-01',
   usageCount: 0,
@@ -470,7 +470,7 @@ describe('TemplateService', () => {
         author: 'test-author',
         rating: 0,
         reviews: [],
-        graph: {,
+        graph: {
   nodes: [], // Invalid: no nodes,
   edges: [,
             {
@@ -478,18 +478,18 @@ describe('TemplateService', () => {
               source: 'nonexistent', // Invalid: references nonexistent node,
   target: 'also-nonexistent',
               type: 'step'],
-          annotations: {,
+          annotations: {
   stickyNotes: [],
             nodeLabels: {},
             regionGroups: [],
             connectionLabels: {},
-            metadata: {,
+            metadata: {
   author: 'test',
   created: '2023-01-01',
   modified: '2023-01-01',
   version: '1.0.0',
 },
-  metadata: {,
+  metadata: {
   created: '2023-01-01',
   lastModified: '2023-01-01',
   usageCount: 0,

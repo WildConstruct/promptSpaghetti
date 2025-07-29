@@ -212,20 +212,14 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
             < div, key = { key }, className = "flex items-center gap-3" >
             (_jsx("label", { className: "w-20 text-sm text-gray-600 capitalize", children: key })
                 ,
-                    _jsx("input", { type: "color", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(,
-                        ) })), ...customization.branding.customColors, [key], e.target.value);
+                    _jsx("input", { type: "color", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(customization.branding.customColors,
+                            [key]), e: true, target: true, value: true })));
     }
 }
 className = "w-12 h-10 border border-gray-300 rounded cursor-pointer"
     /  >
-    _jsx("input", { type: "text", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(,
-        ), customization: true, branding: true, customColors: true });
-[key];
-e.target.value,
-;
-className = "flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-    /  >
-;
+    _jsx("input", { type: "text", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(customization.branding.customColors,
+            [key]), e: true, target: true, value: true, className: "flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm" });
 div >
 ;
 div >

@@ -55,12 +55,12 @@ describe('OrganizationManager', () => {
   totalTeams: 8,
   activeTeams: 8,
   recentActivity: 3,
-  planLimits: {,
+  planLimits: {
   maxUsers: 10,
   maxTeams: 5,
   maxStorage: 1024,
 },
-  usage: {,
+  usage: {
   users: 8,
   teams: 5,
   storage: 512,

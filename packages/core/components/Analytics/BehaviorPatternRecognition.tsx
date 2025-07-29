@@ -31,7 +31,7 @@ import {
 // Behavior pattern recognition interfaces
 
 export interface BehaviorPatternRecognitionProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   patternConfig: PatternRecognitionConfig;
   sessionData: SessionBehaviorData;
   realTimeMode?: boolean;
@@ -41,20 +41,20 @@ export interface BehaviorPatternRecognitionProps {
   onExport?: (data: PatternRecognitionExportData) => void;
 }
 export interface PatternRecognitionConfig {
-  algorithms: RecognitionAlgorithm;,
+  algorithms: RecognitionAlgorithm;
   thresholds: PatternThreshold;
-  features: FeatureExtraction;,
+  features: FeatureExtraction;
   models: PatternModel;
-  clustering: ClusteringConfig;,
+  clustering: ClusteringConfig;
   anomalyDetection: AnomalyDetectionConfig;
   realTimeSettings: RealTimeProcessingSettings;
 }
 export interface RecognitionAlgorithm {
-  algorithmId: string;,
+  algorithmId: string;
   name: string;
-  type: AlgorithmType;,
+  type: AlgorithmType;
   enabled: boolean;
-  confidence: number;,
+  confidence: number;
   parameters: AlgorithmParameters;
   performance: AlgorithmPerformance;
 }
@@ -85,9 +85,9 @@ export interface AlgorithmPerformance {
   lastEvaluation: number; // timestamp,
 }
 export interface PatternThreshold {
-  patternType: PatternType;,
+  patternType: PatternType;
   minConfidence: number; // 0-1,
-  minFrequency: number;,
+  minFrequency: number;
   minSupport: number; // 0-1,
   maxFalsePositiveRate: number; // 0-1,
 }
@@ -104,9 +104,9 @@ export type PatternType =
   | 'decision_making';
 
 export interface FeatureExtraction {
-  featureId: string;,
+  featureId: string;
   name: string;
-  type: FeatureType;,
+  type: FeatureType;
   enabled: boolean;
   weight: number; // 0-1,
   extractor: FeatureExtractor;
@@ -122,9 +122,9 @@ export type FeatureType =
   | 'behavioral';
 
 export interface FeatureExtractor {
-  method: ExtractionMethod;,
+  method: ExtractionMethod;
   parameters: ExtractionParameters;
-  preprocessing: PreprocessingStep;,
+  preprocessing: PreprocessingStep;
   postprocessing: PostprocessingStep;
 }
 export type ExtractionMethod = 
@@ -142,23 +142,23 @@ export interface ExtractionParameters {
   stepSize?: number;
   nGramSize?: number;
   smoothingFactor?: number;
-  aggregationMethod?: 'mean' | 'median' | 'sum' | 'max' | 'min';
-}
+  aggregationMethod?: 'mean' | 'median' | 'sum' | 'max' | 'min'
+  }
 export interface PreprocessingStep {
-  stepType: 'normalization' | 'scaling' | 'filtering' | 'smoothing' | 'denoising';,
+  stepType: 'normalization' | 'scaling' | 'filtering' | 'smoothing' | 'denoising';
   parameters: Record<string, any>;
 }
 export interface PostprocessingStep {
-  stepType: 'threshold' | 'cluster' | 'rank' | 'filter' | 'transform';,
+  stepType: 'threshold' | 'cluster' | 'rank' | 'filter' | 'transform';
   parameters: Record<string, any>;
 }
 export interface PatternModel {
-  modelId: string;,
+  modelId: string;
   name: string;
-  type: ModelType;,
+  type: ModelType;
   version: string;
   trainedOn: number; // timestamp,
-  performance: ModelPerformance;,
+  performance: ModelPerformance;
   features: ModelFeature;
   hyperparameters: ModelHyperparameters;
 }
@@ -171,66 +171,66 @@ export type ModelType =
   | 'ensemble';
 
 export interface ModelPerformance {
-  trainingAccuracy: number;,
+  trainingAccuracy: number;
   validationAccuracy: number;
-  testAccuracy: number;,
+  testAccuracy: number;
   crossValidationScore: number;
-  overfittingScore: number;,
+  overfittingScore: number;
   generalizationScore: number;
 }
 export interface ModelFeature {
-  name: string;,
+  name: string;
   importance: number; // 0-1,
-  type: string;,
+  type: string;
   correlation: number; // -1 to 1,
 }
 export interface ModelHyperparameters {
   [key: string]: unknown;
 }
 export interface ClusteringConfig {
-  algorithms: ClusteringAlgorithm;,
+  algorithms: ClusteringAlgorithm;
   distanceMetrics: DistanceMetric;
-  clusterCount: ClusterCountStrategy;,
+  clusterCount: ClusterCountStrategy;
   validation: ClusterValidation;
 }
 export interface ClusteringAlgorithm {
-  name: 'kmeans' | 'dbscan' | 'hierarchical' | 'spectral' | 'gaussian_mixture';,
+  name: 'kmeans' | 'dbscan' | 'hierarchical' | 'spectral' | 'gaussian_mixture';
   parameters: Record<string, any>;
   enabled: boolean;
 }
 export interface DistanceMetric {
-  name: 'euclidean' | 'manhattan' | 'cosine' | 'jaccard' | 'hamming';,
+  name: 'euclidean' | 'manhattan' | 'cosine' | 'jaccard' | 'hamming';
   weight: number;
 }
 export interface ClusterCountStrategy {
-  method: 'fixed' | 'elbow' | 'silhouette' | 'gap_statistic' | 'adaptive';,
+  method: 'fixed' | 'elbow' | 'silhouette' | 'gap_statistic' | 'adaptive';
   minClusters: number;
   maxClusters: number;
 }
 export interface ClusterValidation {
-  metrics: ClusterMetric;,
+  metrics: ClusterMetric;
   crossValidation: boolean;
   stabilityAnalysis: boolean;
 }
 export type ClusterMetric = 'silhouette' | 'calinski_harabasz' | 'davies_bouldin' | 'adjusted_rand';
 
 export interface AnomalyDetectionConfig {
-  methods: AnomalyDetectionMethod;,
+  methods: AnomalyDetectionMethod;
   sensitivity: 'low' | 'medium' | 'high';
   threshold: number; // 0-1,
-  windowSize: number;,
+  windowSize: number;
   adaptiveThreshold: boolean;
 }
 export interface AnomalyDetectionMethod {
-  name: 'isolation_forest' | 'one_class_svm' | 'local_outlier_factor' | 'autoencoder' | 'statistical';,
+  name: 'isolation_forest' | 'one_class_svm' | 'local_outlier_factor' | 'autoencoder' | 'statistical';
   parameters: Record<string, any>;
   weight: number; // 0-1,
 }
 export interface RealTimeProcessingSettings {
-  enabled: boolean;,
+  enabled: boolean;
   bufferSize: number;
   processingInterval: number; // milliseconds,
-  batchSize: number;,
+  batchSize: number;
   parallelProcessing: boolean;
   memoryLimit: number; // MB,
   // Session behavior data structures
@@ -238,17 +238,17 @@ export interface RealTimeProcessingSettings {
 export interface SessionBehaviorData {
   sessionId: string;
   userId?: string;
-  timestamp: number;,
+  timestamp: number;
   duration: number;
-  interactions: BehaviorInteraction;,
+  interactions: BehaviorInteraction;
   navigationPath: NavigationStep;
-  features: ExtractedFeatures;,
+  features: ExtractedFeatures;
   context: SessionContext;
 }
 export interface BehaviorInteraction {
-  interactionId: string;,
+  interactionId: string;
   type: InteractionType;
-  timestamp: number;,
+  timestamp: number;
   duration: number;
   element: ElementInfo;
   coordinates?: { x: number; y: number };
@@ -278,76 +278,76 @@ export interface ElementInfo {
   position: ElementPosition;
 }
 export interface ElementPosition {
-  x: number;,
+  x: number;
   y: number;
-  width: number;,
+  width: number;
   height: number;
   zIndex: number;
 }
 export interface InteractionContext {
-  pageUrl: string;,
+  pageUrl: string;
   pageTitle: string;
   viewportSize: { width: number; height: number };
   scrollPosition: { x: number; y: number };
-  deviceOrientation?: 'portrait' | 'landscape';
-}
+  deviceOrientation?: 'portrait' | 'landscape'
+  }
 export interface NavigationStep {
-  stepId: string;,
+  stepId: string;
   fromUrl: string;
-  toUrl: string;,
+  toUrl: string;
   timestamp: number;
-  method: NavigationMethod;,
+  method: NavigationMethod;
   duration: number;
   referrer?: string;
 }
 export type NavigationMethod = 'link' | 'button' | 'form' | 'back' | 'forward' | 'direct' | 'redirect';
 
 export interface ExtractedFeatures {
-  temporal: TemporalFeatures;,
+  temporal: TemporalFeatures;
   spatial: SpatialFeatures;
-  sequential: SequentialFeatures;,
+  sequential: SequentialFeatures;
   statistical: StatisticalFeatures;
   behavioral: BehaviralFeatures;
 }
 export interface TemporalFeatures {
-  sessionDuration: number;,
+  sessionDuration: number;
   averageInteractionInterval: number;
   interactionRate: number; // interactions per minute,
-  pauseDurations: number;,
+  pauseDurations: number;
   peakActivityTime: number;
   activityDistribution: number;
 }
 export interface SpatialFeatures {
-  mouseTrackingData: MousePoint;,
+  mouseTrackingData: MousePoint;
   clickHeatmap: HeatmapPoint;
-  scrollPattern: ScrollPattern;,
+  scrollPattern: ScrollPattern;
   viewportUtilization: ViewportArea;
   elementInteractionDensity: ElementDensity;
 }
 export interface MousePoint {
-  x: number;,
+  x: number;
   y: number;
-  timestamp: number;,
+  timestamp: number;
   velocity: number;
   acceleration: number;
 }
 export interface HeatmapPoint {
-  x: number;,
+  x: number;
   y: number;
-  intensity: number;,
+  intensity: number;
   count: number;
 }
 export interface ScrollPattern {
-  totalScrollDistance: number;,
+  totalScrollDistance: number;
   scrollVelocity: number;
-  scrollDirection: ScrollDirection;,
+  scrollDirection: ScrollDirection;
   pausePoints: ScrollPause;
 }
 export type ScrollDirection = 'up' | 'down' | 'left' | 'right';
 
 export interface ScrollPause {
   position: { x: number; y: number };
-  duration: number;,
+  duration: number;
   timestamp: number;
 }
 export interface ViewportArea {
@@ -356,187 +356,187 @@ export interface ViewportArea {
   interactionCount: number;
 }
 export interface ElementDensity {
-  element: ElementInfo;,
+  element: ElementInfo;
   interactionCount: number;
-  timeSpent: number;,
+  timeSpent: number;
   attention: number; // 0-1,
 }
 export interface SequentialFeatures {
-  interactionSequences: InteractionSequence;,
+  interactionSequences: InteractionSequence;
   navigationPatterns: NavigationPattern;
-  pageFlow: PageTransition;,
+  pageFlow: PageTransition;
   behaviorChains: BehaviorChain;
 }
 export interface InteractionSequence {
-  sequence: InteractionType;,
+  sequence: InteractionType;
   frequency: number;
-  avgDuration: number;,
+  avgDuration: number;
   confidence: number; // 0-1,
 }
 export interface NavigationPattern {
-  pattern: string;,
+  pattern: string;
   frequency: number;
   avgCompletionTime: number;
   conversionRate?: number;
 }
 export interface PageTransition {
-  from: string;,
+  from: string;
   to: string;
-  frequency: number;,
+  frequency: number;
   avgTransitionTime: number;
   abandonmentRate: number;
 }
 export interface BehaviorChain {
-  actions: string;,
+  actions: string;
   probability: number; // 0-1,
-  avgDuration: number;,
-  outcome: 'conversion' | 'abandonment' | 'continuation';
-}
+  avgDuration: number;
+  outcome: 'conversion' | 'abandonment' | 'continuation'
+  }
 export interface StatisticalFeatures {
-  interactionStats: InteractionStatistics;,
+  interactionStats: InteractionStatistics;
   timingStats: TimingStatistics;
-  spatialStats: SpatialStatistics;,
+  spatialStats: SpatialStatistics;
   frequencyStats: FrequencyStatistics;
 }
 export interface InteractionStatistics {
-  totalInteractions: number;,
+  totalInteractions: number;
   uniqueInteractionTypes: number;
   interactionVariety: number; // entropy measure,
-  dominantInteractionType: InteractionType;,
+  dominantInteractionType: InteractionType;
   interactionDistribution: Record<InteractionType, number>;
 }
 export interface TimingStatistics {
-  mean: number;,
+  mean: number;
   median: number;
-  standardDeviation: number;,
+  standardDeviation: number;
   skewness: number;
-  kurtosis: number;,
+  kurtosis: number;
   percentiles: Record<string, number>;
 }
 export interface SpatialStatistics {
   centroid: { x: number; y: number };
-  spread: number;,
+  spread: number;
   density: number;
   coverage: number; // 0-1,
   symmetry: number; // 0-1
 }
 export interface FrequencyStatistics {
-  mostFrequentActions: ActionFrequency;,
+  mostFrequentActions: ActionFrequency;
   actionClusters: ActionCluster;
   periodicPatterns: PeriodicPattern;
 }
 export interface ActionFrequency {
-  action: string;,
+  action: string;
   frequency: number;
   percentage: number;
 }
 export interface ActionCluster {
-  actions: string;,
+  actions: string;
   frequency: number;
   coherence: number; // 0-1,
 }
 export interface PeriodicPattern {
-  pattern: string;,
+  pattern: string;
   period: number; // milliseconds,
-  amplitude: number;,
+  amplitude: number;
   confidence: number; // 0-1,
 }
 export interface BehaviorialFeatures {
   engagementLevel: number; // 0-1,
   explorationScore: number; // 0-1,
-  decisionMakingStyle: DecisionMakingStyle;,
+  decisionMakingStyle: DecisionMakingStyle;
   intentSignals: IntentSignal;
-  frustrationIndicators: FrustrationIndicator;,
+  frustrationIndicators: FrustrationIndicator;
   confidenceIndicators: ConfidenceIndicator;
 }
 export type DecisionMakingStyle = 'quick' | 'deliberate' | 'explorative' | 'hesitant' | 'impulsive';
 
 export interface IntentSignal {
-  signal: string;,
+  signal: string;
   strength: number; // 0-1,
-  timestamp: number;,
+  timestamp: number;
   context: string;
 }
 export interface FrustrationIndicator {
-  indicator: 'rapid_clicks' | 'back_button' | 'page_refresh' | 'long_pause' | 'random_scrolling';,
+  indicator: 'rapid_clicks' | 'back_button' | 'page_refresh' | 'long_pause' | 'random_scrolling';
   intensity: number; // 0-1,
-  frequency: number;,
+  frequency: number;
   timestamp: number;
 }
 export interface ConfidenceIndicator {
-  indicator: 'direct_navigation' | 'quick_decisions' | 'minimal_backtracking' | 'focused_interaction';,
+  indicator: 'direct_navigation' | 'quick_decisions' | 'minimal_backtracking' | 'focused_interaction';
   strength: number; // 0-1,
   consistency: number; // 0-1,
 }
 export interface SessionContext {
-  device: DeviceContext;,
+  device: DeviceContext;
   environment: EnvironmentContext;
-  user: UserContext;,
+  user: UserContext;
   temporal: TemporalContext;
 }
 export interface DeviceContext {
-  type: 'desktop' | 'tablet' | 'mobile';,
+  type: 'desktop' | 'tablet' | 'mobile';
   os: string;
-  browser: string;,
+  browser: string;
   screenSize: { width: number; height: number };
   inputMethods: string;
 }
 export interface EnvironmentContext {
   networkSpeed: 'slow' | 'medium' | 'fast';
   location?: { country: string; region: string; city: string };
-  timezone: string;,
+  timezone: string;
   language: string;
 }
 export interface UserContext {
   userId?: string;
-  userType: 'new' | 'returning' | 'premium' | 'anonymous';,
+  userType: 'new' | 'returning' | 'premium' | 'anonymous';
   sessionHistory: number; // previous sessions,
   preferences?: UserPreferences;
 }
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';,
+  theme: 'light' | 'dark' | 'auto';
   language: string;
   accessibility: AccessibilityPreferences;
 }
 export interface AccessibilityPreferences {
-  screenReader: boolean;,
+  screenReader: boolean;
   highContrast: boolean;
-  largeText: boolean;,
+  largeText: boolean;
   reducedMotion: boolean;
 }
 export interface TemporalContext {
   dayOfWeek: number; // 0-6,
   hourOfDay: number; // 0-23,
-  timeZone: string;,
+  timeZone: string;
   sessionStartTime: number;
   relativeTime: 'morning' | 'afternoon' | 'evening' | 'night';
   // Pattern detection results
 }
 export interface DetectedPattern {
-  patternId: string;,
+  patternId: string;
   type: PatternType;
-  name: string;,
+  name: string;
   description: string;
   confidence: number; // 0-1,
-  frequency: number;,
+  frequency: number;
   support: number; // 0-1,
-  instances: PatternInstance;,
+  instances: PatternInstance;
   features: PatternFeatures;
-  insights: PatternInsight;,
+  insights: PatternInsight;
   recommendations: PatternRecommendation;
 }
 export interface PatternInstance {
-  instanceId: string;,
+  instanceId: string;
   sessionId: string;
-  timestamp: number;,
+  timestamp: number;
   duration: number;
-  elements: PatternElement;,
+  elements: PatternElement;
   context: InstanceContext;
 }
 export interface PatternElement {
-  elementType: string;,
+  elementType: string;
   value: Error;
-  timestamp: number;,
+  timestamp: number;
   confidence: number; // 0-1,
 }
 export interface InstanceContext {
@@ -546,43 +546,43 @@ export interface InstanceContext {
   conversionOutcome?: boolean;
 }
 export interface PatternFeatures {
-  temporal: TemporalPatternFeature;,
+  temporal: TemporalPatternFeature;
   spatial: SpatialPatternFeature;
-  sequential: SequentialPatternFeature;,
+  sequential: SequentialPatternFeature;
   contextual: ContextualPatternFeature;
 }
 export interface TemporalPatternFeature {
-  name: string;,
+  name: string;
   value: number;
   importance: number; // 0-1,
   description: string;
 }
 export interface SpatialPatternFeature {
-  name: string;,
+  name: string;
   coordinates: { x: number; y: number };
   area: { width: number; height: number };
-  density: number;,
+  density: number;
   description: string;
 }
 export interface SequentialPatternFeature {
-  name: string;,
+  name: string;
   sequence: string;
   probability: number; // 0-1,
-  length: number;,
+  length: number;
   description: string;
 }
 export interface ContextualPatternFeature {
-  name: string;,
+  name: string;
   context: Record<string, any>;
   relevance: number; // 0-1,
   description: string;
 }
 export interface PatternInsight {
-  insightId: string;,
+  insightId: string;
   type: InsightType;
-  title: string;,
+  title: string;
   description: string;
-  impact: ImpactLevel;,
+  impact: ImpactLevel;
   actionable: boolean;
   evidence: EvidenceItem;
 }
@@ -597,17 +597,17 @@ export type InsightType =
 export type ImpactLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface EvidenceItem {
-  type: 'statistical' | 'visual' | 'temporal' | 'comparative';,
+  type: 'statistical' | 'visual' | 'temporal' | 'comparative';
   data: Record<string, unknown>;
-  description: string;,
+  description: string;
   confidence: number; // 0-1,
 }
 export interface PatternRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   type: RecommendationType;
-  priority: 'low' | 'medium' | 'high' | 'urgent';,
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   title: string;
-  description: string;,
+  description: string;
   implementation: ImplementationGuide;
   expectedImpact: ExpectedImpact;
 }
@@ -620,14 +620,14 @@ export type RecommendationType =
   | 'accessibility_improvement';
 
 export interface ImplementationGuide {
-  steps: ImplementationStep;,
+  steps: ImplementationStep;
   complexity: 'low' | 'medium' | 'high';
-  estimatedTime: string;,
+  estimatedTime: string;
   requiredSkills: string;
   tools: string;
 }
 export interface ImplementationStep {
-  stepNumber: number;,
+  stepNumber: number;
   title: string;
   description: string;
   code?: string;
@@ -642,13 +642,13 @@ export interface ExpectedImpact {
   // Behavior anomaly structures
 }
 export interface BehaviorAnomaly {
-  anomalyId: string;,
+  anomalyId: string;
   type: AnomalyType;
-  severity: AnommalySeverity;,
+  severity: AnommalySeverity;
   description: string;
-  detectedAt: number;,
+  detectedAt: number;
   sessionIds: string;
-  features: AnomalyFeature;,
+  features: AnomalyFeature;
   context: AnomalyContext;
   investigation: AnomalyInvestigation;
 }
@@ -663,68 +663,68 @@ export type AnomalyType =
 export type AnommalySeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export interface AnomalyFeature {
-  featureName: string;,
+  featureName: string;
   expectedValue: number;
-  actualValue: number;,
+  actualValue: number;
   deviationScore: number; // 0-1,
   significance: number; // 0-1,
 }
 export interface AnomalyContext {
-  affectedUsers: number;,
+  affectedUsers: number;
   affectedSessions: number;
   timeRange: { start: number; end: number };
   geographicDistribution?: GeographicData;
   deviceDistribution: DeviceData;
 }
 export interface GeographicData {
-  region: string;,
+  region: string;
   count: number;
   percentage: number;
 }
 export interface DeviceData {
-  deviceType: string;,
+  deviceType: string;
   count: number;
   percentage: number;
 }
 export interface AnomalyInvestigation {
-  possibleCauses: PossibleCause;,
+  possibleCauses: PossibleCause;
   relatedEvents: RelatedEvent;
-  recommendations: InvestigationRecommendation;,
+  recommendations: InvestigationRecommendation;
   followUpActions: FollowUpAction;
 }
 export interface PossibleCause {
-  cause: string;,
+  cause: string;
   probability: number; // 0-1,
-  evidence: string;,
+  evidence: string;
   impact: string;
 }
 export interface RelatedEvent {
-  eventType: string;,
+  eventType: string;
   timestamp: number;
-  description: string;,
+  description: string;
   correlation: number; // -1 to 1,
 }
 export interface InvestigationRecommendation {
-  action: string;,
+  action: string;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  timeline: string;,
+  timeline: string;
   resources: string;
 }
 export interface FollowUpAction {
-  actionId: string;,
+  actionId: string;
   description: string;
   assignee?: string;
-  dueDate: number;,
+  dueDate: number;
   status: 'pending' | 'in_progress' | 'completed';
   // Behavior insights
 }
 export interface BehaviorInsight {
-  insightId: string;,
+  insightId: string;
   type: BehaviorInsightType;
-  title: string;,
+  title: string;
   description: string;
   relevance: number; // 0-1,
-  actionable: boolean;,
+  actionable: boolean;
   data: InsightData;
   visualizations: InsightVisualization;
 }
@@ -737,53 +737,53 @@ export type BehaviorInsightType =
   | 'performance_enhancement';
 
 export interface InsightData {
-  metrics: InsightMetric;,
+  metrics: InsightMetric;
   trends: InsightTrend;
-  comparisons: InsightComparison;,
+  comparisons: InsightComparison;
   correlations: InsightCorrelation;
 }
 export interface InsightMetric {
-  name: string;,
+  name: string;
   value: number;
-  unit: string;,
+  unit: string;
   change: number; // percentage change,
-  significance: 'positive' | 'negative' | 'neutral';
-}
+  significance: 'positive' | 'negative' | 'neutral'
+  }
 export interface InsightTrend {
-  metric: string;,
+  metric: string;
   direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
   strength: number; // 0-1,
-  timeframe: string;,
+  timeframe: string;
   dataPoints: TrendDataPoint;
 }
 export interface TrendDataPoint {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   confidence: number; // 0-1,
 }
 export interface InsightComparison {
-  baseline: ComparisonGroup;,
+  baseline: ComparisonGroup;
   comparison: ComparisonGroup;
-  difference: number;,
+  difference: number;
   significance: number; // 0-1,
   pValue?: number;
 }
 export interface ComparisonGroup {
-  name: string;,
+  name: string;
   size: number;
   metrics: Record<string, number>;
 }
 export interface InsightCorrelation {
-  variable1: string;,
+  variable1: string;
   variable2: string;
   coefficient: number; // -1 to 1,
   significance: number; // 0-1,
-  relationship: 'linear' | 'nonlinear' | 'complex';
-}
+  relationship: 'linear' | 'nonlinear' | 'complex'
+  }
 export interface InsightVisualization {
-  type: VisualizationType;,
+  type: VisualizationType;
   title: string;
-  data: VisualizationData;,
+  data: VisualizationData;
   config: VisualizationConfig;
 }
 export type VisualizationType = 
@@ -800,35 +800,35 @@ export interface VisualizationData {
   [key: string]: unknown; // Flexible data structure for different chart types,
 }
 export interface VisualizationConfig {
-  width: number;,
+  width: number;
   height: number;
-  interactive: boolean;,
+  interactive: boolean;
   animations: boolean;
-  theme: 'light' | 'dark';,
+  theme: 'light' | 'dark';
   responsive: boolean;
   // Export data structure
 }
 export interface PatternRecognitionExportData {
-  patterns: DetectedPattern;,
+  patterns: DetectedPattern;
   anomalies: BehaviorAnomaly;
-  insights: BehaviorInsight;,
+  insights: BehaviorInsight;
   sessionData: SessionBehaviorData;
-  models: PatternModel;,
+  models: PatternModel;
   performance: SystemPerformance;
   metadata: ExportMetadata;
 }
 export interface SystemPerformance {
-  processingTime: number;,
+  processingTime: number;
   memoryUsage: number;
-  cpuUsage: number;,
+  cpuUsage: number;
   accuracy: number;
   throughput: number; // sessions per second,
   errorRate: number; // 0-1,
 }
 export interface ExportMetadata {
-  exportTimestamp: number;,
+  exportTimestamp: number;
   version: string;
-  totalSessions: number;,
+  totalSessions: number;
   totalPatterns: number;
   dateRange: { start: number; end: number };
   algorithms: string;
@@ -850,7 +850,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
   type: ['click', 'hover', 'scroll', 'type', 'select'][Math.floor(Math.random() * 5)] as InteractionType,
       timestamp: timestamp + Math.random() * duration,
       duration: Math.random() * 5000 + 100,
-      element: {,
+      element: {
   tagName: ['button', 'a', 'input', 'div'][Math.floor(Math.random() * 4)],
         id: `elem_${Math.random().toString(36).substr(2, 6)}`}
 },
@@ -858,7 +858,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
 },
   text: `Element ${Math.floor(Math.random() * 100)}`}
 },
-  position: {,
+  position: {
   x: Math.random() * 1920,
   y: Math.random() * 1080,
   width: Math.random() * 200 + 50,
@@ -866,7 +866,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
   zIndex: Math.floor(Math.random() * 10),
 },
   coordinates: { x: Math.random() * 1920, y: Math.random() * 1080 },
-      context: {,
+      context: {
   pageUrl: `/page/${Math.floor(Math.random() * 10) + 1}`}
 },
   pageTitle: `Page ${Math.floor(Math.random() * 10) + 1}`}
@@ -885,7 +885,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
       method: ['link', 'button', 'form', 'back'][Math.floor(Math.random() * 4)] as NavigationMethod,
       duration: Math.random() * 3000 + 500;
   })),
-    features: {,
+    features: {
   temporal: {;
   sessionDuration: duration,
         averageInteractionInterval: duration / 30,
@@ -894,10 +894,10 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
         peakActivityTime: timestamp + duration * 0.3,
         activityDistribution: Array.from({ length: 10 }, () => Math.random())
   },
-  spatial: {,
+  spatial: {
   mouseTrackingData: [],
   clickHeatmap: [],
-  scrollPattern: {,
+  scrollPattern: {
   totalScrollDistance: Math.random() * 5000 + 1000,
   scrollVelocity: [100, 200, 150, 300],
   scrollDirection: ['down', 'up', 'down', 'down'],
@@ -906,19 +906,19 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
   viewportUtilization: [],
         elementInteractionDensity: [];
   },
-  sequential: {,
+  sequential: {
   interactionSequences: [],
   navigationPatterns: [],
   pageFlow: [],
   behaviorChains: [],
 },
-  statistical: {,
-  interactionStats: {,
+  statistical: {
+  interactionStats: {
   totalInteractions: 30,
   uniqueInteractionTypes: 5,
   interactionVariety: 0.8,
   dominantInteractionType: 'click',
-  interactionDistribution: {,
+  interactionDistribution: {
   click: 15,
   hover: 8,
   scroll: 5,
@@ -931,7 +931,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
   submit: 0,
   cancel: 0,
 },
-  timingStats: {,
+  timingStats: {
   mean: 2000,
           median: 1500,
           standardDeviation: 800,
@@ -939,19 +939,19 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
           kurtosis: -0.2,
           percentiles: { '25': 1000, '50': 1500, '75': 2500, '95': 4000 }
   },
-  spatialStats: {,
+  spatialStats: {
   centroid: { x: 960, y: 540 },
           spread: 200,
           density: 0.7,
           coverage: 0.6,
           symmetry: 0.4;
   },
-  frequencyStats: {,
+  frequencyStats: {
   mostFrequentActions: [],
   actionClusters: [],
   periodicPatterns: [],
 },
-  behavioral: {,
+  behavioral: {
   engagementLevel: Math.random(),
   explorationScore: Math.random(),
   decisionMakingStyle: ['quick', 'deliberate', 'explorative'][Math.floor(Math.random() * 3)] as DecisionMakingStyle,
@@ -959,7 +959,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
   frustrationIndicators: [],
   confidenceIndicators: [],
 },
-  context: {,
+  context: {
   device: {;
   type: ['desktop', 'tablet', 'mobile'][Math.floor(Math.random() * 3)] as any,
         os: 'macOS',
@@ -967,17 +967,17 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
         screenSize: { width: 2560, height: 1600 },
         inputMethods: ['mouse', 'keyboard']
   },
-  environment: {,
+  environment: {
   networkSpeed: ['slow', 'medium', 'fast'][Math.floor(Math.random() * 3)] as any,
   timezone: 'America/New_York',
   language: 'en-US',
 },
-  user: {,
+  user: {
   userId,
   userType: ['new', 'returning', 'premium'][Math.floor(Math.random() * 3)] as any,
   sessionHistory: Math.floor(Math.random() * 50),
 },
-  temporal: {,
+  temporal: {
   dayOfWeek: Math.floor(Math.random() * 7),
   hourOfDay: Math.floor(Math.random() * 24),
   timeZone: 'America/New_York',
@@ -997,7 +997,7 @@ const generateMockDetectedPattern = (): DetectedPattern => ({)
   frequency: Math.floor(Math.random() * 100) + 10,
   support: Math.random() * 0.3 + 0.1, // 0.1-0.4
   instances: [],
-  features: {,
+  features: {
   temporal: [],
   spatial: [],
   sequential: [],
@@ -1060,7 +1060,7 @@ export const BehaviorPatternRecognition: React.FC<BehaviorPatternRecognitionProp
   insights: behaviorInsights,
   sessionData: mockSessionData,
   models: [],
-  performance: {,
+  performance: {
   processingTime: 2500,
   memoryUsage: 256,
   cpuUsage: 45,
@@ -1068,12 +1068,12 @@ export const BehaviorPatternRecognition: React.FC<BehaviorPatternRecognitionProp
   throughput: 20,
   errorRate: 0.02,
 },
-  metadata: {,
+  metadata: {
   exportTimestamp: Date.now(),
   version: '1.0.0',
   totalSessions: mockSessionData.length,
   totalPatterns: detectedPatterns.length,
-  dateRange: {,
+  dateRange: {
   start: Date.now() - 86400000,
   end: Date.now(),
 },

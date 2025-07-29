@@ -39,104 +39,104 @@ import {
 // Types for Node Annotations
 
 export interface NodeAnnotation {
-  id: string;,
+  id: string;
   nodeId: string;
-  type: 'performance' | 'creative' | 'technical' | 'review' | 'approval' | 'question' | 'reference';,
+  type: 'performance' | 'creative' | 'technical' | 'review' | 'approval' | 'question' | 'reference';
   content: string;
-  author: VFXUser;,
+  author: VFXUser;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'open' | 'in_progress' | 'resolved' | 'approved' | 'rejected' | 'on_hold';,
+  status: 'open' | 'in_progress' | 'resolved' | 'approved' | 'rejected' | 'on_hold';
   timestamp: string;
-  lastModified: string;,
+  lastModified: string;
   attachments: NodeAnnotationAttachment;
-  replies: NodeAnnotationReply;,
+  replies: NodeAnnotationReply;
   tags: string;
-  visibility: 'public' | 'private' | 'team_only' | 'director_only';,
+  visibility: 'public' | 'private' | 'team_only' | 'director_only';
   linkedAnnotations: string; // IDs of related annotations,
   estimatedTime?: number; // For task-type annotations,
   deadline?: string;
   assignee?: VFXUser;
 }
 export interface NodeAnnotationAttachment {
-  id: string;,
+  id: string;
   type: 'image' | 'video' | 'audio' | 'link' | 'file';
-  name: string;,
+  name: string;
   url: string;
   thumbnail?: string;
   size?: number;
   duration?: number; // For audio/video,
 }
 export interface NodeAnnotationReply {
-  id: string;,
+  id: string;
   content: string;
-  author: VFXUser;,
+  author: VFXUser;
   timestamp: string;
   reactions: { [emoji: string]: VFXUser };
 }
 export interface VFXUser {
-  id: string;,
+  id: string;
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
   avatar?: string;
   email: string;
 }
 export interface NodeAnnotationSystemProps {
-  nodeId: string;,
+  nodeId: string;
   nodeName: string;
-  nodeType: string;,
+  nodeType: string;
   annotations: NodeAnnotation;
-  currentUser: VFXUser;,
+  currentUser: VFXUser;
   onAnnotationCreate: (annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'>) => void;
-  onAnnotationUpdate: (annotationId: string, updates: Partial<NodeAnnotation>) => void;,
-  onAnnotationDelete: (annotationId: string) => void;,
+  onAnnotationUpdate: (annotationId: string, updates: Partial<NodeAnnotation>) => void;
+  onAnnotationDelete: (annotationId: string) => void;
   onReplyCreate: (annotationId: string, reply: Omit<NodeAnnotationReply, 'id' | 'timestamp' | 'reactions'>) => void;
   className?: string;
   compact?: boolean;
   // Annotation type configurations
   const ANNOTATION_TYPES = {
-  performance: {,
+  performance: {
   icon: <Zap className="w-4 h-4" />,
   color: '#f59e0b',
   bgColor: 'bg-amber-50',
   borderColor: 'border-amber-200',
   label: 'Performance',
 },
-  creative: {,
+  creative: {
   icon: <Camera className="w-4 h-4" />,
   color: '#8b5cf6',
   bgColor: 'bg-purple-50',
   borderColor: 'border-purple-200',
   label: 'Creative',
 },
-  technical: {,
+  technical: {
   icon: <Settings className="w-4 h-4" />,
   color: '#6b7280',
   bgColor: 'bg-gray-50',
   borderColor: 'border-gray-200',
   label: 'Technical',
 },
-  review: {,
+  review: {
   icon: <Eye className="w-4 h-4" />,
   color: '#3b82f6',
   bgColor: 'bg-blue-50',
   borderColor: 'border-blue-200',
   label: 'Review',
 },
-  approval: {,
+  approval: {
   icon: <CheckCircle className="w-4 h-4" />,
   color: '#10b981',
   bgColor: 'bg-green-50',
   borderColor: 'border-green-200',
   label: 'Approval',
 },
-  question: {,
+  question: {
   icon: <MessageCircle className="w-4 h-4" />,
   color: '#06b6d4',
   bgColor: 'bg-cyan-50',
   borderColor: 'border-cyan-200',
   label: 'Question',
 },
-  reference: {,
+  reference: {
   icon: <FileText className="w-4 h-4" />,
   color: '#84cc16',
   bgColor: 'bg-lime-50',

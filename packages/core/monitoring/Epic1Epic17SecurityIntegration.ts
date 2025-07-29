@@ -23,120 +23,120 @@ import { SecurityEvent, CrossSystemAlertingSystem } from '../security/AlertingSy
 
 export interface IntegratedSecurityMetrics {
   // Epic 1 base performance metrics
-  performanceMetrics: {,
-  nodeExecutionMetrics: PerformanceMetrics;,
+  performanceMetrics: {
+  nodeExecutionMetrics: PerformanceMetrics;
   aggregatedNodeMetrics: Map<string, AggregatedMetrics>;
-  systemPerformance: {,
-  totalExecutions: number;,
+  systemPerformance: {
+  totalExecutions: number;
   averageExecutionTime: number;
-  errorRate: number;,
+  errorRate: number;
   memoryUsage: number;
 };
   };
   // Epic 17 admin-specific metrics
-  adminMetrics: {,
+  adminMetrics: {
   adminOperationMetrics: AdminPerformanceMetric;
   integrationHealth: Map<SystemIntegration, any>;
-  complianceMetrics: {,
-  auditTrailCompleteness: number;,
+  complianceMetrics: {
+  auditTrailCompleteness: number;
   policyEnforcementRate: number;
   accessControlCompliance: number;
 };
   };
   // Security analytics metrics
-  securityMetrics: {,
+  securityMetrics: {
   systemHealth: Map<string, SecuritySystemHealth>;
   securityAnalytics: Map<string, SecurityAnalyticsMetrics>;
-  threatLandscape: {,
-  overallThreatLevel: number;,
+  threatLandscape: {
+  overallThreatLevel: number;
   activeThreats: number;
-  mitigatedThreats: number;,
+  mitigatedThreats: number;
   falsePositiveRate: number;
 };
   };
   // Cross-system correlations
-  correlations: {,
+  correlations: {
   performanceSecurityCorrelation: number; // How security events correlate with performance,
   adminOperationRisk: number; // Risk score for admin operations,
-  systemHealthTrend: 'improving' | 'stable' | 'degrading';,
+  systemHealthTrend: 'improving' | 'stable' | 'degrading';
   integratedHealthScore: number; // Overall system health 0-100,
 };
 }
 export interface IntegratedAlertRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
   // Conditions across all three systems
-  conditions: {,
+  conditions: {
   // Epic 1 performance conditions
-  performanceConditions?: {,
-  slowExecutionThreshold: number;,
+  performanceConditions?: {
+  slowExecutionThreshold: number;
   errorRateThreshold: number;
   memoryThreshold: number;
 };
     // Epic 17 admin conditions
     adminConditions?: {
-  adminOperations: AdminOperation;,
+  adminOperations: AdminOperation;
   complianceThreshold: number;
   integrationHealthThreshold: number;
 };
     // Security conditions
     securityConditions?: {
-  threatLevelThreshold: number;,
+  threatLevelThreshold: number;
   securityEventTypes: SecurityEvent['type'][];
   falsePositiveThreshold: number;
 };
     // Cross-system correlation conditions
     correlationConditions?: {
-  performanceSecurityCorrelation: number;,
+  performanceSecurityCorrelation: number;
   healthScoreThreshold: number;
   multiSystemEventWindow: number; // milliseconds,
 };
   };
   // Actions that can span all systems
-  actions: {,
+  actions: {
   notifications: Array<{,
-  type: 'email' | 'slack' | 'webhook' | 'admin_dashboard' | 'security_dashboard';,
+  type: 'email' | 'slack' | 'webhook' | 'admin_dashboard' | 'security_dashboard';
   target: string;
-  priority: 'low' | 'normal' | 'high' | 'critical';
-}>;
+  priority: 'low' | 'normal' | 'high' | 'critical'
+  }>;
     automaticMitigation?: {
-  scaleResources: boolean;,
+  scaleResources: boolean;
   isolateComponents: boolean;
-  escalateToAdmin: boolean;,
+  escalateToAdmin: boolean;
   triggerIncidentResponse: boolean;
 };
     complianceActions?: {
-  createAuditEntry: boolean;,
+  createAuditEntry: boolean;
   notifyComplianceTeam: boolean;
   lockAffectedResources: boolean;
 };
   };
-  metadata: {,
+  metadata: {
   createdBy: string;
-  createdAt: number;,
+  createdAt: number;
   lastModified: number;
-  category: 'performance' | 'security' | 'compliance' | 'operational';,
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
-};
+  category: 'performance' | 'security' | 'compliance' | 'operational';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical'
+  };
 }
 export interface IntegratedDashboardData {
   // Real-time status
-  realTimeStatus: {,
-  timestamp: number;,
+  realTimeStatus: {
+  timestamp: number;
   overallHealthScore: number;
-  systemsOperational: number;,
+  systemsOperational: number;
   systemsTotal: number;
-  criticalAlertsCount: number;,
+  criticalAlertsCount: number;
   activeIncidentsCount: number;
 };
   // Performance overview (Epic 1)
-  performanceOverview: {,
-  nodeExecutions: {,
-  total: number;,
+  performanceOverview: {
+  nodeExecutions: {
+  total: number;
   successful: number;
-  failed: number;,
+  failed: number;
   averageTime: number;
 };
     topPerformingNodes: Array<{ nodeType: string; avgTime: number }>;
@@ -144,58 +144,58 @@ export interface IntegratedDashboardData {
     memoryTrend: Array<{ timestamp: number; usage: number }>;
   };
   // Admin operations overview (Epic 17)
-  adminOverview: {,
+  adminOverview: {
   activeAdminSessions: number;
   recentOperations: Array<{,
-  operation: AdminOperation;,
+  operation: AdminOperation;
   timestamp: number;
-  duration: number;,
+  duration: number;
   success: boolean;
   adminUser: string;
 }>;
     integrationStatus: Array<{,
   integration: SystemIntegration;
-  status: 'healthy' | 'degraded' | 'unhealthy';,
+  status: 'healthy' | 'degraded' | 'unhealthy';
   responseTime: number;
 }>;
     complianceScore: number;
   };
   // Security overview
-  securityOverview: {,
+  securityOverview: {
   threatLevel: number;
-  activeSecurityAlerts: number;,
+  activeSecurityAlerts: number;
   securitySystemsHealth: Array<{,
-  systemId: string;,
+  systemId: string;
   healthScore: number;
-  status: 'healthy' | 'degraded' | 'critical' | 'offline';
-}>;
+  status: 'healthy' | 'degraded' | 'critical' | 'offline'
+  }>;
     recentSecurityEvents: Array<{,
   type: SecurityEvent['type'];
-  severity: SecurityEvent['severity'];,
+  severity: SecurityEvent['severity'];
   timestamp: number;
   source: string;
 }>;
   };
   // Cross-system insights
-  crossSystemInsights: {,
+  crossSystemInsights: {
   correlatedEvents: Array<{,
-  type: 'performance_security' | 'admin_security' | 'performance_admin';,
+  type: 'performance_security' | 'admin_security' | 'performance_admin';
   description: string;
-  confidence: number;,
+  confidence: number;
   timestamp: number;
   affectedSystems: string;
 }>;
     recommendations: Array<{,
   category: 'performance' | 'security' | 'admin' | 'compliance';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   estimatedImpact: string;
 }>;
-    riskAssessment: {,
+    riskAssessment: {
   overallRisk: 'low' | 'medium' | 'high' | 'critical';
   riskFactors: Array<{,
-  factor: string;,
+  factor: string;
   impact: number; // 0-10,
   likelihood: number; // 0-10,
   mitigation: string;
@@ -204,35 +204,35 @@ export interface IntegratedDashboardData {
   };
 }
 export interface IntegrationConfig {
-  epic1Integration: {,
-  enabled: boolean;,
+  epic1Integration: {
+  enabled: boolean;
   performanceMonitoringInterval: number;
-  nodeMetricsCollection: boolean;,
+  nodeMetricsCollection: boolean;
   memoryTrackingEnabled: boolean;
 };
-  epic17Integration: {,
+  epic17Integration: {
   enabled: boolean;
-  adminOperationTracking: boolean;,
+  adminOperationTracking: boolean;
   integrationHealthMonitoring: boolean;
-  complianceMonitoring: boolean;,
+  complianceMonitoring: boolean;
   auditIntegration: boolean;
 };
-  securityIntegration: {,
+  securityIntegration: {
   enabled: boolean;
-  threatDetectionEnabled: boolean;,
+  threatDetectionEnabled: boolean;
   complianceMonitoring: boolean;
-  incidentResponseIntegration: boolean;,
+  incidentResponseIntegration: boolean;
   crossSystemCorrelation: boolean;
 };
-  correlationSettings: {,
+  correlationSettings: {
   correlationWindow: number; // milliseconds,
   confidenceThreshold: number; // 0-1,
-  enablePredictiveAnalysis: boolean;,
+  enablePredictiveAnalysis: boolean;
   alertAggregationEnabled: boolean;
 };
-  dashboardSettings: {,
+  dashboardSettings: {
   refreshInterval: number;
-  retentionPeriod: number;,
+  retentionPeriod: number;
   enableRealTimeUpdates: boolean;
   maxHistoricalDataPoints: number;
 };
@@ -257,10 +257,10 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   private dashboardUpdateInterval?: NodeJS.Timeout;
   constructor();
   config: IntegrationConfig,
-  monitors: {,
-  epic1Monitor: PerformanceMonitor;,
+  monitors: {
+  epic1Monitor: PerformanceMonitor;
   epic17Monitor: Epic17PerformanceMonitor;
-  securityMonitor: SecurityAnalyticsMonitor;,
+  securityMonitor: SecurityAnalyticsMonitor;
   alertingSystem: CrossSystemAlertingSystem;
   super();
   this.config = config;
@@ -307,7 +307,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   securityDashboard
   );
   return {
-  realTimeStatus: {,
+  realTimeStatus: {
   timestamp: now,
   overallHealthScore: integratedHealthScore,
   systemsOperational: this.getOperationalSystemsCount(),
@@ -315,44 +315,44 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   criticalAlertsCount: this.getCriticalAlertsCount(),
   activeIncidentsCount: this.getActiveIncidentsCount(),
 },
-  performanceOverview: {,
-  nodeExecutions: {,
+  performanceOverview: {
+  nodeExecutions: {
   total: epic1Stats.totalExecutions,
   successful: epic1Stats.totalExecutions - Math.floor(epic1Stats.totalExecutions * (epic1Stats.errorRate / 100)),
   failed: Math.floor(epic1Stats.totalExecutions * (epic1Stats.errorRate / 100)),
   averageTime: epic1Stats.averageExecutionTime,
 },
-  topPerformingNodes: epic1Stats.topPerformingTypes.map(type => ({,)
+  topPerformingNodes: epic1Stats.topPerformingTypes.map(type => ({)
   nodeType: type,
   avgTime: 0 // Would get actual average from metrics,
 })),
-        bottomPerformingNodes: epic1Stats.underperformingTypes.map(type => ({,)
+        bottomPerformingNodes: epic1Stats.underperformingTypes.map(type => ({)
   nodeType: type,
   avgTime: 0 // Would get actual average from metrics,
 })),
         memoryTrend: this.getMemoryTrend();
   },
-  adminOverview: {,
+  adminOverview: {
   activeAdminSessions: epic17Dashboard.adminSystemOverview.activeAdminSessions,
   recentOperations: this.getRecentAdminOperations(),
-  integrationStatus: epic17Dashboard.integrationHealth.map(health => ({,)
+  integrationStatus: epic17Dashboard.integrationHealth.map(health => ({)
   integration: health.integration,
   status: health.status,
   responseTime: health.responseTime,
 })),
         complianceScore: epic17Dashboard.complianceMetrics.auditTrailCompleteness;
   },
-  securityOverview: {,
+  securityOverview: {
   threatLevel: securityDashboard.threatLevel,
   activeSecurityAlerts: securityDashboard.criticalAlerts,
-  securitySystemsHealth: securityDashboard.systemPerformance.map(perf => ({,)
+  securitySystemsHealth: securityDashboard.systemPerformance.map(perf => ({)
   systemId: perf.systemId,
   healthScore: perf.healthScore,
   status: perf.healthScore > 80 ? 'healthy' : perf.healthScore > 60 ? 'degraded' : 'critical',
 })),
         recentSecurityEvents: this.getRecentSecurityEvents();
   },
-  crossSystemInsights: {,
+  crossSystemInsights: {
   correlatedEvents: this.correlationEngine.getRecentCorrelations(),
   recommendations: this.generateIntegratedRecommendations(),
   riskAssessment: this.performRiskAssessment(),
@@ -362,8 +362,8 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
    */
   recordIntegratedSecurityEvent();
     event: SecurityEvent,
-    context: {,
-  performanceImpact?: {,
+    context: {
+  performanceImpact?: {
   nodeId?: string;
   executionTime?: number;
   memoryUsage?: number;
@@ -412,7 +412,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
     const fullRule: IntegratedAlertRule = {
   ...rule,
   ruleId,
-  metadata: {,
+  metadata: {
   createdBy: 'system',
   createdAt: Date.now(),
   lastModified: Date.now(),
@@ -430,42 +430,42 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
    */
   async generateIntegratedReport(timeRange: { start: number; end: number })
   ): Promise<{
-    summary: {,
+    summary: {
   reportId: string;
-      generatedAt: number;,
+      generatedAt: number;
   timeRange: { start: number; end: number };
-      overallHealthScore: number;,
+      overallHealthScore: number;
   systemsAnalyzed: number;
       criticalIssuesFound: number;
     };
-    performanceAnalysis: {,
+    performanceAnalysis: {
   totalExecutions: number;
-  averagePerformance: number;,
+  averagePerformance: number;
   performanceTrend: 'improving' | 'stable' | 'degrading';
   topBottlenecks: string;
 };
-    adminAnalysis: {,
+    adminAnalysis: {
   adminOperationsCount: number;
-  complianceScore: number;,
+  complianceScore: number;
   integrationHealthScore: number;
   criticalAdminAlerts: number;
 };
-    securityAnalysis: {,
+    securityAnalysis: {
   threatsDetected: number;
-  securityScore: number;,
+  securityScore: number;
   vulnerabilitiesFound: number;
   incidentResponseTime: number;
 };
-    correlationAnalysis: {,
+    correlationAnalysis: {
   correlatedEvents: number;
       riskFactors: Array<{ factor: string; severity: number }>;
       predictiveInsights: string;
     };
     recommendations: Array<{,
   category: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   recommendation: string;
-  estimatedEffort: string;,
+  estimatedEffort: string;
   expectedBenefit: string;
 }>;
   }> {
@@ -483,7 +483,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
       correlationData
     );
     const report = {
-  summary: {,
+  summary: {
   reportId,
   generatedAt: Date.now(),
   timeRange,
@@ -521,33 +521,33 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   // Private helper methods
   private initializeIntegratedMetrics(): IntegratedSecurityMetrics {,
   return {
-  performanceMetrics: {,
+  performanceMetrics: {
   nodeExecutionMetrics: [],
   aggregatedNodeMetrics: new Map(),
-  systemPerformance: {,
+  systemPerformance: {
   totalExecutions: 0,
   averageExecutionTime: 0,
   errorRate: 0,
   memoryUsage: 0,
 },
-  adminMetrics: {,
+  adminMetrics: {
   adminOperationMetrics: [],
   integrationHealth: new Map(),
-  complianceMetrics: {,
+  complianceMetrics: {
   auditTrailCompleteness: 0,
   policyEnforcementRate: 0,
   accessControlCompliance: 0,
 },
-  securityMetrics: {,
+  securityMetrics: {
   systemHealth: new Map(),
   securityAnalytics: new Map(),
-  threatLandscape: {,
+  threatLandscape: {
   overallThreatLevel: 0,
   activeThreats: 0,
   mitigatedThreats: 0,
   falsePositiveRate: 0,
 },
-  correlations: {,
+  correlations: {
   performanceSecurityCorrelation: 0,
   adminOperationRisk: 0,
   systemHealthTrend: 'stable',
@@ -607,23 +607,23 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   name: 'Critical Performance & Security Correlation',
   description: 'Alert when performance degradation correlates with security events',
   enabled: true,
-  conditions: {,
-  performanceConditions: {,
+  conditions: {
+  performanceConditions: {
   slowExecutionThreshold: 5000,
   errorRateThreshold: 0.1,
   memoryThreshold: 1024 * 1024 * 1024 // 1GB,
 },
-  securityConditions: {,
+  securityConditions: {
   threatLevelThreshold: 7,
   securityEventTypes: ['security_breach', 'suspicious_activity'],
   falsePositiveThreshold: 0.2,
 },
-  correlationConditions: {,
+  correlationConditions: {
   performanceSecurityCorrelation: 0.7,
   healthScoreThreshold: 70,
   multiSystemEventWindow: 300000 // 5 minutes,
 },
-  actions: {,
+  actions: {
   notifications: [,
   {
   type: 'email',
@@ -634,7 +634,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   type: 'slack',
   target: '#security-alerts',
   priority: 'critical'],
-  automaticMitigation: {,
+  automaticMitigation: {
   scaleResources: true,
   isolateComponents: false,
   escalateToAdmin: true,
@@ -753,7 +753,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
 class CorrelationEngine extends EventEmitter {
   private config: IntegrationConfig['correlationSettings'];
   private eventBuffer: Array<{,
-  type: 'performance' | 'admin' | 'security';,
+  type: 'performance' | 'admin' | 'security';
   event: any;
   timestamp: number;
 }> = [];

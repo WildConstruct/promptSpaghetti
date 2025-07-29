@@ -21,16 +21,16 @@ export interface PreviewModalProps {
     open: boolean;
     loading: boolean;
     error: string | null;
-    results: PreviewResult | PreviewResultWithPath;
+    results: PreviewResult[] | PreviewResultWithPath[];
     onClose: () => void;
     onCancel?: () => void;
     onResultHover?: (index: number) => void;
     onNodeHighlight?: (nodeIds: string) => void;
     onResultAction?: (action: ResultAction) => void;
-    lockedResults?: LockedResult;
-    regeneratingResults?: number;
+    lockedResults?: LockedResult[];
+    regeneratingResults?: number[];
     onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
 }
 export declare const PreviewModal: React.FC<PreviewModalProps>;
-export {};
+export default PreviewModal;
 //# sourceMappingURL=PreviewModal.d.ts.map

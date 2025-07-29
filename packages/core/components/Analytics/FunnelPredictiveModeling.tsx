@@ -30,7 +30,7 @@ import {
 // Predictive modeling interfaces
 
 export interface FunnelPredictiveModelingProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange: { start: number; end: number };
   modelConfig?: PredictiveModelConfiguration;
@@ -42,13 +42,13 @@ export interface FunnelPredictiveModelingProps {
   onExport?: (data: PredictiveModelingExportData) => void;
 }
 export interface PredictiveModelConfiguration {
-  models: PredictiveModelType;,
+  models: PredictiveModelType;
   updateFrequency: ModelUpdateFrequency;
-  confidenceLevel: number;,
+  confidenceLevel: number;
   seasonalityDetection: boolean;
-  trendAnalysis: boolean;,
+  trendAnalysis: boolean;
   externalFactors: ExternalFactor;
-  modelValidation: ModelValidationConfig;,
+  modelValidation: ModelValidationConfig;
   ensemble: EnsembleConfig;
 }
 export type PredictiveModelType = 
@@ -66,101 +66,101 @@ export type ModelUpdateFrequency = 'real_time' | 'hourly' | 'daily' | 'weekly';
 export type ForecastHorizon = 'short' | 'medium' | 'long' | 'custom';
 
 export interface PredictiveModelingData {
-  performanceForecasts: PerformanceForecast;,
+  performanceForecasts: PerformanceForecast;
   userBehaviorPredictions: UserBehaviorPrediction;
-  churnPredictions: ChurnPrediction;,
+  churnPredictions: ChurnPrediction;
   seasonalAnalysis: SeasonalAnalysis;
-  scenarioAnalysis: ScenarioAnalysis;,
+  scenarioAnalysis: ScenarioAnalysis;
   cohortPredictions: CohortPrediction;
-  modelPerformance: ModelPerformanceMetrics;,
+  modelPerformance: ModelPerformanceMetrics;
   predictionHistory: PredictionHistoryEntry;
-  uncertaintyAnalysis: UncertaintyAnalysis;,
+  uncertaintyAnalysis: UncertaintyAnalysis;
   featureImportance: FeatureImportanceData;
 }
 export interface PerformanceForecast {
-  forecastId: string;,
+  forecastId: string;
   model: PredictiveModelType;
-  horizon: ForecastHorizon;,
+  horizon: ForecastHorizon;
   timePoints: ForecastTimePoint;
-  metrics: ForecastMetrics;,
+  metrics: ForecastMetrics;
   confidence: ConfidenceInterval;
-  factors: ForecastFactor;,
+  factors: ForecastFactor;
   scenarios: ForecastScenario;
-  accuracy: ForecastAccuracy;,
+  accuracy: ForecastAccuracy;
   lastUpdated: number;
 }
 export interface ForecastTimePoint {
-  timestamp: number;,
+  timestamp: number;
   period: string;
-  predictions: MetricPrediction;,
+  predictions: MetricPrediction;
   confidence: number;
-  uncertainty: number;,
+  uncertainty: number;
   contributingFactors: ContributingFactor;
 }
 export interface MetricPrediction {
-  metric: string;,
+  metric: string;
   predictedValue: number;
   actualValue?: number;
   prediction_error?: number;
-  confidence: ConfidenceInterval;,
+  confidence: ConfidenceInterval;
   trend: TrendDirection;
   volatility: number;
 }
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'cyclical' | 'volatile';
 
 export interface ConfidenceInterval {
-  lower: number;,
+  lower: number;
   upper: number;
   level: number; // e.g., 0.95 for 95% confidence,
 }
 export interface ForecastMetrics {
-  conversionRate: MetricForecast;,
+  conversionRate: MetricForecast;
   revenue: MetricForecast;
-  userAcquisition: MetricForecast;,
+  userAcquisition: MetricForecast;
   churnRate: MetricForecast;
-  lifetimeValue: MetricForecast;,
+  lifetimeValue: MetricForecast;
   engagementScore: MetricForecast;
 }
 export interface MetricForecast {
-  metric: string;,
+  metric: string;
   currentValue: number;
-  forecastedValue: number;,
+  forecastedValue: number;
   changePercent: number;
-  trend: TrendDirection;,
+  trend: TrendDirection;
   confidence: ConfidenceInterval;
   seasonality: SeasonalityPattern;
 }
 export interface SeasonalityPattern {
-  detected: boolean;,
+  detected: boolean;
   period: number; // Days,
-  amplitude: number;,
+  amplitude: number;
   phase: number;
   strength: number;
 }
 export interface ForecastFactor {
-  factor: string;,
+  factor: string;
   impact: number; // -1 to 1,
-  confidence: number;,
+  confidence: number;
   description: string;
-  source: 'historical' | 'external' | 'model_derived';
-}
+  source: 'historical' | 'external' | 'model_derived'
+  }
 export interface ForecastScenario {
-  scenarioId: string;,
+  scenarioId: string;
   name: string;
-  description: string;,
+  description: string;
   assumptions: ScenarioAssumption;
-  outcomes: ScenarioOutcome;,
+  outcomes: ScenarioOutcome;
   probability: number;
 }
 export interface ScenarioAssumption {
-  parameter: string;,
+  parameter: string;
   value: number;
   description: string;
 }
 export interface ScenarioOutcome {
-  metric: string;,
+  metric: string;
   predictedValue: number;
-  impact: number;,
+  impact: number;
   confidence: number;
 }
 export interface ForecastAccuracy {
@@ -172,87 +172,87 @@ export interface ForecastAccuracy {
   lastValidation: number;
 }
 export interface UserBehaviorPrediction {
-  userId: string;,
+  userId: string;
   segment: string;
   cohort?: string;
-  behaviorPredictions: BehaviorPrediction;,
+  behaviorPredictions: BehaviorPrediction;
   nextActions: PredictedAction;
-  engagement: EngagementPrediction;,
+  engagement: EngagementPrediction;
   conversionProbability: ConversionProbability;
-  churnRisk: ChurnRisk;,
+  churnRisk: ChurnRisk;
   recommendedInterventions: Intervention;
 }
 export interface BehaviorPrediction {
-  behavior: string;,
+  behavior: string;
   probability: number;
-  confidence: number;,
+  confidence: number;
   timeframe: number; // Days,
   factors: PredictionFactor;
 }
 export interface PredictedAction {
-  action: string;,
+  action: string;
   probability: number;
-  expectedTimestamp: number;,
+  expectedTimestamp: number;
   value: number;
   confidence: number;
 }
 export interface EngagementPrediction {
-  currentScore: number;,
+  currentScore: number;
   predictedScore: number;
-  trend: TrendDirection;,
+  trend: TrendDirection;
   riskLevel: 'low' | 'medium' | 'high';
   drivers: EngagementDriver;
 }
 export interface EngagementDriver {
-  factor: string;,
+  factor: string;
   impact: number;
-  controllable: boolean;,
+  controllable: boolean;
   recommendation: string;
 }
 export interface ConversionProbability {
-  probability: number;,
+  probability: number;
   confidence: number;
-  timeToConversion: number;,
+  timeToConversion: number;
   conversionValue: number;
-  steps: StepConversionProbability;,
+  steps: StepConversionProbability;
   factors: ConversionFactor;
 }
 export interface StepConversionProbability {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  probability: number;,
+  probability: number;
   bottleneck: boolean;
   optimizationPotential: number;
 }
 export interface ConversionFactor {
-  factor: string;,
+  factor: string;
   weight: number;
-  direction: 'positive' | 'negative';,
+  direction: 'positive' | 'negative';
   controllable: boolean;
 }
 export interface ChurnRisk {
-  riskScore: number;,
+  riskScore: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
-  timeToChurn: number;,
+  timeToChurn: number;
   churnProbability: number;
   preventionRecommendations: ChurnPreventionRecommendation;
 }
 export interface ChurnPreventionRecommendation {
-  intervention: string;,
+  intervention: string;
   effectiveness: number;
-  cost: number;,
+  cost: number;
   urgency: 'immediate' | 'high' | 'medium' | 'low';
   implementation: string;
 }
 export interface Intervention {
-  type: InterventionType;,
+  type: InterventionType;
   description: string;
   timing: number; // Days from now,
-  expectedImpact: number;,
+  expectedImpact: number;
   cost: number;
-  success_probability: number;,
-  priority: 'critical' | 'high' | 'medium' | 'low';
-}
+  success_probability: number;
+  priority: 'critical' | 'high' | 'medium' | 'low'
+  }
 export type InterventionType = 
   | 'personalized_offer'
   | 'content_recommendation'
@@ -267,383 +267,383 @@ export interface ChurnPrediction {
   segmentId?: string;
   cohortId?: string;
   timeHorizon: number; // Days,
-  churnRate: ChurnRatePrediction;,
+  churnRate: ChurnRatePrediction;
   riskSegments: RiskSegment;
-  preventionStrategies: PreventionStrategy;,
+  preventionStrategies: PreventionStrategy;
   impactAnalysis: ChurnImpactAnalysis;
 }
 export interface ChurnRatePrediction {
-  currentRate: number;,
+  currentRate: number;
   predictedRate: number;
-  confidence: ConfidenceInterval;,
+  confidence: ConfidenceInterval;
   factors: ChurnFactor;
   seasonality: SeasonalityPattern;
 }
 export interface ChurnFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  trend: TrendDirection;,
+  trend: TrendDirection;
   controllable: boolean;
   prevention: PreventionAction;
 }
 export interface PreventionAction {
-  action: string;,
+  action: string;
   effectiveness: number;
-  cost: number;,
-  feasibility: 'high' | 'medium' | 'low';
-}
+  cost: number;
+  feasibility: 'high' | 'medium' | 'low'
+  }
 export interface RiskSegment {
-  segmentId: string;,
+  segmentId: string;
   segmentName: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   churnProbability: number;
-  size: number;,
+  size: number;
   value: number;
   characteristics: SegmentCharacteristic;
 }
 export interface SegmentCharacteristic {
-  characteristic: string;,
+  characteristic: string;
   value: string | number;
   importance: number;
 }
 export interface PreventionStrategy {
-  strategyId: string;,
+  strategyId: string;
   name: string;
-  description: string;,
+  description: string;
   targetSegments: string;
-  effectiveness: number;,
+  effectiveness: number;
   cost: number;
-  timeline: number;,
+  timeline: number;
   kpis: PreventionKPI;
 }
 export interface PreventionKPI {
-  metric: string;,
+  metric: string;
   target: number;
-  current: number;,
+  current: number;
   improvement: number;
 }
 export interface ChurnImpactAnalysis {
-  revenueImpact: number;,
+  revenueImpact: number;
   userImpact: number;
-  retentionCost: number;,
+  retentionCost: number;
   acquisitionCost: number;
-  netImpact: number;,
-  timeSensitivity: 'critical' | 'high' | 'medium' | 'low';
-}
+  netImpact: number;
+  timeSensitivity: 'critical' | 'high' | 'medium' | 'low'
+  }
 export interface SeasonalAnalysis {
-  pattern: SeasonalPattern;,
+  pattern: SeasonalPattern;
   forecast: SeasonalForecast;
-  anomalies: SeasonalAnomaly;,
+  anomalies: SeasonalAnomaly;
   recommendations: SeasonalRecommendation;
 }
 export interface SeasonalPattern {
-  type: 'yearly' | 'monthly' | 'weekly' | 'daily';,
+  type: 'yearly' | 'monthly' | 'weekly' | 'daily';
   strength: number;
-  peaks: SeasonalPeak;,
+  peaks: SeasonalPeak;
   troughs: SeasonalTrough;
   stability: number;
 }
 export interface SeasonalPeak {
-  period: string;,
+  period: string;
   amplitude: number;
-  reliability: number;,
+  reliability: number;
   duration: number;
 }
 export interface SeasonalTrough {
-  period: string;,
+  period: string;
   amplitude: number;
-  reliability: number;,
+  reliability: number;
   duration: number;
 }
 export interface SeasonalForecast {
-  period: string;,
+  period: string;
   expectedValue: number;
-  confidence: ConfidenceInterval;,
+  confidence: ConfidenceInterval;
   preparation: SeasonalPrepartion;
 }
 export interface SeasonalPrepartion {
-  action: string;,
+  action: string;
   timing: number; // Days before peak/trough,
-  impact: number;,
+  impact: number;
   resources: string;
 }
 export interface SeasonalAnomaly {
-  period: string;,
+  period: string;
   expectedValue: number;
-  actualValue: number;,
+  actualValue: number;
   deviation: number;
-  significance: 'high' | 'medium' | 'low';,
+  significance: 'high' | 'medium' | 'low';
   explanation: string;
 }
 export interface SeasonalRecommendation {
-  recommendation: string;,
+  recommendation: string;
   seasonality: string;
-  impact: number;,
+  impact: number;
   implementation: string;
   timing: SeasonalTiming;
 }
 export interface SeasonalTiming {
-  startDate: number;,
+  startDate: number;
   endDate: number;
   preparation: number; // Days before,
   duration: number; // Days,
 }
 export interface ScenarioAnalysis {
-  scenarioId: string;,
+  scenarioId: string;
   name: string;
-  description: string;,
+  description: string;
   parameters: ScenarioParameter;
-  outcomes: ScenarioOutcome;,
+  outcomes: ScenarioOutcome;
   probability: number;
-  impactAnalysis: ScenarioImpactAnalysis;,
+  impactAnalysis: ScenarioImpactAnalysis;
   recommendations: ScenarioRecommendation;
 }
 export interface ScenarioParameter {
-  parameter: string;,
+  parameter: string;
   baseValue: number;
-  scenarioValue: number;,
+  scenarioValue: number;
   impact: number;
   controllable: boolean;
 }
 export interface ScenarioImpactAnalysis {
-  revenueImpact: number;,
+  revenueImpact: number;
   conversionImpact: number;
-  userImpact: number;,
+  userImpact: number;
   costImpact: number;
-  timeframe: number;,
+  timeframe: number;
   confidence: number;
 }
 export interface ScenarioRecommendation {
-  action: string;,
+  action: string;
   preparationTime: number;
-  resources: string;,
+  resources: string;
   expectedBenefit: number;
   riskMitigation: string;
 }
 export interface CohortPrediction {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  lifecycle: CohortLifecyclePrediction;,
+  lifecycle: CohortLifecyclePrediction;
   valueProjection: CohortValueProjection;
-  behaviorEvolution: CohortBehaviorEvolution;,
+  behaviorEvolution: CohortBehaviorEvolution;
   optimizationOpportunities: CohortOptimizationOpportunity;
 }
 export interface CohortLifecyclePrediction {
-  currentStage: LifecycleStage;,
+  currentStage: LifecycleStage;
   predictedStage: LifecycleStage;
-  transitionProbability: number;,
+  transitionProbability: number;
   timeToTransition: number;
   stageMetrics: StageMetrics;
 }
 export interface LifecycleStage {
-  stage: 'acquisition' | 'activation' | 'retention' | 'revenue' | 'referral' | 'churn';,
+  stage: 'acquisition' | 'activation' | 'retention' | 'revenue' | 'referral' | 'churn';
   probability: number;
   characteristics: StageCharacteristic;
 }
 export interface StageCharacteristic {
-  characteristic: string;,
+  characteristic: string;
   value: number;
   trend: TrendDirection;
 }
 export interface StageMetrics {
-  stage: string;,
+  stage: string;
   duration: number;
-  conversionRate: number;,
+  conversionRate: number;
   dropoffRate: number;
   value: number;
 }
 export interface CohortValueProjection {
-  currentValue: number;,
+  currentValue: number;
   projectedValue: number;
-  valueTrajectory: ValuePoint;,
+  valueTrajectory: ValuePoint;
   peakValue: number;
-  peakTime: number;,
+  peakTime: number;
   factors: ValueFactor;
 }
 export interface ValuePoint {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   confidence: ConfidenceInterval;
 }
 export interface ValueFactor {
-  factor: string;,
+  factor: string;
   contribution: number;
-  trend: TrendDirection;,
+  trend: TrendDirection;
   controllable: boolean;
 }
 export interface CohortBehaviorEvolution {
-  currentBehavior: BehaviorProfile;,
+  currentBehavior: BehaviorProfile;
   predictedBehavior: BehaviorProfile;
-  behaviorTrajectory: BehaviorPoint;,
+  behaviorTrajectory: BehaviorPoint;
   keyChanges: BehaviorChange;
 }
 export interface BehaviorProfile {
-  engagementLevel: number;,
+  engagementLevel: number;
   activityFrequency: number;
-  preferences: Preference;,
+  preferences: Preference;
   riskFactors: RiskFactor;
 }
 export interface Preference {
-  category: string;,
+  category: string;
   weight: number;
   stability: number;
 }
 export interface RiskFactor {
-  factor: string;,
+  factor: string;
   severity: number;
   trend: TrendDirection;
 }
 export interface BehaviorPoint {
-  timestamp: number;,
+  timestamp: number;
   profile: BehaviorProfile;
   confidence: number;
 }
 export interface BehaviorChange {
-  change: string;,
+  change: string;
   impact: number;
-  probability: number;,
+  probability: number;
   timeframe: number;
   intervention: string;
 }
 export interface CohortOptimizationOpportunity {
-  opportunity: string;,
+  opportunity: string;
   impact: number;
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   timeframe: number;
-  resources: string;,
+  resources: string;
   kpis: OptimizationKPI;
 }
 export interface OptimizationKPI {
-  metric: string;,
+  metric: string;
   current: number;
-  target: number;,
+  target: number;
   improvement: number;
 }
 export interface ModelPerformanceMetrics {
-  model: PredictiveModelType;,
+  model: PredictiveModelType;
   accuracy: ModelAccuracy;
-  performance: PerformanceMetric;,
+  performance: PerformanceMetric;
   training: TrainingMetrics;
-  drift: ModelDrift;,
+  drift: ModelDrift;
   lastUpdate: number;
 }
 export interface ModelAccuracy {
-  overall: number;,
+  overall: number;
   precision: number;
-  recall: number;,
+  recall: number;
   f1Score: number;
-  auc: number;,
+  auc: number;
   calibration: number;
 }
 export interface PerformanceMetric {
-  metric: string;,
+  metric: string;
   value: number;
-  benchmark: number;,
+  benchmark: number;
   percentile: number;
 }
 export interface TrainingMetrics {
-  trainingSize: number;,
+  trainingSize: number;
   validationSize: number;
-  testSize: number;,
+  testSize: number;
   features: number;
-  trainingTime: number;,
+  trainingTime: number;
   convergence: number;
 }
 export interface ModelDrift {
-  detected: boolean;,
+  detected: boolean;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  features: DriftingFeature;,
+  features: DriftingFeature;
   recommendation: string;
   lastCheck: number;
 }
 export interface DriftingFeature {
-  feature: string;,
+  feature: string;
   driftScore: number;
-  impact: number;,
-  action: 'monitor' | 'retrain' | 'replace';
-}
+  impact: number;
+  action: 'monitor' | 'retrain' | 'replace'
+  }
 export interface PredictionHistoryEntry {
-  timestamp: number;,
+  timestamp: number;
   prediction: unknown;
   actual?: unknown;
-  accuracy: number;,
+  accuracy: number;
   model: PredictiveModelType;
 }
 export interface UncertaintyAnalysis {
-  source: UncertaintySource;,
+  source: UncertaintySource;
   impact: number;
-  mitigation: UncertaintyMitigation;,
+  mitigation: UncertaintyMitigation;
   confidence: number;
 }
 export interface UncertaintySource {
-  type: 'data_quality' | 'model_limitation' | 'external_factor' | 'measurement_error';,
+  type: 'data_quality' | 'model_limitation' | 'external_factor' | 'measurement_error';
   description: string;
   quantification: number;
 }
 export interface UncertaintyMitigation {
-  strategy: string;,
+  strategy: string;
   effectiveness: number;
-  cost: number;,
+  cost: number;
   timeline: number;
 }
 export interface FeatureImportanceData {
-  feature: string;,
+  feature: string;
   importance: number;
-  stability: number;,
+  stability: number;
   interpretation: string;
-  actionability: 'high' | 'medium' | 'low';
-}
+  actionability: 'high' | 'medium' | 'low'
+  }
 export interface ExternalFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  reliability: number;,
+  reliability: number;
   source: string;
   updateFrequency: string;
 }
 export interface ModelValidationConfig {
-  crossValidation: boolean;,
+  crossValidation: boolean;
   holdoutPercentage: number;
-  timeBasedSplit: boolean;,
+  timeBasedSplit: boolean;
   validationMetrics: string;
 }
 export interface EnsembleConfig {
-  enabled: boolean;,
+  enabled: boolean;
   models: PredictiveModelType;
-  weightingStrategy: 'equal' | 'performance' | 'dynamic';,
-  combinationMethod: 'average' | 'weighted' | 'voting' | 'stacking';
-}
+  weightingStrategy: 'equal' | 'performance' | 'dynamic';
+  combinationMethod: 'average' | 'weighted' | 'voting' | 'stacking'
+  }
 export interface PredictionUpdate {
-  type: 'forecast' | 'behavior' | 'churn' | 'seasonal';,
+  type: 'forecast' | 'behavior' | 'churn' | 'seasonal';
   update: Error;
-  confidence: number;,
+  confidence: number;
   impact: 'high' | 'medium' | 'low';
   timestamp: number;
 }
 export interface ModelAlert {
-  alertType: 'drift' | 'accuracy_drop' | 'data_quality' | 'anomaly';,
+  alertType: 'drift' | 'accuracy_drop' | 'data_quality' | 'anomaly';
   severity: 'critical' | 'high' | 'medium' | 'low';
-  description: string;,
+  description: string;
   affectedModels: PredictiveModelType;
-  recommendation: string;,
+  recommendation: string;
   timestamp: number;
 }
 export interface ContributingFactor {
-  factor: string;,
+  factor: string;
   contribution: number;
   confidence: number;
 }
 export interface PredictionFactor {
-  factor: string;,
+  factor: string;
   weight: number;
-  direction: 'positive' | 'negative';,
+  direction: 'positive' | 'negative';
   confidence: number;
 }
 export interface PredictiveModelingExportData {
-  performanceForecasts: PerformanceForecast;,
+  performanceForecasts: PerformanceForecast;
   userBehaviorPredictions: UserBehaviorPrediction;
-  churnPredictions: ChurnPrediction;,
+  churnPredictions: ChurnPrediction;
   scenarioAnalysis: ScenarioAnalysis;
-  modelPerformance: ModelPerformanceMetrics;,
+  modelPerformance: ModelPerformanceMetrics;
   exportTimestamp: number;
   configuration: PredictiveModelConfiguration;
   // Default configuration
@@ -751,7 +751,7 @@ export const [error, setError] = useState<string | null>(null);
           { factor: 'marketing_spend', contribution: 0.25, confidence: 0.85 }
         ]
       })),
-      metrics: {,
+      metrics: {
   conversionRate: {;
   metric: 'conversion_rate',
           currentValue: 0.15,
@@ -761,7 +761,7 @@ export const [error, setError] = useState<string | null>(null);
           confidence: { lower: 0.14, upper: 0.18, level: 0.95 },
           seasonality: { detected: true, period: 7, amplitude: 0.02, phase: 0, strength: 0.7 }
   },
-  revenue: {,
+  revenue: {
   metric: 'revenue',
           currentValue: 50000,
           forecastedValue: 52000,
@@ -770,7 +770,7 @@ export const [error, setError] = useState<string | null>(null);
           confidence: { lower: 48000, upper: 56000, level: 0.95 },
           seasonality: { detected: true, period: 7, amplitude: 5000, phase: 0, strength: 0.6 }
   },
-  userAcquisition: {,
+  userAcquisition: {
   metric: 'user_acquisition',
           currentValue: 1000,
           forecastedValue: 1050,
@@ -779,7 +779,7 @@ export const [error, setError] = useState<string | null>(null);
           confidence: { lower: 950, upper: 1150, level: 0.95 },
           seasonality: { detected: false, period: 0, amplitude: 0, phase: 0, strength: 0 }
   },
-  churnRate: {,
+  churnRate: {
   metric: 'churn_rate',
           currentValue: 0.05,
           forecastedValue: 0.048,
@@ -788,7 +788,7 @@ export const [error, setError] = useState<string | null>(null);
           confidence: { lower: 0.04, upper: 0.056, level: 0.95 },
           seasonality: { detected: false, period: 0, amplitude: 0, phase: 0, strength: 0 }
   },
-  lifetimeValue: {,
+  lifetimeValue: {
   metric: 'lifetime_value',
           currentValue: 500,
           forecastedValue: 525,
@@ -797,7 +797,7 @@ export const [error, setError] = useState<string | null>(null);
           confidence: { lower: 475, upper: 575, level: 0.95 },
           seasonality: { detected: false, period: 0, amplitude: 0, phase: 0, strength: 0 }
   },
-  engagementScore: {,
+  engagementScore: {
   metric: 'engagement_score',
           currentValue: 0.7,
           forecastedValue: 0.72,
@@ -838,7 +838,7 @@ export const [error, setError] = useState<string | null>(null);
             { metric: 'revenue', predictedValue: 45000, impact: -0.1, confidence: 0.75 }
           ],
           probability: 0.2],
-      accuracy: {,
+      accuracy: {
   mae: 0.02,
   mape: 8.5,
   rmse: 0.025,
@@ -884,7 +884,7 @@ export const [error, setError] = useState<string | null>(null);
           expectedTimestamp: Date.now() + Math.random() * 24 * 60 * 60 * 1000,
           value: Math.random() * 10,
           confidence: Math.random() * 0.2 + 0.8],
-      engagement: {,
+      engagement: {
   currentScore: Math.random() * 0.5 + 0.3,
         predictedScore: Math.random() * 0.5 + 0.4,
         trend: (['increasing', 'decreasing', 'stable'] as TrendDirection)[Math.floor(Math.random() * 3)],
@@ -893,12 +893,12 @@ export const [error, setError] = useState<string | null>(null);
           { factor: 'content_consumption', impact: 0.3, controllable: true, recommendation: 'Personalize content recommendations' }
         ]
   },
-  conversionProbability: {,
+  conversionProbability: {
   probability: Math.random() * 0.6 + 0.2,
   confidence: Math.random() * 0.3 + 0.7,
   timeToConversion: Math.floor(Math.random() * 14 + 1),
   conversionValue: Math.floor(Math.random() * 500 + 100),
-  steps: funnelDefinition.steps.map(step => ({,)
+  steps: funnelDefinition.steps.map(step => ({)
   stepId: step.id,
   stepName: step.name,
   probability: Math.random() * 0.8 + 0.2,
@@ -910,7 +910,7 @@ export const [error, setError] = useState<string | null>(null);
           { factor: 'current_engagement', weight: 0.3, direction: 'positive', controllable: true }
         ]
   },
-  churnRisk: {,
+  churnRisk: {
   riskScore: Math.random() * 100,
   riskLevel: (['low', 'medium', 'high', 'critical'] as const)[Math.floor(Math.random() * 4)],
   timeToChurn: Math.floor(Math.random() * 90 + 30),
@@ -939,7 +939,7 @@ export const [error, setError] = useState<string | null>(null);
     return [
       {
         timeHorizon: 30,
-        churnRate: {,
+        churnRate: {
   currentRate: 0.05,
           predictedRate: 0.048,
           confidence: { lower: 0.04, upper: 0.056, level: 0.95 },
@@ -980,7 +980,7 @@ export const [error, setError] = useState<string | null>(null);
               { metric: 'completion_rate', target: 0.8, current: 0.6, improvement: 0.2 }
             ]
         ],
-        impactAnalysis: {,
+        impactAnalysis: {
   revenueImpact: 15000,
   userImpact: 300,
   retentionCost: 5000,
@@ -992,7 +992,7 @@ export const [error, setError] = useState<string | null>(null);
   const generateSeasonalAnalysis = (): SeasonalAnalysis => {
     return [
       {
-        pattern: {,
+        pattern: {
   type: 'weekly',
           strength: 0.6,
           peaks: [,
@@ -1045,7 +1045,7 @@ export const [error, setError] = useState<string | null>(null);
           { metric: 'revenue', predictedValue: 65000, impact: 0.25, confidence: 0.75 }
         ],
         probability: 0.7,
-        impactAnalysis: {,
+        impactAnalysis: {
   revenueImpact: 13000,
   conversionImpact: 300,
   userImpact: 500,
@@ -1067,7 +1067,7 @@ export const [error, setError] = useState<string | null>(null);
     return cohortList.map(cohort => ({)
   cohortId: cohort.id,
       cohortName: cohort.name,
-      lifecycle: {,
+      lifecycle: {
   currentStage: { stage: 'retention', probability: 0.8, characteristics: [] },
         predictedStage: { stage: 'revenue', probability: 0.7, characteristics: [] },
         transitionProbability: 0.7,
@@ -1077,7 +1077,7 @@ export const [error, setError] = useState<string | null>(null);
           { stage: 'activation', duration: 7, conversionRate: 0.3, dropoffRate: 0.7, value: 50 }
         ]
   },
-  valueProjection: {,
+  valueProjection: {
   currentValue: 500,
         projectedValue: 650,
         valueTrajectory: [],
@@ -1087,14 +1087,14 @@ export const [error, setError] = useState<string | null>(null);
           { factor: 'retention_rate', contribution: 0.4, trend: 'increasing', controllable: true }
         ]
   },
-  behaviorEvolution: {,
-  currentBehavior: {,
+  behaviorEvolution: {
+  currentBehavior: {
   engagementLevel: 0.7,
   activityFrequency: 3,
   preferences: [],
   riskFactors: [],
 },
-  predictedBehavior: {,
+  predictedBehavior: {
   engagementLevel: 0.75,
   activityFrequency: 3.5,
   preferences: [],
@@ -1126,7 +1126,7 @@ export const [error, setError] = useState<string | null>(null);
   const generateModelPerformance = (models: PredictiveModelType): ModelPerformanceMetrics => {
   return models.map(model => ({)
   model,
-  accuracy: {,
+  accuracy: {
   overall: Math.random() * 0.2 + 0.8,
   precision: Math.random() * 0.2 + 0.75,
   recall: Math.random() * 0.25 + 0.7,
@@ -1138,7 +1138,7 @@ export const [error, setError] = useState<string | null>(null);
         { metric: 'mae', value: Math.random() * 0.05 + 0.02, benchmark: 0.05, percentile: 85 },
         { metric: 'mape', value: Math.random() * 5 + 5, benchmark: 10, percentile: 78 }
       ],
-      training: {,
+      training: {
   trainingSize: Math.floor(Math.random() * 50000 + 10000),
   validationSize: Math.floor(Math.random() * 10000 + 2000),
   testSize: Math.floor(Math.random() * 5000 + 1000),
@@ -1146,7 +1146,7 @@ export const [error, setError] = useState<string | null>(null);
   trainingTime: Math.floor(Math.random() * 3600 + 300),
   convergence: Math.random() * 0.2 + 0.8,
 },
-  drift: {,
+  drift: {
   detected: Math.random() > 0.8,
   severity: (['low', 'medium', 'high', 'critical'] as const)[Math.floor(Math.random() * 4)],
   features: [,
@@ -1175,7 +1175,7 @@ export const [error, setError] = useState<string | null>(null);
   const generateUncertaintyAnalysis = (): UncertaintyAnalysis => {
   return [
   {
-  source: {,
+  source: {
   type: 'data_quality',
   description: 'Missing data points in user behavior tracking',
   quantification: 0.15,

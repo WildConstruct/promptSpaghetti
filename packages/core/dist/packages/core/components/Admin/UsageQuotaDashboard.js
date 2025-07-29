@@ -60,144 +60,107 @@ const loadDashboardData = useCallback(async () => {
                     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
                     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
                     createdBy: 'admin-user-1',
-                    configuration: {},
-                    warningThresholds: [75, 90, 95],
-                    emergencyMultiplier: 1.5,
-                    integrateWithRateLimit: true,
-                    integrateWithFraudDetection: true,
-                    integrateWithBilling: false,
-                    trackingEnabled: true,
-                    analyticsEnabled: true,
-                    alertsEnabled: true,
-                    cachingEnabled: true,
-                    batchProcessing: false,
-                    asyncEnforcement: false,
+                    configuration: {
+                        warningThresholds: [75, 90, 95],
+                        emergencyMultiplier: 1.5,
+                        integrateWithRateLimit: true,
+                        integrateWithFraudDetection: true,
+                        integrateWithBilling: false,
+                        trackingEnabled: true,
+                        analyticsEnabled: true,
+                        alertsEnabled: true,
+                        cachingEnabled: true,
+                        batchProcessing: false,
+                        asyncEnforcement: false,
+                    },
+                    metadata: {
+                        description: 'Daily API request limit for free tier users',
+                        category: 'resource_management',
+                        businessJustification: 'Prevent abuse and manage infrastructure costs',
+                        technicalConstraints: ['Rate limiting integration required'],
+                        relatedQuotas: [],
+                        averageUsage: 750,
+                        peakUsage: 980,
+                        violationRate: 5.2,
+                        lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                        impactOnRevenue: 'low',
+                        userSatisfactionImpact: 'medium',
+                        operationalCost: 'low',
+                    }
                 },
-                metadata, {},
-                description, 'Daily API request limit for free tier users',
-                category, 'resource_management',
-                businessJustification, 'Prevent abuse and manage infrastructure costs',
-                technicalConstraints, ['Rate limiting integration required'],
-                relatedQuotas, [],
-                averageUsage, 750,
-                peakUsage, 980,
-                violationRate, 5.2,
-                lastViolation, new Date(Date.now() - 2 * 60 * 60 * 1000),
-                impactOnRevenue, 'low',
-                userSatisfactionImpact, 'medium',
-                operationalCost, 'low',]
-        };
-        {
-            quotaId: 'quota-graph-executions',
-                quotaName;
-            'Graph Executions - Pro Tier',
-                quotaType;
-            'graph_executions',
-                resourceIdentifier;
-            '*',
-                limitValue;
-            500,
-                limitPeriod;
-            'day',
-                limitUnit;
-            'executions',
-                appliesTo;
-            {
-                type: 'tier', value;
-                'pro';
-            }
-            enforcementAction: 'throttle',
-                resetBehavior;
-            'automatic',
-                gracePeriodMinutes;
-            15,
-                hardLimit;
-            false,
-                priority;
-            2,
-                enabled;
-            true,
-                createdAt;
-            new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-                updatedAt;
-            new Date(Date.now() - 12 * 60 * 60 * 1000),
-                createdBy;
-            'admin-user-2',
-                configuration;
-            {
-                warningThresholds: [80, 90, 95],
-                    emergencyMultiplier;
-                2.0,
-                    integrateWithRateLimit;
-                false,
-                    integrateWithFraudDetection;
-                true,
-                    integrateWithBilling;
-                true,
-                    trackingEnabled;
-                true,
-                    analyticsEnabled;
-                true,
-                    alertsEnabled;
-                true,
-                    cachingEnabled;
-                true,
-                    batchProcessing;
-                true,
-                    asyncEnforcement;
-                true,
-                ;
-            }
-            metadata: {
-                description: 'Daily graph execution limit for pro tier users',
-                    category;
-                'business_logic',
-                    businessJustification;
-                'Tier-based service differentiation',
-                    technicalConstraints;
-                ['Execution engine integration'],
-                    relatedQuotas;
-                ['quota-api-requests'],
-                    averageUsage;
-                320,
-                    peakUsage;
-                475,
-                    violationRate;
-                2.1,
-                    impactOnRevenue;
-                'medium',
-                    userSatisfactionImpact;
-                'high',
-                    operationalCost;
-                'medium';
-                violations: [,
-                    {
-                        violationId: 'violation-001',
-                        quotaId: 'quota-api-requests',
-                        userId: 'user-12345',
-                        violationTimestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-                        exceededBy: 150,
-                        quotaLimit: 1000,
-                        actualUsage: 1150,
-                        severity: 'medium',
-                        impactAssessment: {},
+                {
+                    quotaId: 'quota-graph-executions',
+                    quotaName: 'Graph Executions - Pro Tier',
+                    quotaType: 'graph_executions',
+                    resourceIdentifier: '*',
+                    limitValue: 500,
+                    limitPeriod: 'day',
+                    limitUnit: 'executions',
+                    appliesTo: { type: 'tier', value: 'pro' },
+                    enforcementAction: 'throttle',
+                    resetBehavior: 'automatic',
+                    gracePeriodMinutes: 15,
+                    hardLimit: false,
+                    priority: 2,
+                    enabled: true,
+                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+                    updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+                    createdBy: 'admin-user-2',
+                    configuration: {
+                        warningThresholds: [80, 90, 95],
+                        emergencyMultiplier: 2.0,
+                        integrateWithRateLimit: false,
+                        integrateWithFraudDetection: true,
+                        integrateWithBilling: true,
+                        trackingEnabled: true,
+                        analyticsEnabled: true,
+                        alertsEnabled: true,
+                        cachingEnabled: true,
+                        batchProcessing: true,
+                        asyncEnforcement: true,
+                    },
+                    metadata: {
+                        description: 'Daily graph execution limit for pro tier users',
+                        category: 'business_logic',
+                        businessJustification: 'Tier-based service differentiation',
+                        technicalConstraints: ['Execution engine integration'],
+                        relatedQuotas: ['quota-api-requests'],
+                        averageUsage: 320,
+                        peakUsage: 475,
+                        violationRate: 2.1,
+                        impactOnRevenue: 'medium',
+                        userSatisfactionImpact: 'high',
+                        operationalCost: 'medium'
+                    }
+                }],
+            violations: [,
+                {
+                    violationId: 'violation-001',
+                    quotaId: 'quota-api-requests',
+                    userId: 'user-12345',
+                    violationTimestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                    exceededBy: 150,
+                    quotaLimit: 1000,
+                    actualUsage: 1150,
+                    severity: 'medium',
+                    impactAssessment: {
                         businessImpact: 'low',
                         technicalImpact: 'low',
                         userImpact: 'medium',
                         securityRisk: 'low',
                         complianceRisk: 'none',
                     },
-                    enforcementAction, 'hard_block',
-                    enforcementDetails, {},
-                    actionTaken, 'hard_block',
-                    timestamp, new Date(Date.now() - 2 * 60 * 60 * 1000),
-                    reason, 'API request quota exceeded',
-                    automaticAction, true,
-                    additionalData, {}];
-            }
-            status: 'active',
-                appealSubmitted;
-            false;
+                    enforcementAction: 'hard_block',
+                    enforcementDetails: {
+                        actionTaken: 'hard_block',
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                        reason: 'API request quota exceeded',
+                        automaticAction: true,
+                        additionalData: {}
+                    },
+                    status: 'active',
+                    appealSubmitted: false
+                }],
             analytics: [,
                 {
                     period: { type: 'day', value: 7, timezone: 'UTC' },
@@ -214,21 +177,22 @@ const loadDashboardData = useCallback(async () => {
                     trendSignificance: 0.82,
                     seasonalPatterns: [],
                     topUsers: [],
-                    usageDistribution: {},
-                    percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
-                    buckets: [],
-                    outliers: []
-                },
-                averageResponseTime, 120,
-                systemLoad, 68,
-                resourceUtilization, {},
-                cpu, 45,
-                memory, 62,
-                disk, 34,
-                network, 23,
-                database, 78],
-                templates;
-            [,
+                    usageDistribution: {
+                        percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
+                        buckets: [],
+                        outliers: []
+                    },
+                    averageResponseTime: 120,
+                    systemLoad: 68,
+                    resourceUtilization: {
+                        cpu: 45,
+                        memory: 62,
+                        disk: 34,
+                        network: 23,
+                        database: 78
+                    }
+                }],
+            templates: [,
                 {
                     templateId: 'template-free-tier',
                     templateName: 'Free Tier Default',
@@ -251,8 +215,7 @@ const loadDashboardData = useCallback(async () => {
                     validationRules: [],
                     enabled: true
                 }],
-                operations;
-            [,
+            operations: [,
                 {
                     operationId: 'op-001',
                     operationType: 'update_quota',
@@ -264,26 +227,21 @@ const loadDashboardData = useCallback(async () => {
                     parameters: { limitValue: 1200 },
                     requiresApproval: false,
                     status: 'completed',
-                    result: {},
-                    success: true,
-                    affectedRecords: 1,
-                    warnings: [],
-                    details: {}
+                    result: {
+                        success: true,
+                        affectedRecords: 1,
+                        warnings: [],
+                        details: {}
+                    }
                 }
             ],
-                systemMetrics;
-            {
+            systemMetrics: {
                 totalQuotas: 15,
-                    activeQuotas;
-                13,
-                    totalViolations;
-                45,
-                    activeViolations;
-                8,
-                    utilizationRate;
-                68.5,
-                    topViolatedQuotas;
-                [,
+                activeQuotas: 13,
+                totalViolations: 45,
+                activeViolations: 8,
+                utilizationRate: 68.5,
+                topViolatedQuotas: [,
                     {
                         quotaId: 'quota-api-requests',
                         quotaName: 'API Requests - Free Tier',
@@ -291,8 +249,7 @@ const loadDashboardData = useCallback(async () => {
                         lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
                         severity: 'medium'
                     }],
-                    recentActivity;
-                [,
+                recentActivity: [,
                     {
                         timestamp: new Date(Date.now() - 15 * 60 * 1000),
                         type: 'violation_occurred',
@@ -300,11 +257,8 @@ const loadDashboardData = useCallback(async () => {
                         userId: 'user-12345',
                         quotaId: 'quota-api-requests',
                         severity: 'medium'
-                    }];
-            }
-            ;
-            setDashboardState(mockDashboardState);
-        }
+                    }]
+            } };
         try { }
         catch (error) {
             console.error('Failed to load quota dashboard data:', error);

@@ -5,21 +5,21 @@ import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { Node, Edge } from 'reactflow';
 interface ExportBundleDialogProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   onExport?: (result: { success: boolean; error?: string }) => void;
 interface ExportOptions {
-  name: string;,
+  name: string;
   version: string;
   author: string;
   description?: string;
-  includeMetadata: boolean;,
+  includeMetadata: boolean;
   minifyOutput: boolean;
   format: 'json' | 'compressed' | 'yaml' | 'xml' | 'graph' | 'csv';
   imageFormat?: 'png' | 'svg' | 'pdf';
-  includePreview: boolean;,
+  includePreview: boolean;
   exportQuality: 'draft' | 'standard' | 'high';
   export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({,)
   isOpen,
@@ -46,37 +46,37 @@ interface ExportOptions {
   const [previewData, setPreviewData] = useState<unknown>(null);
   const getFormatInfo = (format: string) => {
   const formatInfo = {
-  json: {,
+  json: {
   name: 'GeneratorBundle JSON',
   description: 'Standard JSON format compatible with randomizer engine',
   extension: '.bundle.json',
   mimeType: 'application/json',
 },
-  compressed: {,
+  compressed: {
   name: 'Compressed JSON',
   description: 'Minified JSON for smaller file size',
   extension: '.bundle.min.json',
   mimeType: 'application/json',
 },
-  yaml: {,
+  yaml: {
   name: 'YAML Format',
   description: 'Human-readable YAML format',
   extension: '.bundle.yaml',
   mimeType: 'application/yaml',
 },
-  xml: {,
+  xml: {
   name: 'XML Format',
   description: 'Structured XML representation',
   extension: '.bundle.xml',
   mimeType: 'application/xml',
 },
-  graph: {,
+  graph: {
   name: 'Graph Format',
   description: 'Native graph structure for re-importing',
   extension: '.psg',
   mimeType: 'application/json',
 },
-  csv: {,
+  csv: {
   name: 'CSV Export',
   description: 'Node and edge data in tabular format',
   extension: '.csv',
@@ -171,12 +171,12 @@ interface ExportOptions {
   setError(null);
   const response = await fetch('/export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
   graph: { nodes, edges },
-          options: {,
+          options: {
   name: formData.name,
   version: formData.version,
   author: formData.author,
@@ -201,12 +201,12 @@ interface ExportOptions {
   try {
   const response = await fetch('/export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
   graph: { nodes, edges },
-          options: {,
+          options: {
   name: formData.name.trim(),
   version: formData.version.trim(),
   author: formData.author.trim(),

@@ -47,65 +47,65 @@ export enum RiskLevel {
   PREVENTION = 'prevention',
   RECOVERY = 'recovery'
   export interface CompromiseIndicator {
-  type: CompromiseType;,
+  type: CompromiseType;
   description: string;
   confidence: number; // 0-100,
-  source: string;,
+  source: string;
   detectedAt: Date;
-  evidence: string;,
+  evidence: string;
   affectedAccounts: string;
 }
 export interface SecurityRecommendation {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   category: GuidanceCategory;
-  priority: ActionPriority;,
+  priority: ActionPriority;
   estimatedTime: string;
-  difficulty: 'easy' | 'medium' | 'advanced';,
+  difficulty: 'easy' | 'medium' | 'advanced';
   steps: ActionStep;
-  benefits: string;,
+  benefits: string;
   risks: string;
   dependencies?: string; // IDs of other recommendations,
 }
 export interface ActionStep {
-  stepNumber: number;,
+  stepNumber: number;
   title: string;
-  description: string;,
+  description: string;
   action: string;
-  verification: string;,
+  verification: string;
   helpResources: string;
-  timeEstimate: string;,
+  timeEstimate: string;
   required: boolean;
 }
 export interface GuidanceSession {
-  id: string;,
+  id: string;
   userId: string;
-  riskLevel: RiskLevel;,
+  riskLevel: RiskLevel;
   compromiseIndicators: CompromiseIndicator;
-  recommendations: SecurityRecommendation;,
+  recommendations: SecurityRecommendation;
   completedActions: string;
-  createdAt: Date;,
+  createdAt: Date;
   lastUpdated: Date;
-  expiresAt: Date;,
-  status: 'active' | 'completed' | 'expired';
-}
+  expiresAt: Date;
+  status: 'active' | 'completed' | 'expired'
+  }
 export interface PasswordSecurityAssessment {
-  strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';,
+  strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
   score: number; // 0-100,
-  weaknesses: string;,
+  weaknesses: string;
   recommendations: string;
-  isCompromised: boolean;,
+  isCompromised: boolean;
   breachDatabases: string;
-  reuseDetected: boolean;,
+  reuseDetected: boolean;
   ageInDays: number;
 }
 export interface UserSecurityProfile {
-  userId: string;,
+  userId: string;
   riskScore: number; // 0-100,
-  mfaEnabled: boolean;,
+  mfaEnabled: boolean;
   passwordLastChanged: Date;
-  recentBreaches: CompromiseIndicator;,
+  recentBreaches: CompromiseIndicator;
   securityScore: number;
   recommendations: SecurityRecommendation;
   /**
@@ -722,9 +722,9 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
    * Get guidance session progress
    */
-  public getSessionProgress(sessionId: string): {,
+  public getSessionProgress(sessionId: string): {
   total: number;
-  completed: number;,
+  completed: number;
   percentage: number;
   remainingCritical: number;
 } | null {
@@ -734,9 +734,9 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
    * Calculate session progress
    */
-  private calculateProgress(session: GuidanceSession): {,
+  private calculateProgress(session: GuidanceSession): {
   total: number;
-    completed: number;,
+    completed: number;
   percentage: number;
     remainingCritical: number;
     const total = session.recommendations.length;
@@ -804,10 +804,10 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
   * Get user security dashboard
   */
-  public getUserSecurityDashboard(userId: string): {,
-  profile: UserSecurityProfile | null;,
+  public getUserSecurityDashboard(userId: string): {
+  profile: UserSecurityProfile | null;
   activeSessions: GuidanceSession;
-  recommendedActions: SecurityRecommendation;,
+  recommendedActions: SecurityRecommendation;
   securityTips: string;
   const profile = this.userProfiles.get(userId) || null;
   const activeSessions = Array.from(this.sessions.values());

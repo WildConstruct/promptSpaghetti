@@ -63,7 +63,7 @@ export type MediaType =
 // ====================================
 
 export interface CaseStudyMedia {
-  id: string;,
+  id: string;
   type: MediaType;
   url: string;
   thumbnailUrl?: string;
@@ -72,18 +72,18 @@ export interface CaseStudyMedia {
   altText?: string;
   fileSize?: number;
   mimeType?: string;
-  dimensions?: {,
-  width: number;,
+  dimensions?: {
+  width: number;
   height: number;
 };
   duration?: number; // For video/audio in seconds
-  uploadedAt: string;,
+  uploadedAt: string;
   uploadedBy: string;
 }
 export interface MediaGallery {
-  featured: CaseStudyMedia;,
+  featured: CaseStudyMedia;
   screenshots: CaseStudyMedia;
-  videos: CaseStudyMedia;,
+  videos: CaseStudyMedia;
   documents: CaseStudyMedia;
   charts: CaseStudyMedia;
   // ====================================
@@ -92,45 +92,45 @@ export interface MediaGallery {
 }
 export interface ROIMetrics {
   // Time savings
-  timeSaved: {,
-  hours: number;,
+  timeSaved: {
+  hours: number;
   period: 'day' | 'week' | 'month' | 'project';
   description: string;
 };
   // Cost savings
-  costSavings: {,
+  costSavings: {
   amount: number;
-  currency: string;,
+  currency: string;
   period: 'day' | 'week' | 'month' | 'project';
   calculation: string;
 };
   // Quality improvements
-  qualityMetrics: {,
+  qualityMetrics: {
   metric: string;
-  before: number | string;,
+  before: number | string;
   after: number | string;
   improvement: number; // Percentage,
   unit?: string;
 }[];
   // Productivity metrics
-  productivityGains: {,
+  productivityGains: {
   metric: string;
-  value: number;,
+  value: number;
   unit: string;
   description: string;
 }[];
   // Claude-specific metrics
   claudeMetrics?: {
-  tokensSaved: number;,
+  tokensSaved: number;
   costPerToken: number;
-  totalCostSavings: number;,
+  totalCostSavings: number;
   responseQualityImprovement: number;
   consistencyImprovement: number;
 };
 }
 export interface PerformanceMetrics {
   // Usage statistics
-  templatesUsed: number;,
+  templatesUsed: number;
   implementationTime: number; // Hours,
   projectDuration: number; // Days,
   teamSize: number;
@@ -140,8 +140,8 @@ export interface PerformanceMetrics {
   errorReduction: number; // Percentage,
   stakeholderSatisfaction: number; // 1-10 scale,
   // Comparison metrics
-  beforeAfter: {,
-  metric: string;,
+  beforeAfter: {
+  metric: string;
   before: number | string;
   after: number | string;
   unit?: string;
@@ -152,30 +152,30 @@ export interface PerformanceMetrics {
 // ====================================
 }
 export interface TemplateReference {
-  templateId: string;,
+  templateId: string;
   templateName: string;
-  templateVersion: string;,
+  templateVersion: string;
   templateCategory: string;
-  usageDescription: string;,
+  usageDescription: string;
   customizations: string;
-  resultsWithTemplate: string;,
+  resultsWithTemplate: string;
   licenseType: string;
   purchaseDate?: string;
   cost?: number;
 }
 export interface TemplateImplementation {
-  originalTemplate: TemplateReference;,
-  customizations: {,
-  description: string;,
+  originalTemplate: TemplateReference;
+  customizations: {
+  description: string;
   reasonForChange: string;
   impact: string;
 }[];
-  results: {,
+  results: {
   outputExamples: string;
   performanceMetrics: Record<string, number>;
   userFeedback: string;
 };
-  lessonsLearned: string;,
+  lessonsLearned: string;
   recommendations: string;
 
 // ====================================
@@ -184,19 +184,19 @@ export interface TemplateImplementation {
 }
 export interface CaseStudy {
   // Basic information
-  id: string;,
+  id: string;
   title: string;
   subtitle?: string;
-  description: string;,
+  description: string;
   summary: string; // Short summary for cards/listings,
   // Classification
-  type: CaseStudyType;,
+  type: CaseStudyType;
   status: CaseStudyStatus;
-  industry: IndustryCategory;,
+  industry: IndustryCategory;
   tags: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   // Content structure
-  content: {,
+  content: {
   challenge: string;         // Problem being solved,
   solution: string;          // How templates helped,
   implementation: string;    // How it was implemented,
@@ -208,13 +208,13 @@ export interface CaseStudy {
   media: MediaGallery;
   featuredImage?: CaseStudyMedia;
   // Template integration
-  templatesUsed: TemplateReference;,
+  templatesUsed: TemplateReference;
   templateImplementations: TemplateImplementation;
   // Metrics and ROI
-  roiMetrics: ROIMetrics;,
+  roiMetrics: ROIMetrics;
   performanceMetrics: PerformanceMetrics;
   // Attribution and metadata
-  author: {,
+  author: {
   userId: string;
   name: string;
   title?: string;
@@ -223,24 +223,24 @@ export interface CaseStudy {
   avatar?: string;
   verified: boolean;
 };
-  collaborators: {,
+  collaborators: {
   userId: string;
-  name: string;,
+  name: string;
   role: string;
   contribution: string;
 }[];
   // Engagement metrics
-  engagement: {,
+  engagement: {
   views: number;
-  likes: number;,
+  likes: number;
   shares: number;
-  bookmarks: number;,
+  bookmarks: number;
   comments: number;
-  helpfulVotes: number;,
+  helpfulVotes: number;
   followUps: number; // People who implemented similar solutions,
 };
   // Review and moderation
-  moderation: {,
+  moderation: {
   submittedAt: string;
   submittedBy: string;
   reviewedAt?: string;
@@ -251,29 +251,29 @@ export interface CaseStudy {
   featuredBy?: string;
 };
   // SEO and discovery
-  seo: {,
+  seo: {
   slug: string;
-  metaTitle: string;,
+  metaTitle: string;
   metaDescription: string;
   keywords: string;
   canonicalUrl?: string;
 };
   // Timestamps
-  createdAt: string;,
+  createdAt: string;
   updatedAt: string;
   publishedAt?: string;
   archivedAt?: string;
   // Version control
-  version: string;,
+  version: string;
   previousVersions: string;
   // Configuration
-  config: {,
+  config: {
   allowComments: boolean;
-  allowSharing: boolean;,
+  allowSharing: boolean;
   showAuthor: boolean;
-  showMetrics: boolean;,
+  showMetrics: boolean;
   requireEmailToView: boolean;
-  featured: boolean;,
+  featured: boolean;
   priority: number; // For ordering,
 };
 
@@ -284,11 +284,11 @@ export interface CaseStudy {
 export interface CreateCaseStudyRequest {
   title: string;
   subtitle?: string;
-  description: string;,
+  description: string;
   type: CaseStudyType;
-  industry: IndustryCategory;,
+  industry: IndustryCategory;
   tags: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   content: CaseStudy['content'];
   templatesUsed: Omit<TemplateReference, 'templateName' | 'templateCategory'>[];
   // Optional fields
@@ -348,26 +348,26 @@ export interface CaseStudyFilter {
 export interface CaseStudySort {
   field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ,
   'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
-  direction: 'asc' | 'desc';
-}
+  direction: 'asc' | 'desc'
+  }
 export interface CaseStudyQuery {
   filters?: CaseStudyFilter;
   sort?: CaseStudySort;
-  pagination: {,
-  offset: number;,
+  pagination: {
+  offset: number;
   limit: number;
 };
   include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
 }
 export interface CaseStudyQueryResponse {
-  caseStudies: CaseStudy;,
-  pagination: {,
-  total: number;,
+  caseStudies: CaseStudy;
+  pagination: {
+  total: number;
   offset: number;
-  limit: number;,
+  limit: number;
   hasMore: boolean;
 };
-  aggregations: {,
+  aggregations: {
   totalCaseStudies: number;
     byType: Array<{ type: CaseStudyType; count: number }>;
     byIndustry: Array<{ industry: IndustryCategory; count: number }>;
@@ -382,18 +382,18 @@ export interface CaseStudyQueryResponse {
 export interface CaseStudyAnalytics {
   caseStudyId: string;
   // View analytics
-  totalViews: number;,
+  totalViews: number;
   uniqueViews: number;
-  averageTimeOnPage: number;,
+  averageTimeOnPage: number;
   bounceRate: number;
   // Engagement analytics
-  totalLikes: number;,
+  totalLikes: number;
   totalShares: number;
-  totalComments: number;,
+  totalComments: number;
   totalBookmarks: number;
   helpfulnessRating: number;
   // Template impact
-  templatesDiscovered: number;,
+  templatesDiscovered: number;
   templatePurchases: number;
   implementationAttempts: number;
   // Geographic data
@@ -447,14 +447,14 @@ export const ROIMetricsSchema = z.object({)
   period: z.enum(['day', 'week', 'month', 'project']),
   calculation: z.string().min(1).max(1000),
 }),
-  qualityMetrics: z.array(z.object({,)
+  qualityMetrics: z.array(z.object({)
   metric: z.string().min(1).max(100),
   before: z.union([z.number(), z.string()]),
   after: z.union([z.number(), z.string()]),
   improvement: z.number().min(-100).max(1000),
   unit: z.string().max(50).optional(),
 })),
-  productivityGains: z.array(z.object({,)
+  productivityGains: z.array(z.object({)
   metric: z.string().min(1).max(100),
   value: z.number(),
   unit: z.string().max(50),
@@ -512,9 +512,9 @@ export const CaseStudySchema = z.object({)
 }),
   featuredImage: CaseStudyMediaSchema.optional(),
   templatesUsed: z.array(TemplateReferenceSchema),
-  templateImplementations: z.array(z.object({,)
+  templateImplementations: z.array(z.object({)
   originalTemplate: TemplateReferenceSchema,
-  customizations: z.array(z.object({,)
+  customizations: z.array(z.object({)
   description: z.string().min(1).max(1000),
   reasonForChange: z.string().min(1).max(1000),
   impact: z.string().min(1).max(1000),
@@ -537,7 +537,7 @@ export const CaseStudySchema = z.object({)
   efficiency: z.number().min(0),
   errorReduction: z.number().min(0).max(100),
   stakeholderSatisfaction: z.number().min(1).max(10),
-  beforeAfter: z.array(z.object({,)
+  beforeAfter: z.array(z.object({)
   metric: z.string().min(1).max(100),
   before: z.union([z.number(), z.string()]),
   after: z.union([z.number(), z.string()]),
@@ -553,7 +553,7 @@ export const CaseStudySchema = z.object({)
   avatar: z.string().url().optional(),
   verified: z.boolean(),
 }),
-  collaborators: z.array(z.object({,)
+  collaborators: z.array(z.object({)
   userId: z.string().uuid(),
   name: z.string().min(1).max(100),
   role: z.string().min(1).max(100),

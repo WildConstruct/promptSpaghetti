@@ -114,7 +114,7 @@ _jsxs("div", { style: {
                 fontWeight: '600',
                 color: '#6b7280',
                 backgroundImage: comment.authorAvatarUrl ? `url(${comment.authorAvatarUrl})` : undefined
-            } }), ", backgroundSize: 'cover', backgroundPosition: 'center'; }}>", !comment.authorAvatarUrl && comment.authorDisplayName.charAt(0).toUpperCase()] });
+            } }), ", backgroundSize: 'cover', backgroundPosition: 'center' }}>", !comment.authorAvatarUrl && comment.authorDisplayName.charAt(0).toUpperCase()] });
 { /* Author Info */ }
 _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '6px' }, children: [_jsx("span", { style: {
                         fontSize: isReply ? '13px' : '14px',

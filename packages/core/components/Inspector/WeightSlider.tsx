@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 interface WeightSliderProps {
-  value: number;,
+  value: number;
   onChange: (value: number) => void;
   min?: number;
   max?: number;
@@ -189,7 +189,7 @@ interface WeightSliderProps {
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 whiteSpace: 'nowrap',
                 zIndex: 10,
-                pointerEvents: 'none';
+                pointerEvents: 'none'
   }}
             >
               {value.toFixed(step < 1 ? 1 : 0)}

@@ -98,7 +98,8 @@ export class OpenAITTSAdapter extends BaseAIModel {
                                                 audio_length: this._estimateAudioDuration(text, processedOptions.speed),
                                                 speed: processedOptions.speed,
                                                 response_format: processedOptions.response_format,
-                                                generation_time: generationTime, },
+                                                generation_time: generationTime,
+                                            },
                                             usage: {
                                                 characters: text.length,
                                                 cost: this._calculateCost(text.length, processedOptions.model),
@@ -154,7 +155,8 @@ export class OpenAITTSAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                } } };
+                }
+            } };
         Promise < TTSGenerationResult > {
             const: ttsOptions, TTSRequestOptions = {
                 text: ssmlText,
@@ -263,7 +265,8 @@ export class OpenAITTSAdapter extends BaseAIModel {
                     const response = await fetch('https://api.openai.com/v1/audio/speech', {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${this.config.apiKey}` }
+                            'Authorization': `Bearer ${this.config.apiKey}`
+                        }
                     }, 'Content-Type', 'application/json', ...(this.config.organization && { 'OpenAI-Organization': this.config.organization }));
                 }
                 finally { }

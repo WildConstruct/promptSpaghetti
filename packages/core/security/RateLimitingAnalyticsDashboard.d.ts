@@ -22,7 +22,7 @@ export interface AnalyticsDashboardConfig {
     mlModelUpdateInterval: number;
 
 export interface SecurityAnalytics {
-    threatAnalysis: {,
+    threatAnalysis: {
         currentThreatLevel: ThreatLevel;
         threatTrends: Array<{,
             timestamp: Date;
@@ -49,10 +49,10 @@ export interface SecurityAnalytics {
             suspiciousActivities: string[];
         }>;
     };
-    performanceAnalytics: {,
-        systemHealth: {,
+    performanceAnalytics: {
+        systemHealth: {
             overallScore: number;
-            componentScores: {,
+            componentScores: {
                 rateLimiting: number;
                 throttling: number;
                 dataProcessing: number;
@@ -64,7 +64,7 @@ export interface SecurityAnalytics {
                 recommendation: string;
             }>;
         };
-        capacityAnalysis: {,
+        capacityAnalysis: {
             currentCapacity: number;
             peakCapacity: number;
             averageUtilization: number;
@@ -75,27 +75,27 @@ export interface SecurityAnalytics {
                 scalingRecommendation: string;
             }>;
         };
-        slaCompliance: {,
-            responseTimeSLA: {,
+        slaCompliance: {
+            responseTimeSLA: {
                 target: number;
                 current: number;
                 compliance: number;
                 violations: number;
             };
-            availabilitySLA: {,
+            availabilitySLA: {
                 target: number;
                 current: number;
                 downtime: number;
                 incidents: number;
             };
-            throughputSLA: {,
+            throughputSLA: {
                 target: number;
                 current: number;
                 compliance: number;
             };
         };
     };
-    businessIntelligence: {,
+    businessIntelligence: {
         userBehaviorAnalytics: Array<{,
             segment: string;
             userCount: number;
@@ -113,7 +113,7 @@ export interface SecurityAnalytics {
             businessValue: number;
             optimizationPotential: number;
         }>;
-        revenueImpact: {,
+        revenueImpact: {
             totalRequests: number;
             blockedRequests: number;
             estimatedRevenueLoss: number;
@@ -159,16 +159,16 @@ export interface DashboardVisualization {
         title: string;
         dataSource: string;
         refreshInterval: number;
-        interactivity: {,
+        interactivity: {
             drillDown: boolean;
             filtering: boolean;
             timeRangeSelector: boolean;
             exportOptions: string[];
         };
-        styling: {,
+        styling: {
             colorScheme: string;
             theme: 'light' | 'dark' | 'auto';
-            dimensions: {,
+            dimensions: {
                 width: number;
                 height: number;
             };
@@ -343,7 +343,7 @@ export declare class RateLimitingAnalyticsDashboard extends EventEmitter {
         securityAnalytics: SecurityAnalytics;
         predictiveInsights: PredictiveInsights;
         dashboardVisualization: DashboardVisualization;
-        systemStatus: {,
+        systemStatus: {
             uptime: number;
             processingStatus: 'active' | 'inactive';
             lastUpdate: Date;

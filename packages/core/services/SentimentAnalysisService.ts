@@ -29,7 +29,7 @@ export class SentimentAnalysisService {
   private modelCache: Map<string, any>;
   private analysisCache: Map<string, { analysis: SentimentAnalysis; timestamp: number }>;
   private analyticsCache: Map<string, { analytics: SentimentAnalytics; timestamp: number }>;
-  constructor(serviceConfig: {,)
+  constructor(serviceConfig: {)
   baseUrl: string;
   config?: SentimentAnalysisConfig;
   cacheEnabled?: boolean;
@@ -80,14 +80,14 @@ export class SentimentAnalysisService {
     const overallSentiment = this.calculateOverallSentiment(analyses);
     const response: SentimentAnalysisResponse = {
   analyses,
-  summary: {,
+  summary: {
   totalProcessed: analyses.length,
   totalErrors,
   averageConfidence: analyses.length > 0 ? totalConfidence / analyses.length : 0,
   processingTimeMs: Date.now() - startTime,
   overallSentiment
 },
-  meta: {,
+  meta: {
   requestId,
   modelUsed: this.config.models.primary,
   apiVersion: '1.0.0',
@@ -96,7 +96,7 @@ export class SentimentAnalysisService {
   /**
    * Get sentiment analytics for a resource
    */
-  async getSentimentAnalytics(resourceId: string,)
+  async getSentimentAnalytics(resourceId: string)
     resourceType: string,
     timeRange: { start: Date; end: Date }
   ): Promise<SentimentAnalytics> {
@@ -115,7 +115,7 @@ export class SentimentAnalysisService {
   /**
    * Analyze single text for real-time processing
    */
-  async analyzeText(textId: string,)
+  async analyzeText(textId: string)
     content: string,
     sourceType: FeedbackSourceType,
     options?: {
@@ -203,7 +203,7 @@ export class SentimentAnalysisService {
       keywords,
       intent,
       quality,
-      metadata: {,
+      metadata: {
   processingTimeMs: Date.now() - startTime,
         textLength: textData.content.length,
         wordCount: processedText.split(/\s+/).length,
@@ -337,7 +337,7 @@ export class SentimentAnalysisService {
   level: toxicityLevel,
   score: toxicityScore,
   confidence: Math.min(0.95, 0.7 + toxicityScore * 0.3),
-  categories: {,
+  categories: {
   harassment: Math.min(1, harassmentCount * 0.3),
   hate_speech: Math.min(1, toxicCount * 0.2),
   profanity: Math.min(1, profanityCount * 0.4),
@@ -473,7 +473,7 @@ export class SentimentAnalysisService {
   level: 'none' as ToxicityLevel,
   score: 0,
   confidence: 0,
-  categories: {,
+  categories: {
   harassment: 0,
   hate_speech: 0,
   profanity: 0,
@@ -494,7 +494,7 @@ export class SentimentAnalysisService {
     });
     const maxCount = Math.max(...Object.values(sentimentCounts));
     return Object.entries(sentimentCounts).find(([_, count]) => count === maxCount)?.[0] as SentimentType;
-  private calculateSentimentAnalytics(resourceId: string,)
+  private calculateSentimentAnalytics(resourceId: string)
     resourceType: string,
     timeRange: { start: Date; end: Date },
     analyses: SentimentAnalysis): SentimentAnalytics {,
@@ -507,21 +507,21 @@ export class SentimentAnalysisService {
     });
     const total = analyses.length;
     const sentimentDistribution = {
-  positive: {,
+  positive: {
   count: sentimentCounts.positive,
   percentage: total > 0 ? (sentimentCounts.positive / total) * 100 : 0,
   averageScore: sentimentScores.positive.length > 0 ,
   ? sentimentScores.positive.reduce((a: number, b: number) => a + b, 0) / sentimentScores.positive.length,
   : 0,
 },
-  neutral: {,
+  neutral: {
   count: sentimentCounts.neutral,
   percentage: total > 0 ? (sentimentCounts.neutral / total) * 100 : 0,
   averageScore: sentimentScores.neutral.length > 0 ,
   ? sentimentScores.neutral.reduce((a: number, b: number) => a + b, 0) / sentimentScores.neutral.length,
   : 0,
 },
-  negative: {,
+  negative: {
   count: sentimentCounts.negative,
   percentage: total > 0 ? (sentimentCounts.negative / total) * 100 : 0,
   averageScore: sentimentScores.negative.length > 0 ,
@@ -552,7 +552,7 @@ export class SentimentAnalysisService {
   timeRange,
   totalAnalyses: total,
   sentimentDistribution,
-  emotionAnalytics: {,
+  emotionAnalytics: {
   dominant: dominantEmotion,
   distribution: Object.fromEntries(),
   Object.entries(emotionCounts).map(([emotion, count]) => [
@@ -566,14 +566,14 @@ export class SentimentAnalysisService {
   ) as any,
   mixedEmotionRate: analyses.filter(a => a.emotions.mixed).length / total * 100,
 },
-  toxicityAnalytics: {,
+  toxicityAnalytics: {
   overallLevel: this.calculateOverallToxicityLevel(toxicityCounts),
   distribution: Object.fromEntries(),
   Object.entries(toxicityCounts).map(([level, count]) => [
   level,
   total > 0 ? (count / total) * 100 : 0])
   ) as any,
-  categories: {,
+  categories: {
   harassment: 5, // Mock values,
   hate_speech: 2,
   profanity: 8,
@@ -583,21 +583,21 @@ export class SentimentAnalysisService {
 },
   actionRequired: (toxicityCounts.high + toxicityCounts.severe) / total * 100;
   },
-  trends: {,
+  trends: {
   sentimentTrend: 'stable',
   sentimentOverTime: [],
   emotionTrends: [],
   toxicityTrend: 'stable',
   qualityTrend: 'stable',
 },
-  insights: {,
+  insights: {
   topPositiveKeywords: ['great', 'excellent', 'amazing', 'helpful'],
         topNegativeKeywords: ['slow', 'confusing', 'broken', 'disappointed'],
         emergingTopics: [,
           { topic: 'mobile_experience', sentiment: 'negative', growth: 15 },
           { topic: 'new_features', sentiment: 'positive', growth: 25 }
         ],
-        qualityMetrics: {,
+        qualityMetrics: {
   averageReadability: 75,
   averageConstructiveness: 68,
   averageHelpfulness: 72,
@@ -692,7 +692,7 @@ export class SentimentAnalysisService {
         toxicity: this.generateMockToxicity(),
         topics: [],
         keywords: [],
-        metadata: {,
+        metadata: {
   processingTimeMs: Math.floor(Math.random() * 1000) + 100,
           textLength: mockText.length,
           wordCount: mockText.split(/\s+/).length,
@@ -767,7 +767,7 @@ export class SentimentAnalysisService {
   level,
   score: i * 0.2 + Math.random() * 0.2,
   confidence: 0.7 + Math.random() * 0.3,
-  categories: {,
+  categories: {
   harassment: Math.random() * 0.1,
   hate_speech: Math.random() * 0.05,
   profanity: Math.random() * 0.15,
@@ -781,7 +781,7 @@ export class SentimentAnalysisService {
   level: 'none' as ToxicityLevel,
   score: 0,
   confidence: 0.9,
-  categories: {,
+  categories: {
   harassment: 0, hate_speech: 0, profanity: 0,
   threats: 0, spam: 0, inappropriate: 0,
 },
@@ -793,11 +793,11 @@ export class SentimentAnalysisService {
   name: 'Default Sentiment Analysis',
   description: 'Default configuration for sentiment analysis',
   enabled: true,
-  models: {,
+  models: {
   primary: 'transformer',
   fallback: 'lexicon_based',
 },
-  analysis: {,
+  analysis: {
   enableEmotionDetection: true,
   enableToxicityDetection: true,
   enableTopicExtraction: true,
@@ -807,7 +807,7 @@ export class SentimentAnalysisService {
   maxTextLength: 5000,
   supportedLanguages: ['en', 'es', 'fr', 'de'],
 },
-  processing: {,
+  processing: {
   enablePreprocessing: true,
   removePersonalInfo: true,
   normalizeText: true,
@@ -815,24 +815,24 @@ export class SentimentAnalysisService {
   batchSize: 50,
   timeoutMs: 10000,
 },
-  thresholds: {,
-  toxicity: {,
+  thresholds: {
+  toxicity: {
   low: 0.3,
   medium: 0.5,
   high: 0.7,
   severe: 0.9,
 },
-  confidence: {,
+  confidence: {
   minimum: 0.6,
   high: 0.8,
 },
-  quality: {,
+  quality: {
   minimum: 40,
   good: 70,
 },
-  realTime: {,
+  realTime: {
   enabled: false,
-  alertThresholds: {,
+  alertThresholds: {
   severeToxicity: true,
   criticalIntent: true,
   negativeSpike: false,

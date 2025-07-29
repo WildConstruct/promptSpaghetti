@@ -11,7 +11,7 @@ import { LockQueueVisualization } from './LockQueueVisualization';
 import { LockNotifications } from './LockNotifications';
 import { LockPolicyEditor } from './LockPolicyEditor';
 interface LockingManagerProps {
-  workspaceId: string;,
+  workspaceId: string;
   userId: string;
   onLockStateChange?: (resourceId: string, isLocked: boolean) => void;
   export const LockingManager: React.FC<LockingManagerProps> = ({,)

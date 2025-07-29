@@ -72,31 +72,31 @@ export enum ExemptionType {
   USER_EXPERIENCE = 'user_experience'
   // Exemption Entry
   export interface SecurityExemption {
-  id: string;,
+  id: string;
   type: ExemptionType;
-  scope: ExemptionScope;,
+  scope: ExemptionScope;
   target: string; // User ID, IP address, endpoint, etc.,
-  status: ExemptionStatus;,
+  status: ExemptionStatus;
   priority: ExemptionPriority;
-  reason: ExemptionReason;,
+  reason: ExemptionReason;
   description: string;
-  requestedBy: {,
-  userId: string;,
+  requestedBy: {
+  userId: string;
   userEmail: string;
-  role: AdminRole;,
+  role: AdminRole;
   timestamp: Date;
 };
   approvedBy?: {
-  userId: string;,
+  userId: string;
   userEmail: string;
-  role: AdminRole;,
+  role: AdminRole;
   timestamp: Date;
   comments?: string;
 };
   revokedBy?: {
-  userId: string;,
+  userId: string;
   userEmail: string;
-  role: AdminRole;,
+  role: AdminRole;
   timestamp: Date;
   reason?: string;
 };
@@ -104,22 +104,22 @@ export enum ExemptionType {
   expiresAt?: Date;
   autoRenew: boolean;
   renewalCriteria?: {
-  reviewRequired: boolean;,
+  reviewRequired: boolean;
   maxRenewals: number;
-  renewalPeriodDays: number;,
+  renewalPeriodDays: number;
   currentRenewals: number;
 };
-  conditions: {,
+  conditions: {
     ipWhitelist?: string;
     timeRestrictions?: {
       allowedHours: { start: string; end: string }[];
-      allowedDays: string;,
+      allowedDays: string;
   timezone: string;
     };
     usageQuota?: {
   maxUsesPerDay?: number;
   maxUsesPerHour?: number;
-  currentUsage: number;,
+  currentUsage: number;
   resetTime: Date;
 };
     securityContext?: {
@@ -128,10 +128,10 @@ export enum ExemptionType {
   requireApproval?: boolean;
 };
   };
-  metadata: {,
+  metadata: {
   businessJustification: string;
-  riskAssessment: {,
-  level: 'low' | 'medium' | 'high' | 'critical';,
+  riskAssessment: {
+  level: 'low' | 'medium' | 'high' | 'critical';
   mitigations: string;
   reviewDate: Date;
 };
@@ -139,12 +139,12 @@ export enum ExemptionType {
     relatedTickets?: string;
     tags: string;
   };
-  auditTrail: ExemptionAuditEntry;,
+  auditTrail: ExemptionAuditEntry;
   usage: {;
   timesUsed: number;
   lastUsed?: Date;
   usageHistory: Array<{,
-  timestamp: Date;,
+  timestamp: Date;
   context: Record<string, any>;
   source: string;
 }>;
@@ -153,15 +153,15 @@ export enum ExemptionType {
 // Exemption Audit Entry
 }
 export interface ExemptionAuditEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  action: 'created' | 'approved' | 'denied' | 'revoked' | 'renewed' | 'used' | 'modified' | 'expired';,
-  actor: {,
-  userId: string;,
+  action: 'created' | 'approved' | 'denied' | 'revoked' | 'renewed' | 'used' | 'modified' | 'expired';
+  actor: {
+  userId: string;
   userEmail: string;
   role?: AdminRole;
-  type: 'user' | 'admin' | 'system';
-};
+  type: 'user' | 'admin' | 'system'
+  };
   details: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
@@ -169,15 +169,15 @@ export interface ExemptionAuditEntry {
 // Exemption Request
 }
 export interface ExemptionRequest {
-  type: ExemptionType;,
+  type: ExemptionType;
   scope: ExemptionScope;
-  target: string;,
+  target: string;
   reason: ExemptionReason;
-  description: string;,
+  description: string;
   priority: ExemptionPriority;
   requestedDuration?: number; // days,
   conditions?: Partial<SecurityExemption['conditions']>;
-  businessJustification: string;,
+  businessJustification: string;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   mitigations: string;
   autoRenew?: boolean;
@@ -212,15 +212,15 @@ export interface ExemptionQuery {
   // Exemption Policy
 }
 export interface ExemptionPolicy {
-  type: ExemptionType;,
+  type: ExemptionType;
   scope: ExemptionScope;
-  allowedRoles: AdminRole;,
+  allowedRoles: AdminRole;
   requiresApproval: boolean;
-  approverRoles: AdminRole;,
+  approverRoles: AdminRole;
   maxDuration: number; // days,
-  autoExpiry: boolean;,
+  autoExpiry: boolean;
   emergencyOverrideAllowed: boolean;
-  usageTracking: boolean;,
+  usageTracking: boolean;
   complianceRequired: boolean;
   /**
   * Comprehensive exemption management service
@@ -262,7 +262,7 @@ export class ExemptionManager extends EventEmitter {
   priority: request.priority,
   reason: request.reason,
   description: request.description,
-  requestedBy: {,
+  requestedBy: {
   userId: requestorId,
   userEmail: requestorEmail,
   role: requestorRole,
@@ -273,16 +273,16 @@ export class ExemptionManager extends EventEmitter {
         ? new Date(Date.now() + request.requestedDuration * 24 * 60 * 60 * 1000)
         : undefined,
       autoRenew: request.autoRenew || false,
-      conditions: {,
-  usageQuota: {,
+      conditions: {
+  usageQuota: {
   currentUsage: 0,
   resetTime: new Date(),
 }
         ...request.conditions
   },
-  metadata: {,
+  metadata: {
   businessJustification: request.businessJustification,
-  riskAssessment: {,
+  riskAssessment: {
   level: request.riskLevel,
   mitigations: request.mitigations,
   reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
@@ -293,17 +293,17 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'created',
-  actor: {,
+  actor: {
   userId: requestorId,
   userEmail: requestorEmail,
   role: requestorRole,
   type: 'admin',
 },
-  details: {,
+  details: {
   request,
   policy: policy.type,
 }],
-      usage: {,
+      usage: {
   timesUsed: 0,
   usageHistory: [],
 };
@@ -348,7 +348,7 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'approved',
-  actor: {,
+  actor: {
   userId: approverId,
   userEmail: approverEmail,
   role: approverRole,
@@ -383,7 +383,7 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'denied',
-  actor: {,
+  actor: {
   userId: approverId,
   userEmail: approverEmail,
   role: approverRole,
@@ -397,7 +397,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Check if an exemption exists and is active
    */
-  public checkExemption(type: ExemptionType,)
+  public checkExemption(type: ExemptionType)
     scope: ExemptionScope,
     target: string,
     context?: ExemptionUsageContext
@@ -443,7 +443,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Revoke an active exemption
    */
-  public revokeExemption(exemptionId: string,)
+  public revokeExemption(exemptionId: string)
     revokerId: string,
     revokerEmail: string,
     revokerRole: AdminRole,
@@ -467,7 +467,7 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'revoked',
-  actor: {,
+  actor: {
   userId: revokerId,
   userEmail: revokerEmail,
   role: revokerRole,
@@ -503,13 +503,13 @@ export class ExemptionManager extends EventEmitter {
       reason: ExemptionReason.EMERGENCY_ACCESS,
       description: `EMERGENCY: ${request.description}`}
 },
-  requestedBy: {,
+  requestedBy: {
   userId: requestorId,
   userEmail: requestorEmail,
   role: requestorRole,
   timestamp: new Date(),
 },
-  approvedBy: {,
+  approvedBy: {
   userId: 'EMERGENCY_SYSTEM',
         userEmail: 'emergency@company.com',
         role: AdminRole.SUPER_ADMIN,
@@ -519,14 +519,14 @@ export class ExemptionManager extends EventEmitter {
   effectiveFrom: new Date(),
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours max
       autoRenew: false,
-      conditions: {,
-  usageQuota: {,
+      conditions: {
+  usageQuota: {
   currentUsage: 0,
   resetTime: new Date(),
 },
-  metadata: {,
+  metadata: {
   businessJustification: justification,
-  riskAssessment: {,
+  riskAssessment: {
   level: 'critical',
   mitigations: ['Emergency monitoring enabled', 'Auto-expiry in 24 hours'],
   reviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -537,17 +537,17 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'created',
-  actor: {,
+  actor: {
   userId: requestorId,
   userEmail: requestorEmail,
   role: requestorRole,
   type: 'admin',
 },
-  details: {,
+  details: {
   emergencyCode: emergencyCode.substring(0, 4) + '****',
   justification
 }],
-      usage: {,
+      usage: {
   timesUsed: 0,
   usageHistory: [],
 };
@@ -557,9 +557,9 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Query exemptions
    */
-  public queryExemptions(query: ExemptionQuery): {,
+  public queryExemptions(query: ExemptionQuery): {
   exemptions: SecurityExemption;
-  total: number;,
+  total: number;
   hasMore: boolean;
   let exemptions = Array.from(this.exemptions.values());
   // Apply filters
@@ -618,19 +618,19 @@ export class ExemptionManager extends EventEmitter {
    * Get exemption statistics
    */
   public getExemptionStatistics(): {
-    total: number;,
+    total: number;
   active: number;
-    pending: number;,
+    pending: number;
   expired: number;
-    revoked: number;,
+    revoked: number;
   byType: Record<ExemptionType, number>;
     byScope: Record<ExemptionScope, number>;
     byPriority: Record<ExemptionPriority, number>;
-    expiringSoon: number;,
+    expiringSoon: number;
   emergencyCount: number;
-    usageStats: {,
+    usageStats: {
   totalUsage: number;
-      averageUsagePerExemption: number;,
+      averageUsagePerExemption: number;
   mostUsedExemptions: Array<{ id: string; usage: number }>;
     };
     const exemptions = Array.from(this.exemptions.values());
@@ -664,7 +664,7 @@ export class ExemptionManager extends EventEmitter {
   ex.expiresAt && ex.expiresAt <= soonThreshold && ex.expiresAt > now
   ).length,
   emergencyCount: exemptions.filter(ex => ex.priority === ExemptionPriority.EMERGENCY).length,
-  usageStats: {,
+  usageStats: {
   totalUsage,
   averageUsagePerExemption: exemptions.length > 0 ? totalUsage / exemptions.length : 0,
   mostUsedExemptions
@@ -673,7 +673,7 @@ export class ExemptionManager extends EventEmitter {
   private getPolicy(type: ExemptionType, scope: ExemptionScope): ExemptionPolicy | null {
     const key = `${type}_${scope}`;}
     return this.policies.get(key) || this.policies.get(`${type}_*`) || null;}
-  private checkExemptionConditions(exemption: SecurityExemption,)
+  private checkExemptionConditions(exemption: SecurityExemption)
     context?: ExemptionUsageContext
   ): { valid: boolean; reason?: string } {
     // Check IP whitelist
@@ -735,7 +735,7 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'used',
-  actor: {,
+  actor: {
   userId: 'system',
   userEmail: 'system@company.com',
   type: 'system',
@@ -830,7 +830,7 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: now,
   action: 'expired',
-  actor: {,
+  actor: {
   userId: 'system',
   userEmail: 'system@company.com',
   type: 'system',
@@ -860,12 +860,12 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'renewed',
-  actor: {,
+  actor: {
   userId: 'system',
   userEmail: 'system@company.com',
   type: 'system',
 },
-  details: {,
+  details: {
   reason: 'auto_renewal',
   renewalCount: criteria.currentRenewals,
 });

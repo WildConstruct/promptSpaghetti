@@ -11,73 +11,73 @@ import * as os from 'os';
 import * as fs from 'fs/promises';
 
 export interface InfrastructureComponent {
-  id: string;,
+  id: string;
   name: string;
-  type: 'server' | 'database' | 'cache' | 'load_balancer' | 'storage' | 'network' | 'container' | 'kubernetes_pod' | 'lambda_function';,
+  type: 'server' | 'database' | 'cache' | 'load_balancer' | 'storage' | 'network' | 'container' | 'kubernetes_pod' | 'lambda_function';
   category: 'compute' | 'storage' | 'network' | 'security' | 'monitoring' | 'analytics';
   // Component configuration
-  configuration: {,
-  hostname: string;,
+  configuration: {
+  hostname: string;
   ip_address: string;
   port?: number;
-  environment: 'production' | 'staging' | 'development' | 'test';,
+  environment: 'production' | 'staging' | 'development' | 'test';
   region: string;
   availability_zone?: string;
   tags: Record<string, string>;
 };
   // Monitoring settings
-  monitoring: {,
+  monitoring: {
   enabled: boolean;
-  check_interval_ms: number;,
+  check_interval_ms: number;
   timeout_ms: number;
   retry_attempts: number;
   // Health check configuration
   health_checks: HealthCheckConfig;
   // Performance monitoring
-  performance_monitoring: {,
-  enabled: boolean;,
+  performance_monitoring: {
+  enabled: boolean;
   metrics_collection_interval_ms: number;
   custom_metrics: CustomMetricConfig;
 };
     // Log monitoring
-    log_monitoring: {,
+    log_monitoring: {
   enabled: boolean;
-  log_paths: string;,
+  log_paths: string;
   error_patterns: string;
   warning_patterns: string;
 };
   };
   // Alert configuration
-  alerting: {,
+  alerting: {
   enabled: boolean;
-  alert_thresholds: AlertThreshold;,
+  alert_thresholds: AlertThreshold;
   notification_channels: NotificationChannel;
-  escalation_policies: EscalationPolicy;,
+  escalation_policies: EscalationPolicy;
   suppression_rules: SuppressionRule;
 };
   // Current status
-  status: {,
+  status: {
   health_status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
-  last_check_time: number;,
+  last_check_time: number;
   uptime_seconds: number;
-  response_time_ms: number;,
+  response_time_ms: number;
   error_count_24h: number;
   performance_score: number; // 0-100,
-  availability_percentage_24h: number;,
+  availability_percentage_24h: number;
   availability_percentage_7d: number;
   availability_percentage_30d: number;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   enabled: boolean;
 }
 export interface HealthCheckConfig {
-  id: string;,
+  id: string;
   name: string;
   type: 'http' | 'tcp' | 'ping' | 'dns' | 'ssl_cert' | 'disk_space' | 'memory' | 'cpu' | 'process' | 'custom_script';
   // Check parameters
-  parameters: {,
+  parameters: {
   endpoint?: string;
   expected_status_code?: number;
   expected_response_time_ms?: number;
@@ -89,55 +89,55 @@ export interface HealthCheckConfig {
   threshold_unit?: string;
 };
   // Check behavior
-  success_criteria: {,
+  success_criteria: {
   min_success_rate: number;
-  consecutive_failures_threshold: number;,
+  consecutive_failures_threshold: number;
   response_time_threshold_ms: number;
 };
-  enabled: boolean;,
+  enabled: boolean;
   weight: number; // Impact on overall health score (0-1)
 }
 export interface CustomMetricConfig {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   metric_type: 'gauge' | 'counter' | 'histogram' | 'summary';
   // Collection configuration
-  collection: {,
-  method: 'api_endpoint' | 'file_parsing' | 'command_execution' | 'snmp' | 'prometheus';,
+  collection: {
+  method: 'api_endpoint' | 'file_parsing' | 'command_execution' | 'snmp' | 'prometheus';
   source: string;
   parsing_rule?: string;
-  aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count';
-};
+  aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count'
+  };
   // Alerting thresholds
-  thresholds: {,
+  thresholds: {
   warning_threshold?: number;
   critical_threshold?: number;
-  comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-};
-  unit: string;,
+  comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte'
+  };
+  unit: string;
   enabled: boolean;
 }
 export interface AlertThreshold {
-  id: string;,
+  id: string;
   name: string;
-  metric_name: string;,
-  condition: {,
-  operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte' | 'between' | 'not_between';,
+  metric_name: string;
+  condition: {
+  operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte' | 'between' | 'not_between';
   value: number;
   value_max?: number; // For 'between' conditions,
   duration_minutes?: number; // How long condition must persist,
   evaluation_window_minutes?: number; // Time window for evaluation,
 };
-  severity: 'info' | 'warning' | 'critical';,
+  severity: 'info' | 'warning' | 'critical';
   enabled: boolean;
   priority: number;
 }
 export interface NotificationChannel {
-  id: string;,
+  id: string;
   name: string;
-  type: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty' | 'teams' | 'discord';,
-  configuration: {,
+  type: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty' | 'teams' | 'discord';
+  configuration: {
   endpoint?: string;
   api_key?: string;
   webhook_url?: string;
@@ -147,10 +147,10 @@ export interface NotificationChannel {
   template?: string;
 };
   // Filtering and routing
-  routing: {,
+  routing: {
   severity_filter: ('info' | 'warning' | 'critical')[];
   component_filter: string; // Component IDs or patterns,
-  time_filter?: {,
+  time_filter?: {
   days_of_week: number; // 0-6 (Sunday-Saturday),
   start_hour: number; // 0-23,
   end_hour: number; // 0-23,
@@ -158,62 +158,62 @@ export interface NotificationChannel {
 };
   };
   // Rate limiting
-  rate_limiting: {,
+  rate_limiting: {
   enabled: boolean;
-  max_notifications_per_hour: number;,
+  max_notifications_per_hour: number;
   max_notifications_per_day: number;
   cooldown_period_minutes: number;
 };
   enabled: boolean;
 }
 export interface EscalationPolicy {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Escalation rules
   escalation_levels: Array<{,
-  level: number;,
+  level: number;
   delay_minutes: number;
-  notification_channels: string;,
+  notification_channels: string;
   actions: EscalationAction;
 }>;
   // Trigger conditions
-  trigger_conditions: {,
+  trigger_conditions: {
   severity_levels: ('info' | 'warning' | 'critical')[];
-  component_types: InfrastructureComponent['type'][];,
+  component_types: InfrastructureComponent['type'][];
   unacknowledged_duration_minutes: number;
   consecutive_failures?: number;
 };
   // De-escalation
-  de_escalation: {,
+  de_escalation: {
   auto_resolve: boolean;
-  auto_resolve_delay_minutes: number;,
+  auto_resolve_delay_minutes: number;
   require_manual_acknowledgment: boolean;
 };
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
 }
 export interface EscalationAction {
-  action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';,
+  action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';
   parameters: Record<string, any>;
   timeout_minutes?: number;
   retry_attempts?: number;
 }
 export interface SuppressionRule {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Suppression conditions
-  conditions: {,
-  component_patterns: string;,
+  conditions: {
+  component_patterns: string;
   alert_patterns: string;
   severity_levels: ('info' | 'warning' | 'critical')[];
   maintenance_windows?: MaintenanceWindow;
 };
   // Suppression behavior
-  behavior: {,
+  behavior: {
   suppress_notifications: boolean;
-  suppress_escalations: boolean;,
+  suppress_escalations: boolean;
   suppress_logging: boolean;
   alternative_notification_channels?: string;
 };
@@ -224,78 +224,78 @@ export interface SuppressionRule {
   recurring: boolean;
   recurrence_pattern?: string; // Cron-like pattern,
 };
-  enabled: boolean;,
+  enabled: boolean;
   priority: number;
 }
 export interface MaintenanceWindow {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
-  schedule: {,
-  start_time: number;,
+  description: string;
+  schedule: {
+  start_time: number;
   end_time: number;
-  timezone: string;,
+  timezone: string;
   recurring: boolean;
   recurrence_pattern?: string;
 };
-  affected_components: string;,
+  affected_components: string;
   suppress_all_alerts: boolean;
-  alternative_monitoring: boolean;,
+  alternative_monitoring: boolean;
   created_by: string;
   created_at: number;
 }
 export interface InfrastructureMetrics {
-  component_id: string;,
+  component_id: string;
   timestamp: number;
   // System metrics
-  system: {,
-  cpu_usage_percent: number;,
+  system: {
+  cpu_usage_percent: number;
   memory_usage_percent: number;
-  disk_usage_percent: number;,
+  disk_usage_percent: number;
   disk_io_read_bps: number;
-  disk_io_write_bps: number;,
+  disk_io_write_bps: number;
   network_in_bps: number;
-  network_out_bps: number;,
+  network_out_bps: number;
   load_average_1m: number;
-  load_average_5m: number;,
+  load_average_5m: number;
   load_average_15m: number;
 };
   // Application metrics
   application?: {
-  request_rate_per_second: number;,
+  request_rate_per_second: number;
   error_rate_percent: number;
-  response_time_ms: number;,
+  response_time_ms: number;
   active_connections: number;
-  queue_size: number;,
+  queue_size: number;
   thread_count: number;
-  heap_usage_mb: number;,
+  heap_usage_mb: number;
   gc_time_ms: number;
 };
   // Database metrics (if applicable)
   database?: {
-  connections_active: number;,
+  connections_active: number;
   connections_max: number;
-  query_rate_per_second: number;,
+  query_rate_per_second: number;
   slow_query_count: number;
-  lock_wait_time_ms: number;,
+  lock_wait_time_ms: number;
   replication_lag_ms: number;
-  table_size_mb: number;,
+  table_size_mb: number;
   index_hit_ratio: number;
 };
   // Custom metrics
   custom_metrics: Record<string, number>;
 }
 export interface InfrastructureAlert {
-  id: string;,
+  id: string;
   component_id: string;
-  alert_type: 'threshold_breach' | 'health_check_failure' | 'availability_issue' | 'performance_degradation' | 'security_incident' | 'custom';,
+  alert_type: 'threshold_breach' | 'health_check_failure' | 'availability_issue' | 'performance_degradation' | 'security_incident' | 'custom';
   severity: 'info' | 'warning' | 'critical';
   // Alert details
-  title: string;,
+  title: string;
   description: string;
   detected_at: number;
   // Context information
-  context: {,
+  context: {
   metric_name?: string;
   current_value?: number;
   threshold_value?: number;
@@ -303,10 +303,10 @@ export interface InfrastructureAlert {
   failure_count?: number;
   affected_services: string;
   root_cause_analysis?: string;
-  impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical';
-};
+  impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  };
   // Resolution tracking
-  resolution: {,
+  resolution: {
   acknowledged: boolean;
   acknowledged_by?: string;
   acknowledged_at?: number;
@@ -318,18 +318,18 @@ export interface InfrastructureAlert {
   auto_resolved: boolean;
 };
   // Escalation tracking
-  escalation: {,
+  escalation: {
   escalated: boolean;
-  escalation_level: number;,
+  escalation_level: number;
   escalation_history: Array<{,
-  level: number;,
+  level: number;
   escalated_at: number;
-  escalated_to: string;,
+  escalated_to: string;
   actions_taken: string;
 }>;
   };
   // Notification tracking
-  notifications: {,
+  notifications: {
   channels_notified: string;
   notification_count: number;
   last_notification_at?: number;
@@ -338,15 +338,15 @@ export interface InfrastructureAlert {
 };
 }
 export interface InfrastructureEvent {
-  id: string;,
+  id: string;
   component_id: string;
-  event_type: 'component_up' | 'component_down' | 'performance_change' | 'configuration_change' | 'deployment' | 'maintenance' | 'security_event';,
+  event_type: 'component_up' | 'component_down' | 'performance_change' | 'configuration_change' | 'deployment' | 'maintenance' | 'security_event';
   timestamp: number;
-  title: string;,
+  title: string;
   description: string;
   // Event metadata
-  metadata: {,
-  source: string;,
+  metadata: {
+  source: string;
   automated: boolean;
   user_initiated: boolean;
   triggered_by?: string;
@@ -354,7 +354,7 @@ export interface InfrastructureEvent {
   tags: Record<string, string>;
 };
   // Impact assessment
-  impact: {,
+  impact: {
   severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
   affected_components: string;
   estimated_downtime_minutes?: number;
@@ -362,69 +362,69 @@ export interface InfrastructureEvent {
 };
   // Resolution information
   resolution?: {
-  resolved_at: number;,
+  resolved_at: number;
   resolution_method: 'automatic' | 'manual' | 'rollback' | 'failover';
   resolution_notes: string;
   lessons_learned?: string;
 };
 }
 export interface MonitoringReport {
-  report_id: string;,
+  report_id: string;
   generated_at: number;
-  report_period: {,
-  start_time: number;,
+  report_period: {
+  start_time: number;
   end_time: number;
   duration_hours: number;
 };
   // Overall health summary
-  health_summary: {,
+  health_summary: {
   total_components: number;
-  healthy_components: number;,
+  healthy_components: number;
   warning_components: number;
-  critical_components: number;,
+  critical_components: number;
   overall_health_score: number;
   availability_percentage: number;
 };
   // Performance summary
-  performance_summary: {,
+  performance_summary: {
   avg_response_time_ms: number;
-  p95_response_time_ms: number;,
+  p95_response_time_ms: number;
   p99_response_time_ms: number;
-  avg_cpu_usage_percent: number;,
+  avg_cpu_usage_percent: number;
   avg_memory_usage_percent: number;
-  avg_disk_usage_percent: number;,
+  avg_disk_usage_percent: number;
   network_throughput_mbps: number;
 };
   // Alert summary
-  alert_summary: {,
+  alert_summary: {
   total_alerts: number;
-  critical_alerts: number;,
+  critical_alerts: number;
   warning_alerts: number;
-  info_alerts: number;,
+  info_alerts: number;
   resolved_alerts: number;
-  avg_resolution_time_minutes: number;,
+  avg_resolution_time_minutes: number;
   false_positive_rate_percent: number;
 };
   // Top issues
   top_issues: Array<{,
   component_id: string;
-  component_name: string;,
+  component_name: string;
   issue_type: string;
-  occurrence_count: number;,
+  occurrence_count: number;
   impact_score: number;
   recommended_action: string;
 }>;
   // Trend analysis
-  trends: {,
+  trends: {
   performance_trend: 'improving' | 'stable' | 'degrading';
-  availability_trend: 'improving' | 'stable' | 'degrading';,
+  availability_trend: 'improving' | 'stable' | 'degrading';
   alert_volume_trend: 'increasing' | 'stable' | 'decreasing';
-  resource_utilization_trend: 'increasing' | 'stable' | 'decreasing';
-};
+  resource_utilization_trend: 'increasing' | 'stable' | 'decreasing'
+  };
   // Recommendations
-  recommendations: {,
+  recommendations: {
   immediate_actions: string;
-  preventive_measures: string;,
+  preventive_measures: string;
   capacity_planning: string;
   optimization_opportunities: string;
 };
@@ -482,7 +482,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   ...component,
   id: componentId,
   created_at: Date.now(),
-  status: {,
+  status: {
   health_status: 'unknown',
   last_check_time: 0,
   uptime_seconds: 0,
@@ -871,7 +871,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 },
   description: `Component status changed from ${oldStatus} to ${newStatus}`}
 },
-  context: {,
+  context: {
   failure_count: failedChecks.length,
   affected_services: [component.name],
   impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low',
@@ -893,7 +893,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 },
   description: `Health check "${result.check.name}" failed for component ${component.name}`}
 },
-  context: {,
+  context: {
   metric_name: result.check.name,
   current_value: result.responseTime,
   measurement_unit: 'milliseconds',
@@ -916,7 +916,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 },
   description: `Metric "${threshold.metric_name}" breached threshold`}
 },
-  context: {,
+  context: {
   metric_name: threshold.metric_name,
   current_value: metricValue,
   threshold_value: threshold.condition.value,
@@ -924,7 +924,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   affected_services: [component.name],
   impact_assessment: threshold.severity === 'critical' ? 'high' : threshold.severity === 'warning' ? 'medium' : 'low',
 });
-  private async checkCustomMetricThresholds(componentId: string,)
+  private async checkCustomMetricThresholds(componentId: string)
     config: CustomMetricConfig,
     value: number): Promise<void> {,
   if (!config.thresholds.critical_threshold && !config.thresholds.warning_threshold) return;
@@ -956,7 +956,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 },
   description: `Custom metric "${config.name}" breached ${severity} threshold`}
 },
-  context: {,
+  context: {
   metric_name: config.name,
   current_value: value,
   threshold_value: thresholdValue,
@@ -1010,22 +1010,22 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   id: alertId,
   component_id: componentId,
   detected_at: Date.now(),
-  resolution: {,
+  resolution: {
   acknowledged: false,
   resolved: false,
   auto_resolved: false,
 },
-  escalation: {,
+  escalation: {
   escalated: false,
   escalation_level: 0,
   escalation_history: [],
 },
-  notifications: {,
+  notifications: {
   channels_notified: [],
   notification_count: 0,
   suppressed: false,
 },
-  context: {,
+  context: {
   affected_services: [],
   impact_assessment: 'medium',
   ...alertData.context
@@ -1236,16 +1236,16 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 },
   description: `Component status changed from ${oldStatus} to ${newStatus}`}
 },
-  metadata: {,
+  metadata: {
   source: 'health_monitor',
   automated: true,
   user_initiated: false,
-  tags: {,
+  tags: {
   old_status: oldStatus,
   new_status: newStatus,
   component_type: component.type,
 },
-  impact: {,
+  impact: {
   severity: newStatus === 'critical' ? 'high' : newStatus === 'warning' ? 'medium' : 'low',
         affected_components: [componentId],
         service_impact_description: `Component ${component.name} is now ${newStatus}`}
@@ -1287,7 +1287,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   severity: 'warning',
   title: 'Predictive Alert: CPU Usage Trending Up',
   description: 'CPU usage is trending upward and may reach critical levels',
-  context: {,
+  context: {
   metric_name: 'cpu_usage_percent',
   current_value: recentMetrics[recentMetrics.length - 1].system.cpu_usage_percent,
   measurement_unit: 'percent',
@@ -1302,7 +1302,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   severity: 'warning',
   title: 'Predictive Alert: Memory Usage Trending Up',
   description: 'Memory usage is trending upward and may reach critical levels',
-  context: {,
+  context: {
   metric_name: 'memory_usage_percent',
   current_value: recentMetrics[recentMetrics.length - 1].system.memory_usage_percent,
   measurement_unit: 'percent',
@@ -1499,12 +1499,12 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     return {
   report_id: reportId,
   generated_at: Date.now(),
-  report_period: {,
+  report_period: {
   start_time: startTime,
   end_time: endTime,
   duration_hours: hours,
 },
-  health_summary: {,
+  health_summary: {
   total_components: components.length,
   healthy_components: healthyComponents,
   warning_components: warningComponents,
@@ -1512,7 +1512,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   overall_health_score: Math.round(overallHealthScore),
   availability_percentage: Math.round(avgAvailability * 100) / 100,
 },
-  performance_summary: {,
+  performance_summary: {
   avg_response_time_ms: Math.round(avgResponseTime),
   p95_response_time_ms: Math.round(avgResponseTime * 1.5), // Approximation,
   p99_response_time_ms: Math.round(avgResponseTime * 2), // Approximation,
@@ -1521,7 +1521,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   avg_disk_usage_percent: Math.round(avgDiskUsage * 100) / 100,
   network_throughput_mbps: Math.round(avgNetworkThroughput * 100) / 100,
 },
-  alert_summary: {,
+  alert_summary: {
   total_alerts: allAlerts.length,
   critical_alerts: criticalAlerts,
   warning_alerts: warningAlerts,
@@ -1531,13 +1531,13 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   false_positive_rate_percent: 5 // Estimated,
 },
   top_issues: topIssues,
-      trends: {,
+      trends: {
   performance_trend: 'stable', // Would be calculated from historical data,
   availability_trend: 'stable',
   alert_volume_trend: 'stable',
   resource_utilization_trend: 'stable',
 },
-  recommendations: {,
+  recommendations: {
   immediate_actions: topIssues.slice(),
           0,
           3
@@ -1560,11 +1560,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         ]
     };
   getSystemStatus(): {
-  total_components: number;,
+  total_components: number;
   healthy_components: number;
-  warning_components: number;,
+  warning_components: number;
   critical_components: number;
-  active_alerts: number;,
+  active_alerts: number;
   overall_health_score: number;
   const components = Array.from(this.components.values());
   const healthyComponents = components.filter(c => c.status.health_status === 'healthy').length;

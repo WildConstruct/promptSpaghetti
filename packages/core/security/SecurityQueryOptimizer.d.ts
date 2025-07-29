@@ -13,7 +13,7 @@ export interface QueryProfile {
     query_hash: string;
     query_text: string;
     query_type: 'search' | 'aggregation' | 'time_series' | 'correlation' | 'threat_hunt' | 'compliance_report';
-    characteristics: {,
+    characteristics: {
         complexity_score: number;
         data_volume_estimate: number;
         time_range_days: number;
@@ -22,7 +22,7 @@ export interface QueryProfile {
         aggregation_complexity: number;
     };
     performance_history: QueryExecution[];
-    optimization: {,
+    optimization: {
         optimization_level: 'none' | 'basic' | 'moderate' | 'aggressive';
         suggested_indices: string[];
         partitioning_strategy: string;
@@ -30,7 +30,7 @@ export interface QueryProfile {
         execution_plan: ExecutionPlan;
         cost_estimate: number;
     };
-    usage: {,
+    usage: {
         frequency_per_day: number;
         peak_usage_hours: number[];
         user_patterns: UserUsagePattern[];
@@ -93,13 +93,13 @@ export interface ExecutionPlan {
         parallelization: number;
         dependencies: number[];
     }>;
-    resources: {,
+    resources: {
         cpu_cores: number;
         memory_mb: number;
         disk_io_mb: number;
         network_mb: number;
     };
-    optimizations: {,
+    optimizations: {
         index_usage: string[];
         partition_pruning: boolean;
         predicate_pushdown: boolean;
@@ -143,7 +143,7 @@ export interface CacheEntry {
     access_count: number;
     size_mb: number;
     result_data: any;
-    result_metadata: {,
+    result_metadata: {
         row_count: number;
         column_count: number;
         data_freshness: number;
@@ -164,20 +164,20 @@ export interface QueryOptimizationRule {
     name: string;
     description: string;
     rule_type: 'index_suggestion' | 'query_rewrite' | 'caching_strategy' | 'partitioning' | 'execution_plan';
-    conditions: {,
+    conditions: {
         query_patterns: string[];
-        performance_thresholds: {,
+        performance_thresholds: {
             min_execution_time_ms?: number;
             min_cpu_time_ms?: number;
             min_memory_usage_mb?: number;
             min_cost?: number;
         };
-        usage_patterns: {,
+        usage_patterns: {
             min_frequency_per_day?: number;
             min_user_count?: number;
         };
     };
-    actions: {,
+    actions: {
         index_recommendations: IndexRecommendation[];
         query_rewrites: QueryRewrite[];
         caching_recommendations: CachingStrategy[];
@@ -217,14 +217,14 @@ export interface OptimizationJob {
     name: string;
     description: string;
     job_type: 'index_creation' | 'cache_warming' | 'partition_maintenance' | 'statistics_update' | 'query_plan_refresh';
-    config: {,
+    config: {
         target_queries: string[];
         target_tables: string[];
         optimization_level: 'conservative' | 'moderate' | 'aggressive';
         max_duration_minutes: number;
         max_resource_usage_percentage: number;
     };
-    schedule: {,
+    schedule: {
         type: 'manual' | 'scheduled' | 'triggered';
         cron_expression?: string;
         trigger_conditions?: {
@@ -233,14 +233,14 @@ export interface OptimizationJob {
             query_volume_threshold: number;
         };
     };
-    execution: {,
+    execution: {
         status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
         started_at?: number;
         completed_at?: number;
         progress_percentage: number;
         current_operation?: string;
     };
-    results: {,
+    results: {
         optimizations_applied: number;
         performance_improvements: Record<string, number>;
         cost_savings: number;
@@ -254,11 +254,11 @@ export interface OptimizationJob {
 
 export interface PerformanceMetrics {
     id: string;
-    collection_period: {,
+    collection_period: {
         start: number;
         end: number;
     };
-    query_performance: {,
+    query_performance: {
         total_queries: number;
         avg_execution_time_ms: number;
         p50_execution_time_ms: number;
@@ -267,7 +267,7 @@ export interface PerformanceMetrics {
         slow_queries_count: number;
         failed_queries_count: number;
     };
-    cache_performance: {,
+    cache_performance: {
         total_cache_entries: number;
         cache_hit_rate: number;
         cache_miss_rate: number;
@@ -276,7 +276,7 @@ export interface PerformanceMetrics {
         cache_evictions: number;
         cache_refreshes: number;
     };
-    resource_utilization: {,
+    resource_utilization: {
         avg_cpu_utilization: number;
         peak_cpu_utilization: number;
         avg_memory_utilization: number;
@@ -284,7 +284,7 @@ export interface PerformanceMetrics {
         disk_io_operations_per_second: number;
         network_throughput_mbps: number;
     };
-    cost_metrics: {,
+    cost_metrics: {
         total_compute_cost: number;
         total_storage_cost: number;
         total_network_cost: number;
@@ -292,7 +292,7 @@ export interface PerformanceMetrics {
         cost_savings_from_cache: number;
         cost_savings_from_optimization: number;
     };
-    optimization_effectiveness: {,
+    optimization_effectiveness: {
         rules_applied: number;
         avg_improvement_percentage: number;
         successful_optimizations: number;
@@ -311,19 +311,19 @@ export interface OptimizationEvent {
     description: string;
     query_profile_id?: string;
     optimization_job_id?: string;
-    performance_impact: {,
+    performance_impact: {
         before_metrics: Record<string, number>;
         after_metrics: Record<string, number>;
         improvement_percentage: number;
         cost_impact: number;
     };
-    context: {,
+    context: {
         affected_queries: string[];
         system_state: Record<string, any>;
         resource_utilization: Record<string, number>;
         user_impact_assessment: string;
     };
-    response: {,
+    response: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;

@@ -80,7 +80,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
               id: 'advanced1',
               type: 'WeightedAdvanced',
               choices: [{ value: 'Option A', weight: 2.5 }],
-              distributionConfig: {,
+              distributionConfig: {
   type: 'exponential',
                 parameters: { decay: 0.5 },
                 normalize: true];
@@ -103,7 +103,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
   output: 'Match',
   label: 'test_check'],
   defaultOutput: 'No match',
-  conditionalConfig: {,
+  conditionalConfig: {
   allowVariableAccess: true,
   strictMode: false];
   };
@@ -120,9 +120,9 @@ describe('Epic 12 - LLM Serialization Format', () => {
   id: 'seq1',
   type: 'Sequential',
   sequence: ['First', 'Second', 'Third'],
-  pattern: {,
+  pattern: {
   type: 'cyclical',
-  config: {,
+  config: {
   allowRepeats: false];
   };
         const result = GraphSerializer.serialize(graph);
@@ -136,16 +136,16 @@ describe('Epic 12 - LLM Serialization Format', () => {
             {
               id: 'markov1',
               type: 'Markov',
-              states: {,
+              states: {
   start: {;
   transitions: { middle: 0.7, end: 0.3 }
   },
-  middle: {,
+  middle: {
   transitions: { end: 1.0 }
   },
   end: {}
   },
-  initialState: 'start';
+  initialState: 'start'
   } as any // Type assertion for test
           ]
         };
@@ -229,7 +229,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
   expect(result.errors).toHaveLength(0);
 });
       test('should validate complex graph', () => {
-  const content = `version: 1.0.0;,;
+  const content = `version: 1.0.0;;
   checksum: abc123,
   metadata:,
   name: "Test Graph",

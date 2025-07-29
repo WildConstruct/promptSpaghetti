@@ -8,11 +8,7 @@ import { AdvancedRuntimeNode, NodeExecutionResult } from '../advanced';
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter } from '../../ai';
  > ;
-words ?  : Array < {
-    word: string,
-    start: number,
-    end: number
-} > ;
+words ?  : Array;
 metadata: AudioMetadata;
 export class TextToSpeechNode extends AdvancedRuntimeNode {
     modelFactory;

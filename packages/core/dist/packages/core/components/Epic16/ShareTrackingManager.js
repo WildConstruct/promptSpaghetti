@@ -397,7 +397,7 @@ div >
                             < div, key = { stage, : .stage }, className = "relative mb-4" >
                             _jsx("div", { className: "flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg", style: {
                                     width: `${Math.max(stage.percentage, 10)}%`
-                                } }), minWidth), ": '200px'; }} >", _jsxs("div", { children: [_jsx("div", { className: "font-semibold capitalize", children: stage.stage }), _jsxs("div", { className: "text-sm opacity-90", children: [stage.count.toLocaleString(), " users"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "font-semibold", children: [stage.percentage.toFixed(1), "%"] }), index > 0 && ()
+                                } }), minWidth), ": '200px' }} >", _jsxs("div", { children: [_jsx("div", { className: "font-semibold capitalize", children: stage.stage }), _jsxs("div", { className: "text-sm opacity-90", children: [stage.count.toLocaleString(), " users"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "font-semibold", children: [stage.percentage.toFixed(1), "%"] }), index > 0 && ()
                                     < div, " className=\"text-xs opacity-75\">-", stage.dropOffRate, "% drop"] }), ")}"] }));
     div >
         _jsxs("div", { className: "mt-2 ml-4 text-xs text-gray-500", children: ["Avg. time: ", Math.floor(stage.averageTime / 60), "m ", stage.averageTime % 60, "s"] });

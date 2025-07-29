@@ -13,7 +13,7 @@ export interface SecurityEvent {
     timestamp: number;
     title: string;
     description: string;
-    details: {,
+    details: {
         affected_systems: string[];
         affected_users?: string[];
         ip_addresses?: string[];
@@ -30,7 +30,7 @@ export interface SecurityEvent {
             };
         };
     };
-    metadata: {,
+    metadata: {
         correlation_id?: string;
         threat_level: number;
         confidence_score: number;
@@ -52,7 +52,7 @@ export interface AlertRule {
     name: string;
     description: string;
     enabled: boolean;
-    conditions: {,
+    conditions: {
         event_types: SecurityEvent['type'][];
         severity_threshold: SecurityEvent['severity'];
         source_systems: string[];
@@ -66,7 +66,7 @@ export interface AlertRule {
             value: any;
         }>;
     };
-    actions: {,
+    actions: {
         notifications: NotificationAction[];
         escalation?: EscalationAction;
         automation?: AutomationAction[];
@@ -104,7 +104,7 @@ export interface AutomationAction {
 export interface AlertingConfig {
     enabled: boolean;
     default_severity_threshold: SecurityEvent['severity'];
-    notification_settings: {,
+    notification_settings: {
         batch_notifications: boolean;
         batch_interval: number;
         quiet_hours?: {
@@ -113,17 +113,17 @@ export interface AlertingConfig {
             timezone: string;
         };
     };
-    escalation_settings: {,
+    escalation_settings: {
         auto_escalation_enabled: boolean;
         escalation_timeout: number;
         max_escalation_levels: number;
     };
-    retention: {,
+    retention: {
         events_retention_days: number;
         resolved_events_retention_days: number;
         archive_after_days: number;
     };
-    integrations: {,
+    integrations: {
         siem_integration?: {
             enabled: boolean;
             endpoint: string;
@@ -142,17 +142,17 @@ export interface AlertMetrics {
     alerts_by_severity: Record<SecurityEvent['severity'], number>;
     alerts_by_type: Record<SecurityEvent['type'], number>;
     alerts_by_source: Record<string, number>;
-    response_times: {,
+    response_times: {
         mean_acknowledgment_time: number;
         mean_resolution_time: number;
         p95_response_time: number;
     };
-    escalation_stats: {,
+    escalation_stats: {
         total_escalations: number;
         escalation_rate: number;
     };
     false_positive_rate: number;
-    time_range: {,
+    time_range: {
         start: number;
         end: number;
     };
@@ -192,13 +192,13 @@ export declare class CrossSystemAlertingSystem {
         start: number;
         end: number;
     }): {
-        summary: {,
+        summary: {
             total_events: number;
             critical_alerts: number;
             avg_response_time: number;
             false_positive_rate: number;
         };
-        trends: {,
+        trends: {
             daily_alert_counts: Array<{,
                 date: string;
                 count: number;

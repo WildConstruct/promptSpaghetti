@@ -15,20 +15,20 @@ import { substituteVariables } from '../utils/templateParser.js';
 
 export interface HybridExportFormat extends VFXExportFormat {
   // Hybrid prompting extensions
-  hybridPrompting: {,
-  mars: {,
-  framework: 'MARS-v1.0';,
+  hybridPrompting: {
+  mars: {
+  framework: 'MARS-v1.0';
   tags: MARSFrameworkTags;
   structured: MARSStructuredPrompt;
 };
-    zada: {,
+    zada: {
   approach: 'screenplay-style';
-  variants: ZadaNaturalLanguageVariant;,
+  variants: ZadaNaturalLanguageVariant;
   director_friendly: DirectorAccessiblePrompt;
 };
-    hollywood: {,
+    hollywood: {
   protocol: 'reproducibility-v1';
-  seeds: HollywoodSeedProtocol;,
+  seeds: HollywoodSeedProtocol;
   iteration_tracking: IterationHistory;
 };
   };
@@ -37,15 +37,15 @@ export interface HybridExportFormat extends VFXExportFormat {
 
 export interface MARSFrameworkTags {
   // Camera and composition tags
-  CAM: {,
-  shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';,
+  CAM: {
+  shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';
   angle: 'high' | 'eye' | 'low' | 'dutch' | 'aerial';
-  movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';,
+  movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';
   lens: string; // e.g., "35mm", "85mm", "wide-angle",
   depth_of_field: 'shallow' | 'deep' | 'rack-focus';
 };
   // Subject and character tags
-  SUBJ: {,
+  SUBJ: {
   primary: string; // Main subject description,
   secondary?: string; // Supporting elements,
   interaction: string; // Character actions/interactions,
@@ -53,30 +53,30 @@ export interface MARSFrameworkTags {
   blocking: string; // Physical positioning,
 };
   // Effects and post-processing tags
-  FX: {,
+  FX: {
   lighting: 'natural' | 'dramatic' | 'soft' | 'harsh' | 'practical' | 'motivated';
-  color_grade: 'neutral' | 'warm' | 'cool' | 'desaturated' | 'cinematic';,
+  color_grade: 'neutral' | 'warm' | 'cool' | 'desaturated' | 'cinematic';
   atmosphere: 'clear' | 'hazy' | 'smoky' | 'foggy' | 'dusty';
   special_fx?: string; // VFX elements to add,
   post_processing?: string; // Post-production effects,
 };
   // Focal elements (using !FOCAL syntax)
-  FOCAL: {,
+  FOCAL: {
   primary_focus: string; // Main visual focus point,
   secondary_focus?: string; // Supporting focus elements,
-  background_treatment: 'blur' | 'sharp' | 'silhouette' | 'bokeh';,
-  visual_hierarchy: 'foreground' | 'midground' | 'background';
-};
+  background_treatment: 'blur' | 'sharp' | 'silhouette' | 'bokeh';
+  visual_hierarchy: 'foreground' | 'midground' | 'background'
+  };
 }
 export interface MARSStructuredPrompt {
   raw_mars: string; // Original MARS-tagged prompt,
-  parsed_structure: {,
-  camera_section: string;,
+  parsed_structure: {
+  camera_section: string;
   subject_section: string;
-  effects_section: string;,
+  effects_section: string;
   focal_section: string;
 };
-  controlnet_mapping: {,
+  controlnet_mapping: {
   pose_guidance: string; // SUBJ → pose parameters,
   depth_hints: string; // CAM → depth estimation,
   edge_conditions: string; // FX → edge detection,
@@ -86,9 +86,9 @@ export interface MARSStructuredPrompt {
 // === ZADA NATURAL LANGUAGE APPROACH ===
 }
 export interface ZadaNaturalLanguageVariant {
-  variant_id: string;,
+  variant_id: string;
   style: 'screenplay' | 'storyboard' | 'shot_list' | 'director_note';
-  content: string;,
+  content: string;
   accessibility_level: 'director' | 'cinematographer' | 'general_crew';
   human_readable_score: number; // 1-10, how accessible to non-technical users,
 }
@@ -97,8 +97,8 @@ export interface DirectorAccessiblePrompt {
   shot_description: string; // Natural language shot breakdown,
   mood_direction: string; // Emotional/atmospheric guidance,
   reference_notes: string; // Visual references and inspirations,
-  crew_notes: {,
-  cinematographer: string;,
+  crew_notes: {
+  cinematographer: string;
   lighting_director: string;
   vfx_supervisor: string;
 };
@@ -110,16 +110,16 @@ export interface HollywoodSeedProtocol {
   component_seeds: Record<string, number>; // Per-node/component seeds,
   iteration_seeds: number; // Seeds for multiple iterations,
   reproducibility_checksum: string; // Validation hash,
-  version_compatibility: {,
-  generator_version: string;,
+  version_compatibility: {
+  generator_version: string;
   node_version_map: Record<string, string>;
   schema_version: string;
 };
 }
 export interface IterationHistory {
-  iteration_id: string;,
+  iteration_id: string;
   timestamp: string;
-  seed_used: number;,
+  seed_used: number;
   changes_from_previous: string;
   director_notes?: string;
   approval_status: 'draft' | 'review' | 'approved' | 'final';
@@ -138,21 +138,21 @@ export class HybridPromptExportService {
   /**
    * Export graph with hybrid prompting approach combining all methodologies
    */
-  async exportHybridPrompt(graph: { nodes: Node; edges: Edge },)
-    executionResults: {,
+  async exportHybridPrompt(graph: { nodes: Node; edges: Edge })
+    executionResults: {
   finalPrompt: string;
   variables: Record<string, string>;
   executionTime: number;
   nodePerformance?: Record<string, number>;
   variants?: VFXPromptVariant;
 },
-  options: {,
+  options: {
   includeMARS: boolean;
-  includeZada: boolean;,
+  includeZada: boolean;
   includeHollywoodProtocol: boolean;
-  quality: 'production' | 'preview' | 'debug';,
-  targetAudience: 'director' | 'vfx_professional' | 'mixed_crew';
-} = {
+  quality: 'production' | 'preview' | 'debug';
+  targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
+  } = {
       includeMARS: true,
       includeZada: true,
       includeHollywoodProtocol: true,
@@ -181,7 +181,7 @@ export class HybridPromptExportService {
     executionResults: any,
     options: any,
     const extensions: HybridExportFormat['hybridPrompting'] = {,
-  mars: {,
+  mars: {
   framework: 'MARS-v1.0',
   tags: await this.marsExtractor.extractMARSTags(),
   executionResults.finalPrompt,
@@ -190,7 +190,7 @@ export class HybridPromptExportService {
   structured: await this.marsExtractor.createStructuredPrompt(),
   executionResults.finalPrompt
 },
-  zada: {,
+  zada: {
   approach: 'screenplay-style',
   variants: await this.zadaGenerator.generateNaturalLanguageVariants(),
   executionResults.finalPrompt,
@@ -201,7 +201,7 @@ export class HybridPromptExportService {
   executionResults.finalPrompt,
   executionResults.variables
 },
-  hollywood: {,
+  hollywood: {
   protocol: 'reproducibility-v1',
   seeds: this.seedManager.generateHollywoodSeeds(graph),
   iteration_tracking: this.seedManager.createIterationHistory(),
@@ -224,13 +224,13 @@ class MARSFrameworkExtractor {
   // Parse prompt into MARS structured format
   const structured: MARSStructuredPrompt = {,
   raw_mars: this.convertToMARSFormat(prompt),
-  parsed_structure: {,
+  parsed_structure: {
   camera_section: this.extractCameraSection(prompt),
   subject_section: this.extractSubjectSection(prompt),
   effects_section: this.extractEffectsSection(prompt),
   focal_section: this.extractFocalSection(prompt),
 },
-  controlnet_mapping: {,
+  controlnet_mapping: {
   pose_guidance: this.mapToControlNetPose(prompt),
   depth_hints: this.mapToControlNetDepth(prompt),
   edge_conditions: this.mapToControlNetEdges(prompt),
@@ -478,8 +478,8 @@ class MARSFrameworkExtractor {
   return 'blur'; // Default background blur for cinematic look
   private determineVisualHierarchy(prompt: string, variables: Record<string, string>): 'foreground' | 'midground' | 'background' {,
   if (prompt.toLowerCase().includes('foreground') || prompt.toLowerCase().includes('close to camera')) {
-  return 'foreground';
-} else if (prompt.toLowerCase().includes('background') || prompt.toLowerCase().includes('distance')) {
+  return 'foreground'
+  } else if (prompt.toLowerCase().includes('background') || prompt.toLowerCase().includes('distance')) {
       return 'background';
     return 'midground'; // Default midground focus
   // MARS conversion methods
@@ -506,7 +506,7 @@ class MARSFrameworkExtractor {
 
 // === ZADA NATURAL LANGUAGE GENERATOR ===
 class ZadaNaturalLanguageGenerator {
-  async generateNaturalLanguageVariants(prompt: string,)
+  async generateNaturalLanguageVariants(prompt: string)
   variables: Record<string, string>,
   targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'): Promise<ZadaNaturalLanguageVariant> {,
   const variants: ZadaNaturalLanguageVariant = [];
@@ -543,7 +543,7 @@ class ZadaNaturalLanguageGenerator {
   human_readable_score: 10,
 });
     return variants;
-  async createDirectorAccessiblePrompt(prompt: string,)
+  async createDirectorAccessiblePrompt(prompt: string)
     variables: Record<string, string>
   ): Promise<DirectorAccessiblePrompt> {
   return {
@@ -551,7 +551,7 @@ class ZadaNaturalLanguageGenerator {
   shot_description: this.createNaturalShotDescription(prompt, variables),
   mood_direction: this.extractMoodDirection(prompt, variables),
   reference_notes: this.generateReferenceNotes(prompt, variables),
-  crew_notes: {,
+  crew_notes: {
   cinematographer: this.generateCinematographerNotes(prompt, variables),
   lighting_director: this.generateLightingDirectorNotes(prompt, variables),
   vfx_supervisor: this.generateVFXSupervisorNotes(prompt, variables),
@@ -809,7 +809,7 @@ class HollywoodSeedManager {
   component_seeds: componentSeeds,
   iteration_seeds: iterationSeeds,
   reproducibility_checksum: this.generateChecksum(masterSeed, componentSeeds, iterationSeeds),
-  version_compatibility: {,
+  version_compatibility: {
   generator_version: '1.0.0',
   node_version_map: this.extractNodeVersions(graph.nodes),
   schema_version: 'wild-construct-v1',

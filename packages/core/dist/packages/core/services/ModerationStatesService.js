@@ -402,234 +402,193 @@ export class ModerationStatesService {
                                                         category: 'other',
                                                         severity: 'medium',
                                                         autoActions: [],
-                                                        permissions: {},
-                                                        canView: ['moderator', 'admin', 'super_admin'],
-                                                        canEdit: ['moderator', 'admin', 'super_admin'],
-                                                        canTransition: ['moderator', 'admin', 'super_admin'],
-                                                        canAssign: ['admin', 'super_admin'],
-                                                        canEscalate: ['moderator', 'admin', 'super_admin'],
-                                                        restrictions: [],
+                                                        permissions: {
+                                                            canView: ['moderator', 'admin', 'super_admin'],
+                                                            canEdit: ['moderator', 'admin', 'super_admin'],
+                                                            canTransition: ['moderator', 'admin', 'super_admin'],
+                                                            canAssign: ['admin', 'super_admin'],
+                                                            canEscalate: ['moderator', 'admin', 'super_admin'],
+                                                            restrictions: [],
+                                                        },
+                                                        transitions: [],
+                                                        metadata: {
+                                                            description: 'Initial state for new moderation items',
+                                                            guidelines: ['Review content for policy violations', 'Assign appropriate reviewers'],
+                                                            examples: [],
+                                                            slaTarget: 1800000, // 30 minutes,
+                                                            tags: ['initial', 'triage'],
+                                                            version: '1.0',
+                                                            isTemplate: false,
+                                                        },
+                                                        createdBy: 'system',
+                                                        isActive: true
                                                     },
-                                                    transitions, [],
-                                                    metadata, {},
-                                                    description, 'Initial state for new moderation items',
-                                                    guidelines, ['Review content for policy violations', 'Assign appropriate reviewers'],
-                                                    examples, [],
-                                                    slaTarget, 1800000, // 30 minutes,
-                                                    tags, ['initial', 'triage'],
-                                                    version, '1.0',
-                                                    isTemplate, false,
+                                                    {
+                                                        name: 'Under Review',
+                                                        type: 'processing',
+                                                        category: 'other',
+                                                        severity: 'medium',
+                                                        autoActions: [],
+                                                        permissions: {
+                                                            canView: ['moderator', 'admin', 'super_admin'],
+                                                            canEdit: ['moderator', 'admin', 'super_admin'],
+                                                            canTransition: ['moderator', 'admin', 'super_admin'],
+                                                            canAssign: ['admin', 'super_admin'],
+                                                            canEscalate: ['moderator', 'admin', 'super_admin'],
+                                                            restrictions: [],
+                                                        },
+                                                        transitions: [],
+                                                        metadata: {
+                                                            description: 'Item is being actively reviewed',
+                                                            guidelines: ['Conduct thorough content analysis', 'Document findings'],
+                                                            examples: [],
+                                                            slaTarget: 3600000, // 1 hour,
+                                                            tags: ['review', 'processing'],
+                                                            version: '1.0',
+                                                            isTemplate: false,
+                                                        },
+                                                        createdBy: 'system',
+                                                        isActive: true
+                                                    },
+                                                    {
+                                                        name: 'Escalated',
+                                                        type: 'escalated',
+                                                        category: 'other',
+                                                        severity: 'high',
+                                                        autoActions: [],
+                                                        permissions: {
+                                                            canView: ['senior_moderator', 'admin', 'super_admin'],
+                                                            canEdit: ['senior_moderator', 'admin', 'super_admin'],
+                                                            canTransition: ['admin', 'super_admin'],
+                                                            canAssign: ['admin', 'super_admin'],
+                                                            canEscalate: ['admin', 'super_admin'],
+                                                            restrictions: [],
+                                                        },
+                                                        transitions: [],
+                                                        metadata: {
+                                                            description: 'Item escalated to senior review',
+                                                            guidelines: ['Requires senior moderator attention', 'May need legal consultation'],
+                                                            examples: [],
+                                                            slaTarget: 1800000, // 30 minutes,
+                                                            escalationTimeout: 7200000, // 2 hours,
+                                                            tags: ['escalated', 'priority'],
+                                                            version: '1.0',
+                                                            isTemplate: false,
+                                                        },
+                                                        createdBy: 'system',
+                                                        isActive: true
+                                                    }
                                                 ];
+                                                defaultStates.forEach(stateData => { });
+                                                const state = {
+                                                    ...stateData,
+                                                    id: this.generateStateId(),
+                                                    createdAt: new Date(),
+                                                    updatedAt: new Date(),
+                                                };
+                                                this.states.set(state.id, state);
                                             },
-                                            createdBy: 'system',
-                                            isActive: true };
+                                            initializeDefaultTransitions() {
+                                                // TODO: Initialize default state transitions,
+                                            }
+                                            // TODO: Initialize default state transitions,
+                                            ,
+                                            // TODO: Initialize default state transitions,
+                                            startAutomationProcessor() {
+                                                // Process automation every 30 seconds
+                                                this.processor = setInterval(() => {
+                                                    this.processScheduledAutomation();
+                                                }, 30000);
+                                            },
+                                            processScheduledAutomation() {
+                                                const items = Array.from(this.items.values());
+                                                items.forEach(async (item) => {
+                                                    if (item.autoProcessing.enabled && item.autoProcessing.stage === 'queued') {
+                                                        await this.processAutomation(item.id);
+                                                    }
+                                                });
+                                            },
+                                            getInitialState(category, severity) {
+                                                const initialStates = this.getStates({ type: 'initial' });
+                                                return initialStates.find(s => s.isActive) || initialStates[0];
+                                            },
+                                            findValidTransition(fromStateId, toStateId) {
+                                                return Array.from(this.transitions.values()).find(t => );
+                                                t.fromStates.includes(fromStateId) && t.toState === toStateId;
+                                                 || null;
+                                            },
+                                            validateTransition(item, transition, userId) {
+                                                // TODO: Implement transition validation logic
+                                                return true;
+                                            },
+                                            async executeTransitionActions(item, transition, userId) {
+                                                // TODO: Implement transition action execution
+                                            }
+                                            // TODO: Implement transition action execution
+                                            ,
+                                            // TODO: Implement transition action execution
+                                            getApplicableAutoActions(item) {
+                                                return Array.from(this.autoActions.values()).filter(action => );
+                                                action.enabled && this.matchesAutoActionTriggers(item, action);
+                                                ;
+                                            },
+                                            matchesAutoActionTriggers(item, action) {
+                                                // TODO: Implement trigger matching logic
+                                                return false;
+                                            },
+                                            shouldExecuteAutoAction(item, action) {
+                                                // TODO: Implement execution conditions check
+                                                return false;
+                                            },
+                                            async executeAutoAction(item, action) {
+                                                // TODO: Implement auto action execution
+                                            }
+                                            // TODO: Implement auto action execution
+                                            ,
+                                            // TODO: Implement auto action execution
+                                            findEscalatedState(category, escalationLevel) {
+                                                const escalatedStates = this.getStates({ type: 'escalated' });
+                                                return escalatedStates.find(s => s.isActive) || null;
+                                            },
+                                            notifyListeners(eventType, data) {
+                                                this.listeners.forEach(callback => { });
+                                                try {
+                                                    callback({ type: eventType, data, timestamp: new Date() });
+                                                }
+                                                catch (error) {
+                                                    console.error('Error in moderation listener:', error);
+                                                }
+                                                ;
+                                            },
+                                            generateStateId() {
+                                                return `state_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                            },
+                                            generateItemId() {
+                                                return `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                            },
+                                            generateHistoryId() {
+                                                return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                            },
+                                            interface, ModerationEvent };
                                         {
-                                            name: 'Under Review',
-                                                type;
-                                            'processing',
-                                                category;
-                                            'other',
-                                                severity;
-                                            'medium',
-                                                autoActions;
-                                            [],
-                                                permissions;
-                                            {
-                                                canView: ['moderator', 'admin', 'super_admin'],
-                                                    canEdit;
-                                                ['moderator', 'admin', 'super_admin'],
-                                                    canTransition;
-                                                ['moderator', 'admin', 'super_admin'],
-                                                    canAssign;
-                                                ['admin', 'super_admin'],
-                                                    canEscalate;
-                                                ['moderator', 'admin', 'super_admin'],
-                                                    restrictions;
-                                                [],
-                                                ;
-                                            }
-                                            transitions: [],
-                                                metadata;
-                                            {
-                                                description: 'Item is being actively reviewed',
-                                                    guidelines;
-                                                ['Conduct thorough content analysis', 'Document findings'],
-                                                    examples;
-                                                [],
-                                                    slaTarget;
-                                                3600000, // 1 hour,
-                                                    tags;
-                                                ['review', 'processing'],
-                                                    version;
-                                                '1.0',
-                                                    isTemplate;
-                                                false,
-                                                ;
-                                            }
-                                            createdBy: 'system',
-                                                isActive;
-                                            true;
+                                            type: string;
+                                            data: any;
+                                            timestamp: Date;
+                                            // Export singleton instance
                                         }
-                                        {
-                                            name: 'Escalated',
-                                                type;
-                                            'escalated',
-                                                category;
-                                            'other',
-                                                severity;
-                                            'high',
-                                                autoActions;
-                                            [],
-                                                permissions;
-                                            {
-                                                canView: ['senior_moderator', 'admin', 'super_admin'],
-                                                    canEdit;
-                                                ['senior_moderator', 'admin', 'super_admin'],
-                                                    canTransition;
-                                                ['admin', 'super_admin'],
-                                                    canAssign;
-                                                ['admin', 'super_admin'],
-                                                    canEscalate;
-                                                ['admin', 'super_admin'],
-                                                    restrictions;
-                                                [],
-                                                ;
-                                            }
-                                            transitions: [],
-                                                metadata;
-                                            {
-                                                description: 'Item escalated to senior review',
-                                                    guidelines;
-                                                ['Requires senior moderator attention', 'May need legal consultation'],
-                                                    examples;
-                                                [],
-                                                    slaTarget;
-                                                1800000, // 30 minutes,
-                                                    escalationTimeout;
-                                                7200000, // 2 hours,
-                                                    tags;
-                                                ['escalated', 'priority'],
-                                                    version;
-                                                '1.0',
-                                                    isTemplate;
-                                                false,
-                                                ;
-                                            }
-                                            createdBy: 'system',
-                                                isActive;
-                                            true;
-                                            ;
-                                            defaultStates.forEach(stateData => { });
-                                            const state = {
-                                                ...stateData,
-                                                id: this.generateStateId(),
-                                                createdAt: new Date(),
-                                                updatedAt: new Date(),
-                                            };
-                                            this.states.set(state.id, state);
-                                        }
-                                        ;
-                                    },
-                                    initializeDefaultTransitions() {
-                                        // TODO: Initialize default state transitions,
+                                        export const moderationStatesService = ModerationStatesService.getInstance();
+                                        // Convenience functions
+                                        export const createModerationItem = ();
+                                        itemData: (Omit),
+                                            createdBy;
+                                        string;
+                                        moderationStatesService.createModerationItem(itemData, createdBy);
+                                        export const transitionItem = (itemId, toStateId, reason, triggeredBy) => moderationStatesService.transitionItem(itemId, toStateId, reason, triggeredBy);
+                                        export const getModerationItems = (filter) => moderationStatesService.getModerationItems(filter);
+                                        export const getModerationStats = () => moderationStatesService.getModerationStats();
                                     }
-                                    // TODO: Initialize default state transitions,
-                                    ,
-                                    // TODO: Initialize default state transitions,
-                                    startAutomationProcessor() {
-                                        // Process automation every 30 seconds
-                                        this.processor = setInterval(() => {
-                                            this.processScheduledAutomation();
-                                        }, 30000);
-                                    },
-                                    processScheduledAutomation() {
-                                        const items = Array.from(this.items.values());
-                                        items.forEach(async (item) => {
-                                            if (item.autoProcessing.enabled && item.autoProcessing.stage === 'queued') {
-                                                await this.processAutomation(item.id);
-                                            }
-                                        });
-                                    },
-                                    getInitialState(category, severity) {
-                                        const initialStates = this.getStates({ type: 'initial' });
-                                        return initialStates.find(s => s.isActive) || initialStates[0];
-                                    },
-                                    findValidTransition(fromStateId, toStateId) {
-                                        return Array.from(this.transitions.values()).find(t => );
-                                        t.fromStates.includes(fromStateId) && t.toState === toStateId;
-                                         || null;
-                                    },
-                                    validateTransition(item, transition, userId) {
-                                        // TODO: Implement transition validation logic
-                                        return true;
-                                    },
-                                    async executeTransitionActions(item, transition, userId) {
-                                        // TODO: Implement transition action execution
-                                    }
-                                    // TODO: Implement transition action execution
-                                    ,
-                                    // TODO: Implement transition action execution
-                                    getApplicableAutoActions(item) {
-                                        return Array.from(this.autoActions.values()).filter(action => );
-                                        action.enabled && this.matchesAutoActionTriggers(item, action);
-                                        ;
-                                    },
-                                    matchesAutoActionTriggers(item, action) {
-                                        // TODO: Implement trigger matching logic
-                                        return false;
-                                    },
-                                    shouldExecuteAutoAction(item, action) {
-                                        // TODO: Implement execution conditions check
-                                        return false;
-                                    },
-                                    async executeAutoAction(item, action) {
-                                        // TODO: Implement auto action execution
-                                    }
-                                    // TODO: Implement auto action execution
-                                    ,
-                                    // TODO: Implement auto action execution
-                                    findEscalatedState(category, escalationLevel) {
-                                        const escalatedStates = this.getStates({ type: 'escalated' });
-                                        return escalatedStates.find(s => s.isActive) || null;
-                                    },
-                                    notifyListeners(eventType, data) {
-                                        this.listeners.forEach(callback => { });
-                                        try {
-                                            callback({ type: eventType, data, timestamp: new Date() });
-                                        }
-                                        catch (error) {
-                                            console.error('Error in moderation listener:', error);
-                                        }
-                                        ;
-                                    },
-                                    generateStateId() {
-                                        return `state_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                    },
-                                    generateItemId() {
-                                        return `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                    },
-                                    generateHistoryId() {
-                                        return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                    },
-                                    interface, ModerationEvent
                                 }
                             };
-                            {
-                                type: string;
-                                data: any;
-                                timestamp: Date;
-                                // Export singleton instance
-                            }
-                            export const moderationStatesService = ModerationStatesService.getInstance();
-                            // Convenience functions
-                            export const createModerationItem = ();
-                            itemData: (Omit),
-                                createdBy;
-                            string;
-                            moderationStatesService.createModerationItem(itemData, createdBy);
-                            export const transitionItem = (itemId, toStateId, reason, triggeredBy) => moderationStatesService.transitionItem(itemId, toStateId, reason, triggeredBy);
-                            export const getModerationItems = (filter) => moderationStatesService.getModerationItems(filter);
-                            export const getModerationStats = () => moderationStatesService.getModerationStats();
                         }
                     }
                 } };

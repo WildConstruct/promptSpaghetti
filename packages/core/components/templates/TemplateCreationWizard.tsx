@@ -6,9 +6,9 @@ import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 interface TemplateCreationWizardProps {
   graphData: unknown; // The current graph to turn into a template,
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  onComplete: (template: ProjectTemplate) => void;,
+  onComplete: (template: ProjectTemplate) => void;
   templateManager: ProjectTemplateManager;
   type WizardStep = 'basic' | 'variables' | 'customization' | 'preview' | 'publish';
   export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({,)
@@ -288,7 +288,7 @@ interface TemplateCreationWizardProps {
 
 // Step Components
 interface BasicInfoStepProps {
-  data: Partial<ProjectTemplate>;,
+  data: Partial<ProjectTemplate>;
   categories: TemplateCategory;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
@@ -429,9 +429,9 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
   );
 };
 interface VariablesStepProps {
-  variables: TemplateVariable;,
+  variables: TemplateVariable;
   onAdd: () => void;
-  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;,
+  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;
   onRemove: (index: number) => void;
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
   return;
@@ -552,10 +552,10 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
   );
 };
 interface CustomizationStepProps {
-  points: CustomizationPoint;,
+  points: CustomizationPoint;
   graphData: unknown;
-  onAdd: () => void;,
-  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;,
+  onAdd: () => void;
+  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
   onRemove: (index: number) => void;
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
@@ -714,7 +714,7 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
   );
 };
 interface PublishStepProps {
-  data: Partial<ProjectTemplate>;,
+  data: Partial<ProjectTemplate>;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {

@@ -31,9 +31,9 @@ import {
 // User engagement scoring interfaces
 
 export interface UserEngagementScoringProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   scoringConfig: EngagementScoringConfig;
-  segmentationConfig: UserSegmentationConfig;,
+  segmentationConfig: UserSegmentationConfig;
   userData: UserEngagementData;
   realTimeUpdates?: boolean;
   onScoreUpdated?: (userId: string, score: EngagementScore) => void;
@@ -42,21 +42,21 @@ export interface UserEngagementScoringProps {
   onExport?: (data: EngagementScoringExportData) => void;
 }
 export interface EngagementScoringConfig {
-  scoringModel: ScoringModel;,
+  scoringModel: ScoringModel;
   dimensions: EngagementDimension;
-  weights: DimensionWeights;,
+  weights: DimensionWeights;
   thresholds: EngagementThreshold;
-  updateFrequency: UpdateFrequency;,
+  updateFrequency: UpdateFrequency;
   historicalWindow: number; // days,
-  decayFactors: DecayConfiguration;,
+  decayFactors: DecayConfiguration;
   normalizationSettings: NormalizationSettings;
 }
 export interface ScoringModel {
-  modelType: ScoringModelType;,
+  modelType: ScoringModelType;
   version: string;
-  parameters: ModelParameters;,
+  parameters: ModelParameters;
   features: ScoringFeature;
-  validation: ModelValidation;,
+  validation: ModelValidation;
   performance: ScoringModelPerformance;
 }
 export type ScoringModelType = 
@@ -75,10 +75,10 @@ export interface ModelParameters {
   activationFunction?: string;
 }
 export interface ScoringFeature {
-  name: string;,
+  name: string;
   type: FeatureType;
   importance: number; // 0-1,
-  category: FeatureCategory;,
+  category: FeatureCategory;
   computation: FeatureComputation;
 }
 export type FeatureType = 
@@ -99,9 +99,9 @@ export type FeatureCategory =
   | 'conversion_propensity';
 
 export interface FeatureComputation {
-  method: ComputationMethod;,
+  method: ComputationMethod;
   parameters: ComputationParameters;
-  aggregation: AggregationMethod;,
+  aggregation: AggregationMethod;
   timeWindow: number; // hours,
 }
 export type ComputationMethod = 
@@ -137,20 +137,20 @@ export interface ScoringModelPerformance {
   drift: number; // 0-1, model drift detection,
 }
 export interface EngagementDimension {
-  dimensionId: string;,
+  dimensionId: string;
   name: string;
-  description: string;,
+  description: string;
   metrics: EngagementMetric;
   weight: number; // 0-1,
-  enabled: boolean;,
+  enabled: boolean;
   computation: DimensionComputation;
 }
 export interface EngagementMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  type: MetricType;,
+  type: MetricType;
   weight: number; // 0-1,
-  computation: MetricComputation;,
+  computation: MetricComputation;
   normalization: MetricNormalization;
 }
 export type MetricType = 
@@ -164,9 +164,9 @@ export type MetricType =
   | 'progression';
 
 export interface MetricComputation {
-  formula: string;,
+  formula: string;
   parameters: Record<string, any>;
-  dependencies: string;,
+  dependencies: string;
   updateTriggers: UpdateTrigger;
 }
 export type UpdateTrigger = 
@@ -178,7 +178,7 @@ export type UpdateTrigger =
   | 'external_event';
 
 export interface MetricNormalization {
-  method: NormalizationMethod;,
+  method: NormalizationMethod;
   parameters: NormalizationParameters;
   bounds: { min: number; max: number };
 }
@@ -197,14 +197,14 @@ export interface NormalizationParameters {
   power?: number;
 }
 export interface DimensionComputation {
-  aggregationMethod: AggregationMethod;,
+  aggregationMethod: AggregationMethod;
   weightingScheme: WeightingScheme;
   temporalDecay: TemporalDecay;
 }
 export type WeightingScheme = 'equal' | 'importance_based' | 'performance_based' | 'dynamic';
 
 export interface TemporalDecay {
-  enabled: boolean;,
+  enabled: boolean;
   decayFunction: DecayFunction;
   halfLife: number; // hours,
   minimumWeight: number; // 0-1,
@@ -215,10 +215,10 @@ export interface DimensionWeights {
   [dimensionId: string]: number; // 0-1,
 }
 export interface EngagementThreshold {
-  level: EngagementLevel;,
+  level: EngagementLevel;
   minScore: number; // 0-100,
   maxScore: number; // 0-100,
-  description: string;,
+  description: string;
   color: string;
   recommendations: ThresholdRecommendation;
 }
@@ -230,11 +230,11 @@ export type EngagementLevel =
   | 'super_engaged';
 
 export interface ThresholdRecommendation {
-  type: RecommendationType;,
+  type: RecommendationType;
   action: string;
-  priority: 'low' | 'medium' | 'high';,
-  impact: 'positive' | 'negative' | 'neutral';
-}
+  priority: 'low' | 'medium' | 'high';
+  impact: 'positive' | 'negative' | 'neutral'
+  }
 export type RecommendationType = 
   | 'content_personalization'
   | 'notification_strategy'
@@ -243,54 +243,54 @@ export type RecommendationType =
   | 'intervention_campaign';
 
 export interface UpdateFrequency {
-  realTime: boolean;,
+  realTime: boolean;
   batchInterval: number; // minutes,
-  incrementalUpdates: boolean;,
+  incrementalUpdates: boolean;
   triggerThreshold: number; // minimum change to trigger update,
 }
 export interface DecayConfiguration {
-  timeDecay: TimeDecaySettings;,
+  timeDecay: TimeDecaySettings;
   activityDecay: ActivityDecaySettings;
   contextDecay: ContextDecaySettings;
 }
 export interface TimeDecaySettings {
-  enabled: boolean;,
+  enabled: boolean;
   function: DecayFunction;
-  rate: number;,
+  rate: number;
   minimumValue: number;
 }
 export interface ActivityDecaySettings {
-  enabled: boolean;,
+  enabled: boolean;
   inactivityPenalty: number; // per day,
   recoveryRate: number; // engagement recovery rate,
 }
 export interface ContextDecaySettings {
-  enabled: boolean;,
+  enabled: boolean;
   contextualFactors: ContextualFactor;
 }
 export interface ContextualFactor {
-  factor: string;,
+  factor: string;
   weight: number; // -1 to 1,
   condition: string;
 }
 export interface NormalizationSettings {
-  globalNormalization: boolean;,
+  globalNormalization: boolean;
   segmentNormalization: boolean;
-  temporalNormalization: boolean;,
+  temporalNormalization: boolean;
   outlierHandling: OutlierHandling;
 }
 export interface OutlierHandling {
-  method: 'clip' | 'winsorize' | 'remove' | 'transform';,
+  method: 'clip' | 'winsorize' | 'remove' | 'transform';
   threshold: number; // standard deviations,
   replacement: 'median' | 'mean' | 'percentile';
   // User segmentation configuration
 }
 export interface UserSegmentationConfig {
-  segmentationMethod: SegmentationMethod;,
+  segmentationMethod: SegmentationMethod;
   segmentDefinitions: SegmentDefinition;
-  clusteringConfig: ClusteringConfiguration;,
+  clusteringConfig: ClusteringConfiguration;
   dynamicSegmentation: DynamicSegmentationSettings;
-  segmentValidation: SegmentValidation;,
+  segmentValidation: SegmentValidation;
   migrationRules: SegmentMigrationRule;
 }
 export type SegmentationMethod = 
@@ -301,23 +301,23 @@ export type SegmentationMethod =
   | 'behavioral_cohorts';
 
 export interface SegmentDefinition {
-  segmentId: string;,
+  segmentId: string;
   name: string;
-  description: string;,
+  description: string;
   criteria: SegmentCriteria;
-  characteristics: SegmentCharacteristics;,
+  characteristics: SegmentCharacteristics;
   targetStrategies: TargetStrategy;
 }
 export interface SegmentCriteria {
-  rules: SegmentRule;,
+  rules: SegmentRule;
   logicalOperator: 'AND' | 'OR';
   evaluationPeriod: number; // days,
   minimumSampleSize: number;
 }
 export interface SegmentRule {
-  ruleId: string;,
+  ruleId: string;
   field: string;
-  operator: RuleOperator;,
+  operator: RuleOperator;
   value: Error;
   weight: number; // 0-1,
 }
@@ -333,11 +333,11 @@ export type RuleOperator =
   | 'matches_pattern';
 
 export interface SegmentCharacteristics {
-  averageEngagementScore: number;,
+  averageEngagementScore: number;
   typicalBehaviors: string;
-  conversionRate: number;,
+  conversionRate: number;
   retentionRate: number;
-  lifetimeValue: number;,
+  lifetimeValue: number;
   demographics: DemographicProfile;
 }
 export interface DemographicProfile {
@@ -348,9 +348,9 @@ export interface DemographicProfile {
   referralSources?: string;
 }
 export interface TargetStrategy {
-  strategyType: StrategyType;,
+  strategyType: StrategyType;
   tactics: StrategyTactic;
-  expectedOutcome: ExpectedOutcome;,
+  expectedOutcome: ExpectedOutcome;
   successMetrics: SuccessMetric;
 }
 export type StrategyType = 
@@ -362,42 +362,42 @@ export type StrategyType =
   | 'advocacy';
 
 export interface StrategyTactic {
-  tactic: string;,
+  tactic: string;
   implementation: string;
-  priority: 'low' | 'medium' | 'high';,
-  effort: 'low' | 'medium' | 'high';
-}
+  priority: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high'
+  }
 export interface ExpectedOutcome {
-  primaryMetric: string;,
+  primaryMetric: string;
   expectedChange: number; // percentage,
-  timeframe: string;,
+  timeframe: string;
   confidence: number; // 0-1,
 }
 export interface SuccessMetric {
-  metric: string;,
+  metric: string;
   target: number;
   measurement: MeasurementMethod;
 }
 export type MeasurementMethod = 'absolute' | 'relative' | 'percentage' | 'ratio';
 
 export interface ClusteringConfiguration {
-  algorithm: ClusteringAlgorithm;,
+  algorithm: ClusteringAlgorithm;
   features: ClusteringFeature;
-  parameters: ClusteringParameters;,
+  parameters: ClusteringParameters;
   validation: ClusteringValidation;
 }
 export interface ClusteringAlgorithm {
-  name: 'kmeans' | 'dbscan' | 'hierarchical' | 'gaussian_mixture' | 'spectral';,
+  name: 'kmeans' | 'dbscan' | 'hierarchical' | 'gaussian_mixture' | 'spectral';
   parameters: Record<string, any>;
   distanceMetric: string;
 }
 export interface ClusteringFeature {
-  name: string;,
+  name: string;
   weight: number; // 0-1,
   transformation: FeatureTransformation;
 }
 export interface FeatureTransformation {
-  method: TransformationMethod;,
+  method: TransformationMethod;
   parameters: Record<string, any>;
 }
 export type TransformationMethod = 
@@ -415,77 +415,77 @@ export interface ClusteringParameters {
   randomSeed?: number;
 }
 export interface ClusteringValidation {
-  metrics: ClusteringMetric;,
+  metrics: ClusteringMetric;
   crossValidation: boolean;
-  stabilityAnalysis: boolean;,
+  stabilityAnalysis: boolean;
   optimalClusterSelection: OptimalClusterSelection;
 }
 export interface ClusteringMetric {
-  name: 'silhouette' | 'calinski_harabasz' | 'davies_bouldin' | 'inertia';,
+  name: 'silhouette' | 'calinski_harabasz' | 'davies_bouldin' | 'inertia';
   weight: number; // 0-1,
 }
 export interface OptimalClusterSelection {
-  method: 'elbow' | 'silhouette' | 'gap_statistic' | 'bic' | 'aic';,
+  method: 'elbow' | 'silhouette' | 'gap_statistic' | 'bic' | 'aic';
   range: { min: number; max: number };
 }
 export interface DynamicSegmentationSettings {
-  enabled: boolean;,
+  enabled: boolean;
   updateFrequency: number; // hours,
   migrationThreshold: number; // 0-1,
   stabilityPeriod: number; // days,
   automatedMigration: boolean;
 }
 export interface SegmentValidation {
-  minimumSegmentSize: number;,
+  minimumSegmentSize: number;
   maximumSegmentSize: number;
   stabilityRequirement: number; // 0-1,
   distinctivenessThreshold: number; // 0-1,
   businessRelevance: BusinessRelevanceCheck;
 }
 export interface BusinessRelevanceCheck {
-  requiredMetrics: string;,
+  requiredMetrics: string;
   minimumDifference: number; // percentage,
   statisticalSignificance: number; // 0-1,
 }
 export interface SegmentMigrationRule {
-  ruleId: string;,
+  ruleId: string;
   fromSegment: string;
-  toSegment: string;,
+  toSegment: string;
   conditions: MigrationCondition;
   cooldownPeriod: number; // days,
   notificationRequired: boolean;
 }
 export interface MigrationCondition {
-  field: string;,
+  field: string;
   operator: RuleOperator;
-  value: Error;,
+  value: Error;
   duration: number; // days condition must be met,
   // User engagement data structures
 }
 export interface UserEngagementData {
-  userId: string;,
+  userId: string;
   profileData: UserProfile;
-  sessionData: SessionEngagementData;,
+  sessionData: SessionEngagementData;
   interactionHistory: InteractionHistory;
-  behaviorMetrics: BehaviorMetrics;,
+  behaviorMetrics: BehaviorMetrics;
   contextualData: ContextualEngagementData;
   historicalScores: HistoricalScore;
   currentSegment?: UserSegmentProfile;
 }
 export interface UserProfile {
-  userId: string;,
+  userId: string;
   createdAt: number;
-  lastActive: number;,
+  lastActive: number;
   totalSessions: number;
   totalTimeSpent: number; // milliseconds,
-  demographics: UserDemographics;,
+  demographics: UserDemographics;
   preferences: UserPreferences;
   deviceInfo: DeviceInformation;
 }
 export interface UserDemographics {
   ageGroup?: AgeGroup;
   location?: LocationData;
-  language: string;,
+  language: string;
   timezone: string;
 }
 export type AgeGroup = '18-24' | '25-34' | '35-44' | '45-54' | '55-64' | '65+';
@@ -497,43 +497,43 @@ export interface LocationData {
   coordinates?: { lat: number; lng: number };
 }
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';,
+  theme: 'light' | 'dark' | 'auto';
   notifications: NotificationPreferences;
-  privacy: PrivacyPreferences;,
+  privacy: PrivacyPreferences;
   accessibility: AccessibilityPreferences;
 }
 export interface NotificationPreferences {
-  email: boolean;,
+  email: boolean;
   push: boolean;
-  inApp: boolean;,
-  frequency: 'immediate' | 'daily' | 'weekly' | 'never';
-}
+  inApp: boolean;
+  frequency: 'immediate' | 'daily' | 'weekly' | 'never'
+  }
 export interface PrivacyPreferences {
-  dataSharing: boolean;,
+  dataSharing: boolean;
   analytics: boolean;
-  personalization: boolean;,
+  personalization: boolean;
   marketing: boolean;
 }
 export interface AccessibilityPreferences {
-  screenReader: boolean;,
+  screenReader: boolean;
   highContrast: boolean;
-  largeText: boolean;,
+  largeText: boolean;
   reducedMotion: boolean;
 }
 export interface DeviceInformation {
-  primaryDevice: DeviceType;,
+  primaryDevice: DeviceType;
   devices: DeviceProfile;
   platformPreference: PlatformPreference;
 }
 export type DeviceType = 'desktop' | 'tablet' | 'mobile' | 'smart_tv' | 'other';
 
 export interface DeviceProfile {
-  deviceId: string;,
+  deviceId: string;
   type: DeviceType;
-  os: string;,
+  os: string;
   browser: string;
   screenSize: { width: number; height: number };
-  lastUsed: number;,
+  lastUsed: number;
   usageFrequency: number; // 0-1
 }
 export interface PlatformPreference {
@@ -542,40 +542,40 @@ export interface PlatformPreference {
   desktop: number; // 0-1,
 }
 export interface SessionEngagementData {
-  sessionId: string;,
+  sessionId: string;
   startTime: number;
-  endTime: number;,
+  endTime: number;
   duration: number;
-  pageViews: number;,
+  pageViews: number;
   interactions: number;
   scrollDepth: number; // 0-100,
   bounceRate: number; // 0-1,
-  conversionEvents: ConversionEvent;,
+  conversionEvents: ConversionEvent;
   qualityScore: number; // 0-100,
 }
 export interface ConversionEvent {
-  eventType: string;,
+  eventType: string;
   timestamp: number;
   value?: number;
   context: Record<string, any>;
 }
 export interface InteractionHistory {
-  totalInteractions: number;,
+  totalInteractions: number;
   interactionTypes: InteractionTypeData;
-  interactionPatterns: InteractionPattern;,
+  interactionPatterns: InteractionPattern;
   qualityMetrics: InteractionQualityMetrics;
 }
 export interface InteractionTypeData {
-  type: string;,
+  type: string;
   count: number;
-  averageDuration: number;,
+  averageDuration: number;
   qualityScore: number; // 0-100,
-  trend: 'increasing' | 'decreasing' | 'stable';
-}
+  trend: 'increasing' | 'decreasing' | 'stable'
+  }
 export interface InteractionPattern {
-  patternId: string;,
+  patternId: string;
   pattern: string;
-  frequency: number;,
+  frequency: number;
   lastOccurrence: number;
   predictiveValue: number; // 0-1,
 }
@@ -589,39 +589,39 @@ export interface BehaviorMetrics {
   engagementConsistency: number; // 0-1,
   explorationBehavior: number; // 0-1,
   decisionMakingSpeed: number; // 0-1,
-  contentAffinity: ContentAffinity;,
+  contentAffinity: ContentAffinity;
   behaviorStability: number; // 0-1,
 }
 export interface ContentAffinity {
-  contentType: string;,
+  contentType: string;
   affinityScore: number; // 0-1,
-  interactionCount: number;,
+  interactionCount: number;
   timeSpent: number;
   conversionRate: number;
 }
 export interface ContextualEngagementData {
-  timePatterns: TimePattern;,
+  timePatterns: TimePattern;
   environmentalFactors: EnvironmentalFactor;
-  socialInfluence: SocialInfluenceData;,
+  socialInfluence: SocialInfluenceData;
   externalTriggers: ExternalTrigger;
 }
 export interface TimePattern {
-  dimension: 'hour' | 'day' | 'week' | 'month';,
+  dimension: 'hour' | 'day' | 'week' | 'month';
   values: TimeValue;
   peakTimes: PeakTime;
 }
 export interface TimeValue {
-  timeUnit: number;,
+  timeUnit: number;
   engagementLevel: number; // 0-1,
   frequency: number;
 }
 export interface PeakTime {
-  timeUnit: number;,
+  timeUnit: number;
   score: number; // 0-1,
   consistency: number; // 0-1,
 }
 export interface EnvironmentalFactor {
-  factor: string;,
+  factor: string;
   impact: number; // -1 to 1,
   confidence: number; // 0-1,
   examples: string;
@@ -633,157 +633,157 @@ export interface SocialInfluenceData {
   communityParticipation: number; // 0-1,
 }
 export interface ExternalTrigger {
-  triggerType: string;,
+  triggerType: string;
   effectivenessScore: number; // 0-1,
-  frequency: number;,
+  frequency: number;
   lastTriggered: number;
 }
 export interface HistoricalScore {
-  timestamp: number;,
+  timestamp: number;
   overallScore: number; // 0-100,
   dimensionScores: Record<string, number>;
   context: ScoreContext;
 }
 export interface ScoreContext {
-  events: string;,
+  events: string;
   factors: string;
   anomalies: string;
   // Engagement scoring results
 }
 export interface EngagementScore {
-  userId: string;,
+  userId: string;
   timestamp: number;
   overallScore: number; // 0-100,
-  level: EngagementLevel;,
+  level: EngagementLevel;
   dimensionScores: DimensionScore;
   confidence: number; // 0-1,
-  trend: ScoreTrend;,
+  trend: ScoreTrend;
   factors: ScoreFactor;
   predictions: EngagementPrediction;
 }
 export interface DimensionScore {
-  dimensionId: string;,
+  dimensionId: string;
   name: string;
   score: number; // 0-100,
   weight: number; // 0-1,
   contribution: number; // percentage of overall score,
-  trend: ScoreTrend;,
+  trend: ScoreTrend;
   components: ComponentScore;
 }
 export interface ComponentScore {
-  metricId: string;,
+  metricId: string;
   name: string;
-  rawValue: number;,
+  rawValue: number;
   normalizedValue: number; // 0-100,
   weight: number; // 0-1,
 }
 export interface ScoreTrend {
-  direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';,
+  direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
   strength: number; // 0-1,
   duration: number; // days,
   changeRate: number; // points per day,
 }
 export interface ScoreFactor {
-  factor: string;,
+  factor: string;
   impact: number; // -100 to 100,
-  type: 'positive' | 'negative' | 'neutral';,
+  type: 'positive' | 'negative' | 'neutral';
   significance: number; // 0-1,
   description: string;
 }
 export interface EngagementPrediction {
-  metric: string;,
+  metric: string;
   predictedValue: number;
   confidence: number; // 0-1,
   timeHorizon: number; // days,
   factors: PredictionFactor;
 }
 export interface PredictionFactor {
-  factor: string;,
+  factor: string;
   importance: number; // 0-1,
   direction: 'positive' | 'negative';
   // User segmentation results
 }
 export interface UserSegmentProfile {
-  userId: string;,
+  userId: string;
   segmentId: string;
-  segmentName: string;,
+  segmentName: string;
   membershipProbability: number; // 0-1,
-  assignedAt: number;,
+  assignedAt: number;
   characteristics: SegmentMemberCharacteristics;
-  recommendations: PersonalizationRecommendation;,
+  recommendations: PersonalizationRecommendation;
   migrationRisk: MigrationRisk;
 }
 export interface SegmentMemberCharacteristics {
-  engagementLevel: EngagementLevel;,
+  engagementLevel: EngagementLevel;
   behaviorProfile: BehaviorProfile;
-  preferences: InferredPreferences;,
+  preferences: InferredPreferences;
   valueProfile: ValueProfile;
 }
 export interface BehaviorProfile {
-  primaryBehaviors: string;,
+  primaryBehaviors: string;
   interactionStyle: InteractionStyle;
-  contentPreferences: ContentPreference;,
+  contentPreferences: ContentPreference;
   navigationPatterns: NavigationPattern;
 }
 export interface InteractionStyle {
-  pace: 'slow' | 'medium' | 'fast';,
+  pace: 'slow' | 'medium' | 'fast';
   depth: 'shallow' | 'moderate' | 'deep';
-  exploration: 'focused' | 'exploratory' | 'mixed';,
-  decision: 'quick' | 'deliberate' | 'hesitant';
-}
+  exploration: 'focused' | 'exploratory' | 'mixed';
+  decision: 'quick' | 'deliberate' | 'hesitant'
+  }
 export interface ContentPreference {
-  contentType: string;,
+  contentType: string;
   preference: number; // 0-1,
   engagement: number; // 0-1,
   conversion: number; // 0-1,
 }
 export interface NavigationPattern {
-  pattern: string;,
+  pattern: string;
   frequency: number;
   efficiency: number; // 0-1,
   satisfaction: number; // 0-1,
 }
 export interface InferredPreferences {
-  topics: TopicPreference;,
+  topics: TopicPreference;
   features: FeaturePreference;
-  timing: TimingPreference;,
+  timing: TimingPreference;
   communication: CommunicationPreference;
 }
 export interface TopicPreference {
-  topic: string;,
+  topic: string;
   interest: number; // 0-1,
   expertise: number; // 0-1,
   recency: number; // days since last interaction,
 }
 export interface FeaturePreference {
-  feature: string;,
+  feature: string;
   usage: number; // 0-1,
   satisfaction: number; // 0-1,
   proficiency: number; // 0-1,
 }
 export interface TimingPreference {
-  timeframe: string;,
+  timeframe: string;
   preference: number; // 0-1,
   responsiveness: number; // 0-1,
 }
 export interface CommunicationPreference {
-  channel: string;,
+  channel: string;
   preference: number; // 0-1,
   effectiveness: number; // 0-1,
 }
 export interface ValueProfile {
-  currentValue: number;,
+  currentValue: number;
   potentialValue: number;
   valueGrowth: number; // percentage,
   retentionProbability: number; // 0-1,
   upsellPropensity: number; // 0-1,
 }
 export interface PersonalizationRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   type: PersonalizationType;
-  priority: 'low' | 'medium' | 'high';,
+  priority: 'low' | 'medium' | 'high';
   title: string;
-  description: string;,
+  description: string;
   implementation: PersonalizationImplementation;
   expectedImpact: PersonalizationImpact;
 }
@@ -796,24 +796,24 @@ export type PersonalizationType =
   | 'product_recommendation';
 
 export interface PersonalizationImplementation {
-  method: string;,
+  method: string;
   parameters: Record<string, any>;
-  testingStrategy: TestingStrategy;,
+  testingStrategy: TestingStrategy;
   rolloutPlan: RolloutPlan;
 }
 export interface TestingStrategy {
-  testType: 'ab_test' | 'multivariate' | 'cohort' | 'personalized';,
+  testType: 'ab_test' | 'multivariate' | 'cohort' | 'personalized';
   duration: number; // days,
-  sampleSize: number;,
+  sampleSize: number;
   successMetrics: string;
 }
 export interface RolloutPlan {
-  phases: RolloutPhase;,
+  phases: RolloutPhase;
   timeline: string;
   rollbackCriteria: string;
 }
 export interface RolloutPhase {
-  phase: string;,
+  phase: string;
   percentage: number;
   duration: number; // days,
   criteria: string;
@@ -826,32 +826,32 @@ export interface PersonalizationImpact {
   confidence: number; // 0-1,
 }
 export interface MigrationRisk {
-  riskLevel: 'low' | 'medium' | 'high';,
+  riskLevel: 'low' | 'medium' | 'high';
   riskFactors: RiskFactor;
   timeToMigration: number; // days,
   preventionStrategies: PreventionStrategy;
 }
 export interface RiskFactor {
-  factor: string;,
+  factor: string;
   impact: number; // 0-1,
-  trend: 'increasing' | 'decreasing' | 'stable';,
+  trend: 'increasing' | 'decreasing' | 'stable';
   mitigation: string;
 }
 export interface PreventionStrategy {
-  strategy: string;,
+  strategy: string;
   effectiveness: number; // 0-1,
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   timeline: string;
   // Engagement insights
 }
 export interface EngagementInsight {
-  insightId: string;,
+  insightId: string;
   type: EngagementInsightType;
-  title: string;,
+  title: string;
   description: string;
-  severity: 'info' | 'warning' | 'critical';,
+  severity: 'info' | 'warning' | 'critical';
   affectedUsers: number;
-  potentialImpact: ImpactEstimate;,
+  potentialImpact: ImpactEstimate;
   recommendations: EngagementRecommendation;
   data: InsightSupportingData;
 }
@@ -864,91 +864,91 @@ export type EngagementInsightType =
   | 'predictive_alert';
 
 export interface ImpactEstimate {
-  scope: 'user' | 'segment' | 'global';,
+  scope: 'user' | 'segment' | 'global';
   magnitude: 'low' | 'medium' | 'high';
-  timeframe: string;,
+  timeframe: string;
   metrics: ImpactMetric;
 }
 export interface ImpactMetric {
-  metric: string;,
+  metric: string;
   currentValue: number;
-  projectedValue: number;,
+  projectedValue: number;
   change: number; // percentage,
 }
 export interface EngagementRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   action: string;
-  rationale: string;,
+  rationale: string;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   expectedOutcome: string;
   successMetrics: string;
 }
 export interface InsightSupportingData {
-  charts: ChartData;,
+  charts: ChartData;
   tables: TableData;
-  statistics: StatisticalData;,
+  statistics: StatisticalData;
   comparisons: ComparisonData;
 }
 export interface ChartData {
-  type: string;,
+  type: string;
   title: string;
   data: Record<string, unknown>[];
   config: Record<string, any>;
 }
 export interface TableData {
-  title: string;,
+  title: string;
   headers: string;
-  rows: unknown[];,
+  rows: unknown[];
   sortable: boolean;
 }
 export interface StatisticalData {
-  name: string;,
+  name: string;
   value: number;
   significance: number; // 0-1,
   context: string;
 }
 export interface ComparisonData {
-  title: string;,
+  title: string;
   baseline: ComparisonGroup;
-  comparison: ComparisonGroup;,
+  comparison: ComparisonGroup;
   difference: number;
   significance: number; // 0-1,
 }
 export interface ComparisonGroup {
-  name: string;,
+  name: string;
   value: number;
-  sampleSize: number;,
+  sampleSize: number;
   confidence: number; // 0-1,
   // Export data structure
 }
 export interface EngagementScoringExportData {
-  userScores: EngagementScore;,
+  userScores: EngagementScore;
   segmentProfiles: UserSegmentProfile;
-  insights: EngagementInsight;,
+  insights: EngagementInsight;
   modelPerformance: ScoringModelPerformance;
-  segmentationMetrics: SegmentationMetrics;,
+  segmentationMetrics: SegmentationMetrics;
   metadata: ExportMetadataEngagement;
 }
 export interface SegmentationMetrics {
-  totalSegments: number;,
+  totalSegments: number;
   segmentSizes: SegmentSize;
   segmentStability: number; // 0-1,
   migrationRate: number; // 0-1,
   distinctiveness: number; // 0-1,
 }
 export interface SegmentSize {
-  segmentId: string;,
+  segmentId: string;
   name: string;
-  size: number;,
+  size: number;
   percentage: number;
 }
 export interface ExportMetadataEngagement {
-  exportTimestamp: number;,
+  exportTimestamp: number;
   version: string;
-  totalUsers: number;,
+  totalUsers: number;
   scoringPeriod: { start: number; end: number };
-  modelVersion: string;,
+  modelVersion: string;
   segmentationMethod: string;
 
 // Mock data generators
@@ -958,15 +958,15 @@ const generateMockUserEngagementData = (): UserEngagementData => {
   const lastActive = Date.now() - Math.random() * 86400000; // Last day;
   return {
     userId,
-    profileData: {,
+    profileData: {
       userId,
       createdAt,
       lastActive,
       totalSessions: Math.floor(Math.random() * 200) + 10,
       totalTimeSpent: Math.random() * 86400000 * 30, // Up to 30 days
-      demographics: {,
+      demographics: {
   ageGroup: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'][Math.floor(Math.random() * 6)] as AgeGroup,
-        location: {,
+        location: {
   country: ['US', 'CA', 'UK', 'DE', 'FR', 'AU'][Math.floor(Math.random() * 6)],
           region: `Region ${Math.floor(Math.random() * 10) + 1}`}
 },
@@ -975,30 +975,30 @@ const generateMockUserEngagementData = (): UserEngagementData => {
   language: 'en-US',
         timezone: 'America/New_York';
   },
-  preferences: {,
+  preferences: {
   theme: ['light', 'dark', 'auto'][Math.floor(Math.random() * 3)] as any,
-  notifications: {,
+  notifications: {
   email: Math.random() > 0.5,
   push: Math.random() > 0.5,
   inApp: Math.random() > 0.5,
   frequency: ['immediate', 'daily', 'weekly', 'never'][Math.floor(Math.random() * 4)] as any,
 },
-  privacy: {,
+  privacy: {
   dataSharing: Math.random() > 0.5,
   analytics: Math.random() > 0.5,
   personalization: Math.random() > 0.5,
   marketing: Math.random() > 0.5,
 },
-  accessibility: {,
+  accessibility: {
   screenReader: Math.random() > 0.9,
   highContrast: Math.random() > 0.8,
   largeText: Math.random() > 0.7,
   reducedMotion: Math.random() > 0.6,
 },
-  deviceInfo: {,
+  deviceInfo: {
   primaryDevice: ['desktop', 'tablet', 'mobile'][Math.floor(Math.random() * 3)] as DeviceType,
   devices: [],
-  platformPreference: {,
+  platformPreference: {
   web: Math.random(),
   mobile: Math.random(),
   desktop: Math.random(),
@@ -1016,27 +1016,27 @@ const generateMockUserEngagementData = (): UserEngagementData => {
       conversionEvents: [],
       qualityScore: Math.random() * 40 + 60 // 60-100;
   })),
-    interactionHistory: {,
+    interactionHistory: {
   totalInteractions: Math.floor(Math.random() * 1000) + 100,
   interactionTypes: [],
   interactionPatterns: [],
-  qualityMetrics: {,
+  qualityMetrics: {
   intentionality: Math.random(),
   efficiency: Math.random(),
   completion: Math.random(),
   satisfaction: Math.random(),
 },
-  behaviorMetrics: {,
+  behaviorMetrics: {
   engagementConsistency: Math.random(),
   explorationBehavior: Math.random(),
   decisionMakingSpeed: Math.random(),
   contentAffinity: [],
   behaviorStability: Math.random(),
 },
-  contextualData: {,
+  contextualData: {
   timePatterns: [],
   environmentalFactors: [],
-  socialInfluence: {,
+  socialInfluence: {
   socialEngagement: Math.random(),
   influenceReceptivity: Math.random(),
   viralityScore: Math.random(),
@@ -1047,13 +1047,13 @@ const generateMockUserEngagementData = (): UserEngagementData => {
   historicalScores: Array.from({ length: 30 }, (_, i) => ({)
   timestamp: Date.now() - i * 86400000,
   overallScore: Math.random() * 40 + 40, // 40-80,
-  dimensionScores: {,
+  dimensionScores: {
   frequency: Math.random() * 100,
   depth: Math.random() * 100,
   quality: Math.random() * 100,
   recency: Math.random() * 100,
 },
-  context: {,
+  context: {
   events: [],
   factors: [],
   anomalies: [],
@@ -1079,7 +1079,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
   score: Math.random() * 100,
   weight: 0.25,
   contribution: 25,
-  trend: {,
+  trend: {
   direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 1,
@@ -1093,7 +1093,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
   score: Math.random() * 100,
   weight: 0.3,
   contribution: 30,
-  trend: {,
+  trend: {
   direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 1,
@@ -1107,7 +1107,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
   score: Math.random() * 100,
   weight: 0.25,
   contribution: 25,
-  trend: {,
+  trend: {
   direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 1,
@@ -1121,7 +1121,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
   score: Math.random() * 100,
   weight: 0.2,
   contribution: 20,
-  trend: {,
+  trend: {
   direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 1,
@@ -1129,7 +1129,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
 },
   components: []],
     confidence: Math.random() * 0.3 + 0.7, // 0.7-1.0
-    trend: {,
+    trend: {
   direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)] as any,
   strength: Math.random(),
   duration: Math.floor(Math.random() * 90) + 1,
@@ -1196,11 +1196,11 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
   segmentName: ['High Value', 'Growth Potential', 'At Risk', 'New Users', 'Champions'][Math.floor(Math.random() * 5)],
         membershipProbability: Math.random() * 0.3 + 0.7,
         assignedAt: Date.now() - Math.random() * 86400000,
-        characteristics: {,
+        characteristics: {
   engagementLevel: score?.level || 'moderate_engagement',
-  behaviorProfile: {,
+  behaviorProfile: {
   primaryBehaviors: ['browsing', 'searching', 'purchasing'],
-  interactionStyle: {,
+  interactionStyle: {
   pace: ['slow', 'medium', 'fast'][Math.floor(Math.random() * 3)] as any,
   depth: ['shallow', 'moderate', 'deep'][Math.floor(Math.random() * 3)] as any,
   exploration: ['focused', 'exploratory', 'mixed'][Math.floor(Math.random() * 3)] as any,
@@ -1209,13 +1209,13 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
   contentPreferences: [],
             navigationPatterns: [];
   },
-  preferences: {,
+  preferences: {
   topics: [],
   features: [],
   timing: [],
   communication: [],
 },
-  valueProfile: {,
+  valueProfile: {
   currentValue: Math.random() * 1000,
   potentialValue: Math.random() * 2000,
   valueGrowth: Math.random() * 50,
@@ -1223,7 +1223,7 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
   upsellPropensity: Math.random(),
 },
   recommendations: [],
-        migrationRisk: {,
+        migrationRisk: {
   riskLevel: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)] as any,
   riskFactors: [],
   timeToMigration: Math.floor(Math.random() * 90) + 30,
@@ -1251,14 +1251,14 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
   userScores,
   segmentProfiles: userSegments,
   insights: engagementInsights,
-  modelPerformance: {,
+  modelPerformance: {
   processingTime: 1500,
   throughput: 50,
   memoryUsage: 128,
   errorRate: 0.01,
   drift: 0.05,
 },
-  segmentationMetrics: {,
+  segmentationMetrics: {
   totalSegments: 5,
           segmentSizes: [,
             { segmentId: 'segment_1', name: 'High Value', size: 20, percentage: 20 },
@@ -1271,16 +1271,16 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
           migrationRate: 0.12,
           distinctiveness: 0.78;
   },
-  metadata: {,
+  metadata: {
   exportTimestamp: Date.now(),
   version: '1.0.0',
   totalUsers: mockUserData.length,
-  scoringPeriod: {,
+  scoringPeriod: {
   start: Date.now() - 86400000 * 30,
   end: Date.now(),
 },
   modelVersion: 'v1.2.3',
-          segmentationMethod: 'hybrid';
+          segmentationMethod: 'hybrid'
   };
       onExport(exportData);
   }, [userScores, userSegments, engagementInsights, mockUserData, onExport]);

@@ -312,8 +312,8 @@ export class CollaborativeSync extends EventEmitter {
   timestamp: new Date(),
   userId: this.currentUser.userId,
   sessionId: this.generateSessionId(),
-  data: {,
-  user: {,
+  data: {
+  user: {
   ...this.currentUser,
   isActive,
   lastActivity: new Date(),

@@ -65,7 +65,7 @@ export declare         <U>(selector: (state: CollaborativeGraphState) => U, list
     };
 }>;
 export declare export declare export declare export declare export declare         type: "WeightedChoice";
-        choices: {,
+        choices: {
             value: string;
             weight: number;
         }[];

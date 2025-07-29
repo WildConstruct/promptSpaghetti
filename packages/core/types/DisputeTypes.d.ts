@@ -279,7 +279,7 @@ export interface DisputeMonthlyTrend {
     averageResolutionTime: number;
 
 export interface DisputeAnalytics {
-    period: {,
+    period: {
         startDate: Date;
         endDate: Date;
     };
@@ -306,7 +306,7 @@ export interface DisputeRecommendation {
     title: string;
     description: string;
     expectedImpact: string;
-    implementation: {,
+    implementation: {
         effort: 'low' | 'medium' | 'high';
         timeline: string;
         resources: string[];

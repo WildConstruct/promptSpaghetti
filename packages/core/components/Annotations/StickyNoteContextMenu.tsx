@@ -74,8 +74,8 @@ interface StickyNoteContextMenuProps extends StickyNoteContextMenuOptions {
           e.currentTarget.style.backgroundColor = '#f3f4f6';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
-      }}
+        e.currentTarget.style.backgroundColor = 'transparent'
+  }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {icon && <span style={{ fontSize: 14 }}>{icon}</span>}
@@ -164,7 +164,7 @@ interface StickyNoteContextMenuProps extends StickyNoteContextMenuOptions {
                 color: info.text,
                 fontWeight: 500,
                 transition: 'all 0.15s ease',
-                textAlign: 'left';
+                textAlign: 'left'
   }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.05)';
@@ -172,8 +172,8 @@ interface StickyNoteContextMenuProps extends StickyNoteContextMenuOptions {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+                e.currentTarget.style.boxShadow = 'none'
+  }}
               title={info.description}
             >
               <div style={{

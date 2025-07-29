@@ -175,9 +175,14 @@ export interface RemediationResult {
     };
     errors?: Array<{
         recordId: string;
-    }, error>;
-    string: any;
-    severity: 'warning' | 'error' | 'critical';
+        error: string;
+        severity: 'warning' | 'error' | 'critical';
+    }>;
+    verification: {
+        verificationRun: boolean;
+        verificationPassed: boolean;
+        residualIssues: number;
+    };
 }
 export interface DataIntegrityMetrics {
     overallIntegrityScore: number;

@@ -6,14 +6,14 @@ import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
 export interface ExtensionMarketplaceProps {
-  extensions: ExtensionManifest;,
+  extensions: ExtensionManifest;
   selectedExtension: ExtensionManifest | null;
-  onExtensionSelect: (extension: ExtensionManifest) => void;,
+  onExtensionSelect: (extension: ExtensionManifest) => void;
   onInstallExtension: (extension: ExtensionManifest) => void;
   interface MarketplaceCategory {
-  id: string;,
+  id: string;
   name: string;
-  icon: string;,
+  icon: string;
   description: string;
   count: number;
 }

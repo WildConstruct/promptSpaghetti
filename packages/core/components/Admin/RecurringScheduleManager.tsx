@@ -50,19 +50,19 @@ import {
   FeatureToggleSchedule
 } from '../../../server/src/database/scheduling-models';
 interface RecurringSchedule extends FeatureToggleSchedule {
-  nextOccurrences: Date;,
+  nextOccurrences: Date;
   conflictCount: number;
-  performanceMetrics: {,
-  successRate: number;,
+  performanceMetrics: {
+  successRate: number;
   averageExecutionTime: number;
   lastFailureReason?: string;
 };
 interface ScheduleConflict {
-  id: string;,
+  id: string;
   scheduleIds: string;
-  type: 'time_overlap' | 'action_conflict' | 'resource_conflict';,
+  type: 'time_overlap' | 'action_conflict' | 'resource_conflict';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   suggestedResolution: string;
   interface RecurringScheduleManagerProps {
   className?: string;
@@ -73,7 +73,7 @@ interface ScheduleConflict {
   id: 'daily-business',
   name: 'Daily (Business Days)',
   description: 'Monday to Friday',
-  pattern: {,
+  pattern: {
   type: 'weekly' as RecurrenceType,
   interval: 1,
   daysOfWeek: [1, 2, 3, 4, 5],
@@ -82,7 +82,7 @@ interface ScheduleConflict {
   id: 'weekly-maintenance',
   name: 'Weekly Maintenance',
   description: 'Sunday at 2 AM',
-  pattern: {,
+  pattern: {
   type: 'weekly' as RecurrenceType,
   interval: 1,
   daysOfWeek: [0],
@@ -91,7 +91,7 @@ interface ScheduleConflict {
   id: 'monthly-first',
   name: 'Monthly (First Day)',
   description: '1st of every month',
-  pattern: {,
+  pattern: {
   type: 'monthly' as RecurrenceType,
   interval: 1,
   daysOfMonth: [1],
@@ -100,7 +100,7 @@ interface ScheduleConflict {
   id: 'quarterly',
   name: 'Quarterly',
   description: 'Every 3 months',
-  pattern: {,
+  pattern: {
   type: 'monthly' as RecurrenceType,
   interval: 3,
 }
@@ -108,7 +108,7 @@ interface ScheduleConflict {
     id: 'bi-weekly',
     name: 'Bi-weekly',
     description: 'Every 2 weeks',
-    pattern: {,
+    pattern: {
   type: 'weekly' as RecurrenceType,
       interval: 2];
 const ACTION_CONFIG = {
@@ -152,7 +152,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   startTime: new Date('2024-01-07T02:00:00.000Z'),
   endTime: new Date('2024-01-07T06:00:00.000Z'),
   timezone: 'America/New_York',
-  recurrence: {,
+  recurrence: {
   type: RecurrenceType.WEEKLY,
   interval: 1,
   daysOfWeek: [0],
@@ -175,7 +175,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         new Date(Date.now() + 16 * 24 * 60 * 60 * 1000)
       ],
       conflictCount: 0,
-      performanceMetrics: {,
+      performanceMetrics: {
   successRate: 91.7,
   averageExecutionTime: 1.8,
   lastFailureReason: 'Network timeout',
@@ -189,12 +189,12 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   action: ScheduleAction.MODIFY_PERCENTAGE,
   startTime: new Date('2024-01-15T09:00:00.000Z'),
   timezone: 'UTC',
-  recurrence: {,
+  recurrence: {
   type: RecurrenceType.DAILY,
   interval: 1,
   endDate: new Date('2024-02-15T00:00:00.000Z'),
 },
-  actionConfig: {,
+  actionConfig: {
   rolloutPercentage: 10,
 },
   status: ScheduleStatus.ACTIVE,
@@ -214,7 +214,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         new Date(Date.now() + 62 * 60 * 60 * 1000)
       ],
       conflictCount: 1,
-      performanceMetrics: {,
+      performanceMetrics: {
   successRate: 92.0,
   averageExecutionTime: 0.8,
 }
@@ -228,7 +228,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   startTime: new Date('2024-02-01T01:00:00.000Z'),
   endTime: new Date('2024-02-01T03:00:00.000Z'),
   timezone: 'UTC',
-  recurrence: {,
+  recurrence: {
   type: RecurrenceType.MONTHLY,
   interval: 1,
   daysOfMonth: [1],
@@ -250,7 +250,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         new Date('2024-04-01T01:00:00.000Z')
       ],
       conflictCount: 0,
-      performanceMetrics: {,
+      performanceMetrics: {
   successRate: 0,
   averageExecutionTime: 0];
   const mockConflicts: ScheduleConflict = [
@@ -343,7 +343,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         updatedAt: new Date(),
         nextExecution: undefined,
         lastExecution: undefined,
-        performanceMetrics: {,
+        performanceMetrics: {
   successRate: 0,
   averageExecutionTime: 0,
 };

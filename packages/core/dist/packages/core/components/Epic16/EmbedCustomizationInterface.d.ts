@@ -91,7 +91,11 @@ export interface CustomTheme {
     };
     const: any;
     DEFAULT_PRESETS: EmbedPreset;
+    const: any;
+    WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'config'>[];
 }
+export declare const PresetSelector: React.FC<{}, presets>, EmbedPreset: any;
+export declare const VisualLayoutBuilder: React.FC<{}, widgets>, EmbedWidget: any;
 export declare const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps>;
 export default EmbedCustomizationInterface;
 //# sourceMappingURL=EmbedCustomizationInterface.d.ts.map

@@ -76,88 +76,88 @@ export interface IWidgetRegistry {
 }
 export interface IAdminDashboardDomain {
   // React Components
-  components: {,
-  AdminDashboard: React.ComponentType<AdminDashboardProps>;,
+  components: {
+  AdminDashboard: React.ComponentType<AdminDashboardProps>;
   WidgetGrid: React.ComponentType<WidgetGridProps>;
   WidgetLibrary: React.ComponentType<WidgetLibraryProps>;
   // Specific widgets
-  SecurityWidget: React.ComponentType<any>;,
+  SecurityWidget: React.ComponentType<any>;
   UserManagementWidget: React.ComponentType<any>;
-  ApiManagementWidget: React.ComponentType<any>;,
+  ApiManagementWidget: React.ComponentType<any>;
   SystemMetricsWidget: React.ComponentType<any>;
   AlertIndicatorsWidget: React.ComponentType<any>;
 };
   // React Hooks
-  hooks: {,
+  hooks: {
   useAdminDashboard: () => {,
-  state: AdminDashboardState;,
-  loadLayout: (layoutId: string) => Promise<void>;,
-  saveLayout: (layout: DashboardLayout) => Promise<void>;,
-  addWidget: (widgetType: string, position: any) => void;,
-  removeWidget: (widgetId: string) => void;,
-  updateWidget: (widgetId: string, updates: any) => void;,
+  state: AdminDashboardState;
+  loadLayout: (layoutId: string) => Promise<void>;
+  saveLayout: (layout: DashboardLayout) => Promise<void>;
+  addWidget: (widgetType: string, position: any) => void;
+  removeWidget: (widgetId: string) => void;
+  updateWidget: (widgetId: string, updates: any) => void;
   toggleEditMode: () => void;
 };
     useAdminUsers: () => {,
   users: AdminUser;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  createUser: (userData: Partial<AdminUser>) => Promise<void>;,
-  updateUser: (userId: string, updates: Partial<AdminUser>) => Promise<void>;,
-  deleteUser: (userId: string) => Promise<void>;,
+  createUser: (userData: Partial<AdminUser>) => Promise<void>;
+  updateUser: (userId: string, updates: Partial<AdminUser>) => Promise<void>;
+  deleteUser: (userId: string) => Promise<void>;
   suspendUser: (userId: string, reason: string) => Promise<void>;
 };
     useSecurity: () => {,
   alerts: SecurityAlert;
-  metrics: any;,
+  metrics: any;
   loading: boolean;
-  acknowledgeAlert: (alertId: string) => Promise<void>;,
+  acknowledgeAlert: (alertId: string) => Promise<void>;
   performScan: () => Promise<void>;
   generateReport: () => Promise<any>;
 };
     useApiManagement: () => {,
   apiKeys: ApiKey;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  createApiKey: (keyData: Partial<ApiKey>) => Promise<void>;,
-  revokeApiKey: (keyId: string) => Promise<void>;,
+  createApiKey: (keyData: Partial<ApiKey>) => Promise<void>;
+  revokeApiKey: (keyId: string) => Promise<void>;
   updateRateLimit: (keyId: string, rateLimit: any) => Promise<void>;
 };
     useSystemMonitoring: () => {,
   metrics: SystemMetrics | null;
-  health: any;,
+  health: any;
   loading: boolean;
-  refreshMetrics: () => Promise<void>;,
+  refreshMetrics: () => Promise<void>;
   restartService: (serviceName: string) => Promise<void>;
 };
   };
   // Domain Services
-  services: {,
+  services: {
   users: IAdminUserService;
-  security: ISecurityService;,
+  security: ISecurityService;
   apiManagement: IApiManagementService;
-  systemMonitoring: ISystemMonitoringService;,
+  systemMonitoring: ISystemMonitoringService;
   dashboardConfig: IDashboardConfigService;
   widgetRegistry: IWidgetRegistry;
 };
   // Event System
   events: AdminDomainEvents & {,
-  subscribe: (event: keyof AdminDomainEvents, callback: Function) => () => void;,
+  subscribe: (event: keyof AdminDomainEvents, callback: Function) => () => void;
   emit: (event: keyof AdminDomainEvents, ...args: any) => void;
 };
   // Configuration
-  config: {,
+  config: {
   getConfig: () => AdminDashboardConfig;
-  updateConfig: (config: Partial<AdminDashboardConfig>) => void;,
+  updateConfig: (config: Partial<AdminDashboardConfig>) => void;
   resetConfig: () => void;
 };
   // Utilities
-  utils: {,
-  validatePermission: (userPermissions: string, requiredPermission: string) => boolean;,
-  formatUserRole: (role: string) => string;,
-  calculateSecurityScore: (metrics: any) => number;,
-  exportDashboardConfig: (layout: DashboardLayout) => string;,
-  importDashboardConfig: (configString: string) => DashboardLayout;,
+  utils: {
+  validatePermission: (userPermissions: string, requiredPermission: string) => boolean;
+  formatUserRole: (role: string) => string;
+  calculateSecurityScore: (metrics: any) => number;
+  exportDashboardConfig: (layout: DashboardLayout) => string;
+  importDashboardConfig: (configString: string) => DashboardLayout;
   generateApiKey: () => string;
   hashApiKey: (key: string) => string;
 };

@@ -509,11 +509,12 @@ export var SecurityEventType;
                     lastUpdated: new Date(),
                     isActive: true,
                     threatTypes: [ThreatType.BRUTE_FORCE_ATTACK],
-                    featureImportance: {},
-                    loginFailures: 0.4,
-                    successRate: 0.3,
-                    eventsPerMinute: 0.2,
-                    uniqueIPs: 0.1,
+                    featureImportance: {
+                        loginFailures: 0.4,
+                        successRate: 0.3,
+                        eventsPerMinute: 0.2,
+                        uniqueIPs: 0.1,
+                    }
                 },
                 {
                     modelId: 'account-takeover-v1',
@@ -526,11 +527,12 @@ export var SecurityEventType;
                     lastUpdated: new Date(),
                     isActive: true,
                     threatTypes: [ThreatType.ACCOUNT_TAKEOVER],
-                    featureImportance: {},
-                    unknownLocationRatio: 0.4,
-                    averageRiskScore: 0.35,
-                    uniqueIPs: 0.15,
-                    uniqueCountries: 0.1
+                    featureImportance: {
+                        unknownLocationRatio: 0.4,
+                        averageRiskScore: 0.35,
+                        uniqueIPs: 0.15,
+                        uniqueCountries: 0.1
+                    }
                 }
             ];
             models.forEach(model => this.models.set(model.modelId, model));

@@ -80,7 +80,7 @@ export userId: string;
       const response = await fetch(`${apiBase}/${id}/read`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {
@@ -107,7 +107,7 @@ export userId: string;
       const response = await fetch(`${apiBase}/read-all?${params}`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {
@@ -127,7 +127,7 @@ export userId: string;
     try {
       const response = await fetch(`${apiBase}/${id}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       if (!response.ok) {
         throw new Error('Failed to delete notification');

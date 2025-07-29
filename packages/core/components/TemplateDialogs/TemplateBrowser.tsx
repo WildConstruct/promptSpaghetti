@@ -10,7 +10,7 @@ import {
 } from '../../types/TemplateTypes';
 import { templateService } from '../../services/TemplateService';
 interface TemplateBrowserProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onApplyTemplate: (templateId: string, options: TemplateInstantiationOptions) => Promise<void>;
   currentAuthor?: string; // For filtering "my templates"
@@ -461,9 +461,9 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
 // Template Card Component for Grid View
 const TemplateCard: React.FC<{,
   template: Template;
-  onPreview: () => void;,
+  onPreview: () => void;
   onApply: () => void;
-  onDelete: () => void;,
+  onDelete: () => void;
   showDelete: boolean;
 }> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
   return;
@@ -480,8 +480,8 @@ const TemplateCard: React.FC<{,
       e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
     }}
     onMouseLeave={(e) => {
-      e.currentTarget.style.boxShadow = 'none';
-    }}
+      e.currentTarget.style.boxShadow = 'none'
+  }}
     onClick={onPreview}
     >
       {showDelete && ()
@@ -580,9 +580,9 @@ const TemplateCard: React.FC<{,
 // Template List Item Component for List View
 const TemplateListItem: React.FC<{,
   template: Template;
-  onPreview: () => void;,
+  onPreview: () => void;
   onApply: () => void;
-  onDelete: () => void;,
+  onDelete: () => void;
   showDelete: boolean;
 }> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
   return;
@@ -601,8 +601,8 @@ const TemplateListItem: React.FC<{,
       e.currentTarget.style.backgroundColor = '#f9fafb';
     }}
     onMouseLeave={(e) => {
-      e.currentTarget.style.backgroundColor = 'white';
-    }}
+      e.currentTarget.style.backgroundColor = 'white'
+  }}
     onClick={onPreview}
     >
       <div style={{ flex: 1 }}>
@@ -688,7 +688,7 @@ const TemplateListItem: React.FC<{,
 // Template Preview Modal
 const TemplatePreview: React.FC<{,
   template: Template;
-  onClose: () => void;,
+  onClose: () => void;
   onApply: () => void;
 }> = ({ template, onClose, onApply }) => {
   return;

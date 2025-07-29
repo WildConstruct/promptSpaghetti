@@ -54,22 +54,22 @@ export interface SkillLevelDimensions {
     problem_solving_complexity: number;
 
 export interface SkillLevelContext {
-    target_audience: {,
+    target_audience: {
         experience_level: SkillLevel;
         role: string[];
         industry: string[];
-        learning_style: 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'mixed';
-    };
+        learning_style: 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'mixed'
+  };
     content_type: 'tutorial' | 'guide' | 'reference' | 'workshop' | 'course' | 'example';
     delivery_format: 'text' | 'video' | 'interactive' | 'hands-on' | 'mixed';
     interaction_level: 'passive' | 'guided' | 'interactive' | 'project-based';
-    environment: {,
+    environment: {
         tools_required: string[];
         setup_complexity: number;
         external_resources_needed: boolean;
         mentor_support_recommended: boolean;
     };
-    success_factors: {,
+    success_factors: {
         completion_rate_target: number;
         user_satisfaction_target: number;
         learning_outcome_confidence: number;
@@ -104,7 +104,7 @@ export interface ContentSkillTag {
     id: string;
     content_id: string;
     content_type: 'article' | 'tutorial' | 'guide' | 'course' | 'example' | 'reference';
-    primary_skill: {,
+    primary_skill: {
         domain: SkillDomain;
         subcategory?: string;
         level: SkillLevel;
@@ -116,7 +116,7 @@ export interface ContentSkillTag {
         level: SkillLevel;
         weight: number;
     }>;
-    learning_path_info: {,
+    learning_path_info: {
         suitable_for_paths: string[];
         position_in_path: 'foundation' | 'core' | 'advanced' | 'specialization';
         sequence_dependencies: string[];
@@ -148,18 +148,18 @@ export interface DifficultyIndicators {
     support_needs: string[];
 
 export interface CommunitySkillFeedback {
-    perceived_difficulty: {,
+    perceived_difficulty: {
         average_rating: number;
         rating_distribution: Record<string, number>;
         total_ratings: number;
     };
-    level_appropriateness: {,
+    level_appropriateness: {
         too_easy_votes: number;
         just_right_votes: number;
         too_hard_votes: number;
         total_votes: number;
     };
-    learning_effectiveness: {,
+    learning_effectiveness: {
         helped_learn_skill: number;
         clear_explanations: number;
         good_examples: number;
@@ -192,7 +192,7 @@ export interface SkillBasedLearningPath {
     id: string;
     name: string;
     description: string;
-    skill_progression: {,
+    skill_progression: {
         domain: SkillDomain;
         subcategories: string[];
         start_level: SkillLevel;
@@ -237,8 +237,8 @@ export interface SkillCheckpoint {
         domain: SkillDomain;
         subcategory?: string;
         required_level: SkillLevel;
-        assessment_method: 'quiz' | 'project' | 'peer-review' | 'self-assessment' | 'portfolio';
-    }>;
+        assessment_method: 'quiz' | 'project' | 'peer-review' | 'self-assessment' | 'portfolio'
+  }>;
     checkpoint_type: 'milestone' | 'gate' | 'reflection' | 'feedback';
     blocking: boolean;
     retry_allowed: boolean;
@@ -332,13 +332,13 @@ export interface UserSkillProfile {
         assessment_method: string;
         subcategory_levels: Record<string, SkillLevel>;
     }>;
-    learning_preferences: {,
+    learning_preferences: {
         preferred_difficulty_progression: 'gradual' | 'moderate' | 'steep';
         content_format_preferences: string[];
         interaction_style: 'guided' | 'exploratory' | 'structured';
-        pace_preference: 'self_paced' | 'structured' | 'intensive';
-    };
-    learning_history: {,
+        pace_preference: 'self_paced' | 'structured' | 'intensive'
+  };
+    learning_history: {
         content_completed: ContentCompletionRecord[];
         skill_progression: SkillProgressionRecord[];
         assessment_results: AssessmentResult[];
@@ -439,8 +439,8 @@ export interface ValidationResult {
         aspect: string;
         expected: any;
         actual: any;
-        severity: 'low' | 'medium' | 'high';
-    }>;
+        severity: 'low' | 'medium' | 'high'
+  }>;
     recommendations: string[];
     community_consensus: number;
 

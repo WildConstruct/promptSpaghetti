@@ -52,7 +52,7 @@ export class AuditIntegration {
   /**
    * Log a data access operation with automatic classification enrichment
    */
-  async logDataAccess(context: OperationContext,)
+  async logDataAccess(context: OperationContext)
     resourceType: string,
     resourceId: string,
     data?: any,
@@ -107,11 +107,11 @@ export class AuditIntegration {
   /**
   * Log an administrative operation
   */
-  async logAdminOperation(operation: 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION',)
+  async logAdminOperation(operation: 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION')
   context: OperationContext,
-  target: {,
+  target: {
   userId?: string;
-  resourceType: string;,
+  resourceType: string;
   resourceId: string;
   classification?: DataClassificationLevel;
 }
@@ -130,14 +130,14 @@ export class AuditIntegration {
   success: true,
   sensitiveAccess: target.classification ? ,
   this.isSensitiveClassification(target.classification) : false,
-  metadata: {,
+  metadata: {
   targetUserId: target.userId,
   ...metadata
 });
   /**
    * Log a security event
    */
-  async logSecurityEvent(eventType: string,)
+  async logSecurityEvent(eventType: string)
     context: OperationContext,
     details: Record<string, any>
   ): Promise<void> {
@@ -153,14 +153,14 @@ export class AuditIntegration {
   authorized: false,
   success: false,
   anomalyDetected: true,
-  metadata: {,
+  metadata: {
   eventType,
   ...details
 });
   /**
    * Log a batch operation
    */
-  async logBatchOperation(context: OperationContext,)
+  async logBatchOperation(context: OperationContext)
     operation: AuditOperation,
     resources: Array<{,
   type: string;
@@ -189,7 +189,7 @@ export class AuditIntegration {
       success,
       recordCount: resources.length,
       sensitiveAccess: this.isSensitiveClassification(highestClassification),
-      metadata: {,
+      metadata: {
   batchOperation: operation,
   resourceTypes: [...new Set(resources.map(r => r.type))],
   resourceCount: resources.length,
@@ -198,7 +198,7 @@ export class AuditIntegration {
   /**
    * Create an audit trail for a workflow
    */
-  async startAuditTrail(workflowId: string,)
+  async startAuditTrail(workflowId: string)
     context: OperationContext,
     metadata?: Record<string, any>
   ): Promise<string> {
@@ -215,7 +215,7 @@ export class AuditIntegration {
   sessionId: context.sessionId,
   authorized: true,
   success: true,
-  metadata: {,
+  metadata: {
   workflowStart: true,
   ...metadata
 });
@@ -242,7 +242,7 @@ export class AuditIntegration {
   denialReason: event.reason,
   riskScore: event.riskScore,
   sensitiveAccess: this.isSensitiveClassification(event.classification),
-  metadata: {,
+  metadata: {
   appliedControls: event.appliedControls,
   missingControls: event.missingControls,
   recommendations: event.recommendations,
@@ -267,7 +267,7 @@ export class AuditIntegration {
   authorized: true,
   success: true,
   sensitiveAccess: this.isSensitiveClassification(event.newLevel),
-  metadata: {,
+  metadata: {
   previousLevel: event.previousLevel,
   confidence: event.confidence,
   reason: event.reason,
@@ -297,7 +297,7 @@ export class AuditIntegration {
   /**
    * Generate compliance report
    */
-  async generateComplianceReport(startDate: Date,)
+  async generateComplianceReport(startDate: Date)
     endDate: Date,
     options?: {
   groupBy?: 'user' | 'classification' | 'operation';
@@ -308,7 +308,7 @@ export class AuditIntegration {
   endDate
 });
     const report: ComplianceReport = {,
-  period: {,
+  period: {
   start: startDate,
   end: endDate,
 },
@@ -319,7 +319,7 @@ export class AuditIntegration {
       classificationBreakdown: {},
       operationBreakdown: {},
       anomalies: logs.filter(log => log.anomalyDetected).length,
-      riskMetrics: {,
+      riskMetrics: {
   averageRiskScore: 0,
   highRiskOperations: 0,
 };
@@ -348,19 +348,19 @@ export class AuditIntegration {
   * Compliance report structure
   */
   export interface ComplianceReport {
-  period: {,
-  start: Date;,
+  period: {
+  start: Date;
   end: Date;
 };
-  totalAccess: number;,
+  totalAccess: number;
   sensitiveAccess: number;
-  deniedAccess: number;,
+  deniedAccess: number;
   uniqueUsers: number;
   classificationBreakdown: Record<string, number>;
   operationBreakdown: Record<string, number>;
-  anomalies: number;,
+  anomalies: number;
   riskMetrics: {;
-  averageRiskScore: number;,
+  averageRiskScore: number;
   highRiskOperations: number;
 };
   details?: AuditLogEntry;

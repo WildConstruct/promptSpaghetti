@@ -11,13 +11,13 @@ import { TrendingComment } from '../../types/TrendingCommentsTypes';
 import { TrendingCommentCard } from '../TrendingComments/TrendingCommentCard';
 
 export interface CommentModerationConfig {
-  enableBulkActions: boolean;,
+  enableBulkActions: boolean;
   enableAutoModeration: boolean;
-  enableThreadModeration: boolean;,
+  enableThreadModeration: boolean;
   enableSentimentFiltering: boolean;
   autoHideThreshold: number; // toxicity threshold,
   requireApprovalThreshold: number; // low quality threshold,
-  enableRealtimeUpdates: boolean;,
+  enableRealtimeUpdates: boolean;
   moderatorId: string;
   permissions: string;
 }
@@ -27,8 +27,8 @@ export interface CommentModerationFilters {
   toxicity?: 'low' | 'medium' | 'high' | 'critical';
   reports?: 'none' | 'few' | 'many' | 'critical';
   author?: 'all' | 'new' | 'verified' | 'banned';
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   resourceId?: string;
@@ -37,7 +37,7 @@ export interface CommentModerationFilters {
   keywords?: string;
 }
 export interface CommentModerationAction {
-  type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';,
+  type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
   commentIds: string;
   reason?: string;
   duration?: number; // for temporary actions,
@@ -46,13 +46,13 @@ export interface CommentModerationAction {
   metadata?: Record<string, unknown>;
 }
 export interface CommentModerationStats {
-  total: number;,
+  total: number;
   pending: number;
-  approved: number;,
+  approved: number;
   rejected: number;
-  flagged: number;,
+  flagged: number;
   autoHidden: number;
-  totalReports: number;,
+  totalReports: number;
   avgToxicity: number;
   avgQuality: number;
   lastProcessed?: Date;
@@ -208,7 +208,7 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
   backgroundColor: '#ffffff',
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{
@@ -538,13 +538,13 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
 
 // Individual Comment Moderation Item Component
 interface CommentModerationItemProps {
-  comment: TrendingComment;,
+  comment: TrendingComment;
   selected: boolean;
-  onSelectionChange: (selected: boolean) => void;,
+  onSelectionChange: (selected: boolean) => void;
   onAction: (action: Omit<CommentModerationAction, 'commentIds'>) => void;
-  onThreadToggle: () => void;,
+  onThreadToggle: () => void;
   expanded: boolean;
-  showCheckbox: boolean;,
+  showCheckbox: boolean;
   moderatorPermissions: string;
   style?: React.CSSProperties;
   const CommentModerationItem: React.FC<CommentModerationItemProps> = ({,)
@@ -746,7 +746,7 @@ async function generateMockComments(_____filters: CommentModerationFilters): Pro
       replyCount: Math.floor(Math.random() * 5),
       replyTree: [],
       visibility: 'public',
-      language: 'en';
+      language: 'en'
   });
   return comments;
 function generateMockCommentContent(): string {
@@ -763,20 +763,20 @@ function generateMockCommentContent(): string {
   return contents[Math.floor(Math.random() * contents.length)];
   function generateMockScore(): unknown {,
   return {
-  scores: {,
+  scores: {
   trendingScore: Math.random() * 100,
   engagementScore: Math.random() * 100,
   qualityScore: Math.random() * 100,
   controversyScore: Math.random() * 100,
 },
-  metrics: {,
+  metrics: {
   totalLikes: Math.floor(Math.random() * 50),
   totalReplies: Math.floor(Math.random() * 20),
   totalShares: Math.floor(Math.random() * 10),
   totalHelpfulVotes: Math.floor(Math.random() * 15),
   totalReports: Math.floor(Math.random() * 5),
 },
-  trends: {,
+  trends: {
   velocityTrend: 'steady' as const,
 };
 function calculateMockStats(comments: TrendingComment): CommentModerationStats {

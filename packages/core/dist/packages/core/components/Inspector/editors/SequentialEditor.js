@@ -27,7 +27,8 @@ const handleWeightChange = (index, weight) => {
     const newWeights = [...weights];
     newWeights[index] = Math.max(0, weight);
     onChange({});
-    patternConfig: { }
+    patternConfig: {
+    }
 };
 patternConfig,
     weights;
@@ -37,7 +38,8 @@ newWeights,
 ;
 const handleAllowRepeatsChange = (value) => {
     onChange({});
-    patternConfig: { }
+    patternConfig: {
+    }
 };
 patternConfig,
     allowRepeats;

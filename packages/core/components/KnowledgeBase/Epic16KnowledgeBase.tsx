@@ -15,19 +15,19 @@ import {
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
 interface Epic16KnowledgeBaseProps {
-  userId: string;,
+  userId: string;
   userRole: 'user' | 'creator' | 'admin';
   initialView?: 'search' | 'browse' | 'article';
   initialArticleId?: string;
   onAnalytics?: (analytics: unknown) => void;
   interface KnowledgeBaseState {
-  currentView: 'search' | 'browse' | 'article';,
+  currentView: 'search' | 'browse' | 'article';
   selectedArticle: KnowledgeBaseArticle | null;
-  popularArticles: KnowledgeBaseArticle;,
+  popularArticles: KnowledgeBaseArticle;
   recentArticles: KnowledgeBaseArticle;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  searchQuery: string;,
+  searchQuery: string;
   selectedCategory: KnowledgeCategory | null;
   export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({,)
   userId,

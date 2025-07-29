@@ -30,7 +30,7 @@ import {
 // Attribution analysis interfaces
 
 export interface FunnelAttributionAnalysisProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange: { start: number; end: number };
   attributionConfig?: AttributionConfiguration;
@@ -42,10 +42,10 @@ export interface FunnelAttributionAnalysisProps {
   onExport?: (data: AttributionAnalysisExportData) => void;
 }
 export interface AttributionConfiguration {
-  models: AttributionModel;,
+  models: AttributionModel;
   touchpointWindow: number; // Days to look back for touchpoints,
   conversionWindow: number; // Days to attribute conversion,
-  crossDeviceTracking: boolean;,
+  crossDeviceTracking: boolean;
   excludeDirectTraffic: boolean;
   minimumEngagement: number; // Minimum engagement time to count touchpoint,
   customAttribution?: CustomAttributionRule;
@@ -62,22 +62,22 @@ export type AttributionModel =
 export type AttributionComparisonMode = 'model_comparison' | 'channel_comparison' | 'temporal_analysis';
 
 export interface AttributionAnalysisData {
-  channelAttribution: ChannelAttributionData;,
+  channelAttribution: ChannelAttributionData;
   journeyAnalysis: CustomerJourneyData;
-  modelComparison: AttributionModelComparison;,
+  modelComparison: AttributionModelComparison;
   touchpointAnalysis: TouchpointAnalysisData;
-  crossChannelInsights: CrossChannelInsight;,
+  crossChannelInsights: CrossChannelInsight;
   budgetRecommendations: BudgetAllocationRecommendation;
-  roiAnalysis: ChannelROIAnalysis;,
+  roiAnalysis: ChannelROIAnalysis;
   conversionPaths: ConversionPathData;
   attributionTrends: AttributionTrendData;
 }
 export interface MarketingChannel {
-  id: string;,
+  id: string;
   name: string;
-  category: ChannelCategory;,
+  category: ChannelCategory;
   cost: number;
-  budget: number;,
+  budget: number;
   trackingParameters: Record<string, string>;
   metadata: ChannelMetadata;
 }
@@ -104,73 +104,73 @@ export interface ChannelMetadata {
   audience?: string;
 }
 export interface ChannelAttributionData {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  category: ChannelCategory;,
+  category: ChannelCategory;
   attributionByModel: Record<AttributionModel, ChannelAttribution>;
-  performance: ChannelPerformance;,
+  performance: ChannelPerformance;
   touchpointMetrics: TouchpointMetrics;
-  conversionContribution: ConversionContribution;,
+  conversionContribution: ConversionContribution;
   journeyRole: JourneyRole;
   efficiency: ChannelEfficiency;
 }
 export interface ChannelAttribution {
-  conversions: number;,
+  conversions: number;
   attributedRevenue: number;
-  attributionWeight: number;,
+  attributionWeight: number;
   confidence: number;
   incrementality: number;
 }
 export interface ChannelPerformance {
-  impressions: number;,
+  impressions: number;
   clicks: number;
-  sessions: number;,
+  sessions: number;
   bounceRate: number;
-  averageSessionDuration: number;,
+  averageSessionDuration: number;
   pagesPerSession: number;
   goalCompletions: number;
 }
 export interface TouchpointMetrics {
-  totalTouchpoints: number;,
+  totalTouchpoints: number;
   uniqueUsers: number;
-  averageTouchpointsPerUser: number;,
+  averageTouchpointsPerUser: number;
   firstTouchPercent: number;
-  lastTouchPercent: number;,
+  lastTouchPercent: number;
   middleTouchPercent: number;
   assistedConversions: number;
 }
 export interface ConversionContribution {
-  directConversions: number;,
+  directConversions: number;
   assistedConversions: number;
-  totalConversions: number;,
+  totalConversions: number;
   conversionRate: number;
-  averageTimeToConversion: number;,
+  averageTimeToConversion: number;
   conversionValue: number;
 }
 export interface JourneyRole {
-  primaryRole: 'discovery' | 'consideration' | 'conversion' | 'retention';,
+  primaryRole: 'discovery' | 'consideration' | 'conversion' | 'retention';
   roleDistribution: Record<string, number>;
-  synergisticChannels: string;,
+  synergisticChannels: string;
   competingChannels: string;
 }
 export interface ChannelEfficiency {
-  costPerConversion: number;,
+  costPerConversion: number;
   returnOnAdSpend: number;
-  costPerClick: number;,
+  costPerClick: number;
   costPerAcquisition: number;
-  lifetimeValue: number;,
+  lifetimeValue: number;
   efficiencyScore: number;
 }
 export interface CustomerJourneyData {
-  journeyId: string;,
+  journeyId: string;
   userId: string;
   startTimestamp: number;
   conversionTimestamp?: number;
-  totalTouchpoints: number;,
+  totalTouchpoints: number;
   journeyDuration: number;
-  touchpoints: JourneyTouchpoint;,
+  touchpoints: JourneyTouchpoint;
   conversionValue: number;
-  journeyType: JourneyType;,
+  journeyType: JourneyType;
   complexity: JourneyComplexity;
   patterns: JourneyPattern;
 }
@@ -178,15 +178,15 @@ export type JourneyType = 'converted' | 'abandoned' | 'ongoing';
 export type JourneyComplexity = 'simple' | 'moderate' | 'complex' | 'very_complex';
 
 export interface JourneyTouchpoint {
-  timestamp: number;,
+  timestamp: number;
   channelId: string;
-  channelName: string;,
+  channelName: string;
   category: ChannelCategory;
-  touchpointType: TouchpointType;,
+  touchpointType: TouchpointType;
   engagementScore: number;
-  sessionDuration: number;,
+  sessionDuration: number;
   pageViews: number;
-  events: TouchpointEvent;,
+  events: TouchpointEvent;
   attribution: TouchpointAttribution;
   position: TouchpointPosition;
 }
@@ -199,102 +199,102 @@ export interface TouchpointEvent {
   metadata: Record<string, any>;
 }
 export interface TouchpointAttribution {
-  weight: number;,
+  weight: number;
   influence: number;
-  incrementalValue: number;,
+  incrementalValue: number;
   modelAttributions: Record<AttributionModel, number>;
 }
 export interface JourneyPattern {
-  patternType: string;,
+  patternType: string;
   frequency: number;
-  effectiveness: number;,
+  effectiveness: number;
   avgConversionRate: number;
   avgJourneyLength: number;
 }
 export interface AttributionModelComparison {
-  modelA: AttributionModel;,
+  modelA: AttributionModel;
   modelB: AttributionModel;
-  conversionDifference: number;,
+  conversionDifference: number;
   revenueDifference: number;
-  channelRankingChanges: ChannelRankingChange;,
+  channelRankingChanges: ChannelRankingChange;
   correlationScore: number;
-  modelAccuracy: ModelAccuracy;,
+  modelAccuracy: ModelAccuracy;
   recommendations: ModelRecommendation;
 }
 export interface ChannelRankingChange {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  rankingChangeA: number;,
+  rankingChangeA: number;
   rankingChangeB: number;
-  rankingDifference: number;,
-  impactSignificance: 'high' | 'medium' | 'low';
-}
+  rankingDifference: number;
+  impactSignificance: 'high' | 'medium' | 'low'
+  }
 export interface ModelAccuracy {
-  model: AttributionModel;,
+  model: AttributionModel;
   accuracy: number;
-  precision: number;,
+  precision: number;
   recall: number;
-  f1Score: number;,
+  f1Score: number;
   incrementalityScore: number;
 }
 export interface ModelRecommendation {
-  recommendation: string;,
+  recommendation: string;
   impact: 'high' | 'medium' | 'low';
-  confidence: number;,
+  confidence: number;
   implementation: string;
 }
 export interface TouchpointAnalysisData {
-  step: ConversionStep;,
+  step: ConversionStep;
   channelContributions: StepChannelContribution;
-  dropoffAnalysis: StepDropoffAnalysis;,
+  dropoffAnalysis: StepDropoffAnalysis;
   optimizationOpportunities: StepOptimizationOpportunity;
 }
 export interface StepChannelContribution {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  contribution: number;,
+  contribution: number;
   effectiveness: number;
-  userFlow: number;,
+  userFlow: number;
   conversionImpact: number;
 }
 export interface StepDropoffAnalysis {
-  totalDropoffs: number;,
+  totalDropoffs: number;
   channelDropoffs: ChannelDropoffData;
-  dropoffReasons: DropoffReason;,
+  dropoffReasons: DropoffReason;
   recoveryOpportunities: RecoveryOpportunity;
 }
 export interface ChannelDropoffData {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  dropoffRate: number;,
+  dropoffRate: number;
   dropoffCount: number;
   reasons: string;
 }
 export interface DropoffReason {
-  reason: string;,
+  reason: string;
   frequency: number;
-  affectedChannels: string;,
-  impact: 'high' | 'medium' | 'low';
-}
+  affectedChannels: string;
+  impact: 'high' | 'medium' | 'low'
+  }
 export interface RecoveryOpportunity {
-  opportunity: string;,
+  opportunity: string;
   potentialRecovery: number;
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   expectedImpact: number;
 }
 export interface StepOptimizationOpportunity {
-  opportunity: string;,
+  opportunity: string;
   affectedChannels: string;
-  potentialLift: number;,
+  potentialLift: number;
   implementation: string;
-  priority: 'high' | 'medium' | 'low';
-}
+  priority: 'high' | 'medium' | 'low'
+  }
 export interface CrossChannelInsight {
-  insightType: CrossChannelInsightType;,
+  insightType: CrossChannelInsightType;
   channels: string;
-  description: string;,
+  description: string;
   impact: number;
-  confidence: number;,
+  confidence: number;
   actionable: boolean;
   recommendations: string;
 }
@@ -307,96 +307,96 @@ export type CrossChannelInsightType =
   | 'timing_optimization';
 
 export interface BudgetAllocationRecommendation {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  currentBudget: number;,
+  currentBudget: number;
   recommendedBudget: number;
-  budgetChange: number;,
+  budgetChange: number;
   budgetChangePercent: number;
-  expectedImpact: BudgetImpactProjection;,
+  expectedImpact: BudgetImpactProjection;
   justification: string;
-  confidence: number;,
-  priority: 'immediate' | 'high' | 'medium' | 'low';
-}
+  confidence: number;
+  priority: 'immediate' | 'high' | 'medium' | 'low'
+  }
 export interface BudgetImpactProjection {
-  conversionIncrease: number;,
+  conversionIncrease: number;
   revenueIncrease: number;
-  roiImprovement: number;,
+  roiImprovement: number;
   timeToImpact: number;
-  riskAssessment: 'low' | 'medium' | 'high';
-}
+  riskAssessment: 'low' | 'medium' | 'high'
+  }
 export interface ChannelROIAnalysis {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  cost: number;,
+  cost: number;
   revenue: number;
-  roi: number;,
+  roi: number;
   roas: number;
-  incrementalROI: number;,
+  incrementalROI: number;
   marginalROI: number;
-  saturationPoint: number;,
+  saturationPoint: number;
   optimalSpend: number;
   roiTrend: ROITrendData;
 }
 export interface ROITrendData {
-  period: string;,
+  period: string;
   spend: number;
-  revenue: number;,
+  revenue: number;
   roi: number;
   incrementalROI: number;
 }
 export interface ConversionPathData {
-  pathId: string;,
+  pathId: string;
   path: string;
-  frequency: number;,
+  frequency: number;
   conversionRate: number;
-  averageValue: number;,
+  averageValue: number;
   totalValue: number;
-  pathLength: number;,
+  pathLength: number;
   pathDuration: number;
-  efficiency: number;,
+  efficiency: number;
   optimization: PathOptimization;
 }
 export interface PathOptimization {
-  bottlenecks: string;,
+  bottlenecks: string;
   opportunities: string;
-  alternativePaths: string;,
+  alternativePaths: string;
   expectedImprovement: number;
 }
 export interface AttributionTrendData {
-  period: string;,
+  period: string;
   channelTrends: ChannelTrendData;
-  modelStability: ModelStabilityData;,
+  modelStability: ModelStabilityData;
   seasonalityFactors: SeasonalityFactor;
 }
 export interface ChannelTrendData {
-  channelId: string;,
+  channelId: string;
   channelName: string;
-  trendDirection: 'increasing' | 'decreasing' | 'stable';,
+  trendDirection: 'increasing' | 'decreasing' | 'stable';
   trendStrength: number;
-  attribution: number;,
+  attribution: number;
   confidence: number;
 }
 export interface ModelStabilityData {
-  model: AttributionModel;,
+  model: AttributionModel;
   stability: number;
-  variance: number;,
+  variance: number;
   reliability: number;
 }
 export interface SeasonalityFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  confidence: number;,
+  confidence: number;
   affectedChannels: string;
 }
 export interface AttributionInsight {
-  type: AttributionInsightType;,
+  type: AttributionInsightType;
   title: string;
-  description: string;,
+  description: string;
   impact: 'high' | 'medium' | 'low';
-  confidence: number;,
+  confidence: number;
   affectedChannels: string;
-  actionable: boolean;,
+  actionable: boolean;
   recommendations: InsightRecommendation;
   data: Record<string, any>;
 }
@@ -409,29 +409,29 @@ export type AttributionInsightType =
   | 'cross_channel_effect';
 
 export interface InsightRecommendation {
-  action: string;,
+  action: string;
   impact: number;
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   timeline: string;
   resources: string;
 }
 export interface CustomAttributionRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   condition: string; // JavaScript expression,
-  weight: number;,
+  weight: number;
   priority: number;
   enabled: boolean;
 }
 export interface AttributionAnalysisExportData {
-  channelAttribution: ChannelAttributionData;,
+  channelAttribution: ChannelAttributionData;
   journeyAnalysis: CustomerJourneyData;
-  modelComparison: AttributionModelComparison;,
+  modelComparison: AttributionModelComparison;
   budgetRecommendations: BudgetAllocationRecommendation;
-  roiAnalysis: ChannelROIAnalysis;,
+  roiAnalysis: ChannelROIAnalysis;
   conversionPaths: ConversionPathData;
-  exportTimestamp: number;,
+  exportTimestamp: number;
   configuration: AttributionConfiguration;
   insights: AttributionInsight;
   // Default configuration
@@ -518,7 +518,7 @@ export const [error, setError] = useState<string | null>(null);
 };
         return acc;
       }, {} as Record<AttributionModel, ChannelAttribution>),
-      performance: {,
+      performance: {
   impressions: Math.floor(Math.random() * 100000 + 50000),
   clicks: Math.floor(Math.random() * 5000 + 1000),
   sessions: Math.floor(Math.random() * 3000 + 500),
@@ -527,7 +527,7 @@ export const [error, setError] = useState<string | null>(null);
   pagesPerSession: Math.random() * 3 + 1,
   goalCompletions: Math.floor(Math.random() * 500 + 50),
 },
-  touchpointMetrics: {,
+  touchpointMetrics: {
   totalTouchpoints: Math.floor(Math.random() * 10000 + 2000),
   uniqueUsers: Math.floor(Math.random() * 5000 + 1000),
   averageTouchpointsPerUser: Math.random() * 3 + 1.5,
@@ -536,7 +536,7 @@ export const [error, setError] = useState<string | null>(null);
   middleTouchPercent: Math.random() * 45 + 20,
   assistedConversions: Math.floor(Math.random() * 300 + 50),
 },
-  conversionContribution: {,
+  conversionContribution: {
   directConversions: Math.floor(Math.random() * 200 + 50),
   assistedConversions: Math.floor(Math.random() * 150 + 30),
   totalConversions: 0, // Will be calculated,
@@ -544,14 +544,14 @@ export const [error, setError] = useState<string | null>(null);
   averageTimeToConversion: Math.floor(Math.random() * 10 + 1),
   conversionValue: Math.floor(Math.random() * 5000 + 1000),
 },
-  journeyRole: {,
+  journeyRole: {
   primaryRole: (),
   ['discovery',
   'consideration',
   'conversion',
   'retention'] as const
   )[Math.floor(Math.random() * 4)],
-  roleDistribution: {,
+  roleDistribution: {
   discovery: Math.random() * 0.4,
   consideration: Math.random() * 0.3,
   conversion: Math.random() * 0.2,
@@ -560,7 +560,7 @@ export const [error, setError] = useState<string | null>(null);
   synergisticChannels: [],
         competingChannels: [];
   },
-  efficiency: {,
+  efficiency: {
   costPerConversion: Math.floor(Math.random() * 100 + 20),
   returnOnAdSpend: Math.random() * 5 + 2,
   costPerClick: Math.random() * 5 + 0.5,
@@ -599,7 +599,7 @@ export const [error, setError] = useState<string | null>(null);
   revenueDifference: Math.random() * 10000 - 5000,
   channelRankingChanges: [],
   correlationScore: Math.random() * 0.4 + 0.6,
-  modelAccuracy: {,
+  modelAccuracy: {
   model: models[i],
   accuracy: Math.random() * 0.2 + 0.8,
   precision: Math.random() * 0.2 + 0.75,
@@ -616,7 +616,7 @@ export const [error, setError] = useState<string | null>(null);
   return funnelDefinition.steps.map(step => ({)
   step,
   channelContributions: [],
-  dropoffAnalysis: {,
+  dropoffAnalysis: {
   totalDropoffs: Math.floor(Math.random() * 1000 + 100),
   channelDropoffs: [],
   dropoffReasons: [],
@@ -655,7 +655,7 @@ export const [error, setError] = useState<string | null>(null);
   recommendedBudget: channel.budget * (0.8 + Math.random() * 0.4),
   budgetChange: 0, // Will be calculated,
   budgetChangePercent: 0, // Will be calculated,
-  expectedImpact: {,
+  expectedImpact: {
   conversionIncrease: Math.random() * 20,
   revenueIncrease: Math.random() * 10000,
   roiImprovement: Math.random() * 0.5,
@@ -703,7 +703,7 @@ export const [error, setError] = useState<string | null>(null);
       pathLength: path.length,
       pathDuration: Math.floor(Math.random() * 15 + 2),
       efficiency: Math.random() * 0.4 + 0.6,
-      optimization: {,
+      optimization: {
   bottlenecks: [],
   opportunities: [],
   alternativePaths: [],
@@ -715,7 +715,7 @@ export const [error, setError] = useState<string | null>(null);
   const periods = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
   return periods.map(period => ({)
   period,
-  channelTrends: channelList.map(channel => ({,)
+  channelTrends: channelList.map(channel => ({)
   channelId: channel.id,
   channelName: channel.name,
   trendDirection: (['increasing', 'decreasing', 'stable'] as const)[Math.floor(Math.random() * 3)],
@@ -774,7 +774,7 @@ export const [error, setError] = useState<string | null>(null);
   conversionPaths: attributionData.conversionPaths,
   exportTimestamp: Date.now(),
   configuration: attributionConfig,
-  insights: attributionData.crossChannelInsights.map(insight => ({,)
+  insights: attributionData.crossChannelInsights.map(insight => ({)
   type: 'cross_channel_effect' as AttributionInsightType,
   title: insight.description,
   description: insight.description,
@@ -782,7 +782,7 @@ export const [error, setError] = useState<string | null>(null);
   confidence: insight.confidence,
   affectedChannels: insight.channels,
   actionable: insight.actionable,
-  recommendations: insight.recommendations.map(rec => ({,)
+  recommendations: insight.recommendations.map(rec => ({)
   action: rec,
   impact: 0.1,
   effort: 'medium' as const,

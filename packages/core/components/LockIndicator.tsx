@@ -119,7 +119,7 @@ interface LockIndicatorProps {
 
 // Resource Lock Status Component
 interface ResourceLockStatusProps {
-  resourceId: string;,
+  resourceId: string;
   locks: WorkflowLock;
   className?: string;
   export const ResourceLockStatus: React.FC<ResourceLockStatusProps> = ({,)

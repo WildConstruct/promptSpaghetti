@@ -499,20 +499,20 @@ export interface WorkflowStats {
     runningExecutions: number;
     completedExecutions: number;
     failedExecutions: number;
-    performance: {,
+    performance: {
         averageExecutionTime: number;
         averageStepsPerWorkflow: number;
         automationRate: number;
         successRate: number;
         throughput: number;
     };
-    utilization: {,
+    utilization: {
         processingCapacity: number;
         queueDepth: number;
         resourceUtilization: number;
         bottlenecks: string[];
     };
-    quality: {,
+    quality: {
         slaCompliance: number;
         errorRate: number;
         escalationRate: number;

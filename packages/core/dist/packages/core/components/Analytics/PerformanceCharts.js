@@ -250,27 +250,27 @@ const styles = `;
     margin-bottom: 1.5rem;
   .header-controls {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .trend-summary {
     margin-bottom: 1.5rem;
   .trend-card {
-    padding: 1rem;,
+    padding: 1rem;
   background: white;
-    border-radius: 8px;,
+    border-radius: 8px;
   border: 1px solid #E5E7EB;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   .trend-label {
-    font-size: 0.875rem;,
+    font-size: 0.875rem;
   color: #6B7280;
     margin-bottom: 0.5rem;
   .trend-value {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .trend-indicator {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.25rem;
     font-size: 0.875rem;
     font-weight: 500;
@@ -290,7 +290,7 @@ const styles = `;
     gap: 1.5rem;
   @media (max-width: 768px) {
     .charts-header {
-      flex-direction: column;,
+      flex-direction: column;
   gap: 1rem;
       align-items: stretch;
     .charts-grid {

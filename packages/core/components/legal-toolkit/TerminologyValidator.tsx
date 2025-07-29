@@ -57,11 +57,11 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
   source: 'Contract Law Principles',
   alternatives: ['valuable consideration', 'legal consideration']];
   interface ValidationSettings {
-  jurisdiction: string;,
+  jurisdiction: string;
   practiceArea: string;
-  strictness: 'lenient' | 'moderate' | 'strict';,
+  strictness: 'lenient' | 'moderate' | 'strict';
   checkSpelling: boolean;
-  checkGrammar: boolean;,
+  checkGrammar: boolean;
   checkConsistency: boolean;
   export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({,)
   text,
@@ -343,38 +343,38 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
           .validator-header {
-            background: #f7fafc;,
+            background: #f7fafc;
   padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
           .validator-title {
             font-size: 1.5rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #2d3748;
             margin: 0 0 1rem 0;
           .validator-info {
-            display: flex;,
+            display: flex;
   gap: 1rem;
             margin-bottom: 1rem;
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #4a5568;
           .info-item {
-            padding: 0.25rem 0.5rem;,
+            padding: 0.25rem 0.5rem;
   background: #edf2f7;
-            border-radius: 4px;,
+            border-radius: 4px;
   border: 1px solid #e2e8f0;
           .validator-controls {
-            display: flex;,
+            display: flex;
   gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
           .validate-btn {
-            background: #4299e1;,
+            background: #4299e1;
   color: white;
-            border: none;,
+            border: none;
   padding: 0.5rem 1rem;
-            border-radius: 6px;,
+            border-radius: 6px;
   cursor: pointer;
-            font-weight: 500;,
+            font-weight: 500;
   transition: background 0.2s;
           .validate-btn:hover:not(:disabled) {,
   background: #3182ce;
@@ -382,12 +382,12 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
   background: #cbd5e0;
             cursor: not-allowed;
           .settings-btn {
-            background: none;,
+            background: none;
   border: 1px solid #cbd5e0;
             padding: 0.5rem 1rem;
-            border-radius: 6px;,
+            border-radius: 6px;
   cursor: pointer;
-            color: #4a5568;,
+            color: #4a5568;
   transition: all 0.2s;
           .settings-btn:hover {,
   background: #f7fafc;
@@ -396,15 +396,15 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
             flex: 1;
             max-width: 200px;
           .progress-bar {
-            width: 100%;,
+            width: 100%;
   height: 6px;
             background: #e2e8f0;
-            border-radius: 3px;,
+            border-radius: 3px;
   overflow: hidden;
           .progress-fill {
-            height: 100%;,
+            height: 100%;
   background: #4299e1;
-            border-radius: 3px;,
+            border-radius: 3px;
   transition: width 0.3s ease;
           .validation-summary {
             display: grid;
@@ -412,9 +412,9 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
             gap: 1rem;
             margin-top: 1rem;
           .summary-card {
-            background: white;,
+            background: white;
   padding: 1rem;
-            border-radius: 6px;,
+            border-radius: 6px;
   border: 1px solid #e2e8f0;
             text-align: center;
           .summary-number {
@@ -422,13 +422,13 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
             font-weight: bold;
             margin-bottom: 0.25rem;
           .summary-label {
-            font-size: 0.8rem;,
+            font-size: 0.8rem;
   color: #718096;
             text-transform: uppercase;
             letter-spacing: 0.05em;
           .validator-content {
             display: grid;
-            grid-template-columns: 1fr 300px;,
+            grid-template-columns: 1fr 300px;
   height: 500px;
           .text-panel {
             padding: 1.5rem;
@@ -437,99 +437,99 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
           .highlighted-text {
             font-family: 'Times New Roman', serif;
             font-size: 1rem;
-            line-height: 1.6;,
+            line-height: 1.6;
   color: #2d3748;
             white-space: pre-wrap;
           .term-valid {
-            background: #c6f6d5;,
+            background: #c6f6d5;
   padding: 0 2px;
-            border-radius: 2px;,
+            border-radius: 2px;
   cursor: pointer;
             border-bottom: 2px solid #48bb78;
           .term-invalid {
-            background: #fed7d7;,
+            background: #fed7d7;
   padding: 0 2px;
-            border-radius: 2px;,
+            border-radius: 2px;
   cursor: pointer;
             border-bottom: 2px solid #f56565;
           .term-valid:hover, .term-invalid:hover {,
   opacity: 0.8;
           .results-panel {
             padding: 1.5rem;
-            overflow-y: auto;,
+            overflow-y: auto;
   background: #f7fafc;
           .results-title {
             font-size: 1.1rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #2d3748;
             margin-bottom: 1rem;
           .result-item {
-            background: white;,
+            background: white;
   padding: 1rem;
             border-radius: 6px;
-            margin-bottom: 0.75rem;,
+            margin-bottom: 0.75rem;
   cursor: pointer;
-            transition: all 0.2s;,
+            transition: all 0.2s;
   border: 1px solid #e2e8f0;
           .result-item:hover {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-color: #cbd5e0;
           .result-item.selected {
-            border-color: #4299e1;,
+            border-color: #4299e1;
   background: #ebf8ff;
           .result-item.invalid {
             border-left: 4px solid #f56565;
           .result-item.valid {
             border-left: 4px solid #48bb78;
           .result-term {
-            font-weight: 600;,
+            font-weight: 600;
   color: #2d3748;
             margin-bottom: 0.25rem;
           .result-confidence {
-            font-size: 0.8rem;,
+            font-size: 0.8rem;
   color: #718096;
             margin-bottom: 0.5rem;
           .result-context {
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #4a5568;
             font-style: italic;
-            margin-bottom: 0.5rem;,
+            margin-bottom: 0.5rem;
   display: -webkit-box;
             -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;,
+            -webkit-box-orient: vertical;
   overflow: hidden;
           .result-suggestions {
-            font-size: 0.8rem;,
+            font-size: 0.8rem;
   color: #2b6cb0;
           .settings-panel {
-            background: #f7fafc;,
+            background: #f7fafc;
   padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
           .settings-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;,
+            grid-template-columns: 1fr 1fr;
   gap: 1rem;
           .setting-group {
             display: flex;
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.25rem;
           .setting-label {
             font-size: 0.9rem;
-            font-weight: 500;,
+            font-weight: 500;
   color: #4a5568;
           .setting-input {
-            padding: 0.5rem;,
+            padding: 0.5rem;
   border: 1px solid #cbd5e0;
             border-radius: 4px;
             font-size: 0.9rem;
           .setting-checkbox {
             display: flex;
-            align-items: center;,
+            align-items: center;
   gap: 0.5rem;
-            font-size: 0.9rem;,
+            font-size: 0.9rem;
   color: #4a5568;
           .no-results {
-            text-align: center;,
+            text-align: center;
   padding: 2rem;
             color: #718096;
           .no-results-icon {

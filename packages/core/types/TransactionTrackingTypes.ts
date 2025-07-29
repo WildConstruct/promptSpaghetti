@@ -44,29 +44,29 @@ export type PaymentMethodType =
 // Enhanced Transaction interface for admin tracking
 
 export interface TrackedTransaction {
-  id: string;,
+  id: string;
   externalId: string; // Provider transaction ID,
   parentTransactionId?: string; // For refunds/chargebacks,
   // Basic transaction info
-  type: TransactionType;,
+  type: TransactionType;
   status: TransactionStatus;
-  amount: TransactionAmount;,
+  amount: TransactionAmount;
   currency: string;
   // Parties involved
-  buyer: TransactionParty;,
+  buyer: TransactionParty;
   seller: TransactionParty;
   template?: TransactionTemplate;
   // Payment details
-  paymentMethod: PaymentMethodDetails;,
+  paymentMethod: PaymentMethodDetails;
   provider: PaymentProviderDetails;
   // Risk and fraud
-  riskAssessment: TransactionRiskAssessment;,
+  riskAssessment: TransactionRiskAssessment;
   fraudFlags: FraudFlag;
   // Timing and lifecycle
-  timestamps: TransactionTimestamps;,
+  timestamps: TransactionTimestamps;
   lifecycle: TransactionLifecycleEvent;
   // Admin tracking
-  adminNotes: AdminNote;,
+  adminNotes: AdminNote;
   flags: AdminFlag;
   monitoring: MonitoringMetrics;
   // Metadata
@@ -83,7 +83,7 @@ export interface TransactionAmount {
   refunded: number; // Amount already refunded,
 }
 export interface TransactionParty {
-  id: string;,
+  id: string;
   type: 'user' | 'creator' | 'admin' | 'system';
   displayName: string;
   email?: string;
@@ -93,11 +93,11 @@ export interface TransactionParty {
   lifetimeValue?: number;
 }
 export interface TransactionTemplate {
-  id: string;,
+  id: string;
   title: string;
-  category: string;,
+  category: string;
   price: number;
-  version: string;,
+  version: string;
   creatorId: string;
   creatorName: string;
 }
@@ -112,38 +112,38 @@ export interface PaymentMethodDetails {
   isDefault?: boolean;
 }
 export interface PaymentProviderDetails {
-  provider: PaymentProvider;,
+  provider: PaymentProvider;
   providerTransactionId: string;
-  providerFees: number;,
+  providerFees: number;
   processingTime: number; // milliseconds,
   webhookReceived: boolean;
   webhookTimestamp?: Date;
 }
 export interface TransactionRiskAssessment {
   score: number; // 0-100, higher = more risky,
-  level: 'low' | 'medium' | 'high' | 'critical';,
+  level: 'low' | 'medium' | 'high' | 'critical';
   factors: RiskFactor;
   mlPrediction?: MLRiskPrediction;
   manualReview?: boolean;
 }
 export interface RiskFactor {
-  factor: string;,
+  factor: string;
   score: number;
-  weight: number;,
+  weight: number;
   description: string;
-  category: 'behavioral' | 'payment' | 'geographical' | 'temporal' | 'historical';
-}
+  category: 'behavioral' | 'payment' | 'geographical' | 'temporal' | 'historical'
+  }
 export interface MLRiskPrediction {
-  model: string;,
+  model: string;
   version: string;
-  confidence: number;,
+  confidence: number;
   features: Record<string, number>;
   explanation: string;
 }
 export interface FraudFlag {
-  type: 'velocity' | 'location' | 'payment_method' | 'behavior' | 'ml_detection';,
+  type: 'velocity' | 'location' | 'payment_method' | 'behavior' | 'ml_detection';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   triggeredAt: Date;
   resolvedAt?: Date;
   resolvedBy?: string;
@@ -161,28 +161,28 @@ export interface TransactionTimestamps {
   lastUpdated: Date;
 }
 export interface TransactionLifecycleEvent {
-  id: string;,
+  id: string;
   type: 'created' | 'authorized' | 'captured' | 'failed' | 'disputed' | 'refunded' | 'note_added';
   status?: TransactionStatus;
-  description: string;,
+  description: string;
   metadata: Record<string, any>;
   triggeredBy: string; // User ID or 'system',
   timestamp: Date;
 }
 export interface AdminNote {
-  id: string;,
+  id: string;
   authorId: string;
-  authorName: string;,
+  authorName: string;
   content: string;
-  category: 'general' | 'risk' | 'fraud' | 'dispute' | 'refund' | 'investigation';,
+  category: 'general' | 'risk' | 'fraud' | 'dispute' | 'refund' | 'investigation';
   isPrivate: boolean;
   createdAt: Date;
   updatedAt?: Date;
 }
 export interface AdminFlag {
-  type: 'review_required' | 'high_risk' | 'fraud_suspected' | 'dispute_likely' | 'manual_approval';,
+  type: 'review_required' | 'high_risk' | 'fraud_suspected' | 'dispute_likely' | 'manual_approval';
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  reason: string;,
+  reason: string;
   flaggedBy: string;
   flaggedAt: Date;
   resolvedBy?: string;
@@ -209,8 +209,8 @@ export interface TransactionSearchQuery {
   maxAmount?: number;
   currency?: string;
   // Date filters
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   // Party filters
@@ -231,8 +231,8 @@ export interface TransactionSearchQuery {
   page?: number;
   pageSize?: number;
   sortBy?: TransactionSortField;
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export type TransactionSortField = 
   | 'created_at'
   | 'amount'
@@ -244,18 +244,18 @@ export type TransactionSortField =
   | 'processing_time';
 
 export interface TransactionSearchResults {
-  transactions: TrackedTransaction;,
-  pagination: {,
-  page: number;,
+  transactions: TrackedTransaction;
+  pagination: {
+  page: number;
   pageSize: number;
-  total: number;,
+  total: number;
   totalPages: number;
 };
-  aggregations: TransactionAggregations;,
+  aggregations: TransactionAggregations;
   filters: AppliedFilters;
 }
 export interface TransactionAggregations {
-  totalAmount: number;,
+  totalAmount: number;
   averageAmount: number;
   statusBreakdown: Record<TransactionStatus, number>;
   typeBreakdown: Record<TransactionType, number>;
@@ -266,20 +266,20 @@ export interface TransactionAggregations {
   dailyVolume: Array<{ date: string; count: number; amount: number }>;
 }
 export interface AppliedFilters {
-  count: number;,
+  count: number;
   filters: Array<{,
-  field: string;,
+  field: string;
   operator: string;
-  value: any;,
+  value: any;
   displayName: string;
 }>;
 
 // Real-time Transaction Monitoring
 }
 export interface TransactionMonitoringConfig {
-  enabled: boolean;,
+  enabled: boolean;
   thresholds: MonitoringThresholds;
-  alertChannels: AlertChannel;,
+  alertChannels: AlertChannel;
   updateInterval: number; // seconds,
   bufferSize: number; // number of transactions to keep in memory,
 }
@@ -288,16 +288,16 @@ export interface MonitoringThresholds {
   largeTransactionAlert: number; // amount threshold,
   failureRateAlert: number; // percentage,
   averageProcessingTimeAlert: number; // milliseconds,
-  suspiciousPatternAlert: {,
-  velocityThreshold: number;,
+  suspiciousPatternAlert: {
+  velocityThreshold: number;
   locationAnomalyThreshold: number;
   newPaymentMethodThreshold: number;
 };
 }
 export interface AlertChannel {
-  type: 'email' | 'slack' | 'webhook' | 'sms';,
+  type: 'email' | 'slack' | 'webhook' | 'sms';
   target: string;
-  conditions: string;,
+  conditions: string;
   throttleMinutes: number;
 }
 export interface RealTimeTransactionUpdate {
@@ -307,11 +307,11 @@ export interface RealTimeTransactionUpdate {
   timestamp: Date;
 }
 export interface TransactionAlert {
-  id: string;,
+  id: string;
   type: 'volume' | 'amount' | 'failure_rate' | 'processing_time' | 'fraud_pattern';
-  severity: 'info' | 'warning' | 'error' | 'critical';,
+  severity: 'info' | 'warning' | 'error' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   affectedTransactions: string;
   triggeredAt: Date;
   acknowledgedBy?: string;
@@ -321,187 +321,187 @@ export interface TransactionAlert {
   // Transaction Export and Reporting
 }
 export interface TransactionExportRequest {
-  format: 'csv' | 'json' | 'excel';,
+  format: 'csv' | 'json' | 'excel';
   query: TransactionSearchQuery;
   fields?: string;
   includeNotes?: boolean;
   includeLifecycle?: boolean;
 }
 export interface TransactionReport {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   period: ReportPeriod;
-  metrics: TransactionReportMetrics;,
+  metrics: TransactionReportMetrics;
   charts: TransactionChart;
-  insights: TransactionInsight;,
+  insights: TransactionInsight;
   generatedAt: Date;
   generatedBy: string;
 }
 export interface ReportPeriod {
-  start: Date;,
+  start: Date;
   end: Date;
   timeRange: TimeRange;
   comparisonPeriod?: ReportPeriod;
 }
 export interface TransactionReportMetrics {
-  totalTransactions: number;,
+  totalTransactions: number;
   totalRevenue: number;
-  averageTransactionValue: number;,
+  averageTransactionValue: number;
   successRate: number;
-  failureRate: number;,
+  failureRate: number;
   refundRate: number;
-  averageProcessingTime: number;,
+  averageProcessingTime: number;
   fraudDetectionRate: number;
-  highRiskTransactions: number;,
+  highRiskTransactions: number;
   uniqueBuyers: number;
-  uniqueSellers: number;,
+  uniqueSellers: number;
   topPerformingTemplates: number;
 }
 export interface TransactionChart {
-  type: 'line' | 'bar' | 'pie' | 'heatmap';,
+  type: 'line' | 'bar' | 'pie' | 'heatmap';
   title: string;
-  description: string;,
+  description: string;
   data: ChartDataPoint;
-  xAxis: string;,
+  xAxis: string;
   yAxis: string;
   color?: string;
 }
 export interface ChartDataPoint {
-  x: string | number;,
+  x: string | number;
   y: number;
   label?: string;
   color?: string;
   metadata?: Record<string, any>;
 }
 export interface TransactionInsight {
-  type: 'trend' | 'anomaly' | 'opportunity' | 'risk' | 'performance';,
+  type: 'trend' | 'anomaly' | 'opportunity' | 'risk' | 'performance';
   title: string;
-  description: string;,
+  description: string;
   impact: 'low' | 'medium' | 'high';
-  confidence: number;,
+  confidence: number;
   data: Record<string, any>;
   recommendedActions: string;
   relatedTransactions?: string;
   // Transaction Analytics
 }
 export interface TransactionAnalytics {
-  period: ReportPeriod;,
+  period: ReportPeriod;
   overview: TransactionOverview;
-  performance: TransactionPerformance;,
+  performance: TransactionPerformance;
   riskAnalysis: TransactionRiskAnalysis;
-  patterns: TransactionPatterns;,
+  patterns: TransactionPatterns;
   forecasting: TransactionForecast;
   recommendations: TransactionRecommendation;
 }
 export interface TransactionOverview {
-  totalTransactions: number;,
+  totalTransactions: number;
   totalRevenue: number;
-  netRevenue: number;,
+  netRevenue: number;
   averageTransactionValue: number;
-  medianTransactionValue: number;,
+  medianTransactionValue: number;
   largestTransaction: number;
-  smallestTransaction: number;,
+  smallestTransaction: number;
   growthRate: number;
 }
 export interface TransactionPerformance {
-  successRate: number;,
+  successRate: number;
   failureRate: number;
-  disputeRate: number;,
+  disputeRate: number;
   refundRate: number;
-  averageProcessingTime: number;,
+  averageProcessingTime: number;
   p95ProcessingTime: number;
   providerPerformance: Record<PaymentProvider, ProviderPerformance>;
 }
 export interface ProviderPerformance {
-  transactionCount: number;,
+  transactionCount: number;
   successRate: number;
-  averageProcessingTime: number;,
+  averageProcessingTime: number;
   averageFee: number;
   reliability: number;
 }
 export interface TransactionRiskAnalysis {
-  overallRiskScore: number;,
+  overallRiskScore: number;
   riskDistribution: Record<string, number>;
-  fraudDetectionRate: number;,
+  fraudDetectionRate: number;
   falsePositiveRate: number;
-  topRiskFactors: RiskFactorAnalysis;,
+  topRiskFactors: RiskFactorAnalysis;
   riskTrends: RiskTrend;
 }
 export interface RiskFactorAnalysis {
-  factor: string;,
+  factor: string;
   prevalence: number;
-  averageImpact: number;,
-  trend: 'increasing' | 'stable' | 'decreasing';
-}
+  averageImpact: number;
+  trend: 'increasing' | 'stable' | 'decreasing'
+  }
 export interface RiskTrend {
-  period: string;,
+  period: string;
   riskScore: number;
-  transactionCount: number;,
+  transactionCount: number;
   flaggedCount: number;
 }
 export interface TransactionPatterns {
-  temporalPatterns: TemporalPattern;,
+  temporalPatterns: TemporalPattern;
   geographicPatterns: GeographicPattern;
-  behavioralPatterns: BehavioralPattern;,
+  behavioralPatterns: BehavioralPattern;
   paymentPatterns: PaymentPattern;
 }
 export interface TemporalPattern {
-  pattern: string;,
+  pattern: string;
   description: string;
-  strength: number;,
+  strength: number;
   timeframes: string;
   impact: string;
 }
 export interface GeographicPattern {
-  region: string;,
+  region: string;
   transactionCount: number;
-  averageValue: number;,
+  averageValue: number;
   riskLevel: string;
   trends: string;
 }
 export interface BehavioralPattern {
-  behavior: string;,
+  behavior: string;
   frequency: number;
-  associatedRisk: number;,
+  associatedRisk: number;
   description: string;
 }
 export interface PaymentPattern {
-  method: PaymentMethodType;,
+  method: PaymentMethodType;
   usage: number;
-  successRate: number;,
+  successRate: number;
   averageAmount: number;
   trends: string;
 }
 export interface TransactionForecast {
-  period: string;,
+  period: string;
   predictedVolume: number;
-  predictedRevenue: number;,
+  predictedRevenue: number;
   confidence: number;
-  factors: ForecastFactor;,
+  factors: ForecastFactor;
   scenarios: ForecastScenario;
 }
 export interface ForecastFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  confidence: number;,
+  confidence: number;
   description: string;
 }
 export interface ForecastScenario {
-  name: string;,
+  name: string;
   probability: number;
-  volume: number;,
+  volume: number;
   revenue: number;
   description: string;
 }
 export interface TransactionRecommendation {
-  category: 'optimization' | 'risk_reduction' | 'fraud_prevention' | 'user_experience';,
+  category: 'optimization' | 'risk_reduction' | 'fraud_prevention' | 'user_experience';
   priority: 'low' | 'medium' | 'high' | 'critical';
-  title: string;,
+  title: string;
   description: string;
-  expectedImpact: string;,
-  implementation: {,
-  complexity: 'low' | 'medium' | 'high';,
+  expectedImpact: string;
+  implementation: {
+  complexity: 'low' | 'medium' | 'high';
   timeframe: string;
   requirements: string;
 };
@@ -510,26 +510,26 @@ export interface TransactionRecommendation {
 // Configuration and Settings
 }
 export interface TransactionTrackingConfig {
-  realTimeMonitoring: boolean;,
+  realTimeMonitoring: boolean;
   dataRetentionDays: number;
-  exportLimits: {,
-  maxRecords: number;,
+  exportLimits: {
+  maxRecords: number;
   maxFileSize: number; // MB,
   allowedFormats: string;
 };
-  alertSettings: {,
+  alertSettings: {
   enabled: boolean;
-  channels: AlertChannel;,
+  channels: AlertChannel;
   thresholds: MonitoringThresholds;
 };
-  riskSettings: {,
+  riskSettings: {
   enableMLDetection: boolean;
-  manualReviewThreshold: number;,
+  manualReviewThreshold: number;
   autoFlagThreshold: number;
 };
-  integrations: {,
+  integrations: {
   stripe: boolean;
-  paypal: boolean;,
+  paypal: boolean;
   analytics: boolean;
   crm: boolean;
 };

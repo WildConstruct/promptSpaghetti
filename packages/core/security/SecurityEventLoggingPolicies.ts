@@ -124,7 +124,7 @@ export enum SecurityEventType {
   // Evidence and Forensics
   evidence_preserved: z.boolean().default(false),
   forensic_artifacts: z.array(z.string()).default([]),
-  chain_of_custody: z.array(z.object({,)
+  chain_of_custody: z.array(z.object({)
   timestamp: z.date(),
   action: z.string(),
   performed_by: z.string(),
@@ -146,41 +146,41 @@ export type SecurityEvent = z.infer<typeof SecurityEventSchema>;
 // Security Event Policy Configuration
 
 export interface SecurityEventPolicy {
-  policy_id: string;,
+  policy_id: string;
   policy_name: string;
-  event_types: SecurityEventType;,
+  event_types: SecurityEventType;
   severity_threshold: SecurityEventSeverity;
   enabled: boolean;
   // Detection Configuration
-  detection_rules: {,
+  detection_rules: {
   conditions: Array<{,
-  field: string;,
+  field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
   value: any;
-  logic?: 'and' | 'or';
-}>;
+  logic?: 'and' | 'or'
+  }>;
     time_window?: number; // milliseconds
     frequency_threshold?: number;
   };
   // Response Configuration
-  response_actions: {,
+  response_actions: {
   immediate_actions: string;
-  escalation_actions: string;,
+  escalation_actions: string;
   notification_channels: string;
   automated_containment: boolean;
 };
   // Compliance Configuration
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: ComplianceFramework;
-  requirements: string;,
+  requirements: string;
   retention_period: number; // days,
   requires_encryption: boolean;
 };
   // Reporting Configuration
-  reporting: {,
+  reporting: {
   real_time_alerts: boolean;
   periodic_reports: string; // ['daily', 'weekly', 'monthly'],
-  stakeholders: string;,
+  stakeholders: string;
   external_reporting: boolean;
 };
 /**
@@ -207,7 +207,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.AUTHENTICATION_FAILURE],
       severity_threshold: SecurityEventSeverity.MEDIUM,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'failed_attempts', operator: 'gte', value: 5 },
           { field: 'time_window', operator: 'lte', value: 300000 } // 5 minutes
@@ -215,19 +215,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 300000,
         frequency_threshold: 5;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['block_ip', 'lock_account', 'generate_alert'],
   escalation_actions: ['notify_security_team', 'initiate_investigation'],
   notification_channels: ['email', 'sms', 'dashboard'],
   automated_containment: true,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
   requirements: ['access_control', 'authentication'],
   retention_period: 2555, // 7 years for SOX,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['daily', 'weekly'],
   stakeholders: ['security_team', 'compliance_officer'],
@@ -239,7 +239,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.CODE_INJECTION_ATTEMPT],
       severity_threshold: SecurityEventSeverity.CRITICAL,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'request_payload', operator: 'contains', value: 'sql_injection_pattern' },
           { field: 'request_payload', operator: 'contains', value: 'xss_pattern', logic: 'or' },
@@ -248,19 +248,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 60000,
         frequency_threshold: 1 // Single attempt is critical;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['block_request', 'block_ip', 'preserve_evidence'],
   escalation_actions: ['notify_incident_response', 'initiate_forensics'],
   notification_channels: ['email', 'sms', 'pager', 'slack'],
   automated_containment: true,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.PCI_DSS, ComplianceFramework.SOX],
   requirements: ['input_validation', 'secure_coding'],
   retention_period: 2555,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['immediate', 'daily'],
   stakeholders: ['ciso', 'security_team', 'development_team'],
@@ -273,7 +273,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.NETWORK_INTRUSION_ATTEMPT],
       severity_threshold: SecurityEventSeverity.HIGH,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'suspicious_traffic_pattern', operator: 'eq', value: true },
           { field: 'known_attack_signature', operator: 'eq', value: true, logic: 'or' },
@@ -282,19 +282,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 120000,
         frequency_threshold: 3;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['block_source_ip', 'isolate_network_segment', 'capture_network_traffic'],
   escalation_actions: ['notify_network_ops', 'initiate_incident_response'],
   notification_channels: ['email', 'dashboard', 'siem'],
   automated_containment: true,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.NIST, ComplianceFramework.ISO27001],
   requirements: ['network_security', 'intrusion_detection'],
   retention_period: 1095, // 3 years,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['daily', 'weekly', 'monthly'],
   stakeholders: ['security_operations', 'network_team'],
@@ -307,7 +307,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.SOX_ITGC_VIOLATION],
       severity_threshold: SecurityEventSeverity.HIGH,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'change_management_bypassed', operator: 'eq', value: true },
           { field: 'segregation_duties_violated', operator: 'eq', value: true, logic: 'or' },
@@ -316,19 +316,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 86400000, // 24 hours
         frequency_threshold: 1;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['document_violation', 'notify_compliance', 'preserve_audit_trail'],
   escalation_actions: ['notify_auditors', 'initiate_remediation'],
   notification_channels: ['email', 'compliance_dashboard'],
   automated_containment: false // Manual review required,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.SOX],
   requirements: ['change_management', 'segregation_of_duties', 'access_controls'],
   retention_period: 2555, // 7 years,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['weekly', 'monthly', 'quarterly'],
   stakeholders: ['compliance_officer', 'external_auditors', 'cfo'],
@@ -341,7 +341,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.GDPR_DATA_SUBJECT_REQUEST],
       severity_threshold: SecurityEventSeverity.MEDIUM,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'request_type', operator: 'eq', value: 'access' },
           { field: 'request_type', operator: 'eq', value: 'rectification', logic: 'or' },
@@ -351,19 +351,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 86400000,
         frequency_threshold: 1;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['acknowledge_request', 'start_timer', 'assign_dpo'],
   escalation_actions: ['escalate_if_overdue', 'legal_review_if_complex'],
   notification_channels: ['email', 'privacy_dashboard'],
   automated_containment: false,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.GDPR],
   requirements: ['data_subject_rights', 'response_timelines', 'documentation'],
   retention_period: 2190, // 6 years,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: false,
   periodic_reports: ['daily', 'monthly'],
   stakeholders: ['dpo', 'privacy_team', 'legal_team'],
@@ -376,7 +376,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.SECURITY_INCIDENT_DETECTED],
       severity_threshold: SecurityEventSeverity.MEDIUM,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'impact_level', operator: 'gte', value: 3 },
           { field: 'data_sensitivity', operator: 'eq', value: 'high', logic: 'or' },
@@ -385,19 +385,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 300000,
         frequency_threshold: 1;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['classify_incident', 'assign_ir_team', 'start_incident_timer'],
   escalation_actions: ['notify_management', 'engage_external_resources'],
   notification_channels: ['incident_management_system', 'email', 'sms'],
   automated_containment: false,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.NIST, ComplianceFramework.ISO27001],
   requirements: ['incident_response', 'breach_notification'],
   retention_period: 2555,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['immediate', 'daily'],
   stakeholders: ['ciso', 'incident_response_team', 'legal_team'],
@@ -410,7 +410,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.CI_CD_SECURITY_VIOLATION],
       severity_threshold: SecurityEventSeverity.HIGH,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'security_scan_failed', operator: 'eq', value: true },
           { field: 'vulnerable_dependencies', operator: 'gt', value: 0, logic: 'or' },
@@ -419,19 +419,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 1800000, // 30 minutes
         frequency_threshold: 1;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['block_deployment', 'notify_devops_team', 'generate_security_report'],
   escalation_actions: ['notify_security_team', 'initiate_security_review'],
   notification_channels: ['slack', 'email', 'pipeline_dashboard'],
   automated_containment: true,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.NIST, ComplianceFramework.SOX],
   requirements: ['secure_development', 'change_management'],
   retention_period: 1095,
   requires_encryption: false,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['daily', 'weekly'],
   stakeholders: ['devops_team', 'security_team', 'development_manager'],
@@ -444,7 +444,7 @@ export class SecurityEventLoggingPolicyEngine {
       event_types: [SecurityEventType.BEHAVIORAL_ANOMALY],
       severity_threshold: SecurityEventSeverity.MEDIUM,
       enabled: true,
-      detection_rules: {,
+      detection_rules: {
   conditions: [,
           { field: 'anomaly_score', operator: 'gte', value: 0.8 },
           { field: 'deviation_threshold', operator: 'gte', value: 3.0, logic: 'and' },
@@ -453,19 +453,19 @@ export class SecurityEventLoggingPolicyEngine {
         time_window: 3600000, // 1 hour
         frequency_threshold: 2;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['flag_for_review', 'increase_monitoring', 'document_behavior'],
   escalation_actions: ['notify_security_analyst', 'initiate_investigation'],
   notification_channels: ['dashboard', 'email'],
   automated_containment: false,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.NIST, ComplianceFramework.ISO27001],
   requirements: ['continuous_monitoring', 'anomaly_detection'],
   retention_period: 1095,
   requires_encryption: true,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: false,
   periodic_reports: ['daily', 'weekly'],
   stakeholders: ['security_analyst', 'security_operations'],
@@ -515,10 +515,10 @@ export class SecurityEventLoggingPolicyEngine {
   /**
   * Process security event against all applicable policies
   */
-  processSecurityEvent(event: SecurityEvent): {,
-  matched_policies: string;,
+  processSecurityEvent(event: SecurityEvent): {
+  matched_policies: string;
   actions_triggered: string;
-  notifications_sent: string;,
+  notifications_sent: string;
   compliance_requirements: ComplianceFramework;
   escalation_required: boolean;
   const matchedPolicies: string = [];
@@ -618,12 +618,12 @@ export class SecurityEventLoggingPolicyEngine {
   /**
    * Generate compliance report for framework
    */
-  generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): {,
+  generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): {
   framework: ComplianceFramework;
     period: { start: Date; end: Date };
-    events_count: number;,
+    events_count: number;
   policy_violations: number;
-    compliance_score: number;,
+    compliance_score: number;
   recommendations: string;
     events_by_severity: Record<SecurityEventSeverity, number>;
     const relevantEvents = this.getEventsForTimeframe(startDate, endDate);

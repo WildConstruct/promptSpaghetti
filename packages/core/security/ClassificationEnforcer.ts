@@ -51,7 +51,7 @@ export interface ClassificationEnforcementConfig {
   /** Custom policy overrides */
   policyOverrides?: Map<DataClassificationLevel, Partial<HandlingRequirements>>;
   /** Exempted users or roles */
-  exemptions?: {,
+  exemptions?: {
   users?: string;
   roles?: string;
   conditions?: string;
@@ -61,11 +61,11 @@ export interface ClassificationEnforcementConfig {
  */
 }
 export interface EnforcementResult {
-  allowed: boolean;,
+  allowed: boolean;
   classification: DataClassificationLevel;
-  violations: string;,
+  violations: string;
   requiredControls: string;
-  appliedControls: string;,
+  appliedControls: string;
   riskScore: number;
   auditId: string;
   recommendations?: string;
@@ -74,7 +74,7 @@ export interface EnforcementResult {
   */
 }
 export interface AccessDecision {
-  granted: boolean;,
+  granted: boolean;
   reason: string;
   requiredAuthentication?: string;
   requiredAuthorization?: string;
@@ -101,7 +101,7 @@ export class ClassificationEnforcer {
   /**
    * Enforce classification policies for an operation
    */
-  async enforceClassification(classification: DataClassificationLevel,)
+  async enforceClassification(classification: DataClassificationLevel)
     operation: OperationContext,
     currentControls: string = []): Promise<EnforcementResult> {,
     const auditId = this.generateAuditId(operation);
@@ -209,7 +209,7 @@ export class ClassificationEnforcer {
   /**
   * Make an access control decision
   */
-  async makeAccessDecision(userId: string,)
+  async makeAccessDecision(userId: string)
   dataId: string,
   classification: DataClassificationLevel,
   operation: string,
@@ -279,7 +279,7 @@ export class ClassificationEnforcer {
   /**
    * Validate an operation against classification policies
    */
-  async validateOperation(operation: OperationContext,)
+  async validateOperation(operation: OperationContext)
     classification: DataClassificationLevel,
     dataElement: any): Promise<{ valid: boolean; issues: string; controls: string }> {
     const requirements = this.getEffectiveRequirements(classification);
@@ -349,7 +349,7 @@ export class ClassificationEnforcer {
   /**
    * Validate access requirements
    */
-  private async validateAccessRequirements(requirements: AccessRequirements,)
+  private async validateAccessRequirements(requirements: AccessRequirements)
     operation: OperationContext,
     currentControls: string): Promise<string> {,
     const violations: string = [];
@@ -370,7 +370,7 @@ export class ClassificationEnforcer {
   /**
    * Validate operation-specific requirements
    */
-  private async validateOperationRequirements(classification: DataClassificationLevel,)
+  private async validateOperationRequirements(classification: DataClassificationLevel)
     operation: OperationContext,
     requirements: HandlingRequirements,
     currentControls: string): Promise<string> {,
@@ -401,7 +401,7 @@ export class ClassificationEnforcer {
   /**
   * Calculate risk score
   */
-  private calculateRiskScore(classification: DataClassificationLevel,)
+  private calculateRiskScore(classification: DataClassificationLevel)
   operation: OperationContext,
   violations: string,
   currentControls: string): number {,
@@ -433,7 +433,7 @@ export class ClassificationEnforcer {
   /**
    * Determine if operation should be allowed
    */
-  private shouldAllowOperation(violations: string,)
+  private shouldAllowOperation(violations: string)
     riskScore: number,
     classification: DataClassificationLevel,
     operation: OperationContext): boolean {,
@@ -452,7 +452,7 @@ export class ClassificationEnforcer {
   /**
    * Get required controls for an operation
    */
-  private getRequiredControls(classification: DataClassificationLevel,)
+  private getRequiredControls(classification: DataClassificationLevel)
     operation: OperationContext,
     requirements: HandlingRequirements): string {,
     const controls: string = [];
@@ -511,7 +511,7 @@ export class ClassificationEnforcer {
   /**
    * Check authorization requirements
    */
-  private checkAuthorizationRequirements(requirements: AccessRequirements,)
+  private checkAuthorizationRequirements(requirements: AccessRequirements)
     context: OperationContext,
     classification: DataClassificationLevel): { met: boolean; required?: string } {
     if (!requirements.authorizationRequired) {
@@ -585,7 +585,7 @@ export class ClassificationEnforcer {
   /**
    * Log enforcement decision
    */
-  private async logEnforcementDecision(auditId: string,)
+  private async logEnforcementDecision(auditId: string)
     operation: OperationContext,
     classification: DataClassificationLevel,
     allowed: boolean,
@@ -600,7 +600,7 @@ export class ClassificationEnforcer {
   classification,
   action: operation.operation,
   result: allowed ? 'SUCCESS' : 'FAILURE',
-  details: {,
+  details: {
   violations,
   riskScore,
   environment: operation.environment,
@@ -615,7 +615,7 @@ export class ClassificationEnforcer {
   /**
   * Alert on violation
   */
-  private async alertOnViolation(classification: DataClassificationLevel,)
+  private async alertOnViolation(classification: DataClassificationLevel)
   operation: OperationContext,
   violations: string,
   riskScore: number): Promise<void> {,
@@ -675,7 +675,7 @@ export class ClassificationEnforcer {
   continuous: 'CRITICAL',
 };
     return {
-  storage: {,
+  storage: {
   encryptionRequired: dataReqs.encryption.atRest,
   encryptionAlgorithm: dataReqs.encryption.algorithm,
   keyRotationDays: parseInt(dataReqs.encryption.keyRotation) || 90,
@@ -685,7 +685,7 @@ export class ClassificationEnforcer {
   approvedLocations: this.getApprovedLocationsForClassification(classification),
   redundancyLevel: this.getRedundancyLevelForClassification(classification),
 },
-  transmission: {,
+  transmission: {
   tlsVersion: dataReqs.encryption.inTransit ? 'TLS1.3' : 'TLS1.2',
   certificatePinning: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
   networkRestrictions: this.getNetworkRestrictionsForClassification(classification),
@@ -693,10 +693,10 @@ export class ClassificationEnforcer {
   compressionAllowed: classification === 'PUBLIC' || classification === 'INTERNAL',
   endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL'),
 },
-  processing: {,
+  processing: {
   approvedEnvironments: dataReqs.processingEnvironments || ['production'],
   loggingRequired: dataReqs.accessControl.monitoring !== 'none',
-  cachingRestrictions: {,
+  cachingRestrictions: {
   allowed: classification === 'PUBLIC' || classification === 'INTERNAL',
   encryptionRequired: classification !== 'PUBLIC',
   maxTtlSeconds: this.getCacheTtlForClassification(classification),
@@ -705,9 +705,9 @@ export class ClassificationEnforcer {
 },
   thirdPartyProcessing: classification === 'PUBLIC' || classification === 'INTERNAL',
         isolationRequired: classification === 'RESTRICTED',
-        auditTrailRequired: classification !== 'PUBLIC';
+        auditTrailRequired: classification !== 'PUBLIC'
   },
-  access: {,
+  access: {
   authenticationLevel: authLevelMap[dataReqs.accessControl.authentication] || 'STANDARD',
   authorizationRequired: dataReqs.accessControl.authorization !== 'none',
   approvalWorkflow: dataReqs.transfer.approvalRequired || false,
@@ -716,7 +716,7 @@ export class ClassificationEnforcer {
   auditLogging: auditLevelMap[dataReqs.accessControl.monitoring] || 'STANDARD',
   exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED',
 },
-  monitoring: {,
+  monitoring: {
   alertingEnabled: classification !== 'PUBLIC',
   anomalyDetection: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
   alertThreshold: monitoringLevelMap[dataReqs.accessControl.monitoring] || 'LOW',
@@ -807,7 +807,7 @@ export class ClassificationEnforcer {
   /**
    * Create enforcement result
    */
-  private createEnforcementResult(allowed: boolean,)
+  private createEnforcementResult(allowed: boolean)
     classification: DataClassificationLevel,
     violations: string,
     requiredControls: string,
@@ -852,19 +852,19 @@ export class ClassificationEnforcer {
   */
   export function createClassificationEnforcer(preset: 'development' | 'staging' | 'production' = 'production'): ClassificationEnforcer {,
   const configs: Record<string, Partial<ClassificationEnforcementConfig>> = {,
-  development: {,
+  development: {
   strictMode: false,
   blockViolations: false,
   alertingEnabled: false,
   gracePeriodDays: 90,
 },
-  staging: {,
+  staging: {
   strictMode: false,
   blockViolations: true,
   alertingEnabled: true,
   gracePeriodDays: 30,
 },
-  production: {,
+  production: {
   strictMode: true,
   blockViolations: true,
   alertingEnabled: true,

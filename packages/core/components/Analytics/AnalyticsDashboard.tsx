@@ -42,17 +42,17 @@ export interface AnalyticsDashboardProps {
   * Analytics dashboard state
   */
   interface DashboardState {
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  summary: unknown;,
+  summary: unknown;
   dashboardData: unknown;
-  alerts: unknown;,
+  alerts: unknown;
   recommendations: unknown;
-  timeRange: string;,
+  timeRange: string;
   lastUpdated: Date | null;
-  conversionData: unknown;,
+  conversionData: unknown;
   realTimeMetrics: unknown;
-  performanceData: unknown;,
+  performanceData: unknown;
   userRole: 'director' | 'producer' | 'admin' | 'user';
   /**
   * Main analytics dashboard component
@@ -116,7 +116,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       // Combine real-time metrics
       const realTimeMetrics = {
   ...conversionData.realTimeMetrics,
-  performance: {,
+  performance: {
   healthScore: performanceData.overview.healthScore,
   activeAlerts: performanceData.overview.activeAlerts,
   keyMetrics: performanceData.keyMetrics,
@@ -351,72 +351,72 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
 const styles = `;
   .analytics-dashboard {
     display: flex;
-    flex-direction: column;,
+    flex-direction: column;
   gap: 1rem;
     padding: 1rem;
-    max-width: 100%;,
+    max-width: 100%;
   overflow: hidden;
   .dashboard-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;,
+    align-items: center;
   padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;,
+    border-bottom: 1px solid #e5e7eb;
   background: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   .header-title {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 1rem;
   .header-title h1 {
     margin: 0;
     font-size: 1.5rem;
-    font-weight: 600;,
+    font-weight: 600;
   color: #1f2937;
   .header-controls {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .alerts-bar {
     margin-bottom: 1rem;
   .dashboard-tabs {
-    flex: 1;,
+    flex: 1;
   display: flex;
-    flex-direction: column;,
+    flex-direction: column;
   overflow: hidden;
   .tab-content {
-    flex: 1;,
+    flex: 1;
   overflow: auto;
     padding: 1rem 0;
   .overview-grid {
-    display: grid;,
+    display: grid;
   gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   .insights-grid {
-    display: grid;,
+    display: grid;
   gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   .loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;,
+    justify-content: center;
   padding: 4rem;
     gap: 1rem;
   .loading-spinner {
-    width: 2rem;,
+    width: 2rem;
   height: 2rem;
     border: 2px solid #e5e7eb;
     border-top: 2px solid #3b82f6;
-    border-radius: 50%;,
+    border-radius: 50%;
   animation: spin 1s linear infinite;
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   @media (max-width: 768px) {
     .dashboard-header {
-      flex-direction: column;,
+      flex-direction: column;
   gap: 1rem;
       align-items: stretch;
     .header-controls {

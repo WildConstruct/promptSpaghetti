@@ -168,7 +168,8 @@ export class ElevenLabsAdapter extends BaseAIModel {
                                                 text_length: text.length,
                                                 audio_length: this._estimateAudioDuration(text),
                                                 voice_settings: processedOptions.voice_settings,
-                                                generation_time: generationTime, },
+                                                generation_time: generationTime,
+                                            },
                                             usage: {
                                                 characters: text.length,
                                                 cost: this._calculateCost(text.length),
@@ -255,7 +256,8 @@ export class ElevenLabsAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                } } };
+                }
+            } };
         Promise < ElevenLabsVoice > {
             return: this.createCustomVoice(name, [audioSample], description),
             async deleteVoice(voiceId) {

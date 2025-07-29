@@ -49,20 +49,20 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;
 interface DashboardState {
-  events: AuditEvent;,
+  events: AuditEvent;
   totalCount: number;
-  loading: boolean;,
+  loading: boolean;
   selectedEvent: AuditEvent | null;
-  currentQuery: AuditQuery;,
+  currentQuery: AuditQuery;
   analytics: unknown;
   anomalousPatterns: unknown;
   interface AuditFilters {
   dateRange: [Date?, Date?];
-  eventTypes: AuditEventType;,
+  eventTypes: AuditEventType;
   severities: AuditSeverity;
-  complianceFrameworks: ComplianceFramework;,
+  complianceFrameworks: ComplianceFramework;
   statuses: AuditStatus;
-  searchText: string;,
+  searchText: string;
   riskScoreRange: [number, number];
   /**
   * Main Audit Management Dashboard Component
@@ -73,7 +73,7 @@ interface DashboardState {
   totalCount: 0,
   loading: true,
   selectedEvent: null,
-  currentQuery: {,
+  currentQuery: {
   page: 1,
   limit: 50,
   sort_field: 'timestamp',

@@ -127,7 +127,7 @@ export type UpdateTrigger = 'user_action' | 'time_interval' | 'session_end' | 'p
 export interface MetricNormalization {
     method: NormalizationMethod;
     parameters: NormalizationParameters;
-    bounds: {,
+    bounds: {
         min: number;
         max: number;
     };
@@ -337,7 +337,7 @@ export interface ClusteringMetric {
 
 export interface OptimalClusterSelection {
     method: 'elbow' | 'silhouette' | 'gap_statistic' | 'bic' | 'aic';
-    range: {,
+    range: {
         min: number;
         max: number;
     };
@@ -448,7 +448,7 @@ export interface DeviceProfile {
     type: DeviceType;
     os: string;
     browser: string;
-    screenSize: {,
+    screenSize: {
         width: number;
         height: number;
     };
@@ -850,7 +850,7 @@ export interface ExportMetadataEngagement {
     exportTimestamp: number;
     version: string;
     totalUsers: number;
-    scoringPeriod: {,
+    scoringPeriod: {
         start: number;
         end: number;
     };

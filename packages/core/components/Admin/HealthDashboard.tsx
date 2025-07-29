@@ -13,21 +13,21 @@ import { AlertTriangle, CheckCircle, XCircle, AlertCircle, Activity, Zap, Databa
 
 // Types for health monitoring
 interface HealthStatus {
-  overall: HealthScore;,
+  overall: HealthScore;
   components: ComponentHealth;
-  metrics: SystemMetrics;,
+  metrics: SystemMetrics;
   alerts: SystemAlert;
-  lastUpdated: string;,
+  lastUpdated: string;
   trends: HealthTrends;
   interface HealthScore {
   score: number; // 0-100,
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';,
+  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';
   message: string;
   recommendations: string;
   interface ComponentHealth {
-  name: string;,
+  name: string;
   category: 'system' | 'database' | 'cache' | 'external' | 'filesystem' | 'authentication';
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';,
+  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';
   score: number;
   responseTime?: number;
   lastCheck: string;
@@ -35,53 +35,53 @@ interface HealthStatus {
   metrics?: Record<string, number>;
   dependencies?: string;
   interface SystemMetrics {
-  cpu: {,
-  usage: number;,
+  cpu: {
+  usage: number;
   cores: number;
   temperature?: number;
 };
-  memory: {,
+  memory: {
   used: number;
-  total: number;,
+  total: number;
   available: number;
   usage: number;
 };
-  disk: {,
+  disk: {
   used: number;
-  total: number;,
+  total: number;
   usage: number;
   iops?: number;
 };
-  network: {,
+  network: {
   bytesIn: number;
-  bytesOut: number;,
+  bytesOut: number;
   connections: number;
   latency?: number;
 };
-  database: {,
+  database: {
   connections: number;
-  maxConnections: number;,
+  maxConnections: number;
   queryTime: number;
   queueSize: number;
 };
 interface SystemAlert {
-  id: string;,
+  id: string;
   type: 'error' | 'warning' | 'info';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   message: string;
   component?: string;
-  timestamp: string;,
+  timestamp: string;
   acknowledged: boolean;
   escalated: boolean;
   resolvedAt?: string;
   interface HealthTrends {
-  healthScore: TrendData;,
+  healthScore: TrendData;
   responseTime: TrendData;
-  errorRate: TrendData;,
+  errorRate: TrendData;
   uptime: number;
   interface TrendData {
-  timestamp: string;,
+  timestamp: string;
   value: number;
   // Props interface
   interface HealthDashboardProps {

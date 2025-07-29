@@ -27,7 +27,7 @@ export interface ContributionItem {
     id: string;
     title: string;
     description: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         avatar?: string;

@@ -13,14 +13,14 @@ import {
 } from '../hooks/useEditorProviders';
 
 export interface EditorProviderWrapperProps {
-  children: (props: {,)
-  registry: ProviderRegistry;,
+  children: (props: {)
+  registry: ProviderRegistry;
   editorContext: EditorStateContext;
-  editorActions: EditorActions;,
+  editorActions: EditorActions;
   isLoading: boolean;
 }) => React.ReactNode;
   // Initial state
-  initialNodes: Node;,
+  initialNodes: Node;
   initialEdges: Edge;
   selectedNodeId: string | null;
   validationErrors?: unknown;
@@ -204,7 +204,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
     <>
       {children({)
   registry: safeRegistry,
-  editorContext: {,
+  editorContext: {
   ...editorContext,
   // Add provider error information to context
   providerErrors: Array.from(providerErrors.entries()).map(([id, error]) => ({,)
@@ -264,7 +264,7 @@ export const withEditorProviders = <T extends {}>()
   providerConfig?: Omit<EditorProviderWrapperProps, 'children' | 'initialNodes' | 'initialEdges' | 'selectedNodeId'>
 ) => {
   return React.forwardRef<any, T & {
-  initialNodes: Node;,
+  initialNodes: Node;
   initialEdges: Edge;
   selectedNodeId: string | null;
   validationErrors?: unknown;

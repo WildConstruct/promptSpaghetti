@@ -21,12 +21,12 @@ import { EventEmitter } from 'events';
 // Core step sequencing interfaces
 
 export interface SequenceStep {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  type: 'action' | 'decision' | 'parallel' | 'loop' | 'delay' | 'validation' | 'rollback';,
+  type: 'action' | 'decision' | 'parallel' | 'loop' | 'delay' | 'validation' | 'rollback';
   category: string;
-  priority: number;,
+  priority: number;
   dependencies: string; // IDs of steps that must complete before this one,
   conditions?: StepCondition;
   action?: StepAction;
@@ -34,11 +34,11 @@ export interface SequenceStep {
   rollback?: StepRollback;
   timeout?: number;
   retryPolicy?: RetryPolicy;
-  metadata: StepMetadata;,
+  metadata: StepMetadata;
   performance: StepPerformance;
 }
 export interface StepCondition {
-  id: string;,
+  id: string;
   type: 'boolean' | 'value' | 'expression' | 'function';
   field?: string;
   operator?: 'equals' | 'not_equals' | 'greater' | 'less' | 'contains' | 'exists';
@@ -48,7 +48,7 @@ export interface StepCondition {
   negated?: boolean;
 }
 export interface StepAction {
-  type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';,
+  type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
   handler: string;
   parameters: Record<string, unknown>;
   async: boolean;
@@ -58,51 +58,51 @@ export interface StepAction {
   onSkip?: string; // Skip step ID,
 }
 export interface StepValidation {
-  required: boolean;,
-  validators: {,
-  type: 'required' | 'format' | 'range' | 'custom';,
+  required: boolean;
+  validators: {
+  type: 'required' | 'format' | 'range' | 'custom';
   message: string;
   parameters?: Record<string, unknown>;
 }[];
-  onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
-}
+  onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback'
+  }
 export interface StepRollback {
   enabled: boolean;
   action?: StepAction;
-  autoTrigger: boolean;,
+  autoTrigger: boolean;
   preserveState: boolean;
   dependencies?: string;
 }
 export interface RetryPolicy {
-  maxAttempts: number;,
+  maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'custom';
-  baseDelay: number;,
+  baseDelay: number;
   maxDelay: number;
   retryConditions: string;
 }
 export interface StepMetadata {
-  estimatedDuration: number;,
+  estimatedDuration: number;
   category: string;
-  tags: string;,
+  tags: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  userVisible: boolean;,
+  userVisible: boolean;
   skippable: boolean;
-  optional: boolean;,
+  optional: boolean;
   createdAt: Date;
-  lastModified: Date;,
+  lastModified: Date;
   version: string;
 }
 export interface StepPerformance {
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   successRate: number;
-  failureRate: number;,
+  failureRate: number;
   retryRate: number;
   lastExecutions: ExecutionRecord;
 }
 export interface ExecutionRecord {
-  timestamp: Date;,
+  timestamp: Date;
   duration: number;
-  status: StepExecutionStatus;,
+  status: StepExecutionStatus;
   attempts: number;
   errorMessage?: string;
 }
@@ -117,35 +117,35 @@ export type StepExecutionStatus =
   | 'rolled_back';
 
 export interface SequenceDefinition {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   version: string;
-  steps: SequenceStep;,
+  steps: SequenceStep;
   entryPoint: string; // Initial step ID,
   exitPoints: string; // Terminal step IDs,
   globalTimeout?: number;
   concurrencyLimit?: number;
-  metadata: {,
-  category: string;,
+  metadata: {
+  category: string;
   tags: string;
-  estimatedTotalDuration: number;,
+  estimatedTotalDuration: number;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  createdAt: Date;,
+  createdAt: Date;
   lastModified: Date;
 };
 }
 export interface SequenceExecution {
-  id: string;,
+  id: string;
   sequenceId: string;
-  name: string;,
+  name: string;
   status: 'initializing' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
   currentStep?: string;
-  completedSteps: string;,
+  completedSteps: string;
   failedSteps: string;
-  skippedSteps: string;,
+  skippedSteps: string;
   context: ExecutionContext;
-  progress: SequenceProgress;,
+  progress: SequenceProgress;
   performance: ExecutionPerformance;
   startTime: Date;
   endTime?: Date;
@@ -160,55 +160,55 @@ export interface ExecutionContext {
   rollbackStack: RollbackEntry;
 }
 export interface RollbackEntry {
-  stepId: string;,
+  stepId: string;
   timestamp: Date;
   state: Record<string, unknown>;
-  action: string;,
+  action: string;
   reversible: boolean;
 }
 export interface SequenceProgress {
-  totalSteps: number;,
+  totalSteps: number;
   completedSteps: number;
-  currentStep: number;,
+  currentStep: number;
   percentage: number;
-  estimatedTimeRemaining: number;,
+  estimatedTimeRemaining: number;
   milestones: ProgressMilestone;
 }
 export interface ProgressMilestone {
-  id: string;,
+  id: string;
   name: string;
-  stepId: string;,
+  stepId: string;
   percentage: number;
   reached: boolean;
   timestamp?: Date;
 }
 export interface ExecutionPerformance {
-  totalDuration: number;,
+  totalDuration: number;
   averageStepDuration: number;
   fastestStep: { id: string; duration: number };
   slowestStep: { id: string; duration: number };
-  retryCount: number;,
+  retryCount: number;
   errorCount: number;
   effectiveSuccessRate: number;
 }
 export interface SequencingConfig {
-  execution: {,
-  defaultTimeout: number;,
+  execution: {
+  defaultTimeout: number;
   maxConcurrentExecutions: number;
-  enableProgressPersistence: boolean;,
+  enableProgressPersistence: boolean;
   enablePerformanceTracking: boolean;
-  enableRollback: boolean;,
+  enableRollback: boolean;
   autoRetryOnFailure: boolean;
 };
-  validation: {,
+  validation: {
   validateDependencies: boolean;
-  validateConditions: boolean;,
+  validateConditions: boolean;
   strictValidation: boolean;
   allowCircularDependencies: boolean;
 };
-  performance: {,
+  performance: {
   trackExecutionMetrics: boolean;
-  optimizeExecutionOrder: boolean;,
+  optimizeExecutionOrder: boolean;
   enableCaching: boolean;
   cacheExpiryTime: number;
 };
@@ -226,7 +226,7 @@ export class StepSequencingSystem extends EventEmitter {
   constructor(config?: Partial<SequencingConfig>) {,
   super();
   this.config = {
-  execution: {,
+  execution: {
   defaultTimeout: 30000, // 30 seconds,
   maxConcurrentExecutions: 10,
   enableProgressPersistence: true,
@@ -234,13 +234,13 @@ export class StepSequencingSystem extends EventEmitter {
   enableRollback: true,
   autoRetryOnFailure: true,
 },
-  validation: {,
+  validation: {
   validateDependencies: true,
   validateConditions: true,
   strictValidation: true,
   allowCircularDependencies: false,
 },
-  performance: {,
+  performance: {
   trackExecutionMetrics: true,
   optimizeExecutionOrder: true,
   enableCaching: true,
@@ -255,7 +255,7 @@ export class StepSequencingSystem extends EventEmitter {
     const sequence: SequenceDefinition = {,
   id: sequenceId,
   ...definition,
-  metadata: {,
+  metadata: {
   ...definition.metadata,
   createdAt: new Date(),
   lastModified: new Date(),
@@ -283,7 +283,7 @@ export class StepSequencingSystem extends EventEmitter {
     const updatedSequence = {
   ...sequence,
   ...updates,
-  metadata: {,
+  metadata: {
   ...sequence.metadata,
   ...updates.metadata,
   lastModified: new Date(),
@@ -333,7 +333,7 @@ export class StepSequencingSystem extends EventEmitter {
       completedSteps: [],
       failedSteps: [],
       skippedSteps: [],
-      context: {,
+      context: {
   variables: {},
         userInput: {},
         sessionData: {},
@@ -342,7 +342,7 @@ export class StepSequencingSystem extends EventEmitter {
         ...context
   },
   progress: this.initializeProgress(sequence),
-      performance: {,
+      performance: {
   totalDuration: 0,
         averageStepDuration: 0,
         fastestStep: { id: '', duration: Infinity },
@@ -454,8 +454,8 @@ export class StepSequencingSystem extends EventEmitter {
           duration,
           attempts
         });
-        return 'completed';
-      } catch (error) {
+        return 'completed'
+  } catch (error) {
   lastError = error;
   execution.performance.errorCount++;
   this.emit('stepError', {)
@@ -536,7 +536,7 @@ export class StepSequencingSystem extends EventEmitter {
   // Query and inspection methods
   getSequence(sequenceId: string): SequenceDefinition | null {
   return this.sequences.get(sequenceId) || null;
-  listSequences(filters?: {,)
+  listSequences(filters?: {)
   category?: string;
   tags?: string;
   difficulty?: string;
@@ -579,9 +579,9 @@ export class StepSequencingSystem extends EventEmitter {
   registerRollbackHandler(stepId: string, handler: (...args: unknown) => unknown): void {
     this.rollbackHandlers.set(stepId, handler);
   // Analytics and performance
-  getSequenceAnalytics(sequenceId: string): {,
+  getSequenceAnalytics(sequenceId: string): {
   totalExecutions: number;
-    successRate: number;,
+    successRate: number;
   averageDuration: number;
     commonFailurePoints: Array<{ stepId: string; failureRate: number }>;
     performanceMetrics: Record<string, unknown>;
@@ -614,7 +614,7 @@ export class StepSequencingSystem extends EventEmitter {
   successRate,
   averageDuration,
   commonFailurePoints,
-  performanceMetrics: {,
+  performanceMetrics: {
   averageRetryCount: executions.reduce((sum, exec) => sum + exec.performance.retryCount, 0) / totalExecutions,
   averageErrorCount: executions.reduce((sum, exec) => sum + exec.performance.errorCount, 0) / totalExecutions,
 };
@@ -852,7 +852,7 @@ export class StepSequencingSystem extends EventEmitter {
   return retryPolicy.baseDelay;
   default:,
   return retryPolicy.baseDelay;
-  private updateStepPerformance(step: SequenceStep,)
+  private updateStepPerformance(step: SequenceStep)
   startTime: number,
   status: StepExecutionStatus,
   attempts: number): void {,
@@ -873,7 +873,7 @@ export class StepSequencingSystem extends EventEmitter {
     step.performance.successRate = (executions.filter(ex => ex.status === 'completed').length / executions.length) * 100;
     step.performance.failureRate = (executions.filter(ex => ex.status === 'failed').length / executions.length) * 100;
     step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
-  private updateExecutionProgress(execution: SequenceExecution,)
+  private updateExecutionProgress(execution: SequenceExecution)
     stepId: string,
     status: StepExecutionStatus,
     duration: number): void {,
@@ -949,7 +949,7 @@ export class StepSequencingSystem extends EventEmitter {
   steps: [],
   entryPoint: '',
   exitPoints: [],
-  metadata: {,
+  metadata: {
   category: 'general',
   tags: [],
   estimatedTotalDuration: 0,
@@ -960,7 +960,7 @@ export class StepSequencingSystem extends EventEmitter {
   addStep(step: Omit<SequenceStep, 'performance'>): SequenceBuilder {
   const fullStep: SequenceStep = {,
   ...step,
-  performance: {,
+  performance: {
   averageExecutionTime: 0,
   successRate: 100,
   failureRate: 0,

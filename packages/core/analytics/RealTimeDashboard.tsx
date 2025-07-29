@@ -14,7 +14,7 @@ import './RealTimeDashboard.css';
 interface DashboardConfig {
   refreshInterval: number; // milliseconds,
   maxEventsDisplay: number;
-  enableWebSocket: boolean;,
+  enableWebSocket: boolean;
   enableAutoRefresh: boolean;
   defaultTimeRange: number; // hours,
   widgetLayout: 'grid' | 'masonry' | 'flex';
@@ -37,43 +37,43 @@ export enum WidgetType {
 
 // Widget Configuration
 interface WidgetConfig {
-  id: string;,
+  id: string;
   type: WidgetType;
-  title: string;,
+  title: string;
   position: { x: number; y: number; width: number; height: number };
   filter?: EventFilter;
   refreshRate?: number;
   chartType?: 'line' | 'bar' | 'pie' | 'area';
   aggregation?: 'count' | 'sum' | 'avg' | 'max' | 'min';
   timeGranularity?: 'minute' | 'hour' | 'day';
-  enabled: boolean;,
+  enabled: boolean;
   collapsed: boolean;
 
 // Dashboard Data Types
 interface DashboardMetrics {
-  totalEvents: number;,
+  totalEvents: number;
   eventsPerSecond: number;
-  activeUsers: number;,
+  activeUsers: number;
   activeSessions: number;
-  errorRate: number;,
+  errorRate: number;
   systemHealth: number;
   integrationStatus: { [key: string]: 'healthy' | 'degraded' | 'failing' };
   topSources: Array<{ source: string; count: number; percentage: number }>;
   recentEvents: UnifiedAnalyticsEvent;
 interface TimeSeriesData {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   label?: string;
 interface HeatMapData {
-  x: number;,
+  x: number;
   y: number;
   intensity: number;
 
 // Props
 interface RealTimeDashboardProps {
-  eventBus: UnifiedEventBus;,
+  eventBus: UnifiedEventBus;
   eventRepository: EventRepository;
-  authService: AnalyticsAuthorizationService;,
+  authService: AnalyticsAuthorizationService;
   authContext: AuthContext;
   config?: Partial<DashboardConfig>;
   onWidgetError?: (widgetId: string, error: Error) => void;
@@ -191,7 +191,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
       enabled: true,
       collapsed: false,
       chartType: 'line',
-      timeGranularity: 'minute';
+      timeGranularity: 'minute'
   });
     // Error Rate Widget
     widgets.push({)
@@ -201,7 +201,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
       position: { x: 4, y: 8, width: 4, height: 6 },
       enabled: true,
       collapsed: false,
-      chartType: 'area';
+      chartType: 'area'
   });
     // User Activity Widget
     widgets.push({)
@@ -212,7 +212,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
       filter: { categories: [EventCategory.USER] },
       enabled: true,
       collapsed: false,
-      chartType: 'bar';
+      chartType: 'bar'
   });
     // System Health Widget (admin only)
     if (authSummary.capabilities.canViewAdminDashboard) {
@@ -241,7 +241,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
         type: WidgetType.SECURITY_EVENTS,
         title: 'Security Events',
         position: { x: 6, y: 14, width: 6, height: 4 },
-        filter: {,
+        filter: {
   types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION],
   categories: [EventCategory.SECURITY],
 },
@@ -364,8 +364,8 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
   const errorRate = sourceEvents.length > 0 ? (errorCount / sourceEvents.length) * 100 : 0;
   if (errorRate < 1) integrationStatus[source] = 'healthy';
   else if (errorRate < 10) integrationStatus[source] = 'degraded';
-  else integrationStatus[source] = 'failing';
-});
+  else integrationStatus[source] = 'failing'
+  });
       // Calculate system health score
       const systemHealth = Math.max(0, 100 - errorRate - (eventsPerSecond > 1000 ? 10 : 0));
       // Update dashboard metrics
@@ -408,7 +408,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
           );
           return {
   widgetId: widget.id,
-  data: data.map(point => ({,)
+  data: data.map(point => ({)
   timestamp: point.timestamp,
   value: point.value,
   label: widget.title,
@@ -525,7 +525,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
  */
 const DashboardHeader: React.FC<{,
   metrics: DashboardMetrics;
-  isConnected: boolean;,
+  isConnected: boolean;
   lastUpdate: number;
   onRefresh: () => void;
 }> = ({ metrics, isConnected, lastUpdate, onRefresh }) => ()
@@ -572,12 +572,12 @@ const DashboardHeader: React.FC<{,
  */
 const DashboardWidget: React.FC<{,
   config: WidgetConfig;
-  metrics: DashboardMetrics;,
+  metrics: DashboardMetrics;
   timeSeriesData: TimeSeriesData;
-  heatMapData: HeatMapData;,
+  heatMapData: HeatMapData;
   onToggle: () => void;
-  onRemove: () => void;,
-  onPositionChange: (position: WidgetConfig['position']) => void;,
+  onRemove: () => void;
+  onPositionChange: (position: WidgetConfig['position']) => void;
   onError: (error: Error) => void;
 }> = ({ config, metrics, timeSeriesData, heatMapData, onToggle, onRemove, onError }) => {
   const renderWidgetContent = () => {
@@ -793,7 +793,7 @@ const SecurityEventsWidget: React.FC<{ events: UnifiedAnalyticsEvent }> = ({ eve
  */
 const DashboardFooter: React.FC<{,
   totalEvents: number;
-  systemHealth: number;,
+  systemHealth: number;
   lastUpdate: number;
 }> = ({ totalEvents, systemHealth, lastUpdate }) => ()
   <div className="dashboard-footer">

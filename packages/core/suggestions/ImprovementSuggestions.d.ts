@@ -86,7 +86,7 @@ export interface SuggestionMetadata {
 export interface AnalysisContext {
     userId?: string;
     sessionId?: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -112,19 +112,19 @@ export interface AnalysisFilters {
     targetAudience: string[];
 
 export interface ContextMetrics {
-    performanceMetrics: {,
+    performanceMetrics: {
         responseTime: number;
         errorRate: number;
         throughput: number;
         availability: number;
     };
-    usageMetrics: {,
+    usageMetrics: {
         activeUsers: number;
         sessionDuration: number;
         bounceRate: number;
         conversionRate: number;
     };
-    qualityMetrics: {,
+    qualityMetrics: {
         userSatisfaction: number;
         contentQuality: number;
         featureAdoption: number;
@@ -199,7 +199,7 @@ export interface UserPreference {
     confidence: number;
 
 export interface SystemStateData {
-    performance: {,
+    performance: {
         cpu: number;
         memory: number;
         disk: number;
@@ -240,29 +240,29 @@ export interface TrendData {
     significance: 'low' | 'medium' | 'high';
 
 export interface SuggestionConfiguration {
-    generation: {,
+    generation: {
         enableAutomaticGeneration: boolean;
         analysisInterval: number;
         batchSize: number;
         confidenceThreshold: number;
         diversityFactor: number;
     };
-    filtering: {,
+    filtering: {
         enableSmartFiltering: boolean;
         duplicateDetection: boolean;
         relevanceThreshold: number;
         impactThreshold: number;
     };
-    prioritization: {,
+    prioritization: {
         algorithm: 'impact' | 'effort' | 'roi' | 'user_value' | 'business_value';
-        weights: {,
+        weights: {
             impact: number;
             effort: number;
             confidence: number;
             urgency: number;
         };
     };
-    delivery: {,
+    delivery: {
         enableRealTimeDelivery: boolean;
         batchDelivery: boolean;
         personalization: boolean;
@@ -300,8 +300,8 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
         type: string;
         description: string;
         context: Record<string, any>;
-        urgency: 'low' | 'medium' | 'high' | 'critical';
-    }): Promise<string[]>;
+        urgency: 'low' | 'medium' | 'high' | 'critical'
+  }): Promise<string[]>;
     approveSuggestions(suggestionIds: string[]): Promise<void>;
     rejectSuggestions(suggestionIds: string[], reason?: string): Promise<void>;
     getSuggestionAnalytics(): {

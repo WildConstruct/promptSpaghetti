@@ -1,20 +1,12 @@
 import { useState, useCallback, useRef } from 'react';
 import { ExecutionPathAnalyzer } from './execution/ExecutionTracker';
 import { varianceAnalysisService } from './services/VarianceAnalysisService';
- > ;
-// Epic 8.5 Task 3: Individual result management
-locked ?  : boolean;
-lockedAt ?  : number;
-lockedNote ?  : string;
 export function usePreviewSeeds() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [results, setResults] = useState([]);
     const [aggregateError, setAggregateError] = useState(null);
-    const [performanceStats, setPerformanceStats] = useState < {
-        totalTime: number,
-        averageTime: number
-    } | null > (null);
+    const [performanceStats, setPerformanceStats] = useState(null);
     // Epic 8.5 Task 3: Individual result management state
     const [lockedResults, setLockedResults] = useState([]);
     const [regeneratingResults, setRegeneratingResults] = useState([]);

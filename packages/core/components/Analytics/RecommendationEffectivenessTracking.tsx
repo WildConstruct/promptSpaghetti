@@ -8,58 +8,58 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 export interface RecommendationEffectivenessTrackingProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   trackingConfig: EffectivenessTrackingConfig;
   onEffectivenessAlert?: (alert: EffectivenessAlert) => void;
   onPerformanceInsight?: (insight: PerformanceInsight) => void;
   onExport?: (data: EffectivenessTrackingExportData) => void;
 }
 export interface EffectivenessTrackingConfig {
-  algorithms: TrackedAlgorithm;,
+  algorithms: TrackedAlgorithm;
   metrics: EffectivenessMetric;
-  benchmarks: PerformanceBenchmark;,
+  benchmarks: PerformanceBenchmark;
   reporting: ReportingConfig;
   alerting: AlertingConfig;
   // Core data structures
 }
 export interface RecommendationSystemMetrics {
-  algorithmId: string;,
+  algorithmId: string;
   algorithmName: string;
-  version: string;,
+  version: string;
   timestamp: number;
-  metrics: MetricValue;,
+  metrics: MetricValue;
   contextualMetrics: ContextualMetric;
-  businessImpact: BusinessImpactMetrics;,
+  businessImpact: BusinessImpactMetrics;
   userSegmentPerformance: SegmentPerformance;
 }
 export interface MetricValue {
-  metricId: string;,
+  metricId: string;
   name: string;
-  value: number;,
+  value: number;
   benchmark: number;
-  variance: number;,
+  variance: number;
   trend: TrendData;
   confidence: number;
 }
 export interface ContextualMetric {
-  context: RecommendationContext;,
+  context: RecommendationContext;
   metrics: MetricValue;
-  sampleSize: number;,
+  sampleSize: number;
   significance: number;
 }
 export interface RecommendationContext {
-  deviceType: 'desktop' | 'mobile' | 'tablet';,
+  deviceType: 'desktop' | 'mobile' | 'tablet';
   timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
-  userType: 'new' | 'returning' | 'premium';,
+  userType: 'new' | 'returning' | 'premium';
   contentCategory: string;
-  sessionType: 'browsing' | 'searching' | 'purchasing';
-}
+  sessionType: 'browsing' | 'searching' | 'purchasing'
+  }
 export interface BusinessImpactMetrics {
-  revenueImpact: number;,
+  revenueImpact: number;
   conversionLift: number;
-  engagementIncrease: number;,
+  engagementIncrease: number;
   retentionImprovement: number;
-  costEfficiency: number;,
+  costEfficiency: number;
   customerSatisfaction: number;
 
 // Mock data generators
@@ -80,7 +80,7 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
   value: Math.random() * 0.15 + 0.05,
   benchmark: 0.08,
   variance: (Math.random() - 0.5) * 0.02,
-  trend: {,
+  trend: {
   direction: Math.random() > 0.5 ? 'increasing' : 'decreasing',
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 7,
@@ -93,7 +93,7 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
   value: Math.random() * 0.1 + 0.02,
   benchmark: 0.05,
   variance: (Math.random() - 0.5) * 0.01,
-  trend: {,
+  trend: {
   direction: Math.random() > 0.5 ? 'increasing' : 'stable',
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 7,
@@ -106,7 +106,7 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
   value: Math.random() * 0.3 + 0.7,
   benchmark: 0.75,
   variance: (Math.random() - 0.5) * 0.05,
-  trend: {,
+  trend: {
   direction: 'increasing',
   strength: Math.random(),
   duration: Math.floor(Math.random() * 30) + 7,
@@ -119,14 +119,14 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
   value: Math.random() * 0.4 + 0.6,
   benchmark: 0.7,
   variance: (Math.random() - 0.5) * 0.1,
-  trend: {,
+  trend: {
   direction: 'stable',
   strength: Math.random() * 0.3,
   duration: Math.floor(Math.random() * 30) + 7,
 },
   confidence: Math.random() * 0.2 + 0.8],
     contextualMetrics: [],
-    businessImpact: {,
+    businessImpact: {
   revenueImpact: (Math.random() - 0.3) * 50000,
   conversionLift: Math.random() * 25 + 5,
   engagementIncrease: Math.random() * 30 + 10,
@@ -210,7 +210,7 @@ export const RecommendationEffectivenessTracking: React.FC<RecommendationEffecti
       const exportData: EffectivenessTrackingExportData = {
         algorithmMetrics,
         timeRange: { start: Date.now() - 7 * 86400000, end: Date.now() },
-        summary: {,
+        summary: {
   totalAlgorithms: algorithmMetrics.length,
   bestPerforming: algorithmMetrics.reduce((best, current) => {,
   const bestScore = best.metrics.find(m => m.metricId === 'click_through_rate')?.value || 0;
@@ -498,76 +498,76 @@ export const RecommendationEffectivenessTracking: React.FC<RecommendationEffecti
 // Supporting interfaces (condensed)
 
 export interface TrackedAlgorithm {
-  algorithmId: string;,
+  algorithmId: string;
   name: string;
-  version: string;,
+  version: string;
   enabled: boolean;
 }
 export interface EffectivenessMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  type: 'accuracy' | 'business' | 'user_experience';,
+  type: 'accuracy' | 'business' | 'user_experience';
   weight: number;
   target: number;
 }
 export interface PerformanceBenchmark {
-  metricId: string;,
+  metricId: string;
   benchmark: number;
-  source: 'internal' | 'industry' | 'target';
-}
+  source: 'internal' | 'industry' | 'target'
+  }
 export interface ReportingConfig {
-  frequency: 'hourly' | 'daily' | 'weekly';,
+  frequency: 'hourly' | 'daily' | 'weekly';
   recipients: string;
   includeInsights: boolean;
 }
 export interface AlertingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   thresholds: AlertThreshold;
   channels: string;
 }
 export interface AlertThreshold {
-  metricId: string;,
+  metricId: string;
   condition: 'above' | 'below' | 'change';
-  value: number;,
-  severity: 'low' | 'medium' | 'high';
-}
+  value: number;
+  severity: 'low' | 'medium' | 'high'
+  }
 export interface TrendData {
-  direction: 'increasing' | 'decreasing' | 'stable';,
+  direction: 'increasing' | 'decreasing' | 'stable';
   strength: number;
   duration: number;
 }
 export interface SegmentPerformance {
-  segment: string;,
+  segment: string;
   metrics: MetricValue;
   sampleSize: number;
 }
 export interface EffectivenessAlert {
-  alertId: string;,
+  alertId: string;
   algorithmId: string;
-  type: string;,
+  type: string;
   severity: 'low' | 'medium' | 'high';
-  message: string;,
+  message: string;
   metrics: string;
-  threshold: number;,
+  threshold: number;
   actualValue: number;
-  timestamp: number;,
+  timestamp: number;
   actionRequired: boolean;
 }
 export interface PerformanceInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  message: string;,
+  message: string;
   algorithms: string;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   confidence: number;
   recommendations: string;
 }
 export interface EffectivenessTrackingExportData {
-  algorithmMetrics: RecommendationSystemMetrics;,
+  algorithmMetrics: RecommendationSystemMetrics;
   timeRange: { start: number; end: number };
-  summary: {,
+  summary: {
   totalAlgorithms: number;
-  bestPerforming: string;,
+  bestPerforming: string;
   averageCTR: number;
   totalRevenueImpact: number;
 };

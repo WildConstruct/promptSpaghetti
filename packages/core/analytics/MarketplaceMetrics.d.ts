@@ -24,12 +24,12 @@ export interface MarketplaceEvent {
     entityType?: 'template' | 'creator' | 'category' | 'collection';
     value?: number;
     properties: Record<string, any>;
-    metadata: {,
+    metadata: {
         userAgent: string;
         referrer: string;
         location?: string;
-        deviceType: 'desktop' | 'mobile' | 'tablet';
-    };
+        deviceType: 'desktop' | 'mobile' | 'tablet'
+  };
 
 export type MarketplaceEventType = 'marketplace_visited' | 'category_browsed' | 'search_performed' | 'filter_applied' | 'template_viewed' | 'template_previewed' | 'template_favorited' | 'template_shared' | 'creator_followed' | 'review_submitted' | 'rating_given' | 'template_purchased' | 'template_downloaded' | 'subscription_started' | 'premium_accessed' | 'template_uploaded' | 'template_updated' | 'creator_profile_viewed' | 'earnings_withdrawn' | 'recommendation_shown' | 'recommendation_clicked' | 'promotion_viewed' | 'discount_applied';
 export type MarketplaceCategory = 'discovery' | 'engagement' | 'monetization' | 'creator_economy' | 'recommendation';
@@ -39,66 +39,66 @@ export interface TemplateMetrics {
     name: string;
     creatorId: string;
     category: string;
-    metrics: {,
+    metrics: {
         views: number;
         previews: number;
         downloads: number;
         purchases: number;
         favorites: number;
         shares: number;
-        ratings: {,
+        ratings: {
             average: number;
             count: number;
-            distribution: {,
+            distribution: {
                 [stars: number]: number;
             };
         };
-        revenue: {,
+        revenue: {
             total: number;
             monthly: number;
             weekly: number;
         };
-        conversionRates: {,
+        conversionRates: {
             viewToPreview: number;
             previewToDownload: number;
             viewToFavorite: number;
         };
     };
-    trends: {,
+    trends: {
         viewsGrowth: number;
         revenueGrowth: number;
-        ratingTrend: 'improving' | 'stable' | 'declining';
-    };
+        ratingTrend: 'improving' | 'stable' | 'declining'
+  };
 
 export interface CreatorMetrics {
     creatorId: string;
     name: string;
-    metrics: {,
+    metrics: {
         totalTemplates: number;
         totalRevenue: number;
         totalDownloads: number;
         averageRating: number;
         followers: number;
-        topPerformingTemplate: {,
+        topPerformingTemplate: {
             id: string;
             name: string;
             revenue: number;
         };
-        recentPerformance: {,
+        recentPerformance: {
             period: string;
             revenue: number;
             downloads: number;
             newFollowers: number;
         };
     };
-    trends: {,
+    trends: {
         revenueGrowth: number;
         followerGrowth: number;
-        templatePerformance: 'improving' | 'stable' | 'declining';
-    };
+        templatePerformance: 'improving' | 'stable' | 'declining'
+  };
 
 export interface MarketplaceDashboardData {
-    overview: {,
+    overview: {
         totalRevenue: number;
         totalTransactions: number;
         activeTemplates: number;
@@ -106,7 +106,7 @@ export interface MarketplaceDashboardData {
         averageRating: number;
         conversionRate: number;
     };
-    trends: {,
+    trends: {
         revenueGrowth: number;
         transactionGrowth: number;
         userGrowth: number;
@@ -116,14 +116,14 @@ export interface MarketplaceDashboardData {
             growth: number;
         }>;
     };
-    recommendations: {,
+    recommendations: {
         shown: number;
         clicked: number;
         converted: number;
         ctr: number;
         conversionRate: number;
     };
-    searchAnalytics: {,
+    searchAnalytics: {
         totalSearches: number;
         topQueries: Array<{,
             query: string;

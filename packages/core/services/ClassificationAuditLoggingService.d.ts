@@ -72,8 +72,8 @@ export interface AuditMetadata {
     networkInfo?: {
         vpnDetected: boolean;
         proxyDetected: boolean;
-        networkQuality: 'HIGH' | 'MEDIUM' | 'LOW';
-    };
+        networkQuality: 'HIGH' | 'MEDIUM' | 'LOW'
+  };
     organizationInfo?: {
         organizationId: string;
         department: string;
@@ -122,7 +122,7 @@ export interface AuditReport {
 export interface AuditSummary {
     totalEntries: number;
     uniqueUsers: number;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -133,16 +133,16 @@ export interface AuditSummary {
         nonCompliant: number;
         needsReview: number;
     }>;
-    riskAnalysis: {,
+    riskAnalysis: {
         averageRiskScore: number;
         highRiskEntries: number;
         criticalViolations: number;
     };
-    trendsAnalysis: {,
+    trendsAnalysis: {
         activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
         riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-        complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-    };
+        complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE'
+  };
 
 export interface AuditRetentionPolicy {
     classification: DataClassificationLevel;

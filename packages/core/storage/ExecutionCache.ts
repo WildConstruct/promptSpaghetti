@@ -9,9 +9,9 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
  * Cached execution result with metadata
  */
 interface CachedExecutionResult {
-  result: any;,
+  result: any;
   timestamp: number;
-  executionTime: number;,
+  executionTime: number;
   dependencies: Set<string>; // Node IDs this result depends on,
   inputs: any; // Input values used for this execution,
   seed?: string | number;
@@ -22,18 +22,18 @@ interface CachedExecutionResult {
   interface ExecutionState {
   nodeMap: Map<string, Node>;
   runtimeNodes: Map<string, RuntimeNode>;
-  lastGraphHash: string;,
+  lastGraphHash: string;
   lastUpdate: number;
   executionOrder?: string; // Cached topological order,
   /**
   * Cache performance metrics
   */
   interface CacheMetrics {
-  totalExecutions: number;,
+  totalExecutions: number;
   cacheHits: number;
-  cacheMisses: number;,
+  cacheMisses: number;
   averageExecutionTime: number;
-  cacheSize: number;,
+  cacheSize: number;
   memoryUsage: number;
   /**
   * High-performance execution cache with intelligent invalidation
@@ -66,10 +66,10 @@ interface CachedExecutionResult {
   /**
   * Get optimized graph storage with persistent node map
   */
-  async getOptimizedGraph(nodes: Node,)
+  async getOptimizedGraph(nodes: Node)
   edges: Edge,
   graphId?: string): Promise<{,
-  storage: OptimizedGraphStorage;,
+  storage: OptimizedGraphStorage;
   isFromCache: boolean;
   nodeMap: Map<string, Node>;
 }> {
@@ -109,7 +109,7 @@ interface CachedExecutionResult {
   /**
    * Cache execution result with dependency tracking
    */
-  async cacheExecutionResult(key: string,)
+  async cacheExecutionResult(key: string)
     result: any,
     dependencies: string,
     executionTime: number,
@@ -131,11 +131,11 @@ interface CachedExecutionResult {
   /**
    * Get cached execution result if valid
    */
-  async getCachedResult(key: string,)
+  async getCachedResult(key: string)
     currentInputs?: any,
     currentSeed?: string | number
   ): Promise<{
-  result: any;,
+  result: any;
   fromCache: boolean;
   executionTime: number;
 } | null> {
@@ -213,8 +213,8 @@ interface CachedExecutionResult {
   /**
   * Get cache size statistics
   */
-  getSizeStats(): {,
-  graphCacheEntries: number;,
+  getSizeStats(): {
+  graphCacheEntries: number;
   resultCacheEntries: number;
   estimatedMemoryMB: number;
   oldestEntry?: number;

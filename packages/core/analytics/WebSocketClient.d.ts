@@ -36,9 +36,8 @@ export interface SubscriptionConfig {
         userId?: number;
         organizationId?: number;
         eventTypes?: string[];
-        minSeverity?: 'info' | 'warning' | 'critical';
-
-    };
+        minSeverity?: 'info' | 'warning' | 'critical'
+  };
     throttle?: number;
 
 /**

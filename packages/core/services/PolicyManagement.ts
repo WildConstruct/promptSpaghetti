@@ -58,21 +58,21 @@ export enum PolicyDomain {
   PCI_DSS = 'PCI_DSS',
   ENTERTAINMENT_INDUSTRY = 'ENTERTAINMENT_INDUSTRY'
   export interface UnifiedPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   domain: PolicyDomain;
-  type: PolicyType;,
+  type: PolicyType;
   status: PolicyStatus;
   // Policy Configuration
-  configuration: {,
-  rules: PolicyRule;,
+  configuration: {
+  rules: PolicyRule;
   conditions: PolicyCondition;
-  actions: PolicyAction;,
+  actions: PolicyAction;
   exceptions: PolicyException;
 };
   // Scope and Targets
-  scope: {,
+  scope: {
   workspaceIds?: string;
   projectIds?: string;
   userRoles?: string;
@@ -80,53 +80,53 @@ export enum PolicyDomain {
   vfxPipelines?: string;
 };
   // Enforcement Settings
-  enforcement: {,
+  enforcement: {
   mode: 'ENFORCE' | 'WARN' | 'MONITOR' | 'DISABLED';
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   automated: boolean;
   reviewRequired: boolean;
 };
   // Compliance Integration
-  compliance: {,
+  compliance: {
   frameworks: ComplianceFramework;
-  requirements: string;,
+  requirements: string;
   auditRequired: boolean;
   reportingRequired: boolean;
 };
   // Historical Accuracy (VFX-specific)
   historicalAccuracy?: {
-  timePeriods: string;,
+  timePeriods: string;
   regions: string;
-  cultures: string;,
+  cultures: string;
   accuracyLevel: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
   expertValidationRequired: boolean;
 };
   // Metadata
-  metadata: {,
+  metadata: {
   version: number;
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
   lastEvaluated?: Date;
-  evaluationCount: number;,
+  evaluationCount: number;
   violationCount: number;
   tags: string;
 };
   // Dependencies
   dependencies?: {
-  requiredPolicies: string;,
+  requiredPolicies: string;
   conflictingPolicies: string;
   supersededBy?: string;
 };
 }
 export interface PolicyRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   ruleType: 'VALIDATION' | 'RESTRICTION' | 'REQUIREMENT' | 'THRESHOLD' | 'PATTERN';
   // Rule Logic
-  logic: {,
-  field: string;,
+  logic: {
+  field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | ,
   'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
   value: any;
@@ -143,63 +143,63 @@ export interface PolicyRule {
   enabled: boolean;
 }
 export interface PolicyCondition {
-  id: string;,
+  id: string;
   name: string;
   conditionType: 'PREREQUISITE' | 'CONTEXT' | 'STATE' | 'TEMPORAL' | 'ENVIRONMENTAL';
   // Condition Logic
-  logic: {,
-  expression: string;,
+  logic: {
+  expression: string;
   parameters: Record<string, any>;
-  evaluationMode: 'AND' | 'OR' | 'NOT';
-};
+  evaluationMode: 'AND' | 'OR' | 'NOT'
+  };
   // Evaluation Context
-  evaluationContext: {,
+  evaluationContext: {
   requiredData: string;
   externalServices?: string;
   cacheDuration?: number;
 };
-  weight: number;,
+  weight: number;
   critical: boolean; // If true, condition failure blocks entire policy
 }
 export interface PolicyAction {
-  id: string;,
+  id: string;
   name: string;
   actionType: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE' | 'NOTIFY' | 'LOG' | 'TRANSFORM';
   // Action Configuration
-  configuration: {,
+  configuration: {
   parameters: Record<string, any>;
-  targetEntities: string;,
+  targetEntities: string;
   executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
   rollbackEnabled: boolean;
 };
   // Integration Points
   integrations?: {
-  services: string;,
+  services: string;
   webhooks: string;
   notifications: string;
 };
-  priority: number;,
+  priority: number;
   enabled: boolean;
 }
 export interface PolicyException {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Exception Criteria
-  criteria: {,
+  criteria: {
   userIds?: string;
   roleIds?: string;
   entityIds?: string;
   contextConditions?: Record<string, any>;
 };
   // Exception Scope
-  scope: {,
+  scope: {
   rules?: string; // Specific rules to exempt,
   actions?: string; // Specific actions to exempt,
   fullPolicy?: boolean; // Exempt entire policy,
 };
   // Governance
-  governance: {,
+  governance: {
   approvalRequired: boolean;
   approvedBy?: string;
   approvalDate?: Date;
@@ -211,46 +211,46 @@ export interface PolicyException {
 // Context-specific rule types for VFX domain
 }
 export interface TimeBasedRule {
-  timePeriods: string;,
+  timePeriods: string;
   seasonality: boolean;
   historicalContext: boolean;
 }
 export interface LocationBasedRule {
-  regions: string;,
+  regions: string;
   geopoliticalContext: boolean;
   culturalConsiderations: string;
 }
 export interface RoleBasedRule {
-  roles: string;,
+  roles: string;
   permissions: string;
   clearanceLevel: string;
 }
 export interface ContentBasedRule {
-  contentTypes: string;,
+  contentTypes: string;
   qualityMetrics: Record<string, number>;
   historicalAccuracy: boolean;
   // Policy evaluation and monitoring
 }
 export interface PolicyEvaluationContext {
-  requestId: string;,
+  requestId: string;
   timestamp: Date;
   // Entity Context
   userId?: string;
-  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';,
+  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
   entityId: string;
   // Session Context
-  sessionData: {,
-  ipAddress: string;,
+  sessionData: {
+  ipAddress: string;
   userAgent: string;
   geolocation?: string;
   authenticationMethod: string;
 };
   // Operation Context
-  operation: {,
+  operation: {
   type: string;
   parameters: Record<string, any>;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-};
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  };
   // Content Context (VFX-specific)
   contentContext?: {
   historicalPeriod?: string;
@@ -262,34 +262,34 @@ export interface PolicyEvaluationContext {
   additionalContext: Record<string, any>;
 }
 export interface PolicyEvaluationResult {
-  requestId: string;,
+  requestId: string;
   evaluationId: string;
   timestamp: Date;
   // Policy Information
-  policyId: string;,
+  policyId: string;
   policyName: string;
   // Evaluation Results
-  result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';,
+  result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';
   confidence: number; // 0-1,
   // Rule Results
   ruleResults: Array<{,
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  result: 'PASS' | 'FAIL' | 'WARN';,
+  result: 'PASS' | 'FAIL' | 'WARN';
   score: number;
   details: any;
 }>;
   // Condition Results
   conditionResults: Array<{,
   conditionId: string;
-  conditionName: string;,
+  conditionName: string;
   result: 'MET' | 'NOT_MET' | 'ERROR';
   details: any;
 }>;
   // Actions Triggered
   triggeredActions: Array<{,
   actionId: string;
-  actionType: string;,
+  actionType: string;
   executed: boolean;
   result?: any;
   error?: string;
@@ -297,61 +297,61 @@ export interface PolicyEvaluationResult {
   // Exceptions Applied
   appliedExceptions: Array<{,
   exceptionId: string;
-  exceptionName: string;,
+  exceptionName: string;
   scope: string;
 }>;
   // Compliance Information
-  complianceStatus: {,
+  complianceStatus: {
   frameworks: Array<{,
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   compliant: boolean;
   violations: string;
 }>;
   };
   // Performance Metrics
-  performance: {,
+  performance: {
   evaluationTimeMs: number;
-  cacheHit: boolean;,
+  cacheHit: boolean;
   externalServiceCalls: number;
 };
   // Additional Metadata
-  metadata: {,
+  metadata: {
   evaluatedBy: string;
-  reviewRequired: boolean;,
+  reviewRequired: boolean;
   escalationRequired: boolean;
   auditRequired: boolean;
 };
 }
 export interface PolicyViolation {
-  id: string;,
+  id: string;
   policyId: string;
   policyName: string;
   // Violation Details
-  violation: {,
-  type: 'RULE_VIOLATION' | 'CONDITION_FAILURE' | 'THRESHOLD_EXCEEDED' | 'PATTERN_DETECTED';,
+  violation: {
+  type: 'RULE_VIOLATION' | 'CONDITION_FAILURE' | 'THRESHOLD_EXCEEDED' | 'PATTERN_DETECTED';
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  description: string;,
+  description: string;
   details: any;
 };
   // Context
   context: PolicyEvaluationContext;
   // Impact Assessment
-  impact: {,
+  impact: {
   affectedEntities: string;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   businessImpact: string;
   complianceImpact: string;
 };
   // Response
-  response: {,
+  response: {
   actionsTaken: string;
-  escalated: boolean;,
+  escalated: boolean;
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
 };
   // Metadata
-  metadata: {,
+  metadata: {
   detectedAt: Date;
   detectedBy: string;
   reportedAt?: Date;
@@ -386,12 +386,12 @@ export class PolicyManagement extends EventEmitter {
   /**
   * Create a new policy
   */
-  async createPolicy(policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>,)
+  async createPolicy(policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>)
   createdBy: string): Promise<UnifiedPolicy> {,
   const policy: UnifiedPolicy = {,
   ...policyData,
   id: this.generatePolicyId(),
-  metadata: {,
+  metadata: {
   version: 1,
   createdBy,
   createdAt: new Date(),
@@ -415,7 +415,7 @@ export class PolicyManagement extends EventEmitter {
   /**
    * Update an existing policy
    */
-  async updatePolicy(policyId: string,)
+  async updatePolicy(policyId: string)
     updates: Partial<UnifiedPolicy>,
     updatedBy: string): Promise<UnifiedPolicy> {,
     const existingPolicy = this.policies.get(policyId);
@@ -425,7 +425,7 @@ export class PolicyManagement extends EventEmitter {
   ...existingPolicy,
   ...updates,
   id: policyId, // Ensure ID cannot be changed,
-  metadata: {,
+  metadata: {
   ...existingPolicy.metadata,
   ...updates.metadata,
   version: existingPolicy.metadata.version + 1,
@@ -526,15 +526,15 @@ export class PolicyManagement extends EventEmitter {
   conditionResults: [],
   triggeredActions: [],
   appliedExceptions: [],
-  complianceStatus: {,
+  complianceStatus: {
   frameworks: [],
 },
-  performance: {,
+  performance: {
   evaluationTimeMs: 0,
   cacheHit: false,
   externalServiceCalls: 0,
 },
-  metadata: {,
+  metadata: {
   evaluatedBy: 'policy_management_system',
   reviewRequired: false,
   escalationRequired: false,
@@ -582,7 +582,7 @@ export class PolicyManagement extends EventEmitter {
       result.result = 'DENY'; // Fail securely
       result.confidence = 0.0;
       return this.finalizeResult(result, startTime);
-  private async evaluateRules(policy: UnifiedPolicy,)
+  private async evaluateRules(policy: UnifiedPolicy)
     context: PolicyEvaluationContext,
     exceptions: Array<{ exceptionId: string; exceptionName: string; scope: string }>
   ): Promise<Array<{ ruleId: string; ruleName: string; result: 'PASS' | 'FAIL' | 'WARN'; score: number; details: any }>> {
@@ -765,7 +765,7 @@ export class PolicyManagement extends EventEmitter {
   return {
   valid: false,
   score: 0.0,
-  details: {,
+  details: {
   reason: 'historical_period_mismatch',
   expected: rule.timePeriods,
   actual: contentContext.historicalPeriod,
@@ -792,7 +792,7 @@ export class PolicyManagement extends EventEmitter {
   return {
   valid: false,
   score: 0.0,
-  details: {,
+  details: {
   reason: 'geopolitical_mismatch',
   allowedRegions: rule.regions,
   contentContext: contentContext.culturalContext,
@@ -819,7 +819,7 @@ export class PolicyManagement extends EventEmitter {
   return {
   valid: false,
   score: 0.5,
-  details: {,
+  details: {
   reason: 'expert_review_required',
   accuracyLevel: contentContext.accuracyLevel,
   expertReviewed: contentContext.expertReviewed,
@@ -831,7 +831,7 @@ export class PolicyManagement extends EventEmitter {
   return {
   valid: false,
   score: actualValue / threshold,
-  details: {,
+  details: {
   reason: 'quality_threshold_not_met',
   metric,
   threshold,
@@ -849,19 +849,19 @@ export class PolicyManagement extends EventEmitter {
   domain: PolicyDomain.VFX_PIPELINE,
   type: PolicyType.HISTORICAL_ACCURACY,
   status: PolicyStatus.ACTIVE,
-  configuration: {,
+  configuration: {
   rules: [{,
   id: 'historical-accuracy-rule-001',
   name: 'Historical Period Accuracy',
   description: 'Validates historical period accuracy for generated content',
   ruleType: 'VALIDATION',
-  logic: {,
+  logic: {
   field: 'contentContext.historicalPeriod',
   operator: 'CUSTOM',
   value: null,
   customFunction: 'validateHistoricalAccuracy',
 },
-  context: {,
+  context: {
   timeBasedRules: [{,
   timePeriods: ['ancient', 'medieval', 'renaissance', 'modern'],
   seasonality: false,
@@ -881,7 +881,7 @@ export class PolicyManagement extends EventEmitter {
   id: 'require-expert-review',
           name: 'Require Expert Review',
           actionType: 'ESCALATE',
-          configuration: {,
+          configuration: {
   parameters: { reviewType: 'historical_expert' },
             targetEntities: ['content'],
             executionMode: 'IMMEDIATE',
@@ -892,23 +892,23 @@ export class PolicyManagement extends EventEmitter {
   }],
         exceptions: [];
   },
-  scope: {,
+  scope: {
   contentTypes: ['vfx', 'historical'],
   vfxPipelines: ['historical_recreation', 'period_accurate'],
 },
-  enforcement: {,
+  enforcement: {
   mode: 'ENFORCE',
   severity: 'HIGH',
   automated: false,
   reviewRequired: true,
 },
-  compliance: {,
+  compliance: {
   frameworks: [ComplianceFramework.ENTERTAINMENT_INDUSTRY],
   requirements: ['historical_accuracy', 'cultural_sensitivity'],
   auditRequired: true,
   reportingRequired: true,
 },
-  historicalAccuracy: {,
+  historicalAccuracy: {
   timePeriods: ['ancient', 'medieval', 'renaissance', 'modern'],
   regions: ['global'],
   cultures: ['all_cultures'],
@@ -922,13 +922,13 @@ export class PolicyManagement extends EventEmitter {
   domain: PolicyDomain.DATA_PROTECTION,
   type: PolicyType.DATA_CLASSIFICATION,
   status: PolicyStatus.ACTIVE,
-  configuration: {,
+  configuration: {
   rules: [{,
   id: 'data-classification-rule-001',
   name: 'Asset Classification Validation',
   description: 'Ensures proper classification of VFX assets',
   ruleType: 'VALIDATION',
-  logic: {,
+  logic: {
   field: 'operation.parameters.dataClassification',
   operator: 'NOT_EQUALS',
   value: null,
@@ -941,7 +941,7 @@ export class PolicyManagement extends EventEmitter {
   id: 'apply-protection-measures',
           name: 'Apply Data Protection Measures',
           actionType: 'RESTRICT',
-          configuration: {,
+          configuration: {
   parameters: { protectionLevel: 'high' },
             targetEntities: ['assets', 'templates'],
             executionMode: 'IMMEDIATE',
@@ -953,13 +953,13 @@ export class PolicyManagement extends EventEmitter {
         exceptions: [];
   },
   scope: {},
-      enforcement: {,
+      enforcement: {
   mode: 'ENFORCE',
   severity: 'CRITICAL',
   automated: true,
   reviewRequired: false,
 },
-  compliance: {,
+  compliance: {
   frameworks: [ComplianceFramework.GDPR, ComplianceFramework.ISO_27001],
   requirements: ['data_protection', 'asset_security'],
   auditRequired: true,
@@ -1005,7 +1005,7 @@ export class PolicyManagement extends EventEmitter {
   /**
   * Get all policies
   */
-  getPolicies(filters: {,)
+  getPolicies(filters: {)
   domain?: PolicyDomain;
   type?: PolicyType;
   status?: PolicyStatus;
@@ -1075,18 +1075,18 @@ export class PolicyManagement extends EventEmitter {
     context: PolicyEvaluationContext,
   ): Promise<Array<{ conditionId: string; conditionName: string; result: 'MET' | 'NOT_MET' | 'ERROR'; details: any }>> {
     return []; // Simplified for now
-  private calculatePolicyResult(policy: UnifiedPolicy,)
+  private calculatePolicyResult(policy: UnifiedPolicy)
     ruleResults: any,
     conditionResults: any): { result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE'; confidence: number } {
     const failedRules = ruleResults.filter(r => r.result === 'FAIL').length;
     if (failedRules > 0) {
       return { result: 'DENY', confidence: 0.8 };
     return { result: 'ALLOW', confidence: 1.0 };
-  private async executeActions(policy: UnifiedPolicy,)
+  private async executeActions(policy: UnifiedPolicy)
     context: PolicyEvaluationContext,
     result: PolicyEvaluationResult): Promise<any> {,
     return []; // Simplified for now
-  private async evaluateCompliance(policy: UnifiedPolicy,)
+  private async evaluateCompliance(policy: UnifiedPolicy)
     context: PolicyEvaluationContext,
     result: PolicyEvaluationResult): Promise<any> {,
     return { frameworks: [] }; // Simplified for now
@@ -1104,7 +1104,7 @@ export class PolicyManagement extends EventEmitter {
     const restrictResult = results.find(r => r.result === 'RESTRICT');
     if (restrictResult) return restrictResult;
     return results[0]; // Default to first result
-  private recordPerformanceMetrics(context: PolicyEvaluationContext,)
+  private recordPerformanceMetrics(context: PolicyEvaluationContext)
     evaluationTime: number,
     resultCount: number): void {,
     const key = `${context.entityType}-${new Date().toISOString().split('T')[0]}`;}
@@ -1113,7 +1113,7 @@ export class PolicyManagement extends EventEmitter {
     existing.totalTime += evaluationTime;
     existing.avgTime = existing.totalTime / existing.count;
     this.performanceMetrics.set(key, existing);
-  private async recordViolation(policy: UnifiedPolicy,)
+  private async recordViolation(policy: UnifiedPolicy)
     result: PolicyEvaluationResult,
     context: PolicyEvaluationContext): Promise<void> {,
     const violation: PolicyViolation = {,
@@ -1121,7 +1121,7 @@ export class PolicyManagement extends EventEmitter {
 },
   policyId: policy.id,
       policyName: policy.name,
-      violation: {,
+      violation: {
   type: 'RULE_VIOLATION',
         severity: policy.enforcement.severity,
         description: `Policy violation detected: ${result.result}`}
@@ -1129,25 +1129,25 @@ export class PolicyManagement extends EventEmitter {
   details: result;
   }
       context,
-      impact: {,
+      impact: {
   affectedEntities: [context.entityId],
   riskLevel: policy.enforcement.severity,
   businessImpact: 'Policy enforcement triggered',
   complianceImpact: policy.compliance.frameworks,
 },
-  response: {,
+  response: {
   actionsTaken: result.triggeredActions.map(a => a.actionType),
   escalated: result.metadata.escalationRequired,
   resolved: false,
 },
-  metadata: {,
+  metadata: {
   detectedAt: new Date(),
   detectedBy: 'policy_management_system',
   tags: ['automated_detection'],
 };
     this.violations.set(violation.id, violation);
     this.emit('policyViolation', violation);
-  private async evaluateCustomFunction(functionName: string,)
+  private async evaluateCustomFunction(functionName: string)
     fieldValue: any,
     context: PolicyEvaluationContext): Promise<{ passed: boolean; score: number; details: any }> {
     // This would implement custom policy functions

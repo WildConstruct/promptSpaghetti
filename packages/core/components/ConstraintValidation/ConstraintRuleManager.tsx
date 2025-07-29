@@ -220,8 +220,8 @@ interface ConstraintRuleManagerProps {
   );
 };
 interface ConstraintRuleItemProps {
-  constraint: HistoricalConstraint;,
-  onEdit: (constraint: HistoricalConstraint) => void;,
+  constraint: HistoricalConstraint;
+  onEdit: (constraint: HistoricalConstraint) => void;
   onDelete: (id: string) => void;
   const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({,)
   constraint,
@@ -281,9 +281,9 @@ interface ConstraintRuleItemProps {
   );
 };
 interface ConstraintEditorProps {
-  constraint: HistoricalConstraint;,
+  constraint: HistoricalConstraint;
   isCreating: boolean;
-  onChange: (constraint: HistoricalConstraint) => void;,
+  onChange: (constraint: HistoricalConstraint) => void;
   onSave: () => void;
   onCancel: () => void;
   const ConstraintEditor: React.FC<ConstraintEditorProps> = ({,)

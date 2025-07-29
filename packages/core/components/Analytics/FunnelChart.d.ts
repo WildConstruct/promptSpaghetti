@@ -26,7 +26,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface FunnelChartProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -56,12 +56,12 @@ export interface StepMetrics {
     comparisonData?: StepComparisonMetrics;
 
 export interface StepComparisonMetrics {
-    previousPeriod: {,
+    previousPeriod: {
         conversionRate: number;
         change: number;
-        direction: 'improvement' | 'decline' | 'no_change';
-    };
-    benchmark: {,
+        direction: 'improvement' | 'decline' | 'no_change'
+  };
+    benchmark: {
         conversionRate: number;
         percentile: number;
         industry: string;
@@ -70,8 +70,8 @@ export interface StepComparisonMetrics {
         segmentId: string;
         segmentName: string;
         conversionRate: number;
-        performance: 'above_average' | 'below_average' | 'average';
-    }>;
+        performance: 'above_average' | 'below_average' | 'average'
+  }>;
 
 export interface FunnelChartData {
     steps: StepMetrics[];
@@ -130,14 +130,14 @@ export interface SegmentFunnelComparison {
 export interface ChartExportData {
     chartMode: FunnelChartMode;
     data: FunnelChartData;
-    visualization: {,
+    visualization: {
         svg: string;
         png?: string;
         pdf?: string;
     };
-    metadata: {,
+    metadata: {
         exportedAt: number;
-        timeRange: {,
+        timeRange: {
             start: number;
             end: number;
         };
@@ -147,7 +147,7 @@ export interface ChartExportData {
 export interface InteractionState {
     hoveredStep: string | null;
     selectedStep: string | null;
-    tooltipPosition: {,
+    tooltipPosition: {
         x: number;
         y: number;
     } | null;

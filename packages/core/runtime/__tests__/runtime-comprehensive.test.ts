@@ -181,7 +181,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       const complexValue = {
         array: [1, 2, 3],
         nested: { deep: true },
-        fn: () => 'test';
+        fn: () => 'test'
   };
       const node = new SetVariableNode('set-complex', 'complex', complexValue);
       node.run(mockCtx);
@@ -231,9 +231,9 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
     });
     it('should handle deeply nested variables', () => {
   const deepCtx: ExecutionContext = {,
-  variables: {,
-  level1: {,
-  level2: {,
+  variables: {
+  level1: {
+  level2: {
   level3: 'deep value',
 },
   seed: 'deep-seed';

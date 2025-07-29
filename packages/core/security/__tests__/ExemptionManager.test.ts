@@ -225,9 +225,9 @@ describe('ExemptionManager', () => {
   businessJustification: 'Testing',
   riskLevel: 'low',
   mitigations: [],
-  conditions: {,
+  conditions: {
   ipWhitelist: ['192.168.1.100'],
-  usageQuota: {,
+  usageQuota: {
   maxUsesPerDay: 10,
   maxUsesPerHour: 5,
   currentUsage: 0,

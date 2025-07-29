@@ -8,40 +8,40 @@ import { EventEmitter } from 'events';
 import { PricingOptimizer, PricingModel, PricingCalculationRequest } from './PricingOptimizer';
 
 export interface FilmStudioProfile {
-  studioId: string;,
+  studioId: string;
   name: string;
-  tier: 'independent' | 'mid_tier' | 'major_studio' | 'streaming_platform';,
+  tier: 'independent' | 'mid_tier' | 'major_studio' | 'streaming_platform';
   annualBudget: number;
-  productionVolume: number;,
+  productionVolume: number;
   primaryGenres: string;
-  distributionChannels: ('theatrical' | 'streaming' | 'tv' | 'digital')[];,
-  paymentTerms: {,
-  preferredBilling: 'monthly' | 'per_project' | 'annual';,
+  distributionChannels: ('theatrical' | 'streaming' | 'tv' | 'digital')[];
+  paymentTerms: {
+  preferredBilling: 'monthly' | 'per_project' | 'annual';
   creditLimit: number;
   paymentDays: number;
 };
-  premiumFeatures: string;,
+  premiumFeatures: string;
   contractStartDate: number;
-  contractEndDate: number;,
-  loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip';
-}
+  contractEndDate: number;
+  loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip'
+  }
 export interface ProjectPricingRequest {
-  studioId: string;,
+  studioId: string;
   projectId: string;
-  projectDetails: {,
-  title: string;,
+  projectDetails: {
+  title: string;
   genre: string;
-  budgetRange: 'micro' | 'low' | 'medium' | 'high' | 'blockbuster';,
-  timeline: {,
-  startDate: number;,
+  budgetRange: 'micro' | 'low' | 'medium' | 'high' | 'blockbuster';
+  timeline: {
+  startDate: number;
   endDate: number;
   deliveryDate: number;
 };
-    deliverables: ProjectDeliverable;,
+    deliverables: ProjectDeliverable;
   priority: 'standard' | 'rush' | 'emergency';
     distributionPlan: string;
   };
-  contentRequirements: {,
+  contentRequirements: {
   scriptAnalysis?: ScriptAnalysisOptions;
   storyboardGeneration?: StoryboardOptions;
   conceptArt?: ConceptArtOptions;
@@ -52,132 +52,132 @@ export interface ProjectPricingRequest {
 export interface ProjectDeliverable {
   type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | ,
   'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
-  quantity: number;,
+  quantity: number;
   complexity: 'basic' | 'standard' | 'premium' | 'custom';
-  deadline: number;,
+  deadline: number;
   revisions: number;
-  format: string;,
+  format: string;
   specifications: Record<string, any>;
 }
 export interface ScriptAnalysisOptions {
-  analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';,
+  analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
   includeCharacterArcs: boolean;
-  includeDialogueAnalysis: boolean;,
+  includeDialogueAnalysis: boolean;
   includeStructuralNotes: boolean;
   includeGenreCompliance: boolean;
   benchmarkScripts?: string;
 }
 export interface StoryboardOptions {
-  artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';,
+  artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
   frameCount: number;
-  includeNotes: boolean;,
+  includeNotes: boolean;
   colorTreatment: 'bw' | 'color' | 'mood_palette';
   animationPreview: boolean;
 }
 export interface ConceptArtOptions {
-  artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';,
+  artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
   deliverableTypes: ('character_design' | 'environment_design' | 'prop_design' | 'costume_design')[];
-  iterationRounds: number;,
+  iterationRounds: number;
   highResolution: boolean;
   includeVariations: boolean;
 }
 export interface MarketingContentOptions {
-  campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';,
+  campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
   platforms: ('theatrical' | 'digital' | 'social' | 'print' | 'tv')[];
-  audienceSegments: string;,
+  audienceSegments: string;
   brandGuidelines: boolean;
   localizationNeeded: string;
 }
 export interface CharacterDevelopmentOptions {
-  characterCount: number;,
+  characterCount: number;
   developmentDepth: 'basic_profile' | 'detailed_background' | 'full_psychology';
-  includeDialoguePatterns: boolean;,
+  includeDialoguePatterns: boolean;
   includeVisualReferences: boolean;
   includeRelationshipMaps: boolean;
 }
 export interface FilmIndustryPricingResult {
-  projectId: string;,
+  projectId: string;
   studioId: string;
-  totalPrice: number;,
+  totalPrice: number;
   currency: string;
   // Detailed pricing breakdown
-  basePrice: number;,
+  basePrice: number;
   studioTierAdjustment: number;
-  projectComplexityMultiplier: number;,
+  projectComplexityMultiplier: number;
   timelineAdjustment: number;
   deliverablesPricing: Array<{,
-  deliverable: string;,
+  deliverable: string;
   quantity: number;
-  unitPrice: number;,
+  unitPrice: number;
   subtotal: number;
   complexity: string;
 }>;
   // Industry-specific adjustments
-  genreMultiplier: number;,
+  genreMultiplier: number;
   budgetTierMultiplier: number;
   distributionChannelAdjustment: number;
   // Discounts and premiums
-  loyaltyDiscount: number;,
+  loyaltyDiscount: number;
   volumeDiscount: number;
-  rushPremium: number;,
+  rushPremium: number;
   seasonalAdjustment: number;
   // Payment and billing
-  paymentSchedule: PaymentScheduleItem;,
+  paymentSchedule: PaymentScheduleItem;
   recommendedBilling: 'upfront' | 'milestone' | 'completion';
   // Contract terms
-  deliveryGuarantee: boolean;,
+  deliveryGuarantee: boolean;
   revisionLimits: Record<string, number>;
   intellectualPropertyTerms: string;
   // Analytics and insights
-  competitivePosition: 'below_market' | 'market_rate' | 'premium';,
+  competitivePosition: 'below_market' | 'market_rate' | 'premium';
   valueScore: number; // 0-100
-  riskAssessment: 'low' | 'medium' | 'high';,
+  riskAssessment: 'low' | 'medium' | 'high';
   validUntil: number;
   createdAt: number;
 }
 export interface PaymentScheduleItem {
-  milestone: string;,
+  milestone: string;
   percentage: number;
-  amount: number;,
+  amount: number;
   dueDate: number;
   description: string;
 }
 export interface StudioPricingAnalytics {
-  studioId: string;,
-  period: {,
-  start: number;,
+  studioId: string;
+  period: {
+  start: number;
   end: number;
 };
   // Financial metrics
-  totalRevenue: number;,
+  totalRevenue: number;
   averageProjectValue: number;
-  profitMargin: number;,
+  profitMargin: number;
   paymentPerformance: {;
-  averagePaymentDays: number;,
+  averagePaymentDays: number;
   latePaymentRate: number;
   creditUtilization: number;
 };
   // Project metrics
-  totalProjects: number;,
+  totalProjects: number;
   projectsByType: Record<string, number>;
   projectsByGenre: Record<string, number>;
   averageProjectTimeline: number;
   // Satisfaction and performance
-  deliveryPerformance: {,
+  deliveryPerformance: {
   onTimeDeliveryRate: number;
-  qualityScore: number;,
+  qualityScore: number;
   revisionRate: number;
 };
   // Trends and insights
   seasonalPatterns: Array<{,
   period: string;
-  volume: number;,
+  volume: number;
   revenue: number;
   averageValue: number;
 }>;
-  growthMetrics: {,
+  growthMetrics: {
   revenueGrowth: number;
-  projectVolumeGrowth: number;,
+  projectVolumeGrowth: number;
   averageValueGrowth: number;
 };
 /**
@@ -282,11 +282,11 @@ export class FilmIndustryPricingService extends EventEmitter {
   * Generate studio pricing report
   */
   async generateStudioReport(studioId: string, periodDays: number = 90): Promise<{,
-  studio: FilmStudioProfile;,
+  studio: FilmStudioProfile;
   analytics: StudioPricingAnalytics;
-  recommendations: string;,
-  benchmarks: {,
-  industryAverage: number;,
+  recommendations: string;
+  benchmarks: {
+  industryAverage: number;
   tierAverage: number;
   performanceRank: number;
 };
@@ -310,17 +310,17 @@ export class FilmIndustryPricingService extends EventEmitter {
     averagePricing: Record<string, number>;
     growthRates: Record<string, number>;
     seasonalPatterns: Array<{ period: string; multiplier: number }>;
-    emergingServices: string;,
+    emergingServices: string;
   competitiveLandscape: Array<{ category: string; competitorCount: number; priceRange: { min: number; max: number } }>;
     return {
-  averagePricing: {,
+  averagePricing: {
   'script_analysis': 2500,
   'character_profiles': 1200,
   'storyboard_concepts': 4500,
   'concept_art': 3800,
   'marketing_content': 3200,
 },
-  growthRates: {,
+  growthRates: {
   'ai_content_generation': 45,
   'script_analysis': 30,
   'visual_content': 25,
@@ -361,17 +361,17 @@ export class FilmIndustryPricingService extends EventEmitter {
   async optimizeStudioPricing(studioId: string): Promise<{,
   currentPricing: Record<string, number>;
   recommendedPricing: Record<string, number>;
-  expectedImpact: {,
-  revenueChange: number;,
+  expectedImpact: {
+  revenueChange: number;
   volumeChange: number;
   marginChange: number;
 };
     implementationPlan: Array<{,
   action: string;
-  timeline: string;,
+  timeline: string;
   priority: 'high' | 'medium' | 'low';
-  riskLevel: 'low' | 'medium' | 'high';
-}>;
+  riskLevel: 'low' | 'medium' | 'high'
+  }>;
   }> {
     const studio = this.studioProfiles.get(studioId);
     const analytics = this.studioAnalytics.get(studioId);
@@ -382,7 +382,7 @@ export class FilmIndustryPricingService extends EventEmitter {
     return {
   currentPricing,
   recommendedPricing,
-  expectedImpact: {,
+  expectedImpact: {
   revenueChange: 15, // 15% increase,
   volumeChange: -5,  // 5% decrease in volume,
   marginChange: 22   // 22% margin improvement,
@@ -446,9 +446,9 @@ export class FilmIndustryPricingService extends EventEmitter {
   'blockbuster': 2.5,
 };
     return 5000 * budgetMultipliers[request.projectDetails.budgetRange];
-  private calculateStudioAdjustments(request: ProjectPricingRequest, studio: FilmStudioProfile): {,
+  private calculateStudioAdjustments(request: ProjectPricingRequest, studio: FilmStudioProfile): {
   tierMultiplier: number;
-  loyaltyMultiplier: number;,
+  loyaltyMultiplier: number;
   volumeMultiplier: number;
   const tierMultipliers = {
   'independent': 0.8,
@@ -467,11 +467,11 @@ export class FilmIndustryPricingService extends EventEmitter {
   loyaltyMultiplier: loyaltyMultipliers[studio.loyaltyStatus],
   volumeMultiplier: studio.productionVolume > 20 ? 0.9 : 1.0,
 };
-  private calculateProjectAdjustments(request: ProjectPricingRequest): {,
+  private calculateProjectAdjustments(request: ProjectPricingRequest): {
   complexityMultiplier: number;
-  timelineMultiplier: number;,
+  timelineMultiplier: number;
   genreMultiplier: number;
-  budgetMultiplier: number;,
+  budgetMultiplier: number;
   distributionMultiplier: number;
   // Timeline urgency multiplier
   const timeline = request.projectDetails.timeline;
@@ -484,20 +484,20 @@ export class FilmIndustryPricingService extends EventEmitter {
   budgetMultiplier: 1.0, // Already calculated in base price,
   distributionMultiplier: request.projectDetails.distributionPlan.length > 3 ? 1.2 : 1.0,
 };
-  private calculateDeliverablesPricing(request: ProjectPricingRequest): {,
+  private calculateDeliverablesPricing(request: ProjectPricingRequest): {
   total: number;
   breakdown: Array<{,
-  deliverable: string;,
+  deliverable: string;
   quantity: number;
-  unitPrice: number;,
+  unitPrice: number;
   subtotal: number;
   complexity: string;
 }>;
     const breakdown: Array<{,
   deliverable: string;
-  quantity: number;,
+  quantity: number;
   unitPrice: number;
-  subtotal: number;,
+  subtotal: number;
   complexity: string;
 }> = [];
     let total = 0;
@@ -515,9 +515,9 @@ export class FilmIndustryPricingService extends EventEmitter {
 });
       total += subtotal;
     return { total, breakdown };
-  private calculateDiscountsAndPremiums(request: ProjectPricingRequest, studio: FilmStudioProfile): {,
+  private calculateDiscountsAndPremiums(request: ProjectPricingRequest, studio: FilmStudioProfile): {
   loyaltyDiscount: number;
-  volumeDiscount: number;,
+  volumeDiscount: number;
   rushPremium: number;
   seasonalAdjustment: number;
   const loyaltyDiscounts = {
@@ -556,10 +556,10 @@ export class FilmIndustryPricingService extends EventEmitter {
   dueDate: request.projectDetails.timeline.deliveryDate,
   description: 'Final payment upon delivery');
   return schedule;
-  private calculateFinalPrice(components: {,)
-  basePrice: number;,
+  private calculateFinalPrice(components: {)
+  basePrice: number;
   studioAdjustments: any;
-  projectAdjustments: any;,
+  projectAdjustments: any;
   deliverablesPricing: any;
   discountsAndPremiums: any;
 }): { final: number; breakdown: Record<string, number> } {
@@ -572,7 +572,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   final *= (1 + components.discountsAndPremiums.rushPremium);
   return {
   final,
-  breakdown: {,
+  breakdown: {
   basePrice: components.basePrice,
   deliverables: components.deliverablesPricing.total,
   adjustments: final - components.basePrice - components.deliverablesPricing.total,
@@ -580,14 +580,14 @@ export class FilmIndustryPricingService extends EventEmitter {
   private createEmptyStudioAnalytics(studioId: string): StudioPricingAnalytics {
   return {
   studioId,
-  period: {,
+  period: {
   start: Date.now(),
   end: Date.now() + 90 * 24 * 60 * 60 * 1000 // 90 days,
 },
   totalRevenue: 0,
       averageProjectValue: 0,
       profitMargin: 0,
-      paymentPerformance: {,
+      paymentPerformance: {
   averagePaymentDays: 30,
   latePaymentRate: 0,
   creditUtilization: 0,
@@ -596,13 +596,13 @@ export class FilmIndustryPricingService extends EventEmitter {
       projectsByType: {},
       projectsByGenre: {},
       averageProjectTimeline: 0,
-      deliveryPerformance: {,
+      deliveryPerformance: {
   onTimeDeliveryRate: 100,
   qualityScore: 85,
   revisionRate: 15,
 },
   seasonalPatterns: [],
-      growthMetrics: {,
+      growthMetrics: {
   revenueGrowth: 0,
   projectVolumeGrowth: 0,
   averageValueGrowth: 0,
@@ -666,7 +666,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   recommendations.push('Improve initial requirements gathering to reduce revisions');
   return recommendations;
   private async calculateStudioBenchmarks(studio: FilmStudioProfile, analytics: StudioPricingAnalytics): Promise<{,
-  industryAverage: number;,
+  industryAverage: number;
   tierAverage: number;
   performanceRank: number;
 }> {

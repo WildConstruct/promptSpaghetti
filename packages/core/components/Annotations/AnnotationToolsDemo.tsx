@@ -49,23 +49,23 @@ import type { RegionAnnotation } from './RegionAnnotations';
 // Unified VFX User type
 
 export interface VFXUser {
-  id: string;,
+  id: string;
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
   avatar?: string;
-  email: string;,
+  email: string;
   color: string;
   // Mock graph data for demonstration
   interface MockNode {
-  id: string;,
+  id: string;
   name: string;
-  type: string;,
+  type: string;
   x: number;
-  y: number;,
+  y: number;
   width: number;
   height: number;
   interface MockConnection {
-  id: string;,
+  id: string;
   source: string;
   target: string;
 }
@@ -205,7 +205,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       id: 'draw-001',
       type: 'arrow',
       points: [{ x: 170, y: 140 }, { x: 250, y: 140 }],
-      style: {,
+      style: {
   color: '#ff7c00',
   thickness: 4,
   opacity: 1,
@@ -222,7 +222,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       id: 'draw-002',
       type: 'circle',
       points: [{ x: 310, y: 140 }, { x: 340, y: 170 }],
-      style: {,
+      style: {
   color: '#ef4444',
   thickness: 3,
   opacity: 0.8,
@@ -241,7 +241,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       id: 'draw-003',
       type: 'text',
       points: [{ x: 320, y: 200 }],
-      style: {,
+      style: {
   color: '#1f2937',
   thickness: 1,
   opacity: 1,
@@ -263,7 +263,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       name: 'Character Pipeline',
       type: 'mars_zone',
       shape: 'rectangle',
-      area: {,
+      area: {
   shape: 'rectangle',
         bounds: { x: 30, y: 80, width: 360, height: 120 },
         points: [,
@@ -271,7 +271,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
           { x: 390, y: 200 }
         ]
   },
-  style: {,
+  style: {
   borderColor: '#8b5cf6',
   borderWidth: 3,
   borderStyle: 'dashed',
@@ -289,7 +289,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       marsZone: 'subject_focus',
       nodeIds: ['node-001', 'node-002', 'node-003'],
       tags: ['character', 'hero', 'critical-path'],
-      metadata: {,
+      metadata: {
   nodeCount: 3,
   totalComplexity: 240,
   estimatedRenderTime: 12.5,
@@ -301,7 +301,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       name: 'Background Processing',
       type: 'optimization_zone',
       shape: 'rectangle',
-      area: {,
+      area: {
   shape: 'rectangle',
         bounds: { x: 30, y: 230, width: 360, height: 120 },
         points: [,
@@ -309,7 +309,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
           { x: 390, y: 350 }
         ]
   },
-  style: {,
+  style: {
   borderColor: '#10b981',
   borderWidth: 2,
   borderStyle: 'solid',
@@ -326,7 +326,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       status: 'active',
       nodeIds: ['node-005', 'node-006', 'node-007'],
       tags: ['background', 'optimization', 'performance'],
-      metadata: {,
+      metadata: {
   nodeCount: 3,
   totalComplexity: 180,
   estimatedRenderTime: 8.2,
@@ -412,7 +412,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
   // Export all annotations
   const exportAnnotations = useCallback(() => {
   const exportData = {
-  metadata: {,
+  metadata: {
   exportedBy: currentUser,
   exportedAt: new Date().toISOString(),
   version: '1.0.0',
@@ -824,7 +824,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       </Card>
       <style>{`
         .annotation-tools-demo {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         @media (max-width: 768px) {

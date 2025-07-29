@@ -6,31 +6,31 @@ import React from 'react';
  * across the progressive disclosure system.
  */
 export declare const TypographyScale: {
-    primary: {,
+    primary: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
         letterSpacing: string;
     };
-    secondary: {,
+    secondary: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
         letterSpacing: string;
     };
-    tertiary: {,
+    tertiary: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
         letterSpacing: string;
     };
-    caption: {,
+    caption: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
         letterSpacing: string;
     };
-    micro: {,
+    micro: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -38,7 +38,7 @@ export declare const TypographyScale: {
     };
 };
 export declare const HierarchyColors: {
-    basic: {,
+    basic: {
         primary: string;
         secondary: string;
         background: string;
@@ -46,7 +46,7 @@ export declare const HierarchyColors: {
         text: string;
         accent: string;
     };
-    advanced: {,
+    advanced: {
         primary: string;
         secondary: string;
         background: string;
@@ -54,7 +54,7 @@ export declare const HierarchyColors: {
         text: string;
         accent: string;
     };
-    debug: {,
+    debug: {
         primary: string;
         secondary: string;
         background: string;
@@ -62,7 +62,7 @@ export declare const HierarchyColors: {
         text: string;
         accent: string;
     };
-    neutral: {,
+    neutral: {
         primary: string;
         secondary: string;
         background: string;
@@ -81,21 +81,21 @@ export declare const SpacingScale: {
     xxxl: number;
 };
 export declare const ComponentSizes: {
-    field: {,
+    field: {
         height: number;
         padding: string;
     };
-    section: {,
+    section: {
         padding: string;
         marginBottom: number;
     };
-    header: {,
+    header: {
         height: number;
         padding: string;
     };
 };
 export declare const FieldImportanceStyles: {
-    critical: {,
+    critical: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -105,7 +105,7 @@ export declare const FieldImportanceStyles: {
         borderLeftColor: string;
         backgroundColor: string;
     };
-    important: {,
+    important: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -115,7 +115,7 @@ export declare const FieldImportanceStyles: {
         borderLeftColor: string;
         backgroundColor: string;
     };
-    standard: {,
+    standard: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -125,7 +125,7 @@ export declare const FieldImportanceStyles: {
         borderLeftColor: string;
         backgroundColor: string;
     };
-    supplementary: {,
+    supplementary: {
         opacity: number;
         fontSize: number;
         fontWeight: number;
@@ -177,40 +177,40 @@ export declare const AccessibilityUtils: {
     getFocusableElements: (container: HTMLElement) => HTMLElement[];
 };
 declare const _default: {
-    TypographyScale: {,
-        primary: {,
+    TypographyScale: {
+        primary: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
             letterSpacing: string;
         };
-        secondary: {,
+        secondary: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
             letterSpacing: string;
         };
-        tertiary: {,
+        tertiary: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
             letterSpacing: string;
         };
-        caption: {,
+        caption: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
             letterSpacing: string;
         };
-        micro: {,
+        micro: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
             letterSpacing: string;
         };
     };
-    HierarchyColors: {,
-        basic: {,
+    HierarchyColors: {
+        basic: {
             primary: string;
             secondary: string;
             background: string;
@@ -218,7 +218,7 @@ declare const _default: {
             text: string;
             accent: string;
         };
-        advanced: {,
+        advanced: {
             primary: string;
             secondary: string;
             background: string;
@@ -226,7 +226,7 @@ declare const _default: {
             text: string;
             accent: string;
         };
-        debug: {,
+        debug: {
             primary: string;
             secondary: string;
             background: string;
@@ -234,7 +234,7 @@ declare const _default: {
             text: string;
             accent: string;
         };
-        neutral: {,
+        neutral: {
             primary: string;
             secondary: string;
             background: string;
@@ -243,7 +243,7 @@ declare const _default: {
             accent: string;
         };
     };
-    SpacingScale: {,
+    SpacingScale: {
         xs: number;
         sm: number;
         md: number;
@@ -252,22 +252,22 @@ declare const _default: {
         xxl: number;
         xxxl: number;
     };
-    ComponentSizes: {,
-        field: {,
+    ComponentSizes: {
+        field: {
             height: number;
             padding: string;
         };
-        section: {,
+        section: {
             padding: string;
             marginBottom: number;
         };
-        header: {,
+        header: {
             height: number;
             padding: string;
         };
     };
-    FieldImportanceStyles: {,
-        critical: {,
+    FieldImportanceStyles: {
+        critical: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
@@ -277,7 +277,7 @@ declare const _default: {
             borderLeftColor: string;
             backgroundColor: string;
         };
-        important: {,
+        important: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
@@ -287,7 +287,7 @@ declare const _default: {
             borderLeftColor: string;
             backgroundColor: string;
         };
-        standard: {,
+        standard: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
@@ -297,7 +297,7 @@ declare const _default: {
             borderLeftColor: string;
             backgroundColor: string;
         };
-        supplementary: {,
+        supplementary: {
             opacity: number;
             fontSize: number;
             fontWeight: number;
@@ -313,7 +313,7 @@ declare const _default: {
     HierarchyHeader: React.FC<HierarchyHeaderProps>;
     HierarchyField: React.FC<HierarchyFieldProps>;
     ComplexityIndicator: React.FC<ComplexityIndicatorProps>;
-    AccessibilityUtils: {,
+    AccessibilityUtils: {
         getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
         getAriaDescription: (priority: FieldPriority) => string;
         getFocusableElements: (container: HTMLElement) => HTMLElement[];

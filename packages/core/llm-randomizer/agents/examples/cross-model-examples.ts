@@ -9,10 +9,10 @@ export interface CrossModelTestResult {
   openai?: any;
   claude?: any;
   gemini?: any;
-  comparison: {,
-  allSucceeded: boolean;,
+  comparison: {
+  allSucceeded: boolean;
   successCount: number;
-  totalAttempts: number;,
+  totalAttempts: number;
   averageGenerationTime: number;
   consistencyScore: number;
 };
@@ -118,7 +118,7 @@ export const testCases = {
   /**
   * Simple test case
   */
-  simpleGreeting: {,
+  simpleGreeting: {
   purpose: 'Generate personalized greetings',
   complexity: 'simple' as const,
   nodeCount: 5,
@@ -134,7 +134,7 @@ export const testCases = {
   /**
    * Moderate complexity test case
    */
-  contentGenerator: {,
+  contentGenerator: {
   purpose: 'Create adaptive content based on user preferences',
   complexity: 'moderate' as const,
   nodeCount: 15,
@@ -151,7 +151,7 @@ export const testCases = {
   /**
    * Complex test case with advanced features
    */
-  intelligentTutor: {,
+  intelligentTutor: {
   purpose: 'Build an adaptive tutoring system that adjusts to student responses',
   complexity: 'complex' as const,
   nodeCount: 30,
@@ -174,7 +174,7 @@ export const testCases = {
   /**
    * Creative writing assistant
    */
-  storyGenerator: {,
+  storyGenerator: {
   purpose: 'Generate interactive story scenarios with branching narratives',
   complexity: 'moderate' as const,
   nodeCount: 20,
@@ -196,7 +196,7 @@ export const testCases = {
   /**
    * Data processing pipeline
    */
-  dataProcessor: {,
+  dataProcessor: {
   purpose: 'Create a data transformation and analysis pipeline',
   complexity: 'complex' as const,
   nodeCount: 25,
@@ -216,11 +216,11 @@ export const testCases = {
  */
 export async function runCrossModelTests(): Promise<{
   testResults: Record<string, CrossModelTestResult>;
-  summary: {,
+  summary: {
   totalTests: number;
-    successfulTests: number;,
+    successfulTests: number;
   averageConsistency: number;
-    modelPerformance: {,
+    modelPerformance: {
   openai: { successRate: number; avgTime: number };
       claude: { successRate: number; avgTime: number };
       gemini: { successRate: number; avgTime: number };
@@ -238,7 +238,7 @@ export async function runCrossModelTests(): Promise<{
       console.error(`Test ${testName},)}
   failed:`, error);}
       testResults[testName] = {
-  comparison: {,
+  comparison: {
   allSucceeded: false,
   successCount: 0,
   totalAttempts: 0,
@@ -262,15 +262,15 @@ function calculateSummaryStats(testResults: Record<string, CrossModelTestResult>
   const claudeResults = tests.map(t => t.claude).filter(Boolean);
   const geminiResults = tests.map(t => t.gemini).filter(Boolean);
   const modelPerformance = {
-  openai: {,
+  openai: {
   successRate: openaiResults.filter(r => r.success).length / Math.max(openaiResults.length, 1),
   avgTime: openaiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(openaiResults.length, 1),
 },
-  claude: {,
+  claude: {
   successRate: claudeResults.filter(r => r.success).length / Math.max(claudeResults.length, 1),
   avgTime: claudeResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(claudeResults.length, 1),
 },
-  gemini: {,
+  gemini: {
   successRate: geminiResults.filter(r => r.success).length / Math.max(geminiResults.length, 1),
   avgTime: geminiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(geminiResults.length, 1),
 };
@@ -283,7 +283,7 @@ function calculateSummaryStats(testResults: Record<string, CrossModelTestResult>
 /**
  * Generate a comparative report
  */
-export function generateTestReport(results: {,)
+export function generateTestReport(results: {)
   testResults: Record<string, CrossModelTestResult>;
   summary: any;
 }): string {

@@ -80,9 +80,10 @@ export class AccessibilityManager extends EventEmitter {
         * Create or update user accessibility profile
         */
     }
-    userId;
-    profileData;
-    Promise() {
+    /**
+    * Create or update user accessibility profile
+    */
+    async createAccessibilityProfile(userId, profileData) {
         const existingProfile = this.userProfiles.get(userId);
         const profile = {
             userId,
@@ -94,7 +95,7 @@ export class AccessibilityManager extends EventEmitter {
                 [AccessibilityNeed.COGNITIVE_IMPAIRMENT]: SeverityLevel.MILD,
                 [AccessibilityNeed.SPEECH_IMPAIRMENT]: SeverityLevel.MILD,
                 [AccessibilityNeed.TEMPORARY_DISABILITY]: SeverityLevel.MILD,
-                [AccessibilityNeed.MULTIPLE_DISABILITIES]: SeverityLevel.MILD,
+                [AccessibilityNeed.MULTIPLE_DISABILITIES]: SeverityLevel.MILD
             },
             assistiveTechnologies: profileData.assistiveTechnologies || [],
             preferredFallbacks: profileData.preferredFallbacks || [],
@@ -127,21 +128,12 @@ export class AccessibilityManager extends EventEmitter {
          * Analyze user context and recommend accessibility accommodations
          */
     }
-    userId;
-    context;
-    Promise() {
-        ;
-        recommendedFallbacks: FallbackMethod;
-        requiredAdaptations: InterfaceAdaptation;
-        estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
-        alternatives: Array < {
-            method: string,
-            accessibility: number, // 0-100 score,
-            estimated_time: number, // seconds,
-            requirements: string
-        } > ;
-    }
+    string;
+    accessibility; // 0-100 score,
+    estimated_time; // seconds,
+    requirements;
 }
+ > ;
  > {
     const: profile = this.userProfiles.get(userId),
     const: fallbacks, FallbackMethod = [],
@@ -424,7 +416,8 @@ export class AccessibilityManager extends EventEmitter {
                                                                                             implementation: {
                                                                                                 css: (Record),
                                                                                                 js: string,
-                                                                                                html: string },
+                                                                                                html: string
+                                                                                            },
                                                                                             description: string } > ;
                                                                                         estimatedImpact: number; // 0-100 improvement score
                                                                                         const profile = this.userProfiles.get(userId);

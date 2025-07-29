@@ -6,13 +6,13 @@
  */
 
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   type: 'security_breach' | 'anomaly_detected' | 'policy_violation' | 'system_failure' | 'suspicious_activity' | 'data_leak' | 'unauthorized_access';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   source: string; // System or component that generated the event
-  timestamp: number;,
+  timestamp: number;
   title: string;
-  description: string;,
+  description: string;
   details: {;
   affected_systems: string;
     affected_users?: string;
@@ -21,13 +21,13 @@ export interface SecurityEvent {
     request_patterns?: any;
     data_accessed?: string;
     geographic_location?: {
-      country: string;,
+      country: string;
   region: string;
       city: string;
       coordinates?: { lat: number; lng: number };
     };
   };
-  metadata: {,
+  metadata: {
   correlation_id?: string;
   threat_level: number; // 0-10 scale,
   confidence_score: number; // 0-1 scale,
@@ -38,32 +38,32 @@ export interface SecurityEvent {
   status: 'active' | 'investigating' | 'resolved' | 'dismissed' | 'escalated';
   assigned_to?: string;
   resolution?: {
-  action_taken: string;,
+  action_taken: string;
   resolved_by: string;
-  resolved_at: number;,
+  resolved_at: number;
   notes: string;
 };
 }
 export interface AlertRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
-  conditions: {,
-  event_types: SecurityEvent['type'][];,
+  conditions: {
+  event_types: SecurityEvent['type'][];
   severity_threshold: SecurityEvent['severity'];
   source_systems: string;
-  frequency_threshold?: {,
-  count: number;,
+  frequency_threshold?: {
+  count: number;
   time_window: number; // milliseconds,
 };
     custom_conditions?: Array<{
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex';
   value: any;
 }>;
   };
-  actions: {,
+  actions: {
   notifications: NotificationAction;
   escalation?: EscalationAction;
   automation?: AutomationAction;
@@ -72,17 +72,17 @@ export interface AlertRule {
   duplicate_window: number; // Don't send duplicate alerts within this window,
   similar_event_threshold: number; // Group similar events,
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
   last_modified: number;
 }
 export interface NotificationAction {
-  type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';,
+  type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';
   target: string; // Email, phone number, webhook URL, etc.,
   template?: string;
   priority: 'low' | 'normal' | 'high' | 'urgent';
-  rate_limit?: {,
-  max_per_hour: number;,
+  rate_limit?: {
+  max_per_hour: number;
   max_per_day: number;
 };
 }
@@ -93,64 +93,64 @@ export interface EscalationAction {
   auto_assign?: boolean;
 }
 export interface AutomationAction {
-  type: 'block_ip' | 'disable_user' | 'quarantine_system' | 'trigger_backup' | 'rotate_keys' | 'scale_resources';,
+  type: 'block_ip' | 'disable_user' | 'quarantine_system' | 'trigger_backup' | 'rotate_keys' | 'scale_resources';
   parameters: Record<string, any>;
   confirmation_required: boolean;
   timeout?: number; // Auto-revert after this time,
 }
 export interface AlertingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   default_severity_threshold: SecurityEvent['severity'];
-  notification_settings: {,
-  batch_notifications: boolean;,
+  notification_settings: {
+  batch_notifications: boolean;
   batch_interval: number; // milliseconds,
-  quiet_hours?: {,
+  quiet_hours?: {
   start: string; // HH:MM format,
-  end: string;,
+  end: string;
   timezone: string;
 };
   };
-  escalation_settings: {,
+  escalation_settings: {
   auto_escalation_enabled: boolean;
   escalation_timeout: number; // milliseconds,
   max_escalation_levels: number;
 };
-  retention: {,
+  retention: {
   events_retention_days: number;
-  resolved_events_retention_days: number;,
+  resolved_events_retention_days: number;
   archive_after_days: number;
 };
-  integrations: {,
-  siem_integration?: {,
-  enabled: boolean;,
+  integrations: {
+  siem_integration?: {
+  enabled: boolean;
   endpoint: string;
   api_key: string;
 };
     ticketing_integration?: {
-  enabled: boolean;,
+  enabled: boolean;
   system: 'jira' | 'servicenow' | 'zendesk';
-  endpoint: string;,
+  endpoint: string;
   credentials: Record<string, string>;
 };
   };
 }
 export interface AlertMetrics {
-  total_alerts: number;,
+  total_alerts: number;
   alerts_by_severity: Record<SecurityEvent['severity'], number>;
   alerts_by_type: Record<SecurityEvent['type'], number>;
   alerts_by_source: Record<string, number>;
-  response_times: {,
-  mean_acknowledgment_time: number;,
+  response_times: {
+  mean_acknowledgment_time: number;
   mean_resolution_time: number;
   p95_response_time: number;
 };
-  escalation_stats: {,
+  escalation_stats: {
   total_escalations: number;
   escalation_rate: number;
 };
-  false_positive_rate: number;,
+  false_positive_rate: number;
   time_range: {;
-  start: number;,
+  start: number;
   end: number;
 };
 }
@@ -238,7 +238,7 @@ export class CrossSystemAlertingSystem {
   getAllAlertRules(): AlertRule {,
   return Array.from(this.alertRules.values());
   // Alert management
-  getActiveAlerts(filters?: {,)
+  getActiveAlerts(filters?: {)
   severity?: SecurityEvent['severity'];
   type?: SecurityEvent['type'];
   source?: string;
@@ -334,13 +334,13 @@ export class CrossSystemAlertingSystem {
       return this.calculateMetricsForTimeRange(timeRange);
     return { ...this.alertMetrics };
   generateSecurityReport(timeRange: { start: number; end: number }): {
-  summary: {,
-  total_events: number;,
+  summary: {
+  total_events: number;
   critical_alerts: number;
-  avg_response_time: number;,
+  avg_response_time: number;
   false_positive_rate: number;
 };
-    trends: {,
+    trends: {
   daily_alert_counts: Array<{ date: string; count: number }>;
       top_alert_sources: Array<{ source: string; count: number }>;
       response_time_trend: Array<{ date: string; avg_response_time: number }>;
@@ -362,13 +362,13 @@ export class CrossSystemAlertingSystem {
     const topSources = this.getTopAlertSources(events);
     const responseTimeTrend = this.generateResponseTimeTrend(resolvedAlerts, timeRange);
     return {
-  summary: {,
+  summary: {
   total_events: events.length,
   critical_alerts: criticalAlerts.length,
   avg_response_time: avgResponseTime,
   false_positive_rate: this.calculateFalsePositiveRate(events),
 },
-  trends: {,
+  trends: {
   daily_alert_counts: dailyCounts,
   top_alert_sources: topSources,
   response_time_trend: responseTimeTrend,
@@ -625,7 +625,7 @@ Alert ID: ${alert.id}`;}
     return {
       total_alerts: 0,
       alerts_by_severity: { low: 0, medium: 0, high: 0, critical: 0 },
-      alerts_by_type: {,
+      alerts_by_type: {
   security_breach: 0,
   anomaly_detected: 0,
   policy_violation: 0,
@@ -635,17 +635,17 @@ Alert ID: ${alert.id}`;}
   unauthorized_access: 0,
 },
   alerts_by_source: {},
-      response_times: {,
+      response_times: {
   mean_acknowledgment_time: 0,
   mean_resolution_time: 0,
   p95_response_time: 0,
 },
-  escalation_stats: {,
+  escalation_stats: {
   total_escalations: 0,
   escalation_rate: 0,
 },
   false_positive_rate: 0,
-      time_range: {,
+      time_range: {
   start: Date.now(),
   end: Date.now(),
 };

@@ -35,8 +35,11 @@ return {
             ageGroup: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'][Math.floor(Math.random() * 6)],
             location: {
                 country: ['US', 'CA', 'UK', 'DE', 'FR', 'AU'][Math.floor(Math.random() * 6)],
-                region: `Region ${Math.floor(Math.random() * 10) + 1}` } },
-        city: `City ${Math.floor(Math.random() * 20) + 1}` }
+                region: `Region ${Math.floor(Math.random() * 10) + 1}`
+            }
+        },
+        city: `City ${Math.floor(Math.random() * 20) + 1}`
+    }
 },
     language;
 'en-US',
@@ -187,94 +190,63 @@ const generateMockEngagementScore = (userData) => {
                 score: Math.random() * 100,
                 weight: 0.25,
                 contribution: 25,
-                trend: {},
-                direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
-                strength: Math.random(),
-                duration: Math.floor(Math.random() * 30) + 1,
-                changeRate: (Math.random() - 0.5) * 10,
+                trend: {
+                    direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
+                    strength: Math.random(),
+                    duration: Math.floor(Math.random() * 30) + 1,
+                    changeRate: (Math.random() - 0.5) * 10,
+                },
+                components: []
             },
-            components, []]
-    };
-    {
-        dimensionId: 'depth',
-            name;
-        'Depth',
-            score;
-        Math.random() * 100,
-            weight;
-        0.3,
-            contribution;
-        30,
-            trend;
-        {
-            direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
-                strength;
-            Math.random(),
-                duration;
-            Math.floor(Math.random() * 30) + 1,
-                changeRate;
-            (Math.random() - 0.5) * 10,
-            ;
-        }
-        components: [];
-    }
-    {
-        dimensionId: 'quality',
-            name;
-        'Quality',
-            score;
-        Math.random() * 100,
-            weight;
-        0.25,
-            contribution;
-        25,
-            trend;
-        {
-            direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
-                strength;
-            Math.random(),
-                duration;
-            Math.floor(Math.random() * 30) + 1,
-                changeRate;
-            (Math.random() - 0.5) * 10,
-            ;
-        }
-        components: [];
-    }
-    {
-        dimensionId: 'recency',
-            name;
-        'Recency',
-            score;
-        Math.random() * 100,
-            weight;
-        0.2,
-            contribution;
-        20,
-            trend;
-        {
-            direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
-                strength;
-            Math.random(),
-                duration;
-            Math.floor(Math.random() * 30) + 1,
-                changeRate;
-            (Math.random() - 0.5) * 10,
-            ;
-        }
-        components: [];
+            {
+                dimensionId: 'depth',
+                name: 'Depth',
+                score: Math.random() * 100,
+                weight: 0.3,
+                contribution: 30,
+                trend: {
+                    direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
+                    strength: Math.random(),
+                    duration: Math.floor(Math.random() * 30) + 1,
+                    changeRate: (Math.random() - 0.5) * 10,
+                },
+                components: []
+            },
+            {
+                dimensionId: 'quality',
+                name: 'Quality',
+                score: Math.random() * 100,
+                weight: 0.25,
+                contribution: 25,
+                trend: {
+                    direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
+                    strength: Math.random(),
+                    duration: Math.floor(Math.random() * 30) + 1,
+                    changeRate: (Math.random() - 0.5) * 10,
+                },
+                components: []
+            },
+            {
+                dimensionId: 'recency',
+                name: 'Recency',
+                score: Math.random() * 100,
+                weight: 0.2,
+                contribution: 20,
+                trend: {
+                    direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
+                    strength: Math.random(),
+                    duration: Math.floor(Math.random() * 30) + 1,
+                    changeRate: (Math.random() - 0.5) * 10,
+                },
+                components: []
+            }],
         confidence: Math.random() * 0.3 + 0.7, // 0.7-1.0
-            trend;
-        {
+        trend: {
             direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)],
-                strength;
-            Math.random(),
-                duration;
-            Math.floor(Math.random() * 90) + 1,
-                changeRate;
-            (Math.random() - 0.5) * 5,
-            ;
-        }
+            strength: Math.random(),
+            duration: Math.floor(Math.random() * 90) + 1,
+            changeRate: (Math.random() - 0.5) * 5,
+        },
         factors: [,
             {
                 factor: 'Recent activity increase',
@@ -290,17 +262,15 @@ const generateMockEngagementScore = (userData) => {
                 significance: Math.random(),
                 description: 'User shows deeper engagement with content'
             }],
-            predictions;
-        [,
+        predictions: [,
             {
                 metric: 'engagement_score',
                 predictedValue: overallScore + (Math.random() - 0.5) * 20,
                 confidence: Math.random() * 0.3 + 0.6,
                 timeHorizon: 7,
                 factors: []
-            }];
-    }
-    ;
+            }]
+    };
 };
 export const UserEngagementScoring = ({
     analyticsInfrastructure,
@@ -346,7 +316,8 @@ export const UserEngagementScoring = ({
                 decision: ['quick', 'deliberate', 'hesitant'][Math.floor(Math.random() * 3)],
             },
             contentPreferences: [],
-            navigationPatterns: [] },
+            navigationPatterns: []
+        },
         preferences: {
             topics: [],
             features: [],
@@ -365,7 +336,8 @@ export const UserEngagementScoring = ({
             riskLevel: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
             riskFactors: [],
             timeToMigration: Math.floor(Math.random() * 90) + 30,
-            preventionStrategies: [], }
+            preventionStrategies: [],
+        }
     });
     setUserSegments(segments);
 }

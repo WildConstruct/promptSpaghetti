@@ -226,11 +226,11 @@ export interface ElementPosition {
 export interface InteractionContext {
     pageUrl: string;
     pageTitle: string;
-    viewportSize: {,
+    viewportSize: {
         width: number;
         height: number;
     };
-    scrollPosition: {,
+    scrollPosition: {
         x: number;
         y: number;
     };
@@ -291,7 +291,7 @@ export interface ScrollPattern {
 export type ScrollDirection = 'up' | 'down' | 'left' | 'right';
 
 export interface ScrollPause {
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -299,7 +299,7 @@ export interface ScrollPause {
     timestamp: number;
 
 export interface ViewportArea {
-    region: {,
+    region: {
         x: number;
         y: number;
         width: number;
@@ -367,7 +367,7 @@ export interface TimingStatistics {
     percentiles: Record<string, number>;
 
 export interface SpatialStatistics {
-    centroid: {,
+    centroid: {
         x: number;
         y: number;
     };
@@ -434,7 +434,7 @@ export interface DeviceContext {
     type: 'desktop' | 'tablet' | 'mobile';
     os: string;
     browser: string;
-    screenSize: {,
+    screenSize: {
         width: number;
         height: number;
     };
@@ -521,11 +521,11 @@ export interface TemporalPatternFeature {
 
 export interface SpatialPatternFeature {
     name: string;
-    coordinates: {,
+    coordinates: {
         x: number;
         y: number;
     };
-    area: {,
+    area: {
         width: number;
         height: number;
     };
@@ -619,7 +619,7 @@ export interface AnomalyFeature {
 export interface AnomalyContext {
     affectedUsers: number;
     affectedSessions: number;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -764,7 +764,7 @@ export interface ExportMetadata {
     version: string;
     totalSessions: number;
     totalPatterns: number;
-    dateRange: {,
+    dateRange: {
         start: number;
         end: number;
     };

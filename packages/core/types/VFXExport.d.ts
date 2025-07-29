@@ -10,24 +10,24 @@ export interface VFXExportMetadata {
     exportId: string;
     version: string;
     timestamp: string;
-    generator: {,
+    generator: {
         name: 'Wild Construct Prompt Generator';
         version: string;
         build: string;
     };
-    project: {,
+    project: {
         name?: string;
         id?: string;
         scene?: string;
         shot?: string;
     };
-    export: {,
+    export: {
         format: 'vfx-pipeline-v1';
         quality: 'production' | 'preview' | 'debug';
         includeDebugInfo: boolean;
         includeHistoricalData: boolean;
     };
-    compatibility: {,
+    compatibility: {
         controlNet: boolean;
         diffusionModels: string[];
         animationFramework: boolean;
@@ -36,7 +36,7 @@ export interface VFXExportMetadata {
 
 export interface VFXPromptData {
     finalPrompt: string;
-    components: {,
+    components: {
         subject: string[];
         action: string[];
         setting: string[];
@@ -44,7 +44,7 @@ export interface VFXPromptData {
         technical: string[];
         style: string[];
     };
-    variables: {,
+    variables: {
         [variableName: string]: {
             value: string;
             source: 'user' | 'generated' | 'scene_data' | 'default';
@@ -54,7 +54,7 @@ export interface VFXPromptData {
     };
     variants: VFXPromptVariant[];
     negativePrompt?: string;
-    weights: {,
+    weights: {
         overall: number;
         subject: number;
         composition: number;
@@ -71,7 +71,7 @@ export interface VFXPromptVariant {
     seed: number;
     prompt: string;
     confidence: number;
-    metadata: {,
+    metadata: {
         generationTime: number;
         nodesExecuted: number;
         variablesUsed: string[];
@@ -82,7 +82,7 @@ export interface VFXGraphStructure {
     connections: VFXGraphConnection[];
     executionPath: string[];
     criticalPath: string[];
-    analysis: {,
+    analysis: {
         complexity: 'simple' | 'moderate' | 'complex';
         variabilityScore: number;
         determinismScore: number;
@@ -102,11 +102,11 @@ export interface VFXGraphNode {
     dependsOn: string[];
     affects: string[];
     reproducibilityData?: {
-        originalPosition: {,
+        originalPosition: {
             x: number;
             y: number;
         };
-        originalSize: {,
+        originalSize: {
             width: number;
             height: number;
         };
@@ -117,11 +117,11 @@ export interface VFXGraphNode {
 
 export interface VFXGraphConnection {
     id: string;
-    source: {,
+    source: {
         nodeId: string;
         port?: string;
     };
-    target: {,
+    target: {
         nodeId: string;
         port?: string;
     };
@@ -129,9 +129,9 @@ export interface VFXGraphConnection {
     label?: string;
 
 export interface VFXExecutionData {
-    randomization: {,
+    randomization: {
         masterSeed: number;
-        nodeSeed: {,
+        nodeSeed: {
             [nodeId: string]: number;
         };
         rngState?: string;
@@ -146,9 +146,9 @@ export interface VFXExecutionData {
         };
         executionSequence?: string[];
     };
-    performance: {,
+    performance: {
         totalTime: number;
-        nodePerformance: {,
+        nodePerformance: {
             [nodeId: string]: {
                 executionTime: number;
                 cacheHits: number;
@@ -157,12 +157,12 @@ export interface VFXExecutionData {
         };
         memoryUsage?: number;
     };
-    history: {,
+    history: {
         iterations: VFXExecutionIteration[];
         modifications: VFXModification[];
     };
-    reproduction: {,
-        environment: {,
+    reproduction: {
+        environment: {
             nodeVersion: string;
             platform: string;
             locale?: string;
@@ -198,8 +198,8 @@ export interface VFXExtensions {
         frameCount?: number;
         fps?: number;
         keyframes?: VFXKeyframe[];
-        interpolation?: 'linear' | 'ease' | 'ease-in-out' | 'bezier';
-    };
+        interpolation?: 'linear' | 'ease' | 'ease-in-out' | 'bezier'
+  };
     scene3D?: {
         camera?: VFXCameraData;
         lighting?: VFXLightingData;
@@ -217,14 +217,14 @@ export interface VFXExtensions {
     };
 
 export interface VFXRenderingData {
-    resolution: {,
+    resolution: {
         width: number;
         height: number;
         aspectRatio: string;
     };
     camera: VFXCameraParams;
     lighting: VFXLightingParams;
-    style: {,
+    style: {
         filmstock?: 'digital' | '35mm' | '16mm' | 'super8' | 'polaroid';
         colorGrading?: 'natural' | 'cinematic' | 'desaturated' | 'vibrant' | 'monochrome';
         lensProfile?: string;
@@ -234,7 +234,7 @@ export interface VFXRenderingData {
             blurRadius?: number;
         };
     };
-    quality: {,
+    quality: {
         samples?: number;
         denoising?: number;
         sharpness?: number;
@@ -300,7 +300,7 @@ export interface VFXCameraData {
 
 export interface VFXLightingData {
     setup: 'key' | 'three-point' | 'natural' | 'practical' | 'studio' | 'location';
-    sources: {,
+    sources: {
         type: 'key' | 'fill' | 'rim' | 'background' | 'practical';
         position: [number, number, number];
         intensity: number;
@@ -310,7 +310,7 @@ export interface VFXLightingData {
 
 export interface VFXEnvironmentData {
     type: 'indoor' | 'outdoor' | 'studio' | 'location' | 'greenscreen';
-    conditions: {,
+    conditions: {
         weather?: string;
         timeOfDay?: string;
         season?: 'spring' | 'summer' | 'fall' | 'winter';
@@ -328,7 +328,7 @@ export interface VFXValidationResult {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-    compatibility: {,
+    compatibility: {
         controlNet: boolean;
         animation: boolean;
         rendering: boolean;
@@ -361,43 +361,43 @@ export interface WildConstructCrowdControl {
     enabled: boolean;
     version: string;
     crowdData?: {
-        era: {,
+        era: {
             name: string;
             period: [number, number];
             region: string[];
         };
-        demographics: {,
+        demographics: {
             totalPopulation: number;
-            socialClasses: {,
+            socialClasses: {
                 [className: string]: {
                     percentage: number;
                     occupations: string[];
                     clothingStyles: string[];
                 };
             };
-            ageDistribution: {,
+            ageDistribution: {
                 children: number;
                 adults: number;
                 elderly: number;
             };
-            genderRatio: {,
+            genderRatio: {
                 male: number;
                 female: number;
             };
         };
-        behavior: {,
+        behavior: {
             activities: string[];
             interactions: string[];
             socialMixing: boolean;
             culturalPatterns: string[];
         };
-        validation: {,
+        validation: {
             historicalAccuracy: number;
             constraintViolations: string[];
             suggestions: string[];
         };
     };
-    pipeline: {,
+    pipeline: {
         format: 'json' | 'xml' | 'csv' | 'maya' | 'blender';
         memoryEstimate: number;
         renderComplexity: 'low' | 'medium' | 'high';
@@ -412,35 +412,35 @@ export interface WildConstructBackdrop {
     enabled: boolean;
     version: string;
     environment?: {
-        era: {,
+        era: {
             name: string;
             architecturalStyle: string[];
             materials: string[];
             colors: string[];
         };
-        location: {,
+        location: {
             type: 'urban' | 'rural' | 'interior' | 'natural';
             description: string;
             authenticity: number;
             socialContext: string;
         };
-        atmosphere: {,
+        atmosphere: {
             timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
             season: 'spring' | 'summer' | 'autumn' | 'winter';
             weather: string;
             mood: string;
         };
-        assets: {,
+        assets: {
             buildings: BackdropAsset[];
             props: BackdropAsset[];
             vegetation: BackdropAsset[];
             terrain: BackdropAsset[];
         };
     };
-    scene3D: {,
+    scene3D: {
         coordinate: [number, number, number];
         scale: [number, number, number];
-        lighting: {,
+        lighting: {
             ambientColor: [number, number, number];
             directionalLights: Array<{,
                 direction: [number, number, number];
@@ -457,12 +457,12 @@ export interface WildConstructMeteor {
     enabled: boolean;
     version: string;
     atmosphere?: {
-        era: {,
+        era: {
             name: string;
             climateData: string[];
             seasonalPatterns: string[];
         };
-        weather: {,
+        weather: {
             condition: string;
             temperature: number;
             humidity: number;
@@ -470,7 +470,7 @@ export interface WildConstructMeteor {
             precipitation: number;
             visibility: number;
         };
-        effects: {,
+        effects: {
             particles: Array<{,
                 type: 'rain' | 'snow' | 'fog' | 'dust' | 'smoke' | 'mist';
                 density: number;
@@ -478,13 +478,13 @@ export interface WildConstructMeteor {
                 velocity: [number, number, number];
                 color: [number, number, number, number];
             }>;
-            volumetrics: {,
+            volumetrics: {
                 enabled: boolean;
                 scattering: number;
                 absorption: number;
             };
         };
-        historicalAccuracy: {,
+        historicalAccuracy: {
             score: number;
             factors: string[];
             references: string[];
@@ -498,41 +498,41 @@ export interface WildConstructMaestro {
     enabled: boolean;
     version: string;
     orchestration?: {
-        sceneComposition: {,
+        sceneComposition: {
             foreground: string[];
             midground: string[];
             background: string[];
             depth: number;
         };
-        timing: {,
+        timing: {
             duration: number;
             keyMoments: Array<{,
                 time: number;
                 event: string;
-                priority: 'high' | 'medium' | 'low';
-            }>;
+                priority: 'high' | 'medium' | 'low'
+  }>;
         };
-        coordination: {,
+        coordination: {
             crowdControl: boolean;
             backdrop: boolean;
             meteor: boolean;
             dependencies: string[];
         };
-        historicalContext: {,
+        historicalContext: {
             narrative: string;
             culturalSignificance: string;
             historicalEvents: string[];
             accuracy: number;
         };
     };
-    rendering: {,
+    rendering: {
         renderOrder: string[];
-        compositing: {,
+        compositing: {
             layers: string[];
             blendModes: string[];
             masks: string[];
         };
-        postProcessing: {,
+        postProcessing: {
             colorGrading: boolean;
             filmGrain: boolean;
             vignette: boolean;
@@ -551,20 +551,20 @@ export interface WildConstructUTDG {
         connections: UTDGConnection[];
         metadata: UTDGMetadata;
     };
-    historical: {,
-        era: {,
+    historical: {
+        era: {
             name: string;
             period: [number, number];
             regions: string[];
-            accuracy: 'high' | 'medium' | 'creative';
-        };
+            accuracy: 'high' | 'medium' | 'creative'
+  };
         constraints: Array<{,
             type: 'temporal' | 'regional' | 'social' | 'technical';
             rule: string;
             enforcement: 'strict' | 'warning' | 'suggestion';
             context: string;
         }>;
-        validation: {,
+        validation: {
             overallScore: number;
             violations: Array<{,
                 severity: 'error' | 'warning' | 'info';
@@ -581,14 +581,14 @@ export interface WildConstructUTDG {
         reliability: number;
         coverage: string[];
     }>;
-    vfxMetadata: {,
+    vfxMetadata: {
         textureCategories: string[];
         materialProperties: Array<{,
             name: string;
             values: Record<string, unknown>;
             historicalBasis: string;
         }>;
-        compatibilityFlags: {,
+        compatibilityFlags: {
             maya: boolean;
             blender: boolean;
             houdini: boolean;
@@ -612,19 +612,19 @@ export interface UTDGNode {
     id: string;
     type: 'material' | 'texture' | 'pattern' | 'style' | 'composite';
     content: string;
-    historicalData: {,
+    historicalData: {
         era: string;
         region: string[];
         authenticity: number;
         source: string;
         tags: string[];
     };
-    relationships: {,
+    relationships: {
         compatible: string[];
         incompatible: string[];
         variations: string[];
     };
-    vfxProperties: {,
+    vfxProperties: {
         roughness?: number;
         metallic?: number;
         normal?: string;
@@ -654,74 +654,74 @@ export interface UTDGMetadata {
  */
 
 export interface VFXMARSStructure {
-    metadata: {,
-        camera: {,
+    metadata: {
+        camera: {
             shotType: 'extreme-wide' | 'wide' | 'medium' | 'close-up' | 'extreme-close-up' | 'two-shot' | 'over-shoulder';
             movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'crane' | 'handheld' | 'steadicam' | 'tracking';
             angle: 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'birds-eye' | 'worms-eye';
-            lens: {,
+            lens: {
                 focalLength: number;
                 aperture: number;
                 focusType: 'sharp' | 'shallow-dof' | 'deep-focus' | 'rack-focus' | 'soft-focus';
             };
-            framing: {,
+            framing: {
                 composition: 'rule-of-thirds' | 'centered' | 'golden-ratio' | 'symmetrical' | 'asymmetrical';
                 aspectRatio: '16:9' | '21:9' | '4:3' | '2.35:1' | '1.85:1' | 'square';
-                headroom: 'tight' | 'standard' | 'loose';
-            };
+                headroom: 'tight' | 'standard' | 'loose'
+  };
         };
-        scene: {,
+        scene: {
             location: 'interior' | 'exterior' | 'studio' | 'practical-location' | 'virtual-set';
             timeOfDay: 'golden-hour' | 'blue-hour' | 'day' | 'night' | 'magic-hour' | 'overcast';
             season: 'spring' | 'summer' | 'autumn' | 'winter' | 'timeless';
             weather: 'clear' | 'cloudy' | 'rainy' | 'stormy' | 'foggy' | 'snowy' | 'windy';
-            atmosphere: 'calm' | 'tense' | 'chaotic' | 'serene' | 'ominous' | 'festive' | 'melancholic';
-        };
-        technical: {,
+            atmosphere: 'calm' | 'tense' | 'chaotic' | 'serene' | 'ominous' | 'festive' | 'melancholic'
+  };
+        technical: {
             filmStock: 'digital' | '35mm' | '16mm' | 'super8' | 'imax' | 'alexa' | 'red' | 'blackmagic';
             colorSpace: 'rec709' | 'rec2020' | 'dci-p3' | 'aces' | 'log' | 'srgb';
             resolution: '2k' | '4k' | '6k' | '8k' | 'hd' | 'uhd' | 'cinema4k';
             frameRate: 24 | 25 | 30 | 48 | 50 | 60 | 120;
         };
     };
-    actions: {,
-        primary: {,
+    actions: {
+        primary: {
             subjects: VFXMARSSubject[];
             primaryAction: string;
             secondaryActions: string[];
             interactions: VFXMARSInteraction[];
         };
-        performance: {,
+        performance: {
             emotionalState: 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'surprised' | 'disgusted' | 'contemptuous';
             intensity: 'subtle' | 'moderate' | 'intense' | 'extreme';
             bodyLanguage: 'open' | 'closed' | 'confident' | 'nervous' | 'aggressive' | 'passive' | 'theatrical';
-            facialExpression: 'natural' | 'exaggerated' | 'stoic' | 'animated' | 'pensive' | 'determined';
-        };
-        movement: {,
+            facialExpression: 'natural' | 'exaggerated' | 'stoic' | 'animated' | 'pensive' | 'determined'
+  };
+        movement: {
             pace: 'slow' | 'moderate' | 'fast' | 'frenetic' | 'static';
             direction: 'left-to-right' | 'right-to-left' | 'toward-camera' | 'away-from-camera' | 'circular' | 'chaotic';
-            choreography: 'natural' | 'staged' | 'dance-like' | 'combat' | 'athletic' | 'ceremonial';
-        };
+            choreography: 'natural' | 'staged' | 'dance-like' | 'combat' | 'athletic' | 'ceremonial'
+  };
     };
-    rendering: {,
-        lighting: {,
+    rendering: {
+        lighting: {
             setup: 'natural' | 'three-point' | 'key-only' | 'rim' | 'silhouette' | 'high-key' | 'low-key' | 'chiaroscuro';
             quality: 'soft' | 'hard' | 'mixed' | 'dramatic' | 'flat' | 'volumetric' | 'practical';
-            temperature: {,
+            temperature: {
                 kelvin: number;
                 description: 'warm' | 'cool' | 'neutral' | 'mixed' | 'color-contrast';
             };
-            motivation: 'sun' | 'moon' | 'artificial' | 'fire' | 'neon' | 'candle' | 'fluorescent' | 'led';
-        };
-        effects: {,
+            motivation: 'sun' | 'moon' | 'artificial' | 'fire' | 'neon' | 'candle' | 'fluorescent' | 'led'
+  };
+        effects: {
             atmosphere: ('fog' | 'smoke' | 'dust' | 'rain' | 'snow' | 'mist' | 'haze' | 'steam')[];
             particles: ('sparks' | 'embers' | 'ash' | 'pollen' | 'debris' | 'magical' | 'digital' | 'organic')[];
-            postProcessing: {,
+            postProcessing: {
                 colorGrading: 'natural' | 'cinematic' | 'stylized' | 'desaturated' | 'high-contrast' | 'vintage' | 'futuristic';
-                filtration: 'clean' | 'film-grain' | 'digital-noise' | 'softening' | 'sharpening' | 'glow' | 'bloom';
-            };
+                filtration: 'clean' | 'film-grain' | 'digital-noise' | 'softening' | 'sharpening' | 'glow' | 'bloom'
+  };
         };
-        quality: {,
+        quality: {
             renderEngine: 'path-tracing' | 'ray-tracing' | 'rasterization' | 'hybrid' | 'real-time' | 'offline';
             samples: number;
             bounces: number;
@@ -729,21 +729,21 @@ export interface VFXMARSStructure {
             upscaling: '1x' | '2x' | '4x' | 'ai-upscale';
         };
     };
-    style: {,
+    style: {
         genre: 'drama' | 'action' | 'comedy' | 'horror' | 'sci-fi' | 'fantasy' | 'documentary' | 'commercial' | 'music-video';
-        visualStyle: {,
+        visualStyle: {
             overall: 'realistic' | 'stylized' | 'surreal' | 'abstract' | 'minimalist' | 'maximalist' | 'retro' | 'futuristic';
             colorPalette: 'monochromatic' | 'analogous' | 'complementary' | 'triadic' | 'split-complementary' | 'tetradic' | 'natural';
             contrast: 'low' | 'medium' | 'high' | 'extreme' | 'variable';
             saturation: 'desaturated' | 'natural' | 'saturated' | 'hyper-saturated' | 'selective-color';
         };
-        influences: {,
+        influences: {
             cinematographer: string[];
             director: string[];
             period: string[];
             artMovement: string[];
         };
-        references: {,
+        references: {
             films: string[];
             artwork: string[];
             photography: string[];
@@ -759,12 +759,12 @@ export interface VFXMARSSubject {
     type: 'human' | 'animal' | 'creature' | 'object' | 'vehicle' | 'environment' | 'abstract';
     description: string;
     importance: 'primary' | 'secondary' | 'background' | 'prop';
-    characteristics: {,
+    characteristics: {
         physical: string[];
         emotional: string[];
         narrative: string[];
     };
-    positioning: {,
+    positioning: {
         screenPosition: 'left' | 'center' | 'right' | 'multiple' | 'off-screen';
         depth: 'foreground' | 'midground' | 'background';
         relationship: string[];
@@ -788,24 +788,24 @@ export interface VFXZadaVariant {
     id: string;
     type: 'conversational' | 'technical' | 'poetic' | 'director-notes' | 'screenplay';
     language: 'english' | 'spanish' | 'french' | 'german' | 'italian' | 'japanese' | string;
-    style: {,
+    style: {
         formality: 'casual' | 'professional' | 'academic' | 'artistic' | 'technical';
         length: 'concise' | 'detailed' | 'verbose' | 'bullet-points' | 'paragraph';
         perspective: 'objective' | 'subjective' | 'first-person' | 'second-person' | 'third-person';
     };
-    content: {,
+    content: {
         naturalLanguage: string;
         technicalNotes: string[];
         creativeNotes: string[];
         productionNotes: string[];
     };
-    metadata: {,
+    metadata: {
         targetAudience: 'director' | 'cinematographer' | 'vfx-supervisor' | 'editor' | 'producer' | 'general';
         expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-        context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation';
-    };
-    equivalence: {,
-        marsMapping: {,
+        context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation'
+  };
+    equivalence: {
+        marsMapping: {
             metadata: boolean;
             actions: boolean;
             rendering: boolean;
@@ -821,23 +821,23 @@ export interface VFXZadaVariant {
 
 export interface VFXHollywoodProtocol {
     version: '1.0' | '1.1' | '2.0';
-    production: {,
+    production: {
         masterSeed: number;
         projectCode: string;
         episodeNumber?: number;
         sequenceNumber?: number;
         shotNumber?: number;
     };
-    departmental: {,
+    departmental: {
         cinematography: number;
         vfx: number;
         editorial: number;
         sound: number;
         grading: number;
     };
-    creative: {,
+    creative: {
         directorVariant: number;
-        alternativeVersions: {,
+        alternativeVersions: {
             [versionName: string]: {
                 seed: number;
                 description: string;
@@ -846,22 +846,22 @@ export interface VFXHollywoodProtocol {
             };
         };
     };
-    qa: {,
+    qa: {
         validationSeed: number;
         comparisonSeeds: number[];
         benchmarkSeed: number;
     };
-    reproducibility: {,
+    reproducibility: {
         guaranteeLevel: 'exact' | 'approximate' | 'creative-equivalent' | 'concept-only';
         environmentHash: string;
-        softwareVersions: {,
+        softwareVersions: {
             [software: string]: string;
         };
         hardwareFingerprint: string;
         lastValidated: string;
         validationNotes: string;
     };
-    compliance: {,
+    compliance: {
         studioCertification: boolean;
         distributorApproval: boolean;
         archiveCompliant: boolean;
@@ -873,54 +873,54 @@ export interface VFXHollywoodProtocol {
  */
 
 export interface VFXHumanReadableLayer {
-    executiveSummary: {,
+    executiveSummary: {
         description: string;
         keyElements: string[];
         creativeIntent: string;
         technicalComplexity: 'simple' | 'moderate' | 'complex' | 'experimental';
         estimatedCost: 'low' | 'medium' | 'high' | 'premium';
-        estimatedTime: 'hours' | 'days' | 'weeks' | 'months';
-    };
-    creativeTeam: {,
-        director: {,
+        estimatedTime: 'hours' | 'days' | 'weeks' | 'months'
+  };
+    creativeTeam: {
+        director: {
             vision: string;
             references: string[];
             priorities: string[];
             concerns: string[];
         };
-        cinematographer: {,
+        cinematographer: {
             lookAndFeel: string;
             lightingApproach: string;
             cameraWork: string;
             technicalChallenges: string[];
         };
-        vfxSupervisor: {,
+        vfxSupervisor: {
             vfxApproach: string;
             practicalElements: string[];
             digitalElements: string[];
             integrationNotes: string[];
         };
     };
-    production: {,
-        schedule: {,
+    production: {
+        schedule: {
             prep: string;
             shoot: string;
             post: string;
         };
-        resources: {,
+        resources: {
             crew: string[];
             equipment: string[];
             locations: string[];
             talent: string[];
         };
-        dependencies: {,
+        dependencies: {
             prerequisites: string[];
             deliverables: string[];
             approvals: string[];
         };
     };
-    approval: {,
-        reviewStages: {,
+    approval: {
+        reviewStages: {
             [stageName: string]: {
                 reviewers: string[];
                 criteria: string[];
@@ -928,20 +928,20 @@ export interface VFXHumanReadableLayer {
                 timeline: string;
             };
         };
-        signOffs: {,
+        signOffs: {
             creative: boolean;
             technical: boolean;
             legal: boolean;
             budget: boolean;
         };
-        notes: {,
+        notes: {
             directorNotes: string[];
             producerNotes: string[];
             clientNotes: string[];
             technicalNotes: string[];
         };
     };
-    documentation: {,
+    documentation: {
         projectDocuments: string[];
         referenceImages: string[];
         testFootage: string[];
@@ -954,18 +954,18 @@ export interface VFXHumanReadableLayer {
  */
 
 export interface VFXControlNetTags {
-    camera: {,
+    camera: {
         [tagName: string]: VFXControlNetTag;
     };
-    subjects: {,
+    subjects: {
         [tagName: string]: VFXControlNetTag;
     };
-    effects: {,
+    effects: {
         [tagName: string]: VFXControlNetTag;
     };
-    marsIntegration: {,
+    marsIntegration: {
         enabled: boolean;
-        globalSettings: {,
+        globalSettings: {
             baseStrength: number;
             adaptiveWeighting: boolean;
             cascadeMode: boolean;
@@ -979,7 +979,7 @@ export interface VFXControlNetTags {
 export interface VFXControlNetTag {
     tag: string;
     description: string;
-    controlNetParameters: {,
+    controlNetParameters: {
         depth?: {
             enabled: boolean;
             strength: number;
@@ -1002,20 +1002,20 @@ export interface VFXControlNetTag {
         normal?: {
             enabled: boolean;
             strength: number;
-            preprocessor: 'normal' | 'bae';
-        };
+            preprocessor: 'normal' | 'bae'
+  };
         segmentation?: {
             enabled: boolean;
             strength: number;
-            preprocessor: 'seg' | 'ade20k';
-        };
+            preprocessor: 'seg' | 'ade20k'
+  };
         scribble?: {
             enabled: boolean;
             strength: number;
-            preprocessor: 'scribble' | 'fake_scribble';
-        };
+            preprocessor: 'scribble' | 'fake_scribble'
+  };
     };
-    renderingHints: {,
+    renderingHints: {
         cameraDistance?: number;
         verticalAngle?: number;
         horizontalAngle?: number;
@@ -1033,7 +1033,7 @@ export interface VFXControlNetTag {
         dependsOnTags?: string[];
         conflictsWith?: string[];
     };
-    integration: {,
+    integration: {
         softwareCompatibility: string[];
         pipelineStage: 'previs' | 'lighting' | 'animation' | 'compositing' | 'final';
         qualityLevel: 'draft' | 'preview' | 'final';

@@ -10,7 +10,7 @@ import { PerformanceProfiler } from '../PerformanceProfiler';
 // Mock performance API
 const mockPerformance = {
   now: jest.fn(() => Date.now()),
-  memory: {,
+  memory: {
   usedJSHeapSize: 50 * 1024 * 1024, // 50MB,
   totalJSHeapSize: 100 * 1024 * 1024, // 100MB,
   jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
@@ -120,7 +120,7 @@ describe('StateDevTools', () => {
           { id: 1, name: 'John', active: true },
           { id: 2, name: 'Jane', active: false }
         ],
-        settings: {,
+        settings: {
   theme: 'dark',
   notifications: true,
 };
@@ -299,7 +299,7 @@ describe('StateDevTools', () => {
     });
     it('should import session data', () => {
   const mockSessionData = {
-  config: {,
+  config: {
   enableTimeTravel: true,
   maxHistorySize: 500,
 },
@@ -311,7 +311,7 @@ describe('StateDevTools', () => {
             metadata: { domain: 'import-test' }
         ],
         metrics: {},
-        dependencyGraph: {,
+        dependencyGraph: {
   nodes: [],
           edges: [],
           metadata: { totalNodes: 0, totalEdges: 0 }
@@ -445,7 +445,7 @@ describe('StateDevTools', () => {
           id: `load_test_${i}`}
 },
   timestamp: Date.now() + i,
-          state: {,
+          state: {
   counter: i,
             data: Array.from({ length: 10 }, (_, j) => `item_${i}_${j}`)}
 },

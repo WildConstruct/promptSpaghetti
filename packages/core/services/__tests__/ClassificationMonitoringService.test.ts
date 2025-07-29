@@ -43,7 +43,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'SUCCESS',
         details: { fileSize: 1024 },
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 50,
   dataSize: 1024,
 });
@@ -63,7 +63,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'SUCCESS',
         details: {},
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 100,
 });
       await service.recordEvent({)
@@ -76,7 +76,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'FAILURE',
         details: { reason: 'Insufficient permissions' },
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 50,
 });
       const stats = service.getClassificationStats('CONFIDENTIAL');
@@ -193,7 +193,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'WARNING',
         details: {},
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 100,
   complianceScore: 70 // Below 80 threshold,
 });
@@ -209,7 +209,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'WARNING',
         details: {},
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 120,
   complianceScore: 60,
 });
@@ -338,7 +338,7 @@ describe('ClassificationMonitoringService', () => {
           result: results[i % 5],
           details: {},
           context: mockContext,
-          metrics: {,
+          metrics: {
   processingTimeMs: 50 + (i * 10),
   complianceScore: 80 + (i % 20),
 });
@@ -431,7 +431,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'FAILURE',
         details: {},
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 150,
   complianceScore: 50 // Very low compliance,
 });
@@ -453,7 +453,7 @@ describe('ClassificationMonitoringService', () => {
         result: 'FAILURE',
         details: {},
         context: mockContext,
-        metrics: {,
+        metrics: {
   processingTimeMs: 180,
   complianceScore: 60,
 });
@@ -531,7 +531,7 @@ describe('ClassificationMonitoringService', () => {
           result: 'SUCCESS',
           details: {},
           context: mockContext,
-          metrics: {,
+          metrics: {
   processingTimeMs: time,
 });
       const stats = service.getClassificationStats('INTERNAL');
@@ -550,7 +550,7 @@ describe('ClassificationMonitoringService', () => {
           result: 'SUCCESS',
           details: {},
           context: mockContext,
-          metrics: {,
+          metrics: {
   processingTimeMs: 100,
   complianceScore: score,
 });

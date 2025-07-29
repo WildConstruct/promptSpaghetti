@@ -7,19 +7,6 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { DataClassificationLevel } from '../types/DataClassification';
- > ;
-riskAnalysis: {
-    averageRiskScore: number;
-    highRiskEntries: number;
-    criticalViolations: number;
-}
-;
-trendsAnalysis: {
-    activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
-    riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-    complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-}
-;
 export class ClassificationAuditLoggingService {
     auditLogs = new Map();
     reports = new Map();

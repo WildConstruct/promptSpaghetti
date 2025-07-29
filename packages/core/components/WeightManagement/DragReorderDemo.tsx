@@ -124,7 +124,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   border: '#e5e7eb',
@@ -133,7 +133,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
   success: '#10b981',
   warning: '#f59e0b',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   border: '#4b5563',
@@ -142,7 +142,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
   success: '#34d399',
   warning: '#fbbf24',
 },
-  cinema: {,
+  cinema: {
   background: '#0d1117',
   secondary: '#1a1a1a',
   border: '#ff7c00',
@@ -195,7 +195,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
             background: styles.secondary,
             border: `1px solid ${styles.border}`}
 },
-  borderRadius: '12px';
+  borderRadius: '12px'
   }}>
             <span style={{
   padding: '6px 12px',
@@ -236,7 +236,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
 },
   borderRadius: '16px',
           padding: '24px',
-          marginBottom: '32px';
+          marginBottom: '32px'
   }}>
           <h3 style={{
   margin: '0 0 20px 0',
@@ -328,7 +328,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                 border: `1px solid ${styles.border}`}
 },
   borderRadius: '16px',
-                padding: '24px';
+                padding: '24px'
   }}>
                 <h4 style={{
   margin: '0 0 20px 0',
@@ -368,7 +368,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                       background: styles.accent + '10',
                       border: `1px solid ${styles.accent}30`}
 },
-  borderRadius: '8px';
+  borderRadius: '8px'
   }}>
                       <div style={{ fontSize: '12px', opacity: 0.7, marginBottom: '4px' }}>
                         Most Likely:
@@ -389,7 +389,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                 border: `1px solid ${styles.border}`}
 },
   borderRadius: '16px',
-                padding: '24px';
+                padding: '24px'
   }}>
                 <div style={{
   display: 'flex',
@@ -444,7 +444,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                           fontSize: '14px',
                           opacity: isGenerating && index >= previewResults.length - 1 ? 0.5 : 1,
                           transition: 'opacity 0.3s ease',
-                          animation: isGenerating && index === previewResults.length - 1 ? 'fadeIn 0.3s ease' : 'none';
+                          animation: isGenerating && index === previewResults.length - 1 ? 'fadeIn 0.3s ease' : 'none'
   }}
                       >
                         <span style={{
@@ -483,7 +483,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
             border: `1px solid ${styles.border}`}
 },
   borderRadius: '16px',
-            padding: '24px';
+            padding: '24px'
   }}>
             <h3 style={{
   margin: '0 0 20px 0',

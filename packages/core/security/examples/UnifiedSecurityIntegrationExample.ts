@@ -42,24 +42,24 @@ export function createQuickSecuritySetup() {
   console.log('=== Custom Security Setup Example ===');
   // Define custom configuration
   const customConfig: Partial<UnifiedSecurityConfig> = {,
-  integration: {,
+  integration: {
   mode: IntegrationMode.HIERARCHICAL,
   strategy: CoordinationStrategy.WEIGHTED_AVERAGE,
   fallback: FallbackBehavior.USE_THROTTLING,
-  priorities: {,
+  priorities: {
   rateLimiting: 75,
   throttling: 85,
 },
-  analytics: {,
+  analytics: {
   enableUsagePatterns: true,
   enableScalingAnalytics: true,
   enableCrossSystemLearning: true,
   enableAnalyticsInsights: true,
 },
-  monitoring: {,
+  monitoring: {
   enableMetrics: true,
   enableHealthChecks: true,
-  alertThresholds: {,
+  alertThresholds: {
   errorRate: 5,
   responseTime: 1500,
   systemHealth: 90,
@@ -79,9 +79,9 @@ export function createQuickSecuritySetup() {
 
 export async function handleSecurityRequest()
   integration: AdaptiveRateLimitingIntegration,
-  requestData: {,
+  requestData: {
   ip: string;
-    endpoint: string;,
+    endpoint: string;
   method: string;
     userId?: string;
     userAgent: string;
@@ -101,19 +101,19 @@ export async function handleSecurityRequest()
     recentFailures: 0,
     consecutiveFailures: 0,
     // Integration-specific context
-    rateLimitingHistory: {,
+    rateLimitingHistory: {
   recentAttempts: 0,
   backoffLevel: 0,
   threatAssessment: ThreatLevel.LOW,
   adaptiveMultiplier: 1.0,
 },
-  throttlingHistory: {,
+  throttlingHistory: {
   recentThrottling: 0,
   systemCondition: 'normal' as any,
   activeRules: [],
   effectivenessScore: 85,
 },
-  integrationMetadata: {,
+  integrationMetadata: {
   requestId: `req-${Date.now()}`}
 },
   correlationId: `corr-${Date.now()}`}
@@ -122,19 +122,19 @@ export async function handleSecurityRequest()
       decisionTrail: [];
   },
   analyticsInsights: [],
-    historicalPerformance: {,
+    historicalPerformance: {
   requestVolume: [100, 120, 110, 105],
   successRate: [98.5, 97.8, 98.1, 98.9],
   averageLatency: [200, 220, 210, 195],
   errorRates: [1.5, 2.2, 1.9, 1.1],
 },
-  patternAnalysis: {,
+  patternAnalysis: {
   currentPattern: 'normal',
   patternConfidence: 85,
   predictedNextPattern: 'normal',
   patternTransitionProbability: 0.1,
 },
-  scalingContext: {,
+  scalingContext: {
   currentLoad: 45,
   predictedLoad: 50,
   scalingRecommendation: 'maintain',

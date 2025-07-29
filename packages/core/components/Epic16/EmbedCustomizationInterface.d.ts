@@ -36,11 +36,11 @@ export interface EmbedWidget {
     icon: React.ComponentType<unknown>;
     configurable: boolean;
     required: boolean;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
-    size: {,
+    size: {
         width: number;
         height: number;
     };
@@ -57,7 +57,7 @@ export interface CustomFont {
 export interface CustomTheme {
     id: string;
     name: string;
-    colors: {,
+    colors: {
         primary: string;
         secondary: string;
         accent: string;
@@ -71,21 +71,21 @@ export interface CustomTheme {
         error: string;
         info: string;
     };
-    fonts: {,
+    fonts: {
         heading: CustomFont;
         body: CustomFont;
         ui: CustomFont;
     };
-    spacing: {,
+    spacing: {
         unit: number;
         scale: number[];
     };
-    borderRadius: {,
+    borderRadius: {
         small: number;
         medium: number;
         large: number;
     };
-    shadows: {,
+    shadows: {
         small: string;
         medium: string;
         large: string;

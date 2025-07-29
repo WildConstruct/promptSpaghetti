@@ -40,13 +40,13 @@ export interface SecurityAlert {
     title: string;
     description: string;
     source: string;
-    sourceData: {,
+    sourceData: {
         eventIds?: string[];
         patternIds?: string[];
         insightIds?: string[];
         metrics?: Record<string, number>;
     };
-    context: {,
+    context: {
         affectedSystems: string[];
         affectedUsers: string[];
         ipAddresses: string[];
@@ -56,7 +56,7 @@ export interface SecurityAlert {
             confidence: number;
         };
     };
-    risk: {,
+    risk: {
         score: number;
         factors: Array<{,
             factor: string;
@@ -65,12 +65,12 @@ export interface SecurityAlert {
         likelihood: number;
         impact: number;
     };
-    compliance: {,
+    compliance: {
         frameworks: ComplianceFramework[];
         reportingRequired: boolean;
         deadline?: Date;
     };
-    escalation: {,
+    escalation: {
         level: number;
         maxLevel: number;
         nextEscalation?: Date;
@@ -83,7 +83,7 @@ export interface SecurityAlert {
         preventionMeasures: string[];
         lessonsLearned: string[];
     };
-    metadata: {,
+    metadata: {
         correlationId: string;
         workflowVersion: string;
         processingTime: number;
@@ -236,8 +236,8 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         limit?: number;
         offset?: number;
         sortBy?: 'timestamp' | 'severity' | 'risk';
-        sortOrder?: 'asc' | 'desc';
-    }): {
+        sortOrder?: 'asc' | 'desc'
+  }): {
         alerts: SecurityAlert[];
         total: number;
         hasMore: boolean;

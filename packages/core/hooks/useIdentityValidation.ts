@@ -242,9 +242,9 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
    * Get next recommended verification steps
    */
   const getRecommendedVerificationSteps = useCallback((): {
-  type: IdentityValidationType;,
+  type: IdentityValidationType;
   title: string;
-  description: string;,
+  description: string;
   priority: 'high' | 'medium' | 'low';
   requiredFor: string;
 }[] => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Edge, Node } from 'reactflow';
 interface RestorePromptProps {
     show: boolean;
-    draft: {,
+    draft: {
         nodes: Node[];
         edges: Edge[];
     } | null;

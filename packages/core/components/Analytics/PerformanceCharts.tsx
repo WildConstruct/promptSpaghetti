@@ -10,9 +10,9 @@ import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react'
  */
 interface TimeSeriesChartProps {
   data: Record<string, unknown>[];
-  title: string;,
+  title: string;
   metric: string;
-  unit: string;,
+  unit: string;
   color: string;
   loading: boolean;
   error?: string;
@@ -138,7 +138,7 @@ interface TimeSeriesChartProps {
  */
 
 export interface PerformanceChartsProps {
-  analyticsClient: AnalyticsClient;,
+  analyticsClient: AnalyticsClient;
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
@@ -146,18 +146,18 @@ export interface PerformanceChartsProps {
  * Performance charts state
  */
 interface PerformanceChartsState {
-  executionsData: unknown;,
+  executionsData: unknown;
   tokensData: unknown;
-  costData: unknown;,
+  costData: unknown;
   errorsData: unknown;
-  granularity: 'hour' | 'day';,
-  loading: {,
-  executions: boolean;,
+  granularity: 'hour' | 'day';
+  loading: {
+  executions: boolean;
   tokens: boolean;
-  cost: boolean;,
+  cost: boolean;
   errors: boolean;
 };
-  errors: {,
+  errors: {
   executions?: string;
   tokens?: string;
   cost?: string;
@@ -179,7 +179,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   costData: [],
   errorsData: [],
   granularity: 'hour',
-  loading: {,
+  loading: {
   executions: true,
   tokens: true,
   cost: true,
@@ -194,7 +194,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   const metrics = ['executions', 'tokens', 'cost', 'errors'] as const;
   setState(prev => ({)
   ...prev,
-  loading: {,
+  loading: {
   executions: true,
   tokens: true,
   cost: true,
@@ -215,7 +215,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   tokensData: [],
   costData: [],
   errorsData: [],
-  loading: {,
+  loading: {
   executions: false,
   tokens: false,
   cost: false,
@@ -438,27 +438,27 @@ const styles = `;
     margin-bottom: 1.5rem;
   .header-controls {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .trend-summary {
     margin-bottom: 1.5rem;
   .trend-card {
-    padding: 1rem;,
+    padding: 1rem;
   background: white;
-    border-radius: 8px;,
+    border-radius: 8px;
   border: 1px solid #E5E7EB;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   .trend-label {
-    font-size: 0.875rem;,
+    font-size: 0.875rem;
   color: #6B7280;
     margin-bottom: 0.5rem;
   .trend-value {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.5rem;
   .trend-indicator {
     display: flex;
-    align-items: center;,
+    align-items: center;
   gap: 0.25rem;
     font-size: 0.875rem;
     font-weight: 500;
@@ -478,7 +478,7 @@ const styles = `;
     gap: 1.5rem;
   @media (max-width: 768px) {
     .charts-header {
-      flex-direction: column;,
+      flex-direction: column;
   gap: 1rem;
       align-items: stretch;
     .charts-grid {

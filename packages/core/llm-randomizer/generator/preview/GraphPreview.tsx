@@ -12,27 +12,27 @@ interface GraphPreviewProps {
   showStats?: boolean;
   interactive?: boolean;
   interface GraphStats {
-  nodeCount: number;,
+  nodeCount: number;
   edgeCount: number;
   nodeTypes: Record<string, number>;
-  complexity: 'simple' | 'moderate' | 'complex';,
+  complexity: 'simple' | 'moderate' | 'complex';
   hasOutput: boolean;
-  hasAdvancedNodes: boolean;,
+  hasAdvancedNodes: boolean;
   averageConnections: number;
   maxDepth: number;
   interface VisualNode {
-  id: string;,
+  id: string;
   type: string;
-  label: string;,
+  label: string;
   x: number;
-  y: number;,
+  y: number;
   level: number;
-  connections: number;,
+  connections: number;
   isSelected: boolean;
   interface VisualEdge {
-  id: string;,
+  id: string;
   source: string;
-  target: string;,
+  target: string;
   isSelected: boolean;
   /**
   * Graph preview component with interactive visualization

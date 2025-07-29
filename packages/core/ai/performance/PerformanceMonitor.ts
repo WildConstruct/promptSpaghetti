@@ -7,97 +7,97 @@
 
 export interface PerformanceMetrics {
   // Request metrics
-  totalRequests: number;,
+  totalRequests: number;
   successfulRequests: number;
-  failedRequests: number;,
+  failedRequests: number;
   averageResponseTime: number;
-  minResponseTime: number;,
+  minResponseTime: number;
   maxResponseTime: number;
   // Resource metrics
-  memoryUsage: number;,
+  memoryUsage: number;
   cpuUsage: number;
-  networkLatency: number;,
+  networkLatency: number;
   diskIOUsage: number;
   // Model-specific metrics
-  tokensProcessed: number;,
+  tokensProcessed: number;
   tokensPerSecond: number;
-  costPerRequest: number;,
+  costPerRequest: number;
   totalCost: number;
   // Quality metrics
-  successRate: number;,
+  successRate: number;
   errorRate: number;
-  timeoutRate: number;,
+  timeoutRate: number;
   retryRate: number;
   // Temporal metrics
-  timestamp: number;,
+  timestamp: number;
   windowStart: number;
   windowEnd: number;
 }
 export interface PerformanceAlert {
-  id: string;,
+  id: string;
   type: 'warning' | 'error' | 'critical';
-  metric: string;,
+  metric: string;
   threshold: number;
-  currentValue: number;,
+  currentValue: number;
   message: string;
-  timestamp: number;,
+  timestamp: number;
   resolved: boolean;
   resolvedAt?: number;
 }
 export interface PerformanceThreshold {
-  metric: keyof PerformanceMetrics;,
+  metric: keyof PerformanceMetrics;
   warningThreshold: number;
-  errorThreshold: number;,
+  errorThreshold: number;
   criticalThreshold: number;
-  operator: 'greater_than' | 'less_than' | 'equals';
-}
+  operator: 'greater_than' | 'less_than' | 'equals'
+  }
 export interface MonitoringConfig {
-  enabled: boolean;,
+  enabled: boolean;
   collectionInterval: number; // milliseconds,
   retentionPeriod: number; // milliseconds,
-  alerting: {,
+  alerting: {
   enabled: boolean;
   email?: string;
   webhook?: string;
   slackChannel?: string;
 };
-  thresholds: PerformanceThreshold;,
+  thresholds: PerformanceThreshold;
   sampling: {;
-  enabled: boolean;,
+  enabled: boolean;
   rate: number; // 0-1, percentage of requests to sample,
 };
-  storage: {,
+  storage: {
   type: 'memory' | 'disk' | 'database';
   path?: string;
   maxSize?: number;
 };
 }
 export interface ModelPerformanceData {
-  modelId: string;,
+  modelId: string;
   modelType: string;
-  provider: string;,
+  provider: string;
   metrics: PerformanceMetrics;
-  alerts: PerformanceAlert;,
+  alerts: PerformanceAlert;
   lastUpdated: number;
-  healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
-}
+  healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline'
+  }
 export interface PerformanceReport {
-  summary: {,
-  totalModels: number;,
+  summary: {
+  totalModels: number;
   healthyModels: number;
-  totalRequests: number;,
+  totalRequests: number;
   averageResponseTime: number;
-  totalCost: number;,
+  totalCost: number;
   successRate: number;
 };
-  trends: {,
+  trends: {
   responseTimeTrend: Array<{ timestamp: number; value: number }>;
     successRateTrend: Array<{ timestamp: number; value: number }>;
     costTrend: Array<{ timestamp: number; value: number }>;
   };
   topPerformers: Array<{ modelId: string; metric: string; value: number }>;
   bottomPerformers: Array<{ modelId: string; metric: string; value: number }>;
-  activeAlerts: PerformanceAlert;,
+  activeAlerts: PerformanceAlert;
   recommendations: string;
   generatedAt: number;
 }
@@ -194,7 +194,7 @@ export class PerformanceMonitor {
       this.recordHistoricalMetrics(modelId, { ...metrics });
   recordResourceUsage();
     modelId: string,
-    resourceMetrics: {,
+    resourceMetrics: {
       memoryUsage?: number;
       cpuUsage?: number;
       networkLatency?: number;
@@ -230,7 +230,7 @@ export class PerformanceMonitor {
   const totalCost = allModels.reduce((sum, m) => sum + m.metrics.totalCost, 0);
   const totalSuccessful = allModels.reduce((sum, m) => sum + m.metrics.successfulRequests, 0);
   return {
-  summary: {,
+  summary: {
   totalModels: allModels.length,
   healthyModels: healthyModels.length,
   totalRequests,
@@ -319,10 +319,10 @@ export class PerformanceMonitor {
   let healthStatus: ModelPerformanceData['healthStatus'] = 'healthy';
   // Check various health indicators
   if (metrics.errorRate > 0.2) {
-  healthStatus = 'unhealthy';
-} else if (metrics.errorRate > 0.1 || metrics.averageResponseTime > 10000) {
-      healthStatus = 'degraded';
-    } else if (metrics.successRate < 0.8) {
+  healthStatus = 'unhealthy'
+  } else if (metrics.errorRate > 0.1 || metrics.averageResponseTime > 10000) {
+      healthStatus = 'degraded'
+  } else if (metrics.successRate < 0.8) {
       healthStatus = 'unhealthy';
     // Check if model has been inactive
     const timeSinceLastUpdate = Date.now() - modelData.lastUpdated;
@@ -393,8 +393,8 @@ export class PerformanceMonitor {
     if (operator === 'greater_than') {
       if (value >= criticalThreshold) return 'critical';
       if (value >= errorThreshold) return 'error';
-      return 'warning';
-    } else if (operator === 'less_than') {
+      return 'warning'
+  } else if (operator === 'less_than') {
       if (value <= criticalThreshold) return 'critical';
       if (value <= errorThreshold) return 'error';
       return 'warning';

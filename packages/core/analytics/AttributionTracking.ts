@@ -21,21 +21,21 @@ import { EventEmitter } from 'events';
 // Core Attribution Interfaces
 
 export interface AttributionConfig {
-  trackingId: string;,
+  trackingId: string;
   attribution: AttributionSettings;
-  models: AttributionModel;,
+  models: AttributionModel;
   channels: ChannelConfig;
-  privacy: PrivacySettings;,
+  privacy: PrivacySettings;
   storage: StorageSettings;
-  reporting: ReportingSettings;,
+  reporting: ReportingSettings;
   integration: IntegrationSettings;
 }
 export interface AttributionSettings {
-  lookbackWindow: LookbackWindow;,
+  lookbackWindow: LookbackWindow;
   crossDevice: CrossDeviceConfig;
-  deduplication: DeduplicationConfig;,
+  deduplication: DeduplicationConfig;
   defaultModel: string;
-  realTimeUpdates: boolean;,
+  realTimeUpdates: boolean;
   batchProcessing: boolean;
   dataRetention: number; // days,
   samplingRate: number; // 0-1,
@@ -48,40 +48,40 @@ export interface LookbackWindow {
   custom: Record<string, number>;
 }
 export interface CrossDeviceConfig {
-  enabled: boolean;,
+  enabled: boolean;
   identityResolution: IdentityResolutionConfig;
   deviceGraphProvider?: string;
-  probabilisticMatching: boolean;,
+  probabilisticMatching: boolean;
   deterministicMatching: boolean;
   confidenceThreshold: number;
 }
 export interface IdentityResolutionConfig {
-  email: boolean;,
+  email: boolean;
   phone: boolean;
-  userId: boolean;,
+  userId: boolean;
   cookieSync: boolean;
-  fingerprinting: boolean;,
+  fingerprinting: boolean;
   ipAddress: boolean;
   userAgent: boolean;
 }
 export interface DeduplicationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   strategy: 'first' | 'last' | 'unique' | 'position';
   window: number; // minutes,
   fields: string;
 }
 export interface AttributionModel {
-  id: string;,
+  id: string;
   name: string;
-  type: AttributionModelType;,
+  type: AttributionModelType;
   description: string;
-  configuration: ModelConfiguration;,
+  configuration: ModelConfiguration;
   weights: AttributionWeights;
-  rules: AttributionRule;,
+  rules: AttributionRule;
   isDefault: boolean;
-  isActive: boolean;,
+  isActive: boolean;
   version: string;
-  created: Date;,
+  created: Date;
   updated: Date;
 }
 export type AttributionModelType = 
@@ -103,69 +103,69 @@ export interface ModelConfiguration {
   parameters: Record<string, any>;
 }
 export interface AttributionWeights {
-  byPosition: PositionWeight;,
+  byPosition: PositionWeight;
   byChannel: ChannelWeight;
-  byTouchType: TouchTypeWeight;,
+  byTouchType: TouchTypeWeight;
   byTimeDecay: TimeDecayWeight;
   byCustom: CustomWeight;
 }
 export interface PositionWeight {
-  position: 'first' | 'middle' | 'last' | number;,
+  position: 'first' | 'middle' | 'last' | number;
   weight: number;
   conditions?: WeightCondition;
 }
 export interface ChannelWeight {
-  channel: string;,
+  channel: string;
   weight: number;
   conditions?: WeightCondition;
 }
 export interface TouchTypeWeight {
-  touchType: string;,
+  touchType: string;
   weight: number;
   conditions?: WeightCondition;
 }
 export interface TimeDecayWeight {
-  daysFromConversion: number;,
+  daysFromConversion: number;
   weight: number;
-  decayFunction: 'linear' | 'exponential' | 'custom';
-}
+  decayFunction: 'linear' | 'exponential' | 'custom'
+  }
 export interface CustomWeight {
-  dimension: string;,
+  dimension: string;
   value: string;
   weight: number;
   conditions?: WeightCondition;
 }
 export interface WeightCondition {
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'greater' | 'less' | 'in';
   value: any;
 }
 export interface AttributionRule {
-  id: string;,
+  id: string;
   name: string;
-  condition: RuleCondition;,
+  condition: RuleCondition;
   action: RuleAction;
-  priority: number;,
+  priority: number;
   isActive: boolean;
 }
 export interface RuleCondition {
-  field: string;,
+  field: string;
   operator: string;
   value: any;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   nested?: RuleCondition;
 }
 export interface RuleAction {
-  type: 'include' | 'exclude' | 'modify' | 'redirect';,
+  type: 'include' | 'exclude' | 'modify' | 'redirect';
   parameters: Record<string, any>;
   weight?: number;
 }
 export interface ChannelConfig {
-  id: string;,
+  id: string;
   name: string;
-  type: ChannelType;,
+  type: ChannelType;
   category: ChannelCategory;
-  attribution: ChannelAttributionConfig;,
+  attribution: ChannelAttributionConfig;
   tracking: ChannelTrackingConfig;
   metadata: ChannelMetadata;
 }
@@ -193,66 +193,66 @@ export type ChannelCategory =
   | 'support';
 
 export interface ChannelAttributionConfig {
-  defaultWeight: number;,
+  defaultWeight: number;
   lookbackWindow: number;
-  touchPointCapture: TouchPointCapture;,
+  touchPointCapture: TouchPointCapture;
   conversionWindow: number;
-  assistWeight: number;,
+  assistWeight: number;
   lastTouchWeight: number;
 }
 export interface TouchPointCapture {
-  impression: boolean;,
+  impression: boolean;
   click: boolean;
-  view: boolean;,
+  view: boolean;
   engagement: boolean;
-  conversion: boolean;,
+  conversion: boolean;
   custom: Record<string, boolean>;
 }
 export interface ChannelTrackingConfig {
-  utmTracking: UTMTracking;,
+  utmTracking: UTMTracking;
   customParameters: CustomParameter;
-  crossDomainTracking: boolean;,
+  crossDomainTracking: boolean;
   cookieDomain: string;
   sessionTimeout: number; // minutes,
 }
 export interface UTMTracking {
-  source: boolean;,
+  source: boolean;
   medium: boolean;
-  campaign: boolean;,
+  campaign: boolean;
   term: boolean;
-  content: boolean;,
+  content: boolean;
   customDimensions: string;
 }
 export interface CustomParameter {
-  name: string;,
+  name: string;
   source: 'url' | 'cookie' | 'header' | 'custom';
   pattern?: string;
   defaultValue?: string;
   required: boolean;
 }
 export interface ChannelMetadata {
-  description: string;,
+  description: string;
   cost: CostConfig;
-  performance: PerformanceMetrics;,
+  performance: PerformanceMetrics;
   tags: string;
-  created: Date;,
+  created: Date;
   updated: Date;
 }
 export interface CostConfig {
-  enabled: boolean;,
+  enabled: boolean;
   currency: string;
-  costModel: 'cpc' | 'cpm' | 'cpa' | 'fixed' | 'custom';,
+  costModel: 'cpc' | 'cpm' | 'cpa' | 'fixed' | 'custom';
   defaultCost: number;
   costSource?: string;
 }
 export interface PerformanceMetrics {
-  impressions: number;,
+  impressions: number;
   clicks: number;
-  conversions: number;,
+  conversions: number;
   revenue: number;
-  cost: number;,
+  cost: number;
   ctr: number;
-  conversionRate: number;,
+  conversionRate: number;
   roas: number;
   cpa: number;
   // Journey and Touchpoint Tracking
@@ -262,29 +262,29 @@ export interface CustomerJourney {
   userId?: string;
   anonymousId: string;
   deviceId?: string;
-  sessionIds: string;,
+  sessionIds: string;
   touchPoints: TouchPoint;
-  conversions: Conversion;,
+  conversions: Conversion;
   attribution: JourneyAttribution;
-  timeline: JourneyTimeline;,
+  timeline: JourneyTimeline;
   metadata: JourneyMetadata;
-  created: Date;,
+  created: Date;
   updated: Date;
 }
 export interface TouchPoint {
-  id: string;,
+  id: string;
   journeyId: string;
-  sessionId: string;,
+  sessionId: string;
   type: TouchPointType;
-  channel: string;,
+  channel: string;
   source: string;
   medium: string;
   campaign?: string;
   content?: string;
   term?: string;
-  timestamp: Date;,
+  timestamp: Date;
   data: TouchPointData;
-  context: TouchPointContext;,
+  context: TouchPointContext;
   attribution: TouchPointAttribution;
 }
 export type TouchPointType = 
@@ -299,14 +299,14 @@ export type TouchPointType =
 export interface TouchPointData {
   url: string;
   referrer?: string;
-  page: PageData;,
+  page: PageData;
   user: UserData;
-  device: DeviceData;,
+  device: DeviceData;
   location: LocationData;
   custom: Record<string, any>;
 }
 export interface PageData {
-  title: string;,
+  title: string;
   path: string;
   category?: string;
   tags: string;
@@ -324,23 +324,23 @@ export interface UserData {
   behavior: BehaviorData;
 }
 export interface BehaviorData {
-  sessionCount: number;,
+  sessionCount: number;
   pageViews: number;
-  timeOnSite: number;,
+  timeOnSite: number;
   bounceRate: number;
-  previousVisits: Date;,
+  previousVisits: Date;
   interactionHistory: InteractionEvent;
 }
 export interface InteractionEvent {
-  type: string;,
+  type: string;
   element: string;
-  timestamp: Date;,
+  timestamp: Date;
   data: Record<string, any>;
 }
 export interface DeviceData {
-  type: 'desktop' | 'mobile' | 'tablet' | 'tv';,
+  type: 'desktop' | 'mobile' | 'tablet' | 'tv';
   os: string;
-  browser: string;,
+  browser: string;
   resolution: string;
   userAgent: string;
   fingerprint?: string;
@@ -363,7 +363,7 @@ export interface TouchPointContext {
   businessContext?: BusinessContext;
 }
 export interface ExperimentContext {
-  experimentId: string;,
+  experimentId: string;
   variant: string;
   allocation: number;
 }
@@ -374,17 +374,17 @@ export interface AudienceContext {
   churnRisk?: number;
 }
 export interface WeatherContext {
-  condition: string;,
+  condition: string;
   temperature: number;
-  humidity: number;,
+  humidity: number;
   season: string;
 }
 export interface TimeContext {
-  dayOfWeek: string;,
+  dayOfWeek: string;
   hourOfDay: number;
-  isWeekend: boolean;,
+  isWeekend: boolean;
   isHoliday: boolean;
-  season: string;,
+  season: string;
   timeZone: string;
 }
 export interface BusinessContext {
@@ -394,21 +394,21 @@ export interface BusinessContext {
   competitorActivity?: string;
 }
 export interface TouchPointAttribution {
-  credit: number;,
+  credit: number;
   weight: number;
   models: Record<string, number>;
-  rank: number;,
+  rank: number;
   influence: number;
   decay: number;
 }
 export interface Conversion {
-  id: string;,
+  id: string;
   journeyId: string;
-  type: ConversionType;,
+  type: ConversionType;
   value: ConversionValue;
-  attribution: ConversionAttribution;,
+  attribution: ConversionAttribution;
   funnel: FunnelData;
-  timestamp: Date;,
+  timestamp: Date;
   data: ConversionData;
 }
 export type ConversionType = 
@@ -430,43 +430,43 @@ export interface ConversionValue {
   custom: Record<string, number>;
 }
 export interface ConversionAttribution {
-  touchPoints: TouchPointAttribution;,
+  touchPoints: TouchPointAttribution;
   models: Record<string, ModelAttribution>;
-  primary: ModelAttribution;,
+  primary: ModelAttribution;
   assisted: ModelAttribution;
   incrementality: IncrementalityData;
 }
 export interface ModelAttribution {
-  model: string;,
+  model: string;
   credit: TouchPointCredit;
-  confidence: number;,
+  confidence: number;
   methodology: string;
 }
 export interface TouchPointCredit {
-  touchPointId: string;,
+  touchPointId: string;
   credit: number;
-  percentage: number;,
+  percentage: number;
   channel: string;
   position: number;
 }
 export interface IncrementalityData {
-  baseline: number;,
+  baseline: number;
   incremental: number;
-  lift: number;,
+  lift: number;
   confidence: number;
   methodology: string;
 }
 export interface FunnelData {
-  stage: string;,
+  stage: string;
   position: number;
   completion: boolean;
   dropoff?: boolean;
   micro_conversions: MicroConversion;
 }
 export interface MicroConversion {
-  type: string;,
+  type: string;
   value: number;
-  timestamp: Date;,
+  timestamp: Date;
   attribution: number;
 }
 export interface ConversionData {
@@ -477,120 +477,120 @@ export interface ConversionData {
   custom: Record<string, any>;
 }
 export interface ProductData {
-  id: string;,
+  id: string;
   name: string;
-  category: string;,
+  category: string;
   price: number;
-  quantity: number;,
+  quantity: number;
   sku: string;
   brand?: string;
   variant?: string;
 }
 export interface TransactionData {
-  id: string;,
+  id: string;
   total: number;
-  currency: string;,
+  currency: string;
   tax: number;
-  shipping: number;,
+  shipping: number;
   discount: number;
-  paymentMethod: string;,
+  paymentMethod: string;
   products: ProductData;
 }
 export interface FormData {
-  formId: string;,
+  formId: string;
   fields: FormField;
-  completion: number;,
+  completion: number;
   timeToComplete: number;
   abandonmentPoint?: string;
 }
 export interface FormField {
-  name: string;,
+  name: string;
   value: any;
-  type: string;,
+  type: string;
   required: boolean;
   filled: boolean;
 }
 export interface EngagementData {
-  type: string;,
+  type: string;
   duration: number;
-  interactions: number;,
+  interactions: number;
   depth: number;
   quality: number;
 }
 export interface JourneyAttribution {
   models: Record<string, JourneyModelAttribution>;
-  primary: string;,
+  primary: string;
   touchPointCount: number;
-  conversionPath: string;,
+  conversionPath: string;
   timeToConversion: number;
-  assist_interactions: number;,
+  assist_interactions: number;
   direct_interactions: number;
 }
 export interface JourneyModelAttribution {
-  model: string;,
+  model: string;
   distribution: ChannelDistribution;
-  totalCredit: number;,
+  totalCredit: number;
   confidence: number;
 }
 export interface ChannelDistribution {
-  channel: string;,
+  channel: string;
   credit: number;
-  percentage: number;,
+  percentage: number;
   touchPoints: number;
 }
 export interface JourneyTimeline {
-  firstTouch: Date;,
+  firstTouch: Date;
   lastTouch: Date;
   firstConversion?: Date;
-  duration: number;,
+  duration: number;
   touchPointsByDay: Record<string, number>;
   conversionsByDay: Record<string, number>;
   engagementPeaks: Date;
 }
 export interface JourneyMetadata {
-  source: string;,
+  source: string;
   quality: QualityScore;
-  completeness: CompletenessScore;,
+  completeness: CompletenessScore;
   anomalies: AnomalyData;
   tags: string;
 }
 export interface QualityScore {
-  overall: number;,
+  overall: number;
   dataCompleteness: number;
-  attribution_confidence: number;,
+  attribution_confidence: number;
   cross_device_matching: number;
   deduplication: number;
 }
 export interface CompletenessScore {
-  touchPoints: number;,
+  touchPoints: number;
   conversions: number;
-  user_data: number;,
+  user_data: number;
   context_data: number;
   overall: number;
 }
 export interface AnomalyData {
-  type: string;,
+  type: string;
   description: string;
-  confidence: number;,
+  confidence: number;
   impact: 'low' | 'medium' | 'high';
   timestamp: Date;
   // Privacy and Storage Configuration
 }
 export interface PrivacySettings {
-  gdprCompliance: boolean;,
+  gdprCompliance: boolean;
   ccpaCompliance: boolean;
-  cookieConsent: boolean;,
+  cookieConsent: boolean;
   dataMinimization: boolean;
-  anonymization: AnonymizationConfig;,
+  anonymization: AnonymizationConfig;
   retention: RetentionConfig;
   userRights: UserRightsConfig;
 }
 export interface AnonymizationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   ipAnonymization: boolean;
-  userIdHashing: boolean;,
+  userIdHashing: boolean;
   piiRemoval: boolean;
-  aggregationThreshold: number;,
+  aggregationThreshold: number;
   kAnonymity: number;
 }
 export interface RetentionConfig {
@@ -602,16 +602,16 @@ export interface RetentionConfig {
   autoDelete: boolean;
 }
 export interface UserRightsConfig {
-  accessRequests: boolean;,
+  accessRequests: boolean;
   deleteRequests: boolean;
-  portabilityRequests: boolean;,
+  portabilityRequests: boolean;
   optOutRequests: boolean;
   correctionRequests: boolean;
 }
 export interface StorageSettings {
-  backend: StorageBackend;,
+  backend: StorageBackend;
   partitioning: PartitioningConfig;
-  compression: CompressionConfig;,
+  compression: CompressionConfig;
   encryption: EncryptionConfig;
   backup: BackupConfig;
 }
@@ -623,62 +623,62 @@ export interface StorageBackend {
   credentials?: Record<string, string>;
 }
 export interface PartitioningConfig {
-  strategy: 'time' | 'user' | 'channel' | 'custom';,
+  strategy: 'time' | 'user' | 'channel' | 'custom';
   granularity: 'day' | 'week' | 'month';
   retention: number; // partitions to keep,
 }
 export interface CompressionConfig {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: 'gzip' | 'lz4' | 'snappy';
   level: number;
 }
 export interface EncryptionConfig {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: 'AES-256' | 'ChaCha20';
-  keyRotation: boolean;,
+  keyRotation: boolean;
   rotationInterval: number; // days,
 }
 export interface BackupConfig {
-  enabled: boolean;,
+  enabled: boolean;
   frequency: 'hourly' | 'daily' | 'weekly';
   retention: number; // backup count,
   offsite: boolean;
 }
 export interface ReportingSettings {
-  realTime: boolean;,
+  realTime: boolean;
   batchInterval: number; // minutes,
-  aggregationLevels: AggregationLevel;,
+  aggregationLevels: AggregationLevel;
   dimensions: ReportDimension;
-  metrics: ReportMetric;,
+  metrics: ReportMetric;
   exports: ExportConfig;
 }
 export interface AggregationLevel {
-  name: string;,
+  name: string;
   granularity: 'minute' | 'hour' | 'day' | 'week' | 'month';
-  dimensions: string;,
+  dimensions: string;
   metrics: string;
 }
 export interface ReportDimension {
-  name: string;,
+  name: string;
   type: 'string' | 'number' | 'date' | 'boolean';
-  cardinality: 'low' | 'medium' | 'high';,
+  cardinality: 'low' | 'medium' | 'high';
   nullable: boolean;
 }
 export interface ReportMetric {
-  name: string;,
+  name: string;
   type: 'count' | 'sum' | 'avg' | 'min' | 'max' | 'distinct';
-  aggregation: string;,
+  aggregation: string;
   precision: number;
 }
 export interface ExportConfig {
-  name: string;,
+  name: string;
   format: 'csv' | 'json' | 'parquet' | 'avro';
-  destination: ExportDestination;,
+  destination: ExportDestination;
   schedule: ExportSchedule;
   filters: ExportFilter;
 }
 export interface ExportDestination {
-  type: 'file' | 'database' | 'api' | 'warehouse';,
+  type: 'file' | 'database' | 'api' | 'warehouse';
   connection: Record<string, string>;
   path?: string;
   table?: string;
@@ -690,100 +690,100 @@ export interface ExportSchedule {
   enabled: boolean;
 }
 export interface ExportFilter {
-  field: string;,
+  field: string;
   operator: string;
   value: any;
 }
 export interface IntegrationSettings {
-  dataImport: DataImportConfig;,
+  dataImport: DataImportConfig;
   webhooks: WebhookConfig;
-  apis: APIConfig;,
+  apis: APIConfig;
   connectors: ConnectorConfig;
 }
 export interface DataImportConfig {
-  name: string;,
+  name: string;
   source: ImportSource;
-  mapping: FieldMapping;,
+  mapping: FieldMapping;
   schedule: ImportSchedule;
   validation: ValidationConfig;
 }
 export interface ImportSource {
-  type: 'file' | 'database' | 'api' | 'stream';,
+  type: 'file' | 'database' | 'api' | 'stream';
   connection: Record<string, string>;
-  format?: 'csv' | 'json' | 'xml' | 'avro';
-}
+  format?: 'csv' | 'json' | 'xml' | 'avro'
+  }
 export interface FieldMapping {
-  source: string;,
+  source: string;
   target: string;
   transform?: string;
   required: boolean;
 }
 export interface ImportSchedule {
-  frequency: 'realtime' | 'hourly' | 'daily' | 'weekly';,
+  frequency: 'realtime' | 'hourly' | 'daily' | 'weekly';
   enabled: boolean;
 }
 export interface ValidationConfig {
-  enabled: boolean;,
+  enabled: boolean;
   rules: ValidationRule;
-  errorHandling: 'skip' | 'fail' | 'log';
-}
+  errorHandling: 'skip' | 'fail' | 'log'
+  }
 export interface ValidationRule {
-  field: string;,
+  field: string;
   type: 'required' | 'format' | 'range' | 'custom';
   parameters: Record<string, any>;
   message: string;
 }
 export interface WebhookConfig {
-  name: string;,
+  name: string;
   url: string;
   events: string;
   authentication?: AuthConfig;
-  retryPolicy: RetryPolicy;,
+  retryPolicy: RetryPolicy;
   enabled: boolean;
 }
 export interface AuthConfig {
-  type: 'none' | 'basic' | 'bearer' | 'oauth' | 'custom';,
+  type: 'none' | 'basic' | 'bearer' | 'oauth' | 'custom';
   credentials: Record<string, string>;
 }
 export interface RetryPolicy {
-  maxAttempts: number;,
+  maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
-  baseDelay: number;,
+  baseDelay: number;
   maxDelay: number;
 }
 export interface APIConfig {
-  name: string;,
+  name: string;
   baseUrl: string;
-  authentication: AuthConfig;,
+  authentication: AuthConfig;
   rateLimiting: RateLimitConfig;
   endpoints: EndpointConfig;
 }
 export interface RateLimitConfig {
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   burstLimit: number;
   retryAfter: number;
 }
 export interface EndpointConfig {
-  path: string;,
+  path: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  purpose: string;,
+  purpose: string;
   parameters: ParameterConfig;
 }
 export interface ParameterConfig {
-  name: string;,
+  name: string;
   type: 'query' | 'path' | 'body' | 'header';
   required: boolean;
   default?: any;
 }
 export interface ConnectorConfig {
-  name: string;,
+  name: string;
   type: 'google_analytics' | 'facebook_ads' | 'google_ads' | 'salesforce' | 'custom';
   credentials: Record<string, string>;
-  syncSettings: SyncSettings;,
+  syncSettings: SyncSettings;
   fieldMapping: FieldMapping;
 }
 export interface SyncSettings {
-  frequency: 'realtime' | 'hourly' | 'daily';,
+  frequency: 'realtime' | 'hourly' | 'daily';
   enabled: boolean;
   lastSync?: Date;
   syncWindow: number; // days,
@@ -851,7 +851,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('journeysMerged', { sourceJourneyId, targetJourneyId, mergedJourney });
     return mergedJourney;
   // Attribution Analysis
-  async calculateAttribution(conversionId: string,)
+  async calculateAttribution(conversionId: string)
     modelId?: string
   ): Promise<ConversionAttribution> {
     const conversion = await this.findConversion(conversionId);
@@ -866,8 +866,8 @@ export class AttributionTracker extends EventEmitter {
     if (!model) {
       throw new Error('Attribution model not found');
     return this.computeAttribution(journey, conversion, model);
-  async getAttributionReport(timeRange: { start: Date; end: Date },)
-    options: {,
+  async getAttributionReport(timeRange: { start: Date; end: Date })
+    options: {
   models?: string;
   channels?: string;
   dimensions?: string;
@@ -983,8 +983,8 @@ export class AttributionTracker extends EventEmitter {
   async getChannelPerformance(timeRange: { start: Date; end: Date }): Promise<ChannelPerformanceReport> {
     const journeys = this.getJourneysInRange(timeRange);
     return this.calculateChannelPerformance(journeys);
-  async getConversionPaths(timeRange: { start: Date; end: Date },)
-    options: {,
+  async getConversionPaths(timeRange: { start: Date; end: Date })
+    options: {
   limit?: number;
   minTouchPoints?: number;
   channels?: string;
@@ -1000,7 +1000,7 @@ export class AttributionTracker extends EventEmitter {
   private mergeDefaultConfig(config: Partial<AttributionConfig>): AttributionConfig {
     return {
       trackingId: config.trackingId || 'default',
-      attribution: {,
+      attribution: {
   lookbackWindow: {;
   impression: 30,
           click: 90,
@@ -1008,9 +1008,9 @@ export class AttributionTracker extends EventEmitter {
           engagement: 30,
           custom: {}
   },
-  crossDevice: {,
+  crossDevice: {
   enabled: false,
-  identityResolution: {,
+  identityResolution: {
   email: true,
   phone: false,
   userId: true,
@@ -1023,7 +1023,7 @@ export class AttributionTracker extends EventEmitter {
           deterministicMatching: true,
           confidenceThreshold: 0.8;
   },
-  deduplication: {,
+  deduplication: {
   enabled: true,
   strategy: 'unique',
   window: 5,
@@ -1038,12 +1038,12 @@ export class AttributionTracker extends EventEmitter {
   },
   models: config.models || [],
       channels: config.channels || [],
-      privacy: {,
+      privacy: {
   gdprCompliance: true,
   ccpaCompliance: true,
   cookieConsent: false,
   dataMinimization: true,
-  anonymization: {,
+  anonymization: {
   enabled: true,
   ipAnonymization: true,
   userIdHashing: false,
@@ -1051,7 +1051,7 @@ export class AttributionTracker extends EventEmitter {
   aggregationThreshold: 50,
   kAnonymity: 5,
 },
-  retention: {,
+  retention: {
   touchPoints: 90,
   conversions: 365,
   journeys: 365,
@@ -1059,7 +1059,7 @@ export class AttributionTracker extends EventEmitter {
   logs: 30,
   autoDelete: true,
 },
-  userRights: {,
+  userRights: {
   accessRequests: true,
   deleteRequests: true,
   portabilityRequests: true,
@@ -1068,27 +1068,27 @@ export class AttributionTracker extends EventEmitter {
 }
         ...config.privacy
   },
-  storage: {,
-  backend: {,
+  storage: {
+  backend: {
   type: 'local',
 },
-  partitioning: {,
+  partitioning: {
   strategy: 'time',
   granularity: 'day',
   retention: 90,
 },
-  compression: {,
+  compression: {
   enabled: true,
   algorithm: 'gzip',
   level: 6,
 },
-  encryption: {,
+  encryption: {
   enabled: false,
   algorithm: 'AES-256',
   keyRotation: false,
   rotationInterval: 30,
 },
-  backup: {,
+  backup: {
   enabled: false,
   frequency: 'daily',
   retention: 7,
@@ -1096,7 +1096,7 @@ export class AttributionTracker extends EventEmitter {
 }
         ...config.storage
   },
-  reporting: {,
+  reporting: {
   realTime: true,
   batchInterval: 15,
   aggregationLevels: [],
@@ -1105,7 +1105,7 @@ export class AttributionTracker extends EventEmitter {
   exports: [],
   ...config.reporting
 },
-  integration: {,
+  integration: {
   dataImport: [],
   webhooks: [],
   apis: [],
@@ -1121,7 +1121,7 @@ export class AttributionTracker extends EventEmitter {
         type: 'first_touch',
         description: 'Gives 100% credit to the first touchpoint',
         configuration: { parameters: {} },
-        weights: {,
+        weights: {
   byPosition: [{ position: 'first', weight: 1.0 }],
           byChannel: [],
           byTouchType: [],
@@ -1141,7 +1141,7 @@ export class AttributionTracker extends EventEmitter {
         type: 'last_touch',
         description: 'Gives 100% credit to the last touchpoint',
         configuration: { parameters: {} },
-        weights: {,
+        weights: {
   byPosition: [{ position: 'last', weight: 1.0 }],
           byChannel: [],
           byTouchType: [],
@@ -1161,7 +1161,7 @@ export class AttributionTracker extends EventEmitter {
         type: 'linear',
         description: 'Distributes credit equally across all touchpoints',
         configuration: { parameters: {} },
-        weights: {,
+        weights: {
   byPosition: [],
   byChannel: [],
   byTouchType: [],
@@ -1229,7 +1229,7 @@ export class AttributionTracker extends EventEmitter {
           season: this.getSeason(new Date()),
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone;
   },
-  attribution: {,
+  attribution: {
   credit: 0,
         weight: 0,
         models: {},
@@ -1281,7 +1281,7 @@ export class AttributionTracker extends EventEmitter {
         const attribution = this.computeAttribution(journey, conversion, model);
         conversion.attribution.models[modelId] = attribution.models[modelId];
     this.emit('conversionProcessed', { conversion, journey });
-  private computeAttribution(journey: CustomerJourney,)
+  private computeAttribution(journey: CustomerJourney)
     conversion: Conversion,
     model: AttributionModel): ConversionAttribution {,
     const relevantTouchPoints = this.getRelevantTouchPoints(journey, conversion);
@@ -1310,8 +1310,8 @@ export class AttributionTracker extends EventEmitter {
         influence: 1.0,
         decay: 1.0;
   }],
-      models: {,
-  [model.id]: {,
+      models: {
+  [model.id]: {
   model: model.id,
   credit: [{,
   touchPointId: firstTouchPoint.id,
@@ -1321,9 +1321,9 @@ export class AttributionTracker extends EventEmitter {
   position: 1,
 }],
           confidence: 1.0,
-          methodology: 'first_touch';
+          methodology: 'first_touch'
   },
-  primary: {,
+  primary: {
   model: model.id,
   credit: [{,
   touchPointId: firstTouchPoint.id,
@@ -1333,15 +1333,15 @@ export class AttributionTracker extends EventEmitter {
   position: 1,
 }],
         confidence: 1.0,
-        methodology: 'first_touch';
+        methodology: 'first_touch'
   },
-  assisted: {,
+  assisted: {
   model: model.id,
   credit: [],
   confidence: 0,
   methodology: 'none',
 },
-  incrementality: {,
+  incrementality: {
   baseline: 0,
   incremental: 1.0,
   lift: 1.0,
@@ -1359,8 +1359,8 @@ export class AttributionTracker extends EventEmitter {
         influence: 1.0,
         decay: 1.0;
   }],
-      models: {,
-  [model.id]: {,
+      models: {
+  [model.id]: {
   model: model.id,
   credit: [{,
   touchPointId: lastTouchPoint.id,
@@ -1370,9 +1370,9 @@ export class AttributionTracker extends EventEmitter {
   position: touchPoints.length,
 }],
           confidence: 1.0,
-          methodology: 'last_touch';
+          methodology: 'last_touch'
   },
-  primary: {,
+  primary: {
   model: model.id,
   credit: [{,
   touchPointId: lastTouchPoint.id,
@@ -1382,15 +1382,15 @@ export class AttributionTracker extends EventEmitter {
   position: touchPoints.length,
 }],
         confidence: 1.0,
-        methodology: 'last_touch';
+        methodology: 'last_touch'
   },
-  assisted: {,
+  assisted: {
   model: model.id,
   credit: [],
   confidence: 0,
   methodology: 'none',
 },
-  incrementality: {,
+  incrementality: {
   baseline: 0,
   incremental: 1.0,
   lift: 1.0,
@@ -1407,7 +1407,7 @@ export class AttributionTracker extends EventEmitter {
   position: index + 1,
 }));
     return {
-      touchPoints: credits.map(c => ({,)
+      touchPoints: credits.map(c => ({)
   credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1415,33 +1415,33 @@ export class AttributionTracker extends EventEmitter {
         influence: c.credit,
         decay: 1.0;
   })),
-      models: {,
-  [model.id]: {,
+      models: {
+  [model.id]: {
   model: model.id,
   credit: credits,
   confidence: 0.9,
   methodology: 'linear',
 },
-  primary: {,
+  primary: {
   model: model.id,
   credit: credits,
   confidence: 0.9,
   methodology: 'linear',
 },
-  assisted: {,
+  assisted: {
   model: model.id,
   credit: [],
   confidence: 0,
   methodology: 'none',
 },
-  incrementality: {,
+  incrementality: {
   baseline: 0,
   incremental: 1.0,
   lift: 1.0,
   confidence: 0.7,
   methodology: 'estimated',
 };
-  private computeTimeDecayAttribution(touchPoints: TouchPoint,)
+  private computeTimeDecayAttribution(touchPoints: TouchPoint)
     model: AttributionModel,
     conversion: Conversion): ConversionAttribution {,
   const halfLife = model.configuration.halfLife || 7; // days;
@@ -1464,7 +1464,7 @@ export class AttributionTracker extends EventEmitter {
       c.percentage = c.credit * 100;
     });
     return {
-      touchPoints: credits.map(c => ({,)
+      touchPoints: credits.map(c => ({)
   credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1472,26 +1472,26 @@ export class AttributionTracker extends EventEmitter {
         influence: c.credit,
         decay: c.credit;
   })),
-      models: {,
-  [model.id]: {,
+      models: {
+  [model.id]: {
   model: model.id,
   credit: credits,
   confidence: 0.85,
   methodology: 'time_decay',
 },
-  primary: {,
+  primary: {
   model: model.id,
   credit: credits,
   confidence: 0.85,
   methodology: 'time_decay',
 },
-  assisted: {,
+  assisted: {
   model: model.id,
   credit: [],
   confidence: 0,
   methodology: 'none',
 },
-  incrementality: {,
+  incrementality: {
   baseline: 0,
   incremental: 1.0,
   lift: 1.0,
@@ -1556,7 +1556,7 @@ export class AttributionTracker extends EventEmitter {
 });
       });
     return {
-      touchPoints: credits.map(c => ({,)
+      touchPoints: credits.map(c => ({)
   credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1564,33 +1564,33 @@ export class AttributionTracker extends EventEmitter {
         influence: c.credit,
         decay: 1.0;
   })),
-      models: {,
-  [model.id]: {,
+      models: {
+  [model.id]: {
   model: model.id,
   credit: credits,
   confidence: 0.8,
   methodology: 'position_based',
 },
-  primary: {,
+  primary: {
   model: model.id,
   credit: credits,
   confidence: 0.8,
   methodology: 'position_based',
 },
-  assisted: {,
+  assisted: {
   model: model.id,
   credit: [],
   confidence: 0,
   methodology: 'none',
 },
-  incrementality: {,
+  incrementality: {
   baseline: 0,
   incremental: 1.0,
   lift: 1.0,
   confidence: 0.7,
   methodology: 'estimated',
 };
-  private computeCustomAttribution(touchPoints: TouchPoint,)
+  private computeCustomAttribution(touchPoints: TouchPoint)
     model: AttributionModel,
     conversion: Conversion): ConversionAttribution {,
     // Implement custom attribution logic based on model configuration
@@ -1608,7 +1608,7 @@ export class AttributionTracker extends EventEmitter {
       sessionIds: [touchPoint.sessionId],
       touchPoints: [],
       conversions: [],
-      attribution: {,
+      attribution: {
   models: {},
         primary: '',
         touchPointCount: 0,
@@ -1617,7 +1617,7 @@ export class AttributionTracker extends EventEmitter {
         assist_interactions: 0,
         direct_interactions: 0;
   },
-  timeline: {,
+  timeline: {
   firstTouch: touchPoint.timestamp,
         lastTouch: touchPoint.timestamp,
         duration: 0,
@@ -1625,16 +1625,16 @@ export class AttributionTracker extends EventEmitter {
         conversionsByDay: {},
         engagementPeaks: [];
   },
-  metadata: {,
+  metadata: {
   source: 'web',
-  quality: {,
+  quality: {
   overall: 1.0,
   dataCompleteness: 1.0,
   attribution_confidence: 1.0,
   cross_device_matching: 0,
   deduplication: 1.0,
 },
-  completeness: {,
+  completeness: {
   touchPoints: 1.0,
   conversions: 0,
   user_data: 0.5,
@@ -1725,13 +1725,13 @@ export class AttributionTracker extends EventEmitter {
     this.conversionQueue = [];
     this.removeAllListeners();
   // Placeholder methods for report generation
-  private async generateAttributionReport(journeys: CustomerJourney,)
+  private async generateAttributionReport(journeys: CustomerJourney)
     conversions: Conversion,
     options: any): Promise<AttributionReport> {,
     return {
       id: 'report_' + Date.now(),
       timeRange: { start: new Date(), end: new Date() },
-      summary: {,
+      summary: {
   totalJourneys: journeys.length,
   totalConversions: conversions.length,
   totalTouchPoints: journeys.reduce((sum, j) => sum + j.touchPoints.length, 0),
@@ -1750,7 +1750,7 @@ export class AttributionTracker extends EventEmitter {
   private async calculateChannelPerformance(journeys: CustomerJourney): Promise<ChannelPerformanceReport> {
   return {
   channels: [],
-  summary: {,
+  summary: {
   totalChannels: 0,
   totalTouchPoints: 0,
   totalConversions: 0,
@@ -1775,27 +1775,27 @@ export class AttributionTracker extends EventEmitter {
 // Supporting interfaces for reporting
 
 export interface AttributionReport {
-  id: string;,
+  id: string;
   timeRange: { start: Date; end: Date };
-  summary: {,
+  summary: {
   totalJourneys: number;
-  totalConversions: number;,
+  totalConversions: number;
   totalTouchPoints: number;
-  averageJourneyLength: number;,
+  averageJourneyLength: number;
   conversionRate: number;
 };
-  models: any;,
+  models: any;
   channels: any;
-  paths: any;,
+  paths: any;
   insights: any;
   generatedAt: Date;
 }
 export interface ChannelPerformanceReport {
-  channels: any;,
-  summary: {,
-  totalChannels: number;,
+  channels: any;
+  summary: {
+  totalChannels: number;
   totalTouchPoints: number;
-  totalConversions: number;,
+  totalConversions: number;
   averageCPA: number;
   averageROAS: number;
 };
@@ -1803,20 +1803,20 @@ export interface ChannelPerformanceReport {
   generatedAt: Date;
 }
 export interface ConversionPath {
-  id: string;,
+  id: string;
   path: string;
-  touchPoints: number;,
+  touchPoints: number;
   conversions: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageValue: number;
   frequency: number;
 }
 export interface AttributionInsights {
-  trends: any;,
+  trends: any;
   anomalies: any;
-  opportunities: any;,
+  opportunities: any;
   recommendations: any;
-  confidence: number;,
+  confidence: number;
   generatedAt: Date;
 }
 export default {

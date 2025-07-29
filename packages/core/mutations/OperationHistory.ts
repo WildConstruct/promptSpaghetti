@@ -214,8 +214,7 @@ export class OperationHistory {
       return 'Clear graph';
     case OperationType.GRAPH_IMPORT:
       return 'Import graph';
-    case OperationType.GRAPH_MERGE:
-      return 'Merge graph';,
+    case OperationType.GRAPH_MERGE: return 'Merge graph';
   default:
       return 'Unknown operation';
   private canCreateInverseOperation(operation: GraphOperation): boolean {
@@ -256,7 +255,7 @@ export class OperationHistory {
       return this.createVariationReorderInverse(operation as VariationReorderOperation, inverseId, inverseTimestamp);
     default:
       throw new Error(`Cannot create inverse operation for type: ${operation.type}`);}
-  private createNodeDeleteInverse(operation: NodeAddOperation,)
+  private createNodeDeleteInverse(operation: NodeAddOperation)
     id: string,
     timestamp: Date): NodeDeleteOperation {,
   return {
@@ -265,12 +264,12 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.node.id,
   snapshot: operation.payload.node,
   connectedEdges: [] // Would be populated by the engine,
 };
-  private createNodeAddInverse(operation: NodeDeleteOperation,)
+  private createNodeAddInverse(operation: NodeDeleteOperation)
     id: string,
     timestamp: Date): NodeAddOperation {,
   return {
@@ -279,11 +278,11 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   node: operation.payload.snapshot,
   position: operation.payload.snapshot.position,
 };
-  private createNodeUpdateInverse(operation: NodeUpdateOperation,)
+  private createNodeUpdateInverse(operation: NodeUpdateOperation)
     id: string,
     timestamp: Date): NodeUpdateOperation {,
   return {
@@ -292,12 +291,12 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   updates: operation.payload.previousValues,
   previousValues: operation.payload.updates,
 };
-  private createNodeMoveInverse(operation: NodeMoveOperation,)
+  private createNodeMoveInverse(operation: NodeMoveOperation)
     id: string,
     timestamp: Date): NodeMoveOperation {,
   return {
@@ -306,12 +305,12 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   newPosition: operation.payload.previousPosition,
   previousPosition: operation.payload.newPosition,
 };
-  private createEdgeDeleteInverse(operation: EdgeAddOperation,)
+  private createEdgeDeleteInverse(operation: EdgeAddOperation)
     id: string,
     timestamp: Date): EdgeDeleteOperation {,
   return {
@@ -320,11 +319,11 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   edgeId: operation.payload.edge.id!,
   snapshot: operation.payload.edge,
 };
-  private createEdgeAddInverse(operation: EdgeDeleteOperation,)
+  private createEdgeAddInverse(operation: EdgeDeleteOperation)
     id: string,
     timestamp: Date): EdgeAddOperation {,
   return {
@@ -333,10 +332,10 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   edge: operation.payload.snapshot,
 };
-  private createVariationDeleteInverse(operation: VariationAddOperation,)
+  private createVariationDeleteInverse(operation: VariationAddOperation)
     id: string,
     timestamp: Date): VariationDeleteOperation {,
   const index = operation.payload.index || 0; // Would need to be determined by engine;
@@ -346,12 +345,12 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   index,
   snapshot: operation.payload.variation,
 };
-  private createVariationAddInverse(operation: VariationDeleteOperation,)
+  private createVariationAddInverse(operation: VariationDeleteOperation)
     id: string,
     timestamp: Date): VariationAddOperation {,
   return {
@@ -360,12 +359,12 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   variation: operation.payload.snapshot,
   index: operation.payload.index,
 };
-  private createVariationUpdateInverse(operation: VariationUpdateOperation,)
+  private createVariationUpdateInverse(operation: VariationUpdateOperation)
     id: string,
     timestamp: Date): VariationUpdateOperation {,
   return {
@@ -374,13 +373,13 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   index: operation.payload.index,
   newValue: operation.payload.previousValue,
   previousValue: operation.payload.newValue,
 };
-  private createVariationReorderInverse(operation: VariationReorderOperation,)
+  private createVariationReorderInverse(operation: VariationReorderOperation)
     id: string,
     timestamp: Date): VariationReorderOperation {,
   return {
@@ -389,7 +388,7 @@ export class OperationHistory {
   timestamp,
   userId: operation.userId,
   sessionId: operation.sessionId,
-  payload: {,
+  payload: {
   nodeId: operation.payload.nodeId,
   fromIndex: operation.payload.toIndex,
   toIndex: operation.payload.fromIndex,

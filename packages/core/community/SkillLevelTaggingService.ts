@@ -60,7 +60,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
 } catch (error) {
       console.error('Failed to classify difficulty:', error);
       throw error;
-  async tagContentWithSkillLevel(contentId: string,)
+  async tagContentWithSkillLevel(contentId: string)
     skillTag: Omit<ContentSkillTag, 'id' | 'tagged_at' | 'last_updated'>
   ): Promise<ContentSkillTag> {
     try {
@@ -109,7 +109,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
   user_id: userId,
   skill_levels: skillLevels,
   learning_preferences: await this.inferLearningPreferences(userId),
-  learning_history: {,
+  learning_history: {
   content_completed: completionHistory,
   skill_progression: await this.getSkillProgressionHistory(userId),
   assessment_results: assessmentResults,
@@ -123,7 +123,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
     } catch (error) {
       console.error('Failed to assess user skill level:', error);
       throw error;
-  async updateUserSkillAssessment(userId: string,)
+  async updateUserSkillAssessment(userId: string)
     domain: SkillDomain,
     newLevel: SkillLevel,
     evidence: string): Promise<void> {,
@@ -134,7 +134,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
         level: newLevel,
         evidence,
         assessed_at: new Date().toISOString(),
-        assessment_method: 'manual_update';
+        assessment_method: 'manual_update'
   });
     } catch (error) {
   console.error('Failed to update user skill assessment:', error);
@@ -233,16 +233,16 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
     } catch (error) {
   console.error('Failed to incorporate community feedback:', error);
   throw error;
-  async submitSkillFeedback(userId: string,)
+  async submitSkillFeedback(userId: string)
   contentId: string,
-  feedback: {,
-  perceived_difficulty: number;,
+  feedback: {
+  perceived_difficulty: number;
   level_appropriateness: 'too_easy' | 'just_right' | 'too_hard';
   suggested_level?: SkillLevel;
-  learning_effectiveness: {,
-  helped_learn_skill: boolean;,
+  learning_effectiveness: {
+  helped_learn_skill: boolean;
   clear_explanations: boolean;
-  good_examples: boolean;,
+  good_examples: boolean;
   would_recommend: boolean;
 };
       improvement_suggestions?: string;
@@ -284,13 +284,13 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
   console.error('Failed to validate skill tagging:', error);
   throw error;
   async auditSkillClassifications(domain?: SkillDomain): Promise<{,
-  total_content: number;,
+  total_content: number;
   classification_accuracy: number;
-  community_consensus: number;,
+  community_consensus: number;
   issues_found: Array<{,
-  content_id: string;,
+  content_id: string;
   issue_type: string;
-  severity: string;,
+  severity: string;
   description: string;
 }>;
   }> {
@@ -396,13 +396,13 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
   content_type: content.type || 'unknown',
   delivery_format: content.format || 'text',
   interaction_level: this.assessInteractionLevel(content),
-  environment: {,
+  environment: {
   tools_required: content.tools_required || [],
   setup_complexity: this.assessSetupComplexity(content),
   external_resources_needed: (content.external_resources || []).length > 0,
   mentor_support_recommended: classification.level === 'expert',
 },
-  success_factors: {,
+  success_factors: {
   completion_rate_target: this.calculateTargetCompletionRate(classification.level),
   user_satisfaction_target: 4.0,
   learning_outcome_confidence: classification.confidence,
@@ -491,7 +491,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
   private async getUserProfile(userId: string): Promise<UserSkillProfile> {
     // Placeholder implementation
     return {} as UserSkillProfile;
-  private async generateNextContentSuggestions(userProfile: UserSkillProfile,)
+  private async generateNextContentSuggestions(userProfile: UserSkillProfile)
     currentSkillTags: ContentSkillTag,
     currentContent: string): Promise<ContentSuggestion> {,
     return []; // Placeholder
@@ -499,7 +499,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
     return {}; // Placeholder
   private async identifySkillGaps(userProfile: UserSkillProfile, originalPath: any): Promise<any> {
     return []; // Placeholder
-  private async optimizeContentSequence(userProfile: UserSkillProfile,)
+  private async optimizeContentSequence(userProfile: UserSkillProfile)
     originalPath: any,
     skillGaps: any): Promise<string> {,
     return []; // Placeholder
@@ -527,7 +527,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
     return []; // Placeholder
   private async getContentById(contentId: string): Promise<any> {
     return {}; // Placeholder
-  private performValidationAnalysis(currentTags: ContentSkillTag,)
+  private performValidationAnalysis(currentTags: ContentSkillTag)
     communityFeedback: any,
     expertReviews: any,
     algorithmicAssessment: SkillLevelClassification): ValidationResult {,

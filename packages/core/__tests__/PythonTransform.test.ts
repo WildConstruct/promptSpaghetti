@@ -137,7 +137,7 @@ describe('PythonTransformNode', () => {
   // Create node with default fallback
   node = new PythonTransformNode('test-node', {)
   code: 'invalid code',
-  pythonConfig: {,
+  pythonConfig: {
   fallbackBehavior: 'default',
   defaultOutput: 'Default output',
 });
@@ -204,7 +204,7 @@ describe('PythonTransformNode', () => {
   timeout: 60,
   memoryLimit: '256MB',
   allowedModules: ['json', 'math', 'datetime'],
-  pythonConfig: {,
+  pythonConfig: {
   strictMode: false,
   enableCaching: false,
   retryAttempts: 5,
@@ -242,7 +242,7 @@ describe('PythonTransformNode', () => {
   // Create node with custom executor URL
   node = new PythonTransformNode('test-node', {)
   code: 'def transform(input_data): return input_data',
-  pythonConfig: {,
+  pythonConfig: {
   executorUrl: 'http://custom-executor:8001',
   retryAttempts: 2,
 });

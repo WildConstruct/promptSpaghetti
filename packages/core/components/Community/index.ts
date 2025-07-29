@@ -114,7 +114,7 @@ export const bParts = b.split('.').map(Number);
     if (score >= 75) return 'C+';
     if (score >= 70) return 'C';
     if (score >= 60) return 'D';
-    return 'F';
+    return 'F'
   }
   // Workflow stage validation
   validateWorkflowTransition: (),

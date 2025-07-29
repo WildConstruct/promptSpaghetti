@@ -48,7 +48,7 @@ describe('PasswordStrengthIndicator', () => {
   passedRules: 2,
   totalRules: 3,
   entropy: 45.2,
-  estimatedCrackTime: {,
+  estimatedCrackTime: {
   offline: '2 hours',
   online: '3 days',
   unit: 'average time',
@@ -370,7 +370,7 @@ describe('PasswordStrengthIndicator', () => {
   // Mock matchMedia for auto theme detection
   Object.defineProperty(window, 'matchMedia', {)
   writable: true,
-  value: jest.fn().mockImplementation(query => ({,)
+  value: jest.fn().mockImplementation(query => ({)
   matches: query.includes('dark'),
   media: query,
   onchange: null,

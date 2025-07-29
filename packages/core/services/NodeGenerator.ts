@@ -68,7 +68,7 @@ export class NodeGenerator {
       const metadata: GenerationMetadata = {
   generationId,
   timestamp: new Date(),
-  performance: {,
+  performance: {
   totalTimeMs: totalTime,
   nodesGenerated: nodes.length,
   edgesGenerated: connectionResult.edges.length,
@@ -76,12 +76,12 @@ export class NodeGenerator {
   validationTimeMs: validation.errors.length * 5 // Estimated,
 },
   options: request.options,
-        validation: {,
+        validation: {
   isValid: validation.errors.length === 0,
   errors: validation.errors,
   warnings: validation.warnings,
 },
-  statistics: {,
+  statistics: {
   averageNodeConfidence: this.calculateAverageConfidence(request.selectedSuggestions),
   layoutEfficiency: layoutResult.efficiency,
   connectionDensity: this.calculateConnectionDensity(nodes.length, connectionResult.edges.length),
@@ -125,7 +125,7 @@ export class NodeGenerator {
   /**
    * Calculate optimal layout for nodes using specified algorithm
    */
-  private calculateLayout(suggestions: NodeSuggestion,)
+  private calculateLayout(suggestions: NodeSuggestion)
     layoutType: LayoutType,
     startPosition: Position,
     spacing: { horizontal: number; vertical: number }
@@ -207,7 +207,7 @@ export class NodeGenerator {
 },
   type: 'default',
         position,
-        data: {,
+        data: {
   nodeType: suggestion.nodeType,
   title: suggestion.title,
   description: suggestion.description,
@@ -223,7 +223,7 @@ export class NodeGenerator {
   /**
    * Generate intelligent connections between nodes
    */
-  private generateConnections(suggestions: NodeSuggestion,)
+  private generateConnections(suggestions: NodeSuggestion)
     nodes: Node,
     pattern: ConnectionPattern): ConnectionResult {,
   const edges: Edge = [];
@@ -278,12 +278,12 @@ export class NodeGenerator {
   sequentialConnections++;
   return {
   edges,
-  patterns: {,
+  patterns: {
   sequential: sequentialConnections,
   branching: branchingConnections,
   cyclical: cyclicalConnections,
 },
-  validation: {,
+  validation: {
   validConnections: edges.length,
   invalidConnections: 0, // Would need actual validation,
   duplicateConnections: 0 // Would need duplicate detection,
@@ -334,7 +334,7 @@ export class NodeGenerator {
       target: targetId,
       type: 'default',
       animated: false,
-      data: {,
+      data: {
   generated: true,
   generatedAt: new Date().toISOString(),
 };
@@ -456,18 +456,18 @@ export class NodeGenerator {
   (this.performanceMetrics.generationStats.averageGenerationTimeMs + metadata.performance.totalTimeMs) / 2;
   private initializeMetrics(): PerformanceMetrics {,
   return {
-  generationStats: {,
+  generationStats: {
   totalGenerations: 0,
   averageGenerationTimeMs: 0,
   peakMemoryUsageMB: 0,
   errorRate: 0,
 },
-  layoutStats: {,
+  layoutStats: {
   preferredLayouts: {},
         averageLayoutTimeMs: {},
         layoutEfficiencyScores: {}
   },
-  userStats: {,
+  userStats: {
   averageNodesPerGeneration: 0,
         mostUsedNodeTypes: {},
         commonValidationErrors: {}
@@ -479,7 +479,7 @@ export class NodeGenerator {
   maxGenerationTimeMs: GENERATION_TIMEOUT_MS,
   allowedNodeTypes: ['WeightedChoice', 'Output', 'Concat', 'Subject', 'Action', 'Include'],
   restrictedOperations: ['eval', 'Function', 'constructor'],
-  validationRules: {,
+  validationRules: {
   requireInputValidation: true,
   sanitizeUserContent: true,
   enforceRateLimiting: false // Would need rate limiting implementation,

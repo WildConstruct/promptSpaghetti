@@ -18,16 +18,16 @@ export interface NodeCategory {
     metadata?: {
         keywords?: string[];
         difficulty?: 'beginner' | 'intermediate' | 'advanced';
-        usage?: 'common' | 'specialized' | 'experimental';
-    };
+        usage?: 'common' | 'specialized' | 'experimental'
+  };
 /**
  * Special category IDs for system categories
  */
 export declare const SPECIAL_CATEGORIES: {
     readonly FAVORITES: "favorites";
     readonly SEARCH_RESULTS: "search-results";
-    readonly ALL: "all";
-};
+    readonly ALL: "all"
+  };
 /**
  * Core node categories definition
  */

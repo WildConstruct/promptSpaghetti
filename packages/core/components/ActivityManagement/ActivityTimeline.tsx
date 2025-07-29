@@ -54,52 +54,52 @@ interface ActivityTimelineProps {
   * Activity type configurations for UI styling
   */
   const ACTIVITY_TYPE_CONFIG = {
-  user_interaction: {,
+  user_interaction: {
   icon: User,
   color: 'text-blue-600 bg-blue-50 border-blue-200',
   badgeColor: 'bg-blue-100 text-blue-800',
 },
-  system_event: {,
+  system_event: {
   icon: Settings,
   color: 'text-gray-600 bg-gray-50 border-gray-200',
   badgeColor: 'bg-gray-100 text-gray-800',
 },
-  graph_operation: {,
+  graph_operation: {
   icon: GitBranch,
   color: 'text-green-600 bg-green-50 border-green-200',
   badgeColor: 'bg-green-100 text-green-800',
 },
-  file_operation: {,
+  file_operation: {
   icon: FileText,
   color: 'text-purple-600 bg-purple-50 border-purple-200',
   badgeColor: 'bg-purple-100 text-purple-800',
 },
-  collaboration: {,
+  collaboration: {
   icon: Users,
   color: 'text-orange-600 bg-orange-50 border-orange-200',
   badgeColor: 'bg-orange-100 text-orange-800',
 },
-  performance: {,
+  performance: {
   icon: Zap,
   color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
   badgeColor: 'bg-yellow-100 text-yellow-800',
 },
-  error: {,
+  error: {
   icon: AlertTriangle,
   color: 'text-red-600 bg-red-50 border-red-200',
   badgeColor: 'bg-red-100 text-red-800',
 },
-  authentication: {,
+  authentication: {
   icon: User,
   color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
   badgeColor: 'bg-indigo-100 text-indigo-800',
 },
-  admin: {,
+  admin: {
   icon: Settings,
   color: 'text-gray-700 bg-gray-100 border-gray-300',
   badgeColor: 'bg-gray-200 text-gray-900',
 },
-  integration: {,
+  integration: {
   icon: Globe,
   color: 'text-teal-600 bg-teal-50 border-teal-200',
   badgeColor: 'bg-teal-100 text-teal-800',
@@ -418,7 +418,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
  */
 interface TimelineViewProps {
   groupedActivities: Record<string, ActivityEvent>;
-  onSelectActivity: (activity: ActivityEvent) => void;,
+  onSelectActivity: (activity: ActivityEvent) => void;
   compact: boolean;
   const TimelineView: React.FC<TimelineViewProps> = ({,)
   groupedActivities,
@@ -475,8 +475,8 @@ interface TimelineViewProps {
  * List View Component
  */
 interface ListViewProps {
-  activities: ActivityEvent;,
-  onSelectActivity: (activity: ActivityEvent) => void;,
+  activities: ActivityEvent;
+  onSelectActivity: (activity: ActivityEvent) => void;
   compact: boolean;
   const ListView: React.FC<ListViewProps> = ({,)
   activities,
@@ -509,7 +509,7 @@ interface ListViewProps {
  * Analytics View Component
  */
 interface AnalyticsViewProps {
-  stats: ActivityStats | null;,
+  stats: ActivityStats | null;
   activities: ActivityEvent;
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
@@ -605,7 +605,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
  * Activity Card Component
  */
 interface ActivityCardProps {
-  activity: ActivityEvent;,
+  activity: ActivityEvent;
   onClick: () => void;
   compact?: boolean;
   showTimestamp?: boolean;
@@ -686,7 +686,7 @@ interface ActivityCardProps {
  * Activity Detail Modal
  */
 interface ActivityDetailModalProps {
-  activity: ActivityEvent;,
+  activity: ActivityEvent;
   onClose: () => void;
   const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({,)
   activity,

@@ -16,7 +16,7 @@ describe('Runtime Node Implementation Tests', () => {
   // Create a proper ExecutionContext matching the interface
   const mockCtx: ExecutionContext = { ,
   variables: {}, 
-    seed: '42';
+    seed: '42'
   };
   describe('WeightedChoiceNode', () => {
     it('should return the first choice when random value is less than weight', () => {
@@ -146,7 +146,7 @@ describe('Runtime Node Implementation Tests', () => {
       // First run with string seed
       const stringSeedCtx: ExecutionContext = {,
   variables: {},
-        seed: 'hello';
+        seed: 'hello'
   };
       const node = new WeightedChoiceNode('weighted2', [);
         { weight: 0.5, value: 'A' },
@@ -156,7 +156,7 @@ describe('Runtime Node Implementation Tests', () => {
       // Run again with same seed
       const stringSeedCtx2: ExecutionContext = {,
   variables: {},
-        seed: 'hello';
+        seed: 'hello'
   };
       const secondResult = node.run(stringSeedCtx2);
       // Should be deterministic

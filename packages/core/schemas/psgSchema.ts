@@ -36,7 +36,7 @@ export const ProjectSettingsSchema = z.object({)
 
 // Collaboration data schema (Epic 8.7 compatibility)
 export const CollaborationDataSchema = z.object({)
-  stickyNotes: z.array(z.object({,)
+  stickyNotes: z.array(z.object({)
   id: z.string(),
     content: z.string(),
     position: z.object({ x: z.number(), y: z.number() }),
@@ -47,7 +47,7 @@ export const CollaborationDataSchema = z.object({)
   })).default([]),
   annotations: z.object({,)
   nodeLabels: z.record(z.string()).default({}),
-    regionGroups: z.array(z.object({,)
+    regionGroups: z.array(z.object({)
   id: z.string(),
       name: z.string(),
       nodeIds: z.array(z.string()),

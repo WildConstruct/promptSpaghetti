@@ -210,7 +210,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     name: string;
     description: string;
     version: string;
-    author: {,
+    author: {
         name: string;
         email?: string | undefined;
         url?: string | undefined;
@@ -289,7 +289,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     name: string;
     description: string;
     version: string;
-    author: {,
+    author: {
         name: string;
         email?: string | undefined;
         url?: string | undefined;

@@ -1,11 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
 import { useCorrectionsStore } from '../correctionsStore';
-export const WorkflowManager = ({
-    isOpen,
-    onClose
-});
-{
+export const WorkflowManager = ({ isOpen, onClose }) => {
     const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('pending');
     const [selectedRules, setSelectedRules] = useState(new Set());
@@ -30,178 +26,116 @@ export const WorkflowManager = ({
         setApprovalComment('');
     };
     const handleBulkApprove = () => {
-        selectedRules.forEach(ruleId => { });
-        approveRule(ruleId, 'system');
-    };
-    setSelectedRules(new Set());
-}
-;
-const handleDeprecate = (ruleId, reason) => {
-    deprecateRule(ruleId, reason);
-    setShowDeprecationDialog(false);
-    setCurrentRule(null);
-    setDeprecationReason('');
-};
-const handleBulkDeprecate = () => {
-    const reason = prompt('Enter deprecation reason:');
-    if (reason) {
-        selectedRules.forEach(ruleId => { });
-        deprecateRule(ruleId, reason);
-    }
-    ;
-    setSelectedRules(new Set());
-};
-const toggleRuleSelection = (ruleId) => {
-    const newSelected = new Set(selectedRules);
-    if (newSelected.has(ruleId)) {
-        newSelected.delete(ruleId);
-    }
-    else {
-        newSelected.add(ruleId);
-        setSelectedRules(newSelected);
-    }
-    ;
-    const selectAllRules = (ruleList) => {
-        const allIds = new Set(ruleList.map(rule => rule.id));
-        setSelectedRules(allIds);
-    };
-    const clearSelection = () => {
+        selectedRules.forEach(ruleId => {
+            approveRule(ruleId, 'system');
+        });
         setSelectedRules(new Set());
     };
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'draft':
-                return '#fbb040';
-            case 'published':
-                return '#68d391';
-            case 'deprecated':
-                return '#e53e3e';
-            default:
-                return '#a0aec0';
+    const handleDeprecate = (ruleId, reason) => {
+        deprecateRule(ruleId, reason);
+        setShowDeprecationDialog(false);
+        setCurrentRule(null);
+        setDeprecationReason('');
+    };
+    const handleBulkDeprecate = () => {
+        const reason = prompt('Enter deprecation reason:');
+        if (reason) {
+            selectedRules.forEach(ruleId => {
+                deprecateRule(ruleId, reason);
+            });
+            setSelectedRules(new Set());
         }
         ;
-        const getStatusBadge = (rule) => ();
-        ;
-        _jsx("span", { style: {
-                padding: '2px 6px',
-                borderRadius: '3px',
-                fontSize: '10px',
-                fontWeight: 500,
-                background: getStatusColor(rule.status),
-                color: '#1a202c',
-            }, children: rule.status.toUpperCase() });
+        const toggleRuleSelection = (ruleId) => {
+            const newSelected = new Set(selectedRules);
+            if (newSelected.has(ruleId)) {
+                newSelected.delete(ruleId);
+            }
+            else {
+                newSelected.add(ruleId);
+                setSelectedRules(newSelected);
+            }
+            ;
+            const selectAllRules = (ruleList) => {
+                const allIds = new Set(ruleList.map(rule => rule.id));
+                setSelectedRules(allIds);
+            };
+            const clearSelection = () => {
+                setSelectedRules(new Set());
+            };
+            const getStatusColor = (status) => {
+                switch (status) {
+                    case 'draft':
+                        return '#fbb040';
+                    case 'published':
+                        return '#68d391';
+                    case 'deprecated':
+                        return '#e53e3e';
+                    default:
+                        return '#a0aec0';
+                }
+                ;
+                const getStatusBadge = (rule) => (_jsx("span", { style: {
+                        padding: '2px 6px',
+                        borderRadius: '3px',
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        background: getStatusColor(rule.status),
+                        color: '#1a202c',
+                    }, children: rule.status.toUpperCase() }));
+                const renderRuleCard = (rule) => (_jsxs("div", { style: {
+                        background: '#2a2e37',
+                        border: '1px solid #4a5568',
+                        borderRadius: '6px',
+                        padding: '12px',
+                        marginBottom: '8px',
+                    }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }, children: [_jsx("input", { type: "checkbox", checked: selectedRules.has(rule.id), onChange: () => toggleRuleSelection(rule.id), style: { cursor: 'pointer' } }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx("span", { style: { fontWeight: 600, color: '#e2e8f0' }, children: rule.name }), getStatusBadge(rule), rule.suggestedBy && (_jsxs("span", { style: {
+                                                        fontSize: '10px',
+                                                        color: '#a0aec0',
+                                                        fontStyle: 'italic',
+                                                    }, children: ["Suggested by ", rule.suggestedBy] }))] }), rule.description && (_jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }, children: rule.description })), _jsxs("div", { style: { fontSize: '11px', color: '#a0aec0', display: 'flex', gap: '16px' }, children: [_jsxs("span", { children: ["Created: ", rule.createdAt.toLocaleDateString()] }), _jsxs("span", { children: ["Updated: ", rule.updatedAt.toLocaleDateString()] }), rule.usageCount !== undefined && (_jsxs("span", { children: ["Used: ", rule.usageCount, " times"] })), rule.lastUsedAt && (_jsxs("span", { children: ["Last used: ", rule.lastUsedAt.toLocaleDateString()] }))] }), rule.suggestionReason && (_jsxs("div", { style: {
+                                                fontSize: '11px',
+                                                color: '#fbb040',
+                                                marginTop: '4px',
+                                                fontStyle: 'italic',
+                                            }, children: ["Suggestion: ", rule.suggestionReason] })), rule.deprecationReason && (_jsxs("div", { style: {
+                                                fontSize: '11px',
+                                                color: '#e53e3e',
+                                                marginTop: '4px',
+                                            }, children: ["Deprecated: ", rule.deprecationReason] }))] }), _jsxs("div", { style: { display: 'flex', gap: '4px' }, children: [rule.status === 'draft' && ()
+                                            < button, "onClick=", () => handleApprove(rule.id), "style=", {
+                                            background: '#68d391',
+                                            color: '#1a202c',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            padding: '4px 8px',
+                                            fontSize: '11px',
+                                            cursor: 'pointer',
+                                        }, "> Approve"] }), ")}", rule.status === 'published' && ()
+                                    < button, "onClick=", () => {
+                                    setCurrentRule(rule);
+                                    setShowDeprecationDialog(true);
+                                }, "style=", {
+                                    background: '#e53e3e',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '4px 8px',
+                                    fontSize: '11px',
+                                    cursor: 'pointer',
+                                }, "> Deprecate"] }), ")}", _jsx("button", { onClick: () => deleteRule(rule.id), style: {
+                                background: '#4a5568',
+                                color: '#e2e8f0',
+                                border: 'none',
+                                borderRadius: '4px',
+                                padding: '4px 8px',
+                                fontSize: '11px',
+                                cursor: 'pointer',
+                            }, children: "Delete" })] }, rule.id));
+            };
+        };
     };
 };
-;
-const renderRuleCard = (rule) => ();
-;
-_jsxs("div", { style: {
-        background: '#2a2e37',
-        border: '1px solid #4a5568',
-        borderRadius: '6px',
-        padding: '12px',
-        marginBottom: '8px',
-    }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }, children: [_jsx("input", { type: "checkbox", checked: selectedRules.has(rule.id), onChange: () => toggleRuleSelection(rule.id), style: { cursor: 'pointer' } }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx("span", { style: { fontWeight: 600, color: '#e2e8f0' }, children: rule.name }), getStatusBadge(rule), rule.suggestedBy && ()
-                                    < span, " style=", {
-                                    fontSize: '10px',
-                                    color: '#a0aec0',
-                                    fontStyle: 'italic',
-                                }, "> Suggested by ", rule.suggestedBy] }), ")}"] }), rule.description && ()
-                    < div, " style=", { fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }, ">", rule.description] }), ")}", _jsxs("div", { style: { fontSize: '11px', color: '#a0aec0', display: 'flex', gap: '16px' }, children: [_jsxs("span", { children: ["Created: ", rule.createdAt.toLocaleDateString()] }), _jsxs("span", { children: ["Updated: ", rule.updatedAt.toLocaleDateString()] }), rule.usageCount !== undefined && ()
-                    < span > Used, ": ", rule.usageCount, " times"] }), ")}", rule.lastUsedAt && ()
-            < span > Last, " used: ", rule.lastUsedAt.toLocaleDateString()] }, rule.id);
-div >
-    { rule, : .suggestionReason && ()
-            < div, style = {} };
-{
-    fontSize: '11px',
-        color;
-    '#fbb040',
-        marginTop;
-    '4px',
-        fontStyle;
-    'italic',
-    ;
-}
- >
-    Suggestion;
-{
-    rule.suggestionReason;
-}
-div >
-;
-{
-    rule.deprecationReason && ()
-        < div;
-    style = {};
-    {
-        fontSize: '11px',
-            color;
-        '#e53e3e',
-            marginTop;
-        '4px',
-        ;
-    }
-}
- >
-    Deprecated;
-{
-    rule.deprecationReason;
-}
-div >
-;
-div >
-    _jsxs("div", { style: { display: 'flex', gap: '4px' }, children: [rule.status === 'draft' && ()
-                < button, "onClick=", () => handleApprove(rule.id), "style=", {
-                background: '#68d391',
-                color: '#1a202c',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '4px 8px',
-                fontSize: '11px',
-                cursor: 'pointer',
-            }, "> Approve"] });
-{
-    rule.status === 'published' && ()
-        < button;
-    onClick = {}();
-    {
-        setCurrentRule(rule);
-        setShowDeprecationDialog(true);
-    }
-}
-style = {};
-{
-    background: '#e53e3e',
-        color;
-    '#fff',
-        border;
-    'none',
-        borderRadius;
-    '4px',
-        padding;
-    '4px 8px',
-        fontSize;
-    '11px',
-        cursor;
-    'pointer',
-    ;
-}
-    >
-        Deprecate;
-button >
-;
-_jsx("button", { onClick: () => deleteRule(rule.id), style: {
-        background: '#4a5568',
-        color: '#e2e8f0',
-        border: 'none',
-        borderRadius: '4px',
-        padding: '4px 8px',
-        fontSize: '11px',
-        cursor: 'pointer',
-    }, children: "Delete" });
-div >
-;
 div >
 ;
 div >

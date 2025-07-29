@@ -469,7 +469,7 @@ describe('LegalDocumentParser Component', () => {
       );
       const dropZone = screen.getByTestId('upload-dropzone');
       fireEvent.dragOver(dropZone, {)
-  dataTransfer: {,
+  dataTransfer: {
   types: ['Files'],
 });
       expect(dropZone).toHaveClass('drag-over');
@@ -484,7 +484,7 @@ describe('LegalDocumentParser Component', () => {
       const dropZone = screen.getByTestId('upload-dropzone');
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       fireEvent.drop(dropZone, {)
-  dataTransfer: {,
+  dataTransfer: {
   files: [validFile],
 });
       await waitFor(() => {

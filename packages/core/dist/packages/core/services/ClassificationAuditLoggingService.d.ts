@@ -128,9 +128,19 @@ export interface AuditSummary {
     classificationBreakdown: Record<DataClassificationLevel, number>;
     complianceBreakdown: Record<string, {
         compliant: number;
-    }, nonCompliant>;
-    number: any;
-    needsReview: number;
+        nonCompliant: number;
+        needsReview: number;
+    }>;
+    riskAnalysis: {
+        averageRiskScore: number;
+        highRiskEntries: number;
+        criticalViolations: number;
+    };
+    trendsAnalysis: {
+        activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
+        riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
+        complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
+    };
 }
 export interface AuditRetentionPolicy {
     classification: DataClassificationLevel;

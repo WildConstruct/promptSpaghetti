@@ -6,12 +6,12 @@
 // Core workspace types
 
 export interface Workspace {
-  id: string;,
+  id: string;
   owner_id: string;
   name: string;
   description?: string;
   settings: Record<string, any>;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   archived_at?: Date | null;
 }
@@ -27,18 +27,18 @@ export interface UpdateWorkspace {
   // Project types
 }
 export interface Project {
-  id: string;,
+  id: string;
   workspace_id: string;
   name: string;
   description?: string;
-  status: 'draft' | 'active' | 'archived' | 'deleted';,
+  status: 'draft' | 'active' | 'archived' | 'deleted';
   metadata: Record<string, any>;
-  created_by: string;,
+  created_by: string;
   created_at: Date;
   updated_at: Date;
 }
 export interface CreateProject {
-  workspace_id: string;,
+  workspace_id: string;
   name: string;
   description?: string;
   metadata?: Record<string, any>;
@@ -51,9 +51,9 @@ export interface UpdateProject {
   // Resource types
 }
 export interface Resource {
-  id: string;,
+  id: string;
   project_id: string;
-  name: string;,
+  name: string;
   type: 'graph' | 'template' | 'file' | 'export';
   content_type?: string;
   json_meta: Record<string, any>;
@@ -61,13 +61,13 @@ export interface Resource {
   content_data?: Record<string, any>;
   size_bytes: number;
   checksum?: string;
-  version: number;,
+  version: number;
   created_by: string;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
 }
 export interface CreateResource {
-  project_id: string;,
+  project_id: string;
   name: string;
   type: Resource['type'];
   content_type?: string;
@@ -79,41 +79,41 @@ export interface CreateResource {
   // Permission and role types
 }
 export interface ACLRole {
-  id: string;,
+  id: string;
   workspace_id: string;
   name: string;
   description?: string;
-  permissions: number;,
+  permissions: number;
   is_system_role: boolean;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
 }
 export interface UserMembership {
-  id: string;,
+  id: string;
   user_id: string;
-  workspace_id: string;,
+  workspace_id: string;
   status: 'pending' | 'active' | 'suspended' | 'left';
   invited_by?: string;
-  joined_at: Date;,
+  joined_at: Date;
   last_active_at: Date;
   // Activity and notifications
 }
 export interface ActivityEvent {
-  id: string;,
+  id: string;
   workspace_id: string;
   project_id?: string;
   resource_id?: string;
-  actor_id: string;,
+  actor_id: string;
   event_type: string;
   event_data: Record<string, any>;
   aggregation_key?: string;
   created_at: Date;
 }
 export interface Comment {
-  id: string;,
+  id: string;
   resource_id: string;
   parent_id?: string;
-  author_id: string;,
+  author_id: string;
   content_markdown: string;
   content_html?: string;
   target_type?: 'resource' | 'node' | 'region';
@@ -122,13 +122,13 @@ export interface Comment {
   edited_at?: Date;
   resolved_by?: string;
   resolved_at?: Date;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
 }
 export interface CreateComment {
   resource_id: string;
   parent_id?: string;
-  author_id: string;,
+  author_id: string;
   content_markdown: string;
   target_type?: Comment['target_type'];
   target_data?: Record<string, any>;
@@ -138,15 +138,15 @@ export interface UpdateComment {
   status?: Comment['status'];
 }
 export interface Notification {
-  id: string;,
+  id: string;
   user_id: string;
   workspace_id: string;
   event_id?: string;
-  notification_type: string;,
+  notification_type: string;
   title: string;
   message?: string;
   action_url?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';,
+  priority: 'low' | 'normal' | 'high' | 'urgent';
   delivery_channel: 'in_app' | 'email' | 'push';
   read_at?: Date;
   delivered_at: Date;
@@ -168,15 +168,15 @@ export interface WorkspaceWithMembership extends Workspace {
   actor_avatar?: string;
   // API response types
   export interface PaginationMeta {
-  page: number;,
+  page: number;
   limit: number;
-  total: number;,
+  total: number;
   total_pages: number;
-  has_next: boolean;,
+  has_next: boolean;
   has_prev: boolean;
 }
 export interface PaginatedResponse<T> {
-  data: T;,
+  data: T;
   pagination: PaginationMeta;
   // Filter and query types
   export interface WorkspaceFilter {

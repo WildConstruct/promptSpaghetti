@@ -8,18 +8,18 @@ import React from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
 
 export interface PerformanceConfig {
-  maxVisibleNodes: number;,
+  maxVisibleNodes: number;
   cullingThreshold: number;
-  animationFrameThrottle: number;,
+  animationFrameThrottle: number;
   renderDebounce: number;
   memoryCleanupInterval: number;
 }
 export interface CanvasMetrics {
-  fps: number;,
+  fps: number;
   renderTime: number;
-  nodeCount: number;,
+  nodeCount: number;
   visibleNodes: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   lastUpdateTime: number;
 }
 export class CanvasOptimizer {

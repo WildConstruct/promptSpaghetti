@@ -182,26 +182,26 @@ describe('DataPermissionHierarchy', () => {
   requiresExplicitGrant: false,
   maxDelegationLevel: 2,
   auditLevel: 'STANDARD',
-  metadata: {,
+  metadata: {
   createdBy: 'test',
   createdAt: new Date(),
   lastModified: new Date(),
   version: '1.0',
-  compliance: {,
+  compliance: {
   frameworks: ['ISO27001'],
   requirements: [],
   lastAudit: new Date(),
   nextReview: new Date(),
   certifications: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   overallRisk: 'MEDIUM',
   riskFactors: [],
   mitigations: [],
   lastAssessment: new Date(),
   assessedBy: 'test',
 },
-  usageStatistics: {,
+  usageStatistics: {
   totalGrants: 0,
   activeUsers: 0,
   violationCount: 0,
@@ -235,7 +235,7 @@ describe('DataPermissionHierarchy', () => {
   it('should validate time restriction structure', () => {
   const timeRestriction: TimeRestriction = {,
   type: 'BUSINESS_HOURS',
-  configuration: {,
+  configuration: {
   startTime: '09:00',
   endTime: '17:00',
   daysOfWeek: [1, 2, 3, 4, 5],
@@ -253,7 +253,7 @@ describe('DataPermissionHierarchy', () => {
     it('should handle maintenance windows', () => {
   const timeRestriction: TimeRestriction = {,
   type: 'MAINTENANCE_WINDOWS',
-  configuration: {,
+  configuration: {
   timezone: 'UTC',
   maintenanceWindows: [{,
   start: new Date('2024-01-01T02:00:00Z'),
@@ -375,26 +375,26 @@ describe('DataPermissionHierarchy', () => {
           requiresExplicitGrant: config.level <= 2,
           maxDelegationLevel: config.maxDelegationLevel,
           auditLevel: config.auditLevel,
-          metadata: {,
+          metadata: {
   createdBy: 'system',
   createdAt: new Date(),
   lastModified: new Date(),
   version: '1.0',
-  compliance: {,
+  compliance: {
   frameworks: ['ISO27001'],
   requirements: [],
   lastAudit: new Date(),
   nextReview: new Date(),
   certifications: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   overallRisk: 'MEDIUM',
   riskFactors: [],
   mitigations: [],
   lastAssessment: new Date(),
   assessedBy: 'system',
 },
-  usageStatistics: {,
+  usageStatistics: {
   totalGrants: 0,
   activeUsers: 0,
   violationCount: 0,

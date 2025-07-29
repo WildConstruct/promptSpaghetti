@@ -21,41 +21,41 @@ export interface GraphState {
   edges: Record<string, GraphEdge>;
   metadata: GraphMetadata;
   // UI state
-  selection: {,
-  selectedNodes: string;,
+  selection: {
+  selectedNodes: string;
   selectedEdges: string;
   isMultiSelect: boolean;
 };
   // View state
-  viewport: {,
+  viewport: {
   x: number;
-  y: number;,
+  y: number;
   zoom: number;
 };
   // Execution state
-  execution: {,
+  execution: {
   isRunning: boolean;
   currentNodeId?: string;
   results: Record<string, any>;
   errors: ExecutionError;
 };
   // History and undo/redo
-  history: {,
+  history: {
   canUndo: boolean;
-  canRedo: boolean;,
+  canRedo: boolean;
   currentIndex: number;
   maxSize: number;
 };
   // Collaboration state
-  collaboration: {,
+  collaboration: {
   isConnected: boolean;
-  activeUsers: CollaboratorInfo;,
+  activeUsers: CollaboratorInfo;
   cursors: Record<string, CursorPosition>;
 };
   // Performance metrics
-  performance: {,
+  performance: {
   nodeCount: number;
-  edgeCount: number;,
+  edgeCount: number;
   lastRenderTime: number;
   memoryUsage: number;
 };
@@ -63,7 +63,7 @@ export interface GraphState {
 // Supporting interfaces
 }
 export interface GraphNode {
-  id: string;,
+  id: string;
   type: string;
   position: { x: number; y: number };
   data: Record<string, any>;
@@ -74,14 +74,14 @@ export interface GraphNode {
   style?: Record<string, any>;
   className?: string;
   metadata?: {
-  created: number;,
+  created: number;
   modified: number;
   author?: string;
   version?: number;
 };
 }
 export interface GraphEdge {
-  id: string;,
+  id: string;
   source: string;
   target: string;
   sourceHandle?: string;
@@ -92,49 +92,49 @@ export interface GraphEdge {
   className?: string;
   animated?: boolean;
   selected?: boolean;
-  metadata?: {,
-  created: number;,
+  metadata?: {
+  created: number;
   modified: number;
   author?: string;
 };
 }
 export interface GraphMetadata {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  version: string;,
+  version: string;
   created: number;
-  modified: number;,
+  modified: number;
   author: string;
-  tags: string;,
+  tags: string;
   isPublic: boolean;
-  schema: GraphSchema;,
-  settings: {,
-  snapToGrid: boolean;,
+  schema: GraphSchema;
+  settings: {
+  snapToGrid: boolean;
   gridSize: number;
-  showGrid: boolean;,
+  showGrid: boolean;
   nodeSpacing: number;
   autoLayout: boolean;
 };
 }
 export interface ExecutionError {
-  id: string;,
+  id: string;
   nodeId: string;
-  message: string;,
+  message: string;
   type: 'runtime' | 'validation' | 'network';
   timestamp: number;
   stack?: string;
 }
 export interface CollaboratorInfo {
-  id: string;,
+  id: string;
   name: string;
   avatar?: string;
-  color: string;,
+  color: string;
   isActive: boolean;
   lastSeen: number;
 }
 export interface CursorPosition {
-  userId: string;,
+  userId: string;
   x: number;
   y: number;
   nodeId?: string;
@@ -160,7 +160,7 @@ export type GraphOperation =
 // Transaction context for batch operations
 
 export interface GraphTransaction {
-  id: string;,
+  id: string;
   operations: GraphOperation;
   timestamp: number;
   userId?: string;
@@ -193,7 +193,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
     return {
       nodes: {},
       edges: {},
-      metadata: {,
+      metadata: {
   id: this.generateId(),
         name: 'Untitled Graph',
         version: '1.0.0',
@@ -203,40 +203,40 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         tags: [],
         isPublic: false,
         schema: { version: '1.0', nodeTypes: [], edgeTypes: [] },
-        settings: {,
+        settings: {
   snapToGrid: true,
   gridSize: 20,
   showGrid: true,
   nodeSpacing: 100,
   autoLayout: false,
 },
-  selection: {,
+  selection: {
   selectedNodes: [],
   selectedEdges: [],
   isMultiSelect: false,
 },
-  viewport: {,
+  viewport: {
   x: 0,
   y: 0,
   zoom: 1,
 },
-  execution: {,
+  execution: {
   isRunning: false,
         results: {},
         errors: [];
   },
-  history: {,
+  history: {
   canUndo: false,
   canRedo: false,
   currentIndex: 0,
   maxSize: 100,
 },
-  collaboration: {,
+  collaboration: {
   isConnected: false,
         activeUsers: [],
         cursors: {}
   },
-  performance: {,
+  performance: {
   nodeCount: 0,
   edgeCount: 0,
   lastRenderTime: 0,
@@ -253,7 +253,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 },
   message: 'Node must have id and type',
           value: node,
-          code: 'INVALID_NODE';
+          code: 'INVALID_NODE'
   });
       if (!node.position || typeof node.position.x !== 'number' || typeof node.position.y !== 'number') {
         errors.push({)
@@ -261,7 +261,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 },
   message: 'Node must have valid position coordinates',
           value: node.position,
-          code: 'INVALID_POSITION';
+          code: 'INVALID_POSITION'
   });
     });
     // Validate edges
@@ -272,7 +272,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 },
   message: 'Edge must have id, source, and target',
           value: edge,
-          code: 'INVALID_EDGE';
+          code: 'INVALID_EDGE'
   });
       // Check if source and target nodes exist
       if (!state.nodes[edge.source]) {
@@ -281,7 +281,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 },
   message: 'Edge source node does not exist',
           value: edge.source,
-          code: 'MISSING_SOURCE_NODE';
+          code: 'MISSING_SOURCE_NODE'
   });
       if (!state.nodes[edge.target]) {
         errors.push({)
@@ -289,7 +289,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 },
   message: 'Edge target node does not exist',
           value: edge.target,
-          code: 'MISSING_TARGET_NODE';
+          code: 'MISSING_TARGET_NODE'
   });
     });
     // Validate selection consistency
@@ -563,7 +563,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   const now = performance.now();
   this.setState(prevState => ({)
   ...prevState,
-  performance: {,
+  performance: {
   ...prevState.performance,
   nodeCount: Object.keys(state.nodes).length,
   edgeCount: Object.keys(state.edges).length,

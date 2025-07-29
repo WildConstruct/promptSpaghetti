@@ -6,11 +6,11 @@ import React, { useState, useEffect } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
 export interface ExtensionConfigurationPanelProps {
-  extension: ExtensionManifest;,
+  extension: ExtensionManifest;
   onSave: (config: Record<string, any>) => void;
   onCancel: () => void;
 interface ConfigField {
-  key: string;,
+  key: string;
   label: string;
   type: 'string' | 'number' | 'boolean' | 'select' | 'json' | 'array';
   description?: string;
@@ -355,7 +355,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
 
 // Array input component for handling array values
 interface ArrayInputProps {
-  value: string;,
+  value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 const ArrayInput: React.FC<ArrayInputProps> = ({ value, onChange, placeholder }) => {

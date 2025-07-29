@@ -530,9 +530,19 @@ ModelConfiguration;
                                                                         providerDefaults: {
                                                                             [AIModelProvider.OPENAI]: {
                                                                                 parameters: { temperature: 1, max_tokens: 1000 }
-                                                                            }[AIModelProvider.ANTHROPIC] }
+                                                                            }[AIModelProvider.ANTHROPIC]
+                                                                        }
                                                                     }
-                                                                } } } } } } } } } }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         };
                         {
                             parameters: {

@@ -40,17 +40,17 @@ import {
 
 export interface ExperimentBuilderProps {
   experiment?: Experiment;
-  onSave: (experiment: Partial<Experiment>) => Promise<void>;,
+  onSave: (experiment: Partial<Experiment>) => Promise<void>;
   onPreview: (variant: ExperimentVariant) => Promise<{ cost: number; tokens: number; latency: number }>;
-  onStart: (experimentId: string) => Promise<void>;,
+  onStart: (experimentId: string) => Promise<void>;
   onPause: (experimentId: string) => Promise<void>;
   className?: string;
 interface BuilderState {
-  experiment: Partial<Experiment>;,
+  experiment: Partial<Experiment>;
   activeTab: string;
-  validationErrors: string;,
+  validationErrors: string;
   previewResults: Record<string, { cost: number; tokens: number; latency: number }>;
-  saving: boolean;,
+  saving: boolean;
   estimatedSampleSize: number;
   estimatedDuration: number;
 }
@@ -91,7 +91,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   const updateExperiment = useCallback((field: string, value: unknown) => {
   setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   [field]: value,
 }));
@@ -120,7 +120,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   updatedAllocation[updatedVariants[0].id] += remainder;
   setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   variants: updatedVariants,
   trafficAllocation: updatedAllocation,
@@ -144,7 +144,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   updatedAllocation[updatedVariants[0].id] += remainder;
   setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   variants: updatedVariants,
   trafficAllocation: updatedAllocation,
@@ -161,7 +161,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
     ) || [];
     setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   variants: updatedVariants,
 }));
@@ -176,7 +176,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
 };
     setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   trafficAllocation: updatedAllocation,
 }));
@@ -192,12 +192,12 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
       type: 'conversion',
       isPrimary: state.experiment.metrics?.length === 0,
       isGuardrail: false,
-      expectedDirection: 'increase';
+      expectedDirection: 'increase'
   };
     const updatedMetrics = [...(state.experiment.metrics || []), newMetric];
     setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   metrics: updatedMetrics,
 }));
@@ -213,7 +213,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
     ) || [];
     setState(prev => ({)
   ...prev,
-  experiment: {,
+  experiment: {
   ...prev.experiment,
   metrics: updatedMetrics,
 }));
@@ -226,7 +226,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   const result = await onPreview(variant);
   setState(prev => ({)
   ...prev,
-  previewResults: {,
+  previewResults: {
   ...prev.previewResults,
   [variant.id]: result,
 }));
@@ -722,7 +722,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     value={state.experiment.schedule?.autoStop?.minSampleSize || ''}
                     onChange={(e) => updateExperiment('schedule', {)
   ...state.experiment.schedule,
-  autoStop: {,
+  autoStop: {
   ...state.experiment.schedule?.autoStop,
   minSampleSize: parseInt(e.target.value) || undefined,
 })}
@@ -741,7 +741,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     value={state.experiment.schedule?.autoStop?.maxPValue || ''}
                     onChange={(e) => updateExperiment('schedule', {)
   ...state.experiment.schedule,
-  autoStop: {,
+  autoStop: {
   ...state.experiment.schedule?.autoStop,
   maxPValue: parseFloat(e.target.value) || undefined,
 })}

@@ -13,13 +13,13 @@ export interface SecuritySystemNode {
     name: string;
     type: 'primary' | 'secondary' | 'standby';
     role: 'monitor' | 'analytics' | 'alerting' | 'storage' | 'processing' | 'dashboard';
-    config: {,
+    config: {
         hostname: string;
         port: number;
         region: string;
         datacenter: string;
         availability_zone: string;
-        capacity: {,
+        capacity: {
             cpu_cores: number;
             memory_gb: number;
             storage_gb: number;
@@ -27,7 +27,7 @@ export interface SecuritySystemNode {
         };
     };
     status: 'healthy' | 'degraded' | 'unhealthy' | 'offline' | 'maintenance';
-    health: {,
+    health: {
         last_heartbeat: number;
         response_time: number;
         cpu_usage: number;
@@ -37,7 +37,7 @@ export interface SecuritySystemNode {
         error_rate: number;
         throughput: number;
     };
-    failover: {,
+    failover: {
         priority: number;
         auto_failover_enabled: boolean;
         failover_timeout: number;
@@ -47,7 +47,7 @@ export interface SecuritySystemNode {
         last_failover: number;
         manual_override: boolean;
     };
-    load_balancing: {,
+    load_balancing: {
         weight: number;
         max_connections: number;
         current_connections: number;
@@ -70,14 +70,14 @@ export interface FailoverPolicy {
     name: string;
     description: string;
     enabled: boolean;
-    triggers: {,
-        node_failure: {,
+    triggers: {
+        node_failure: {
             enabled: boolean;
             consecutive_failed_checks: number;
             check_interval: number;
             timeout_threshold: number;
         };
-        performance_degradation: {,
+        performance_degradation: {
             enabled: boolean;
             cpu_threshold: number;
             memory_threshold: number;
@@ -85,19 +85,19 @@ export interface FailoverPolicy {
             error_rate_threshold: number;
             duration_threshold: number;
         };
-        capacity_limits: {,
+        capacity_limits: {
             enabled: boolean;
             connection_threshold: number;
             queue_threshold: number;
             throughput_threshold: number;
         };
-        dependency_failure: {,
+        dependency_failure: {
             enabled: boolean;
             cascade_failover: boolean;
             dependency_timeout: number;
         };
     };
-    strategy: {,
+    strategy: {
         type: 'immediate' | 'graceful' | 'planned';
         target_selection: 'priority' | 'load_based' | 'geographic' | 'round_robin';
         data_synchronization: 'real_time' | 'eventual' | 'manual';
@@ -105,13 +105,13 @@ export interface FailoverPolicy {
         rollback_enabled: boolean;
         rollback_conditions: string[];
     };
-    notifications: {,
+    notifications: {
         immediate: string[];
         escalation: string[];
         escalation_delay: number;
         channels: ('email' | 'sms' | 'slack' | 'webhook')[];
     };
-    compliance: {,
+    compliance: {
         require_approval: boolean;
         audit_all_actions: boolean;
         retention_period: number;
@@ -134,7 +134,7 @@ export interface FailoverEvent {
     start_time: number;
     end_time?: number;
     duration?: number;
-    impact: {,
+    impact: {
         affected_services: string[];
         downtime: number;
         data_loss: boolean;
@@ -142,7 +142,7 @@ export interface FailoverEvent {
         users_affected: number;
         transactions_lost: number;
     };
-    results: {,
+    results: {
         success: boolean;
         error_message?: string;
         data_synchronized: boolean;
@@ -151,7 +151,7 @@ export interface FailoverEvent {
         recovery_time_objective_met: boolean;
         recovery_point_objective_met: boolean;
     };
-    analysis: {,
+    analysis: {
         root_cause: string;
         lessons_learned: string[];
         improvement_actions: string[];
@@ -176,7 +176,7 @@ export interface RedundancyGroup {
     type: 'active_active' | 'active_passive' | 'master_slave' | 'multi_master';
     nodes: string[];
     primary_node?: string;
-    config: {,
+    config: {
         min_healthy_nodes: number;
         max_nodes: number;
         auto_scaling_enabled: boolean;
@@ -184,7 +184,7 @@ export interface RedundancyGroup {
         consistency_level: 'strong' | 'eventual' | 'weak';
         partition_tolerance: boolean;
     };
-    health: {,
+    health: {
         overall_status: 'healthy' | 'degraded' | 'critical' | 'offline';
         healthy_nodes: number;
         degraded_nodes: number;
@@ -193,7 +193,7 @@ export interface RedundancyGroup {
         data_consistency_score: number;
         replication_lag: number;
     };
-    load_distribution: {,
+    load_distribution: {
         strategy: 'round_robin' | 'weighted' | 'least_connections' | 'resource_based';
         current_distribution: Record<string, number>;
         auto_rebalancing: boolean;
@@ -203,14 +203,14 @@ export interface RedundancyGroup {
     last_updated: number;
 
 export interface FailoverMetrics {
-    availability: {,
+    availability: {
         uptime_percentage: number;
         downtime_minutes: number;
         mean_time_between_failures: number;
         mean_time_to_recovery: number;
         availability_sla_compliance: number;
     };
-    failover_performance: {,
+    failover_performance: {
         total_failovers: number;
         successful_failovers: number;
         failed_failovers: number;
@@ -220,7 +220,7 @@ export interface FailoverMetrics {
         automatic_failovers: number;
         manual_failovers: number;
     };
-    system_health: {,
+    system_health: {
         healthy_nodes: number;
         total_nodes: number;
         degraded_nodes: number;
@@ -230,19 +230,19 @@ export interface FailoverMetrics {
         average_memory_usage: number;
         error_rate: number;
     };
-    data_consistency: {,
+    data_consistency: {
         replication_lag: number;
         consistency_violations: number;
         data_loss_incidents: number;
         sync_success_rate: number;
     };
-    compliance: {,
+    compliance: {
         rto_compliance: number;
         rpo_compliance: number;
         audit_events: number;
         policy_violations: number;
     };
-    time_range: {,
+    time_range: {
         start: number;
         end: number;
     };
@@ -252,46 +252,46 @@ export interface FailoverConfig {
     default_failover_timeout: number;
     default_recovery_timeout: number;
     max_concurrent_failovers: number;
-    health_check: {,
+    health_check: {
         interval: number;
         timeout: number;
         retries: number;
         parallel_checks: boolean;
     };
-    load_balancing: {,
+    load_balancing: {
         enabled: boolean;
         algorithm: 'round_robin' | 'weighted' | 'least_connections' | 'resource_based';
         health_check_weight: number;
         performance_weight: number;
         capacity_weight: number;
     };
-    data_sync: {,
+    data_sync: {
         mode: 'real_time' | 'periodic' | 'on_demand';
         sync_interval: number;
         consistency_check_interval: number;
         max_replication_lag: number;
     };
-    notifications: {,
+    notifications: {
         enabled: boolean;
         immediate_recipients: string[];
         escalation_recipients: string[];
         escalation_delay: number;
         notification_channels: string[];
     };
-    performance: {,
+    performance: {
         max_cpu_usage: number;
         max_memory_usage: number;
         max_disk_usage: number;
         max_network_latency: number;
         resource_check_interval: number;
     };
-    geographic: {,
+    geographic: {
         multi_region_enabled: boolean;
         preferred_regions: string[];
         cross_region_latency_threshold: number;
         region_failover_enabled: boolean;
     };
-    security: {,
+    security: {
         encrypt_inter_node_communication: boolean;
         require_authentication: boolean;
         audit_all_failovers: boolean;

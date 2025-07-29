@@ -15,8 +15,8 @@ import {
 } from '../../types/NodeGenerationTypes';
 
 export interface SuggestionSelectorProps {
-  suggestions: NodeSuggestion;,
-  onGenerate: (selectedSuggestions: NodeSuggestion, options: GenerationOptions) => void;,
+  suggestions: NodeSuggestion;
+  onGenerate: (selectedSuggestions: NodeSuggestion, options: GenerationOptions) => void;
   onCancel: () => void;
   isGenerating?: boolean;
   theme?: 'light' | 'dark' | 'cinema';
@@ -28,17 +28,17 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   layout: GENERATION_DEFAULTS.DEFAULT_LAYOUT,
   spacing: GENERATION_DEFAULTS.DEFAULT_SPACING,
   connectionPattern: GENERATION_DEFAULTS.DEFAULT_CONNECTION_PATTERN,
-  nodeConfiguration: {,
+  nodeConfiguration: {
   autoConnect: true,
   useSmartPositioning: true,
   preserveUserNodes: true,
 },
-  validation: {,
+  validation: {
   enableStrictValidation: true,
   allowDuplicateConnections: false,
   maxNodesPerGeneration: GENERATION_DEFAULTS.MAX_NODES_GENERATED,
 },
-  performance: {,
+  performance: {
   batchSize: GENERATION_DEFAULTS.BATCH_SIZE,
   useProgressiveGeneration: false,
   enablePerformanceTracking: true,
@@ -46,7 +46,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   border: '#e5e7eb',
@@ -58,7 +58,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   error: '#ef4444',
   hover: '#f3f4f6',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   border: '#4b5563',
@@ -70,7 +70,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   error: '#f87171',
   hover: '#374151',
 },
-  cinema: {,
+  cinema: {
   background: '#1a1a1a',
   secondary: '#0d1117',
   border: '#ff7c00',
@@ -307,7 +307,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
                   transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '12px';
+                  gap: '12px'
   }}
                 role="checkbox"
                 aria-checked={isSelected}
@@ -332,7 +332,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  marginTop: '2px';
+                  marginTop: '2px'
   }}>
                   {isSelected && ()
                     <div style={{
@@ -433,7 +433,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   borderRadius: '4px',
                 background: styles.background,
                 color: styles.text,
-                fontSize: '12px';
+                fontSize: '12px'
   }}
             >
               <option value="linear">Linear</option>
@@ -468,7 +468,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   borderRadius: '4px',
                 background: styles.background,
                 color: styles.text,
-                fontSize: '12px';
+                fontSize: '12px'
   }}
             >
               <option value="sequential">Sequential</option>
@@ -507,7 +507,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
   borderRadius: '4px',
                 background: styles.background,
                 color: styles.text,
-                fontSize: '12px';
+                fontSize: '12px'
   }}
             >
               <option value="150">Tight</option>

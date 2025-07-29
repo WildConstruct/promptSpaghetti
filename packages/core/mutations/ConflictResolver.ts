@@ -119,7 +119,7 @@ export class ConflictResolver extends EventEmitter {
 });
     return options;
   // PRIVATE CONFLICT DETECTION METHODS
-  private async detectConflict(localOp: GraphOperation,)
+  private async detectConflict(localOp: GraphOperation)
     remoteOp: GraphOperation,
     state: GraphState): Promise<OperationConflict | null> {,
   // Check if operations are too far apart in time
@@ -221,7 +221,7 @@ export class ConflictResolver extends EventEmitter {
   if (remoteNodeId) elements.add(remoteNodeId);
   if (remoteEdgeId) elements.add(remoteEdgeId);
   return Array.from(elements);
-  private getConflictSeverity(localOp: GraphOperation,)
+  private getConflictSeverity(localOp: GraphOperation)
   remoteOp: GraphOperation,
   conflictType: ConflictType): 'low' | 'medium' | 'high' | 'critical' {,
   switch (conflictType) {
@@ -235,7 +235,7 @@ export class ConflictResolver extends EventEmitter {
   return 'low';
   default:,
   return 'medium';
-  private getConflictResolutionOptions(localOp: GraphOperation,)
+  private getConflictResolutionOptions(localOp: GraphOperation)
   remoteOp: GraphOperation,
   conflictType: ConflictType): ConflictResolutionOption {,
   const options: ConflictResolutionOption = [];
@@ -323,15 +323,15 @@ export class ConflictResolver extends EventEmitter {
   ...localOp,
   id: this.generateId(),
   timestamp: new Date(),
-  payload: {,
+  payload: {
   ...localOp.payload,
   updates: mergedUpdates,
-  previousValues: {,
+  previousValues: {
   ...remoteOp.payload.previousValues,
   ...localOp.payload.previousValues
 };
     return mergedOperation;
-  private emitConflictResolved(resolution: GraphOperation,)
+  private emitConflictResolved(resolution: GraphOperation)
     conflict: OperationConflict,
     strategy: ConflictResolutionStrategy): void {,
     this.emit('conflict_resolved', {)

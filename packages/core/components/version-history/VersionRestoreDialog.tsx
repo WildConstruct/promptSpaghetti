@@ -13,11 +13,11 @@ import {
 } from '../../version-history/VersionRestoreManager';
 import { VersionSnapshot } from '../../version-history/VersionHistoryManager';
 interface VersionRestoreDialogProps {
-  snapshot: VersionSnapshot;,
+  snapshot: VersionSnapshot;
   currentGraphData: unknown;
-  restoreManager: VersionRestoreManager;,
+  restoreManager: VersionRestoreManager;
   isOpen: boolean;
-  onClose: () => void;,
+  onClose: () => void;
   onRestoreComplete: (result: RestoreResult) => void;
   className?: string;
   type DialogStep = 'options' | 'preview' | 'conflicts' | 'progress' | 'result';
@@ -317,8 +317,8 @@ interface VersionRestoreDialogProps {
 
 // Step Components
 interface RestoreOptionsStepProps {
-  options: RestoreOptions;,
-  onChange: (options: RestoreOptions) => void;,
+  options: RestoreOptions;
+  onChange: (options: RestoreOptions) => void;
   snapshot: VersionSnapshot;
 const RestoreOptionsStep: React.FC<RestoreOptionsStepProps> = ({ options, onChange, snapshot }) => {
   return;
@@ -485,9 +485,9 @@ const RestoreOptionsStep: React.FC<RestoreOptionsStepProps> = ({ options, onChan
   );
 };
 interface ConflictResolutionStepProps {
-  conflicts: RestoreConflict;,
+  conflicts: RestoreConflict;
   resolutions: Record<string, string>;
-  onResolutionChange: (conflictId: string, resolution: string) => void;,
+  onResolutionChange: (conflictId: string, resolution: string) => void;
   getSeverityColor: (severity: string) => string;
   const ConflictResolutionStep: React.FC<ConflictResolutionStepProps> = ({,)
   conflicts,
@@ -590,9 +590,9 @@ interface ConflictResolutionStepProps {
   );
 };
 interface RestorePreviewStepProps {
-  preview: RestorePreview;,
+  preview: RestorePreview;
   options: RestoreOptions;
-  conflicts: RestoreConflict;,
+  conflicts: RestoreConflict;
   getRiskLevelColor: (level: string) => string;
   const RestorePreviewStep: React.FC<RestorePreviewStepProps> = ({,)
   preview,
@@ -699,7 +699,7 @@ interface RestorePreviewStepProps {
   );
 };
 interface RestoreProgressStepProps {
-  restoreState: RestoreState;,
+  restoreState: RestoreState;
   onCancel: () => void;
 const RestoreProgressStep: React.FC<RestoreProgressStepProps> = ({ restoreState, onCancel }) => {
   return;
@@ -743,7 +743,7 @@ const RestoreProgressStep: React.FC<RestoreProgressStepProps> = ({ restoreState,
   );
 };
 interface RestoreResultStepProps {
-  result: RestoreResult;,
+  result: RestoreResult;
   onClose: () => void;
 const RestoreResultStep: React.FC<RestoreResultStepProps> = ({ result, onClose }) => {
   return;

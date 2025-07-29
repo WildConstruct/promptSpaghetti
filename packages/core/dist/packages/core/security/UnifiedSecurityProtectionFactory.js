@@ -455,10 +455,13 @@ export var SecurityProfile;
                                                                                                                                             { threshold: 0.9, delay: 2 },
                                                                                                                                             { threshold: 0.95, delay: 0 }
                                                                                                                                         ]
-                                                                                                                                    } }(),
+                                                                                                                                    }
+                                                                                                                                }(),
                                                                                                                                 base: UnifiedSecurityConfig,
                                                                                                                                 custom: (Partial),
-                                                                                                                                UnifiedSecurityConfig } }
+                                                                                                                                UnifiedSecurityConfig
+                                                                                                                            }
+                                                                                                                        }
                                                                                                                     };
                                                                                                                     {
                                                                                                                         const merged = { ...base };
@@ -589,7 +592,10 @@ export var SecurityProfile;
                                                                                                                                         enableHealthChecks: true,
                                                                                                                                         alertThresholds: { errorRate: 8, responseTime: 2000, systemHealth: 80 }
                                                                                                                                     },
-                                                                                                                                    : .integration.priorities.rateLimiting < 0 || config.integration.priorities.rateLimiting > 100 } } }
+                                                                                                                                    : .integration.priorities.rateLimiting < 0 || config.integration.priorities.rateLimiting > 100
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
                                                                                                                     };
                                                                                                                     {
                                                                                                                         errors.push('Rate limiting priority must be between 0 and 100');
@@ -622,9 +628,20 @@ export var SecurityProfile;
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
-                                                                                                                } }
+                                                                                                                }
+                                                                                                            }
                                                                                                         };
-                                                                                                    } } } } } } } } } } } } } } }
+                                                                                                    }
+                                                                                                }
+                                                                                            } }
+                                                                                    }
+                                                                                } }
+                                                                        }
+                                                                    } }
+                                                            }
+                                                        } }
+                                                }
+                                            }
                                         };
                                 }
                             }

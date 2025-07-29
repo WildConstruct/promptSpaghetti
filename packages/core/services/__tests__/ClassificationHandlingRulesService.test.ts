@@ -179,7 +179,7 @@ describe('ClassificationHandlingRulesService', () => {
   description: 'Custom rule for special data handling',
   classification: 'INTERNAL',
   ruleType: 'STORAGE',
-  requirements: {,
+  requirements: {
   customEncryption: true,
   specialLocation: 'custom_datacenter',
 },
@@ -199,7 +199,7 @@ describe('ClassificationHandlingRulesService', () => {
   expect(originalReqs).toBeDefined();
   const updatedReqs: HandlingRequirements = {,
   ...originalReqs!,
-  storage: {,
+  storage: {
   ...originalReqs!.storage,
   keyRotationDays: 45 // Change from default 90 days,
 };

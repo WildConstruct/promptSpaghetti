@@ -16,13 +16,13 @@
  */
 
 export interface ActivityEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
   userId: string;
   userDisplayName?: string;
   userRole?: string;
   // Event classification
-  type: ActivityType;,
+  type: ActivityType;
   category: ActivityCategory;
   action: string;
   resource?: string;
@@ -91,7 +91,7 @@ export interface ActivityDetails {
   customData?: Record<string, unknown>;
 }
 export interface NodeChange {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
   changeType: 'created' | 'updated' | 'deleted' | 'moved';
   field?: string;
@@ -100,9 +100,9 @@ export interface NodeChange {
   position?: [number, number];
 }
 export interface ConnectionChange {
-  connectionId: string;,
+  connectionId: string;
   changeType: 'created' | 'deleted';
-  sourceNodeId: string;,
+  sourceNodeId: string;
   targetNodeId: string;
   sourceHandle?: string;
   targetHandle?: string;
@@ -111,16 +111,16 @@ export interface VariableChange {
   variableName: string;
   oldValue?: string;
   newValue?: string;
-  scope: 'global' | 'local' | 'session';
-}
+  scope: 'global' | 'local' | 'session'
+  }
 export interface ClientInfo {
-  userAgent: string;,
+  userAgent: string;
   platform: string;
-  browser: string;,
+  browser: string;
   browserVersion: string;
   screenResolution: [number, number];
   viewport: [number, number];
-  timezone: string;,
+  timezone: string;
   language: string;
 }
 export interface GeolocationInfo {
@@ -175,8 +175,8 @@ export interface ActivityFilter {
   workspaceIds?: string;
   projectIds?: string;
   graphIds?: string;
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   impactLevels?: ActivityImpact;
@@ -191,10 +191,10 @@ export interface ActivityFilter {
   limit?: number;
   offset?: number;
   sortBy?: 'timestamp' | 'impact' | 'duration';
-  sortDirection?: 'asc' | 'desc';
-}
+  sortDirection?: 'asc' | 'desc'
+  }
 export interface ActivityStats {
-  totalEvents: number;,
+  totalEvents: number;
   uniqueUsers: number;
   averageSessionDuration: number;
   // Activity distribution
@@ -205,43 +205,43 @@ export interface ActivityStats {
   // Time-based stats
   eventsPerHour: Record<string, number>;
   eventsPerDay: Record<string, number>;
-  peakActivity: {,
-  hour: number;,
+  peakActivity: {
+  hour: number;
   count: number;
 };
   // User engagement
   mostActiveUsers: Array<{,
   userId: string;
-  displayName: string;,
+  displayName: string;
   eventCount: number;
   lastActivity: Date;
 }>;
   // Performance insights
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   errorRate: number;
   cacheHitRate: number;
   // Collaboration stats
-  collaborativeEvents: number;,
+  collaborativeEvents: number;
   teamsActive: number;
   sharingEvents: number;
 }
 export interface ActivitySession {
-  id: string;,
+  id: string;
   userId: string;
   workspaceId?: string;
   projectId?: string;
   startTime: Date;
   endTime?: Date;
   duration?: number; // milliseconds,
-  eventCount: number;,
+  eventCount: number;
   uniqueResources: string;
   clientInfo: ClientInfo;
   location?: GeolocationInfo;
   // Session classification
-  type: 'work' | 'exploration' | 'collaboration' | 'admin';,
+  type: 'work' | 'exploration' | 'collaboration' | 'admin';
   productivity: 'high' | 'medium' | 'low';
   // Key activities in session
-  primaryActivities: ActivityType;,
+  primaryActivities: ActivityType;
   keyEvents: string; // event IDs,
   // Outcomes
   goalsAchieved?: string;
@@ -298,7 +298,7 @@ export class ActivityTimelineService {
   /**
    * Track a graph operation
    */
-  async trackGraphOperation(action: string,)
+  async trackGraphOperation(action: string)
     details: Partial<ActivityDetails> & {,
   nodeChanges?: NodeChange;
   connectionChanges?: ConnectionChange;
@@ -325,7 +325,7 @@ export class ActivityTimelineService {
   /**
    * Track user interaction
    */
-  async trackUserInteraction(action: string,)
+  async trackUserInteraction(action: string)
     element: string,
     details: Partial<ActivityDetails> = {},
     userId: string,
@@ -338,7 +338,7 @@ export class ActivityTimelineService {
       title: `${action} ${element}`}
 },
   resource: element,
-      details: {,
+      details: {
   ...details,
   interactionType: action,
   element,
@@ -351,7 +351,7 @@ export class ActivityTimelineService {
   /**
    * Track performance event
    */
-  async trackPerformance(operation: string,)
+  async trackPerformance(operation: string)
     duration: number,
     success: boolean,
     details: Partial<ActivityDetails> = {},
@@ -366,7 +366,7 @@ export class ActivityTimelineService {
 }
       duration,
       success,
-      details: {,
+      details: {
   ...details,
   executionTime: duration,
   operation
@@ -378,7 +378,7 @@ export class ActivityTimelineService {
   /**
    * Track collaboration event
    */
-  async trackCollaboration(action: string,)
+  async trackCollaboration(action: string)
     collaborators: string,
     resource: string,
     details: Partial<ActivityDetails> = {},
@@ -392,7 +392,7 @@ export class ActivityTimelineService {
       title: `${action} ${resource} with ${collaborators.length} collaborators`}
 }
       resource,
-      details: {,
+      details: {
   ...details,
   collaboratorCount: collaborators.length,
 }
@@ -614,7 +614,7 @@ export class ActivityTimelineService {
   /**
   * Start a new user session
   */
-  startSession(userId: string, clientInfo: ClientInfo, context?: {,)
+  startSession(userId: string, clientInfo: ClientInfo, context?: {)
   workspaceId?: string;
   projectId?: string;
   location?: GeolocationInfo;
@@ -711,7 +711,7 @@ export class ActivityTimelineService {
   // Detect rapid error sequences
   if (!event.success) {
   const recentErrors = this.getActivities({)
-  dateRange: {,
+  dateRange: {
   start: new Date(Date.now() - 5 * 60 * 1000), // Last 5 minutes,
   end: new Date(),
 },
@@ -727,7 +727,7 @@ export class ActivityTimelineService {
   private analyzeSession(session: ActivitySession): void {,
   const sessionActivities = this.getActivities({)
   userIds: [session.userId],
-  dateRange: {,
+  dateRange: {
   start: session.startTime,
   end: session.endTime || new Date(),
 });
@@ -736,12 +736,12 @@ export class ActivityTimelineService {
     const collaborations = sessionActivities.filter(a => a.type === 'collaboration').length;
     const adminActions = sessionActivities.filter(a => a.type === 'admin').length;
     if (adminActions > graphOperations) {
-      session.type = 'admin';
-    } else if (collaborations > graphOperations * 0.3) {
-      session.type = 'collaboration';
-    } else if (graphOperations > 10) {
-      session.type = 'work';
-    } else {
+      session.type = 'admin'
+  } else if (collaborations > graphOperations * 0.3) {
+      session.type = 'collaboration'
+  } else if (graphOperations > 10) {
+      session.type = 'work'
+  } else {
       session.type = 'exploration';
     // Calculate productivity
     const highImpactActions = sessionActivities.filter(a => ;);
@@ -749,10 +749,10 @@ export class ActivityTimelineService {
     ).length;
     const errorRate = sessionActivities.filter(a => !a.success).length / sessionActivities.length;
     if (highImpactActions > 5 && errorRate < 0.1) {
-      session.productivity = 'high';
-    } else if (highImpactActions > 2 && errorRate < 0.2) {
-      session.productivity = 'medium';
-    } else {
+      session.productivity = 'high'
+  } else if (highImpactActions > 2 && errorRate < 0.2) {
+      session.productivity = 'medium'
+  } else {
   session.productivity = 'low';
   // Identify key events
   session.keyEvents = sessionActivities

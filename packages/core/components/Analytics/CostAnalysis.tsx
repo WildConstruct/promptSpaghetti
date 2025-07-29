@@ -25,7 +25,7 @@ import {
  * Budget card props
  */
 interface BudgetCardProps {
-  budget: unknown;,
+  budget: unknown;
   usage: Error;
   onUpdate: (budgetId: string, updates: unknown) => void;
 /**
@@ -151,7 +151,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
  * Cost forecast chart props
  */
 interface CostForecastChartProps {
-  forecastData: unknown;,
+  forecastData: unknown;
   loading: boolean;
 /**
  * Cost forecast chart component
@@ -262,7 +262,7 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
  */
 
 export interface CostAnalysisProps {
-  analyticsClient: AnalyticsClient;,
+  analyticsClient: AnalyticsClient;
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
@@ -270,12 +270,12 @@ export interface CostAnalysisProps {
  * Cost analysis state
  */
 interface CostAnalysisState {
-  loading: boolean;,
+  loading: boolean;
   costSummary: unknown;
-  forecast: unknown;,
+  forecast: unknown;
   budgets: unknown;
   budgetUsage: Map<string, any>;
-  recommendations: unknown;,
+  recommendations: unknown;
   error: string | null;
   /**
   * Cost analysis component

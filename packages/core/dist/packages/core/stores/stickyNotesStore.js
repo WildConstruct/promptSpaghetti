@@ -168,7 +168,9 @@ moveNote: (id, position) => {
                 metadata: {
                     ...state.notes[id].metadata,
                     updatedAt: new Date().toISOString(),
-                } } });
+                }
+            }
+        });
         ;
     }
     resizeNote: (id, size) => {
@@ -180,7 +182,9 @@ moveNote: (id, position) => {
                 metadata: {
                     ...state.notes[id].metadata,
                     updatedAt: new Date().toISOString(),
-                } } });
+                }
+            }
+        });
         ;
     },
         bringToFront;
@@ -193,7 +197,9 @@ moveNote: (id, position) => {
                 appearance: {
                     ...state.notes[id].appearance,
                     zIndex: maxZ + 1,
-                } } });
+                }
+            }
+        });
         ;
     },
         sendToBack;
@@ -206,7 +212,9 @@ moveNote: (id, position) => {
                 appearance: {
                     ...state.notes[id].appearance,
                     zIndex: minZ - 1,
-                } } });
+                }
+            }
+        });
         ;
     };
     // Selection and editing
@@ -281,7 +289,8 @@ addToGroup: (groupId, noteId) => {
         [groupId]: {
             ...state.groups[groupId],
             notes: [...state.groups[groupId].notes, noteId],
-        } });
+        }
+    });
     ;
 },
     removeFromGroup;
@@ -291,7 +300,8 @@ addToGroup: (groupId, noteId) => {
         [groupId]: {
             ...state.groups[groupId],
             notes: state.groups[groupId].notes.filter(id => id !== noteId),
-        } });
+        }
+    });
     ;
 },
     deleteGroup;

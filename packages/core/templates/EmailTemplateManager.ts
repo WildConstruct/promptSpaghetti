@@ -11,18 +11,18 @@ import path from 'path';
 // ========================================
 
 export interface EmailTemplate {
-  subject: string;,
+  subject: string;
   htmlTemplate: string;
-  textTemplate: string;,
+  textTemplate: string;
   variables: string;
-  description: string;,
-  category: 'verification' | 'enrollment' | 'security' | 'notification';
-}
+  description: string;
+  category: 'verification' | 'enrollment' | 'security' | 'notification'
+  }
 export interface TemplateVariables {
   // Common variables
-  displayName: string;,
+  displayName: string;
   emailAddress: string;
-  expiryMinutes: string;,
+  expiryMinutes: string;
   code: string;
   // Optional security variables
   securityWarning?: string;
@@ -269,9 +269,9 @@ export class EmailTemplateManager {
   /**
    * Validate a template
    */
-  validateTemplate(templateName: string, variables: TemplateVariables): {,
+  validateTemplate(templateName: string, variables: TemplateVariables): {
   valid: boolean;
-    errors: string;,
+    errors: string;
   warnings: string;
     const template = this.getTemplate(templateName);
     const errors: string = [];
@@ -450,9 +450,9 @@ export class TemplateTestUtils {
   /**
    * Test all templates with sample data
    */
-  static testAllTemplates(manager: EmailTemplateManager): {,
+  static testAllTemplates(manager: EmailTemplateManager): {
   templateName: string;
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string,
 }[] {

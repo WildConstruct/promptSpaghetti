@@ -147,7 +147,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
   deterministic: true,
   cacheable: false, // Don't cache since output depends on state,
   stateful: true,   // Maintains state between executions,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 };
@@ -234,7 +234,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
           evaluationDepth: 0,
           cache: new Map(),
           prng: () => Math.random(),
-          executionMeta: {,
+          executionMeta: {
   startTime: Date.now(),
             executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -264,16 +264,16 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
       id: this.id,
       type: 'Sequential',
       config: this.getConfig(),
-      data: {,
+      data: {
   sequence: this.sequence,
-        pattern: {,
+        pattern: {
   type: this.pattern.type,
           config: this.pattern instanceof WeightedPattern ? ,
             { weights: (this.pattern as any).config.weights } :
             this.pattern instanceof RandomPattern ?
               { allowRepeats: (this.pattern as any).config.allowRepeats } :
   },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };
@@ -301,7 +301,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Sequential nodes
  */
-export function createSequentialNode(id: string,)
+export function createSequentialNode(id: string)
   sequence: string,
   patternType: SequencePattern['type'] = 'linear',
   patternConfig: SequencePatternConfig = {}

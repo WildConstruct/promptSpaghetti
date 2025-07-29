@@ -6,7 +6,7 @@ import { ProjectTemplate, TemplateVariable, CustomizationPoint } from './Project
 import { VersionSnapshot, Branch, VersionDiff } from '../version-history/VersionHistoryManager';
 
 export interface TemplateVersion {
-  id: string;,
+  id: string;
   template_id: string;
   version_number: string; // Semantic version (e.g., "1.2.0"),
   version_tag?: string; // Human-readable tag (e.g., "stable", "beta"),
@@ -19,43 +19,43 @@ export interface TemplateVersion {
   release_notes?: string;
   // Versioning information
   parent_version_id?: string;
-  branch_name: string;,
+  branch_name: string;
   commit_hash: string;
   // Compatibility and migration
-  api_version: string;,
+  api_version: string;
   compatibility_level: 'patch' | 'minor' | 'major';
   migration_required: boolean;
   migration_script?: string;
   // Author and timing
-  created_by: string;,
+  created_by: string;
   created_at: string;
   published_at?: string;
   deprecated_at?: string;
   // Status and lifecycle
-  status: 'draft' | 'review' | 'published' | 'deprecated' | 'archived';,
+  status: 'draft' | 'review' | 'published' | 'deprecated' | 'archived';
   visibility: 'private' | 'workspace' | 'public';
   // Analytics
-  download_count: number;,
+  download_count: number;
   usage_count: number;
   rating: number;
   // Dependencies and conflicts
-  dependencies: TemplateDependency;,
+  dependencies: TemplateDependency;
   conflicts: TemplateConflict;
 }
 export interface TemplateDependency {
-  template_id: string;,
+  template_id: string;
   version_constraint: string; // e.g., ">=1.0.0, <2.0.0",
   dependency_type: 'required' | 'optional' | 'peer';
   description?: string;
 }
 export interface TemplateConflict {
-  template_id: string;,
+  template_id: string;
   conflict_type: 'api_version' | 'node_type' | 'variable_name' | 'resource';
-  description: string;,
-  severity: 'warning' | 'error';
-}
+  description: string;
+  severity: 'warning' | 'error'
+  }
 export interface TemplateImportOptions {
-  format: 'json' | 'yaml' | 'zip' | 'git' | 'template_bundle';,
+  format: 'json' | 'yaml' | 'zip' | 'git' | 'template_bundle';
   source: string | File | ArrayBuffer;
   // Import behavior
   merge_strategy?: 'replace' | 'merge' | 'keep_both';
@@ -92,22 +92,22 @@ export interface TemplateExportOptions {
   // Output customization
   filename?: string;
   metadata?: Record<string, any>;
-  encryption?: {,
+  encryption?: {
   enabled: boolean;
   password?: string;
   algorithm?: string;
 };
 }
 export interface TemplateImportResult {
-  success: boolean;,
+  success: boolean;
   imported_version: TemplateVersion;
-  warnings: string;,
+  warnings: string;
   errors: string;
   // Import details
   original_version?: string;
-  new_version: string;,
+  new_version: string;
   changes_detected: number;
-  conflicts_resolved: number;,
+  conflicts_resolved: number;
   dependencies_updated: number;
   // Migration info
   migration_applied: boolean;
@@ -117,26 +117,26 @@ export interface TemplateImportResult {
   can_rollback: boolean;
 }
 export interface VersionComparisonResult {
-  from_version: TemplateVersion;,
+  from_version: TemplateVersion;
   to_version: TemplateVersion;
-  diff: TemplateDiff;,
-  compatibility: {,
-  breaking_changes: boolean;,
+  diff: TemplateDiff;
+  compatibility: {
+  breaking_changes: boolean;
   api_changes: boolean;
-  schema_changes: boolean;,
+  schema_changes: boolean;
   dependency_changes: boolean;
 };
-  migration_required: boolean;,
+  migration_required: boolean;
   migration_complexity: 'simple' | 'moderate' | 'complex';
   estimated_migration_time: number; // minutes
 }
 export interface TemplateDiff {
   metadata_changes: Array<{,
-  field: string;,
+  field: string;
   old_value: any;
-  new_value: any;,
-  change_type: 'added' | 'removed' | 'modified';
-}>;
+  new_value: any;
+  change_type: 'added' | 'removed' | 'modified'
+  }>;
   variable_changes: Array<{,
   variable_id: string;
   change_type: 'added' | 'removed' | 'modified';
@@ -149,11 +149,11 @@ export interface TemplateDiff {
   old_point?: CustomizationPoint;
   new_point?: CustomizationPoint;
 }>;
-  graph_changes: {,
+  graph_changes: {
   nodes_added: number;
-  nodes_removed: number;,
+  nodes_removed: number;
   nodes_modified: number;
-  edges_added: number;,
+  edges_added: number;
   edges_removed: number;
   edges_modified: number;
 };
@@ -167,16 +167,16 @@ export class TemplateVersionManager {
     private userId: string
   ) {}
   // Version Management
-  async createVersion(template: ProjectTemplate,)
-    options: {,
+  async createVersion(template: ProjectTemplate)
+    options: {
   version_number?: string;
   version_tag?: string;
   title?: string;
   description?: string;
   changelog?: string;
   branch_name?: string;
-  compatibility_level?: 'patch' | 'minor' | 'major';
-} = {}
+  compatibility_level?: 'patch' | 'minor' | 'major'
+  } = {}
   ): Promise<TemplateVersion> {
   try {
   const versionData = {
@@ -201,15 +201,15 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to create template version:', error);
   throw error;
-  async publishVersion(versionId: string, options: {,)
+  async publishVersion(versionId: string, options: {)
   release_notes?: string;
-  visibility?: 'private' | 'workspace' | 'public';
-} = {}): Promise<TemplateVersion> {
+  visibility?: 'private' | 'workspace' | 'public'
+  } = {}): Promise<TemplateVersion> {
     try {
       const response = await this.apiClient.put(`/api/template-versions/${versionId}/publish`, {)}
   },
   release_notes: options.release_notes,
-        visibility: options.visibility || 'public';
+        visibility: options.visibility || 'public'
   });
       const version = response.data;
       this.versions.set(versionId, version);
@@ -217,7 +217,7 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to publish template version:', error);
   throw error;
-  async getVersions(options: {,)
+  async getVersions(options: {)
   include_drafts?: boolean;
   branch_name?: string;
   limit?: number;
@@ -286,10 +286,10 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to import template:', error);
   throw error;
-  async importFromGit(gitUrl: string, options: {,)
+  async importFromGit(gitUrl: string, options: {)
   branch?: string;
   commit?: string;
-  credentials?: {,
+  credentials?: {
   username?: string;
   token?: string;
 };
@@ -312,7 +312,7 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to import template from Git:', error);
   throw error;
-  async importFromMarketplace(marketplaceId: string, options: {,)
+  async importFromMarketplace(marketplaceId: string, options: {)
   version?: string;
   auto_update?: boolean;
   include_dependencies?: boolean;
@@ -337,7 +337,7 @@ export class TemplateVersionManager {
   async exportTemplate(versionId: string, options: TemplateExportOptions): Promise<{,
   download_url?: string;
   file_data?: ArrayBuffer;
-  filename: string;,
+  filename: string;
   size: number;
   checksum: string;
 }> {
@@ -365,14 +365,14 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to export template:', error);
   throw error;
-  async exportVersionHistory(options: {,)
+  async exportVersionHistory(options: {)
   branch_name?: string;
   start_version?: string;
   end_version?: string;
   format?: 'json' | 'csv' | 'timeline';
   include_diffs?: boolean;
 } = {}): Promise<{
-  download_url: string;,
+  download_url: string;
   filename: string;
 }> {
   try {
@@ -387,11 +387,11 @@ export class TemplateVersionManager {
   throw error;
   // Dependency Management
   async checkDependencies(versionId: string): Promise<{,
-  satisfied: boolean;,
+  satisfied: boolean;
   missing: TemplateDependency;
-  conflicts: TemplateConflict;,
+  conflicts: TemplateConflict;
   recommendations: Array<{,
-  template_id: string;,
+  template_id: string;
   recommended_version: string;
   reason: string;
 }>;
@@ -402,13 +402,13 @@ export class TemplateVersionManager {
     } catch (error) {
   console.error('Failed to check dependencies:', error);
   throw error;
-  async resolveDependencies(versionId: string, options: {,)
+  async resolveDependencies(versionId: string, options: {)
   auto_install?: boolean;
-  update_strategy?: 'conservative' | 'latest' | 'compatible';
-}): Promise<{
-  resolved: TemplateDependency;,
+  update_strategy?: 'conservative' | 'latest' | 'compatible'
+  }): Promise<{
+  resolved: TemplateDependency;
   installed: string;
-  updated: string;,
+  updated: string;
   conflicts: TemplateConflict;
 }> {
     try {
@@ -419,12 +419,12 @@ export class TemplateVersionManager {
   throw error;
   // Migration and Compatibility
   async generateMigrationScript(fromVersionId: string, toVersionId: string): Promise<{,
-  script: string;,
+  script: string;
   instructions: string;
-  complexity: 'simple' | 'moderate' | 'complex';,
+  complexity: 'simple' | 'moderate' | 'complex';
   estimated_time: number;
   breaking_changes: Array<{,
-  type: string;,
+  type: string;
   description: string;
   action_required: string;
 }>;
@@ -438,7 +438,7 @@ export class TemplateVersionManager {
   console.error('Failed to generate migration script:', error);
   throw error;
   async applyMigration(versionId: string, migrationScript: string): Promise<{,
-  success: boolean;,
+  success: boolean;
   new_version_id: string;
   migration_log: string;
   rollback_script?: string;
@@ -485,28 +485,28 @@ export class TemplateVersionManager {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   // Template Bundle Format
   export interface TemplateBundle {
-  format_version: string;,
+  format_version: string;
   created_at: string;
   created_by: string;
   // Primary template
   template: TemplateVersion;
   // Dependencies and related templates
-  dependencies: TemplateVersion;,
+  dependencies: TemplateVersion;
   related_templates: TemplateVersion;
   // Assets and resources
   assets: Array<{,
-  type: 'image' | 'document' | 'config' | 'script';,
+  type: 'image' | 'document' | 'config' | 'script';
   filename: string;
-  data: ArrayBuffer | string;,
+  data: ArrayBuffer | string;
   mime_type: string;
 }>;
   // Metadata and documentation
-  documentation: {,
+  documentation: {
   readme: string;
   changelog: string;
   api_docs?: string;
   examples?: Array<{,
-  name: string;,
+  name: string;
   description: string;
   graph_data: any;
 }>;

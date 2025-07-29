@@ -47,7 +47,7 @@ export interface ConversionMetricQuery {
     metrics: ConversionMetricType[];
     groupBy?: ConversionGroupBy[];
     filters?: ConversionFilter[];
-    aggregation: {,
+    aggregation: {
         interval: 'hour' | 'day' | 'week' | 'month';
         timeZone?: string;
         fillGaps?: boolean;
@@ -69,7 +69,7 @@ export interface ConversionMetricResult {
     metricType: ConversionMetricType;
     value: number;
     timestamp: number;
-    metadata: {,
+    metadata: {
         sampleSize: number;
         confidence: number;
         variability: number;
@@ -80,7 +80,7 @@ export interface ConversionMetricResult {
     breakdowns?: MetricBreakdown[];
 
 export interface ComparisonData {
-    previousPeriod: {,
+    previousPeriod: {
         value: number;
         changePercent: number;
         significance: number;
@@ -116,17 +116,17 @@ export interface DataWarehouseConfig {
     connectionString: string;
     schemaName: string;
     tablePrefix: string;
-    partitioning: {,
+    partitioning: {
         strategy: 'time' | 'hash' | 'range';
         field: string;
         interval?: string;
     };
-    retention: {,
+    retention: {
         rawEvents: number;
         aggregatedMetrics: number;
         archivedData: number;
     };
-    indexing: {,
+    indexing: {
         timeIndex: boolean;
         userIndex: boolean;
         funnelIndex: boolean;
@@ -134,18 +134,18 @@ export interface DataWarehouseConfig {
     };
 
 export interface AnalyticsAPIConfig {
-    caching: {,
+    caching: {
         enabled: boolean;
         ttl: number;
         maxSize: number;
-        strategy: 'lru' | 'lfu' | 'ttl';
-    };
-    rateLimiting: {,
+        strategy: 'lru' | 'lfu' | 'ttl'
+  };
+    rateLimiting: {
         enabled: boolean;
         requestsPerMinute: number;
         burstLimit: number;
     };
-    optimization: {,
+    optimization: {
         queryTimeout: number;
         maxConcurrentQueries: number;
         enableQueryPlanning: boolean;
@@ -288,7 +288,7 @@ export interface BatchProcessingResult {
 export interface RealTimeMetrics {
     funnelId: string;
     timestamp: number;
-    metrics: {,
+    metrics: {
         activeUsers: number;
         conversionsLastHour: number;
         conversionRate: number;
@@ -318,7 +318,7 @@ export interface InfrastructureHealthStatus {
 export interface ComponentHealthStatus {
     healthy: boolean;
     uptime: number;
-    metrics: {,
+    metrics: {
         totalProcessed?: number;
         totalCalculations?: number;
         errorRate: number;

@@ -38,70 +38,70 @@ import {
 // VFX Pipeline Data Types
 
 export interface VFXScene {
-  id: string;,
+  id: string;
   name: string;
-  historicalPeriod: string;,
+  historicalPeriod: string;
   region: string;
-  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';,
+  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
   weather: string;
-  characters: VFXCharacter;,
+  characters: VFXCharacter;
   assets: VFXAsset;
-  composition: SceneComposition;,
+  composition: SceneComposition;
   accuracy: HistoricalAccuracyMetrics;
 }
 export interface VFXCharacter {
-  id: string;,
+  id: string;
   name: string;
-  type: 'crowd' | 'hero' | 'background';,
+  type: 'crowd' | 'hero' | 'background';
   period: string;
-  culture: string;,
+  culture: string;
   accuracy: number;
-  clothing: string;,
+  clothing: string;
   position: { x: number; y: number; z: number };
 }
 export interface VFXAsset {
-  id: string;,
+  id: string;
   name: string;
-  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';,
+  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';
   period: string;
-  region: string;,
+  region: string;
   accuracy: number;
-  materials: MaterialProperty;,
+  materials: MaterialProperty;
   lod: number;
 }
 export interface MaterialProperty {
-  name: string;,
+  name: string;
   type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
-  value: number;,
+  value: number;
   historicallyAccurate: boolean;
 }
 export interface SceneComposition {
   cameraPosition: { x: number; y: number; z: number };
-  focalLength: number;,
+  focalLength: number;
   depth: number;
   layers: SceneLayer;
 }
 export interface SceneLayer {
-  id: string;,
+  id: string;
   name: string;
-  type: 'foreground' | 'midground' | 'background';,
+  type: 'foreground' | 'midground' | 'background';
   opacity: number;
   elements: string;
 }
 export interface HistoricalAccuracyMetrics {
-  overall: number;,
+  overall: number;
   architecture: number;
-  clothing: number;,
+  clothing: number;
   technology: number;
-  culture: number;,
+  culture: number;
   timeline: number;
-  expertValidated: boolean;,
+  expertValidated: boolean;
   violations: AccuracyViolation;
 }
 export interface AccuracyViolation {
-  type: 'anachronism' | 'cultural' | 'architectural' | 'technological';,
+  type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
+  description: string;
   element: string;
   suggestion: string;
 }
@@ -963,12 +963,12 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       </Tabs>
       <style>{`
         .vfx-pipeline-visualizer {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
         .scene-visualization {
-          position: relative;,
+          position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 12px;,
+          border-radius: 12px;
   overflow: hidden;
         .accuracy-indicator {
           animation: pulse-accuracy 2s ease-in-out infinite;

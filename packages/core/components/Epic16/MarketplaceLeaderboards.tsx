@@ -34,23 +34,23 @@ export interface MarketplaceLeaderboardsProps {
   onCategoryClick?: (categoryId: string) => void;
   className?: string;
   interface LeaderboardEntry {
-  id: string;,
+  id: string;
   name: string;
-  rank: number;,
+  rank: number;
   score: number;
-  change: number;,
+  change: number;
   metadata: Record<string, any>;
   lastUpdated: Date;
   interface LeaderboardResponse {
-  success: boolean;,
+  success: boolean;
   leaderboard: LeaderboardEntry;
-  totalEntries: number;,
+  totalEntries: number;
   lastUpdated: Date;
-  timeframe: string;,
-  metadata: {,
-  averageScore: number;,
+  timeframe: string;
+  metadata: {
+  averageScore: number;
   topScore: number;
-  totalParticipants: number;,
+  totalParticipants: number;
   updateFrequency: string;
 };
 interface LeaderboardFilter {
@@ -97,7 +97,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       const endpoint = getLeaderboardEndpoint(activeTab, activeMetric);
       const response = await fetch(`${endpoint}?${params}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${getAuthToken()}`}
       });
       if (!response.ok) {

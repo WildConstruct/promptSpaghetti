@@ -36,7 +36,7 @@ import { GraphCRDT } from './GraphCRDT';
  */
 
 export interface TransformResult {
-  op1: MutationOperation | null;,
+  op1: MutationOperation | null;
   op2: MutationOperation | null;
   conflict?: ConflictOperation;
   requiresResolution: boolean;
@@ -45,9 +45,9 @@ export interface TransformResult {
   */
 }
 export interface BatchResult {
-  success: boolean;,
+  success: boolean;
   appliedOperations: MutationOperation;
-  failedOperations: MutationOperation;,
+  failedOperations: MutationOperation;
   conflicts: ConflictOperation;
   rollbackRequired: boolean;
   /**
@@ -55,11 +55,11 @@ export interface BatchResult {
   */
 }
 export interface QueuedOperation {
-  operation: MutationOperation;,
+  operation: MutationOperation;
   priority: OperationPriority;
-  dependencies: string;,
+  dependencies: string;
   retryCount: number;
-  maxRetries: number;,
+  maxRetries: number;
   timestamp: number;
   // =============================================================================
   // Main Mutation Coordinator Class
@@ -91,7 +91,7 @@ export class MutationCoordinator {
   documentId: string,
   clientId: string,
   userId: string,
-  options?: {,
+  options?: {
   conflictResolutionStrategy?: ResolutionStrategy;
   maxOperationHistory?: number;
   operationTimeout?: number;
@@ -399,7 +399,7 @@ export class MutationCoordinator {
    * Detect conflicts with pending operations
    */
   private detectConflicts(operation: MutationOperation): MutationOperation {
-  const conflicts: MutationOperation = [];
+  const conflicts: MutationOperation[] = [];
   this.pendingOperations.forEach((pendingOp) => {
   if (operationsConflict(operation, pendingOp)) {
   conflicts.push(pendingOp);
@@ -558,7 +558,7 @@ export class MutationCoordinator {
   hasConflicts: boolean;
   conflicts: ConflictOperation;
 }> {
-  const conflicts: ConflictOperation = [];
+  const conflicts: ConflictOperation[] = [];
   // Check for internal conflicts within the batch
   for (let i = 0; i < operations.length; i++) {
   for (let j = i + 1; j < operations.length; j++) {
@@ -586,7 +586,7 @@ export class MutationCoordinator {
   */
   private createInverseOperation(operation: MutationOperation): MutationOperation | null {,
   switch (operation.type) {
-  case 'NODE_ADD':,
+  case 'NODE_ADD':
   const nodeRemoveOp: NodeRemoveOperation = {,
   type: 'NODE_REMOVE',
   operationId: generateOperationId(this.userId),
@@ -651,7 +651,7 @@ export class MutationCoordinator {
   /**
   * Set event handlers
   */
-  setEventHandlers(handlers: {,)
+  setEventHandlers(handlers: {)
   onOperationApplied?: (operation: MutationOperation) => void;
   onConflictDetected?: (conflict: ConflictOperation) => void;
   onConflictResolved?: (resolution: ConflictResolution) => void;
@@ -669,8 +669,8 @@ export class MutationCoordinator {
   /**
   * Get current configuration
   */
-  getConfiguration(): {,
-  conflictResolutionStrategy: ResolutionStrategy;,
+  getConfiguration(): {
+  conflictResolutionStrategy: ResolutionStrategy;
   maxOperationHistory: number;
   operationTimeout: number;
   return {

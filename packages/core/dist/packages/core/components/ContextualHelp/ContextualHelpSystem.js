@@ -49,8 +49,9 @@ export const ContextualHelpSystem = ({
                 'Use the preview system to see your story in action'
             ],
             level: 'beginner',
-            context: {},
-            conditions: { nodeCount: 0, edgeCount: 0 }
+            context: {
+                conditions: { nodeCount: 0, edgeCount: 0 }
+            }
         },
         {
             id: 'node-creation-basics',
@@ -65,9 +66,10 @@ export const ContextualHelpSystem = ({
             ],
             relatedFeatures: ['Palette', 'Inspector Panel', 'Node Configuration'],
             level: 'beginner',
-            context: {},
-            triggerElements: ['palette-item'],
-            actions: ['node-drag', 'node-drop'],
+            context: {
+                triggerElements: ['palette-item'],
+                actions: ['node-drag', 'node-drop'],
+            }
         },
         {
             id: 'weighted-choice-direction',
@@ -81,9 +83,10 @@ export const ContextualHelpSystem = ({
                 'Preview different weight combinations to find the right balance'
             ],
             level: 'intermediate',
-            context: {},
-            nodeTypes: ['WeightedChoice'],
-            triggerElements: ['weight-slider', 'variation-input'],
+            context: {
+                nodeTypes: ['WeightedChoice'],
+                triggerElements: ['weight-slider', 'variation-input'],
+            }
         },
         {
             id: 'connection-flow-narrative',
@@ -97,8 +100,9 @@ export const ContextualHelpSystem = ({
                 'Use the preview to see how connections affect the final result'
             ],
             level: 'beginner',
-            context: {},
-            actions: ['connection-start', 'connection-complete'],
+            context: {
+                actions: ['connection-start', 'connection-complete'],
+            }
         },
         {
             id: 'preview-system-dailies',
@@ -113,8 +117,9 @@ export const ContextualHelpSystem = ({
             ],
             relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Variance Analysis'],
             level: 'intermediate',
-            context: {},
-            triggerElements: ['preview-button', 'director-toolbar'],
+            context: {
+                triggerElements: ['preview-button', 'director-toolbar'],
+            }
         },
         {
             id: 'advanced-conditional-direction',
@@ -128,8 +133,9 @@ export const ContextualHelpSystem = ({
                 'Test different scenarios to ensure robust storytelling'
             ],
             level: 'advanced',
-            context: {},
-            nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
+            context: {
+                nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
+            }
         },
         {
             id: 'professional-export-pipeline',
@@ -143,8 +149,9 @@ export const ContextualHelpSystem = ({
                 'Maintain version control for collaborative workflows'
             ],
             level: 'professional',
-            context: {},
-            triggerElements: ['export-button', 'save-project']
+            context: {
+                triggerElements: ['export-button', 'save-project']
+            }
         }
     ], []);
     // Calculate current context for smart help suggestions
@@ -355,19 +362,19 @@ _jsx("style", { children: `
         .contextual-help-system {
           position: relative;
         .help-launcher {
-          position: fixed;,
+          position: fixed;
   top: 20px;
           right: 20px;
-          z-index: 9999;,
+          z-index: 9999;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
         .help-button {
           background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
           border: none;
-          border-radius: 50%;,
+          border-radius: 50%;
   width: 40px;
-          height: 40px;,
+          height: 40px;
   cursor: pointer;
           transition: all 0.2s ease;
           box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
@@ -378,12 +385,12 @@ _jsx("style", { children: `
           font-size: 18px;
         .progressive-hint {
           background: rgba(0, 0, 0, 0.8);
-          color: #fff;,
+          color: #fff;
   padding: 8px 12px;
           border-radius: 6px;
-          font-size: 12px;,
+          font-size: 12px;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           animation: fadeInPulse 2s ease-in-out;
         @keyframes fadeInPulse {
@@ -392,7 +399,7 @@ _jsx("style", { children: `
         .help-tooltip {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #ffd700;
-          border-radius: 8px;,
+          border-radius: 8px;
   color: #fff;
           min-width: 300px;
           max-width: 400px;
@@ -404,38 +411,38 @@ _jsx("style", { children: `
           max-height: 500px;
         @keyframes helpSlideIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translateY(-10px);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translateY(0);
         .help-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 12px 16px;
           border-bottom: 1px solid #444;
         .help-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
         .help-title h3 {
           margin: 0;
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #ffd700;
         .help-type-icon {
           font-size: 16px;
         .help-controls {
-          display: flex;,
+          display: flex;
   gap: 4px;
         .expand-button, .close-button {
-          background: none;,
+          background: none;
   border: none;
-          color: #aaa;,
+          color: #aaa;
   cursor: pointer;
           padding: 4px;
-          border-radius: 3px;,
+          border-radius: 3px;
   transition: color 0.2s ease;
         .expand-button:hover, .close-button:hover {,
   color: #fff;
@@ -445,17 +452,17 @@ _jsx("style", { children: `
         .help-description {
           margin: 0 0 12px 0;
           line-height: 1.4;
-          font-size: 13px;,
+          font-size: 13px;
   color: #ddd;
         .film-terminology {
           background: rgba(255, 215, 0, 0.1);
-          border-left: 3px solid #ffd700;,
+          border-left: 3px solid #ffd700;
   padding: 8px 12px;
           margin: 12px 0;
           border-radius: 0 4px 4px 0;
         .film-terminology p {
           margin: 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: #ffd700;
           font-style: italic;
         .film-icon {
@@ -464,7 +471,7 @@ _jsx("style", { children: `
           margin-top: 16px;
         .action-items h4 {
           margin: 0 0 8px 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: #ffd700;
           text-transform: uppercase;
         .action-items ul {
@@ -473,21 +480,21 @@ _jsx("style", { children: `
         .action-items li {
           font-size: 12px;
           line-height: 1.4;
-          margin-bottom: 4px;,
+          margin-bottom: 4px;
   color: #ccc;
         .related-features {
           margin-top: 16px;
         .related-features h4 {
           margin: 0 0 8px 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: #ffd700;
           text-transform: uppercase;
         .feature-tags {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 4px;
         .feature-tag {
-          background: #444;,
+          background: #444;
   color: #fff;
           padding: 2px 6px;
           border-radius: 3px;
@@ -495,38 +502,38 @@ _jsx("style", { children: `
         .tour-navigation {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 12px 16px;
-          border-top: 1px solid #444;,
+          border-top: 1px solid #444;
   background: rgba(255, 215, 0, 0.1);
         .tour-progress {
-          font-size: 11px;,
+          font-size: 11px;
   color: #ffd700;
         .tour-next {
-          background: #ffd700;,
+          background: #ffd700;
   color: #000;
-          border: none;,
+          border: none;
   padding: 4px 12px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 11px;
           font-weight: 600;
         .tour-launcher {
-          position: fixed;,
+          position: fixed;
   bottom: 20px;
           right: 20px;
           z-index: 9999;
         .start-tour-btn {
           background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-          color: #000;,
+          color: #000;
   border: none;
           padding: 12px 20px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           font-weight: 600;
           font-size: 13px;
           box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-          transition: all 0.2s ease;,
+          transition: all 0.2s ease;
   animation: tourPulse 3s ease-in-out infinite;
         .start-tour-btn:hover {,
   transform: translateY(-2px);

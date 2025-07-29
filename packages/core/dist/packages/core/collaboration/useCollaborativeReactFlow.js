@@ -127,17 +127,14 @@ const getUserCursors = useCallback(() => {
 },  > , []);
 connectedUsers.forEach((user, userId) => {
     if (user.cursor?.position && userId !== localPresence?.userId) {
-        cursors.push({});
-        userId,
+        cursors.push({
+            userId,
             user,
-            position;
-        user.cursor.position,
-            nodeId;
-        user.cursor.nodeId,
-        ;
+            position: user.cursor.position,
+            nodeId: user.cursor.nodeId,
+        });
     }
 });
-;
 return cursors;
 [isCollaborative, connectedUsers, localPresence];
 ;

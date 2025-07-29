@@ -18,7 +18,7 @@ export interface EventableStore {
 
 export interface StateChangeEvent extends BaseEvent {
     type: 'state_changed' | 'store_initialized' | 'store_reset';
-    metadata: {,
+    metadata: {
         storeName: string;
         path: string;
         previousValue: unknown;

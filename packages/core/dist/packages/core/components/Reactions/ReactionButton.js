@@ -379,7 +379,7 @@ _jsxs("div", { style: {
                 }, ", color: isUserReaction ? '#3b82f6' : '#374151'; }}>", reaction.label] }, reaction.id), ")}", showCounts && count > 0 && ()
             < span, " style=", {
             fontSize: `calc(${currentSize.fontSize} * 0.8)`
-        }, ", fontWeight: '600', color: isUserReaction ? '#3b82f6' : '#6b7280', backgroundColor: isUserReaction ? '#dbeafe' : '#f3f4f6', padding: '1px 4px', borderRadius: '8px'; }}>", count] });
+        }, ", fontWeight: '600', color: isUserReaction ? '#3b82f6' : '#6b7280', backgroundColor: isUserReaction ? '#dbeafe' : '#f3f4f6', padding: '1px 4px', borderRadius: '8px' }}>", count] });
 button >
 ;
 ;

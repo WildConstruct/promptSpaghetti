@@ -43,7 +43,7 @@ export interface PolicyCheckRequest {
     resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
     resourceId: string;
     data: Record<string, any>;
-    context: {,
+    context: {
         userId?: string;
         userRole?: string;
         source: string;

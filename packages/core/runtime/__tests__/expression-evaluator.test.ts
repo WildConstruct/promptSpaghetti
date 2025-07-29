@@ -8,11 +8,11 @@ describe('SafeExpressionEvaluator', () => {
   y: 5,
   name: 'test',
   active: true,
-  user: {,
+  user: {
   id: 123,
   status: 'active',
 },
-  Math: {,
+  Math: {
   min: Math.min,
   max: Math.max,
   floor: Math.floor,
@@ -217,10 +217,10 @@ describe('SafeExpressionEvaluator', () => {
 });
     it('should handle multiple levels of member access', () => {
   const context = {
-  data: {,
-  user: {,
-  profile: {,
-  settings: {,
+  data: {
+  user: {
+  profile: {
+  settings: {
   theme: 'dark',
 };
       expect(SafeExpressionEvaluator.evaluate('data.user.profile.settings.theme', context)).toBe('dark');

@@ -5,16 +5,16 @@ import React, { useState } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
 export interface WeightPreset {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: 'basic' | 'creative' | 'advanced' | 'custom';
   pattern: (options: WeightControlOption) => number;
   icon?: string;
   preview?: string;
 }
 export interface WeightPresetsProps {
-  options: WeightControlOption;,
+  options: WeightControlOption;
   onApplyPreset: (newWeights: number) => void;
   onSaveCustomPreset?: (preset: Omit<WeightPreset, 'id'>) => void;
   customPresets?: WeightPreset;
@@ -239,7 +239,7 @@ export const BUILT_IN_PRESETS: WeightPreset = [
       <div className={`weight-presets compact ${className}`} style={{},}
   display: 'flex',
         gap: '4px',
-        flexWrap: 'wrap';
+        flexWrap: 'wrap'
   }}>
         {BUILT_IN_PRESETS.slice(0, 4).map(preset => ()
           <button

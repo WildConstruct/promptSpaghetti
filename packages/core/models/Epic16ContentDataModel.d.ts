@@ -223,7 +223,7 @@ export declare const TemplateSchema: z.ZodObject<{
     title: string;
     complexity: "advanced" | "intermediate" | "beginner";
     featured: boolean;
-    stats: {,
+    stats: {
         views: number;
         downloads: number;
         likes: number;
@@ -260,7 +260,7 @@ export declare const TemplateSchema: z.ZodObject<{
     tags: string[];
     title: string;
     complexity: "advanced" | "intermediate" | "beginner";
-    stats: {,
+    stats: {
         views?: number | undefined;
         downloads?: number | undefined;
         likes?: number | undefined;
@@ -355,12 +355,12 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     hash: string;
-    examples: {,
+    examples: {
         input: string;
         title: string;
         expectedOutput: string;
     }[];
-    assets: {,
+    assets: {
         name: string;
         type: string;
         size: number;
@@ -666,7 +666,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     allowComments: boolean;
     isPinned: boolean;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         name: string;
         size: number;
@@ -875,7 +875,7 @@ export declare const TutorialSchema: z.ZodObject<{
         id: string;
         content: string;
         title: string;
-        resources: {,
+        resources: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
             url: string;
@@ -934,11 +934,11 @@ export declare const TutorialSchema: z.ZodObject<{
     status: "draft" | "published" | "archived";
     category: string;
     title: string;
-    steps: {,
+    steps: {
         id: string;
         content: string;
         title: string;
-        resources: {,
+        resources: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
             url: string;
@@ -948,7 +948,7 @@ export declare const TutorialSchema: z.ZodObject<{
     }[];
     difficulty: "advanced" | "intermediate" | "beginner";
     authorId: string;
-    assets: {,
+    assets: {
         name: string;
         url: string;
         description?: string | undefined;
@@ -976,7 +976,7 @@ export declare const TutorialSchema: z.ZodObject<{
     status: "draft" | "published" | "archived";
     category: string;
     title: string;
-    steps: {,
+    steps: {
         id: string;
         content: string;
         title: string;
@@ -1184,7 +1184,7 @@ export declare const SearchQuerySchema: z.ZodObject<{
     query: string;
     normalizedQuery: string;
     resultsCount: number;
-    clickedResults: {,
+    clickedResults: {
         position: number;
         contentType: ContentType;
         contentId: string;
@@ -1271,7 +1271,7 @@ export declare const CollectionSchema: z.ZodObject<{
     updatedAt: Date;
     name: string;
     tags: string[];
-    items: {,
+    items: {
         order: number;
         contentType: ContentType;
         contentId: string;
@@ -1281,7 +1281,7 @@ export declare const CollectionSchema: z.ZodObject<{
     isPublic: boolean;
     views: number;
     likes: number;
-    collaborators: {,
+    collaborators: {
         userId: string;
         role: "admin" | "editor" | "viewer";
         addedAt: Date;
@@ -1553,7 +1553,7 @@ export declare const Epic16ContentSchemas: {
         title: string;
         complexity: "advanced" | "intermediate" | "beginner";
         featured: boolean;
-        stats: {,
+        stats: {
             views: number;
             downloads: number;
             likes: number;
@@ -1590,7 +1590,7 @@ export declare const Epic16ContentSchemas: {
         tags: string[];
         title: string;
         complexity: "advanced" | "intermediate" | "beginner";
-        stats: {,
+        stats: {
             views?: number | undefined;
             downloads?: number | undefined;
             likes?: number | undefined;
@@ -1684,12 +1684,12 @@ export declare const Epic16ContentSchemas: {
         id: string;
         createdAt: Date;
         hash: string;
-        examples: {,
+        examples: {
             input: string;
             title: string;
             expectedOutput: string;
         }[];
-        assets: {,
+        assets: {
             name: string;
             type: string;
             size: number;
@@ -1992,7 +1992,7 @@ export declare const Epic16ContentSchemas: {
         allowComments: boolean;
         isPinned: boolean;
         replies: number;
-        attachments: {,
+        attachments: {
             id: string;
             name: string;
             size: number;
@@ -2199,7 +2199,7 @@ export declare const Epic16ContentSchemas: {
             id: string;
             content: string;
             title: string;
-            resources: {,
+            resources: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
                 url: string;
@@ -2258,11 +2258,11 @@ export declare const Epic16ContentSchemas: {
         status: "draft" | "published" | "archived";
         category: string;
         title: string;
-        steps: {,
+        steps: {
             id: string;
             content: string;
             title: string;
-            resources: {,
+            resources: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
                 url: string;
@@ -2272,7 +2272,7 @@ export declare const Epic16ContentSchemas: {
         }[];
         difficulty: "advanced" | "intermediate" | "beginner";
         authorId: string;
-        assets: {,
+        assets: {
             name: string;
             url: string;
             description?: string | undefined;
@@ -2300,7 +2300,7 @@ export declare const Epic16ContentSchemas: {
         status: "draft" | "published" | "archived";
         category: string;
         title: string;
-        steps: {,
+        steps: {
             id: string;
             content: string;
             title: string;
@@ -2505,7 +2505,7 @@ export declare const Epic16ContentSchemas: {
         query: string;
         normalizedQuery: string;
         resultsCount: number;
-        clickedResults: {,
+        clickedResults: {
             position: number;
             contentType: ContentType;
             contentId: string;
@@ -2591,7 +2591,7 @@ export declare const Epic16ContentSchemas: {
         updatedAt: Date;
         name: string;
         tags: string[];
-        items: {,
+        items: {
             order: number;
             contentType: ContentType;
             contentId: string;
@@ -2601,7 +2601,7 @@ export declare const Epic16ContentSchemas: {
         isPublic: boolean;
         views: number;
         likes: number;
-        collaborators: {,
+        collaborators: {
             userId: string;
             role: "admin" | "editor" | "viewer";
             addedAt: Date;

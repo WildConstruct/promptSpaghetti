@@ -4,17 +4,17 @@
 import React, { useState } from 'react';
 
 export interface OptimizationSettings {
-  deadCodeElimination: boolean;,
+  deadCodeElimination: boolean;
   constantPropagation: boolean;
-  resultCaching: boolean;,
+  resultCaching: boolean;
   parallelExecution: boolean;
-  memoryOptimization: boolean;,
+  memoryOptimization: boolean;
   precompilation: boolean;
-  performanceMonitoring: boolean;,
+  performanceMonitoring: boolean;
   debugMode: boolean;
   interface OptimizationControlsProps {
-  settings: OptimizationSettings;,
-  onSettingsChange: (settings: OptimizationSettings) => void;,
+  settings: OptimizationSettings;
+  onSettingsChange: (settings: OptimizationSettings) => void;
   isOpen: boolean;
   onClose: () => void;
   const DEFAULT_SETTINGS: OptimizationSettings = {,

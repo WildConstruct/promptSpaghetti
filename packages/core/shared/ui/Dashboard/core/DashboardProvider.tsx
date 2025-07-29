@@ -8,30 +8,30 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 
 export interface DashboardContextValue {
   // Time range state
-  timeRange: string;,
+  timeRange: string;
   setTimeRange: (timeRange: string) => void;
   // Loading and refresh state
-  refreshing: boolean;,
+  refreshing: boolean;
   setRefreshing: (refreshing: boolean) => void;
   // Export state
-  exporting: boolean;,
+  exporting: boolean;
   setExporting: (exporting: boolean) => void;
   // Filter state
   filters: Record<string, any>;
   setFilters: (filters: Record<string, any>) => void;
-  updateFilter: (key: string, value: any) => void;,
+  updateFilter: (key: string, value: any) => void;
   clearFilters: () => void;
   // Search state
-  searchTerm: string;,
+  searchTerm: string;
   setSearchTerm: (term: string) => void;
   // View state
-  viewMode: 'grid' | 'list' | 'table';,
+  viewMode: 'grid' | 'list' | 'table';
   setViewMode: (mode: 'grid' | 'list' | 'table') => void;
   // Selection state (for bulk operations)
-  selectedItems: Set<string>;,
-  selectItem: (id: string) => void;,
-  deselectItem: (id: string) => void;,
-  selectAll: (ids: string) => void;,
+  selectedItems: Set<string>;
+  selectItem: (id: string) => void;
+  deselectItem: (id: string) => void;
+  selectAll: (ids: string) => void;
   clearSelection: () => void;
   isSelected: (id: string) => boolean;
   // Actions

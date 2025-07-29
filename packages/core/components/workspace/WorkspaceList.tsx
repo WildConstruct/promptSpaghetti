@@ -5,7 +5,7 @@
 import React, { useState, useMemo } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
 interface WorkspaceListProps {
-  workspaces: WorkspaceWithMembership;,
+  workspaces: WorkspaceWithMembership;
   selectedWorkspace: WorkspaceWithMembership | null;
   onWorkspaceSelect: (workspace: WorkspaceWithMembership) => void;
   loading?: boolean;
@@ -105,7 +105,7 @@ interface WorkspaceListProps {
   );
 };
 interface WorkspaceItemProps {
-  workspace: WorkspaceWithMembership;,
+  workspace: WorkspaceWithMembership;
   isSelected: boolean;
   onSelect: () => void;
   const WorkspaceItem: React.FC<WorkspaceItemProps> = ({,)

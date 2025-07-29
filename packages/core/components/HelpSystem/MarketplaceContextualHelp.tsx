@@ -36,42 +36,42 @@ export interface UserBehaviorContext {
   // Navigation patterns
   currentPage: string;
   previousPage?: string;
-  timeOnPage: number;,
+  timeOnPage: number;
   scrollDepth: number;
   // Interaction patterns
-  clickCount: number;,
+  clickCount: number;
   hoverCount: number;
-  searchAttempts: number;,
+  searchAttempts: number;
   filterChanges: number;
   // Task completion patterns
-  templatesViewed: number;,
+  templatesViewed: number;
   templatesAddedToCart: number;
-  purchasesCompleted: number;,
+  purchasesCompleted: number;
   reviewsWritten: number;
   // Struggle indicators
-  backButtonUse: number;,
+  backButtonUse: number;
   searchRefinements: number;
-  timeWithoutProgress: number;,
+  timeWithoutProgress: number;
   errorEncounters: number;
   helpRequestCount: number;
   // Success indicators
-  taskCompletionRate: number;,
+  taskCompletionRate: number;
   featureDiscoveryCount: number;
   returnUserBehavior: boolean;
   // Contextual help rule
 }
 export interface ContextualHelpRule {
-  id: string;,
+  id: string;
   name: string;
-  triggerType: ContextualTriggerType;,
-  conditions: {,
+  triggerType: ContextualTriggerType;
+  conditions: {
   pagePattern?: RegExp;
   elementSelector?: string;
   userBehavior?: Partial<UserBehaviorContext>;
   timeThreshold?: number;
   eventCount?: number;
 };
-  helpContent: MarketplaceHelpContent;,
+  helpContent: MarketplaceHelpContent;
   priority: number;
   cooldownMinutes?: number;
   maxTriggers?: number;
@@ -151,11 +151,11 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       id: 'marketplace-first-visit',
       name: 'First Marketplace Visit',
       triggerType: 'first-time',
-      conditions: {,
+      conditions: {
   pagePattern: /\/marketplace$/,
         userBehavior: { timeOnPage: 5000 } // 5 seconds
   },
-  helpContent: {,
+  helpContent: {
   id: 'first-visit-guide',
         type: 'marketplace-discovery',
         title: 'Welcome to the Marketplace!',
@@ -167,7 +167,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'beginner',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'marketplace',
   userRole: 'new-user',
 },
@@ -179,13 +179,13 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
   id: 'search-struggle-help',
   name: 'Search Difficulty Detected',
   triggerType: 'struggle-detected',
-  conditions: {,
+  conditions: {
   pagePattern: /\/marketplace/,
-  userBehavior: {,
+  userBehavior: {
   searchRefinements: 3,
   timeWithoutProgress: 30000 // 30 seconds without success,
 },
-  helpContent: {,
+  helpContent: {
   id: 'search-help',
         type: 'template-browsing',
         title: 'Having trouble finding what you need?',
@@ -198,7 +198,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'beginner',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'marketplace',
   purchaseStage: 'browsing',
 },
@@ -210,13 +210,13 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
   id: 'preview-hesitation',
   name: 'Template Preview Hesitation',
   triggerType: 'hover',
-  conditions: {,
+  conditions: {
   elementSelector: '.template-card',
-  userBehavior: {,
+  userBehavior: {
   hoverCount: 5,
   templatesViewed: 0,
 },
-  helpContent: {,
+  helpContent: {
   id: 'preview-encouragement',
         type: 'template-preview',
         title: 'Click to Preview Templates',
@@ -229,7 +229,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'beginner',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'marketplace',
   purchaseStage: 'browsing',
 },
@@ -241,12 +241,12 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       id: 'purchase-hesitation',
       name: 'Purchase Flow Hesitation',
       triggerType: 'idle',
-      conditions: {,
+      conditions: {
   pagePattern: /\/template\/.*$/,
         timeThreshold: 20000, // 20 seconds on template page
         userBehavior: { templatesAddedToCart: 0 }
   },
-  helpContent: {,
+  helpContent: {
   id: 'purchase-confidence',
         type: 'purchase-flow',
         title: 'Ready to Get Started?',
@@ -259,7 +259,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'beginner',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'template-details',
   purchaseStage: 'preview',
 },
@@ -271,10 +271,10 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
   id: 'creator-dashboard-first',
   name: 'First Creator Dashboard Visit',
   triggerType: 'first-time',
-  conditions: {,
+  conditions: {
   pagePattern: /\/creator\/dashboard$/,
 },
-  helpContent: {,
+  helpContent: {
   id: 'creator-dashboard-intro',
         type: 'creator-onboarding',
         title: 'Welcome to Your Creator Dashboard',
@@ -287,7 +287,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'advanced',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'creator-dashboard',
   userRole: 'creator',
 },
@@ -299,10 +299,10 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
   id: 'wishlist-discovery',
   name: 'Wishlist Feature Discovery',
   triggerType: 'hover',
-  conditions: {,
+  conditions: {
   elementSelector: '.wishlist-button, .heart-button',
 },
-  helpContent: {,
+  helpContent: {
   id: 'wishlist-feature',
         type: 'marketplace-navigation',
         title: 'Save Templates for Later',
@@ -315,7 +315,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'intermediate',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'marketplace',
 },
   priority: 4,
@@ -326,11 +326,11 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       id: 'community-engagement-prompt',
       name: 'Community Engagement Opportunity',
       triggerType: 'scroll',
-      conditions: {,
+      conditions: {
   pagePattern: /\/community|\/forum/,
         userBehavior: { timeOnPage: 15000 }
   },
-  helpContent: {,
+  helpContent: {
   id: 'community-participation',
         type: 'community-features',
         title: 'Join the Conversation',
@@ -343,7 +343,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         ],
         level: 'intermediate',
         context: {},
-        marketplaceContext: {,
+        marketplaceContext: {
   page: 'community',
   userRole: 'community-member',
 },
@@ -355,10 +355,10 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       id: 'error-recovery',
       name: 'Error Recovery Assistance',
       triggerType: 'error',
-      conditions: {,
+      conditions: {
   userBehavior: { errorEncounters: 1 }
   },
-  helpContent: {,
+  helpContent: {
   id: 'error-help',
         type: 'troubleshooting',
         title: 'Having Technical Issues?',
@@ -558,14 +558,14 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         .marketplace-contextual-help {
           position: relative;
         .contextual-help-debug {
-          position: fixed;,
+          position: fixed;
   bottom: 10px;
           left: 10px;
           z-index: 9999;
           pointer-events: none;
         .debug-panel {
           background: rgba(0, 0, 0, 0.8);
-          color: #fff;,
+          color: #fff;
   padding: 12px;
           border-radius: 8px;
           font-size: 11px;
@@ -573,11 +573,11 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
           max-width: 300px;
           pointer-events: auto;
         .debug-panel h4 {
-          margin: 0 0 8px 0;,
+          margin: 0 0 8px 0;
   color: #3bb3e0;
           font-size: 12px;
         .debug-info div {
-          margin-bottom: 4px;,
+          margin-bottom: 4px;
   opacity: 0.8;
         .debug-info div:last-child {
           margin-bottom: 0;

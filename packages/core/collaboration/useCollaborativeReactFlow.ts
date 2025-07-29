@@ -49,7 +49,7 @@ export function useCollaborativeReactFlow() {
   id: node.id,
       type: node.type.toLowerCase(),
       position: { x: 0, y: 0 }, // Position will be managed by React Flow
-      data: {,
+      data: {
   ...node,
   isCollaborative,
   // Add collaborative metadata
@@ -65,7 +65,7 @@ export function useCollaborativeReactFlow() {
   sourceHandle: edge.sourceHandle,
   targetHandle: edge.targetHandle,
   type: 'step',
-  style: {,
+  style: {
   stroke: '#666',
   strokeWidth: 2,
   // Highlight if being edited by collaborators
@@ -79,12 +79,12 @@ export function useCollaborativeReactFlow() {
   const onNodesChange = useCallback((changes: NodeChange) => {
   changes.forEach(change => {)
   switch (change.type) {
-  case 'position':,
+  case 'position':
   if (change.position && change.dragging === false) {
   // Only update position when drag is complete
   updateNodePosition(change.id, change.position);
   break;
-  case 'remove':,
+  case 'remove':
   deleteNode(change.id);
   break;
 });
@@ -93,7 +93,7 @@ export function useCollaborativeReactFlow() {
   const onEdgesChange = useCallback((changes: EdgeChange) => {
   changes.forEach(change => {)
   switch (change.type) {
-  case 'remove':,
+  case 'remove':
   deleteEdge(change.id);
   break;
 });
@@ -137,13 +137,13 @@ export function useCollaborativeReactFlow() {
     if (!isCollaborative) return [];
     const cursors: Array<{,
   userId: string;
-      user: UserPresence;,
+      user: UserPresence;
   position: { x: number; y: number };
       nodeId?: string;
     }> = [];
     connectedUsers.forEach((user, userId) => {
   if (user.cursor?.position && userId !== localPresence?.userId) {
-  cursors.push({)
+  cursors.push({
   userId,
   user,
   position: user.cursor.position,
@@ -203,7 +203,7 @@ export function useCollaborativeReactFlow() {
  * Get users who are currently interacting with a specific node
  */
 function getNodeCollaborators(nodeId: string, connectedUsers: Map<string, UserPresence>): UserPresence {
-  const collaborators: UserPresence = [];
+  const collaborators: UserPresence[] = [];
   connectedUsers.forEach(user => {)
   if (user.cursor?.nodeId === nodeId || user.selection?.includes(nodeId)) {
   collaborators.push(user);
@@ -223,7 +223,7 @@ function isEdgeBeingEdited(edgeId: string, connectedUsers: Map<string, UserPrese
   const connectedUsers = useConnectedUsers();
   const localPresence = useCollaborativeGraphStore(state => state.localPresence);
   return useMemo(() => {
-  const collaborators: UserPresence = [];
+  const collaborators: UserPresence[] = [];
   connectedUsers.forEach((user, userId) => {
   if (userId !== localPresence?.userId) {
   if (user.cursor?.nodeId === nodeId || user.selection?.includes(nodeId)) {

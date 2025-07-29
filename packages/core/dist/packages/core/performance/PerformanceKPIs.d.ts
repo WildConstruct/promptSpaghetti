@@ -46,4 +46,8 @@ export interface KPIThresholds {
     };
 }
 export declare const corePerformanceKPIs: KPIDefinition;
+/**
+ * KPI threshold definitions for status calculation
+ */
+export declare const kpiThresholds: Record<string, KPIThresholds>, thresholds: KPIThresholds;
 //# sourceMappingURL=PerformanceKPIs.d.ts.map

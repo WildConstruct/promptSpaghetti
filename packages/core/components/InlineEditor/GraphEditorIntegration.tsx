@@ -16,11 +16,11 @@ const nodeTypes = {
 };
 
 export interface GraphEditorWithInlineEditingProps {
-  nodes: Node<NodeData>[];,
+  nodes: Node<NodeData>[];
   edges: Edge;
-  onNodesChange: (changes: any) => void;,
-  onEdgesChange: (changes: any) => void;,
-  onNodeUpdate: (nodeId: string, updates: Partial<NodeData>) => void;,
+  onNodesChange: (changes: any) => void;
+  onEdgesChange: (changes: any) => void;
+  onNodeUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   onConnect: (connection: any) => void;
   className?: string;
   theme?: 'light' | 'dark' | 'cinema';
@@ -45,7 +45,7 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
   // Enhanced node props with inline editing support
   const enhancedNodes = nodes.map(node => ({)
   ...node,
-  data: {,
+  data: {
   ...node.data,
   theme,
   showEditHint: true,
@@ -106,7 +106,7 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
             {showControls && ()
               <Controls 
                 style={{
-  button: {,
+  button: {
   backgroundColor: theme === 'light' ? 'white' : '#2d3748',
   color: theme === 'light' ? '#2d3748' : 'white',
   border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #4a5568',
@@ -134,9 +134,9 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
             stroke: #4299e1;
             stroke-width: 3;
           .graph-editor-inline .react-flow__handle {
-            border: 2px solid white;,
+            border: 2px solid white;
   background: #4299e1;
-            width: 12px;,
+            width: 12px;
   height: 12px;
           .graph-editor-inline .react-flow__handle:hover {,
   background: #63b3ed;
@@ -144,7 +144,7 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
           .graph-editor-inline .react-flow__controls {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border: 1px solid ${theme === 'light' ? '#e2e8f0' : '#4a5568'};}
-            border-radius: 8px;,
+            border-radius: 8px;
   overflow: hidden;
           .graph-editor-inline .react-flow__controls button {
             background: ${theme === 'light' ? 'white' : '#2d3748'};},}
@@ -219,7 +219,7 @@ export const useGraphWithInlineEditing = ()
       target: connection.target,
       sourceHandle: connection.sourceHandle,
       targetHandle: connection.targetHandle,
-      type: 'default';
+      type: 'default'
   };
     setEdges(eds => [...eds, newEdge]);
   }, []);
@@ -240,10 +240,10 @@ export const createInlineEditingGraph = ()
   nodes: Node<NodeData>[],
   edges: Edge) => {,
   return {
-  nodes: nodes.map(node => ({,)
+  nodes: nodes.map(node => ({)
   ...node,
   type: node.type || 'default',
-  data: {,
+  data: {
   ...node.data,
   supportsInlineEditing: true,
 })),

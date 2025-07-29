@@ -22,59 +22,59 @@ import {
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 interface DeploymentApprovalRequest {
-  id: string;,
+  id: string;
   deployment_id: string;
-  sha: string;,
+  sha: string;
   environment: 'production' | 'staging' | 'preview' | 'development';
-  title: string;,
+  title: string;
   description: string;
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'auto_approved';,
+  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'auto_approved';
   urgency: 'low' | 'medium' | 'high' | 'critical';
-  requested_by: string;,
+  requested_by: string;
   requested_at: Date;
   approved_at?: Date;
   auto_approved?: boolean;
   deployment_url?: string;
   github_url: string;
   // Deployment-specific metadata
-  metadata: {,
-  repository: string;,
+  metadata: {
+  repository: string;
   ref: string;
-  changed_files: number;,
+  changed_files: number;
   lines_changed: number;
-  breaking_changes: boolean;,
+  breaking_changes: boolean;
   test_coverage: number;
-  security_scan_status: 'passed' | 'warning' | 'failed';,
+  security_scan_status: 'passed' | 'warning' | 'failed';
   performance_regression: number;
-  deployment_type: 'github_actions' | 'manual' | 'auto';
-};
+  deployment_type: 'github_actions' | 'manual' | 'auto'
+  };
   // Approval criteria and progress
-  criteria: DeploymentCriterion;,
+  criteria: DeploymentCriterion;
   approvals: DeploymentApproval;
-  current_approvals: number;,
+  current_approvals: number;
   required_approvals: number;
 interface DeploymentCriterion {
-  type: 'security-review' | 'performance-impact' | 'business-approval';,
+  type: 'security-review' | 'performance-impact' | 'business-approval';
   status: 'pending' | 'approved' | 'rejected';
-  weight: number;,
+  weight: number;
   assigned_reviewers: string;
   description: string;
   validation_steps?: ValidationStep;
   interface DeploymentApproval {
-  id: string;,
+  id: string;
   criterion_type: string;
-  reviewer_name: string;,
+  reviewer_name: string;
   reviewer_email: string;
-  decision: 'approved' | 'rejected';,
+  decision: 'approved' | 'rejected';
   comments: string;
   reviewed_at: Date;
   interface ValidationStep {
-  name: string;,
+  name: string;
   status: 'passed' | 'failed' | 'pending';
   result?: unknown;
   automated: boolean;
   interface DeploymentApprovalDashboardProps {
-  workspaceId: string;,
+  workspaceId: string;
   currentUserId: string;
   mode?: 'reviewer' | 'requester' | 'admin';
   environment?: string;
@@ -347,7 +347,7 @@ interface DeploymentCriterion {
 // Component for individual deployment request cards
 const DeploymentRequestCard: React.FC<{,
   request: DeploymentApprovalRequest;
-  onSelect: (request: DeploymentApprovalRequest) => void;,
+  onSelect: (request: DeploymentApprovalRequest) => void;
   currentUserId: string;
 }> = ({ request, onSelect, currentUserId }) => {
   const getEnvironmentIcon = (env: string) => {,
@@ -496,7 +496,7 @@ const DeploymentRequestCard: React.FC<{,
 // Detailed view component (placeholder - would be expanded with full details)
 const DeploymentRequestDetail: React.FC<{,
   request: DeploymentApprovalRequest;
-  onClose: () => void;,
+  onClose: () => void;
   currentUserId: string;
   onUpdate: () => void;
 }> = ({ request, onClose, currentUserId, onUpdate }) => {

@@ -8,99 +8,99 @@ import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics, PerformanceA
 import { EventEmitter } from 'events';
 
 export interface PerformanceReport {
-  generatedAt: number;,
-  timeRange: {,
-  start: number;,
+  generatedAt: number;
+  timeRange: {
+  start: number;
   end: number;
 };
   // Executive Summary
-  summary: {,
+  summary: {
   totalExecutions: number;
   averagePerformance: number; // Score 0-100,
   reliabilityScore: number; // Score 0-100,
   efficiencyScore: number; // Score 0-100,
-  recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical';
-};
+  recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical'
+  };
   // Detailed Metrics
-  performance: {,
+  performance: {
   averageExecutionTime: number;
-  p50ExecutionTime: number;,
+  p50ExecutionTime: number;
   p95ExecutionTime: number;
-  p99ExecutionTime: number;,
+  p99ExecutionTime: number;
   slowestNodes: Array<{,
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
-  averageDuration: number;,
+  averageDuration: number;
   executionCount: number;
 }>;
   };
-  reliability: {,
+  reliability: {
   successRate: number;
-  errorRate: number;,
+  errorRate: number;
   mostReliableTypes: string;
-  leastReliableTypes: string;,
+  leastReliableTypes: string;
   errorPatterns: Array<{,
-  pattern: string;,
+  pattern: string;
   frequency: number;
   affectedNodes: string;
 }>;
   };
-  efficiency: {,
+  efficiency: {
   memoryEfficiency: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   contextOptimization: number;
-  resourceWaste: number;,
+  resourceWaste: number;
   optimizationOpportunities: string;
 };
-  trends: {,
+  trends: {
   performanceTrend: 'improving' | 'stable' | 'degrading';
   trendConfidence: number; // 0-1,
-  projectedImprovement: number;,
+  projectedImprovement: number;
   seasonalPatterns: Array<{,
-  period: string;,
+  period: string;
   impact: number;
   description: string;
 }>;
   };
-  alerts: {,
+  alerts: {
   critical: number;
-  high: number;,
+  high: number;
   medium: number;
-  low: number;,
+  low: number;
   topAlertTypes: Array<{,
-  type: string;,
+  type: string;
   frequency: number;
   severity: string;
 }>;
   };
 }
 export interface PerformanceBenchmark {
-  nodeType: string;,
-  target: {,
-  averageExecutionTime: number;,
-  maxExecutionTime: number;
-  successRate: number;,
-  memoryUsage: number;
-};
-  current: {,
+  nodeType: string;
+  target: {
   averageExecutionTime: number;
-  maxExecutionTime: number;,
+  maxExecutionTime: number;
   successRate: number;
   memoryUsage: number;
 };
-  status: 'exceeds' | 'meets' | 'below' | 'critical';,
+  current: {
+  averageExecutionTime: number;
+  maxExecutionTime: number;
+  successRate: number;
+  memoryUsage: number;
+};
+  status: 'exceeds' | 'meets' | 'below' | 'critical';
   improvement: number; // Percentage improvement needed
 }
 export interface PerformanceInsight {
-  id: string;,
+  id: string;
   timestamp: number;
-  category: 'performance' | 'reliability' | 'efficiency' | 'cost';,
+  category: 'performance' | 'reliability' | 'efficiency' | 'cost';
   severity: 'info' | 'warning' | 'critical';
-  title: string;,
+  title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   actionItems: string;
-  affectedNodes: string;,
+  affectedNodes: string;
   confidence: number; // 0-1,
   automatable: boolean;
   /**
@@ -341,7 +341,7 @@ export class PerformanceAnalytics extends EventEmitter {
    * Export analytics data
    */
   exportData(): {
-    insights: PerformanceInsight;,
+    insights: PerformanceInsight;
   benchmarks: PerformanceBenchmark;
     reports: Array<{ timestamp: number; report: PerformanceReport }>;
     return {
@@ -353,7 +353,7 @@ export class PerformanceAnalytics extends EventEmitter {
   private initializeDefaultBenchmarks(): void {
   // Set default benchmarks for common node types
   const defaultBenchmarks = {
-  'WeightedChoice': {,
+  'WeightedChoice': {
   averageExecutionTime: 10,
   maxExecutionTime: 50,
   successRate: 99,

@@ -40,39 +40,39 @@ export interface AuditLogEntry {
     id: string;
     timestamp: Date;
     eventType: AuditEventType;
-    actor: {,
+    actor: {
         userId?: string;
         systemId?: string;
         ipAddress: string;
         userAgent?: string;
         sessionId?: string;
     };
-    target: {,
+    target: {
         dataId?: string;
         resourceType: string;
         resourceId: string;
         classification?: ClassificationResult;
     };
-    action: {,
+    action: {
         operation: string;
         result: 'success' | 'failure';
         reason?: string;
         duration?: number;
     };
-    context: {,
+    context: {
         environment: string;
         applicationVersion: string;
         correlationId?: string;
         parentEventId?: string;
         metadata: Record<string, any>;
     };
-    compliance: {,
+    compliance: {
         frameworks: ComplianceFramework[];
         dataCategory?: DataCategory;
         retentionRequired: boolean;
         encryptionApplied: boolean;
     };
-    integrity: {,
+    integrity: {
         hash: string;
         previousHash: string;
         signature?: string;
@@ -94,17 +94,17 @@ export interface AuditQueryFilter {
 
 export interface ComplianceReport {
     framework: ComplianceFramework;
-    reportPeriod: {,
+    reportPeriod: {
         start: Date;
         end: Date;
     };
-    summary: {,
+    summary: {
         totalEvents: number;
         compliantEvents: number;
         violations: number;
         complianceRate: number;
     };
-    dataProcessing: {,
+    dataProcessing: {
         classified: number;
         accessed: number;
         exported: number;

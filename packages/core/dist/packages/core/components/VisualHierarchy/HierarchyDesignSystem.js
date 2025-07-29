@@ -85,10 +85,12 @@ export const TypographyScale = {
         const: ComponentSizes = {
             field: {
                 height: 36,
-                padding: `${SpacingScale.sm}px ${SpacingScale.md}px` }
+                padding: `${SpacingScale.sm}px ${SpacingScale.md}px`
+            }
         },
         section: {
-            padding: `${SpacingScale.md}px` }
+            padding: `${SpacingScale.md}px`
+        }
     },
     marginBottom: SpacingScale.md
 }, header;
@@ -100,26 +102,30 @@ export const FieldImportanceStyles = {
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.basic.primary,
         backgroundColor: `${HierarchyColors.basic.primary}15`, // 15% opacity}
-        ...TypographyScale.secondary },
+        ...TypographyScale.secondary
+    },
     important: {
         borderLeftWidth: 3,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.advanced.primary,
         backgroundColor: `${HierarchyColors.advanced.primary}10`, // 10% opacity}
-        ...TypographyScale.tertiary },
+        ...TypographyScale.tertiary
+    },
     standard: {
         borderLeftWidth: 2,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.neutral.border,
         backgroundColor: 'transparent',
-        ...TypographyScale.tertiary },
+        ...TypographyScale.tertiary
+    },
     supplementary: {
         borderLeftWidth: 1,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.neutral.secondary,
         backgroundColor: 'transparent',
         ...TypographyScale.caption,
-        opacity: 0.8, },
+        opacity: 0.8,
+    },
     // Field priority classification system
     type, FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary',
     const: classifyFieldPriority = (fieldName, nodeType = 'generic') => {

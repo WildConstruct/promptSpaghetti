@@ -29,7 +29,7 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
 };
 
 export interface InspectorPanelProps {
-  node: Error | null;,
+  node: Error | null;
   schema: ZodSchema<unknown> | null;
   onChange: (partial: Record<string, unknown>) => void;
   onClose?: () => void;
@@ -84,8 +84,8 @@ export const InspectorPanel = ({ )
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    } else {
+      document.body.style.userSelect = 'none'
+  } else {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = '';
@@ -115,7 +115,7 @@ export const InspectorPanel = ({ )
   willChange: 'width',
           overflow: 'hidden', // Prevent content spillover during animation
           WebkitBackfaceVisibility: 'hidden',
-          backfaceVisibility: 'hidden';
+          backfaceVisibility: 'hidden'
   }}
         onKeyDown={(e) => {
           e.stopPropagation();
@@ -160,7 +160,7 @@ export const InspectorPanel = ({ )
 },
   willChange: 'background-color, transform',
               WebkitBackfaceVisibility: 'hidden',
-              backfaceVisibility: 'hidden';
+              backfaceVisibility: 'hidden'
   }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -178,7 +178,7 @@ export const InspectorPanel = ({ )
                 transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`}
 },
   display: 'inline-block',
-                willChange: 'transform';
+                willChange: 'transform'
   }}
             >
               ◀
@@ -238,7 +238,7 @@ export const InspectorPanel = ({ )
   willChange: 'width',
         overflow: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
-        backfaceVisibility: 'hidden';
+        backfaceVisibility: 'hidden'
   }}
       onKeyDown={(e) => {
         e.stopPropagation();

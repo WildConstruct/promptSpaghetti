@@ -87,12 +87,7 @@ allowedUsers: string;
 allowedRoles: string;
 // Integration settings
 syncToExternalSystems: boolean;
-externalSystemMappings: Record < string, {
-    systemId: string,
-    segmentId: string,
-    lastSync: Date,
-    syncStatus: 'pending' | 'syncing' | 'synced' | 'failed'
-} > ;
+externalSystemMappings: Record;
 // Validation and quality
 validationRules: Array < {
     rule: string,
@@ -105,11 +100,7 @@ parentSegmentId ?  : string; // for hierarchical segments
 childSegmentIds: string;
 dependencies: string; // other segments this one depends on
 // A/B testing integration
-treatmentVariants ?  : Record < string, {
-    name: string,
-    allocation: number, // percentage 0-100,
-    isControl: boolean
-} > ;
+treatmentVariants ?  : Record;
 // Scheduling and lifecycle
 schedule ?  : {
     startDate: Date,
@@ -137,33 +128,6 @@ createdAt: Date;
 lastCalculated: Date;
 calculationStatus: 'pending' | 'calculating' | 'completed' | 'failed';
 isActive: boolean;
- > ;
-// Revenue metrics
-totalRevenue: number;
-averageRevenuePerUser: number;
-customerLifetimeValue: number;
-// Geographic distribution
-geographicBreakdown: Record < string, {
-    userCount: number,
-    percentage: number
-} > ;
-// Device and platform distribution
-platformBreakdown: Record < string, {
-    userCount: number,
-    percentage: number
-} > ;
-// Temporal patterns
-activityHeatmap: Record; // hour -> activity level
-weeklyPattern: Record; // day -> activity level
-// Comparative analysis
-benchmarkComparison: {
-    metric: string;
-    segmentValue: number;
-    benchmarkValue: number;
-    percentageDifference: number;
-    significance: 'higher' | 'lower' | 'similar';
-}
-[];
 'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
 parameters: Record;
 // Conditional execution

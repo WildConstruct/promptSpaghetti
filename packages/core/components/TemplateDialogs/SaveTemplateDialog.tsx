@@ -6,7 +6,7 @@ import {
   TemplateSaveData 
 } from '../../types/TemplateTypes';
 interface SaveTemplateDialogProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onSave: (templateData: TemplateSaveData) => Promise<{ success: boolean; error?: string }>;
   initialData?: Partial<TemplateSaveData>;

@@ -322,13 +322,13 @@ describe('UserAccessTransparencyService', () => {
   test('should update user transparency settings', async () => {
   const userId = 'user-123';
   const settingsUpdate = {
-  notificationPreferences: {,
+  notificationPreferences: {
   realTimeNotifications: false,
   emailNotifications: true,
   frequency: 'DAILY' as const,
   eventTypes: [TransparencyEventType.DATA_ACCESSED],
 },
-  privacySettings: {,
+  privacySettings: {
   dataMinimizationEnabled: true,
   automaticDataDeletion: false,
   thirdPartyDataSharingOptOut: true,
@@ -376,7 +376,7 @@ describe('UserAccessTransparencyService', () => {
     test('should validate settings format', async () => {
   const userId = 'user-123';
   const invalidSettings = {
-  notificationPreferences: {,
+  notificationPreferences: {
   frequency: 'INVALID_FREQUENCY' // Invalid value,
 };
       // Should handle validation gracefully
@@ -428,9 +428,9 @@ describe('UserAccessTransparencyService', () => {
     test('should respect quiet hours setting', async () => {
   const userId = 'user-123';
   await transparencyService.updateTransparencySettings(userId, {)
-  notificationPreferences: {,
+  notificationPreferences: {
   realTimeNotifications: true,
-  quietHours: {,
+  quietHours: {
   enabled: true,
   start: '22:00',
   end: '08:00',

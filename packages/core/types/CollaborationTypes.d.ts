@@ -8,13 +8,13 @@
 
 export interface StickyNote {
     id: string;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
     content: string;
     color: StickyNoteColor;
-    size: {,
+    size: {
         width: number;
         height: number;
     };
@@ -103,7 +103,7 @@ export interface ConnectionLabel {
     connectionId: string;
     content: string;
     description?: string;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -219,7 +219,7 @@ export export export interface GraphAnnotations {
     labelPreferences: NodeLabelPreferences;
     regionGroupPreferences: RegionGroupPreferences;
     connectionAnnotationPreferences: ConnectionAnnotationPreferences;
-    metadata: {,
+    metadata: {
         author: string;
         created: string;
         modified: string;

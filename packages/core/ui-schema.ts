@@ -51,7 +51,7 @@ export const UIGetVariableNode = UIBaseNode.extend({)
 // Advanced nodes with simplified interfaces
 export const UIConditionalNode = UIBaseNode.extend({)
   type: z.literal('Conditional'),
-  conditions: z.array(z.object({,)
+  conditions: z.array(z.object({)
   when: z.string(),                    // Simple condition text,
   then: z.string(),                    // Output when true,
   label: z.string().optional()        // User label for this condition,

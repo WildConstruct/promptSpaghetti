@@ -60,7 +60,7 @@ export interface RateLimitProfile {
     description: string;
     rules: DynamicRateLimitRule[];
     defaultRule?: Partial<DynamicRateLimitRule>;
-    metadata: {,
+    metadata: {
         version: string;
         createdAt: Date;
         updatedAt: Date;

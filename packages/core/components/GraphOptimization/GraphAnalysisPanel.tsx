@@ -4,25 +4,25 @@
 import React, { useMemo } from 'react';
 import { Node, Edge } from 'reactflow';
 interface GraphAnalysisResult {
-  nodeCount: number;,
+  nodeCount: number;
   edgeCount: number;
   deadNodes: string; // Nodes with no outputs or unreachable,
   constantNodes: string; // Nodes that always produce the same output,
   cyclicPaths: string[]; // Potential cycles in the graph,
   parallelizableNodes: string; // Nodes that can run concurrently,
-  maxDepth: number;,
+  maxDepth: number;
   complexity: 'low' | 'medium' | 'high';
   optimizationOpportunities: OptimizationOpportunity;
   interface OptimizationOpportunity {
-  type: 'dead_code' | 'constant_prop' | 'parallelization' | 'caching' | 'memory';,
+  type: 'dead_code' | 'constant_prop' | 'parallelization' | 'caching' | 'memory';
   severity: 'low' | 'medium' | 'high';
   description: string;
   nodeIds?: string;
   estimatedImprovement: string;
   interface GraphAnalysisPanelProps {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   /**
   * Analyze graph structure for optimization opportunities
@@ -292,7 +292,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({)
 },
   backgroundColor: `${getSeverityColor(opportunity.severity)}11`}
 },
-  borderRadius: '8px';
+  borderRadius: '8px'
   }}
                 >
                   <div style={{

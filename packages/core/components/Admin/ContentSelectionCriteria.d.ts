@@ -57,12 +57,12 @@ export interface ContentSelectionPreview {
     }>;
     category_distribution: Record<string, number>;
     creator_distribution: Record<string, number>;
-    quality_stats: {,
+    quality_stats: {
         avg_rating: number;
         avg_downloads: number;
         avg_engagement: number;
     };
-    performance_prediction: {,
+    performance_prediction: {
         expected_ctr: number;
         expected_conversion_rate: number;
         confidence_level: number;

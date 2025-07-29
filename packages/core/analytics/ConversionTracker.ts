@@ -13,16 +13,16 @@
  */
 
 export interface ConversionEvent {
-  id: string;,
+  id: string;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   timestamp: number;
-  type: ConversionEventType;,
+  type: ConversionEventType;
   category: ConversionCategory;
   value?: number;
   properties: Record<string, unknown>;
-  metadata: {,
-  userAgent: string;,
+  metadata: {
+  userAgent: string;
   referrer: string;
   campaignSource?: string;
   experimentGroup?: string;
@@ -75,41 +75,41 @@ export type ConversionCategory =
   | 'referral';
 
 export interface ConversionFunnel {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   steps: ConversionStep;
   timeWindow: number; // milliseconds,
   category: ConversionCategory;
 }
 export interface ConversionStep {
-  id: string;,
+  id: string;
   name: string;
-  eventType: ConversionEventType;,
+  eventType: ConversionEventType;
   required: boolean;
   conditions?: Record<string, any>;
   timeout?: number;
 }
 export interface ConversionMetrics {
-  funnel: string;,
-  period: {,
-  start: number;,
+  funnel: string;
+  period: {
+  start: number;
   end: number;
 };
-  metrics: {,
+  metrics: {
   totalUsers: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  averageTimeToConvert: number;,
-  dropoffPoints: {,
-  step: string;,
+  averageTimeToConvert: number;
+  dropoffPoints: {
+  step: string;
   dropoffRate: number;
   users: number;
 }[];
   };
-  segmentBreakdown: {,
-  [segment: string]: {,
-  users: number;,
+  segmentBreakdown: {
+  [segment: string]: {
+  users: number;
   conversions: number;
   rate: number;
 };
@@ -245,7 +245,7 @@ export class ConversionTracker {
   /**
    * Track a conversion event
    */
-  public trackEvent(type: ConversionEventType,)
+  public trackEvent(type: ConversionEventType)
     properties: Record<string, any> = {},
     value?: number
   ): void {
@@ -260,7 +260,7 @@ export class ConversionTracker {
   category: this.getCategoryForEventType(type),
   value,
   properties,
-  metadata: {,
+  metadata: {
   userAgent: (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : 'server',
   referrer: (typeof document !== 'undefined' && document.referrer) ? document.referrer : '',
   campaignSource: this.getCampaignSource(),
@@ -298,7 +298,7 @@ export class ConversionTracker {
   /**
    * Track user engagement events
    */
-  public trackEngagement(engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation',)
+  public trackEngagement(engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation')
     details: Record<string, any> = {}
   ): void {
   const baseProperties = {
@@ -322,7 +322,7 @@ export class ConversionTracker {
   /**
    * Track business conversion events
    */
-  public trackBusinessEvent(eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled',)
+  public trackBusinessEvent(eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled')
     value: number,
     metadata: Record<string, any> = {}
   ): void {
@@ -384,7 +384,7 @@ export class ConversionTracker {
     return {
       funnel: funnelId,
       period: { start: startTime, end: endTime },
-      metrics: {,
+      metrics: {
         totalUsers,
         conversions,
         conversionRate,
@@ -397,15 +397,15 @@ export class ConversionTracker {
    * Get real-time conversion dashboard data
    */
   public getDashboardData(): {
-  realTimeMetrics: {,
-  activeUsers: number;,
+  realTimeMetrics: {
+  activeUsers: number;
   conversionsLast24h: number;
-  topConvertingFunnel: string;,
+  topConvertingFunnel: string;
   averageSessionDuration: number;
 };
-    funnelPerformance: {,
-  [funnelId: string]: {,
-  conversionRate: number;,
+    funnelPerformance: {
+  [funnelId: string]: {
+  conversionRate: number;
   trend: 'up' | 'down' | 'stable';
   completions24h: number;
 };
@@ -446,7 +446,7 @@ export class ConversionTracker {
       ? sessionDurations.reduce((a, b) => a + b, 0) / sessionDurations.length
       : 0;
     return {
-  realTimeMetrics: {,
+  realTimeMetrics: {
   activeUsers,
   conversionsLast24h,
   topConvertingFunnel,
@@ -458,7 +458,7 @@ export class ConversionTracker {
   /**
    * A/B testing integration
    */
-  public trackExperimentConversion(experimentId: string,)
+  public trackExperimentConversion(experimentId: string)
     variantId: string,
     eventType: ConversionEventType,
     properties: Record<string, any> = {}
@@ -533,9 +533,9 @@ export class ConversionTracker {
         // This could trigger funnel progress notifications
         console.log(`Funnel progress: ${funnel.name} - ${relevantStep.name} completed`);}
     });
-  private analyzeFunnelProgression(funnel: ConversionFunnel, userEvents: ConversionEvent): {,
+  private analyzeFunnelProgression(funnel: ConversionFunnel, userEvents: ConversionEvent): {
   completed: boolean;
-    completedSteps: string;,
+    completedSteps: string;
   timeToComplete: number;
     dropoffStep?: string;
     const completedSteps: string = [];
@@ -569,7 +569,7 @@ export class ConversionTracker {
       timeToComplete,
       dropoffStep
     };
-  private calculateSegmentBreakdown(userJourneys: Record<string, unknown>[],)
+  private calculateSegmentBreakdown(userJourneys: Record<string, unknown>[])
     events: ConversionEvent): Record<string, { users: number; conversions: number; rate: number }> {
     // This would segment users by various criteria
     return {
@@ -598,7 +598,7 @@ export class ConversionTracker {
   try {
   await fetch(this.analyticsEndpoint, {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ events: eventsToFlush })

@@ -12,7 +12,7 @@ export interface MedievalClothing {
     gender: 'male' | 'female' | 'unisex';
     materials: string[];
     colors: string[];
-    period: {,
+    period: {
         start: number;
         end: number;
     };
@@ -67,7 +67,7 @@ export interface MedievalScene {
     title: string;
     setting: MedievalLocation;
     characters: MedievalCharacter[];
-    timeContext: {,
+    timeContext: {
         season: string;
         timeOfDay: string;
         weather?: string;
@@ -75,7 +75,7 @@ export interface MedievalScene {
     activities: string[];
     socialDynamics: string[];
     historicalElements: string[];
-    sensoryDetails: {,
+    sensoryDetails: {
         sights: string[];
         sounds: string[];
         smells: string[];

@@ -149,7 +149,7 @@ export class TemplateService {
   /**
    * Create template from current graph data
    */
-  async createFromGraph(nodes: Node,)
+  async createFromGraph(nodes: Node)
     edges: Edge,
     saveData: TemplateSaveData,
     author: string): Promise<Template> {,
@@ -239,7 +239,7 @@ export class TemplateService {
       throw new Error(`Template with id "${templateId}" not found`);}
     // Increment usage count
     await this.storage.update(templateId, {)
-  metadata: {,
+  metadata: {
   ...template.metadata,
   usageCount: template.metadata.usageCount + 1,
   lastModified: new Date().toISOString(),
@@ -253,21 +253,21 @@ export class TemplateService {
   // Apply position offset to nodes
   graphData.nodes = graphData.nodes.map(node => ({)
   ...node,
-  position: {,
+  position: {
   x: node.position.x + offsetX,
   y: node.position.y + offsetY,
 }));
       // Update sticky note positions
       graphData.annotations.stickyNotes = graphData.annotations.stickyNotes.map(note => ({)
   ...note,
-  position: {,
+  position: {
   x: note.position.x + offsetX,
   y: note.position.y + offsetY,
 }));
       // Update region group bounds
       graphData.annotations.regionGroups = graphData.annotations.regionGroups.map(region => ({)
   ...region,
-  bounds: {,
+  bounds: {
   ...region.bounds,
   x: region.bounds.x + offsetX,
   y: region.bounds.y + offsetY,
@@ -377,7 +377,7 @@ export class TemplateService {
   isValid: errors.length === 0,
   errors,
   warnings,
-  compatibility: {,
+  compatibility: {
   version: '1.0.0',
   features: ['basic-nodes', 'annotations'],
   missingFeatures: [],
@@ -393,7 +393,7 @@ export class TemplateService {
   connectionLabels: Object.fromEntries(),
   edges.filter(edge => edge.label).map(edge => [edge.id, edge.label!])
   ),
-  metadata: {,
+  metadata: {
   author: 'system',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),

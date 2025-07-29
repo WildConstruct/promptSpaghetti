@@ -14,22 +14,22 @@ import {
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
 interface ApprovalStatistics {
-  total_requests: number;,
+  total_requests: number;
   pending_requests: number;
-  overdue_requests: number;,
+  overdue_requests: number;
   avg_approval_time_hours: number;
-  approval_rate: number;,
+  approval_rate: number;
   by_urgency: Record<string, number>;
   by_status: Record<string, number>;
   top_reviewers: Array<{ reviewer_id: string; count: number }>;
 interface PerformanceMetrics {
-  avg_completion_time: number;,
+  avg_completion_time: number;
   avg_first_review_time: number;
-  avg_criteria_pass_rate: number;,
+  avg_criteria_pass_rate: number;
   avg_satisfaction_score: number;
-  total_approvals: number;,
+  total_approvals: number;
   approved_count: number;
-  rejected_count: number;,
+  rejected_count: number;
   escalated_count: number;
   interface ApprovalStatisticsProps {
   workspaceId: string;
@@ -100,7 +100,7 @@ interface PerformanceMetrics {
   };
   const StatCard: React.FC<{,
   title: string;
-  value: string | number;,
+  value: string | number;
   icon: React.ReactNode;
   color: string;
   trend?: React.ReactNode;

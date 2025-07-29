@@ -833,7 +833,9 @@ export class DirectLinkSharing extends EventEmitter {
                                                                                                                                             message: string,
                                                                                                                                             clickEvent: ClickEvent,
                                                                                                                                             AccessResult
-                                                                                                                                        } } } }
+                                                                                                                                        }
+                                                                                                                                    } }
+                                                                                                                            }
                                                                                                                         };
                                                                                                                         {
                                                                                                                             return {

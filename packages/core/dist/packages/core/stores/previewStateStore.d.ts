@@ -11,11 +11,26 @@ export interface PreviewResult {
     }>;
     weightChoices?: Array<{
         nodeId: string;
-    }, selectedOption>;
-    unknown: any;
-    availableOptions: unknown;
-    weights?: number;
-    selectionProbability?: number;
+        selectedOption: unknown;
+        availableOptions: unknown;
+        weights?: number;
+        selectionProbability?: number;
+    }>;
+    locked?: boolean;
+    lockedAt?: number;
+    lockedNote?: string;
+    debugInfo?: {
+        nodeExecutionOrder: string;
+        randomChoices: Array<{
+            nodeId: string;
+            choice: unknown;
+        }>;
+        performanceBreakdown: Record<string, number>;
+        memoryUsage?: {
+            used: number;
+            total: number;
+        };
+    };
 }
 export interface PreviewCache {
     graphHash: string;

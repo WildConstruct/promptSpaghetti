@@ -126,7 +126,7 @@ if (isLoading) {
           .verification-status-tracker.loading {
             display: flex;
             align-items: center;
-            justify-content: center;,
+            justify-content: center;
   padding: 60px 20px;
             color: #6b7280;
           .loading-spinner {
@@ -208,11 +208,11 @@ div >
 div >
     _jsx("style", { children: `
         .verification-status-tracker {
-          max-width: 900px;,
+          max-width: 900px;
   margin: 0 auto;
           padding: 24px;
         .tracker-header {
-          margin-bottom: 32px;,
+          margin-bottom: 32px;
   padding: 24px;
           background: white;
           border-radius: 8px;
@@ -224,16 +224,16 @@ div >
           margin-bottom: 20px;
         .header-main h2 {
           font-size: 24px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .refresh-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   border: none;
           padding: 8px 12px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
           transition: background-color 0.2s;
         .refresh-btn:hover {,
@@ -241,32 +241,32 @@ div >
         .progress-summary {
           margin-bottom: 12px;
         .progress-bar {
-          width: 100%;,
+          width: 100%;
   height: 8px;
           background-color: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
           margin-bottom: 8px;
         .progress-fill {
-          height: 100%;,
+          height: 100%;
   background: linear-gradient(90deg, #3b82f6, #10b981);
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           font-weight: 500;
         .last-updated {
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
         .verification-items {
-          display: grid;,
+          display: grid;
   gap: 20px;
         .verification-item {
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 24px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          border-left: 4px solid #e5e7eb;,
+          border-left: 4px solid #e5e7eb;
   transition: transform 0.2s, box-shadow 0.2s;
         .verification-item:hover {,
   transform: translateY(-2px);
@@ -278,30 +278,30 @@ div >
           margin-bottom: 12px;
         .item-title {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 12px;
         .status-icon {
           font-size: 24px;
           margin-top: 2px;
         .title-text h3 {
           font-size: 18px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 6px 0;
         .priority-badge {
           color: white;
-          font-size: 11px;,
+          font-size: 11px;
   padding: 2px 8px;
           border-radius: 12px;
           font-weight: 500;
           text-transform: uppercase;
         .status-badge {
-          padding: 6px 12px;,
+          padding: 6px 12px;
   border: 1px solid;
           border-radius: 6px;
           font-size: 12px;
           font-weight: 600;
-          text-transform: uppercase;,
+          text-transform: uppercase;
   background: rgba(255, 255, 255, 0.8);
         .item-description {
           color: #6b7280;
@@ -309,12 +309,12 @@ div >
           margin-bottom: 16px;
           line-height: 1.5;
         .status-details {
-          margin-bottom: 16px;,
+          margin-bottom: 16px;
   padding: 12px;
           background: #f9fafb;
           border-radius: 6px;
         .detail-item {
-          font-size: 13px;,
+          font-size: 13px;
   color: #374151;
           margin-bottom: 4px;
         .detail-item:last-child {
@@ -322,7 +322,7 @@ div >
         .detail-item strong {
           color: #1f2937;
         .next-steps {
-          margin-bottom: 20px;,
+          margin-bottom: 20px;
   padding: 12px;
           background: #fffbeb;
           border-radius: 6px;
@@ -338,28 +338,28 @@ div >
           font-size: 13px;
           margin-bottom: 4px;
         .item-actions {
-          display: flex;,
+          display: flex;
   gap: 12px;
         .btn {
-          padding: 8px 16px;,
+          padding: 8px 16px;
   border: none;
           border-radius: 6px;
           font-size: 14px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
           transition: all 0.2s;
         .btn-primary {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
         .btn-primary:hover {,
   background: #2563eb;
         .btn-warning {
-          background: #f59e0b;,
+          background: #f59e0b;
   color: white;
         .btn-warning:hover {,
   background: #d97706;
         .btn-secondary {
-          background: #6b7280;,
+          background: #6b7280;
   color: white;
         .btn-secondary:hover {,
   background: #4b5563;
@@ -370,7 +370,7 @@ div >
           .verification-item {
             padding: 16px;
           .item-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 12px;
             align-items: flex-start;
           .status-badge {

@@ -433,7 +433,8 @@ export var HealthCheckCategory;
                                                                 privilegedAccessRequired: false,
                                                             }
                                                                 .build(),
-                                                            return: [dbCheck, apiCheck] }
+                                                            return: [dbCheck, apiCheck]
+                                                        }
                                                     };
                                                 }
                                             }

@@ -454,7 +454,8 @@ catch (error) {
                 ...condition,
                 parameters: {
                     percentage: experiment.trafficAllocation,
-                    salt: `ab_${experiment.experimentId}` } }, context;
+                    salt: `ab_${experiment.experimentId}`
+                } }, context;
             ;
             return {
                 included: percentageResult.included,
@@ -590,8 +591,7 @@ catch (error) {
                                                                                                 }
                                                                                             case ComparisonOperator.IN_LIST:
                                                                                                 return Array.isArray(targetValue) && targetValue.includes(userValue);
-                                                                                            case ComparisonOperator.NOT_IN_LIST:
-                                                                                                return Array.isArray(targetValue) && !targetValue.includes(userValue);
+                                                                                            case ComparisonOperator.NOT_IN_LIST: return Array.isArray(targetValue) && !targetValue.includes(userValue);
                                                                                             default:
                                                                                                 return false;
                                                                                                 generateHash(input, string);

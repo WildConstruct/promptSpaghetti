@@ -36,12 +36,12 @@ export interface ShareSecurityConfig {
     dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
     encryptionRequired: boolean;
     auditingEnabled: boolean;
-    retentionPolicy: {,
+    retentionPolicy: {
         maxShareDuration: number;
         autoExpire: boolean;
         dataRetentionDays: number;
     };
-    accessControls: {,
+    accessControls: {
         ipWhitelist: string[];
         geoRestrictions: string[];
         requireAuthentication: boolean;
@@ -201,7 +201,7 @@ export interface GeoLocation {
     country: string;
     region: string;
     city: string;
-    coordinates: {,
+    coordinates: {
         lat: number;
         lng: number;
     };

@@ -45,7 +45,7 @@ interface ConnectionAnnotationsLayerProps {
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
   const [pendingConnection, setPendingConnection] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<{
-  x: number;,
+  x: number;
   y: number;
   connectionId: string;
 } | null>(null);
@@ -351,8 +351,8 @@ interface ConnectionAnnotationsLayerProps {
               e.currentTarget.style.background = '#f3f4f6';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'none';
-            }}
+              e.currentTarget.style.background = 'none'
+  }}
           >
             📝 Add Label
           </button>
@@ -372,8 +372,8 @@ interface ConnectionAnnotationsLayerProps {
               e.currentTarget.style.background = '#f3f4f6';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'none';
-            }}
+              e.currentTarget.style.background = 'none'
+  }}
           >
             ✨ Highlight
           </button>
@@ -393,8 +393,8 @@ interface ConnectionAnnotationsLayerProps {
               e.currentTarget.style.background = '#f3f4f6';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'none';
-            }}
+              e.currentTarget.style.background = 'none'
+  }}
           >
             🎨 Edit Style
           </button>

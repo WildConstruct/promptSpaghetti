@@ -46,33 +46,33 @@ import {
 // Core checklist data structures
 
 export interface VFXChecklistItem {
-  id: string;,
+  id: string;
   title: string;
   description?: string;
-  status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';,
+  status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';
   priority: 'low' | 'medium' | 'high' | 'critical';
   completion: number; // 0-100 percentage,
   assignee?: VFXTeamMember;
   reviewer?: VFXTeamMember;
-  author: VFXTeamMember;,
+  author: VFXTeamMember;
   createdAt: string;
   updatedAt: string;
   dueDate?: string;
   estimatedHours?: number;
   actualHours?: number;
-  dependencies: string;,
+  dependencies: string;
   subtasks: VFXChecklistSubtask;
-  attachments: VFXChecklistAttachment;,
+  attachments: VFXChecklistAttachment;
   assets: VFXAssetReference;
-  tags: string;,
+  tags: string;
   category: VFXChecklistCategory;
-  vfxPhase: VFXProductionPhase;,
+  vfxPhase: VFXProductionPhase;
   qualityGates: VFXQualityGate;
-  comments: VFXChecklistComment;,
+  comments: VFXChecklistComment;
   history: VFXChecklistHistoryEntry;
 }
 export interface VFXChecklistSubtask {
-  id: string;,
+  id: string;
   title: string;
   completed: boolean;
   assignee?: VFXTeamMember;
@@ -81,19 +81,19 @@ export interface VFXChecklistSubtask {
   estimatedMinutes?: number;
 }
 export interface VFXChecklistAttachment {
-  id: string;,
+  id: string;
   name: string;
-  type: 'image' | 'video' | 'document' | 'reference' | 'asset';,
+  type: 'image' | 'video' | 'document' | 'reference' | 'asset';
   url: string;
   thumbnailUrl?: string;
-  size: number;,
+  size: number;
   uploadedBy: VFXTeamMember;
   uploadedAt: string;
 }
 export interface VFXAssetReference {
-  id: string;,
+  id: string;
   name: string;
-  type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';,
+  type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';
   status: 'draft' | 'review' | 'approved' | 'final';
   version: string;
   accuracy?: number; // Historical accuracy percentage,
@@ -101,9 +101,9 @@ export interface VFXAssetReference {
   dependencies: string;
 }
 export interface VFXQualityGate {
-  id: string;,
+  id: string;
   name: string;
-  type: 'technical' | 'creative' | 'accuracy' | 'performance';,
+  type: 'technical' | 'creative' | 'accuracy' | 'performance';
   status: 'pending' | 'passed' | 'failed' | 'waived';
   criteria: string;
   result?: string;
@@ -112,40 +112,40 @@ export interface VFXQualityGate {
   required: boolean;
 }
 export interface VFXChecklistComment {
-  id: string;,
+  id: string;
   content: string;
-  author: VFXTeamMember;,
+  author: VFXTeamMember;
   timestamp: string;
-  type: 'comment' | 'review' | 'approval' | 'rejection';,
+  type: 'comment' | 'review' | 'approval' | 'rejection';
   mentions: string;
   reactions: { [emoji: string]: VFXTeamMember };
 }
 export interface VFXChecklistHistoryEntry {
-  id: string;,
+  id: string;
   action: string;
   field?: string;
   oldValue?: unknown;
   newValue?: unknown;
-  user: VFXTeamMember;,
+  user: VFXTeamMember;
   timestamp: string;
   description: string;
 }
 export interface VFXTeamMember {
-  id: string;,
+  id: string;
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator' | 'qa_lead';
   avatar?: string;
-  email: string;,
+  email: string;
   color: string;
   isOnline?: boolean;
   permissions: VFXPermissions;
 }
 export interface VFXPermissions {
-  canCreate: boolean;,
+  canCreate: boolean;
   canEdit: boolean;
-  canDelete: boolean;,
+  canDelete: boolean;
   canApprove: boolean;
-  canAssign: boolean;,
+  canAssign: boolean;
   canViewReports: boolean;
 }
 export type VFXChecklistCategory = 
@@ -157,7 +157,7 @@ export type VFXProductionPhase =
   | 'comp' | 'render' | 'review' | 'final';
 
 export interface VFXChecklist {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
   project: string;
@@ -166,45 +166,45 @@ export interface VFXChecklist {
   sequence?: string;
   items: VFXChecklistItem;
   template?: VFXChecklistTemplate;
-  owner: VFXTeamMember;,
+  owner: VFXTeamMember;
   team: VFXTeamMember;
-  createdAt: string;,
+  createdAt: string;
   updatedAt: string;
   dueDate?: string;
-  status: 'draft' | 'active' | 'review' | 'completed' | 'archived';,
+  status: 'draft' | 'active' | 'review' | 'completed' | 'archived';
   tags: string;
   metadata: VFXChecklistMetadata;
 }
 export interface VFXChecklistTemplate {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  category: VFXChecklistCategory;,
+  category: VFXChecklistCategory;
   phase: VFXProductionPhase;
   items: Omit<VFXChecklistItem, 'id' | 'author' | 'createdAt' | 'updatedAt' | 'history'>[];
-  isPublic: boolean;,
+  isPublic: boolean;
   createdBy: VFXTeamMember;
   usageCount: number;
 }
 export interface VFXChecklistMetadata {
-  totalItems: number;,
+  totalItems: number;
   completedItems: number;
-  overallProgress: number;,
+  overallProgress: number;
   estimatedTotalHours: number;
-  actualTotalHours: number;,
+  actualTotalHours: number;
   criticalIssues: number;
-  blockedItems: number;,
+  blockedItems: number;
   averageAccuracy: number;
-  lastActivity: string;,
+  lastActivity: string;
   collaborators: number;
 }
 export interface VFXChecklistSystemProps {
-  checklist: VFXChecklist;,
+  checklist: VFXChecklist;
   currentUser: VFXTeamMember;
-  onChecklistUpdate: (checklist: VFXChecklist) => void;,
+  onChecklistUpdate: (checklist: VFXChecklist) => void;
   onItemCreate: (item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;,
-  onItemDelete: (itemId: string) => void;,
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
+  onItemDelete: (itemId: string) => void;
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
   readonly?: boolean;
   showStatistics?: boolean;
@@ -746,15 +746,15 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
 
 // Individual checklist item card component
 interface VFXChecklistItemCardProps {
-  item: VFXChecklistItem;,
+  item: VFXChecklistItem;
   checklist: VFXChecklist;
-  currentUser: VFXTeamMember;,
-  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void;,
-  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void;,
-  onAssigneeChange: (itemId: string, assigneeId: string) => void;,
-  onProgressChange: (itemId: string, progress: number) => void;,
+  currentUser: VFXTeamMember;
+  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void;
+  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void;
+  onAssigneeChange: (itemId: string, assigneeId: string) => void;
+  onProgressChange: (itemId: string, progress: number) => void;
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;,
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
   onItemDelete: (itemId: string) => void;
   readonly?: boolean;
   compact?: boolean;

@@ -15,8 +15,8 @@ export interface AdvancedNodeConfig {
     /** Optional performance hints */
     performanceHints?: {
         expectedExecutionTime?: 'fast' | 'medium' | 'slow';
-        memoryUsage?: 'low' | 'medium' | 'high';
-    };
+        memoryUsage?: 'low' | 'medium' | 'high'
+  };
 
 export interface AdvancedNodeData {
     id: string;
@@ -42,7 +42,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
     /** Pseudorandom number generator function for deterministic execution */
     prng: () => number;
     /** Execution metadata and debugging info */
-    executionMeta: {,
+    executionMeta: {
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
@@ -118,7 +118,7 @@ export declare class AdvancedExecutionContextImpl implements AdvancedExecutionCo
     evaluationDepth: number;
     cache: Map<string, unknown>;
     prng: () => number;
-    executionMeta: {,
+    executionMeta: {
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
@@ -179,7 +179,7 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
  * Standard node data serialization helpers
  */
 export declare class SerializationHelpers {
-    static createAdvancedNodeData(id: string,)
+    static createAdvancedNodeData(id: string)
       type: string,
       config: AdvancedNodeConfig,
       data: Record<string,

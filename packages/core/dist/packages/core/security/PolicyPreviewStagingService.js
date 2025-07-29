@@ -427,7 +427,8 @@ export var IssueCategory;
                             approvedBy: string,
                             effectiveDate: Date,
                             rolloutStrategy: string,
-                            Promise() { promoted: boolean; productionVersion: string; } } > {
+                            Promise() { promoted: boolean; productionVersion: string; }
+                        } > {
                             const: preview = this.activePreviews.get(previewId),
                             if(, preview) {
                                 throw new Error('Preview not found');
@@ -570,7 +571,8 @@ export var IssueCategory;
                                         warnings: findings.filter(f => f.severity === 'warning').map(f => f.description),
                                         validatedAt: new Date(),
                                         validatorInfo: {
-                                            validatorId: `validator_${validationType.toLowerCase()}` }
+                                            validatorId: `validator_${validationType.toLowerCase()}`
+                                        }
                                     },
                                         validatorType;
                                     'automated',
@@ -606,7 +608,8 @@ export var IssueCategory;
                             });
                         }, 60000: , // Check every minute
                         // Auto-complete monitoring after duration
-                        setTimeout() { } }()
+                        setTimeout() { }
+                    }()
                 };
                 {
                     clearInterval(monitoringInterval);
@@ -718,7 +721,9 @@ export var IssueCategory;
                     async analyzeComparisonImpact(differences) { return {}; },
                     async assessUserImpact(differences) { return {}; },
                     async compareCompliance(differences) { return {}; },
-                    async getUserSegment(userId) { return 'general'; },
+                    async getUserSegment(userId) {
+                        return 'general';
+                    },
                     async aggregateAnalytics(preview) { return {}; },
                     async validateProductionReadiness(preview) { return { ready: true, reasons: [] }; }
                 }();

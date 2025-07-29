@@ -570,8 +570,7 @@ export var DeliveryStatus;
                                                         return 'security@example.com';
                                                     case EmailType.MFA_CODE:
                                                         return 'auth@example.com';
-                                                    case EmailType.SECURITY_ALERT:
-                                                        return 'alerts@example.com';
+                                                    case EmailType.SECURITY_ALERT: return 'alerts@example.com';
                                                     default:
                                                         return 'noreply@example.com';
                                                         delay(ms, number);

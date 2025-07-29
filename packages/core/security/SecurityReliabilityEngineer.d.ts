@@ -13,13 +13,13 @@ export interface ServiceLevelObjective {
     name: string;
     description: string;
     service: string;
-    definition: {,
+    definition: {
         metric_type: 'availability' | 'latency' | 'throughput' | 'error_rate' | 'data_freshness' | 'alert_accuracy';
         target_value: number;
         measurement_window: number;
-        evaluation_period: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-    };
-    error_budget: {,
+        evaluation_period: 'daily' | 'weekly' | 'monthly' | 'quarterly'
+  };
+    error_budget: {
         budget_percentage: number;
         consumption_rate: number;
         remaining_budget: number;
@@ -27,7 +27,7 @@ export interface ServiceLevelObjective {
         reset_frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
         last_reset: number;
     };
-    alerting: {,
+    alerting: {
         burn_rate_alerts: BurnRateAlert[];
         budget_exhaustion_threshold: number;
         multi_window_alerting: boolean;
@@ -64,19 +64,19 @@ export interface ReliabilityIncident {
     title: string;
     description: string;
     severity: 'sev1' | 'sev2' | 'sev3' | 'sev4';
-    classification: {,
+    classification: {
         category: 'service_outage' | 'performance_degradation' | 'data_corruption' | 'security_breach' | 'capacity_issue';
         root_cause_category: 'infrastructure' | 'software_bug' | 'human_error' | 'external_dependency' | 'capacity' | 'security';
-        impact_scope: 'single_service' | 'multiple_services' | 'entire_platform' | 'customer_facing';
-    };
-    timeline: {,
+        impact_scope: 'single_service' | 'multiple_services' | 'entire_platform' | 'customer_facing'
+  };
+    timeline: {
         detected_at: number;
         acknowledged_at?: number;
         mitigated_at?: number;
         resolved_at?: number;
         postmortem_completed_at?: number;
     };
-    impact: {,
+    impact: {
         affected_services: string[];
         affected_slos: string[];
         customer_impact: 'none' | 'minimal' | 'moderate' | 'significant' | 'severe';
@@ -84,7 +84,7 @@ export interface ReliabilityIncident {
         estimated_cost: number;
         users_affected: number;
     };
-    response: {,
+    response: {
         responders: string[];
         incident_commander: string;
         communication_channels: string[];
@@ -120,18 +120,18 @@ export interface ImprovementItem {
 export interface ReliabilityMetrics {
     id: string;
     service: string;
-    collection_period: {,
+    collection_period: {
         start: number;
         end: number;
     };
-    availability: {,
+    availability: {
         uptime_percentage: number;
         downtime_minutes: number;
         mtbf: number;
         mttr: number;
         mttd: number;
     };
-    performance: {,
+    performance: {
         avg_response_time: number;
         p50_response_time: number;
         p95_response_time: number;
@@ -139,14 +139,14 @@ export interface ReliabilityMetrics {
         throughput_rps: number;
         error_rate_percentage: number;
     };
-    error_budget: {,
+    error_budget: {
         total_budget: number;
         consumed_budget: number;
         remaining_budget: number;
         burn_rate: number;
         projected_exhaustion_date?: number;
     };
-    capacity: {,
+    capacity: {
         cpu_utilization: number;
         memory_utilization: number;
         disk_utilization: number;
@@ -187,18 +187,18 @@ export interface ReliabilityReport {
     id: string;
     title: string;
     report_type: 'weekly' | 'monthly' | 'quarterly' | 'incident_summary' | 'slo_review';
-    period: {,
+    period: {
         start: number;
         end: number;
     };
-    summary: {,
+    summary: {
         overall_reliability_score: number;
         key_achievements: string[];
         major_incidents: number;
         error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
         top_reliability_risks: string[];
     };
-    metrics: {,
+    metrics: {
         slo_performance: Array<{,
             slo_id: string;
             slo_name: string;
@@ -207,7 +207,7 @@ export interface ReliabilityReport {
             status: 'met' | 'missed' | 'at_risk';
             error_budget_remaining: number;
         }>;
-        incident_statistics: {,
+        incident_statistics: {
             total_incidents: number;
             by_severity: Record<string, number>;
             by_category: Record<string, number>;
@@ -219,8 +219,8 @@ export interface ReliabilityReport {
             availability: number;
             performance_score: number;
             capacity_utilization: number;
-            trend: 'improving' | 'stable' | 'degrading';
-        }>;
+            trend: 'improving' | 'stable' | 'degrading'
+  }>;
     };
     recommendations: Array<{,
         priority: 'low' | 'medium' | 'high' | 'critical';
@@ -243,14 +243,14 @@ export interface ReliabilityEvent {
     timestamp: number;
     title: string;
     description: string;
-    data: {,
+    data: {
         affected_services?: string[];
         metrics?: Record<string, number>;
         thresholds?: Record<string, number>;
         projected_impact?: string;
         recommended_actions?: string[];
     };
-    response: {,
+    response: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;

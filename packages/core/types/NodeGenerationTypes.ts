@@ -10,22 +10,22 @@ import { Node, Edge, Position } from 'reactflow';
  */
 
 export interface NodeGenerationRequest {
-  analysisResult: PromptAnalysisResult;,
+  analysisResult: PromptAnalysisResult;
   selectedSuggestions: NodeSuggestion;
-  canvasPosition: Position;,
+  canvasPosition: Position;
   options: GenerationOptions;
   /**
   * Result of prompt analysis that drives node generation
   */
 }
 export interface PromptAnalysisResult {
-  prompt: string;,
+  prompt: string;
   suggestions: NodeSuggestion;
-  confidence: number;,
-  analysisMetadata: {,
-  processingTimeMs: number;,
+  confidence: number;
+  analysisMetadata: {
+  processingTimeMs: number;
   complexity: 'simple' | 'moderate' | 'complex';
-  suggestedLayout: LayoutType;,
+  suggestedLayout: LayoutType;
   estimatedNodes: number;
 };
 
@@ -34,16 +34,16 @@ export interface PromptAnalysisResult {
  */
 }
 export interface NodeSuggestion {
-  id: string;,
+  id: string;
   nodeType: string;
-  title: string;,
+  title: string;
   description: string;
   confidence: number; // 0-100,
-  suggestedPosition: Position;,
+  suggestedPosition: Position;
   nodeData: Record<string, unknown>;
-  connections: SuggestedConnection;,
-  metadata: {,
-  category: 'content' | 'logic' | 'output' | 'variable';,
+  connections: SuggestedConnection;
+  metadata: {
+  category: 'content' | 'logic' | 'output' | 'variable';
   priority: 'high' | 'medium' | 'low';
   estimatedComplexity: number; // 1-10,
 };
@@ -53,9 +53,9 @@ export interface NodeSuggestion {
  */
 }
 export interface SuggestedConnection {
-  fromNodeId: string;,
+  fromNodeId: string;
   toNodeId: string;
-  connectionType: 'direct' | 'conditional' | 'weighted';,
+  connectionType: 'direct' | 'conditional' | 'weighted';
   confidence: number;
   label?: string;
   /**
@@ -63,25 +63,25 @@ export interface SuggestedConnection {
   */
 }
 export interface GenerationOptions {
-  layout: LayoutType;,
-  spacing: {,
-  horizontal: number;,
+  layout: LayoutType;
+  spacing: {
+  horizontal: number;
   vertical: number;
 };
-  connectionPattern: ConnectionPattern;,
+  connectionPattern: ConnectionPattern;
   nodeConfiguration: {;
-  autoConnect: boolean;,
+  autoConnect: boolean;
   useSmartPositioning: boolean;
   preserveUserNodes: boolean;
 };
-  validation: {,
+  validation: {
   enableStrictValidation: boolean;
-  allowDuplicateConnections: boolean;,
+  allowDuplicateConnections: boolean;
   maxNodesPerGeneration: number;
 };
-  performance: {,
+  performance: {
   batchSize: number;
-  useProgressiveGeneration: boolean;,
+  useProgressiveGeneration: boolean;
   enablePerformanceTracking: boolean;
 };
 
@@ -105,7 +105,7 @@ export type ConnectionPattern =
  */
 
 export interface GeneratedGraph {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   metadata: GenerationMetadata;
   /**
@@ -113,24 +113,24 @@ export interface GeneratedGraph {
   */
 }
 export interface GenerationMetadata {
-  generationId: string;,
+  generationId: string;
   timestamp: Date;
-  performance: {,
-  totalTimeMs: number;,
+  performance: {
+  totalTimeMs: number;
   nodesGenerated: number;
-  edgesGenerated: number;,
+  edgesGenerated: number;
   layoutTimeMs: number;
   validationTimeMs: number;
 };
-  options: GenerationOptions;,
+  options: GenerationOptions;
   validation: {;
-  isValid: boolean;,
+  isValid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
 };
-  statistics: {,
+  statistics: {
   averageNodeConfidence: number;
-  layoutEfficiency: number;,
+  layoutEfficiency: number;
   connectionDensity: number;
   complexityScore: number;
 };
@@ -140,22 +140,22 @@ export interface GenerationMetadata {
  */
 }
 export interface ValidationError {
-  code: string;,
+  code: string;
   message: string;
   nodeId?: string;
   edgeId?: string;
-  severity: 'error' | 'warning';,
+  severity: 'error' | 'warning';
   suggestions: string;
   /**
   * Validation warning during generation
   */
 }
 export interface ValidationWarning {
-  code: string;,
+  code: string;
   message: string;
   nodeId?: string;
   edgeId?: string;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   recommendation: string;
   /**
   * Layout calculation result
@@ -163,10 +163,10 @@ export interface ValidationWarning {
 }
 export interface LayoutResult {
   positions: Map<string, Position>;
-  bounds: {,
-  minX: number;,
+  bounds: {
+  minX: number;
   maxX: number;
-  minY: number;,
+  minY: number;
   maxY: number;
 };
   efficiency: number; // 0-100, higher is better
@@ -177,15 +177,15 @@ export interface LayoutResult {
  */
 }
 export interface ConnectionResult {
-  edges: Edge;,
-  patterns: {,
-  sequential: number;,
+  edges: Edge;
+  patterns: {
+  sequential: number;
   branching: number;
   cyclical: number;
 };
-  validation: {,
+  validation: {
   validConnections: number;
-  invalidConnections: number;,
+  invalidConnections: number;
   duplicateConnections: number;
 };
 
@@ -194,16 +194,16 @@ export interface ConnectionResult {
  */
 }
 export interface NodeFactoryConfig {
-  nodeType: string;,
+  nodeType: string;
   defaultData: Record<string, unknown>;
-  validation: {,
-  requiredFields: string;,
+  validation: {
+  requiredFields: string;
   optionalFields: string;
   constraints: Record<string, unknown>;
 };
-  rendering: {,
+  rendering: {
   defaultSize: { width: number; height: number };
-    iconClass: string;,
+    iconClass: string;
   colorScheme: string;
   };
 
@@ -212,36 +212,36 @@ export interface NodeFactoryConfig {
  */
 }
 export interface GenerationProgress {
-  stage: 'analyzing' | 'layouting' | 'connecting' | 'validating' | 'finalizing';,
+  stage: 'analyzing' | 'layouting' | 'connecting' | 'validating' | 'finalizing';
   progress: number; // 0-100,
-  currentStep: string;,
+  currentStep: string;
   estimatedTimeRemainingMs: number;
-  nodesProcessed: number;,
+  nodesProcessed: number;
   totalNodes: number;
   /**
   * Generation context for maintaining state
   */
 }
 export interface GenerationContext {
-  requestId: string;,
+  requestId: string;
   startTime: Date;
-  canvas: {,
-  existingNodes: Node;,
+  canvas: {
+  existingNodes: Node;
   existingEdges: Edge;
-  viewport: {,
-  x: number;,
+  viewport: {
+  x: number;
   y: number;
   zoom: number;
 };
   };
-  userPreferences: {,
+  userPreferences: {
   defaultLayout: LayoutType;
-  preferredSpacing: number;,
+  preferredSpacing: number;
   autoSaveEnabled: boolean;
 };
-  performance: {,
+  performance: {
   memoryUsageMB: number;
-  renderTimeMs: number;,
+  renderTimeMs: number;
   validationTimeMs: number;
 };
 
@@ -250,18 +250,18 @@ export interface GenerationContext {
  */
 }
 export interface GenerationOperation {
-  type: 'generate' | 'delete' | 'modify';,
+  type: 'generate' | 'delete' | 'modify';
   operationId: string;
-  timestamp: Date;,
-  data: {,
-  nodesAffected: string;,
+  timestamp: Date;
+  data: {
+  nodesAffected: string;
   edgesAffected: string;
   beforeState: Record<string, unknown>;
   afterState: Record<string, unknown>;
 };
-  metadata: {,
+  metadata: {
   description: string;
-  canUndo: boolean;,
+  canUndo: boolean;
   canRedo: boolean;
 };
 
@@ -270,16 +270,16 @@ export interface GenerationOperation {
  */
 }
 export interface ExportConfiguration {
-  format: 'json' | 'yaml' | 'graphml' | 'dot' | 'svg';,
-  options: {,
-  includeMetadata: boolean;,
+  format: 'json' | 'yaml' | 'graphml' | 'dot' | 'svg';
+  options: {
+  includeMetadata: boolean;
   includePerformanceData: boolean;
-  compressOutput: boolean;,
+  compressOutput: boolean;
   validateBeforeExport: boolean;
 };
-  filters: {,
+  filters: {
   nodeTypes: string;
-  excludeSystemNodes: boolean;,
+  excludeSystemNodes: boolean;
   includeHiddenEdges: boolean;
 };
 
@@ -288,18 +288,18 @@ export interface ExportConfiguration {
  */
 }
 export interface PerformanceMetrics {
-  generationStats: {,
-  totalGenerations: number;,
+  generationStats: {
+  totalGenerations: number;
   averageGenerationTimeMs: number;
-  peakMemoryUsageMB: number;,
+  peakMemoryUsageMB: number;
   errorRate: number;
 };
-  layoutStats: {,
+  layoutStats: {
   preferredLayouts: Record<LayoutType, number>;
   averageLayoutTimeMs: Record<LayoutType, number>;
   layoutEfficiencyScores: Record<LayoutType, number>;
 };
-  userStats: {,
+  userStats: {
   averageNodesPerGeneration: number;
   mostUsedNodeTypes: Record<string, number>;
   commonValidationErrors: Record<string, number>;
@@ -310,13 +310,13 @@ export interface PerformanceMetrics {
  */
 }
 export interface SecurityConstraints {
-  maxNodesPerRequest: number;,
+  maxNodesPerRequest: number;
   maxPromptLength: number;
-  maxGenerationTimeMs: number;,
+  maxGenerationTimeMs: number;
   allowedNodeTypes: string;
-  restrictedOperations: string;,
-  validationRules: {,
-  requireInputValidation: boolean;,
+  restrictedOperations: string;
+  validationRules: {
+  requireInputValidation: boolean;
   sanitizeUserContent: boolean;
   enforceRateLimiting: boolean;
 };

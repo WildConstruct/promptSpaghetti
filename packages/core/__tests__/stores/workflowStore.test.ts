@@ -101,29 +101,29 @@ const createMockStatistics = (overrides: Partial<WorkflowStatistics> = {}): Work
   pending_approvals: 3,
   active_locks: 2,
   scheduled_executions: 1,
-  resources_by_state: {,
+  resources_by_state: {
   'state-1': 10,
   'state-2': 5,
   'state-3': 2,
 },
-  approval_stats: {,
+  approval_stats: {
   pending: 3,
   approved: 15,
   rejected: 2,
   cancelled: 1,
   avg_approval_time_hours: 24.5,
 },
-  lock_stats: {,
+  lock_stats: {
   total_active: 2,
-  by_type: {,
+  by_type: {
   edit: 1,
   state_change: 1,
 },
   avg_lock_duration_hours: 2.5;
   },
-  schedule_stats: {,
+  schedule_stats: {
   total_active: 1,
-  by_type: {,
+  by_type: {
   cron: 1,
 },
   successful_executions: 45,

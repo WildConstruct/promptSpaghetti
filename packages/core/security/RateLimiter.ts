@@ -37,17 +37,17 @@ export interface RateLimitContext {
   organizationId?: string;
 }
 export interface RateLimitInfo {
-  totalHits: number;,
+  totalHits: number;
   totalHitsInWindow: number;
-  remainingRequests: number;,
+  remainingRequests: number;
   resetTime: Date;
-  windowStart: Date;,
+  windowStart: Date;
   windowEnd: Date;
   exceeded: boolean;
   retryAfter?: number;
 }
 export interface RateLimitResult {
-  allowed: boolean;,
+  allowed: boolean;
   info: RateLimitInfo;
   headers: Record<string, string>;
   error?: string;
@@ -60,7 +60,7 @@ export interface RateLimitStore {
   cleanup(): Promise<void>;
 }
 export interface RateLimitData {
-  hits: number;,
+  hits: number;
   resetTime: number;
   windowStart: number;
 }

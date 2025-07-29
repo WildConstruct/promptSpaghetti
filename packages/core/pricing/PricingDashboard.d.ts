@@ -12,7 +12,7 @@ export interface DashboardConfig {
     showPredictiveAnalytics: boolean;
     enableRealTimeUpdates: boolean;
     maxHistoryDays: number;
-    alertThresholds: {,
+    alertThresholds: {
         revenueDeclinePercent: number;
         demandDropPercent: number;
         competitiveThreatScore: number;
@@ -75,7 +75,7 @@ export interface PricingInsight {
 export interface RevenueProjection {
     period: '1_month' | '3_months' | '6_months' | '1_year';
     projectedRevenue: number;
-    confidenceInterval: {,
+    confidenceInterval: {
         lower: number;
         upper: number;
     };
@@ -127,8 +127,8 @@ export declare class PricingDashboard extends EventEmitter {
         competitiveAdvantage: number;
         marketGaps: string[];
         pricingRecommendations: string[];
-        threatLevel: 'low' | 'medium' | 'high';
-    }>;
+        threatLevel: 'low' | 'medium' | 'high'
+  }>;
     /**
      * Get film industry specific dashboard data
      */

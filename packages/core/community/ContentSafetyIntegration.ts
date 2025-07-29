@@ -69,11 +69,11 @@ export type SafetyDecision =
 export type SafetyRisk = 'low' | 'medium' | 'high' | 'critical';
 
 export interface ContentSafetyRequest {
-  id: string;,
+  id: string;
   content_id: string;
   content_type: MarketplaceContentType;
   // Content data
-  content_data: {,
+  content_data: {
   title?: string;
   description?: string;
   body?: string;
@@ -81,14 +81,14 @@ export interface ContentSafetyRequest {
   attachments?: ContentAttachment;
 };
   // Submission context
-  submission_context: {,
+  submission_context: {
   submitter_id: string;
-  submission_type: 'new' | 'update' | 'revision' | 'appeal';,
+  submission_type: 'new' | 'update' | 'revision' | 'appeal';
   submission_source: 'marketplace' | 'community' | 'tutorial' | 'api';
   urgency: ModerationPriority;
 };
   // Integration context
-  integration_context: {,
+  integration_context: {
   contribution_id?: string;
   template_id?: string;
   tutorial_id?: string;
@@ -97,51 +97,51 @@ export interface ContentSafetyRequest {
   workflow_stage?: string;
 };
   // Safety configuration
-  safety_config: {,
+  safety_config: {
   enable_filtering: boolean;
-  enable_moderation: boolean;,
+  enable_moderation: boolean;
   enable_community_review: boolean;
-  strictness_level: 'permissive' | 'standard' | 'strict' | 'maximum';,
+  strictness_level: 'permissive' | 'standard' | 'strict' | 'maximum';
   auto_publish_threshold: number; // 0-100,
   human_review_threshold: number; // 0-100,
 };
   // Business context
-  business_context: {,
+  business_context: {
   revenue_impact: 'none' | 'low' | 'medium' | 'high';
-  brand_sensitivity: 'low' | 'medium' | 'high';,
+  brand_sensitivity: 'low' | 'medium' | 'high';
   regulatory_requirements: string;
-  stakeholder_visibility: 'internal' | 'public' | 'regulatory';
-};
+  stakeholder_visibility: 'internal' | 'public' | 'regulatory'
+  };
 }
 export interface ContentAttachment {
-  attachment_id: string;,
+  attachment_id: string;
   attachment_type: 'image' | 'video' | 'document' | 'code' | 'data';
-  file_name: string;,
+  file_name: string;
   file_size: number;
-  content_type: string;,
+  content_type: string;
   safety_scanned: boolean;
   scan_results?: AttachmentScanResult;
 }
 export interface AttachmentScanResult {
-  virus_scan_clean: boolean;,
-  content_analysis: {,
-  inappropriate_content: boolean;,
+  virus_scan_clean: boolean;
+  content_analysis: {
+  inappropriate_content: boolean;
   copyright_issues: boolean;
-  privacy_concerns: boolean;,
+  privacy_concerns: boolean;
   security_risks: boolean;
 };
-  metadata_analysis: {,
+  metadata_analysis: {
   personal_data_detected: boolean;
-  sensitive_information: string;,
+  sensitive_information: string;
   compliance_issues: string;
 };
 }
 export interface ContentSafetyResult {
-  id: string;,
+  id: string;
   request_id: string;
   content_id: string;
   // Overall safety assessment
-  overall_decision: SafetyDecision;,
+  overall_decision: SafetyDecision;
   overall_risk: SafetyRisk;
   confidence_score: number; // 0-100,
   // Stage results
@@ -154,15 +154,15 @@ export interface ContentSafetyResult {
   // Risk analysis
   risk_analysis: RiskAnalysis;
   // Action requirements
-  required_actions: RequiredAction;,
+  required_actions: RequiredAction;
   monitoring_requirements: MonitoringRequirement;
   // Appeals and escalation
-  appeal_eligibility: AppealEligibility;,
+  appeal_eligibility: AppealEligibility;
   escalation_recommendations: EscalationRecommendation;
   // Integration updates
   integration_updates: IntegrationUpdate;
   // Compliance and audit
-  compliance_status: ComplianceStatus;,
+  compliance_status: ComplianceStatus;
   audit_trail: AuditEntry;
   // Performance metrics
   processing_metrics: ProcessingMetrics;
@@ -172,231 +172,231 @@ export interface ContentSafetyResult {
   version: string;
 }
 export interface SafetyStageResult {
-  stage: ContentSafetyStage;,
+  stage: ContentSafetyStage;
   status: 'completed' | 'skipped' | 'failed' | 'pending';
-  decision: SafetyDecision;,
+  decision: SafetyDecision;
   confidence: number;
-  processing_time_ms: number;,
+  processing_time_ms: number;
   findings: SafetyFinding;
-  recommendations: string;,
+  recommendations: string;
   next_stage_suggestions: ContentSafetyStage;
-  reviewer_info?: {,
-  reviewer_id: string;,
+  reviewer_info?: {
+  reviewer_id: string;
   reviewer_type: 'automated' | 'human' | 'community';
   review_timestamp: string;
 };
 }
 export interface SafetyFinding {
-  finding_id: string;,
+  finding_id: string;
   finding_type: 'policy_violation' | 'quality_issue' | 'safety_concern' | 'compliance_issue';
-  severity: SafetyRisk;,
+  severity: SafetyRisk;
   category: string;
-  description: string;,
+  description: string;
   evidence: string;
   location?: string; // Where in content the issue was found,
-  resolution_required: boolean;,
+  resolution_required: boolean;
   resolution_suggestions: string;
-  auto_fixable: boolean;,
+  auto_fixable: boolean;
   business_impact: BusinessImpactAssessment;
 }
 export interface SafetyAssessment {
-  content_safety: {,
-  toxicity_score: number;,
+  content_safety: {
+  toxicity_score: number;
   harassment_score: number;
-  hate_speech_score: number;,
+  hate_speech_score: number;
   violence_score: number;
-  sexual_content_score: number;,
+  sexual_content_score: number;
   spam_score: number;
 };
-  quality_safety: {,
+  quality_safety: {
   accuracy_score: number;
-  completeness_score: number;,
+  completeness_score: number;
   clarity_score: number;
-  usefulness_score: number;,
+  usefulness_score: number;
   originality_score: number;
 };
-  technical_safety: {,
+  technical_safety: {
   security_score: number;
-  privacy_score: number;,
+  privacy_score: number;
   accessibility_score: number;
-  performance_score: number;,
+  performance_score: number;
   compatibility_score: number;
 };
-  business_safety: {,
+  business_safety: {
   brand_alignment_score: number;
-  legal_compliance_score: number;,
+  legal_compliance_score: number;
   competitive_risk_score: number;
   revenue_protection_score: number;
 };
-  community_safety: {,
+  community_safety: {
   community_standards_score: number;
-  contribution_value_score: number;,
+  contribution_value_score: number;
   collaboration_potential_score: number;
   knowledge_sharing_score: number;
 };
 }
 export interface RiskAnalysis {
-  immediate_risks: RiskFactor;,
+  immediate_risks: RiskFactor;
   short_term_risks: RiskFactor;
-  long_term_risks: RiskFactor;,
+  long_term_risks: RiskFactor;
   risk_mitigation: RiskMitigation;
-  monitoring_recommendations: RiskMonitoring;,
+  monitoring_recommendations: RiskMonitoring;
   risk_trend: 'increasing' | 'stable' | 'decreasing';
   risk_correlation: RiskCorrelation;
 }
 export interface RiskFactor {
-  risk_type: string;,
+  risk_type: string;
   risk_level: SafetyRisk;
   probability: number; // 0-100,
-  potential_impact: string;,
+  potential_impact: string;
   time_horizon: 'immediate' | 'short_term' | 'long_term';
-  contributing_factors: string;,
+  contributing_factors: string;
   indicators: string;
   thresholds: Record<string, number>;
 }
 export interface RiskMitigation {
-  mitigation_type: 'preventive' | 'corrective' | 'monitoring' | 'escalation';,
+  mitigation_type: 'preventive' | 'corrective' | 'monitoring' | 'escalation';
   mitigation_action: string;
   effectiveness: number; // 0-100,
-  implementation_effort: 'low' | 'medium' | 'high';,
+  implementation_effort: 'low' | 'medium' | 'high';
   cost_estimate: string;
   timeline: string;
 }
 export interface RiskMonitoring {
-  monitoring_type: string;,
+  monitoring_type: string;
   monitoring_frequency: string;
   alert_thresholds: Record<string, number>;
-  escalation_triggers: string;,
+  escalation_triggers: string;
   automated_responses: string;
 }
 export interface RiskCorrelation {
-  primary_risk: string;,
+  primary_risk: string;
   correlated_risk: string;
   correlation_strength: number; // 0-100,
-  correlation_type: 'causal' | 'concurrent' | 'consequential';
-}
+  correlation_type: 'causal' | 'concurrent' | 'consequential'
+  }
 export interface RequiredAction {
-  action_id: string;,
+  action_id: string;
   action_type: 'content_modification' | 'user_notification' | 'workflow_update' | 'monitoring_setup';
-  action_description: string;,
+  action_description: string;
   urgency: ModerationPriority;
-  responsible_party: string;,
+  responsible_party: string;
   due_date: string;
-  dependencies: string;,
+  dependencies: string;
   success_criteria: string;
-  completion_validation: string;,
+  completion_validation: string;
   automation_possible: boolean;
   user_involvement_required: boolean;
 }
 export interface MonitoringRequirement {
-  monitoring_id: string;,
+  monitoring_id: string;
   monitoring_scope: 'content' | 'user' | 'system' | 'business';
-  monitoring_duration: string;,
+  monitoring_duration: string;
   metrics_to_track: string;
-  alert_conditions: AlertCondition;,
+  alert_conditions: AlertCondition;
   reporting_requirements: ReportingRequirement;
-  integration_points: string;,
-  automation_level: 'manual' | 'semi_automated' | 'fully_automated';
-}
+  integration_points: string;
+  automation_level: 'manual' | 'semi_automated' | 'fully_automated'
+  }
 export interface AlertCondition {
-  condition_name: string;,
+  condition_name: string;
   condition_expression: string;
-  alert_threshold: number;,
+  alert_threshold: number;
   alert_priority: ModerationPriority;
-  notification_recipients: string;,
+  notification_recipients: string;
   escalation_rules: string;
 }
 export interface ReportingRequirement {
-  report_type: string;,
+  report_type: string;
   report_frequency: string;
-  report_recipients: string;,
+  report_recipients: string;
   report_format: 'dashboard' | 'email' | 'api' | 'file';
   automated_generation: boolean;
 }
 export interface AppealEligibility {
-  appeal_allowed: boolean;,
+  appeal_allowed: boolean;
   appeal_deadline: string;
-  appeal_process: string;,
+  appeal_process: string;
   required_evidence: string;
   appeal_success_probability: number; // 0-100,
   alternative_remedies: string;
 }
 export interface EscalationRecommendation {
-  escalation_type: 'technical' | 'legal' | 'business' | 'regulatory';,
+  escalation_type: 'technical' | 'legal' | 'business' | 'regulatory';
   escalation_urgency: ModerationPriority;
-  escalation_target: string;,
+  escalation_target: string;
   escalation_rationale: string;
-  expected_outcome: string;,
+  expected_outcome: string;
   escalation_timeline: string;
 }
 export interface IntegrationUpdate {
-  integration_type: 'contribution_workflow' | 'tutorial_system' | 'marketplace' | 'analytics';,
+  integration_type: 'contribution_workflow' | 'tutorial_system' | 'marketplace' | 'analytics';
   update_type: 'status_change' | 'metadata_update' | 'workflow_transition' | 'notification';
   update_data: Record<string, any>;
-  update_timestamp: string;,
+  update_timestamp: string;
   affected_systems: string;
 }
 export interface ComplianceStatus {
-  overall_compliant: boolean;,
+  overall_compliant: boolean;
   compliance_score: number; // 0-100,
   policy_compliance: Record<string, boolean>;
   regulatory_compliance: Record<string, boolean>;
   platform_compliance: Record<string, boolean>;
-  violations_found: ComplianceViolation;,
+  violations_found: ComplianceViolation;
   remediation_required: ComplianceRemediation;
   certification_status: CertificationStatus;
 }
 export interface ComplianceViolation {
-  violation_id: string;,
+  violation_id: string;
   violation_type: string;
-  severity: SafetyRisk;,
+  severity: SafetyRisk;
   regulation_reference: string;
-  violation_description: string;,
+  violation_description: string;
   remediation_deadline: string;
   penalty_risk: string;
 }
 export interface ComplianceRemediation {
-  remediation_id: string;,
+  remediation_id: string;
   remediation_type: string;
-  remediation_actions: string;,
+  remediation_actions: string;
   timeline: string;
-  responsible_party: string;,
+  responsible_party: string;
   validation_required: boolean;
 }
 export interface CertificationStatus {
-  certification_name: string;,
+  certification_name: string;
   certification_status: 'valid' | 'expired' | 'pending' | 'revoked';
   expiry_date?: string;
   renewal_requirements: string;
 }
 export interface AuditEntry {
-  entry_id: string;,
+  entry_id: string;
   timestamp: string;
-  actor: string;,
+  actor: string;
   action: string;
   details: Record<string, any>;
   security_classification: string;
 }
 export interface ProcessingMetrics {
-  total_processing_time_ms: number;,
+  total_processing_time_ms: number;
   stage_breakdown: Record<ContentSafetyStage, number>;
-  resource_utilization: ResourceUtilization;,
+  resource_utilization: ResourceUtilization;
   performance_indicators: PerformanceIndicator;
 }
 export interface ResourceUtilization {
-  cpu_time_ms: number;,
+  cpu_time_ms: number;
   memory_peak_mb: number;
-  api_calls_count: number;,
+  api_calls_count: number;
   cache_hit_rate: number; // 0-100,
-  database_queries: number;,
+  database_queries: number;
   external_service_calls: number;
 }
 export interface PerformanceIndicator {
-  indicator_name: string;,
+  indicator_name: string;
   indicator_value: number;
-  benchmark_value: number;,
-  performance_rating: 'excellent' | 'good' | 'acceptable' | 'poor';
-}
+  benchmark_value: number;
+  performance_rating: 'excellent' | 'good' | 'acceptable' | 'poor'
+  }
 export interface BusinessImpactAssessment {
   revenue_impact: number; // 0-100,
   brand_impact: number; // 0-100,
@@ -554,7 +554,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
           resolution_required: true,
           resolution_suggestions: ['Reduce content size'],
           auto_fixable: false,
-          business_impact: {,
+          business_impact: {
   revenue_impact: 10,
   brand_impact: 5,
   user_experience_impact: 15,
@@ -575,7 +575,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
           resolution_required: false,
           resolution_suggestions: ['Add proper headings and organization'],
           auto_fixable: true,
-          business_impact: {,
+          business_impact: {
   revenue_impact: 5,
   brand_impact: 5,
   user_experience_impact: 20,
@@ -628,13 +628,13 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   content_type: request.content_type,
         content_data: request.content_data,
-        context: {,
+        context: {
   user_id: request.submission_context.submitter_id,
   user_role: 'contributor',
   submission_type: request.submission_context.submission_type,
 },
   integration_data: request.integration_context,
-        filtering_config: {,
+        filtering_config: {
   categories_to_check: this.determineFilteringCategories(request),
   strictness_level: request.safety_config.strictness_level,
   auto_fix_enabled: true,
@@ -677,17 +677,17 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   contentId: request.content_id,
         contentType: 'template',
-        content: {,
+        content: {
   title: request.content_data.title,
   description: request.content_data.description,
   body: request.content_data.body,
   metadata: request.content_data.metadata,
 },
-  author: {,
+  author: {
   userId: request.submission_context.submitter_id,
   trustScore: 75 // Would be fetched from user service,
 },
-  context: {,
+  context: {
   source: request.submission_context.submission_source,
   timestamp: new Date().toISOString(),
 },
@@ -695,7 +695,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
         workflow_type: this.determineWorkflowType(request),
         moderation_priority: request.submission_context.urgency,
         integration_data: request.integration_context,
-        enhanced_user_context: {,
+        enhanced_user_context: {
   user_tier: 'verified',
   account_status: 'active',
   risk_profile: 'low',
@@ -749,22 +749,22 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   content_id: contribution.id,
       content_type: 'contribution_submission',
-      content_data: {,
+      content_data: {
   title: contribution.title,
   description: contribution.description,
   body: contribution.content.body,
   metadata: contribution.content.metadata,
 },
-  submission_context: {,
+  submission_context: {
   submitter_id: contribution.submission.submitted_by,
   submission_type: 'new',
   submission_source: 'community',
   urgency: 'normal',
 },
-  integration_context: {,
+  integration_context: {
   contribution_id: contribution.id,
 },
-  safety_config: {,
+  safety_config: {
   enable_filtering: true,
   enable_moderation: true,
   enable_community_review: true,
@@ -772,7 +772,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   auto_publish_threshold: 80,
   human_review_threshold: 70,
 },
-  business_context: {,
+  business_context: {
   revenue_impact: 'low',
   brand_sensitivity: 'medium',
   regulatory_requirements: [],
@@ -785,21 +785,21 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   content_id: templateData.template_id,
       content_type: 'template_listing',
-      content_data: {,
+      content_data: {
   title: templateData.title,
   description: templateData.description,
   metadata: templateData,
 },
-  submission_context: {,
+  submission_context: {
   submitter_id: templateData.creator_id || 'unknown',
   submission_type: 'new',
   submission_source: 'marketplace',
   urgency: 'high',
 },
-  integration_context: {,
+  integration_context: {
   template_id: templateData.template_id,
 },
-  safety_config: {,
+  safety_config: {
   enable_filtering: true,
   enable_moderation: true,
   enable_community_review: false,
@@ -807,7 +807,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   auto_publish_threshold: 90,
   human_review_threshold: 80,
 },
-  business_context: {,
+  business_context: {
   revenue_impact: templateData.price > 100 ? 'high' : 'medium',
   brand_sensitivity: 'high',
   regulatory_requirements: ['marketplace_terms'],
@@ -820,21 +820,21 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   content_id: tutorialData.tutorial_id,
       content_type: 'tutorial_content',
-      content_data: {,
+      content_data: {
   title: tutorialData.title,
   description: tutorialData.description,
   body: tutorialData.content,
 },
-  submission_context: {,
+  submission_context: {
   submitter_id: tutorialData.creator_id || 'unknown',
   submission_type: 'new',
   submission_source: 'tutorial',
   urgency: 'normal',
 },
-  integration_context: {,
+  integration_context: {
   tutorial_id: tutorialData.tutorial_id,
 },
-  safety_config: {,
+  safety_config: {
   enable_filtering: true,
   enable_moderation: true,
   enable_community_review: true,
@@ -842,7 +842,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   auto_publish_threshold: 85,
   human_review_threshold: 75,
 },
-  business_context: {,
+  business_context: {
   revenue_impact: 'medium',
   brand_sensitivity: 'high',
   regulatory_requirements: ['educational_standards'],
@@ -855,18 +855,18 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
 },
   content_id: communityData.content_id,
       content_type: 'community_post',
-      content_data: {,
+      content_data: {
   title: communityData.title,
   body: communityData.body,
 },
-  submission_context: {,
+  submission_context: {
   submitter_id: communityData.author_id || 'unknown',
   submission_type: 'new',
   submission_source: 'community',
   urgency: 'low',
 },
   integration_context: {},
-      safety_config: {,
+      safety_config: {
   enable_filtering: true,
   enable_moderation: false,
   enable_community_review: true,
@@ -874,7 +874,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   auto_publish_threshold: 70,
   human_review_threshold: 60,
 },
-  business_context: {,
+  business_context: {
   revenue_impact: 'none',
   brand_sensitivity: 'medium',
   regulatory_requirements: [],
@@ -918,10 +918,15 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   private trackSafetyEvent(request: any, result: any): Promise<void> { return Promise.resolve(); }
   private executeIntegrationUpdates(result: any): Promise<void> { return Promise.resolve(); }
   private determineFilteringCategories(request: any): any { return []; }
-  private mapPriorityToFilteringPriority(priority: any): any { return 'medium'; }
+  private mapPriorityToFilteringPriority(priority: any): any { return 'medium'
+  }
   private convertFilteringIssuesToFindings(result: any): SafetyFinding { return []; }
-  private mapFilteringActionToSafetyDecision(action: FilteringAction): SafetyDecision { return 'approve'; }
-  private inferModerationContext(request: any): EnhancedModerationContext { return 'marketplace_template'; }
-  private determineWorkflowType(request: any): ModerationWorkflowType { return 'standard_review'; }
+  private mapFilteringActionToSafetyDecision(action: FilteringAction): SafetyDecision { return 'approve'
+  }
+  private inferModerationContext(request: any): EnhancedModerationContext { return 'marketplace_template'
+  }
+  private determineWorkflowType(request: any): ModerationWorkflowType { return 'standard_review'
+  }
   private convertModerationResultToFindings(result: any): SafetyFinding { return []; }
-  private mapModerationActionToSafetyDecision(action: any): SafetyDecision { return 'approve'; }
+  private mapModerationActionToSafetyDecision(action: any): SafetyDecision { return 'approve'
+  }

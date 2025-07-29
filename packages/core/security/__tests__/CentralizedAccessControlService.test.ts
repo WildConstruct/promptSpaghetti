@@ -35,14 +35,14 @@ describe('CentralizedAccessControlService', () => {
   clearanceLevel: 'INTERNAL' as DataClassificationLevel,
   department: 'Engineering',
   jobTitle: 'Software Engineer',
-  location: {,
+  location: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
   timezone: 'PST',
   withinApprovedRegions: true,
 },
-  device: {,
+  device: {
   deviceId: 'device-123',
   deviceType: 'LAPTOP',
   operatingSystem: 'macOS',
@@ -54,7 +54,7 @@ describe('CentralizedAccessControlService', () => {
   registered: true,
   lastSeen: new Date(),
 },
-  behaviorProfile: {,
+  behaviorProfile: {
   normalAccessPatterns: [],
       anomalyScore: 5,
       typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
@@ -98,14 +98,14 @@ describe('CentralizedAccessControlService', () => {
 });
   const createTestEnvironment = (overrides?: Partial<EnvironmentAttributes>): EnvironmentAttributes => ({)
   timestamp: new Date(),
-  location: {,
+  location: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
   timezone: 'PST',
   withinApprovedRegions: true,
 },
-  network: {,
+  network: {
   ipAddress: '192.168.1.100',
   vpnConnection: false,
   corporateNetwork: true,
@@ -113,7 +113,7 @@ describe('CentralizedAccessControlService', () => {
   bandwidth: '1Gbps',
   connectionType: 'WIRED',
 },
-  securityContext: {,
+  securityContext: {
   authenticationMethod: 'MFA',
   sessionAge: 3600,
   sessionRisk: 10,
@@ -137,7 +137,7 @@ describe('CentralizedAccessControlService', () => {
   object: createTestObject(object),
   action: createTestAction(action),
   environment: createTestEnvironment(environment),
-  context: {,
+  context: {
   sessionId: 'session-123',
   requestSource: 'web_app',
   purpose: 'business_operation',
@@ -188,7 +188,7 @@ describe('CentralizedAccessControlService', () => {
   maxClassificationAccess: 'INTERNAL' as DataClassificationLevel,
   roles: ['USER'],
   automaticInheritance: true,
-  inheritanceScope: {,
+  inheritanceScope: {
   permissions: 'ALL',
   constraints: 'INHERIT',
   approvals: 'INHERIT',
@@ -201,26 +201,26 @@ describe('CentralizedAccessControlService', () => {
       inheritanceRules: [],
       prohibitedInheritance: [],
       escalationRules: [],
-      inheritanceValidation: {,
-  validationRules: {,
+      inheritanceValidation: {
+  validationRules: {
   preInheritanceChecks: [],
   postInheritanceChecks: [],
   continuousValidation: [],
   periodicReviews: [],
 },
-  conflictDetection: {,
+  conflictDetection: {
   conflictTypes: [],
   detectionAlgorithms: [],
   resolutionStrategies: [],
   escalationPaths: [],
 },
-  complianceChecks: {,
+  complianceChecks: {
   frameworks: [],
   validationRules: [],
   auditRequirements: [],
   reportingRequirements: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   riskFactors: [],
   assessmentCriteria: [],
   mitigationStrategies: [],
@@ -560,7 +560,7 @@ describe('CentralizedAccessControlService', () => {
         approvalWorkflows: [],
         monitoringRequirements: [],
         violationActions: [],
-        metadata: {,
+        metadata: {
   createdBy: 'test',
   createdAt: new Date(),
   lastModified: new Date(),

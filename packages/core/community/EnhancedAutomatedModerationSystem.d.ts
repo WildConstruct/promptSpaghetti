@@ -19,7 +19,7 @@ export interface EnhancedModerationRequest extends ModerationRequest {
     moderation_context: EnhancedModerationContext;
     workflow_type?: ModerationWorkflowType;
     moderation_priority: ModerationPriority;
-    integration_data: {,
+    integration_data: {
         contribution_id?: string;
         template_id?: string;
         tutorial_id?: string;
@@ -39,8 +39,8 @@ export interface EnhancedModerationRequest extends ModerationRequest {
         community_role?: 'member' | 'contributor' | 'moderator' | 'expert';
         reputation_score?: number;
         contribution_history?: ContributionHistory;
-        community_standing?: 'good' | 'warning' | 'probation' | 'restricted';
-    };
+        community_standing?: 'good' | 'warning' | 'probation' | 'restricted'
+  };
     learning_context?: {
         skill_domain?: SkillDomain;
         target_skill_level?: SkillLevel;
@@ -48,7 +48,7 @@ export interface EnhancedModerationRequest extends ModerationRequest {
         learning_objectives?: string[];
         assessment_context?: boolean;
     };
-    enhanced_user_context: {,
+    enhanced_user_context: {
         user_tier?: 'new' | 'verified' | 'trusted' | 'expert' | 'vip';
         account_status?: 'active' | 'limited' | 'under_review' | 'suspended';
         risk_profile?: 'low' | 'medium' | 'high' | 'critical';
@@ -60,8 +60,8 @@ export interface EnhancedModerationRequest extends ModerationRequest {
         brand_sensitive?: boolean;
         regulatory_implications?: string[];
         compliance_requirements?: string[];
-        stakeholder_visibility?: 'internal' | 'external' | 'public' | 'regulatory';
-    };
+        stakeholder_visibility?: 'internal' | 'external' | 'public' | 'regulatory'
+  };
 
 export interface ContributionHistory {
     total_contributions: number;
@@ -120,7 +120,7 @@ export interface EscalationTimeline {
 
 export interface BusinessImpactAssessment {
     impact_score: number;
-    impact_categories: {,
+    impact_categories: {
         revenue_impact: number;
         brand_impact: number;
         user_experience_impact: number;
@@ -150,13 +150,13 @@ export interface CommunityModerationResult {
     community_value_assessment: number;
     knowledge_contribution_score: number;
     community_engagement_prediction: number;
-    community_feedback_integration: {,
+    community_feedback_integration: {
         community_reports_considered: number;
         community_sentiment: 'positive' | 'neutral' | 'negative';
         expert_opinions_gathered: number;
         consensus_level: number;
     };
-    contribution_lifecycle_impact: {,
+    contribution_lifecycle_impact: {
         workflow_stage_recommendation: WorkflowStage;
         quality_gate_status: string[];
         reviewer_assignment_suggestions: string[];
@@ -168,19 +168,19 @@ export interface LearningModerationResult {
     skill_development_potential: number;
     learning_objective_alignment: number;
     accessibility_compliance: number;
-    content_categorization: {,
+    content_categorization: {
         difficulty_level_verification: boolean;
         skill_domain_accuracy: boolean;
         prerequisite_validation: boolean;
         learning_outcome_prediction: string[];
     };
-    instructional_quality: {,
+    instructional_quality: {
         clarity_score: number;
         engagement_potential: number;
         retention_likelihood: number;
         practical_applicability: number;
     };
-    learning_analytics_integration: {,
+    learning_analytics_integration: {
         tracking_requirements: string[];
         success_metrics_definition: string[];
         personalization_opportunities: string[];
@@ -191,24 +191,24 @@ export interface MarketplaceModerationResult {
     commercial_viability_assessment: number;
     competitive_positioning: string;
     market_demand_indicator: number;
-    quality_standards_compliance: {,
+    quality_standards_compliance: {
         template_quality_score: number;
         user_experience_score: number;
         technical_standards_compliance: boolean;
         marketplace_policy_compliance: boolean;
     };
-    monetization_assessment: {,
+    monetization_assessment: {
         pricing_appropriateness: number;
         revenue_potential: number;
         market_saturation_level: number;
         differentiation_strength: number;
     };
-    risk_assessment: {,
+    risk_assessment: {
         intellectual_property_risk: 'low' | 'medium' | 'high';
         brand_safety_risk: 'low' | 'medium' | 'high';
         customer_satisfaction_risk: 'low' | 'medium' | 'high';
-        regulatory_compliance_risk: 'low' | 'medium' | 'high';
-    };
+        regulatory_compliance_risk: 'low' | 'medium' | 'high'
+  };
 
 export interface FollowUpAction {
     action_type: 'notification' | 'monitoring' | 'review_scheduling' | 'policy_update' | 'user_education';

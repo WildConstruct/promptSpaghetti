@@ -111,26 +111,26 @@ export interface ExtensionAPIContext {
   // System Information
 }
 export interface SystemInfo {
-  version: string;,
+  version: string;
   platform: string;
-  architecture: string;,
+  architecture: string;
   nodeVersion: string;
-  memoryUsage: NodeJS.MemoryUsage;,
+  memoryUsage: NodeJS.MemoryUsage;
   uptime: number;
   // Performance Metrics
 }
 export interface PerformanceMetrics {
-  executionTime: number;,
+  executionTime: number;
   memoryUsage: number;
-  cpuUsage: number;,
+  cpuUsage: number;
   activeNodes: number;
   totalExecutions: number;
   // Node Definition Interface
 }
 export interface NodeDefinition {
-  id: string;,
+  id: string;
   name: string;
-  category: string;,
+  category: string;
   description: string;
   version: string;
   // Node class constructor
@@ -142,8 +142,8 @@ export interface NodeDefinition {
   // Schema definition
   schema: z.ZodSchema<any>;
   // Metadata
-  metadata: {,
-  author: string;,
+  metadata: {
+  author: string;
   license: string;
   repository?: string;
   documentation?: string;
@@ -152,7 +152,7 @@ export interface NodeDefinition {
 // Menu Item Interface
 }
 export interface MenuItem {
-  id: string;,
+  id: string;
   label: string;
   icon?: string;
   shortcut?: string;
@@ -163,7 +163,7 @@ export interface MenuItem {
 }
 export interface Notification {
   id?: string;
-  type: 'info' | 'success' | 'warning' | 'error';,
+  type: 'info' | 'success' | 'warning' | 'error';
   title: string;
   message: string;
   duration?: number;
@@ -171,13 +171,13 @@ export interface Notification {
   // Notification Action
 }
 export interface NotificationAction {
-  label: string;,
+  label: string;
   action: () => void;
   primary?: boolean;
   // Modal Definition
 }
 export interface ModalDefinition {
-  id: string;,
+  id: string;
   title: string;
   content: React.ComponentType<any>;
   size?: 'small' | 'medium' | 'large' | 'fullscreen';
@@ -205,9 +205,9 @@ export interface APIHandler {
   // API Request
 }
 export interface APIRequest {
-  method: string;,
+  method: string;
   url: string;
-  path: string;,
+  path: string;
   query: Record<string, any>;
   params: Record<string, any>;
   headers: Record<string, string>;
@@ -224,7 +224,7 @@ export interface APIResponse {
   // API Middleware
 }
 export interface APIMiddleware {
-  id: string;,
+  id: string;
   priority: number;
   handler: (request: APIRequest, response: APIResponse, next: () => void) => Promise<void> | void;
   // Extension Lifecycle States
@@ -259,7 +259,7 @@ export enum ExtensionLifecycleState {
   this.name = 'ExtensionError';
   // Extension Validation Result
   export interface ExtensionValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string;
   // Extension Manifest Schema (will be used in Story 8.4.3)

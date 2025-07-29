@@ -13,7 +13,7 @@ export interface AutosaveState {
     timestamp: number;
     version: number;
     checksum: string;
-    metadata: {,
+    metadata: {
         nodeCount: number;
         edgeCount: number;
         lastModified: string;

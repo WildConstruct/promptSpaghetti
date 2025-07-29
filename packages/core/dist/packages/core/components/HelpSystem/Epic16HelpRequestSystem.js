@@ -17,12 +17,7 @@ import HelpRequestForm from './HelpRequestForm';
     // State management
     const [_____selectedRequest, setSelectedRequest] = useState(null);
     const [view, setView] = useState('dashboard');
-    const [notifications, setNotifications] = useState < Array < {
-        id: string,
-        type: 'success' | 'error' | 'info' | 'warning',
-        message: string,
-        timestamp: Date
-    } >> ([]);
+    const [notifications, setNotifications] = useState([]);
     // Set up event listeners for service events
     useEffect(() => {
         const handleRequestSubmitted = (data) => {

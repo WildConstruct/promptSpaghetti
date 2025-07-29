@@ -76,7 +76,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     examples: ['Final result: {content}', '{character},
   says: "{dialogue}"'],
     relatedFeatures: ['variable-system', 'node-connections'],
-    priority: 'high';
+    priority: 'high'
   });
   // Contextual help for format selection
   const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({)

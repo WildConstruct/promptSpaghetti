@@ -75,11 +75,11 @@ export enum SecuritySeverity {
   */
 }
 export interface SecurityAuditEvent {
-  id: string;,
+  id: string;
   timestamp: number;
-  severity: SecuritySeverity;,
+  severity: SecuritySeverity;
   category: SecurityEventCategory;
-  message: string;,
+  message: string;
   context: SecurityEventContext;
   blocked: boolean;
   /**
@@ -87,10 +87,10 @@ export interface SecurityAuditEvent {
   */
 }
 export interface SecurityEventStats {
-  totalEvents: number;,
+  totalEvents: number;
   eventsByCategory: Record<SecurityEventCategory, number>;
   eventsBySeverity: Record<SecuritySeverity, number>;
-  blockedOperations: number;,
+  blockedOperations: number;
   uniqueExpressions: number;
   topBlockedPatterns: Array<{ pattern: string; count: number }>;
   recentCriticalEvents: SecurityAuditEvent;
@@ -99,9 +99,9 @@ export interface SecurityEventStats {
  */
 }
 export interface SecurityAuditConfig {
-  maxEvents: number;,
+  maxEvents: number;
   enableConsoleLogging: boolean;
-  enableStackTraces: boolean;,
+  enableStackTraces: boolean;
   eventRetentionMs: number;
   aggregationInterval: number;
   /**
@@ -150,7 +150,7 @@ export class SecurityAuditLogger {
   severity,
   category,
   message,
-  context: {,
+  context: {
   ...context,
   stackTrace: this.config.enableStackTraces ? this.captureStackTrace() : undefined,
 }
@@ -389,7 +389,7 @@ export function auditSecurityEvent(()
     severity: SecuritySeverity = SecuritySeverity.INFO,
     category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION,
   ): MethodDecorator {
-  return function (target: unknown,)
+  return function (target: unknown)
     propertyName: string | symbol,
     descriptor: PropertyDescriptor): PropertyDescriptor {,
     const method = descriptor.value;

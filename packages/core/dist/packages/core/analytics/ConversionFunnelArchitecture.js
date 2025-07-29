@@ -88,109 +88,51 @@ export class ConversionArchitectureManager {
                     conditions: {},
                     weight: 1.0
                 }]
-        }, segmentation;
-        {
-            id: 'indie-filmmakers',
-                name;
-            'Independent Filmmakers',
-                definition;
-            {
-                rules: [,
-                    { field: 'user.budget_range', operator: 'less_than', value: 50000 },
-                    { field: 'user.project_type', operator: 'contains', value: 'independent' }
-                ],
-                    operator;
-                'AND';
-            }
-            size: 892,
-                conversionRate;
-            18.7;
-            cohortDefinitions: [,
-                {
-                    id: 'weekly-signups',
-                    name: 'Weekly Signup Cohorts',
-                    criteriaEvent: 'user_signup',
-                    criteriaWindow: 7,
-                    analysisWindow: 90,
-                    retentionPeriods: [1, 7, 30, 60, 90]
-                }];
-        }
-        anomalyDetection: {
-            enabled: true,
-                thresholds;
-            [,
-                {
-                    metric: 'conversion_rate',
-                    threshold: 15.0,
-                    direction: 'below',
-                    sensitivity: 'medium',
-                },
-                {
-                    metric: 'drop_off_rate',
-                    threshold: 40.0,
-                    direction: 'above',
-                    sensitivity: 'high'
-                }],
-                alerting;
-            {
-                channels: ['email', 'slack', 'dashboard'],
-                    recipients;
-                ['analytics@company.com'],
-                    frequency;
-                'immediate',
-                    cooldown;
-                60,
+        }, segmentation, anomalyDetection;
+        this.funnels.set(marketplaceDiscoveryFunnel.id, marketplaceDiscoveryFunnel);
+        // Define stream configurations
+        const defaultStreamConfig = {
+            streamName: 'conversion-events-stream',
+            batchSize: 100,
+            flushInterval: 5000,
+            retryPolicy: {
+                maxRetries: 3,
+                backoffMultiplier: 2,
+                maxBackoffTime: 30000,
+            },
+            deadLetterQueue: {
+                enabled: true,
+                maxAge: 24,
+            },
+            partitioning: {
+                strategy: 'user_id',
+                partitionCount: 10,
+            },
+            this: .streamConfigs.set('default', defaultStreamConfig),
+            setupPrivacyCompliance() {
+                // GDPR and privacy-compliant settings
+                this.privacySettings.set('gdpr_compliance', {});
+                consentRequired: true,
+                    dataRetentionDays;
+                730,
+                    anonymizationDelay;
+                30,
+                    rightToErasure;
+                true,
+                    dataPortability;
+                true,
                 ;
-            }
-            ;
-            this.funnels.set(marketplaceDiscoveryFunnel.id, marketplaceDiscoveryFunnel);
-            // Define stream configurations
-            const defaultStreamConfig = {
-                streamName: 'conversion-events-stream',
-                batchSize: 100,
-                flushInterval: 5000,
-                retryPolicy: {
-                    maxRetries: 3,
-                    backoffMultiplier: 2,
-                    maxBackoffTime: 30000,
-                },
-                deadLetterQueue: {
-                    enabled: true,
-                    maxAge: 24,
-                },
-                partitioning: {
-                    strategy: 'user_id',
-                    partitionCount: 10,
-                },
-                this: .streamConfigs.set('default', defaultStreamConfig),
-                setupPrivacyCompliance() {
-                    // GDPR and privacy-compliant settings
-                    this.privacySettings.set('gdpr_compliance', {});
-                    consentRequired: true,
-                        dataRetentionDays;
-                    730,
-                        anonymizationDelay;
-                    30,
-                        rightToErasure;
-                    true,
-                        dataPortability;
-                    true,
-                    ;
-                } };
-            this.privacySettings.set('cross_device_tracking', {});
-            requiresExplicitConsent: true,
-                deterministicOnly;
-            false,
-                probabilisticThreshold;
-            0.8,
-                linkingCooldown;
-            24 * 60 * 60 * 1000; // 24 hours,
-        }
-        ;
-        /**
-         * Create enhanced conversion event with attribution and privacy compliance
-         */
+            } };
+        this.privacySettings.set('cross_device_tracking', {});
+        requiresExplicitConsent: true,
+            deterministicOnly;
+        false,
+            probabilisticThreshold;
+        0.8,
+            linkingCooldown;
+        24 * 60 * 60 * 1000; // 24 hours,
     }
+    ;
     touchpoints;
     privacyConsent;
     EnhancedConversionEvent;
@@ -517,7 +459,11 @@ export class ConversionArchitectureManager {
                                                                                                     },
                                                                                                     // Global instance
                                                                                                     const: conversionArchitecture = new ConversionArchitectureManager(),
-                                                                                                    export: , default: conversionArchitecture } } } }
+                                                                                                    export: , default: conversionArchitecture
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
                                                                                 };
                                                                             }
                                                                         };

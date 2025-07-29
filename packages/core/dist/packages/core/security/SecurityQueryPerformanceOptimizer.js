@@ -394,7 +394,8 @@ void {
                 optimizations_applied: [],
                 optimization_time_ms: 0,
                 execution_plan: {
-                    plan_id: `plan_${executionId}` }
+                    plan_id: `plan_${executionId}`
+                }
             },
             plan_type: 'sequential',
             estimated_cost: 0,
@@ -716,7 +717,8 @@ void {
                                                                     } | null > {
                                                                         try: {
                                                                             switch(rule) { }, : .actions.optimization_type
-                                                                        } } } }, { case: , 'index_hints': , return: await, this: , applyIndexOptimization };
+                                                                        } }
+                                                                } }, { case: , 'index_hints': , return: await, this: , applyIndexOptimization };
                                                             (rule, profile, execution);
                                                             'query_rewrite';
                                                             return await this.applyQueryRewrite(rule, profile, execution);
@@ -1369,7 +1371,8 @@ void {
                                                                                                                         },
                                                                                                                         affected_queries: slowQueries.length,
                                                                                                                         implementation_effort: 'Medium',
-                                                                                                                        priority_score: Math.min(10, slowQueries.length + 5) },
+                                                                                                                        priority_score: Math.min(10, slowQueries.length + 5)
+                                                                                                                    },
                                                                                                                     // Index optimization
                                                                                                                     const: poorIndexQueries = profiles.filter(p => p.characteristics.index_utilization_score < 0.5),
                                                                                                                     if(poorIndexQueries) { }, : .length > 0

@@ -118,7 +118,8 @@ CrossModelTestResult['comparison'];
                             'Friendly and welcoming tone'
                         ],
                         style: 'creative',
-                        domain: 'social interaction', }
+                        domain: 'social interaction',
+                    }
                     /**
                      * Moderate complexity test case
                      */
@@ -138,7 +139,8 @@ CrossModelTestResult['comparison'];
                         ],
                         focusAreas: ['personalization', 'content quality', 'user experience'],
                         style: 'balanced',
-                        domain: 'educational content', }
+                        domain: 'educational content',
+                    }
                     /**
                      * Complex test case with advanced features
                      */
@@ -164,7 +166,8 @@ CrossModelTestResult['comparison'];
                             'No inappropriate content',
                             'Educational focus required',
                             'Clear learning objectives'
-                        ] }
+                        ]
+                    }
                     /**
                      * Creative writing assistant
                      */
@@ -189,7 +192,8 @@ CrossModelTestResult['comparison'];
                             'Choose-your-own-adventure style',
                             'Character-driven narratives',
                             'Multiple endings possible'
-                        ] }
+                        ]
+                    }
                     /**
                      * Data processing pipeline
                      */
@@ -210,7 +214,8 @@ CrossModelTestResult['comparison'];
                         ],
                         focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
                         style: 'logical',
-                        domain: 'data science', },
+                        domain: 'data science',
+                    },
                     /**
                      * Run comprehensive cross-model tests
                      */

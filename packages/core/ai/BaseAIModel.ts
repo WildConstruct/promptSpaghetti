@@ -32,7 +32,7 @@ export enum AIModelType {
   MAINTENANCE = 'maintenance'
   // Core interfaces
   export interface ModelCapabilities {
-  inputTypes: string;,
+  inputTypes: string;
   outputTypes: string;
   maxInputSize?: number;
   maxOutputSize?: number;
@@ -42,16 +42,16 @@ export enum AIModelType {
   customParameters?: Record<string, unknown>;
 }
 export interface ModelMetadata {
-  name: string;,
+  name: string;
   version: string;
-  description: string;,
+  description: string;
   provider: AIModelProvider;
   type: AIModelType;
   costPerRequest?: number;
   costPerToken?: number;
   averageLatency?: number;
   maxConcurrency?: number;
-  rateLimit?: {,
+  rateLimit?: {
   requestsPerMinute: number;
   tokensPerMinute?: number;
 };
@@ -59,23 +59,23 @@ export interface ModelMetadata {
   lastUpdated: Date;
 }
 export interface CostEstimate {
-  estimatedCost: number;,
+  estimatedCost: number;
   currency: string;
-  breakdown?: {,
-  inputCost: number;,
+  breakdown?: {
+  inputCost: number;
   outputCost: number;
   processingCost: number;
 };
   confidence: number; // 0-1
 }
 export interface HealthStatus {
-  status: AIModelStatus;,
+  status: AIModelStatus;
   uptime: number;
   lastCheck: Date;
   responseTime?: number;
   errorRate?: number;
   concurrentRequests?: number;
-  details?: {,
+  details?: {
   memoryUsage?: number;
   cpuUsage?: number;
   diskSpace?: number;
@@ -84,10 +84,10 @@ export interface HealthStatus {
   issues?: string;
 }
 export interface AIRequest {
-  id: string;,
+  id: string;
   input: unknown;
   options?: Record<string, unknown>;
-  metadata?: {,
+  metadata?: {
   userId?: string;
   sessionId?: string;
   priority?: 'low' | 'normal' | 'high' | 'urgent';
@@ -97,21 +97,21 @@ export interface AIRequest {
   createdAt: Date;
 }
 export interface AIResponse {
-  id: string;,
+  id: string;
   requestId: string;
   output: unknown;
-  metadata?: {,
+  metadata?: {
   processingTime: number;
   cost?: CostEstimate;
   modelUsed: string;
-  tokensUsed?: {,
-  input: number;,
+  tokensUsed?: {
+  input: number;
   output: number;
 };
     quality?: number; // 0-1 quality score
   };
   error?: {
-  code: string;,
+  code: string;
   message: string;
   details?: unknown;
 };
@@ -156,7 +156,7 @@ export abstract class BaseAIModel {
   estimatedCost: baseRequestCost + tokenCost,
   currency: 'USD',
   confidence: 0.7,
-  breakdown: {,
+  breakdown: {
   inputCost: tokenCost * 0.3,
   outputCost: tokenCost * 0.7,
   processingCost: baseRequestCost,
@@ -193,7 +193,7 @@ export abstract class BaseAIModel {
 },
   requestId: request.id,
         output,
-        metadata: {,
+        metadata: {
   processingTime: Date.now() - startTime,
   cost,
   modelUsed: this._id,
@@ -209,7 +209,7 @@ export abstract class BaseAIModel {
 },
   requestId: request.id,
         output: null,
-        error: {,
+        error: {
   code: 'PROCESSING_ERROR',
   message: error instanceof Error ? error.message : 'Unknown error',
   details: error,
@@ -303,7 +303,7 @@ export abstract class BaseAIModel {
   // Configuration interface for model creation
 }
 export interface ModelConfiguration {
-  id: string;,
+  id: string;
   type: AIModelType;
   provider: AIModelProvider;
   endpoint?: string;

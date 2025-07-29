@@ -319,7 +319,8 @@ export class UnifiedEventBus extends EventEmitter {
                                                     data;
                                                 transformedEvent.data || (),
                                                     typeof legacyEvent === 'object' && legacyEvent !== null ? legacyEvent : {};
-                                                metadata: { }
+                                                metadata: {
+                                                }
                                             }
                                             finally {
                                             }

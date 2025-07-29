@@ -9,50 +9,50 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 export interface CommentSubmissionData {
-  content: string;,
+  content: string;
   contentType: 'text' | 'markdown' | 'rich';
-  resourceId: string;,
+  resourceId: string;
   resourceType: 'template' | 'project' | 'user' | 'marketplace_item';
   parentCommentId?: string;
-  authorId: string;,
+  authorId: string;
   mentions: string;
-  hashtags: string;,
+  hashtags: string;
   attachments: CommentAttachment;
   metadata?: Record<string, unknown>;
 }
 export interface CommentAttachment {
-  id: string;,
+  id: string;
   name: string;
-  type: 'image' | 'file' | 'link' | 'code';,
+  type: 'image' | 'file' | 'link' | 'code';
   url: string;
   size?: number;
   preview?: string;
   metadata?: Record<string, unknown>;
 }
 export interface CommentSubmissionConfig {
-  enableRichText: boolean;,
+  enableRichText: boolean;
   enableMarkdown: boolean;
-  enableAttachments: boolean;,
+  enableAttachments: boolean;
   enableMentions: boolean;
-  enableHashtags: boolean;,
+  enableHashtags: boolean;
   enableCodeBlocks: boolean;
-  enableLinkPreviews: boolean;,
+  enableLinkPreviews: boolean;
   maxContentLength: number;
-  maxAttachments: number;,
+  maxAttachments: number;
   allowedFileTypes: string;
   maxFileSize: number; // bytes,
-  enableDrafts: boolean;,
+  enableDrafts: boolean;
   autoSaveDrafts: boolean;
-  enableSpellCheck: boolean;,
+  enableSpellCheck: boolean;
   enablePreview: boolean;
-  moderationSettings: {,
-  requireApproval: boolean;,
+  moderationSettings: {
+  requireApproval: boolean;
   enableAutoModeration: boolean;
   flagSuspiciousContent: boolean;
 };
 }
 export interface CommentSubmissionFormProps {
-  resourceId: string;,
+  resourceId: string;
   resourceType: 'template' | 'project' | 'user' | 'marketplace_item';
   parentCommentId?: string;
   authorId: string;
@@ -66,12 +66,12 @@ export interface CommentSubmissionFormProps {
   autoFocus?: boolean;
   disabled?: boolean;
   interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
   interface DraftData {
-  content: string;,
+  content: string;
   attachments: CommentAttachment;
-  mentions: string;,
+  mentions: string;
   hashtags: string;
   lastSaved: Date;
   const DEFAULT_CONFIG: CommentSubmissionConfig = {,
@@ -90,7 +90,7 @@ export interface CommentSubmissionFormProps {
   autoSaveDrafts: true,
   enableSpellCheck: true,
   enablePreview: true,
-  moderationSettings: {,
+  moderationSettings: {
   requireApproval: false,
   enableAutoModeration: true,
   flagSuspiciousContent: true,
@@ -214,7 +214,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
   mentions,
   hashtags,
   attachments,
-  metadata: {,
+  metadata: {
   submittedAt: new Date().toISOString(),
   userAgent: navigator.userAgent,
   contentLength: content.length,
@@ -274,7 +274,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
         url: URL.createObjectURL(file), // In real app, would upload to server
         size: file.size,
         preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-        metadata: {,
+        metadata: {
   originalFile: file,
   uploadedAt: new Date().toISOString(),
 };
@@ -359,7 +359,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
   border: '1px solid #e5e7eb',
       borderRadius: '8px',
       backgroundColor: 'white',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{
@@ -696,7 +696,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
 
 // Attachment Preview Component
 interface AttachmentPreviewProps {
-  attachment: CommentAttachment;,
+  attachment: CommentAttachment;
   onRemove: () => void;
 const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRemove }) => {
   return;

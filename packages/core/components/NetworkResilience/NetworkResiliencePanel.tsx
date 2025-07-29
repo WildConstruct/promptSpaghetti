@@ -5,12 +5,12 @@ import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 interface NetworkResiliencePanelProps {
-  status: NetworkStatus;,
+  status: NetworkStatus;
   queuedOperations: QueuedOperation;
   onRetryConnection?: () => void;
   onForceSync?: () => void;
   onClearQueue?: () => void;
-  onRetryOperation?: (operationId: string) => void;,
+  onRetryOperation?: (operationId: string) => void;
   isOpen: boolean;
   onClose: () => void;
   export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({,)

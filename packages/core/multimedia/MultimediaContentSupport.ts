@@ -21,20 +21,20 @@ import { EventEmitter } from 'events';
 // Core multimedia interfaces
 
 export interface MediaAsset {
-  id: string;,
+  id: string;
   name: string;
-  type: 'image' | 'video' | 'audio' | 'document' | 'interactive';,
+  type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
   mimeType: string;
   size: number;
   duration?: number; // for video/audio
   dimensions?: { width: number; height: number };
   url: string;
   thumbnailUrl?: string;
-  metadata: MediaMetadata;,
+  metadata: MediaMetadata;
   accessibility: AccessibilityFeatures;
-  processing: ProcessingStatus;,
+  processing: ProcessingStatus;
   storage: StorageInfo;
-  created: Date;,
+  created: Date;
   lastModified: Date;
 }
 export interface MediaMetadata {
@@ -48,17 +48,17 @@ export interface MediaMetadata {
   exif?: Record<string, any>; // for images,
   chapters?: MediaChapter; // for video/audio,
   quality: 'low' | 'medium' | 'high' | 'original';
-  encoding?: {,
-  codec: string;,
+  encoding?: {
+  codec: string;
   bitrate: number;
   framerate?: number;
   sampleRate?: number;
 };
 }
 export interface MediaChapter {
-  id: string;,
+  id: string;
   title: string;
-  startTime: number;,
+  startTime: number;
   endTime: number;
   description?: string;
   thumbnailUrl?: string;
@@ -73,29 +73,29 @@ export interface AccessibilityFeatures {
   screenReaderOptimized: boolean;
 }
 export interface MediaCaption {
-  id: string;,
+  id: string;
   language: string;
-  startTime: number;,
+  startTime: number;
   endTime: number;
   text: string;
   position?: { x: number; y: number };
   styling?: {
-  fontSize: number;,
+  fontSize: number;
   color: string;
-  backgroundColor: string;,
+  backgroundColor: string;
   fontFamily: string;
 };
 }
 export interface ProcessingStatus {
-  status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';,
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
   progress: number; // 0-100,
-  stages: ProcessingStage;,
+  stages: ProcessingStage;
   errors: string;
   estimatedCompletion?: Date;
   processingTime?: number;
 }
 export interface ProcessingStage {
-  name: string;,
+  name: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress: number;
   startTime?: Date;
@@ -106,17 +106,17 @@ export interface StorageInfo {
   provider: 'local' | 'cloud' | 'cdn';
   bucket?: string;
   path: string;
-  cdn?: {,
-  url: string;,
+  cdn?: {
+  url: string;
   distribution: string;
   region: string;
 };
-  compression: {,
+  compression: {
   enabled: boolean;
-  algorithm: string;,
+  algorithm: string;
   ratio: number;
 };
-  backup: {,
+  backup: {
   enabled: boolean;
   locations: string;
   lastBackup?: Date;
@@ -132,17 +132,17 @@ export interface MediaProcessingOptions {
     watermark?: {
   text?: string;
   image?: string;
-  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';,
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
   opacity: number;
 };
   };
   video?: {
-  transcode?: {,
+  transcode?: {
   resolution?: '480p' | '720p' | '1080p' | '4k';
   bitrate?: number;
   framerate?: number;
-  codec?: 'h264' | 'h265' | 'vp9';
-};
+  codec?: 'h264' | 'h265' | 'vp9'
+  };
     thumbnail?: {
       count: number;
       interval?: number;
@@ -152,12 +152,12 @@ export interface MediaProcessingOptions {
     captions?: boolean;
   };
   audio?: {
-  transcode?: {,
+  transcode?: {
   bitrate?: number;
   sampleRate?: number;
   channels?: number;
-  codec?: 'mp3' | 'aac' | 'ogg' | 'flac';
-};
+  codec?: 'mp3' | 'aac' | 'ogg' | 'flac'
+  };
     normalize?: boolean;
     noiseReduction?: boolean;
     transcription?: boolean;
@@ -170,29 +170,29 @@ export interface MediaProcessingOptions {
 };
 }
 export interface MultimediaConfig {
-  storage: {,
-  provider: 'local' | 'aws' | 'gcp' | 'azure';,
+  storage: {
+  provider: 'local' | 'aws' | 'gcp' | 'azure';
   maxFileSize: number;
-  allowedTypes: string;,
+  allowedTypes: string;
   compressionEnabled: boolean;
 };
-  processing: {,
+  processing: {
   enableTranscoding: boolean;
-  enableOptimization: boolean;,
+  enableOptimization: boolean;
   enableThumbnails: boolean;
-  enableAccessibility: boolean;,
+  enableAccessibility: boolean;
   maxConcurrentJobs: number;
   timeoutMs: number;
 };
-  delivery: {,
+  delivery: {
   cdnEnabled: boolean;
-  cacheMaxAge: number;,
+  cacheMaxAge: number;
   adaptiveStreaming: boolean;
   lazyLoading: boolean;
 };
-  accessibility: {,
+  accessibility: {
   requireAltText: boolean;
-  autoGenerateTranscriptions: boolean;,
+  autoGenerateTranscriptions: boolean;
   autoGenerateCaptions: boolean;
   enforceStandards: boolean;
 };
@@ -208,7 +208,7 @@ export class MultimediaContentSupport extends EventEmitter {
   constructor(config?: Partial<MultimediaConfig>) {,
   super();
   this.config = {
-  storage: {,
+  storage: {
   provider: 'local',
   maxFileSize: 100 * 1024 * 1024, // 100MB,
   allowedTypes: [,
@@ -219,7 +219,7 @@ export class MultimediaContentSupport extends EventEmitter {
   ],
   compressionEnabled: true,
 },
-  processing: {,
+  processing: {
   enableTranscoding: true,
   enableOptimization: true,
   enableThumbnails: true,
@@ -227,13 +227,13 @@ export class MultimediaContentSupport extends EventEmitter {
   maxConcurrentJobs: 3,
   timeoutMs: 300000 // 5 minutes,
 },
-  delivery: {,
+  delivery: {
   cdnEnabled: false,
   cacheMaxAge: 86400, // 24 hours,
   adaptiveStreaming: false,
   lazyLoading: true,
 },
-  accessibility: {,
+  accessibility: {
   requireAltText: true,
   autoGenerateTranscriptions: false,
   autoGenerateCaptions: false,
@@ -243,7 +243,7 @@ export class MultimediaContentSupport extends EventEmitter {
     };
     this.initializeProcessingWorkers();
   // Upload and process media asset
-  async uploadAsset(file: File | Buffer,)
+  async uploadAsset(file: File | Buffer)
     metadata: Partial<MediaMetadata> = {},
     options: MediaProcessingOptions = {}
   ): Promise<string> {
@@ -264,7 +264,7 @@ export class MultimediaContentSupport extends EventEmitter {
         mimeType,
         size: file instanceof File ? file.size : file.length,
         url: '', // Will be set after upload
-        metadata: {,
+        metadata: {
   title: metadata.title,
   description: metadata.description,
   alt: metadata.alt,
@@ -275,27 +275,27 @@ export class MultimediaContentSupport extends EventEmitter {
   quality: metadata.quality || 'original',
   ...metadata
 },
-  accessibility: {,
+  accessibility: {
   altText: metadata.alt || '',
   screenReaderOptimized: false,
   ...this.generateDefaultAccessibility(mediaType)
 },
-  processing: {,
+  processing: {
   status: 'pending',
   progress: 0,
   stages: this.generateProcessingStages(mediaType, options),
   errors: [],
 },
-  storage: {,
+  storage: {
   provider: this.config.storage.provider,
           path: `/${mediaType}s/${assetId}`}
 },
-  compression: {,
+  compression: {
   enabled: this.config.storage.compressionEnabled,
   algorithm: 'gzip',
   ratio: 1,
 },
-  backup: {,
+  backup: {
   enabled: true,
   locations: [],
 },
@@ -494,19 +494,19 @@ export class MultimediaContentSupport extends EventEmitter {
   const results = await Promise.allSettled(promises);
   return results.map(result => result.status === 'fulfilled' ? result.value : false);
   // Analytics and metrics
-  getUsageMetrics(): {,
-  totalAssets: number;,
+  getUsageMetrics(): {
+  totalAssets: number;
   totalSize: number;
   assetsByType: Record<string, number>;
-  processingStats: {,
-  pending: number;,
+  processingStats: {
+  pending: number;
   processing: number;
-  completed: number;,
+  completed: number;
   failed: number;
 };
-    storageUsage: {,
+    storageUsage: {
   used: number;
-  available: number;,
+  available: number;
   efficiency: number;
 };
     const assets = Array.from(this.assets.values());
@@ -527,7 +527,7 @@ export class MultimediaContentSupport extends EventEmitter {
   totalSize,
   assetsByType,
   processingStats,
-  storageUsage: {,
+  storageUsage: {
   used: totalSize,
   available: this.config.storage.maxFileSize * 1000, // Estimated,
   efficiency: this.calculateStorageEfficiency(assets),

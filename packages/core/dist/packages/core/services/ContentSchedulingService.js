@@ -9,12 +9,7 @@
  */
  > ;
 // A/B testing results
-variants ?  : Array < {
-    id: string,
-    name: string,
-    traffic: number, // percentage,
-    performance: ContentPerformance
-} > ;
+variants ?  : Array;
  > ;
  > ;
 performanceMetrics: {
@@ -25,11 +20,7 @@ performanceMetrics: {
         views: number,
         engagement: number
     } > ;
-    contentTypePerformance: Record < ContentType, {
-        count: number,
-        averageViews: number,
-        averageEngagement: number
-    } > ;
+    contentTypePerformance: Record;
 }
 ;
 export class ContentSchedulingService {
@@ -90,7 +81,8 @@ export class ContentSchedulingService {
                         const deletedContent = await this.updateContent(contentId, {});
                         status: 'deleted',
                             scheduling;
-                        { }
+                        {
+                        }
                     },
                     ...content.scheduling,
                     deleteAt: new Date(), }, deletedBy,

@@ -16,50 +16,50 @@ import { RateLimitingPerformanceMetrics, PerformanceMetrics } from './RateLimiti
 // ========================================
 
 export interface AnalyticsDashboardConfig {
-  enableRealTimeAnalytics: boolean;,
+  enableRealTimeAnalytics: boolean;
   enablePredictiveAnalytics: boolean;
-  enableAnomalyDetection: boolean;,
+  enableAnomalyDetection: boolean;
   enableThreatIntelligence: boolean;
-  enableBusinessIntelligence: boolean;,
+  enableBusinessIntelligence: boolean;
   dataRetentionDays: number;
   analyticsProcessingInterval: number; // seconds,
   mlModelUpdateInterval: number; // hours,
 }
 export interface SecurityAnalytics {
-  threatAnalysis: {,
-  currentThreatLevel: ThreatLevel;,
+  threatAnalysis: {
+  currentThreatLevel: ThreatLevel;
   threatTrends: Array<{,
-  timestamp: Date;,
+  timestamp: Date;
   level: ThreatLevel;
-  confidence: number;,
+  confidence: number;
   indicators: string;
 }>;
     attackPatterns: Array<{,
   patternId: string;
-  patternType: 'brute_force' | 'ddos' | 'credential_stuffing' | 'bot_activity' | 'anomalous_behavior';,
+  patternType: 'brute_force' | 'ddos' | 'credential_stuffing' | 'bot_activity' | 'anomalous_behavior';
   frequency: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   firstSeen: Date;
-  lastSeen: Date;,
+  lastSeen: Date;
   affectedEndpoints: string;
-  sourceIPs: string;,
+  sourceIPs: string;
   countermeasures: string;
 }>;
     geographicThreats: Array<{,
   country: string;
-  region: string;,
+  region: string;
   threatCount: number;
-  threatLevel: ThreatLevel;,
+  threatLevel: ThreatLevel;
   suspiciousActivities: string;
 }>;
   };
-  performanceAnalytics: {,
-  systemHealth: {,
+  performanceAnalytics: {
+  systemHealth: {
   overallScore: number; // 0-100,
-  componentScores: {,
-  rateLimiting: number;,
+  componentScores: {
+  rateLimiting: number;
   throttling: number;
-  dataProcessing: number;,
+  dataProcessing: number;
   alerting: number;
 };
       degradationFactors: Array<{,
@@ -68,128 +68,128 @@ export interface SecurityAnalytics {
   recommendation: string;
 }>;
     };
-    capacityAnalysis: {,
+    capacityAnalysis: {
   currentCapacity: number; // percentage,
-  peakCapacity: number;,
+  peakCapacity: number;
   averageUtilization: number;
   bottlenecks: Array<{,
-  component: string;,
+  component: string;
   utilizationLevel: number;
-  impactScore: number;,
+  impactScore: number;
   scalingRecommendation: string;
 }>;
     };
-    slaCompliance: {,
-  responseTimeSLA: {,
+    slaCompliance: {
+  responseTimeSLA: {
   target: number; // ms,
-  current: number;,
+  current: number;
   compliance: number; // percentage,
   violations: number;
 };
-      availabilitySLA: {,
+      availabilitySLA: {
   target: number; // percentage,
-  current: number;,
+  current: number;
   downtime: number; // minutes,
   incidents: number;
 };
-      throughputSLA: {,
+      throughputSLA: {
   target: number; // requests/second,
-  current: number;,
+  current: number;
   compliance: number;
 };
     };
   };
-  businessIntelligence: {,
+  businessIntelligence: {
   userBehaviorAnalytics: Array<{,
-  segment: string;,
+  segment: string;
   userCount: number;
-  avgSessionDuration: number;,
+  avgSessionDuration: number;
   requestPatterns: Record<string, number>;
-  conversionRate: number;,
+  conversionRate: number;
   riskScore: number;
 }>;
     endpointAnalytics: Array<{,
   endpoint: string;
-  totalRequests: number;,
+  totalRequests: number;
   uniqueUsers: number;
-  averageResponseTime: number;,
+  averageResponseTime: number;
   errorRate: number;
-  businessValue: number;,
+  businessValue: number;
   optimizationPotential: number;
 }>;
-    revenueImpact: {,
+    revenueImpact: {
   totalRequests: number;
-  blockedRequests: number;,
+  blockedRequests: number;
   estimatedRevenueLoss: number;
-  falsePositiveImpact: number;,
+  falsePositiveImpact: number;
   securityROI: number;
 };
   };
 }
 export interface PredictiveInsights {
   threatPredictions: Array<{,
-  predictionId: string;,
+  predictionId: string;
   predictedThreatType: string;
   probability: number; // 0-100,
   timeframe: string; // e.g., "next 2 hours",
-  impactEstimate: 'low' | 'medium' | 'high' | 'critical';,
+  impactEstimate: 'low' | 'medium' | 'high' | 'critical';
   recommendedActions: string;
   modelConfidence: number;
 }>;
   capacityForecasts: Array<{,
   forecastId: string;
-  metric: 'cpu' | 'memory' | 'throughput' | 'connections';,
+  metric: 'cpu' | 'memory' | 'throughput' | 'connections';
   currentValue: number;
-  predictedValue: number;,
+  predictedValue: number;
   forecastHorizon: number; // hours,
-  confidence: number;,
+  confidence: number;
   scalingRecommendation: string;
 }>;
   anomalyDetections: Array<{,
   anomalyId: string;
-  anomalyType: 'statistical' | 'behavioral' | 'temporal' | 'pattern-based';,
+  anomalyType: 'statistical' | 'behavioral' | 'temporal' | 'pattern-based';
   description: string;
   severity: number; // 0-100,
-  affectedMetrics: string;,
+  affectedMetrics: string;
   detectionTime: Date;
-  possibleCauses: string;,
+  possibleCauses: string;
   investigationSteps: string;
 }>;
 }
 export interface DashboardVisualization {
   chartConfigurations: Array<{,
-  chartId: string;,
+  chartId: string;
   chartType: 'line' | 'bar' | 'pie' | 'heatmap' | 'gauge' | 'scatter' | 'waterfall';
-  title: string;,
+  title: string;
   dataSource: string;
-  refreshInterval: number;,
-  interactivity: {,
-  drillDown: boolean;,
+  refreshInterval: number;
+  interactivity: {
+  drillDown: boolean;
   filtering: boolean;
-  timeRangeSelector: boolean;,
+  timeRangeSelector: boolean;
   exportOptions: string;
 };
-    styling: {,
+    styling: {
   colorScheme: string;
-      theme: 'light' | 'dark' | 'auto';,
+      theme: 'light' | 'dark' | 'auto';
   dimensions: { width: number; height: number };
     };
   }>;
   alertPanels: Array<{,
   panelId: string;
-  alertType: 'security' | 'performance' | 'business';,
+  alertType: 'security' | 'performance' | 'business';
   severity: 'info' | 'warning' | 'error' | 'critical';
-  message: string;,
+  message: string;
   timestamp: Date;
-  actionable: boolean;,
+  actionable: boolean;
   quickActions: string;
 }>;
   keyMetrics: Array<{,
   metricId: string;
-  displayName: string;,
+  displayName: string;
   currentValue: number | string;
   unit?: string;
-  trend: 'up' | 'down' | 'stable';,
+  trend: 'up' | 'down' | 'stable';
   changePercent: number;
   status: 'good' | 'warning' | 'critical';
   target?: number;
@@ -414,14 +414,14 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   /**
    * Calculate system health scores
    */
-  private calculateSystemHealth(systemStatus: Record<string,)
+  private calculateSystemHealth(systemStatus: Record<string)
     unknown>
   ): SecurityAnalytics['performanceAnalytics']['systemHealth'] {
   const overallScore = systemStatus?.status === 'healthy' ? 95 : ;
   systemStatus?.status === 'warning' ? 75 : 45;
   return {
   overallScore,
-  componentScores: {,
+  componentScores: {
   rateLimiting: 90 + Math.random() * 10,
   throttling: 85 + Math.random() * 10,
   dataProcessing: 88 + Math.random() * 10,
@@ -441,7 +441,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   /**
    * Analyze system capacity
    */
-  private analyzeCapacity(systemStatus: Record<string,)
+  private analyzeCapacity(systemStatus: Record<string)
     unknown>
   ): SecurityAnalytics['performanceAnalytics']['capacityAnalysis'] {
   const currentCapacity = 65 + Math.random() * 30;
@@ -459,24 +459,24 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   /**
    * Calculate SLA compliance
    */
-  private calculateSLACompliance(systemStatus: Record<string,)
+  private calculateSLACompliance(systemStatus: Record<string)
     unknown>
   ): SecurityAnalytics['performanceAnalytics']['slaCompliance'] {
   const metrics = systemStatus?.metrics;
   return {
-  responseTimeSLA: {,
+  responseTimeSLA: {
   target: 100,
   current: metrics?.responseTime?.average || 85,
   compliance: Math.max(0, 100 - ((metrics?.responseTime?.average || 85) - 100) / 100 * 100),
   violations: Math.floor(Math.random() * 5),
 },
-  availabilitySLA: {,
+  availabilitySLA: {
   target: 99.9,
   current: 99.95,
   downtime: Math.random() * 10,
   incidents: Math.floor(Math.random() * 3),
 },
-  throughputSLA: {,
+  throughputSLA: {
   target: 1000,
   current: metrics?.throughput?.requestsPerSecond || 850,
   compliance: Math.min(100, ((metrics?.throughput?.requestsPerSecond || 850) / 1000) * 100),
@@ -502,7 +502,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   segment: 'Premium Users',
   userCount: Math.floor(Math.random() * 1000) + 500,
   avgSessionDuration: 25 + Math.random() * 20, // minutes,
-  requestPatterns: {,
+  requestPatterns: {
   '/api/premium': Math.floor(Math.random() * 100) + 50,
   '/api/users': Math.floor(Math.random() * 50) + 20,
 },
@@ -513,7 +513,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   segment: 'Free Users',
   userCount: Math.floor(Math.random() * 5000) + 2000,
   avgSessionDuration: 8 + Math.random() * 10,
-  requestPatterns: {,
+  requestPatterns: {
   '/api/free': Math.floor(Math.random() * 200) + 100,
   '/api/users': Math.floor(Math.random() * 100) + 50,
 },
@@ -683,13 +683,13 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   title: 'Threat Level Timeline',
   dataSource: 'threatAnalysis.threatTrends',
   refreshInterval: 30,
-  interactivity: {,
+  interactivity: {
   drillDown: true,
   filtering: true,
   timeRangeSelector: true,
   exportOptions: ['png', 'pdf', 'svg'],
 },
-  styling: {,
+  styling: {
   colorScheme: 'security',
           theme: 'auto',
           dimensions: { width: 800, height: 400 }
@@ -700,13 +700,13 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   title: 'System Health Score',
   dataSource: 'performanceAnalytics.systemHealth.overallScore',
   refreshInterval: 5,
-  interactivity: {,
+  interactivity: {
   drillDown: false,
   filtering: false,
   timeRangeSelector: false,
   exportOptions: ['png'],
 },
-  styling: {,
+  styling: {
   colorScheme: 'performance',
           theme: 'auto',
           dimensions: { width: 300, height: 300 }
@@ -717,13 +717,13 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   title: 'Geographic Threat Distribution',
   dataSource: 'threatAnalysis.geographicThreats',
   refreshInterval: 60,
-  interactivity: {,
+  interactivity: {
   drillDown: true,
   filtering: true,
   timeRangeSelector: false,
   exportOptions: ['png', 'pdf'],
 },
-  styling: {,
+  styling: {
   colorScheme: 'threat-heatmap',
           theme: 'auto',
           dimensions: { width: 600, height: 400 }
@@ -857,21 +857,21 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   /**
   * Get comprehensive analytics summary
   */
-  public getAnalyticsSummary(): {,
-  securityAnalytics: SecurityAnalytics;,
+  public getAnalyticsSummary(): {
+  securityAnalytics: SecurityAnalytics;
   predictiveInsights: PredictiveInsights;
-  dashboardVisualization: DashboardVisualization;,
-  systemStatus: {,
-  uptime: number;,
+  dashboardVisualization: DashboardVisualization;
+  systemStatus: {
+  uptime: number;
   processingStatus: 'active' | 'inactive';
-  lastUpdate: Date;,
+  lastUpdate: Date;
   dataRetention: number;
 };
     return {
   securityAnalytics: this.securityAnalytics,
   predictiveInsights: this.predictiveInsights,
   dashboardVisualization: this.dashboardVisualization,
-  systemStatus: {,
+  systemStatus: {
   uptime: Date.now() - this.startTime.getTime(),
   processingStatus: this.analyticsTimer ? 'active' : 'inactive',
   lastUpdate: new Date(),
@@ -885,16 +885,16 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
    */
   private initializeSecurityAnalytics(): SecurityAnalytics {
   return {
-  threatAnalysis: {,
+  threatAnalysis: {
   currentThreatLevel: ThreatLevel.LOW,
   threatTrends: [],
   attackPatterns: [],
   geographicThreats: [],
 },
-  performanceAnalytics: {,
-  systemHealth: {,
+  performanceAnalytics: {
+  systemHealth: {
   overallScore: 95,
-  componentScores: {,
+  componentScores: {
   rateLimiting: 95,
   throttling: 95,
   dataProcessing: 95,
@@ -902,21 +902,21 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
 },
   degradationFactors: [];
   },
-  capacityAnalysis: {,
+  capacityAnalysis: {
   currentCapacity: 65,
   peakCapacity: 85,
   averageUtilization: 52,
   bottlenecks: [],
 },
-  slaCompliance: {,
+  slaCompliance: {
   responseTimeSLA: { target: 100, current: 85, compliance: 85, violations: 0 },
           availabilitySLA: { target: 99.9, current: 99.95, downtime: 0, incidents: 0 },
           throughputSLA: { target: 1000, current: 850, compliance: 85 }
   },
-  businessIntelligence: {,
+  businessIntelligence: {
   userBehaviorAnalytics: [],
   endpointAnalytics: [],
-  revenueImpact: {,
+  revenueImpact: {
   totalRequests: 0,
   blockedRequests: 0,
   estimatedRevenueLoss: 0,

@@ -121,7 +121,7 @@ jest.mock('reactflow', () => {
         {...props}
       />
     ),
-    Position: {,
+    Position: {
   Top: 'top',
   Right: 'right',
   Bottom: 'bottom',
@@ -149,11 +149,11 @@ describe('Scene Rendering Integration', () => {
         id: `scene-${i + 1}`}
 },
   type: baseData.nodeType,
-        position: {,
+        position: {
   x: (i % 3) * 200 + Math.random() * 50,
   y: Math.floor(i / 3) * 150 + Math.random() * 30,
 },
-  data: {,
+  data: {
   ...baseData,
   ...(withTransforms && {)
   transform: i % 2 === 0 ? 'rotate(5deg)' : 'scale(1.1)',
@@ -172,7 +172,7 @@ describe('Scene Rendering Integration', () => {
   target: `scene-${i + 2}`}
 },
   animated: withAnimations && i % 2 === 0,
-      data: {,
+      data: {
   color: withAnimations ? '#38a169' : '#cbd5e0',
   strokeWidth: withAnimations ? 3 : 2,
 }));

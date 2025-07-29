@@ -7,7 +7,7 @@ import React from 'react';
 interface UnsavedChangesDialogProps {
   isOpen: boolean;
   projectName?: string;
-  onSave: () => void;,
+  onSave: () => void;
   onDontSave: () => void;
   onCancel: () => void;
   actionDescription?: string; // e.g., "opening a new project", "closing the browser",

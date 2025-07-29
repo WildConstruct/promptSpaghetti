@@ -53,7 +53,7 @@ export enum ErrorCode {
   metadata?: Record<string, any>;
 }
 export interface RecoveryAction {
-  type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';,
+  type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
   description: string;
   action?: () => Promise<void> | void;
   url?: string;
@@ -74,7 +74,7 @@ export abstract class BaseError extends Error {
     code: ErrorCode,
     severity: ErrorSeverity = ErrorSeverity.MEDIUM,
     context: Partial<ErrorContext> = {},
-    options: {,
+    options: {
   suggestions?: string;
   recoveryActions?: RecoveryAction;
   userMessage?: string;

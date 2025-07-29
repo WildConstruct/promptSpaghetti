@@ -194,7 +194,7 @@ export const DirectorAnalyticsView = ({
             _jsxs("div", { className: "director-analytics-view", children: [_jsxs("div", { className: "director-overview", children: [_jsxs(Card, { className: "efficiency-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Workflow Efficiency" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "efficiency-score", children: [_jsxs("div", { className: "score-value", children: [directorMetrics.workflowEfficiency.toFixed(1), "%"] }), _jsx("div", { className: "score-label", children: "Overall efficiency" })] }) })] }), _jsxs(Card, { className: "projects-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Projects Created" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "projects-count", children: [_jsx("div", { className: "count-value", children: directorMetrics.projectsCreated }), _jsx("div", { className: "count-label", children: "This period" })] }) })] }), _jsxs(Card, { className: "complexity-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Avg Project Complexity" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "complexity-score", children: [_jsx("div", { className: "complexity-value", children: directorMetrics.avgProjectComplexity.toFixed(0) }), _jsx("div", { className: "complexity-label", children: "Nodes & connections" })] }) })] }), _jsxs(Card, { className: "collaboration-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Collaboration Events" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "collaboration-count", children: [_jsx("div", { className: "collab-value", children: directorMetrics.collaborationEvents }), _jsx("div", { className: "collab-label", children: "Team interactions" })] }) })] })] }), _jsxs(Card, { className: "creative-workflow-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Creative Output Analysis" }) }), _jsx(CardContent, { children: renderCreativeWorkflowMetrics() })] }), _jsxs(Card, { className: "insights-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Personalized Insights" }) }), _jsx(CardContent, { children: renderWorkflowInsights() })] }), _jsxs(Card, { className: "recommendations-card", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Director Templates" }) }), _jsx(CardContent, { children: renderTemplateRecommendations() })] }), _jsx("style", { children: `
         .director-analytics-view {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .director-overview {
           display: grid;
@@ -204,16 +204,16 @@ export const DirectorAnalyticsView = ({
           text-align: center;
         .score-value, .count-value, .complexity-value, .collab-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .score-label, .count-label, .complexity-label, .collab-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.25rem;
         .creative-workflow-section h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .workflow-grid {
           display: grid;
@@ -221,31 +221,31 @@ export const DirectorAnalyticsView = ({
           gap: 1rem;
         .workflow-metric {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
         .metric-icon {
           font-size: 1.5rem;
         .metric-value {
           font-size: 1.2rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .metric-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .workflow-insights h4, .template-recommendations h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .insights-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .insight-card {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
           border-left: 4px solid;
@@ -259,7 +259,7 @@ export const DirectorAnalyticsView = ({
           align-items: center;
           margin-bottom: 0.5rem;
         .insight-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .insight-description {
           color: #6b7280;
@@ -270,7 +270,7 @@ export const DirectorAnalyticsView = ({
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 1rem;
         .template-card {
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
         .template-header {
@@ -279,7 +279,7 @@ export const DirectorAnalyticsView = ({
           align-items: center;
           margin-bottom: 0.5rem;
         .template-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .template-description {
           color: #6b7280;
@@ -290,26 +290,26 @@ export const DirectorAnalyticsView = ({
           justify-content: space-between;
           align-items: center;
         .usage-stat {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           font-size: 0.875rem;
         .usage-label {
           color: #9ca3af;
         .usage-value {
-          font-weight: 600;,
+          font-weight: 600;
   color: #059669;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   padding: 3rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;,
+          width: 2rem;
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }

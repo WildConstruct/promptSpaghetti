@@ -57,28 +57,28 @@ interface UsageQuotaDashboardProps {
   onQuotaOverride?: (quotaId: string, userId: string, overrideAmount: number, duration: number) => Promise<void>;
   className?: string;
   interface DashboardState {
-  quotas: UsageQuota;,
+  quotas: UsageQuota;
   violations: QuotaViolation;
-  analytics: UsageAnalytics;,
+  analytics: UsageAnalytics;
   templates: QuotaTemplate;
-  operations: QuotaAdminOperation;,
+  operations: QuotaAdminOperation;
   systemMetrics: SystemQuotaMetrics;
   interface SystemQuotaMetrics {
-  totalQuotas: number;,
+  totalQuotas: number;
   activeQuotas: number;
-  totalViolations: number;,
+  totalViolations: number;
   activeViolations: number;
-  utilizationRate: number;,
+  utilizationRate: number;
   topViolatedQuotas: QuotaViolationSummary;
   recentActivity: QuotaActivityItem;
   interface QuotaViolationSummary {
-  quotaId: string;,
+  quotaId: string;
   quotaName: string;
-  violationCount: number;,
+  violationCount: number;
   lastViolation: Date;
   severity: ActionSeverity;
   interface QuotaActivityItem {
-  timestamp: Date;,
+  timestamp: Date;
   type: 'quota_created' | 'violation_occurred' | 'quota_updated' | 'violation_resolved';
   description: string;
   userId?: string;
@@ -135,7 +135,7 @@ interface UsageQuotaDashboardProps {
             createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
             createdBy: 'admin-user-1',
-            configuration: {,
+            configuration: {
   warningThresholds: [75, 90, 95],
   emergencyMultiplier: 1.5,
   integrateWithRateLimit: true,
@@ -148,7 +148,7 @@ interface UsageQuotaDashboardProps {
   batchProcessing: false,
   asyncEnforcement: false,
 },
-  metadata: {,
+  metadata: {
   description: 'Daily API request limit for free tier users',
   category: 'resource_management',
   businessJustification: 'Prevent abuse and manage infrastructure costs',
@@ -180,7 +180,7 @@ interface UsageQuotaDashboardProps {
             createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
             updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
             createdBy: 'admin-user-2',
-            configuration: {,
+            configuration: {
   warningThresholds: [80, 90, 95],
   emergencyMultiplier: 2.0,
   integrateWithRateLimit: false,
@@ -193,7 +193,7 @@ interface UsageQuotaDashboardProps {
   batchProcessing: true,
   asyncEnforcement: true,
 },
-  metadata: {,
+  metadata: {
   description: 'Daily graph execution limit for pro tier users',
   category: 'business_logic',
   businessJustification: 'Tier-based service differentiation',
@@ -215,7 +215,7 @@ interface UsageQuotaDashboardProps {
   quotaLimit: 1000,
   actualUsage: 1150,
   severity: 'medium',
-  impactAssessment: {,
+  impactAssessment: {
   businessImpact: 'low',
   technicalImpact: 'low',
   userImpact: 'medium',
@@ -223,7 +223,7 @@ interface UsageQuotaDashboardProps {
   complianceRisk: 'none',
 },
   enforcementAction: 'hard_block',
-            enforcementDetails: {,
+            enforcementDetails: {
   actionTaken: 'hard_block',
               timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
               reason: 'API request quota exceeded',
@@ -248,14 +248,14 @@ interface UsageQuotaDashboardProps {
             trendSignificance: 0.82,
             seasonalPatterns: [],
             topUsers: [],
-            usageDistribution: {,
+            usageDistribution: {
   percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
               buckets: [],
               outliers: [];
   },
   averageResponseTime: 120,
             systemLoad: 68,
-            resourceUtilization: {,
+            resourceUtilization: {
   cpu: 45,
               memory: 62,
               disk: 34,
@@ -294,13 +294,13 @@ interface UsageQuotaDashboardProps {
             parameters: { limitValue: 1200 },
             requiresApproval: false,
             status: 'completed',
-            result: {,
+            result: {
   success: true,
               affectedRecords: 1,
               warnings: [],
               details: {}
         ],
-        systemMetrics: {,
+        systemMetrics: {
   totalQuotas: 15,
   activeQuotas: 13,
   totalViolations: 45,
@@ -514,7 +514,7 @@ interface UsageQuotaDashboardProps {
 // Overview Tab Component
 const OverviewTab: React.FC<{,
   systemMetrics: SystemQuotaMetrics;
-  quotas: UsageQuota;,
+  quotas: UsageQuota;
   violations: QuotaViolation;
   analytics: UsageAnalytics;
 }> = ({ systemMetrics, quotas, violations, analytics }) => {

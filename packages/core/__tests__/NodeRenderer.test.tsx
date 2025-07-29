@@ -28,7 +28,7 @@ describe('NodeRenderer', () => {
   });
   const defaultProps = {
   id: 'node-1',
-  data: {,
+  data: {
   label: 'Test Node',
   nodeType: 'WeightedChoice',
 },
@@ -77,7 +77,7 @@ describe('NodeRenderer', () => {
   it('displays variations count badge when variations exist', () => {
   const propsWithVariations = {
   ...defaultProps,
-  data: {,
+  data: {
   ...defaultProps.data,
   variations: ['var1', 'var2', 'var3'],
 };
@@ -93,7 +93,7 @@ describe('NodeRenderer', () => {
   it('displays node properties (max 3)', () => {
   const propsWithProperties = {
   ...defaultProps,
-  data: {,
+  data: {
   label: 'Test Node',
   nodeType: 'WeightedChoice',
   property1: 'value1',
@@ -117,7 +117,7 @@ describe('NodeRenderer', () => {
   const longValue = 'This is a very long property value that should be truncated';
   const propsWithLongValue = {
   ...defaultProps,
-  data: {,
+  data: {
   ...defaultProps.data,
   longProperty: longValue,
 };
@@ -155,7 +155,7 @@ describe('NodeRenderer', () => {
   it('generates accessible aria-label', () => {
   const propsWithProperties = {
   ...defaultProps,
-  data: {,
+  data: {
   label: 'My Node',
   property1: 'value1',
   property2: 'value2',
@@ -202,7 +202,7 @@ describe('NodeRenderer', () => {
   it('filters out internal properties from display', () => {
   const propsWithInternalData = {
   ...defaultProps,
-  data: {,
+  data: {
   label: 'Test Node',
   variations: ['var1'],
   type: 'SomeType',

@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from 'react';
 import { CheckCircleIcon, ClockIcon, XCircleIcon, DocumentTextIcon, EyeIcon, GlobeAltIcon, ArchiveBoxIcon, PlusIcon, PencilIcon, ChevronDownIcon, ChevronRightIcon, LockClosedIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-{
+export const WorkflowStateManager = ({ workspaceId, resourceId, currentUserId, onStateChange, onLockAcquired, onLockReleased }) => {
     const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, createState, updateState, deleteState, createTransition, deleteTransition } = useWorkflowStore();
     const [activeTab, setActiveTab] = useState('states');
     const [__showCreateState, setShowCreateState] = useState(false);
@@ -21,188 +21,188 @@ import { useWorkflowStore } from '../stores/workflowStore';
     }, [workspaceId]);
     // Get current resource state
     const currentResourceState = resourceId;
-    states.find(state => state.id === resourceId); // This would need to be fetched from resource data
-    null;
-    // Get available transitions for current state
-    const availableTransitions = currentResourceState;
-    transitions.filter(t => t.from_state_id === currentResourceState.id);
-    [];
-    // Get resource locks
-    const resourceLocks = resourceId;
-    locks.filter(lock => lock.resource_id === resourceId);
-    [];
-    // Get pending approvals for current user
-    const pendingApprovals = approvals.filter(approval => );
+};
+states.find(state => state.id === resourceId); // This would need to be fetched from resource data
+null;
+// Get available transitions for current state
+const availableTransitions = currentResourceState;
+transitions.filter(t => t.from_state_id === currentResourceState.id);
+[];
+// Get resource locks
+const resourceLocks = resourceId;
+locks.filter(lock => lock.resource_id === resourceId);
+[];
+// Get pending approvals for current user
+const pendingApprovals = approvals.filter(approval => );
+;
+approval.status === 'pending' &&
+    (approval.requester_id === currentUserId || approval.approved_by === currentUserId);
+;
+const handleStateTransition = useCallback(async (toStateId, comment) => {
+    if (!resourceId)
+        return;
+    try {
+        const result = await transitionResourceState(resourceId, toStateId, currentUserId, {});
+        comment,
+            force;
+        false,
+        ;
+    }
+    finally { }
+});
+if (result.success) {
+    if (result.approval_required) {
+        // Show approval request confirmation
+        alert('Approval request submitted for state transition.');
+    }
+    else {
+        onStateChange?.(result.new_state_id);
+    }
+    try { }
+    catch (error) {
+        console.error('Failed to transition state:', error);
+    }
+    [resourceId, currentUserId, transitionResourceState, onStateChange];
     ;
-    approval.status === 'pending' &&
-        (approval.requester_id === currentUserId || approval.approved_by === currentUserId);
+    const handleApprovalAction = useCallback(async());
     ;
-    const handleStateTransition = useCallback(async (toStateId, comment) => {
-        if (!resourceId)
-            return;
+    approvalId: string,
+        action;
+    'approve' | 'reject',
+        comment ?  : string;
+    {
         try {
-            const result = await transitionResourceState(resourceId, toStateId, currentUserId, {});
-            comment,
-                force;
-            false,
-            ;
+            if (action === 'approve') {
+                await approveWorkflow(approvalId, currentUserId, comment);
+            }
+            else {
+                await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
+                // Refresh data
+                fetchApprovals(workspaceId);
+                fetchStates(workspaceId);
+            }
+            try { }
+            catch (error) {
+                console.error(`Failed to ${action},)}
+  workflow:`, error);
+            }
         }
         finally { }
-    });
-    if (result.success) {
-        if (result.approval_required) {
-            // Show approval request confirmation
-            alert('Approval request submitted for state transition.');
-        }
-        else {
-            onStateChange?.(result.new_state_id);
-        }
-        try { }
-        catch (error) {
-            console.error('Failed to transition state:', error);
-        }
-        [resourceId, currentUserId, transitionResourceState, onStateChange];
+        [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId];
         ;
-        const handleApprovalAction = useCallback(async());
+        const handleLockAction = useCallback(async());
         ;
-        approvalId: string,
-            action;
-        'approve' | 'reject',
-            comment ?  : string;
+        action: 'acquire' | 'release',
+            lockId ?  : string,
+            lockType ?  : 'edit' | 'state_change' | 'delete' | 'custom';
         {
+            if (!resourceId)
+                return;
             try {
-                if (action === 'approve') {
-                    await approveWorkflow(approvalId, currentUserId, comment);
+                if (action === 'acquire') {
+                    const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {});
+                    reason: 'Manual lock acquisition',
+                    ;
                 }
-                else {
-                    await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
-                    // Refresh data
-                    fetchApprovals(workspaceId);
-                    fetchStates(workspaceId);
-                }
-                try { }
-                catch (error) {
-                    console.error(`Failed to ${action},)}
-  workflow:`, error);
-                }
+                ;
+                onLockAcquired?.(lock.id);
             }
             finally { }
-            [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId];
-            ;
-            const handleLockAction = useCallback(async());
-            ;
-            action: 'acquire' | 'release',
-                lockId ?  : string,
-                lockType ?  : 'edit' | 'state_change' | 'delete' | 'custom';
-            {
-                if (!resourceId)
-                    return;
-                try {
-                    if (action === 'acquire') {
-                        const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {});
-                        reason: 'Manual lock acquisition',
-                        ;
-                    }
-                    ;
-                    onLockAcquired?.(lock.id);
-                }
-                finally { }
-                if (lockId) {
-                    await releaseLock(lockId, currentUserId);
-                    onLockReleased?.(lockId);
-                    // Refresh locks
-                    fetchLocks(workspaceId);
-                }
-                try { }
-                catch (error) {
-                    console.error(`Failed to ${action},)}
+            if (lockId) {
+                await releaseLock(lockId, currentUserId);
+                onLockReleased?.(lockId);
+                // Refresh locks
+                fetchLocks(workspaceId);
+            }
+            try { }
+            catch (error) {
+                console.error(`Failed to ${action},)}
   lock:`, error);
-                }
             }
-            [resourceId, currentUserId, acquireLock, releaseLock, onLockAcquired, onLockReleased, fetchLocks, workspaceId];
-            ;
-            const toggleStateExpansion = (stateId) => {
-                const newExpanded = new Set(expandedStates);
-                if (newExpanded.has(stateId)) {
-                    newExpanded.delete(stateId);
-                }
-                else {
-                    newExpanded.add(stateId);
-                    setExpandedStates(newExpanded);
-                }
-                ;
-                const getStateIcon = (state) => {
-                    switch (state.icon) {
-                        case 'CheckCircleIcon': return _jsx(CheckCircleIcon, { className: "h-4 w-4" });
-                        case 'EyeIcon': return _jsx(EyeIcon, { className: "h-4 w-4" });
-                        case 'GlobeAltIcon': return _jsx(GlobeAltIcon, { className: "h-4 w-4" });
-                        case 'ArchiveBoxIcon': return _jsx(ArchiveBoxIcon, { className: "h-4 w-4" });
-                        case 'DocumentTextIcon':
-                        default: return _jsx(DocumentTextIcon, { className: "h-4 w-4" });
-                    }
-                    ;
-                    const getStateTransitions = (stateId) => {
-                        return transitions.filter(t => t.from_state_id === stateId);
-                    };
-                    if (loading) {
-                        return;
-                        _jsx("div", { className: "flex items-center justify-center p-8", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
-                    }
-                };
-            };
-            ;
-            if (error) {
-                return;
-                _jsx("div", { className: "bg-red-50 border border-red-200 rounded-md p-4", children: _jsxs("div", { className: "flex", children: [_jsx(XCircleIcon, { className: "h-5 w-5 text-red-400" }), _jsxs("div", { className: "ml-3", children: [_jsx("h3", { className: "text-sm font-medium text-red-800", children: "Error loading workflow data" }), _jsx("div", { className: "mt-2 text-sm text-red-700", children: error })] })] }) });
-                ;
-                return;
-                _jsx("div", { className: "bg-white rounded-lg shadow", children: _jsxs("div", { className: "border-b border-gray-200", children: [_jsxs("div", { className: "px-6 py-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Workflow Management" }), _jsx("p", { className: "mt-1 text-sm text-gray-600", children: "Manage workflow states, approvals, and transitions" })] }), resourceId && currentResourceState && ()
-                                                < div, " className=\"flex items-center space-x-2\">", _jsxs("div", { className: "flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium", style: { backgroundColor: `${currentResourceState.color}20`, color: currentResourceState.color }, children: [getStateIcon(currentResourceState), _jsx("span", { children: currentResourceState.name })] }), resourceLocks.length > 0 && ()
-                                                < div, " className=\"flex items-center space-x-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs\">", _jsx(LockClosedIcon, { className: "h-3 w-3" }), _jsxs("span", { children: [resourceLocks.length, " lock(s)"] })] }), ")}"] }), ")}"] }) });
-                { /* Tab Navigation */ }
-                _jsxs("div", { className: "flex space-x-8 px-6", children: [[
-                            { id: 'states', label: 'States', count: states.length },
-                            { id: 'approvals', label: 'Approvals', count: pendingApprovals.length },
-                            { id: 'locks', label: 'Locks', count: resourceLocks.length },
-                            { id: 'statistics', label: 'Statistics', count: null }
-                        ].map(tab => ()
-                            < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
-                            ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        }`, ">", tab.label, tab.count !== null && ()
-                            < span, " className=", `ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.id
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'bg-gray-100 text-gray-600',
-                        }`, ">", tab.count] });
-            }
-            button >
-            ;
         }
-        div >
+        [resourceId, currentUserId, acquireLock, releaseLock, onLockAcquired, onLockReleased, fetchLocks, workspaceId];
         ;
-        div >
-            { /* Tab Content */}
-            < div;
-        className = "p-6" >
-            { activeTab } === 'states' && ()
-            < div;
-        className = "space-y-4" >
-            _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Workflow States" }), _jsxs("button", { onClick: () => setShowCreateState(true), className: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(PlusIcon, { className: "h-4 w-4 mr-2" }), "Add State"] })] });
-        { /* States List */ }
-        _jsxs("div", { className: "space-y-3", children: [states.map(state => ()
-                    < div, key = { state, : .id }, className = "border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
-                    >
-                        _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("button", { onClick: () => toggleStateExpansion(state.id), className: "text-gray-400 hover:text-gray-600", children: [expandedStates.has(state.id) ? ()
-                                                    < ChevronDownIcon : , " className=\"h-4 w-4\" /> ) : ()", _jsx(ChevronRightIcon, { className: "h-4 w-4" }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium", style: { backgroundColor: `${state.color}20`, color: state.color }, children: [getStateIcon(state), _jsx("span", { children: state.name })] }), state.is_initial && ()
-                                            < span, " className=\"px-2 py-1 bg-green-100 text-green-800 text-xs rounded\"> Initial"] }), ")}", state.is_final && ()
-                                    < span, " className=\"px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded\"> Final"] })), state.is_locked && ()
-                    < span, " className=\"px-2 py-1 bg-red-100 text-red-800 text-xs rounded\"> Locked"] });
+        const toggleStateExpansion = (stateId) => {
+            const newExpanded = new Set(expandedStates);
+            if (newExpanded.has(stateId)) {
+                newExpanded.delete(stateId);
+            }
+            else {
+                newExpanded.add(stateId);
+                setExpandedStates(newExpanded);
+            }
+            ;
+            const getStateIcon = (state) => {
+                switch (state.icon) {
+                    case 'CheckCircleIcon': return _jsx(CheckCircleIcon, { className: "h-4 w-4" });
+                    case 'EyeIcon': return _jsx(EyeIcon, { className: "h-4 w-4" });
+                    case 'GlobeAltIcon': return _jsx(GlobeAltIcon, { className: "h-4 w-4" });
+                    case 'ArchiveBoxIcon': return _jsx(ArchiveBoxIcon, { className: "h-4 w-4" });
+                    case 'DocumentTextIcon':
+                    default: return _jsx(DocumentTextIcon, { className: "h-4 w-4" });
+                }
+                ;
+                const getStateTransitions = (stateId) => {
+                    return transitions.filter(t => t.from_state_id === stateId);
+                };
+                if (loading) {
+                    return;
+                    _jsx("div", { className: "flex items-center justify-center p-8", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
+                }
+            };
+        };
+        ;
+        if (error) {
+            return;
+            _jsx("div", { className: "bg-red-50 border border-red-200 rounded-md p-4", children: _jsxs("div", { className: "flex", children: [_jsx(XCircleIcon, { className: "h-5 w-5 text-red-400" }), _jsxs("div", { className: "ml-3", children: [_jsx("h3", { className: "text-sm font-medium text-red-800", children: "Error loading workflow data" }), _jsx("div", { className: "mt-2 text-sm text-red-700", children: error })] })] }) });
+            ;
+            return;
+            _jsx("div", { className: "bg-white rounded-lg shadow", children: _jsxs("div", { className: "border-b border-gray-200", children: [_jsxs("div", { className: "px-6 py-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Workflow Management" }), _jsx("p", { className: "mt-1 text-sm text-gray-600", children: "Manage workflow states, approvals, and transitions" })] }), resourceId && currentResourceState && ()
+                                            < div, " className=\"flex items-center space-x-2\">", _jsxs("div", { className: "flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium", style: { backgroundColor: `${currentResourceState.color}20`, color: currentResourceState.color }, children: [getStateIcon(currentResourceState), _jsx("span", { children: currentResourceState.name })] }), resourceLocks.length > 0 && ()
+                                            < div, " className=\"flex items-center space-x-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs\">", _jsx(LockClosedIcon, { className: "h-3 w-3" }), _jsxs("span", { children: [resourceLocks.length, " lock(s)"] })] }), ")}"] }), ")}"] }) });
+            { /* Tab Navigation */ }
+            _jsxs("div", { className: "flex space-x-8 px-6", children: [[
+                        { id: 'states', label: 'States', count: states.length },
+                        { id: 'approvals', label: 'Approvals', count: pendingApprovals.length },
+                        { id: 'locks', label: 'Locks', count: resourceLocks.length },
+                        { id: 'statistics', label: 'Statistics', count: null }
+                    ].map(tab => ()
+                        < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
+                        ? 'border-blue-500 text-blue-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                    }`, ">", tab.label, tab.count !== null && ()
+                        < span, " className=", `ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.id
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'bg-gray-100 text-gray-600',
+                    }`, ">", tab.count] });
+        }
+        button >
+        ;
     }
     div >
-        _jsxs("div", { className: "flex items-center space-x-2", children: [resourceId && currentResourceState?.id === state.id && ()
-                    < div, " className=\"flex items-center space-x-2\">", availableTransitions.map(transition => ()
-                    < button, key = { transition, : .id }, onClick = {}()), " => handleStateTransition(transition.to_state_id)} className=\"px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded hover:bg-blue-200\" disabled=", transition.requires_approval, ">", transition.name, transition.requires_approval && _jsx("span", { className: "ml-1", children: "*" })] });
+    ;
+    div >
+        { /* Tab Content */}
+        < div;
+    className = "p-6" >
+        { activeTab } === 'states' && ()
+        < div;
+    className = "space-y-4" >
+        _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Workflow States" }), _jsxs("button", { onClick: () => setShowCreateState(true), className: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(PlusIcon, { className: "h-4 w-4 mr-2" }), "Add State"] })] });
+    { /* States List */ }
+    _jsxs("div", { className: "space-y-3", children: [states.map(state => ()
+                < div, key = { state, : .id }, className = "border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
+                >
+                    _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("button", { onClick: () => toggleStateExpansion(state.id), className: "text-gray-400 hover:text-gray-600", children: [expandedStates.has(state.id) ? ()
+                                                < ChevronDownIcon : , " className=\"h-4 w-4\" /> ) : ()", _jsx(ChevronRightIcon, { className: "h-4 w-4" }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium", style: { backgroundColor: `${state.color}20`, color: state.color }, children: [getStateIcon(state), _jsx("span", { children: state.name })] }), state.is_initial && ()
+                                        < span, " className=\"px-2 py-1 bg-green-100 text-green-800 text-xs rounded\"> Initial"] }), ")}", state.is_final && ()
+                                < span, " className=\"px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded\"> Final"] })), state.is_locked && ()
+                < span, " className=\"px-2 py-1 bg-red-100 text-red-800 text-xs rounded\"> Locked"] });
 }
+div >
+    _jsxs("div", { className: "flex items-center space-x-2", children: [resourceId && currentResourceState?.id === state.id && ()
+                < div, " className=\"flex items-center space-x-2\">", availableTransitions.map(transition => ()
+                < button, key = { transition, : .id }, onClick = {}()), " => handleStateTransition(transition.to_state_id)} className=\"px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded hover:bg-blue-200\" disabled=", transition.requires_approval, ">", transition.name, transition.requires_approval && _jsx("span", { className: "ml-1", children: "*" })] });
 div >
 ;
 _jsx("button", { onClick: () => setSelectedState(state), className: "p-1 text-gray-400 hover:text-gray-600", children: _jsx(PencilIcon, { className: "h-4 w-4" }) });

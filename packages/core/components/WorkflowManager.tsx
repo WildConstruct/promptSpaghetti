@@ -80,16 +80,16 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
   };
   const getStatusColor = (status: CorrectionRule['status']) => {
   switch (status) {
-  case 'draft':,
+  case 'draft':
   return '#fbb040';
-  case 'published':,
+  case 'published':
   return '#68d391';
-  case 'deprecated':,
+  case 'deprecated':
   return '#e53e3e';
-  default:,
+  default:
   return '#a0aec0';
 };
-  const getStatusBadge = (rule: CorrectionRule) => (;);
+  const getStatusBadge = (rule: CorrectionRule) => (
     <span style={{
   padding: '2px 6px',
   borderRadius: '3px',
@@ -101,7 +101,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
       {rule.status.toUpperCase()}
     </span>
   );
-  const renderRuleCard = (rule: CorrectionRule) => (;);
+  const renderRuleCard = (rule: CorrectionRule) => (
     <div
       key={rule.id}
       style={{
@@ -125,7 +125,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
               {rule.name}
             </span>
             {getStatusBadge(rule)}
-            {rule.suggestedBy && ()
+            {rule.suggestedBy && (
               <span style={{
   fontSize: '10px',
   color: '#a0aec0',
@@ -135,7 +135,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
               </span>
             )}
           </div>
-          {rule.description && ()
+          {rule.description && (
             <div style={{ fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }}>
               {rule.description}
             </div>
@@ -143,14 +143,14 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
           <div style={{ fontSize: '11px', color: '#a0aec0', display: 'flex', gap: '16px' }}>
             <span>Created: {rule.createdAt.toLocaleDateString()}</span>
             <span>Updated: {rule.updatedAt.toLocaleDateString()}</span>
-            {rule.usageCount !== undefined && ()
+            {rule.usageCount !== undefined && (
               <span>Used: {rule.usageCount} times</span>
             )}
-            {rule.lastUsedAt && ()
+            {rule.lastUsedAt && (
               <span>Last used: {rule.lastUsedAt.toLocaleDateString()}</span>
             )}
           </div>
-          {rule.suggestionReason && ()
+          {rule.suggestionReason && (
             <div style={{
   fontSize: '11px',
   color: '#fbb040',
@@ -160,7 +160,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
               Suggestion: {rule.suggestionReason}
             </div>
           )}
-          {rule.deprecationReason && ()
+          {rule.deprecationReason && (
             <div style={{
   fontSize: '11px',
   color: '#e53e3e',

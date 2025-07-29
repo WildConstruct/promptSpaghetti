@@ -96,7 +96,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
     showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
     examples: ['Combining {input1} and {input2}', '{character}: {dialogue}'],
     relatedFeatures: ['variable-extraction', 'input-ports'],
-    priority: 'medium';
+    priority: 'medium'
   });
   // Contextual help for join mode
   const { wrapWithHelp: wrapJoinModeHelp } = useContextualHelp({)

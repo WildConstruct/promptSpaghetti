@@ -57,7 +57,7 @@ describe('SessionConflictNotificationService', () => {
       const userId = 'user-123';
       const preferences: UserNotificationPreferences = {
         userId,
-        channels: {,
+        channels: {
           [NotificationChannel.EMAIL]: { enabled: true, address: 'user@test.com' },
           [NotificationChannel.SMS]: { enabled: false },
           [NotificationChannel.PUSH]: { enabled: true },
@@ -66,13 +66,13 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
   },
-  conflictResolution: {,
+  conflictResolution: {
   autoResolve: false,
   preferredResolution: ConflictResolution.PROMPT_USER,
   requireConfirmation: true,
   timeoutMinutes: 10,
 },
-  securityAlerts: {,
+  securityAlerts: {
   enabledTypes: [NotificationType.SESSION_CONFLICT, NotificationType.SESSION_EVICTED],
   minimumPriority: NotificationPriority.NORMAL,
 };
@@ -90,7 +90,7 @@ describe('SessionConflictNotificationService', () => {
       });
       const preferences: UserNotificationPreferences = {,
   userId: 'user-event',
-        channels: {,
+        channels: {
           [NotificationChannel.EMAIL]: { enabled: true },
           [NotificationChannel.SMS]: { enabled: false },
           [NotificationChannel.PUSH]: { enabled: false },
@@ -99,13 +99,13 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
   },
-  conflictResolution: {,
+  conflictResolution: {
   autoResolve: true,
   preferredResolution: ConflictResolution.EVICT_OLDEST,
   requireConfirmation: false,
   timeoutMinutes: 5,
 },
-  securityAlerts: {,
+  securityAlerts: {
   enabledTypes: [NotificationType.SESSION_CONFLICT],
   minimumPriority: NotificationPriority.LOW,
 };
@@ -125,7 +125,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-123',
         type: 'user_limit',
         affectedSessions: ['session-1', 'session-2'],
-        newSessionRequest: {,
+        newSessionRequest: {
   userId: 'user-new',
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
@@ -155,7 +155,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-fail',
         type: 'device_limit',
         affectedSessions: ['session-1'],
-        newSessionRequest: {,
+        newSessionRequest: {
   userId: 'user-test',
           deviceId: 'device-test',
           priority: SessionPriority.MEDIUM,
@@ -261,7 +261,7 @@ describe('SessionConflictNotificationService', () => {
       const userId = 'user-auto';
       const preferences: UserNotificationPreferences = {
         userId,
-        channels: {,
+        channels: {
           [NotificationChannel.EMAIL]: { enabled: true },
           [NotificationChannel.SMS]: { enabled: false },
           [NotificationChannel.PUSH]: { enabled: false },
@@ -270,13 +270,13 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
   },
-  conflictResolution: {,
+  conflictResolution: {
   autoResolve: true,
   preferredResolution: ConflictResolution.EVICT_OLDEST,
   requireConfirmation: false,
   timeoutMinutes: 5,
 },
-  securityAlerts: {,
+  securityAlerts: {
   enabledTypes: [NotificationType.SESSION_CONFLICT],
   minimumPriority: NotificationPriority.NORMAL,
 };
@@ -285,7 +285,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-auto',
         type: 'user_limit',
         affectedSessions: ['session-1'],
-        newSessionRequest: {,
+        newSessionRequest: {
           userId,
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
@@ -308,7 +308,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-manual',
         type: 'device_limit',
         affectedSessions: ['session-1'],
-        newSessionRequest: {,
+        newSessionRequest: {
   userId: 'user-manual',
           deviceId: 'device-1',
           priority: SessionPriority.MEDIUM,
@@ -330,7 +330,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-response',
         type: 'total_limit',
         affectedSessions: ['session-1', 'session-2'],
-        newSessionRequest: {,
+        newSessionRequest: {
   userId: 'user-response',
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
@@ -389,8 +389,8 @@ describe('SessionConflictNotificationService', () => {
         channels: [NotificationChannel.EMAIL],
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
-        deliveryStatus: {,
-  [NotificationChannel.EMAIL]: {,
+        deliveryStatus: {
+  [NotificationChannel.EMAIL]: {
   status: DeliveryStatus.SENT,
   attempts: 1,
 },
@@ -429,8 +429,8 @@ describe('SessionConflictNotificationService', () => {
         channels: [NotificationChannel.IN_APP],
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
-        deliveryStatus: {,
-  [NotificationChannel.IN_APP]: {,
+        deliveryStatus: {
+  [NotificationChannel.IN_APP]: {
   status: DeliveryStatus.SENT,
   attempts: 1,
 },
@@ -458,8 +458,8 @@ describe('SessionConflictNotificationService', () => {
   channels: [NotificationChannel.EMAIL],
   createdAt: new Date(),
   expiresAt: new Date(Date.now() + 60000),
-  deliveryStatus: {,
-  [NotificationChannel.EMAIL]: {,
+  deliveryStatus: {
+  [NotificationChannel.EMAIL]: {
   status: DeliveryStatus.DELIVERED,
   deliveredAt: new Date(),
 }
@@ -469,8 +469,8 @@ describe('SessionConflictNotificationService', () => {
   channels: [NotificationChannel.SMS],
   createdAt: new Date(),
   expiresAt: new Date(Date.now() + 60000),
-  deliveryStatus: {,
-  [NotificationChannel.SMS]: {,
+  deliveryStatus: {
+  [NotificationChannel.SMS]: {
   status: DeliveryStatus.FAILED];
   // Add notifications to service
   notifications.forEach(notification => {)
@@ -501,7 +501,7 @@ describe('SessionConflictNotificationService', () => {
   id: 'conflict-rate-limit',
         type: 'user_limit',
         affectedSessions: ['session-1'],
-        newSessionRequest: {,
+        newSessionRequest: {
   userId: 'user-rate-limit',
           deviceId: 'device-1',
           priority: SessionPriority.MEDIUM,
@@ -561,8 +561,8 @@ describe('SessionConflictNotificationService', () => {
         channels: [NotificationChannel.EMAIL],
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
-        deliveryStatus: {,
-  [NotificationChannel.EMAIL]: {,
+        deliveryStatus: {
+  [NotificationChannel.EMAIL]: {
   status: DeliveryStatus.SENT,
   attempts: 1,
 },

@@ -8,12 +8,12 @@ import { PerformanceSnapshot, BudgetCheckResult } from './PerformanceBudget';
 export interface DashboardConfig {
     updateInterval: number;
     historyLimit: number;
-    alertThresholds: {,
+    alertThresholds: {
         violations: number;
         score: number;
     };
     autoOptimize: boolean;
-    reporting: {,
+    reporting: {
         enabled: boolean;
         interval: number;
         recipients: string[];
@@ -25,7 +25,7 @@ export interface DashboardData {
     score: number;
     budgetResult: BudgetCheckResult;
     snapshot: PerformanceSnapshot;
-    trends: {,
+    trends: {
         score: number[];
         violations: number[];
         bundleSize: number[];
@@ -58,12 +58,12 @@ export interface OptimizationSuggestion {
     priority: 'low' | 'medium' | 'high' | 'critical';
     title: string;
     description: string;
-    estimatedImpact: {,
+    estimatedImpact: {
         scoreImprovement: number;
         sizeReduction?: number;
         timeReduction?: number;
     };
-    implementation: {,
+    implementation: {
         effort: 'low' | 'medium' | 'high';
         steps: string[];
         codeExample?: string;

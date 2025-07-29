@@ -14,7 +14,7 @@ import {
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
 interface LearningPathViewerProps {
-  path: LearningPath;,
+  path: LearningPath;
   learningService: Epic16LearningPathService;
   userId: string;
   enrollment?: UserEnrollment;
@@ -100,14 +100,14 @@ interface LearningPathViewerProps {
   const prerequisitesMet = module.prerequisites.every(prereqId =>;);
   enrollment.progress.completedModules.includes(prereqId)
   );
-  return prerequisitesMet ? 'available' : 'locked';
-}, [enrollment]);
+  return prerequisitesMet ? 'available' : 'locked'
+  }, [enrollment]);
   // Get activity status
   const getActivityStatus = useCallback((activity: LearningActivity) => {
     if (!enrollment || !currentModule) return 'not_started';
     const completed = enrollment.progress.completedActivities.includes(activity.id);
     if (completed) return 'completed';
-    return 'available';
+    return 'available'
   }, [enrollment, currentModule]);
   // Render module sidebar
   const renderModuleSidebar = () => (;);
@@ -465,7 +465,7 @@ interface LearningPathViewerProps {
 
 // Activity Viewer Component
 interface ActivityViewerProps {
-  activity: LearningActivity;,
+  activity: LearningActivity;
   onComplete: () => void;
   loading?: boolean;
   const ActivityViewer: React.FC<ActivityViewerProps> = ({,)

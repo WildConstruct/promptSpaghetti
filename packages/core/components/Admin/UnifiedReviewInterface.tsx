@@ -56,122 +56,122 @@ import {
 // Unified review types extending existing system
 
 export interface ReviewItem {
-  id: string;,
+  id: string;
   type: 'template_submission' | 'verification_request' | 'policy_violation' | 'content_appeal' | 'marketplace_listing';
   title: string;
   description?: string;
-  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'changes_requested';,
+  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'changes_requested';
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  submitter: {,
-  id: string;,
+  submitter: {
+  id: string;
   name: string;
   email: string;
   avatar_url?: string;
   tier: string;
   reputation_score?: number;
 };
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   submitted_at?: Date;
   assigned_reviewer?: string;
   estimated_review_time?: number; // minutes
   // Type-specific data
   template_data?: {
-  template_id: string;,
+  template_id: string;
   version: number;
-  categories: string;,
+  categories: string;
   tags: string;
-  price_cents: number;,
+  price_cents: number;
   graph_json: unknown;
   validation_results: ValidationResult;
   previous_reviews?: ReviewFeedback;
 };
   verification_data?: {
-  request_type: 'identity' | 'business' | 'creator';,
+  request_type: 'identity' | 'business' | 'creator';
   documents: DocumentData;
   verification_criteria: VerificationCriterion;
   previous_attempts?: number;
 };
   violation_data?: {
-  policy_id: string;,
+  policy_id: string;
   violation_type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   evidence: Evidence;
   automated_detection: boolean;
   affected_content?: string;
 };
   appeal_data?: {
-  original_decision_id: string;,
+  original_decision_id: string;
   appeal_reason: string;
-  supporting_evidence: Evidence;,
+  supporting_evidence: Evidence;
   original_reviewer: string;
   appeal_deadline: Date;
 };
 }
 export interface ValidationResult {
-  rule_id: string;,
+  rule_id: string;
   severity: 'error' | 'warning' | 'info';
-  category: string;,
+  category: string;
   message: string;
   field?: string;
   auto_fixable: boolean;
   suggestions?: string;
 }
 export interface ReviewFeedback {
-  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';,
+  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
   rating: number; // 1-5,
-  comments: string;,
+  comments: string;
   suggestions: string;
   is_blocking: boolean;
 }
 export interface DocumentData {
-  id: string;,
+  id: string;
   type: 'image' | 'pdf' | 'document' | 'video' | 'audio';
-  fileName: string;,
+  fileName: string;
   fileSize: number;
   url: string;
   thumbnailUrl?: string;
   metadata?: {
     dimensions?: { width: number; height: number };
     duration?: number;
-    quality?: 'low' | 'medium' | 'high';
+    quality?: 'low' | 'medium' | 'high'
   };
 }
 export interface VerificationCriterion {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   required: boolean;
-  type: 'document_check' | 'identity_match' | 'address_verification' | 'business_validation';,
+  type: 'document_check' | 'identity_match' | 'address_verification' | 'business_validation';
   status: 'pending' | 'passed' | 'failed' | 'manual_review';
   automated_result?: unknown;
   manual_override?: boolean;
 }
 export interface Evidence {
-  id: string;,
+  id: string;
   type: 'screenshot' | 'log' | 'report' | 'document';
-  url: string;,
+  url: string;
   description: string;
   timestamp: Date;
   confidence_score?: number;
 }
 export interface ReviewDecision {
-  decision: 'approved' | 'rejected' | 'changes_requested';,
+  decision: 'approved' | 'rejected' | 'changes_requested';
   overall_score: number; // 1-100,
-  feedback: ReviewFeedback;,
+  feedback: ReviewFeedback;
   public_comments: string;
-  private_notes: string;,
+  private_notes: string;
   follow_up_required: boolean;
   follow_up_date?: Date;
-  conditional_approval?: {,
-  conditions: string;,
+  conditional_approval?: {
+  conditions: string;
   deadline: Date;
 };
 }
 export interface UnifiedReviewInterfaceProps {
-  reviewItem: ReviewItem;,
-  onDecision: (decision: ReviewDecision) => void;,
-  onSaveDraft: (decision: Partial<ReviewDecision>) => void;,
+  reviewItem: ReviewItem;
+  onDecision: (decision: ReviewDecision) => void;
+  onSaveDraft: (decision: Partial<ReviewDecision>) => void;
   onBack: () => void;
   reviewerPermissions: string;
   className?: string;
@@ -770,14 +770,14 @@ export interface UnifiedReviewInterfaceProps {
       </Tabs>
       <style>{`
         .unified-review-interface {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
-          padding: 24px;,
+          padding: 24px;
   background: #f8fafc;
           min-height: 100vh;
         .review-header {
           background: white;
-          border-radius: 12px;,
+          border-radius: 12px;
   padding: 16px 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -786,10 +786,10 @@ export interface UnifiedReviewInterfaceProps {
           justify-content: space-between;
           align-items: center;
         .header-actions {
-          display: flex;,
+          display: flex;
   gap: 12px;
         .submit-decision {
-          background: #059669;,
+          background: #059669;
   color: white;
         .submit-decision:hover {,
   background: #047857;
@@ -798,14 +798,14 @@ export interface UnifiedReviewInterfaceProps {
           cursor: not-allowed;
         .review-tabs {
           background: white;
-          border-radius: 12px;,
+          border-radius: 12px;
   padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         .review-tab-list {
           grid-template-columns: repeat(3, 1fr);
           margin-bottom: 32px;
         .tab-content {
-          margin: 0;,
+          margin: 0;
   padding: 0;
         /* Overview Tab Styles */
         .overview-header {
@@ -816,14 +816,14 @@ export interface UnifiedReviewInterfaceProps {
           margin-bottom: 8px;
         .item-title {
           font-size: 24px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin: 0 0 8px 0;
           line-height: 1.3;
         .item-description {
           color: #6b7280;
           font-size: 16px;
-          line-height: 1.5;,
+          line-height: 1.5;
   margin: 0;
         .metadata-grid {
           display: grid;
@@ -832,12 +832,12 @@ export interface UnifiedReviewInterfaceProps {
           margin-top: 16px;
         .metadata-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .template-insights, .verification-insights {
-          margin-top: 24px;,
+          margin-top: 24px;
   border: 1px solid #e5e7eb;
         .insights-grid {
           display: grid;
@@ -845,18 +845,18 @@ export interface UnifiedReviewInterfaceProps {
           gap: 16px;
         .insight-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
-          padding: 12px;,
+          padding: 12px;
   background: #f9fafb;
           border-radius: 8px;
         .insight-label {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           display: block;
         .insight-value {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           display: block;
         .verification-progress {
@@ -865,25 +865,25 @@ export interface UnifiedReviewInterfaceProps {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .criteria-list {
           space-y: 8px;
         .criterion-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
-          padding: 12px;,
+          padding: 12px;
   background: #f9fafb;
           border-radius: 6px;
         .criterion-status {
           flex-shrink: 0;
         .criterion-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   flex: 1;
         .criterion-name {
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
         /* Content Tab Styles */
         .content-review {
@@ -891,33 +891,33 @@ export interface UnifiedReviewInterfaceProps {
         .content-tabs {
           border: 1px solid #e5e7eb;
         .graph-preview {
-          max-height: 400px;,
+          max-height: 400px;
   overflow: auto;
           background: #f8fafc;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 16px;
         .graph-json {
           font-family: 'Monaco', 'Consolas', monospace;
           font-size: 12px;
-          line-height: 1.4;,
+          line-height: 1.4;
   color: #374151;
-          white-space: pre-wrap;,
+          white-space: pre-wrap;
   margin: 0;
         .validation-list {
           space-y: 12px;
         .validation-item {
-          display: flex;,
+          display: flex;
   gap: 12px;
           padding: 12px;
           border-radius: 8px;
         .validation-item.severity-error {
-          background: #fef2f2;,
+          background: #fef2f2;
   border: 1px solid #fecaca;
         .validation-item.severity-warning {
-          background: #fffbeb;,
+          background: #fffbeb;
   border: 1px solid #fed7aa;
         .validation-item.severity-info {
-          background: #eff6ff;,
+          background: #eff6ff;
   border: 1px solid #bfdbfe;
         .validation-icon {
           flex-shrink: 0;
@@ -931,14 +931,14 @@ export interface UnifiedReviewInterfaceProps {
           font-size: 12px;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.05em;,
+          letter-spacing: 0.05em;
   color: #6b7280;
         .validation-message {
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
           margin: 4px 0;
         .validation-field {
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
           margin: 0;
         .documents-grid {
@@ -948,14 +948,14 @@ export interface UnifiedReviewInterfaceProps {
           margin-bottom: 24px;
         .document-card {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   overflow: hidden;
           background: white;
         .document-preview {
-          height: 150px;,
+          height: 150px;
   display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   background: #f9fafb;
           overflow: hidden;
         .document-image {
@@ -965,7 +965,7 @@ export interface UnifiedReviewInterfaceProps {
         .document-placeholder {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           color: #9ca3af;
         .document-type {
@@ -975,32 +975,32 @@ export interface UnifiedReviewInterfaceProps {
           padding: 12px;
         .document-name {
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 4px 0;
           word-break: break-word;
         .document-size {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           margin: 0;
         .document-actions {
-          display: flex;,
+          display: flex;
   gap: 8px;
           padding: 12px;
           border-top: 1px solid #f3f4f6;
         .document-controls {
           display: flex;
-          justify-content: center;,
+          justify-content: center;
   padding: 16px;
-          border-top: 1px solid #f3f4f6;,
+          border-top: 1px solid #f3f4f6;
   background: #f9fafb;
         .zoom-controls {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
         .zoom-level {
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
           min-width: 50px;
           text-align: center;
@@ -1010,39 +1010,39 @@ export interface UnifiedReviewInterfaceProps {
         .decision-options {
           space-y: 16px;
         .decision-buttons {
-          display: flex;,
+          display: flex;
   gap: 12px;
           flex-wrap: wrap;
         .overall-score {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
-          padding: 16px;,
+          padding: 16px;
   background: #f9fafb;
           border-radius: 8px;
         .score-label {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .score-value {
           font-size: 18px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .score-bar {
-          flex: 1;,
+          flex: 1;
   height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .score-fill {
-          height: 100%;,
+          height: 100%;
   background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
           transition: width 0.3s;
         .feedback-categories {
           space-y: 20px;
         .feedback-category {
-          padding: 16px;,
+          padding: 16px;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   background: #fafafa;
         .category-header {
           display: flex;
@@ -1051,18 +1051,18 @@ export interface UnifiedReviewInterfaceProps {
           margin-bottom: 12px;
         .category-title {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .rating-controls {
-          display: flex;,
+          display: flex;
   gap: 4px;
         .rating-star {
-          background: none;,
+          background: none;
   border: none;
-          cursor: pointer;,
+          cursor: pointer;
   padding: 2px;
-          transition: color 0.2s;,
+          transition: color 0.2s;
   color: #d1d5db;
         .rating-star:hover {,
   color: #fbbf24;
@@ -1070,64 +1070,64 @@ export interface UnifiedReviewInterfaceProps {
           color: #f59e0b;
         .feedback-textarea {
           width: 100%;
-          margin-bottom: 8px;,
+          margin-bottom: 8px;
   resize: vertical;
         .feedback-options {
           display: flex;
           align-items: center;
         .blocking-checkbox {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
           cursor: pointer;
         .comment-inputs {
           space-y: 20px;
         .comment-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 8px;
         .comment-label {
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .public-comments, .private-notes {
-          width: 100%;,
+          width: 100%;
   resize: vertical;
         .follow-up-options {
           space-y: 12px;
         .follow-up-checkbox {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
           cursor: pointer;
         .follow-up-details {
           padding-left: 24px;
         .follow-up-date {
-          padding: 8px 12px;,
+          padding: 8px 12px;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
           font-size: 14px;
         .history-list {
           space-y: 16px;
         .history-item {
-          padding: 16px;,
+          padding: 16px;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   background: #fafafa;
         .review-meta {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
           margin-bottom: 8px;
         .review-comments {
-          color: #374151;,
+          color: #374151;
   margin: 8px 0;
         .review-suggestions {
-          margin: 8px 0 0 20px;,
+          margin: 8px 0 0 20px;
   color: #6b7280;
           font-size: 14px;
         .review-suggestions li {
@@ -1137,7 +1137,7 @@ export interface UnifiedReviewInterfaceProps {
           .unified-review-interface {
             padding: 16px;
           .header-nav {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 16px;
             align-items: stretch;
           .header-actions {
@@ -1155,7 +1155,7 @@ export interface UnifiedReviewInterfaceProps {
             align-items: stretch;
             text-align: center;
           .category-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 8px;
             align-items: stretch;
             text-align: center;

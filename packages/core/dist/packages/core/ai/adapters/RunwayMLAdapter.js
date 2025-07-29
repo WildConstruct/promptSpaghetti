@@ -125,7 +125,8 @@ export class RunwayMLAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                } } };
+                }
+            } };
         Promise < RunwayMLGenerationResult > {
             const: runwayOptions, RunwayMLRequestOptions = {
                 text_prompt: prompt,

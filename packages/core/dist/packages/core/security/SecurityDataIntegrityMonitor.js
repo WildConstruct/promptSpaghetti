@@ -8,14 +8,6 @@
  */
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
- > ;
-// Verification
-verification: {
-    verificationRun: boolean;
-    verificationPassed: boolean;
-    residualIssues: number;
-}
-;
 export class SecurityDataIntegrityMonitor extends EventEmitter {
     config;
     // Check management
@@ -205,7 +197,8 @@ constructor(config, (Partial) = {});
                             // Execute the appropriate check type
                             ,
                             // Execute the appropriate check type
-                            switch(check) { }, : .type } }, { case: , 'hash_verification': await, this:  };
+                            switch(check) { }, : .type
+                        } }, { case: , 'hash_verification': await, this:  };
                 }
             }, : .executeHashVerification(check, result),
             break: ,
@@ -225,7 +218,8 @@ constructor(config, (Partial) = {});
             await, this: .executeDigitalSignatureVerification(check, result),
             break: ,
             default: ,
-            throw: new Error(`Unknown check type: ${check.type}`) }
+            throw: new Error(`Unknown check type: ${check.type}`)
+        }
         // Calculate final metrics
         ,
         // Calculate final metrics
@@ -1769,40 +1763,33 @@ View full report: /integrity/reports/${result.executionId}
                                                                                         averageExecutionTime: number,
                                                                                         findingsGenerated: number
                                                                                     } > {
-                                                                                        const: checkMap = new Map < string,
-                                                                                    };
-                                                                                    {
-                                                                                        executions: IntegrityCheckResult;
-                                                                                        name: string;
-                                                                                    }
-                                                                                     > ();
-                                                                                    for (const result of results) {
-                                                                                        if (!checkMap.has(result.checkId)) {
-                                                                                            const check = this.integrityChecks.get(result.checkId);
-                                                                                            checkMap.set(result.checkId, {});
-                                                                                            executions: [],
-                                                                                                name;
-                                                                                            check?.name || 'Unknown Check',
+                                                                                        const: checkMap = new Map(),
+                                                                                        for(, result, of, results) {
+                                                                                            if (!checkMap.has(result.checkId)) {
+                                                                                                const check = this.integrityChecks.get(result.checkId);
+                                                                                                checkMap.set(result.checkId, {});
+                                                                                                executions: [],
+                                                                                                    name;
+                                                                                                check?.name || 'Unknown Check',
+                                                                                                ;
+                                                                                            }
                                                                                             ;
-                                                                                        }
-                                                                                        ;
-                                                                                        checkMap.get(result.checkId).executions.push(result);
-                                                                                        return Array.from(checkMap.entries()).map(([checkId, data]) => {
-                                                                                            const successful = data.executions.filter(e => e.status === 'passed').length;
-                                                                                            const totalFindings = data.executions.reduce((sum, e) => sum + e.findings.length, 0);
-                                                                                            const totalTime = data.executions.reduce((sum, e) => sum + e.performance.executionTime, 0);
-                                                                                            return {
-                                                                                                checkId,
-                                                                                                checkName: data.name,
-                                                                                                executionCount: data.executions.length,
-                                                                                                successRate: successful / data.executions.length,
-                                                                                                averageExecutionTime: totalTime / data.executions.length,
-                                                                                                findingsGenerated: totalFindings,
-                                                                                            };
-                                                                                        });
-                                                                                        summarizeFindings(findings, IntegrityFinding);
-                                                                                        any;
-                                                                                        {
+                                                                                            checkMap.get(result.checkId).executions.push(result);
+                                                                                            return Array.from(checkMap.entries()).map(([checkId, data]) => {
+                                                                                                const successful = data.executions.filter(e => e.status === 'passed').length;
+                                                                                                const totalFindings = data.executions.reduce((sum, e) => sum + e.findings.length, 0);
+                                                                                                const totalTime = data.executions.reduce((sum, e) => sum + e.performance.executionTime, 0);
+                                                                                                return {
+                                                                                                    checkId,
+                                                                                                    checkName: data.name,
+                                                                                                    executionCount: data.executions.length,
+                                                                                                    successRate: successful / data.executions.length,
+                                                                                                    averageExecutionTime: totalTime / data.executions.length,
+                                                                                                    findingsGenerated: totalFindings,
+                                                                                                };
+                                                                                            });
+                                                                                        },
+                                                                                        summarizeFindings(findings) {
                                                                                             const bySeverity = findings.reduce((acc, f) => {
                                                                                                 acc[f.severity] = (acc[f.severity] || 0) + 1;
                                                                                                 return acc;
@@ -1829,217 +1816,216 @@ View full report: /integrity/reports/${result.executionId}
                                                                                                 topAffectedDataTypes: this.getTopAffectedDataTypes(findings),
                                                                                                 resolutionStats
                                                                                             };
-                                                                                            getTopAffectedDataTypes(findings, IntegrityFinding);
-                                                                                            Array < { dataType: string, count: number } > {
-                                                                                                const: dataTypeCount = new Map(),
-                                                                                                for(, finding, of, findings) {
-                                                                                                    const location = finding.affectedData.location;
-                                                                                                    // Extract data type from location (simplified)
-                                                                                                    let dataType = 'unknown';
-                                                                                                    if (location.includes('audit'))
-                                                                                                        dataType = 'audit_logs';
-                                                                                                    else if (location.includes('security'))
-                                                                                                        dataType = 'security_events';
-                                                                                                    else if (location.includes('user'))
-                                                                                                        dataType = 'user_data';
-                                                                                                    dataTypeCount.set(dataType, (dataTypeCount.get(dataType) || 0) + 1);
-                                                                                                    return Array.from(dataTypeCount.entries())
-                                                                                                        .map(([dataType, count]) => ({ dataType, count }))
-                                                                                                        .sort((a, b) => b.count - a.count)
-                                                                                                        .slice(0, 5);
-                                                                                                },
-                                                                                                summarizeRemediations(results) {
-                                                                                                    const remediations = results.flatMap(r => r.remediationResults || []);
-                                                                                                    const successful = remediations.filter(r => r.status === 'success').length;
-                                                                                                    const failed = remediations.filter(r => r.status === 'failed').length;
-                                                                                                    const totalTime = remediations.reduce((sum, r) => sum + (r.endTime - r.startTime), 0);
-                                                                                                    const actionCounts = new Map();
-                                                                                                    for (const remediation of remediations) {
-                                                                                                        const current = actionCounts.get(remediation.actionName) || { count: 0, successful: 0 };
-                                                                                                        current.count++;
-                                                                                                        if (remediation.status === 'success')
-                                                                                                            current.successful++;
-                                                                                                        actionCounts.set(remediation.actionName, current);
-                                                                                                        const topActions = Array.from(actionCounts.entries());
+                                                                                        },
+                                                                                        getTopAffectedDataTypes(findings) {
+                                                                                            const dataTypeCount = new Map();
+                                                                                            for (const finding of findings) {
+                                                                                                const location = finding.affectedData.location;
+                                                                                                // Extract data type from location (simplified)
+                                                                                                let dataType = 'unknown';
+                                                                                                if (location.includes('audit'))
+                                                                                                    dataType = 'audit_logs';
+                                                                                                else if (location.includes('security'))
+                                                                                                    dataType = 'security_events';
+                                                                                                else if (location.includes('user'))
+                                                                                                    dataType = 'user_data';
+                                                                                                dataTypeCount.set(dataType, (dataTypeCount.get(dataType) || 0) + 1);
+                                                                                                return Array.from(dataTypeCount.entries())
+                                                                                                    .map(([dataType, count]) => ({ dataType, count }))
+                                                                                                    .sort((a, b) => b.count - a.count)
+                                                                                                    .slice(0, 5);
+                                                                                            }
+                                                                                        },
+                                                                                        summarizeRemediations(results) {
+                                                                                            const remediations = results.flatMap(r => r.remediationResults || []);
+                                                                                            const successful = remediations.filter(r => r.status === 'success').length;
+                                                                                            const failed = remediations.filter(r => r.status === 'failed').length;
+                                                                                            const totalTime = remediations.reduce((sum, r) => sum + (r.endTime - r.startTime), 0);
+                                                                                            const actionCounts = new Map();
+                                                                                            for (const remediation of remediations) {
+                                                                                                const current = actionCounts.get(remediation.actionName) || { count: 0, successful: 0 };
+                                                                                                current.count++;
+                                                                                                if (remediation.status === 'success')
+                                                                                                    current.successful++;
+                                                                                                actionCounts.set(remediation.actionName, current);
+                                                                                                const topActions = Array.from(actionCounts.entries());
+                                                                                            }
+                                                                                        },
+                                                                                        : 
+                                                                                            .map(([action, stats]) => ({}), action, count, stats.count, successRate, stats.successful / stats.count)
+                                                                                    };
+                                                                                    sort((a, b) => b.count - a.count)
+                                                                                        .slice(0, 5);
+                                                                                    return {
+                                                                                        totalRemediations: remediations.length,
+                                                                                        successfulRemediations: successful,
+                                                                                        failedRemediations: failed,
+                                                                                        averageRemediationTime: remediations.length > 0 ? totalTime / remediations.length : 0,
+                                                                                        topRemediationActions: topActions,
+                                                                                    };
+                                                                                    generateRecommendations((), results, IntegrityCheckResult, findings, IntegrityFinding);
+                                                                                    string;
+                                                                                    {
+                                                                                        const recommendations = [];
+                                                                                        // Check success rate recommendations
+                                                                                        const failedResults = results.filter(r => r.status === 'failed').length;
+                                                                                        if (failedResults / results.length > 0.1) {
+                                                                                            recommendations.push('High check failure rate detected - review check configurations and system health');
+                                                                                            // Finding severity recommendations
+                                                                                            const criticalFindings = findings.filter(f => f.severity === 'critical').length;
+                                                                                            if (criticalFindings > 0) {
+                                                                                                recommendations.push(`${criticalFindings} critical integrity issues require immediate attention`);
+                                                                                            }
+                                                                                            // Performance recommendations
+                                                                                            const avgExecutionTime = results.reduce((sum, r) => sum + r.performance.executionTime, 0) / results.length;
+                                                                                            if (avgExecutionTime > 60000) { // 1 minute
+                                                                                                recommendations.push('Check execution times are high - consider optimizing check parameters or system resources');
+                                                                                                // Category-specific recommendations
+                                                                                                const tamperingFindings = findings.filter(f => f.category === 'tampering').length;
+                                                                                                if (tamperingFindings > 0) {
+                                                                                                    recommendations.push('Data tampering detected - review access controls and audit trails');
+                                                                                                    const corruptionFindings = findings.filter(f => f.category === 'corruption').length;
+                                                                                                    if (corruptionFindings > 0) {
+                                                                                                        recommendations.push('Data corruption detected - check system integrity and backup procedures');
+                                                                                                        return recommendations;
+                                                                                                        assessComplianceStatus(findings, IntegrityFinding);
+                                                                                                        Array < {
+                                                                                                            framework: string,
+                                                                                                            compliant: boolean,
+                                                                                                            issues: string
+                                                                                                        } > {
+                                                                                                            return: this.config.compliance.frameworks.map(framework => { }),
+                                                                                                            const: issues = [],
+                                                                                                            // Framework-specific compliance checks
+                                                                                                            switch(framework) {
+                                                                                                            },
+                                                                                                            case: 'SOX',
+                                                                                                            const: financialFindings = findings.filter(f => ),
+                                                                                                            f, : .affectedData.location.includes('financial') ||
+                                                                                                                f.category === 'business_rule_violation',
+                                                                                                            if(financialFindings) { }, : .length > 0
+                                                                                                        };
+                                                                                                        {
+                                                                                                            issues.push(`${financialFindings.length} financial data integrity issues`);
+                                                                                                        }
+                                                                                                        break;
+                                                                                                        'GDPR';
+                                                                                                        const personalDataFindings = findings.filter(f => );
+                                                                                                        ;
+                                                                                                        f.affectedData.location.includes('user') ||
+                                                                                                            f.affectedData.location.includes('personal');
+                                                                                                        ;
+                                                                                                        if (personalDataFindings.length > 0) {
+                                                                                                            issues.push(`${personalDataFindings.length} personal data integrity issues`);
+                                                                                                        }
+                                                                                                        break;
+                                                                                                        'HIPAA';
+                                                                                                        const healthDataFindings = findings.filter(f => );
+                                                                                                        ;
+                                                                                                        f.affectedData.location.includes('health') ||
+                                                                                                            f.affectedData.location.includes('medical');
+                                                                                                        ;
+                                                                                                        if (healthDataFindings.length > 0) {
+                                                                                                            issues.push(`${healthDataFindings.length} health data integrity issues`);
+                                                                                                        }
+                                                                                                        break;
+                                                                                                        return {
+                                                                                                            framework,
+                                                                                                            compliant: issues.length === 0,
+                                                                                                            issues
+                                                                                                        };
                                                                                                     }
-                                                                                                },
-                                                                                                : 
-                                                                                                    .map(([action, stats]) => ({}), action, count, stats.count, successRate, stats.successful / stats.count)
-                                                                                            };
-                                                                                            sort((a, b) => b.count - a.count)
-                                                                                                .slice(0, 5);
-                                                                                            return {
-                                                                                                totalRemediations: remediations.length,
-                                                                                                successfulRemediations: successful,
-                                                                                                failedRemediations: failed,
-                                                                                                averageRemediationTime: remediations.length > 0 ? totalTime / remediations.length : 0,
-                                                                                                topRemediationActions: topActions,
-                                                                                            };
-                                                                                            generateRecommendations((), results, IntegrityCheckResult, findings, IntegrityFinding);
-                                                                                            string;
-                                                                                            {
-                                                                                                const recommendations = [];
-                                                                                                // Check success rate recommendations
-                                                                                                const failedResults = results.filter(r => r.status === 'failed').length;
-                                                                                                if (failedResults / results.length > 0.1) {
-                                                                                                    recommendations.push('High check failure rate detected - review check configurations and system health');
-                                                                                                    // Finding severity recommendations
-                                                                                                    const criticalFindings = findings.filter(f => f.severity === 'critical').length;
-                                                                                                    if (criticalFindings > 0) {
-                                                                                                        recommendations.push(`${criticalFindings} critical integrity issues require immediate attention`);
-                                                                                                    }
-                                                                                                    // Performance recommendations
-                                                                                                    const avgExecutionTime = results.reduce((sum, r) => sum + r.performance.executionTime, 0) / results.length;
-                                                                                                    if (avgExecutionTime > 60000) { // 1 minute
-                                                                                                        recommendations.push('Check execution times are high - consider optimizing check parameters or system resources');
-                                                                                                        // Category-specific recommendations
-                                                                                                        const tamperingFindings = findings.filter(f => f.category === 'tampering').length;
-                                                                                                        if (tamperingFindings > 0) {
-                                                                                                            recommendations.push('Data tampering detected - review access controls and audit trails');
-                                                                                                            const corruptionFindings = findings.filter(f => f.category === 'corruption').length;
-                                                                                                            if (corruptionFindings > 0) {
-                                                                                                                recommendations.push('Data corruption detected - check system integrity and backup procedures');
-                                                                                                                return recommendations;
-                                                                                                                assessComplianceStatus(findings, IntegrityFinding);
-                                                                                                                Array < {
-                                                                                                                    framework: string,
-                                                                                                                    compliant: boolean,
-                                                                                                                    issues: string
-                                                                                                                } > {
-                                                                                                                    return: this.config.compliance.frameworks.map(framework => { }),
-                                                                                                                    const: issues = [],
-                                                                                                                    // Framework-specific compliance checks
-                                                                                                                    switch(framework) {
-                                                                                                                    },
-                                                                                                                    case: 'SOX',
-                                                                                                                    const: financialFindings = findings.filter(f => ),
-                                                                                                                    f, : .affectedData.location.includes('financial') ||
-                                                                                                                        f.category === 'business_rule_violation',
-                                                                                                                    if(financialFindings) { }, : .length > 0
-                                                                                                                };
-                                                                                                                {
-                                                                                                                    issues.push(`${financialFindings.length} financial data integrity issues`);
-                                                                                                                }
-                                                                                                                break;
-                                                                                                                'GDPR';
-                                                                                                                const personalDataFindings = findings.filter(f => );
-                                                                                                                ;
-                                                                                                                f.affectedData.location.includes('user') ||
-                                                                                                                    f.affectedData.location.includes('personal');
-                                                                                                                ;
-                                                                                                                if (personalDataFindings.length > 0) {
-                                                                                                                    issues.push(`${personalDataFindings.length} personal data integrity issues`);
-                                                                                                                }
-                                                                                                                break;
-                                                                                                                'HIPAA';
-                                                                                                                const healthDataFindings = findings.filter(f => );
-                                                                                                                ;
-                                                                                                                f.affectedData.location.includes('health') ||
-                                                                                                                    f.affectedData.location.includes('medical');
-                                                                                                                ;
-                                                                                                                if (healthDataFindings.length > 0) {
-                                                                                                                    issues.push(`${healthDataFindings.length} health data integrity issues`);
-                                                                                                                }
-                                                                                                                break;
-                                                                                                                return {
-                                                                                                                    framework,
-                                                                                                                    compliant: issues.length === 0,
-                                                                                                                    issues
-                                                                                                                };
-                                                                                                            }
-                                                                                                            ;
-                                                                                                            calculateMetricsForTimeRange(timeRange, { start: number, end: number });
-                                                                                                            DataIntegrityMetrics;
+                                                                                                    ;
+                                                                                                    calculateMetricsForTimeRange(timeRange, { start: number, end: number });
+                                                                                                    DataIntegrityMetrics;
+                                                                                                    {
+                                                                                                        const relevantResults = this.getResultsInTimeRange(timeRange);
+                                                                                                        const relevantFindings = this.getFindingsInTimeRange(timeRange);
+                                                                                                        // Calculate metrics based on time range data
+                                                                                                        const successfulChecks = relevantResults.filter(r => r.status === 'passed').length;
+                                                                                                        const checkSuccessRate = relevantResults.length > 0 ? successfulChecks / relevantResults.length : 1.0;
+                                                                                                        const avgDuration = relevantResults.length > 0;
+                                                                                                        relevantResults.reduce((sum, r) => sum + r.performance.executionTime, 0) / relevantResults.length;
+                                                                                                        0;
+                                                                                                        const findingsBySeverity = relevantFindings.reduce((acc, f) => {
+                                                                                                            acc[f.severity]++;
+                                                                                                            return acc;
+                                                                                                        }, { critical: 0, high: 0, medium: 0, low: 0, info: 0 });
+                                                                                                        const findingsByCategory = relevantFindings.reduce((acc, f) => {
+                                                                                                            acc[f.category]++;
+                                                                                                            return acc;
+                                                                                                        }, {
+                                                                                                            corruption: 0,
+                                                                                                            tampering: 0,
+                                                                                                            inconsistency: 0,
+                                                                                                            missing_data: 0,
+                                                                                                            unauthorized_change: 0,
+                                                                                                            schema_violation: 0,
+                                                                                                            business_rule_violation: 0,
+                                                                                                        });
+                                                                                                        return {
+                                                                                                            ...this.metrics,
+                                                                                                            checksRun: relevantResults.length,
+                                                                                                            checkSuccessRate,
+                                                                                                            averageCheckDuration: avgDuration,
+                                                                                                            totalFindings: relevantFindings.length,
+                                                                                                            findingsBySeverity,
+                                                                                                            findingsByCategory,
+                                                                                                            overallIntegrityScore: this.calculateIntegrityScore(relevantResults, relevantFindings),
+                                                                                                            timeRange
+                                                                                                        };
+                                                                                                        generateCheckId();
+                                                                                                        string;
+                                                                                                        {
+                                                                                                            return `check-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                                                                        }
+                                                                                                        generateExecutionId();
+                                                                                                        string;
+                                                                                                        {
+                                                                                                            return `exec-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+                                                                                                        }
+                                                                                                        generateFindingId();
+                                                                                                        string;
+                                                                                                        {
+                                                                                                            return `finding-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                                                                        }
+                                                                                                        generateReportId();
+                                                                                                        string;
+                                                                                                        {
+                                                                                                            return `report-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+                                                                                                        }
+                                                                                                        generateResultChecksum(result, IntegrityCheckResult);
+                                                                                                        string;
+                                                                                                        {
+                                                                                                            const dataToHash = {
+                                                                                                                checkId: result.checkId,
+                                                                                                                executionId: result.executionId,
+                                                                                                                summary: result.summary,
+                                                                                                                findingsCount: result.findings.length,
+                                                                                                                status: result.status,
+                                                                                                            };
+                                                                                                            return crypto.createHash('sha256')
+                                                                                                                .update(JSON.stringify(dataToHash))
+                                                                                                                .digest('hex');
+                                                                                                            /**
+                                                                                                             * Shutdown the integrity monitor
+                                                                                                             */
+                                                                                                            shutdown();
+                                                                                                            void {
+                                                                                                                : .scheduledChecks.values()
+                                                                                                            };
                                                                                                             {
-                                                                                                                const relevantResults = this.getResultsInTimeRange(timeRange);
-                                                                                                                const relevantFindings = this.getFindingsInTimeRange(timeRange);
-                                                                                                                // Calculate metrics based on time range data
-                                                                                                                const successfulChecks = relevantResults.filter(r => r.status === 'passed').length;
-                                                                                                                const checkSuccessRate = relevantResults.length > 0 ? successfulChecks / relevantResults.length : 1.0;
-                                                                                                                const avgDuration = relevantResults.length > 0;
-                                                                                                                relevantResults.reduce((sum, r) => sum + r.performance.executionTime, 0) / relevantResults.length;
-                                                                                                                0;
-                                                                                                                const findingsBySeverity = relevantFindings.reduce((acc, f) => {
-                                                                                                                    acc[f.severity]++;
-                                                                                                                    return acc;
-                                                                                                                }, { critical: 0, high: 0, medium: 0, low: 0, info: 0 });
-                                                                                                                const findingsByCategory = relevantFindings.reduce((acc, f) => {
-                                                                                                                    acc[f.category]++;
-                                                                                                                    return acc;
-                                                                                                                }, {
-                                                                                                                    corruption: 0,
-                                                                                                                    tampering: 0,
-                                                                                                                    inconsistency: 0,
-                                                                                                                    missing_data: 0,
-                                                                                                                    unauthorized_change: 0,
-                                                                                                                    schema_violation: 0,
-                                                                                                                    business_rule_violation: 0,
-                                                                                                                });
-                                                                                                                return {
-                                                                                                                    ...this.metrics,
-                                                                                                                    checksRun: relevantResults.length,
-                                                                                                                    checkSuccessRate,
-                                                                                                                    averageCheckDuration: avgDuration,
-                                                                                                                    totalFindings: relevantFindings.length,
-                                                                                                                    findingsBySeverity,
-                                                                                                                    findingsByCategory,
-                                                                                                                    overallIntegrityScore: this.calculateIntegrityScore(relevantResults, relevantFindings),
-                                                                                                                    timeRange
-                                                                                                                };
-                                                                                                                generateCheckId();
-                                                                                                                string;
-                                                                                                                {
-                                                                                                                    return `check-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                                                                                }
-                                                                                                                generateExecutionId();
-                                                                                                                string;
-                                                                                                                {
-                                                                                                                    return `exec-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-                                                                                                                }
-                                                                                                                generateFindingId();
-                                                                                                                string;
-                                                                                                                {
-                                                                                                                    return `finding-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                                                                                }
-                                                                                                                generateReportId();
-                                                                                                                string;
-                                                                                                                {
-                                                                                                                    return `report-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-                                                                                                                }
-                                                                                                                generateResultChecksum(result, IntegrityCheckResult);
-                                                                                                                string;
-                                                                                                                {
-                                                                                                                    const dataToHash = {
-                                                                                                                        checkId: result.checkId,
-                                                                                                                        executionId: result.executionId,
-                                                                                                                        summary: result.summary,
-                                                                                                                        findingsCount: result.findings.length,
-                                                                                                                        status: result.status,
-                                                                                                                    };
-                                                                                                                    return crypto.createHash('sha256')
-                                                                                                                        .update(JSON.stringify(dataToHash))
-                                                                                                                        .digest('hex');
-                                                                                                                    /**
-                                                                                                                     * Shutdown the integrity monitor
-                                                                                                                     */
-                                                                                                                    shutdown();
-                                                                                                                    void {
-                                                                                                                        : .scheduledChecks.values()
-                                                                                                                    };
-                                                                                                                    {
-                                                                                                                        clearInterval(timer);
-                                                                                                                        this.scheduledChecks.clear();
-                                                                                                                        // Clear remediation processor
-                                                                                                                        if (this.remediationProcessor) {
-                                                                                                                            clearInterval(this.remediationProcessor);
-                                                                                                                            // Clear data
-                                                                                                                            this.activeExecutions.clear();
-                                                                                                                            this.remediationQueue = [];
-                                                                                                                            this.emit('monitor_shutdown');
-                                                                                                                            console.log('🔐 Security Data Integrity Monitor shutdown complete');
-                                                                                                                            export default SecurityDataIntegrityMonitor;
-                                                                                                                        }
-                                                                                                                    }
+                                                                                                                clearInterval(timer);
+                                                                                                                this.scheduledChecks.clear();
+                                                                                                                // Clear remediation processor
+                                                                                                                if (this.remediationProcessor) {
+                                                                                                                    clearInterval(this.remediationProcessor);
+                                                                                                                    // Clear data
+                                                                                                                    this.activeExecutions.clear();
+                                                                                                                    this.remediationQueue = [];
+                                                                                                                    this.emit('monitor_shutdown');
+                                                                                                                    console.log('🔐 Security Data Integrity Monitor shutdown complete');
+                                                                                                                    export default SecurityDataIntegrityMonitor;
                                                                                                                 }
                                                                                                             }
                                                                                                         }

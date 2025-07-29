@@ -7,11 +7,11 @@ import { VariableSuggestion, templateParser } from './templateParser';
 // Based on screenplay structure: time/setting → actions → locations → characters → cinematography
 
 export interface ZadaTemplateComponent {
-  category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';,
+  category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';
   name: string;
-  description: string;,
+  description: string;
   template: string;
-  variables: string;,
+  variables: string;
   examples: string;
   priority: number;
   dependencies?: string; // Other components this depends on,
@@ -154,9 +154,9 @@ export const ZADA_SCREENPLAY_TEMPLATES: ZadaTemplateComponent = [
 // Modular tagging system: [CAM] for camera, [SUBJ] for subject, [FX] for effects, !FOCAL for priorities
 
 export interface MarsTag {
-  tag: string;,
+  tag: string;
   category: 'camera' | 'subject' | 'effects' | 'focal' | 'setting' | 'mood' | 'technical';
-  description: string;,
+  description: string;
   syntax: string;
   examples: string;
   priority?: number;
@@ -380,9 +380,9 @@ export class AdvancedPromptingMethodology {
   /**
    * Parse MARS tags from template and validate compatibility
    */
-  parseMarsFramework(template: string): {,
+  parseMarsFramework(template: string): {
   tags: MarsTag;
-    conflicts: string;,
+    conflicts: string;
   suggestions: string;
     const foundTags: MarsTag = [];
     const conflicts: string = [];
@@ -411,9 +411,9 @@ export class AdvancedPromptingMethodology {
   /**
    * Create hybrid natural+structured template
    */
-  createHybridTemplate(naturalTemplate: string, marsFramework: boolean = false): {,
+  createHybridTemplate(naturalTemplate: string, marsFramework: boolean = false): {
   hybrid: string;
-  structure: any;,
+  structure: any;
   variables: string;
   // Parse existing template for variables
   const parseResult = templateParser.parseTemplate(naturalTemplate);
@@ -458,7 +458,7 @@ export class AdvancedPromptingMethodology {
    * Create template pattern library with examples
    */
   getTemplatePatternLibrary(): {
-    zada: ZadaTemplateComponent;,
+    zada: ZadaTemplateComponent;
   mars: MarsTag;
     hybridExamples: string;
     const hybridExamples = [;

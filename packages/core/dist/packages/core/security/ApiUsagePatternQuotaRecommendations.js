@@ -1992,54 +1992,43 @@ export var AbuseRuleType;
                                                                                         weight: 1.0,
                                                                                         enabled: true
                                                                                     }],
-                                                                                quotaImpact: {},
-                                                                                quotaMultiplier: 1.5,
-                                                                                adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
-                                                                                maxAdjustment: 100,
-                                                                                minAdjustment: 10,
-                                                                                confidenceThreshold: 0.7,
+                                                                                quotaImpact: {
+                                                                                    quotaMultiplier: 1.5,
+                                                                                    adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
+                                                                                    maxAdjustment: 100,
+                                                                                    minAdjustment: 10,
+                                                                                    confidenceThreshold: 0.7,
+                                                                                },
+                                                                                priority: 1,
+                                                                                enabled: true
                                                                             },
-                                                                            priority, 1,
-                                                                            enabled, true]
-                                                                    };
-                                                                    {
-                                                                        patternId: 'steady_state',
-                                                                            patternName;
-                                                                        'Steady State',
-                                                                            patternType;
-                                                                        UsagePatternType.STEADY_STATE,
-                                                                            detectionRules;
-                                                                        [,
                                                                             {
-                                                                                ruleId: 'steady_detection',
-                                                                                condition: 'steady_state',
-                                                                                threshold: 10,
-                                                                                timeWindow: 60,
-                                                                                weight: 1.0,
+                                                                                patternId: 'steady_state',
+                                                                                patternName: 'Steady State',
+                                                                                patternType: UsagePatternType.STEADY_STATE,
+                                                                                detectionRules: [,
+                                                                                    {
+                                                                                        ruleId: 'steady_detection',
+                                                                                        condition: 'steady_state',
+                                                                                        threshold: 10,
+                                                                                        timeWindow: 60,
+                                                                                        weight: 1.0,
+                                                                                        enabled: true
+                                                                                    }],
+                                                                                quotaImpact: {
+                                                                                    quotaMultiplier: 0.9,
+                                                                                    adjustmentType: QuotaAdjustmentType.DECREASE,
+                                                                                    maxAdjustment: 50,
+                                                                                    minAdjustment: 5,
+                                                                                    confidenceThreshold: 0.8,
+                                                                                },
+                                                                                priority: 3,
                                                                                 enabled: true
                                                                             }],
-                                                                            quotaImpact;
-                                                                        {
-                                                                            quotaMultiplier: 0.9,
-                                                                                adjustmentType;
-                                                                            QuotaAdjustmentType.DECREASE,
-                                                                                maxAdjustment;
-                                                                            50,
-                                                                                minAdjustment;
-                                                                            5,
-                                                                                confidenceThreshold;
-                                                                            0.8,
-                                                                            ;
-                                                                        }
-                                                                        priority: 3,
-                                                                            enabled;
-                                                                        true;
                                                                         quotaAdjustmentRules: [],
-                                                                            fairnessConfig;
-                                                                        {
+                                                                        fairnessConfig: {
                                                                             enableFairnessAnalysis: true,
-                                                                                fairnessMetrics;
-                                                                            [,
+                                                                            fairnessMetrics: [,
                                                                                 {
                                                                                     metricId: 'gini_coefficient',
                                                                                     metricName: 'Gini Coefficient',
@@ -2049,16 +2038,12 @@ export var AbuseRuleType;
                                                                                     weight: 1.0,
                                                                                     enabled: true
                                                                                 }],
-                                                                                redistributionRules;
-                                                                            [],
-                                                                                priorityTiers;
-                                                                            [],
-                                                                            ;
-                                                                        }
+                                                                            redistributionRules: [],
+                                                                            priorityTiers: [],
+                                                                        },
                                                                         abuseDetectionConfig: {
                                                                             enableAbuseDetection: true,
-                                                                                abusePatterns;
-                                                                            [,
+                                                                            abusePatterns: [,
                                                                                 {
                                                                                     patternId: 'rate_abuse',
                                                                                     patternName: 'Rate Abuse',
@@ -2076,10 +2061,8 @@ export var AbuseRuleType;
                                                                                     confidence: 0.8,
                                                                                     enabled: true
                                                                                 }],
-                                                                                detectionSensitivity;
-                                                                            0.7,
-                                                                                responseActions;
-                                                                            [,
+                                                                            detectionSensitivity: 0.7,
+                                                                            responseActions: [,
                                                                                 {
                                                                                     actionId: 'temp_limit',
                                                                                     severity: AbuseSeverity.HIGH,
@@ -2088,33 +2071,27 @@ export var AbuseRuleType;
                                                                                     autoExecute: true,
                                                                                     escalation: false
                                                                                 }],
-                                                                                whitelistRules;
-                                                                            [];
-                                                                        }
+                                                                            whitelistRules: []
+                                                                        },
                                                                         alertingConfig: {
                                                                             enableAlerting: true,
-                                                                                alertThresholds;
-                                                                            [],
-                                                                                notificationChannels;
-                                                                            [],
-                                                                                escalationRules;
-                                                                            [],
-                                                                            ;
+                                                                            alertThresholds: [],
+                                                                            notificationChannels: [],
+                                                                            escalationRules: [],
+                                                                        },
+                                                                        static createHighSensitivityConfig() {
+                                                                            const config = this.createDefaultConfig();
+                                                                            config.abuseDetectionConfig.detectionSensitivity = 0.9;
+                                                                            config.analysisWindow = 12; // Shorter analysis window
+                                                                            config.recommendationInterval = 30; // More frequent recommendations
+                                                                            return config;
+                                                                        },
+                                                                        static createRecommendationEngine(config) {
+                                                                            const fullConfig = { ...this.createDefaultConfig(), ...config };
+                                                                            return new ApiUsagePatternQuotaRecommendations(fullConfig);
+                                                                            export default ApiUsagePatternQuotaRecommendations;
                                                                         }
-                                                                        ;
-                                                                    }
-                                                                }
-                                                                static createHighSensitivityConfig() {
-                                                                    const config = this.createDefaultConfig();
-                                                                    config.abuseDetectionConfig.detectionSensitivity = 0.9;
-                                                                    config.analysisWindow = 12; // Shorter analysis window
-                                                                    config.recommendationInterval = 30; // More frequent recommendations
-                                                                    return config;
-                                                                }
-                                                                static createRecommendationEngine(config) {
-                                                                    const fullConfig = { ...this.createDefaultConfig(), ...config };
-                                                                    return new ApiUsagePatternQuotaRecommendations(fullConfig);
-                                                                    export default ApiUsagePatternQuotaRecommendations;
+                                                                    };
                                                                 }
                                                             }
                                                         } };

@@ -6,13 +6,13 @@ import { Node, Edge } from 'reactflow';
  */
 
 export interface Template {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: string;
-  version: string;,
+  version: string;
   author: string;
-  rating: number;,
+  rating: number;
   reviews: Review;
   graph: GraphData; // Complete graph with annotations,
   metadata: TemplateMetadata;
@@ -21,7 +21,7 @@ export interface Template {
   */
 }
 export interface GraphData {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   annotations: GraphAnnotations;
   /**
@@ -29,32 +29,32 @@ export interface GraphData {
   */
 }
 export interface GraphAnnotations {
-  stickyNotes: StickyNote;,
+  stickyNotes: StickyNote;
   nodeLabels: Record<string, string>;
-  regionGroups: RegionGroup;,
+  regionGroups: RegionGroup;
   connectionLabels: Record<string, string>;
-  metadata: {,
-  author: string;,
+  metadata: {
+  author: string;
   created: string;
-  modified: string;,
+  modified: string;
   version: string;
 };
 }
 export interface StickyNote {
-  id: string;,
+  id: string;
   position: { x: number; y: number };
-  content: string;,
+  content: string;
   color: string;
   size: { width: number; height: number };
-  author: string;,
+  author: string;
   timestamp: string;
 }
 export interface RegionGroup {
-  id: string;,
+  id: string;
   label: string;
-  color: string;,
+  color: string;
   bounds: { x: number; y: number; width: number; height: number };
-  nodeIds: string;,
+  nodeIds: string;
   collapsed: boolean;
 
 /**
@@ -62,10 +62,10 @@ export interface RegionGroup {
  */
 }
 export interface Review {
-  id: string;,
+  id: string;
   author: string;
   rating: number; // 1-5 stars,
-  comment: string;,
+  comment: string;
   timestamp: string;
   helpful: number; // helpful votes,
   /**
@@ -73,13 +73,13 @@ export interface Review {
   */
 }
 export interface TemplateMetadata {
-  created: string;,
+  created: string;
   lastModified: string;
-  usageCount: number;,
+  usageCount: number;
   tags: string;
-  complexity: 'simple' | 'medium' | 'complex';,
+  complexity: 'simple' | 'medium' | 'complex';
   nodeCount: number;
-  estimatedOutputLength: number;,
+  estimatedOutputLength: number;
   isPublic: boolean;
   parentTemplateId?: string; // for version tracking,
   language: string;
@@ -103,7 +103,7 @@ export type TemplateCategory =
  */
 
 export interface TemplateSharing {
-  isPublic: boolean;,
+  isPublic: boolean;
   sharedWith: string; // user IDs,
   permissions: 'view' | 'edit' | 'admin';
   shareUrl?: string;
@@ -126,7 +126,7 @@ export interface TemplateFilter {
   */
 }
 export interface TemplateInstantiationOptions {
-  preservePositions: boolean;,
+  preservePositions: boolean;
   mergeWithCurrent: boolean;
   offsetX?: number;
   offsetY?: number;
@@ -136,11 +136,11 @@ export interface TemplateInstantiationOptions {
   */
 }
 export interface TemplateValidation {
-  isValid: boolean;,
+  isValid: boolean;
   errors: string;
-  warnings: string;,
-  compatibility: {,
-  version: string;,
+  warnings: string;
+  compatibility: {
+  version: string;
   features: string;
   missingFeatures: string;
 };
@@ -150,11 +150,11 @@ export interface TemplateValidation {
  */
 }
 export interface TemplateLibraryState {
-  templates: Template;,
+  templates: Template;
   categories: TemplateCategory;
-  isLoading: boolean;,
+  isLoading: boolean;
   error: string | null;
-  filter: TemplateFilter;,
+  filter: TemplateFilter;
   selectedTemplate: Template | null;
   /**
   * Template operations
@@ -163,12 +163,12 @@ export interface TemplateLibraryState {
 export interface TemplateOperations {
   // CRUD operations
   saveTemplate: (template: Omit<Template, 'id'>) => Promise<Template>;
-  loadTemplate: (id: string) => Promise<Template>;,
-  updateTemplate: (id: string, updates: Partial<Template>) => Promise<Template>;,
+  loadTemplate: (id: string) => Promise<Template>;
+  updateTemplate: (id: string, updates: Partial<Template>) => Promise<Template>;
   deleteTemplate: (id: string) => Promise<void>;
   // Search and browse
-  searchTemplates: (filter: TemplateFilter) => Promise<Template>;,
-  getTemplatesByCategory: (category: TemplateCategory) => Promise<Template>;,
+  searchTemplates: (filter: TemplateFilter) => Promise<Template>;
+  getTemplatesByCategory: (category: TemplateCategory) => Promise<Template>;
   getPopularTemplates: (limit?: number) => Promise<Template>;
   getRecentTemplates: (limit?: number) => Promise<Template>;
   // Instantiation
@@ -176,7 +176,7 @@ export interface TemplateOperations {
   templateId: string,
   options: TemplateInstantiationOptions) => Promise<GraphData>;
   // Sharing
-  shareTemplate: (templateId: string, sharing: TemplateSharing) => Promise<string>;,
+  shareTemplate: (templateId: string, sharing: TemplateSharing) => Promise<string>;
   importSharedTemplate: (shareUrl: string) => Promise<Template>;
   // Reviews
   addReview: (templateId: string, review: Omit<Review, 'id' | 'timestamp'>) => Promise<Review>;
@@ -188,22 +188,22 @@ export interface TemplateOperations {
   */
 }
 export interface TemplateSaveData {
-  name: string;,
+  name: string;
   description: string;
-  category: TemplateCategory;,
+  category: TemplateCategory;
   tags: string;
-  isPublic: boolean;,
+  isPublic: boolean;
   includeAnnotations: boolean;
   /**
   * Template browser UI state
   */
 }
 export interface TemplateBrowserState {
-  isOpen: boolean;,
+  isOpen: boolean;
   viewMode: 'grid' | 'list';
-  selectedCategory: TemplateCategory | 'all';,
+  selectedCategory: TemplateCategory | 'all';
   searchQuery: string;
-  sortBy: TemplateFilter['sortBy'];,
+  sortBy: TemplateFilter['sortBy'];
   showOnlyMyTemplates: boolean;
   previewTemplate: Template | null;
   /**
@@ -220,13 +220,13 @@ export type TemplateEvent =
  */
 
 export interface TemplateCompatibility {
-  supportsNodeTypes: string;,
+  supportsNodeTypes: string;
   requiredFeatures: string;
-  minEditorVersion: string;,
-  annotations: {,
-  stickyNotes: boolean;,
+  minEditorVersion: string;
+  annotations: {
+  stickyNotes: boolean;
   nodeLabels: boolean;
-  regionGroups: boolean;,
+  regionGroups: boolean;
   connectionLabels: boolean;
 };
 }

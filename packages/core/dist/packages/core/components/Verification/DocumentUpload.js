@@ -184,9 +184,9 @@ _jsx("style", { children: `
           width: 100%;
         .upload-area {
           border: 2px dashed #d1d5db;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 40px 20px;
-          text-align: center;,
+          text-align: center;
   cursor: pointer;
           transition: all 0.2s ease;
           background-color: #fafafa;
@@ -196,10 +196,10 @@ _jsx("style", { children: `
           background-color: #f0f9ff;
         .upload-area.drag-active {
           border-color: #3b82f6;
-          background-color: #dbeafe;,
+          background-color: #dbeafe;
   transform: scale(1.02);
         .upload-area.disabled {
-          opacity: 0.5;,
+          opacity: 0.5;
   cursor: not-allowed;
           background-color: #f5f5f5;
         .upload-icon {
@@ -207,23 +207,23 @@ _jsx("style", { children: `
           margin-bottom: 16px;
         .upload-primary {
           font-size: 18px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 8px;
         .upload-secondary {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           margin-bottom: 12px;
         .upload-info {
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
-          max-width: 400px;,
+          max-width: 400px;
   margin: 0 auto;
           line-height: 1.4;
         .upload-errors {
           margin-bottom: 20px;
         .error-message {
-          background-color: #fef2f2;,
+          background-color: #fef2f2;
   color: #dc2626;
           padding: 8px 12px;
           border-radius: 6px;
@@ -236,13 +236,13 @@ _jsx("style", { children: `
         .selected-files h4,
         .existing-files h4 {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 12px 0;
         .file-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 12px;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -253,7 +253,7 @@ _jsx("style", { children: `
           border-color: #d1d5db;
         .file-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   flex: 1;
         .file-icon {
           font-size: 20px;
@@ -261,23 +261,23 @@ _jsx("style", { children: `
         .file-details {
           flex: 1;
         .file-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
           margin-bottom: 2px;
           font-size: 14px;
         .file-size {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .file-date {
-          font-size: 11px;,
+          font-size: 11px;
   color: #9ca3af;
           margin-top: 2px;
         .remove-file {
-          background: none;,
+          background: none;
   border: none;
-          cursor: pointer;,
+          cursor: pointer;
   padding: 4px;
-          border-radius: 4px;,
+          border-radius: 4px;
   transition: background-color 0.2s;
         .remove-file:hover:not(:disabled) {
           background-color: #fee2e2;

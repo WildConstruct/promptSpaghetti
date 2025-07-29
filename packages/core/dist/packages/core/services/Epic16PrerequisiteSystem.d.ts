@@ -39,9 +39,15 @@ export interface PrerequisiteReport {
     };
     categories: Record<string, {
         passed: boolean;
-    }, checks>;
-    number: any;
-    failures: number;
+        checks: number;
+        failures: number;
+    }>;
+    results: Record<string, PrerequisiteResult>;
+    dependencies: PrerequisiteDependencyMap;
+    recommendations: string;
+    reportId: string;
+    generatedAt: Date;
+    version: string;
 }
 export interface PrerequisiteDependencyMap {
     [checkId: string]: {

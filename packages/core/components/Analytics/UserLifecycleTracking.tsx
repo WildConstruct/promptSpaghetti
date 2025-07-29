@@ -31,7 +31,7 @@ import {
 // User lifecycle tracking interfaces
 
 export interface UserLifecycleTrackingProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   lifecycleConfig: LifecycleConfiguration;
   userLifecycleData: UserLifecycleData;
   cohortAnalysisEnabled?: boolean;
@@ -42,26 +42,26 @@ export interface UserLifecycleTrackingProps {
   onExport?: (data: LifecycleTrackingExportData) => void;
 }
 export interface LifecycleConfiguration {
-  stageDefinitions: LifecycleStage;,
+  stageDefinitions: LifecycleStage;
   transitionRules: TransitionRule;
-  healthMetrics: LifecycleHealthMetric;,
+  healthMetrics: LifecycleHealthMetric;
   interventionStrategies: InterventionStrategy;
-  cohortSettings: CohortAnalysisSettings;,
+  cohortSettings: CohortAnalysisSettings;
   predictionModels: LifecyclePredictionModel;
   trackingSettings: LifecycleTrackingSettings;
 }
 export interface LifecycleStage {
-  stageId: string;,
+  stageId: string;
   name: string;
-  description: string;,
+  description: string;
   category: StageCategory;
-  sequence: number;,
+  sequence: number;
   duration: StageDuration;
-  entryConditions: StageCondition;,
+  entryConditions: StageCondition;
   exitConditions: StageCondition;
-  healthIndicators: HealthIndicator;,
+  healthIndicators: HealthIndicator;
   typicalBehaviors: TypicalBehavior;
-  riskFactors: RiskFactor;,
+  riskFactors: RiskFactor;
   opportunities: StageOpportunity;
 }
 export type StageCategory = 
@@ -81,11 +81,11 @@ export interface StageDuration {
   variance: number; // standard deviation,
 }
 export interface StageCondition {
-  conditionId: string;,
+  conditionId: string;
   type: ConditionType;
-  field: string;,
+  field: string;
   operator: ConditionOperator;
-  value: Error;,
+  value: Error;
   weight: number; // 0-1,
   required: boolean;
 }
@@ -109,11 +109,11 @@ export type ConditionOperator =
   | 'not_exists';
 
 export interface HealthIndicator {
-  indicatorId: string;,
+  indicatorId: string;
   name: string;
-  type: IndicatorType;,
+  type: IndicatorType;
   measurement: IndicatorMeasurement;
-  thresholds: IndicatorThreshold;,
+  thresholds: IndicatorThreshold;
   weight: number; // 0-1,
 }
 export type IndicatorType = 
@@ -125,7 +125,7 @@ export type IndicatorType =
   | 'risk_score';
 
 export interface IndicatorMeasurement {
-  metric: string;,
+  metric: string;
   aggregation: AggregationMethod;
   timeWindow: number; // days,
   normalization: NormalizationMethod;
@@ -134,7 +134,7 @@ export type AggregationMethod = 'sum' | 'average' | 'median' | 'max' | 'min' | '
 export type NormalizationMethod = 'none' | 'z_score' | 'min_max' | 'percentile' | 'log_transform';
 
 export interface IndicatorThreshold {
-  level: ThresholdLevel;,
+  level: ThresholdLevel;
   value: number;
   action: ThresholdAction;
 }
@@ -142,26 +142,26 @@ export type ThresholdLevel = 'critical' | 'warning' | 'good' | 'excellent';
 export type ThresholdAction = 'alert' | 'intervene' | 'optimize' | 'celebrate';
 
 export interface TypicalBehavior {
-  behaviorId: string;,
+  behaviorId: string;
   name: string;
-  description: string;,
+  description: string;
   frequency: number; // 0-1,
   importance: number; // 0-1,
   indicators: BehaviorIndicator;
 }
 export interface BehaviorIndicator {
-  indicator: string;,
+  indicator: string;
   expectedValue: number;
-  variance: number;,
+  variance: number;
   correlation: number; // -1 to 1,
 }
 export interface RiskFactor {
-  factorId: string;,
+  factorId: string;
   name: string;
-  description: string;,
+  description: string;
   severity: RiskSeverity;
   likelihood: number; // 0-1,
-  impact: RiskImpact;,
+  impact: RiskImpact;
   mitigation: MitigationStrategy;
 }
 export type RiskSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -173,21 +173,21 @@ export interface RiskImpact {
   retentionRisk: number; // 0-1,
 }
 export interface MitigationStrategy {
-  strategyId: string;,
+  strategyId: string;
   name: string;
-  description: string;,
+  description: string;
   effectiveness: number; // 0-1,
-  effort: EffortLevel;,
+  effort: EffortLevel;
   timeline: string;
 }
 export type EffortLevel = 'low' | 'medium' | 'high' | 'very_high';
 
 export interface StageOpportunity {
-  opportunityId: string;,
+  opportunityId: string;
   name: string;
-  description: string;,
+  description: string;
   type: OpportunityType;
-  potential: OpportunityPotential;,
+  potential: OpportunityPotential;
   requirements: OpportunityRequirement;
 }
 export type OpportunityType = 
@@ -207,9 +207,9 @@ export interface OpportunityPotential {
   confidence: number; // 0-1,
 }
 export interface OpportunityRequirement {
-  requirement: string;,
+  requirement: string;
   complexity: ComplexityLevel;
-  resources: string;,
+  resources: string;
   timeline: string;
 }
 export type ComplexityLevel = 'simple' | 'moderate' | 'complex' | 'very_complex';
@@ -217,19 +217,19 @@ export type ComplexityLevel = 'simple' | 'moderate' | 'complex' | 'very_complex'
 // Transition rules and analysis
 
 export interface TransitionRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  fromStage: string;,
+  fromStage: string;
   toStage: string;
-  conditions: TransitionCondition;,
+  conditions: TransitionCondition;
   probability: TransitionProbability;
-  triggers: TransitionTrigger;,
+  triggers: TransitionTrigger;
   blockers: TransitionBlocker;
 }
 export interface TransitionCondition {
-  conditionId: string;,
+  conditionId: string;
   type: ConditionType;
-  requirement: string;,
+  requirement: string;
   threshold: number;
   weight: number; // 0-1,
   temporal: TemporalRequirement;
@@ -242,17 +242,17 @@ export interface TemporalRequirement {
 }
 export interface TransitionProbability {
   baseRate: number; // 0-1,
-  factors: ProbabilityFactor;,
+  factors: ProbabilityFactor;
   timeDependent: boolean;
   probabilityFunction: ProbabilityFunction;
 }
 export interface ProbabilityFactor {
-  factor: string;,
+  factor: string;
   influence: number; // -1 to 1,
   confidence: number; // 0-1,
 }
 export interface ProbabilityFunction {
-  type: FunctionType;,
+  type: FunctionType;
   parameters: FunctionParameters;
 }
 export type FunctionType = 'linear' | 'exponential' | 'logarithmic' | 'sigmoid' | 'custom';
@@ -261,9 +261,9 @@ export interface FunctionParameters {
   [key: string]: number;
 }
 export interface TransitionTrigger {
-  triggerId: string;,
+  triggerId: string;
   name: string;
-  type: TriggerType;,
+  type: TriggerType;
   conditions: TriggerCondition;
   effectiveness: number; // 0-1,
 }
@@ -276,41 +276,41 @@ export type TriggerType =
   | 'intervention_response';
 
 export interface TriggerCondition {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
-  value: Error;,
+  value: Error;
   persistence: number; // days condition must persist,
 }
 export interface TransitionBlocker {
-  blockerId: string;,
+  blockerId: string;
   name: string;
-  description: string;,
+  description: string;
   severity: BlockerSeverity;
-  detection: BlockerDetection;,
+  detection: BlockerDetection;
   resolution: BlockerResolution;
 }
 export type BlockerSeverity = 'minor' | 'moderate' | 'major' | 'critical';
 
 export interface BlockerDetection {
-  indicators: string;,
+  indicators: string;
   threshold: number;
   timeWindow: number; // days,
   confidence: number; // 0-1,
 }
 export interface BlockerResolution {
-  resolutionId: string;,
+  resolutionId: string;
   method: string;
   effectiveness: number; // 0-1,
-  effort: EffortLevel;,
+  effort: EffortLevel;
   timeline: string;
   // Health metrics and assessment
 }
 export interface LifecycleHealthMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  description: string;,
+  description: string;
   category: HealthCategory;
-  calculation: HealthCalculation;,
+  calculation: HealthCalculation;
   benchmarks: HealthBenchmark;
   trends: TrendAnalysis;
 }
@@ -322,21 +322,21 @@ export type HealthCategory =
   | 'retention_health';
 
 export interface HealthCalculation {
-  formula: string;,
+  formula: string;
   inputs: HealthInput;
-  aggregation: AggregationMethod;,
+  aggregation: AggregationMethod;
   normalization: NormalizationMethod;
   weighting: WeightingScheme;
 }
 export interface HealthInput {
-  inputId: string;,
+  inputId: string;
   name: string;
-  source: string;,
+  source: string;
   weight: number; // 0-1,
   transformation: InputTransformation;
 }
 export interface InputTransformation {
-  method: TransformationMethod;,
+  method: TransformationMethod;
   parameters: TransformationParameters;
 }
 export type TransformationMethod = 
@@ -353,32 +353,32 @@ export interface TransformationParameters {
 export type WeightingScheme = 'equal' | 'performance_based' | 'dynamic' | 'user_defined';
 
 export interface HealthBenchmark {
-  benchmarkId: string;,
+  benchmarkId: string;
   name: string;
-  type: BenchmarkType;,
+  type: BenchmarkType;
   value: number;
-  percentile: number;,
+  percentile: number;
   context: BenchmarkContext;
 }
 export type BenchmarkType = 'industry' | 'company' | 'cohort' | 'historical' | 'target';
 
 export interface BenchmarkContext {
-  segment: string;,
+  segment: string;
   timeframe: string;
-  conditions: string;,
+  conditions: string;
   sampleSize: number;
 }
 export interface TrendAnalysis {
-  direction: TrendDirection;,
+  direction: TrendDirection;
   strength: number; // 0-1,
   consistency: number; // 0-1,
-  seasonality: SeasonalityPattern;,
+  seasonality: SeasonalityPattern;
   forecast: TrendForecast;
 }
 export type TrendDirection = 'improving' | 'declining' | 'stable' | 'volatile';
 
 export interface SeasonalityPattern {
-  pattern: string;,
+  pattern: string;
   amplitude: number;
   period: number; // days,
   confidence: number; // 0-1,
@@ -389,42 +389,42 @@ export interface TrendForecast {
   longTerm: ForecastPeriod; // 365 days,
 }
 export interface ForecastPeriod {
-  predictedValue: number;,
+  predictedValue: number;
   confidence: number; // 0-1
   range: { min: number; max: number };
   factors: ForecastFactor;
 }
 export interface ForecastFactor {
-  factor: string;,
+  factor: string;
   influence: number; // -1 to 1,
   certainty: number; // 0-1,
   // Intervention strategies
 }
 export interface InterventionStrategy {
-  strategyId: string;,
+  strategyId: string;
   name: string;
-  description: string;,
+  description: string;
   targetStages: string;
-  targetConditions: InterventionCondition;,
+  targetConditions: InterventionCondition;
   interventions: Intervention;
-  effectiveness: InterventionEffectiveness;,
+  effectiveness: InterventionEffectiveness;
   implementation: InterventionImplementation;
 }
 export interface InterventionCondition {
-  condition: string;,
+  condition: string;
   threshold: number;
-  priority: InterventionPriority;,
+  priority: InterventionPriority;
   urgency: InterventionUrgency;
 }
 export type InterventionPriority = 'low' | 'medium' | 'high' | 'critical';
 export type InterventionUrgency = 'immediate' | 'within_day' | 'within_week' | 'within_month';
 
 export interface Intervention {
-  interventionId: string;,
+  interventionId: string;
   name: string;
-  type: InterventionType;,
+  type: InterventionType;
   delivery: InterventionDelivery;
-  content: InterventionContent;,
+  content: InterventionContent;
   timing: InterventionTiming;
   personalization: InterventionPersonalization;
 }
@@ -439,13 +439,13 @@ export type InterventionType =
   | 'gamification';
 
 export interface InterventionDelivery {
-  channels: DeliveryChannel;,
+  channels: DeliveryChannel;
   frequency: DeliveryFrequency;
-  duration: DeliveryDuration;,
+  duration: DeliveryDuration;
   fallback: FallbackStrategy;
 }
 export interface DeliveryChannel {
-  channel: ChannelType;,
+  channel: ChannelType;
   priority: number;
   effectiveness: number; // 0-1,
   constraints: ChannelConstraint;
@@ -461,12 +461,12 @@ export type ChannelType =
   | 'human_outreach';
 
 export interface ChannelConstraint {
-  constraint: string;,
+  constraint: string;
   value: Error;
   impact: number; // 0-1,
 }
 export interface DeliveryFrequency {
-  initial: FrequencySpec;,
+  initial: FrequencySpec;
   ongoing: FrequencySpec;
   escalation: EscalationSpec;
 }
@@ -476,16 +476,16 @@ export interface FrequencySpec {
   maximum: number; // max messages in period,
 }
 export interface EscalationSpec {
-  triggers: EscalationTrigger;,
+  triggers: EscalationTrigger;
   changes: EscalationChange;
 }
 export interface EscalationTrigger {
-  condition: string;,
+  condition: string;
   threshold: number;
   timeframe: number; // days,
 }
 export interface EscalationChange {
-  aspect: 'frequency' | 'channel' | 'content' | 'urgency';,
+  aspect: 'frequency' | 'channel' | 'content' | 'urgency';
   modification: string;
   factor: number;
 }
@@ -495,52 +495,52 @@ export interface DeliveryDuration {
   expiration: number; // days message remains valid,
 }
 export interface FallbackStrategy {
-  enabled: boolean;,
+  enabled: boolean;
   triggers: FallbackTrigger;
   alternatives: AlternativeIntervention;
 }
 export interface FallbackTrigger {
-  condition: string;,
+  condition: string;
   threshold: number;
   timeframe: number; // hours,
 }
 export interface AlternativeIntervention {
-  interventionId: string;,
+  interventionId: string;
   probability: number; // 0-1,
   effectiveness: number; // 0-1,
 }
 export interface InterventionContent {
-  templates: ContentTemplate;,
+  templates: ContentTemplate;
   personalization: ContentPersonalization;
-  localization: ContentLocalization;,
+  localization: ContentLocalization;
   dynamic: DynamicContent;
 }
 export interface ContentTemplate {
-  templateId: string;,
+  templateId: string;
   name: string;
-  type: ContentType;,
+  type: ContentType;
   content: string;
-  variables: ContentVariable;,
+  variables: ContentVariable;
   effectiveness: number; // 0-1,
 }
 export type ContentType = 'text' | 'html' | 'rich_text' | 'interactive' | 'multimedia';
 
 export interface ContentVariable {
-  variable: string;,
+  variable: string;
   source: string;
-  fallback: string;,
+  fallback: string;
   format: string;
 }
 export interface ContentPersonalization {
-  enabled: boolean;,
+  enabled: boolean;
   factors: PersonalizationFactor;
-  rules: PersonalizationRule;,
+  rules: PersonalizationRule;
   testing: PersonalizationTesting;
 }
 export interface PersonalizationFactor {
-  factor: string;,
+  factor: string;
   weight: number; // 0-1,
-  source: string;,
+  source: string;
   type: FactorType;
 }
 export type FactorType = 
@@ -552,36 +552,36 @@ export type FactorType =
   | 'predictive';
 
 export interface PersonalizationRule {
-  ruleId: string;,
+  ruleId: string;
   condition: string;
-  modification: string;,
+  modification: string;
   impact: number; // 0-1,
 }
 export interface PersonalizationTesting {
-  enabled: boolean;,
+  enabled: boolean;
   method: TestingMethod;
-  variants: number;,
+  variants: number;
   duration: number; // days,
   metrics: string;
 }
 export type TestingMethod = 'ab_test' | 'multivariate' | 'bandit' | 'personalized';
 
 export interface ContentLocalization {
-  enabled: boolean;,
+  enabled: boolean;
   languages: string;
-  regions: string;,
+  regions: string;
   culturalAdaptation: boolean;
 }
 export interface DynamicContent {
-  enabled: boolean;,
+  enabled: boolean;
   sources: DynamicSource;
   updateFrequency: number; // hours,
   caching: CachingStrategy;
 }
 export interface DynamicSource {
-  sourceId: string;,
+  sourceId: string;
   type: SourceType;
-  endpoint: string;,
+  endpoint: string;
   parameters: SourceParameters;
 }
 export type SourceType = 'api' | 'database' | 'file' | 'real_time_feed';
@@ -590,100 +590,100 @@ export interface SourceParameters {
   [key: string]: unknown;
 }
 export interface CachingStrategy {
-  enabled: boolean;,
+  enabled: boolean;
   duration: number; // hours,
   invalidation: InvalidationRule;
 }
 export interface InvalidationRule {
-  trigger: string;,
-  action: 'refresh' | 'clear' | 'validate';
-}
+  trigger: string;
+  action: 'refresh' | 'clear' | 'validate'
+  }
 export interface InterventionTiming {
-  triggers: TimingTrigger;,
+  triggers: TimingTrigger;
   optimal: OptimalTiming;
   constraints: TimingConstraint;
 }
 export interface TimingTrigger {
-  triggerId: string;,
+  triggerId: string;
   type: TriggerType;
-  conditions: TriggerCondition;,
+  conditions: TriggerCondition;
   delay: number; // minutes,
 }
 export interface OptimalTiming {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: TimingAlgorithm;
-  factors: TimingFactor;,
+  factors: TimingFactor;
   learning: TimingLearning;
 }
 export type TimingAlgorithm = 'rule_based' | 'ml_optimized' | 'behavioral_prediction' | 'multi_armed_bandit';
 
 export interface TimingFactor {
-  factor: string;,
+  factor: string;
   weight: number; // 0-1,
   type: FactorType;
 }
 export interface TimingLearning {
-  enabled: boolean;,
+  enabled: boolean;
   feedbackLoop: boolean;
   adaptationRate: number; // 0-1,
   performanceMetrics: string;
 }
 export interface TimingConstraint {
-  constraint: string;,
+  constraint: string;
   value: Error;
   flexibility: number; // 0-1,
 }
 export interface InterventionPersonalization {
-  userProfile: UserProfilePersonalization;,
+  userProfile: UserProfilePersonalization;
   contextual: ContextualPersonalization;
   adaptive: AdaptivePersonalization;
 }
 export interface UserProfilePersonalization {
-  demographics: boolean;,
+  demographics: boolean;
   preferences: boolean;
-  history: boolean;,
+  history: boolean;
   behavior: boolean;
   lifecycle: boolean;
 }
 export interface ContextualPersonalization {
-  device: boolean;,
+  device: boolean;
   location: boolean;
-  time: boolean;,
+  time: boolean;
   environment: boolean;
   session: boolean;
 }
 export interface AdaptivePersonalization {
-  enabled: boolean;,
+  enabled: boolean;
   learningRate: number; // 0-1,
-  feedbackIncorporation: boolean;,
+  feedbackIncorporation: boolean;
   performanceTracking: boolean;
 }
 export interface InterventionEffectiveness {
-  overall: EffectivenessMetric;,
+  overall: EffectivenessMetric;
   byStage: StageEffectiveness;
-  bySegment: SegmentEffectiveness;,
+  bySegment: SegmentEffectiveness;
   temporal: TemporalEffectiveness;
 }
 export interface EffectivenessMetric {
-  metric: string;,
+  metric: string;
   value: number;
   confidence: number; // 0-1,
-  sampleSize: number;,
+  sampleSize: number;
   timeframe: string;
 }
 export interface StageEffectiveness {
-  stageId: string;,
+  stageId: string;
   stageName: string;
-  effectiveness: EffectivenessMetric;,
+  effectiveness: EffectivenessMetric;
   specificImpacts: SpecificImpact;
 }
 export interface SpecificImpact {
-  aspect: string;,
+  aspect: string;
   impact: number; // -1 to 1,
   significance: number; // 0-1,
 }
 export interface SegmentEffectiveness {
-  segment: string;,
+  segment: string;
   effectiveness: EffectivenessMetric;
   differentialImpact: number; // compared to baseline,
 }
@@ -694,99 +694,99 @@ export interface TemporalEffectiveness {
   longTerm: EffectivenessMetric; // 1+ months,
 }
 export interface InterventionImplementation {
-  requirements: ImplementationRequirement;,
+  requirements: ImplementationRequirement;
   resources: ImplementationResource;
-  timeline: ImplementationTimeline;,
+  timeline: ImplementationTimeline;
   risks: ImplementationRisk;
 }
 export interface ImplementationRequirement {
-  requirement: string;,
+  requirement: string;
   type: RequirementType;
-  priority: RequirementPriority;,
+  priority: RequirementPriority;
   complexity: ComplexityLevel;
 }
 export type RequirementType = 'technical' | 'operational' | 'legal' | 'business' | 'creative';
 export type RequirementPriority = 'must_have' | 'should_have' | 'could_have' | 'nice_to_have';
 
 export interface ImplementationResource {
-  resource: string;,
+  resource: string;
   type: ResourceType;
-  quantity: number;,
+  quantity: number;
   duration: number; // days,
   cost: number;
 }
 export type ResourceType = 'human' | 'technical' | 'financial' | 'external' | 'infrastructure';
 
 export interface ImplementationTimeline {
-  phases: ImplementationPhase;,
+  phases: ImplementationPhase;
   totalDuration: number; // days,
-  criticalPath: CriticalPathItem;,
+  criticalPath: CriticalPathItem;
   milestones: Milestone;
 }
 export interface ImplementationPhase {
-  phaseId: string;,
+  phaseId: string;
   name: string;
   duration: number; // days,
-  dependencies: string;,
+  dependencies: string;
   deliverables: string;
   resources: string;
 }
 export interface CriticalPathItem {
-  item: string;,
+  item: string;
   duration: number; // days,
-  dependencies: string;,
+  dependencies: string;
   buffer: number; // days,
 }
 export interface Milestone {
-  milestoneId: string;,
+  milestoneId: string;
   name: string;
   date: number; // timestamp,
-  criteria: string;,
+  criteria: string;
   importance: MilestoneImportance;
 }
 export type MilestoneImportance = 'minor' | 'major' | 'critical' | 'go_no_go';
 
 export interface ImplementationRisk {
-  riskId: string;,
+  riskId: string;
   description: string;
   probability: number; // 0-1,
-  impact: RiskImpactLevel;,
+  impact: RiskImpactLevel;
   mitigation: RiskMitigation;
 }
 export type RiskImpactLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface RiskMitigation {
-  strategy: string;,
+  strategy: string;
   effectiveness: number; // 0-1,
-  cost: number;,
+  cost: number;
   timeline: string;
   // Cohort analysis settings
 }
 export interface CohortAnalysisSettings {
-  enabled: boolean;,
+  enabled: boolean;
   cohortDefinitions: CohortDefinition;
-  analysisTypes: CohortAnalysisType;,
+  analysisTypes: CohortAnalysisType;
   comparisonMetrics: CohortMetric;
   timeHorizons: TimeHorizon;
 }
 export interface CohortDefinition {
-  cohortId: string;,
+  cohortId: string;
   name: string;
-  description: string;,
+  description: string;
   criteria: CohortCriteria;
-  size: CohortSize;,
+  size: CohortSize;
   characteristics: CohortCharacteristics;
 }
 export interface CohortCriteria {
-  rules: CohortRule;,
+  rules: CohortRule;
   timeframe: CohortTimeframe;
-  inclusionConditions: InclusionCondition;,
+  inclusionConditions: InclusionCondition;
   exclusionConditions: ExclusionCondition;
 }
 export interface CohortRule {
-  ruleId: string;,
+  ruleId: string;
   field: string;
-  operator: ConditionOperator;,
+  operator: ConditionOperator;
   value: Error;
   weight: number; // 0-1,
 }
@@ -798,34 +798,34 @@ export interface CohortTimeframe {
 export type TimePeriod = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
 export interface InclusionCondition {
-  condition: string;,
+  condition: string;
   required: boolean;
   weight: number; // 0-1,
 }
 export interface ExclusionCondition {
-  condition: string;,
+  condition: string;
   reason: string;
   strictness: ConditionStrictness;
 }
 export type ConditionStrictness = 'strict' | 'moderate' | 'flexible';
 
 export interface CohortSize {
-  target: number;,
+  target: number;
   minimum: number;
   maximum: number;
   actual?: number;
 }
 export interface CohortCharacteristics {
-  demographics: DemographicProfile;,
+  demographics: DemographicProfile;
   behaviors: BehaviorProfile;
-  lifecycle: LifecycleProfile;,
+  lifecycle: LifecycleProfile;
   performance: PerformanceProfile;
 }
 export interface DemographicProfile {
   [key: string]: unknown;
 }
 export interface BehaviorProfile {
-  primaryBehaviors: string;,
+  primaryBehaviors: string;
   engagementLevel: number; // 0-1,
   activityLevel: number; // 0-1,
   preferences: string;
@@ -833,7 +833,7 @@ export interface BehaviorProfile {
 export interface LifecycleProfile {
   averageStageProgression: number; // days,
   completionRate: number; // 0-1,
-  commonPathways: string;,
+  commonPathways: string;
   riskFactors: string;
 }
 export interface PerformanceProfile {
@@ -850,31 +850,31 @@ export type CohortAnalysisType =
   | 'comparative_analysis';
 
 export interface CohortMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  description: string;,
+  description: string;
   calculation: MetricCalculation;
   benchmarks: MetricBenchmark;
 }
 export interface MetricCalculation {
-  formula: string;,
+  formula: string;
   inputs: string;
-  aggregation: AggregationMethod;,
+  aggregation: AggregationMethod;
   timeWindow: number; // days,
 }
 export interface MetricBenchmark {
-  benchmarkType: BenchmarkType;,
+  benchmarkType: BenchmarkType;
   value: number;
   context: string;
 }
 export interface TimeHorizon {
-  horizonId: string;,
+  horizonId: string;
   name: string;
   duration: number; // days,
   checkpoints: TimeCheckpoint;
 }
 export interface TimeCheckpoint {
-  day: number;,
+  day: number;
   metrics: string;
   significance: CheckpointSignificance;
 }
@@ -883,13 +883,13 @@ export type CheckpointSignificance = 'routine' | 'important' | 'critical' | 'mil
 // Prediction models
 
 export interface LifecyclePredictionModel {
-  modelId: string;,
+  modelId: string;
   name: string;
-  description: string;,
+  description: string;
   type: PredictionModelType;
-  targets: PredictionTarget;,
+  targets: PredictionTarget;
   features: ModelFeature;
-  performance: ModelPerformance;,
+  performance: ModelPerformance;
   deployment: ModelDeployment;
 }
 export type PredictionModelType = 
@@ -901,9 +901,9 @@ export type PredictionModelType =
   | 'intervention_response';
 
 export interface PredictionTarget {
-  targetId: string;,
+  targetId: string;
   name: string;
-  type: TargetType;,
+  type: TargetType;
   timeHorizon: number; // days,
   accuracy: PredictionAccuracy;
 }
@@ -917,9 +917,9 @@ export interface PredictionAccuracy {
   auc: number; // 0-1,
 }
 export interface ModelFeature {
-  featureId: string;,
+  featureId: string;
   name: string;
-  type: FeatureDataType;,
+  type: FeatureDataType;
   importance: number; // 0-1,
   correlation: number; // -1 to 1,
   stability: number; // 0-1,
@@ -933,9 +933,9 @@ export type FeatureDataType =
   | 'embedded';
 
 export interface ModelPerformance {
-  trainingPerformance: PerformanceMetrics;,
+  trainingPerformance: PerformanceMetrics;
   validationPerformance: PerformanceMetrics;
-  testPerformance: PerformanceMetrics;,
+  testPerformance: PerformanceMetrics;
   productionPerformance: ProductionPerformance;
 }
 export interface PerformanceMetrics {
@@ -948,43 +948,43 @@ export interface PerformanceMetrics {
   mae?: number; // for regression,
 }
 export interface ProductionPerformance {
-  currentPerformance: PerformanceMetrics;,
+  currentPerformance: PerformanceMetrics;
   performanceTrend: PerformanceTrend;
-  dataGrift: DataDrift;,
+  dataGrift: DataDrift;
   modelDrift: ModelDrift;
 }
 export interface PerformanceTrend {
-  direction: TrendDirection;,
+  direction: TrendDirection;
   rate: number; // change per day,
   significance: number; // 0-1,
   timeframe: number; // days,
 }
 export interface DataDrift {
-  detected: boolean;,
+  detected: boolean;
   severity: DriftSeverity;
-  affectedFeatures: string;,
+  affectedFeatures: string;
   detectionDate: number; // timestamp,
 }
 export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export interface ModelDrift {
-  detected: boolean;,
+  detected: boolean;
   severity: DriftSeverity;
   impactedPredictions: number; // percentage,
   recommendedActions: string;
 }
 export interface ModelDeployment {
-  environment: DeploymentEnvironment;,
+  environment: DeploymentEnvironment;
   version: string;
   deployedAt: number; // timestamp,
   lastUpdated: number; // timestamp,
-  configuration: DeploymentConfiguration;,
+  configuration: DeploymentConfiguration;
   monitoring: ModelMonitoring;
 }
 export type DeploymentEnvironment = 'development' | 'staging' | 'production' | 'canary';
 
 export interface DeploymentConfiguration {
-  batchSize: number;,
+  batchSize: number;
   updateFrequency: number; // hours,
   fallbackModel?: string;
   confidenceThreshold: number; // 0-1,
@@ -993,13 +993,13 @@ export interface DeploymentConfiguration {
 export type ExplanabilityLevel = 'none' | 'basic' | 'detailed' | 'comprehensive';
 
 export interface ModelMonitoring {
-  enabled: boolean;,
+  enabled: boolean;
   metrics: MonitoringMetric;
-  alerts: MonitoringAlert;,
+  alerts: MonitoringAlert;
   reporting: MonitoringReporting;
 }
 export interface MonitoringMetric {
-  metric: string;,
+  metric: string;
   threshold: number;
   frequency: number; // hours,
   action: MonitoringAction;
@@ -1007,28 +1007,28 @@ export interface MonitoringMetric {
 export type MonitoringAction = 'log' | 'alert' | 'rollback' | 'retrain';
 
 export interface MonitoringAlert {
-  alertId: string;,
+  alertId: string;
   condition: string;
-  severity: AlertSeverity;,
+  severity: AlertSeverity;
   recipients: string;
   escalation: AlertEscalation;
 }
 export type AlertSeverity = 'info' | 'warning' | 'error' | 'critical';
 
 export interface AlertEscalation {
-  enabled: boolean;,
+  enabled: boolean;
   levels: EscalationLevel;
   timeouts: number; // minutes for each level,
 }
 export interface EscalationLevel {
-  level: number;,
+  level: number;
   recipients: string;
   actions: string;
 }
 export interface MonitoringReporting {
-  enabled: boolean;,
+  enabled: boolean;
   frequency: ReportingFrequency;
-  recipients: string;,
+  recipients: string;
   format: ReportFormat;
   content: ReportContent;
 }
@@ -1036,20 +1036,20 @@ export type ReportingFrequency = 'daily' | 'weekly' | 'monthly' | 'on_demand';
 export type ReportFormat = 'email' | 'dashboard' | 'pdf' | 'json' | 'api';
 
 export interface ReportContent {
-  sections: ReportSection;,
+  sections: ReportSection;
   visualizations: ReportVisualization;
-  insights: boolean;,
+  insights: boolean;
   recommendations: boolean;
 }
 export interface ReportSection {
-  section: string;,
+  section: string;
   content: string;
   priority: SectionPriority;
 }
 export type SectionPriority = 'high' | 'medium' | 'low';
 
 export interface ReportVisualization {
-  type: VisualizationType;,
+  type: VisualizationType;
   data: string;
   configuration: VisualizationConfiguration;
 }
@@ -1063,17 +1063,17 @@ export type VisualizationType =
   | 'box_plot';
 
 export interface VisualizationConfiguration {
-  title: string;,
+  title: string;
   axes: AxisConfiguration;
-  colors: ColorScheme;,
+  colors: ColorScheme;
   interactive: boolean;
 }
 export interface AxisConfiguration {
-  x: AxisSettings;,
+  x: AxisSettings;
   y: AxisSettings;
 }
 export interface AxisSettings {
-  label: string;,
+  label: string;
   scale: ScaleType;
   range?: { min: number; max: number };
 }
@@ -1083,11 +1083,11 @@ export type ColorScheme = 'default' | 'viridis' | 'plasma' | 'categorical' | 'cu
 // Tracking settings
 
 export interface LifecycleTrackingSettings {
-  realTimeTracking: boolean;,
+  realTimeTracking: boolean;
   batchUpdateFrequency: number; // hours,
-  dataRetention: DataRetentionSettings;,
+  dataRetention: DataRetentionSettings;
   privacy: PrivacySettings;
-  performance: PerformanceSettings;,
+  performance: PerformanceSettings;
   integration: IntegrationSettings;
 }
 export interface DataRetentionSettings {
@@ -1098,55 +1098,55 @@ export interface DataRetentionSettings {
   compliance: ComplianceRequirement;
 }
 export interface ComplianceRequirement {
-  regulation: string;,
+  regulation: string;
   retention: number; // days,
-  anonymization: boolean;,
+  anonymization: boolean;
   deletionTriggers: string;
 }
 export interface PrivacySettings {
-  consentRequired: boolean;,
+  consentRequired: boolean;
   dataMinimization: boolean;
-  anonymization: AnonymizationSettings;,
+  anonymization: AnonymizationSettings;
   accessControl: AccessControlSettings;
 }
 export interface AnonymizationSettings {
-  enabled: boolean;,
+  enabled: boolean;
   method: AnonymizationMethod;
-  fields: string;,
+  fields: string;
   preserveUtility: boolean;
 }
 export type AnonymizationMethod = 'hashing' | 'pseudonymization' | 'generalization' | 'suppression';
 
 export interface AccessControlSettings {
-  roleBasedAccess: boolean;,
+  roleBasedAccess: boolean;
   dataClassification: DataClassification;
   auditLogging: boolean;
 }
 export interface DataClassification {
-  classification: ClassificationLevel;,
+  classification: ClassificationLevel;
   fields: string;
-  accessRoles: string;,
+  accessRoles: string;
   restrictions: string;
 }
 export type ClassificationLevel = 'public' | 'internal' | 'confidential' | 'restricted';
 
 export interface PerformanceSettings {
-  caching: CachingConfiguration;,
+  caching: CachingConfiguration;
   optimization: OptimizationSettings;
   scaling: ScalingSettings;
 }
 export interface CachingConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   strategy: CachingStrategy;
   ttl: number; // seconds,
   invalidation: CacheInvalidation;
 }
 export interface CacheInvalidation {
-  triggers: InvalidationTrigger;,
+  triggers: InvalidationTrigger;
   strategy: InvalidationStrategy;
 }
 export interface InvalidationTrigger {
-  event: string;,
+  event: string;
   delay: number; // seconds,
   scope: InvalidationScope;
 }
@@ -1154,18 +1154,18 @@ export type InvalidationStrategy = 'immediate' | 'lazy' | 'scheduled' | 'smart';
 export type InvalidationScope = 'global' | 'user' | 'segment' | 'specific';
 
 export interface OptimizationSettings {
-  indexing: IndexingConfiguration;,
+  indexing: IndexingConfiguration;
   queryOptimization: boolean;
-  parallelProcessing: boolean;,
+  parallelProcessing: boolean;
   compression: CompressionSettings;
 }
 export interface IndexingConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   fields: IndexedField;
   strategy: IndexingStrategy;
 }
 export interface IndexedField {
-  field: string;,
+  field: string;
   type: IndexType;
   priority: IndexPriority;
 }
@@ -1174,22 +1174,22 @@ export type IndexPriority = 'high' | 'medium' | 'low';
 export type IndexingStrategy = 'eager' | 'lazy' | 'adaptive';
 
 export interface CompressionSettings {
-  enabled: boolean;,
+  enabled: boolean;
   algorithm: CompressionAlgorithm;
-  level: CompressionLevel;,
+  level: CompressionLevel;
   fields: string;
 }
 export type CompressionAlgorithm = 'gzip' | 'lz4' | 'snappy' | 'zstd';
 export type CompressionLevel = 'low' | 'medium' | 'high' | 'maximum';
 
 export interface ScalingSettings {
-  autoScaling: boolean;,
+  autoScaling: boolean;
   triggers: ScalingTrigger;
-  limits: ScalingLimits;,
+  limits: ScalingLimits;
   strategy: ScalingStrategy;
 }
 export interface ScalingTrigger {
-  metric: string;,
+  metric: string;
   threshold: number;
   duration: number; // seconds,
   action: ScalingAction;
@@ -1197,7 +1197,7 @@ export interface ScalingTrigger {
 export type ScalingAction = 'scale_up' | 'scale_down' | 'scale_out' | 'scale_in';
 
 export interface ScalingLimits {
-  minInstances: number;,
+  minInstances: number;
   maxInstances: number;
   minCpu: number; // percentage,
   maxCpu: number; // percentage,
@@ -1207,21 +1207,21 @@ export interface ScalingLimits {
 export type ScalingStrategy = 'reactive' | 'predictive' | 'scheduled' | 'hybrid';
 
 export interface IntegrationSettings {
-  apis: ApiIntegration;,
+  apis: ApiIntegration;
   webhooks: WebhookConfiguration;
-  exports: ExportConfiguration;,
+  exports: ExportConfiguration;
   imports: ImportConfiguration;
 }
 export interface ApiIntegration {
-  apiId: string;,
+  apiId: string;
   name: string;
-  endpoint: string;,
+  endpoint: string;
   authentication: AuthenticationSettings;
-  rateLimit: RateLimitSettings;,
+  rateLimit: RateLimitSettings;
   retryPolicy: RetryPolicy;
 }
 export interface AuthenticationSettings {
-  type: AuthenticationType;,
+  type: AuthenticationType;
   credentials: AuthenticationCredentials;
   refreshPolicy: RefreshPolicy;
 }
@@ -1231,78 +1231,78 @@ export interface AuthenticationCredentials {
   [key: string]: string;
 }
 export interface RefreshPolicy {
-  enabled: boolean;,
+  enabled: boolean;
   frequency: number; // hours,
   buffer: number; // hours before expiration,
 }
 export interface RateLimitSettings {
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   requestsPerMinute: number;
-  requestsPerHour: number;,
+  requestsPerHour: number;
   burstAllowance: number;
 }
 export interface RetryPolicy {
-  enabled: boolean;,
+  enabled: boolean;
   maxRetries: number;
-  backoffStrategy: BackoffStrategy;,
+  backoffStrategy: BackoffStrategy;
   retryableErrors: string;
 }
 export type BackoffStrategy = 'fixed' | 'exponential' | 'linear' | 'random';
 
 export interface WebhookConfiguration {
-  webhookId: string;,
+  webhookId: string;
   name: string;
-  url: string;,
+  url: string;
   events: string;
-  authentication: WebhookAuthentication;,
+  authentication: WebhookAuthentication;
   reliability: WebhookReliability;
 }
 export interface WebhookAuthentication {
-  type: WebhookAuthType;,
+  type: WebhookAuthType;
   secret: string;
   headers: Record<string, string>;
 }
 export type WebhookAuthType = 'none' | 'hmac' | 'bearer' | 'custom';
 
 export interface WebhookReliability {
-  retries: number;,
+  retries: number;
   timeout: number; // seconds,
-  backoff: BackoffStrategy;,
+  backoff: BackoffStrategy;
   failureHandling: FailureHandling;
 }
 export interface FailureHandling {
-  strategy: FailureStrategy;,
+  strategy: FailureStrategy;
   deadLetterQueue: boolean;
   notification: FailureNotification;
 }
 export type FailureStrategy = 'ignore' | 'retry' | 'queue' | 'alert';
 
 export interface FailureNotification {
-  enabled: boolean;,
+  enabled: boolean;
   threshold: number; // failures before notification,
-  recipients: string;,
+  recipients: string;
   channels: string;
 }
 export interface ExportConfiguration {
-  exportId: string;,
+  exportId: string;
   name: string;
-  format: ExportFormat;,
+  format: ExportFormat;
   schedule: ExportSchedule;
-  destination: ExportDestination;,
+  destination: ExportDestination;
   content: ExportContentSettings;
 }
 export type ExportFormat = 'csv' | 'json' | 'xml' | 'parquet' | 'avro';
 
 export interface ExportSchedule {
-  frequency: ScheduleFrequency;,
+  frequency: ScheduleFrequency;
   time: string; // HH:MM format,
-  timezone: string;,
+  timezone: string;
   enabled: boolean;
 }
 export type ScheduleFrequency = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'on_demand';
 
 export interface ExportDestination {
-  type: DestinationType;,
+  type: DestinationType;
   configuration: DestinationConfiguration;
   credentials: DestinationCredentials;
 }
@@ -1315,37 +1315,37 @@ export interface DestinationCredentials {
   [key: string]: string;
 }
 export interface ExportContentSettings {
-  fields: string;,
+  fields: string;
   filters: ExportFilter;
-  aggregations: ExportAggregation;,
+  aggregations: ExportAggregation;
   formatting: ExportFormatting;
 }
 export interface ExportFilter {
-  field: string;,
+  field: string;
   operator: ConditionOperator;
   value: Error;
 }
 export interface ExportAggregation {
-  field: string;,
+  field: string;
   method: AggregationMethod;
   groupBy: string;
 }
 export interface ExportFormatting {
-  dateFormat: string;,
+  dateFormat: string;
   numberFormat: string;
-  nullValues: string;,
+  nullValues: string;
   encoding: string;
 }
 export interface ImportConfiguration {
-  importId: string;,
+  importId: string;
   name: string;
-  source: ImportSource;,
+  source: ImportSource;
   mapping: ImportMapping;
-  validation: ImportValidation;,
+  validation: ImportValidation;
   processing: ImportProcessing;
 }
 export interface ImportSource {
-  type: SourceType;,
+  type: SourceType;
   configuration: SourceConfiguration;
   authentication: SourceAuthentication;
 }
@@ -1353,26 +1353,26 @@ export interface SourceConfiguration {
   [key: string]: unknown;
 }
 export interface SourceAuthentication {
-  type: AuthenticationType;,
+  type: AuthenticationType;
   credentials: AuthenticationCredentials;
 }
 export interface ImportMapping {
-  fieldMappings: FieldMapping;,
+  fieldMappings: FieldMapping;
   transformations: FieldTransformation;
   defaults: DefaultValue;
 }
 export interface FieldMapping {
-  sourceField: string;,
+  sourceField: string;
   targetField: string;
-  required: boolean;,
+  required: boolean;
   validation: FieldValidation;
 }
 export interface FieldValidation {
-  rules: ValidationRule;,
+  rules: ValidationRule;
   errorHandling: ValidationErrorHandling;
 }
 export interface ValidationRule {
-  rule: string;,
+  rule: string;
   parameters: ValidationParameters;
   severity: ValidationSeverity;
 }
@@ -1389,59 +1389,59 @@ export interface ValidationErrorHandling {
 export type ErrorHandlingStrategy = 'fail' | 'skip' | 'default' | 'transform';
 
 export interface FieldTransformation {
-  sourceField: string;,
+  sourceField: string;
   transformation: TransformationFunction;
   parameters: TransformationParameters;
 }
 export interface TransformationFunction {
-  name: string;,
+  name: string;
   code: string;
   language: TransformationLanguage;
 }
 export type TransformationLanguage = 'javascript' | 'python' | 'sql' | 'regex';
 
 export interface DefaultValue {
-  field: string;,
+  field: string;
   value: Error;
   condition?: string;
 }
 export interface ImportValidation {
-  enabled: boolean;,
+  enabled: boolean;
   rules: ValidationRule;
-  sampling: ValidationSampling;,
+  sampling: ValidationSampling;
   reporting: ValidationReporting;
 }
 export interface ValidationSampling {
-  enabled: boolean;,
+  enabled: boolean;
   percentage: number; // 0-100,
   minimumRecords: number;
 }
 export interface ValidationReporting {
-  enabled: boolean;,
+  enabled: boolean;
   detailLevel: ReportDetailLevel;
-  recipients: string;,
+  recipients: string;
   format: ReportFormat;
 }
 export type ReportDetailLevel = 'summary' | 'detailed' | 'verbose';
 
 export interface ImportProcessing {
-  batchSize: number;,
+  batchSize: number;
   parallelism: number;
-  errorTolerance: ErrorTolerance;,
+  errorTolerance: ErrorTolerance;
   rollback: RollbackConfiguration;
 }
 export interface ErrorTolerance {
-  maxErrors: number;,
+  maxErrors: number;
   errorRate: number; // 0-1,
   continueOnError: boolean;
 }
 export interface RollbackConfiguration {
-  enabled: boolean;,
+  enabled: boolean;
   triggers: RollbackTrigger;
   strategy: RollbackStrategy;
 }
 export interface RollbackTrigger {
-  condition: string;,
+  condition: string;
   threshold: number;
   timeWindow: number; // minutes,
 }
@@ -1450,60 +1450,60 @@ export type RollbackStrategy = 'full' | 'partial' | 'checkpoint' | 'manual';
 // User lifecycle data structures
 
 export interface UserLifecycleData {
-  userId: string;,
+  userId: string;
   lifecycleHistory: LifecycleStageRecord;
-  currentStage: CurrentStageData;,
+  currentStage: CurrentStageData;
   progressionAnalysis: ProgressionAnalysis;
-  healthAssessment: LifecycleHealthAssessment;,
+  healthAssessment: LifecycleHealthAssessment;
   riskAssessment: LifecycleRiskAssessment;
-  interventionHistory: InterventionRecord;,
+  interventionHistory: InterventionRecord;
   predictions: LifecyclePrediction;
   cohortMemberships: CohortMembership;
 }
 export interface LifecycleStageRecord {
-  recordId: string;,
+  recordId: string;
   stageId: string;
-  stageName: string;,
+  stageName: string;
   entryDate: number; // timestamp,
   exitDate?: number; // timestamp,
   duration?: number; // milliseconds,
-  entryTriggers: StageTrigger;,
+  entryTriggers: StageTrigger;
   exitTriggers: StageTrigger;
-  stageMetrics: StageMetrics;,
+  stageMetrics: StageMetrics;
   behaviors: StageBehavior;
-  interventions: StageIntervention;,
+  interventions: StageIntervention;
   outcomes: StageOutcome;
 }
 export interface StageTrigger {
-  triggerId: string;,
+  triggerId: string;
   type: TriggerType;
-  description: string;,
+  description: string;
   timestamp: number;
   confidence: number; // 0-1,
   context: TriggerContext;
 }
 export interface TriggerContext {
-  events: ContextEvent;,
+  events: ContextEvent;
   conditions: ContextCondition;
   environment: EnvironmentContext;
 }
 export interface ContextEvent {
-  eventType: string;,
+  eventType: string;
   timestamp: number;
   data: Record<string, any>;
   significance: number; // 0-1,
 }
 export interface ContextCondition {
-  condition: string;,
+  condition: string;
   value: Error;
-  met: boolean;,
+  met: boolean;
   confidence: number; // 0-1,
 }
 export interface EnvironmentContext {
-  device: string;,
+  device: string;
   platform: string;
   location?: string;
-  timeOfDay: string;,
+  timeOfDay: string;
   dayOfWeek: string;
   season: string;
 }
@@ -1517,23 +1517,23 @@ export interface StageMetrics {
   customMetrics: CustomMetric;
 }
 export interface CustomMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  value: number;,
+  value: number;
   unit: string;
   context: string;
 }
 export interface StageBehavior {
-  behaviorId: string;,
+  behaviorId: string;
   name: string;
-  frequency: number;,
+  frequency: number;
   intensity: number; // 0-1,
   duration: number; // milliseconds,
-  pattern: BehaviorPattern;,
+  pattern: BehaviorPattern;
   context: BehaviorContext;
 }
 export interface BehaviorPattern {
-  patternType: PatternType;,
+  patternType: PatternType;
   regularity: number; // 0-1,
   predictability: number; // 0-1,
   seasonality?: SeasonalityInfo;
@@ -1542,33 +1542,33 @@ export type PatternType = 'consistent' | 'sporadic' | 'declining' | 'growing' | 
 
 export interface SeasonalityInfo {
   period: number; // days,
-  amplitude: number;,
+  amplitude: number;
   phase: number;
 }
 export interface BehaviorContext {
-  triggers: string;,
+  triggers: string;
   inhibitors: string;
-  facilitators: string;,
+  facilitators: string;
   correlations: BehaviorCorrelation;
 }
 export interface BehaviorCorrelation {
-  behavior: string;,
+  behavior: string;
   correlation: number; // -1 to 1,
   significance: number; // 0-1,
 }
 export interface StageIntervention {
-  interventionId: string;,
+  interventionId: string;
   type: InterventionType;
-  timestamp: number;,
+  timestamp: number;
   response: InterventionResponse;
-  effectiveness: InterventionEffectiveness;,
+  effectiveness: InterventionEffectiveness;
   followUp: InterventionFollowUp;
 }
 export interface InterventionResponse {
-  responseType: ResponseType;,
+  responseType: ResponseType;
   responseTime: number; // milliseconds,
   engagement: number; // 0-1,
-  sentiment: ResponseSentiment;,
+  sentiment: ResponseSentiment;
   actions: ResponseAction;
 }
 export type ResponseType = 'positive' | 'negative' | 'neutral' | 'mixed' | 'no_response';
@@ -1579,30 +1579,30 @@ export interface ResponseSentiment {
   aspects: SentimentAspect;
 }
 export interface SentimentAspect {
-  aspect: string;,
+  aspect: string;
   sentiment: number; // -1 to 1,
   confidence: number; // 0-1,
 }
 export interface ResponseAction {
-  action: string;,
+  action: string;
   timestamp: number;
-  context: ActionContext;,
+  context: ActionContext;
   outcome: ActionOutcome;
 }
 export interface ActionContext {
-  page: string;,
+  page: string;
   feature: string;
-  sessionId: string;,
+  sessionId: string;
   deviceType: string;
 }
 export interface ActionOutcome {
-  successful: boolean;,
+  successful: boolean;
   valueGenerated: number;
   satisfactionImpact: number; // -1 to 1,
   progressionImpact: number; // -1 to 1,
 }
 export interface InterventionFollowUp {
-  followUpId: string;,
+  followUpId: string;
   type: FollowUpType;
   scheduledFor: number; // timestamp,
   completed: boolean;
@@ -1611,15 +1611,15 @@ export interface InterventionFollowUp {
 export type FollowUpType = 'check_in' | 'reminder' | 'escalation' | 'support' | 'feedback';
 
 export interface FollowUpOutcome {
-  success: boolean;,
+  success: boolean;
   feedback: string;
-  nextActions: string;,
+  nextActions: string;
   satisfaction: number; // 0-100,
 }
 export interface StageOutcome {
-  outcomeType: OutcomeType;,
+  outcomeType: OutcomeType;
   value: number;
-  unit: string;,
+  unit: string;
   timestamp: number;
   attribution: OutcomeAttribution;
 }
@@ -1632,36 +1632,36 @@ export type OutcomeType =
   | 'risk_reduction';
 
 export interface OutcomeAttribution {
-  factor: string;,
+  factor: string;
   contribution: number; // 0-1,
   confidence: number; // 0-1,
 }
 export interface CurrentStageData {
-  stageId: string;,
+  stageId: string;
   stageName: string;
   entryDate: number; // timestamp,
-  daysInStage: number;,
+  daysInStage: number;
   progress: StageProgress;
-  health: StageHealth;,
+  health: StageHealth;
   risks: StageRisk;
-  opportunities: StageOpportunityAssessment;,
+  opportunities: StageOpportunityAssessment;
   nextStagePredictiuons: NextStagePrediction;
 }
 export interface StageProgress {
   overall: number; // 0-1,
-  milestones: MilestoneProgress;,
+  milestones: MilestoneProgress;
   trajectory: ProgressTrajectory;
   blockers: ProgressBlocker;
 }
 export interface MilestoneProgress {
-  milestoneId: string;,
+  milestoneId: string;
   name: string;
-  completed: boolean;,
+  completed: boolean;
   progress: number; // 0-1,
   estimatedCompletion?: number; // timestamp,
 }
 export interface ProgressTrajectory {
-  direction: TrajectoryDirection;,
+  direction: TrajectoryDirection;
   velocity: number; // progress per day,
   acceleration: number; // change in velocity,
   forecast: TrajectoryForecast;
@@ -1679,14 +1679,14 @@ export interface ForecastPoint {
   factors: ForecastingFactor;
 }
 export interface ForecastingFactor {
-  factor: string;,
+  factor: string;
   impact: number; // -1 to 1,
   certainty: number; // 0-1,
 }
 export interface ProgressBlocker {
-  blockerId: string;,
+  blockerId: string;
   name: string;
-  severity: BlockerSeverity;,
+  severity: BlockerSeverity;
   impact: BlockerImpact;
   resolutionStrategies: BlockerResolutionStrategy;
 }
@@ -1696,61 +1696,61 @@ export interface BlockerImpact {
   riskIncrease: number; // 0-1,
 }
 export interface BlockerResolutionStrategy {
-  strategy: string;,
+  strategy: string;
   effectiveness: number; // 0-1,
-  effort: EffortLevel;,
+  effort: EffortLevel;
   timeline: string;
   resources: string;
 }
 export interface StageHealth {
   overall: number; // 0-100,
-  dimensions: HealthDimension;,
+  dimensions: HealthDimension;
   trends: HealthTrend;
   alerts: HealthAlert;
 }
 export interface HealthDimension {
-  dimension: string;,
+  dimension: string;
   score: number; // 0-100,
   weight: number; // 0-1,
-  trend: DimensionTrend;,
+  trend: DimensionTrend;
   contributors: HealthContributor;
 }
 export interface DimensionTrend {
-  direction: TrendDirection;,
+  direction: TrendDirection;
   strength: number; // 0-1,
   duration: number; // days,
   significance: number; // 0-1,
 }
 export interface HealthContributor {
-  contributor: string;,
+  contributor: string;
   impact: number; // -1 to 1,
   confidence: number; // 0-1,
 }
 export interface HealthTrend {
-  aspect: string;,
+  aspect: string;
   trend: TrendDirection;
   change: number; // percentage change,
   timeframe: number; // days,
   significance: number; // 0-1,
 }
 export interface HealthAlert {
-  alertId: string;,
+  alertId: string;
   type: AlertType;
-  severity: AlertSeverity;,
+  severity: AlertSeverity;
   message: string;
-  timestamp: number;,
+  timestamp: number;
   actionRequired: boolean;
   recommendedActions: string;
 }
 export type AlertType = 'health_decline' | 'risk_increase' | 'milestone_delay' | 'anomaly_detected';
 
 export interface StageRisk {
-  riskId: string;,
+  riskId: string;
   name: string;
-  type: StageRiskType;,
+  type: StageRiskType;
   severity: RiskSeverity;
   probability: number; // 0-1,
-  impact: StageRiskImpact;,
+  impact: StageRiskImpact;
   indicators: RiskIndicator;
   mitigation: RiskMitigationPlan;
 }
@@ -1768,27 +1768,27 @@ export interface StageRiskImpact {
   interventionCost: number; // 0-1,
 }
 export interface RiskIndicator {
-  indicator: string;,
+  indicator: string;
   currentValue: number;
-  threshold: number;,
+  threshold: number;
   severity: IndicatorSeverity;
   trend: IndicatorTrend;
 }
 export type IndicatorSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export interface IndicatorTrend {
-  direction: TrendDirection;,
+  direction: TrendDirection;
   rate: number; // change per day,
   consistency: number; // 0-1,
 }
 export interface RiskMitigationPlan {
-  strategies: MitigationStrategy;,
+  strategies: MitigationStrategy;
   priority: MitigationPriority;
-  timeline: MitigationTimeline;,
+  timeline: MitigationTimeline;
   resources: MitigationResource;
 }
 export interface MitigationPriority {
-  immediate: string;,
+  immediate: string;
   shortTerm: string;
   longTerm: string;
 }
@@ -1798,34 +1798,34 @@ export interface MitigationTimeline {
   longTerm: number; // weeks,
 }
 export interface MitigationResource {
-  resource: string;,
+  resource: string;
   type: ResourceType;
   availability: number; // 0-1,
   cost: number;
 }
 export interface StageOpportunityAssessment {
-  opportunityId: string;,
+  opportunityId: string;
   name: string;
-  type: OpportunityType;,
+  type: OpportunityType;
   potential: OpportunityPotentialAssessment;
-  feasibility: OpportunityFeasibility;,
+  feasibility: OpportunityFeasibility;
   timeline: OpportunityTimeline;
   requirements: OpportunityRequirementAssessment;
 }
 export interface OpportunityPotentialAssessment {
   score: number; // 0-100,
-  benefits: OpportunityBenefit;,
+  benefits: OpportunityBenefit;
   risks: OpportunityRisk;
   confidence: number; // 0-1,
 }
 export interface OpportunityBenefit {
-  benefit: string;,
+  benefit: string;
   impact: number; // 0-1,
   likelihood: number; // 0-1,
   timeframe: string;
 }
 export interface OpportunityRisk {
-  risk: string;,
+  risk: string;
   impact: number; // 0-1,
   likelihood: number; // 0-1,
   mitigation: string;
@@ -1844,31 +1844,31 @@ export interface OpportunityTimeline {
   total: number; // days,
 }
 export interface OpportunityRequirementAssessment {
-  requirement: string;,
+  requirement: string;
   complexity: ComplexityLevel;
   availability: number; // 0-1,
-  cost: number;,
+  cost: number;
   criticalPath: boolean;
 }
 export interface NextStagePrediction {
-  stageId: string;,
+  stageId: string;
   stageName: string;
   probability: number; // 0-1,
   estimatedTransitionTime: number; // days,
   confidence: number; // 0-1,
-  requirements: TransitionRequirement;,
+  requirements: TransitionRequirement;
   accelerators: TransitionAccelerator;
 }
 export interface TransitionRequirement {
-  requirement: string;,
+  requirement: string;
   currentStatus: number; // 0-1 (0 = not met, 1 = fully met),
   importance: number; // 0-1,
   timeToMeet: number; // days,
 }
 export interface TransitionAccelerator {
-  accelerator: string;,
+  accelerator: string;
   potential: number; // 0-1,
-  effort: EffortLevel;,
+  effort: EffortLevel;
   impact: AcceleratorImpact;
 }
 export interface AcceleratorImpact {
@@ -1878,38 +1878,38 @@ export interface AcceleratorImpact {
   // Progression analysis
 }
 export interface ProgressionAnalysis {
-  overallProgression: OverallProgression;,
+  overallProgression: OverallProgression;
   stageAnalysis: StageProgressionAnalysis;
-  pathwayAnalysis: PathwayAnalysis;,
+  pathwayAnalysis: PathwayAnalysis;
   velocityAnalysis: VelocityAnalysis;
   benchmarkComparison: ProgressionBenchmark;
 }
 export interface OverallProgression {
   totalDuration: number; // days since first stage,
-  stagesCompleted: number;,
+  stagesCompleted: number;
   progressionRate: number; // stages per day,
   efficiency: number; // 0-1,
   trajectory: OverallTrajectory;
 }
 export interface OverallTrajectory {
-  direction: TrajectoryDirection;,
+  direction: TrajectoryDirection;
   consistency: number; // 0-1,
   momentum: number; // 0-1,
   forecast: ProgressionForecast;
 }
 export interface ProgressionForecast {
-  nextMilestone: MilestoneForecast;,
+  nextMilestone: MilestoneForecast;
   completion: CompletionForecast;
   risks: ForecastRisk;
 }
 export interface MilestoneForecast {
-  milestone: string;,
+  milestone: string;
   estimatedDate: number; // timestamp,
   confidence: number; // 0-1,
   requirements: ForecastRequirement;
 }
 export interface ForecastRequirement {
-  requirement: string;,
+  requirement: string;
   probability: number; // 0-1,
   impact: number; // -1 to 1,
 }
@@ -1919,26 +1919,26 @@ export interface CompletionForecast {
   scenarios: CompletionScenario;
 }
 export interface CompletionScenario {
-  scenario: string;,
+  scenario: string;
   probability: number; // 0-1,
   duration: number; // days,
   conditions: string;
 }
 export interface ForecastRisk {
-  risk: string;,
+  risk: string;
   probability: number; // 0-1,
-  impact: ForecastRiskImpact;,
+  impact: ForecastRiskImpact;
   mitigation: string;
 }
 export interface ForecastRiskImpact {
-  delayDays: number;,
+  delayDays: number;
   probabilityReduction: number; // 0-1,
   alternativePaths: string;
 }
 export interface StageProgressionAnalysis {
-  stageId: string;,
+  stageId: string;
   stageName: string;
-  performance: StagePerformance;,
+  performance: StagePerformance;
   comparison: StageComparison;
   insights: StageInsight;
 }
@@ -1950,16 +1950,16 @@ export interface StagePerformance {
   challengesFaced: StageChallengeRecord;
 }
 export interface StageChallengeRecord {
-  challenge: string;,
+  challenge: string;
   severity: ChallengeSeverity;
   duration: number; // days,
-  resolution: ChallengeResolution;,
+  resolution: ChallengeResolution;
   impact: ChallengeImpact;
 }
 export type ChallengeSeverity = 'minor' | 'moderate' | 'major' | 'critical';
 
 export interface ChallengeResolution {
-  resolved: boolean;,
+  resolved: boolean;
   method: string;
   timeToResolution: number; // days,
   effectiveness: number; // 0-1,
@@ -1970,14 +1970,14 @@ export interface ChallengeImpact {
   futureStageImpact: number; // -1 to 1,
 }
 export interface StageComparison {
-  vsTypical: ComparisonResult;,
+  vsTypical: ComparisonResult;
   vsCohort: ComparisonResult;
   vsPersonalBest: ComparisonResult;
 }
 export interface ComparisonResult {
-  metric: string;,
+  metric: string;
   userValue: number;
-  benchmarkValue: number;,
+  benchmarkValue: number;
   difference: number; // percentage,
   percentile: number; // 0-100,
   significance: ComparisonSignificance;
@@ -1985,16 +1985,16 @@ export interface ComparisonResult {
 export type ComparisonSignificance = 'much_better' | 'better' | 'average' | 'worse' | 'much_worse';
 
 export interface StageInsight {
-  insight: string;,
+  insight: string;
   type: InsightType;
-  impact: InsightImpact;,
+  impact: InsightImpact;
   actionable: boolean;
   recommendations: string;
 }
 export type InsightType = 'performance' | 'behavioral' | 'comparative' | 'predictive' | 'optimization';
 
 export interface InsightImpact {
-  scope: InsightScope;,
+  scope: InsightScope;
   magnitude: ImpactMagnitude;
   confidence: number; // 0-1,
 }
@@ -2022,7 +2022,7 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
       duration: i < currentStageIndex ? 86400000 * 30 : undefined, // 30 days
       entryTriggers: [],
       exitTriggers: [],
-      stageMetrics: {,
+      stageMetrics: {
   engagementLevel: Math.random(),
   activityLevel: Math.random(),
   satisfactionScore: Math.random() * 100,
@@ -2035,38 +2035,38 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
       interventions: [],
       outcomes: [];
   })),
-    currentStage: {,
+    currentStage: {
   stageId: `stage_${currentStageIndex + 1}`}
 },
   stageName: stages[currentStageIndex],
       entryDate: Date.now() - (stages.length - currentStageIndex) * 86400000 * 30,
       daysInStage: (stages.length - currentStageIndex) * 30,
-      progress: {,
+      progress: {
   overall: Math.random(),
   milestones: [],
-  trajectory: {,
+  trajectory: {
   direction: ['forward', 'stalled', 'accelerating'][Math.floor(Math.random() * 3)] as TrajectoryDirection,
   velocity: Math.random() * 0.1,
   acceleration: (Math.random() - 0.5) * 0.01,
-  forecast: {,
-  shortTerm: {,
+  forecast: {
+  shortTerm: {
   predictedProgress: Math.random(),
   confidence: Math.random(),
   factors: [],
 },
-  mediumTerm: {,
+  mediumTerm: {
   predictedProgress: Math.random(),
   confidence: Math.random(),
   factors: [],
 },
-  longTerm: {,
+  longTerm: {
   predictedProgress: Math.random(),
   confidence: Math.random(),
   factors: [],
 },
   blockers: [];
   },
-  health: {,
+  health: {
   overall: Math.random() * 40 + 60, // 60-100,
   dimensions: [],
   trends: [],
@@ -2076,17 +2076,17 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
       opportunities: [],
       nextStagePredictiuons: [];
   },
-  progressionAnalysis: {,
+  progressionAnalysis: {
   overallProgression: {;
   totalDuration: (currentStageIndex + 1) * 30,
         stagesCompleted: currentStageIndex,
         progressionRate: currentStageIndex / ((currentStageIndex + 1) * 30),
         efficiency: Math.random(),
-        trajectory: {,
+        trajectory: {
   direction: 'forward',
           consistency: Math.random(),
           momentum: Math.random(),
-          forecast: {,
+          forecast: {
   nextMilestone: {;
   milestone: `Stage ${currentStageIndex + 2}`}
 },
@@ -2094,7 +2094,7 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
               confidence: Math.random(),
               requirements: [];
   },
-  completion: {,
+  completion: {
   estimatedCompletionDate: Date.now() + Math.random() * 86400000 * 180,
   confidence: Math.random(),
   scenarios: [],
@@ -2102,20 +2102,20 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
   risks: [];
   },
   stageAnalysis: [],
-      pathwayAnalysis: {,
+      pathwayAnalysis: {
   primaryPath: stages.slice(0, currentStageIndex + 1),
   alternativePaths: [],
   efficiency: Math.random(),
   uniqueness: Math.random(),
 },
-  velocityAnalysis: {,
+  velocityAnalysis: {
   currentVelocity: Math.random() * 0.1,
   averageVelocity: Math.random() * 0.08,
   acceleration: (Math.random() - 0.5) * 0.01,
   factors: [],
 },
-  benchmarkComparison: {,
-  vsIndustry: {,
+  benchmarkComparison: {
+  vsIndustry: {
   metric: 'progression_rate',
   userValue: Math.random() * 0.1,
   benchmarkValue: 0.05,
@@ -2123,7 +2123,7 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
   percentile: Math.random() * 100,
   significance: 'average',
 },
-  vsCohort: {,
+  vsCohort: {
   metric: 'progression_rate',
   userValue: Math.random() * 0.1,
   benchmarkValue: 0.06,
@@ -2131,7 +2131,7 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
   percentile: Math.random() * 100,
   significance: 'better',
 },
-  vsHistorical: {,
+  vsHistorical: {
   metric: 'progression_rate',
   userValue: Math.random() * 0.1,
   benchmarkValue: 0.04,
@@ -2139,14 +2139,14 @@ const generateMockUserLifecycleData = (): UserLifecycleData => {
   percentile: Math.random() * 100,
   significance: 'much_better',
 },
-  healthAssessment: {,
+  healthAssessment: {
   overall: Math.random() * 40 + 60,
   dimensions: [],
   trends: [],
   alerts: [],
   recommendations: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   overall: Math.random() * 60 + 20,
   risks: [],
   mitigation: [],
@@ -2197,7 +2197,7 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
           description: 'Users are progressing through lifecycle stages 23% faster than historical average',
           severity: 'info',
           affectedUsers: 50,
-          potentialImpact: {,
+          potentialImpact: {
   scope: 'overall_journey',
   magnitude: 'medium',
   confidence: 0.85,
@@ -2211,7 +2211,7 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
   effort: 'low',
   expectedOutcome: 'Maintain accelerated progression',
   successMetrics: ['progression_rate', 'user_satisfaction']],
-  data: {,
+  data: {
   charts: [],
   tables: [],
   statistics: [],
@@ -2232,11 +2232,11 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
   cohortAnalysis: [],
   predictions: [],
   insights,
-  metadata: {,
+  metadata: {
   exportTimestamp: Date.now(),
   version: '1.0.0',
   totalUsers: mockLifecycleData.length,
-  analysisPeriod: {,
+  analysisPeriod: {
   start: Date.now() - 86400000 * 90,
   end: Date.now(),
 },
@@ -2559,94 +2559,94 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
 // Additional interfaces for export data
 
 export interface LifecycleTrackingExportData {
-  userLifecycleData: UserLifecycleData;,
+  userLifecycleData: UserLifecycleData;
   stageTransitions: StageTransition;
-  interventionEffectiveness: InterventionEffectivenessReport;,
+  interventionEffectiveness: InterventionEffectivenessReport;
   cohortAnalysis: CohortAnalysisResult;
-  predictions: LifecyclePredictionResult;,
+  predictions: LifecyclePredictionResult;
   insights: LifecycleInsight;
   metadata: LifecycleExportMetadata;
 }
 export interface StageTransition {
-  userId: string;,
+  userId: string;
   fromStage: string;
-  toStage: string;,
+  toStage: string;
   transitionDate: number;
-  duration: number;,
+  duration: number;
   triggers: string;
   success: boolean;
 }
 export interface InterventionEffectivenessReport {
-  interventionId: string;,
+  interventionId: string;
   name: string;
-  effectiveness: number;,
+  effectiveness: number;
   participants: number;
   outcomes: InterventionOutcome;
 }
 export interface InterventionOutcome {
-  metric: string;,
+  metric: string;
   improvement: number;
   significance: number;
 }
 export interface CohortAnalysisResult {
-  cohortId: string;,
+  cohortId: string;
   name: string;
-  size: number;,
+  size: number;
   performance: CohortPerformanceMetrics;
   insights: string;
 }
 export interface CohortPerformanceMetrics {
-  progressionRate: number;,
+  progressionRate: number;
   completionRate: number;
-  satisfactionScore: number;,
+  satisfactionScore: number;
   retentionRate: number;
 }
 export interface LifecyclePredictionResult {
-  userId: string;,
+  userId: string;
   predictions: PredictionResult;
-  confidence: number;,
+  confidence: number;
   timeHorizon: number;
 }
 export interface PredictionResult {
-  metric: string;,
+  metric: string;
   predictedValue: number;
-  confidence: number;,
+  confidence: number;
   factors: string;
 }
 export interface LifecycleInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  title: string;,
+  title: string;
   description: string;
-  severity: string;,
+  severity: string;
   affectedUsers: number;
-  potentialImpact: {,
-  scope: string;,
+  potentialImpact: {
+  scope: string;
   magnitude: string;
   confidence: number;
 };
   recommendations: Array<{,
   recommendationId: string;
-  action: string;,
+  action: string;
   rationale: string;
-  priority: string;,
+  priority: string;
   effort: string;
-  expectedOutcome: string;,
+  expectedOutcome: string;
   successMetrics: string;
 }>;
-  data: {,
+  data: {
   charts: unknown;
-  tables: unknown;,
+  tables: unknown;
   statistics: unknown;
   comparisons: unknown;
 };
 }
 export interface LifecycleExportMetadata {
-  exportTimestamp: number;,
+  exportTimestamp: number;
   version: string;
-  totalUsers: number;,
-  analysisePeriod: {,
-  start: number;,
+  totalUsers: number;
+  analysisePeriod: {
+  start: number;
   end: number;
 };
   configurationVersion: string;
@@ -2654,127 +2654,127 @@ export interface LifecycleExportMetadata {
 // Pathway analysis interfaces
 }
 export interface PathwayAnalysis {
-  primaryPath: string;,
+  primaryPath: string;
   alternativePaths: AlternativePath;
-  efficiency: number;,
+  efficiency: number;
   uniqueness: number;
 }
 export interface AlternativePath {
-  path: string;,
+  path: string;
   frequency: number;
-  efficiency: number;,
+  efficiency: number;
   outcomes: PathOutcome;
 }
 export interface PathOutcome {
-  outcome: string;,
+  outcome: string;
   probability: number;
   value: number;
   // Velocity analysis interfaces
 }
 export interface VelocityAnalysis {
-  currentVelocity: number;,
+  currentVelocity: number;
   averageVelocity: number;
-  acceleration: number;,
+  acceleration: number;
   factors: VelocityFactor;
 }
 export interface VelocityFactor {
-  factor: string;,
+  factor: string;
   impact: number;
   confidence: number;
   // Benchmark comparison interfaces
 }
 export interface ProgressionBenchmark {
-  vsIndustry: ComparisonResult;,
+  vsIndustry: ComparisonResult;
   vsCohort: ComparisonResult;
   vsHistorical: ComparisonResult;
   // Health and risk assessment interfaces
 }
 export interface LifecycleHealthAssessment {
-  overall: number;,
+  overall: number;
   dimensions: HealthDimension;
-  trends: HealthTrend;,
+  trends: HealthTrend;
   alerts: HealthAlert;
   recommendations: HealthRecommendation;
 }
 export interface HealthRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   aspect: string;
-  action: string;,
+  action: string;
   priority: string;
   impact: number;
 }
 export interface LifecycleRiskAssessment {
-  overall: number;,
+  overall: number;
   risks: LifecycleRisk;
-  mitigation: RiskMitigationStrategy;,
+  mitigation: RiskMitigationStrategy;
   monitoring: RiskMonitoringPlan;
 }
 export interface LifecycleRisk {
-  riskId: string;,
+  riskId: string;
   name: string;
-  probability: number;,
+  probability: number;
   impact: number;
-  category: string;,
+  category: string;
   indicators: string;
 }
 export interface RiskMitigationStrategy {
-  riskId: string;,
+  riskId: string;
   strategy: string;
-  effectiveness: number;,
+  effectiveness: number;
   cost: number;
   timeline: string;
 }
 export interface RiskMonitoringPlan {
-  riskId: string;,
+  riskId: string;
   monitors: RiskMonitor;
-  alertThresholds: AlertThreshold;,
+  alertThresholds: AlertThreshold;
   escalationProcedure: EscalationProcedure;
 }
 export interface RiskMonitor {
-  metric: string;,
+  metric: string;
   frequency: string;
-  threshold: number;,
+  threshold: number;
   action: string;
 }
 export interface AlertThreshold {
-  level: string;,
+  level: string;
   value: number;
   response: string;
 }
 export interface EscalationProcedure {
-  levels: EscalationLevel;,
+  levels: EscalationLevel;
   timeouts: number;
   notifications: NotificationSetting;
 }
 export interface NotificationSetting {
-  level: string;,
+  level: string;
   recipients: string;
   methods: string;
   // Prediction interfaces
 }
 export interface LifecyclePrediction {
-  predictionId: string;,
+  predictionId: string;
   type: string;
-  target: string;,
+  target: string;
   value: number;
-  confidence: number;,
+  confidence: number;
   timeHorizon: number;
-  factors: PredictionFactor;,
+  factors: PredictionFactor;
   alternatives: AlternativePrediction;
 }
 export interface AlternativePrediction {
-  scenario: string;,
+  scenario: string;
   probability: number;
-  value: number;,
+  value: number;
   conditions: string;
   // Cohort membership interfaces
 }
 export interface CohortMembership {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  joinDate: number;,
+  joinDate: number;
   membershipProbability: number;
-  characteristics: CohortMemberCharacteristics;,
+  characteristics: CohortMemberCharacteristics;
   performance: CohortMemberPerformance;
 }
 export interface CohortMemberCharacteristics {
@@ -2783,9 +2783,9 @@ export interface CohortMemberCharacteristics {
   preferences: Record<string, any>;
 }
 export interface CohortMemberPerformance {
-  relativeProgression: number;,
+  relativeProgression: number;
   relativeEngagement: number;
-  relativeSatisfaction: number;,
+  relativeSatisfaction: number;
   relativeValue: number;
 }
 export default UserLifecycleTracking;

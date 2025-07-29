@@ -30,27 +30,27 @@ export interface UseRateLimitingMetricsOptions {
 }
 export interface MetricsHookReturn {
   // Data
-  currentMetrics: PerformanceMetrics | null;,
+  currentMetrics: PerformanceMetrics | null;
   visualizationData: MetricsVisualizationData | null;
-  activeAlerts: AlertCondition;,
+  activeAlerts: AlertCondition;
   widgets: DashboardWidget;
   // Status
-  isLoading: boolean;,
+  isLoading: boolean;
   isConnected: boolean;
-  lastUpdate: Date | null;,
+  lastUpdate: Date | null;
   systemStatus: 'healthy' | 'warning' | 'critical';
   // Actions
-  refreshMetrics: () => Promise<void>;,
-  exportMetrics: (format: 'json' | 'csv') => string;,
-  acknowledgeAlert: (alertId: string) => void;,
-  addWidget: (widget: DashboardWidget) => void;,
-  removeWidget: (widgetId: string) => void;,
+  refreshMetrics: () => Promise<void>;
+  exportMetrics: (format: 'json' | 'csv') => string;
+  acknowledgeAlert: (alertId: string) => void;
+  addWidget: (widget: DashboardWidget) => void;
+  removeWidget: (widgetId: string) => void;
   updateTimeRange: (range: string) => void;
   // Control
-  startMonitoring: () => void;,
+  startMonitoring: () => void;
   stopMonitoring: () => void;
   // Error handling
-  error: string | null;,
+  error: string | null;
   clearError: () => void;
 }
 export interface MetricsServiceConfig {
@@ -101,16 +101,16 @@ export const useRateLimitingMetrics = ({)
   {
   enableRealTimeMetrics: autoRefresh,
   metricsRetentionPeriod: retainHistoryHours,
-  visualizationOptions: {,
+  visualizationOptions: {
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
   enableGeospatialMaps: true,
   refreshInterval
 },
-  alerting: {,
+  alerting: {
   enableAlerts,
-  alertThresholds: {,
+  alertThresholds: {
   highResponseTime: 200,
   lowThroughput: 100,
   highErrorRate: 10,
@@ -275,7 +275,7 @@ export const useRateLimitingMetrics = ({)
     if (!isConnected || error) return 'critical';
     if (activeAlerts.length === 0) return 'healthy';
     if (activeAlerts.length < 3) return 'warning';
-    return 'critical';
+    return 'critical'
   }, [isConnected, error, activeAlerts.length])();
   // ========================================
   // Effects

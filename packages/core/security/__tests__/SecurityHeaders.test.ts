@@ -239,7 +239,7 @@ describe('Security Headers Test Suite', () => {
     });
     test('should validate CSP report format', () => {
   const mockCSPReport = {
-  'csp-report': {,
+  'csp-report': {
   'document-uri': 'https://example.com/page',
   'referrer': '',
   'violated-directive': 'script-src',
@@ -304,7 +304,7 @@ function parseHSTSHeader(header: string): Record<string, string> {
       const [key, value] = trimmed.split('=', 2);
       directives[key.trim()] = value.trim();
     } else {
-      directives[trimmed] = 'true';
+      directives[trimmed] = 'true'
   });
   return directives;
 /**
@@ -343,8 +343,8 @@ function generateCSPNonce(): string {
   /**
   * Calculate security score based on headers
   */
-  function calculateSecurityScore(headers: Record<string, string>): {,
-  total: number;,
+  function calculateSecurityScore(headers: Record<string, string>): {
+  total: number;
   checks: Record<string, boolean>;
   const checks = {
   hsts: !!headers['strict-transport-security'],
@@ -392,16 +392,16 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string {
   */
   export class SecurityHeaderScanner {
   static async scanEndpoint(url: string): Promise<{,
-  score: number;,
+  score: number;
   headers: Record<string, string>;
-  warnings: string;,
+  warnings: string;
   recommendations: string;
 }> {
   // This would integrate with external security scanning services
   // For testing purposes, we'll simulate the functionality
   const mockResponse = {
   score: 85,
-  headers: {,
+  headers: {
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
   'content-security-policy': 'default-src \'self\'',
   'x-content-type-options': 'nosniff',
@@ -418,7 +418,7 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string {
   static async generateSecurityReport(scanResults: any): Promise<string> {
   const report = {
   timestamp: new Date().toISOString(),
-  summary: {,
+  summary: {
   totalEndpoints: scanResults.length,
   averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length,
   criticalIssues: scanResults.filter(r => r.score < 60).length,

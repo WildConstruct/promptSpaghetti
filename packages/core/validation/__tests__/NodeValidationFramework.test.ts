@@ -14,12 +14,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'test-node-1',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['Option A', 'Option B', 'Option C'],
   weights: [1, 2, 1],
 };
@@ -45,7 +45,7 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'test-node-1',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: 'invalid' as any,
   cacheable: true,
   stateful: false,
@@ -62,12 +62,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'Conditional',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   condition: 'eval("malicious code")',
 };
       const result = validator.validateNode(nodeData);
@@ -82,12 +82,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['new Function("return alert(1)")()'],
 };
       const result = validator.validateNode(nodeData);
@@ -98,12 +98,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['__proto__.isAdmin = true'],
 };
       const result = validator.validateNode(nodeData);
@@ -114,12 +114,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   template: 'Hello ${user.input}'}
       };
       const result = validator.validateNode(nodeData);
@@ -129,12 +129,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'python-node',
   type: 'PythonTransform',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   code: 'exec("import os; os.system(\'rm -rf /\')")',
 };
       const result = validator.validateNode(nodeData);
@@ -146,12 +146,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'safe-python-node',
   type: 'PythonTransform',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   code: 'result = input.upper()',
 };
       const result = validator.validateNode(nodeData);
@@ -164,12 +164,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'infinite-node',
   type: 'Sequential',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: true,
 },
-  data: {,
+  data: {
   pattern: 'cyclical',
   items: [] // Empty items array causes infinite loop,
 };
@@ -182,13 +182,13 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'stuck-markov',
   type: 'Markov',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: true,
 },
-  data: {,
-  transitionMatrix: {,
+  data: {
+  transitionMatrix: {
             'state1': {}, // No transitions - will get stuck
             'state2': { 'state1': 0.5, 'state2': 0.5 }
       };
@@ -200,12 +200,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'large-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: new Array(1000).fill('Large choice option with lots of text'),
   weights: new Array(1000).fill(1),
 };
@@ -221,12 +221,12 @@ describe('NodeValidationFramework', () => {
       const nodeData: AdvancedNodeData = {,
   id: 'memory-heavy-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: new Array(1000).fill('Very large choice with lots of data'),
   weights: new Array(1000).fill(1),
 };
@@ -240,12 +240,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'typed-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A', 'B', 'C'], // Correct string array,
   weights: [1, 2, 3] // Correct number array,
 };
@@ -262,12 +262,12 @@ describe('NodeValidationFramework', () => {
       const nodeData: AdvancedNodeData = {,
   id: 'dangerous-node',
   type: 'Conditional',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   condition: 'eval("malicious code")',
 };
       const result = permissiveValidator.validateNode(nodeData);
@@ -282,12 +282,12 @@ describe('NodeValidationFramework', () => {
       const nodeData: AdvancedNodeData = {,
   id: 'infinite-node',
   type: 'Sequential',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: true,
 },
-  data: {,
+  data: {
   pattern: 'cyclical',
   items: [],
 };
@@ -301,14 +301,14 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'nested-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['Safe choice'],
-  metadata: {,
+  metadata: {
   description: 'eval("nested threat")',
   tags: ['safe', '__proto__.danger = true'],
 };
@@ -322,12 +322,12 @@ describe('NodeValidationFramework', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'array-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: [,
   'Safe choice',
   'eval("danger in array")',
@@ -358,12 +358,12 @@ describe('NodeValidationUtils', () => {
   const nodeData: AdvancedNodeData = {,
   id: 'test-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: true,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: ['A', 'B', 'C'],
   weights: [1, 2, 3],
 };
@@ -417,12 +417,12 @@ describe('Security Threat Detection Patterns', () => {
       const nodeData: AdvancedNodeData = {,
   id: 'test-node',
   type: 'WeightedChoice',
-  config: {,
+  config: {
   deterministic: true,
   cacheable: false,
   stateful: false,
 },
-  data: {,
+  data: {
   choices: [pattern],
 };
       const result = validator.validateNode(nodeData);

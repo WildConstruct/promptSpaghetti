@@ -1,69 +1,53 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useMemo } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES } from '../correctionsStore';
-export const MobileCorrectionsPanel = ({
-    isOpen,
-    onClose
-});
-{
+export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
     const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('rules');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRule, setSelectedRule] = useState(null);
     const [testText, setTestText] = useState('');
-    const [newRule, setNewRule] = useState({});
-    name: '',
-        description;
-    '',
-        findPattern;
-    '',
-        replaceWith;
-    '',
-        isRegex;
-    false,
-        isActive;
-    true,
-        priority;
-    rules.length,
-    ;
-}
-;
-// Filter rules based on search
-const filteredRules = useMemo(() => {
-    if (!searchQuery)
-        return rules;
-    const query = searchQuery.toLowerCase();
-    return rules.filter(rule => );
-    rule.name.toLowerCase().includes(query) ||
-        rule.description?.toLowerCase().includes(query) ||
-        rule.findPattern.toLowerCase().includes(query) ||
-        rule.replaceWith.toLowerCase().includes(query);
-});
-[rules, searchQuery];
-;
-const handleAddRule = useCallback(() => {
-    if (newRule.name.trim() && newRule.findPattern.trim()) {
-        addRule(newRule);
-        setNewRule({});
+    const [newRule, setNewRule] = useState({
         name: '',
-            description;
-        '',
-            findPattern;
-        '',
-            replaceWith;
-        '',
-            isRegex;
-        false,
-            isActive;
-        true,
-            priority;
-        rules.length,
-        ;
-    }
-});
-setActiveTab('rules');
-[newRule, addRule, rules.length];
-;
+        description: '',
+        findPattern: '',
+        replaceWith: '',
+        isRegex: false,
+        isActive: true,
+        priority: rules.length,
+    });
+    // Filter rules based on search
+    const filteredRules = useMemo(() => {
+        if (!searchQuery)
+            return rules;
+        const query = searchQuery.toLowerCase();
+        return rules.filter(rule => rule.name.toLowerCase().includes(query) ||
+            rule.description?.toLowerCase().includes(query) ||
+            rule.findPattern.toLowerCase().includes(query) ||
+            rule.replaceWith.toLowerCase().includes(query));
+    }, [rules, searchQuery]);
+    const handleAddRule = useCallback(() => {
+        if (newRule.name.trim() && newRule.findPattern.trim()) {
+            addRule(newRule);
+            setNewRule({});
+            name: '',
+                description;
+            '',
+                findPattern;
+            '',
+                replaceWith;
+            '',
+                isRegex;
+            false,
+                isActive;
+            true,
+                priority;
+            rules.length,
+            ;
+        }
+    });
+    setActiveTab('rules');
+}, [newRule, addRule, rules, length];
 const handleUpdateRule = useCallback((rule) => {
     updateRule(rule.id, rule);
     setSelectedRule(null);

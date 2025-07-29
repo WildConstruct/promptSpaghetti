@@ -8,31 +8,31 @@
 // Audience and Segmentation types
 
 export interface Audience {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   segments: AudienceSegment;
-  conditions: TargetingCondition;,
+  conditions: TargetingCondition;
   size: number;
-  estimatedReach: number;,
+  estimatedReach: number;
   status: AudienceStatus;
   metadata: AudienceMetadata;
 }
 export type AudienceStatus = 'active' | 'draft' | 'archived' | 'inactive';
 
 export interface AudienceSegment {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   criteria: SegmentCriteria;
-  size: number;,
+  size: number;
   overlap: SegmentOverlap;
   performance: SegmentPerformance;
 }
 export interface SegmentCriteria {
-  type: CriteriaType;,
+  type: CriteriaType;
   operator: CriteriaOperator;
-  value: any;,
+  value: any;
   weight: number;
   description: string;
 }
@@ -45,32 +45,32 @@ export type CriteriaOperator =
   | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in';
 
 export interface SegmentOverlap {
-  segmentId: string;,
+  segmentId: string;
   overlapSize: number;
   overlapPercentage: number;
 }
 export interface SegmentPerformance {
-  conversionRate: number;,
+  conversionRate: number;
   engagementRate: number;
-  retentionRate: number;,
+  retentionRate: number;
   averageValue: number;
   lastUpdated: Date;
 }
 export interface AudienceMetadata {
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
-  createdBy: string;,
+  createdBy: string;
   lastModifiedBy: string;
-  version: number;,
+  version: number;
   tags: string;
   // Targeting Conditions and Rules
 }
 export interface TargetingCondition {
-  id: string;,
+  id: string;
   name: string;
-  type: ConditionType;,
+  type: ConditionType;
   rules: TargetingRule;
-  logic: LogicOperator;,
+  logic: LogicOperator;
   priority: number;
   enabled: boolean;
 }
@@ -78,11 +78,11 @@ export type ConditionType = 'inclusion' | 'exclusion' | 'requirement' | 'prefere
 export type LogicOperator = 'AND' | 'OR' | 'NOT' | 'XOR';
 
 export interface TargetingRule {
-  id: string;,
+  id: string;
   attribute: string;
-  operator: RuleOperator;,
+  operator: RuleOperator;
   value: any;
-  valueType: ValueType;,
+  valueType: ValueType;
   caseSensitive: boolean;
   negated: boolean;
 }
@@ -96,52 +96,52 @@ export type ValueType = 'string' | 'number' | 'boolean' | 'date' | 'list' | 'reg
 // Preview and Testing
 
 export interface TargetingPreview {
-  audienceId: string;,
+  audienceId: string;
   previewData: PreviewResult;
-  sampleSize: number;,
+  sampleSize: number;
   confidence: number;
-  estimatedReach: number;,
+  estimatedReach: number;
   generatedAt: Date;
 }
 export interface PreviewResult {
-  userId: string;,
+  userId: string;
   matched: boolean;
-  matchedSegments: string;,
+  matchedSegments: string;
   matchedConditions: string;
-  score: number;,
+  score: number;
   reasoning: MatchReasoning;
 }
 export interface MatchReasoning {
-  rule: string;,
+  rule: string;
   condition: string;
-  result: boolean;,
+  result: boolean;
   score: number;
   explanation: string;
   // Analytics and Performance
 }
 export interface TargetingAnalytics {
-  audienceId: string;,
+  audienceId: string;
   period: AnalyticsPeriod;
-  metrics: TargetingMetrics;,
+  metrics: TargetingMetrics;
   performance: PerformanceData;
-  trends: TrendData;,
+  trends: TrendData;
   insights: AnalyticsInsight;
 }
 export interface AnalyticsPeriod {
-  start: Date;,
+  start: Date;
   end: Date;
-  granularity: 'hour' | 'day' | 'week' | 'month';
-}
+  granularity: 'hour' | 'day' | 'week' | 'month'
+  }
 export interface TargetingMetrics {
-  totalReach: number;,
+  totalReach: number;
   uniqueReach: number;
-  impressions: number;,
+  impressions: number;
   clicks: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  clickThroughRate: number;,
+  clickThroughRate: number;
   cost: number;
-  costPerClick: number;,
+  costPerClick: number;
   costPerConversion: number;
   returnOnAdSpend: number;
 }
@@ -154,17 +154,17 @@ export interface PerformanceData {
   byLocation: Map<string, TargetingMetrics>;
 }
 export interface TrendData {
-  metric: string;,
+  metric: string;
   values: { timestamp: Date; value: number }[];
-  trend: 'increasing' | 'decreasing' | 'stable' | 'volatile';,
+  trend: 'increasing' | 'decreasing' | 'stable' | 'volatile';
   changeRate: number;
 }
 export interface AnalyticsInsight {
-  type: InsightType;,
+  type: InsightType;
   title: string;
-  description: string;,
+  description: string;
   impact: InsightImpact;
-  confidence: number;,
+  confidence: number;
   recommendation: string;
   data: any;
 }
@@ -177,19 +177,19 @@ export type InsightImpact = 'low' | 'medium' | 'high' | 'critical';
 // Domain State and Events
 
 export interface TargetingDomainState {
-  audiences: Audience;,
+  audiences: Audience;
   selectedAudience: Audience | null;
-  previewResults: TargetingPreview | null;,
+  previewResults: TargetingPreview | null;
   analytics: TargetingAnalytics | null;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
 }
 export interface TargetingDomainEvents {
-  onAudienceCreated: (audience: Audience) => void;,
-  onAudienceUpdated: (audience: Audience) => void;,
-  onAudienceDeleted: (audienceId: string) => void;,
-  onPreviewGenerated: (preview: TargetingPreview) => void;,
-  onAnalyticsUpdated: (analytics: TargetingAnalytics) => void;,
+  onAudienceCreated: (audience: Audience) => void;
+  onAudienceUpdated: (audience: Audience) => void;
+  onAudienceDeleted: (audienceId: string) => void;
+  onPreviewGenerated: (preview: TargetingPreview) => void;
+  onAnalyticsUpdated: (analytics: TargetingAnalytics) => void;
   onSegmentPerformanceChanged: (segmentId: string, performance: SegmentPerformance) => void;
   // Component Props
 }
@@ -201,8 +201,8 @@ export interface AudienceBuilderProps {
   className?: string;
 }
 export interface ConditionEditorProps {
-  conditions: TargetingCondition;,
-  onChange: (conditions: TargetingCondition) => void;,
+  conditions: TargetingCondition;
+  onChange: (conditions: TargetingCondition) => void;
   availableAttributes: string;
   className?: string;
 }

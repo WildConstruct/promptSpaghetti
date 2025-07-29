@@ -8,48 +8,48 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 export interface PersonalizationABTestingFrameworkProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   testingConfig: ABTestingConfig;
   onTestResult?: (result: ABTestResult) => void;
   onOptimizationRecommendation?: (recommendation: OptimizationRecommendation) => void;
   onExport?: (data: ABTestingExportData) => void;
 }
 export interface ABTestingConfig {
-  testFramework: TestFramework;,
+  testFramework: TestFramework;
   statisticalSettings: StatisticalSettings;
-  experimentDesign: ExperimentDesign;,
+  experimentDesign: ExperimentDesign;
   optimizationSettings: OptimizationSettings;
   // Core data structures
 }
 export interface PersonalizationABTest {
-  testId: string;,
+  testId: string;
   name: string;
-  description: string;,
+  description: string;
   status: TestStatus;
-  variants: TestVariant;,
+  variants: TestVariant;
   metrics: TestMetric;
-  targeting: TestTargeting;,
+  targeting: TestTargeting;
   results: ABTestResult | null;
-  timeline: TestTimeline;,
+  timeline: TestTimeline;
   configuration: TestConfiguration;
 }
 export type TestStatus = 'draft' | 'running' | 'paused' | 'completed' | 'archived';
 
 export interface TestVariant {
-  variantId: string;,
+  variantId: string;
   name: string;
-  description: string;,
+  description: string;
   trafficAllocation: number;
-  personalizationStrategy: PersonalizationStrategy;,
+  personalizationStrategy: PersonalizationStrategy;
   configuration: VariantConfiguration;
   performance: VariantPerformance;
 }
 export interface PersonalizationStrategy {
-  strategyId: string;,
+  strategyId: string;
   name: string;
-  type: PersonalizationType;,
+  type: PersonalizationType;
   parameters: StrategyParameters;
-  targetSegments: string;,
+  targetSegments: string;
   adaptationRules: AdaptationRule;
 }
 export type PersonalizationType = 
@@ -61,20 +61,20 @@ export type PersonalizationType =
   | 'demographic';
 
 export interface ABTestResult {
-  testId: string;,
+  testId: string;
   startDate: number;
-  endDate: number;,
+  endDate: number;
   participants: number;
-  results: VariantResult;,
+  results: VariantResult;
   statisticalSignificance: StatisticalSignificance;
-  winningVariant: string | null;,
+  winningVariant: string | null;
   insights: TestInsight;
   recommendations: TestRecommendation;
 }
 export interface VariantResult {
-  variantId: string;,
+  variantId: string;
   participants: number;
-  metrics: MetricResult;,
+  metrics: MetricResult;
   confidence: number;
   statisticalPower: number;
 
@@ -89,12 +89,12 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   description: i === 0 ? 'Current personalization' : `Enhanced personalization strategy ${i}`}
 },
   trafficAllocation: i === 0 ? 0.5 : 0.5 / (Math.floor(Math.random() * 3) + 1),
-    personalizationStrategy: {,
+    personalizationStrategy: {
   strategyId: `strategy_${i}`}
 },
   name: ['Content-Based', 'Collaborative', 'Hybrid', 'Contextual'][Math.floor(Math.random() * 4)],
       type: ['content_based', 'collaborative_filtering', 'hybrid', 'contextual'][Math.floor(Math.random() * 4)] as PersonalizationType,
-      parameters: {,
+      parameters: {
   threshold: Math.random() * 0.5 + 0.5,
   learningRate: Math.random() * 0.01 + 0.001,
   regularization: Math.random() * 0.1,
@@ -102,13 +102,13 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   targetSegments: ['new_users', 'returning_users', 'premium_users'].slice(0, Math.floor(Math.random() * 3) + 1),
       adaptationRules: [];
   },
-  configuration: {,
+  configuration: {
   maxRecommendations: Math.floor(Math.random() * 10) + 5,
   diversityWeight: Math.random(),
   noveltyWeight: Math.random(),
   freshnessBias: Math.random(),
 },
-  performance: {,
+  performance: {
   clickThroughRate: Math.random() * 0.15 + 0.05,
   conversionRate: Math.random() * 0.08 + 0.02,
   engagementScore: Math.random() * 40 + 60,
@@ -135,7 +135,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   type: 'primary',
   target: 0.05,
   minimumDetectableEffect: 0.01],
-  targeting: {,
+  targeting: {
   audience: 'all_users',
   segments: ['new_users', 'returning_users'],
   filters: [],
@@ -146,7 +146,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   startDate: Date.now() - Math.random() * 30 * 86400000,
   endDate: Date.now() - Math.random() * 7 * 86400000,
   participants: Math.floor(Math.random() * 8000) + 2000,
-  results: variants.map(variant => ({,)
+  results: variants.map(variant => ({)
   variantId: variant.variantId,
   participants: Math.floor(Math.random() * 2000) + 500,
   metrics: [,
@@ -154,7 +154,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   metricId: 'click_through_rate',
   value: Math.random() * 0.15 + 0.05,
   standardError: Math.random() * 0.01 + 0.005,
-  confidenceInterval: {,
+  confidenceInterval: {
   lower: Math.random() * 0.05 + 0.05,
   upper: Math.random() * 0.05 + 0.15,
 }
@@ -162,13 +162,13 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
   metricId: 'conversion_rate',
   value: Math.random() * 0.08 + 0.02,
   standardError: Math.random() * 0.005 + 0.002,
-  confidenceInterval: {,
+  confidenceInterval: {
   lower: Math.random() * 0.02 + 0.02,
   upper: Math.random() * 0.02 + 0.08],
   confidence: Math.random() * 0.3 + 0.7,
   statisticalPower: Math.random() * 0.2 + 0.8,
 })),
-      statisticalSignificance: {,
+      statisticalSignificance: {
   pValue: Math.random() * 0.05,
   confidence: Math.random() * 0.05 + 0.95,
   effect: Math.random() * 0.3 + 0.1,
@@ -178,13 +178,13 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       insights: [],
       recommendations: [];
   } : null,
-    timeline: {,
+    timeline: {
   plannedStart: Date.now() + Math.random() * 7 * 86400000,
   plannedEnd: Date.now() + Math.random() * 21 * 86400000,
   actualStart: Date.now() - Math.random() * 14 * 86400000,
   actualEnd: Math.random() > 0.5 ? Date.now() - Math.random() * 7 * 86400000 : null,
 },
-  configuration: {,
+  configuration: {
   confidenceLevel: 0.95,
   minimumSampleSize: Math.floor(Math.random() * 5000) + 1000,
   maximumDuration: Math.floor(Math.random() * 30) + 14,
@@ -230,13 +230,13 @@ export const PersonalizationABTestingFramework: React.FC<PersonalizationABTestin
           title: 'Hybrid Personalization Shows Best Performance',
           description: 'Hybrid algorithms consistently outperform single-strategy approaches',
           priority: 'high',
-          expectedImpact: {,
+          expectedImpact: {
   conversionIncrease: 15.3,
   engagementIncrease: 22.1,
   revenueIncrease: 18750,
   confidenceLevel: 0.94,
 },
-  implementation: {,
+  implementation: {
   complexity: 'medium',
   estimatedTime: '2-3 weeks',
   resources: ['ML Engineer', 'Data Scientist'],
@@ -255,7 +255,7 @@ export const PersonalizationABTestingFramework: React.FC<PersonalizationABTestin
   if (onExport) {
   const exportData: ABTestingExportData = {,
   tests,
-  summary: {,
+  summary: {
   totalTests: tests.length,
   runningTests: tests.filter(t => t.status === 'running').length,
   completedTests: tests.filter(t => t.status === 'completed').length,
@@ -574,137 +574,137 @@ export const PersonalizationABTestingFramework: React.FC<PersonalizationABTestin
 // Supporting interfaces (condensed)
 
 export interface TestFramework {
-  platform: string;,
+  platform: string;
   version: string;
   capabilities: string;
 }
 export interface StatisticalSettings {
-  confidenceLevel: number;,
+  confidenceLevel: number;
   power: number;
-  minimumDetectableEffect: number;,
+  minimumDetectableEffect: number;
   multipleTestingCorrection: boolean;
 }
 export interface ExperimentDesign {
-  designType: 'ab' | 'multivariate' | 'factorial';,
+  designType: 'ab' | 'multivariate' | 'factorial';
   randomizationUnit: 'user' | 'session' | 'request';
   stratification: string;
 }
 export interface OptimizationSettings {
-  algorithm: 'frequentist' | 'bayesian' | 'bandit';,
+  algorithm: 'frequentist' | 'bayesian' | 'bandit';
   earlyStoppingRules: EarlyStoppingRule;
   adaptiveAllocation: boolean;
 }
 export interface EarlyStoppingRule {
-  condition: string;,
+  condition: string;
   threshold: number;
   minimumSampleSize: number;
 }
 export interface TestMetric {
-  metricId: string;,
+  metricId: string;
   name: string;
-  type: 'primary' | 'secondary' | 'guardrail';,
+  type: 'primary' | 'secondary' | 'guardrail';
   target: number;
   minimumDetectableEffect: number;
 }
 export interface TestTargeting {
-  audience: string;,
+  audience: string;
   segments: string;
-  filters: TargetingFilter;,
+  filters: TargetingFilter;
   sampleSize: number;
 }
 export interface TargetingFilter {
-  field: string;,
+  field: string;
   operator: string;
   value: Error;
 }
 export interface TestTimeline {
-  plannedStart: number;,
+  plannedStart: number;
   plannedEnd: number;
-  actualStart: number | null;,
+  actualStart: number | null;
   actualEnd: number | null;
 }
 export interface TestConfiguration {
-  confidenceLevel: number;,
+  confidenceLevel: number;
   minimumSampleSize: number;
-  maximumDuration: number;,
+  maximumDuration: number;
   earlyStoppingEnabled: boolean;
-  multipleTestingCorrection: boolean;,
+  multipleTestingCorrection: boolean;
   sequentialTesting: boolean;
 }
 export interface StrategyParameters {
   [key: string]: unknown;
 }
 export interface AdaptationRule {
-  ruleId: string;,
+  ruleId: string;
   condition: string;
-  action: string;,
+  action: string;
   parameters: Record<string, any>;
 }
 export interface VariantConfiguration {
-  maxRecommendations: number;,
+  maxRecommendations: number;
   diversityWeight: number;
-  noveltyWeight: number;,
+  noveltyWeight: number;
   freshnessBias: number;
 }
 export interface VariantPerformance {
-  clickThroughRate: number;,
+  clickThroughRate: number;
   conversionRate: number;
-  engagementScore: number;,
+  engagementScore: number;
   userSatisfaction: number;
 }
 export interface MetricResult {
-  metricId: string;,
+  metricId: string;
   value: number;
-  standardError: number;,
-  confidenceInterval: {,
-  lower: number;,
+  standardError: number;
+  confidenceInterval: {
+  lower: number;
   upper: number;
 };
 }
 export interface StatisticalSignificance {
-  pValue: number;,
+  pValue: number;
   confidence: number;
-  effect: number;,
+  effect: number;
   significance: boolean;
 }
 export interface TestInsight {
-  insightId: string;,
+  insightId: string;
   type: string;
-  message: string;,
+  message: string;
   evidence: string;
 }
 export interface TestRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   action: string;
-  rationale: string;,
-  priority: 'low' | 'medium' | 'high';
-}
+  rationale: string;
+  priority: 'low' | 'medium' | 'high'
+  }
 export interface OptimizationRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   type: string;
-  title: string;,
+  title: string;
   description: string;
-  priority: 'low' | 'medium' | 'high';,
-  expectedImpact: {,
-  conversionIncrease: number;,
+  priority: 'low' | 'medium' | 'high';
+  expectedImpact: {
+  conversionIncrease: number;
   engagementIncrease: number;
-  revenueIncrease: number;,
+  revenueIncrease: number;
   confidenceLevel: number;
 };
-  implementation: {,
+  implementation: {
   complexity: 'low' | 'medium' | 'high';
-  estimatedTime: string;,
+  estimatedTime: string;
   resources: string;
   steps: string;
 };
   testEvidence: string;
 }
 export interface ABTestingExportData {
-  tests: PersonalizationABTest;,
-  summary: {,
-  totalTests: number;,
+  tests: PersonalizationABTest;
+  summary: {
+  totalTests: number;
   runningTests: number;
-  completedTests: number;,
+  completedTests: number;
   significantResults: number;
   averageUplift: number;
 };

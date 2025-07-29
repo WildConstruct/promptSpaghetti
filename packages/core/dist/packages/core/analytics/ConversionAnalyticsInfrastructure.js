@@ -145,7 +145,8 @@ Promise < DataExportResult > {
                         sessionId;
                     currentEvent.sessionId,
                         properties;
-                    { }
+                    {
+                    }
                 }
                 finally {
                 }
@@ -539,7 +540,9 @@ catch (error) {
                                                                                                                     constructor(config) {
                                                                                                                         this.config = config;
                                                                                                                     }
-                                                                                                                    getName() { return 'validation'; }
+                                                                                                                    getName() {
+                                                                                                                        return 'validation';
+                                                                                                                    }
                                                                                                                     async process(event) {
                                                                                                                         // Simplified validation
                                                                                                                         const hasRequiredFields = this.config.requiredFields.every(field => );
@@ -599,7 +602,9 @@ catch (error) {
                                                                                                                                             constructor(config) {
                                                                                                                                                 this.config = config;
                                                                                                                                             }
-                                                                                                                                            getName() { return 'transformation'; }
+                                                                                                                                            getName() {
+                                                                                                                                                return 'transformation';
+                                                                                                                                            }
                                                                                                                                             async process(event) {
                                                                                                                                                 const transformedEvent = { ...event };
                                                                                                                                                 if (this.config.normalizeTimestamps) {
@@ -639,7 +644,9 @@ catch (error) {
                                                                                                                                                                     constructor(config) {
                                                                                                                                                                         this.config = config;
                                                                                                                                                                     }
-                                                                                                                                                                    getName() { return 'storage'; }
+                                                                                                                                                                    getName() {
+                                                                                                                                                                        return 'storage';
+                                                                                                                                                                    }
                                                                                                                                                                     async process(event) {
                                                                                                                                                                         // Storage logic would happen here
                                                                                                                                                                         return { success: true, transformedEvent: event };

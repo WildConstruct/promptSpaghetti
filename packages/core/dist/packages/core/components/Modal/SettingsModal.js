@@ -248,7 +248,7 @@ return;
 _jsxs(Modal, { isOpen: isOpen, onClose: onClose, title: "Advanced Settings", size: "large", "aria-describedby": "settings-description", children: [_jsx("div", { id: "settings-description", className: "sr-only", children: "Configure advanced execution, batch processing, performance, and interface settings" }), _jsxs("div", { style: { display: 'flex', height: '600px', gap: '24px' }, children: [_jsx("div", { style: {
                         width: '240px',
                         borderRight: `1px solid ${uiColors.ui.border}`
-                    } }), ", paddingRight: '24px'; }}>", _jsx("div", { style: {
+                    } }), ", paddingRight: '24px' }}>", _jsx("div", { style: {
                         marginBottom: '16px',
                         fontSize: '14px',
                         fontWeight: 500,
@@ -267,7 +267,7 @@ _jsxs(Modal, { isOpen: isOpen, onClose: onClose, title: "Advanced Settings", siz
                 }
                     ? uiColors.accent.primary + '10'
                     : 'transparent',
-                    border), ": activeGroup === group.id , ? `1px solid $", uiColors.accent.primary, "` } : '1px solid transparent', borderRadius: '8px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline: 'none'; }} onMouseEnter=", (e) => {
+                    border), ": activeGroup === group.id , ? `1px solid $", uiColors.accent.primary, "` } : '1px solid transparent', borderRadius: '8px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline: 'none' }} onMouseEnter=", (e) => {
                     if (activeGroup !== group.id) {
                         e.currentTarget.style.backgroundColor = uiColors.ui.hover;
                     }

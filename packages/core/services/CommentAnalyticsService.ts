@@ -22,35 +22,35 @@ export interface EngagementBreakdown {
   [key: string]: number;
 }
 export interface TimeSeriesData {
-  timestamp: string;,
+  timestamp: string;
   value: number;
 }
 export interface CommentMetrics {
-  totalComments: number;,
+  totalComments: number;
   totalReplies: number;
-  totalThreads: number;,
+  totalThreads: number;
   uniqueCommenters: number;
-  averageRating: number;,
+  averageRating: number;
   engagementRate: number;
 }
 export interface SentimentAnalysis {
-  positive: number;,
+  positive: number;
   neutral: number;
-  negative: number;,
+  negative: number;
   averageScore: number;
   confidence: number;
 }
 export interface TopicTrend {
-  topic: string;,
+  topic: string;
   mentionCount: number;
-  sentimentAverage: number;,
+  sentimentAverage: number;
   growthRate: number;
   peakHour?: number;
 }
 export interface UserEngagementData {
-  userId: string;,
+  userId: string;
   commentsPosted: number;
-  likesReceived: number;,
+  likesReceived: number;
   influenceScore: number;
   reputationScore: number;
 }
@@ -72,9 +72,9 @@ export class CommentAnalyticsService {
   /**
    * Get comprehensive comment analytics for a resource
    */
-  async getCommentAnalytics(resourceId: string,)
+  async getCommentAnalytics(resourceId: string)
     resourceType: CommentableResourceType,
-    options: {,
+    options: {
   startDate?: Date;
   endDate?: Date;
   includeRealTime?: boolean;
@@ -112,11 +112,11 @@ export class CommentAnalyticsService {
       const analytics: CommentAnalytics = {
   resourceId,
   resourceType,
-  timeRange: {,
+  timeRange: {
   startDate: startDate.toISOString(),
   endDate: endDate.toISOString(),
 },
-  summary: {,
+  summary: {
   totalComments: coreMetrics.totalComments,
   totalEngagements: engagementData.totalEngagements,
   uniqueCommenters: coreMetrics.uniqueCommenters,
@@ -125,7 +125,7 @@ export class CommentAnalyticsService {
   growthRate: await this.calculateGrowthRate(resourceId, resourceType, startDate, endDate),
   trendingScore: await this.calculateTrendingScore(resourceId, resourceType),
 },
-  engagement: {,
+  engagement: {
   likesCount: engagementData.likes,
   repliesCount: engagementData.replies,
   sharesCount: engagementData.shares,
@@ -134,7 +134,7 @@ export class CommentAnalyticsService {
   engagementVelocity: await this.calculateEngagementVelocity(resourceId, resourceType),
   peakEngagementTime: await this.getPeakEngagementTime(resourceId, resourceType, startDate, endDate),
 },
-  content: {,
+  content: {
   averageCommentLength: await this.getAverageCommentLength(resourceId, resourceType, startDate, endDate),
   responseTime: await this.getAverageResponseTime(resourceId, resourceType, startDate, endDate),
   qualityScore: await this.getQualityScore(resourceId, resourceType, startDate, endDate),
@@ -146,18 +146,18 @@ export class CommentAnalyticsService {
           topTopics: topicData.slice(0, 5).map(t => t.topic),
           languageDistribution: await this.getLanguageDistribution(resourceId, resourceType, startDate, endDate)
   },
-  trends: {,
+  trends: {
   dailyActivity: timeSeriesData.daily,
           hourlyActivity: timeSeriesData.hourly,
           weeklyActivity: timeSeriesData.weekly,
           monthlyActivity: timeSeriesData.monthly,
-          topicEvolution: topicData.map(t => ({,)
+          topicEvolution: topicData.map(t => ({)
   topic: t.topic,
             timeline: [{ date: endDate.toISOString().split('T')[0], count: t.mentionCount }]
           }))
   },
-  breakdowns: {,
-  byEngagementType: {,
+  breakdowns: {
+  byEngagementType: {
   'like': engagementData.likes,
   'reply': engagementData.replies,
   'share': engagementData.shares,
@@ -176,7 +176,7 @@ export class CommentAnalyticsService {
 } : { positive: 0, neutral: 0, negative: 0 }
   },
   topContributors: await this.getTopContributors(resourceId, resourceType, startDate, endDate),
-        comparisons: {,
+        comparisons: {
   previousPeriod: await this.getPreviousPeriodComparison(resourceId, resourceType, startDate, endDate),
   benchmark: await this.getBenchmarkComparison(resourceType),
   similarResources: await this.getSimilarResourcesComparison(resourceId, resourceType),
@@ -190,7 +190,7 @@ export class CommentAnalyticsService {
   /**
    * Record a comment engagement event
    */
-  async recordEngagementEvent(commentId: string,)
+  async recordEngagementEvent(commentId: string)
     userId: string | null,
     sessionId: string,
     engagementType: CommentEngagementType,
@@ -226,7 +226,7 @@ export class CommentAnalyticsService {
       console.error('Error updating daily analytics:', error);
       throw new Error(`Failed to update daily analytics: ${error.message}`);}
   // Private helper methods
-  private async getCoreMetrics(resourceId: string,)
+  private async getCoreMetrics(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<CommentMetrics> {,
@@ -252,7 +252,7 @@ export class CommentAnalyticsService {
   averageRating: parseFloat(row.average_rating),
   engagementRate: totalEngagements / Math.max(parseInt(row.total_comments), 1),
 };
-  private async getEngagementBreakdowns(resourceId: string,)
+  private async getEngagementBreakdowns(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<any> {,
@@ -290,7 +290,7 @@ export class CommentAnalyticsService {
   case 'report': breakdowns.reports = count; break;
 });
     return breakdowns;
-  private async getTimeSeriesData(resourceId: string,)
+  private async getTimeSeriesData(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<any> {,
@@ -327,7 +327,7 @@ export class CommentAnalyticsService {
       weekly: Array(7).fill(0).map((_, i) => Math.floor(Math.random() * 50)), // Placeholder
       monthly: dailyResult.rows.map(row => parseInt(row.count));
   };
-  private async getSentimentAnalysis(resourceId: string,)
+  private async getSentimentAnalysis(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<SentimentAnalysis | null> {,
@@ -364,7 +364,7 @@ export class CommentAnalyticsService {
   averageScore: (positive - negative) / totalCount,
   confidence: totalConfidence / totalCount,
 };
-  private async getTopicTrends(resourceId: string,)
+  private async getTopicTrends(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<TopicTrend> {,
@@ -388,7 +388,7 @@ export class CommentAnalyticsService {
   sentimentAverage: parseFloat(row.avg_sentiment),
   growthRate: parseFloat(row.avg_growth_rate),
 }));
-  private async getTotalEngagements(resourceId: string,)
+  private async getTotalEngagements(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<number> {,
@@ -401,7 +401,7 @@ export class CommentAnalyticsService {
       [resourceId, resourceType, startDate, endDate]
     );
     return parseInt(result.rows[0].total);
-  private async calculateGrowthRate(resourceId: string,)
+  private async calculateGrowthRate(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<number> {,
@@ -432,7 +432,7 @@ export class CommentAnalyticsService {
       [resourceId, resourceType]
     );
     return parseFloat(result.rows[0].velocity) || 0;
-  private async getPeakEngagementTime(resourceId: string,)
+  private async getPeakEngagementTime(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<string> {,
@@ -452,7 +452,7 @@ export class CommentAnalyticsService {
     if (result.rows.length === 0) return '12:00';
     const hour = parseInt(result.rows[0].hour);
     return `${hour.toString().padStart(2, '0')}:00`;}
-  private async getAverageCommentLength(resourceId: string,)
+  private async getAverageCommentLength(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<number> {,
@@ -464,7 +464,7 @@ export class CommentAnalyticsService {
   [resourceId, resourceType, startDate, endDate]
   );
   return parseFloat(result.rows[0].avg_length) || 0;
-  private async getAverageResponseTime(resourceId: string,)
+  private async getAverageResponseTime(resourceId: string)
   resourceType: string,
   startDate: Date,
   endDate: Date): Promise<number> {,
@@ -479,7 +479,7 @@ export class CommentAnalyticsService {
   [resourceId, resourceType, startDate, endDate]
   );
   return parseFloat(result.rows[0].avg_minutes) || 0;
-  private async getQualityScore(resourceId: string,)
+  private async getQualityScore(resourceId: string)
   resourceType: string,
   startDate: Date,
   endDate: Date): Promise<number> {,
@@ -499,7 +499,7 @@ export class CommentAnalyticsService {
   [resourceId, resourceType, startDate, endDate]
   );
   return parseFloat(result.rows[0].quality_score) || 70;
-  private async getLanguageDistribution(resourceId: string,)
+  private async getLanguageDistribution(resourceId: string)
   resourceType: string,
   startDate: Date,
   endDate: Date): Promise<Record<string, number>> {,
@@ -510,7 +510,7 @@ export class CommentAnalyticsService {
   'fr': 3,
   'de': 2,
 };
-  private async getUserTypeBreakdown(resourceId: string,)
+  private async getUserTypeBreakdown(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<Record<string, number>> {
@@ -520,7 +520,7 @@ export class CommentAnalyticsService {
   'regular': 65,
   'new': 10,
 };
-  private async getTopContributors(resourceId: string,)
+  private async getTopContributors(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<UserEngagementData> {,
@@ -553,7 +553,7 @@ export class CommentAnalyticsService {
   influenceScore: parseFloat(row.influence_score),
   reputationScore: parseFloat(row.influence_score) * 1.2 // Simple calculation,
 }));
-  private async getPreviousPeriodComparison(resourceId: string,)
+  private async getPreviousPeriodComparison(resourceId: string)
     resourceType: string,
     startDate: Date,
     endDate: Date): Promise<any> {,

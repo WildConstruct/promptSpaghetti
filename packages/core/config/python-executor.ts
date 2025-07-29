@@ -8,27 +8,27 @@ export interface PythonExecutorConfig {
   serviceUrl: string;
   apiKey?: string;
   // Request settings
-  timeout: number;,
+  timeout: number;
   retryAttempts: number;
   retryDelay: number;
   // Resource limits
-  defaultMemoryLimit: string;,
+  defaultMemoryLimit: string;
   defaultTimeout: number;
-  maxMemoryLimit: string;,
+  maxMemoryLimit: string;
   maxTimeout: number;
   // Security settings
-  strictMode: boolean;,
+  strictMode: boolean;
   enableCaching: boolean;
   allowedModules: string;
   // Fallback behavior
-  fallbackBehavior: 'error' | 'skip' | 'default';,
+  fallbackBehavior: 'error' | 'skip' | 'default';
   defaultOutput: string;
   // Monitoring
-  enableMetrics: boolean;,
+  enableMetrics: boolean;
   enableTracing: boolean;
   enableAuditLogs: boolean;
   // Development
-  enableDebugLogs: boolean;,
+  enableDebugLogs: boolean;
   enableValidation: boolean;
   const DEFAULT_CONFIG: PythonExecutorConfig = {,
   // Service connection

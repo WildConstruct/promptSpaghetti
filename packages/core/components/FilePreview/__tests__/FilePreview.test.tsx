@@ -9,7 +9,7 @@ import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
-  projectManager: {,
+  projectManager: {
   generateThumbnail: jest.fn(),
   getMockFile: jest.fn(),
 }));
@@ -22,7 +22,7 @@ describe('FilePreview Component', () => {
   size: 1024,
   lastModified: new Date('2025-01-15T10:00:00Z'),
   nodeCount: 15,
-  metadata: {,
+  metadata: {
   title: 'Test Graph',
   description: 'A test graph for unit testing',
   tags: ['test', 'graph'],

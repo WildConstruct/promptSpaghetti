@@ -47,92 +47,92 @@ export interface SocialPlatformIntegrationProps {
   customizations?: SocialCustomizations;
 }
 export interface SocialPlatform {
-  id: string;,
+  id: string;
   name: string;
-  displayName: string;,
+  displayName: string;
   icon: React.ComponentType<unknown>;
-  color: string;,
+  color: string;
   description: string;
-  enabled: boolean;,
+  enabled: boolean;
   requiresAuth: boolean;
-  config: PlatformConfig;,
+  config: PlatformConfig;
   features: PlatformFeatures;
-  limits: PlatformLimits;,
+  limits: PlatformLimits;
   analytics: PlatformAnalytics;
 }
 export interface PlatformConfig {
   apiEndpoint?: string;
   clientId?: string;
   redirectUri?: string;
-  scopes: string;,
+  scopes: string;
   customFields: Record<string, any>;
   webhookUrl?: string;
   rateLimit: RateLimitConfig;
 }
 export interface RateLimitConfig {
-  requestsPerMinute: number;,
+  requestsPerMinute: number;
   requestsPerHour: number;
-  burstLimit: number;,
+  burstLimit: number;
   retryAfter: number;
 }
 export interface PlatformFeatures {
-  directPosting: boolean;,
+  directPosting: boolean;
   scheduledPosting: boolean;
-  mediaUpload: boolean;,
+  mediaUpload: boolean;
   hashtags: boolean;
-  mentions: boolean;,
+  mentions: boolean;
   geotagging: boolean;
-  crossPosting: boolean;,
+  crossPosting: boolean;
   analytics: boolean;
   engagement: boolean;
 }
 export interface PlatformLimits {
-  maxTextLength: number;,
+  maxTextLength: number;
   maxImages: number;
-  maxVideos: number;,
+  maxVideos: number;
   maxHashtags: number;
-  maxMentions: number;,
+  maxMentions: number;
   fileSize: number;
   videoLength: number;
 }
 export interface PlatformAnalytics {
-  impressions: number;,
+  impressions: number;
   engagements: number;
-  clicks: number;,
+  clicks: number;
   shares: number;
-  reach: number;,
+  reach: number;
   lastUpdated: Date;
 }
 export interface ShareRecord {
-  id: string;,
+  id: string;
   templateId: string;
-  platform: string;,
+  platform: string;
   shareType: ShareType;
-  content: ShareContent;,
+  content: ShareContent;
   timestamp: Date;
-  userId: string;,
+  userId: string;
   success: boolean;
-  analytics: ShareAnalytics;,
+  analytics: ShareAnalytics;
   metadata: ShareMetadata;
 }
 export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
 
 export interface ShareContent {
-  title: string;,
+  title: string;
   description: string;
   url: string;
   imageUrl?: string;
   videoUrl?: string;
-  hashtags: string;,
+  hashtags: string;
   mentions: string;
   customText?: string;
 }
 export interface ShareAnalytics {
-  views: number;,
+  views: number;
   clicks: number;
-  engagements: number;,
+  engagements: number;
   conversions: number;
-  revenue: number;,
+  revenue: number;
   demographics: DemographicData;
   performance: PerformanceMetrics;
 }
@@ -143,9 +143,9 @@ export interface DemographicData {
   devices: Record<string, number>;
 }
 export interface PerformanceMetrics {
-  clickThroughRate: number;,
+  clickThroughRate: number;
   conversionRate: number;
-  engagementRate: number;,
+  engagementRate: number;
   viralCoefficient: number;
   timeToConversion: number;
 }
@@ -159,11 +159,11 @@ export interface ShareMetadata {
   medium?: string;
 }
 export interface SocialCustomizations {
-  autoHashtags: boolean;,
+  autoHashtags: boolean;
   customBranding: boolean;
-  trackingParameters: boolean;,
+  trackingParameters: boolean;
   crossPlatformSync: boolean;
-  schedulingEnabled: boolean;,
+  schedulingEnabled: boolean;
   analyticsIntegration: boolean;
 
 // Predefined social platforms
@@ -181,12 +181,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share on Twitter with trending hashtags',
     enabled: true,
     requiresAuth: true,
-    config: {,
+    config: {
   scopes: ['tweet.read', 'tweet.write', 'users.read'],
       customFields: { includeThread: false },
       rateLimit: { requestsPerMinute: 300, requestsPerHour: 1500, burstLimit: 100, retryAfter: 900 }
   },
-  features: {,
+  features: {
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -197,7 +197,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   analytics: true,
   engagement: true,
 },
-  limits: {,
+  limits: {
   maxTextLength: 280,
   maxImages: 4,
   maxVideos: 1,
@@ -206,7 +206,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   fileSize: 5242880, // 5MB,
   videoLength: 140,
 },
-  analytics: {,
+  analytics: {
   impressions: 0,
   engagements: 0,
   clicks: 0,
@@ -227,12 +227,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share professionally on LinkedIn',
     enabled: true,
     requiresAuth: true,
-    config: {,
+    config: {
   scopes: ['r_liteprofile', 'w_member_social'],
       customFields: { targetAudience: 'professional' },
       rateLimit: { requestsPerMinute: 100, requestsPerHour: 500, burstLimit: 50, retryAfter: 3600 }
   },
-  features: {,
+  features: {
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -243,7 +243,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   analytics: true,
   engagement: true,
 },
-  limits: {,
+  limits: {
   maxTextLength: 3000,
   maxImages: 9,
   maxVideos: 1,
@@ -252,7 +252,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   fileSize: 104857600, // 100MB,
   videoLength: 600,
 },
-  analytics: {,
+  analytics: {
   impressions: 0,
   engagements: 0,
   clicks: 0,
@@ -273,12 +273,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share with Facebook communities',
     enabled: true,
     requiresAuth: true,
-    config: {,
+    config: {
   scopes: ['pages_manage_posts', 'pages_read_engagement'],
       customFields: { pageId: '', autoSchedule: false },
       rateLimit: { requestsPerMinute: 200, requestsPerHour: 4800, burstLimit: 600, retryAfter: 300 }
   },
-  features: {,
+  features: {
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -289,7 +289,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   analytics: true,
   engagement: true,
 },
-  limits: {,
+  limits: {
   maxTextLength: 63206,
   maxImages: 10,
   maxVideos: 1,
@@ -298,7 +298,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   fileSize: 104857600, // 100MB,
   videoLength: 240,
 },
-  analytics: {,
+  analytics: {
   impressions: 0,
   engagements: 0,
   clicks: 0,
@@ -319,12 +319,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share in relevant Reddit communities',
     enabled: true,
     requiresAuth: true,
-    config: {,
+    config: {
   scopes: ['identity', 'submit', 'read'],
       customFields: { subreddit: 'promptengineering', flairId: '' },
       rateLimit: { requestsPerMinute: 60, requestsPerHour: 600, burstLimit: 10, retryAfter: 600 }
   },
-  features: {,
+  features: {
   directPosting: true,
   scheduledPosting: false,
   mediaUpload: true,
@@ -335,7 +335,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   analytics: true,
   engagement: true,
 },
-  limits: {,
+  limits: {
   maxTextLength: 40000,
   maxImages: 1,
   maxVideos: 1,
@@ -344,7 +344,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   fileSize: 20971520, // 20MB,
   videoLength: 900,
 },
-  analytics: {,
+  analytics: {
   impressions: 0,
   engagements: 0,
   clicks: 0,
@@ -365,12 +365,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share in Discord servers and communities',
     enabled: true,
     requiresAuth: true,
-    config: {,
+    config: {
   scopes: ['bot', 'messages.read'],
       customFields: { webhookUrl: '', channelId: '', guildId: '' },
       rateLimit: { requestsPerMinute: 50, requestsPerHour: 1000, burstLimit: 5, retryAfter: 1000 }
   },
-  features: {,
+  features: {
   directPosting: true,
   scheduledPosting: false,
   mediaUpload: true,
@@ -381,7 +381,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   analytics: false,
   engagement: true,
 },
-  limits: {,
+  limits: {
   maxTextLength: 2000,
   maxImages: 10,
   maxVideos: 1,
@@ -390,7 +390,7 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   fileSize: 8388608, // 8MB,
   videoLength: 600,
 },
-  analytics: {,
+  analytics: {
   impressions: 0,
   engagements: 0,
   clicks: 0,
@@ -470,13 +470,13 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
     engagements: 0,
     conversions: 0,
     revenue: 0,
-    demographics: {,
+    demographics: {
   ageGroups: {},
       geoLocations: {},
       interests: {},
       devices: {}
   },
-  performance: {,
+  performance: {
   clickThroughRate: 0,
   conversionRate: 0,
   engagementRate: 0,
@@ -525,7 +525,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
       utm_medium: 'social',
       utm_campaign: `template_${template.id}`}
 },
-  utm_content: 'share_button';
+  utm_content: 'share_button'
   } : {};
     const shareRecord: ShareRecord = {,
   id: `share_${Date.now()}_${platformId}`}
@@ -533,33 +533,33 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
   templateId: template.id,
       platform: platformId,
       shareType: 'direct',
-      content: {,
+      content: {
   ...content,
   url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
 },
   timestamp: new Date(),
       userId: 'current_user', // Would come from auth context
       success: Math.random() > 0.1, // 90% success rate simulation
-      analytics: {,
+      analytics: {
   views: Math.floor(Math.random() * 1000),
         clicks: Math.floor(Math.random() * 100),
         engagements: Math.floor(Math.random() * 50),
         conversions: Math.floor(Math.random() * 10),
         revenue: Math.floor(Math.random() * 1000) / 100,
-        demographics: {,
+        demographics: {
   ageGroups: { '18-24': 30, '25-34': 45, '35-44': 25 },
           geoLocations: { 'US': 60, 'EU': 25, 'Other': 15 },
           interests: { 'AI': 80, 'Tech': 70, 'Productivity': 60 },
           devices: { 'Desktop': 60, 'Mobile': 35, 'Tablet': 5 }
   },
-  performance: {,
+  performance: {
   clickThroughRate: Math.random() * 10,
   conversionRate: Math.random() * 5,
   engagementRate: Math.random() * 15,
   viralCoefficient: Math.random() * 2,
   timeToConversion: Math.random() * 3600,
 },
-  metadata: {,
+  metadata: {
   userAgent: navigator.userAgent,
   referrer: document.referrer,
   deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',

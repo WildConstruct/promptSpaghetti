@@ -12,13 +12,13 @@ import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 
 export interface WeightedChoiceData {
   choices?: Array<{,
-  text: string;,
+  text: string;
   weight: number;
 }>;
   [key: string]: unknown;
 }
 export interface DragReorderWeightedChoiceEditorProps {
-  data: WeightedChoiceData;,
+  data: WeightedChoiceData;
   onChange: (data: Partial<WeightedChoiceData>) => void;
   nodeId?: string;
   disabled?: boolean;
@@ -52,7 +52,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   text: choice.text || `Choice ${index + 1}`}
 },
   weight: choice.weight || 1,
-      category: 'choice';
+      category: 'choice'
   }));
   }, [data.choices]);
   // Handle options change from drag-reorder component
@@ -116,7 +116,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   border: '#e5e7eb',
@@ -126,7 +126,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   warning: '#f59e0b',
   error: '#ef4444',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   border: '#4b5563',
@@ -136,7 +136,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   warning: '#fbbf24',
   error: '#f87171',
 },
-  cinema: {,
+  cinema: {
   background: '#1a1a1a',
   secondary: '#0d1117',
   border: '#ff7c00',
@@ -235,7 +235,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
             background: styles.secondary,
             border: `1px solid ${styles.border}`}
 },
-  borderRadius: '8px';
+  borderRadius: '8px'
   }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{
@@ -294,7 +294,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
 },
   borderRadius: '8px',
             padding: '16px',
-            marginBottom: '20px';
+            marginBottom: '20px'
   }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <input
@@ -311,7 +311,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   borderRadius: '6px',
                   background: styles.background,
                   color: styles.text,
-                  fontSize: '14px';
+                  fontSize: '14px'
   }}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') handleAddChoice();
@@ -348,7 +348,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   borderRadius: '6px',
                   padding: '8px 16px',
                   fontSize: '14px',
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
               >
               Cancel
@@ -422,7 +422,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
             background: styles.secondary,
             border: `1px solid ${styles.border}`}
 },
-  borderRadius: '12px';
+  borderRadius: '12px'
   }}>
             <div style={{
   display: 'flex',
@@ -456,7 +456,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   borderRadius: '4px',
                     background: styles.background,
                     color: styles.text,
-                    fontSize: '12px';
+                    fontSize: '12px'
   }}
                 />
                 <button

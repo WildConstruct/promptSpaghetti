@@ -42,14 +42,14 @@ describe('DataRetrievalRateLimit', () => {
   clearanceLevel: 'INTERNAL' as DataClassificationLevel,
   department: 'Engineering',
   jobTitle: 'Software Engineer',
-  location: {,
+  location: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
   timezone: 'PST',
   withinApprovedRegions: true,
 },
-  device: {,
+  device: {
   deviceId: 'device-123',
   deviceType: 'LAPTOP',
   operatingSystem: 'macOS',
@@ -61,7 +61,7 @@ describe('DataRetrievalRateLimit', () => {
   registered: true,
   lastSeen: new Date(),
 },
-  behaviorProfile: {,
+  behaviorProfile: {
   normalAccessPatterns: [],
       anomalyScore: 5,
       typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
@@ -301,7 +301,7 @@ describe('DataRetrievalRateLimit', () => {
     });
     test('should apply location-based adjustments', async () => {
   const subject = createTestSubject({)
-  location: {,
+  location: {
   ...createTestSubject().location,
   withinApprovedRegions: false,
 });
@@ -352,7 +352,7 @@ describe('DataRetrievalRateLimit', () => {
     test('should detect off-hours access anomaly', async () => {
   jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3 as unknown as unknown as unknown); // 3 AM
   const subject = createTestSubject({)
-  behaviorProfile: {,
+  behaviorProfile: {
   ...createTestSubject().behaviorProfile,
   typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17] // Business hours,
 });

@@ -22,22 +22,22 @@ export interface RateLimiter {
     reset(key: string): Promise<void>;
 
 export interface ValidationServiceConfig {
-    rateLimiting: {,
+    rateLimiting: {
         enabled: boolean;
         maxGenerationsPerHour: number;
         maxValidationAttemptsPerHour: number;
         maxValidationAttemptsPerCode: number;
     };
-    monitoring: {,
+    monitoring: {
         enabled: boolean;
         alertOnSuspiciousActivity: boolean;
         logAllValidations: boolean;
     };
-    cleanup: {,
+    cleanup: {
         autoDeleteExpired: boolean;
         cleanupIntervalMinutes: number;
     };
-    security: {,
+    security: {
         constantTimeValidation: boolean;
         logFailedAttempts: boolean;
         blockAfterFailures: number;
@@ -132,7 +132,7 @@ export declare class ValidationService extends EventEmitter {
     private logValidationAttempt;
     private checkForSuspiciousActivity;
 
-export declare function createValidationService(storage: VerificationCodeStorage,)
+export declare function createValidationService(storage: VerificationCodeStorage)
   rateLimiter: RateLimiter,
   environment?: 'development' | 'production'
 ): ValidationService;

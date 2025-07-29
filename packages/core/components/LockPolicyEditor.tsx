@@ -5,7 +5,7 @@ import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucid
 import { LockPolicy } from '../types/locking';
 import { useLockingStore } from '../stores/lockingStore';
 interface LockPolicyEditorProps {
-  workspaceId: string;,
+  workspaceId: string;
   onPolicyUpdate: () => void;
   export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({,)
   workspaceId,

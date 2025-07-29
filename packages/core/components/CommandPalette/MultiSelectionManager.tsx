@@ -286,8 +286,8 @@ interface SelectionInfoPanelProps {
   onClearSelection: () => void;
   onSelectAll: () => void;
   onInvertSelection: () => void;
-  theme: 'light' | 'dark' | 'cinema';
-}
+  theme: 'light' | 'dark' | 'cinema'
+  }
 
 const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
   selectedNodes,

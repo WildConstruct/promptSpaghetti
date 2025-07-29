@@ -1,7 +1,7 @@
 import { Edge, Node } from 'reactflow';
 
 export interface ValidationError {
-  edgeId: string;,
+  edgeId: string;
   message: string;
   /**
   * Validate current graph connections.
@@ -9,7 +9,7 @@ export interface ValidationError {
   */
 }
 export function validateConnection(edges: Edge, nodes: Node): ValidationError {
-  const errors: ValidationError = [];
+  const errors: ValidationError[] = [];
   const seenPairs = new Set<string>();
   edges.forEach((e) => {
     // Self-loop

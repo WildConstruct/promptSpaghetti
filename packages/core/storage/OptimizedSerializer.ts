@@ -22,7 +22,7 @@ export interface SerializationOptions {
   */
 }
 export interface SerializationResult {
-  data: string | ArrayBuffer;,
+  data: string | ArrayBuffer;
   format: string;
   size: number;
   compressionRatio?: number;
@@ -33,7 +33,7 @@ export interface SerializationResult {
   */
   interface IncrementalState {
   lastSerialized: number; // timestamp,
-  dirtyNodes: Set<string>;,
+  dirtyNodes: Set<string>;
   baselineChecksum: string;
   version: number;
   /**
@@ -101,7 +101,7 @@ export class OptimizedSerializer {
   /**
    * Incremental serialization - only serialize changes
    */
-  async serializeIncremental(projectData: PSGFile,)
+  async serializeIncremental(projectData: PSGFile)
     projectId: string,
     options: SerializationOptions = { format: 'json', incremental: true }
   ): Promise<SerializationResult & { isIncremental: boolean; deltaSize: number }> {
@@ -137,17 +137,17 @@ export class OptimizedSerializer {
    * Get serialization performance metrics
    */
   getMetrics(): {
-  averageSerializationTime: number;,
+  averageSerializationTime: number;
   totalSerializations: number;
-  compressionStats: {,
-  averageRatio: number;,
+  compressionStats: {
+  averageRatio: number;
   timeSaved: number;
 };
     // Implementation would track these metrics
     return {
   averageSerializationTime: 0,
   totalSerializations: 0,
-  compressionStats: {,
+  compressionStats: {
   averageRatio: 0,
   timeSaved: 0,
 };
@@ -287,11 +287,11 @@ export class OptimizedSerializer {
   private async createDelta(projectData: PSGFile, state: IncrementalState): Promise<Partial<PSGFile>> {
     // Create incremental delta - only changed nodes
     return {
-      metadata: {,
+      metadata: {
         ...projectData.metadata,
         version: `${projectData.metadata.version}+delta.${state.version}`}
   },
-  graph: {,
+  graph: {
   nodes: [], // Only dirty nodes would be included,
   seed: projectData.graph.seed,
 } as any

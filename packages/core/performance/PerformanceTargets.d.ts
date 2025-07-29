@@ -16,11 +16,11 @@ export interface PerformanceTarget {
     critical: number;
     reasoning: string;
     source: 'user-requirement' | 'industry-standard' | 'business-objective' | 'technical-constraint';
-    businessImpact: {,
+    businessImpact: {
         userExperience: 'high' | 'medium' | 'low';
         businessValue: 'high' | 'medium' | 'low';
-        technicalRisk: 'high' | 'medium' | 'low';
-    };
+        technicalRisk: 'high' | 'medium' | 'low'
+  };
 /**
  * Performance targets based on Web Vitals and industry standards
  *
@@ -50,7 +50,7 @@ export declare function getTargetsForUserSegment(segment: PerformanceTargetConfi
 /**
  * Validate if current performance meets targets
  */
-export declare function validatePerformanceTargets(currentMetrics: Record<string,)
+export declare function validatePerformanceTargets(currentMetrics: Record<string)
   number>,
   config: PerformanceTargetConfig,
 ): {
@@ -60,8 +60,8 @@ export declare function validatePerformanceTargets(currentMetrics: Record<string
         kpiId: string;
         current: number;
         target: number;
-        severity: 'warning' | 'critical';
-    }>;
+        severity: 'warning' | 'critical'
+  }>;
     recommendations: string[];
 };
 /**

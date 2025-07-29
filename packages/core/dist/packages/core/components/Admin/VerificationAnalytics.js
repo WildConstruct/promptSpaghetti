@@ -159,42 +159,42 @@ _jsxs(Card, { className: "risk-analysis", children: [_jsx(CardHeader, { children
 return;
 _jsxs("div", { className: `verification-analytics ${className}`, children: ["}", _jsxs("div", { className: "analytics-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Verification Analytics" }), _jsx("p", { children: "System performance and verification insights" })] }), _jsxs("div", { className: "header-controls", children: [_jsxs("select", { value: selectedPeriod, onChange: (e) => setSelectedPeriod(e.target.value), className: "period-select", children: [_jsx("option", { value: "last_7_days", children: "Last 7 Days" }), _jsx("option", { value: "last_30_days", children: "Last 30 Days" }), _jsx("option", { value: "last_90_days", children: "Last 90 Days" }), _jsx("option", { value: "last_year", children: "Last Year" })] }), _jsxs(Button, { onClick: handleRefreshData, disabled: isLoading, variant: "outline", children: [_jsx(RefreshCw, { className: `w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}` }), "} Refresh"] }), _jsxs(Button, { variant: "outline", children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export Report"] })] })] }), _jsxs("div", { className: "analytics-content", children: [renderOverviewMetrics(), _jsxs("div", { className: "analytics-grid", children: [renderRequestTypeAnalysis(), renderTrustScoreDistribution()] }), renderRiskAnalysis()] }), _jsx("style", { children: `
         .verification-analytics {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .analytics-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         .header-controls {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           align-items: center;
         .period-select {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   background: white;
         .analytics-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .overview-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .metrics-grid {
           display: grid;
@@ -209,48 +209,48 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           margin-bottom: 1rem;
         .metric-trend {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
           font-size: 0.75rem;
-          font-weight: 500;,
+          font-weight: 500;
   padding: 0.25rem 0.5rem;
           border-radius: 4px;
         .metric-trend.positive {
-          color: #059669;,
+          color: #059669;
   background: #d1fae5;
         .metric-trend.negative {
-          color: #dc2626;,
+          color: #dc2626;
   background: #fee2e2;
         .metric-trend.neutral {
-          color: #6b7280;,
+          color: #6b7280;
   background: #f3f4f6;
         .metric-content {
           text-align: center;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.5rem;
         .status-breakdown {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .chart-legend {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
           margin-bottom: 1rem;
         .legend-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-size: 0.875rem;
         .legend-color {
-          width: 12px;,
+          width: 12px;
   height: 12px;
           border-radius: 2px;
         .legend-item.approved .legend-color {
@@ -263,9 +263,9 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           display: flex;
           justify-content: center;
         .pie-chart {
-          width: 120px;,
+          width: 120px;
   height: 120px;
-          border-radius: 50%;,
+          border-radius: 50%;
   background: conic-gradient(),
             #10b981 0deg calc(var(--approved-percentage, 0) * 3.6deg),
             #ef4444 calc()
@@ -276,25 +276,25 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           );
         .performance-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .performance-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .performance-label {
           min-width: 120px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           font-weight: 500;
         .performance-bar {
-          flex: 1;,
+          flex: 1;
   height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .performance-fill {
-          height: 100%;,
+          height: 100%;
   transition: width 0.3s ease;
         .performance-fill.sla {
           background: #10b981;
@@ -306,29 +306,29 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           min-width: 60px;
           text-align: right;
           font-size: 0.875rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .analytics-grid {
           display: grid;
-          grid-template-columns: 2fr 1fr;,
+          grid-template-columns: 2fr 1fr;
   gap: 1rem;
         .type-analysis-table {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .table-header {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;,
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
-          padding: 0.75rem;,
+          padding: 0.75rem;
   background: #f9fafb;
           border-radius: 6px;
           font-weight: 600;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .table-row {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;,
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
           padding: 0.75rem;
           border-bottom: 1px solid #e5e7eb;
@@ -336,7 +336,7 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
         .table-row:last-child {
           border-bottom: none;
         .table-cell {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
         .type-name {
           font-weight: 500;
@@ -351,25 +351,25 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           font-weight: 600;
         .distribution-chart {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .distribution-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .range-label {
           min-width: 60px;
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .range-bar {
-          flex: 1;,
+          flex: 1;
   height: 20px;
           background: #e5e7eb;
-          border-radius: 10px;,
+          border-radius: 10px;
   overflow: hidden;
         .range-fill {
-          height: 100%;,
+          height: 100%;
   transition: width 0.3s ease;
         .range-fill.range-0 { background: #10b981; }
         .range-fill.range-1 { background: #3b82f6; }
@@ -383,10 +383,10 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           min-width: 80px;
         .range-count {
           font-size: 0.875rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .range-percentage {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .risk-metrics {
           display: grid;
@@ -395,32 +395,32 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
           margin-bottom: 1.5rem;
         .risk-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 8px;
         .risk-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .risk-value {
           font-size: 1.25rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .risk-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .risk-alerts {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
         .alert-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-size: 0.875rem;
         .alert-item.warning {
@@ -435,7 +435,7 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
         @media (max-width: 768px) {
           .analytics-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .header-controls {
             justify-content: stretch;
@@ -444,7 +444,7 @@ _jsxs("div", { className: `verification-analytics ${className}`, children: ["}",
             grid-template-columns: repeat(2, 1fr);
           .table-header,
           .table-row {
-            grid-template-columns: 2fr 1fr 1fr;,
+            grid-template-columns: 2fr 1fr 1fr;
   gap: 0.5rem;
           .table-header .header-cell:nth-child(4),
           .table-header .header-cell:nth-child(5),

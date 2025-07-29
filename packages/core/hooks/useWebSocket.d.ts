@@ -28,7 +28,7 @@ export interface UseWebSocketReturn {
 
 export declare function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn;
 export declare function usePresence(documentId: string, userId: string, userName?: string, userAvatar?: string): {
-    cursor: {,
+    cursor: {
         x: number;
         y: number;
         nodeId?: string;

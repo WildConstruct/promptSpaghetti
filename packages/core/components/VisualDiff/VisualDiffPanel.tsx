@@ -138,7 +138,7 @@ export interface VisualDiffPanelProps {
         id: node.id,
         type: 'diffNode',
         position: node.position || { x: 0, y: 0 },
-        data: {,
+        data: {
   ...node.data,
   originalNode: node,
   diffState,
@@ -196,7 +196,7 @@ export interface VisualDiffPanelProps {
   source: edge.source,
   target: edge.target,
   type: 'diffEdge',
-  data: {,
+  data: {
   ...edge.data,
   originalEdge: edge,
   diffState,

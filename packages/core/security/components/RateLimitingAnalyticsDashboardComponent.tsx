@@ -26,22 +26,22 @@ interface RateLimitingAnalyticsDashboardProps {
   enableRealTimeUpdates?: boolean;
   showAdvancedFeatures?: boolean;
   interface MetricCard {
-  id: string;,
+  id: string;
   title: string;
   value: string | number;
   unit?: string;
-  trend: 'up' | 'down' | 'stable';,
+  trend: 'up' | 'down' | 'stable';
   trendValue: number;
-  status: 'good' | 'warning' | 'critical';,
+  status: 'good' | 'warning' | 'critical';
   description: string;
   interface AlertSummary {
-  total: number;,
+  total: number;
   byType: Record<string, number>;
   bySeverity: Record<string, number>;
   recent: Array<{,
-  id: string;,
+  id: string;
   type: string;
-  severity: string;,
+  severity: string;
   message: string;
   timestamp: Date;
 }>;

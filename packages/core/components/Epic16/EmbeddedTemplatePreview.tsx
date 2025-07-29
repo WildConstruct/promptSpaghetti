@@ -42,7 +42,7 @@ import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../emb
 // Enhanced types for embedded template previews
 
 export interface EmbeddedTemplatePreviewProps {
-  template: Template;,
+  template: Template;
   embedConfig: EmbedConfiguration;
   showCustomization?: boolean;
   onCustomize?: (config: Partial<EmbedConfiguration>) => void;
@@ -67,54 +67,54 @@ export interface ShareMethod {
   customization?: EmbedCustomization;
 }
 export interface EmbedCustomization {
-  size: EmbedSize;,
+  size: EmbedSize;
   theme: EmbedTheme;
-  features: EmbedFeatures;,
+  features: EmbedFeatures;
   layout: EmbedLayout;
-  branding: EmbedBranding;,
+  branding: EmbedBranding;
   social: EmbedSocialConfig;
 }
 export interface EmbedLayout {
-  orientation: 'horizontal' | 'vertical' | 'grid';,
+  orientation: 'horizontal' | 'vertical' | 'grid';
   showHeader: boolean;
-  showFooter: boolean;,
+  showFooter: boolean;
   showSidebar: boolean;
-  contentAlignment: 'left' | 'center' | 'right';,
+  contentAlignment: 'left' | 'center' | 'right';
   spacing: 'tight' | 'normal' | 'loose';
-  borderRadius: number;,
-  shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-}
+  borderRadius: number;
+  shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+  }
 export interface EmbedBranding {
-  showLogo: boolean;,
+  showLogo: boolean;
   showTitle: boolean;
-  showAuthor: boolean;,
+  showAuthor: boolean;
   showPoweredBy: boolean;
-  customColors?: {,
-  primary: string;,
+  customColors?: {
+  primary: string;
   secondary: string;
-  accent: string;,
+  accent: string;
   background: string;
   text: string;
 };
   customFonts?: {
-  heading: string;,
+  heading: string;
   body: string;
 };
 }
 export interface EmbedSocialConfig {
-  showLikes: boolean;,
+  showLikes: boolean;
   showShares: boolean;
-  showComments: boolean;,
+  showComments: boolean;
   showRating: boolean;
-  showDownloads: boolean;,
+  showDownloads: boolean;
   enableInteraction: boolean;
-  showAuthorInfo: boolean;,
+  showAuthorInfo: boolean;
   showStats: boolean;
 }
 export interface PreviewSize {
-  width: number;,
+  width: number;
   height: number;
-  label: string;,
+  label: string;
   icon: React.ComponentType<unknown>;
   description: string;
   // Predefined preview sizes
@@ -131,7 +131,7 @@ export const PREVIEW_SIZES: PreviewSize = [
 // Embed code generation component
 export const EmbedCodeGenerator: React.FC<{,
   template: Template;
-  customization: EmbedCustomization;,
+  customization: EmbedCustomization;
   onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
 }> = ({ template, customization, onCustomizationChange }) => {
   const [activeTab, setActiveTab] = useState<'iframe' | 'javascript' | 'react'>('iframe');
@@ -258,7 +258,7 @@ export const EmbedCodeGenerator: React.FC<{,
 // Customization panel component
 export const EmbedCustomizationPanel: React.FC<{,
   customization: EmbedCustomization;
-  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;,
+  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
   previewSize: PreviewSize;
   onPreviewSizeChange: (size: PreviewSize) => void;
 }> = ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
@@ -395,7 +395,7 @@ export const EmbedCustomizationPanel: React.FC<{,
                       type="color"
                       value={value}
                       onChange={(e) => updateBranding({)
-  customColors: {,
+  customColors: {
   ...customization.branding.customColors,
   [key]: e.target.value,
 })}
@@ -405,7 +405,7 @@ export const EmbedCustomizationPanel: React.FC<{,
                       type="text"
                       value={value}
                       onChange={(e) => updateBranding({)
-  customColors: {,
+  customColors: {
   ...customization.branding.customColors,
   [key]: e.target.value,
 })}
@@ -546,7 +546,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
   const [customization, setCustomization] = useState<EmbedCustomization>({)
   size: { width: previewSize.width, height: previewSize.height, responsive: true },
     theme: { name: 'light', colors: {}, fonts: {} },
-    features: {,
+    features: {
   showPreview: true,
   showMetadata: true,
   showActions: showSocialActions,
@@ -556,7 +556,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
   enablePurchase: showPurchaseButton,
   showRating: true,
 },
-  layout: {,
+  layout: {
   orientation: 'vertical',
   showHeader: true,
   showFooter: true,
@@ -566,19 +566,19 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
   borderRadius: 8,
   shadow: 'md',
 },
-  branding: {,
+  branding: {
   showLogo: true,
   showTitle: true,
   showAuthor: true,
   showPoweredBy: true,
-  customColors: {,
+  customColors: {
   primary: '#3B82F6',
   secondary: '#64748B',
   accent: '#10B981',
   background: '#FFFFFF',
   text: '#1F2937',
 },
-  social: {,
+  social: {
   showLikes: true,
   showShares: true,
   showComments: false,

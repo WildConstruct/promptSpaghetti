@@ -21,7 +21,7 @@ const mockApiResponse = {
   seed: 11111,
   output: 'Result 1',
   executionTimeMs: 100,
-  executionPath: {,
+  executionPath: {
   id: 'exec_1',
   seed: 11111,
   nodeExecutionOrder: ['node1'],
@@ -31,7 +31,7 @@ const mockApiResponse = {
   seed: 22222,
   output: 'Result 2',
   executionTimeMs: 150,
-  executionPath: {,
+  executionPath: {
   id: 'exec_2',
   seed: 22222,
   nodeExecutionOrder: ['node1'],
@@ -137,7 +137,7 @@ describe('usePreviewSeeds - Individual Result Management', () => {
   seed: 99999,
   output: 'Regenerated Result',
   executionTimeMs: 200,
-  executionPath: {,
+  executionPath: {
   id: 'exec_new',
   seed: 99999,
   nodeExecutionOrder: ['node1'],

@@ -8,9 +8,9 @@ import { RecentProjectsMenu } from './RecentProjects/RecentProjectsMenu';
 import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 
 interface StatusBarProps {
-  statusMessage: string;,
+  statusMessage: string;
   errors: ValidationError;
-  onPreview: () => void;,
+  onPreview: () => void;
   onSaveJson: () => void;
   onExportBundle?: () => void;
   onSaveProject?: () => void;

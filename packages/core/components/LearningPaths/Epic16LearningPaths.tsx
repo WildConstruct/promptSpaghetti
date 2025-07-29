@@ -14,7 +14,7 @@ import {
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
 interface Epic16LearningPathsProps {
-  userId: string;,
+  userId: string;
   userRole: 'user' | 'creator' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   onAnalytics?: (analytics: unknown) => void;
@@ -93,7 +93,7 @@ interface Epic16LearningPathsProps {
   if (userEnrollment) {
   setUserEnrollment({)
   ...userEnrollment,
-  progress: {,
+  progress: {
   ...userEnrollment.progress,
   overallProgress: progress,
 });

@@ -68,7 +68,7 @@ interface ActivityActions {
     reset: () => void;
 type ActivityStore = ActivityState & ActivityActions;
 export declare const useActivityStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ActivityStore>, "subscribe"> & {
-    subscribe: {,
+    subscribe: {
         (listener: (selectedState: ActivityStore, previousSelectedState: ActivityStore) => void): () => void;
         <U>(selector: (state: ActivityStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;

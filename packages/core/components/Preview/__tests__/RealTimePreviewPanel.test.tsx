@@ -42,7 +42,7 @@ const mockPreviewResults = [;
   results: mockPreviewResults,
   isLoading: false,
   error: null,
-  performanceStats: {,
+  performanceStats: {
   totalTime: 1500,
   averageTime: 86,
 },
@@ -67,7 +67,7 @@ const mockSyncState = {
   affectedNodes: ['node-1'],
   affectedEdges: [],
 })),
-  performanceMetrics: {,
+  performanceMetrics: {
   avgSyncTime: 250,
   successRate: 0.95,
   cacheHitRate: 0.75,

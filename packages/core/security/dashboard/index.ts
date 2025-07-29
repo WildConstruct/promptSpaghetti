@@ -77,7 +77,7 @@ export {
 export class SecurityDashboardFactory {
   private framework: SecurityDashboardFramework;
   private registry: DashboardRegistry;
-  constructor(options: {,)
+  constructor(options: {)
   frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
   registryOptions?: Partial<RegistryOptions>;
 } = {}) {
@@ -157,20 +157,20 @@ export class SecurityDashboardFactory {
   /**
   * Get framework statistics
   */
-  getStatistics(): {,
-  framework: {,
-  dashboardCount: number;,
+  getStatistics(): {
+  framework: {
+  dashboardCount: number;
   widgetCount: number;
   themeCount: number;
 };
-    registry: {,
+    registry: {
   dashboardCount: number;
-  presetCount: number;,
+  presetCount: number;
   widgetCount: number;
   categoriesByType: Record<DashboardType, number>;
 };
     return {
-  framework: {,
+  framework: {
   dashboardCount: this.framework['dashboards'].size,
   widgetCount: this.framework['widgets'].size,
   themeCount: this.framework['themes'].size,
@@ -189,7 +189,7 @@ export class SecurityDashboardFactory {
   /**
   * Utility function to create a dashboard factory with custom options
   */
-  export function createSecurityDashboardFactory(options: {,)
+  export function createSecurityDashboardFactory(options: {)
   frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
   registryOptions?: Partial<RegistryOptions>;
 } = {}): SecurityDashboardFactory {
@@ -197,10 +197,10 @@ export class SecurityDashboardFactory {
   /**
   * Utility function to get supported dashboard types
   */
-  export function getSupportedDashboardTypes(): {,
-  type: DashboardType;,
+  export function getSupportedDashboardTypes(): {
+  type: DashboardType;
   name: string;
-  description: string;,
+  description: string;
   targetRoles: SecurityRole;
 }[] {
   return [

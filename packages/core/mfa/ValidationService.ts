@@ -32,52 +32,52 @@ export interface RateLimiter {
   // Configuration
 }
 export interface ValidationServiceConfig {
-  rateLimiting: {,
-  enabled: boolean;,
+  rateLimiting: {
+  enabled: boolean;
   maxGenerationsPerHour: number;
-  maxValidationAttemptsPerHour: number;,
+  maxValidationAttemptsPerHour: number;
   maxValidationAttemptsPerCode: number;
 };
-  monitoring: {,
+  monitoring: {
   enabled: boolean;
-  alertOnSuspiciousActivity: boolean;,
+  alertOnSuspiciousActivity: boolean;
   logAllValidations: boolean;
 };
-  cleanup: {,
+  cleanup: {
   autoDeleteExpired: boolean;
   cleanupIntervalMinutes: number;
 };
-  security: {,
+  security: {
   constantTimeValidation: boolean;
-  logFailedAttempts: boolean;,
+  logFailedAttempts: boolean;
   blockAfterFailures: number;
 };
 const DEFAULT_CONFIG: ValidationServiceConfig = {,
-  rateLimiting: {,
+  rateLimiting: {
   enabled: true,
   maxGenerationsPerHour: 10,
   maxValidationAttemptsPerHour: 30,
   maxValidationAttemptsPerCode: 5,
 },
-  monitoring: {,
+  monitoring: {
   enabled: true,
   alertOnSuspiciousActivity: true,
   logAllValidations: true,
 },
-  cleanup: {,
+  cleanup: {
   autoDeleteExpired: true,
   cleanupIntervalMinutes: 60,
 },
-  security: {,
+  security: {
   constantTimeValidation: true,
   logFailedAttempts: true,
   blockAfterFailures: 10,
 };
 }
 export interface ValidationAttempt {
-  id: string;,
+  id: string;
   userId: string;
-  codeId: string;,
+  codeId: string;
   inputCode: string;
   success: boolean;
   reason?: string;
@@ -86,7 +86,7 @@ export interface ValidationAttempt {
   timestamp: Date;
 }
 export interface SuspiciousActivity {
-  type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';,
+  type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';
   userId: string;
   details: Record<string, any>;
   timestamp: Date;
@@ -112,9 +112,9 @@ export class ValidationService extends EventEmitter {
   /**
   * Generate and store a verification code
   */
-  async generateVerificationCode(userId: string,)
+  async generateVerificationCode(userId: string)
   purpose: string,
-  options: {,
+  options: {
   length?: number;
   format?: 'numeric' | 'alphanumeric' | 'alphabetic';
   expirationMinutes?: number;
@@ -175,9 +175,9 @@ export class ValidationService extends EventEmitter {
   /**
    * Validate a verification code
    */
-  async validateVerificationCode(codeId: string,)
+  async validateVerificationCode(codeId: string)
     inputCode: string,
-    options: {,
+    options: {
   userId?: string;
   ipAddress?: string;
   userAgent?: string;
@@ -295,10 +295,10 @@ export class ValidationService extends EventEmitter {
   /**
    * Validate code by user and purpose (convenience method)
    */
-  async validateByUserAndPurpose(userId: string,)
+  async validateByUserAndPurpose(userId: string)
     purpose: string,
     inputCode: string,
-    options: {,
+    options: {
   ipAddress?: string;
   userAgent?: string;
 } = {}
@@ -346,11 +346,11 @@ export class ValidationService extends EventEmitter {
    */
   async getUserValidationStats(userId: string): Promise<{,
   totalCodes: number;
-  activeCodes: number;,
+  activeCodes: number;
   expiredCodes: number;
-  usedCodes: number;,
+  usedCodes: number;
   totalAttempts: number;
-  successfulValidations: number;,
+  successfulValidations: number;
   failedValidations: number;
 }> {
   const codes = await this.storage.findByUser(userId);
@@ -421,7 +421,7 @@ export class ValidationService extends EventEmitter {
   private logValidationAttempt(attempt: ValidationAttempt): void {
   if (this.config.security.logFailedAttempts || attempt.success) {
   this.emit('validationAttempt', attempt);
-  private async checkForSuspiciousActivity(userId: string,)
+  private async checkForSuspiciousActivity(userId: string)
   codeId: string,
   ipAddress?: string): Promise<void> {,
   // Check for rapid-fire attempts
@@ -434,7 +434,7 @@ export class ValidationService extends EventEmitter {
   this.emit('suspiciousActivity', {)
   type: 'rapid_fire',
   userId,
-  details: {,
+  details: {
   recentAttempts: recentAttempts.length,
   timeWindow: '5 minutes',
   ipAddress
@@ -447,7 +447,7 @@ export class ValidationService extends EventEmitter {
   this.emit('suspiciousActivity', {)
   type: 'expired_code_use',
   userId,
-  details: {,
+  details: {
   codeId,
   expiredSince: new Date().getTime() - code.expiresAt.getTime(),
   attempts: code.attempts,
@@ -457,28 +457,28 @@ export class ValidationService extends EventEmitter {
   });
 
 // Factory function for common configurations
-export function createValidationService(storage: VerificationCodeStorage,)
+export function createValidationService(storage: VerificationCodeStorage)
   rateLimiter: RateLimiter,
   environment: 'development' | 'production' = 'production'): ValidationService {,
   const config: Partial<ValidationServiceConfig> = environment === 'development' ? {,
-  rateLimiting: {,
+  rateLimiting: {
   enabled: false,
   maxGenerationsPerHour: 100,
   maxValidationAttemptsPerHour: 300,
   maxValidationAttemptsPerCode: 10,
 },
-  monitoring: {,
+  monitoring: {
   enabled: true,
   alertOnSuspiciousActivity: false,
   logAllValidations: true,
 } : {
-  rateLimiting: {,
+  rateLimiting: {
   enabled: true,
   maxGenerationsPerHour: 10,
   maxValidationAttemptsPerHour: 30,
   maxValidationAttemptsPerCode: 5,
 },
-  monitoring: {,
+  monitoring: {
   enabled: true,
   alertOnSuspiciousActivity: true,
   logAllValidations: false,

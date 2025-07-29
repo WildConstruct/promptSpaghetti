@@ -33,7 +33,7 @@ const mockCreateElement = jest.fn(() => ({)
 }));
 global.document = {
   createElement: mockCreateElement,
-  body: {,
+  body: {
   appendChild: jest.fn<unknown, unknown>(),
   removeChild: jest.fn<unknown, unknown>(),
 } as any;
@@ -62,7 +62,7 @@ describe('Project Edge Cases Integration Tests', () => {
 },
   type: 'default' as const,
           position: { x: (i % 50) * 50, y: Math.floor(i / 50) * 50 },
-          data: {,
+          data: {
   nodeType: 'weighted-choice',
             label: `Node ${i}`}
 },
@@ -77,7 +77,7 @@ describe('Project Edge Cases Integration Tests', () => {
   target: `node-${i + 1}`}
 },
   sourceHandle: 'output',
-          targetHandle: 'input';
+          targetHandle: 'input'
   }))
       };
       const metadata = createDefaultMetadata('Massive Test Project', 'Test User');
@@ -155,7 +155,7 @@ describe('Project Edge Cases Integration Tests', () => {
 },
   type: 'default' as const,
           position: { x: i * 10, y: i * 10 },
-          data: {,
+          data: {
   nodeType: 'text',
             content: largeTextContent,
             variations: Array.from({ length: 10 }, () => largeTextContent)
@@ -218,7 +218,7 @@ describe('Project Edge Cases Integration Tests', () => {
       // Test with malformed nodes array
       const corruptedProject3 = {
   ...validProject,
-  graph: {,
+  graph: {
   nodes: 'not an array',
   edges: [],
 };
@@ -355,7 +355,7 @@ describe('Project Edge Cases Integration Tests', () => {
   id: 'unicode-node',
           type: 'default' as const,
           position: { x: 0, y: 0 },
-          data: {,
+          data: {
   nodeType: 'text',
   label: '测试节点 🌟 العقدة الاختبار',
   content: 'Content with emoji 🚀 and unicode ñáéíóú',
@@ -385,7 +385,7 @@ describe('Project Edge Cases Integration Tests', () => {
           name: veryLongName,
           fileName: `${veryLongName}.psg`}
 },
-  author: 'User';
+  author: 'User'
   }
         createDefaultSettings();
       );
@@ -408,7 +408,7 @@ describe('Project Edge Cases Integration Tests', () => {
 },
   fileName: `rapid-${i}.psg`}
 },
-  author: 'User';
+  author: 'User'
   }
           settings
       );

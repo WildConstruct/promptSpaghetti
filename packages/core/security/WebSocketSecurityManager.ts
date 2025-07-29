@@ -26,51 +26,51 @@ import { TrustedDeviceManager } from './TrustedDeviceManager';
 
 export interface WebSocketSecurityConfig {
   // Encryption settings
-  enableMessageEncryption: boolean;,
+  enableMessageEncryption: boolean;
   encryptionKeyRotationMinutes: number;
   requireE2EEncryption: boolean;
   // Authentication settings
-  requireDeviceVerification: boolean;,
+  requireDeviceVerification: boolean;
   enableMFAForHighRisk: boolean;
-  sessionTimeoutMinutes: number;,
+  sessionTimeoutMinutes: number;
   maxConcurrentSessions: number;
   // Threat detection
-  enableAnomalyDetection: boolean;,
+  enableAnomalyDetection: boolean;
   rateLimitMessagesPerMinute: number;
-  suspiciousBehaviorThreshold: number;,
+  suspiciousBehaviorThreshold: number;
   blockSuspiciousIPs: boolean;
   // Data classification
-  enableDataClassification: boolean;,
+  enableDataClassification: boolean;
   enforceClassificationPolicies: boolean;
   logClassifiedData: boolean;
   // Audit and compliance
-  enableSecurityAuditLog: boolean;,
+  enableSecurityAuditLog: boolean;
   auditLogRetentionDays: number;
   complianceMode: boolean;
   // Certificate pinning
-  enableCertificatePinning: boolean;,
+  enableCertificatePinning: boolean;
   pinnedCertificates: string;
   // Additional security
-  enableCSRFProtection: boolean;,
+  enableCSRFProtection: boolean;
   allowedOrigins: string;
   requireSecureTransport: boolean;
   // Security context for connections
 }
 export interface ConnectionSecurityContext {
-  connectionId: string;,
+  connectionId: string;
   userId: string;
   sessionId: string;
   // Authentication state
-  isAuthenticated: boolean;,
+  isAuthenticated: boolean;
   mfaVerified: boolean;
-  deviceVerified: boolean;,
+  deviceVerified: boolean;
   trustLevel: 'none' | 'basic' | 'verified' | 'full';
   // Encryption state
   encryptionKeyId?: string;
   encryptionSessionKey?: Buffer;
   lastKeyRotation: Date;
   // Risk assessment
-  riskScore: number;,
+  riskScore: number;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   suspiciousActivityCount: number;
   // Device information
@@ -78,16 +78,16 @@ export interface ConnectionSecurityContext {
   deviceTrusted: boolean;
   locationData?: any;
   // Session tracking
-  connectedAt: Date;,
+  connectedAt: Date;
   lastActivity: Date;
-  messageCount: number;,
+  messageCount: number;
   bytesSent: number;
   bytesReceived: number;
   // Security flags
-  flags: {,
-  vpnDetected: boolean;,
+  flags: {
+  vpnDetected: boolean;
   proxyDetected: boolean;
-  botDetected: boolean;,
+  botDetected: boolean;
   repeatedLoginAttempts: boolean;
   anomalousPatterns: boolean;
 };
@@ -95,43 +95,43 @@ export interface ConnectionSecurityContext {
 // Enhanced message with security metadata
 }
 export interface SecureWebSocketMessage {
-  id: string;,
+  id: string;
   type: string;
   payload: any;
   // Security metadata
-  encrypted: boolean;,
+  encrypted: boolean;
   signed: boolean;
-  classification: ClassificationLevel;,
+  classification: ClassificationLevel;
   timestamp: number;
   // Encryption data
   encryptionKeyId?: string;
   iv?: Buffer;
   signature?: string;
   // Audit trail
-  originConnectionId: string;,
+  originConnectionId: string;
   originUserId: string;
   processingPath: string;
   // Security events
 }
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
-  severity: 'info' | 'warning' | 'error' | 'critical';,
+  severity: 'info' | 'warning' | 'error' | 'critical';
   connectionId: string;
   userId?: string;
-  timestamp: Date;,
+  timestamp: Date;
   description: string;
   metadata: Record<string, any>;
   // Threat detection rules
 }
 export interface ThreatDetectionRule {
-  id: string;,
+  id: string;
   name: string;
-  type: 'rate_limit' | 'pattern_match' | 'anomaly' | 'behavioral';,
+  type: 'rate_limit' | 'pattern_match' | 'anomaly' | 'behavioral';
   enabled: boolean;
-  threshold: number;,
+  threshold: number;
   timeWindowMinutes: number;
-  action: 'log' | 'warn' | 'block' | 'disconnect';,
+  action: 'log' | 'warn' | 'block' | 'disconnect';
   description: string;
   /**
   * WebSocket Security Manager
@@ -160,9 +160,9 @@ export class WebSocketSecurityManager extends EventEmitter {
   public async initializeConnection()
     connectionId: string,
     userId: string,
-    requestInfo: {,
+    requestInfo: {
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   origin: string;
   headers: Record<string, string>;
   ): Promise<ConnectionSecurityContext> {,
@@ -184,18 +184,18 @@ export class WebSocketSecurityManager extends EventEmitter {
   source: 'ip' as const,
   accuracy: 1000,
   confidence: 50,
-  coordinates: {,
+  coordinates: {
   latitude: 0,
   longitude: 0,
 },
-  address: {,
+  address: {
   country: 'Unknown',
   countryCode: 'XX',
   region: 'Unknown',
   regionCode: 'XX',
   city: 'Unknown',
 },
-  network: {,
+  network: {
   ipAddress: requestInfo.ipAddress,
   isp: 'Unknown',
   timezone: 'UTC',
@@ -205,7 +205,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   hostingProvider: false,
   datacenter: false,
 },
-  metadata: {,
+  metadata: {
   language: 'en',
   currency: 'USD',
   callingCode: '+1',
@@ -236,7 +236,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   messageCount: 0,
   bytesSent: 0,
   bytesReceived: 0,
-  flags: {,
+  flags: {
   vpnDetected: riskAssessment.factors.some(f => f.factor.includes('vpn')),
   proxyDetected: riskAssessment.factors.some(f => f.factor.includes('proxy')),
   botDetected: false,
@@ -254,7 +254,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   connectionId,
   userId,
   description: 'Connection security context initialized',
-  metadata: {,
+  metadata: {
   riskScore: context.riskScore,
   threatLevel: context.threatLevel,
   deviceTrusted: context.deviceTrusted,
@@ -276,7 +276,7 @@ export class WebSocketSecurityManager extends EventEmitter {
    */
   public async authenticateConnection()
     connectionId: string,
-    credentials: {,
+    credentials: {
   token: string;
       mfaCode?: string;
       deviceVerificationToken?: string;
@@ -328,7 +328,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   connectionId,
   userId: context.userId,
   description: 'Connection authenticated successfully',
-  metadata: {,
+  metadata: {
   trustLevel: context.trustLevel,
   mfaVerified: context.mfaVerified,
   deviceVerified: context.deviceVerified,
@@ -420,7 +420,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   connectionId,
   userId: context.userId,
   description: 'Classified message encrypted',
-  metadata: {,
+  metadata: {
   classification: classification.level,
   messageType: message.type,
   encrypted: shouldEncrypt,
@@ -481,7 +481,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   return {
   type: secureMessage.type,
   payload,
-  metadata: {,
+  metadata: {
   classification: secureMessage.classification,
   encrypted: secureMessage.encrypted,
   timestamp: secureMessage.timestamp,
@@ -563,7 +563,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   connectionId,
   userId: context.userId,
   description: 'Connection security context cleaned up',
-  metadata: {,
+  metadata: {
   sessionDuration: Date.now() - context.connectedAt.getTime(),
   messageCount: context.messageCount,
 });
@@ -596,7 +596,7 @@ export class WebSocketSecurityManager extends EventEmitter {
 },
   tier: StorageTier.HOT,
         expirationDays: 1,
-        metadata: {,
+        metadata: {
   sessionId: context.sessionId,
   connectionId: context.connectionId,
   userId: context.userId,

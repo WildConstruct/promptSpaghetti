@@ -2,25 +2,25 @@ import { Node } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 
 export interface SharedGraphFormat {
-    metadata: {,
+    metadata: {
         exportId: string;
         version: string;
         timestamp: string;
         title: string;
         description?: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email?: string;
         };
-        versionControl: {,
+        versionControl: {
             version: number;
             previousVersion?: string;
             changes: string[];
             tags: string[];
             branch?: string;
         };
-        sharing: {,
+        sharing: {
             permissions: 'private' | 'read_only' | 'collaborative' | 'public';
             collaborators: Array<{,
                 userId: string;
@@ -32,11 +32,11 @@ export interface SharedGraphFormat {
             expiresAt?: string;
         };
     };
-    graph: {,
+    graph: {
         nodes: Node[];
         edges: AnnotatedEdge[];
-        settings: {,
-            canvasPosition: {,
+        settings: {
+            canvasPosition: {
                 x: number;
                 y: number;
                 zoom: number;
@@ -47,7 +47,7 @@ export interface SharedGraphFormat {
             readonly?: boolean;
         };
     };
-    annotations: {,
+    annotations: {
         connectionLabels: Array<{,
             edgeId: string;
             label: string;
@@ -57,11 +57,11 @@ export interface SharedGraphFormat {
         }>;
         stickyNotes: Array<{,
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -84,7 +84,7 @@ export interface SharedGraphFormat {
         regions: Array<{,
             id: string;
             name: string;
-            bounds: {,
+            bounds: {
                 x: number;
                 y: number;
                 width: number;
@@ -116,7 +116,7 @@ export interface SharedGraphFormat {
             }>;
         }>;
     };
-    collaboration: {,
+    collaboration: {
         changeHistory: Array<{,
             id: string;
             timestamp: string;
@@ -138,9 +138,9 @@ export interface SharedGraphFormat {
             resolution?: any;
         }>;
         lastSync: string;
-        syncStatus: 'synced' | 'pending' | 'conflict' | 'offline';
-    };
-    compatibility: {,
+        syncStatus: 'synced' | 'pending' | 'conflict' | 'offline'
+  };
+    compatibility: {
         minVersion: string;
         features: string[];
         warnings: string[];
@@ -158,7 +158,7 @@ export declare class GraphSharingService {
         includeHistory?: boolean;
         includeComments?: boolean;
         permissions?: SharedGraphFormat['metadata']['sharing']['permissions'];
-        author: {,
+        author: {
             id: string;
             name: string;
             email?: string;
@@ -193,7 +193,7 @@ export declare class GraphSharingService {
         edges?: AnnotatedEdge[];
         annotations?: Partial<SharedGraphFormat['annotations']>;
         changeDescription: string;
-        author: {,
+        author: {
             id: string;
             name: string;
         };

@@ -47,7 +47,7 @@ interface AttributionPanelProps {
   projectId: string;
   selectedResourceType?: ResourceType;
   selectedResourceId?: string;
-  visible: boolean;,
+  visible: boolean;
   onClose: () => void;
   onAttributionRecord?: (attribution: ChangeAttribution) => void;
 interface AuthorIndicatorProps {
@@ -143,7 +143,8 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
         style={{ cursor: 'pointer', padding: '4px', borderRadius: '4px' }}
         onClick={onClick}
         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'
+  }}
       >
         {content}
       </div>

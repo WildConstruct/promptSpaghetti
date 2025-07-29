@@ -17,26 +17,26 @@ import { ThreatForecast } from './SecurityThreatForecasting';
 // ==========================================
 
 export interface SecurityDashboardConfig {
-  refreshInterval: number;,
+  refreshInterval: number;
   enableRealTimeUpdates: boolean;
-  retentionPeriodDays: number;,
+  retentionPeriodDays: number;
   enableExecutiveReports: boolean;
-  enableThreatIntelligence: boolean;,
+  enableThreatIntelligence: boolean;
   enableComplianceReporting: boolean;
-  alertThresholds: DashboardAlertThresholds;,
+  alertThresholds: DashboardAlertThresholds;
   reportingSchedules: ReportingSchedule;
 }
 export interface DashboardAlertThresholds {
-  criticalThreatCount: number;,
+  criticalThreatCount: number;
   anomalyVolumeThreshold: number;
-  responseTimeThresholdMs: number;,
+  responseTimeThresholdMs: number;
   systemHealthThreshold: number;
   complianceScoreThreshold: number;
 }
 export interface ReportingSchedule {
-  reportType: ReportType;,
+  reportType: ReportType;
   frequency: ReportFrequency;
-  recipients: string;,
+  recipients: string;
   nextExecution: Date;
   enabled: boolean;
 }
@@ -57,12 +57,12 @@ export enum ReportType {
   QUARTERLY = 'quarterly'
   export interface SecurityPosture {
   overallScore: number; // 0-100,
-  threatLevel: ThreatLevel;,
+  threatLevel: ThreatLevel;
   complianceScore: number; // 0-100,
   systemHealth: number; // 0-100,
-  lastUpdated: Date;,
+  lastUpdated: Date;
   trends: PostureTrend;
-  riskFactors: RiskFactor;,
+  riskFactors: RiskFactor;
   recommendations: SecurityRecommendation;
 }
 export enum ThreatLevel {
@@ -73,19 +73,19 @@ export enum ThreatLevel {
   HIGH = 'high',
   SEVERE = 'severe'
   export interface PostureTrend {
-  metric: string;,
+  metric: string;
   direction: 'improving' | 'declining' | 'stable';
-  changePercent: number;,
+  changePercent: number;
   timeframe: string;
-  significance: 'high' | 'medium' | 'low';
-}
+  significance: 'high' | 'medium' | 'low'
+  }
 export interface RiskFactor {
-  id: string;,
+  id: string;
   category: RiskCategory;
-  severity: 'critical' | 'high' | 'medium' | 'low';,
+  severity: 'critical' | 'high' | 'medium' | 'low';
   impact: number; // 0-100,
   likelihood: number; // 0-100,
-  description: string;,
+  description: string;
   mitigationStatus: 'pending' | 'in_progress' | 'completed';
   estimatedResolutionTime: number; // hours,
 }
@@ -97,148 +97,148 @@ export enum RiskCategory {
   HUMAN_FACTOR = 'human_factor',
   INFRASTRUCTURE = 'infrastructure'
   export interface SecurityRecommendation {
-  id: string;,
+  id: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
-  category: string;,
+  category: string;
   title: string;
-  description: string;,
+  description: string;
   expectedBenefit: string;
-  estimatedEffort: string;,
+  estimatedEffort: string;
   implementationCost: number;
   riskReduction: number; // 0-100,
-  dependencies: string;,
+  dependencies: string;
   timeline: string;
 }
 export interface ThreatIntelligenceData {
-  activeThreatCount: number;,
+  activeThreatCount: number;
   highSeverityThreats: ThreatSummary;
   threatsByCategory: Record<string, number>;
-  geographicalThreats: GeographicalThreat;,
+  geographicalThreats: GeographicalThreat;
   attackVectors: AttackVector;
-  threatTrends: ThreatTrend;,
+  threatTrends: ThreatTrend;
   indicators: ThreatIndicator;
 }
 export interface ThreatSummary {
-  id: string;,
+  id: string;
   type: string;
-  severity: string;,
+  severity: string;
   confidence: number;
-  firstSeen: Date;,
+  firstSeen: Date;
   lastSeen: Date;
-  affectedSystems: string;,
+  affectedSystems: string;
   description: string;
-  status: 'active' | 'mitigated' | 'resolved';
-}
+  status: 'active' | 'mitigated' | 'resolved'
+  }
 export interface GeographicalThreat {
-  country: string;,
+  country: string;
   region: string;
-  threatCount: number;,
+  threatCount: number;
   severityDistribution: Record<string, number>;
   primaryThreatTypes: string;
 }
 export interface AttackVector {
-  vector: string;,
+  vector: string;
   frequency: number;
-  successRate: number;,
+  successRate: number;
   averageDamage: number;
-  trend: 'increasing' | 'decreasing' | 'stable';
-}
+  trend: 'increasing' | 'decreasing' | 'stable'
+  }
 export interface ThreatTrend {
-  timeframe: string;,
+  timeframe: string;
   threatType: string;
-  volumeChange: number;,
+  volumeChange: number;
   severityChange: number;
   newVariants: number;
 }
 export interface ThreatIndicator {
-  type: 'ip' | 'domain' | 'hash' | 'pattern';,
+  type: 'ip' | 'domain' | 'hash' | 'pattern';
   value: string;
-  confidence: number;,
+  confidence: number;
   sources: string;
-  firstSeen: Date;,
+  firstSeen: Date;
   associatedThreats: string;
 }
 export interface DashboardMetrics {
-  securityEvents: {,
-  total: number;,
+  securityEvents: {
+  total: number;
   critical: number;
-  resolved: number;,
+  resolved: number;
   averageResponseTime: number;
 };
-  anomalies: {,
+  anomalies: {
   detected: number;
-  falsePositives: number;,
+  falsePositives: number;
   accuracy: number;
 };
-  systemHealth: {,
+  systemHealth: {
   availability: number;
-  performance: number;,
+  performance: number;
   errors: number;
 };
-  compliance: {,
+  compliance: {
   overallScore: number;
-  violations: number;,
+  violations: number;
   auditReadiness: number;
 };
-  threats: {,
+  threats: {
   active: number;
-  mitigated: number;,
+  mitigated: number;
   severity: Record<string, number>;
 };
 }
 export interface ExecutiveReport {
-  id: string;,
+  id: string;
   reportType: ReportType;
-  generatedAt: Date;,
-  period: {,
-  start: Date;,
+  generatedAt: Date;
+  period: {
+  start: Date;
   end: Date;
 };
-  summary: ExecutiveSummary;,
+  summary: ExecutiveSummary;
   keyMetrics: KeyMetric;
-  findings: Finding;,
+  findings: Finding;
   recommendations: SecurityRecommendation;
   appendices: ReportAppendix;
 }
 export interface ExecutiveSummary {
-  overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';,
+  overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   keyHighlights: string;
-  majorConcerns: string;,
+  majorConcerns: string;
   actionItems: string;
   budgetImpact: string;
 }
 export interface KeyMetric {
-  name: string;,
+  name: string;
   value: number | string;
-  unit: string;,
+  unit: string;
   trend: 'up' | 'down' | 'stable';
-  context: string;,
+  context: string;
   benchmark: number | string;
 }
 export interface Finding {
-  id: string;,
+  id: string;
   category: string;
-  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';,
+  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
   title: string;
-  description: string;,
+  description: string;
   evidence: string;
-  impact: string;,
+  impact: string;
   recommendation: string;
 }
 export interface ReportAppendix {
-  title: string;,
+  title: string;
   type: 'chart' | 'table' | 'text' | 'image';
-  content: unknown;,
+  content: unknown;
   description: string;
 }
 export interface DashboardWidget {
-  id: string;,
+  id: string;
   type: WidgetType;
-  title: string;,
+  title: string;
   position: WidgetPosition;
-  size: WidgetSize;,
+  size: WidgetSize;
   config: WidgetConfig;
-  dataSource: string;,
+  dataSource: string;
   refreshRate: number;
   isVisible: boolean;
 }
@@ -254,19 +254,19 @@ export enum WidgetType {
   ALERT_LIST = 'alert_list',
   THREAT_MAP = 'threat_map'
   export interface WidgetPosition {
-  x: number;,
+  x: number;
   y: number;
 }
 export interface WidgetSize {
-  width: number;,
+  width: number;
   height: number;
 }
 export interface WidgetConfig {
-  theme: 'light' | 'dark';,
+  theme: 'light' | 'dark';
   colors: string;
-  showLegend: boolean;,
+  showLegend: boolean;
   showLabels: boolean;
-  animation: boolean;,
+  animation: boolean;
   customOptions: Record<string, unknown>;
   // ==========================================
   // MAIN DASHBOARD CLASS
@@ -290,7 +290,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   enableExecutiveReports: true,
   enableThreatIntelligence: true,
   enableComplianceReporting: true,
-  alertThresholds: {,
+  alertThresholds: {
   criticalThreatCount: 5,
   anomalyVolumeThreshold: 100,
   responseTimeThresholdMs: 300000, // 5 minutes,
@@ -330,28 +330,28 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       indicators: [];
   };
     this.dashboardMetrics = {
-  securityEvents: {,
+  securityEvents: {
   total: 0,
   critical: 0,
   resolved: 0,
   averageResponseTime: 0,
 },
-  anomalies: {,
+  anomalies: {
   detected: 0,
   falsePositives: 0,
   accuracy: 0,
 },
-  systemHealth: {,
+  systemHealth: {
   availability: 100,
   performance: 100,
   errors: 0,
 },
-  compliance: {,
+  compliance: {
   overallScore: 100,
   violations: 0,
   auditReadiness: 100,
 },
-  threats: {,
+  threats: {
   active: 0,
         mitigated: 0,
         severity: {}
@@ -364,7 +364,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Overall Security Posture',
         position: { x: 0, y: 0 },
         size: { width: 6, height: 4 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#ff4444', '#ffaa00', '#44ff44'],
           showLegend: true,
@@ -382,7 +382,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Current Threat Level',
         position: { x: 6, y: 0 },
         size: { width: 3, height: 2 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#ff4444'],
           showLegend: false,
@@ -400,7 +400,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Active Threats',
         position: { x: 9, y: 0 },
         size: { width: 3, height: 2 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#ff6b35'],
           showLegend: false,
@@ -418,7 +418,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Compliance Score',
         position: { x: 6, y: 2 },
         size: { width: 6, height: 4 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#ff4444', '#ffaa00', '#44ff44'],
           showLegend: true,
@@ -436,7 +436,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Security Events Timeline',
         position: { x: 0, y: 4 },
         size: { width: 12, height: 6 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#007acc', '#ff6b35', '#ff4444'],
           showLegend: true,
@@ -454,7 +454,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Threat Distribution by Type',
         position: { x: 0, y: 10 },
         size: { width: 6, height: 6 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#007acc', '#ff6b35', '#ff4444', '#44ff44', '#ffaa00'],
           showLegend: true,
@@ -472,7 +472,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         title: 'Global Threat Activity',
         position: { x: 6, y: 10 },
         size: { width: 6, height: 6 },
-        config: {,
+        config: {
   theme: 'light',
           colors: ['#ffaa00', '#ff6b35', '#ff4444'],
           showLegend: true,
@@ -536,7 +536,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   public async processThreatForecasts(forecasts: ThreatForecast): Promise<void> {
     try {
       // Update threat trends from forecasts
-      const threatTrends: ThreatTrend = forecasts.map(forecast => ({,)
+      const threatTrends: ThreatTrend = forecasts.map(forecast => ({)
   timeframe: `next_${forecast.timeHorizon}min`}
 },
   threatType: forecast.threatType,
@@ -607,7 +607,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         affectedSystems: intel.correlatedEvents.map(e => e.metadata?.system as string).filter(Boolean),
         description: `Security intelligence: ${intel.type}`}
 },
-  status: intel.autoResolved ? 'resolved' : 'active';
+  status: intel.autoResolved ? 'resolved' : 'active'
   }));
     // Threats by category
     const threatsByCategory: Record<string, number> = {};
@@ -620,7 +620,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   country: 'Various',
   region: 'Global',
   threatCount: activeThreats.length,
-  severityDistribution: {,
+  severityDistribution: {
   critical: activeThreats.filter(i => i.severity === 'critical').length,
   high: activeThreats.filter(i => i.severity === 'high').length,
   medium: activeThreats.filter(i => i.severity === 'medium').length,

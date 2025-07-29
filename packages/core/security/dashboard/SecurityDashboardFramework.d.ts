@@ -274,7 +274,7 @@ export interface ColorPalette {
 
 export interface TypographyConfig {
     fontFamily: string;
-    fontSize: {,
+    fontSize: {
         xs: string;
         sm: string;
         base: string;
@@ -283,14 +283,14 @@ export interface TypographyConfig {
         '2xl': string;
         '3xl': string;
     };
-    fontWeight: {,
+    fontWeight: {
         light: number;
         normal: number;
         medium: number;
         semibold: number;
         bold: number;
     };
-    lineHeight: {,
+    lineHeight: {
         tight: number;
         normal: number;
         relaxed: number;
@@ -312,12 +312,12 @@ export interface ShadowConfig {
     xl: string;
 
 export interface BorderConfig {
-    width: {,
+    width: {
         thin: string;
         normal: string;
         thick: string;
     };
-    radius: {,
+    radius: {
         sm: string;
         md: string;
         lg: string;
@@ -325,12 +325,12 @@ export interface BorderConfig {
     };
 
 export interface AnimationConfig {
-    duration: {,
+    duration: {
         fast: string;
         normal: string;
         slow: string;
     };
-    easing: {,
+    easing: {
         linear: string;
         easeIn: string;
         easeOut: string;
@@ -342,7 +342,7 @@ export interface AccessibilityConfig {
     screenReaderOnly: string;
     highContrast: boolean;
     reducedMotion: boolean;
-    fontSize: {,
+    fontSize: {
         min: string;
         max: string;
     };

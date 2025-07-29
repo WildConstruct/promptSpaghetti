@@ -273,11 +273,12 @@ const generateMockPredictions = () => {
             preventiveActions: [,
                 { action: 'Pre-scale infrastructure', effectiveness: 0.8, cost: 200, timeline: '1 hour', dependencies: [] }
             ],
-            monitoringPlan: {},
-            metrics: ['response_time', 'error_rate', 'conversion_rate'],
-            frequency: 60,
-            alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
-            escalationPlan: ['ops', 'management']
+            monitoringPlan: {
+                metrics: ['response_time', 'error_rate', 'conversion_rate'],
+                frequency: 60,
+                alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
+                escalationPlan: ['ops', 'management']
+            }
         }
     ];
 };
@@ -288,20 +289,21 @@ const generateAnomalyTrends = () => {
             period: 'last_24h',
             anomalyCount: 12,
             severityDistribution: { critical: 1, high: 3, medium: 5, low: 3, info: 0 },
-            typeDistribution: {},
-            performance_drop: 4,
-            conversion_anomaly: 3,
-            traffic_anomaly: 2,
-            revenue_anomaly: 1,
-            temporal_anomaly: 1,
-            technical_anomaly: 1,
-            performance_spike: 0,
-            segment_anomaly: 0,
-            cohort_anomaly: 0,
-        },
-        falsePositiveRate, 0.15,
-        averageDetectionTime, 120,
-        averageResolutionTime, 1800
+            typeDistribution: {
+                performance_drop: 4,
+                conversion_anomaly: 3,
+                traffic_anomaly: 2,
+                revenue_anomaly: 1,
+                temporal_anomaly: 1,
+                technical_anomaly: 1,
+                performance_spike: 0,
+                segment_anomaly: 0,
+                cohort_anomaly: 0,
+            },
+            falsePositiveRate: 0.15,
+            averageDetectionTime: 120,
+            averageResolutionTime: 1800
+        }
     ];
 };
 // Generate root cause analyses

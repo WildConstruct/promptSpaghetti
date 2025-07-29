@@ -15,32 +15,32 @@ import { SecurityIntelligence, SecurityAnalyticsConfig } from './MLSecurityAnaly
 // ==========================================
 
 export interface AnomalyDetectionConfig {
-  enableRealTimeDetection: boolean;,
+  enableRealTimeDetection: boolean;
   detectionSensitivity: number;
-  alertThreshold: number;,
+  alertThreshold: number;
   enableAdaptiveThresholds: boolean;
-  baselineTrainingPeriod: number;,
+  baselineTrainingPeriod: number;
   anomalyRetentionDays: number;
-  enableCorrelationAnalysis: boolean;,
+  enableCorrelationAnalysis: boolean;
   autoResponseEnabled: boolean;
   escalationRules: EscalationRule;
 }
 export interface SecurityAnomaly {
-  id: string;,
+  id: string;
   timestamp: Date;
-  anomalyType: AnomalyType;,
+  anomalyType: AnomalyType;
   severity: AnomalySeverity;
-  confidence: number;,
+  confidence: number;
   description: string;
-  affectedSystems: string;,
+  affectedSystems: string;
   affectedMetrics: string;
-  deviationMagnitude: number;,
+  deviationMagnitude: number;
   baselineValue: number;
-  observedValue: number;,
+  observedValue: number;
   statisticalSignificance: number;
-  correlatedAnomalies: string;,
+  correlatedAnomalies: string;
   riskAssessment: AnomalyRiskAssessment;
-  alertsTriggered: SecurityAlert;,
+  alertsTriggered: SecurityAlert;
   isResolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
@@ -71,21 +71,21 @@ export enum AnomalyType {
   operationalImpact: number; // 0-100,
   complianceRisk: number; // 0-100,
   cascadeRisk: number; // 0-100,
-  mitigationUrgency: 'immediate' | 'high' | 'medium' | 'low';,
+  mitigationUrgency: 'immediate' | 'high' | 'medium' | 'low';
   estimatedDowntime: number; // minutes,
-  affectedUserCount: number;,
+  affectedUserCount: number;
   dataExposureRisk: number; // 0-100,
 }
 export interface SecurityAlert {
-  id: string;,
+  id: string;
   timestamp: Date;
-  alertType: AlertType;,
+  alertType: AlertType;
   severity: AnomalySeverity;
-  title: string;,
+  title: string;
   description: string;
-  sourceAnomaly: string;,
+  sourceAnomaly: string;
   targetChannels: NotificationChannel;
-  escalationLevel: number;,
+  escalationLevel: number;
   isEscalated: boolean;
   escalatedAt?: Date;
   acknowledgedBy?: string;
@@ -107,66 +107,66 @@ export enum AlertType {
   AVAILABILITY_ALERT = 'availability_alert',
   CORRELATION_ALERT = 'correlation_alert'
   export interface NotificationChannel {
-  channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';,
+  channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
   target: string;
-  enabled: boolean;,
+  enabled: boolean;
   severity: AnomalySeverity;
   rateLimiting: RateLimitConfig;
   template?: string;
 }
 export interface RateLimitConfig {
-  maxAlertsPerHour: number;,
+  maxAlertsPerHour: number;
   maxAlertsPerDay: number;
-  burstLimit: number;,
+  burstLimit: number;
   cooldownPeriod: number; // minutes,
 }
 export interface EscalationRule {
-  id: string;,
+  id: string;
   name: string;
-  conditions: EscalationCondition;,
+  conditions: EscalationCondition;
   timeoutMinutes: number;
-  targetChannels: NotificationChannel;,
+  targetChannels: NotificationChannel;
   autoEscalate: boolean;
   maxEscalationLevel: number;
 }
 export interface EscalationCondition {
-  field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';,
+  field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in';
   value: unknown;
 }
 export interface MetricBaseline {
-  metricName: string;,
+  metricName: string;
   systemName: string;
-  mean: number;,
+  mean: number;
   standardDeviation: number;
-  median: number;,
+  median: number;
   percentile95: number;
-  percentile99: number;,
+  percentile99: number;
   minValue: number;
-  maxValue: number;,
+  maxValue: number;
   dataPoints: number;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   seasonalPatterns: SeasonalPattern;
   trendCoefficient: number;
 }
 export interface SeasonalPattern {
-  period: 'hourly' | 'daily' | 'weekly' | 'monthly';,
+  period: 'hourly' | 'daily' | 'weekly' | 'monthly';
   pattern: number;
-  strength: number;,
+  strength: number;
   phase: number;
 }
 export interface AnomalyDetectionModel {
-  modelId: string;,
+  modelId: string;
   modelType: DetectionModelType;
-  name: string;,
+  name: string;
   description: string;
-  targetMetrics: string;,
+  targetMetrics: string;
   sensitivity: number;
-  isActive: boolean;,
+  isActive: boolean;
   accuracy: number;
-  falsePositiveRate: number;,
+  falsePositiveRate: number;
   lastTrained: Date;
-  trainingDataSize: number;,
+  trainingDataSize: number;
   parameters: Record<string, unknown>;
 }
 export enum DetectionModelType {
@@ -179,11 +179,11 @@ export enum DetectionModelType {
   LSTM_AUTOENCODER = 'lstm_autoencoder',
   CHANGEPOINT_DETECTION = 'changepoint_detection'
   export interface SecurityMetric {
-  id: string;,
+  id: string;
   timestamp: Date;
-  systemName: string;,
+  systemName: string;
   metricName: string;
-  value: number;,
+  value: number;
   unit: string;
   tags: Record<string, string>;
   metadata: Record<string, unknown>;
@@ -294,7 +294,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
   // ==========================================
   // DETECTION ALGORITHMS
   // ==========================================
-  private detectStatisticalThresholdAnomaly(metric: SecurityMetric,)
+  private detectStatisticalThresholdAnomaly(metric: SecurityMetric)
     baseline: MetricBaseline,
     model: AnomalyDetectionModel): { isAnomalous: boolean; deviationMagnitude: number; confidence: number } {
     const threshold = baseline.standardDeviation * (model.sensitivity || 2);
@@ -304,7 +304,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
     const deviationMagnitude = Math.abs(metric.value - baseline.mean) / baseline.standardDeviation;
     const confidence = Math.min(0.99, deviationMagnitude / 3); // Cap at 99%;
     return { isAnomalous, deviationMagnitude, confidence };
-  private detectZScoreAnomaly(metric: SecurityMetric,)
+  private detectZScoreAnomaly(metric: SecurityMetric)
     baseline: MetricBaseline,
     model: AnomalyDetectionModel): { isAnomalous: boolean; deviationMagnitude: number; confidence: number } {
     const zScore = Math.abs((metric.value - baseline.mean) / baseline.standardDeviation);
@@ -313,7 +313,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
     const deviationMagnitude = zScore;
     const confidence = Math.min(0.99, zScore / 4); // Normalize to 0-1 range;
     return { isAnomalous, deviationMagnitude, confidence };
-  private async detectChangepointAnomaly(metric: SecurityMetric,)
+  private async detectChangepointAnomaly(metric: SecurityMetric)
     baseline: MetricBaseline,
     model: AnomalyDetectionModel): Promise<{ isAnomalous: boolean; deviationMagnitude: number; confidence: number }> {
     const metricKey = `${metric.systemName}:${metric.metricName}`;}
@@ -398,7 +398,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
   targetChannels: this.getTargetChannels(anomaly.severity),
   escalationLevel: 0,
   isEscalated: false,
-  metadata: {,
+  metadata: {
   confidence: anomaly.confidence,
   deviationMagnitude: anomaly.deviationMagnitude,
   affectedSystems: anomaly.affectedSystems,
@@ -566,7 +566,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
     const mean = this.calculateMean(pattern);
     const variance = this.calculateStandardDeviation(pattern, mean);
     return variance / Math.max(mean, 1); // Coefficient of variation
-  private createAnomaly(metric: SecurityMetric,)
+  private createAnomaly(metric: SecurityMetric)
     baseline: MetricBaseline,
     model: AnomalyDetectionModel,
     deviationMagnitude: number,
@@ -599,7 +599,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
   if (score >= 2) return AnomalySeverity.MEDIUM;
   if (score >= 1) return AnomalySeverity.LOW;
   return AnomalySeverity.INFO;
-  private assessAnomalyRisk(metric: SecurityMetric,)
+  private assessAnomalyRisk(metric: SecurityMetric)
   severity: AnomalySeverity,
   deviationMagnitude: number): AnomalyRiskAssessment {,
   const severityMultiplier = {
@@ -677,7 +677,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
   target: 'security-alerts@company.com',
   enabled: true,
   severity: [AnomalySeverity.MEDIUM, AnomalySeverity.HIGH, AnomalySeverity.CRITICAL],
-  rateLimiting: {,
+  rateLimiting: {
   maxAlertsPerHour: 10,
   maxAlertsPerDay: 50,
   burstLimit: 3,

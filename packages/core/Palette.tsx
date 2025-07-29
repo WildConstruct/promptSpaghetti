@@ -155,8 +155,8 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         e.currentTarget.style.backgroundColor = '#2a2f3a';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'none';
-                      }}
+                        e.currentTarget.style.backgroundColor = 'none'
+  }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           onDragStart?.(node.id);

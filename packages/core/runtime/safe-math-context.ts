@@ -232,9 +232,9 @@ export function validateMathFunctionCall(functionName: string): boolean {
   * Security audit for Math function usage
   */
   export interface MathFunctionAudit {
-  functionName: string;,
+  functionName: string;
   allowed: boolean;
-  reason: string;,
+  reason: string;
   timestamp: number;
   context?: string;
   /**

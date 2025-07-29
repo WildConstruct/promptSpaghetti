@@ -176,12 +176,11 @@ Promise < string > {
                             ;
                         },
                         return: false,
-                        number,
-                        hitRate: number,
-                        evictions: number
-                    } > {
-                        const: stats, Record() {
-                            size: number;
+                        /**
+                         * Get cache statistics for all categories
+                         */
+                        getCacheStatistics() {
+                            const stats, number;
                             maxSize: number;
                             hitRate: number;
                             evictions: number;
@@ -378,7 +377,8 @@ Promise < string > {
                                                     if(totalActiveNodes) { }
                                                 } >= this.config.globalSettings.maxConcurrentOperations
                                             }
-                                        } }
+                                        }
+                                    }
                                 };
                                 {
                                     return false;

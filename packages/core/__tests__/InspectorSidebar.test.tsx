@@ -30,7 +30,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   const node = {
   id: 'n1',
   type: 'TestNode',
-  data: {,
+  data: {
   label: 'Test Label',
   value: 5,
   description: 'Test description',
@@ -216,7 +216,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       });
       const complexNode = {
         ...node,
-        data: {,
+        data: {
   field1: 'test',
           field2: 123,
           field3: true,

@@ -85,8 +85,8 @@ export interface IOResolutionMetadata {
   /** Original connected node ID (if from connection) */
   sourceNodeId?: string;
   /** Type coercion performed */
-  typeCoercion?: {,
-  from: IODataType;,
+  typeCoercion?: {
+  from: IODataType;
   to: IODataType;
 };
   /** Validation warnings */

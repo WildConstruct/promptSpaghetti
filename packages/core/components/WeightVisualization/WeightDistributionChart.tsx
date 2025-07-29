@@ -126,7 +126,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
                   transition: `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`}
 },
   filter: isHovered ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none',
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
                 onMouseEnter={() => handleOptionHover(option)}
                 onMouseLeave={() => handleOptionHover(null)}
@@ -221,7 +221,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
                   ), filter ${animationDuration}ms`}
 },
   filter: isHovered ? 'brightness(1.1) drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none',
-                  cursor: 'pointer';
+                  cursor: 'pointer'
   }}
                 onMouseEnter={() => handleOptionHover(option)}
                 onMouseLeave={() => handleOptionHover(null)}

@@ -4,22 +4,6 @@
  */
 import { EventEmitter } from 'events';
 import { corePerformanceKPIs, getKPIsByCategory } from './PerformanceKPIs';
- > ;
-alerts: {
-    total: number;
-    critical: number;
-    high: number;
-    medium: number;
-    low: number;
-    acknowledged: number;
-}
-;
-trends: {
-    improving: KPITrendAnalysis;
-    degrading: KPITrendAnalysis;
-    stable: KPITrendAnalysis;
-}
-;
 export class KPIDashboard extends EventEmitter {
     monitoringService;
     baseline;

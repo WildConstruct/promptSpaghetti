@@ -9,18 +9,18 @@ import { EventEmitter } from 'events';
 
 export interface PerformanceReport {
     generatedAt: number;
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
-    summary: {,
+    summary: {
         totalExecutions: number;
         averagePerformance: number;
         reliabilityScore: number;
         efficiencyScore: number;
-        recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical';
-    };
-    performance: {,
+        recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical'
+  };
+    performance: {
         averageExecutionTime: number;
         p50ExecutionTime: number;
         p95ExecutionTime: number;
@@ -32,7 +32,7 @@ export interface PerformanceReport {
             executionCount: number;
         }>;
     };
-    reliability: {,
+    reliability: {
         successRate: number;
         errorRate: number;
         mostReliableTypes: string[];
@@ -43,14 +43,14 @@ export interface PerformanceReport {
             affectedNodes: string[];
         }>;
     };
-    efficiency: {,
+    efficiency: {
         memoryEfficiency: number;
         cacheHitRate: number;
         contextOptimization: number;
         resourceWaste: number;
         optimizationOpportunities: string[];
     };
-    trends: {,
+    trends: {
         performanceTrend: 'improving' | 'stable' | 'degrading';
         trendConfidence: number;
         projectedImprovement: number;
@@ -60,7 +60,7 @@ export interface PerformanceReport {
             description: string;
         }>;
     };
-    alerts: {,
+    alerts: {
         critical: number;
         high: number;
         medium: number;
@@ -74,13 +74,13 @@ export interface PerformanceReport {
 
 export interface PerformanceBenchmark {
     nodeType: string;
-    target: {,
+    target: {
         averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;
         memoryUsage: number;
     };
-    current: {,
+    current: {
         averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;

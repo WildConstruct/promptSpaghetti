@@ -6,14 +6,6 @@
  * infrastructure requirements, and service integrations.
  */
 import { EventEmitter } from 'events';
- > ;
-results: Record;
-dependencies: PrerequisiteDependencyMap;
-recommendations: string;
-// Report metadata
-reportId: string;
-generatedAt: Date;
-version: string;
 export class Epic16PrerequisiteSystem extends EventEmitter {
     config;
     checks = new Map();

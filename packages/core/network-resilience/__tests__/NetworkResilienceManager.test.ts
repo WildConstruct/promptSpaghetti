@@ -9,9 +9,9 @@ class MockWebSocket {
   static CLOSING = 2;
   static CLOSED = 3;
   readyState = MockWebSocket.CONNECTING;
-  onopen: ((event: Event) => void) | null = null;,
-  onclose: ((event: CloseEvent) => void) | null = null;,
-  onerror: ((event: Event) => void) | null = null;,
+  onopen: ((event: Event) => void) | null = null;
+  onclose: ((event: CloseEvent) => void) | null = null;
+  onerror: ((event: Event) => void) | null = null;
   onmessage: ((event: MessageEvent) => void) | null = null;
   constructor(public url: string) {,
   setTimeout(() => {
@@ -45,17 +45,17 @@ describe('NetworkResilienceManager', () => {
   beforeEach(() => {
   manager = new NetworkResilienceManager({)
   enabled: true,
-  notifications: {,
+  notifications: {
   enabled: true,
   showOfflineIndicator: true,
   showConnectionQuality: true,
   notifyOnReconnect: true,
   notifyOnSyncComplete: true,
 },
-  persistence: {,
+  persistence: {
   enabled: false // Disable for tests,
 },
-  performance: {,
+  performance: {
   enableMetrics: true,
   metricsInterval: 100,
   enableProfiling: false,

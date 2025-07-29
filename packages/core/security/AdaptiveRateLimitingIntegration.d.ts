@@ -49,19 +49,19 @@ export declare enum FallbackBehavior {
     ESCALATE = "escalate"
 
 export interface UnifiedProtectionContext extends ThrottlingContext {
-    rateLimitingHistory: {,
+    rateLimitingHistory: {
         recentAttempts: number;
         backoffLevel: number;
         threatAssessment: ThreatLevel;
         adaptiveMultiplier: number;
     };
-    throttlingHistory: {,
+    throttlingHistory: {
         recentThrottling: number;
         systemCondition: SystemCondition;
         activeRules: string[];
         effectivenessScore: number;
     };
-    integrationMetadata: {,
+    integrationMetadata: {
         requestId: string;
         correlationId: string;
         protectionLayers: string[];
@@ -81,22 +81,22 @@ export interface UnifiedProtectionResult {
     delay: number;
     rateLimitingResult: RateLimitStatus;
     throttlingResult: ThrottlingResult;
-    finalDecision: {,
+    finalDecision: {
         system: string;
         strategy: CoordinationStrategy;
         confidence: number;
         reasoning: string;
     };
-    recommendations: {,
+    recommendations: {
         adjustRateLimits: boolean;
         adjustThrottling: boolean;
         escalateToAdmin: boolean;
         updateRules: boolean;
     };
-    metadata: {,
+    metadata: {
         protectionLayers: string[];
         decisionTime: number;
-        systemHealth: {,
+        systemHealth: {
             rateLimitingHealth: number;
             throttlingHealth: number;
             integrationHealth: number;
@@ -104,19 +104,19 @@ export interface UnifiedProtectionResult {
     };
 
 export interface CrossSystemLearning {
-    rateLimitingInsights: {,
+    rateLimitingInsights: {
         effectiveBackoffStrategies: BackoffStrategy[];
         optimalThreatThresholds: Record<ThreatLevel, number>;
         endpointVulnerabilities: Record<string, number>;
         patternRecognition: string[];
     };
-    throttlingInsights: {,
+    throttlingInsights: {
         effectiveRuleCombinations: string[];
         systemLoadCorrelations: Record<SystemCondition, number>;
         adaptationSuccessRates: Record<ThrottlingMode, number>;
         falsePositivePatterns: string[];
     };
-    integratedInsights: {,
+    integratedInsights: {
         complementaryProtections: Array<{,
             rateLimiting: string;
             throttling: string;
@@ -127,7 +127,7 @@ export interface CrossSystemLearning {
             resolution: CoordinationStrategy;
             success: boolean;
         }>;
-        performanceImpact: {,
+        performanceImpact: {
             latency: number;
             throughput: number;
             accuracy: number;
@@ -262,7 +262,7 @@ export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
         config: IntegrationConfig;
         performance: typeof this.performanceMetrics;
         learning: CrossSystemLearning;
-        systemHealth: {,
+        systemHealth: {
             rateLimitingHealth: number;
             throttlingHealth: number;
             integrationHealth: number;

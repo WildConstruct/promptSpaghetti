@@ -29,10 +29,10 @@ import './HelpIntegrationWidget.css';
 
 export interface HelpIntegrationProps {
   // Current context
-  currentSystem: 'graph-editor' | 'marketplace';,
+  currentSystem: 'graph-editor' | 'marketplace';
   currentView: string;
   templateId?: string;
-  userId: string;,
+  userId: string;
   userRole: 'buyer' | 'seller' | 'admin';
   // Integration callbacks
   onTransitionToSystem?: (system: 'graph-editor' | 'marketplace') => void;
@@ -45,23 +45,23 @@ export interface HelpIntegrationProps {
   hidden?: boolean;
 }
 export interface HelpSession {
-  id: string;,
+  id: string;
   sessionType: string;
-  currentStep: number;,
+  currentStep: number;
   totalSteps: number;
-  content: HelpContent;,
+  content: HelpContent;
   startTime: Date;
-  userProgress: {,
-  completedActions: string;,
+  userProgress: {
+  completedActions: string;
   skippedContent: string;
   ratings: Record<string, number>;
 };
   escalationLevel: number;
 }
 export interface TransitionContext {
-  fromSystem: 'graph-editor' | 'marketplace';,
+  fromSystem: 'graph-editor' | 'marketplace';
   toSystem: 'graph-editor' | 'marketplace';
-  reason: string;,
+  reason: string;
   preserveHelp: boolean;
   bridgeContent?: HelpContent;
   // =============================================================================
@@ -124,14 +124,14 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       // Request contextual help from API
       const response = await fetch('/api/help-integration/contextual-help', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
   },
   body: JSON.stringify({),
   userId,
   sessionType,
-  context: {,
+  context: {
   currentView,
   templateId,
   userRole,
@@ -158,7 +158,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
           totalSteps: data.content.length,
           content: data.content,
           startTime: new Date(),
-          userProgress: {,
+          userProgress: {
   completedActions: [],
             skippedContent: [],
             ratings: {}
@@ -178,7 +178,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
     try {
       const response = await fetch('/api/help-integration/system-transition', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
   },
@@ -188,7 +188,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   toSystem,
   preserveHelp: true,
   currentSessionId: currentSession.id,
-  transitionData: {,
+  transitionData: {
   currentStep: currentSession.currentStep,
   templateId,
   currentView
@@ -240,7 +240,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       await fetch(`/api/help-integration/session/${currentSession.id}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
   },
@@ -262,7 +262,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
     try {
       const response = await fetch('/api/help-integration/escalate-to-support', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
   },
@@ -272,10 +272,10 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   escalationReason,
   userDescription: escalationDescription,
   priority: 'medium',
-  additionalContext: {,
+  additionalContext: {
   currentView,
   templateId,
-  systemState: {,
+  systemState: {
   currentSystem,
   userRole,
   sessionProgress: currentSession.userProgress,
@@ -540,13 +540,13 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
 // Helper Components
 // =============================================================================
 interface HelpContentCardProps {
-  content: HelpContent;,
+  content: HelpContent;
   isActive: boolean;
-  isCompleted: boolean;,
+  isCompleted: boolean;
   stepNumber: number;
-  totalSteps: number;,
+  totalSteps: number;
   onView: () => void;
-  onComplete: () => void;,
+  onComplete: () => void;
   onSkip: () => void;
   onRate: (rating: number) => void;
   const HelpContentCard: React.FC<HelpContentCardProps> = ({,)

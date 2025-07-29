@@ -184,7 +184,7 @@ export declare const securityAudit: SecurityAuditLogger;
 /**
  * Decorator for automatic security logging
  */
-export declare function auditSecurityEvent(severity?: SecuritySeverity,)
+export declare function auditSecurityEvent(severity?: SecuritySeverity)
   category?: SecurityEventCategory
 ): MethodDecorator;
 export default SecurityAuditLogger;

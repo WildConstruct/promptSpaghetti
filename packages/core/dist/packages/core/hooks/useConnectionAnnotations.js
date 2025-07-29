@@ -214,7 +214,11 @@ export const connectionAnnotationPresets = {
                     },
                     // Helper to create preset connections
                     const: createPresetConnection = (baseEdge) => preset, keyof, typeof: connectionAnnotationPresets,
-                    label: string, AnnotatedEdge } } } }
+                    label: string, AnnotatedEdge
+                }
+            }
+        }
+    }
 };
 {
     return createAnnotatedEdge();

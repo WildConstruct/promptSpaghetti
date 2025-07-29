@@ -16,19 +16,19 @@ export interface AudioConfig {
   defaultParameters?: Record<string, any>;
 }
 export interface AudioMetadata {
-  duration: number;,
+  duration: number;
   format: string;
-  sample_rate: number;,
+  sample_rate: number;
   channels: number;
   bitrate?: number;
-  size: number;,
+  size: number;
   provider: string;
-  model: string;,
+  model: string;
   generation_time: number;
   cost: number;
 }
 export interface GeneratedAudio {
-  data: ArrayBuffer | string;,
+  data: ArrayBuffer | string;
   format: string;
   metadata: AudioMetadata;
 }
@@ -37,12 +37,12 @@ export interface TranscriptionResult {
   language?: string;
   confidence?: number;
   segments?: Array<{,
-  start: number;,
+  start: number;
   end: number;
   text: string;
 }>;
   words?: Array<{
-  word: string;,
+  word: string;
   start: number;
   end: number;
 }>;
@@ -100,7 +100,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
       const audioData: GeneratedAudio = {,
   data: result.audio.data,
   format: result.audio.format,
-  metadata: {,
+  metadata: {
   duration: result.audio.duration,
   format: result.audio.format,
   sample_rate: result.audio.sample_rate,
@@ -113,7 +113,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
   cost: result.usage.cost,
 };
       return {
-  outputs: {,
+  outputs: {
   audio: audioData,
   metadata: audioData.metadata,
   cost: result.usage.cost,
@@ -179,7 +179,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
         return {
   voice_id: voice || undefined,
   output_format: this._mapToElevenLabsFormat(format),
-  voice_settings: {,
+  voice_settings: {
   stability: 0.5,
   similarity_boost: 0.5,
   style: 0,
@@ -248,7 +248,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
   confidence: result.metadata.confidence_score,
   segments: result.segments,
   words: result.words,
-  metadata: {,
+  metadata: {
   duration: result.metadata.duration,
   format: 'transcription',
   sample_rate: 0,
@@ -260,7 +260,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
   cost: result.usage.cost,
 };
       return {
-  outputs: {,
+  outputs: {
   text: transcription.text,
   segments: transcription.segments || [],
   metadata: transcription.metadata,
@@ -342,7 +342,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
   const analysis = await this._analyzeAudio(audioFile, analysisType);
   const processingTime = Date.now() - startTime;
   return {
-  outputs: {,
+  outputs: {
   duration: analysis.duration,
   format: analysis.format,
   sample_rate: analysis.sample_rate,
@@ -363,8 +363,8 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
   // Determine format from file type or extension
   let format = 'unknown';
   if (audioFile.type) {
-  format = audioFile.type.split('/')[1] || 'unknown';
-} else if (audioFile.name) {
+  format = audioFile.type.split('/')[1] || 'unknown'
+  } else if (audioFile.name) {
   const extension = audioFile.name.split('.').pop()?.toLowerCase();
   format = extension || 'unknown';
   // Estimate duration (very rough estimate based on file size)
@@ -454,7 +454,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
   : (audioFile.size || 0) / convertedAudio.byteLength,
 };
       return {
-  outputs: {,
+  outputs: {
   converted_audio: convertedAudio,
   metadata
 },

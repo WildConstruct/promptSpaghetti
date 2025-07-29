@@ -211,7 +211,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     levelId: string;
     assignmentType: AssignmentType;
     assignmentTarget: string;
-    notificationMethods: {,
+    notificationMethods: {
         priority: EscalationPriority;
         type: NotificationType;
         address: string;
@@ -245,7 +245,7 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     levelId: string;
     assignmentType: AssignmentType;
     assignmentTarget: string;
-    notificationMethods: {,
+    notificationMethods: {
         priority: EscalationPriority;
         type: NotificationType;
         address: string;
@@ -383,7 +383,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -417,7 +417,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -463,7 +463,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     version: number;
     lastModified: Date;
     enabled: boolean;
-    conditions: {,
+    conditions: {
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
         operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -474,14 +474,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     ruleId: string;
     createdBy: string;
     triggerType: EscalationTriggerType;
-    escalationPath: {,
+    escalationPath: {
         name: string;
         description: string;
         level: number;
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -523,7 +523,7 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     version: number;
     lastModified: Date;
     enabled: boolean;
-    conditions: {,
+    conditions: {
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
         operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -534,14 +534,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     ruleId: string;
     createdBy: string;
     triggerType: EscalationTriggerType;
-    escalationPath: {,
+    escalationPath: {
         name: string;
         description: string;
         level: number;
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -781,7 +781,7 @@ export interface CategoryBreakdown {
     trend: 'up' | 'down' | 'stable';
 
 export interface EscalationDashboard {
-    overview: {,
+    overview: {
         activeCases: number;
         criticalCases: number;
         overdueResponses: number;
@@ -790,7 +790,7 @@ export interface EscalationDashboard {
     };
     recentEscalations: EscalationCase[];
     urgentCases: EscalationCase[];
-    performance: {,
+    performance: {
         slaCompliance: number;
         firstCallResolution: number;
         customerSatisfaction: number;
@@ -885,7 +885,7 @@ export interface EscalationAPIResponse<T = any> {
 
 export interface PaginatedResponse<T> {
     items: T[];
-    pagination: {,
+    pagination: {
         page: number;
         limit: number;
         total: number;
@@ -898,7 +898,7 @@ export interface EscalationRuleTestResult {
     wouldTrigger: boolean;
     matchedConditions: string[];
     suggestedLevel: number;
-    estimatedEscalationPath: {,
+    estimatedEscalationPath: {
         level: number;
         assignee: string;
         estimatedTime: number;
@@ -907,7 +907,7 @@ export interface EscalationRuleTestResult {
 
 export interface AssigneePerformance {
     assignee: string;
-    period: {,
+    period: {
         startDate: Date;
         endDate: Date;
     };
@@ -954,24 +954,24 @@ export interface EscalationEvent {
 
 export interface EscalationServiceConfig {
     defaultTimezone: string;
-    businessHours: {,
+    businessHours: {
         startTime: string;
         endTime: string;
         daysOfWeek: number[];
     };
-    notifications: {,
+    notifications: {
         retryAttempts: number;
         retryInterval: number;
         enableBatching: boolean;
         batchSize: number;
         batchInterval: number;
     };
-    performance: {,
+    performance: {
         metricsRetentionDays: number;
         autoCleanupExpiredCases: boolean;
         maxConcurrentEscalations: number;
     };
-    integrations: {,
+    integrations: {
         enableWebhooks: boolean;
         webhookTimeout: number;
         enableSlackNotifications: boolean;
@@ -1130,7 +1130,7 @@ declare const _default: {
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -1164,7 +1164,7 @@ declare const _default: {
         levelId: string;
         assignmentType: AssignmentType;
         assignmentTarget: string;
-        notificationMethods: {,
+        notificationMethods: {
             priority: EscalationPriority;
             type: NotificationType;
             address: string;
@@ -1302,7 +1302,7 @@ declare const _default: {
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {,
+            notificationMethods: {
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1336,7 +1336,7 @@ declare const _default: {
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {,
+            notificationMethods: {
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1382,7 +1382,7 @@ declare const _default: {
         version: number;
         lastModified: Date;
         enabled: boolean;
-        conditions: {,
+        conditions: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
             operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -1393,14 +1393,14 @@ declare const _default: {
         ruleId: string;
         createdBy: string;
         triggerType: EscalationTriggerType;
-        escalationPath: {,
+        escalationPath: {
             name: string;
             description: string;
             level: number;
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {,
+            notificationMethods: {
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;
@@ -1442,7 +1442,7 @@ declare const _default: {
         version: number;
         lastModified: Date;
         enabled: boolean;
-        conditions: {,
+        conditions: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
             operator: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
@@ -1453,14 +1453,14 @@ declare const _default: {
         ruleId: string;
         createdBy: string;
         triggerType: EscalationTriggerType;
-        escalationPath: {,
+        escalationPath: {
             name: string;
             description: string;
             level: number;
             levelId: string;
             assignmentType: AssignmentType;
             assignmentTarget: string;
-            notificationMethods: {,
+            notificationMethods: {
                 priority: EscalationPriority;
                 type: NotificationType;
                 address: string;

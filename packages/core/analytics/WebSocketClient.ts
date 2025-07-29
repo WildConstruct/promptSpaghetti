@@ -18,7 +18,7 @@ export enum WebSocketMessageType {
   * WebSocket message structure
   */
   export interface WebSocketMessage {
-  type: WebSocketMessageType;,
+  type: WebSocketMessageType;
   data: any;
   timestamp: number;
   id?: string;
@@ -28,23 +28,23 @@ export enum WebSocketMessageType {
 }
 export interface SubscriptionConfig {
   topic: string;
-  filters?: {,
+  filters?: {
   userId?: number;
   organizationId?: number;
   eventTypes?: string;
-  minSeverity?: 'info' | 'warning' | 'critical';
-};
+  minSeverity?: 'info' | 'warning' | 'critical'
+  };
   throttle?: number; // Minimum time between updates in ms
 /**
  * WebSocket client configuration
  */
 }
 export interface WebSocketClientConfig {
-  url: string;,
+  url: string;
   reconnectInterval: number;
-  maxReconnectAttempts: number;,
+  maxReconnectAttempts: number;
   heartbeatInterval: number;
-  subscriptionTimeout: number;,
+  subscriptionTimeout: number;
   enableLogging: boolean;
   apiKey?: string;
   userId?: number;
@@ -145,7 +145,7 @@ export class WebSocketClient extends EventEmitter {
   return new Promise((resolve, reject) => {
   const subscriptionConfig: SubscriptionConfig = {,
   topic,
-  filters: {,
+  filters: {
   userId: this.config.userId,
   organizationId: this.config.organizationId,
   ...config?.filters
@@ -210,8 +210,8 @@ export class WebSocketClient extends EventEmitter {
   if (this.config.apiKey) {
   this.sendMessage({)
   type: WebSocketMessageType.SUBSCRIPTION,
-  data: {,
-  auth: {,
+  data: {
+  auth: {
   apiKey: this.config.apiKey,
   userId: this.config.userId,
   organizationId: this.config.organizationId,
@@ -370,7 +370,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
   */
   async subscribeToDashboard(): Promise<void> {,
   await this.subscribe('dashboard', {)
-  filters: {,
+  filters: {
   eventTypes: ['analytics_update', 'performance_metric'],
 },
   throttle: 5000 // Update every 5 seconds;
@@ -380,7 +380,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    */
   async subscribeToCostAlerts(): Promise<void> {
   await this.subscribe('cost_alerts', {)
-  filters: {,
+  filters: {
   eventTypes: ['cost_alert', 'budget_alert'],
   minSeverity: 'warning',
 },
@@ -391,7 +391,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    */
   async subscribeToRecommendations(): Promise<void> {
   await this.subscribe('recommendations', {)
-  filters: {,
+  filters: {
   eventTypes: ['recommendation'],
 },
   throttle: 10000 // Update every 10 seconds;
@@ -401,7 +401,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    */
   async subscribeToUserActivity(): Promise<void> {
   await this.subscribe('user_activity', {)
-  filters: {,
+  filters: {
   eventTypes: ['user_activity'],
 },
   throttle: 2000 // Update every 2 seconds;

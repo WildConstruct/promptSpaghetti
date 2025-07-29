@@ -142,7 +142,7 @@ export type AuditAnalytics = z.infer<typeof AuditAnalyticsSchema>;
  */
 export class AuditManagementSystem {
   private events: Map<string, AuditEvent> = new Map();
-  private indexedData: {,
+  private indexedData: {
   byUser: Map<string, string>;
   byType: Map<AuditEventType, string>;
   bySeverity: Map<AuditSeverity, string>;
@@ -180,9 +180,9 @@ export class AuditManagementSystem {
    */
   async queryAuditEvents(query: AuditQuery): Promise<{,
   events: AuditEvent;
-  totalCount: number;,
+  totalCount: number;
   page: number;
-  totalPages: number;,
+  totalPages: number;
   analytics: unknown;
 }> {
   const validatedQuery = AuditQuerySchema.parse(query);
@@ -216,7 +216,7 @@ export class AuditManagementSystem {
   const analytics: any = {,
   timeframe: validatedRequest.timeframe,
   total_events: events.length,
-  date_range: {,
+  date_range: {
   start: events.length > 0 ? Math.min(...events.map(e => e.timestamp.getTime())) : null,
   end: events.length > 0 ? Math.max(...events.map(e => e.timestamp.getTime())) : null,
 },
@@ -261,18 +261,18 @@ export class AuditManagementSystem {
   framework,
   report_period: dateRange,
   generated_at: new Date(),
-  summary: {,
+  summary: {
   total_events: events.length,
   critical_events: events.filter(e => e.severity === AuditSeverity.CRITICAL).length,
   high_risk_events: events.filter(e => e.risk_score >= 7).length,
   unresolved_events: events.filter(e => e.status !== AuditStatus.RESOLVED).length,
 },
-  event_breakdown: {,
+  event_breakdown: {
   by_severity: this.calculateSeverityDistribution(events),
   by_type: this.calculateEventTypeDistribution(events),
   by_status: this.calculateStatusDistribution(events),
 },
-  risk_analysis: {,
+  risk_analysis: {
   average_risk_score: events.reduce((sum, e) => sum + e.risk_score, 0) / events.length || 0,
   high_risk_events: events.filter(e => e.risk_score >= 7),
   risk_trends: this.calculateRiskTrends(events),
@@ -283,8 +283,8 @@ export class AuditManagementSystem {
   /**
    * Real-time audit monitoring and alerting
    */
-  setupRealTimeMonitoring(config: {,)
-  alertThresholds: {,
+  setupRealTimeMonitoring(config: {)
+  alertThresholds: {
   criticalEventRate: number;      // Events per minute,
   highRiskEventRate: number;      // Events per hour,
   failedLoginRate: number;        // Failed logins per minute,
@@ -345,10 +345,10 @@ export class AuditManagementSystem {
   /**
    * Audit retention and archival management
    */
-  manageAuditRetention(policies: {,)
+  manageAuditRetention(policies: {)
   defaultRetentionDays: number;
     complianceRetentionDays: { [framework in ComplianceFramework]?: number };
-    archivalStorage: string;,
+    archivalStorage: string;
   legalHoldOverride: boolean;
   }): void {
     const now = new Date();

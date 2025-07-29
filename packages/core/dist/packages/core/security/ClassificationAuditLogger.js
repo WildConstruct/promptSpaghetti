@@ -578,8 +578,7 @@ context: {
         return: this.exportAsSyslog(logs),
         case: ExportFormat.CEF,
         return: this.exportAsCEF(logs),
-        case: ExportFormat.LEEF,
-        return: this.exportAsLEEF(logs),
+        case: ExportFormat.LEEF, return: this.exportAsLEEF(logs),
         default: ,
         throw: new Error(`Unsupported export format: ${format}`)
     };

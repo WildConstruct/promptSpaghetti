@@ -13,29 +13,29 @@ export interface EmptyStateProps {
   title?: string;
   description?: string;
   action?: {
-  label: string;,
+  label: string;
   onClick: () => void;
-  variant?: 'primary' | 'secondary';
-};
+  variant?: 'primary' | 'secondary'
+  };
   variant?: 'default' | 'search' | 'filter' | 'create';
   className?: string;
 const VARIANT_CONFIGS = {
-  default: {,
+  default: {
   icon: Database,
   title: 'No data available',
   description: 'There is no data to display at this time.',
 },
-  search: {,
+  search: {
   icon: Search,
   title: 'No search results',
   description: 'Try adjusting your search terms or filters.',
 },
-  filter: {,
+  filter: {
   icon: Filter,
   title: 'No matching results',
   description: 'No items match your current filter criteria.',
 },
-  create: {,
+  create: {
   icon: Plus,
   title: 'Get started',
   description: 'Create your first item to see it here.',

@@ -25,41 +25,41 @@ const SETTINGS_VERSION = '1.0.0';
 /**
  * Default settings configuration
  */
-const DEFAULT_SETTINGS: AdvancedSettings = {,
-  seed: {,
-  enabled: false,
-  history: [],
-  autoGenerate: true,
-},
-  temperature: {,
-  enabled: false,
+const DEFAULT_SETTINGS: AdvancedSettings = {
+  seed: {
+    enabled: false,
+    history: [],
+    autoGenerate: true
+  },
+  temperature: {
+    enabled: false,
     value: 1.0,
     showIndicator: true,
-    presets: [,
+    presets: [
       { name: 'Conservative', value: 0.3, description: 'More predictable results' },
       { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
       { name: 'Creative', value: 1.7, description: 'More varied results' }
     ]
   },
-  runCount: {,
+  runCount: {
   value: 5,
   showPerformanceWarning: true,
   presets: [1, 3, 5, 10, 20],
 },
-  batch: {,
+  batch: {
   batchSize: 5,
     outputFormat: 'individual',
     namingPattern: 'result-{seed}-{timestamp}',
     includeMetadata: true,
     autoDownload: false;
   },
-  performance: {,
+  performance: {
   showExecutionTimes: false,
   enableCaching: true,
   showMemoryUsage: false,
   logExecutionSteps: false,
 },
-  ui: {,
+  ui: {
   theme: 'auto',
   showTooltips: true,
   enableKeyboardShortcuts: true,
@@ -117,7 +117,7 @@ export class SettingsManager {
   Object.keys(newSettings).forEach(key => {)
   const typedKey = key as keyof AdvancedSettings;
   if (newSettings[typedKey] !== previousSettings[typedKey]) {
-  this.notifyChange({)
+  this.notifyChange({
   key,
   value: newSettings[typedKey],
   previousValue: previousSettings[typedKey],
@@ -146,7 +146,7 @@ export class SettingsManager {
     // Notify listeners
     Object.keys(DEFAULT_SETTINGS).forEach(key => {)
   const typedKey = key as keyof AdvancedSettings;
-  this.notifyChange({)
+  this.notifyChange({
   key,
   value: DEFAULT_SETTINGS[typedKey],
   previousValue: previousSettings[typedKey],
@@ -249,7 +249,7 @@ export class SettingsManager {
   public exportSettings(): SettingsExport {
   return {
   settings: this.getSettings(),
-  metadata: {,
+  metadata: {
   exportedAt: new Date().toISOString(),
   version: SETTINGS_VERSION,
   appVersion: '1.0.0' // TODO: Get from package.json,
@@ -263,7 +263,7 @@ export class SettingsManager {
       if (!exportData.settings || !exportData.metadata) {
         return { valid: false, errors: ['Invalid export format'], warnings: [] };
       // Check version compatibility
-      const warnings: string = [];
+      const warnings: string[] = [];
       if (exportData.metadata.version !== SETTINGS_VERSION) {
         warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);}
       // Import settings

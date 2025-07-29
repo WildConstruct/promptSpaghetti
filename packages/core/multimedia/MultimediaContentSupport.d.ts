@@ -115,12 +115,12 @@ export interface StorageInfo {
         distribution: string;
         region: string;
     };
-    compression: {,
+    compression: {
         enabled: boolean;
         algorithm: string;
         ratio: number;
     };
-    backup: {,
+    backup: {
         enabled: boolean;
         locations: string[];
         lastBackup?: Date;
@@ -149,8 +149,8 @@ export interface MediaProcessingOptions {
             resolution?: '480p' | '720p' | '1080p' | '4k';
             bitrate?: number;
             framerate?: number;
-            codec?: 'h264' | 'h265' | 'vp9';
-        };
+            codec?: 'h264' | 'h265' | 'vp9'
+  };
         thumbnail?: {
             count: number;
             interval?: number;
@@ -167,8 +167,8 @@ export interface MediaProcessingOptions {
             bitrate?: number;
             sampleRate?: number;
             channels?: number;
-            codec?: 'mp3' | 'aac' | 'ogg' | 'flac';
-        };
+            codec?: 'mp3' | 'aac' | 'ogg' | 'flac'
+  };
         normalize?: boolean;
         noiseReduction?: boolean;
         transcription?: boolean;
@@ -181,13 +181,13 @@ export interface MediaProcessingOptions {
     };
 
 export interface MultimediaConfig {
-    storage: {,
+    storage: {
         provider: 'local' | 'aws' | 'gcp' | 'azure';
         maxFileSize: number;
         allowedTypes: string[];
         compressionEnabled: boolean;
     };
-    processing: {,
+    processing: {
         enableTranscoding: boolean;
         enableOptimization: boolean;
         enableThumbnails: boolean;
@@ -195,13 +195,13 @@ export interface MultimediaConfig {
         maxConcurrentJobs: number;
         timeoutMs: number;
     };
-    delivery: {,
+    delivery: {
         cdnEnabled: boolean;
         cacheMaxAge: number;
         adaptiveStreaming: boolean;
         lazyLoading: boolean;
     };
-    accessibility: {,
+    accessibility: {
         requireAltText: boolean;
         autoGenerateTranscriptions: boolean;
         autoGenerateCaptions: boolean;
@@ -251,13 +251,13 @@ export declare class MultimediaContentSupport extends EventEmitter {
         totalAssets: number;
         totalSize: number;
         assetsByType: Record<string, number>;
-        processingStats: {,
+        processingStats: {
             pending: number;
             processing: number;
             completed: number;
             failed: number;
         };
-        storageUsage: {,
+        storageUsage: {
             used: number;
             available: number;
             efficiency: number;

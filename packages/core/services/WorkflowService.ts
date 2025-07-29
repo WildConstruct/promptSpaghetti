@@ -30,7 +30,7 @@ class WorkflowService {
     const response = await fetch(`${this.baseUrl}/workflows/configs/${configId}`);}
     if (!response.ok) throw new Error(`Failed to fetch workflow config: ${response.statusText}`);}
     return response.json();
-  async createWorkflowConfig(config: Omit<WorkflowConfig,)
+  async createWorkflowConfig(config: Omit<WorkflowConfig)
     'id' | 'created_at' | 'updated_at'>
   ): Promise<WorkflowConfig> {
     const response = await fetch(`${this.baseUrl}/workflows/configs`, {)}
@@ -53,7 +53,7 @@ class WorkflowService {
   async deleteWorkflowConfig(configId: string): Promise<void> {
     const response = await fetch(`${this.baseUrl}/workflows/configs/${configId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
     if (!response.ok) throw new Error(`Failed to delete workflow config: ${response.statusText}`);}
   // Workflow Instances
@@ -66,7 +66,7 @@ class WorkflowService {
     if (response.status === 404) return null;
     if (!response.ok) throw new Error(`Failed to fetch workflow instance: ${response.statusText}`);}
     return response.json();
-  async createWorkflowInstance(resourceId: string,)
+  async createWorkflowInstance(resourceId: string)
     resourceType: string,
     configId: string,
     metadata?: Record<string, any>
@@ -145,7 +145,7 @@ class WorkflowService {
   async releaseLock(lockId: string): Promise<void> {
     const response = await fetch(`${this.baseUrl}/workflows/locks/${lockId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
     if (!response.ok) throw new Error(`Failed to release lock: ${response.statusText}`);}
   async breakLock(lockId: string, reason?: string): Promise<void> {
@@ -206,7 +206,7 @@ class WorkflowService {
   async deleteWebhook(webhookId: string): Promise<void> {
     const response = await fetch(`${this.baseUrl}/workflows/webhooks/${webhookId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
     if (!response.ok) throw new Error(`Failed to delete webhook: ${response.statusText}`);}
   // Scheduled Execution
@@ -242,7 +242,7 @@ class WorkflowService {
   async deleteScheduledExecution(executionId: string): Promise<void> {
     const response = await fetch(`${this.baseUrl}/workflows/scheduled/${executionId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
     if (!response.ok) throw new Error(`Failed to delete scheduled execution: ${response.statusText}`);}
   async getExecutionResults(executionId: string): Promise<ExecutionResult> {

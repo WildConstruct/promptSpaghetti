@@ -8,7 +8,7 @@ import React from 'react';
 import type { TabConfig } from './DashboardShell';
 
 export interface DashboardTabsProps {
-  tabs: TabConfig;,
+  tabs: TabConfig;
   activeTab: string;
   onTabChange: (tabId: string) => void;
   className?: string;

@@ -51,8 +51,8 @@ export const SENSITIVITY_LEVEL_MAPPING: Record<DataSensitivityLevel, Classificat
 export interface EnhancedDataElement extends DataElement {
   sensitivityLevel?: DataSensitivityLevel;
   handlingRequirements?: DataHandlingRequirements;
-  securityMarkings?: {,
-  label: string;,
+  securityMarkings?: {
+  label: string;
   color: string;
   displayFormat: string;
 };
@@ -61,13 +61,13 @@ export interface EnhancedDataElement extends DataElement {
  */
 
 export interface SecurityPolicyEnforcementResult {
-  compliant: boolean;,
+  compliant: boolean;
   violations: string;
-  recommendations: string;,
-  requiredActions: {,
-  encryption: boolean;,
+  recommendations: string;
+  requiredActions: {
+  encryption: boolean;
   accessControl: string;
-  monitoring: string;,
+  monitoring: string;
   retention: string;
 };
   riskScore: number;
@@ -76,11 +76,11 @@ export interface SecurityPolicyEnforcementResult {
  */
 }
 export interface DataFlowSecurityAssessment {
-  sourceLevel: DataSensitivityLevel;,
+  sourceLevel: DataSensitivityLevel;
   targetLevel: DataSensitivityLevel;
-  transferAllowed: boolean;,
+  transferAllowed: boolean;
   requiredControls: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   complianceImpact: string;
   /**
   * Comprehensive data classification helper utilities
@@ -100,7 +100,7 @@ export class DataClassificationHelpers {
   /**
   * Enhance DataElement with sensitivity information
   */
-  static enhanceDataElement(element: DataElement,)
+  static enhanceDataElement(element: DataElement)
   sensitivityLevel?: DataSensitivityLevel): EnhancedDataElement {,
   const level = sensitivityLevel || this.detectSensitivityLevel(element);
   const handlingRequirements = DataSensitivityUtils.getHandlingRequirements(level);
@@ -137,7 +137,7 @@ export class DataClassificationHelpers {
   */
   private static detectFromFieldName(fieldName: string): DataSensitivityLevel | null {,
   const fieldPatterns: Array<{,
-  pattern: RegExp;,
+  pattern: RegExp;
   level: DataSensitivityLevel;
 }> = [
       // PII patterns
@@ -191,11 +191,11 @@ export class DataClassificationHelpers {
   /**
   * Enforce security policies based on sensitivity level
   */
-  static enforceSecurityPolicies(element: EnhancedDataElement,)
-  currentSecurity: {,
-  encrypted: boolean;,
+  static enforceSecurityPolicies(element: EnhancedDataElement)
+  currentSecurity: {
+  encrypted: boolean;
   accessControl: string;
-  monitoring: string;,
+  monitoring: string;
   retention: string;
   ): SecurityPolicyEnforcementResult {,
   if (!element.sensitivityLevel || !element.handlingRequirements) {
@@ -257,7 +257,7 @@ export class DataClassificationHelpers {
   /**
    * Assess security for data transfer between systems
    */
-  static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel,)
+  static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel)
     targetLevel: DataSensitivityLevel,
     transferMethod: string,
     encryptionInPlace: boolean): DataFlowSecurityAssessment {,
@@ -299,19 +299,19 @@ export class DataClassificationHelpers {
   /**
    * Generate data handling compliance report
    */
-  static generateComplianceReport(elements: EnhancedDataElement,)
+  static generateComplianceReport(elements: EnhancedDataElement)
     currentPolicies: Record<string, any>
   ): {
-  summary: {,
-  totalElements: number;,
+  summary: {
+  totalElements: number;
   compliantElements: number;
-  highRiskElements: number;,
+  highRiskElements: number;
   violationCount: number;
 };
     levelBreakdown: Record<DataSensitivityLevel, number>;
     violations: Array<{,
   elementId: string;
-  sensitivityLevel: DataSensitivityLevel;,
+  sensitivityLevel: DataSensitivityLevel;
   violations: string;
   riskScore: number;
 }>;
@@ -330,7 +330,7 @@ export class DataClassificationHelpers {
 };
     const violations: Array<{,
   elementId: string;
-  sensitivityLevel: DataSensitivityLevel;,
+  sensitivityLevel: DataSensitivityLevel;
   violations: string;
   riskScore: number;
 }> = [];
@@ -369,10 +369,10 @@ export class DataClassificationHelpers {
   /**
    * Validate field value against sensitivity level requirements
    */
-  static validateFieldValue(fieldName: string,)
+  static validateFieldValue(fieldName: string)
     value: any,
     sensitivityLevel: DataSensitivityLevel): {;
-  valid: boolean;,
+  valid: boolean;
   errors: string;
     sanitizedValue?: any;
     const errors: string = [];
@@ -409,7 +409,7 @@ export class DataClassifierIntegration {
   * Enhance ClassificationResult with sensitivity information
   */
   static enhanceClassificationResult(result: ClassificationResult): ClassificationResult & {,
-  sensitivityLevel: DataSensitivityLevel;,
+  sensitivityLevel: DataSensitivityLevel;
   handlingRequirements: DataHandlingRequirements;
   securityMarkings: ReturnType<typeof DataSensitivityUtils.generateSecurityMarkings>;
   const sensitivityLevel = DataClassificationHelpers.convertClassificationResult(result);
@@ -424,7 +424,7 @@ export class DataClassifierIntegration {
   /**
    * Create DataElement from enhanced data with sensitivity
    */
-  static createDataElementFromSensitive(id: string,)
+  static createDataElementFromSensitive(id: string)
     fieldName: string,
     value: any,
     sensitivityLevel: DataSensitivityLevel,
@@ -434,7 +434,7 @@ export class DataClassifierIntegration {
   fieldName,
   value,
   dataType: typeof value,
-  context: {,
+  context: {
   sensitivityLevel,
   detectedAt: new Date().toISOString(),
 }

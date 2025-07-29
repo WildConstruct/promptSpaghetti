@@ -34,16 +34,16 @@ export function BasicMetricsExample() {
     {
   enableRealTimeMetrics: true,
   metricsRetentionPeriod: 24, // 24 hours,
-  visualizationOptions: {,
+  visualizationOptions: {
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
   enableGeospatialMaps: true,
   refreshInterval: 5 // 5 seconds,
 },
-  alerting: {,
+  alerting: {
   enableAlerts: true,
-  alertThresholds: {,
+  alertThresholds: {
   highResponseTime: 150,
   lowThroughput: 50,
   highErrorRate: 8,
@@ -91,7 +91,7 @@ export function RateLimitingDashboardExample() {
   const metricsHook = useRateLimitingMetrics({)
   rateLimitingService,
   throttlingEngine,
-  options: {,
+  options: {
   autoRefresh: true,
   refreshInterval: 3,
   timeRange: '1h',
@@ -187,7 +187,7 @@ export function AdvancedVisualizationExample() {
     throttlingEngine,
     {
   enableRealTimeMetrics: true,
-  visualizationOptions: {,
+  visualizationOptions: {
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
@@ -249,7 +249,7 @@ export function CustomWidgetExample() {
   description: 'Real-time security metrics overview',
   dataSource: 'current',
   refreshInterval: 1,
-  config: {,
+  config: {
   chartType: 'gauge' as const,
   metrics: ['threatLevel', 'blockRate'],
 },
@@ -262,7 +262,7 @@ export function CustomWidgetExample() {
   description: 'Performance metrics by endpoint',
   dataSource: 'distribution',
   refreshInterval: 10,
-  config: {,
+  config: {
   metrics: ['endpointDistribution'],
   dimensions: ['endpoint', 'requests', 'responseTime'],
 },
@@ -275,7 +275,7 @@ export function CustomWidgetExample() {
   description: 'Historical threat activity over time',
   dataSource: 'timeseries',
   refreshInterval: 30,
-  config: {,
+  config: {
   chartType: 'area' as const,
   timeRange: '24h',
   metrics: ['blockRate', 'errorRate'],
@@ -310,9 +310,9 @@ export function AlertManagementExample() {
   rateLimitingService,
   undefined,
   {
-  alerting: {,
+  alerting: {
   enableAlerts: true,
-  alertThresholds: {,
+  alertThresholds: {
   highResponseTime: 100, // Low threshold for demo,
   lowThroughput: 10,
   highErrorRate: 5,

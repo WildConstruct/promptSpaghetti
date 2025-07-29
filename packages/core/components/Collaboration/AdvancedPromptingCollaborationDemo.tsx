@@ -300,7 +300,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
                         padding: '2px 6px',
                         borderRadius: 4,
                         fontWeight: 500,
-                        textTransform: 'capitalize';
+                        textTransform: 'capitalize'
   }}
                     >
                       {permission.replace('_', ' ')}

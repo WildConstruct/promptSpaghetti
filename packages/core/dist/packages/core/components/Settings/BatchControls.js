@@ -136,7 +136,7 @@ const outputFormats = [];
                                     width: '100px',
                                     padding: '8px 12px',
                                     border: `1px solid ${uiColors.ui.border}`
-                                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none', textAlign: 'center'; }} onFocus=", (e) => {
+                                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none', textAlign: 'center' }} onFocus=", (e) => {
                                 e.target.style.borderColor = uiColors.accent.primary;
                             }, "onBlur=", (e) => {
                                 e.target.style.borderColor = uiColors.ui.border;
@@ -171,7 +171,7 @@ const outputFormats = [];
                                         ? uiColors.accent.primary + '20'
                                         : uiColors.ui.hover,
                                         border) }, format.value);
-                            }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'left'; }} onMouseEnter=", (e) => {
+                            }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'left' }} onMouseEnter=", (e) => {
                                 if (!isSelected) {
                                     e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                                 }
@@ -199,7 +199,7 @@ const outputFormats = [];
                     width: '100%',
                     padding: '8px 12px',
                     border: `1px solid ${uiColors.ui.border}`
-                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none'; }} onFocus=", (e) => {
+                } }), ", borderRadius: '6px', backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: '14px', outline: 'none' }} onFocus=", (e) => {
                 e.target.style.borderColor = uiColors.accent.primary;
             }, "onBlur=", (e) => {
                 e.target.style.borderColor = uiColors.ui.border;

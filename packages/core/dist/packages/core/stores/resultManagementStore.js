@@ -88,7 +88,8 @@ updateResult: (id, updates) => {
                 ...currentResult,
                 ...updates,
                 lastModified: new Date(),
-            } });
+            }
+        });
         ;
         get().refreshStats();
     }
@@ -138,7 +139,8 @@ updateResult: (id, updates) => {
             version: 1,
             metadata: {
                 ...original.metadata,
-                notes: original.metadata?.notes ? `Copy of: ${original.metadata.notes}` : 'Duplicated result' }
+                notes: original.metadata?.notes ? `Copy of: ${original.metadata.notes}` : 'Duplicated result'
+            }
         };
         return get().saveResult(duplicated);
     };
@@ -295,7 +297,8 @@ updateCollection: (id, updates) => {
                 ...current,
                 ...updates,
                 lastModified: new Date(),
-            } });
+            }
+        });
         ;
     }
     deleteCollection: (id) => {
@@ -526,9 +529,10 @@ getFilteredResults: () => {
                                     ...result,
                                     savedAt: new Date(result.savedAt),
                                     lastModified: new Date(result.lastModified),
-                                    metadata: {},
-                                    ...result.metadata,
-                                    createdAt: result.metadata?.createdAt ? new Date(result.metadata.createdAt) : undefined
+                                    metadata: {
+                                        ...result.metadata,
+                                        createdAt: result.metadata?.createdAt ? new Date(result.metadata.createdAt) : undefined
+                                    }
                                 }
                             ]),
                             collections: Object.fromEntries(),

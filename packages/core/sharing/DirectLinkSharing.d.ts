@@ -96,7 +96,7 @@ export interface TimeRestriction {
 
 export interface TimeSchedule {
     days: string[];
-    hours: {,
+    hours: {
         start: string;
         end: string;
     };
@@ -240,7 +240,7 @@ export interface QRCodeConfig {
     customization: QRCustomization;
 
 export interface QRCustomization {
-    colors: {,
+    colors: {
         foreground: string;
         background: string;
     };
@@ -766,17 +766,17 @@ export interface ScheduledShare {
 
 export interface LinkAnalyticsReport {
     linkId: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
-    summary: {,
+    summary: {
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
     };
-    breakdown: {,
+    breakdown: {
         byCountry: Record<string, number>;
         byDevice: Record<string, number>;
         byReferrer: Record<string, number>;
@@ -790,7 +790,7 @@ export interface LinkAnalyticsReport {
 
 export interface BulkAnalyticsReport {
     totalLinks: number;
-    summary: {,
+    summary: {
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
@@ -810,7 +810,7 @@ export interface UserAnalyticsReport {
     userId: string;
     totalLinks: number;
     activeLinks: number;
-    summary: {,
+    summary: {
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;

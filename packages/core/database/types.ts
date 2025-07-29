@@ -12,16 +12,16 @@ export interface PaginationOptions {
   limit?: number;
   offset?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export interface PaginatedResult<T> {
-  data: T;,
-  pagination: {,
-  page: number;,
+  data: T;
+  pagination: {
+  page: number;
   limit: number;
-  totalCount: number;,
+  totalCount: number;
   totalPages: number;
-  hasNextPage: boolean;,
+  hasNextPage: boolean;
   hasPreviousPage: boolean;
   nextPage?: number;
   previousPage?: number;
@@ -37,25 +37,25 @@ export interface PaginatedResult<T> {
 // Re-exported from auth types for consistency
 
 export interface Role {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
 }
 export interface Permission {
-  id: string;,
+  id: string;
   roleId: string;
-  resource: string;,
+  resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
   createdAt: Date;
 }
 export interface UserRole {
-  id: string;,
+  id: string;
   userId: string;
   roleId: string;
   grantedBy?: string;
@@ -72,15 +72,15 @@ export interface QueryOptions {
   distinct?: boolean;
 }
 export interface QueryResult<T> {
-  rows: T;,
+  rows: T;
   count: number;
   affectedRows?: number;
   insertId?: number;
   // Database connection and transaction types
   export interface DatabaseConfig {
-  host: string;,
+  host: string;
   port: number;
-  database: string;,
+  database: string;
   username: string;
   password: string;
   ssl?: boolean;
@@ -89,13 +89,13 @@ export interface QueryResult<T> {
   commandTimeout?: number;
 }
 export interface TransactionContext {
-  id: string;,
+  id: string;
   startedAt: Date;
   isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
   // Audit and tracking types
 }
 export interface AuditableEntity {
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
   updatedBy?: string;
@@ -122,7 +122,7 @@ export interface SearchOptions {
   caseSensitive?: boolean;
 }
 export interface FilterOptions {
-  field: string;,
+  field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'ilike' | 'between';
   value: any;
   values?: any;
@@ -136,12 +136,12 @@ export interface OperationResult<T = unknown> {
   timestamp: Date;
   executionTime?: number;
   export interface BulkOperationResult<T = unknown> {
-  success: boolean;,
+  success: boolean;
   successCount: number;
   errorCount: number;
   data?: T;
   errors?: Array<{,
-  index: number;,
+  index: number;
   error: string;
   item?: any;
 }>;
@@ -156,7 +156,7 @@ export interface CacheOptions {
   version?: string;
 }
 export interface CachedResult<T> {
-  data: T;,
+  data: T;
   cached: boolean;
   cacheKey: string;
   expiresAt?: Date;
@@ -164,7 +164,7 @@ export interface CachedResult<T> {
   // Utility types for database operations
   export type DatabaseOperation = 'create' | 'read' | 'update' | 'delete' | 'bulk_create' | 'bulk_update' | 'bulk_delete';
   export interface OperationContext {
-  operation: DatabaseOperation;,
+  operation: DatabaseOperation;
   entityType: string;
   userId?: string;
   timestamp: Date;
@@ -178,7 +178,7 @@ export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 
 // Export utility functions for creating pagination results
-export function createPaginatedResult<T>(data: T,)
+export function createPaginatedResult<T>(data: T)
   totalCount: number,
   options: PaginationOptions): PaginatedResult<T> {,
   const page = options.page || 1;
@@ -186,7 +186,7 @@ export function createPaginatedResult<T>(data: T,)
   const totalPages = Math.ceil(totalCount / limit);
   return {
   data,
-  pagination: {,
+  pagination: {
   page,
   limit,
   totalCount,
@@ -198,7 +198,7 @@ export function createPaginatedResult<T>(data: T,)
 };
 
 // Export utility function for creating operation results
-export function createOperationResult<T>(success: boolean,)
+export function createOperationResult<T>(success: boolean)
   data?: T,
   error?: string,
   errorCode?: string,

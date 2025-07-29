@@ -418,7 +418,8 @@ describe('SecurityValidation Class', () => {
       // Test object with too many keys
       const largeObj: any = {};
       for (let i = 0; i < 101; i++) {
-        largeObj[`key${i}`] = 'value';}
+        largeObj[`key${i}`] = 'value'
+  }
       expect(SecurityValidation.validateSafeValue(largeObj)).toBe(false);
       // Note: Property key validation may behave differently for some reserved words
       // The validation focuses on preventing actual security issues
@@ -744,9 +745,9 @@ describe('Edge Cases and Error Handling', () => {
   });
   it('should handle deeply nested objects and arrays', () => {
   const deepObject = {
-  level1: {,
-  level2: {,
-  level3: {,
+  level1: {
+  level2: {
+  level3: {
   value: 'deep',
 };
     const deepArray = [[[['deep']]]];

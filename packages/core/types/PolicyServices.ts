@@ -195,14 +195,14 @@ export interface PolicyServiceResponse<T> {
   error?: ServiceError;
   metadata?: ResponseMetadata;
   export interface ServiceError {
-  code: string;,
+  code: string;
   message: string;
   details?: any;
   timestamp: Date;
   requestId?: string;
 }
 export interface ResponseMetadata {
-  requestId: string;,
+  requestId: string;
   timestamp: Date;
   executionTime: number; // milliseconds,
   fromCache?: boolean;
@@ -220,50 +220,50 @@ export interface UpdatePolicyRequest {
   validateOnly?: boolean;
 }
 export interface PolicyTestCase {
-  testId: string;,
+  testId: string;
   name: string;
-  description: string;,
+  description: string;
   context: EvaluationContext;
   expectedDecision: 'allow' | 'deny' | 'conditional' | 'review_required';
   expectedReasons?: string;
 }
 export interface PolicyTestResult {
-  testId: string;,
+  testId: string;
   passed: boolean;
-  actualResult: PolicyEvaluation;,
+  actualResult: PolicyEvaluation;
   expectedResult: Partial<PolicyEvaluation>;
-  deviations: TestDeviation;,
+  deviations: TestDeviation;
   executionTime: number;
 }
 export interface TestDeviation {
-  field: string;,
+  field: string;
   expected: any;
-  actual: any;,
-  severity: 'info' | 'warning' | 'error';
-}
+  actual: any;
+  severity: 'info' | 'warning' | 'error'
+  }
 export interface PolicyVersion {
-  version: string;,
+  version: string;
   createdAt: Date;
-  createdBy: string;,
+  createdBy: string;
   changeLog: string;
-  status: PolicyStatus;,
+  status: PolicyStatus;
   policy: BasePolicy;
 }
 export interface BulkOperationResult {
-  totalRequested: number;,
+  totalRequested: number;
   successful: number;
-  failed: number;,
+  failed: number;
   results: BulkOperationItem;
   errors: ServiceError;
 }
 export interface BulkOperationItem {
-  id: string;,
+  id: string;
   success: boolean;
   error?: ServiceError;
   data?: any;
 }
 export interface BulkUpdateRequest {
-  id: string;,
+  id: string;
   updates: Partial<BasePolicy>;
   reason?: string;
 }
@@ -279,13 +279,13 @@ export interface EvaluationOptions {
   maxEvaluationTime?: number; // milliseconds,
 }
 export interface EvaluationPerformanceMetrics {
-  totalEvaluations: number;,
+  totalEvaluations: number;
   averageLatency: number;
-  p50Latency: number;,
+  p50Latency: number;
   p95Latency: number;
-  p99Latency: number;,
+  p99Latency: number;
   errorRate: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   timeframe: AnalyticsPeriod;
   // =============================================================================
   // Assignment Service Types
@@ -307,9 +307,9 @@ export interface AssignmentSearchCriteria {
   assignedBefore?: Date;
 }
 export interface AssignmentSearchResult {
-  assignments: PolicyAssignment;,
+  assignments: PolicyAssignment;
   totalCount: number;
-  pageSize: number;,
+  pageSize: number;
   currentPage: number;
 }
 export interface AssignmentOptions {
@@ -320,62 +320,62 @@ export interface AssignmentOptions {
   effectiveUntil?: Date;
 }
 export interface ConflictResolutionResult {
-  hasConflicts: boolean;,
+  hasConflicts: boolean;
   conflicts: AssignmentConflict;
-  resolvedAssignments: PolicyAssignment;,
+  resolvedAssignments: PolicyAssignment;
   recommendations: ConflictRecommendation;
 }
 export interface AssignmentConflict {
-  conflictType: 'priority' | 'contradiction' | 'duplicate';,
+  conflictType: 'priority' | 'contradiction' | 'duplicate';
   involvedAssignments: string;
-  description: string;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
-}
+  description: string;
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  }
 export interface ConflictRecommendation {
-  recommendationType: 'merge' | 'prioritize' | 'exclude' | 'manual_review';,
+  recommendationType: 'merge' | 'prioritize' | 'exclude' | 'manual_review';
   description: string;
   automatable: boolean;
 }
 export interface AssignmentInheritanceChain {
-  assignmentId: string;,
+  assignmentId: string;
   chain: InheritanceLevel;
-  effectivePolicy: BasePolicy;,
+  effectivePolicy: BasePolicy;
   overrides: string;
 }
 export interface InheritanceLevel {
-  assignmentId: string;,
+  assignmentId: string;
   targetType: AssignmentTargetType;
-  targetId: string;,
+  targetId: string;
   policyId: string;
   priority: number;
 }
 export interface AssignmentValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: AssignmentValidationError;
   warnings: AssignmentValidationWarning;
 }
 export interface AssignmentValidationError {
-  field: string;,
+  field: string;
   message: string;
-  code: string;,
-  severity: 'error' | 'warning';
-}
+  code: string;
+  severity: 'error' | 'warning'
+  }
 export interface AssignmentValidationWarning {
-  field: string;,
+  field: string;
   message: string;
   code: string;
   recommendation?: string;
 }
 export interface AssignmentSimulationResult {
-  wouldSucceed: boolean;,
+  wouldSucceed: boolean;
   predictedConflicts: AssignmentConflict;
-  impactAnalysis: AssignmentImpact;,
+  impactAnalysis: AssignmentImpact;
   recommendations: string;
 }
 export interface AssignmentImpact {
-  affectedTargets: number;,
+  affectedTargets: number;
   cascadingAssignments: number;
-  performanceImpact: 'low' | 'medium' | 'high';,
+  performanceImpact: 'low' | 'medium' | 'high';
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   // =============================================================================
   // Analytics Service Types
@@ -389,104 +389,104 @@ export interface AnalyticsSearchCriteria {
   includeInactive?: boolean;
 }
 export interface UsageAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   policyUsage: PolicyUsageData;
-  totalEvaluations: number;,
+  totalEvaluations: number;
   uniqueContexts: number;
   topPolicies: TopPolicyData;
 }
 export interface PolicyUsageData {
-  policyId: string;,
+  policyId: string;
   policyName: string;
-  evaluationCount: number;,
+  evaluationCount: number;
   successRate: number;
-  averageLatency: number;,
+  averageLatency: number;
   errorCount: number;
 }
 export interface TopPolicyData {
-  policyId: string;,
+  policyId: string;
   policyName: string;
-  rank: number;,
+  rank: number;
   evaluationCount: number;
-  impact: 'low' | 'medium' | 'high';
-}
+  impact: 'low' | 'medium' | 'high'
+  }
 export interface ComplianceAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   overallScore: number;
-  frameworkScores: FrameworkScore;,
+  frameworkScores: FrameworkScore;
   violations: ComplianceViolation;
   recommendations: ComplianceRecommendation;
 }
 export interface FrameworkScore {
-  framework: ComplianceFramework;,
-  score: number;
-  maxScore: number;,
-  lastAssessed: Date;
-  trending: 'up' | 'stable' | 'down';
-}
-export interface ComplianceViolation {
-  violationId: string;,
   framework: ComplianceFramework;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  score: number;
+  maxScore: number;
+  lastAssessed: Date;
+  trending: 'up' | 'stable' | 'down'
+  }
+export interface ComplianceViolation {
+  violationId: string;
+  framework: ComplianceFramework;
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   policyId?: string;
-  detectedAt: Date;,
-  status: 'open' | 'acknowledged' | 'resolved' | 'false_positive';
-}
+  detectedAt: Date;
+  status: 'open' | 'acknowledged' | 'resolved' | 'false_positive'
+  }
 export interface ComplianceRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   framework: ComplianceFramework;
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  impact: string;,
-  effort: 'low' | 'medium' | 'high';
-}
+  impact: string;
+  effort: 'low' | 'medium' | 'high'
+  }
 export interface PerformanceAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   systemMetrics: SystemPerformanceMetrics;
-  policyMetrics: PolicyPerformanceMetrics;,
+  policyMetrics: PolicyPerformanceMetrics;
   bottlenecks: PerformanceBottleneck;
 }
 export interface SystemPerformanceMetrics {
-  totalRequests: number;,
+  totalRequests: number;
   averageLatency: number;
-  errorRate: number;,
+  errorRate: number;
   throughput: number; // requests per second,
   availability: number; // percentage,
 }
 export interface PolicyPerformanceMetrics {
-  policyId: string;,
+  policyId: string;
   averageEvaluationTime: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   errorRate: number;
-  complexity: 'low' | 'medium' | 'high';
-}
+  complexity: 'low' | 'medium' | 'high'
+  }
 export interface PerformanceBottleneck {
-  type: 'latency' | 'throughput' | 'memory' | 'cpu';,
+  type: 'latency' | 'throughput' | 'memory' | 'cpu';
   component: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   recommendation: string;
 }
 export interface RealTimeMetrics {
-  timestamp: Date;,
+  timestamp: Date;
   activeEvaluations: number;
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   averageLatency: number;
-  errorRate: number;,
+  errorRate: number;
   cacheHitRate: number;
   systemLoad: number; // 0-100,
 }
 export interface SystemHealthMetrics {
-  overallHealth: 'healthy' | 'degraded' | 'critical';,
+  overallHealth: 'healthy' | 'degraded' | 'critical';
   healthScore: number; // 0-100,
-  components: ComponentHealth;,
+  components: ComponentHealth;
   lastCheck: Date;
 }
 export interface ComponentHealth {
-  component: string;,
+  component: string;
   status: 'healthy' | 'degraded' | 'critical';
-  details: string;,
+  details: string;
   lastCheck: Date;
   // =============================================================================
   // Template Service Types
@@ -508,9 +508,9 @@ export interface TemplateSearchCriteria {
   text?: string;
 }
 export interface TemplateSearchResult {
-  templates: PolicyTemplate;,
+  templates: PolicyTemplate;
   totalCount: number;
-  pageSize: number;,
+  pageSize: number;
   currentPage: number;
 }
 export interface TemplateCustomization {
@@ -520,17 +520,17 @@ export interface TemplateCustomization {
   description?: string;
 }
 export interface TemplateUsageStats {
-  templateId: string;,
+  templateId: string;
   totalUsages: number;
   recentUsages: number; // last 30 days,
-  averageRating: number;,
+  averageRating: number;
   successRate: number; // percentage of successful policy creations,
   popularCustomizations: PopularCustomization;
 }
 export interface PopularCustomization {
-  field: string;,
+  field: string;
   value: any;
-  usageCount: number;,
+  usageCount: number;
   percentage: number;
 }
 export interface TemplateRecommendationContext {
@@ -541,39 +541,39 @@ export interface TemplateRecommendationContext {
   existingPolicies?: string;
 }
 export interface TemplateValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: TemplateValidationError;
   warnings: TemplateValidationWarning;
 }
 export interface TemplateValidationError {
-  field: string;,
+  field: string;
   message: string;
-  code: string;,
-  severity: 'error' | 'warning';
-}
+  code: string;
+  severity: 'error' | 'warning'
+  }
 export interface TemplateValidationWarning {
-  field: string;,
+  field: string;
   message: string;
   code: string;
   suggestion?: string;
 }
 export interface TemplateTestData {
-  customizations: TemplateCustomization;,
+  customizations: TemplateCustomization;
   validationTests: TemplateValidationTest;
 }
 export interface TemplateValidationTest {
-  testName: string;,
+  testName: string;
   expectedValid: boolean;
   customization: TemplateCustomization;
 }
 export interface TemplateTestResult {
-  testsPassed: number;,
+  testsPassed: number;
   totalTests: number;
-  results: TemplateTestCaseResult;,
+  results: TemplateTestCaseResult;
   overallSuccess: boolean;
 }
 export interface TemplateTestCaseResult {
-  testName: string;,
+  testName: string;
   passed: boolean;
   error?: string;
   generatedPolicy?: BasePolicy;
@@ -595,7 +595,7 @@ export interface ExportEncryption {
   keyId?: string;
 }
 export interface ImportData {
-  format: ExportFormat;,
+  format: ExportFormat;
   data: string | Buffer;
   metadata?: ExportMetadata;
 }
@@ -611,11 +611,11 @@ export interface ImportConflictResolution {
   customResolver?: string;
 }
 export interface ImportValidationResult {
-  valid: boolean;,
+  valid: boolean;
   totalPolicies: number;
-  validPolicies: number;,
+  validPolicies: number;
   invalidPolicies: number;
-  errors: ImportValidationError;,
+  errors: ImportValidationError;
   warnings: ImportValidationWarning;
 }
 export interface ImportValidationError {
@@ -634,21 +634,21 @@ export interface ImportValidationWarning {
   suggestion?: string;
 }
 export interface ExportSchedule {
-  frequency: 'daily' | 'weekly' | 'monthly';,
+  frequency: 'daily' | 'weekly' | 'monthly';
   time: string; // HH:MM format,
-  timezone: string;,
+  timezone: string;
   enabled: boolean;
 }
 export interface ImportSchedule {
   frequency: 'hourly' | 'daily' | 'weekly';
   time?: string; // HH:MM format for daily/weekly,
-  timezone: string;,
+  timezone: string;
   enabled: boolean;
 }
 export interface BatchJob {
-  jobId: string;,
+  jobId: string;
   type: 'export' | 'import';
-  status: 'scheduled' | 'running' | 'completed' | 'failed' | 'cancelled';,
+  status: 'scheduled' | 'running' | 'completed' | 'failed' | 'cancelled';
   schedule: ExportSchedule | ImportSchedule;
   createdAt: Date;
   lastRunAt?: Date;
@@ -656,47 +656,47 @@ export interface BatchJob {
   results?: BatchJobResult;
 }
 export interface BatchJobResult {
-  runId: string;,
+  runId: string;
   startedAt: Date;
   completedAt?: Date;
-  status: 'running' | 'completed' | 'failed';,
+  status: 'running' | 'completed' | 'failed';
   recordsProcessed: number;
   errors: ServiceError;
   outputLocation?: string;
 }
 export interface ImportSource {
-  type: 'url' | 'file' | 's3' | 'database';,
+  type: 'url' | 'file' | 's3' | 'database';
   location: string;
   credentials?: SourceCredentials;
   format: ExportFormat;
 }
 export interface SourceCredentials {
-  type: 'basic' | 'bearer' | 'oauth' | 'aws' | 'key';,
+  type: 'basic' | 'bearer' | 'oauth' | 'aws' | 'key';
   credentials: Record<string, string>;
   // =============================================================================
   // Additional Utility Types
   // =============================================================================
 }
 export interface PolicyInsight {
-  insightId: string;,
+  insightId: string;
   type: 'usage' | 'performance' | 'compliance' | 'security' | 'optimization';
-  title: string;,
+  title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';,
+  impact: 'low' | 'medium' | 'high' | 'critical';
   actionable: boolean;
-  relatedPolicies: string;,
+  relatedPolicies: string;
   generatedAt: Date;
 }
 export interface PolicyRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   category: 'security' | 'performance' | 'compliance' | 'user_experience' | 'cost_optimization';
-  priority: 'low' | 'medium' | 'high' | 'critical';,
+  priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
-  description: string;,
+  description: string;
   expectedImpact: string;
-  implementationComplexity: 'low' | 'medium' | 'high';,
+  implementationComplexity: 'low' | 'medium' | 'high';
   estimatedEffort: string;
-  relatedPolicies: string;,
+  relatedPolicies: string;
   generatedAt: Date;
 }
 export interface InsightCriteria {
@@ -716,88 +716,88 @@ export interface RecommendationCriteria {
 export type ReportFormat = 'pdf' | 'html' | 'csv' | 'json' | 'xml';
 
 export interface ComplianceReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   frameworks: ComplianceFramework;
-  overallScore: number;,
+  overallScore: number;
   frameworkResults: FrameworkResult;
-  violations: ComplianceViolation;,
+  violations: ComplianceViolation;
   recommendations: ComplianceRecommendation;
   format: ReportFormat;
   downloadUrl?: string;
 }
 export interface FrameworkResult {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   score: number;
-  maxScore: number;,
+  maxScore: number;
   passedControls: number;
-  totalControls: number;,
+  totalControls: number;
   criticalFindings: number;
-  status: 'compliant' | 'partially_compliant' | 'non_compliant';
-}
+  status: 'compliant' | 'partially_compliant' | 'non_compliant'
+  }
 export interface UsageReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   totalEvaluations: number;
-  uniquePolicies: number;,
+  uniquePolicies: number;
   topPolicies: TopPolicyData;
-  usageTrends: UsageTrendData;,
+  usageTrends: UsageTrendData;
   format: ReportFormat;
   downloadUrl?: string;
 }
 export interface UsageTrendData {
-  date: Date;,
+  date: Date;
   evaluations: number;
-  uniquePolicies: number;,
+  uniquePolicies: number;
   averageLatency: number;
   errorRate: number;
 }
 export interface AuditReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   auditTrail: AuditTrailEntry;
-  policyChanges: PolicyChangeEntry;,
+  policyChanges: PolicyChangeEntry;
   accessLog: AccessLogEntry;
-  securityEvents: SecurityEventEntry;,
+  securityEvents: SecurityEventEntry;
   format: ReportFormat;
   downloadUrl?: string;
 }
 export interface AuditTrailEntry {
-  timestamp: Date;,
+  timestamp: Date;
   userId: string;
-  action: string;,
+  action: string;
   resourceType: string;
-  resourceId: string;,
+  resourceId: string;
   details: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
 }
 export interface PolicyChangeEntry {
-  timestamp: Date;,
+  timestamp: Date;
   policyId: string;
-  changeType: 'created' | 'updated' | 'deleted' | 'activated' | 'deactivated';,
+  changeType: 'created' | 'updated' | 'deleted' | 'activated' | 'deactivated';
   changedBy: string;
   changeSummary: string;
   previousVersion?: string;
   newVersion?: string;
 }
 export interface AccessLogEntry {
-  timestamp: Date;,
+  timestamp: Date;
   userId: string;
-  resourceType: string;,
+  resourceType: string;
   resourceId: string;
-  action: string;,
+  action: string;
   result: 'success' | 'failure' | 'partial';
   ipAddress?: string;
   userAgent?: string;
 }
 export interface SecurityEventEntry {
-  timestamp: Date;,
+  timestamp: Date;
   eventType: 'authentication' | 'authorization' | 'policy_violation' | 'suspicious_activity';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   userId?: string;
   affectedResources: string;

@@ -837,7 +837,8 @@ DashboardType.OPERATIONAL,
                                             widgets;
                                         preset.widgets.map(w => ({}), id, w.id, type, w.type, category, this.widgets.get(w.type)?.category || 'METRICS', title, this.widgets.get(w.type)?.name || w.type, position, w.position, size, w.size, config, w.config, dataSource, {
                                             type: 'realtime',
-                                            source: 'default', }, permissions, this.widgets.get(w.type)?.permissions || {
+                                            source: 'default',
+                                        }, permissions, this.widgets.get(w.type)?.permissions || {
                                             view: [SecurityRole.VIEWER],
                                             configure: [SecurityRole.SECURITY_ADMIN],
                                             export: [SecurityRole.VIEWER],

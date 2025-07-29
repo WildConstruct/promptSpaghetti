@@ -546,7 +546,7 @@ CardContent >
 Card >
     _jsx("style", { children: `
         .annotation-tools-demo {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         @media (max-width: 768px) {

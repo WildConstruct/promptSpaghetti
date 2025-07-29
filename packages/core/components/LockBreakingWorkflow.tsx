@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
 interface LockBreakingWorkflowProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  resourceId: string;,
-  onBreakLock: (lockId: string, resourceId: string, justification: string) => void;,
+  resourceId: string;
+  onBreakLock: (lockId: string, resourceId: string, justification: string) => void;
   userId: string;
   export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({,)
   isOpen,
@@ -23,7 +23,7 @@ interface LockBreakingWorkflowProps {
   const [error, setError] = useState<string | null>(null);
   const [locks, setLocks] = useState<WorkflowLock>([]);
   const [userPermissions, setUserPermissions] = useState<{
-  canBreakLocks: boolean;,
+  canBreakLocks: boolean;
   requiresJustification: boolean;
   roles: string;
 }>({)

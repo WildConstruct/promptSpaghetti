@@ -16,17 +16,17 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 // Core condition interfaces
 
 export interface ToggleCondition {
-  id: string;,
+  id: string;
   toggleId: string;
-  name: string;,
+  name: string;
   description: string;
-  conditionType: ConditionType;,
+  conditionType: ConditionType;
   expression: string;
-  parameters: ConditionParameters;,
+  parameters: ConditionParameters;
   priority: number; // Higher number = higher priority,
-  active: boolean;,
+  active: boolean;
   metadata: ConditionMetadata;
-  created: Date;,
+  created: Date;
   lastModified: Date;
 }
 export enum ConditionType {
@@ -73,12 +73,12 @@ export enum ConditionType {
 }
 export interface UserAttributeParams {
   attributes: Array<{,
-  key: string;,
+  key: string;
   operator: ComparisonOperator;
   value: any;
 }>;
-  logic: 'AND' | 'OR';
-}
+  logic: 'AND' | 'OR'
+  }
 export enum ComparisonOperator {
   EQUALS = 'equals',
   NOT_EQUALS = 'not_equals',
@@ -97,22 +97,22 @@ export enum ComparisonOperator {
   daysOfWeek?: number; // 0-6, Sunday=0,
   hoursOfDay?: number; // 0-23,
   recurring?: boolean;
-  recurrencePattern?: 'daily' | 'weekly' | 'monthly';
-}
+  recurrencePattern?: 'daily' | 'weekly' | 'monthly'
+  }
 export interface ExperimentParams {
-  experimentId: string;,
+  experimentId: string;
   variant: string;
   trafficAllocation: number; // 0-100,
-  stickiness?: 'user' | 'session' | 'device';
-}
+  stickiness?: 'user' | 'session' | 'device'
+  }
 export interface ConditionMetadata {
-  category: string;,
+  category: string;
   tags: string;
   epic?: string;
   story?: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
-  technicalNotes: string;,
+  technicalNotes: string;
   author: string;
   reviewedBy?: string;
   reviewedAt?: Date;
@@ -146,45 +146,45 @@ export interface RequestContext {
   session?: SessionInfo;
 }
 export interface DeviceInfo {
-  type: 'mobile' | 'tablet' | 'desktop' | 'unknown';,
+  type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
   platform: string;
   browser?: string;
   version?: string;
 }
 export interface SessionInfo {
-  id: string;,
+  id: string;
   startTime: Date;
   duration: number; // seconds,
   pageViews: number;
 }
 export interface EnvironmentContext {
-  environment: 'development' | 'staging' | 'production';,
+  environment: 'development' | 'staging' | 'production';
   region: string;
-  timezone: string;,
+  timezone: string;
   version: string;
   // Evaluation results
 }
 export interface ConditionEvaluationResult {
-  conditionId: string;,
+  conditionId: string;
   result: boolean;
   score?: number; // 0-1 for weighted conditions,
-  reason: string;,
+  reason: string;
   executionTime: number; // milliseconds,
-  metadata: {,
-  evaluatedAt: Date;,
+  metadata: {
+  evaluatedAt: Date;
   contextHash: string;
   intermediateValues?: Record<string, any>;
 };
 }
 export interface ToggleEvaluationResult {
-  toggleId: string;,
+  toggleId: string;
   enabled: boolean;
   variant?: string; // for multivariate toggles,
   conditions: ConditionEvaluationResult;
   fallbackReason?: string;
   confidence: number; // 0-1,
-  metadata: {,
-  evaluatedAt: Date;,
+  metadata: {
+  evaluatedAt: Date;
   totalExecutionTime: number;
   cacheHit: boolean;
 };
@@ -192,31 +192,31 @@ export interface ToggleEvaluationResult {
 // Service configuration
 }
 export interface ToggleConditionsConfig {
-  evaluation: {,
-  enableCaching: boolean;,
+  evaluation: {
+  enableCaching: boolean;
   cacheTimeToLive: number; // seconds,
-  maxConditionsPerToggle: number;,
+  maxConditionsPerToggle: number;
   evaluationTimeout: number; // milliseconds,
   strictMode: boolean;
 };
-  security: {,
+  security: {
   allowCustomExpressions: boolean;
-  maxExpressionComplexity: number;,
+  maxExpressionComplexity: number;
   enableSecurityAudit: boolean;
   blockedPatterns: string;
 };
-  rollout: {,
+  rollout: {
   defaultSalt: string;
   stickinessDuration: number; // seconds,
-  enableGradualRollout: boolean;,
+  enableGradualRollout: boolean;
   rolloutRateLimit: number; // percentage per hour,
 };
-  experiments: {,
+  experiments: {
   enableABTesting: boolean;
-  defaultTrafficAllocation: number;,
+  defaultTrafficAllocation: number;
   maxVariants: number;
-  stickinessStrategy: 'user' | 'session' | 'device';
-};
+  stickinessStrategy: 'user' | 'session' | 'device'
+  };
 /**
  * Toggle Conditions Service
  * 
@@ -232,7 +232,7 @@ export class ToggleConditionsService {
   private expressionEvaluator: SafeExpressionEvaluator;
   constructor(config: Partial<ToggleConditionsConfig> = {}) {
   this.config = {
-  evaluation: {,
+  evaluation: {
   enableCaching: true,
   cacheTimeToLive: 300, // 5 minutes,
   maxConditionsPerToggle: 20,
@@ -240,21 +240,21 @@ export class ToggleConditionsService {
   strictMode: false,
   ...config.evaluation
 },
-  security: {,
+  security: {
   allowCustomExpressions: true,
   maxExpressionComplexity: 100,
   enableSecurityAudit: true,
   blockedPatterns: ['eval', 'Function', 'constructor', 'prototype', '__proto__'],
   ...config.security
 },
-  rollout: {,
+  rollout: {
   defaultSalt: 'toggle-conditions-v1',
   stickinessDuration: 86400, // 24 hours,
   enableGradualRollout: true,
   rolloutRateLimit: 10, // 10% per hour,
   ...config.rollout
 },
-  experiments: {,
+  experiments: {
   enableABTesting: true,
   defaultTrafficAllocation: 100,
   maxVariants: 10,
@@ -321,7 +321,7 @@ export class ToggleConditionsService {
   conditions: [],
   fallbackReason: 'No conditions configured',
   confidence: 0,
-  metadata: {,
+  metadata: {
   evaluatedAt: new Date(),
   totalExecutionTime: Date.now() - startTime,
   cacheHit: false,
@@ -351,7 +351,7 @@ export class ToggleConditionsService {
           reason: `Evaluation error: ${errorMessage}`}
 },
   executionTime: 0,
-          metadata: {,
+          metadata: {
   evaluatedAt: new Date(),
   contextHash: this.generateContextHash(context),
 });
@@ -363,7 +363,7 @@ export class ToggleConditionsService {
   variant,
   conditions: conditionResults,
   confidence,
-  metadata: {,
+  metadata: {
   evaluatedAt: new Date(),
   totalExecutionTime: Date.now() - startTime,
   cacheHit: false,
@@ -464,7 +464,7 @@ export class ToggleConditionsService {
   result,
   reason,
   executionTime: Date.now() - startTime,
-  metadata: {,
+  metadata: {
   evaluatedAt: new Date(),
   contextHash,
   intermediateValues
@@ -544,7 +544,7 @@ export class ToggleConditionsService {
     // Check traffic allocation
     const percentageResult = this.evaluatePercentage({)
   ...condition,
-      parameters: {,
+      parameters: {
   percentage: experiment.trafficAllocation,
         salt: `ab_${experiment.experimentId}`}
     }, context);
@@ -655,8 +655,7 @@ export class ToggleConditionsService {
         return false;
     case ComparisonOperator.IN_LIST:
       return Array.isArray(targetValue) && targetValue.includes(userValue);
-    case ComparisonOperator.NOT_IN_LIST:
-      return Array.isArray(targetValue) && !targetValue.includes(userValue);,
+    case ComparisonOperator.NOT_IN_LIST: return Array.isArray(targetValue) && !targetValue.includes(userValue);
   default:
       return false;
   private generateHash(input: string): string {

@@ -54,7 +54,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
     phase: 'asset_build',
     isPublic: true,
     usageCount: 247,
-    createdBy: {,
+    createdBy: {
   id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -203,7 +203,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
     phase: 'final',
     isPublic: true,
     usageCount: 189,
-    createdBy: {,
+    createdBy: {
   id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -348,7 +348,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
     phase: 'review',
     isPublic: true,
     usageCount: 156,
-    createdBy: {,
+    createdBy: {
   id: 'system',
       name: 'Wild Construct',
       role: 'director',
@@ -439,7 +439,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
 
 export interface VFXChecklistTemplatesProps {
   templates?: VFXChecklistTemplate;
-  currentUser: VFXTeamMember;,
+  currentUser: VFXTeamMember;
   onTemplateSelect: (template: VFXChecklistTemplate) => void;
   onTemplateCreate?: (template: Omit<VFXChecklistTemplate, 'id' | 'usageCount'>) => void;
   onTemplateUpdate?: (templateId: string, updates: Partial<VFXChecklistTemplate>) => void;
@@ -652,9 +652,9 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
 
 // Individual template card component
 interface TemplateCardProps {
-  template: VFXChecklistTemplate;,
+  template: VFXChecklistTemplate;
   currentUser: VFXTeamMember;
-  isSelected: boolean;,
+  isSelected: boolean;
   onSelect: () => void;
   onUse: () => void;
   onClone?: () => void;

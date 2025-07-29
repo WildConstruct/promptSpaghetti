@@ -839,11 +839,11 @@ export declare class AttributionTracker extends EventEmitter {
 
 export interface AttributionReport {
     id: string;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
-    summary: {,
+    summary: {
         totalJourneys: number;
         totalConversions: number;
         totalTouchPoints: number;
@@ -858,14 +858,14 @@ export interface AttributionReport {
 
 export interface ChannelPerformanceReport {
     channels: any[];
-    summary: {,
+    summary: {
         totalChannels: number;
         totalTouchPoints: number;
         totalConversions: number;
         averageCPA: number;
         averageROAS: number;
     };
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };

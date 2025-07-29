@@ -5,10 +5,10 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { GraphDiffEngine, GraphDiff, DiffChange, GraphData } from './GraphDiffEngine';
 interface VisualDiffViewerProps {
-  fromGraphData: GraphData;,
+  fromGraphData: GraphData;
   toGraphData: GraphData;
   diff?: GraphDiff;
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   onApplyChange?: (changeId: string) => void;
   onRejectChange?: (changeId: string) => void;
@@ -95,7 +95,7 @@ interface VisualDiffViewerProps {
     if (significance >= 0.8) return 'High';
     if (significance >= 0.5) return 'Medium';
     if (significance >= 0.2) return 'Low';
-    return 'Minimal';
+    return 'Minimal'
   };
   const getSignificanceColor = (significance: number): string => {
     if (significance >= 0.8) return 'text-red-600';
@@ -357,14 +357,14 @@ interface VisualDiffViewerProps {
 
 // Sub-components (simplified versions - would need full implementations)
 interface ChangeItemProps {
-  change: DiffChange;,
+  change: DiffChange;
   isSelected: boolean;
   onClick: () => void;
   onApply?: () => void;
   onReject?: () => void;
-  getChangeColor: (change: DiffChange) => string;,
-  getChangeIcon: (change: DiffChange) => string;,
-  getSignificanceLevel: (significance: number) => string;,
+  getChangeColor: (change: DiffChange) => string;
+  getChangeIcon: (change: DiffChange) => string;
+  getSignificanceLevel: (significance: number) => string;
   getSignificanceColor: (significance: number) => string;
   const ChangeItem: React.FC<ChangeItemProps> = ({,)
   change,

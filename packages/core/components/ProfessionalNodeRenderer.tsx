@@ -8,11 +8,11 @@ import {
   professionalBorderRadius
 } from '../styles/professional-design-system';
 interface ProfessionalNodeRendererProps {
-  id: string;,
+  id: string;
   data: Record<string, unknown>;
   selected?: boolean;
-  onSelect: (nodeId: string) => void;,
-  getNodeMeta: (nodeType: string) => NodeMeta;,
+  onSelect: (nodeId: string) => void;
+  getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
   /**
   * Professional Node Renderer - Cinema 4D/Substance Designer inspired
@@ -144,7 +144,7 @@ interface ProfessionalNodeRendererProps {
     const inputHandleStyle: React.CSSProperties = {
   ...handleBaseStyle,
   background: professionalColors.ui.border,
-  '&:hover': {,
+  '&:hover': {
   background: professionalColors.ui.borderHover,
   transform: 'scale(1.1)',
   boxShadow: professionalShadows.elevation.md,
@@ -292,7 +292,7 @@ interface ProfessionalNodeRendererProps {
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: professionalShadows.elevation.md,
-          textAlign: 'center';
+          textAlign: 'center'
   }}
       >
         <div>

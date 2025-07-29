@@ -36,7 +36,7 @@ const userProgressSchema = z.object({)
   completedAt: z.date().optional(),
   expiresAt: z.date().optional(),
   attempts: z.number().min(0).default(0),
-  evidence: z.array(z.object({,)
+  evidence: z.array(z.object({)
   type: z.enum(['completion', 'score', 'time', 'peer_review', 'instructor_approval']),
   value: z.string().max(1000),
   timestamp: z.date(),
@@ -144,9 +144,9 @@ export class DependencyResolver {
   /**
    * Resolves prerequisites for a user with comprehensive checking
    */
-  resolvePrerequisitesForUser(userId: string, targetPrerequisites: string): {,
+  resolvePrerequisitesForUser(userId: string, targetPrerequisites: string): {
   canProceed: boolean;
-  missingPrerequisites: string;,
+  missingPrerequisites: string;
   satisfiedPrerequisites: string;
   recommendations: string;
   const userProgressData = this.userProgress.get(userId) || [];
@@ -233,7 +233,7 @@ export class DependencyResolver {
   /**
    * Updates user progress with security validation
    */
-  updateUserProgress(userId: string, prerequisiteId: string, progress: Partial<UserProgress>): {,
+  updateUserProgress(userId: string, prerequisiteId: string, progress: Partial<UserProgress>): {
   success: boolean;
     errors?: string;
     // Security validation
@@ -270,7 +270,7 @@ export class DependencyResolver {
   /**
    * Gets learning path suggestions based on user progress
    */
-  generateLearningPath(userId: string, targetGoal: string): {,
+  generateLearningPath(userId: string, targetGoal: string): {
   path: Array<{ prerequisiteId: string; name: string; estimatedTime: number }>;
     totalEstimatedTime: number;
     const userProgressData = this.userProgress.get(userId) || [];
@@ -332,7 +332,7 @@ export class PrerequisiteSystemService {
    */
   async evaluatePrerequisites(userId: string, targetPrerequisites: string): Promise<{,
   canProceed: boolean;
-  evaluation: any;,
+  evaluation: any;
   recommendations: string;
 }> {
   try {

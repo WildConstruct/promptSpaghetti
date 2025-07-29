@@ -283,20 +283,20 @@ return;
 _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", _jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Bulk Property Updates" }), _jsx("p", { children: "Update properties across multiple entities with validation and rollback" })] }), _jsx("div", { className: "header-actions", children: _jsxs(Button, { variant: "outline", children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export Report"] }) })] }), _jsxs(Tabs, { value: activeTab, onValueChange: setActiveTab, children: [_jsxs(TabsList, { className: "grid grid-cols-3 w-full", children: [_jsxs(TabsTrigger, { value: "operations", children: ["Operations", _jsx(Badge, { className: "ml-2 text-xs", children: operations.length })] }), _jsx(TabsTrigger, { value: "templates", children: "Templates" }), _jsx(TabsTrigger, { value: "analytics", children: "Analytics" })] }), _jsx(TabsContent, { value: "operations", className: "tab-content", children: renderOperations() }), _jsx(TabsContent, { value: "templates", className: "tab-content", children: renderTemplates() }), _jsx(TabsContent, { value: "analytics", className: "tab-content", children: renderAnalytics() })] }), selectedOperation && ()
             < OperationDetailModal, "operation=", selectedOperation, "onClose=", () => setSelectedOperation(null), "onExecute=", handleExecuteOperation, "onRollback=", handleRollbackOperation, "userRole=", userRole, "/> )}", isCreating && renderCreateOperation(), _jsx("style", { children: `
         .bulk-update-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -305,37 +305,37 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
         .operations-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
         .search-filters {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .search-bar {
-          position: relative;,
+          position: relative;
   display: flex;
           align-items: center;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
           z-index: 1;
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
         .action-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .operations-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .templates-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .templates-header {
           display: flex;
@@ -343,7 +343,7 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           align-items: center;
         .templates-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .templates-grid {
           display: grid;
@@ -351,7 +351,7 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           gap: 1rem;
         .analytics-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .analytics-grid {
           display: grid;
@@ -359,52 +359,52 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-change {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .metric-change.positive {
           color: #059669;
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .success-rate-chart {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .chart-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .chart-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           min-width: 120px;
           font-size: 0.875rem;
           font-weight: 500;
           text-transform: capitalize;
         .chart-bar {
-          flex: 1;,
+          flex: 1;
   height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
         .chart-fill {
-          height: 100%;,
+          height: 100%;
   transition: width 0.3s ease;
         .chart-value {
           min-width: 80px;
@@ -412,62 +412,62 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           font-weight: 600;
           font-size: 0.875rem;
         .chart-details {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           margin-left: 0.25rem;
         .errors-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .error-item {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         .error-type {
-          font-weight: 600;,
+          font-weight: 600;
   color: #dc2626;
           margin-bottom: 0.25rem;
         .error-message {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .error-stats {
           text-align: right;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .error-count {
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
         .create-operation-modal {
-          position: fixed;,
+          position: fixed;
   inset: 0;
           z-index: 1000;
         .modal-overlay {
-          position: absolute;,
+          position: absolute;
   inset: 0;
           background: rgba(0, 0, 0, 0.5);
         .modal-content {
-          position: absolute;,
+          position: absolute;
   top: 50%;
-          left: 50%;,
+          left: 50%;
   transform: translate(-50%, -50%);
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   width: 90vw;
           max-width: 800px;
-          max-height: 80vh;,
+          max-height: 80vh;
   overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .modal-body {
           padding: 1.5rem;
@@ -475,7 +475,7 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           margin-bottom: 1.5rem;
         .form-section h3 {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 1rem;
         .form-group {
@@ -483,39 +483,39 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
         .form-group label {
           display: block;
           font-size: 0.875rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           margin-bottom: 0.5rem;
         .form-checkboxes {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .checkbox-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-size: 0.875rem;
         .updates-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .update-item {
-          padding: 0.75rem;,
+          padding: 0.75rem;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .update-fields {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr auto;,
+          grid-template-columns: 1fr 1fr 1fr auto;
   gap: 0.5rem;
           align-items: center;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;,
+          justify-content: flex-end;
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
         .empty-state {
-          text-align: center;,
+          text-align: center;
   padding: 4rem 2rem;
           color: #6b7280;
         .empty-state h3 {
@@ -526,7 +526,7 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
             align-items: stretch;
           .operations-controls {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.75rem;
           .search-filters {
             flex-direction: column;
@@ -540,11 +540,11 @@ _jsxs("div", { className: `bulk-update-dashboard ${className}`, children: ["}", 
           .templates-grid {
             grid-template-columns: 1fr;
           .update-fields {
-            grid-template-columns: 1fr;,
+            grid-template-columns: 1fr;
   gap: 0.5rem;
           .chart-item {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.5rem;
           .chart-label {
             min-width: auto;
@@ -583,29 +583,29 @@ CardContent >
           align-items: flex-start;
           margin-bottom: 1rem;
         .operation-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .operation-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .operation-progress {
           margin-bottom: 1rem;
         .progress-bar {
-          height: 4px;,
+          height: 4px;
   background: #e5e7eb;
-          border-radius: 2px;,
+          border-radius: 2px;
   overflow: hidden;
           margin-bottom: 0.5rem;
         .progress-fill {
-          height: 100%;,
+          height: 100%;
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .operation-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
       ` });
 Card >
@@ -622,7 +622,7 @@ Card >
     div >
         _jsx("style", { children: `
         .modal-overlay {
-          position: fixed;,
+          position: fixed;
   inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
@@ -631,45 +631,45 @@ Card >
           z-index: 1000;
         .modal-content {
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   width: 90vw;
           max-width: 700px;
-          max-height: 80vh;,
+          max-height: 80vh;
   overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .modal-title h2 {
           font-size: 1.25rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .modal-body {
           padding: 1.5rem;
         .operation-details {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .detail-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
         .detail-item label {
           color: #6b7280;
@@ -679,11 +679,11 @@ Card >
           color: #1f2937;
           font-size: 0.875rem;
         .progress-stats {
-          display: flex;,
+          display: flex;
   gap: 1rem;
         .progress-stat {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
           font-size: 0.875rem;
         .stat-label {
@@ -696,7 +696,7 @@ Card >
           color: #dc2626;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;,
+          justify-content: flex-end;
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

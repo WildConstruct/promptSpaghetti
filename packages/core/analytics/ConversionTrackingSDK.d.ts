@@ -60,13 +60,13 @@ export interface ConversionContext {
     deviceId: string;
     timestamp: number;
     touchpoints: TouchPoint[];
-    privacyConsent: {,
+    privacyConsent: {
         tracking: boolean;
         analytics: boolean;
         personalization: boolean;
         crossDevice: boolean;
     };
-    attribution: {,
+    attribution: {
         source: string;
         medium: string;
         campaign?: string;

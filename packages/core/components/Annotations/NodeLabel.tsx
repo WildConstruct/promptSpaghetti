@@ -14,7 +14,7 @@ import {
   NODE_LABEL_STYLES
 } from '../../types/CollaborationTypes';
 interface NodeLabelProps {
-  config: NodeLabelConfig;,
+  config: NodeLabelConfig;
   nodeId: string;
   currentNodeLabel?: string; // The node's built-in label,
   onAction: (action: NodeLabelAction) => void;
@@ -91,7 +91,7 @@ interface NodeLabelProps {
   nodeId,
   labelId: config.id,
   customLabel: newLabel,
-  config: {,
+  config: {
   customLabel: newLabel,
   isEditing: false,
 });
@@ -251,8 +251,8 @@ interface NodeLabelProps {
               e.currentTarget.style.opacity = '0.8';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '1';
-          }}
+            e.currentTarget.style.opacity = '1'
+  }}
         >
           {config.showIcon && ()
             <span style={{ marginRight: '4px' }}>🏷️</span>
@@ -302,8 +302,8 @@ interface NodeLabelProps {
 });
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '1';
-          }}
+            e.currentTarget.style.opacity = '1'
+  }}
           onMouseLeave={(e) => {
             e.currentTarget.style.opacity = '0.8';
           }}
@@ -318,10 +318,10 @@ interface NodeLabelProps {
           animation: nodeLabelFadeIn 0.2s ease-out;
         @keyframes nodeLabelFadeIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translateX(-50%) scale(0.9);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translateX(-50%) scale(1);
       `}</style>
     </div>

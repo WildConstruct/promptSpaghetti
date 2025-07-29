@@ -13,35 +13,35 @@ import { ExtensionManifest } from './ExtensionLifecycleManager';
 import * as crypto from 'crypto';
 
 export interface SandboxOptions {
-  timeout: number;,
+  timeout: number;
   memoryLimit: number;
-  allowedModules: string;,
+  allowedModules: string;
   blockedModules: string;
-  enableFileSystem: boolean;,
+  enableFileSystem: boolean;
   enableNetwork: boolean;
-  enableChildProcess: boolean;,
+  enableChildProcess: boolean;
   maxCallStack: number;
   contextName: string;
 }
 export interface ResourceUsage {
-  memoryUsed: number;,
+  memoryUsed: number;
   executionTime: number;
-  apiCalls: number;,
+  apiCalls: number;
   fileOperations: number;
   networkRequests: number;
 }
 export interface SandboxContext {
-  require: (id: string) => any;,
+  require: (id: string) => any;
   module: { exports: any };
-  exports: any;,
+  exports: any;
   __filename: string;
-  __dirname: string;,
+  __dirname: string;
   console: Console;
-  process: Partial<NodeJS.Process>;,
+  process: Partial<NodeJS.Process>;
   global: any;
-  Buffer: typeof Buffer;,
+  Buffer: typeof Buffer;
   setTimeout: typeof setTimeout;
-  setInterval: typeof setInterval;,
+  setInterval: typeof setInterval;
   clearTimeout: typeof clearTimeout;
   clearInterval: typeof clearInterval;
 }
@@ -159,7 +159,7 @@ export class PluginSandbox {
     sandboxGlobal.global = sandboxGlobal;
     return createContext(sandboxGlobal, {)
   name: this.options.contextName,
-  codeGeneration: {,
+  codeGeneration: {
   strings: false,  // Disable eval(),
   wasm: false     // Disable WebAssembly,
 });

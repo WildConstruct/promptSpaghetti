@@ -2,53 +2,53 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface DocumentState {
-  version: number;,
+  version: number;
   checksum: string;
-  lastModified: number;,
+  lastModified: number;
   operations: DocumentOperation;
   metadata: Record<string, any>;
 }
 export interface DocumentOperation {
-  id: string;,
+  id: string;
   type: 'create' | 'update' | 'delete' | 'move';
-  target: 'node' | 'edge' | 'property';,
+  target: 'node' | 'edge' | 'property';
   targetId: string;
   data: any;
   oldData?: any;
-  timestamp: number;,
+  timestamp: number;
   userId: string;
   version: number;
   dependencies?: string;
 }
 export interface SyncDelta {
-  operations: DocumentOperation;,
+  operations: DocumentOperation;
   fromVersion: number;
-  toVersion: number;,
+  toVersion: number;
   conflicts: ConflictInfo;
-  metadata: {,
-  operationCount: number;,
+  metadata: {
+  operationCount: number;
   estimatedSize: number;
   compression?: string;
 };
 }
 export interface ConflictInfo {
-  id: string;,
+  id: string;
   type: 'concurrent_edit' | 'version_mismatch' | 'dependency_missing' | 'data_corruption';
   operation1: DocumentOperation;
   operation2?: DocumentOperation;
-  description: string;,
+  description: string;
   resolutionOptions: ConflictResolution;
-  autoResolvable: boolean;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
-}
+  autoResolvable: boolean;
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  }
 export interface ConflictResolution {
-  strategy: 'mine' | 'theirs' | 'merge' | 'manual';,
+  strategy: 'mine' | 'theirs' | 'merge' | 'manual';
   description: string;
   result?: any;
   confidence: number;
 }
 export interface SyncProgress {
-  phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';,
+  phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
   totalOperations: number;
   processedOperations: number;
   currentOperation?: DocumentOperation;
@@ -58,26 +58,26 @@ export interface SyncProgress {
   errors: Error;
 }
 export interface RecoveryConfig {
-  maxDeltaSize: number;,
+  maxDeltaSize: number;
   maxOperationsPerBatch: number;
-  checksumValidation: boolean;,
+  checksumValidation: boolean;
   conflictDetection: boolean;
-  autoResolveConflicts: boolean;,
+  autoResolveConflicts: boolean;
   compressionEnabled: boolean;
-  progressReporting: boolean;,
+  progressReporting: boolean;
   maxRecoveryTime: number;
-  enableDependencyTracking: boolean;,
+  enableDependencyTracking: boolean;
   validateIntegrity: boolean;
   backupBeforeRecovery: boolean;
 }
 export interface RecoveryStats {
-  totalRecoveries: number;,
+  totalRecoveries: number;
   successfulRecoveries: number;
-  failedRecoveries: number;,
+  failedRecoveries: number;
   averageRecoveryTime: number;
-  operationsRecovered: number;,
+  operationsRecovered: number;
   conflictsResolved: number;
-  dataCorruptions: number;,
+  dataCorruptions: number;
   lastRecoveryTime: number | null;
 }
 export class SynchronizationRecovery extends EventEmitter {
@@ -183,7 +183,7 @@ export class SynchronizationRecovery extends EventEmitter {
   fromVersion: localState.version,
   toVersion: serverState.version,
   conflicts: [],
-  metadata: {,
+  metadata: {
   operationCount: 0,
   estimatedSize: 0,
 };
@@ -269,7 +269,7 @@ export class SynchronizationRecovery extends EventEmitter {
               { strategy: 'manual', description: 'Manual resolution required', confidence: 0 }
             ],
             autoResolvable: false,
-            severity: 'high';
+            severity: 'high'
   };
           appliedDelta.conflicts.push(conflict);
       // Emit batch progress
@@ -421,7 +421,7 @@ export class SynchronizationRecovery extends EventEmitter {
               { strategy: 'merge', description: 'Attempt to merge operations', confidence: 0.3 }
             ],
             autoResolvable: true,
-            severity: 'medium';
+            severity: 'medium'
   };
           conflicts.push(conflict);
     return conflicts;
@@ -472,7 +472,7 @@ export class SynchronizationRecovery extends EventEmitter {
             { strategy: 'theirs', description: 'Use incoming operation', confidence: 0.6 }
           ],
           autoResolvable: true,
-          severity: 'medium';
+          severity: 'medium'
   };
         return { success: false, conflict };
       // Apply operation (would integrate with actual graph operations)
@@ -545,7 +545,7 @@ export class SynchronizationRecovery extends EventEmitter {
   // Simplified merge logic - would need domain-specific implementation
   return {
   ...op2, // Use newer operation as base
-  data: {,
+  data: {
   ...op1.data,
   ...op2.data // Shallow merge
 },

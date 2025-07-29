@@ -32,7 +32,7 @@ interface VerificationRequest {
     type: IdentityValidationType;
     status: ValidationStatus;
     timestamp: number;
-    metadata: {,
+    metadata: {
         ipAddress: string;
         userAgent: string;
         sessionId: string;
@@ -40,7 +40,7 @@ interface VerificationRequest {
     };
 interface TrustScore {
     overall: number;
-    components: {,
+    components: {
         identity: number;
         professional: number;
         community: number;

@@ -32,15 +32,6 @@ export declare enum ChallengeType {
     enum,
     ChallengeOutcome
 }
-export interface FraudPattern {
-    id: string;
-    name: string;
-    description: string;
-    conditions: Array<{}, field>;
-    string: any;
-    operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
-    value: any;
-}
 export declare class ChallengeTelemetryService extends EventEmitter {
     private events;
     private statistics;

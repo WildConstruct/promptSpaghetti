@@ -33,11 +33,11 @@ import {
 } from 'lucide-react';
 
 export interface DocumentData {
-  id: string;,
+  id: string;
   type: 'image' | 'pdf' | 'document';
-  fileName: string;,
+  fileName: string;
   fileSize: number;
-  uploadDate: Date;,
+  uploadDate: Date;
   mimeType: string;
   url: string;
   thumbnailUrl?: string;
@@ -49,23 +49,23 @@ export interface DocumentData {
   };
 }
 export interface DocumentReviewProps {
-  documents: DocumentData;,
+  documents: DocumentData;
   requestId: string;
-  userId: string;,
+  userId: string;
   documentType: string;
-  onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;,
+  onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;
   onBack: () => void;
   className?: string;
 }
 export interface ReviewAnnotation {
-  id: string;,
+  id: string;
   x: number; // percentage,
   y: number; // percentage,
   width: number; // percentage,
   height: number; // percentage,
-  type: 'highlight' | 'redact' | 'question' | 'approve' | 'reject';,
+  type: 'highlight' | 'redact' | 'question' | 'approve' | 'reject';
   note: string;
-  reviewer: string;,
+  reviewer: string;
   timestamp: Date;
 }
 export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
@@ -491,20 +491,20 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </div>
       <style>{`
         .document-review-interface {
-          max-width: 1600px;,
+          max-width: 1600px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
           min-height: 100vh;
         .interface-header {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.5rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .header-info p {
@@ -512,7 +512,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
           font-size: 0.875rem;
         .interface-layout {
           display: grid;
-          grid-template-columns: 1fr 400px;,
+          grid-template-columns: 1fr 400px;
   gap: 1.5rem;
           flex: 1;
         .main-content {
@@ -521,73 +521,73 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
           min-height: 0;
         .sidebar-content {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
           overflow-y: auto;
         .document-viewer {
-          background: white;,
+          background: white;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   flex: 1;
           min-height: 0;
         .viewer-toolbar {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between;
   padding: 0.75rem 1rem;
-          border-bottom: 1px solid #e5e7eb;,
+          border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
           border-radius: 8px 8px 0 0;
         .toolbar-left {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
         .document-info {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           font-weight: 500;
         .document-name {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
-          max-width: 200px;,
+          max-width: 200px;
   overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         .toolbar-center {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .toolbar-right {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .zoom-level {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           font-weight: 500;
           min-width: 40px;
           text-align: center;
         .viewer-container {
-          flex: 1;,
+          flex: 1;
   position: relative;
-          overflow: auto;,
+          overflow: auto;
   background: #f3f4f6;
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 400px;
         .viewer-container.fullscreen {
-          position: fixed;,
+          position: fixed;
   top: 0;
-          left: 0;,
+          left: 0;
   right: 0;
           bottom: 0;
-          z-index: 1000;,
+          z-index: 1000;
   background: white;
         .document-display {
-          position: relative;,
+          position: relative;
   transition: transform 0.2s ease;
           cursor: ${activeAnnotationType ? 'crosshair' : 'default'};}
         .document-image {
@@ -597,70 +597,70 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
         .document-placeholder {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
           padding: 4rem;
-          text-align: center;,
+          text-align: center;
   color: #6b7280;
         .annotation {
-          position: absolute;,
+          position: absolute;
   border: 2px solid;
           pointer-events: none;
         .annotation-buttons {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 0.5rem;
         .annotation-help {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          margin-top: 0.75rem;,
+          margin-top: 0.75rem;
   padding: 0.75rem;
           background: #eff6ff;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1e40af;
         .metadata-grid {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .metadata-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         .metadata-item:last-child {
           border-bottom: none;
         .metadata-label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           font-size: 0.875rem;
         .metadata-value {
           color: #1f2937;
           font-size: 0.875rem;
         .document-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           margin-top: 1rem;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         .review-form {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .form-group label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .form-textarea {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   resize: vertical;
         .form-textarea:focus {,
   outline: none;
@@ -671,23 +671,23 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
         .status-display {
           display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   padding: 1rem;
           border-radius: 6px;
         .status.approved {
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #065f46;
         .status.rejected {
-          background: #fee2e2;,
+          background: #fee2e2;
   color: #991b1b;
         .status {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           font-weight: 500;
         .review-actions {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .approve-button {
           background: #059669;
@@ -704,46 +704,46 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
         .no-annotations {
           color: #6b7280;
           font-style: italic;
-          text-align: center;,
+          text-align: center;
   padding: 2rem;
         .annotations {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .annotation-item {
           border: 1px solid #e5e7eb;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 0.75rem;
         .annotation-header {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .annotation-color {
-          width: 12px;,
+          width: 12px;
   height: 12px;
           border-radius: 50%;
         .annotation-type {
           font-size: 0.75rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           flex: 1;
         .annotation-time {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .annotation-note {
           width: 100%;
           font-size: 0.875rem;
         .approve-btn {
           background: #059669;
-          border-color: #059669;,
+          border-color: #059669;
   color: white;
         .approve-btn:hover {,
   background: #047857;
           border-color: #047857;
         .reject-btn {
           background: #dc2626;
-          border-color: #dc2626;,
+          border-color: #dc2626;
   color: white;
         .reject-btn:hover {,
   background: #b91c1c;
@@ -754,17 +754,17 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
           .sidebar-content {
             order: -1;
             flex-direction: row;
-            overflow-x: auto;,
+            overflow-x: auto;
   gap: 0.75rem;
           .sidebar-content > * {
             min-width: 300px;
         @media (max-width: 768px) {
           .interface-header {
             flex-direction: column;
-            align-items: flex-start;,
+            align-items: flex-start;
   gap: 0.75rem;
           .viewer-toolbar {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .toolbar-left,
           .toolbar-center,

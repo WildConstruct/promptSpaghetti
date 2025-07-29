@@ -3,12 +3,12 @@ import { Node, useReactFlow } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
 import { InlineNodeEditor } from './InlineNodeEditor';
 interface InlineEditorState {
-  nodeId: string | null;,
+  nodeId: string | null;
   position: { x: number; y: number };
   isActive: boolean;
 
 export interface InlineEditorManagerProps {
-  nodes: Node<NodeData>[];,
+  nodes: Node<NodeData>[];
   onNodeUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   canvasRef?: React.RefObject<HTMLDivElement>;
 }
@@ -130,8 +130,8 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
 
 // Component to handle click events on individual nodes
 interface NodeClickHandlerProps {
-  node: Node<NodeData>;,
-  onClick: (event: React.MouseEvent, nodeId: string) => void;,
+  node: Node<NodeData>;
+  onClick: (event: React.MouseEvent, nodeId: string) => void;
   isEditorActive: boolean;
   const NodeClickHandler: React.FC<NodeClickHandlerProps> = ({ ),
   node,
@@ -187,8 +187,8 @@ export const useInlineEditor = () => {
 
 // Context for sharing editor state across components
 export const InlineEditorContext = React.createContext<{
-  activeNodeId: string | null;,
-  activateEditor: (nodeId: string) => void;,
+  activeNodeId: string | null;
+  activateEditor: (nodeId: string) => void;
   deactivateEditor: () => void;
   isNodeBeingEdited: (nodeId: string) => boolean;
 } | null>(null);

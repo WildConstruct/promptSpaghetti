@@ -8,14 +8,14 @@ import { NodeData, NodeType } from '../types/NodeTypes';
  * Compressed storage format for large graphs
  */
 interface CompressedGraphData {
-  format_version: '2.0.0';,
+  format_version: '2.0.0';
   compressed: true;
-  node_data: Uint8Array;,
+  node_data: Uint8Array;
   edge_data: Uint8Array;
-  metadata: {,
-  node_count: number;,
+  metadata: {
+  node_count: number;
   edge_count: number;
-  compression_ratio: number;,
+  compression_ratio: number;
   original_size: number;
 };
 /**
@@ -153,17 +153,17 @@ export class OptimizedGraphStorage {
   /**
   * Get graph statistics
   */
-  getStats(): {,
-  nodeCount: number;,
+  getStats(): {
+  nodeCount: number;
   edgeCount: number;
   nodeTypes: Record<string, number>;
-  connectivityStats: {,
-  leafNodes: number;,
+  connectivityStats: {
+  leafNodes: number;
   rootNodes: number;
-  isolatedNodes: number;,
+  isolatedNodes: number;
   averageConnections: number;
 };
-    memoryUsage: {,
+    memoryUsage: {
   estimatedBytes: number;
   cacheHitRatio?: number;
 };
@@ -178,13 +178,13 @@ export class OptimizedGraphStorage {
   nodeCount: this.nodeMap.size,
   edgeCount: this.edgeMap.size,
   nodeTypes,
-  connectivityStats: {,
+  connectivityStats: {
   leafNodes: this.indexes.leafNodes.size,
   rootNodes: this.indexes.rootNodes.size,
   isolatedNodes: this.indexes.isolatedNodes.size,
   averageConnections: this.nodeMap.size > 0 ? totalConnections / this.nodeMap.size : 0,
 },
-  memoryUsage: {,
+  memoryUsage: {
   estimatedBytes: this.estimateMemoryUsage(),
 };
   /**
@@ -212,7 +212,7 @@ export class OptimizedGraphStorage {
   compressed: true,
   node_data: nodeData,
   edge_data: edgeData,
-  metadata: {,
+  metadata: {
   node_count: nodeCount,
   edge_count: edgeCount,
   compression_ratio: compressionRatio,

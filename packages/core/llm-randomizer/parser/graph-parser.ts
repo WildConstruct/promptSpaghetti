@@ -9,17 +9,17 @@ import { Graph } from '../../graphSchema';
 export interface ParserResult {
   success: boolean;
   graph?: Graph;
-  errors: ParserError;,
+  errors: ParserError;
   warnings: ParserError;
-  metadata: {,
-  parseTime: number;,
+  metadata: {
+  parseTime: number;
   tokenCount: number;
-  nodeCount: number;,
+  nodeCount: number;
   edgeCount: number;
 };
 }
 export interface ParserError {
-  type: 'lexer' | 'parser' | 'semantic';,
+  type: 'lexer' | 'parser' | 'semantic';
   code: string;
   message: string;
   line?: number;
@@ -55,7 +55,7 @@ export class GraphParser {
   success: false,
   errors: [],
   warnings: [],
-  metadata: {,
+  metadata: {
   parseTime: 0,
   tokenCount: 0,
   nodeCount: 0,
@@ -106,7 +106,7 @@ export class GraphParser {
   * Validate content without full parsing (faster for validation-only use cases)
   */
   async validate(content: string): Promise<{,
-  isValid: boolean;,
+  isValid: boolean;
   errors: ParserError;
   warnings: ParserError;
 }> {
@@ -120,10 +120,10 @@ export class GraphParser {
    * Parse with performance profiling
    */
   async parseWithProfiling(content: string): Promise<ParserResult & {,
-  profiling: {,
-  lexerTime: number;,
+  profiling: {
+  lexerTime: number;
   astTime: number;
-  semanticTime: number;,
+  semanticTime: number;
   totalTime: number;
 };
   }> {
@@ -160,7 +160,7 @@ export class GraphParser {
   graph,
   errors: [],
   warnings: [],
-  metadata: {,
+  metadata: {
   parseTime: totalTime,
   tokenCount: tokens.length,
   nodeCount: ast?.nodes.length || 0,
@@ -172,7 +172,7 @@ export class GraphParser {
     this.addSemanticWarnings(result, warnings);
     return {
   ...result,
-  profiling: {,
+  profiling: {
   lexerTime,
   astTime,
   semanticTime,

@@ -45,17 +45,17 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 5000,
-  context: {,
+  context: {
   ipAddress: '192.168.1.100',
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
   userAgentType: UserAgentType.HUMAN,
   deviceFingerprint: 'fp-12345',
-  geolocation: {,
+  geolocation: {
   country: 'US',
   region: 'California',
   city: 'San Francisco',
 },
-  browserInfo: {,
+  browserInfo: {
   name: 'Chrome',
   version: '120.0',
   platform: 'Windows',
@@ -63,12 +63,12 @@ describe('ChallengeTelemetryService', () => {
   touchSupport: true,
   screenResolution: '1920x1080',
 },
-  challengeData: {,
+  challengeData: {
   variant: 'A',
           parameters: { difficulty: 'medium', images: 9 },
           metadata: { source: 'login_page' }
   },
-  userBehavior: {,
+  userBehavior: {
   mouseMovements: 25,
           keystrokes: 0,
           clickPatterns: [{ x: 100, y: 200, timestamp: 1000 }],
@@ -78,14 +78,14 @@ describe('ChallengeTelemetryService', () => {
           hesitationTime: 500,
           mouseVelocity: 150;
   },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 15,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
   vpnDetected: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -109,11 +109,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.EASY,
   attemptNumber: 1,
   timeToComplete: 3000,
-  context: {,
+  context: {
   ipAddress: '10.0.0.1',
   userAgent: 'TestAgent',
   userAgentType: UserAgentType.HUMAN,
-  browserInfo: {,
+  browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -122,17 +122,17 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   totalInteractionTime: 2500,
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 0,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: true,
   highContrastMode: false,
   assistiveTechUsed: ['screen_reader'],
@@ -201,12 +201,12 @@ describe('ChallengeTelemetryService', () => {
           difficultyLevel: i < 5 ? DifficultyLevel.EASY : DifficultyLevel.HARD,
           attemptNumber: 1,
           timeToComplete: 3000 + (i * 500),
-          context: {,
+          context: {
   ipAddress: `192.168.1.${100 + i}`}
 },
   userAgent: 'TestAgent',
             userAgentType: UserAgentType.HUMAN,
-            browserInfo: {,
+            browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -215,17 +215,17 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-          userBehavior: {,
+          userBehavior: {
   totalInteractionTime: 2500 + (i * 100),
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: i * 5, // Increasing risk scores,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -296,17 +296,17 @@ describe('ChallengeTelemetryService', () => {
           difficultyLevel: DifficultyLevel.MEDIUM,
           attemptNumber: 1,
           timeToComplete: 4000,
-          context: {,
+          context: {
   ipAddress: `192.168.1.${200 + index}`}
 },
   userAgent: 'TestAgent',
             userAgentType: eventData.userAgentType,
-            geolocation: {,
+            geolocation: {
   country: eventData.country,
   region: 'TestRegion',
   city: 'TestCity',
 },
-  browserInfo: {,
+  browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -315,17 +315,17 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-          userBehavior: {,
+          userBehavior: {
   totalInteractionTime: 3500,
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: eventData.riskScore,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -399,11 +399,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 500, // Very fast,
-  context: {,
+  context: {
   ipAddress: '203.0.113.100',
   userAgent: 'SuspiciousBot/1.0',
   userAgentType: UserAgentType.BOT_SUSPECTED,
-  browserInfo: {,
+  browserInfo: {
   name: 'Unknown',
   version: '1.0',
   platform: 'Linux',
@@ -412,18 +412,18 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   mouseMovements: 0, // No mouse movement,
   totalInteractionTime: 400,
   hesitationTime: 0 // No hesitation,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 30,
   indicators: [],
   automationDetected: true,
   anomalousPattern: true,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -451,11 +451,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 300,
-  context: {,
+  context: {
   ipAddress: '203.0.113.200',
   userAgent: 'FraudBot',
   userAgentType: UserAgentType.BOT_CONFIRMED,
-  browserInfo: {,
+  browserInfo: {
   name: 'Bot',
   version: '1.0',
   platform: 'Linux',
@@ -464,18 +464,18 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   mouseMovements: 0,
   totalInteractionTime: 250,
   hesitationTime: 0,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 80,
   indicators: ['automation'],
   automationDetected: true,
   anomalousPattern: true,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -492,11 +492,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 8000, // Normal time,
-  context: {,
+  context: {
   ipAddress: '192.168.1.150',
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
   userAgentType: UserAgentType.HUMAN,
-  browserInfo: {,
+  browserInfo: {
   name: 'Chrome',
   version: '120.0',
   platform: 'Windows',
@@ -505,7 +505,7 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1920x1080',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   mouseMovements: 45,
           totalInteractionTime: 7500,
           hesitationTime: 1200, // Natural hesitation
@@ -514,13 +514,13 @@ describe('ChallengeTelemetryService', () => {
             { x: 300, y: 400, timestamp: 3000 }
           ]
   },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 5,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -650,11 +650,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.EASY,
   attemptNumber: 1,
   timeToComplete: 5000,
-  context: {,
+  context: {
   ipAddress: '192.168.1.1',
   userAgent: 'TestAgent',
   userAgentType: UserAgentType.HUMAN,
-  browserInfo: {,
+  browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -662,22 +662,22 @@ describe('ChallengeTelemetryService', () => {
   touchSupport: false,
   screenResolution: '1024x768',
 },
-  challengeData: {,
+  challengeData: {
   variant: 'easy',
           parameters: {},
           metadata: {}
   },
-  userBehavior: {,
+  userBehavior: {
   totalInteractionTime: 4500,
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 0,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -700,16 +700,16 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 6000,
-  context: {,
+  context: {
   ipAddress: '192.168.1.100',
   userAgent: 'DashboardAgent',
   userAgentType: UserAgentType.HUMAN,
-  geolocation: {,
+  geolocation: {
   country: 'US',
   region: 'California',
   city: 'Los Angeles',
 },
-  browserInfo: {,
+  browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -718,17 +718,17 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   totalInteractionTime: 5500,
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 25,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],
@@ -760,11 +760,11 @@ describe('ChallengeTelemetryService', () => {
   difficultyLevel: DifficultyLevel.MEDIUM,
   attemptNumber: 1,
   timeToComplete: 4000,
-  context: {,
+  context: {
   ipAddress: '192.168.1.200',
   userAgent: 'RealTimeAgent',
   userAgentType: UserAgentType.HUMAN,
-  browserInfo: {,
+  browserInfo: {
   name: 'Test',
   version: '1.0',
   platform: 'Test',
@@ -773,17 +773,17 @@ describe('ChallengeTelemetryService', () => {
   screenResolution: '1024x768',
 },
   challengeData: { parameters: {}, metadata: {} },
-        userBehavior: {,
+        userBehavior: {
   totalInteractionTime: 3500,
   hesitationTime: 500,
 },
-  fraudIndicators: {,
+  fraudIndicators: {
   riskScore: 10,
   indicators: [],
   automationDetected: false,
   anomalousPattern: false,
 },
-  accessibility: {,
+  accessibility: {
   screenReaderDetected: false,
   highContrastMode: false,
   assistiveTechUsed: [],

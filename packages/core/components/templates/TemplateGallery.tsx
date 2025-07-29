@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProjectTemplate, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 interface TemplateGalleryProps {
-  templateManager: ProjectTemplateManager;,
+  templateManager: ProjectTemplateManager;
   onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
   onTemplatePreview: (template: ProjectTemplate) => void;
   className?: string;
@@ -182,7 +182,7 @@ interface TemplateGalleryProps {
   );
 };
 interface TemplateCardProps {
-  template: ProjectTemplate;,
+  template: ProjectTemplate;
   onUse: () => void;
   onPreview: () => void;
   featured?: boolean;

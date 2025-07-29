@@ -64,7 +64,7 @@ export interface ResetToken {
     ipAddress: string;
     userAgent: string;
     securityLevel: SecurityLevel;
-    metadata: {,
+    metadata: {
         requestSource?: string;
         deviceFingerprint?: string;
         locationData?: any;
@@ -132,7 +132,7 @@ export interface TokenStatistics {
     usageRate: number;
     securityViolations: number;
     rateLimitViolations: number;
-    cleanupStats: {,
+    cleanupStats: {
         lastCleanup: Date;
         tokensRemoved: number;
         auditLogsRemoved: number;

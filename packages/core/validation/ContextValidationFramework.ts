@@ -8,39 +8,39 @@ import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advance
 import { EventEmitter } from 'events';
 
 export interface ContextValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
-  warnings: string;,
+  warnings: string;
   score: number; // 0-100 quality score,
-  recommendations: string;,
-  contextHealth: {,
-  variableIntegrity: number;,
+  recommendations: string;
+  contextHealth: {
+  variableIntegrity: number;
   stateConsistency: number;
-  cacheEfficiency: number;,
+  cacheEfficiency: number;
   memoryUsage: number;
 };
 }
 export interface ContextValidationRule {
-  name: string;,
+  name: string;
   description: string;
-  category: 'critical' | 'warning' | 'info';,
+  category: 'critical' | 'warning' | 'info';
   weight: number; // Impact on overall score,
   validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult;
 }
 export interface ContextValidationRuleResult {
-  passed: boolean;,
+  passed: boolean;
   score: number; // 0-100,
   message?: string;
   details?: Record<string, any>;
 }
 export interface ContextValidationConfig {
-  enableVariableValidation: boolean;,
+  enableVariableValidation: boolean;
   enableStateValidation: boolean;
-  enableCacheValidation: boolean;,
+  enableCacheValidation: boolean;
   enablePerformanceValidation: boolean;
-  enableSecurityValidation: boolean;,
+  enableSecurityValidation: boolean;
   maxVariableCount: number;
-  maxDepth: number;,
+  maxDepth: number;
   maxCacheSize: number;
   warningThreshold: number; // Score below which warnings are issued,
   errorThreshold: number; // Score below which errors are issued,
@@ -52,7 +52,7 @@ export class ContextValidationFramework extends EventEmitter {
   private config: ContextValidationConfig;
   private rules: Map<string, ContextValidationRule>;
   private validationHistory: Array<{,
-  timestamp: number;,
+  timestamp: number;
   contextId: string;
   result: ContextValidationResult;
 }> = [];
@@ -76,7 +76,7 @@ export class ContextValidationFramework extends EventEmitter {
   /**
    * Validate execution context comprehensively
    */
-  async validateContext(context: AdvancedExecutionContext,)
+  async validateContext(context: AdvancedExecutionContext)
     config?: AdvancedNodeConfig
   ): Promise<ContextValidationResult> {
   const startTime = performance.now();
@@ -159,7 +159,7 @@ export class ContextValidationFramework extends EventEmitter {
   warnings: [],
         score: 0,
         recommendations: ['Check context validation configuration'],
-        contextHealth: {,
+        contextHealth: {
   variableIntegrity: 0,
   stateConsistency: 0,
   cacheEfficiency: 0,
@@ -191,14 +191,14 @@ export class ContextValidationFramework extends EventEmitter {
    * Get validation statistics
    */
   getValidationStatistics(): {
-  totalValidations: number;,
+  totalValidations: number;
   averageScore: number;
-  errorRate: number;,
+  errorRate: number;
   warningRate: number;
   recentValidations: Array<{,
-  contextId: string;,
+  contextId: string;
   score: number;
-  timestamp: number;,
+  timestamp: number;
   valid: boolean;
 }>;
     const total = this.validationHistory.length;
@@ -218,7 +218,7 @@ export class ContextValidationFramework extends EventEmitter {
   averageScore: totalScore / total,
   errorRate: (errorCount / total) * 100,
   warningRate: (warningCount / total) * 100,
-  recentValidations: this.validationHistory.slice(-10).map(v => ({,)
+  recentValidations: this.validationHistory.slice(-10).map(v => ({)
   contextId: v.contextId,
   score: v.result.score,
   timestamp: v.timestamp,
@@ -269,7 +269,7 @@ export class ContextValidationFramework extends EventEmitter {
             score: Math.max(0, 100 - ((count - maxCount) / maxCount) * 100),
             message: `Too many variables: ${count} (max: ${maxCount})`}
 },
-  details: {,
+  details: {
   recommendation: 'Consider reducing variable count or increasing max limit',
 };
         return {
@@ -305,7 +305,7 @@ export class ContextValidationFramework extends EventEmitter {
           score,
           message: typeErrors > 0 ? `${typeErrors} variable type issues detected` : undefined}
 },
-  details: {,
+  details: {
   typeErrors,
   totalVariables,
   recommendation: typeErrors > 0 ? 'Review variable assignments for type consistency' : undefined,
@@ -333,7 +333,7 @@ export class ContextValidationFramework extends EventEmitter {
           score,
           message: inconsistencies > 0 ? `${inconsistencies} state consistency issues` : undefined}
 },
-  details: {,
+  details: {
   stateCount,
   evaluationDepth: context.evaluationDepth,
   maxDepth: this.config.maxDepth,
@@ -362,7 +362,7 @@ export class ContextValidationFramework extends EventEmitter {
   passed: cacheSize <= maxSize,
   score,
   message,
-  details: {,
+  details: {
   cacheSize,
   maxSize,
   recommendation: cacheSize > maxSize ? 'Implement cache cleanup or increase limits' : undefined,
@@ -399,7 +399,7 @@ export class ContextValidationFramework extends EventEmitter {
           score: Math.max(0, score),
           message: issues.length > 0 ? `Metadata issues: ${issues.join(', ')}` : undefined}
 },
-  details: {,
+  details: {
   issues,
   recommendation: issues.length > 0 ? 'Ensure complete execution metadata initialization' : undefined,
 };
@@ -426,7 +426,7 @@ export class ContextValidationFramework extends EventEmitter {
   passed: false,
   score: 20,
   message: 'PRNG returns invalid values',
-  details: {,
+  details: {
   recommendation: 'Ensure PRNG returns numbers in [0, 1) range',
 };
         } catch (error) {
@@ -434,7 +434,7 @@ export class ContextValidationFramework extends EventEmitter {
   passed: false,
   score: 0,
   message: 'PRNG function throws errors',
-  details: {,
+  details: {
   error: error instanceof Error ? error.message : 'Unknown error',
 };
         return {
@@ -454,7 +454,7 @@ export class ContextValidationFramework extends EventEmitter {
   passed: false,
   score: 50,
   message: 'Missing seed value for deterministic execution',
-  details: {,
+  details: {
   recommendation: 'Provide seed value for reproducible results',
 };
         if (typeof context.seed !== 'number') {
@@ -462,7 +462,7 @@ export class ContextValidationFramework extends EventEmitter {
   passed: false,
   score: 30,
   message: 'Seed should be a number',
-  details: {,
+  details: {
   seedType: typeof context.seed,
   recommendation: 'Use numeric seed for consistent behavior',
 };
@@ -471,7 +471,7 @@ export class ContextValidationFramework extends EventEmitter {
   score: 100,
 };
     });
-  private updateContextHealth(health: ContextValidationResult['contextHealth'],)
+  private updateContextHealth(health: ContextValidationResult['contextHealth'])
     ruleName: string,
     result: ContextValidationRuleResult): void {,
   // Map rule results to health metrics
@@ -513,7 +513,7 @@ export class ContextValidationUtils {
       evaluationDepth: 0,
       cache: new Map(),
       prng: () => Math.random(),
-      executionMeta: {,
+      executionMeta: {
   startTime: Date.now(),
         executionId: `test-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -546,12 +546,12 @@ export class ContextValidationUtils {
   /**
   * Estimate context memory usage
   */
-  static estimateContextMemory(context: AdvancedExecutionContext): {,
-  totalBytes: number;,
-  breakdown: {,
-  variables: number;,
+  static estimateContextMemory(context: AdvancedExecutionContext): {
+  totalBytes: number;
+  breakdown: {
+  variables: number;
   nodeStates: number;
-  cache: number;,
+  cache: number;
   metadata: number;
 };
     const breakdown = {

@@ -14,7 +14,7 @@ interface UseActivityFeedOptions {
   autoRefresh?: boolean;
   refreshInterval?: number;
 interface ActivityStatsData {
-  total_events: number;,
+  total_events: number;
   events_by_type: Record<string, number>;
   events_by_day: Array<{ date: string; count: number }>;
   most_active_users: Array<{ user_id: string; count: number }>;
@@ -60,7 +60,7 @@ export function useActivityFeed()
       const queryString = buildQueryString(filters, page);
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity?${queryString}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -86,7 +86,7 @@ export function useActivityFeed()
     try {
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/stats`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -102,7 +102,7 @@ export function useActivityFeed()
     try {
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/types`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -128,7 +128,7 @@ export function useActivityFeed()
     try {
       const response = await fetch(`${API_BASE}/activity/${eventId}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });
@@ -204,7 +204,7 @@ export function useProjectActivityFeed()
 });
       const response = await fetch(`${API_BASE}/projects/${projectId}/activity?${params}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   'X-User-Id': userId,
 });

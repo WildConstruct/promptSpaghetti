@@ -173,10 +173,7 @@ catch (error) {
     setError('Failed to submit review');
 }
 ;
-const CriteriaModal;
-() => void ;
- > ;
-({ criteria, onSave, onClose }) => {
+const CriteriaModal = ({ criteria, onSave, onClose }) => {
     const [formData, setFormData] = useState({});
     name: criteria?.name || '',
         description;
@@ -188,7 +185,6 @@ const CriteriaModal;
         conditions;
     criteria?.conditions || {};
 };
-;
 const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);

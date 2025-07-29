@@ -22,7 +22,7 @@ export interface EnforcementWorkflow {
     description: string;
     policyId: string;
     policyName: string;
-    trigger: {,
+    trigger: {
         type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
         conditions: string[];
     };
@@ -36,7 +36,7 @@ export interface EnforcementStep {
     stepId: string;
     name: string;
     type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';
-    config: {,
+    config: {
         action?: EnforcementAction;
         approvers?: string[];
         timeout?: number;

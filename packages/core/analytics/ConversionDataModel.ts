@@ -14,17 +14,17 @@
 import { EnhancedConversionEvent, TouchPoint, AttributionModel } from './ConversionFunnelArchitecture';
 
 export interface ConversionFunnelDefinition {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: FunnelCategory;
   version: string;
   // Funnel configuration
-  configuration: {,
+  configuration: {
   timeWindow: number; // milliseconds,
-  allowBacktracking: boolean;,
+  allowBacktracking: boolean;
   requireSequentialSteps: boolean;
-  enableParallelPaths: boolean;,
+  enableParallelPaths: boolean;
   dropOffGracePeriod: number; // milliseconds,
 };
   // Step definitions
@@ -34,30 +34,30 @@ export interface ConversionFunnelDefinition {
   // Success criteria
   successCriteria: SuccessCriteria;
   // Analytics configuration
-  analytics: {,
+  analytics: {
   enableRealTimeTracking: boolean;
   retentionPeriod: number; // days,
-  cohortTrackingEnabled: boolean;,
+  cohortTrackingEnabled: boolean;
   segmentationRules: SegmentationRule;
 };
   // Metadata
-  metadata: {,
+  metadata: {
   createdAt: number;
-  updatedAt: number;,
+  updatedAt: number;
   createdBy: string;
-  tags: string;,
+  tags: string;
   businessContext: string;
   expectedConversionRate: number;
   benchmarkData?: BenchmarkData;
 };
 }
 export interface ConversionStep {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   order: number;
   // Step configuration
-  type: StepType;,
+  type: StepType;
   isRequired: boolean;
   isTerminal: boolean; // If true, funnel ends here,
   // Event matching criteria
@@ -65,24 +65,24 @@ export interface ConversionStep {
   // Conditions and constraints
   conditions: StepCondition;
   // Time constraints
-  timeConstraints: {,
+  timeConstraints: {
   minTimeFromPrevious?: number; // milliseconds,
   maxTimeFromPrevious?: number; // milliseconds,
   maxTimeFromStart?: number; // milliseconds,
   allowedTimeWindows?: TimeWindow;
 };
   // Success metrics
-  successMetrics: {,
+  successMetrics: {
   expectedCompletionRate: number;
-  averageTimeToComplete: number;,
+  averageTimeToComplete: number;
   criticalSuccessFactors: string;
 };
   // Branching logic
   branches: StepBranch;
   // Metadata
-  metadata: {,
+  metadata: {
   businessValue: number;
-  complexity: 'low' | 'medium' | 'high';,
+  complexity: 'low' | 'medium' | 'high';
   dependencies: string;
   optimizationOpportunities: string;
 };
@@ -113,7 +113,7 @@ export interface EventCriteria {
 }
 export interface PropertyMatcher {
   propertyPath: string; // Dot notation: "user.profile.tier",
-  operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'matches' | 'exists' | 'in' | 'between';,
+  operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'matches' | 'exists' | 'in' | 'between';
   value: any;
   caseSensitive?: boolean;
   required?: boolean;
@@ -126,24 +126,24 @@ export interface ValueConstraint {
   excludeValues?: number;
 }
 export interface ContextRequirement {
-  type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';,
+  type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';
   condition: string;
   value: any;
 }
 export interface StepCondition {
-  id: string;,
+  id: string;
   type: 'property' | 'time' | 'sequence' | 'count' | 'custom';
-  description: string;,
+  description: string;
   logic: ConditionLogic;
   weight: number; // For scoring complex conditions,
 }
 export interface ConditionLogic {
-  operator: 'AND' | 'OR' | 'NOT';,
+  operator: 'AND' | 'OR' | 'NOT';
   conditions: SimpleCondition;
   customValidator?: string; // JavaScript function body for custom logic,
 }
 export interface SimpleCondition {
-  field: string;,
+  field: string;
   operator: string;
   value: any;
   metadata?: Record<string, any>;
@@ -155,51 +155,51 @@ export interface TimeWindow {
   timezone?: string;
 }
 export interface StepBranch {
-  id: string;,
+  id: string;
   name: string;
-  condition: ConditionLogic;,
+  condition: ConditionLogic;
   nextStepId: string;
   weight: number; // For probabilistic branching,
-  metadata: {,
-  description: string;,
+  metadata: {
+  description: string;
   expectedFlow: number; // Percentage of users expected to take this branch,
 };
 }
 export interface ConditionalPath {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   entryConditions: ConditionLogic;
   steps: string; // Step IDs in this path,
-  priority: number;,
+  priority: number;
   isDefault: boolean;
 }
 export interface SuccessCriteria {
-  primary: {,
-  stepId: string;,
+  primary: {
+  stepId: string;
   requirements: ConditionLogic;
   weight: number;
 };
   secondary: Array<{,
   stepId: string;
-  requirements: ConditionLogic;,
+  requirements: ConditionLogic;
   weight: number;
   isOptional: boolean;
 }>;
-  scoreCalculation: {,
+  scoreCalculation: {
   method: 'weighted' | 'binary' | 'progressive' | 'custom';
   customFormula?: string;
 };
 }
 export interface SegmentationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   conditions: ConditionLogic;
-  priority: number;,
+  priority: number;
   isExclusive: boolean; // If true, user can only be in one segment,
-  metadata: {,
-  expectedSize: number;,
+  metadata: {
+  expectedSize: number;
   businessValue: string;
   trackingPeriod: number; // days,
 };
@@ -208,20 +208,20 @@ export interface BenchmarkData {
   industryAverageConversionRate: number;
   competitorData?: CompetitorBenchmark;
   historicalData?: HistoricalBenchmark;
-  goalConversionRate: number;,
+  goalConversionRate: number;
   lastUpdated: number;
 }
 export interface CompetitorBenchmark {
-  name: string;,
+  name: string;
   conversionRate: number;
-  averageTimeToConvert: number;,
+  averageTimeToConvert: number;
   dropOffPoints: string;
   strengths: string;
 }
 export interface HistoricalBenchmark {
-  period: string;,
+  period: string;
   conversionRate: number;
-  volume: number;,
+  volume: number;
   averageValue: number;
   topDropOffPoints: string;
   /**
@@ -231,71 +231,71 @@ export interface HistoricalBenchmark {
 }
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
   // Flexible properties with schema validation
-  flexibleProperties: {,
+  flexibleProperties: {
   [key: string]: FlexibleProperty;
 };
   // Event schema version
   schemaVersion: string;
   // Validation results
-  validation: {,
+  validation: {
   isValid: boolean;
-  score: number;,
+  score: number;
   errors: ValidationError;
-  warnings: ValidationWarning;,
+  warnings: ValidationWarning;
   appliedRules: string;
 };
   // Funnel context
-  funnelContext: {,
+  funnelContext: {
   funnelId: string;
-  stepId: string;,
+  stepId: string;
   stepOrder: number;
   pathId?: string;
-  timeInFunnel: number;,
+  timeInFunnel: number;
   previousSteps: string;
   isBacktracking: boolean;
 };
   // Enriched user context
-  userContext: {,
+  userContext: {
   segmentIds: string;
-  cohortIds: string;,
+  cohortIds: string;
   lifetimeValue: number;
-  riskScore: number;,
+  riskScore: number;
   engagementScore: number;
-  profileCompleteness: number;,
+  profileCompleteness: number;
   lastActivity: number;
 };
   // Template context (for marketplace events)
   templateContext?: {
-  templateId: string;,
+  templateId: string;
   templateType: string;
-  creatorId: string;,
+  creatorId: string;
   category: string;
-  price: number;,
+  price: number;
   rating: number;
-  popularity: number;,
+  popularity: number;
   tags: string;
 };
   // Session enrichment
-  sessionContext: {,
+  sessionContext: {
   isNewSession: boolean;
-  sessionDuration: number;,
+  sessionDuration: number;
   pageViewCount: number;
-  previousConversions: number;,
+  previousConversions: number;
   referrerCategory: string;
   deviceFingerprint: string;
   locationData?: LocationData;
 };
 
 export interface FlexibleProperty {
-  value: any;,
+  value: any;
   type: PropertyType;
   schema?: PropertySchema;
-  metadata: {,
-  source: string;,
+  metadata: {
+  source: string;
   confidence: number;
-  lastUpdated: number;,
-  validationStatus: 'valid' | 'invalid' | 'pending';
-};
+  lastUpdated: number;
+  validationStatus: 'valid' | 'invalid' | 'pending'
+  };
 }
 export type PropertyType = 
   | 'string' 
@@ -309,7 +309,7 @@ export type PropertyType =
   | 'custom';
 
 export interface PropertySchema {
-  type: PropertyType;,
+  type: PropertyType;
   required: boolean;
   constraints: PropertyConstraint;
   defaultValue?: any;
@@ -317,32 +317,32 @@ export interface PropertySchema {
   relationships?: PropertyRelationship;
 }
 export interface PropertyConstraint {
-  type: 'format' | 'range' | 'length' | 'pattern' | 'custom';,
+  type: 'format' | 'range' | 'length' | 'pattern' | 'custom';
   value: any;
-  errorMessage: string;,
-  severity: 'error' | 'warning' | 'info';
-}
+  errorMessage: string;
+  severity: 'error' | 'warning' | 'info'
+  }
 export interface PropertyTransformation {
-  type: 'normalize' | 'encode' | 'hash' | 'encrypt' | 'custom';,
+  type: 'normalize' | 'encode' | 'hash' | 'encrypt' | 'custom';
   config: Record<string, any>;
   conditions?: ConditionLogic;
 }
 export interface PropertyRelationship {
-  type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';,
+  type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
   targetProperty: string;
   relationship: string;
 }
 export interface ValidationError {
-  propertyPath: string;,
+  propertyPath: string;
   constraint: string;
-  message: string;,
+  message: string;
   severity: 'critical' | 'major' | 'minor';
   suggestedFix?: string;
 }
 export interface ValidationWarning {
-  propertyPath: string;,
+  propertyPath: string;
   issue: string;
-  message: string;,
+  message: string;
   impact: string;
   recommendation?: string;
 }
@@ -351,8 +351,8 @@ export interface LocationData {
   region?: string;
   city?: string;
   timezone: string;
-  coordinates?: {,
-  latitude: number;,
+  coordinates?: {
+  latitude: number;
   longitude: number;
   accuracy: number;
 };
@@ -362,81 +362,81 @@ export interface LocationData {
  */
 }
 export interface ConversionCohort {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Cohort definition
-  definition: {,
-  criteriaEvent: string;,
+  definition: {
+  criteriaEvent: string;
   criteriaConditions: ConditionLogic;
   timeWindow: number; // milliseconds,
   maxSize?: number;
   minSize?: number;
 };
   // Analysis configuration
-  analysis: {,
+  analysis: {
   retentionPeriods: number; // Days to track retention,
   analysisWindow: number; // Total days to analyze,
   metricCalculations: MetricCalculation;
   comparisonCohorts?: string; // IDs of cohorts to compare against,
 };
   // Current state
-  state: {,
+  state: {
   currentSize: number;
-  creationDate: number;,
+  creationDate: number;
   lastAnalysisDate: number;
-  status: 'active' | 'completed' | 'archived';,
+  status: 'active' | 'completed' | 'archived';
   completionRate: number;
 };
   // Performance data
-  performance: {,
+  performance: {
   conversionRates: TimeSeriesData;
-  retentionRates: TimeSeriesData;,
+  retentionRates: TimeSeriesData;
   averageTimeToConvert: number;
-  topDropOffPoints: DropOffPoint;,
+  topDropOffPoints: DropOffPoint;
   valueMetrics: ValueMetrics;
 };
   // Metadata
-  metadata: {,
+  metadata: {
   businessContext: string;
-  hypothesis: string;,
+  hypothesis: string;
   expectedOutcome: string;
-  tags: string;,
+  tags: string;
   owner: string;
 };
 }
 export interface UserSegment {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Segment definition
-  definition: {,
-  rules: SegmentationRule;,
+  definition: {
+  rules: SegmentationRule;
   operator: 'AND' | 'OR';
-  updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';,
+  updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
   isStatic: boolean; // If true, membership doesn't change after initial assignment,
 };
   // Current state
-  state: {,
+  state: {
   currentSize: number;
-  lastUpdated: number;,
+  lastUpdated: number;
   growthRate: number;
-  churnRate: number;,
-  status: 'active' | 'paused' | 'archived';
-};
+  churnRate: number;
+  status: 'active' | 'paused' | 'archived'
+  };
   // Performance metrics
-  performance: {,
+  performance: {
   averageConversionRate: number;
-  averageTimeToConvert: number;,
+  averageTimeToConvert: number;
   averageLifetimeValue: number;
-  engagementScore: number;,
+  engagementScore: number;
   retentionRate: number;
   behaviorPatterns: BehaviorPattern;
 };
   // Funnel-specific metrics
   funnelMetrics: Map<string, FunnelSegmentMetrics>; // funnelId -> metrics
   // Metadata
-  metadata: {,
+  metadata: {
   businessValue: 'high' | 'medium' | 'low';
   targetingPriority: number;
   marketingPersona?: string;
@@ -444,60 +444,60 @@ export interface UserSegment {
 };
 }
 export interface MetricCalculation {
-  id: string;,
+  id: string;
   name: string;
-  type: 'count' | 'rate' | 'average' | 'sum' | 'median' | 'percentile' | 'custom';,
+  type: 'count' | 'rate' | 'average' | 'sum' | 'median' | 'percentile' | 'custom';
   field: string;
   aggregationPeriod: 'hour' | 'day' | 'week' | 'month';
   customFormula?: string;
 }
 export interface TimeSeriesData {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   metadata?: Record<string, any>;
 }
 export interface DropOffPoint {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  dropOffRate: number;,
+  dropOffRate: number;
   volume: number;
-  averageTimeSpent: number;,
+  averageTimeSpent: number;
   commonExitActions: string;
   recoveryOpportunities: string;
 }
 export interface ValueMetrics {
-  totalRevenue: number;,
+  totalRevenue: number;
   averageOrderValue: number;
-  lifetimeValue: number;,
+  lifetimeValue: number;
   revenuePerUser: number;
-  costPerAcquisition: number;,
+  costPerAcquisition: number;
   returnOnInvestment: number;
 }
 export interface BehaviorPattern {
-  id: string;,
+  id: string;
   name: string;
-  pattern: string;,
+  pattern: string;
   frequency: number;
   conversionImpact: number;
-  timePattern?: {,
-  preferredDays: number;,
+  timePattern?: {
+  preferredDays: number;
   preferredHours: number;
   seasonality?: string;
 };
 }
 export interface FunnelSegmentMetrics {
-  funnelId: string;,
+  funnelId: string;
   conversionRate: number;
-  averageTimeToConvert: number;,
+  averageTimeToConvert: number;
   dropOffPoints: DropOffPoint;
-  completionRate: number;,
+  completionRate: number;
   backtrackingRate: number;
   pathPreferences: PathPreference;
 }
 export interface PathPreference {
-  pathId: string;,
+  pathId: string;
   pathName: string;
-  usageRate: number;,
+  usageRate: number;
   conversionRate: number;
   averageTime: number;
   /**
@@ -507,15 +507,15 @@ export interface PathPreference {
 export interface UserEntity {
   id: string;
   // Basic information
-  profile: {,
+  profile: {
   email?: string;
   name?: string;
-  registrationDate: number;,
+  registrationDate: number;
   verificationStatus: 'verified' | 'pending' | 'suspended';
-  accountType: 'free' | 'premium' | 'enterprise';
-};
+  accountType: 'free' | 'premium' | 'enterprise'
+  };
   // Conversion history
-  conversionHistory: {,
+  conversionHistory: {
   totalConversions: number;
   firstConversionDate?: number;
   lastConversionDate?: number;
@@ -523,34 +523,34 @@ export interface UserEntity {
   averageTimeToConvert: number;
 };
   // Behavioral data
-  behavior: {,
+  behavior: {
   sessionCount: number;
-  totalTimeSpent: number;,
+  totalTimeSpent: number;
   averageSessionDuration: number;
-  devicePreferences: DevicePreference;,
+  devicePreferences: DevicePreference;
   locationHistory: LocationData;
   activityPatterns: ActivityPattern;
 };
   // Value metrics
-  value: {,
+  value: {
   lifetimeValue: number;
-  averageOrderValue: number;,
+  averageOrderValue: number;
   totalRevenue: number;
-  acquisitionCost: number;,
+  acquisitionCost: number;
   churnRisk: number;
 };
   // Segmentation
-  segmentation: {,
+  segmentation: {
   currentSegments: string;
-  segmentHistory: SegmentChange;,
+  segmentHistory: SegmentChange;
   cohorts: CohortMembership;
-  riskScore: number;,
+  riskScore: number;
   engagementScore: number;
 };
   // Preferences
-  preferences: {,
+  preferences: {
   privacySettings: PrivacySettings;
-  communicationPreferences: CommunicationPreference;,
+  communicationPreferences: CommunicationPreference;
   contentPreferences: ContentPreference;
   notificationSettings: NotificationSettings;
 };
@@ -558,154 +558,154 @@ export interface UserEntity {
 export interface TemplateEntity {
   id: string;
   // Basic information
-  metadata: {,
-  name: string;,
+  metadata: {
+  name: string;
   description: string;
-  creatorId: string;,
+  creatorId: string;
   category: string;
   subcategory?: string;
-  tags: string;,
+  tags: string;
   createdDate: number;
   lastUpdated: number;
 };
   // Conversion performance
-  conversionMetrics: {,
+  conversionMetrics: {
   totalViews: number;
-  totalPreviews: number;,
+  totalPreviews: number;
   totalPurchases: number;
-  totalDownloads: number;,
+  totalDownloads: number;
   conversionRate: number;
-  viewToPreviewRate: number;,
+  viewToPreviewRate: number;
   previewToPurchaseRate: number;
 };
   // Funnel performance
   funnelPerformance: Map<string, TemplateFunnelMetrics>; // funnelId -> metrics
   // User engagement
-  engagement: {,
+  engagement: {
   averageViewTime: number;
-  bounceRate: number;,
+  bounceRate: number;
   shareCount: number;
-  favoriteCount: number;,
+  favoriteCount: number;
   reviewCount: number;
   averageRating: number;
 };
   // Revenue data
-  revenue: {,
+  revenue: {
   totalRevenue: number;
-  price: number;,
+  price: number;
   priceHistory: PriceChange;
   averageRevenuePerUser: number;
   monthlyRecurringRevenue?: number;
 };
   // Performance trends
-  trends: {,
+  trends: {
   viewTrend: TrendData;
-  conversionTrend: TrendData;,
+  conversionTrend: TrendData;
   revenueTrend: TrendData;
   ratingTrend: TrendData;
   seasonality?: SeasonalityData;
 };
   // Quality metrics
-  quality: {,
+  quality: {
   completionRate: number;
-  errorRate: number;,
+  errorRate: number;
   supportTickets: number;
-  refundRate: number;,
+  refundRate: number;
   qualityScore: number;
 };
 }
 export interface ConversionSummary {
-  funnelId: string;,
+  funnelId: string;
   totalConversions: number;
-  averageTimeToConvert: number;,
+  averageTimeToConvert: number;
   averageValue: number;
   lastConversionDate: number;
   preferredPath?: string;
 }
 export interface DevicePreference {
-  deviceType: string;,
+  deviceType: string;
   usagePercentage: number;
-  conversionRate: number;,
+  conversionRate: number;
   lastUsed: number;
 }
 export interface ActivityPattern {
-  type: 'temporal' | 'behavioral' | 'contextual';,
+  type: 'temporal' | 'behavioral' | 'contextual';
   pattern: string;
-  frequency: number;,
+  frequency: number;
   strength: number;
-  impact: 'positive' | 'negative' | 'neutral';
-}
+  impact: 'positive' | 'negative' | 'neutral'
+  }
 export interface SegmentChange {
-  date: number;,
+  date: number;
   fromSegment: string;
-  toSegment: string;,
+  toSegment: string;
   reason: string;
   triggerEvent?: string;
 }
 export interface CohortMembership {
-  cohortId: string;,
+  cohortId: string;
   joinDate: number;
-  status: 'active' | 'graduated' | 'churned';,
+  status: 'active' | 'graduated' | 'churned';
   daysActive: number;
   conversionAchieved: boolean;
 }
 export interface PrivacySettings {
-  trackingConsent: boolean;,
+  trackingConsent: boolean;
   analyticsConsent: boolean;
-  personalizationConsent: boolean;,
+  personalizationConsent: boolean;
   crossDeviceConsent: boolean;
-  dataRetentionPeriod: number;,
+  dataRetentionPeriod: number;
   rightToErasure: boolean;
 }
 export interface CommunicationPreference {
-  channel: 'email' | 'sms' | 'push' | 'in_app';,
+  channel: 'email' | 'sms' | 'push' | 'in_app';
   frequency: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'never';
   topics: string;
 }
 export interface ContentPreference {
-  category: string;,
+  category: string;
   interest: number; // 0-1 scale,
-  lastInteraction: number;,
+  lastInteraction: number;
   conversionHistory: number;
 }
 export interface NotificationSettings {
-  marketing: boolean;,
+  marketing: boolean;
   product: boolean;
-  security: boolean;,
+  security: boolean;
   social: boolean;
-  quietHours?: {,
-  start: string;,
+  quietHours?: {
+  start: string;
   end: string;
   timezone: string;
 };
 }
 export interface TemplateFunnelMetrics {
-  funnelId: string;,
+  funnelId: string;
   views: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  averageTimeToConvert: number;,
+  averageTimeToConvert: number;
   dropOffPoints: DropOffPoint;
   topSegments: string;
 }
 export interface PriceChange {
-  date: number;,
+  date: number;
   oldPrice: number;
-  newPrice: number;,
+  newPrice: number;
   reason: string;
   impactOnConversions: number;
 }
 export interface TrendData {
-  direction: 'up' | 'down' | 'stable';,
+  direction: 'up' | 'down' | 'stable';
   magnitude: number;
-  confidence: number;,
+  confidence: number;
   timeframe: string;
   dataPoints: TimeSeriesData;
 }
 export interface SeasonalityData {
-  pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';,
+  pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
   peaks: Array<{,
-  period: string;,
+  period: string;
   multiplier: number;
 }>;
   confidence: number;
@@ -746,7 +746,7 @@ export class ConversionDataRelationshipManager {
   flexibleProperties,
   schemaVersion: '1.0.0',
   validation,
-  funnelContext: {,
+  funnelContext: {
   funnelId: String(baseEvent.properties?.funnelId || 'unknown'),
   stepId: String(baseEvent.properties?.stepId || 'unknown'),
   stepOrder: Number(baseEvent.properties?.stepOrder) || 0,
@@ -783,7 +783,7 @@ export class ConversionDataRelationshipManager {
   /**
    * Build flexible properties with schema validation
    */
-  private buildFlexibleProperties(event: EnhancedConversionEvent,)
+  private buildFlexibleProperties(event: EnhancedConversionEvent)
     user: UserEntity,
     template?: TemplateEntity
   ): Record<string, FlexibleProperty> {
@@ -793,7 +793,7 @@ export class ConversionDataRelationshipManager {
   properties[key] = {
   value,
   type: this.inferPropertyType(value),
-  metadata: {,
+  metadata: {
   source: 'event',
   confidence: 1.0,
   lastUpdated: Date.now(),
@@ -804,7 +804,7 @@ export class ConversionDataRelationshipManager {
     properties['user_lifetime_value'] = {
   value: user.value.lifetimeValue,
   type: 'number',
-  metadata: {,
+  metadata: {
   source: 'derived',
   confidence: 0.9,
   lastUpdated: Date.now(),
@@ -814,7 +814,7 @@ export class ConversionDataRelationshipManager {
   properties['template_conversion_rate'] = {
   value: template.conversionMetrics.conversionRate,
   type: 'number',
-  metadata: {,
+  metadata: {
   source: 'template',
   confidence: 0.95,
   lastUpdated: Date.now(),
@@ -852,7 +852,7 @@ export class ConversionDataRelationshipManager {
   deviceFingerprint: event.deviceFingerprint || '',
   locationData: user.behavior.locationHistory[0] // Most recent location,
 };
-  private async validateFlexibleEvent(event: EnhancedConversionEvent,)
+  private async validateFlexibleEvent(event: EnhancedConversionEvent)
     properties: Record<string, FlexibleProperty>
     // Simplified validation for demo
     return {
@@ -866,17 +866,17 @@ export class ConversionDataRelationshipManager {
   private createDefaultUserEntity(userId: string): UserEntity {
   return {
   id: userId,
-  profile: {,
+  profile: {
   registrationDate: Date.now() - 86400000,
   verificationStatus: 'verified',
   accountType: 'free',
 },
-  conversionHistory: {,
+  conversionHistory: {
   totalConversions: 0,
   conversionsByFunnel: new Map(),
   averageTimeToConvert: 0,
 },
-  behavior: {,
+  behavior: {
   sessionCount: 1,
   totalTimeSpent: 0,
   averageSessionDuration: 0,
@@ -884,22 +884,22 @@ export class ConversionDataRelationshipManager {
   locationHistory: [],
   activityPatterns: [],
 },
-  value: {,
+  value: {
   lifetimeValue: 0,
   averageOrderValue: 0,
   totalRevenue: 0,
   acquisitionCost: 0,
   churnRisk: 0.1,
 },
-  segmentation: {,
+  segmentation: {
   currentSegments: ['new_user'],
   segmentHistory: [],
   cohorts: [],
   riskScore: 0.1,
   engagementScore: 0.5,
 },
-  preferences: {,
-  privacySettings: {,
+  preferences: {
+  privacySettings: {
   trackingConsent: true,
   analyticsConsent: true,
   personalizationConsent: false,
@@ -909,7 +909,7 @@ export class ConversionDataRelationshipManager {
 },
   communicationPreferences: [],
         contentPreferences: [],
-        notificationSettings: {,
+        notificationSettings: {
   marketing: false,
   product: true,
   security: true,
@@ -918,7 +918,7 @@ export class ConversionDataRelationshipManager {
   private createDefaultTemplateEntity(templateId: string): TemplateEntity {
     return {
       id: templateId,
-      metadata: {,
+      metadata: {
   name: `Template ${templateId}`}
 },
   description: 'Sample template',
@@ -928,7 +928,7 @@ export class ConversionDataRelationshipManager {
         createdDate: Date.now() - 86400000,
         lastUpdated: Date.now();
   },
-  conversionMetrics: {,
+  conversionMetrics: {
   totalViews: 1000,
   totalPreviews: 300,
   totalPurchases: 50,
@@ -938,7 +938,7 @@ export class ConversionDataRelationshipManager {
   previewToPurchaseRate: 16.7,
 },
   funnelPerformance: new Map(),
-      engagement: {,
+      engagement: {
   averageViewTime: 120000,
   bounceRate: 0.4,
   shareCount: 25,
@@ -946,42 +946,42 @@ export class ConversionDataRelationshipManager {
   reviewCount: 15,
   averageRating: 4.2,
 },
-  revenue: {,
+  revenue: {
   totalRevenue: 1000,
   price: 20,
   priceHistory: [],
   averageRevenuePerUser: 20,
 },
-  trends: {,
-  viewTrend: {,
+  trends: {
+  viewTrend: {
   direction: 'up',
   magnitude: 0.15,
   confidence: 0.8,
   timeframe: '30d',
   dataPoints: [],
 },
-  conversionTrend: {,
+  conversionTrend: {
   direction: 'stable',
   magnitude: 0.02,
   confidence: 0.9,
   timeframe: '30d',
   dataPoints: [],
 },
-  revenueTrend: {,
+  revenueTrend: {
   direction: 'up',
   magnitude: 0.12,
   confidence: 0.85,
   timeframe: '30d',
   dataPoints: [],
 },
-  ratingTrend: {,
+  ratingTrend: {
   direction: 'stable',
   magnitude: 0.01,
   confidence: 0.95,
   timeframe: '30d',
   dataPoints: [],
 },
-  quality: {,
+  quality: {
   completionRate: 0.92,
   errorRate: 0.03,
   supportTickets: 2,

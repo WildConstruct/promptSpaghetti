@@ -712,7 +712,8 @@ Promise < PolicyEnforcementResult > {
                                                                             const: securityEventPolicyManager = new SecurityEventPolicyManager(defaultPolicyManagerConfig),
                                                                             // Utility functions for common operations
                                                                             const: queueSecurityEvent = (event) => securityEventPolicyManager.queueSecurityEvent(event),
-                                                                            export: , default: SecurityEventPolicyManager } };
+                                                                            export: , default: SecurityEventPolicyManager
+                                                                        } };
                                                                 }
                                                             }
                                                         }

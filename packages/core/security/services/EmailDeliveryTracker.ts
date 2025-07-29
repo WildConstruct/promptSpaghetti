@@ -74,7 +74,7 @@ export enum DeliveryStatus {
   priority?: 'low' | 'normal' | 'high' | 'urgent';
   sendAt?: Date;
   batchId?: string;
-  trackingSettings?: {,
+  trackingSettings?: {
   clickTracking?: boolean;
   openTracking?: boolean;
   subscriptionTracking?: boolean;
@@ -84,13 +84,13 @@ export enum DeliveryStatus {
 // Email delivery record
 }
 export interface EmailDeliveryRecord {
-  id: string;,
+  id: string;
   messageId: string;
-  provider: EmailProvider;,
+  provider: EmailProvider;
   type: EmailType;
-  status: DeliveryStatus;,
+  status: DeliveryStatus;
   recipient: string;
-  sender: string;,
+  sender: string;
   subject: string;
   createdAt: Date;
   sentAt?: Date;
@@ -103,17 +103,17 @@ export interface EmailDeliveryRecord {
   // Delivery attempts
   attempts: EmailDeliveryAttempt;
   // Bounce information
-  bounceInfo?: {,
-  type: BounceType;,
+  bounceInfo?: {
+  type: BounceType;
   subType: BounceSubType;
   reason: string;
   diagnosticCode?: string;
   remoteMta?: string;
 };
   // Tracking data
-  tracking: {,
+  tracking: {
   opens: EmailOpenEvent;
-  clicks: EmailClickEvent;,
+  clicks: EmailClickEvent;
   unsubscribes: EmailUnsubscribeEvent;
 };
   // Provider-specific data
@@ -122,7 +122,7 @@ export interface EmailDeliveryRecord {
 // Delivery attempt information
 }
 export interface EmailDeliveryAttempt {
-  attemptNumber: number;,
+  attemptNumber: number;
   timestamp: Date;
   status: DeliveryStatus;
   providerResponse?: string;
@@ -131,83 +131,83 @@ export interface EmailDeliveryAttempt {
   // Email tracking events
 }
 export interface EmailOpenEvent {
-  timestamp: Date;,
+  timestamp: Date;
   ipAddress: string;
   userAgent: string;
   location?: string;
   deviceType?: string;
 }
 export interface EmailClickEvent {
-  timestamp: Date;,
+  timestamp: Date;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   url: string;
   linkId?: string;
   location?: string;
   deviceType?: string;
 }
 export interface EmailUnsubscribeEvent {
-  timestamp: Date;,
+  timestamp: Date;
   ipAddress: string;
   userAgent: string;
   reason?: string;
   // Delivery statistics
 }
 export interface DeliveryStatistics {
-  totalEmails: number;,
+  totalEmails: number;
   sentEmails: number;
-  deliveredEmails: number;,
+  deliveredEmails: number;
   openedEmails: number;
-  clickedEmails: number;,
+  clickedEmails: number;
   bouncedEmails: number;
-  rejectedEmails: number;,
+  rejectedEmails: number;
   spamEmails: number;
   failedEmails: number;
   // Rates
-  deliveryRate: number;,
+  deliveryRate: number;
   openRate: number;
-  clickRate: number;,
+  clickRate: number;
   bounceRate: number;
   spamRate: number;
   // By email type
-  statisticsByType: {,
-  [key in EmailType]: {,
-  count: number;,
+  statisticsByType: {
+  [key in EmailType]: {
+  count: number;
   deliveryRate: number;
-  openRate: number;,
+  openRate: number;
   bounceRate: number;
 };
   };
   // By provider
-  statisticsByProvider: {,
-  [key in EmailProvider]: {,
-  count: number;,
+  statisticsByProvider: {
+  [key in EmailProvider]: {
+  count: number;
   deliveryRate: number;
   averageDeliveryTime: number;
 };
   };
   // Time-based metrics
-  averageDeliveryTime: number;,
+  averageDeliveryTime: number;
   averageOpenTime: number;
   peakSendTimes: Array<{,
   hour: number;
-  count: number;,
+  count: number;
   deliveryRate: number;
 }>;
 
 // Configuration
 }
 export interface EmailDeliveryConfig {
-  defaultProvider: EmailProvider;,
+  defaultProvider: EmailProvider;
   retryAttempts: number;
-  retryDelayMs: number;,
+  retryDelayMs: number;
   trackingEnabled: boolean;
-  enableBounceHandling: boolean;,
+  enableBounceHandling: boolean;
   enableAnalytics: boolean;
   webhookEndpoint?: string;
   webhookSecret?: string;
-  providerConfigs: {,
-  [key in EmailProvider]?: {,
+  providerConfigs: {
+  [key in EmailProvider]?: {
   apiKey?: string;
   endpoint?: string;
   customSettings?: Record<string, any>;
@@ -217,10 +217,10 @@ export interface EmailDeliveryConfig {
 // Email sending request
 }
 export interface EmailSendRequest {
-  type: EmailType;,
+  type: EmailType;
   recipient: string;
-  subject: string;,
-  content: {,
+  subject: string;
+  content: {
   text?: string;
   html?: string;
   templateId?: string;
@@ -260,7 +260,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   createdAt: new Date(),
   metadata: request.metadata,
   attempts: [],
-  tracking: {,
+  tracking: {
   opens: [],
   clicks: [],
   unsubscribes: [],
@@ -330,7 +330,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   /**
    * Add delivery tracking event
    */
-  public addTrackingEvent(emailId: string,)
+  public addTrackingEvent(emailId: string)
     eventType: 'open' | 'click' | 'unsubscribe',
     eventData: any): void {,
   const record = this.deliveryRecords.get(emailId);
@@ -409,7 +409,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   type: record.type,
   recipient: record.recipient,
   subject: record.subject,
-  content: {,
+  content: {
   html: record.providerData.htmlContent,
   text: record.providerData.textContent,
 },
@@ -463,7 +463,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   if (record) {
   record.attempts.push(attempt);
   this.deliveryRecords.set(emailId, record);
-  private handleStatusChange(record: EmailDeliveryRecord,)
+  private handleStatusChange(record: EmailDeliveryRecord)
   previousStatus: DeliveryStatus,
   newStatus: DeliveryStatus): void {,
   // Handle bounces
@@ -516,7 +516,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   this.updateStatus(emailId, event.status, {)
   providerData: event.providerData,
 });
-  private updateStatistics(previousStatus: DeliveryStatus,)
+  private updateStatistics(previousStatus: DeliveryStatus)
     newStatus: DeliveryStatus,
     emailType: EmailType,
     provider: EmailProvider): void {,
@@ -572,8 +572,7 @@ export class EmailDeliveryTracker extends EventEmitter {
       return 'security@example.com';
     case EmailType.MFA_CODE:
       return 'auth@example.com';
-    case EmailType.SECURITY_ALERT:
-      return 'alerts@example.com';,
+    case EmailType.SECURITY_ALERT: return 'alerts@example.com';
   default:
       return 'noreply@example.com';
   private delay(ms: number): Promise<void> {

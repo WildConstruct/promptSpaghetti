@@ -37,7 +37,7 @@ describe('DeviceFingerprintingService', () => {
   ipAddress: '192.168.1.100',
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
   acceptLanguage: 'en-US,en;q=0.9',
-  headers: {,
+  headers: {
   'accept-encoding': 'gzip, deflate, br',
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
 };
@@ -67,25 +67,25 @@ describe('DeviceFingerprintingService', () => {
   ipAddress: '10.0.0.1',
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
         headers: {},
-        clientData: {,
-  screen: {,
+        clientData: {
+  screen: {
   width: 2560,
   height: 1440,
   colorDepth: 24,
   pixelRatio: 2,
 },
-  canvas: {,
+  canvas: {
   fingerprint: 'unique_canvas_hash_12345',
   geometry: 'geometry_data',
   text: 'text_rendering_data',
 },
-  webgl: {,
+  webgl: {
   vendor: 'Intel Inc.',
   renderer: 'Intel Iris Pro OpenGL Engine',
   version: 'WebGL 1.0',
   extensions: ['WEBGL_debug_renderer_info', 'OES_texture_float'],
 },
-  audio: {,
+  audio: {
   fingerprint: 'audio_context_hash_67890',
   sampleRate: 48000,
   channelCount: 2,
@@ -166,7 +166,7 @@ describe('DeviceFingerprintingService', () => {
     test('should enhance location with GPS coordinates', async () => {
   const ipAddress = '192.168.1.50';
   const additionalContext = {
-  coordinates: {,
+  coordinates: {
   latitude: 37.7749,
   longitude: -122.4194,
   accuracy: 10,
@@ -204,7 +204,7 @@ describe('DeviceFingerprintingService', () => {
   ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         headers: {},
-        clientData: {,
+        clientData: {
   plugins: [,
             { name: 'Chrome PDF Plugin', filename: 'pdf', description: 'PDF support' }
           ]
@@ -224,7 +224,7 @@ describe('DeviceFingerprintingService', () => {
   ipAddress: '203.0.113.100',
         userAgent: 'Mozilla/5.0 (compatible; HeadlessChrome/91.0.4472.101)',
         headers: {},
-        clientData: {,
+        clientData: {
   plugins: [] // No plugins indicates possible automation,
 };
       const fingerprint = await service.generateFingerprint(context);
@@ -309,7 +309,7 @@ describe('DeviceFingerprintingService', () => {
   ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         headers: {},
-        clientData: {,
+        clientData: {
   plugins: [{ name: 'Flash', filename: 'flash.dll', description: 'Adobe Flash' }]
       };
       const fingerprint = await service.generateFingerprint(context);

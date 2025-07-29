@@ -14,72 +14,72 @@ export interface RestoreOptions {
   notify_collaborators?: boolean;
 }
 export interface RestoreConflict {
-  id: string;,
+  id: string;
   type: 'data_conflict' | 'workflow_conflict' | 'permission_conflict' | 'dependency_conflict';
-  element_id: string;,
+  element_id: string;
   element_type: 'node' | 'edge' | 'property' | 'metadata';
-  description: string;,
+  description: string;
   current_value: any;
-  restore_value: any;,
+  restore_value: any;
   suggested_resolution: 'keep_current' | 'use_restore' | 'merge' | 'manual';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   auto_resolvable: boolean;
 }
 export interface RestorePreview {
-  restore_id: string;,
+  restore_id: string;
   snapshot_id: string;
-  conflicts: RestoreConflict;,
-  changes_summary: {,
-  nodes_to_add: number;,
+  conflicts: RestoreConflict;
+  changes_summary: {
+  nodes_to_add: number;
   nodes_to_remove: number;
-  nodes_to_modify: number;,
+  nodes_to_modify: number;
   edges_to_add: number;
-  edges_to_remove: number;,
+  edges_to_remove: number;
   edges_to_modify: number;
   properties_to_change: number;
 };
   estimated_duration: number; // seconds,
   risk_level: 'low' | 'medium' | 'high' | 'critical';
-  backup_required: boolean;,
+  backup_required: boolean;
   collaborator_impact: {;
-  active_users: string;,
+  active_users: string;
   potential_conflicts: string;
   recommended_actions: string;
 };
 }
 export interface RestoreResult {
-  success: boolean;,
+  success: boolean;
   restore_id: string;
   backup_snapshot_id?: string;
-  conflicts_resolved: number;,
+  conflicts_resolved: number;
   conflicts_remaining: number;
-  changes_applied: {,
-  nodes_added: number;,
+  changes_applied: {
+  nodes_added: number;
   nodes_removed: number;
-  nodes_modified: number;,
+  nodes_modified: number;
   edges_added: number;
-  edges_removed: number;,
+  edges_removed: number;
   edges_modified: number;
   properties_changed: number;
 };
-  duration_ms: number;,
+  duration_ms: number;
   warnings: string;
   errors: string;
 }
 export interface RestoreState {
-  id: string;,
+  id: string;
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
   progress: number; // 0-100,
-  current_step: string;,
+  current_step: string;
   total_steps: number;
-  completed_steps: number;,
+  completed_steps: number;
   started_at: string;
   completed_at?: string;
   error_message?: string;
 }
 export class VersionRestoreManager {
   private activeRestores = new Map<string, RestoreState>();
-  private restoreHistory: RestoreResult = [];
+  private restoreHistory: RestoreResult[] = [];
   constructor();
     private apiClient: any,
     private projectId: string,
@@ -87,7 +87,7 @@ export class VersionRestoreManager {
     private versionHistoryManager: any
   ) {}
   // Create restore preview
-  async createRestorePreview(snapshotId: string,)
+  async createRestorePreview(snapshotId: string)
     currentGraphData: any,
     options: RestoreOptions = {}
   ): Promise<RestorePreview> {
@@ -104,7 +104,7 @@ export class VersionRestoreManager {
       console.error('Failed to create restore preview:', error);
       throw error;
   // Execute version restore
-  async executeRestore(snapshotId: string,)
+  async executeRestore(snapshotId: string)
     options: RestoreOptions = {},
     conflictResolutions: Record<string, 'keep_current' | 'use_restore' | 'merge' | 'custom'> = {}
   ): Promise<{ restoreId: string; result: Promise<RestoreResult> }> {
@@ -126,7 +126,7 @@ export class VersionRestoreManager {
     } catch (error) {
   console.error('Failed to execute restore:', error);
   throw error;
-  private async performRestore(restoreId: string,)
+  private async performRestore(restoreId: string)
   snapshotId: string,
   options: RestoreOptions,
   conflictResolutions: Record<string, string>): Promise<RestoreResult> {,
@@ -170,7 +170,7 @@ export class VersionRestoreManager {
   completed_steps: 4,
 });
       // Step 5: Calculate and prepare changes
-      const changesToApply = await this.calculateChangesToApply(;);
+      const changesToApply = await this.calculateChangesToApply(;
         currentGraphData,
         snapshotData,
         options,
@@ -231,7 +231,7 @@ export class VersionRestoreManager {
   backup_snapshot_id: backupSnapshotId,
   conflicts_resolved: 0,
   conflicts_remaining: 0,
-  changes_applied: {,
+  changes_applied: {
   nodes_added: 0,
   nodes_removed: 0,
   nodes_modified: 0,
@@ -254,7 +254,7 @@ export class VersionRestoreManager {
 },
   description: 'Automatic backup created before version restore',
         snapshot_type: 'backup',
-        trigger_event: 'pre_restore_backup';
+        trigger_event: 'pre_restore_backup'
   });
       return snapshot.id;
     } catch (error) {
@@ -268,7 +268,7 @@ export class VersionRestoreManager {
       console.error('Failed to get current graph data:', error);
       throw error;
   private async detectConflicts(snapshotData: any, currentData: any): Promise<RestoreConflict> {
-    const conflicts: RestoreConflict = [];
+    const conflicts: RestoreConflict[] = [];
     // Detect data conflicts
     conflicts.push(...this.detectDataConflicts(snapshotData, currentData));
     // Detect workflow conflicts
@@ -277,14 +277,14 @@ export class VersionRestoreManager {
     conflicts.push(...this.detectDependencyConflicts(snapshotData, currentData));
     return conflicts;
   private detectDataConflicts(snapshotData: any, currentData: any): RestoreConflict {
-    const conflicts: RestoreConflict = [];
+    const conflicts: RestoreConflict[] = [];
     // Compare nodes
     const currentNodes = new Map(currentData.nodes?.map((n: any) => [n.id, n]) || []);
     const snapshotNodes = new Map(snapshotData.nodes?.map((n: any) => [n.id, n]) || []);
     for (const [nodeId, snapshotNode] of snapshotNodes) {
       const currentNode = currentNodes.get(nodeId);
       if (currentNode && this.hasSignificantDifferences(currentNode, snapshotNode)) {
-        conflicts.push({)
+        conflicts.push({
   id: crypto.randomUUID(),
           type: 'data_conflict',
           element_id: nodeId,
@@ -303,7 +303,7 @@ export class VersionRestoreManager {
     for (const [edgeId, snapshotEdge] of snapshotEdges) {
       const currentEdge = currentEdges.get(edgeId);
       if (currentEdge && this.hasSignificantDifferences(currentEdge, snapshotEdge)) {
-        conflicts.push({)
+        conflicts.push({
   id: crypto.randomUUID(),
           type: 'data_conflict',
           element_id: edgeId,
@@ -318,10 +318,10 @@ export class VersionRestoreManager {
         });
     return conflicts;
   private detectWorkflowConflicts(snapshotData: any, currentData: any): RestoreConflict {
-    const conflicts: RestoreConflict = [];
+    const conflicts: RestoreConflict[] = [];
     // Check workflow state conflicts
     if (snapshotData.workflow_state !== currentData.workflow_state) {
-      conflicts.push({)
+      conflicts.push({
   id: crypto.randomUUID(),
         type: 'workflow_conflict',
         element_id: 'workflow_state',
@@ -336,7 +336,7 @@ export class VersionRestoreManager {
   });
     // Check approval status conflicts
     if (snapshotData.approval_status !== currentData.approval_status) {
-  conflicts.push({)
+  conflicts.push({
   id: crypto.randomUUID(),
   type: 'workflow_conflict',
   element_id: 'approval_status',
@@ -350,12 +350,12 @@ export class VersionRestoreManager {
 });
     return conflicts;
   private detectDependencyConflicts(snapshotData: any, currentData: any): RestoreConflict {
-    const conflicts: RestoreConflict = [];
+    const conflicts: RestoreConflict[] = [];
     // Check for missing dependencies
     const snapshotDependencies = snapshotData.dependencies || [];
     for (const dependency of snapshotDependencies) {
       if (!this.isDependencyAvailable(dependency)) {
-        conflicts.push({)
+        conflicts.push({
   id: crypto.randomUUID(),
           type: 'dependency_conflict',
           element_id: dependency.id,
@@ -369,12 +369,12 @@ export class VersionRestoreManager {
           auto_resolvable: false;
   });
     return conflicts;
-  private async resolveConflicts(conflicts: RestoreConflict,)
+  private async resolveConflicts(conflicts: RestoreConflict)
     conflictResolutions: Record<string, string>
   ): Promise<{ resolved: RestoreConflict; unresolved: RestoreConflict; warnings: string }> {
-  const resolved: RestoreConflict = [];
-  const unresolved: RestoreConflict = [];
-  const warnings: string = [];
+  const resolved: RestoreConflict[] = [];
+  const unresolved: RestoreConflict[] = [];
+  const warnings: string[] = [];
   for (const conflict of conflicts) {
   const resolution = conflictResolutions[conflict.id] || conflict.suggested_resolution;
   if (resolution === 'manual' || (!conflict.auto_resolvable && resolution !== 'keep_current' && resolution !== 'use_restore')) {
@@ -455,7 +455,7 @@ export class VersionRestoreManager {
   const validTransition = await this.validateWorkflowTransition(snapshotData.workflow_state);
   if (!validTransition) {
   throw new Error('Invalid workflow state transition');
-  private async calculateChangesToApply(currentData: any,)
+  private async calculateChangesToApply(currentData: any)
   snapshotData: any,
   options: RestoreOptions,
   resolvedConflicts: any): Promise<unknown> {,
@@ -469,13 +469,13 @@ export class VersionRestoreManager {
   properties_to_change: [],
 };
     switch (options.restore_mode) {
-  case 'full':,
+  case 'full':
   // Complete replacement
   return this.calculateFullRestore(currentData, snapshotData);
-  case 'selective':,
+  case 'selective':
   // Only restore specific elements (would need additional selection data)
   return this.calculateSelectiveRestore(currentData, snapshotData, options);
-  case 'merge':,
+  case 'merge':
   default:,
   // Intelligent merge
   return this.calculateMergeRestore(currentData, snapshotData, resolvedConflicts);

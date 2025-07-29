@@ -8,7 +8,7 @@ import { PerformanceProfiler, PerformanceProfilerConfig, globalPerformanceProfil
 // Mock performance API
 const mockPerformance = {
   now: jest.fn(() => Date.now()),
-  memory: {,
+  memory: {
   usedJSHeapSize: 50 * 1024 * 1024, // 50MB,
   totalJSHeapSize: 100 * 1024 * 1024, // 100MB,
   jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
@@ -40,7 +40,7 @@ describe('PerformanceProfiler', () => {
   enableRenderProfiling: true,
   enableCacheProfiling: true,
   trackingDuration: 600000,
-  alertThresholds: {,
+  alertThresholds: {
   updateLatency: 50,
   memoryUsage: 200 * 1024 * 1024,
   renderTime: 8,
@@ -123,8 +123,8 @@ describe('PerformanceProfiler', () => {
         // Simulate some work
         for (let i = 0; i < 1000; i++) {
           Math.sqrt(i);
-        return 'result';
-      };
+        return 'result'
+  };
       const result = profiler.sampleOperation(;);
         'test-domain',
         'test-operation',
@@ -305,7 +305,7 @@ describe('PerformanceProfiler', () => {
   profiler.on('configUpdated', configHandler);
   const newConfig = {
   sampleRate: 200,
-  alertThresholds: {,
+  alertThresholds: {
   updateLatency: 200,
   memoryUsage: 150 * 1024 * 1024,
   renderTime: 32,
@@ -319,7 +319,7 @@ describe('PerformanceProfiler', () => {
     it('should respect updated thresholds', () => {
   // Update threshold to be very low
   profiler.updateConfig({)
-  alertThresholds: {,
+  alertThresholds: {
   updateLatency: 1, // 1ms threshold,
   memoryUsage: 1024, // 1KB,
   renderTime: 1,

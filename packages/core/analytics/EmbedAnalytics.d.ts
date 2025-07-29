@@ -70,7 +70,7 @@ export interface PageContext {
     path: string;
     domain: string;
     language: string;
-    viewport: {,
+    viewport: {
         width: number;
         height: number;
     };
@@ -120,7 +120,7 @@ export interface DeviceContext {
     osVersion: string;
     browser: string;
     browserVersion: string;
-    resolution: {,
+    resolution: {
         width: number;
         height: number;
     };
@@ -144,11 +144,11 @@ export interface EmbedContext {
     id: string;
     version: string;
     type: string;
-    size: {,
+    size: {
         width: number;
         height: number;
     };
-    position: {,
+    position: {
         x: number;
         y: number;
     };

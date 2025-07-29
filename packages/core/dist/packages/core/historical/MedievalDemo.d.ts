@@ -3,34 +3,34 @@
  */
 export declare const MEDIEVAL_PERIODS: {
     EARLY_MEDIEVAL: {
-        name: string;
-        period: {
-            start: number;
-            end: number;
+        readonly name: "Early Medieval";
+        readonly period: {
+            readonly start: 476;
+            readonly end: 1000;
         };
-        region: string[];
-        accuracy: string;
-        description: string;
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism";
     };
     HIGH_MEDIEVAL: {
-        name: string;
-        period: {
-            start: number;
-            end: number;
+        readonly name: "High Medieval";
+        readonly period: {
+            readonly start: 1000;
+            readonly end: 1300;
         };
-        region: string[];
-        accuracy: string;
-        description: string;
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "High medieval period of cathedral building, crusades, and scholasticism";
     };
     LATE_MEDIEVAL: {
-        name: string;
-        period: {
-            start: number;
-            end: number;
+        readonly name: "Late Medieval";
+        readonly period: {
+            readonly start: 1300;
+            readonly end: 1500;
         };
-        region: string[];
-        accuracy: string;
-        description: string;
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "Late medieval period transitioning toward Renaissance";
     };
 };
 /**

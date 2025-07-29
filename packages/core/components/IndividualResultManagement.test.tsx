@@ -17,7 +17,7 @@ const mockResults: PreviewResultWithPath = [
   executionTimeMs: 100,
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: [],
-  executionPath: {,
+  executionPath: {
   id: 'exec_1',
   seed: 12345,
   startTime: Date.now() - 1000,
@@ -34,7 +34,7 @@ const mockResults: PreviewResultWithPath = [
   executionTimeMs: 150,
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: [],
-  executionPath: {,
+  executionPath: {
   id: 'exec_2',
   seed: 67890,
   startTime: Date.now() - 1000,

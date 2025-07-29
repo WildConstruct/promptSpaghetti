@@ -224,7 +224,13 @@
                                                                                                 /**
                                                                                                  * CSP violation report handler
                                                                                                  */
-                                                                                                function: createCSPReportHandler() } } } } } }
+                                                                                                function: createCSPReportHandler()
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     }, { return:  };
                                                                     (req, res) => {
                                                                         try {

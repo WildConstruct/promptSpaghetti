@@ -59,7 +59,7 @@ export declare class WeightedPattern implements SequencePattern {
 /**
  * Factory function to create sequence patterns
  */
-export declare function createSequencePattern(type: SequencePattern['type'],)
+export declare function createSequencePattern(type: SequencePattern['type'])
   config?: SequencePatternConfig
 ): SequencePattern;
 /**
@@ -98,7 +98,7 @@ export declare class SequentialNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Sequential nodes
  */
-export declare function createSequentialNode(id: string,)
+export declare function createSequentialNode(id: string)
   sequence: string[],
   patternType?: SequencePattern['type'],
   patternConfig?: SequencePatternConfig

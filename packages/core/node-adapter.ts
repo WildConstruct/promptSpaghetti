@@ -78,7 +78,7 @@ export class NodeAdapter {
   return {
   ...baseInternal,
   type: 'WeightedChoice',
-  choices: ui.choices.map(choice => ({,)
+  choices: ui.choices.map(choice => ({)
   value: choice,
   weight: 1 // Default equal weights,
 }))
@@ -112,7 +112,7 @@ export class NodeAdapter {
       return {
   ...baseInternal,
   type: 'Conditional',
-  branches: ui.conditions.map(condition => ({,)
+  branches: ui.conditions.map(condition => ({)
   condition: condition.when,
   output: condition.then,
   label: condition.label,
@@ -124,7 +124,7 @@ export class NodeAdapter {
   ...baseInternal,
   type: 'Sequential',
   sequence: ui.items,
-  pattern: {,
+  pattern: {
   type: this.mapSequenceMode(ui.mode),
 };
     default:

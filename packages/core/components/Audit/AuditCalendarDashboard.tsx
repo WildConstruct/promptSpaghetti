@@ -60,23 +60,23 @@ const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 interface CalendarState {
-  schedules: AuditSchedule;,
+  schedules: AuditSchedule;
   currentView: 'month' | 'week' | 'day' | 'agenda';
-  selectedDate: Moment;,
+  selectedDate: Moment;
   selectedSchedule: AuditSchedule | null;
-  loading: boolean;,
+  loading: boolean;
   showCreateModal: boolean;
-  showEditModal: boolean;,
+  showEditModal: boolean;
   upcomingDeadlines: AuditSchedule;
-  overdueSchedules: AuditSchedule;,
+  overdueSchedules: AuditSchedule;
   calendarEvents: unknown;
   interface FilterState {
-  activityTypes: AuditActivityType;,
+  activityTypes: AuditActivityType;
   priorities: SchedulePriority;
-  statuses: ScheduleStatus;,
+  statuses: ScheduleStatus;
   assignees: string;
   dateRange: [Moment?, Moment?];
-  showCompleted: boolean;,
+  showCompleted: boolean;
   showCancelled: boolean;
   /**
   * Main Audit Calendar Dashboard Component
@@ -125,13 +125,13 @@ interface CalendarState {
   view_type: calendarState.currentView === 'agenda' ? 'month' : calendarState.currentView,
   start_date: startDate.toDate(),
   end_date: endDate.toDate(),
-  filters: {,
+  filters: {
   activity_types: filters.activityTypes.length > 0 ? filters.activityTypes : undefined,
   priorities: filters.priorities.length > 0 ? filters.priorities : undefined,
   statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
   assignees: filters.assignees.length > 0 ? filters.assignees : undefined,
 },
-  display_options: {,
+  display_options: {
   show_completed: filters.showCompleted,
   show_cancelled: filters.showCancelled,
   color_by: 'priority',
@@ -662,8 +662,8 @@ const ScheduleDetailsView: React.FC<{,
 // Schedule List View Component  
 const ScheduleListView: React.FC<{,
   schedules: unknown;
-  onScheduleClick: (schedule: Error) => void;,
-  onScheduleUpdate: (scheduleId: string, updates: unknown) => void;,
+  onScheduleClick: (schedule: Error) => void;
+  onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
   loading: boolean;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate, loading }) => {
   const columns = [;
@@ -840,8 +840,8 @@ const getEventBadgeStatus = (;);
   if (status === ScheduleStatus.IN_PROGRESS) return 'processing';
   if (priority === SchedulePriority.CRITICAL) return 'error';
   if (priority === SchedulePriority.HIGH) return 'warning';
-  return 'default';
-};
+  return 'default'
+  };
 const getPriorityColor = (priority: SchedulePriority): string => {
   const colors = {
   [SchedulePriority.LOW]: 'green',
@@ -850,8 +850,8 @@ const getPriorityColor = (priority: SchedulePriority): string => {
   [SchedulePriority.CRITICAL]: 'red',
   [SchedulePriority.REGULATORY]: 'purple',
 };
-  return colors[priority] || 'blue';
-};
+  return colors[priority] || 'blue'
+  };
 const getStatusColor = (status: ScheduleStatus): string => {
   const colors = {
   [ScheduleStatus.SCHEDULED]: 'blue',
@@ -862,13 +862,13 @@ const getStatusColor = (status: ScheduleStatus): string => {
   [ScheduleStatus.FAILED]: 'red',
   [ScheduleStatus.OVERDUE]: 'red',
 };
-  return colors[status] || 'blue';
-};
+  return colors[status] || 'blue'
+  };
 
 // Edit Schedule Modal Component
 const EditScheduleModal: React.FC<{,
   visible: boolean;
-  schedule: AuditSchedule | null;,
+  schedule: AuditSchedule | null;
   onCancel: () => void;
   onSubmit: (updates: unknown) => void;
 }> = ({ visible, schedule, onCancel, onSubmit }) => {
@@ -1006,7 +1006,7 @@ const EditScheduleModal: React.FC<{,
 // Overdue Schedules View Component
 const OverdueSchedulesView: React.FC<{,
   schedules: AuditSchedule;
-  onScheduleClick: (schedule: AuditSchedule) => void;,
+  onScheduleClick: (schedule: AuditSchedule) => void;
   onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate }) => {
   const columns = [;

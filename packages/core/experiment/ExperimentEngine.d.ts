@@ -106,7 +106,7 @@ export declare class ExperimentEngine {
 /**
  * Factory function to create experiment engine with default configuration
  */
-export declare function createExperimentEngine(storage: ExperimentStorage,)
+export declare function createExperimentEngine(storage: ExperimentStorage)
   metrics: ExperimentMetrics,
   config?: Partial<ABTestingConfig>,
   allocationConfig?: Partial<AllocationServiceConfig>

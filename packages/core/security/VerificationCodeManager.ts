@@ -55,40 +55,40 @@ export enum VerificationCodeType {
   rateLimitWindow: number;         // Rate limiting window in milliseconds,
   rateLimitCount: number;          // Maximum codes per window,
   cleanupInterval: number;         // Cleanup interval in milliseconds,
-  codeFormats: {,
+  codeFormats: {
   [key in VerificationCodeType]: CodeFormat;
 };
-  expirationTimes: {,
+  expirationTimes: {
   [key in VerificationCodeType]: number;
 };
-  retryLimits: {,
+  retryLimits: {
   [key in VerificationCodeType]: number;
 };
-  enableSecurityLogging: boolean;,
+  enableSecurityLogging: boolean;
   antiEnumerationDelay: number;    // Delay to prevent enumeration attacks
   requireSecureDelivery: boolean;  // Require secure delivery channels
 
 // Verification Code Data
 }
 export interface VerificationCode {
-  id: string;,
+  id: string;
   userId: string;
-  type: VerificationCodeType;,
+  type: VerificationCodeType;
   format: CodeFormat;
-  hashedCode: string;,
+  hashedCode: string;
   salt: string;
-  status: CodeStatus;,
+  status: CodeStatus;
   createdAt: Date;
   expiresAt: Date;
   usedAt?: Date;
   revokedAt?: Date;
-  attempts: number;,
+  attempts: number;
   maxAttempts: number;
-  deliveryChannel: DeliveryChannel;,
+  deliveryChannel: DeliveryChannel;
   deliveryAddress: string;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
-  metadata: {,
+  metadata: {
   purpose?: string;
   requestSource?: string;
   deviceFingerprint?: string;
@@ -98,9 +98,9 @@ export interface VerificationCode {
   revocationReason?: string;
   additionalContext?: Record<string, any>;
 };
-  securityFlags: {,
+  securityFlags: {
   highRisk: boolean;
-  multipleAttempts: boolean;,
+  multipleAttempts: boolean;
   suspiciousActivity: boolean;
   deviceMismatch: boolean;
 };
@@ -108,11 +108,11 @@ export interface VerificationCode {
 // Code Generation Request
 }
 export interface CodeGenerationRequest {
-  userId: string;,
+  userId: string;
   type: VerificationCodeType;
-  deliveryChannel: DeliveryChannel;,
+  deliveryChannel: DeliveryChannel;
   deliveryAddress: string;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   expirationMinutes?: number;
   maxAttempts?: number;
@@ -120,9 +120,9 @@ export interface CodeGenerationRequest {
   // Code Validation Request
 }
 export interface CodeValidationRequest {
-  userId: string;,
+  userId: string;
   code: string;
-  type: VerificationCodeType;,
+  type: VerificationCodeType;
   ipAddress: string;
   userAgent: string;
   deviceFingerprint?: string;
@@ -138,9 +138,9 @@ export interface ValidationResult {
   // Rate Limiting Data
 }
 export interface RateLimitData {
-  count: number;,
+  count: number;
   resetTime: number;
-  lastRequest: Date;,
+  lastRequest: Date;
   violations: number;
   // Security Events
 }
@@ -157,16 +157,16 @@ export enum SecurityEvent {
   CODE_CLEANUP = 'code_cleanup'
   // Statistics
   export interface CodeStatistics {
-  totalCodes: number;,
+  totalCodes: number;
   activeCodes: number;
-  usedCodes: number;,
+  usedCodes: number;
   expiredCodes: number;
-  revokedCodes: number;,
+  revokedCodes: number;
   codesByType: Record<VerificationCodeType, number>;
   codesByChannel: Record<DeliveryChannel, number>;
-  successRate: number;,
+  successRate: number;
   averageAttempts: number;
-  securityViolations: number;,
+  securityViolations: number;
   rateLimitViolations: number;
   averageCodeLifetime: number;
   /**
@@ -225,7 +225,7 @@ export class VerificationCodeManager extends EventEmitter {
         deliveryAddress: request.deliveryAddress,
         ipAddress: request.ipAddress,
         userAgent: request.userAgent,
-        metadata: {,
+        metadata: {
   purpose: `${request.type}_verification`}
 },
   requestSource: 'verification_code_manager',
@@ -233,7 +233,7 @@ export class VerificationCodeManager extends EventEmitter {
           deliveryStatus: 'pending',
           ...request.metadata
   },
-  securityFlags: {,
+  securityFlags: {
   highRisk: false,
   multipleAttempts: false,
   suspiciousActivity: false,
@@ -505,7 +505,7 @@ export class VerificationCodeManager extends EventEmitter {
   rateLimitWindow: 15 * 60 * 1000, // 15 minutes,
   rateLimitCount: 5,
   cleanupInterval: 30 * 60 * 1000, // 30 minutes,
-  codeFormats: {,
+  codeFormats: {
   [VerificationCodeType.EMAIL_VERIFICATION]: CodeFormat.NUMERIC_6,
   [VerificationCodeType.SMS_VERIFICATION]: CodeFormat.NUMERIC_6,
   [VerificationCodeType.TOTP_BACKUP]: CodeFormat.NUMERIC_8,
@@ -515,7 +515,7 @@ export class VerificationCodeManager extends EventEmitter {
   [VerificationCodeType.LOGIN_CONFIRMATION]: CodeFormat.NUMERIC_4,
   [VerificationCodeType.TRANSACTION_APPROVAL]: CodeFormat.NUMERIC_6,
 },
-  expirationTimes: {,
+  expirationTimes: {
   [VerificationCodeType.EMAIL_VERIFICATION]: 30 * 60 * 1000, // 30 minutes,
   [VerificationCodeType.SMS_VERIFICATION]: 10 * 60 * 1000, // 10 minutes,
   [VerificationCodeType.TOTP_BACKUP]: 5 * 60 * 1000, // 5 minutes,
@@ -525,7 +525,7 @@ export class VerificationCodeManager extends EventEmitter {
   [VerificationCodeType.LOGIN_CONFIRMATION]: 2 * 60 * 1000, // 2 minutes,
   [VerificationCodeType.TRANSACTION_APPROVAL]: 5 * 60 * 1000 // 5 minutes,
 },
-  retryLimits: {,
+  retryLimits: {
   [VerificationCodeType.EMAIL_VERIFICATION]: 5,
   [VerificationCodeType.SMS_VERIFICATION]: 3,
   [VerificationCodeType.TOTP_BACKUP]: 3,
@@ -674,7 +674,7 @@ export class VerificationCodeManager extends EventEmitter {
   return new Promise(resolve => {)
   setTimeout(resolve, this.config.antiEnumerationDelay);
 });
-  private logSecurityEvent(event: SecurityEvent,)
+  private logSecurityEvent(event: SecurityEvent)
     details: Record<string, any>,
     ipAddress: string = 'system',
     userAgent: string = 'system'): void {,

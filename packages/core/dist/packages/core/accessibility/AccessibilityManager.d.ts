@@ -199,14 +199,19 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
     * Create or update user accessibility profile
     */
-    createAccessibilityProfile(): any;
-    userId: string;
-    profileData: Partial<UserAccessibilityProfile>;
+    createAccessibilityProfile(userId: string, profileData: Partial<UserAccessibilityProfile>): Promise<UserAccessibilityProfile>;
     /**
      * Analyze user context and recommend accessibility accommodations
      */
-    analyzeAccessibilityNeeds(): any;
-    userId: string;
-    context: AccessibilityContext;
+    analyzeAccessibilityNeeds(userId: string, context: AccessibilityContext): Promise<{
+        recommendedFallbacks: FallbackMethod;
+        requiredAdaptations: InterfaceAdaptation;
+        estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
+        alternatives: Array<{}, method>;
+    }>;
+    string: any;
+    accessibility: number;
+    estimated_time: number;
+    requirements: string;
 }
 //# sourceMappingURL=AccessibilityManager.d.ts.map

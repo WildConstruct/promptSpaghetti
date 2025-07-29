@@ -27,7 +27,9 @@ interface WorkflowStateManagerProps {
   onStateChange?: (newStateId: string) => void;
   onLockAcquired?: (lockId: string) => void;
   onLockReleased?: (lockId: string) => void;
-  export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({,)
+}
+
+export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
   workspaceId,
   resourceId,
   currentUserId,

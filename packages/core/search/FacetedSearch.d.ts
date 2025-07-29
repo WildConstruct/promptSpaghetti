@@ -80,7 +80,7 @@ export interface FacetMetadata {
         field: string;
         value: any;
     };
-    analytics: {,
+    analytics: {
         totalSelections: number;
         popularValues: string[];
         averageSelections: number;
@@ -164,7 +164,7 @@ export interface FacetResult {
         selectedMax?: number;
     };
     hierarchy?: FacetHierarchy;
-    metadata: {,
+    metadata: {
         totalOptions: number;
         selectedOptions: number;
         hasMore: boolean;
@@ -253,24 +253,24 @@ export interface IndexStatistics {
     totalFields: number;
     indexSize: number;
     lastUpdated: Date;
-    performance: {,
+    performance: {
         averageSearchTime: number;
         averageFacetTime: number;
         cacheHitRate: number;
     };
 
 export interface IndexConfiguration {
-    analyzer: {,
+    analyzer: {
         default: string;
         text: string;
         keyword: string;
     };
-    faceting: {,
+    faceting: {
         defaultLimit: number;
         maxFacets: number;
         enableHierarchical: boolean;
     };
-    performance: {,
+    performance: {
         enableCaching: boolean;
         cacheSize: number;
         cacheTtl: number;
@@ -278,7 +278,7 @@ export interface IndexConfiguration {
 
 export interface SearchConfiguration {
     index: IndexConfiguration;
-    query: {,
+    query: {
         defaultOperator: 'and' | 'or';
         enableFuzzy: boolean;
         fuzzyDistance: number;
@@ -286,19 +286,19 @@ export interface SearchConfiguration {
         enableStemming: boolean;
         minShouldMatch?: string;
     };
-    faceting: {,
+    faceting: {
         enableRealTime: boolean;
         maxFacetOptions: number;
         enableHierarchical: boolean;
         enableRanges: boolean;
     };
-    suggestions: {,
+    suggestions: {
         enableAutoComplete: boolean;
         enableCorrections: boolean;
         maxSuggestions: number;
         minQueryLength: number;
     };
-    performance: {,
+    performance: {
         enableCaching: boolean;
         debounceDelay: number;
         maxCacheSize: number;

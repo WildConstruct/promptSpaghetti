@@ -74,7 +74,7 @@ export interface UserAccessibilityProfile {
     assistiveTechnologies: AssistiveTechnology[];
     preferredFallbacks: FallbackMethod[];
     interfaceAdaptations: InterfaceAdaptation[];
-    customSettings: {,
+    customSettings: {
         fontSize: number;
         contrastRatio: number;
         timeoutMultiplier: number;
@@ -82,9 +82,9 @@ export interface UserAccessibilityProfile {
         visualEnabled: boolean;
         hapticEnabled: boolean;
         animationsReduced: boolean;
-        colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy';
-    };
-    verificationMethods: {,
+        colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy'
+  };
+    verificationMethods: {
         primary: string[];
         fallback: string[];
         emergency: string[];
@@ -96,7 +96,7 @@ export interface UserAccessibilityProfile {
         email: string;
         canAuthorize: boolean;
     }>;
-    documentation: {,
+    documentation: {
         medicalCertification?: string;
         accommodationLetter?: string;
         renewalDate?: Date;
@@ -108,25 +108,25 @@ export interface AccessibilityContext {
     userAgent: string;
     screenReaderDetected: boolean;
     assistiveTechDetected: AssistiveTechnology[];
-    deviceCapabilities: {,
+    deviceCapabilities: {
         hasCamera: boolean;
         hasMicrophone: boolean;
         hasTouch: boolean;
         hasKeyboard: boolean;
         hasMouse: boolean;
-        screenSize: {,
+        screenSize: {
             width: number;
             height: number;
         };
         colorDepth: number;
     };
-    environmentalFactors: {,
+    environmentalFactors: {
         isNoisy: boolean;
         isLowLight: boolean;
         isPublicSpace: boolean;
         hasTimeConstraints: boolean;
     };
-    sessionContext: {,
+    sessionContext: {
         isEmergency: boolean;
         attemptCount: number;
         timeRemaining: number;
@@ -137,24 +137,24 @@ export interface FallbackConfiguration {
     method: FallbackMethod;
     enabled: boolean;
     priority: number;
-    requirements: {,
+    requirements: {
         needsAudio: boolean;
         needsVisual: boolean;
         needsInteraction: boolean;
         minimumTime: number;
         maximumTime: number;
     };
-    accessibility: {,
+    accessibility: {
         supportedNeeds: AccessibilityNeed[];
         incompatibleWith: AccessibilityNeed[];
         assistiveTechSupport: AssistiveTechnology[];
     };
-    implementation: {,
+    implementation: {
         component: string;
         params: Record<string, unknown>;
         validationRules: string[];
     };
-    compliance: {,
+    compliance: {
         wcagLevel: 'A' | 'AA' | 'AAA';
         section508: boolean;
         ada: boolean;
@@ -182,7 +182,7 @@ export interface EmergencyBypass {
     expiresAt: Date;
     usageCount: number;
     maxUsages: number;
-    conditions: {,
+    conditions: {
         ipRestriction?: string[];
         timeRestriction?: {
             start: string;
@@ -258,7 +258,7 @@ export declare class AccessibilityManager extends EventEmitter {
         adaptations: Array<{,
             type: InterfaceAdaptation;
             priority: 'high' | 'medium' | 'low';
-            implementation: {,
+            implementation: {
                 css?: Record<string, string>;
                 js?: string;
                 html?: string;
@@ -275,11 +275,11 @@ export declare class AccessibilityManager extends EventEmitter {
         usersWithProfiles: number;
         accessibilityNeeds: Record<AccessibilityNeed, number>;
         fallbackUsage: Record<FallbackMethod, number>;
-        complianceScores: {,
+        complianceScores: {
             average: number;
             distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number>;
         };
-        emergencyBypasses: {,
+        emergencyBypasses: {
             active: number;
             used: number;
             expired: number;
@@ -287,8 +287,8 @@ export declare class AccessibilityManager extends EventEmitter {
         topIssues: Array<{,
             issue: string;
             frequency: number;
-            severity: 'critical' | 'major' | 'minor';
-        }>;
+            severity: 'critical' | 'major' | 'minor'
+  }>;
     };
     private calculateDifficultyScore;
     private generateAuthenticationAlternatives;

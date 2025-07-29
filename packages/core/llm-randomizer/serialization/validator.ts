@@ -4,20 +4,20 @@
 import { NodeTypeEnum } from '../../graphSchema';
 
 export interface ValidationResult {
-  isValid: boolean;,
+  isValid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
 }
 export interface ValidationError {
-  type: 'syntax' | 'semantic' | 'schema';,
+  type: 'syntax' | 'semantic' | 'schema';
   message: string;
   line?: number;
   column?: number;
   nodeId?: string;
-  severity: 'error' | 'warning';
-}
+  severity: 'error' | 'warning'
+  }
 export interface ValidationWarning {
-  type: 'optimization' | 'compatibility' | 'best-practice';,
+  type: 'optimization' | 'compatibility' | 'best-practice';
   message: string;
   suggestion?: string;
   nodeId?: string;
@@ -26,17 +26,17 @@ export interface ParsedGraph {
   version: string;
   checksum?: string;
   metadata?: Record<string, any>;
-  nodes: ParsedNode;,
+  nodes: ParsedNode;
   edges: ParsedEdge;
 }
 export interface ParsedNode {
-  id: string;,
+  id: string;
   type: string;
   props?: Record<string, any>;
   inputs?: string;
 }
 export interface ParsedEdge {
-  source: string;,
+  source: string;
   target: string;
 }
 export class FormatValidator {
@@ -67,7 +67,7 @@ export class FormatValidator {
   type: 'syntax',
         message: `Parse error: ${error.message}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
     result.isValid = result.errors.filter(e => e.severity === 'error').length === 0;
     return result;
@@ -204,7 +204,7 @@ export class FormatValidator {
   type: 'schema',
         message: `Unsupported version: ${parsed.version}. Supported versions: ${this.SUPPORTED_VERSIONS.join(', ')}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
     // Check nodes
     if (parsed.nodes.length === 0) {
@@ -227,7 +227,7 @@ export class FormatValidator {
           message: `Node ${node.id} missing required type field`}
 },
   nodeId: node.id,
-          severity: 'error';
+          severity: 'error'
   });
       } else if (!this.VALID_NODE_TYPES.includes(node.type as any)) {
         result.errors.push({)
@@ -235,7 +235,7 @@ export class FormatValidator {
           message: `Node ${node.id} has invalid type: ${node.type}`}
 },
   nodeId: node.id,
-          severity: 'error';
+          severity: 'error'
   });
       // Validate node ID format
       if (node.id && !/^[a-zA-Z0-9_-]+$/.test(node.id)) {
@@ -244,7 +244,7 @@ export class FormatValidator {
           message: `Node ID ${node.id} contains invalid characters. Use only alphanumeric, underscore, and hyphen.`}
 },
   nodeId: node.id,
-          severity: 'error';
+          severity: 'error'
   });
     });
   /**
@@ -262,7 +262,7 @@ export class FormatValidator {
         message: `Duplicate node ID: ${id}`}
 },
   nodeId: id,
-        severity: 'error';
+        severity: 'error'
   });
     });
     // Validate edge references
@@ -272,14 +272,14 @@ export class FormatValidator {
   type: 'semantic',
           message: `Edge references non-existent source node: ${edge.source}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
       if (!nodeIds.has(edge.target)) {
         result.errors.push({)
   type: 'semantic',
           message: `Edge references non-existent target node: ${edge.target}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
     });
     // Validate node input references
@@ -292,7 +292,7 @@ export class FormatValidator {
               message: `Node ${node.id} references non-existent input: ${inputId}`}
 },
   nodeId: node.id,
-              severity: 'error';
+              severity: 'error'
   });
         });
     });
@@ -314,7 +314,7 @@ export class FormatValidator {
           message: `Cycle detected: ${path.join(' -> ')} -> ${nodeId}`}
 },
   nodeId: nodeId,
-          severity: 'error';
+          severity: 'error'
   });
         return true;
       if (visited.has(nodeId)) {
@@ -346,7 +346,7 @@ export class FormatValidator {
             message: `${node.type} node ${node.id} missing required choices array`}
 },
   nodeId: node.id,
-            severity: 'error';
+            severity: 'error'
   });
         } else {
           node.props.choices.forEach((choice: any, index: number) => {
@@ -356,7 +356,7 @@ export class FormatValidator {
                 message: `${node.type} node ${node.id} choice ${index} missing value`}
 },
   nodeId: node.id,
-                severity: 'error';
+                severity: 'error'
   });
             if (typeof choice.weight !== 'number' || choice.weight < 0) {
               result.errors.push({)
@@ -364,7 +364,7 @@ export class FormatValidator {
                 message: `${node.type} node ${node.id} choice ${index} has invalid weight`}
 },
   nodeId: node.id,
-                severity: 'error';
+                severity: 'error'
   });
           });
         break;
@@ -376,7 +376,7 @@ export class FormatValidator {
             message: `${node.type} node ${node.id} missing required key property`}
 },
   nodeId: node.id,
-            severity: 'error';
+            severity: 'error'
   });
         break;
       case 'Include':
@@ -386,7 +386,7 @@ export class FormatValidator {
             message: `Include node ${node.id} missing required name property`}
 },
   nodeId: node.id,
-            severity: 'error';
+            severity: 'error'
   });
         break;
     });

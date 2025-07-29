@@ -13,18 +13,18 @@
  */
 
 export interface IdentityValidationRequest {
-  userId: string;,
+  userId: string;
   requestId: string;
-  timestamp: number;,
+  timestamp: number;
   type: IdentityValidationType;
-  data: IdentityValidationData;,
+  data: IdentityValidationData;
   status: ValidationStatus;
-  metadata: {,
-  ipAddress: string;,
+  metadata: {
+  ipAddress: string;
   userAgent: string;
-  sessionId: string;,
-  requestSource: 'profile_setup' | 'manual_request' | 'system_triggered';
-};
+  sessionId: string;
+  requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
+  };
 }
 export type IdentityValidationType = 
   | 'basic_profile'
@@ -54,26 +54,26 @@ export interface IdentityValidationData {
   // Contact Information
   email?: string;
   phoneNumber?: string;
-  address?: {,
-  street: string;,
+  address?: {
+  street: string;
   city: string;
-  state: string;,
+  state: string;
   postalCode: string;
   country: string;
 };
   // Government ID
   governmentId?: {
-  type: 'passport' | 'drivers_license' | 'national_id';,
+  type: 'passport' | 'drivers_license' | 'national_id';
   number: string;
-  expirationDate: string;,
+  expirationDate: string;
   issuingAuthority: string;
   documentImages: string; // Base64 or file URLs,
 };
   // Professional Information
   professionalCredentials?: {
-  role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';,
+  role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';
   experience: 'student' | 'emerging' | 'professional' | 'veteran';
-  credentials: ProfessionalCredential;,
+  credentials: ProfessionalCredential;
   portfolio: PortfolioItem;
 };
   // Industry Affiliations
@@ -84,7 +84,7 @@ export interface IdentityValidationData {
 };
   // Social Media Verification
   socialMediaProfiles?: {
-  platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';,
+  platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';
   url: string;
   verified: boolean;
   followerCount?: number;
@@ -92,33 +92,33 @@ export interface IdentityValidationData {
 }[];
   // Payment Method
   paymentMethod?: {
-  type: 'bank_account' | 'credit_card' | 'paypal';,
+  type: 'bank_account' | 'credit_card' | 'paypal';
   last4: string;
-  verified: boolean;,
+  verified: boolean;
   country: string;
 };
 }
 export interface ProfessionalCredential {
-  type: 'degree' | 'certificate' | 'award' | 'credit';,
+  type: 'degree' | 'certificate' | 'award' | 'credit';
   title: string;
-  institution: string;,
+  institution: string;
   year: number;
   verificationStatus: ValidationStatus;
   documentUrl?: string;
 }
 export interface PortfolioItem {
-  type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';,
+  type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
   title: string;
   description: string;
   url?: string;
   thumbnailUrl?: string;
-  year: number;,
+  year: number;
   role: string;
   verificationStatus: ValidationStatus;
   imdbUrl?: string;
 }
 export interface Certification {
-  name: string;,
+  name: string;
   issuingBody: string;
   certificationNumber?: string;
   issueDate: number;
@@ -126,42 +126,42 @@ export interface Certification {
   verificationStatus: ValidationStatus;
 }
 export interface ValidationResult {
-  requestId: string;,
+  requestId: string;
   userId: string;
-  type: IdentityValidationType;,
+  type: IdentityValidationType;
   status: ValidationStatus;
   score: number; // 0-100,
   confidence: number; // 0-100,
   verifiedAt: number;
   expiresAt?: number;
-  evidence: ValidationEvidence;,
+  evidence: ValidationEvidence;
   flags: ValidationFlag;
   reviewNotes?: string;
   nextSteps?: string;
 }
 export interface ValidationEvidence {
-  type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';,
+  type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
   source: string;
-  confidence: number;,
+  confidence: number;
   timestamp: number;
   data: Record<string, unknown>;
 }
 export interface ValidationFlag {
-  type: 'warning' | 'error' | 'info';,
+  type: 'warning' | 'error' | 'info';
   code: string;
-  message: string;,
+  message: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   requiresAction: boolean;
 }
 export interface TrustScore {
   overall: number; // 0-100,
-  components: {,
-  identity: number;,
+  components: {
+  identity: number;
   professional: number;
-  community: number;,
+  community: number;
   activity: number;
 };
-  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';,
+  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
   badges: string;
   lastUpdated: number;
 }
@@ -181,7 +181,7 @@ export class IdentityValidationService {
     const sampleUsers = [;
       {
         userId: 'creator-johnsmith',
-        trustScore: {,
+        trustScore: {
   overall: 92,
           components: { identity: 95, professional: 90, community: 88, activity: 95 },
           tier: 'professional' as const,
@@ -190,7 +190,7 @@ export class IdentityValidationService {
   }
       {
         userId: 'creator-maryjones',
-        trustScore: {,
+        trustScore: {
   overall: 88,
           components: { identity: 90, professional: 85, community: 92, activity: 85 },
           tier: 'verified' as const,
@@ -216,7 +216,7 @@ export class IdentityValidationService {
   type,
   data: data as IdentityValidationData,
   status: 'pending',
-  metadata: {,
+  metadata: {
   ipAddress: metadata.ipAddress || '127.0.0.1',
   userAgent: metadata.userAgent || 'Unknown',
   sessionId: metadata.sessionId || 'session_' + Date.now(),
@@ -329,8 +329,8 @@ export class IdentityValidationService {
     const criticalFlags = flags.filter(f => f.severity === 'critical');
     const highFlags = flags.filter(f => f.severity === 'high');
     if (criticalFlags.length > 0 || score < 30) {
-      status = 'rejected';
-    } else if (highFlags.length > 0 || score < 60) {
+      status = 'rejected'
+  } else if (highFlags.length > 0 || score < 60) {
   status = 'requires_update';
   return {
   requestId: request.requestId,
@@ -515,7 +515,7 @@ export class IdentityValidationService {
     else if (overall >= 40) tier = 'basic';
     return {
   overall,
-  components: {,
+  components: {
   identity: identityScore,
   professional: professionalScore,
   community: communityScore,
@@ -550,12 +550,12 @@ export class IdentityValidationService {
   /**
   * Get user validation summary
   */
-  public getUserValidationSummary(userId: string): {,
-  totalRequests: number;,
+  public getUserValidationSummary(userId: string): {
+  totalRequests: number;
   approvedCount: number;
-  pendingCount: number;,
+  pendingCount: number;
   rejectedCount: number;
-  trustScore: TrustScore | null;,
+  trustScore: TrustScore | null;
   completedValidations: IdentityValidationType;
   missingValidations: IdentityValidationType;
   const userRequests = this.getUserValidations(userId);
@@ -607,9 +607,9 @@ class PhoneVerificationService {
 };
 class DocumentVerificationService {
   async verify(document: NonNullable<IdentityValidationData['governmentId']>): Promise<{,
-  valid: boolean;,
+  valid: boolean;
   confidence: number;
-  expired: boolean;,
+  expired: boolean;
   documentType: string;
 }> {
   // Mock document validation
@@ -622,7 +622,7 @@ class DocumentVerificationService {
 };
 class SocialMediaVerificationService {
   async verify(profiles: NonNullable<IdentityValidationData['socialMediaProfiles']>): Promise<{,
-  averageScore: number;,
+  averageScore: number;
   confidence: number;
   verifiedProfiles: number;
 }> {

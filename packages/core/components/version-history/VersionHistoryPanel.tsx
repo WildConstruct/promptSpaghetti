@@ -5,10 +5,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { VersionHistoryManager, VersionSnapshot, Branch, ChangeEvent, VersionAnnotation } from '../../version-history/VersionHistoryManager';
 interface VersionHistoryPanelProps {
-  versionManager: VersionHistoryManager;,
+  versionManager: VersionHistoryManager;
   currentGraphData: unknown;
-  onRestoreVersion: (snapshotId: string) => void;,
-  onCompareVersions: (fromId: string, toId: string) => void;,
+  onRestoreVersion: (snapshotId: string) => void;
+  onCompareVersions: (fromId: string, toId: string) => void;
   isOpen: boolean;
   onClose: () => void;
   className?: string;
@@ -316,12 +316,12 @@ interface VersionHistoryPanelProps {
 
 // Sub-components
 interface SnapshotTimelineProps {
-  snapshots: VersionSnapshot;,
+  snapshots: VersionSnapshot;
   selectedSnapshots: Set<string>;
-  onSnapshotSelect: (id: string, selected: boolean) => void;,
-  onRestore: (id: string) => void;,
-  formatTimeAgo: (date: string) => string;,
-  getSnapshotTypeIcon: (type: string) => string;,
+  onSnapshotSelect: (id: string, selected: boolean) => void;
+  onRestore: (id: string) => void;
+  formatTimeAgo: (date: string) => string;
+  getSnapshotTypeIcon: (type: string) => string;
   getSnapshotTypeColor: (type: string) => string;
   const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({,)
   snapshots,
@@ -400,10 +400,10 @@ interface SnapshotTimelineProps {
   );
 };
 interface BranchViewProps {
-  branches: Branch;,
+  branches: Branch;
   snapshots: VersionSnapshot;
-  selectedBranch: string;,
-  onBranchSelect: (branchName: string) => void;,
+  selectedBranch: string;
+  onBranchSelect: (branchName: string) => void;
   formatTimeAgo: (date: string) => string;
   const BranchView: React.FC<BranchViewProps> = ({,)
   branches,
@@ -469,7 +469,7 @@ interface BranchViewProps {
   );
 };
 interface ChangeEventsListProps {
-  events: ChangeEvent;,
+  events: ChangeEvent;
   formatTimeAgo: (date: string) => string;
 const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeAgo }) => {
   const getEventIcon = (eventType: string): string => {,
@@ -542,7 +542,7 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
   );
 };
 interface AnnotationsListProps {
-  annotations: VersionAnnotation;,
+  annotations: VersionAnnotation;
   formatTimeAgo: (date: string) => string;
 const AnnotationsList: React.FC<AnnotationsListProps> = ({ annotations, formatTimeAgo }) => {
   const getAnnotationIcon = (type: string): string => {,

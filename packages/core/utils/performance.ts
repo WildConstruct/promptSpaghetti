@@ -3,7 +3,7 @@
  */
 
 export interface ExecutionMetrics {
-  duration: number;,
+  duration: number;
   startTime: number;
   endTime: number;
   memory?: number;

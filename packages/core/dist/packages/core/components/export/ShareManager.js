@@ -116,7 +116,7 @@ import { FiShare2, FiCopy, FiEye, FiEdit, FiTrash2, FiClock, FiDownload, FiLock,
                     case 'password_protected':
                         return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
                     case 'private':
-                        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
+                        return 'bg-red-100 text-red-800 dark: bg-red-900/20 dark:text-red-300';
                     default:
                         return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
                 }

@@ -4,7 +4,7 @@ import React from 'react';
 import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
 interface LockQueueVisualizationProps {
-  queue: LockQueue;,
+  queue: LockQueue;
   onRemoveFromQueue: (queueId: string) => void;
   export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({,)
   queue,
@@ -36,8 +36,8 @@ interface LockQueueVisualizationProps {
   case 2: return 'High';
   case 3: return 'Medium';
   case 4: return 'Low';
-  default: return 'Normal';
-};
+  default: return 'Normal'
+  };
   if (queue.length === 0) {
     return;
       <div className="text-center py-8">

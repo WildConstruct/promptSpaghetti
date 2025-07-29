@@ -30,14 +30,14 @@ export interface ThrottlingAnalyticsInsight {
     insightType: 'pattern_detected' | 'scaling_recommendation' | 'anomaly_detected' | 'predictive_adjustment';
     confidence: number;
     ruleId: string;
-    recommendation: {,
+    recommendation: {
         action: 'increase_throttling' | 'decrease_throttling' | 'maintain_current' | 'enable_protection' | 'disable_protection';
         adjustmentFactor: number;
         reason: string;
         expectedImpact: string;
         validityPeriod: number;
     };
-    metadata: {,
+    metadata: {
         patternType?: string;
         usageMetrics?: Record<string, number>;
         scalingFactors?: Record<string, number>;
@@ -47,19 +47,19 @@ export interface ThrottlingAnalyticsInsight {
 
 export interface ThrottlingDecisionContext extends ThrottlingContext {
     analyticsInsights: ThrottlingAnalyticsInsight[];
-    historicalPerformance: {,
+    historicalPerformance: {
         requestVolume: number[];
         successRate: number[];
         averageLatency: number[];
         errorRates: number[];
     };
-    patternAnalysis: {,
+    patternAnalysis: {
         currentPattern: string;
         patternConfidence: number;
         predictedNextPattern: string;
         patternTransitionProbability: number;
     };
-    scalingContext: {,
+    scalingContext: {
         currentLoad: number;
         predictedLoad: number;
         scalingRecommendation: string;
@@ -72,16 +72,16 @@ export declare const ThrottlingMode: {
     readonly PROGRESSIVE: "progressive";
     readonly CIRCUIT_BREAKER: "circuit_breaker";
     readonly LOAD_SHEDDING: "load_shedding";
-    readonly BANDWIDTH_SHAPING: "bandwidth_shaping";
-};
+    readonly BANDWIDTH_SHAPING: "bandwidth_shaping"
+  };
 export type SystemCondition = 'normal' | 'elevated' | 'high_load' | 'overload' | 'under_attack';
 export declare const SystemCondition: {
     readonly NORMAL: "normal";
     readonly ELEVATED: "elevated";
     readonly HIGH_LOAD: "high_load";
     readonly OVERLOAD: "overload";
-    readonly UNDER_ATTACK: "under_attack";
-};
+    readonly UNDER_ATTACK: "under_attack"
+  };
 
 export interface ThrottlingRule {
     id: string;
@@ -147,7 +147,7 @@ export interface ThrottlingResult {
     delay: number;
     reason: string;
     ruleId: string;
-    metadata: {,
+    metadata: {
         originalDelay?: number;
         appliedMultiplier?: number;
         systemCondition: SystemCondition;
@@ -318,7 +318,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
         insightsByType: Record<string, number>;
         insightsByRule: Record<string, number>;
         averageConfidence: number;
-        performanceMetrics: {,
+        performanceMetrics: {
             averageEffectiveness: number;
             averageFalsePositiveRate: number;
             averageAdaptationSuccessRate: number;

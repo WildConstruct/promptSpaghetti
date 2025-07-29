@@ -54,7 +54,7 @@ describe('WebSocketSecurityManager', () => {
   ipAddress: '192.168.1.100',
   userAgent: 'Mozilla/5.0 (Test Browser)',
   origin: 'https://example.com',
-  headers: {,
+  headers: {
   'accept': 'application/json',
   'accept-language': 'en-US',
 };
@@ -81,7 +81,7 @@ describe('WebSocketSecurityManager', () => {
   createdAt: new Date(),
   lastSeen: new Date(),
   seenCount: 1,
-  basic: {,
+  basic: {
   userAgent: testConnectionRequest.userAgent,
   language: 'en-US',
   platform: 'Test',
@@ -103,7 +103,7 @@ describe('WebSocketSecurityManager', () => {
   reason: 'Device not previously trusted',
   riskScore: 30,
   requiresVerification: true,
-  factors: {,
+  factors: {
   deviceMatch: false,
   locationMatch: true,
   riskAcceptable: true,
@@ -128,7 +128,7 @@ describe('WebSocketSecurityManager', () => {
   reasoning: [],
 });
     mockKeyManagementService.generateKey.mockResolvedValue({)
-  metadata: {,
+  metadata: {
   id: 'session-key-123',
   name: 'test-session-key',
   status: 'ACTIVE' as any,
@@ -208,7 +208,7 @@ describe('WebSocketSecurityManager', () => {
   reason: 'Device is trusted',
   riskScore: 10,
   requiresVerification: false,
-  factors: {,
+  factors: {
   deviceMatch: true,
   locationMatch: true,
   riskAcceptable: true,
@@ -309,7 +309,7 @@ describe('WebSocketSecurityManager', () => {
     test('should encrypt outgoing messages', async () => {
       const message = {
         type: 'graph_update',
-        payload: {,
+        payload: {
   nodeId: 'node-123',
           data: { name: 'Test Node' }
       };
@@ -330,7 +330,7 @@ describe('WebSocketSecurityManager', () => {
       // First encrypt a message
       const originalMessage = {
         type: 'presence_update',
-        payload: {,
+        payload: {
   cursor: { x: 100, y: 200 },
           selection: ['node-1', 'node-2']
       };
@@ -357,7 +357,7 @@ describe('WebSocketSecurityManager', () => {
 });
       const message = {
   type: 'user_data',
-  payload: {,
+  payload: {
   email: 'user@example.com',
   ssn: '123-45-6789',
 };
@@ -422,7 +422,7 @@ describe('WebSocketSecurityManager', () => {
   // Send an unusually large message
   const largeMessage = {
   type: 'large_data',
-  payload: {,
+  payload: {
   data: 'x'.repeat(50000) // 50KB of data,
 };
       // Send some normal messages first to establish baseline

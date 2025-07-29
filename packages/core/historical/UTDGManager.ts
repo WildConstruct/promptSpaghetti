@@ -62,7 +62,7 @@ export class UTDGManager {
   region: config.region,
   category: this.getRelevantNodeTypes(config.scenario),
   social_class: config.social_class,
-  filters: {,
+  filters: {
   scenario: config.scenario,
   gender: config.gender,
   age_groups: config.age_groups,
@@ -89,7 +89,7 @@ export class UTDGManager {
     return {
   nodes: selectedNodes,
   constraints_applied: appliedConstraints,
-  generation_metadata: {,
+  generation_metadata: {
   config,
   generation_time: performance.now() - startTime,
   accuracy_score: accuracyScore,
@@ -252,7 +252,7 @@ export class UTDGManager {
   const overallScore = (completenessScore + consistencyScore + accuracyScore + reliabilityScore + freshnessScore) / 5;
   return {
   overall_score: overallScore,
-  metrics: {,
+  metrics: {
   completeness: completenessScore,
   consistency: consistencyScore,
   historical_accuracy: accuracyScore,
@@ -319,7 +319,7 @@ export class UTDGManager {
   return {
   nodes: results,
   total_count: results.length,
-  query_metadata: {,
+  query_metadata: {
   query_time: performance.now() - startTime,
   cache_hit: false,
   sources_used: ['medieval_demo'],
@@ -356,7 +356,7 @@ export class UTDGManager {
     return {
   nodes,
   constraints_applied: appliedConstraints,
-  generation_metadata: {,
+  generation_metadata: {
   config,
   generation_time: performance.now() - startTime,
   accuracy_score: accuracyScore,
@@ -491,8 +491,8 @@ export class UTDGManager {
     return distribution;
   private determineArchitecturalStyle(era: Era): string {
     if (era.name.includes('Medieval')) {
-      return 'Gothic';
-    } else if (era.name.includes('Roman')) {
+      return 'Gothic'
+  } else if (era.name.includes('Roman')) {
       return 'Classical Roman';
     } else if (era.name.includes('Renaissance')) {
       return 'Renaissance';

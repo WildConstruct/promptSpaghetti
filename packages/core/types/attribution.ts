@@ -7,7 +7,7 @@ export const AuthorTypeSchema = z.enum(['user', 'anonymous', 'guest', 'system', 
 export const AggregationPeriodSchema = z.enum(['hour', 'day', 'week', 'month']);
 export const CacheTypeSchema = z.enum(['contributor_stats', 'change_heatmap', 'timeline_data', 'collaboration_metrics']);
 
-export const ChangeAttributionSchema = z.object({)
+export const ChangeAttributionSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   resourceType: ResourceTypeSchema,
@@ -43,7 +43,7 @@ export const ChangeAttributionSchema = z.object({)
   effectiveAt: z.date();
   });
 
-export const AttributionAggregationSchema = z.object({)
+export const AttributionAggregationSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   authorId: z.string().uuid().optional(),
@@ -72,7 +72,7 @@ export const AttributionAggregationSchema = z.object({)
   updatedAt: z.date(),
 });
 
-export const AttributionSessionSchema = z.object({)
+export const AttributionSessionSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   authorId: z.string().uuid().optional(),
@@ -96,7 +96,7 @@ export const AttributionSessionSchema = z.object({)
   createdAt: z.date(),
 });
 
-export const AttributionPrivacySettingsSchema = z.object({)
+export const AttributionPrivacySettingsSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   userId: z.string().uuid(),
@@ -117,7 +117,7 @@ export const AttributionPrivacySettingsSchema = z.object({)
   updatedAt: z.date(),
 });
 
-export const AttributionStatsCacheSchema = z.object({)
+export const AttributionStatsCacheSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   cacheKey: z.string(),
@@ -141,7 +141,7 @@ export type AttributionPrivacySettings = z.infer<typeof AttributionPrivacySettin
 export type AttributionStatsCache = z.infer<typeof AttributionStatsCacheSchema>;
 
 // Request/response types
-export const CreateAttributionRequestSchema = z.object({)
+export const CreateAttributionRequestSchema = z.object({
   projectId: z.string().uuid(),
   resourceType: ResourceTypeSchema,
   resourceId: z.string(),
@@ -160,7 +160,7 @@ export const CreateAttributionRequestSchema = z.object({)
   parentChangeId: z.string().uuid().optional();
   });
 
-export const AttributionFilterSchema = z.object({)
+export const AttributionFilterSchema = z.object({
   projectId: z.string().uuid().optional(),
   resourceType: ResourceTypeSchema.optional(),
   resourceId: z.string().optional(),
@@ -180,7 +180,7 @@ export const AttributionFilterSchema = z.object({)
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 
-export const AttributionStatsRequestSchema = z.object({)
+export const AttributionStatsRequestSchema = z.object({
   projectId: z.string().uuid(),
   period: AggregationPeriodSchema.optional(),
   authorId: z.string().uuid().optional(),
@@ -194,7 +194,7 @@ export const AttributionStatsRequestSchema = z.object({)
   includeCollaborationMetrics: z.boolean().default(false),
 });
 
-export const UpdatePrivacySettingsRequestSchema = z.object({)
+export const UpdatePrivacySettingsRequestSchema = z.object({
   projectId: z.string().uuid(),
   settings: AttributionPrivacySettingsSchema.omit({ id: true, projectId: true, userId: true, createdAt: true, updatedAt: true })
 });
@@ -205,7 +205,7 @@ export type AttributionStatsRequest = z.infer<typeof AttributionStatsRequestSche
 export type UpdatePrivacySettingsRequest = z.infer<typeof UpdatePrivacySettingsRequestSchema>;
 
 // Response types
-export const AttributionStatsResponseSchema = z.object({)
+export const AttributionStatsResponseSchema = z.object({
   overview: z.object({,)
   totalChanges: z.number().int(),
   uniqueAuthors: z.number().int(),
@@ -214,7 +214,7 @@ export const AttributionStatsResponseSchema = z.object({)
   collaborativeChanges: z.number().int(),
   anonymousChanges: z.number().int(),
 }),
-  byAuthor: z.array(z.object({,)
+  byAuthor: z.array(z.object({)
   authorId: z.string().uuid().optional(),
   authorName: z.string().optional(),
   authorType: AuthorTypeSchema,
@@ -227,7 +227,7 @@ export const AttributionStatsResponseSchema = z.object({)
 })),
   byResourceType: z.record(z.number().int()),
   byChangeType: z.record(z.number().int()),
-  timeline: z.array(z.object({,)
+  timeline: z.array(z.object({)
   timestamp: z.date(),
   changes: z.number().int(),
   authors: z.number().int(),
@@ -237,7 +237,7 @@ export const AttributionStatsResponseSchema = z.object({)
   collaboration: z.object({,)
   totalCollaborativeSessions: z.number().int(),
   averageCollaboratorsPerSession: z.number(),
-  mostActiveCollaborations: z.array(z.object({,)
+  mostActiveCollaborations: z.array(z.object({)
   sessionId: z.string(),
   authors: z.array(z.string()),
   changes: z.number().int(),
@@ -246,10 +246,10 @@ export const AttributionStatsResponseSchema = z.object({)
   }).optional()
 });
 
-export const AttributionTimelineResponseSchema = z.object({)
-  timeline: z.array(z.object({,)
+export const AttributionTimelineResponseSchema = z.object({
+  timeline: z.array(z.object({)
   timestamp: z.date(),
-  changes: z.array(z.object({,)
+  changes: z.array(z.object({)
   id: z.string().uuid(),
   resourceType: ResourceTypeSchema,
   resourceId: z.string(),
@@ -280,24 +280,24 @@ export const AttributionTimelineResponseSchema = z.object({)
   }
 });
 
-export const ContributorStatsResponseSchema = z.object({)
-  contributors: z.array(z.object({,)
+export const ContributorStatsResponseSchema = z.object({
+  contributors: z.array(z.object({)
   authorId: z.string().uuid().optional(),
   authorName: z.string().optional(),
   authorType: AuthorTypeSchema,
   totalChanges: z.number().int(),
   firstContribution: z.date(),
   lastContribution: z.date(),
-  activePeriods: z.array(z.object({,)
+  activePeriods: z.array(z.object({)
   period: z.date(),
   changes: z.number().int(),
 })),
-    expertise: z.array(z.object({,)
+    expertise: z.array(z.object({)
   resourceType: ResourceTypeSchema,
   changes: z.number().int(),
   percentage: z.number(),
 })),
-    collaborations: z.array(z.object({,)
+    collaborations: z.array(z.object({)
   sessionId: z.string(),
   collaborators: z.array(z.string()),
   changes: z.number().int(),
@@ -335,9 +335,9 @@ export interface AttributionContext {
   trackingConsent?: boolean;
 }
 export interface ChangeEvent {
-  resourceType: ResourceType;,
+  resourceType: ResourceType;
   resourceId: string;
-  changeType: ChangeType;,
+  changeType: ChangeType;
   changeOperation: string;
   oldValue?: any;
   newValue?: any;
@@ -349,30 +349,30 @@ export interface ChangeEvent {
   parentChangeId?: string;
 }
 export interface AttributionVisualization {
-  type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';,
+  type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';
   data: any;
-  metadata: {,
-  generatedAt: Date;,
-  dateRange: {,
-  start: Date;,
+  metadata: {
+  generatedAt: Date;
+  dateRange: {
+  start: Date;
   end: Date;
 };
-    filters: AttributionFilter;,
+    filters: AttributionFilter;
   totalDataPoints: number;
   };
 }
 export interface CollaborationMetrics {
-  totalSessions: number;,
+  totalSessions: number;
   averageSessionDuration: number;
-  averageCollaboratorsPerSession: number;,
+  averageCollaboratorsPerSession: number;
   mostActiveCollaborations: Array<{,
-  sessionId: string;,
+  sessionId: string;
   authors: string;
-  changes: number;,
+  changes: number;
   duration: number;
   efficiency: number;
 }>;
-  collaborationPatterns: {,
+  collaborationPatterns: {
   byTimeOfDay: Record<string, number>;
   byDayOfWeek: Record<string, number>;
   byResourceType: Record<string, number>;
@@ -405,7 +405,7 @@ export const ATTRIBUTION_DEFAULTS = {
   MAX_BATCH_SIZE: 1000,
   CACHE_TTL_MINUTES: 60,
   SESSION_TIMEOUT_MINUTES: 30,
-  AGGREGATION_INTERVALS: {,
+  AGGREGATION_INTERVALS: {
   HOUR: 60 * 60 * 1000,
   DAY: 24 * 60 * 60 * 1000,
   WEEK: 7 * 24 * 60 * 60 * 1000,
@@ -440,18 +440,18 @@ export const RESOURCE_TYPE_DESCRIPTIONS = {
 // Event types for real-time updates
 
 export interface AttributionEvent {
-  type: 'attribution_created' | 'attribution_updated' | 'session_started' | 'session_ended';,
+  type: 'attribution_created' | 'attribution_updated' | 'session_started' | 'session_ended';
   data: ChangeAttribution | AttributionSession;
-  timestamp: Date;,
+  timestamp: Date;
   projectId: string;
   sessionId?: string;
 }
 export interface AttributionNotification {
-  type: 'contributor_milestone' | 'collaboration_started' | 'significant_change';,
+  type: 'contributor_milestone' | 'collaboration_started' | 'significant_change';
   title: string;
-  message: string;,
+  message: string;
   data: any;
-  timestamp: Date;,
+  timestamp: Date;
   projectId: string;
   authorId?: string;
 }

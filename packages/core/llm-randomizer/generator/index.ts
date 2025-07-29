@@ -72,7 +72,7 @@ export class RandomizerSystem {
   /**
   * Quick generation with minimal setup
   */
-  async quickGenerate(purpose: string,)
+  async quickGenerate(purpose: string)
   complexity: ComplexityLevelType = 'moderate',
   provider: LLMProviderType = 'openai'): Promise<WorkflowResult> {,
   const parameters = this.parameterManager.createCompleteParameters({)

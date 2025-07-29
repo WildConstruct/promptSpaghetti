@@ -13,7 +13,7 @@ export enum NodeSafetyLevel {
   * Interface for blocked node information
   */
   export interface BlockedNodeInfo {
-  nodeType: string;,
+  nodeType: string;
   safetyLevel: NodeSafetyLevel;
   reason: string;
   position?: acorn.Position;
@@ -22,14 +22,14 @@ export enum NodeSafetyLevel {
   */
 }
 export interface FilterResult {
-  allowed: boolean;,
+  allowed: boolean;
   blockedNodes: BlockedNodeInfo;
   /**
   * AST node whitelist filter configuration
   */
 }
 export interface ASTNodeWhitelistConfig {
-  allowedNodeTypes: Set<string>;,
+  allowedNodeTypes: Set<string>;
   restrictedNodeTypes: Set<string>;
   dangerousNodeTypes: Set<string>;
   maxDepth?: number;
@@ -183,7 +183,7 @@ export class ASTNodeWhitelistFilter {
   /**
    * Validate call expressions
    */
-  private validateCallExpression(node: acorn.Node & {,)
+  private validateCallExpression(node: acorn.Node & {)
   callee: acorn.Node,
   arguments: acorn.Node,
 }, blockedNodes: BlockedNodeInfo): void {

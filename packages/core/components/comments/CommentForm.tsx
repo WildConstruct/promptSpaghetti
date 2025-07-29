@@ -4,7 +4,7 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 interface CommentFormProps {
-  onSubmit: (content: string) => Promise<void>;,
+  onSubmit: (content: string) => Promise<void>;
   onCancel: () => void;
   initialValue?: string;
   placeholder?: string;

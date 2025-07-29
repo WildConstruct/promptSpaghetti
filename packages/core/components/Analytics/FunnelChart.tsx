@@ -30,7 +30,7 @@ import {
 // Chart interfaces
 
 export interface FunnelChartProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange: { start: number; end: number };
   segments?: UserSegment;
@@ -49,114 +49,114 @@ export type FunnelChartMode =
   | 'heatmap';
 
 export interface StepMetrics {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  order: number;,
+  order: number;
   totalEntries: number;
-  totalConversions: number;,
+  totalConversions: number;
   conversionRate: number;
-  dropOffCount: number;,
+  dropOffCount: number;
   dropOffRate: number;
-  averageTimeSpent: number;,
+  averageTimeSpent: number;
   revenue: number;
   revenuePerConversion: number;
   previousStepConversionRate?: number;
   comparisonData?: StepComparisonMetrics;
 }
 export interface StepComparisonMetrics {
-  previousPeriod: {,
-  conversionRate: number;,
-  change: number;
-  direction: 'improvement' | 'decline' | 'no_change';
-};
-  benchmark: {,
+  previousPeriod: {
   conversionRate: number;
-  percentile: number;,
+  change: number;
+  direction: 'improvement' | 'decline' | 'no_change'
+  };
+  benchmark: {
+  conversionRate: number;
+  percentile: number;
   industry: string;
 };
   segments: Array<{,
   segmentId: string;
-  segmentName: string;,
+  segmentName: string;
   conversionRate: number;
-  performance: 'above_average' | 'below_average' | 'average';
-}>;
+  performance: 'above_average' | 'below_average' | 'average'
+  }>;
 }
 export interface FunnelChartData {
-  steps: StepMetrics;,
+  steps: StepMetrics;
   overallMetrics: OverallFunnelMetrics;
-  dropoffAnalysis: DropoffAnalysis;,
+  dropoffAnalysis: DropoffAnalysis;
   trends: FunnelTrend;
   segmentComparisons: SegmentFunnelComparison;
 }
 export interface OverallFunnelMetrics {
-  totalEntries: number;,
+  totalEntries: number;
   totalConversions: number;
-  overallConversionRate: number;,
+  overallConversionRate: number;
   averageTimeToConvert: number;
-  totalRevenue: number;,
+  totalRevenue: number;
   revenuePerEntry: number;
-  revenuePerConversion: number;,
+  revenuePerConversion: number;
   totalDropoffs: number;
-  biggestDropoffStep: string;,
+  biggestDropoffStep: string;
   mostEfficientStep: string;
 }
 export interface DropoffAnalysis {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  dropOffCount: number;,
+  dropOffCount: number;
   dropOffRate: number;
-  dropOffReasons: DropoffReason;,
+  dropOffReasons: DropoffReason;
   recoveryOpportunity: number;
-  recommendedActions: string;,
-  severity: 'critical' | 'high' | 'medium' | 'low';
-}
+  recommendedActions: string;
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  }
 export interface DropoffReason {
-  reason: string;,
+  reason: string;
   category: 'technical' | 'user_experience' | 'content' | 'external';
-  percentage: number;,
+  percentage: number;
   count: number;
   confidence: number;
 }
 export interface FunnelTrend {
-  period: string;,
+  period: string;
   conversionRate: number;
-  entries: number;,
+  entries: number;
   conversions: number;
   revenue: number;
 }
 export interface SegmentFunnelComparison {
-  segmentId: string;,
+  segmentId: string;
   segmentName: string;
-  overallConversionRate: number;,
+  overallConversionRate: number;
   stepPerformance: Array<{,
-  stepId: string;,
+  stepId: string;
   conversionRate: number;
   relativePerformance: number;
 }>;
   insights: string;
 }
 export interface ChartExportData {
-  chartMode: FunnelChartMode;,
+  chartMode: FunnelChartMode;
   data: FunnelChartData;
-  visualization: {,
+  visualization: {
   svg: string;
   png?: string;
   pdf?: string;
 };
-  metadata: {,
+  metadata: {
   exportedAt: number;
     timeRange: { start: number; end: number };
     filters: unknown;
   };
 }
 export interface InteractionState {
-  hoveredStep: string | null;,
+  hoveredStep: string | null;
   selectedStep: string | null;
   tooltipPosition: { x: number; y: number } | null;
   tooltipContent: StepTooltipContent | null;
 }
 export interface StepTooltipContent {
-  stepName: string;,
+  stepName: string;
   metrics: StepMetrics;
   comparisonData?: StepComparisonMetrics;
   insights: string;
@@ -266,7 +266,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
   hoveredStep: stepId,
           selectedStep: interactionState.selectedStep,
           tooltipPosition: { x: rect.right + 10, y: rect.top },
-          tooltipContent: {,
+          tooltipContent: {
   stepName: step.stepName,
   metrics: step,
   comparisonData: step.comparisonData,
@@ -297,10 +297,10 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
   const exportData: ChartExportData = {,
   chartMode,
   data: chartData,
-  visualization: {,
+  visualization: {
   svg: svgString,
 },
-  metadata: {,
+  metadata: {
   exportedAt: Date.now(),
   timeRange,
   filters: [],
@@ -391,9 +391,9 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
  * Funnel Chart Header Component
  */
 interface FunnelChartHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   overallMetrics: OverallFunnelMetrics;
-  chartMode: FunnelChartMode;,
+  chartMode: FunnelChartMode;
   onExport: () => void;
   const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({,)
   funnelDefinition,
@@ -438,9 +438,9 @@ interface FunnelChartHeaderProps {
  * Standard Funnel Chart Component
  */
 interface StandardFunnelChartProps {
-  data: FunnelChartData;,
+  data: FunnelChartData;
   dimensions: unknown;
-  interactionState: InteractionState;,
+  interactionState: InteractionState;
   onStepHover: (stepId: string | null, event?: React.MouseEvent) => void;
   onStepClick: (stepId: string) => void;
   const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({,)
@@ -695,7 +695,7 @@ const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segment
  * Step Tooltip Component
  */
 interface StepTooltipProps {
-  content: StepTooltipContent;,
+  content: StepTooltipContent;
   position: { x: number; y: number };
   onClose: () => void;
 const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => {
@@ -757,7 +757,7 @@ const FunnelChartLoadingState: React.FC = () => ()
   </div>
 );
 interface FunnelChartErrorStateProps {
-  error: string;,
+  error: string;
   onRetry: () => void;
 const FunnelChartErrorState: React.FC<FunnelChartErrorStateProps> = ({ error, onRetry }) => ()
   <div className="funnel-chart-error">
@@ -798,7 +798,7 @@ function generateStepInsights(step: StepMetrics): string {
   if (step.averageTimeSpent > 300000) { // 5 minutes
     insights.push('Users spend significant time on this step');
   return insights;
-async function processFunnelChartData(funnelDefinition: ConversionFunnelDefinition,)
+async function processFunnelChartData(funnelDefinition: ConversionFunnelDefinition)
   metricResults: ConversionMetricResult,
   segments: UserSegment,
   cohorts: ConversionCohort,
@@ -818,13 +818,13 @@ async function processFunnelChartData(funnelDefinition: ConversionFunnelDefiniti
   averageTimeSpent: 120000 + (index * 30000),
   revenue: 500 * (index + 1),
   revenuePerConversion: 25 + (index * 5),
-  comparisonData: {,
-  previousPeriod: {,
+  comparisonData: {
+  previousPeriod: {
   conversionRate: 75 + (Math.random() * 20),
   change: (Math.random() - 0.5) * 20,
   direction: Math.random() > 0.5 ? 'improvement' : 'decline',
 },
-  benchmark: {,
+  benchmark: {
   conversionRate: 70 + (Math.random() * 15),
   percentile: 60 + (Math.random() * 30),
   industry: 'marketplace',
@@ -877,11 +877,11 @@ async function processFunnelChartData(funnelDefinition: ConversionFunnelDefiniti
   ],
   severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium',
 }));
-  const segmentComparisons: SegmentFunnelComparison = segments.map(segment => ({,)
+  const segmentComparisons: SegmentFunnelComparison = segments.map(segment => ({)
   segmentId: segment.id,
   segmentName: segment.name,
   overallConversionRate: segment.performance.averageConversionRate,
-  stepPerformance: steps.map(step => ({,)
+  stepPerformance: steps.map(step => ({)
   stepId: step.stepId,
   conversionRate: step.conversionRate * (0.8 + Math.random() * 0.4),
   relativePerformance: (Math.random() - 0.5) * 40,

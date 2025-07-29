@@ -9,15 +9,15 @@
 import React, { useState, useCallback } from 'react';
 
 export interface FlaggingReason {
-  id: string;,
+  id: string;
   label: string;
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   category: 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other';
   requiresDetails?: boolean;
 }
 export interface FlagSubmission {
-  contentId: string;,
+  contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
   reasonId: string;
   details?: string;
@@ -25,7 +25,7 @@ export interface FlagSubmission {
   metadata?: Record<string, unknown>;
 }
 export interface FlaggingButtonProps {
-  contentId: string;,
+  contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
   userId: string;
   onFlag?: (submission: FlagSubmission) => Promise<void>;
@@ -37,11 +37,11 @@ export interface FlaggingButtonProps {
   className?: string;
 }
 export interface FlaggingStatus {
-  contentId: string;,
+  contentId: string;
   canFlag: boolean;
-  alreadyFlagged: boolean;,
+  alreadyFlagged: boolean;
   flagCount: number;
-  userHasFlagged: boolean;,
+  userHasFlagged: boolean;
   status: 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed';
   resolvedAt?: Date;
   moderatorNote?: string;
@@ -199,7 +199,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
   reasonId: selectedReason,
   details: details.trim() || undefined,
   reporterId: userId,
-  metadata: {,
+  metadata: {
   severity: reason?.severity,
   category: reason?.category,
   timestamp: new Date().toISOString(),
@@ -240,19 +240,19 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
   };
   // Button styling based on props
   const buttonStyles = {
-  small: {,
+  small: {
   padding: '4px 8px',
   fontSize: '11px',
   minWidth: variant === 'icon' ? '24px' : '60px',
   height: '24px',
 },
-  medium: {,
+  medium: {
   padding: '6px 12px',
   fontSize: '12px',
   minWidth: variant === 'icon' ? '28px' : '70px',
   height: '28px',
 },
-  large: {,
+  large: {
   padding: '8px 16px',
   fontSize: '14px',
   minWidth: variant === 'icon' ? '32px' : '80px',
@@ -303,8 +303,8 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
             e.currentTarget.style.backgroundColor = '#f3f4f6';
         }}
         onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = 'transparent';
-        }}
+          e.currentTarget.style.backgroundColor = 'transparent'
+  }}
       >
         {getButtonText()}
         {status.flagCount > 0 && variant !== 'icon' && ()

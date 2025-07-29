@@ -30,7 +30,7 @@ import {
 // Cohort analysis interfaces
 
 export interface CohortFunnelAnalysisProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange: { start: number; end: number };
   selectedCohorts?: ConversionCohort;
@@ -48,123 +48,123 @@ export type CohortAnalysisMode =
   | 'lifecycle';
 
 export interface CohortAnalysisData {
-  cohortPerformance: CohortPerformanceData;,
+  cohortPerformance: CohortPerformanceData;
   comparativeAnalysis: CohortComparativeAnalysis;
-  retentionAnalysis: CohortRetentionAnalysis;,
+  retentionAnalysis: CohortRetentionAnalysis;
   lifecycleAnalysis: CohortLifecycleAnalysis;
-  behaviorPatterns: CohortBehaviorPattern;,
+  behaviorPatterns: CohortBehaviorPattern;
   valueAnalysis: CohortValueAnalysis;
-  predictiveModels: CohortPredictiveModel;,
+  predictiveModels: CohortPredictiveModel;
   insights: CohortInsight;
   healthScores: CohortHealthScore;
 }
 export interface CohortPerformanceData {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  cohortDefinition: CohortDefinitionSummary;,
+  cohortDefinition: CohortDefinitionSummary;
   funnelMetrics: CohortFunnelMetrics;
-  stepPerformance: CohortStepPerformance;,
+  stepPerformance: CohortStepPerformance;
   temporalPerformance: CohortTemporalPerformance;
-  progressionMetrics: CohortProgressionMetrics;,
+  progressionMetrics: CohortProgressionMetrics;
   valueMetrics: CohortValueMetrics;
   benchmarkComparison: CohortBenchmarkComparison;
 }
 export interface CohortDefinitionSummary {
-  criteriaEvent: string;,
+  criteriaEvent: string;
   timeWindow: number;
-  size: number;,
+  size: number;
   creationDate: number;
-  maturity: 'new' | 'growing' | 'mature' | 'declining';,
+  maturity: 'new' | 'growing' | 'mature' | 'declining';
   characteristics: string;
 }
 export interface CohortFunnelMetrics {
-  totalEntries: number;,
+  totalEntries: number;
   totalConversions: number;
-  overallConversionRate: number;,
+  overallConversionRate: number;
   averageTimeToConvert: number;
-  completionRate: number;,
+  completionRate: number;
   dropOffRate: number;
-  retentionRate: number;,
+  retentionRate: number;
   reactivationRate: number;
 }
 export interface CohortStepPerformance {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  stepOrder: number;,
+  stepOrder: number;
   entries: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  averageTimeSpent: number;,
+  averageTimeSpent: number;
   dropOffCount: number;
-  dropOffRate: number;,
+  dropOffRate: number;
   retentionToNextStep: number;
-  stepEfficiency: number;,
+  stepEfficiency: number;
   cohortSpecificBehaviors: CohortBehaviorMetric;
 }
 export interface CohortBehaviorMetric {
-  behavior: string;,
+  behavior: string;
   frequency: number;
-  impact: number;,
+  impact: number;
   uniqueness: number; // How unique this behavior is to this cohort,
   description: string;
 }
 export interface CohortTemporalPerformance {
   period: number; // Days/weeks since cohort creation,
-  periodLabel: string;,
+  periodLabel: string;
   entries: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  retentionRate: number;,
+  retentionRate: number;
   reactivationCount: number;
-  valueGenerated: number;,
-  trendDirection: 'improving' | 'declining' | 'stable';
-}
+  valueGenerated: number;
+  trendDirection: 'improving' | 'declining' | 'stable'
+  }
 export interface CohortProgressionMetrics {
   progressionRate: number; // % of cohort progressing through funnel,
-  averageProgressionTime: number;,
+  averageProgressionTime: number;
   progressionStages: ProgressionStage;
-  stagnationPoints: StagnationPoint;,
+  stagnationPoints: StagnationPoint;
   accelerationFactors: AccelerationFactor;
 }
 export interface ProgressionStage {
-  stageId: string;,
+  stageId: string;
   stageName: string;
-  entry: number;,
+  entry: number;
   exit: number;
-  averageTimeInStage: number;,
+  averageTimeInStage: number;
   progressionRate: number;
   commonExitReasons: string;
 }
 export interface StagnationPoint {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  stagnationRate: number;,
+  stagnationRate: number;
   averageStagnationTime: number;
-  recoveryRate: number;,
+  recoveryRate: number;
   interventionOpportunities: string;
 }
 export interface AccelerationFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  frequency: number;,
+  frequency: number;
   conditions: string;
-  replicability: 'high' | 'medium' | 'low';
-}
+  replicability: 'high' | 'medium' | 'low'
+  }
 export interface CohortValueMetrics {
-  totalValue: number;,
+  totalValue: number;
   valuePerUser: number;
-  valuePerConversion: number;,
+  valuePerConversion: number;
   lifetimeValue: number;
-  valueTrajectory: ValueTrajectoryPoint;,
+  valueTrajectory: ValueTrajectoryPoint;
   valueDistribution: ValueDistribution;
   moneyGenerationPattern: MoneyGenerationPattern;
 }
 export interface ValueTrajectoryPoint {
-  period: number;,
+  period: number;
   periodLabel: string;
-  cumulativeValue: number;,
+  cumulativeValue: number;
   periodValue: number;
-  valueVelocity: number;,
+  valueVelocity: number;
   projectedValue: number;
 }
 export interface ValueDistribution {
@@ -174,9 +174,9 @@ export interface ValueDistribution {
   topPercentile: { threshold: number; percentage: number; totalValue: number };
 }
 export interface MoneyGenerationPattern {
-  pattern: 'front_loaded' | 'gradual' | 'back_loaded' | 'sporadic';,
+  pattern: 'front_loaded' | 'gradual' | 'back_loaded' | 'sporadic';
   consistency: number;
-  predictability: number;,
+  predictability: number;
   seasonality: SeasonalityInfo;
 }
 export interface SeasonalityInfo {
@@ -186,369 +186,369 @@ export interface SeasonalityInfo {
   troughs?: string;
 }
 export interface CohortBenchmarkComparison {
-  overallPerformance: BenchmarkMetric;,
+  overallPerformance: BenchmarkMetric;
   stepComparisons: StepBenchmarkMetric;
-  peerCohorts: PeerCohortComparison;,
+  peerCohorts: PeerCohortComparison;
   industryBenchmarks: IndustryBenchmarkMetric;
 }
 export interface BenchmarkMetric {
-  metric: string;,
+  metric: string;
   cohortValue: number;
-  benchmarkValue: number;,
+  benchmarkValue: number;
   percentile: number;
-  performance: 'excellent' | 'good' | 'average' | 'below_average' | 'poor';,
+  performance: 'excellent' | 'good' | 'average' | 'below_average' | 'poor';
   improvementPotential: number;
 }
 export interface StepBenchmarkMetric extends BenchmarkMetric {
-  stepId: string;,
+  stepId: string;
   stepName: string;
   export interface PeerCohortComparison {
-  peerCohortId: string;,
+  peerCohortId: string;
   peerCohortName: string;
-  similarity: number;,
+  similarity: number;
   performanceComparison: 'better' | 'similar' | 'worse';
-  keyDifferences: string;,
+  keyDifferences: string;
   learnings: string;
 }
 export interface IndustryBenchmarkMetric {
-  metric: string;,
+  metric: string;
   industryAverage: number;
-  topQuartile: number;,
+  topQuartile: number;
   cohortValue: number;
-  industryRanking: number;,
-  competitivePosition: 'leader' | 'challenger' | 'follower' | 'niche';
-}
+  industryRanking: number;
+  competitivePosition: 'leader' | 'challenger' | 'follower' | 'niche'
+  }
 export interface CohortComparativeAnalysis {
-  crossCohortMetrics: CrossCohortMetric;,
+  crossCohortMetrics: CrossCohortMetric;
   performanceRankings: CohortRanking;
-  significantDifferences: CohortDifference;,
+  significantDifferences: CohortDifference;
   convergenceAnalysis: ConvergenceAnalysis;
   outlierAnalysis: CohortOutlierAnalysis;
 }
 export interface CrossCohortMetric {
-  metric: string;,
+  metric: string;
   values: Array<{ cohortId: string; cohortName: string; value: number }>;
-  variance: number;,
+  variance: number;
   coefficient: number;
-  trend: 'converging' | 'diverging' | 'stable';,
+  trend: 'converging' | 'diverging' | 'stable';
   insights: string;
 }
 export interface CohortRanking {
-  metric: string;,
+  metric: string;
   rankings: Array<{,
-  rank: number;,
+  rank: number;
   cohortId: string;
-  cohortName: string;,
+  cohortName: string;
   value: number;
   score: number;
 }>;
 }
 export interface CohortDifference {
-  metric: string;,
+  metric: string;
   cohortA: { id: string; name: string; value: number };
   cohortB: { id: string; name: string; value: number };
-  difference: number;,
+  difference: number;
   significance: number;
-  possibleReasons: string;,
+  possibleReasons: string;
   actionableInsights: string;
 }
 export interface ConvergenceAnalysis {
-  cohortIds: string;,
+  cohortIds: string;
   cohortNames: string;
-  metric: string;,
+  metric: string;
   convergenceRate: number;
   timeToConvergence: number; // Days,
-  convergencePoint: number;,
+  convergencePoint: number;
   factors: string;
 }
 export interface CohortOutlierAnalysis {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  outlierMetrics: string;,
+  outlierMetrics: string;
   deviationSeverity: 'extreme' | 'significant' | 'moderate';
-  possibleCauses: string;,
-  investigationPriority: 'high' | 'medium' | 'low';
-}
+  possibleCauses: string;
+  investigationPriority: 'high' | 'medium' | 'low'
+  }
 export interface CohortRetentionAnalysis {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  retentionCurve: RetentionPoint;,
+  retentionCurve: RetentionPoint;
   retentionMetrics: RetentionMetrics;
-  retentionFactors: RetentionFactor;,
+  retentionFactors: RetentionFactor;
   churnAnalysis: ChurnAnalysis;
   reactivationAnalysis: ReactivationAnalysis;
 }
 export interface RetentionPoint {
-  period: number;,
+  period: number;
   periodLabel: string;
-  retainedUsers: number;,
+  retainedUsers: number;
   retentionRate: number;
-  churnedUsers: number;,
+  churnedUsers: number;
   churnRate: number;
-  reactivatedUsers: number;,
+  reactivatedUsers: number;
   netRetention: number;
 }
 export interface RetentionMetrics {
-  dayOneRetention: number;,
+  dayOneRetention: number;
   daySevenRetention: number;
-  dayThirtyRetention: number;,
+  dayThirtyRetention: number;
   dayNinetyRetention: number;
   halfLife: number; // Days until 50% retention,
-  retentionStability: number;,
-  retentionTrend: 'improving' | 'declining' | 'stable';
-}
+  retentionStability: number;
+  retentionTrend: 'improving' | 'declining' | 'stable'
+  }
 export interface RetentionFactor {
-  factor: string;,
+  factor: string;
   impact: number;
-  correlation: number;,
+  correlation: number;
   actionability: 'high' | 'medium' | 'low';
   description: string;
 }
 export interface ChurnAnalysis {
-  overallChurnRate: number;,
+  overallChurnRate: number;
   churnPredictors: ChurnPredictor;
-  churnSegments: ChurnSegment;,
+  churnSegments: ChurnSegment;
   preventableChurn: number;
   churnValue: number; // Value lost to churn,
 }
 export interface ChurnPredictor {
-  predictor: string;,
+  predictor: string;
   accuracy: number;
   leadTime: number; // Days before churn,
   actionWindow: number; // Days to take action,
   interventions: string;
 }
 export interface ChurnSegment {
-  segment: string;,
+  segment: string;
   size: number;
-  churnRate: number;,
+  churnRate: number;
   reasons: string;
   preventionStrategies: string;
 }
 export interface ReactivationAnalysis {
-  reactivationRate: number;,
+  reactivationRate: number;
   averageTimeToReactivation: number;
-  reactivationTriggers: ReactivationTrigger;,
+  reactivationTriggers: ReactivationTrigger;
   reactivationValue: number;
   reactivationROI: number;
 }
 export interface ReactivationTrigger {
-  trigger: string;,
+  trigger: string;
   effectiveness: number;
-  cost: number;,
+  cost: number;
   timeToAction: number;
   suitableCohorts: string;
 }
 export interface CohortLifecycleAnalysis {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  lifecycleStages: LifecycleStage;,
+  lifecycleStages: LifecycleStage;
   stageTransitions: StageTransition;
-  maturityMetrics: MaturityMetrics;,
+  maturityMetrics: MaturityMetrics;
   lifecycleHealth: LifecycleHealthMetrics;
 }
 export interface LifecycleStage {
-  stage: 'onboarding' | 'activation' | 'engagement' | 'retention' | 'expansion' | 'advocacy';,
+  stage: 'onboarding' | 'activation' | 'engagement' | 'retention' | 'expansion' | 'advocacy';
   userCount: number;
-  percentage: number;,
+  percentage: number;
   averageTimeInStage: number;
-  conversionToNext: number;,
+  conversionToNext: number;
   valueGenerated: number;
   stageCharacteristics: string;
 }
 export interface StageTransition {
-  fromStage: string;,
+  fromStage: string;
   toStage: string;
-  transitionRate: number;,
+  transitionRate: number;
   averageTransitionTime: number;
-  transitionFactors: string;,
+  transitionFactors: string;
   optimizationOpportunities: string;
 }
 export interface MaturityMetrics {
   overallMaturity: number; // 0-100,
-  maturityFactors: MaturityFactor;,
+  maturityFactors: MaturityFactor;
   maturityTrajectory: 'accelerating' | 'steady' | 'plateauing' | 'declining';
-  expectedPeakValue: number;,
+  expectedPeakValue: number;
   timeToMaturity: number;
 }
 export interface MaturityFactor {
-  factor: string;,
+  factor: string;
   weight: number;
-  currentScore: number;,
+  currentScore: number;
   targetScore: number;
   improvementActions: string;
 }
 export interface LifecycleHealthMetrics {
   healthScore: number; // 0-100,
-  healthFactors: HealthFactor;,
+  healthFactors: HealthFactor;
   riskIndicators: RiskIndicator;
   opportunityAreas: OpportunityArea;
 }
 export interface HealthFactor {
-  factor: string;,
+  factor: string;
   score: number;
-  weight: number;,
+  weight: number;
   trend: 'improving' | 'stable' | 'declining';
   impact: string;
 }
 export interface RiskIndicator {
-  risk: string;,
+  risk: string;
   severity: 'high' | 'medium' | 'low';
-  probability: number;,
+  probability: number;
   impact: number;
   mitigationActions: string;
 }
 export interface OpportunityArea {
-  opportunity: string;,
+  opportunity: string;
   potential: number;
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   timeframe: 'immediate' | 'short_term' | 'long_term';
   actions: string;
 }
 export interface CohortBehaviorPattern {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  patterns: BehaviorPattern;,
+  patterns: BehaviorPattern;
   uniqueBehaviors: UniqueBehavior;
-  behaviorEvolution: BehaviorEvolution;,
+  behaviorEvolution: BehaviorEvolution;
   crossCohortComparison: BehaviorComparison;
 }
 export interface BehaviorPattern {
-  pattern: string;,
+  pattern: string;
   frequency: number;
-  conversionImpact: number;,
+  conversionImpact: number;
   valueImpact: number;
-  temporalPattern: string;,
+  temporalPattern: string;
   predictability: number;
   description: string;
 }
 export interface UniqueBehavior {
-  behavior: string;,
+  behavior: string;
   uniquenessScore: number;
-  cohortSpecific: boolean;,
+  cohortSpecific: boolean;
   competitiveAdvantage: boolean;
-  replicability: string;,
+  replicability: string;
   description: string;
 }
 export interface BehaviorEvolution {
-  period: number;,
+  period: number;
   periodLabel: string;
-  behaviorChanges: BehaviorChange;,
+  behaviorChanges: BehaviorChange;
   adaptationRate: number;
   stabilityScore: number;
 }
 export interface BehaviorChange {
-  behavior: string;,
+  behavior: string;
   changeType: 'emerged' | 'strengthened' | 'weakened' | 'disappeared';
-  changeIntensity: number;,
+  changeIntensity: number;
   drivers: string;
 }
 export interface BehaviorComparison {
-  behavior: string;,
+  behavior: string;
   cohortFrequency: number;
-  otherCohortsAverage: number;,
+  otherCohortsAverage: number;
   relativeStrength: number;
   significance: number;
 }
 export interface CohortPredictiveModel {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
-  modelType: 'conversion' | 'value' | 'retention' | 'lifecycle';,
+  modelType: 'conversion' | 'value' | 'retention' | 'lifecycle';
   predictions: PredictionResult;
-  modelAccuracy: number;,
+  modelAccuracy: number;
   confidenceInterval: number;
-  keyPredictors: ModelPredictor;,
+  keyPredictors: ModelPredictor;
   scenarioAnalysis: ScenarioAnalysis;
 }
 export interface PredictionResult {
   timeframe: number; // Days ahead,
-  timeframeLabel: string;,
+  timeframeLabel: string;
   predictedValue: number;
-  confidence: number;,
+  confidence: number;
   factors: string;
   assumptions: string;
 }
 export interface ModelPredictor {
-  predictor: string;,
+  predictor: string;
   importance: number;
-  direction: 'positive' | 'negative';,
+  direction: 'positive' | 'negative';
   stability: number;
   actionability: string;
 }
 export interface ScenarioAnalysis {
-  scenario: string;,
+  scenario: string;
   probability: number;
-  predictedOutcome: number;,
+  predictedOutcome: number;
   impactFactors: string;
   preparationActions: string;
 }
 export interface CohortInsight {
-  type: 'performance' | 'behavior' | 'opportunity' | 'risk' | 'comparison';,
+  type: 'performance' | 'behavior' | 'opportunity' | 'risk' | 'comparison';
   cohortIds: string;
-  cohortNames: string;,
+  cohortNames: string;
   title: string;
-  description: string;,
+  description: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
-  confidence: number;,
+  confidence: number;
   businessImpact: number;
-  timeframe: 'immediate' | 'short_term' | 'long_term';,
+  timeframe: 'immediate' | 'short_term' | 'long_term';
   actionability: 'high' | 'medium' | 'low';
-  recommendations: string;,
+  recommendations: string;
   evidence: string;
   relatedInsights: string;
 }
 export interface CohortHealthScore {
-  cohortId: string;,
+  cohortId: string;
   cohortName: string;
   overallScore: number; // 0-100,
-  scoreComponents: HealthScoreComponent;,
+  scoreComponents: HealthScoreComponent;
   scoreHistory: HealthScoreHistory;
-  scoreTrend: 'improving' | 'stable' | 'declining';,
+  scoreTrend: 'improving' | 'stable' | 'declining';
   riskLevel: 'low' | 'medium' | 'high';
   interventionRecommendations: InterventionRecommendation;
 }
 export interface HealthScoreComponent {
-  component: string;,
+  component: string;
   score: number;
-  weight: number;,
+  weight: number;
   trend: 'improving' | 'stable' | 'declining';
-  benchmark: number;,
+  benchmark: number;
   contributingFactors: string;
 }
 export interface HealthScoreHistory {
-  timestamp: number;,
+  timestamp: number;
   score: number;
   changes: ScoreChange;
 }
 export interface ScoreChange {
-  component: string;,
+  component: string;
   change: number;
   reason: string;
 }
 export interface InterventionRecommendation {
-  recommendation: string;,
+  recommendation: string;
   priority: 'high' | 'medium' | 'low';
-  expectedImpact: number;,
+  expectedImpact: number;
   effort: 'low' | 'medium' | 'high';
-  timeframe: string;,
+  timeframe: string;
   successMetrics: string;
 }
 export interface CohortAnalysisExportData {
-  analysisMode: CohortAnalysisMode;,
+  analysisMode: CohortAnalysisMode;
   timeRange: { start: number; end: number };
-  cohorts: string;,
+  cohorts: string;
   data: CohortAnalysisData;
-  visualizations: {,
+  visualizations: {
   comparative: string;
-  retention: string;,
+  retention: string;
   lifecycle: string;
   behavior: string;
 };
-  insights: CohortInsight;,
+  insights: CohortInsight;
   recommendations: InterventionRecommendation;
-  metadata: {,
+  metadata: {
   exportedAt: number;
-  analysisDepth: 'basic' | 'standard' | 'comprehensive';,
+  analysisDepth: 'basic' | 'standard' | 'comprehensive';
   dataQuality: number;
 };
 /**
@@ -593,7 +593,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
   'cohort_lifecycle'
   ],
   groupBy: ['funnel_step', 'cohort', 'time_period'],
-  filters: selectedCohortIds.map(cohortId => ({,)
+  filters: selectedCohortIds.map(cohortId => ({)
   field: 'userContext.cohortIds',
   operator: 'contains',
   value: cohortId,
@@ -639,7 +639,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
   timeRange,
   cohorts: selectedCohortIds,
   data: analysisData,
-  visualizations: {,
+  visualizations: {
   comparative: 'comparative-chart-svg',
   retention: 'retention-chart-svg',
   lifecycle: 'lifecycle-chart-svg',
@@ -647,7 +647,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
 },
   insights: analysisData.insights,
       recommendations: analysisData.healthScores.flatMap(h => h.interventionRecommendations),
-      metadata: {,
+      metadata: {
   exportedAt: Date.now(),
   analysisDepth: 'comprehensive',
   dataQuality: 0.95,
@@ -720,12 +720,12 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
  * Cohort Analysis Header Component
  */
 interface CohortAnalysisHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   selectedCohorts: ConversionCohort;
-  analysisData: CohortAnalysisData;,
+  analysisData: CohortAnalysisData;
   activeView: string;
-  onViewChange: (view: string) => void;,
-  onCohortSelection: (cohortIds: string) => void;,
+  onViewChange: (view: string) => void;
+  onCohortSelection: (cohortIds: string) => void;
   onExport: () => void;
   const CohortAnalysisHeader: React.FC<CohortAnalysisHeaderProps> = ({,)
   funnelDefinition,
@@ -803,7 +803,7 @@ interface CohortAnalysisHeaderProps {
  * Comparative Analysis View Component
  */
 interface ComparativeAnalysisViewProps {
-  cohortPerformance: CohortPerformanceData;,
+  cohortPerformance: CohortPerformanceData;
   comparativeAnalysis: CohortComparativeAnalysis;
   funnelDefinition: ConversionFunnelDefinition;
   const ComparativeAnalysisView: React.FC<ComparativeAnalysisViewProps> = ({,)
@@ -869,7 +869,7 @@ interface ComparativeAnalysisViewProps {
  * Step Comparison Chart Component
  */
 interface StepComparisonChartProps {
-  cohortPerformance: CohortPerformanceData;,
+  cohortPerformance: CohortPerformanceData;
   funnelSteps: ConversionStep;
   const StepComparisonChart: React.FC<StepComparisonChartProps> = ({,)
   cohortPerformance,
@@ -1204,7 +1204,7 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
  * Lifecycle Analysis View Component
  */
 interface LifecycleAnalysisViewProps {
-  lifecycleAnalysis: CohortLifecycleAnalysis;,
+  lifecycleAnalysis: CohortLifecycleAnalysis;
   healthScores: CohortHealthScore;
   const LifecycleAnalysisView: React.FC<LifecycleAnalysisViewProps> = ({,)
   lifecycleAnalysis,
@@ -1455,7 +1455,7 @@ const ValueAnalysisView: React.FC<ValueAnalysisViewProps> = ({ valueAnalysis }) 
  * Cohort Insights Panel Component
  */
 interface CohortInsightsPanelProps {
-  insights: CohortInsight;,
+  insights: CohortInsight;
   healthScores: CohortHealthScore;
 const CohortInsightsPanel: React.FC<CohortInsightsPanelProps> = ({ insights, healthScores }) => {
   const criticalInsights = insights.filter(i => i.severity === 'critical' || i.severity === 'high');
@@ -1502,7 +1502,7 @@ const CohortAnalysisLoadingState: React.FC = () => ()
   </div>
 );
 interface CohortAnalysisErrorStateProps {
-  error: string;,
+  error: string;
   onRetry: () => void;
 const CohortAnalysisErrorState: React.FC<CohortAnalysisErrorStateProps> = ({ error, onRetry }) => ()
   <div className="cohort-analysis-error">
@@ -1538,7 +1538,7 @@ function getHealthScoreClass(score: number): string {
   if (score >= 40) return 'average';
   if (score >= 20) return 'below-average';
   return 'poor';
-async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefinition,)
+async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefinition)
   metricResults: ConversionMetricResult,
   selectedCohorts: ConversionCohort,
   timeRange: { start: number; end: number },
@@ -1547,7 +1547,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   const cohortPerformance: CohortPerformanceData = selectedCohorts.map((cohort, index) => ({,)
   cohortId: cohort.id,
   cohortName: cohort.name,
-  cohortDefinition: {,
+  cohortDefinition: {
   criteriaEvent: cohort.definition.criteriaEvent,
   timeWindow: cohort.definition.timeWindow,
   size: cohort.state.currentSize,
@@ -1555,7 +1555,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   maturity: 'mature',
   characteristics: ['High engagement', 'Premium features usage'],
 },
-  funnelMetrics: {,
+  funnelMetrics: {
   totalEntries: 1000 + (index * 200),
   totalConversions: 180 + (index * 50),
   overallConversionRate: 18 + (index * 3) + (Math.random() * 5),
@@ -1595,39 +1595,39 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
       retentionRate: 80 + (Math.random() * 15),
       reactivationCount: Math.floor(Math.random() * 5),
       valueGenerated: 500 + Math.random() * 300,
-      trendDirection: Math.random() > 0.5 ? 'improving' : 'stable';
+      trendDirection: Math.random() > 0.5 ? 'improving' : 'stable'
   })),
-    progressionMetrics: {,
+    progressionMetrics: {
   progressionRate: 75 + (Math.random() * 20),
   averageProgressionTime: 86400000 * (3 + Math.random() * 4),
   progressionStages: [],
   stagnationPoints: [],
   accelerationFactors: [],
 },
-  valueMetrics: {,
+  valueMetrics: {
   totalValue: 5000 + (index * 2000),
       valuePerUser: 25 + (index * 10),
       valuePerConversion: 150 + (index * 50),
       lifetimeValue: 500 + (index * 200),
       valueTrajectory: [],
-      valueDistribution: {,
+      valueDistribution: {
   lowValue: { threshold: 10, percentage: 40, totalValue: 800 },
         mediumValue: { threshold: 50, percentage: 35, totalValue: 1750 },
         highValue: { threshold: 100, percentage: 20, totalValue: 2000 },
         topPercentile: { threshold: 500, percentage: 5, totalValue: 2500 }
   },
-  moneyGenerationPattern: {,
+  moneyGenerationPattern: {
   pattern: 'gradual',
   consistency: 0.75,
   predictability: 0.8,
-  seasonality: {,
+  seasonality: {
   hasSeasonality: true,
   pattern: 'weekly',
   peaks: ['Tuesday', 'Wednesday'],
   troughs: ['Sunday'],
 },
-  benchmarkComparison: {,
-  overallPerformance: {,
+  benchmarkComparison: {
+  overallPerformance: {
   metric: 'conversion_rate',
   cohortValue: 18 + (index * 3),
   benchmarkValue: 15,
@@ -1664,7 +1664,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
       relatedInsights: []];
   return {
     cohortPerformance,
-    comparativeAnalysis: {,
+    comparativeAnalysis: {
   crossCohortMetrics: [],
       performanceRankings: [],
       significantDifferences: selectedCohorts.length > 1 ? [,
@@ -1687,7 +1687,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
       convergenceAnalysis: [],
       outlierAnalysis: [];
   },
-  retentionAnalysis: selectedCohorts.map(cohort => ({,)
+  retentionAnalysis: selectedCohorts.map(cohort => ({)
   cohortId: cohort.id,
       cohortName: cohort.name,
       retentionCurve: Array.from({ length: 30 }, (_, day) => ({)
@@ -1701,7 +1701,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
         reactivatedUsers: Math.floor(Math.random() * 20),
         netRetention: Math.pow(0.95, day) * 100 + (Math.random() * 5)
       })),
-      retentionMetrics: {,
+      retentionMetrics: {
   dayOneRetention: 95,
   daySevenRetention: 75,
   dayThirtyRetention: 55,
@@ -1717,21 +1717,21 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   correlation: 0.82,
   actionability: 'high',
   description: 'Users who engage within first 24 hours show higher retention'],
-  churnAnalysis: {,
+  churnAnalysis: {
   overallChurnRate: 45,
   churnPredictors: [],
   churnSegments: [],
   preventableChurn: 15,
   churnValue: 2500,
 },
-  reactivationAnalysis: {,
+  reactivationAnalysis: {
   reactivationRate: 12,
   averageTimeToReactivation: 604800000, // 7 days,
   reactivationTriggers: [],
   reactivationValue: 850,
   reactivationROI: 3.2,
 })),
-    lifecycleAnalysis: selectedCohorts.map(cohort => ({,)
+    lifecycleAnalysis: selectedCohorts.map(cohort => ({)
   cohortId: cohort.id,
   cohortName: cohort.name,
   lifecycleStages: [,
@@ -1789,20 +1789,20 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   valueGenerated: 5000,
   stageCharacteristics: ['Referrals', 'Community participation']],
   stageTransitions: [],
-  maturityMetrics: {,
+  maturityMetrics: {
   overallMaturity: 75,
   maturityFactors: [],
   maturityTrajectory: 'steady',
   expectedPeakValue: 15000,
   timeToMaturity: 180,
 },
-  lifecycleHealth: {,
+  lifecycleHealth: {
   healthScore: 82,
   healthFactors: [],
   riskIndicators: [],
   opportunityAreas: [],
 })),
-    behaviorPatterns: selectedCohorts.map(cohort => ({,)
+    behaviorPatterns: selectedCohorts.map(cohort => ({)
   cohortId: cohort.id,
   cohortName: cohort.name,
   patterns: [,
@@ -1826,7 +1826,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   crossCohortComparison: [],
 })),
     valueAnalysis: [],
-    predictiveModels: selectedCohorts.map(cohort => ({,)
+    predictiveModels: selectedCohorts.map(cohort => ({)
   cohortId: cohort.id,
   cohortName: cohort.name,
   modelType: 'conversion',
@@ -1865,7 +1865,7 @@ async function processCohortAnalysisData(funnelDefinition: ConversionFunnelDefin
   scenarioAnalysis: [],
 })),
     insights,
-    healthScores: selectedCohorts.map(cohort => ({,)
+    healthScores: selectedCohorts.map(cohort => ({)
   cohortId: cohort.id,
   cohortName: cohort.name,
   overallScore: 75 + (Math.random() * 20),

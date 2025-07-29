@@ -61,7 +61,7 @@ export interface ConnectionSecurityContext {
     messageCount: number;
     bytesSent: number;
     bytesReceived: number;
-    flags: {,
+    flags: {
         vpnDetected: boolean;
         proxyDetected: boolean;
         botDetected: boolean;

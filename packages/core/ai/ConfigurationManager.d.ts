@@ -11,15 +11,15 @@ export interface EnvironmentConfig {
     name: string;
     description: string;
     models: ModelConfiguration[];
-    defaults: {,
+    defaults: {
         timeout: number;
         retries: number;
-        rateLimit: {,
+        rateLimit: {
             requestsPerMinute: number;
             tokensPerMinute: number;
         };
     };
-    features: {,
+    features: {
         enableCaching: boolean;
         enableLoadBalancing: boolean;
         enableHealthChecks: boolean;

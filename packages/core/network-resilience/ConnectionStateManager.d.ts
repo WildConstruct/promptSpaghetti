@@ -48,12 +48,12 @@ export interface ConnectionStateData {
 export interface ConnectionStateConfig {
     pingInterval: number;
     qualityCheckInterval: number;
-    latencyThreshold: {,
+    latencyThreshold: {
         excellent: number;
         good: number;
         fair: number;
     };
-    packetLossThreshold: {,
+    packetLossThreshold: {
         excellent: number;
         good: number;
         fair: number;

@@ -49,9 +49,9 @@ import {
 // Core Types
 
 export interface TargetingCondition {
-  id: string;,
+  id: string;
   type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
-  field: string;,
+  field: string;
   operator: string;
   value: Error;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
@@ -59,38 +59,38 @@ export interface TargetingCondition {
   isEnabled: boolean;
 }
 export interface UserSegment {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  conditions: TargetingCondition;,
+  conditions: TargetingCondition;
   userCount: number;
-  isActive: boolean;,
+  isActive: boolean;
   createdAt: Date;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   tags: string;
   color: string;
 }
 export interface TargetingAudience {
-  id: string;,
+  id: string;
   name: string;
-  segments: UserSegment;,
+  segments: UserSegment;
   conditions: TargetingCondition;
-  estimatedReach: number;,
+  estimatedReach: number;
   conversionRate: number;
-  isActive: boolean;,
+  isActive: boolean;
   rolloutPercentage: number;
 }
 export interface TargetingPreview {
-  totalUsers: number;,
+  totalUsers: number;
   matchedUsers: number;
-  matchPercentage: number;,
+  matchPercentage: number;
   sampleUsers: Array<{,
-  id: string;,
+  id: string;
   email: string;
   attributes: Record<string, any>;
   matchReasons: string;
 }>;
-  demographics: {,
+  demographics: {
   age: Record<string, number>;
   location: Record<string, number>;
   userType: Record<string, number>;
@@ -255,12 +255,12 @@ export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name'
 
 // Advanced Condition Builder Component
 interface AdvancedConditionBuilderProps {
-  conditions: TargetingCondition;,
-  onChange: (conditions: TargetingCondition) => void;,
+  conditions: TargetingCondition;
+  onChange: (conditions: TargetingCondition) => void;
   availableFields: Array<{,
-  key: string;,
+  key: string;
   label: string;
-  type: string;,
+  type: string;
   category: string;
   options?: unknown;
 }>;
@@ -309,11 +309,11 @@ export const [previewLoading, setPreviewLoading] = useState(false);
   };
   const handleDragStart = (e: React.DragEvent, conditionId: string) => {
     setDraggedCondition(conditionId);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = 'move'
   };
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = 'move'
   };
   const handleDrop = (e: React.DragEvent, targetIndex: number) => {
     e.preventDefault();
@@ -586,11 +586,11 @@ export const [previewLoading, setPreviewLoading] = useState(false);
 
 // Geographic Targeting Component
 interface GeographicTargetingProps {
-  selectedCountries: string;,
+  selectedCountries: string;
   selectedRegions: string;
-  selectedCities: string;,
-  onCountriesChange: (countries: string) => void;,
-  onRegionsChange: (regions: string) => void;,
+  selectedCities: string;
+  onCountriesChange: (countries: string) => void;
+  onRegionsChange: (regions: string) => void;
   onCitiesChange: (cities: string) => void;
   excludeMode?: boolean;
   onExcludeModeChange?: (exclude: boolean) => void;
@@ -695,10 +695,10 @@ interface GeographicTargetingProps {
 
 // Segment Management Component
 interface SegmentManagementProps {
-  segments: UserSegment;,
+  segments: UserSegment;
   onCreateSegment: (segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastUpdated'>) => void;
-  onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;,
-  onDeleteSegment: (id: string) => void;,
+  onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
+  onDeleteSegment: (id: string) => void;
   onDuplicateSegment: (id: string) => void;
   return;
     <div className="segment-management">
@@ -866,26 +866,26 @@ interface SegmentManagementProps {
 
 // Targeting Performance Analytics
 interface TargetingAnalyticsProps {
-  analytics: {,
-  totalUsers: number;,
+  analytics: {
+  totalUsers: number;
   activeTargeting: number;
-  conversionRate: number;,
+  conversionRate: number;
   impressions: number;
-  clicks: number;,
+  clicks: number;
   topSegments: Array<{,
-  id: string;,
+  id: string;
   name: string;
-  performance: number;,
+  performance: number;
   users: number;
 }>;
     geographicBreakdown: Record<string, number>;
     timeSeriesData: Array<{,
   date: string;
-  impressions: number;,
+  impressions: number;
   conversions: number;
 }>;
   };
-  timeRange: '24h' | '7d' | '30d' | '90d';,
+  timeRange: '24h' | '7d' | '30d' | '90d';
   onTimeRangeChange: (range: '24h' | '7d' | '30d' | '90d') => void;
 
 // Export all components

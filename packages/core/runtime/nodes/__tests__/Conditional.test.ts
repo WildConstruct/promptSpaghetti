@@ -189,7 +189,7 @@ describe('Conditional Node', () => {
   describe('Custom Functions', () => {
   test('should support custom functions in configuration', () => {
   const customConfig: ConditionalConfig = {,
-  customFunctions: {,
+  customFunctions: {
   isEven: (n: number) => n % 2 === 0,
   capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
 };
@@ -205,7 +205,7 @@ describe('Conditional Node', () => {
     });
     test('should support custom functions with multiple parameters', () => {
   const customConfig: ConditionalConfig = {,
-  customFunctions: {,
+  customFunctions: {
   between: (value: number, min: number, max: number) => value >= min && value <= max,
   distance: (x1: number, y1: number, x2: number, y2: number) =>,
   Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)

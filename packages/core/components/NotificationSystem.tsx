@@ -127,10 +127,10 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       <style>{`
         @keyframes slideIn {
           from {
-            transform: translateX(100%);,
+            transform: translateX(100%);
   opacity: 0;
           to {
-            transform: translateX(0);,
+            transform: translateX(0);
   opacity: 1;
         @keyframes fadeOut {
           from {

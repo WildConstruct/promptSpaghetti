@@ -14,23 +14,23 @@ import {
 const isBrowser = (function() {
   try {
     return typeof window !== 'undefined' && 
-           typeof localStorage !== 'undefined';
+           typeof localStorage !== 'undefined'
   } catch {
     return false;
 })();
 
 export interface ParameterHistory {
-  id: string;,
+  id: string;
   parameters: RandomizerParameters;
-  timestamp: string;,
+  timestamp: string;
   success: boolean;
   generationTime?: number;
   errorCount?: number;
 }
 export interface ParameterManagerOptions {
-  enableHistory: boolean;,
+  enableHistory: boolean;
   maxHistorySize: number;
-  autoSave: boolean;,
+  autoSave: boolean;
   storageKey: string;
   /**
   * Manages randomizer parameters, presets, and history
@@ -225,11 +225,11 @@ export class ParameterManager {
    * Get history statistics
    */
   getHistoryStats(): {
-    totalGenerations: number;,
+    totalGenerations: number;
   successRate: number;
-    averageGenerationTime: number;,
+    averageGenerationTime: number;
   mostUsedComplexity: string;
-    mostUsedProvider: string;,
+    mostUsedProvider: string;
   popularNodeTypes: Array<{ nodeType: string; count: number }>;
     if (this.history.length === 0) {
   return {
@@ -304,7 +304,7 @@ export class ParameterManager {
    * Export parameters and presets
    */
   exportData(): {
-  presets: ParameterPreset;,
+  presets: ParameterPreset;
   history: ParameterHistory;
   exported: string;
   return {
@@ -319,7 +319,7 @@ export class ParameterManager {
   presets?: ParameterPreset;
   history?: ParameterHistory;
 }): {
-  presetsImported: number;,
+  presetsImported: number;
   historyImported: number;
   errors: string;
   const result = {

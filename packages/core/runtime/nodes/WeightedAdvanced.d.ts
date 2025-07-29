@@ -78,7 +78,7 @@ export declare class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating WeightedAdvanced nodes
  */
-export declare function createWeightedAdvancedNode(id: string,)
+export declare function createWeightedAdvancedNode(id: string)
   choices: WeightedChoice[],
   distributionConfig?: WeightDistributionConfig
 ): WeightedAdvancedNode;
@@ -86,26 +86,26 @@ export declare function createWeightedAdvancedNode(id: string,)
  * Default distribution configurations for common use cases
  */
 export declare const DistributionPresets: {
-    linear: {,
+    linear: {
         type: "linear";
         normalize: true;
     };
-    exponential: {,
+    exponential: {
         type: "exponential";
-        parameters: {,
+        parameters: {
             factor: number;
         };
         normalize: true;
     };
-    gaussian: {,
+    gaussian: {
         type: "gaussian";
-        parameters: {,
+        parameters: {
             mean: number;
             std: number;
         };
         normalize: true;
     };
-    uniform: {,
+    uniform: {
         type: "linear";
         normalize: true;
         minWeight: number;

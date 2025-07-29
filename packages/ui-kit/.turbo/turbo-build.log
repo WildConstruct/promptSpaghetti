@@ -2,15 +2,3 @@
 > @prompt-spaghetti/ui-kit@0.1.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/ui-kit
 > tsc
 
-src/touch/index.ts(119,1): error TS1128: Declaration or statement expected.
-src/touch/index.ts(119,10): error TS1128: Declaration or statement expected.
-src/touch/index.ts(119,11): error TS1128: Declaration or statement expected.
-src/touch/index.ts(124,20): error TS1005: ';' expected.
-src/touch/index.ts(124,22): error TS1434: Unexpected keyword or identifier.
-src/touch/index.ts(126,4): error TS1128: Declaration or statement expected.
-src/touch/index.ts(131,23): error TS1005: ';' expected.
-src/touch/index.ts(131,25): error TS1434: Unexpected keyword or identifier.
-src/touch/index.ts(133,4): error TS1128: Declaration or statement expected.
-src/touch/index.ts(138,25): error TS1005: ';' expected.
-src/touch/index.ts(153,1): error TS1128: Declaration or statement expected.
- ELIFECYCLE  Command failed with exit code 2.

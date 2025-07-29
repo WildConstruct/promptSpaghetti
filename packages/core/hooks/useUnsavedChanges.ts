@@ -10,11 +10,11 @@ interface UseUnsavedChangesOptions {
   projectName?: string;
   onSave?: () => Promise<boolean> | boolean; // Returns true if save was successful,
   interface UseUnsavedChangesReturn {
-  showUnsavedDialog: boolean;,
+  showUnsavedDialog: boolean;
   dialogAction: string;
-  confirmNavigation: (action: string, callback: () => void) => void;,
+  confirmNavigation: (action: string, callback: () => void) => void;
   handleSave: () => void;
-  handleDontSave: () => void;,
+  handleDontSave: () => void;
   handleCancel: () => void;
   export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChangesReturn {,
   const [isDialogOpen, setIsDialogOpen] = useState(false);

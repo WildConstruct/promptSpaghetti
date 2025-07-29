@@ -26,44 +26,44 @@ import {
 // Type definitions for article management
 
 export interface Article {
-  id: string;,
+  id: string;
   title: string;
-  content: string;,
+  content: string;
   excerpt: string;
-  slug: string;,
+  slug: string;
   status: 'draft' | 'published' | 'archived' | 'review';
-  category: ArticleCategory;,
+  category: ArticleCategory;
   tags: string;
   author: ArticleAuthor;
   collaborators?: ArticleAuthor;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;
-  viewCount: number;,
+  viewCount: number;
   likeCount: number;
-  shareCount: number;,
+  shareCount: number;
   bookmarkCount: number;
   readTime: number; // estimated reading time in minutes,
-  difficulty: 'beginner' | 'intermediate' | 'advanced';,
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   featured: boolean;
   attachments?: ArticleAttachment;
   relatedArticles?: string; // IDs of related articles,
-  seo: {,
+  seo: {
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string;
 };
-  analytics: {,
+  analytics: {
   averageRating: number;
-  ratingCount: number;,
+  ratingCount: number;
   completionRate: number;
   bounceRate: number;
 };
 }
 export interface ArticleCategory {
-  id: string;,
+  id: string;
   name: string;
-  slug: string;,
+  slug: string;
   description: string;
   color: string;
   icon?: string;
@@ -71,24 +71,24 @@ export interface ArticleCategory {
   articleCount: number;
 }
 export interface ArticleAuthor {
-  id: string;,
+  id: string;
   name: string;
   email: string;
   avatar?: string;
   role: 'admin' | 'editor' | 'contributor' | 'guest';
   bio?: string;
-  socialLinks?: {,
+  socialLinks?: {
   twitter?: string;
   github?: string;
   linkedin?: string;
 };
 }
 export interface ArticleAttachment {
-  id: string;,
+  id: string;
   name: string;
-  url: string;,
+  url: string;
   type: 'image' | 'document' | 'video' | 'audio' | 'archive';
-  size: number;,
+  size: number;
   mimeType: string;
 }
 export interface ArticleFilter {
@@ -97,42 +97,42 @@ export interface ArticleFilter {
   tags?: string;
   author?: string;
   difficulty?: Article['difficulty'][];
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   featured?: boolean;
   searchQuery?: string;
 }
 export interface ArticleSort {
-  field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';,
+  field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
   direction: 'asc' | 'desc';
   // Props for main ArticleManagement component
 }
 export interface ArticleManagementProps {
-  articles: Article;,
+  articles: Article;
   categories: ArticleCategory;
-  currentUser: ArticleAuthor;,
-  onCreateArticle: (article: Partial<Article>) => Promise<Article>;,
-  onUpdateArticle: (id: string, article: Partial<Article>) => Promise<Article>;,
-  onDeleteArticle: (id: string) => Promise<void>;,
-  onPublishArticle: (id: string) => Promise<void>;,
-  onArchiveArticle: (id: string) => Promise<void>;,
-  onDuplicateArticle: (id: string) => Promise<Article>;,
-  onUploadAttachment: (file: File) => Promise<ArticleAttachment>;,
-  onCreateCategory: (category: Partial<ArticleCategory>) => Promise<ArticleCategory>;,
+  currentUser: ArticleAuthor;
+  onCreateArticle: (article: Partial<Article>) => Promise<Article>;
+  onUpdateArticle: (id: string, article: Partial<Article>) => Promise<Article>;
+  onDeleteArticle: (id: string) => Promise<void>;
+  onPublishArticle: (id: string) => Promise<void>;
+  onArchiveArticle: (id: string) => Promise<void>;
+  onDuplicateArticle: (id: string) => Promise<Article>;
+  onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
+  onCreateCategory: (category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
   onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
   className?: string;
   // Article List Component
 }
 export const ArticleList: React.FC<{,
   articles: Article;
-  filter: ArticleFilter;,
+  filter: ArticleFilter;
   sort: ArticleSort;
-  onEdit: (article: Article) => void;,
-  onDelete: (article: Article) => void;,
-  onDuplicate: (article: Article) => void;,
-  onView: (article: Article) => void;,
+  onEdit: (article: Article) => void;
+  onDelete: (article: Article) => void;
+  onDuplicate: (article: Article) => void;
+  onView: (article: Article) => void;
   currentUser: ArticleAuthor;
 }> = ({ articles, filter, sort, onEdit, onDelete, onDuplicate, onView, currentUser }) => {
   const filteredAndSortedArticles = useMemo(() => {
@@ -303,8 +303,8 @@ export const ArticleList: React.FC<{,
 // Article Editor Component
 export const ArticleEditor: React.FC<{
   article?: Article;
-  categories: ArticleCategory;,
-  onSave: (article: Partial<Article>) => Promise<void>;,
+  categories: ArticleCategory;
+  onSave: (article: Partial<Article>) => Promise<void>;
   onCancel: () => void;
   onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
 }> = ({ article, categories, onSave, onCancel, onUploadAttachment }) => {

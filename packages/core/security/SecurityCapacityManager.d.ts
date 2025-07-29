@@ -13,60 +13,60 @@ export interface CapacityPlan {
     name: string;
     description: string;
     service: string;
-    planning_horizon: {,
+    planning_horizon: {
         short_term_days: number;
         medium_term_days: number;
         long_term_days: number;
     };
-    requirements: {,
+    requirements: {
         baseline_capacity: ResourceRequirements;
         peak_capacity: ResourceRequirements;
         growth_projections: GrowthProjection[];
         performance_targets: PerformanceTargets;
         availability_requirements: AvailabilityRequirements;
     };
-    scaling: {,
+    scaling: {
         auto_scaling_enabled: boolean;
         scaling_policies: ScalingPolicy[];
         scaling_cooldown: number;
         min_instances: number;
         max_instances: number;
-        target_utilization: {,
+        target_utilization: {
             cpu_percentage: number;
             memory_percentage: number;
             network_percentage: number;
             custom_metrics: CustomMetricTarget[];
         };
     };
-    cost_optimization: {,
-        budget_constraints: {,
+    cost_optimization: {
+        budget_constraints: {
             monthly_budget: number;
             cost_per_hour_limit: number;
             currency: string;
         };
         instance_types: InstanceTypeConfig[];
-        reserved_capacity: {,
+        reserved_capacity: {
             percentage: number;
-            commitment_period: 'monthly' | 'yearly' | 'multi_year';
-        };
-        spot_instances: {,
+            commitment_period: 'monthly' | 'yearly' | 'multi_year'
+  };
+        spot_instances: {
             enabled: boolean;
             max_percentage: number;
-            fallback_strategy: 'on_demand' | 'reserved' | 'scale_down';
-        };
+            fallback_strategy: 'on_demand' | 'reserved' | 'scale_down'
+  };
     };
-    monitoring: {,
-        capacity_thresholds: {,
+    monitoring: {
+        capacity_thresholds: {
             warning_percentage: number;
             critical_percentage: number;
             forecast_breach_days: number;
         };
-        metrics_collection: {,
+        metrics_collection: {
             interval_seconds: number;
             retention_days: number;
             custom_metrics: string[];
         };
-        alerting: {,
+        alerting: {
             notification_channels: string[];
             escalation_policy: string[];
             alert_suppression_minutes: number;
@@ -115,13 +115,13 @@ export interface PerformanceTargets {
 export interface AvailabilityRequirements {
     target_availability: number;
     downtime_budget_minutes_monthly: number;
-    maintenance_window: {,
+    maintenance_window: {
         day_of_week: string;
         start_time: string;
         duration_hours: number;
         timezone: string;
     };
-    disaster_recovery: {,
+    disaster_recovery: {
         rto_minutes: number;
         rpo_minutes: number;
         geographic_redundancy: boolean;
@@ -133,17 +133,17 @@ export interface ScalingPolicy {
     description: string;
     type: 'reactive' | 'predictive' | 'scheduled';
     enabled: boolean;
-    triggers: {,
+    triggers: {
         metric_based: MetricTrigger[];
         time_based: TimeTrigger[];
         event_based: EventTrigger[];
     };
-    actions: {,
+    actions: {
         scale_up: ScalingAction;
         scale_down: ScalingAction;
         notification: NotificationAction[];
     };
-    constraints: {,
+    constraints: {
         max_scale_up_percentage: number;
         max_scale_down_percentage: number;
         cooldown_period_seconds: number;
@@ -215,18 +215,18 @@ export interface CapacityMetrics {
     id: string;
     service: string;
     timestamp: number;
-    collection_period: {,
+    collection_period: {
         start: number;
         end: number;
     };
-    current_utilization: {,
+    current_utilization: {
         cpu_percentage: number;
         memory_percentage: number;
         disk_percentage: number;
         network_percentage: number;
         custom_metrics: Record<string, number>;
     };
-    performance: {,
+    performance: {
         avg_response_time: number;
         p95_response_time: number;
         p99_response_time: number;
@@ -235,7 +235,7 @@ export interface CapacityMetrics {
         queue_depth: number;
         active_connections: number;
     };
-    resources: {,
+    resources: {
         allocated_instances: number;
         running_instances: number;
         pending_instances: number;
@@ -244,14 +244,14 @@ export interface CapacityMetrics {
         total_memory_gb: number;
         total_storage_gb: number;
     };
-    cost: {,
+    cost: {
         current_hourly_cost: number;
         projected_monthly_cost: number;
         reserved_capacity_utilization: number;
         spot_instance_percentage: number;
         cost_per_request: number;
     };
-    health: {,
+    health: {
         overall_health_score: number;
         bottleneck_indicators: string[];
         scaling_recommendations: string[];
@@ -266,7 +266,7 @@ export interface ScalingEvent {
     event_type: 'scale_up' | 'scale_down' | 'policy_triggered' | 'manual_intervention';
     trigger_reason: string;
     triggered_by: string;
-    scaling_details: {,
+    scaling_details: {
         previous_capacity: number;
         target_capacity: number;
         actual_capacity: number;
@@ -274,19 +274,19 @@ export interface ScalingEvent {
         instances_added: number;
         instances_removed: number;
     };
-    impact: {,
-        performance_change: {,
+    impact: {
+        performance_change: {
             response_time_change_ms: number;
             throughput_change_rps: number;
             error_rate_change: number;
         };
-        cost_impact: {,
+        cost_impact: {
             hourly_cost_change: number;
             estimated_monthly_impact: number;
         };
-        availability_impact: 'none' | 'minimal' | 'moderate' | 'significant';
-    };
-    validation: {,
+        availability_impact: 'none' | 'minimal' | 'moderate' | 'significant'
+  };
+    validation: {
         scaling_successful: boolean;
         target_reached: boolean;
         performance_improved: boolean;
@@ -299,7 +299,7 @@ export interface CapacityForecast {
     service: string;
     generated_at: number;
     forecast_horizon_days: number;
-    methodology: {,
+    methodology: {
         algorithm: 'linear_regression' | 'exponential_smoothing' | 'arima' | 'machine_learning';
         confidence_interval: number;
         historical_data_points: number;
@@ -315,12 +315,12 @@ export interface CapacityForecast {
         estimated_cost: number;
         risk_factors: string[];
     }>;
-    recommendations: {,
+    recommendations: {
         immediate_actions: CapacityRecommendation[];
         short_term_planning: CapacityRecommendation[];
         long_term_strategy: CapacityRecommendation[];
     };
-    accuracy: {,
+    accuracy: {
         last_forecast_accuracy: number;
         trend_accuracy: number;
         peak_prediction_accuracy: number;
@@ -334,7 +334,7 @@ export interface CapacityRecommendation {
     title: string;
     description: string;
     rationale: string;
-    implementation: {,
+    implementation: {
         estimated_effort_hours: number;
         estimated_cost_impact: number;
         estimated_benefit: string;
@@ -342,7 +342,7 @@ export interface CapacityRecommendation {
         risks: string[];
         rollback_plan: string;
     };
-    timeline: {,
+    timeline: {
         recommended_start: number;
         estimated_completion: number;
         deadline?: number;
@@ -387,7 +387,7 @@ export declare class SecurityCapacityManager extends EventEmitter {
         services: Array<{,
             service: string;
             current_capacity: number;
-            utilization: {,
+            utilization: {
                 cpu: number;
                 memory: number;
             };

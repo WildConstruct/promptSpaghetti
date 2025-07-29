@@ -9,13 +9,13 @@ import { PreviewResultWithPath, ExecutionPath } from '../types/ExecutionPath';
 import { exportResults, ExportRequest, ExportResult } from '../../../server/src/exporter';
 
 export interface ResultExportOptions {
-  format: ExportFormat;,
+  format: ExportFormat;
   includeMetadata: boolean;
-  includeExecutionPaths: boolean;,
+  includeExecutionPaths: boolean;
   includeDebugInfo: boolean;
   filename?: string;
   // Film industry options
-  filmOptions?: {,
+  filmOptions?: {
   includeDirectorNotes?: boolean;
   sceneNumbering?: boolean;
   shotBreakdown?: boolean;
@@ -55,19 +55,19 @@ export type ExportFormat =
   | 'batch-summary';
 
 export interface IndividualExportData {
-  result: PreviewResultWithPath;,
+  result: PreviewResultWithPath;
   index: number;
-  totalResults: number;,
+  totalResults: number;
   exportedAt: string;
   sourceGraph?: any;
 }
 export interface BatchExportData {
-  results: PreviewResultWithPath;,
+  results: PreviewResultWithPath;
   selectedIndices: number;
-  aggregateStats: {,
-  totalResults: number;,
+  aggregateStats: {
+  totalResults: number;
   averageExecutionTime: number;
-  uniqueSeeds: number;,
+  uniqueSeeds: number;
   varianceScore: number;
   commonElements: string;
 };
@@ -78,7 +78,7 @@ export class ResultExportService {
   /**
   * Export a single preview result in the specified format
   */
-  async exportIndividualResult(result: PreviewResultWithPath,)
+  async exportIndividualResult(result: PreviewResultWithPath)
   resultIndex: number,
   totalResults: number,
   options: ResultExportOptions,
@@ -95,7 +95,7 @@ export class ResultExportService {
   /**
    * Export multiple selected results as a batch
    */
-  async exportBatchResults(results: PreviewResultWithPath,)
+  async exportBatchResults(results: PreviewResultWithPath)
     selectedIndices: number,
     options: ResultExportOptions,
     sourceGraph?: any
@@ -118,7 +118,7 @@ export class ResultExportService {
   /**
    * Export all results with comparison analysis
    */
-  async exportComparison(results: PreviewResultWithPath,)
+  async exportComparison(results: PreviewResultWithPath)
     options: ResultExportOptions,
     sourceGraph?: any
   ): Promise<ExportResult> {
@@ -135,11 +135,11 @@ export class ResultExportService {
    * Get available export formats with descriptions
    */
   getAvailableFormats(): Array<{
-  format: ExportFormat;,
+  format: ExportFormat;
   name: string;
-  description: string;,
+  description: string;
   category: 'text' | 'data' | 'film' | 'vfx' | 'analysis';
-  supportsIndividual: boolean;,
+  supportsIndividual: boolean;
   supportsBatch: boolean;
 }> {
   return [
@@ -263,8 +263,8 @@ export class ResultExportService {
   /**
   * Estimate export size for UI feedback
   */
-  estimateExportSize(results: PreviewResultWithPath, format: ExportFormat, options: ResultExportOptions): {,
-  estimatedSize: number;,
+  estimateExportSize(results: PreviewResultWithPath, format: ExportFormat, options: ResultExportOptions): {
+  estimatedSize: number;
   unit: 'KB' | 'MB';
   warning?: string;
   const baseSize = results.reduce((total, result) => {
@@ -315,7 +315,7 @@ export class ResultExportService {
   /**
    * Private helper methods
    */
-  private async performExport(data: IndividualExportData | BatchExportData | any,)
+  private async performExport(data: IndividualExportData | BatchExportData | any)
     options: ResultExportOptions,
     filename: string,
     exportType: 'individual' | 'batch' | 'comparison'): Promise<ExportResult> {,
@@ -351,7 +351,7 @@ export class ResultExportService {
   'batch-summary': 'json-complete' // Custom handling,
 };
     return formatMap[format] || 'json-complete';
-  private transformDataForExport(data: IndividualExportData | BatchExportData | any,)
+  private transformDataForExport(data: IndividualExportData | BatchExportData | any)
     options: ResultExportOptions,
     exportType: string): any {,
   const baseData = {
@@ -382,7 +382,7 @@ export class ResultExportService {
   vfxOptions: options.vfxOptions,
   analysisOptions: options.analysisOptions,
 };
-  private async handleCustomExport(data: any,)
+  private async handleCustomExport(data: any)
     options: ResultExportOptions,
     filename: string,
     exportType: string): Promise<ExportResult> {,
@@ -593,7 +593,7 @@ export class ResultExportService {
   sceneDataIntegration: vfxOptions.sceneDataIntegration,
   pipeline: 'stable-diffusion',
   resolution: [1920, 1080],
-  results: results.map(r => ({,)
+  results: results.map(r => ({)
   seed: r.seed,
   prompt: r.output,
   executionPath: r.executionPath,
@@ -627,7 +627,7 @@ export class ResultExportService {
   standardDeviation: Math.sqrt(),
   lengths.reduce((sum, len) => sum + Math.pow(len - mean, 2), 0) / lengths.length
   ),
-  range: {,
+  range: {
   min: Math.min(...lengths),
   max: Math.max(...lengths),
 };

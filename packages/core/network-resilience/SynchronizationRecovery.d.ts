@@ -24,7 +24,7 @@ export interface SyncDelta {
     fromVersion: number;
     toVersion: number;
     conflicts: ConflictInfo[];
-    metadata: {,
+    metadata: {
         operationCount: number;
         estimatedSize: number;
         compression?: string;

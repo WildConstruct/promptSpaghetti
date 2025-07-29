@@ -157,7 +157,7 @@ describe('EmailTemplateManager', () => {
         textTemplate: 'Hello {{name}}',
         variables: ['name'],
         description: 'Test template',
-        category: 'notification';
+        category: 'notification'
   };
       templateManager.addTemplate('custom-test', customTemplate);
       const retrieved = templateManager.getTemplate('custom-test');
@@ -241,7 +241,7 @@ describe('EmailTemplateManager', () => {
         textTemplate: 'Hello {{uppercase name}}',
         variables: ['name', 'title'],
         description: 'Test helpers',
-        category: 'notification';
+        category: 'notification'
   };
       templateManager.addTemplate('helper-test', templateWithHelpers);
       const result = templateManager.renderTemplate('helper-test', {)
@@ -268,7 +268,7 @@ describe('EmailTemplateManager', () => {
         textTemplate: 'Simple text',
         variables: ['hasWarning', 'isUrgent', 'warningMessage'],
         description: 'Test complex conditionals',
-        category: 'notification';
+        category: 'notification'
   };
       templateManager.addTemplate('complex-test', complexTemplate);
       const result = templateManager.renderTemplate('complex-test', {)
@@ -320,7 +320,7 @@ describe('EmailTemplateManager', () => {
         textTemplate: 'Hello {{name}}',
         variables: ['name'],
         description: 'Test XSS protection',
-        category: 'notification';
+        category: 'notification'
   };
       templateManager.addTemplate('security-test', maliciousTemplate);
       const result = templateManager.renderTemplate('security-test', {)

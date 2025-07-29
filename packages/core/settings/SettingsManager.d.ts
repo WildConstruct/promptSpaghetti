@@ -35,7 +35,7 @@ export declare class SettingsManager {
     /**
      * Update specific setting
      */
-    updateSetting<K extends keyof AdvancedSettings>(key: K,)
+    updateSetting<K extends keyof AdvancedSettings>(key: K)
       value: AdvancedSettings[K],
       source?: 'user' | 'system' | 'import'): SettingsValidationResult;
     /**

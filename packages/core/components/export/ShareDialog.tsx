@@ -18,14 +18,14 @@ import {
   FiGlobe
 } from 'react-icons/fi';
 interface ShareDialogProps {
-  exportJob: ExportJob;,
+  exportJob: ExportJob;
   onClose: () => void;
   onShareCreated: (share: ExportShare) => void;
   className?: string;
   const ACCESS_LEVELS: Array<{,
-  value: ShareAccessLevel;,
+  value: ShareAccessLevel;
   label: string;
-  description: string;,
+  description: string;
   icon: React.ComponentType;
 }> = [
   {
@@ -96,7 +96,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
 } as CreateExportShare;
       const response = await fetch('/api/export/shares', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(sharePayload);

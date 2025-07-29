@@ -38,19 +38,19 @@ export interface VerificationDashboardProps {
   onRequestSelect?: (request: IdentityValidationRequest) => void;
 }
 export interface AdminVerificationMetrics {
-  totalRequests: number;,
+  totalRequests: number;
   pendingRequests: number;
-  approvedToday: number;,
+  approvedToday: number;
   rejectedToday: number;
   averageProcessingTime: number; // hours,
-  queueBacklog: number;,
+  queueBacklog: number;
   priorityRequests: number;
 }
 export interface VerificationQueueItem extends IdentityValidationRequest {
-  priority: 'low' | 'medium' | 'high' | 'urgent';,
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   timeInQueue: number; // hours,
   assignedReviewer?: string;
-  complexity: 'simple' | 'moderate' | 'complex';,
+  complexity: 'simple' | 'moderate' | 'complex';
   flagged: boolean;
   const VerificationDashboard: React.FC<VerificationDashboardProps> = ({,)
   className = '',
@@ -424,31 +424,31 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
       </Tabs>
       <style>{`
         .verification-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
         .header-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .overview-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .metrics-grid {
           display: grid;
@@ -458,21 +458,21 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           padding: 1.5rem;
         .metric-header {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-bottom: 0.75rem;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           font-weight: 500;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .metric-change {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
           font-size: 0.75rem;
           font-weight: 500;
@@ -484,70 +484,70 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           color: #6b7280;
         .performance-cards {
           display: grid;
-          grid-template-columns: 1fr 1fr;,
+          grid-template-columns: 1fr 1fr;
   gap: 1rem;
         .performance-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .performance-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         .performance-item:last-child {
           border-bottom: none;
         .performance-value {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .performance-value.priority {
           color: #dc2626;
         .alerts-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .alert-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           padding: 0.75rem;
           border-radius: 6px;
           font-size: 0.875rem;
         .alert-item.warning {
-          background: #fef3c7;,
+          background: #fef3c7;
   color: #92400e;
         .alert-item.info {
-          background: #dbeafe;,
+          background: #dbeafe;
   color: #1e40af;
         .alert-item.success {
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #065f46;
         .queue-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .queue-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
         .search-bar {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           flex: 1;
-          max-width: 400px;,
+          max-width: 400px;
   position: relative;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
           z-index: 1;
         .search-input {
-          flex: 1;,
+          flex: 1;
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -558,46 +558,46 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .filters {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .filter-select {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   background: white;
         .queue-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .queue-item .card-content {
           padding: 1rem;
         .queue-item-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .item-info {
           flex: 1;
         .item-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .user-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .item-details {
-          display: flex;,
+          display: flex;
   gap: 1rem;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
         .item-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           align-items: center;
         .review-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .approve-btn {
           background: #059669;
@@ -615,10 +615,10 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           margin-top: 0.75rem;
           padding-top: 0.75rem;
           border-top: 1px solid #e5e7eb;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .empty-state {
-          text-align: center;,
+          text-align: center;
   padding: 4rem;
           color: #6b7280;
         @media (max-width: 768px) {
@@ -627,14 +627,14 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
             align-items: stretch;
           .queue-controls {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.75rem;
           .search-bar {
             max-width: none;
           .filters {
             flex-wrap: wrap;
           .queue-item-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .performance-cards {
             grid-template-columns: 1fr;

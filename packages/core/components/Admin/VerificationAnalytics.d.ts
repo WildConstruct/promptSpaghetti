@@ -7,12 +7,12 @@
 import React from 'react';
 
 export interface VerificationAnalyticsData {
-    period: {,
+    period: {
         start: Date;
         end: Date;
         label: string;
     };
-    overview: {,
+    overview: {
         totalRequests: number;
         approvedRequests: number;
         rejectedRequests: number;
@@ -38,13 +38,13 @@ export interface VerificationAnalyticsData {
         count: number;
         percentage: number;
     }>;
-    riskAnalysis: {,
+    riskAnalysis: {
         highRiskUsers: number;
         flaggedDocuments: number;
         fraudAttempts: number;
         suspendedAccounts: number;
     };
-    performanceMetrics: {,
+    performanceMetrics: {
         slaCompliance: number;
         qualityScore: number;
         reviewerProductivity: number;

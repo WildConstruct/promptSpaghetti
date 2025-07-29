@@ -52,36 +52,36 @@ export enum TokenType {
   // Token Data
 }
 export interface ResetToken {
-  id: string;,
+  id: string;
   userId: string;
-  email: string;,
+  email: string;
   type: TokenType;
-  status: TokenStatus;,
+  status: TokenStatus;
   hashedToken: string;
-  salt: string;,
+  salt: string;
   createdAt: Date;
   expiresAt: Date;
   usedAt?: Date;
   revokedAt?: Date;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
-  securityLevel: SecurityLevel;,
-  metadata: {,
+  securityLevel: SecurityLevel;
+  metadata: {
   requestSource?: string;
   deviceFingerprint?: string;
   locationData?: any;
   additionalContext?: Record<string, any>;
 };
-  usageCount: number;,
+  usageCount: number;
   maxUsageCount: number;
   revocationReason?: string;
 
 // Token Request Data
 }
 export interface TokenRequest {
-  userId: string;,
+  userId: string;
   email: string;
-  type: TokenType;,
+  type: TokenType;
   ipAddress: string;
   userAgent: string;
   expirationMinutes?: number;
@@ -98,9 +98,9 @@ export interface TokenValidation {
   // Rate Limiting Data
 }
 export interface RateLimitData {
-  count: number;,
+  count: number;
   resetTime: number;
-  lastRequest: Date;,
+  lastRequest: Date;
   violationCount: number;
   // Security Events
 }
@@ -116,12 +116,12 @@ export enum SecurityEvent {
   TOKEN_CLEANUP = 'token_cleanup'
   // Audit Log Entry
   export interface AuditLogEntry {
-  id: string;,
+  id: string;
   event: SecurityEvent;
   timestamp: Date;
   userId?: string;
   tokenId?: string;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   details: Record<string, any>;
   riskScore: number;
@@ -129,19 +129,19 @@ export enum SecurityEvent {
   // Statistics and Metrics
 }
 export interface TokenStatistics {
-  totalTokens: number;,
+  totalTokens: number;
   activeTokens: number;
-  usedTokens: number;,
+  usedTokens: number;
   expiredTokens: number;
-  revokedTokens: number;,
+  revokedTokens: number;
   tokensByType: Record<TokenType, number>;
   tokensBySecurityLevel: Record<SecurityLevel, number>;
-  averageTokenLifetime: number;,
+  averageTokenLifetime: number;
   usageRate: number;
-  securityViolations: number;,
+  securityViolations: number;
   rateLimitViolations: number;
-  cleanupStats: {,
-  lastCleanup: Date;,
+  cleanupStats: {
+  lastCleanup: Date;
   tokensRemoved: number;
   auditLogsRemoved: number;
 };
@@ -197,7 +197,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   ipAddress: request.ipAddress,
   userAgent: request.userAgent,
   securityLevel: request.securityLevel || this.config.securityLevel,
-  metadata: {,
+  metadata: {
   requestSource: 'password_reset_manager',
   ...request.metadata
 },
@@ -420,7 +420,7 @@ export class PasswordResetTokenManager extends EventEmitter {
       usageRate: 0,
       securityViolations: 0,
       rateLimitViolations: 0,
-      cleanupStats: {,
+      cleanupStats: {
   lastCleanup: new Date(),
   tokensRemoved: 0,
   auditLogsRemoved: 0,
@@ -516,7 +516,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   const requestedMs = requestedMinutes * 60 * 1000;
   baseExpiration = Math.min(requestedMs, this.config.maxExpiration);
   return baseExpiration;
-  private async performTokenValidation(tokenValue: string,)
+  private async performTokenValidation(tokenValue: string)
   ipAddress: string,
   userAgent: string): Promise<TokenValidation> {,
   // Apply anti-enumeration delay
@@ -632,7 +632,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   return new Promise(resolve => {)
   setTimeout(resolve, this.config.antiEnumerationDelay);
 });
-  private logSecurityEvent(event: SecurityEvent,)
+  private logSecurityEvent(event: SecurityEvent)
     details: Record<string, any>,
     ipAddress: string = 'system',
     userAgent: string = 'system'): void {,

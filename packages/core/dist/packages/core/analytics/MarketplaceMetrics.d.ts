@@ -108,5 +108,8 @@ export declare class MarketplaceMetrics {
     private recommendations;
     constructor();
     private initializeSampleData;
+    const sampleCreators: CreatorMetrics;
+    sampleCreators: CreatorMetrics;
+    forEach(creator: any, {}: {}): any;
 }
 //# sourceMappingURL=MarketplaceMetrics.d.ts.map

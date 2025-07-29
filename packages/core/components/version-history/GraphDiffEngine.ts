@@ -4,14 +4,14 @@
  */
 
 export interface GraphNode {
-  id: string;,
+  id: string;
   type: string;
   position: { x: number; y: number };
   data: Record<string, unknown>;
   style?: unknown;
 }
 export interface GraphEdge {
-  id: string;,
+  id: string;
   source: string;
   target: string;
   type?: string;
@@ -19,12 +19,12 @@ export interface GraphEdge {
   style?: unknown;
 }
 export interface GraphData {
-  nodes: GraphNode;,
+  nodes: GraphNode;
   edges: GraphEdge;
   metadata?: unknown;
 }
 export interface DiffChange {
-  type: 'added' | 'removed' | 'modified' | 'moved';,
+  type: 'added' | 'removed' | 'modified' | 'moved';
   element_type: 'node' | 'edge' | 'property';
   element_id: string;
   old_value?: unknown;
@@ -38,27 +38,27 @@ export interface DiffChange {
   significance: number; // 0-1 scale indicating how significant this change is
 }
 export interface GraphDiff {
-  id: string;,
+  id: string;
   from_snapshot_id: string;
-  to_snapshot_id: string;,
+  to_snapshot_id: string;
   changes: DiffChange;
-  summary: {,
-  total_changes: number;,
+  summary: {
+  total_changes: number;
   added_nodes: number;
-  removed_nodes: number;,
+  removed_nodes: number;
   modified_nodes: number;
-  moved_nodes: number;,
+  moved_nodes: number;
   added_edges: number;
-  removed_edges: number;,
+  removed_edges: number;
   modified_edges: number;
-  property_changes: number;,
+  property_changes: number;
   similarity_score: number; // 0-1, how similar the graphs are,
   complexity_score: number; // 0-10, how complex the diff is to understand,
 };
-  visualization_data: {,
+  visualization_data: {
   changed_regions: Array<{;
   bounds: { x: number; y: number; width: number; height: number };
-      change_types: string;,
+      change_types: string;
   intensity: number;
     }>;
     change_paths: Array<{,
@@ -72,7 +72,7 @@ export interface GraphDiff {
 export class GraphDiffEngine {
   private static readonly POSITION_THRESHOLD = 10; // pixels
   private static readonly SIMILARITY_THRESHOLD = 0.95;
-  constructor(private options: {,)
+  constructor(private options: {)
   ignore_position_changes?: boolean;
   ignore_style_changes?: boolean;
   position_threshold?: number;
@@ -176,7 +176,7 @@ export class GraphDiffEngine {
   element_id: fromNode.id,
   old_value: fromNode.position,
   new_value: toNode.position,
-  position_change: {,
+  position_change: {
   from: fromNode.position,
   to: toNode.position,
   distance: positionDistance,
@@ -261,7 +261,7 @@ export class GraphDiffEngine {
   significance: 0.6,
 });
     return changes;
-  private compareObjectProperties(fromObj: unknown,)
+  private compareObjectProperties(fromObj: unknown)
     toObj: unknown,
     basePath: string): Array<Omit<DiffChange, 'element_type' | 'element_id'>> {
     const changes: Array<Omit<DiffChange, 'element_type' | 'element_id'>> = [];
@@ -390,7 +390,7 @@ export class GraphDiffEngine {
   private generateVisualizationData(changes: DiffChange, fromGraph: GraphData, toGraph: GraphData) {
     const changedRegions: Array<{,
   bounds: { x: number; y: number; width: number; height: number };
-      change_types: string;,
+      change_types: string;
   intensity: number;
     }> = [];
     const changePaths: Array<{,
@@ -453,7 +453,7 @@ export class GraphDiffEngine {
         const regionKey = `${regionX},${regionY}`;}
         if (!regions.has(regionKey)) {
   regions.set(regionKey, {)
-  bounds: {,
+  bounds: {
   x: regionX,
   y: regionY,
   width: REGION_SIZE,

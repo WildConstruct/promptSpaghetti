@@ -8,23 +8,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface SeedControlsProps {
-  settings: SeedSettings;,
+  settings: SeedSettings;
   onChange: (settings: SeedSettings) => void;
   /**
   * Seed Settings Controls Component
@@ -185,7 +185,7 @@ export const SeedControls: React.FC<SeedControlsProps> = ({)
                   backgroundColor: uiColors.background.primary,
                   color: uiColors.text.primary,
                   fontSize: '14px',
-                  outline: 'none';
+                  outline: 'none'
   }}
                 onFocus={(e) => {
                   e.target.style.borderColor = uiColors.accent.primary;

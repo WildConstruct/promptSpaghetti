@@ -55,71 +55,71 @@ interface AdminIncidentDashboardProps {
   skipApproval?: boolean;
   dryRun?: boolean;
   interface IncidentCreationData {
-  title: string;,
+  title: string;
   description: string;
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   affectedSystems: Epic17System;
   category: PlaybookCategory;
   interface DashboardState {
-  activeIncidents: ActiveIncident;,
+  activeIncidents: ActiveIncident;
   playbookExecutions: PlaybookExecution;
-  systemHealth: SystemHealthStatus;,
+  systemHealth: SystemHealthStatus;
   alertsSummary: AlertsSummary;
-  performanceMetrics: PerformanceMetrics;,
+  performanceMetrics: PerformanceMetrics;
   recentActivity: ActivityLog;
   interface ActiveIncident {
-  id: string;,
+  id: string;
   title: string;
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   status: 'investigating' | 'responding' | 'monitoring' | 'resolved';
-  affectedSystems: Epic17System;,
+  affectedSystems: Epic17System;
   startTime: Date;
-  assignedTo: string;,
+  assignedTo: string;
   playbooks: string;
-  businessImpact: BusinessImpact;,
+  businessImpact: BusinessImpact;
   userImpact: UserImpact;
   timeline: IncidentTimelineEntry;
   interface PlaybookExecution {
-  executionId: string;,
+  executionId: string;
   playbookId: string;
-  playbookName: string;,
+  playbookName: string;
   category: PlaybookCategory;
-  status: 'running' | 'completed' | 'failed' | 'cancelled';,
+  status: 'running' | 'completed' | 'failed' | 'cancelled';
   progress: number;
   startTime: Date;
   endTime?: Date;
-  triggeredBy: string;,
+  triggeredBy: string;
   affectedSystems: Epic17System;
   result?: PlaybookExecutionResult;
   interface SystemHealthStatus {
-  system: Epic17System;,
+  system: Epic17System;
   status: 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
-  lastCheck: Date;,
+  lastCheck: Date;
   uptime: number;
-  responseTime: number;,
+  responseTime: number;
   errorRate: number;
-  alertCount: number;,
+  alertCount: number;
   healthScore: number;
   interface AlertsSummary {
-  total: number;,
+  total: number;
   critical: number;
-  high: number;,
+  high: number;
   medium: number;
-  low: number;,
+  low: number;
   recent: Alert;
   trends: AlertTrend;
   interface Alert {
-  id: string;,
+  id: string;
   title: string;
-  severity: ActionSeverity;,
+  severity: ActionSeverity;
   system: Epic17System;
-  timestamp: Date;,
+  timestamp: Date;
   acknowledged: boolean;
   playbookTriggered: boolean;
   interface AlertTrend {
-  system: Epic17System;,
+  system: Epic17System;
   count: number;
-  trend: 'increasing' | 'stable' | 'decreasing';,
+  trend: 'increasing' | 'stable' | 'decreasing';
   severity: ActionSeverity;
   interface PerformanceMetrics {
   mttr: number; // Mean Time To Recovery (minutes),
@@ -129,17 +129,17 @@ interface AdminIncidentDashboardProps {
   escalationRate: number; // percentage,
   userSatisfactionScore: number; // 1-5,
   interface ActivityLog {
-  id: string;,
+  id: string;
   timestamp: Date;
-  type: 'playbook_execution' | 'incident_created' | 'system_alert' | 'manual_action';,
+  type: 'playbook_execution' | 'incident_created' | 'system_alert' | 'manual_action';
   description: string;
   severity: ActionSeverity;
   system?: Epic17System;
   userId?: string;
   interface IncidentTimelineEntry {
-  timestamp: Date;,
+  timestamp: Date;
   type: 'created' | 'playbook_executed' | 'escalated' | 'resolved' | 'note_added';
-  description: string;,
+  description: string;
   userId: string;
   data?: unknown;
   export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({,)
@@ -173,7 +173,7 @@ interface AdminIncidentDashboardProps {
   startTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
   assignedTo: 'admin-user-1',
   playbooks: ['feature-toggle-recovery'],
-  businessImpact: {,
+  businessImpact: {
   severity: 'high',
   affectedUsers: 15000,
   revenueImpact: 50000,
@@ -181,7 +181,7 @@ interface AdminIncidentDashboardProps {
   complianceRisk: 'low',
   description: 'Feature toggles not responding, affecting user experience',
 },
-  userImpact: {,
+  userImpact: {
   adminUsers: { affected: true, count: 25, impactType: 'degraded_performance', severity: 'high', estimatedDuration: 60 },
               regularUsers: { affected: true, count: 15000, impactType: 'limited_functionality', severity: 'medium', estimatedDuration: 30 },
               externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
@@ -242,7 +242,7 @@ interface AdminIncidentDashboardProps {
   errorRate: 0.2,
   alertCount: 1,
   healthScore: 95],
-  alertsSummary: {,
+  alertsSummary: {
   total: 12,
   critical: 1,
   high: 3,
@@ -264,7 +264,7 @@ interface AdminIncidentDashboardProps {
   trend: 'increasing',
   severity: 'high'];
   },
-  performanceMetrics: {,
+  performanceMetrics: {
   mttr: 15.5,
   mtbf: 168,
   playbookSuccessRate: 92,
@@ -444,7 +444,7 @@ interface AdminIncidentDashboardProps {
 // Overview Tab Component
 const OverviewTab: React.FC<{,
   dashboardState: DashboardState;
-  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;,
+  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
 }> = ({ dashboardState, onPlaybookExecute: _onPlaybookExecute, onIncidentCreate: _onIncidentCreate }) => {
   return;
@@ -649,7 +649,7 @@ const PlaybookExecutionCard: React.FC<{ execution: PlaybookExecution }> = ({ exe
 };
 const MetricCard: React.FC<{,
   label: string;
-  value: string;,
+  value: string;
   trend: 'up' | 'down' | 'stable';
   good: boolean;
 }> = ({ label, value, trend, good }) => {

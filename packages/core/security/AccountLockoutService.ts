@@ -52,81 +52,81 @@ export enum LockoutStatus {
   ADMIN_ACTION_REQUIRED = 'admin_action_required',
   COMPLIANCE_REPORT = 'compliance_report'
   export interface AccountLockout {
-  id: string;,
+  id: string;
   userId: string;
-  userEmail: string;,
+  userEmail: string;
   status: LockoutStatus;
-  reason: LockoutReason;,
+  reason: LockoutReason;
   lockoutTime: Date;
   expiryTime?: Date;
   unlockTime?: Date;
-  failedAttempts: number;,
+  failedAttempts: number;
   securityEvents: string;
-  metadata: {,
+  metadata: {
   ipAddress?: string;
   userAgent?: string;
   geolocation?: string;
-  riskScore: number;,
+  riskScore: number;
   threatLevel: string;
 };
-  adminActions: AdminAction;,
+  adminActions: AdminAction;
   notifications: LockoutNotification;
   auditTrail: AuditEntry;
 }
 export interface AdminAction {
-  id: string;,
+  id: string;
   adminId: string;
-  adminEmail: string;,
+  adminEmail: string;
   adminRole: AdminRole;
-  action: 'unlock' | 'extend_lockout' | 'escalate' | 'review' | 'approve';,
+  action: 'unlock' | 'extend_lockout' | 'escalate' | 'review' | 'approve';
   reason: string;
-  timestamp: Date;,
+  timestamp: Date;
   ipAddress: string;
-  authenticationMethod: string;,
+  authenticationMethod: string;
   approvalRequired: boolean;
   approvedBy?: string;
   approvalTime?: Date;
   metadata: Record<string, any>;
 }
 export interface LockoutNotification {
-  id: string;,
+  id: string;
   type: NotificationType;
-  recipient: string;,
+  recipient: string;
   channel: 'email' | 'sms' | 'push' | 'admin_console';
   sentAt: Date;
   deliveredAt?: Date;
   readAt?: Date;
-  content: string;,
-  status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read';
-}
+  content: string;
+  status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read'
+  }
 export interface AuditEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  event: string;,
+  event: string;
   actor: string;
-  actorType: 'user' | 'admin' | 'system';,
+  actorType: 'user' | 'admin' | 'system';
   details: Record<string, any>;
   ipAddress?: string;
   sessionId?: string;
 }
 export interface UnlockRequest {
-  lockoutId: string;,
+  lockoutId: string;
   adminId: string;
-  reason: string;,
+  reason: string;
   method: UnlockMethod;
-  urgency: 'low' | 'medium' | 'high' | 'emergency';,
+  urgency: 'low' | 'medium' | 'high' | 'emergency';
   justification: string;
   approvalRequired: boolean;
   metadata?: Record<string, any>;
 }
 export interface UnlockPolicy {
-  adminRole: AdminRole;,
+  adminRole: AdminRole;
   canUnlock: boolean;
-  requiresApproval: boolean;,
+  requiresApproval: boolean;
   maxLockoutDuration: number; // hours,
-  approverRoles: AdminRole;,
+  approverRoles: AdminRole;
   emergencyUnlock: boolean;
-  auditRequired: boolean;,
+  auditRequired: boolean;
   notificationRequired: boolean;
   /**
   * Comprehensive account lockout management service
@@ -159,7 +159,7 @@ export class AccountLockoutService extends EventEmitter {
   expiryTime: this.calculateExpiryTime(reason),
   failedAttempts: metadata.riskScore || 0,
   securityEvents: [],
-  metadata: {,
+  metadata: {
   riskScore: 50,
   threatLevel: 'medium',
   ...metadata
@@ -354,12 +354,12 @@ export class AccountLockoutService extends EventEmitter {
    * Get lockout statistics and reports
    */
   public getLockoutStatistics(dateRange?: { start: Date; end: Date }): {
-    totalLockouts: number;,
+    totalLockouts: number;
   activeLockouts: number;
     lockoutsByReason: Record<LockoutReason, number>;
-    averageLockoutDuration: number;,
+    averageLockoutDuration: number;
   adminUnlocks: number;
-    emergencyUnlocks: number;,
+    emergencyUnlocks: number;
   topAffectedUsers: Array<{ userId: string; count: number }>;
     let lockouts = Array.from(this.lockouts.values());
     if (dateRange) {
@@ -603,7 +603,7 @@ export class AccountLockoutService extends EventEmitter {
   auditRequired: true,
   notificationRequired: true,
 });
-  private logSecurityEvent(lockout: AccountLockout | null,)
+  private logSecurityEvent(lockout: AccountLockout | null)
     event: string,
     details: Record<string, any> = {}
   ): void {

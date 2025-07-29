@@ -12,16 +12,16 @@ import {
   MFAEnrollmentResponse
 } from '../types/MFATypes';
 interface EmailMFAConfig {
-    encryption: {,
+    encryption: {
         algorithm: 'aes-256-gcm';
         keyDerivation: 'pbkdf2';
         iterations: number;
     };
-    templates: {,
+    templates: {
         verificationCode: string;
         enrollmentCode: string;
     };
-    rateLimit: {,
+    rateLimit: {
         maxDailyEmails: number;
         cooldownMinutes: number;
     };

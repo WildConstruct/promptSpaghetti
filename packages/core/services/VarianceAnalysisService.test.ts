@@ -33,7 +33,7 @@ const createMockResult = (;);
         inputs: [],
         output: `choice_${seed}`}
 },
-  randomChoice: {,
+  randomChoice: {
   choiceType: 'weighted',
           availableOptions: [`choice_${seed}`, 'other_choice']}
 },

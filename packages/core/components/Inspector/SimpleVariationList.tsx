@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export interface SimpleVariationListProps {
-  variations: string;,
+  variations: string;
   onChange: (variations: string) => void;
   placeholder?: string;
   addButtonText?: string;

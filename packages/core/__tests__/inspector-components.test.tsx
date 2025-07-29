@@ -37,7 +37,7 @@ const mockGraphStore = {
     {
       id: 'test-node-id',
       type: 'WeightedChoice',
-      data: {,
+      data: {
   choices: [,
           { weight: 0.5, value: 'Option A' },
           { weight: 0.5, value: 'Option B' }
@@ -82,7 +82,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     const mockNode = {
   id: 'test-node',
   type: 'TestNode',
-  data: {,
+  data: {
   label: 'Test Node',
   value: 'test value',
   variations: ['var1', 'var2'],
@@ -539,7 +539,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     const mockNode = {
       id: 'weighted-node',
       type: 'WeightedChoice',
-      data: {,
+      data: {
   choices: [,
           { weight: 0.6, value: 'Choice A' },
           { weight: 0.4, value: 'Choice B' }
@@ -548,7 +548,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     it('should handle node with malformed choices', () => {
       const nodeWithMalformedChoices = {
         ...mockNode,
-        data: {,
+        data: {
   choices: [,
             null,
             undefined,

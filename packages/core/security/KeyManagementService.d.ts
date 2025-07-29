@@ -198,7 +198,7 @@ export interface KeyManagementConfig {
     encryptionAtRest: boolean;
     keyDerivationComplexity: 'low' | 'medium' | 'high';
     performanceMonitoring: boolean;
-    alertThresholds: {,
+    alertThresholds: {
         keyUsageRate: number;
         failureRate: number;
         responseTime: number;
@@ -207,7 +207,7 @@ export interface KeyManagementConfig {
 export interface HSMConfiguration {
     provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
     endpoint: string;
-    credentials: {,
+    credentials: {
         username?: string;
         password?: string;
         certificatePath?: string;

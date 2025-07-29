@@ -69,21 +69,21 @@ export enum RevisionRequestStatus {
   REQUEST_CANCELLED = 'request_cancelled'
   // Core revision request interface
   export interface RevisionRequest {
-  id: string;,
+  id: string;
   requesterId: string;
-  requesterName: string;,
+  requesterName: string;
   requesterEmail: string;
   // Content being revised
-  contentType: RevisionContentType;,
+  contentType: RevisionContentType;
   contentId: string;
   contentTitle: string;
   contentVersion?: string;
   // Request details
-  title: string;,
+  title: string;
   description: string;
-  requestedChanges: string;,
+  requestedChanges: string;
   businessJustification: string;
-  type: RevisionRequestType;,
+  type: RevisionRequestType;
   priority: RevisionRequestPriority;
   // Workflow and assignment
   status: RevisionRequestStatus;
@@ -94,7 +94,7 @@ export enum RevisionRequestStatus {
   dueDate?: Date;
   estimatedHours?: number;
   actualHours?: number;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   completedAt?: Date;
   // Review details
@@ -103,7 +103,7 @@ export enum RevisionRequestStatus {
   approvalNotes?: string;
   implementationNotes?: string;
   // Attachments and tracking
-  evidence: RevisionEvidence;,
+  evidence: RevisionEvidence;
   timeline: RevisionTimelineEvent;
   tags: string;
   // Metadata
@@ -114,32 +114,32 @@ export enum RevisionRequestStatus {
   // Evidence/attachment interface
 }
 export interface RevisionEvidence {
-  id: string;,
+  id: string;
   revisionRequestId: string;
-  evidenceType: RevisionEvidenceType;,
+  evidenceType: RevisionEvidenceType;
   title: string;
   description?: string;
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
   mimeType?: string;
-  uploadedBy: string;,
+  uploadedBy: string;
   uploadedAt: Date;
   annotations?: EvidenceAnnotation;
   metadata: Record<string, any>;
   // Annotation interface for evidence (following DocumentReviewInterface pattern)
 }
 export interface EvidenceAnnotation {
-  id: string;,
+  id: string;
   evidenceId: string;
   annotationType: 'highlight' | 'question' | 'note' | 'suggestion' | 'issue';
-  coordinates?: {,
-  x: number;,
+  coordinates?: {
+  x: number;
   y: number;
   width?: number;
   height?: number;
 };
-  content: string;,
+  content: string;
   createdBy: string;
   createdAt: Date;
   resolved?: boolean;
@@ -149,22 +149,22 @@ export interface EvidenceAnnotation {
 // Timeline event interface
 }
 export interface RevisionTimelineEvent {
-  id: string;,
+  id: string;
   revisionRequestId: string;
-  eventType: RevisionTimelineEventType;,
+  eventType: RevisionTimelineEventType;
   actorId: string;
-  actorName: string;,
+  actorName: string;
   description: string;
   oldValue?: string;
   newValue?: string;
-  timestamp: Date;,
+  timestamp: Date;
   metadata: Record<string, any>;
   // Comment interface for discussions
 }
 export interface RevisionComment {
-  id: string;,
+  id: string;
   revisionRequestId: string;
-  authorId: string;,
+  authorId: string;
   authorName: string;
   content: string;
   parentCommentId?: string; // For threaded discussions,
@@ -187,12 +187,12 @@ export interface RevisionRequestSearchQuery {
   reviewerId?: string;
   unassigned?: boolean;
   // Date filters
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   dueDateRange?: {
-  start: Date;,
+  start: Date;
   end: Date;
 };
   // Content filters
@@ -209,8 +209,8 @@ export interface RevisionRequestSearchQuery {
   page?: number;
   pageSize?: number;
   sortBy?: RevisionRequestSortField;
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export type RevisionRequestSortField = 
   | 'created_at'
   | 'updated_at'
@@ -223,14 +223,14 @@ export type RevisionRequestSortField =
   | 'status';
 
 export interface RevisionRequestSearchResults {
-  requests: RevisionRequest;,
-  pagination: {,
-  page: number;,
+  requests: RevisionRequest;
+  pagination: {
+  page: number;
   pageSize: number;
-  total: number;,
+  total: number;
   totalPages: number;
 };
-  aggregations: RevisionRequestAggregations;,
+  aggregations: RevisionRequestAggregations;
   filters: AppliedFilters;
 }
 export interface RevisionRequestAggregations {
@@ -238,62 +238,62 @@ export interface RevisionRequestAggregations {
   priorityBreakdown: Record<RevisionRequestPriority, number>;
   typeBreakdown: Record<RevisionRequestType, number>;
   contentTypeBreakdown: Record<RevisionContentType, number>;
-  assignmentStats: {,
-  assigned: number;,
+  assignmentStats: {
+  assigned: number;
   unassigned: number;
-  overdue: number;,
+  overdue: number;
   dueToday: number;
   dueThisWeek: number;
 };
   averageCompletionTime: number; // in hours,
   topRequesters: Array<{;
-  requesterId: string;,
+  requesterId: string;
   requesterName: string;
   count: number;
 }>;
   topReviewers: Array<{,
   reviewerId: string;
-  reviewerName: string;,
+  reviewerName: string;
   count: number;
   averageResponseTime: number;
 }>;
 }
 export interface AppliedFilters {
-  count: number;,
+  count: number;
   filters: Array<{,
-  field: string;,
+  field: string;
   operator: string;
-  value: any;,
+  value: any;
   displayName: string;
 }>;
 
 // Analytics and reporting interfaces
 }
 export interface RevisionRequestAnalytics {
-  period: AnalyticsPeriod;,
+  period: AnalyticsPeriod;
   overview: RevisionRequestOverview;
-  performance: RevisionRequestPerformance;,
+  performance: RevisionRequestPerformance;
   trends: RevisionRequestTrends;
-  insights: RevisionRequestInsight;,
+  insights: RevisionRequestInsight;
   recommendations: RevisionRequestRecommendation;
 }
 export interface AnalyticsPeriod {
-  startDate: Date;,
+  startDate: Date;
   endDate: Date;
   timeRange: TimeRange;
   comparisonPeriod?: AnalyticsPeriod;
 }
 export interface RevisionRequestOverview {
-  totalRequests: number;,
+  totalRequests: number;
   completedRequests: number;
-  pendingRequests: number;,
+  pendingRequests: number;
   overdueRequests: number;
-  averageCompletionTime: number;,
+  averageCompletionTime: number;
   completionRate: number;
   satisfactionScore: number;
   // Growth metrics
-  growthMetrics: {,
-  requestGrowth: number;,
+  growthMetrics: {
+  requestGrowth: number;
   completionGrowth: number;
   averageTimeImprovement: number;
 };
@@ -303,69 +303,69 @@ export interface RevisionRequestPerformance {
   contentTypePerformance: Record<RevisionContentType, ContentTypePerformance>;
   priorityPerformance: Record<RevisionRequestPriority, PriorityPerformance>;
   // SLA metrics
-  slaMetrics: {,
-  onTimeCompletionRate: number;,
+  slaMetrics: {
+  onTimeCompletionRate: number;
   averageResponseTime: number;
   escalationRate: number;
 };
 }
 export interface ReviewerPerformance {
-  reviewerId: string;,
+  reviewerId: string;
   reviewerName: string;
-  totalAssigned: number;,
+  totalAssigned: number;
   totalCompleted: number;
-  averageCompletionTime: number;,
+  averageCompletionTime: number;
   onTimeRate: number;
-  satisfactionRating: number;,
+  satisfactionRating: number;
   workloadBalance: number;
 }
 export interface ContentTypePerformance {
-  totalRequests: number;,
+  totalRequests: number;
   averageCompletionTime: number;
-  complexityScore: number;,
+  complexityScore: number;
   successRate: number;
 }
 export interface PriorityPerformance {
-  totalRequests: number;,
+  totalRequests: number;
   averageResponseTime: number;
-  slaCompliance: number;,
+  slaCompliance: number;
   escalationRate: number;
 }
 export interface RevisionRequestTrends {
   requestVolume: Array<{,
-  date: string;,
+  date: string;
   count: number;
   priority: Record<RevisionRequestPriority, number>;
 }>;
   completionTrends: Array<{,
   date: string;
-  completed: number;,
+  completed: number;
   averageTime: number;
 }>;
   contentTypeTrends: Array<{,
   contentType: RevisionContentType;
-  trend: 'increasing' | 'decreasing' | 'stable';,
+  trend: 'increasing' | 'decreasing' | 'stable';
   changePercent: number;
 }>;
 }
 export interface RevisionRequestInsight {
-  type: 'bottleneck' | 'opportunity' | 'risk' | 'trend';,
+  type: 'bottleneck' | 'opportunity' | 'risk' | 'trend';
   title: string;
-  description: string;,
+  description: string;
   impact: 'low' | 'medium' | 'high';
-  confidence: number;,
+  confidence: number;
   data: Record<string, any>;
   recommendedActions: string;
   relatedRequests?: string;
 }
 export interface RevisionRequestRecommendation {
-  category: 'process_improvement' | 'resource_allocation' | 'automation' | 'training';,
+  category: 'process_improvement' | 'resource_allocation' | 'automation' | 'training';
   priority: 'low' | 'medium' | 'high' | 'critical';
-  title: string;,
+  title: string;
   description: string;
-  expectedImpact: string;,
-  implementation: {,
-  complexity: 'low' | 'medium' | 'high';,
+  expectedImpact: string;
+  implementation: {
+  complexity: 'low' | 'medium' | 'high';
   timeframe: string;
   requirements: string;
 };
@@ -374,7 +374,7 @@ export interface RevisionRequestRecommendation {
 // Export request interface
 }
 export interface RevisionRequestExportRequest {
-  format: 'csv' | 'json' | 'excel';,
+  format: 'csv' | 'json' | 'excel';
   query: RevisionRequestSearchQuery;
   fields?: string;
   includeEvidence?: boolean;
@@ -384,34 +384,34 @@ export interface RevisionRequestExportRequest {
 }
 export interface RevisionRequestConfig {
   // Workflow settings
-  enableAutoAssignment: boolean;,
+  enableAutoAssignment: boolean;
   defaultReviewerAssignment: 'round_robin' | 'workload_based' | 'skill_based';
-  autoEscalationDays: number;,
+  autoEscalationDays: number;
   enableSLA: boolean;
   // SLA settings by priority
   slaHours: Record<RevisionRequestPriority, number>;
   // Approval settings
-  requireApprovalFor: RevisionRequestType;,
+  requireApprovalFor: RevisionRequestType;
   multipleReviewersFor: RevisionRequestType;
   // Notification settings
-  enableEmailNotifications: boolean;,
+  enableEmailNotifications: boolean;
   enableSlackNotifications: boolean;
-  notificationSettings: {,
-  onAssignment: boolean;,
+  notificationSettings: {
+  onAssignment: boolean;
   onStatusChange: boolean;
-  onComment: boolean;,
+  onComment: boolean;
   onDueDate: boolean;
   onOverdue: boolean;
 };
   // Evidence settings
-  maxEvidenceFiles: number;,
+  maxEvidenceFiles: number;
   maxFileSizeMB: number;
-  allowedFileTypes: string;,
+  allowedFileTypes: string;
   enableAnnotations: boolean;
   // Advanced features
-  enableComplexityScoring: boolean;,
+  enableComplexityScoring: boolean;
   enableImpactScoring: boolean;
-  enablePredictiveAnalytics: boolean;,
+  enablePredictiveAnalytics: boolean;
   retentionDays: number;
 }
 export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {,
@@ -419,7 +419,7 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {,
   defaultReviewerAssignment: 'workload_based',
   autoEscalationDays: 3,
   enableSLA: true,
-  slaHours: {,
+  slaHours: {
   [RevisionRequestPriority.LOW]: 168, // 7 days,
   [RevisionRequestPriority.MEDIUM]: 72, // 3 days,
   [RevisionRequestPriority.HIGH]: 24, // 1 day,
@@ -436,7 +436,7 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {,
   ],
   enableEmailNotifications: true,
   enableSlackNotifications: true,
-  notificationSettings: {,
+  notificationSettings: {
   onAssignment: true,
   onStatusChange: true,
   onComment: true,
@@ -462,21 +462,21 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {,
 // Utility types for forms and UI
 
 export interface RevisionRequestFormData {
-  title: string;,
+  title: string;
   description: string;
-  requestedChanges: string;,
+  requestedChanges: string;
   businessJustification: string;
-  contentType: RevisionContentType;,
+  contentType: RevisionContentType;
   contentId: string;
-  type: RevisionRequestType;,
+  type: RevisionRequestType;
   priority: RevisionRequestPriority;
   dueDate?: Date;
   estimatedHours?: number;
-  tags: string;,
+  tags: string;
   evidence: File;
 }
 export interface RevisionRequestReviewFormData {
-  decision: 'approve' | 'reject' | 'request_info';,
+  decision: 'approve' | 'reject' | 'request_info';
   reviewNotes: string;
   rejectionReason?: string;
   approvalNotes?: string;
@@ -487,13 +487,13 @@ export interface RevisionRequestReviewFormData {
   // Following the pattern from marketplace review.types.ts
 }
 export type RevisionRequestCreateSchema = {
-  title: string;,
+  title: string;
   description: string;
-  requestedChanges: string;,
+  requestedChanges: string;
   businessJustification: string;
-  contentType: RevisionContentType;,
+  contentType: RevisionContentType;
   contentId: string;
-  type: RevisionRequestType;,
+  type: RevisionRequestType;
   priority: RevisionRequestPriority;
   dueDate?: string;
   estimatedHours?: number;
@@ -510,7 +510,7 @@ export type RevisionRequestUpdateSchema = Partial<RevisionRequestCreateSchema> &
 };
 
 export type RevisionEvidenceCreateSchema = {
-  evidenceType: RevisionEvidenceType;,
+  evidenceType: RevisionEvidenceType;
   title: string;
   description?: string;
   file?: File;

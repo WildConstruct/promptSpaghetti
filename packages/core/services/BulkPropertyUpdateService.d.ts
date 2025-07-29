@@ -161,7 +161,7 @@ export interface BulkUpdateStats {
         count: number;
         affectedTargets: number;
     }>;
-    performanceMetrics: {,
+    performanceMetrics: {
         averageItemsPerSecond: number;
         largestBatchSize: number;
         longestOperation: number;

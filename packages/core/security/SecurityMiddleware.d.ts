@@ -7,36 +7,36 @@
 import { Request, Response, NextFunction } from 'express';
 
 export interface SecurityConfig {
-    hsts: {,
+    hsts: {
         enabled: boolean;
         maxAge: number;
         includeSubDomains: boolean;
         preload: boolean;
     };
-    csp: {,
+    csp: {
         enabled: boolean;
         directives: Record<string, string | string[]>;
         reportUri?: string;
         reportOnly: boolean;
         useNonces: boolean;
     };
-    frameOptions: {,
+    frameOptions: {
         enabled: boolean;
         policy: 'DENY' | 'SAMEORIGIN' | 'ALLOW-FROM';
         allowFrom?: string;
     };
-    contentTypeOptions: {,
+    contentTypeOptions: {
         enabled: boolean;
     };
-    xssProtection: {,
+    xssProtection: {
         enabled: boolean;
-        mode: 'filter' | 'block';
-    };
-    referrerPolicy: {,
+        mode: 'filter' | 'block'
+  };
+    referrerPolicy: {
         enabled: boolean;
         policy: string;
     };
-    permissionsPolicy: {,
+    permissionsPolicy: {
         enabled: boolean;
         directives: Record<string, string>;
     };

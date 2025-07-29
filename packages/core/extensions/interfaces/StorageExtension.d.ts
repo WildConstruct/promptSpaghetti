@@ -192,8 +192,8 @@ export interface StorageConnectionConfiguration {
         enabled?: boolean;
         maxRetries?: number;
         retryDelay?: number;
-        backoffStrategy?: 'fixed' | 'exponential' | 'linear';
-    };
+        backoffStrategy?: 'fixed' | 'exponential' | 'linear'
+  };
     timeout?: {
         connection?: number;
         query?: number;
@@ -212,8 +212,8 @@ export interface StoragePerformanceConfiguration {
         enabled?: boolean;
         size?: number;
         ttl?: number;
-        strategy?: 'lru' | 'lfu' | 'fifo';
-    };
+        strategy?: 'lru' | 'lfu' | 'fifo'
+  };
     compression?: {
         enabled?: boolean;
         algorithm?: 'gzip' | 'deflate' | 'brotli';
@@ -328,8 +328,8 @@ export interface StorageProviderMetadata {
     performance?: {
         throughput: 'low' | 'medium' | 'high';
         latency: 'low' | 'medium' | 'high';
-        scalability: 'single' | 'cluster' | 'distributed';
-    };
+        scalability: 'single' | 'cluster' | 'distributed'
+  };
     compatibility?: {
         minVersion: string;
         maxVersion?: string;
@@ -389,8 +389,8 @@ export interface StorageQuery {
     offset?: number;
     orderBy?: Array<{
         field: string;
-        direction: 'asc' | 'desc';
-    }>;
+        direction: 'asc' | 'desc'
+  }>;
     select?: string[];
     groupBy?: string[];
     having?: StorageQueryCondition;
@@ -406,39 +406,39 @@ export interface StorageQueryCondition {
 
 export interface StorageQueryJoin {
     collection: string;
-    on: {,
+    on: {
         left: string;
         right: string;
     };
     type: 'inner' | 'left' | 'right' | 'full';
 
 export interface StorageStats {
-    connections: {,
+    connections: {
         total: number;
         active: number;
         idle: number;
     };
-    operations: {,
+    operations: {
         total: number;
         reads: number;
         writes: number;
         deletes: number;
         errors: number;
     };
-    performance: {,
+    performance: {
         averageLatency: number;
         throughput: number;
         errorRate: number;
         cacheHitRate?: number;
     };
-    storage: {,
+    storage: {
         totalSize: number;
         usedSize: number;
         availableSize: number;
         keyCount: number;
         collectionCount?: number;
     };
-    memory: {,
+    memory: {
         used: number;
         available: number;
         cached: number;

@@ -152,7 +152,8 @@ export var VerificationCodeType;
                         ipAddress: request.ipAddress,
                         userAgent: request.userAgent,
                         metadata: {
-                            purpose: `${request.type}_verification` }
+                            purpose: `${request.type}_verification`
+                        }
                     }, requestSource, deliveryAttempts, deliveryStatus;
                     request.metadata;
                 }

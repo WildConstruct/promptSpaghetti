@@ -53,7 +53,8 @@ const capabilities = {
     customParameters: {
         size: {
             type: 'enum',
-            values: modelName === 'dall-e-3', }
+            values: modelName === 'dall-e-3',
+        }
             ? ['1024x1024', '1792x1024', '1024x1792']
             : ['256x256', '512x512', '1024x1024'],
         default: '1024x1024',

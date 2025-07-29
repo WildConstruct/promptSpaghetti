@@ -19,20 +19,20 @@ import {
 
 export interface SegmentServiceConfig {
   // Performance settings
-  maxSegmentSize: number;,
+  maxSegmentSize: number;
   evaluationBatchSize: number;
-  maxConcurrentEvaluations: number;,
+  maxConcurrentEvaluations: number;
   cacheTTL: number; // seconds,
   // Real-time settings
-  enableRealTimeUpdates: boolean;,
+  enableRealTimeUpdates: boolean;
   realTimeBufferSize: number;
   realTimeFlushInterval: number; // milliseconds,
   // Quality settings
-  minQualityScore: number;,
+  minQualityScore: number;
   autoArchiveInactiveSegments: boolean;
   inactivityThreshold: number; // days,
   // External integration
-  webhookEndpoints: string;,
+  webhookEndpoints: string;
   enableExternalSync: boolean;
   syncBatchSize: number;
   // Segment Query Interface
@@ -81,16 +81,16 @@ export interface SegmentOperationResult {
   segmentId?: string;
   affectedUserCount?: number;
   executionTime: number; // milliseconds,
-  warnings: string;,
+  warnings: string;
   errors: string;
   metadata?: Record<string, any>;
 }
 export interface SegmentBulkOperationResult {
-  totalSegments: number;,
+  totalSegments: number;
   successfulOperations: number;
-  failedOperations: number;,
+  failedOperations: number;
   results: Array<{,
-  segmentId: string;,
+  segmentId: string;
   operation: string;
   result: SegmentOperationResult;
 }>;
@@ -99,14 +99,14 @@ export interface SegmentBulkOperationResult {
 // Segment Evaluation Results
 }
 export interface SegmentEvaluationResult {
-  segmentId: string;,
+  segmentId: string;
   evaluationId: string;
-  startTime: Date;,
+  startTime: Date;
   endTime: Date;
   // Results
-  totalUsersEvaluated: number;,
+  totalUsersEvaluated: number;
   matchingUsers: number;
-  newMatches: number;,
+  newMatches: number;
   removedMatches: number;
   // Performance
   evaluationTime: number; // milliseconds,
@@ -117,7 +117,7 @@ export interface SegmentEvaluationResult {
   segmentHealthScore: number;
   // Insights
   anomalies: Array<{,
-  type: 'size_change' | 'performance_degradation' | 'condition_mismatch';,
+  type: 'size_change' | 'performance_degradation' | 'condition_mismatch';
   severity: 'low' | 'medium' | 'high';
   description: string;
   recommendation?: string;
@@ -126,9 +126,9 @@ export interface SegmentEvaluationResult {
 // User Segment Membership
 }
 export interface SegmentMembership {
-  userId: string;,
+  userId: string;
   segmentId: string;
-  joinedAt: Date;,
+  joinedAt: Date;
   lastEvaluated: Date;
   matchScore: number; // 0-100,
   matchingConditions: string;
@@ -142,24 +142,24 @@ export interface SegmentMembership {
   // Segment Performance Metrics
 }
 export interface SegmentPerformanceMetrics {
-  segmentId: string;,
-  timeRange: {,
-  start: Date;,
+  segmentId: string;
+  timeRange: {
+  start: Date;
   end: Date;
 };
   // Evaluation metrics
-  totalEvaluations: number;,
+  totalEvaluations: number;
   averageEvaluationTime: number;
   evaluationSuccessRate: number;
   // User metrics
-  peakUserCount: number;,
+  peakUserCount: number;
   averageUserCount: number;
-  userChurnRate: number;,
+  userChurnRate: number;
   userGrowthRate: number;
   // Condition performance
   conditionPerformance: Array<{,
   conditionId: string;
-  evaluationTime: number;,
+  evaluationTime: number;
   matchRate: number;
   errorRate: number;
 }>;
@@ -168,26 +168,26 @@ export interface SegmentPerformanceMetrics {
   cpuUsage: number; // percentage
   cacheUsage: number; // percentage
   // Business metrics
-  conversionImpact: number;,
+  conversionImpact: number;
   revenueImpact: number;
   engagementImpact: number;
 
 // Segment Recommendation Engine
 }
 export interface SegmentRecommendation {
-  type: 'create_segment' | 'merge_segments' | 'split_segment' | 'optimize_conditions' | 'archive_segment';,
+  type: 'create_segment' | 'merge_segments' | 'split_segment' | 'optimize_conditions' | 'archive_segment';
   priority: 'low' | 'medium' | 'high' | 'critical';
   // Recommendation details
-  title: string;,
+  title: string;
   description: string;
-  rationale: string;,
-  expectedImpact: {,
+  rationale: string;
+  expectedImpact: {
   userCountChange?: number;
   performanceImprovement?: number;
   qualityScoreChange?: number;
 };
   // Implementation
-  actionable: boolean;,
+  actionable: boolean;
   automatable: boolean;
   estimatedEffort: 'low' | 'medium' | 'high';
   // Supporting data
@@ -195,69 +195,69 @@ export interface SegmentRecommendation {
   supportingMetrics?: Record<string, number>;
   confidence: number; // 0-1
   // Metadata
-  generatedAt: Date;,
+  generatedAt: Date;
   generatedBy: 'system' | 'ml_model' | 'user_request';
   modelVersion?: string;
 
 // Segment A/B Testing Integration
 }
 export interface SegmentExperiment {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
   // Experiment configuration
-  segmentId: string;,
+  segmentId: string;
   treatmentVariants: Array<{,
-  id: string;,
+  id: string;
   name: string;
   allocation: number; // percentage,
   configuration: Record<string, any>;
   isControl: boolean;
 }>;
   // Status and lifecycle
-  status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';,
+  status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';
   startDate: Date;
   endDate?: Date;
   duration?: number; // days
   // Metrics and goals
-  primaryMetric: string;,
+  primaryMetric: string;
   secondaryMetrics: string;
   successCriteria: Array<{,
   metric: string;
-  operator: 'greater_than' | 'less_than' | 'between';,
+  operator: 'greater_than' | 'less_than' | 'between';
   value: number | [number, number];
   significance: number; // 0-1,
 }>;
   // Results
   results?: {
   variants: Array<{,
-  variantId: string;,
+  variantId: string;
   userCount: number;
   metrics: Record<string, number>;
-  conversionRate: number;,
+  conversionRate: number;
   confidence: number;
 }>;
     winner?: string;
-    significance: number;,
+    significance: number;
   liftPercentage: number;
   };
   // Metadata
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
   lastUpdated: Date;
 
 // Segment Data Pipeline
 }
 export interface SegmentDataPipeline {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
   // Pipeline configuration
-  sourceType: 'database' | 'api' | 'file' | 'stream';,
+  sourceType: 'database' | 'api' | 'file' | 'stream';
   sourceConfig: Record<string, any>;
   // Processing steps
   transformations: Array<{,
-  id: string;,
+  id: string;
   type: 'filter' | 'map' | 'aggregate' | 'join' | 'custom';
   configuration: Record<string, any>;
   order: number;
@@ -274,9 +274,9 @@ export interface SegmentDataPipeline {
   // Performance
   executionHistory: Array<{,
   startTime: Date;
-  endTime: Date;,
+  endTime: Date;
   recordsProcessed: number;
-  recordsSuccessful: number;,
+  recordsSuccessful: number;
   recordsFailed: number;
   status: 'success' | 'partial' | 'failed';
   errorMessage?: string;
@@ -288,66 +288,66 @@ export interface SegmentComplianceConfig {
   // Data classification
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
   // Privacy regulations
-  gdprCompliant: boolean;,
+  gdprCompliant: boolean;
   ccpaCompliant: boolean;
-  coppaCompliant: boolean;,
+  coppaCompliant: boolean;
   customRegulations: string;
   // Data handling
   retentionPeriod: number; // days,
   anonymizationRules: Array<{,
-  field: string;,
+  field: string;
   method: 'hash' | 'encrypt' | 'remove' | 'pseudonymize';
   parameters?: Record<string, any>;
 }>;
   // Consent management
-  requiresConsent: boolean;,
+  requiresConsent: boolean;
   consentTypes: string;
   consentValidation: Array<{,
   condition: string;
   errorMessage: string;
 }>;
   // Audit requirements
-  auditTrail: boolean;,
+  auditTrail: boolean;
   auditRetention: number; // days
   complianceReporting: boolean;
 
 // Segment Validation Rules
 }
 export interface SegmentValidationRule {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Rule configuration
-  ruleType: 'data_quality' | 'business_logic' | 'performance' | 'compliance' | 'custom';,
+  ruleType: 'data_quality' | 'business_logic' | 'performance' | 'compliance' | 'custom';
   severity: 'warning' | 'error' | 'critical';
   // Validation logic
   validator: string; // function name or expression,
   parameters: Record<string, any>;
   // Execution settings
-  runOnCreate: boolean;,
+  runOnCreate: boolean;
   runOnUpdate: boolean;
   runOnSchedule: boolean;
   schedule?: string; // cron expression,
   // Metadata
-  isActive: boolean;,
+  isActive: boolean;
   createdAt: Date;
   lastExecuted?: Date;
-  executionCount: number;,
+  executionCount: number;
   violationCount: number;
   // Segment Integration Configuration
 }
 export interface SegmentIntegration {
-  id: string;,
+  id: string;
   name: string;
   type: 'webhook' | 'api' | 'database' | 'message_queue' | 'custom';
   // Connection settings
-  endpoint: string;,
-  authentication: {,
-  type: 'api_key' | 'oauth' | 'basic' | 'token' | 'custom';,
+  endpoint: string;
+  authentication: {
+  type: 'api_key' | 'oauth' | 'basic' | 'token' | 'custom';
   credentials: Record<string, any>;
 };
   // Sync settings
-  syncDirection: 'outbound' | 'inbound' | 'bidirectional';,
+  syncDirection: 'outbound' | 'inbound' | 'bidirectional';
   syncFrequency: 'realtime' | 'batch' | 'scheduled';
   batchSize?: number;
   schedule?: string; // cron expression
@@ -361,14 +361,14 @@ export interface SegmentIntegration {
   // Status and monitoring
   isActive: boolean;
   lastSync?: Date;
-  syncStatus: 'healthy' | 'degraded' | 'failed';,
+  syncStatus: 'healthy' | 'degraded' | 'failed';
   errorCount: number;
   // Performance
   syncHistory: Array<{,
   startTime: Date;
-  endTime: Date;,
+  endTime: Date;
   recordsSynced: number;
-  recordsSuccessful: number;,
+  recordsSuccessful: number;
   recordsFailed: number;
   status: 'success' | 'partial' | 'failed';
   errorMessage?: string;
@@ -384,7 +384,7 @@ export interface IUserSegmentService {
   getSegment(id: string, options?: { includeAnalytics?: boolean }): Promise<UserSegment | null>;
   querySegments(query: SegmentQuery): Promise<{,
   segments: UserSegment;
-  totalCount: number;,
+  totalCount: number;
   hasMore: boolean;
 }>;
   // Segment evaluation
@@ -395,7 +395,7 @@ export interface IUserSegmentService {
   removeUserFromSegment(userId: string, segmentId: string): Promise<boolean>;
   getUserSegments(userId: string): Promise<SegmentMembership>;
   getSegmentUsers(segmentId: string, options?: { limit?: number; offset?: number }): Promise<{
-  users: SegmentMembership;,
+  users: SegmentMembership;
   totalCount: number;
 }>;
   // Analytics and insights
@@ -411,9 +411,9 @@ export interface IUserSegmentService {
   maxRecords?: number;
 }): Promise<SegmentExport>;
   importSegmentUsers(segmentId: string, data: any, options?: {)
-  format: 'csv' | 'json';,
-  mergeStrategy: 'replace' | 'append' | 'merge';
-}): Promise<SegmentOperationResult>;
+  format: 'csv' | 'json';
+  mergeStrategy: 'replace' | 'append' | 'merge'
+  }): Promise<SegmentOperationResult>;
   // A/B testing integration
   createExperiment(experiment: Omit<SegmentExperiment, 'id' | 'createdAt'>): Promise<SegmentExperiment>;
   getExperimentResults(experimentId: string): Promise<SegmentExperiment['results']>;
@@ -421,11 +421,11 @@ export interface IUserSegmentService {
   optimizeSegment(segmentId: string): Promise<SegmentOperationResult>;
   validateSegment(segmentId: string): Promise<{,
   isValid: boolean;
-  errors: string;,
+  errors: string;
   warnings: string;
 }>;
   getSystemHealth(): Promise<{
-  status: 'healthy' | 'degraded' | 'unhealthy';,
+  status: 'healthy' | 'degraded' | 'unhealthy';
   metrics: Record<string, number>;
   issues: string;
 }>;

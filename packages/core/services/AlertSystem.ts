@@ -14,68 +14,68 @@
  */
 
 export interface AlertRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   type: AlertType;
-  category: AlertCategory;,
+  category: AlertCategory;
   severity: AlertSeverity;
-  enabled: boolean;,
+  enabled: boolean;
   conditions: AlertCondition;
   actions: AlertAction;
   thresholds?: AlertThreshold;
   cooldownPeriod?: number; // Minutes before same alert can trigger again,
   escalation?: AlertEscalation;
   tags?: string;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   createdBy: string;
 }
 export interface AlertCondition {
-  id: string;,
+  id: string;
   field: string; // e.g., 'execution_time', 'error_rate', 'memory_usage',
-  operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';,
+  operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';
   value: string | number | boolean;
   aggregation?: 'sum' | 'avg' | 'min' | 'max' | 'count';
   timeWindow?: number; // Minutes to evaluate condition over,
 }
 export interface AlertAction {
-  id: string;,
+  id: string;
   type: 'notification' | 'email' | 'webhook' | 'script' | 'create_task';
-  enabled: boolean;,
+  enabled: boolean;
   configuration: Record<string, any>;
-  retryPolicy?: {,
-  maxRetries: number;,
+  retryPolicy?: {
+  maxRetries: number;
   retryDelay: number; // seconds,
   backoffMultiplier?: number;
 };
 }
 export interface AlertThreshold {
-  id: string;,
+  id: string;
   name: string;
-  value: number;,
+  value: number;
   comparison: 'above' | 'below' | 'equals';
   severity: AlertSeverity;
 }
 export interface AlertEscalation {
-  enabled: boolean;,
+  enabled: boolean;
   stages: AlertEscalationStage;
 }
 export interface AlertEscalationStage {
-  id: string;,
+  id: string;
   delayMinutes: number;
-  severity: AlertSeverity;,
-  actions: AlertAction;
-  condition?: 'unacknowledged' | 'unresolved' | 'recurring';
-}
-export interface Alert {
-  id: string;,
-  ruleId: string;
-  ruleName: string;,
-  type: AlertType;
-  category: AlertCategory;,
   severity: AlertSeverity;
-  title: string;,
+  actions: AlertAction;
+  condition?: 'unacknowledged' | 'unresolved' | 'recurring'
+  }
+export interface Alert {
+  id: string;
+  ruleId: string;
+  ruleName: string;
+  type: AlertType;
+  category: AlertCategory;
+  severity: AlertSeverity;
+  title: string;
   message: string;
   description?: string;
   source: string; // Component or service that triggered the alert,
@@ -93,7 +93,7 @@ export interface Alert {
   expiresAt?: Date;
   suppressedUntil?: Date;
   // Occurrence tracking
-  occurrenceCount: number;,
+  occurrenceCount: number;
   firstOccurrence: Date;
   lastOccurrence: Date;
   // Alert context
@@ -104,7 +104,7 @@ export interface Alert {
   // UI presentation
   icon?: string;
   color?: string;
-  priority: AlertPriority;,
+  priority: AlertPriority;
   tags: string;
 }
 export type AlertType = 
@@ -142,18 +142,18 @@ export interface AlertFilter {
   statuses?: AlertStatus;
   sources?: string;
   tags?: string;
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   searchQuery?: string;
 }
 export interface AlertStats {
-  total: number;,
+  total: number;
   active: number;
-  acknowledged: number;,
+  acknowledged: number;
   resolved: number;
-  suppressed: number;,
+  suppressed: number;
   byType: Record<AlertType, number>;
   bySeverity: Record<AlertSeverity, number>;
   byCategory: Record<AlertCategory, number>;
@@ -236,7 +236,7 @@ export class AlertSystem {
   status: 'acknowledged',
   acknowledgedAt: new Date(),
   acknowledgedBy,
-  metadata: {,
+  metadata: {
   ...alert.metadata,
   acknowledgmentNote: note,
 };
@@ -261,7 +261,7 @@ export class AlertSystem {
   status: 'resolved',
   resolvedAt: new Date(),
   resolvedBy,
-  metadata: {,
+  metadata: {
   ...alert.metadata,
   resolution
 };
@@ -288,7 +288,7 @@ export class AlertSystem {
   ...alert,
   status: 'suppressed',
   suppressedUntil,
-  metadata: {,
+  metadata: {
   ...alert.metadata,
   suppressedBy,
   suppressionReason: reason,
@@ -432,7 +432,7 @@ export class AlertSystem {
       ...alert,
       occurrenceCount: alert.occurrenceCount + 1,
       lastOccurrence: new Date(),
-      metadata: {,
+      metadata: {
         ...alert.metadata,
         ...context,
         occurrenceHistory: [,
@@ -503,7 +503,7 @@ export class AlertSystem {
             ...currentAlert,
             severity: stage.severity,
             escalatedAt: new Date(),
-            metadata: {,
+            metadata: {
               ...currentAlert.metadata,
               escalationStage: index + 1,
               escalationReason: `Escalated to ${stage.severity} after ${stage.delayMinutes} minutes`}
@@ -633,7 +633,7 @@ export class AlertSystem {
   id: 'notify_timeout',
   type: 'notification',
   enabled: true,
-  configuration: {,
+  configuration: {
   type: 'warning',
   title: 'Execution Timeout',
   autoHide: false],
@@ -662,11 +662,11 @@ export class AlertSystem {
   id: 'notify_errors',
   type: 'notification',
   enabled: true,
-  configuration: {,
+  configuration: {
   type: 'error',
   title: 'High Error Rate Detected',
   autoHide: false],
-  escalation: {,
+  escalation: {
   enabled: true,
   stages: [,
   {
@@ -679,7 +679,7 @@ export class AlertSystem {
   id: 'critical_notification',
   type: 'notification',
   enabled: true,
-  configuration: {,
+  configuration: {
   type: 'error',
   title: 'CRITICAL: High Error Rate Unresolved',
   autoHide: false],
@@ -735,7 +735,7 @@ export class AlertSystem {
   message: alert.message,
   autoHide: config.autoHide !== false,
   duration: config.duration || 5000,
-  metadata: {,
+  metadata: {
   alertId: alert.id,
   severity: alert.severity,
   source: 'alert_system',
@@ -751,7 +751,7 @@ export class AlertSystem {
     try {
       const response = await fetch(config.url, {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           ...(config.headers || {})
   },

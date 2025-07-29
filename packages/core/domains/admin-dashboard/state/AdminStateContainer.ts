@@ -16,71 +16,71 @@ import { DomainStateContainer, DomainStateChange } from '../../../state/orchestr
 
 export interface AdminDashboardState {
   // Dashboard layout and configuration
-  layout: {,
-  widgets: DashboardWidget;,
+  layout: {
+  widgets: DashboardWidget;
   gridConfig: GridConfiguration;
-  theme: 'light' | 'dark' | 'auto';,
+  theme: 'light' | 'dark' | 'auto';
   collapsed: boolean;
 };
   // User management state
-  users: {,
+  users: {
   list: UserRecord;
-  selected: string;,
+  selected: string;
   filters: UserFilters;
-  pagination: PaginationState;,
+  pagination: PaginationState;
   bulkOperations: BulkOperation;
 };
   // System metrics and monitoring
-  metrics: {,
+  metrics: {
   realTime: RealTimeMetrics;
-  historical: HistoricalMetrics;,
+  historical: HistoricalMetrics;
   alerts: AlertRecord;
   performance: PerformanceMetrics;
 };
   // Security monitoring
-  security: {,
+  security: {
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
-  activeIncidents: SecurityIncident;,
+  activeIncidents: SecurityIncident;
   auditLogs: AuditLogEntry;
   accessControl: AccessControlState;
 };
   // API management
-  api: {,
+  api: {
   endpoints: ApiEndpoint;
-  rateLimits: RateLimitConfig;,
+  rateLimits: RateLimitConfig;
   usage: ApiUsageMetrics;
   errors: ApiError;
 };
   // System configuration
-  configuration: {,
+  configuration: {
   features: FeatureFlag;
-  settings: SystemSettings;,
+  settings: SystemSettings;
   maintenance: MaintenanceState;
   backup: BackupState;
 };
   // UI state
-  ui: {,
+  ui: {
   activeTab: string;
-  modals: ModalState;,
+  modals: ModalState;
   notifications: NotificationState;
   loading: LoadingState;
 };
   // Real-time collaboration
-  collaboration: {,
+  collaboration: {
   activeAdmins: AdminUser;
-  sharedSessions: SharedSession;,
+  sharedSessions: SharedSession;
   conflicts: StateConflict;
 };
 
 // Supporting interfaces
 }
 export interface DashboardWidget {
-  id: string;,
+  id: string;
   type: 'metric' | 'chart' | 'table' | 'alert' | 'custom';
-  title: string;,
+  title: string;
   config: WidgetConfiguration;
   position: { x: number; y: number; w: number; h: number };
-  data: any;,
+  data: any;
   isLoading: boolean;
   error?: string;
   lastUpdated: number;
@@ -88,7 +88,7 @@ export interface DashboardWidget {
   permissions: string;
 }
 export interface GridConfiguration {
-  cols: number;,
+  cols: number;
   rowHeight: number;
   margin: [number, number];
   containerPadding: [number, number];
@@ -96,34 +96,34 @@ export interface GridConfiguration {
   layouts: Record<string, any>;
 }
 export interface UserRecord {
-  id: string;,
+  id: string;
   username: string;
-  email: string;,
+  email: string;
   role: UserRole;
-  status: 'active' | 'inactive' | 'suspended' | 'banned';,
+  status: 'active' | 'inactive' | 'suspended' | 'banned';
   permissions: Permission;
-  profile: UserProfile;,
+  profile: UserProfile;
   activity: UserActivity;
-  createdAt: number;,
+  createdAt: number;
   lastLogin: number;
   metadata: Record<string, any>;
 }
 export interface UserRole {
-  id: string;,
+  id: string;
   name: string;
-  permissions: string;,
+  permissions: string;
   hierarchy: number;
   isSystem: boolean;
 }
 export interface Permission {
-  resource: string;,
+  resource: string;
   actions: string;
   conditions?: Record<string, any>;
   grantedAt: number;
   expiresAt?: number;
 }
 export interface UserProfile {
-  firstName: string;,
+  firstName: string;
   lastName: string;
   avatar?: string;
   phone?: string;
@@ -132,9 +132,9 @@ export interface UserProfile {
   preferences: UserPreferences;
 }
 export interface UserActivity {
-  loginCount: number;,
+  loginCount: number;
   lastActions: UserAction;
-  sessionsActive: number;,
+  sessionsActive: number;
   ipAddresses: string;
   devices: DeviceInfo;
 }
@@ -146,16 +146,16 @@ export interface UserFilters {
   dateRange?: { start: number; end: number };
 }
 export interface PaginationState {
-  page: number;,
+  page: number;
   pageSize: number;
-  total: number;,
+  total: number;
   hasNext: boolean;
   hasPrev: boolean;
 }
 export interface BulkOperation {
-  id: string;,
+  id: string;
   type: 'activate' | 'deactivate' | 'delete' | 'update_role' | 'reset_password';
-  userIds: string;,
+  userIds: string;
   status: 'pending' | 'running' | 'completed' | 'failed';
   progress: number;
   result?: BulkOperationResult;
@@ -163,89 +163,89 @@ export interface BulkOperation {
   completedAt?: number;
 }
 export interface RealTimeMetrics {
-  activeUsers: number;,
+  activeUsers: number;
   systemLoad: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   cpuUsage: number;
-  networkTraffic: number;,
+  networkTraffic: number;
   errorRate: number;
-  responseTime: number;,
+  responseTime: number;
   timestamp: number;
 }
 export interface HistoricalMetrics {
-  timeRange: '1h' | '24h' | '7d' | '30d' | '90d';,
+  timeRange: '1h' | '24h' | '7d' | '30d' | '90d';
   data: MetricDataPoint;
-  aggregation: 'avg' | 'sum' | 'max' | 'min';
-}
+  aggregation: 'avg' | 'sum' | 'max' | 'min'
+  }
 export interface MetricDataPoint {
-  timestamp: number;,
+  timestamp: number;
   value: number;
   metadata?: Record<string, any>;
 }
 export interface AlertRecord {
-  id: string;,
+  id: string;
   type: 'system' | 'security' | 'performance' | 'user' | 'api';
-  severity: 'info' | 'warning' | 'error' | 'critical';,
+  severity: 'info' | 'warning' | 'error' | 'critical';
   title: string;
-  message: string;,
+  message: string;
   source: string;
-  timestamp: number;,
+  timestamp: number;
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: number;
   resolved: boolean;
   resolvedAt?: number;
-  actions: AlertAction;,
+  actions: AlertAction;
   metadata: Record<string, any>;
 }
 export interface SecurityIncident {
-  id: string;,
+  id: string;
   type: 'breach_attempt' | 'suspicious_activity' | 'policy_violation' | 'system_compromise';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   status: 'active' | 'investigating' | 'resolved' | 'false_positive';
-  description: string;,
+  description: string;
   affectedUsers: string;
-  affectedResources: string;,
+  affectedResources: string;
   timeline: IncidentTimelineEntry;
-  response: IncidentResponse;,
+  response: IncidentResponse;
   createdAt: number;
   updatedAt: number;
 }
 export interface ApiEndpoint {
-  id: string;,
+  id: string;
   path: string;
-  method: string;,
+  method: string;
   version: string;
-  status: 'active' | 'deprecated' | 'disabled';,
+  status: 'active' | 'deprecated' | 'disabled';
   rateLimit: number;
-  authentication: string;,
+  authentication: string;
   permissions: string;
-  documentation: string;,
+  documentation: string;
   usage: EndpointUsageStats;
-  healthStatus: 'healthy' | 'degraded' | 'error';
-}
+  healthStatus: 'healthy' | 'degraded' | 'error'
+  }
 export interface SystemSettings {
-  maintenance: {,
+  maintenance: {
   enabled: boolean;
   scheduledAt?: number;
   message?: string;
 };
   features: Record<string, boolean>;
-  limits: {,
+  limits: {
   maxUsers: number;
-  maxSessions: number;,
+  maxSessions: number;
   maxFileSize: number;
   maxRequests: number;
 };
-  security: {,
+  security: {
   passwordPolicy: PasswordPolicy;
-  sessionTimeout: number;,
+  sessionTimeout: number;
   maxLoginAttempts: number;
   twoFactorRequired: boolean;
 };
-  notifications: {,
+  notifications: {
   emailEnabled: boolean;
-  smsEnabled: boolean;,
+  smsEnabled: boolean;
   pushEnabled: boolean;
   templates: Record<string, string>;
 };
@@ -302,9 +302,9 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   // Abstract method implementations
   getInitialState(): AdminDashboardState {
     return {
-      layout: {,
+      layout: {
   widgets: [],
-        gridConfig: {,
+        gridConfig: {
   cols: 12,
           rowHeight: 60,
           margin: [10, 10],
@@ -315,11 +315,11 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   theme: 'light',
         collapsed: false;
   },
-  users: {,
+  users: {
   list: [],
         selected: [],
         filters: {},
-        pagination: {,
+        pagination: {
   page: 1,
   pageSize: 25,
   total: 0,
@@ -328,8 +328,8 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   bulkOperations: [];
   },
-  metrics: {,
-  realTime: {,
+  metrics: {
+  realTime: {
   activeUsers: 0,
   systemLoad: 0,
   memoryUsage: 0,
@@ -339,31 +339,31 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   responseTime: 0,
   timestamp: Date.now(),
 },
-  historical: {,
+  historical: {
   timeRange: '24h',
   data: [],
   aggregation: 'avg',
 },
   alerts: [],
-        performance: {,
+        performance: {
   uptime: 0,
   throughput: 0,
   latency: 0,
   errorCount: 0,
 },
-  security: {,
+  security: {
   threatLevel: 'low',
   activeIncidents: [],
   auditLogs: [],
-  accessControl: {,
+  accessControl: {
   policies: [],
   roles: [],
   violations: [],
 },
-  api: {,
+  api: {
   endpoints: [],
   rateLimits: [],
-  usage: {,
+  usage: {
   requestsPerMinute: 0,
   errorRate: 0,
   avgResponseTime: 0,
@@ -371,19 +371,19 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   errors: [];
   },
-  configuration: {,
+  configuration: {
   features: [],
-        settings: {,
+        settings: {
   maintenance: { enabled: false },
           features: {},
-          limits: {,
+          limits: {
   maxUsers: 10000,
   maxSessions: 1000,
   maxFileSize: 100 * 1024 * 1024, // 100MB,
   maxRequests: 1000,
 },
-  security: {,
-  passwordPolicy: {,
+  security: {
+  passwordPolicy: {
   minLength: 8,
   requireUppercase: true,
   requireLowercase: true,
@@ -394,33 +394,33 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
             maxLoginAttempts: 5,
             twoFactorRequired: false;
   },
-  notifications: {,
+  notifications: {
   emailEnabled: true,
             smsEnabled: false,
             pushEnabled: true,
             templates: {}
   },
-  maintenance: {,
+  maintenance: {
   inProgress: false,
   scheduled: false,
   lastRun: 0,
   nextRun: 0,
 },
-  backup: {,
+  backup: {
   lastBackup: 0,
   nextBackup: 0,
   status: 'idle',
   size: 0,
 },
-  ui: {,
+  ui: {
   activeTab: 'overview',
         modals: [],
         notifications: [],
-        loading: {,
+        loading: {
   global: false,
           sections: {}
   },
-  collaboration: {,
+  collaboration: {
   activeAdmins: [],
   sharedSessions: [],
   conflicts: [],
@@ -436,7 +436,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   message: 'Widget must have id, type, and title',
           value: widget,
-          code: 'INVALID_WIDGET';
+          code: 'INVALID_WIDGET'
   });
       if (!widget.position || widget.position.w <= 0 || widget.position.h <= 0) {
         errors.push({)
@@ -444,7 +444,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   message: 'Widget must have valid position and dimensions',
           value: widget.position,
-          code: 'INVALID_WIDGET_POSITION';
+          code: 'INVALID_WIDGET_POSITION'
   });
     });
     // Validate users
@@ -455,7 +455,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   message: 'User must have id, username, and email',
           value: user,
-          code: 'INVALID_USER';
+          code: 'INVALID_USER'
   });
       if (user.email && !this.isValidEmail(user.email)) {
         errors.push({)
@@ -463,7 +463,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   message: 'Invalid email format',
           value: user.email,
-          code: 'INVALID_EMAIL';
+          code: 'INVALID_EMAIL'
   });
     });
     // Validate pagination
@@ -488,7 +488,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 },
   message: 'Security incident must have id, type, and severity',
           value: incident,
-          code: 'INVALID_INCIDENT';
+          code: 'INVALID_INCIDENT'
   });
     });
     // Performance validations
@@ -562,7 +562,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
         newState.users = {
   ...state.users,
   list: [...state.users.list, newUser],
-  pagination: {,
+  pagination: {
   ...state.users.pagination,
   total: state.users.pagination.total + 1,
 };
@@ -581,7 +581,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   ...state.users,
   list: state.users.list.filter(user => user.id !== operation.userId),
   selected: state.users.selected.filter(id => id !== operation.userId),
-  pagination: {,
+  pagination: {
   ...state.users.pagination,
   total: Math.max(0, state.users.pagination.total - 1),
 };
@@ -821,136 +821,136 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   filters?: Record<string, any>;
   displayOptions?: Record<string, any>;
   interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';,
+  theme: 'light' | 'dark' | 'auto';
   language: string;
-  timezone: string;,
-  notifications: {,
-  email: boolean;,
+  timezone: string;
+  notifications: {
+  email: boolean;
   push: boolean;
   sms: boolean;
 };
 interface UserAction {
-  type: string;,
+  type: string;
   resource: string;
   timestamp: number;
   metadata?: Record<string, any>;
 interface DeviceInfo {
-  id: string;,
+  id: string;
   type: 'desktop' | 'mobile' | 'tablet';
-  os: string;,
+  os: string;
   browser: string;
   lastSeen: number;
 interface BulkOperationResult {
-  successful: number;,
+  successful: number;
   failed: number;
   errors: string;
 interface PerformanceMetrics {
-  uptime: number;,
+  uptime: number;
   throughput: number;
-  latency: number;,
+  latency: number;
   errorCount: number;
 interface AccessControlState {
-  policies: any;,
+  policies: any;
   roles: any;
   violations: any;
 interface AuditLogEntry {
-  id: string;,
+  id: string;
   userId: string;
-  action: string;,
+  action: string;
   resource: string;
-  timestamp: number;,
+  timestamp: number;
   details: Record<string, any>;
 interface AlertAction {
-  type: string;,
+  type: string;
   label: string;
   callback: string;
 interface IncidentTimelineEntry {
-  timestamp: number;,
+  timestamp: number;
   event: string;
   details: string;
   userId?: string;
 interface IncidentResponse {
   actions: string;
   assignee?: string;
-  status: string;,
+  status: string;
   notes: string;
 interface EndpointUsageStats {
-  requestCount: number;,
+  requestCount: number;
   errorCount: number;
-  avgResponseTime: number;,
+  avgResponseTime: number;
   lastAccessed: number;
 interface RateLimitConfig {
-  endpoint: string;,
+  endpoint: string;
   limit: number;
-  window: number;,
+  window: number;
   current: number;
 interface ApiUsageMetrics {
-  requestsPerMinute: number;,
+  requestsPerMinute: number;
   errorRate: number;
-  avgResponseTime: number;,
+  avgResponseTime: number;
   bandwidthUsage: number;
 interface ApiError {
-  id: string;,
+  id: string;
   endpoint: string;
-  method: string;,
+  method: string;
   statusCode: number;
-  message: string;,
+  message: string;
   timestamp: number;
   userId?: string;
 interface FeatureFlag {
-  name: string;,
+  name: string;
   enabled: boolean;
-  description: string;,
+  description: string;
   rolloutPercentage: number;
 interface MaintenanceState {
-  inProgress: boolean;,
+  inProgress: boolean;
   scheduled: boolean;
-  lastRun: number;,
+  lastRun: number;
   nextRun: number;
 interface BackupState {
-  lastBackup: number;,
+  lastBackup: number;
   nextBackup: number;
-  status: 'idle' | 'running' | 'completed' | 'failed';,
+  status: 'idle' | 'running' | 'completed' | 'failed';
   size: number;
 interface PasswordPolicy {
-  minLength: number;,
+  minLength: number;
   requireUppercase: boolean;
-  requireLowercase: boolean;,
+  requireLowercase: boolean;
   requireNumbers: boolean;
   requireSymbols: boolean;
 interface ModalState {
-  id: string;,
+  id: string;
   type: string;
-  title: string;,
+  title: string;
   content: any;
   isOpen: boolean;
   onClose?: () => void;
 interface NotificationState {
-  id: string;,
+  id: string;
   type: 'info' | 'success' | 'warning' | 'error';
-  title: string;,
+  title: string;
   message: string;
   timestamp: number;
   duration?: number;
   actions?: Array<{ label: string; action: () => void }>;
 interface LoadingState {
-  global: boolean;,
+  global: boolean;
   sections: Record<string, boolean>;
 interface AdminUser {
-  id: string;,
+  id: string;
   name: string;
   avatar?: string;
-  isActive: boolean;,
+  isActive: boolean;
   lastSeen: number;
 interface SharedSession {
-  id: string;,
+  id: string;
   adminIds: string;
-  resource: string;,
+  resource: string;
   startTime: number;
   activity: any;
 interface StateConflict {
-  id: string;,
+  id: string;
   type: string;
-  description: string;,
+  description: string;
   timestamp: number;
   resolved: boolean;

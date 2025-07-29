@@ -260,7 +260,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         exportVersion?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
-    metadata: {,
+    metadata: {
         name: string;
         version: string;
         fileFormatVersion: string;
@@ -270,7 +270,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         created?: string | undefined;
         modified?: string | undefined;
     };
-    settings: {,
+    settings: {
         autoSave: boolean;
         theme: "light" | "dark";
         showNodeIcons: boolean;
@@ -280,7 +280,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         miniMapVisible: boolean;
         showConnectionLabels: boolean;
     };
-    graph: {,
+    graph: {
         nodes: any[];
         edges: any[];
         seed?: number | undefined;
@@ -290,7 +290,7 @@ export declare const PSGFileSchema: z.ZodObject<{
             zoom: number;
         } | undefined;
     };
-    exportMetadata: {,
+    exportMetadata: {
         format: "psg";
         exportedBy: string;
         exportDate: string;
@@ -301,7 +301,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         } | undefined;
     };
 }, {
-    metadata: {,
+    metadata: {
         name: string;
         description?: string | undefined;
         tags?: string[] | undefined;
@@ -311,7 +311,7 @@ export declare const PSGFileSchema: z.ZodObject<{
         created?: string | undefined;
         modified?: string | undefined;
     };
-    graph: {,
+    graph: {
         nodes: any[];
         edges: any[];
         seed?: number | undefined;
@@ -321,7 +321,7 @@ export declare const PSGFileSchema: z.ZodObject<{
             zoom: number;
         } | undefined;
     };
-    exportMetadata: {,
+    exportMetadata: {
         format: "psg";
         exportDate: string;
         compatibility?: {

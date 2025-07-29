@@ -26,16 +26,16 @@ interface RateLimitingMetricsDashboardProps {
   autoRefresh?: boolean;
   refreshInterval?: number; // seconds,
   interface ChartData {
-  labels: string;,
+  labels: string;
   datasets: Array<{,
-  label: string;,
+  label: string;
   data: number;
-  borderColor: string;,
+  borderColor: string;
   backgroundColor: string;
   fill?: boolean;
 }>;
 interface MetricStat {
-  label: string;,
+  label: string;
   value: number | string;
   unit?: string;
   trend?: 'up' | 'down' | 'stable';

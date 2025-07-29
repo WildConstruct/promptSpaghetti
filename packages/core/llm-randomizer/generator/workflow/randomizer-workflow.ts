@@ -18,32 +18,32 @@ export interface WorkflowResult {
   graph?: Graph;
   serializedGraph?: string;
   llmOutput?: string;
-  errors: WorkflowError;,
+  errors: WorkflowError;
   warnings: WorkflowWarning;
-  metadata: {,
-  generationTime: number;,
+  metadata: {
+  generationTime: number;
   llmProvider: string;
-  llmAttempts: number;,
+  llmAttempts: number;
   parsingTime: number;
-  serializationTime: number;,
+  serializationTime: number;
   totalTime: number;
 };
   debugInfo?: {
-  originalRequest: RandomizerParameters;,
+  originalRequest: RandomizerParameters;
   llmRequest: UniversalAgentRequest;
-  llmResponse: any;,
+  llmResponse: any;
   parserResult: ParserResult;
   validationResult: any;
 };
 }
 export interface WorkflowError {
-  stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';,
+  stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
   type: string;
   message: string;
   details?: any;
 }
 export interface WorkflowWarning {
-  stage: string;,
+  stage: string;
   message: string;
   suggestion?: string;
   /**
@@ -63,7 +63,7 @@ export class RandomizerWorkflow {
   success: false,
   errors: [],
   warnings: [],
-  metadata: {,
+  metadata: {
   generationTime: 0,
   llmProvider: parameters.provider,
   llmAttempts: 0,
@@ -216,7 +216,7 @@ export class RandomizerWorkflow {
   /**
    * Call LLM with retry logic and error handling
    */
-  private async callLLM(request: UniversalAgentRequest,)
+  private async callLLM(request: UniversalAgentRequest)
     parameters: RandomizerParameters,
     timeoutMs: number): Promise<{;
   success: boolean;
@@ -334,7 +334,7 @@ export class RandomizerWorkflow {
   /**
    * Generate multiple variations with different parameters
    */
-  async generateVariations(baseParameters: RandomizerParameters,)
+  async generateVariations(baseParameters: RandomizerParameters)
     variationCount: number = 3,
     options: WorkflowOptions = {}
   ): Promise<WorkflowResult> {
@@ -374,9 +374,9 @@ export class RandomizerWorkflow {
   /**
    * Validate workflow parameters before generation
    */
-  validateWorkflowParameters(parameters: RandomizerParameters): {,
+  validateWorkflowParameters(parameters: RandomizerParameters): {
   isValid: boolean;
-    errors: string;,
+    errors: string;
   warnings: string;
     const errors: string = [];
     const warnings: string = [];

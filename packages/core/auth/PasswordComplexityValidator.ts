@@ -10,13 +10,13 @@ import { z } from 'zod';
 // ========================================
 
 export interface PasswordComplexityRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   enabled: boolean;
-  required: boolean;,
+  required: boolean;
   weight: number; // For scoring (1-10),
-  category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';,
+  category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';
   severity: 'error' | 'warning' | 'info';
   validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
 }
@@ -33,53 +33,53 @@ export interface PasswordValidationContext {
   locale?: string;
 }
 export interface PasswordRuleResult {
-  passed: boolean;,
+  passed: boolean;
   score: number; // 0-10 scale,
   message: string;
   suggestion?: string;
-  details?: {,
+  details?: {
   expected?: unknown;
   actual?: unknown;
   examples?: string;
 };
 }
 export interface PasswordComplexityConfig {
-  enabled: boolean;,
+  enabled: boolean;
   mode: 'strict' | 'balanced' | 'lenient' | 'custom';
   minimumScore: number; // Overall minimum score required (0-100),
   rules: PasswordComplexityRule;
-  allowOverrides?: {,
-  enabled: boolean;,
+  allowOverrides?: {
+  enabled: boolean;
   roles: string;
   requireJustification: boolean;
 };
   breachChecking?: {
-  enabled: boolean;,
+  enabled: boolean;
   sources: ('hibp' | 'internal' | 'custom')[];
-  cacheResults: boolean;,
+  cacheResults: boolean;
   timeoutMs: number;
 };
   customDictionaries?: {
-  enabled: boolean;,
+  enabled: boolean;
   sources: string;
   categories: string;
 };
 }
 export interface PasswordValidationResult {
-  valid: boolean;,
+  valid: boolean;
   score: number; // 0-100 overall score,
-  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';,
+  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';
   ruleResults: PasswordRuleResult;
-  errors: string;,
+  errors: string;
   warnings: string;
   suggestions: string;
-  estimatedCrackTime?: {,
-  offline: string;,
+  estimatedCrackTime?: {
+  offline: string;
   online: string;
   unit: string;
 };
   entropy?: number;
-  passedRules: number;,
+  passedRules: number;
   totalRules: number;
 
 // ========================================
@@ -149,7 +149,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Add ${minLength - password.length} more characters`}
 },
-  details: {,
+  details: {
   expected: minLength,
   actual: password.length,
 };
@@ -179,7 +179,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Remove ${password.length - maxLength} characters`}
 },
-  details: {,
+  details: {
   expected: maxLength,
   actual: password.length,
 };
@@ -211,7 +211,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Add ${minCount - uppercaseCount} uppercase letter(s)`}
 },
-  details: {,
+  details: {
   expected: minCount,
   actual: uppercaseCount,
   examples: ['A', 'B', 'C', 'Z'],
@@ -244,7 +244,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Add ${minCount - lowercaseCount} lowercase letter(s)`}
 },
-  details: {,
+  details: {
   expected: minCount,
   actual: lowercaseCount,
   examples: ['a', 'b', 'c', 'z'],
@@ -277,7 +277,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Add ${minCount - digitCount} digit(s)`}
 },
-  details: {,
+  details: {
   expected: minCount,
   actual: digitCount,
   examples: ['0', '1', '5', '9'],
@@ -312,7 +312,7 @@ export class PasswordRules {
 },
   suggestion: passed ? undefined : `Add ${minCount - specialCharCount} special character(s)`}
 },
-  details: {,
+  details: {
   expected: minCount,
   actual: specialCharCount,
   examples: ['!', '@', '#', '$', '%', '^', '&', '*'],
@@ -345,7 +345,7 @@ export class PasswordRules {
             : `Contains consecutive identical characters: ${matches?.join(', ')}`}
 },
   suggestion: passed ? undefined : 'Replace consecutive identical characters with varied characters',
-          details: {,
+          details: {
   expected: `Max ${maxCount} consecutive`}
 },
   actual: matches?.length || 0;
@@ -383,7 +383,7 @@ export class PasswordRules {
             : `Contains common sequences: ${foundSequences.join(', ')}`}
 },
   suggestion: passed ? undefined : 'Replace common sequences with random character combinations',
-          details: {,
+          details: {
   expected: 'No common sequences',
   actual: foundSequences,
 };
@@ -429,7 +429,7 @@ export class PasswordRules {
             : `Contains personal information: ${foundInfo.join(', ')}`}
 },
   suggestion: passed ? undefined : 'Remove personal information and use unrelated words or phrases',
-          details: {,
+          details: {
   expected: 'No personal information',
   actual: foundInfo,
 };
@@ -460,7 +460,7 @@ export class PasswordRules {
             : `Low entropy (${entropy.toFixed(1)}/${minEntropy} bits)`}
 },
   suggestion: passed ? undefined : 'Increase randomness by mixing character types and avoiding patterns',
-          details: {,
+          details: {
   expected: minEntropy,
   actual: Math.round(entropy * 10) / 10,
 };
@@ -495,7 +495,7 @@ export class PasswordRules {
             ? 'Password matches a recently used password'
             : 'Password is not in recent history',
           suggestion: isReused ? 'Choose a password you have not used recently' : undefined,
-          details: {,
+          details: {
   expected: `Not in last ${historyCount} passwords`}
 },
   actual: isReused ? 'Found in history' : 'Not in history';
@@ -523,18 +523,18 @@ export class PasswordComplexityValidator {
   mode: 'balanced',
   minimumScore: 70,
   rules: this.getDefaultRules(mode), // Use the actual mode,
-  allowOverrides: {,
+  allowOverrides: {
   enabled: false,
   roles: ['admin', 'security-officer'],
   requireJustification: true,
 },
-  breachChecking: {,
+  breachChecking: {
   enabled: true,
   sources: ['hibp'],
   cacheResults: true,
   timeoutMs: 5000,
 },
-  customDictionaries: {,
+  customDictionaries: {
   enabled: false,
   sources: [],
   categories: [],
@@ -604,7 +604,7 @@ export class PasswordComplexityValidator {
   /**
   * Validate password against all configured rules
   */
-  async validatePassword(password: string,)
+  async validatePassword(password: string)
   context?: PasswordValidationContext): Promise<PasswordValidationResult> {,
   if (!this.config.enabled) {
   return {
@@ -709,9 +709,9 @@ export class PasswordComplexityValidator {
   /**
    * Estimate crack time based on entropy
    */
-  private estimateCrackTime(entropy: number): {,
+  private estimateCrackTime(entropy: number): {
   offline: string;
-    online: string;,
+    online: string;
   unit: string;
     const combinations = Math.pow(2, entropy);
     const avgCombinations = combinations / 2;

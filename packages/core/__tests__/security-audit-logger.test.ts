@@ -408,7 +408,7 @@ describe('SecurityAuditLogger', () => {
   expect(events[0]).toMatchObject({)
   severity: SecuritySeverity.INFO,
   message: 'successMethod executed successfully',
-  context: {,
+  context: {
   functionName: 'TestClass.successMethod',
 },
   blocked: false;

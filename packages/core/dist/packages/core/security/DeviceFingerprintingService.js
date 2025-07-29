@@ -674,7 +674,8 @@ Promise < DeviceFingerprint > {
                                         factor: 'new_device',
                                         impact: 10,
                                         confidence: 90,
-                                        description: 'First time seeing this device for this user', },
+                                        description: 'First time seeing this device for this user',
+                                    },
                                     // Check for location consistency
                                     const: userLocations = Array.from(this.ipLocationCache.values()),
                                     : 

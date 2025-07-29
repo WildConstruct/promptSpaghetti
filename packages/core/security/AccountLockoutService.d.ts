@@ -60,7 +60,7 @@ export interface AccountLockout {
     unlockTime?: Date;
     failedAttempts: number;
     securityEvents: string[];
-    metadata: {,
+    metadata: {
         ipAddress?: string;
         userAgent?: string;
         geolocation?: string;

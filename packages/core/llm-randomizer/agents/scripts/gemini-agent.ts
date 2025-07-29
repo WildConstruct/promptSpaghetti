@@ -4,23 +4,23 @@
 import { validateFormat } from '../../serialization/validator';
 
 export interface GeminiAgentConfig {
-  apiKey: string;,
+  apiKey: string;
   model: string;
-  temperature: number;,
+  temperature: number;
   maxOutputTokens: number;
-  maxRetries: number;,
+  maxRetries: number;
   retryTemperatureReduction: number;
   useStructuredOutput: boolean;
   safetySettings?: Array<{,
-  category: string;,
+  category: string;
   threshold: string;
 }>;
   stopSequences?: string;
 }
 export interface GeminiGenerationRequest {
-  purpose: string;,
+  purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
-  nodeCount: number;,
+  nodeCount: number;
   nodeTypes: string;
   specificRequirements?: string;
   focusAreas?: string;
@@ -36,12 +36,12 @@ export interface GeminiGenerationResult {
   warnings?: string;
   attempts: number;
   safetyRatings?: Array<{,
-  category: string;,
+  category: string;
   probability: string;
 }>;
-  metadata: {,
+  metadata: {
   model: string;
-  temperature: number;,
+  temperature: number;
   tokenCount: number;
   generationTime: number;
 };
@@ -77,7 +77,7 @@ export class GeminiGraphAgent {
   warnings: validation.warnings.map(w => w.message),
   attempts,
   safetyRatings: response.safetyRatings,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -92,7 +92,7 @@ export class GeminiGraphAgent {
   errors: validation.errors.map(e => e.message),
   attempts,
   safetyRatings: response.safetyRatings,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: response.tokenCount || 0,
@@ -111,7 +111,7 @@ export class GeminiGraphAgent {
   errors: ['Content blocked by safety filters'],
   attempts,
   safetyRatings: response.safetyRatings,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: 0,
@@ -126,7 +126,7 @@ export class GeminiGraphAgent {
   success: false,
   errors: ['Maximum retry attempts exceeded'],
   attempts,
-  metadata: {,
+  metadata: {
   model: this.config.model,
   temperature: currentTemperature,
   tokenCount: 0,

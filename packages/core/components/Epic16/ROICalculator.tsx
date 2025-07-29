@@ -21,13 +21,13 @@ interface ROIInputs {
   // Claude API pricing (2025 rates)
   claudeTokenCostPer1K: number; // cost per 1K tokens,
   interface ROIResult {
-  templateTotalCost: number;,
+  templateTotalCost: number;
   manualTotalCost: number;
-  netSavings: number;,
+  netSavings: number;
   roi: number; // as percentage,
-  paybackMonths: number;,
+  paybackMonths: number;
   monthlySavings: number;
-  timeToValue: string;,
+  timeToValue: string;
   efficiency: number; // efficiency factor,
   interface ROICalculatorProps {
   className?: string;
@@ -51,7 +51,7 @@ interface ROIInputs {
   const [activeScenario, setActiveScenario] = useState<string>(presetScenario || 'individual');
   // Preset scenarios for different user types
   const presetScenarios = {
-  individual: {,
+  individual: {
   templatePrice: 499, // $4.99,
   templateUsageFrequency: 10,
   claudeTokensPerUse: 1200,
@@ -61,7 +61,7 @@ interface ROIInputs {
   analysisMonths: 6,
   claudeTokenCostPer1K: 0.015,
 },
-  startup: {,
+  startup: {
   templatePrice: 999, // $9.99,
   templateUsageFrequency: 30,
   claudeTokensPerUse: 1500,
@@ -71,7 +71,7 @@ interface ROIInputs {
   analysisMonths: 12,
   claudeTokenCostPer1K: 0.015,
 },
-  agency: {,
+  agency: {
   templatePrice: 1999, // $19.99,
   templateUsageFrequency: 100,
   claudeTokensPerUse: 2000,
@@ -81,7 +81,7 @@ interface ROIInputs {
   analysisMonths: 12,
   claudeTokenCostPer1K: 0.015,
 },
-  enterprise: {,
+  enterprise: {
   templatePrice: 4999, // $49.99,
   templateUsageFrequency: 250,
   claudeTokensPerUse: 2500,

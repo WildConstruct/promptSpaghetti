@@ -11,7 +11,7 @@ export interface ProjectTemplate {
     tags: string[];
     version: string;
     preview_image?: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         avatar?: string;
@@ -70,7 +70,7 @@ export interface TemplateUsageAnalytics {
     average_rating: number;
     completion_rate: number;
     most_used_customizations: string[];
-    trend_data: {,
+    trend_data: {
         date: string;
         uses: number;
     }[];

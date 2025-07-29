@@ -26,7 +26,7 @@ export interface EnhancedPreviewResult {
   usedNodeIds?: string;
   usedEdgeIds?: string;
   // Film industry metadata
-  metadata?: {,
+  metadata?: {
   createdAt: Date;
   wordCount?: number;
   characterCount?: number;
@@ -42,9 +42,9 @@ export interface EnhancedPreviewResult {
   saved?: boolean;
   exported?: boolean;
 interface EnhancedPreviewModalProps {
-  open: boolean;,
+  open: boolean;
   loading: boolean;
-  error: string | null;,
+  error: string | null;
   results: EnhancedPreviewResult;
   varianceAnalysis?: VarianceAnalysis | null;
   onClose: () => void;
@@ -215,7 +215,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
   fontSize: 14,
   fontWeight: 500,
   transition: 'all 0.2s',
-  ':hover': {,
+  ':hover': {
   borderColor: '#ffffff',
   background: 'rgba(255, 255, 255, 0.1)',
 }}

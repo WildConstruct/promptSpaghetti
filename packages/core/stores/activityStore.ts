@@ -21,78 +21,78 @@ import {
 // Store State Interface
 interface ActivityState {
   // Data State
-  activities: Activity;,
+  activities: Activity;
   currentActivity: Activity | null;
   metrics: ActivityMetrics | null;
   // UI State
-  isLoading: boolean;,
+  isLoading: boolean;
   error: string | null;
   selectedActivityIds: string;
   // Query State
-  currentQuery: ActivityQuery;,
+  currentQuery: ActivityQuery;
   queryResult: ActivityQueryResult | null;
   lastQueryTime: string | null;
   // Real-time State
-  isStreamConnected: boolean;,
+  isStreamConnected: boolean;
   streamSubscriptionId: string | null;
   recentActivities: Activity;
   // Filters and Preferences
-  activeFilters: Partial<ActivityQuery>;,
+  activeFilters: Partial<ActivityQuery>;
   viewMode: 'list' | 'timeline' | 'analytics';
-  sortBy: 'timestamp' | 'severity' | 'type' | 'user';,
+  sortBy: 'timestamp' | 'severity' | 'type' | 'user';
   sortOrder: 'asc' | 'desc';
   groupBy: 'none' | 'type' | 'severity' | 'user' | 'source';
   // Pagination
-  currentPage: number;,
+  currentPage: number;
   pageSize: number;
-  hasNextPage: boolean;,
+  hasNextPage: boolean;
   hasPreviousPage: boolean;
   // Store Actions Interface
   interface ActivityActions {
   // Data Actions
-  setActivities: (activities: Activity) => void;,
-  addActivity: (activity: Activity) => void;,
-  updateActivity: (id: string, updates: Partial<Activity>) => void;,
-  removeActivity: (id: string) => void;,
-  setCurrentActivity: (activity: Activity | null) => void;,
+  setActivities: (activities: Activity) => void;
+  addActivity: (activity: Activity) => void;
+  updateActivity: (id: string, updates: Partial<Activity>) => void;
+  removeActivity: (id: string) => void;
+  setCurrentActivity: (activity: Activity | null) => void;
   setMetrics: (metrics: ActivityMetrics | null) => void;
   // Query Actions
-  setQuery: (query: ActivityQuery) => void;,
-  updateQuery: (updates: Partial<ActivityQuery>) => void;,
-  setQueryResult: (result: ActivityQueryResult | null) => void;,
+  setQuery: (query: ActivityQuery) => void;
+  updateQuery: (updates: Partial<ActivityQuery>) => void;
+  setQueryResult: (result: ActivityQueryResult | null) => void;
   clearQuery: () => void;
   // Filter Actions
-  setActiveFilters: (filters: Partial<ActivityQuery>) => void;,
-  addFilter: (key: keyof ActivityQuery, value: any) => void;,
-  removeFilter: (key: keyof ActivityQuery) => void;,
+  setActiveFilters: (filters: Partial<ActivityQuery>) => void;
+  addFilter: (key: keyof ActivityQuery, value: any) => void;
+  removeFilter: (key: keyof ActivityQuery) => void;
   clearFilters: () => void;
   // Selection Actions
-  selectActivity: (id: string) => void;,
-  deselectActivity: (id: string) => void;,
+  selectActivity: (id: string) => void;
+  deselectActivity: (id: string) => void;
   selectAllActivities: () => void;
-  clearSelection: () => void;,
+  clearSelection: () => void;
   toggleActivitySelection: (id: string) => void;
   // View Actions
-  setViewMode: (mode: 'list' | 'timeline' | 'analytics') => void;,
-  setSorting: (sortBy: string, sortOrder: 'asc' | 'desc') => void;,
+  setViewMode: (mode: 'list' | 'timeline' | 'analytics') => void;
+  setSorting: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   setGroupBy: (groupBy: string) => void;
   // Pagination Actions
-  setPage: (page: number) => void;,
-  setPageSize: (size: number) => void;,
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
   nextPage: () => void;
   previousPage: () => void;
   // Real-time Actions
-  setStreamConnected: (connected: boolean) => void;,
-  setStreamSubscriptionId: (id: string | null) => void;,
-  addRecentActivity: (activity: Activity) => void;,
+  setStreamConnected: (connected: boolean) => void;
+  setStreamSubscriptionId: (id: string | null) => void;
+  addRecentActivity: (activity: Activity) => void;
   clearRecentActivities: () => void;
   // Async Actions
-  loadActivities: (query?: ActivityQuery) => Promise<void>;,
+  loadActivities: (query?: ActivityQuery) => Promise<void>;
   loadMetrics: (query?: ActivityQuery) => Promise<void>;
   refreshData: () => Promise<void>;
   // Utility Actions
-  setLoading: (loading: boolean) => void;,
-  setError: (error: string | null) => void;,
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
   reset: () => void;
   // Combined Store Type
   type ActivityStore = ActivityState & ActivityActions;
@@ -107,7 +107,7 @@ interface ActivityState {
   error: null,
   selectedActivityIds: [],
   // Query State
-  currentQuery: {,
+  currentQuery: {
   limit: 50,
   offset: 0,
   sortBy: 'timestamp',
@@ -170,7 +170,7 @@ const activityApi = {
   await new Promise(resolve => setTimeout(resolve, 300));
   return {
   totalActivities: 1000,
-  activitiesByType: {,
+  activitiesByType: {
   user_action: 400,
   system_event: 300,
   admin_action: 100,
@@ -184,14 +184,14 @@ const activityApi = {
   file_operation: 1,
   workflow_event: 0,
 },
-  activitiesBySeverity: {,
+  activitiesBySeverity: {
   critical: 5,
   high: 20,
   medium: 100,
   low: 375,
   info: 500,
 },
-  activitiesByStatus: {,
+  activitiesByStatus: {
   pending: 10,
   in_progress: 5,
   completed: 950,
@@ -215,7 +215,7 @@ const activityApi = {
       ],
       errorRate: 3.5,
       averageDuration: 250,
-      performanceMetrics: {,
+      performanceMetrics: {
   p50: 100,
   p95: 500,
   p99: 1000,

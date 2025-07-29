@@ -8,9 +8,9 @@ export interface AnalyticsResponse<T = unknown> {
   data?: T;
   error?: string;
   details?: string;
-  meta?: {,
-  period?: {,
-  startTime: number;,
+  meta?: {
+  period?: {
+  startTime: number;
   endTime: number;
 };
     generatedAt?: number;
@@ -33,7 +33,7 @@ export interface AnalyticsQuery {
   */
 }
 export interface TimeRange {
-  startTime: number;,
+  startTime: number;
   endTime: number;
   granularity?: 'hour' | 'day';
   /**
@@ -54,7 +54,7 @@ export interface BudgetConfig {
   */
 }
 export interface ReportConfig {
-  startTime: number;,
+  startTime: number;
   endTime: number;
   format?: 'json' | 'csv' | 'html' | 'pdf';
   includeHeatMap?: boolean;
@@ -144,7 +144,7 @@ export class AnalyticsClient extends EventEmitter {
   /**
    * Get cost summary
    */
-  async getCostSummary(timeRange: TimeRange,)
+  async getCostSummary(timeRange: TimeRange)
     userId?: number,
     organizationId?: number
   ): Promise<AnalyticsResponse> {
@@ -158,7 +158,7 @@ export class AnalyticsClient extends EventEmitter {
   /**
    * Get cost forecast
    */
-  async getCostForecast(days: number,)
+  async getCostForecast(days: number)
     userId?: number,
     organizationId?: number
   ): Promise<AnalyticsResponse> {
@@ -174,7 +174,7 @@ export class AnalyticsClient extends EventEmitter {
   async createBudget(config: BudgetConfig): Promise<AnalyticsResponse> {
   return this.makeRequest('/analytics/budgets', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(config);
@@ -182,7 +182,7 @@ export class AnalyticsClient extends EventEmitter {
   /**
    * Get budgets
    */
-  async getBudgets(userId?: number,)
+  async getBudgets(userId?: number)
     organizationId?: number
   ): Promise<AnalyticsResponse> {
     const params = new URLSearchParams();
@@ -199,7 +199,7 @@ export class AnalyticsClient extends EventEmitter {
     return this.makeRequest(`/analytics/budgets/${budgetId}`, {)}
   },
   method: 'PUT',
-      headers: {,
+      headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(updates);
@@ -220,12 +220,12 @@ export class AnalyticsClient extends EventEmitter {
   async acknowledgeAlert(alertId: string): Promise<AnalyticsResponse> {
     return this.makeRequest(`/analytics/alerts/${alertId}/acknowledge`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
   /**
    * Get efficiency recommendations
    */
-  async getRecommendations(userId?: number,)
+  async getRecommendations(userId?: number)
     organizationId?: number
   ): Promise<AnalyticsResponse> {
     const params = new URLSearchParams();
@@ -238,11 +238,11 @@ export class AnalyticsClient extends EventEmitter {
   async generateReport(config: ReportConfig): Promise<string> {
   const response = await this.makeRequest('/analytics/reports', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(config),
-      responseType: 'text';
+      responseType: 'text'
   });
     return response.data || '';
   /**
@@ -259,7 +259,7 @@ export class AnalyticsClient extends EventEmitter {
 });
     const response = await this.makeRequest(`/analytics/export?${params}`, {)}
   },
-  responseType: 'text';
+  responseType: 'text'
   });
     return response.data || '';
   /**
@@ -315,7 +315,7 @@ export class AnalyticsClient extends EventEmitter {
     const { responseType = 'json', ...fetchOptions } = options;
     const requestOptions: RequestInit = {
       ...fetchOptions,
-      headers: {,
+      headers: {
         'Accept': responseType === 'json' ? 'application/json' : 'text/plain',
         ...this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }
 }

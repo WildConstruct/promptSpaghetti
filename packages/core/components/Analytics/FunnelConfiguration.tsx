@@ -42,26 +42,26 @@ export interface FunnelConfigurationProps {
   onValidation?: (isValid: boolean, errors: ValidationError) => void;
 }
 export interface FunnelTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   category: FunnelCategory;
-  steps: Partial<ConversionStep>[];,
+  steps: Partial<ConversionStep>[];
   defaultConfiguration: Partial<ConversionFunnelDefinition>;
   tags: string;
 }
 export interface EventDefinition {
-  type: string;,
+  type: string;
   name: string;
-  description: string;,
+  description: string;
   category: string;
-  properties: PropertyDefinition;,
+  properties: PropertyDefinition;
   examples: unknown;
 }
 export interface PropertyDefinition {
-  path: string;,
+  path: string;
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';,
+  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
   description: string;
   possibleValues?: unknown;
   validation?: PropertyValidation;
@@ -76,13 +76,13 @@ export interface PropertyValidation {
   customValidator?: string;
 }
 export interface ValidationError {
-  field: string;,
+  field: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
   suggestion?: string;
 }
 export interface DragItem {
-  type: 'step' | 'condition' | 'path';,
+  type: 'step' | 'condition' | 'path';
   id: string;
   data: Record<string, unknown>;
   /**
@@ -104,7 +104,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   description: '',
   category: 'acquisition',
   version: '1.0.0',
-  configuration: {,
+  configuration: {
   timeWindow: 86400000, // 24 hours,
   allowBacktracking: false,
   requireSequentialSteps: true,
@@ -113,7 +113,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
 },
   steps: [],
     conditionalPaths: [],
-    successCriteria: {,
+    successCriteria: {
   primary: {;
   stepId: '',
         requirements: { operator: 'AND', conditions: [] },
@@ -122,13 +122,13 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   secondary: [],
       scoreCalculation: { method: 'weighted' }
   },
-  analytics: {,
+  analytics: {
   enableRealTimeTracking: true,
   retentionPeriod: 90,
   cohortTrackingEnabled: true,
   segmentationRules: [],
 },
-  metadata: {,
+  metadata: {
   createdAt: Date.now(),
   updatedAt: Date.now(),
   createdBy: 'current-user',
@@ -174,7 +174,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   field: 'steps',
           message: `Duplicate step orders found: ${duplicateOrders.join(', ')}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
       // Validate each step
       funnelData.steps.forEach((step, index) => {
@@ -184,7 +184,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
 },
   message: `Step ${index + 1} name is required`}
 },
-  severity: 'error';
+  severity: 'error'
   });
         if (!step.eventCriteria?.eventType) {
           errors.push({)
@@ -192,7 +192,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
 },
   message: `Step ${index + 1} must have event criteria`}
 },
-  severity: 'error';
+  severity: 'error'
   });
         // Validate time constraints
         if (step.timeConstraints?.minTimeFromPrevious && step.timeConstraints?.maxTimeFromPrevious) {
@@ -202,7 +202,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
 },
   message: `Step ${index + 1}: Min time cannot be greater than max time`}
 },
-  severity: 'error';
+  severity: 'error'
   });
       });
     // Success criteria validation
@@ -225,7 +225,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   setFunnel(prev => ({)
   ...prev,
   [field]: value,
-  metadata: {,
+  metadata: {
   ...prev.metadata!,
   updatedAt: Date.now(),
 }));
@@ -233,11 +233,11 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   const handleConfigurationChange = useCallback((field: string, value: Error) => {
   setFunnel(prev => ({)
   ...prev,
-  configuration: {,
+  configuration: {
   ...prev.configuration!,
   [field]: value,
 },
-  metadata: {,
+  metadata: {
   ...prev.metadata!,
   updatedAt: Date.now(),
 }));
@@ -253,19 +253,19 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
       type: 'engagement',
       isRequired: true,
       isTerminal: false,
-      eventCriteria: {,
+      eventCriteria: {
   eventType: '',
   propertyMatchers: [],
 },
   conditions: [],
       timeConstraints: {},
-      successMetrics: {,
+      successMetrics: {
   expectedCompletionRate: 50,
   averageTimeToComplete: 60000,
   criticalSuccessFactors: [],
 },
   branches: [],
-      metadata: {,
+      metadata: {
   businessValue: 1,
   complexity: 'medium',
   dependencies: [],
@@ -340,7 +340,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   dependencies: [],
   optimizationOpportunities: [],
 })),
-      metadata: {,
+      metadata: {
   ...prev.metadata!,
   tags: template.tags,
   updatedAt: Date.now(),
@@ -483,8 +483,8 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({ errors }) => {
  * Basic Configuration Component
  */
 interface BasicConfigurationProps {
-  funnel: Partial<ConversionFunnelDefinition>;,
-  onChange: (field: string, value: Error) => void;,
+  funnel: Partial<ConversionFunnelDefinition>;
+  onChange: (field: string, value: Error) => void;
   onConfigChange: (field: string, value: Error) => void;
   const BasicConfiguration: React.FC<BasicConfigurationProps> = ({,)
   funnel,
@@ -640,15 +640,15 @@ interface BasicConfigurationProps {
  * Steps Configuration Component
  */
 interface StepsConfigurationProps {
-  steps: ConversionStep;,
+  steps: ConversionStep;
   availableEvents: EventDefinition;
-  availableProperties: PropertyDefinition;,
+  availableProperties: PropertyDefinition;
   onStepAdd: () => void;
-  onStepUpdate: (stepId: string, updates: Partial<ConversionStep>) => void;,
-  onStepDelete: (stepId: string) => void;,
-  onStepReorder: (fromIndex: number, toIndex: number) => void;,
+  onStepUpdate: (stepId: string, updates: Partial<ConversionStep>) => void;
+  onStepDelete: (stepId: string) => void;
+  onStepReorder: (fromIndex: number, toIndex: number) => void;
   draggedItem: DragItem | null;
-  onDragStart: (item: DragItem) => void;,
+  onDragStart: (item: DragItem) => void;
   onDragEnd: () => void;
   const StepsConfiguration: React.FC<StepsConfigurationProps> = ({,)
   steps,
@@ -702,15 +702,15 @@ interface StepsConfigurationProps {
  * Step Editor Component
  */
 interface StepEditorProps {
-  step: ConversionStep;,
+  step: ConversionStep;
   index: number;
-  availableEvents: EventDefinition;,
+  availableEvents: EventDefinition;
   availableProperties: PropertyDefinition;
-  onUpdate: (updates: Partial<ConversionStep>) => void;,
+  onUpdate: (updates: Partial<ConversionStep>) => void;
   onDelete: () => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;,
+  onReorder: (fromIndex: number, toIndex: number) => void;
   draggedItem: DragItem | null;
-  onDragStart: (item: DragItem) => void;,
+  onDragStart: (item: DragItem) => void;
   onDragEnd: () => void;
   const StepEditor: React.FC<StepEditorProps> = ({,)
   step,
@@ -846,9 +846,9 @@ interface StepEditorProps {
  * Event Criteria Editor Component
  */
 interface EventCriteriaEditorProps {
-  criteria: EventCriteria;,
+  criteria: EventCriteria;
   availableEvents: EventDefinition;
-  availableProperties: PropertyDefinition;,
+  availableProperties: PropertyDefinition;
   onChange: (criteria: EventCriteria) => void;
   const EventCriteriaEditor: React.FC<EventCriteriaEditorProps> = ({,)
   criteria,
@@ -903,7 +903,7 @@ interface EventCriteriaEditorProps {
  * Property Matchers Editor Component
  */
 interface PropertyMatchersEditorProps {
-  matchers: PropertyMatcher;,
+  matchers: PropertyMatcher;
   availableProperties: PropertyDefinition;
   onChange: (matchers: PropertyMatcher) => void;
   const PropertyMatchersEditor: React.FC<PropertyMatchersEditorProps> = ({,)
@@ -1016,7 +1016,7 @@ interface PropertyMatchersEditorProps {
  * Time Constraints Editor Component
  */
 interface TimeConstraintsEditorProps {
-  constraints: ConversionStep['timeConstraints'];,
+  constraints: ConversionStep['timeConstraints'];
   onChange: (constraints: ConversionStep['timeConstraints']) => void;
   const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({,)
   constraints,
@@ -1084,8 +1084,8 @@ const AnalyticsConfiguration: React.FC<unknown> = () => ()
  * Template Selection Modal
  */
 interface TemplateSelectionModalProps {
-  templates: FunnelTemplate;,
-  onSelect: (template: FunnelTemplate) => void;,
+  templates: FunnelTemplate;
+  onSelect: (template: FunnelTemplate) => void;
   onClose: () => void;
   const TemplateSelectionModal: React.FC<TemplateSelectionModalProps> = ({,)
   templates,

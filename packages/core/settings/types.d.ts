@@ -42,7 +42,7 @@ export declare const TemperatureSettingsSchema: z.ZodObject<{
     value: number;
     enabled: boolean;
     showIndicator: boolean;
-    presets: {,
+    presets: {
         name: string;
         description: string;
         value: number;
@@ -177,7 +177,7 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         value: number;
         enabled: boolean;
         showIndicator: boolean;
-        presets: {,
+        presets: {
             name: string;
             description: string;
             value: number;
@@ -263,44 +263,44 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
     lastModified: z.ZodOptional<z.ZodString>;
     userId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    performance: {,
+    performance: {
         enableCaching: boolean;
         showExecutionTimes: boolean;
         showMemoryUsage: boolean;
         logExecutionSteps: boolean;
     };
-    seed: {,
+    seed: {
         history: number[];
         enabled: boolean;
         autoGenerate: boolean;
         value?: number | undefined;
     };
     version: string;
-    temperature: {,
+    temperature: {
         value: number;
         enabled: boolean;
         showIndicator: boolean;
-        presets: {,
+        presets: {
             name: string;
             description: string;
             value: number;
         }[];
     };
-    batch: {,
+    batch: {
         includeMetadata: boolean;
         batchSize: number;
         outputFormat: "json" | "csv" | "individual" | "combined";
         namingPattern: string;
         autoDownload: boolean;
     };
-    ui: {,
+    ui: {
         theme: "auto" | "light" | "dark";
         showTooltips: boolean;
         enableKeyboardShortcuts: boolean;
         reduceAnimations: boolean;
         highContrast: boolean;
     };
-    runCount: {,
+    runCount: {
         value: number;
         presets: number[];
         showPerformanceWarning: boolean;
@@ -308,19 +308,19 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
     lastModified?: string | undefined;
     userId?: string | undefined;
 }, {
-    performance: {,
+    performance: {
         enableCaching?: boolean | undefined;
         showExecutionTimes?: boolean | undefined;
         showMemoryUsage?: boolean | undefined;
         logExecutionSteps?: boolean | undefined;
     };
-    seed: {,
+    seed: {
         history?: number[] | undefined;
         value?: number | undefined;
         enabled?: boolean | undefined;
         autoGenerate?: boolean | undefined;
     };
-    temperature: {,
+    temperature: {
         value?: number | undefined;
         enabled?: boolean | undefined;
         showIndicator?: boolean | undefined;
@@ -330,21 +330,21 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
             value: number;
         }[] | undefined;
     };
-    batch: {,
+    batch: {
         includeMetadata?: boolean | undefined;
         batchSize?: number | undefined;
         outputFormat?: "json" | "csv" | "individual" | "combined" | undefined;
         namingPattern?: string | undefined;
         autoDownload?: boolean | undefined;
     };
-    ui: {,
+    ui: {
         theme?: "auto" | "light" | "dark" | undefined;
         showTooltips?: boolean | undefined;
         enableKeyboardShortcuts?: boolean | undefined;
         reduceAnimations?: boolean | undefined;
         highContrast?: boolean | undefined;
     };
-    runCount: {,
+    runCount: {
         value?: number | undefined;
         presets?: number[] | undefined;
         showPerformanceWarning?: boolean | undefined;
@@ -466,7 +466,7 @@ export interface SettingsValidationResult {
 
 export interface SettingsExport {
     settings: AdvancedSettings;
-    metadata: {,
+    metadata: {
         exportedAt: string;
         version: string;
         appVersion: string;

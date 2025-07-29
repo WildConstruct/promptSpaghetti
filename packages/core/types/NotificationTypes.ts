@@ -11,16 +11,16 @@ export type NotificationPriority = 'high' | 'medium' | 'low';
 export type NotificationStatus = 'unread' | 'read' | 'archived';
 
 export interface Notification {
-  id: string;,
+  id: string;
   user_id: string;
   workspace_id?: string;
   project_id?: string;
-  type: NotificationType;,
+  type: NotificationType;
   priority: NotificationPriority;
-  title: string;,
+  title: string;
   message: string;
   action_url?: string;
-  metadata?: {,
+  metadata?: {
   actor_id?: string;
   actor_name?: string;
   project_name?: string;
@@ -30,23 +30,23 @@ export interface Notification {
   [key: string]: any;
 };
   read_at?: string;
-  created_at: string;,
+  created_at: string;
   updated_at: string;
 }
 export interface NotificationPreferences {
   user_id: string;
   workspace_id?: string;
-  email_enabled: boolean;,
+  email_enabled: boolean;
   push_enabled: boolean;
-  in_app_enabled: boolean;,
-  type_preferences: {,
-  [key in NotificationType]?: {,
+  in_app_enabled: boolean;
+  type_preferences: {
+  [key in NotificationType]?: {
   in_app?: boolean;
   email?: boolean;
   push?: boolean;
 };
   };
-  quiet_hours: {,
+  quiet_hours: {
   enabled: boolean;
   start: string; // HH:MM format,
   end: string;   // HH:MM format,
@@ -57,32 +57,32 @@ export interface NotificationPreferences {
   updated_at?: string;
 }
 export interface NotificationTemplate {
-  id: string;,
+  id: string;
   type: NotificationType;
-  name: string;,
+  name: string;
   title_template: string;
-  message_template: string;,
+  message_template: string;
   variables: string;
-  default_priority: NotificationPriority;,
+  default_priority: NotificationPriority;
   created_at: string;
   updated_at: string;
 }
 export interface NotificationDeliveryLog {
-  id: string;,
+  id: string;
   notification_id: string;
-  delivery_method: 'in_app' | 'email' | 'push';,
+  delivery_method: 'in_app' | 'email' | 'push';
   status: 'pending' | 'sent' | 'delivered' | 'failed';
   error_message?: string;
   delivered_at?: string;
   created_at: string;
 }
 export interface NotificationStats {
-  total: number;,
+  total: number;
   unread: number;
   by_type: Record<NotificationType, number>;
   by_priority: Record<NotificationPriority, number>;
-  recent_activity: {,
-  today: number;,
+  recent_activity: {
+  today: number;
   this_week: number;
   this_month: number;
 };
@@ -95,15 +95,15 @@ export interface RealTimeNotificationConnection {
   // Event types for real-time notifications
 }
 export interface NotificationEvent {
-  type: 'notification_created' | 'notification_updated' | 'notification_deleted';,
+  type: 'notification_created' | 'notification_updated' | 'notification_deleted';
   notification: Notification;
   timestamp: string;
   // API response types
 }
 export interface NotificationListResponse {
-  notifications: Notification;,
+  notifications: Notification;
   total: number;
-  unread_count: number;,
+  unread_count: number;
   has_more: boolean;
   next_cursor?: string;
 }
@@ -113,26 +113,26 @@ export interface NotificationCreateRequest {
   project_id?: string;
   type: NotificationType;
   priority?: NotificationPriority;
-  title: string;,
+  title: string;
   message: string;
   action_url?: string;
   metadata?: Record<string, any>;
   // Hook return types
 }
 export interface UseNotificationsReturn {
-  notifications: Notification;,
+  notifications: Notification;
   unreadCount: number;
-  loading: boolean;,
+  loading: boolean;
   error: Error | null;
-  stats: NotificationStats | null;,
+  stats: NotificationStats | null;
   realTimeConnection: RealTimeNotificationConnection | null;
   // Actions
-  markAsRead: (id: string) => Promise<void>;,
+  markAsRead: (id: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
-  deleteNotification: (id: string) => Promise<void>;,
+  deleteNotification: (id: string) => Promise<void>;
   refreshNotifications: () => Promise<void>;
   loadMore: () => Promise<void>;
   // Filters
-  setFilter: (filter: NotificationType | 'all') => void;,
+  setFilter: (filter: NotificationType | 'all') => void;
   setUnreadOnly: (unreadOnly: boolean) => void;
 }

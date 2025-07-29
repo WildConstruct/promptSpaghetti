@@ -13,7 +13,7 @@ export interface CacheConfig {
     compressionEnabled: boolean;
     persistToDisk: boolean;
     diskCachePath?: string;
-    metrics: {,
+    metrics: {
         enabled: boolean;
         reportingInterval: number;
     };
@@ -28,7 +28,7 @@ export interface CacheItem<T = any> {
     ttl: number;
     priority: number;
     compressed: boolean;
-    metadata: {,
+    metadata: {
         modelType: string;
         inputHash: string;
         responseTime: number;

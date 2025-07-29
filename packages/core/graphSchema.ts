@@ -26,7 +26,7 @@ export const BaseNode = z.object({)
   inputs: z.array(z.string()).optional(), // ids of upstream nodes (ordered)
   // Epic 8.2 Template Support
   template: z.string().optional(), // Template with {variable} syntax
-  extractedVariables: z.array(z.object({,)
+  extractedVariables: z.array(z.object({)
   name: z.string(),
   placeholder: z.string(),
   startIndex: z.number(),

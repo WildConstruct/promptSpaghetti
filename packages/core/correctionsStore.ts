@@ -180,7 +180,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
   try {
   const response = await fetch('/api/corrections/import', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),

@@ -8,23 +8,23 @@ import { uiColors } from '../../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...uiColors,
-  accent: {,
+  accent: {
   ...uiColors.accent,
   primary: uiColors.accent.orange,
   secondary: uiColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...uiColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...uiColors.text,
   disabled: '#6b7280',
 };
 
 export interface RunCountControlsProps {
-  settings: RunCountSettings;,
+  settings: RunCountSettings;
   onChange: (settings: RunCountSettings) => void;
   /**
   * Run Count Settings Controls Component
@@ -139,7 +139,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
               color: uiColors.text.primary,
               fontSize: '14px',
               outline: 'none',
-              textAlign: 'center';
+              textAlign: 'center'
   }}
             onFocus={(e) => {
               e.target.style.borderColor = uiColors.accent.primary;
@@ -214,7 +214,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
   borderRadius: '6px',
                   cursor: 'pointer',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  minWidth: '60px';
+                  minWidth: '60px'
   }}
                 title={`${presetValue} variants - ${presetPerf.description}`}
                 onMouseEnter={(e) => {

@@ -155,7 +155,7 @@ export interface ActivityStats {
     byImpact: Record<ActivityImpact, number>;
     eventsPerHour: Record<string, number>;
     eventsPerDay: Record<string, number>;
-    peakActivity: {,
+    peakActivity: {
         hour: number;
         count: number;
     };

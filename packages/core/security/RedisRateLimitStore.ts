@@ -320,7 +320,7 @@ export class RedisRateLimitStore implements RateLimitStore {
   * Get statistics about the store
   */
   async getStats(): Promise<{,
-  redisAvailable: boolean;,
+  redisAvailable: boolean;
   totalKeys: number;
   fallbackKeys: number;
 }> {
@@ -425,7 +425,7 @@ export class RedisConnectionFactory {
   /**
   * Create Redis client for different environments
   */
-  static async createClient(_config: {,)
+  static async createClient(_config: {)
   host?: string;
   port?: number;
   password?: string;
@@ -440,7 +440,7 @@ export class RedisConnectionFactory {
   /**
    * Create Redis cluster client
    */
-  static async createClusterClient(_config: {,)
+  static async createClusterClient(_config: {)
   nodes: Array<{ host: string; port: number }>;
     password?: string;
     maxRetriesPerRequest?: number;

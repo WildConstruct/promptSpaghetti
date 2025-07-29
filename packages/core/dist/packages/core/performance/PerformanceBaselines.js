@@ -528,7 +528,8 @@ boolean;
                                 target: 50,
                                 warning: 80,
                                 critical: 150,
-                                tags: ['api', 'validation'], },
+                                tags: ['api', 'validation'],
+                            },
                             // UI Rendering Baselines
                             manager, : .createBaseline({}),
                             id: 'ui-first-contentful-paint',

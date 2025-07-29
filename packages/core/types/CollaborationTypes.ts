@@ -7,12 +7,12 @@
  */
 
 export interface StickyNote {
-  id: string;,
+  id: string;
   position: { x: number; y: number };
-  content: string;,
+  content: string;
   color: StickyNoteColor;
   size: { width: number; height: number };
-  author: string;,
+  author: string;
   timestamp: string;
   isEditing?: boolean;
   zIndex?: number;
@@ -26,11 +26,11 @@ export type StickyNoteColor =
   | 'orange';    // Review/feedback notes
 
 export interface StickyNoteColorInfo {
-  background: string;,
+  background: string;
   border: string;
-  text: string;,
+  text: string;
   shadow: string;
-  category: string;,
+  category: string;
   description: string;
   // Enhanced Region Grouping System (Epic 8.7 Task 3)
 }
@@ -38,31 +38,31 @@ export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'mode
 export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
 
 export interface RegionGroupBounds {
-  x: number;,
+  x: number;
   y: number;
-  width: number;,
+  width: number;
   height: number;
   padding?: number; // Extra padding around contained nodes,
 }
 export interface RegionGroup {
-  id: string;,
+  id: string;
   label: string;
   description?: string;
   color: string;
   backgroundColor?: string;
   opacity?: number;
-  bounds: RegionGroupBounds;,
+  bounds: RegionGroupBounds;
   nodeIds: string;
-  collapsed: boolean;,
+  collapsed: boolean;
   visible: boolean;
-  style: RegionGroupStyle;,
+  style: RegionGroupStyle;
   visibility: RegionGroupVisibility;
   borderWidth?: number;
   showLabel?: boolean;
   showNodeCount?: boolean;
   isLocked?: boolean;
   zIndex?: number;
-  author: string;,
+  author: string;
   timestamp: string;
   lastModified: string;
 }
@@ -77,17 +77,17 @@ export interface RegionGroupAction {
   size?: { width: number; height: number };
 }
 export interface RegionGroupPreferences {
-  defaultColor: string;,
+  defaultColor: string;
   defaultBackgroundColor: string;
-  defaultOpacity: number;,
+  defaultOpacity: number;
   defaultStyle: RegionGroupStyle;
-  defaultVisibility: RegionGroupVisibility;,
+  defaultVisibility: RegionGroupVisibility;
   defaultPadding: number;
-  showLabels: boolean;,
+  showLabels: boolean;
   showNodeCounts: boolean;
-  enableAutoGrouping: boolean;,
+  enableAutoGrouping: boolean;
   autoGroupThreshold: number; // Minimum nodes to suggest grouping,
-  snapToGrid: boolean;,
+  snapToGrid: boolean;
   gridSize: number;
   // Enhanced Connection Annotation System (Epic 8.7 Task 4)
 }
@@ -96,13 +96,13 @@ export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' |
 export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
 
 export interface ConnectionLabel {
-  id: string;,
+  id: string;
   connectionId: string;
   content: string;
   description?: string;
 
   position: { x: number; y: number };
-  positionType: ConnectionLabelPosition;,
+  positionType: ConnectionLabelPosition;
   positionOffset: number; // 0-1 along the path for non-custom positions
   style: ConnectionLabelStyle;
   color?: string;
@@ -112,15 +112,15 @@ export interface ConnectionLabel {
   isEditing?: boolean;
   showIcon?: boolean;
   icon?: string;
-  visible: boolean;,
+  visible: boolean;
   author: string;
-  timestamp: string;,
+  timestamp: string;
   lastModified: string;
 }
 export interface ConnectionAnnotation {
-  id: string;,
+  id: string;
   connectionId: string;
-  labels: ConnectionLabel;,
+  labels: ConnectionLabel;
   visualStyle: ConnectionVisualStyle;
   color?: string;
   strokeWidth?: number;
@@ -131,7 +131,7 @@ export interface ConnectionAnnotation {
   isHighlighted?: boolean;
   category?: string;
   metadata?: Record<string, any>;
-  author: string;,
+  author: string;
   timestamp: string;
   lastModified: string;
 }
@@ -152,15 +152,15 @@ export interface ConnectionAnnotationAction {
   annotation?: Partial<ConnectionAnnotation>;
 }
 export interface ConnectionAnnotationPreferences {
-  defaultLabelStyle: ConnectionLabelStyle;,
+  defaultLabelStyle: ConnectionLabelStyle;
   defaultVisualStyle: ConnectionVisualStyle;
-  defaultColor: string;,
+  defaultColor: string;
   defaultPosition: ConnectionLabelPosition;
-  enableInlineEditing: boolean;,
+  enableInlineEditing: boolean;
   showTooltips: boolean;
-  autoPositioning: boolean;,
+  autoPositioning: boolean;
   snapToPath: boolean;
-  showDirectionArrows: boolean;,
+  showDirectionArrows: boolean;
   maxLabelLength: number;
   highlightOnHover: boolean;
   // Enhanced Node Label System (Epic 8.7 Task 2)
@@ -170,11 +170,11 @@ export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
 
 export interface NodeLabelConfig {
-  id: string;,
+  id: string;
   nodeId: string;
-  customLabel: string;,
+  customLabel: string;
   displayMode: NodeLabelDisplayMode;
-  position: NodeLabelPosition;,
+  position: NodeLabelPosition;
   style: NodeLabelStyle;
   color?: string;
   backgroundColor?: string;
@@ -183,40 +183,40 @@ export interface NodeLabelConfig {
   isEditing?: boolean;
   showIcon?: boolean;
   truncateLength?: number;
-  author: string;,
+  author: string;
   timestamp: string;
 }
 export interface NodeLabelAction {
-  type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';,
+  type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
   nodeId: string;
   labelId?: string;
   config?: Partial<NodeLabelConfig>;
   customLabel?: string;
 }
 export interface NodeLabelPreferences {
-  defaultDisplayMode: NodeLabelDisplayMode;,
+  defaultDisplayMode: NodeLabelDisplayMode;
   defaultPosition: NodeLabelPosition;
-  defaultStyle: NodeLabelStyle;,
+  defaultStyle: NodeLabelStyle;
   enableInlineEditing: boolean;
-  enableAutoSave: boolean;,
+  enableAutoSave: boolean;
   enableLabelHistory: boolean;
-  maxLabelLength: number;,
+  maxLabelLength: number;
   showLabelTooltips: boolean;
 }
 export interface GraphAnnotations {
-  stickyNotes: StickyNote;,
+  stickyNotes: StickyNote;
   nodeLabels: Record<string, string>; // Keep for backward compatibility,
   nodeLabelConfigs: Record<string, NodeLabelConfig>; // Enhanced node labels,
-  regionGroups: RegionGroup;,
+  regionGroups: RegionGroup;
   connectionLabels: ConnectionLabel; // Keep for backward compatibility,
   connectionAnnotations: ConnectionAnnotation; // Enhanced connection annotations,
-  labelPreferences: NodeLabelPreferences;,
+  labelPreferences: NodeLabelPreferences;
   regionGroupPreferences: RegionGroupPreferences;
-  connectionAnnotationPreferences: ConnectionAnnotationPreferences;,
-  metadata: {,
-  author: string;,
+  connectionAnnotationPreferences: ConnectionAnnotationPreferences;
+  metadata: {
+  author: string;
   created: string;
-  modified: string;,
+  modified: string;
   version: string;
 };
 }
@@ -231,10 +231,10 @@ export interface StickyNoteAction {
   color?: StickyNoteColor;
 }
 export interface StickyNoteContextMenuOptions {
-  x: number;,
+  x: number;
   y: number;
   noteId?: string;
-  canEdit: boolean;,
+  canEdit: boolean;
   canDelete: boolean;
   onEdit?: () => void;
   onDelete?: () => void;

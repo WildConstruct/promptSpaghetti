@@ -8,41 +8,41 @@ import { ModelConfiguration, AIModelType, AIModelProvider, ModelCapabilities, Mo
 import { ModelRegistration } from './AIModelFactory';
 
 export interface EnvironmentConfig {
-  name: string;,
+  name: string;
   description: string;
-  models: ModelConfiguration;,
-  defaults: {,
-  timeout: number;,
+  models: ModelConfiguration;
+  defaults: {
+  timeout: number;
   retries: number;
-  rateLimit: {,
-  requestsPerMinute: number;,
+  rateLimit: {
+  requestsPerMinute: number;
   tokensPerMinute: number;
 };
   };
-  features: {,
+  features: {
   enableCaching: boolean;
-  enableLoadBalancing: boolean;,
+  enableLoadBalancing: boolean;
   enableHealthChecks: boolean;
   enableMetrics: boolean;
 };
 }
 export interface ConfigurationSchema {
-  version: string;,
+  version: string;
   environments: Record<string, EnvironmentConfig>;
   modelTemplates: Record<string, Partial<ModelConfiguration>>;
   providerDefaults: Record<AIModelProvider, Partial<ModelConfiguration>>;
   validationRules: ValidationRule;
 }
 export interface ValidationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   validate: (config: ModelConfiguration) => ValidationResult;
 }
 export interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
-  warnings: string;,
+  warnings: string;
   suggestions: string;
 }
 export interface ConfigurationUpdate {
@@ -54,9 +54,9 @@ export interface ConfigurationUpdate {
   reason?: string;
 }
 export interface ConfigurationHistory {
-  updates: ConfigurationUpdate;,
+  updates: ConfigurationUpdate;
   snapshots: Array<{,
-  timestamp: Date;,
+  timestamp: Date;
   config: ConfigurationSchema;
   version: string;
 }>;
@@ -379,7 +379,7 @@ export class ConfigurationManager {
   id: config.id,
   provider: config.provider,
   modelName: config.modelName || 'default',
-  config: {,
+  config: {
   apiKey: config.apiKey,
   endpoint: config.endpoint,
   ...config.parameters
@@ -391,63 +391,63 @@ export class ConfigurationManager {
   private _createDefaultSchema(): ConfigurationSchema {
   return {
   version: '1.0.0',
-  environments: {,
-  development: {,
+  environments: {
+  development: {
   name: 'Development',
   description: 'Development environment configuration',
   models: [],
-  defaults: {,
+  defaults: {
   timeout: 30000,
   retries: 3,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 100,
   tokensPerMinute: 10000,
 },
-  features: {,
+  features: {
   enableCaching: true,
   enableLoadBalancing: false,
   enableHealthChecks: true,
   enableMetrics: true,
 },
-  staging: {,
+  staging: {
   name: 'Staging',
   description: 'Staging environment configuration',
   models: [],
-  defaults: {,
+  defaults: {
   timeout: 30000,
   retries: 3,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 500,
   tokensPerMinute: 50000,
 },
-  features: {,
+  features: {
   enableCaching: true,
   enableLoadBalancing: true,
   enableHealthChecks: true,
   enableMetrics: true,
 },
-  production: {,
+  production: {
   name: 'Production',
   description: 'Production environment configuration',
   models: [],
-  defaults: {,
+  defaults: {
   timeout: 60000,
   retries: 5,
-  rateLimit: {,
+  rateLimit: {
   requestsPerMinute: 1000,
   tokensPerMinute: 100000,
 },
-  features: {,
+  features: {
   enableCaching: true,
   enableLoadBalancing: true,
   enableHealthChecks: true,
   enableMetrics: true,
 },
-  modelTemplates: {,
-  'openai-text': {,
+  modelTemplates: {
+  'openai-text': {
   provider: AIModelProvider.OPENAI,
   type: AIModelType.TEXT,
-  capabilities: {,
+  capabilities: {
   inputTypes: ['text', 'json'],
   outputTypes: ['text', 'json'],
   supportsStreaming: true,
@@ -456,7 +456,7 @@ export class ConfigurationManager {
         'anthropic-text': {
   provider: AIModelProvider.ANTHROPIC,
   type: AIModelType.TEXT,
-  capabilities: {,
+  capabilities: {
   inputTypes: ['text', 'json', 'image'],
   outputTypes: ['text', 'json'],
   supportsStreaming: true,
@@ -466,12 +466,12 @@ export class ConfigurationManager {
   provider: AIModelProvider.LOCAL,
   type: AIModelType.TEXT,
   endpoint: 'http://localhost:11434',
-  capabilities: {,
+  capabilities: {
   inputTypes: ['text', 'json'],
   outputTypes: ['text', 'json'],
   supportsStreaming: true,
 },
-  providerDefaults: {,
+  providerDefaults: {
         [AIModelProvider.OPENAI]: {
           parameters: { temperature: 1, max_tokens: 1000 }
   }

@@ -52,11 +52,11 @@ const mockTemplate = {
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
   isPublic: false,
-  graph: {,
+  graph: {
   nodes: [],
   edges: [],
 },
-  metadata: {,
+  metadata: {
   category: 'test',
   difficulty: 'beginner',
   estimatedTime: 5,

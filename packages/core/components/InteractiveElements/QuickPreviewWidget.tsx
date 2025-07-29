@@ -11,9 +11,9 @@ import {
   InteractionType
 } from '../../services/Epic16InteractiveElementsService';
 interface QuickPreviewWidgetProps {
-  element: QuickPreviewElement;,
+  element: QuickPreviewElement;
   interactiveService: Epic16InteractiveElementsService;
-  userId: string;,
+  userId: string;
   templateId: string;
   templateData: TemplatePreviewData;
   onClose?: () => void;
@@ -21,35 +21,35 @@ interface QuickPreviewWidgetProps {
   onShare?: (templateId: string, platform: string) => void;
   onPurchase?: (templateId: string) => void;
   interface TemplatePreviewData {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   author: string;
   authorAvatar?: string;
   price: number;
   originalPrice?: number;
-  currency: string;,
+  currency: string;
   rating: number;
-  reviewCount: number;,
+  reviewCount: number;
   downloadCount: number;
-  category: string;,
+  category: string;
   tags: string;
   license: string;
   // Preview content
-  previewUrl: string;,
+  previewUrl: string;
   thumbnails: string;
   demoUrl?: string;
   // Metadata
-  fileSize: string;,
+  fileSize: string;
   fileFormat: string;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   compatibility: string;
   // Features
-  features: string;,
+  features: string;
   whatsIncluded: string;
   requirements: string;
   // User context
-  isPurchased: boolean;,
+  isPurchased: boolean;
   isInWishlist: boolean;
   canDownload: boolean;
   export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({,)
@@ -84,7 +84,7 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CUSTOM,
         user_id: userId,
         timestamp: new Date(),
-        context: {,
+        context: {
   page_url: window.location.href,
           referrer: document.referrer,
           user_agent: navigator.userAgent,
@@ -96,13 +96,13 @@ interface QuickPreviewWidgetProps {
           session_id: 'session-' + Date.now(),
           ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'preview_opened',
   template_id: templateId,
   template_category: templateData.category,
   template_price: templateData.price,
 },
-  result: {,
+  result: {
   success: true,
           conversion: false,
           data: { template_id: templateId }
@@ -148,7 +148,7 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CLICK,
         user_id: userId,
         timestamp: new Date(),
-        context: {,
+        context: {
   page_url: window.location.href,
           referrer: document.referrer,
           user_agent: navigator.userAgent,
@@ -160,11 +160,11 @@ interface QuickPreviewWidgetProps {
           session_id: 'session-' + Date.now(),
           ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: templateData.isInWishlist ? 'wishlist_remove' : 'wishlist_add',
   template_id: templateId,
 },
-  result: {,
+  result: {
   success: true,
           conversion: !templateData.isInWishlist,
           data: { wishlist_status: !templateData.isInWishlist }
@@ -186,7 +186,7 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {,
+      context: {
   page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
@@ -198,12 +198,12 @@ interface QuickPreviewWidgetProps {
         session_id: 'session-' + Date.now(),
         ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'template_shared',
   template_id: templateId,
   share_platform: platform,
 },
-  result: {,
+  result: {
   success: true,
         conversion: true,
         data: { platform }
@@ -218,7 +218,7 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {,
+      context: {
   page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
@@ -230,12 +230,12 @@ interface QuickPreviewWidgetProps {
         session_id: 'session-' + Date.now(),
         ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'template_downloaded',
   template_id: templateId,
   was_purchased: templateData.isPurchased,
 },
-  result: {,
+  result: {
   success: true,
         conversion: true,
         data: { template_id: templateId }
@@ -250,7 +250,7 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {,
+      context: {
   page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
@@ -262,16 +262,16 @@ interface QuickPreviewWidgetProps {
         session_id: 'session-' + Date.now(),
         ab_test_variant: null;
   },
-  data: {,
+  data: {
   action: 'purchase_initiated',
   template_id: templateId,
   price: templateData.price,
   currency: templateData.currency,
 },
-  result: {,
+  result: {
   success: true,
   conversion: true,
-  data: {,
+  data: {
   template_id: templateId,
   price: templateData.price,
   currency: templateData.currency,

@@ -28,13 +28,13 @@ export enum MFAMethodType {
   // Base MFA Configuration
   // ========================================
   export interface BaseMFAConfiguration {
-  id: string;,
+  id: string;
   userId: string;
-  methodType: MFAMethodType;,
+  methodType: MFAMethodType;
   status: MFAMethodStatus;
-  isPrimary: boolean;,
+  isPrimary: boolean;
   displayName: string;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   lastUsedAt?: Date;
   failedAttempts: number;
@@ -44,7 +44,7 @@ export enum MFAMethodType {
   // ========================================
 }
 export interface TOTPConfiguration extends BaseMFAConfiguration {
-  methodType: MFAMethodType.TOTP;,
+  methodType: MFAMethodType.TOTP;
   encryptedSecret: string;       // AES-256 encrypted TOTP secret,
   algorithm: 'SHA1' | 'SHA256';  // HMAC algorithm,
   digits: 6 | 8;                 // Code length,
@@ -60,7 +60,7 @@ export interface TOTPConfiguration extends BaseMFAConfiguration {
   accountName: string;     // User identifier,
 }
 export interface TOTPEnrollmentData {
-  configurationId: string;,
+  configurationId: string;
   secret: TOTPSecret;
   backupCodes: string;   // 10 recovery codes,
   expiresAt: Date;        // Enrollment must complete within 10 minutes,
@@ -69,20 +69,20 @@ export interface TOTPEnrollmentData {
   // ========================================
 }
 export interface EmailConfiguration extends BaseMFAConfiguration {
-  methodType: MFAMethodType.EMAIL;,
+  methodType: MFAMethodType.EMAIL;
   emailAddress: string;
   isVerified: boolean;
   verificationSentAt?: Date;
   verificationExpiresAt?: Date;
   export interface EmailVerification {
-  id: string;,
+  id: string;
   userId: string;
-  emailAddress: string;,
+  emailAddress: string;
   encryptedToken: string;     // AES-256 encrypted verification token,
   expiresAt: Date;           // 10 minute expiry,
   attempts: number;          // Failed verification attempts,
-  metadata: {,
-  ipAddress: string;,
+  metadata: {
+  ipAddress: string;
   userAgent: string;
   location?: string;
   riskScore: number;       // 0-100 risk assessment,
@@ -93,92 +93,92 @@ export interface EmailConfiguration extends BaseMFAConfiguration {
 // ========================================
 }
 export interface SMSConfiguration extends BaseMFAConfiguration {
-  methodType: MFAMethodType.SMS;,
+  methodType: MFAMethodType.SMS;
   phoneNumber: string;       // E.164 format,
   countryCode: string;       // ISO country code,
   isVerified: boolean;
-  carrierInfo?: {,
-  carrier: string;,
+  carrierInfo?: {
+  carrier: string;
   lineType: 'mobile' | 'landline' | 'voip';
   riskScore: number;       // 0-100 carrier risk assessment,
 };
 
 export interface SMSVerification {
-  id: string;,
+  id: string;
   userId: string;
-  phoneNumber: string;,
+  phoneNumber: string;
   encryptedCode: string;     // AES-256 encrypted 6-digit code,
   expiresAt: Date;          // 5 minute expiry,
   attempts: number;         // Failed verification attempts,
   dailyCount: number;       // SMS sent today (rate limiting),
-  metadata: {,
-  ipAddress: string;,
+  metadata: {
+  ipAddress: string;
   userAgent: string;
   carrierResponse?: string; // Gateway response,
-  deliveryStatus?: 'sent' | 'delivered' | 'failed';
-};
+  deliveryStatus?: 'sent' | 'delivered' | 'failed'
+  };
 
 // ========================================
 // Backup Codes
 // ========================================
 }
 export interface BackupCode {
-  id: string;,
+  id: string;
   userId: string;
   codeHash: string;         // bcrypt hashed code,
   isUsed: boolean;
   usedAt?: Date;
-  usedFrom?: {,
-  ipAddress: string;,
+  usedFrom?: {
+  ipAddress: string;
   userAgent: string;
   location?: string;
 };
   createdAt: Date;
 }
 export interface BackupCodeSet {
-  userId: string;,
+  userId: string;
   codes: string;          // Plain text codes (only shown once),
-  generatedAt: Date;,
+  generatedAt: Date;
   expiresAt: Date;          // Codes expire after 1 year,
   // ========================================
   // MFA Session & Verification
   // ========================================
 }
 export interface MFAChallenge {
-  id: string;,
+  id: string;
   userId: string;
-  methodType: MFAMethodType;,
+  methodType: MFAMethodType;
   challengeData: string;    // Method-specific challenge data,
-  expiresAt: Date;,
+  expiresAt: Date;
   attempts: number;
-  maxAttempts: number;,
+  maxAttempts: number;
   createdAt: Date;
 }
 export interface MFAVerificationAttempt {
-  id: string;,
+  id: string;
   userId: string;
-  methodType: MFAMethodType;,
+  methodType: MFAMethodType;
   success: boolean;
-  result: MFAVerificationResult;,
+  result: MFAVerificationResult;
   ipAddress: string;
-  userAgent: string;,
+  userAgent: string;
   attemptedAt: Date;
   processingTimeMs: number;
-  metadata?: {,
+  metadata?: {
   codeLength?: number;
   timeSkew?: number;       // For TOTP,
   riskScore?: number;
 };
 }
 export interface MFASession {
-  id: string;,
+  id: string;
   userId: string;
-  isVerified: boolean;,
+  isVerified: boolean;
   verifiedMethods: MFAMethodType;
-  expiresAt: Date;,
+  expiresAt: Date;
   createdAt: Date;
   lastVerifiedAt?: Date;
-  ipAddress: string;,
+  ipAddress: string;
   userAgent: string;
   // ========================================
   // Rate Limiting & Security
@@ -196,7 +196,7 @@ export interface RateLimitRule {
 export interface RateLimitState {
   userId?: string;
   ipAddress?: string;
-  action: string;,
+  action: string;
   count: number;
   windowStart: Date;
   blockedUntil?: Date;
@@ -204,17 +204,17 @@ export interface RateLimitState {
 export interface SecurityEvent {
   id: string;
   userId?: string;
-  eventType: 'suspicious_activity' | 'rate_limit_exceeded' | 'brute_force' | 'geo_anomaly';,
+  eventType: 'suspicious_activity' | 'rate_limit_exceeded' | 'brute_force' | 'geo_anomaly';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;,
-  metadata: {,
+  description: string;
+  metadata: {
   ipAddress?: string;
   userAgent?: string;
   location?: string;
   methodType?: MFAMethodType;
   attemptCount?: number;
 };
-  createdAt: Date;,
+  createdAt: Date;
   resolved: boolean;
   resolvedAt?: Date;
 
@@ -223,26 +223,26 @@ export interface SecurityEvent {
 // ========================================
 }
 export interface UserMFAProfile {
-  userId: string;,
+  userId: string;
   isEnabled: boolean;
   hasAnyMethodConfigured: boolean;
   primaryMethod?: MFAMethodType;
   configuredMethods: MFAMethodType;
-  lastUsed?: {,
-  methodType: MFAMethodType;,
+  lastUsed?: {
+  methodType: MFAMethodType;
   timestamp: Date;
 };
-  securityMetrics: {,
+  securityMetrics: {
   totalAttempts: number;
-  successfulAttempts: number;,
+  successfulAttempts: number;
   failedAttempts: number;
   lastFailedAttempt?: Date;
   accountLocked: boolean;
   lockedUntil?: Date;
 };
-  preferences: {,
+  preferences: {
   defaultMethod: MFAMethodType;
-  backupMethodEnabled: boolean;,
+  backupMethodEnabled: boolean;
   securityNotifications: boolean;
 };
 
@@ -250,7 +250,7 @@ export interface UserMFAProfile {
 // Zod Validation Schemas
 // ========================================
 }
-export const TOTPConfigurationSchema = z.object({)
+export const TOTPConfigurationSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.TOTP),
@@ -269,7 +269,7 @@ export const TOTPConfigurationSchema = z.object({)
   lockedUntil: z.date().optional(),
 });
 
-export const EmailConfigurationSchema = z.object({)
+export const EmailConfigurationSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.EMAIL),
@@ -285,7 +285,7 @@ export const EmailConfigurationSchema = z.object({)
   lockedUntil: z.date().optional(),
 });
 
-export const SMSConfigurationSchema = z.object({)
+export const SMSConfigurationSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.literal(MFAMethodType.SMS),
@@ -302,7 +302,7 @@ export const SMSConfigurationSchema = z.object({)
   lockedUntil: z.date().optional();
   });
 
-export const MFAVerificationAttemptSchema = z.object({)
+export const MFAVerificationAttemptSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
   methodType: z.nativeEnum(MFAMethodType),
@@ -341,32 +341,32 @@ export function isTOTPConfiguration(config: BaseMFAConfiguration): config is TOT
 // ========================================
 
 export interface MFAEnrollmentRequest {
-  methodType: MFAMethodType;,
+  methodType: MFAMethodType;
   displayName: string;
   emailAddress?: string;    // For email method,
   phoneNumber?: string;     // For SMS method,
 }
 export interface MFAEnrollmentResponse {
-  configurationId: string;,
+  configurationId: string;
   methodType: MFAMethodType;
   enrollmentData?: TOTPEnrollmentData; // Only for TOTP,
-  requiresVerification: boolean;,
+  requiresVerification: boolean;
   expiresAt: Date;
 }
 export interface MFAVerificationRequest {
-  configurationId: string;,
+  configurationId: string;
   code: string;
   backupCode?: boolean;     // True if using backup code,
 }
 export interface MFAVerificationResponse {
-  success: boolean;,
+  success: boolean;
   result: MFAVerificationResult;
   remainingAttempts?: number;
   lockoutDuration?: number; // Seconds until unlock,
   nextMethodSuggested?: MFAMethodType;
 }
 export interface MFAListResponse {
-  configurations: BaseMFAConfiguration;,
+  configurations: BaseMFAConfiguration;
   profile: UserMFAProfile;
   availableBackupCodes: number;
   // ========================================
@@ -374,23 +374,23 @@ export interface MFAListResponse {
   // ========================================
 }
 export const MFA_CONSTANTS = {
-  TOTP: {,
+  TOTP: {
   SECRET_LENGTH: 32,        // Bytes,
   QR_CODE_EXPIRY: 300,     // 5 minutes,
   BACKUP_CODE_COUNT: 10,    // Number of backup codes,
   MAX_CLOCK_SKEW: 90      // Seconds,
 },
-  EMAIL: {,
+  EMAIL: {
   TOKEN_EXPIRY: 600,       // 10 minutes,
   MAX_DAILY_SENDS: 5,      // Per user per day,
   RATE_LIMIT_WINDOW: 3600 // 1 hour,
 },
-  SMS: {,
+  SMS: {
   CODE_EXPIRY: 300,        // 5 minutes,
   MAX_DAILY_SENDS: 3,      // Per user per day,
   CODE_LENGTH: 6          // Digits,
 },
-  SECURITY: {,
+  SECURITY: {
   MAX_FAILED_ATTEMPTS: 5,  // Before account lock,
   LOCKOUT_DURATION: 900,   // 15 minutes,
   SESSION_DURATION: 3600  // 1 hour,

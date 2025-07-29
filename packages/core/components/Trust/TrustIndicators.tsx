@@ -34,7 +34,7 @@ export interface TrustIndicatorProps {
   className?: string;
 }
 export interface CreatorTrustBadgeProps {
-  creatorId: string;,
+  creatorId: string;
   creatorName: string;
   trustScore?: TrustScore | null;
   verifications?: string;
@@ -98,8 +98,8 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
   case 'professional': return 'Professional';
   case 'verified': return 'Verified';
   case 'basic': return 'Basic';
-  default: return 'Unverified';
-};
+  default: return 'Unverified'
+  };
   const indicator = (;);
     <div className={`trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`}>}
       {getTrustIcon(trustScore.tier)}

@@ -8,13 +8,13 @@ import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 interface CorrectionsPanelProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
 type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | 'published' | 'deprecated';
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
 
-export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onClose }) => {
+export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = ({ isOpen, onClose }) => {
   const { rules, isEnabled, addRule, updateRule, deleteRule, toggleRule, reorderRules, clearAllRules, applyCorrections } = useCorrectionsStore();
   // UI State
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
@@ -29,7 +29,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const [showWorkflow, setShowWorkflow] = useState(false);
   const [testText, setTestText] = useState('');
   // New rule form state
-  const [newRule, setNewRule] = useState({)
+  const [newRule, setNewRule] = useState({
   name: '',
   description: '',
   findPattern: '',
@@ -68,39 +68,39 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   );
   // Apply type filter
   switch (filterType) {
-  case 'active':,
+  case 'active':
   filtered = filtered.filter(rule => rule.isActive);
   break;
-  case 'inactive':,
+  case 'inactive':
   filtered = filtered.filter(rule => !rule.isActive);
   break;
-  case 'regex':,
+  case 'regex':
   filtered = filtered.filter(rule => rule.isRegex);
   break;
-  case 'text':,
+  case 'text':
   filtered = filtered.filter(rule => !rule.isRegex);
   break;
-  case 'draft':,
+  case 'draft':
   filtered = filtered.filter(rule => rule.status === 'draft');
   break;
-  case 'published':,
+  case 'published':
   filtered = filtered.filter(rule => rule.status === 'published');
   break;
-  case 'deprecated':,
+  case 'deprecated':
   filtered = filtered.filter(rule => rule.status === 'deprecated');
   break;
   // Apply sorting
   switch (sortType) {
-  case 'name':,
+  case 'name':
   filtered.sort((a, b) => a.name.localeCompare(b.name));
   break;
-  case 'priority':,
+  case 'priority':
   filtered.sort((a, b) => a.priority - b.priority);
   break;
-  case 'created':,
+  case 'created':
   filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   break;
-  case 'updated':,
+  case 'updated':
   filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
   break;
   return filtered;
@@ -109,7 +109,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const handleAddRule = useCallback(() => {
   if (newRule.name.trim() && newRule.findPattern.trim()) {
   addRule(newRule);
-  setNewRule({)
+  setNewRule({
   name: '',
   description: '',
   findPattern: '',
@@ -128,9 +128,9 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       deleteRule(id);
   }, [deleteRule]);
   const handleBulkAction = useCallback((action: 'delete' | 'activate' | 'deactivate') => {
-    if (selectedRules.size === 0) return;
+    if (selectedRules.size === 0) return (
     const confirmed = window.confirm(`Are you sure you want to ${action} ${selectedRules.size} rule(s)?`);}
-    if (!confirmed) return;
+    if (!confirmed) return (
     selectedRules.forEach(ruleId => {)
   switch (action) {
       case 'delete':
@@ -172,7 +172,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   console.error('Export failed:', error);
 }, [exportFormat, exportRules, filterType]);
   const handleImport = useCallback(async () => {
-  if (!importContent || !importFilename) return;
+  if (!importContent || !importFilename) return (
   try {
   const result = await importRules(importContent, importFilename, {)
   skipDuplicates: true,
@@ -195,7 +195,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const panelWidth = isMobile ? '100%' : isCollapsed ? '60px' : '500px';
   // Don't render if panel is closed or corrections are not enabled
   if (!isOpen || !isEnabled) return null;
-  return;
+  return (
     <div
       style={{
   position: 'fixed',
@@ -223,7 +223,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   justifyContent: 'space-between',
   minHeight: '48px',
 }}>
-        {!isCollapsed && ()
+        {!isCollapsed && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
@@ -273,7 +273,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
             </div>
           </>
         )}
-        {isCollapsed && ()
+        {isCollapsed && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
             <button
               onClick={() => setIsCollapsed(false)}
@@ -302,7 +302,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
           </div>
         )}
       </div>
-      {!isCollapsed && ()
+      {!isCollapsed && (
         <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           {/* Controls */}
           <div style={{ padding: '16px', borderBottom: '1px solid #444' }}>
@@ -405,7 +405,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               >
                 {selectedRules.size === filteredAndSortedRules.length ? 'Deselect All' : 'Select All'}
               </button>
-              {selectedRules.size > 0 && ()
+              {selectedRules.size > 0 && (
                 <>
                   <button
                     onClick={() => handleBulkAction('activate')}
@@ -493,7 +493,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
 }}
               >
                 Workflow
-                {getDraftRules().length > 0 && ()
+                {getDraftRules().length > 0 && (
                   <span style={{
   position: 'absolute',
   top: '-4px',
@@ -515,7 +515,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
             </div>
           </div>
           {/* Import/Export Section */}
-          {showImportExport && ()
+          {showImportExport && (
             <div style={{
   padding: '16px',
   background: '#1e2228',
@@ -594,7 +594,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   marginBottom: '8px',
 }}
                 />
-                {importContent && ()
+                {importContent && (
                   <button
                     onClick={handleImport}
                     style={{
@@ -634,7 +634,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   fontSize: '14px',
 }}
             />
-            {testText && ()
+            {testText && (
               <div style={{ marginTop: '8px' }}>
                 <strong style={{ fontSize: '12px', color: '#a0aec0' }}>Result:</strong>
                 <div
@@ -743,7 +743,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       <strong style={{ fontSize: '14px', fontWeight: 600 }}>
                         {rule.name}
                       </strong>
-                      {rule.isRegex && ()
+                      {rule.isRegex && (
                         <span style={{
   background: '#4a5568',
   color: '#fff',
@@ -755,7 +755,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                           REGEX
                         </span>
                       )}
-                      {rule.status && ()
+                      {rule.status && (
                         <span style={{
   background: rule.status === 'draft' ? '#fbb040' : ,
   rule.status === 'published' ? '#68d391' :,
@@ -802,7 +802,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       </button>
                     </div>
                   </div>
-                  {rule.description && ()
+                  {rule.description && (
                     <p style={{
   fontSize: '12px',
   color: '#a0aec0',
@@ -836,14 +836,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 </div>
               ))}
             </div>
-            {filteredAndSortedRules.length === 0 && ()
+            {filteredAndSortedRules.length === 0 && (
               <div style={{
   textAlign: 'center',
   padding: '40px',
   color: '#a0aec0',
 }}>
                 <p>No correction rules found.</p>
-                {searchQuery && ()
+                {searchQuery && (
                   <p style={{ fontSize: '12px' }}>
                     Try adjusting your search or filter criteria.
                   </p>
@@ -958,7 +958,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         </div>
       )}
       {/* Edit Rule Modal */}
-      {editingRule && ()
+      {editingRule && (
         <div
           style={{
   position: 'fixed',

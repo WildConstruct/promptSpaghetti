@@ -6,8 +6,8 @@ export interface PreviewSectionProps {
   node: Error;
   interface PreviewExample {
   text: string;
-  highlightInfo?: {,
-  selectedVariation: string;,
+  highlightInfo?: {
+  selectedVariation: string;
   selectedIndex: number;
   totalVariations: number;
 };

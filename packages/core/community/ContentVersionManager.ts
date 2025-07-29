@@ -7,13 +7,13 @@
  */
 
 export interface CommunityContent {
-  id: string;,
+  id: string;
   type: 'article' | 'tutorial' | 'case-study' | 'guide' | 'documentation';
   title: string;
   subtitle?: string;
   slug: string;
   // Content structure
-  content: {,
+  content: {
   markdown: string;
   html?: string;
   summary: string;
@@ -23,18 +23,18 @@ export interface CommunityContent {
   // Rich media attachments
   media: ContentMediaAttachment;
   // Categorization
-  category: string;,
+  category: string;
   tags: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   // SEO and discovery
-  seo: {,
+  seo: {
   metaTitle: string;
-  metaDescription: string;,
+  metaDescription: string;
   keywords: string;
   canonicalUrl?: string;
 };
   // Editorial workflow
-  editorial: {,
+  editorial: {
   status: 'draft' | 'review' | 'approved' | 'published' | 'archived';
   assignedEditor?: string;
   reviewNotes?: string;
@@ -43,7 +43,7 @@ export interface CommunityContent {
 };
 }
 export interface ContentSection {
-  id: string;,
+  id: string;
   title: string;
   level: number; // 1-6 for h1-h6,
   anchor: string;
@@ -51,15 +51,15 @@ export interface ContentSection {
 }
 export interface ContentMetadata {
   readingTime: number; // estimated minutes,
-  wordCount: number;,
+  wordCount: number;
   lastSignificantUpdate: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   prerequisites: string;
-  learningObjectives: string;,
+  learningObjectives: string;
   relatedContent: string;
 }
 export interface ContentMediaAttachment {
-  id: string;,
+  id: string;
   type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
   url: string;
   thumbnailUrl?: string;
@@ -74,7 +74,7 @@ export interface ContentMediaAttachment {
   position: number; // order in content
 }
 export interface ContentVersion {
-  id: string;,
+  id: string;
   content_id: string;
   version_number: string; // Semantic version (e.g., "1.2.0"),
   version_tag?: string; // Human-readable tag (e.g., "stable", "draft"),
@@ -91,22 +91,22 @@ export interface ContentVersion {
   approval_status: 'pending' | 'approved' | 'rejected' | 'needs_revision';
   // Versioning information
   parent_version_id?: string;
-  branch_name: string;,
+  branch_name: string;
   commit_hash: string;
   // Collaboration tracking
-  contributors: ContentContributor;,
+  contributors: ContentContributor;
   revision_type: 'major' | 'minor' | 'patch' | 'editorial';
   change_summary: string;
   // Author and timing
-  created_by: string;,
+  created_by: string;
   created_at: string;
   published_at?: string;
   deprecated_at?: string;
   // Status and lifecycle
-  status: 'draft' | 'review' | 'approved' | 'published' | 'deprecated' | 'archived';,
+  status: 'draft' | 'review' | 'approved' | 'published' | 'deprecated' | 'archived';
   visibility: 'private' | 'team' | 'community' | 'public';
   // Analytics and engagement
-  view_count: number;,
+  view_count: number;
   engagement_score: number;
   feedback_score: number;
   // Quality and editorial metrics
@@ -115,74 +115,74 @@ export interface ContentVersion {
   fact_check?: FactCheckResult;
 }
 export interface ReviewFeedback {
-  id: string;,
+  id: string;
   reviewer_id: string;
-  reviewer_name: string;,
+  reviewer_name: string;
   review_date: string;
   feedback_type: 'suggestion' | 'correction' | 'improvement' | 'approval' | 'rejection';
   section?: string; // specific section or line,
-  comment: string;,
+  comment: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   status: 'open' | 'addressed' | 'dismissed';
   resolution?: string;
 }
 export interface ContentContributor {
-  user_id: string;,
+  user_id: string;
   name: string;
-  role: 'author' | 'co-author' | 'editor' | 'reviewer' | 'illustrator' | 'fact-checker';,
+  role: 'author' | 'co-author' | 'editor' | 'reviewer' | 'illustrator' | 'fact-checker';
   contribution: string;
-  contribution_date: string;,
+  contribution_date: string;
   attribution_visible: boolean;
 }
 export interface ContentQualityScore {
   overall_score: number; // 0-100,
-  dimensions: {,
-  accuracy: number;,
+  dimensions: {
+  accuracy: number;
   clarity: number;
-  completeness: number;,
+  completeness: number;
   usefulness: number;
-  originality: number;,
+  originality: number;
   engagement: number;
 };
-  automated_checks: {,
+  automated_checks: {
   grammar_score: number;
-  readability_score: number;,
+  readability_score: number;
   seo_score: number;
   formatting_score: number;
 };
   editorial_assessment?: {
-  content_quality: number;,
+  content_quality: number;
   factual_accuracy: number;
-  style_consistency: number;,
+  style_consistency: number;
   target_audience_fit: number;
 };
 }
 export interface PlagiarismResult {
   overall_similarity: number; // 0-100%,
   sources_found: Array<{,
-  url: string;,
+  url: string;
   similarity: number;
-  matched_text: string;,
+  matched_text: string;
   context: string;
 }>;
-  confidence_level: number;,
+  confidence_level: number;
   check_date: string;
 }
 export interface FactCheckResult {
   overall_accuracy: number; // 0-100%,
-  claims_checked: number;,
+  claims_checked: number;
   claims_verified: number;
   disputed_claims: Array<{,
-  claim: string;,
+  claim: string;
   status: 'verified' | 'disputed' | 'false' | 'unverifiable';
-  sources: string;,
+  sources: string;
   explanation: string;
 }>;
   check_date: string;
   checker_id?: string;
 }
 export interface ContentImportOptions {
-  format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';,
+  format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
   source: string | File | ArrayBuffer;
   // Import behavior
   merge_strategy?: 'replace' | 'merge' | 'create_version';
@@ -221,7 +221,7 @@ export interface ContentExportOptions {
   // Output customization
   filename?: string;
   template?: 'standard' | 'academic' | 'blog' | 'documentation';
-  styling?: {,
+  styling?: {
   theme?: string;
   custom_css?: string;
   include_toc?: boolean;
@@ -229,7 +229,7 @@ export interface ContentExportOptions {
 }
 export interface ContentVersionDiff {
   content_changes: Array<{,
-  section: string;,
+  section: string;
   change_type: 'added' | 'removed' | 'modified';
   old_content?: string;
   new_content?: string;
@@ -237,32 +237,32 @@ export interface ContentVersionDiff {
 }>;
   metadata_changes: Array<{,
   field: string;
-  old_value: unknown;,
+  old_value: unknown;
   new_value: unknown;
-  change_type: 'added' | 'removed' | 'modified';
-}>;
+  change_type: 'added' | 'removed' | 'modified'
+  }>;
   media_changes: Array<{,
   media_id: string;
   change_type: 'added' | 'removed' | 'modified';
   old_media?: ContentMediaAttachment;
   new_media?: ContentMediaAttachment;
 }>;
-  structure_changes: {,
+  structure_changes: {
   sections_added: number;
-  sections_removed: number;,
+  sections_removed: number;
   sections_reordered: number;
   toc_changes: boolean;
 };
-  editorial_changes: {,
-  status_change?: {,
-  from: string;,
+  editorial_changes: {
+  status_change?: {
+  from: string;
   to: string;
 };
     reviewer_change?: {
   from?: string;
   to?: string;
 };
-    feedback_added: number;,
+    feedback_added: number;
   feedback_resolved: number;
   };
 }
@@ -275,8 +275,8 @@ export class ContentVersionManager {
   private userId: string,
   this.apiClient = apiClient;
   // Core Version Management
-  async createVersion(content: CommunityContent,)
-  options: {,
+  async createVersion(content: CommunityContent)
+  options: {
   version_number?: string;
   version_tag?: string;
   title?: string;
@@ -285,8 +285,8 @@ export class ContentVersionManager {
   branch_name?: string;
   revision_type?: 'major' | 'minor' | 'patch' | 'editorial';
   change_summary?: string;
-  target_status?: 'draft' | 'review';
-} = {}
+  target_status?: 'draft' | 'review'
+  } = {}
   ): Promise<ContentVersion> {
   try {
   // Calculate content metrics
@@ -322,17 +322,17 @@ export class ContentVersionManager {
     } catch (error) {
   console.error('Failed to create content version:', error);
   throw error;
-  async submitForReview(versionId: string, options: {,)
+  async submitForReview(versionId: string, options: {)
   reviewer_id?: string;
   review_notes?: string;
-  priority?: 'low' | 'normal' | 'high' | 'urgent';
-} = {}): Promise<ContentVersion> {
+  priority?: 'low' | 'normal' | 'high' | 'urgent'
+  } = {}): Promise<ContentVersion> {
     try {
       const response = await this.apiClient.put(`/api/content-versions/${versionId}/submit-review`, {)}
   },
   reviewer_id: options.reviewer_id,
         review_notes: options.review_notes,
-        priority: options.priority || 'normal';
+        priority: options.priority || 'normal'
   });
       const version = response.data;
       this.versions.set(versionId, version);
@@ -340,7 +340,7 @@ export class ContentVersionManager {
     } catch (error) {
   console.error('Failed to submit content for review:', error);
   throw error;
-  async publishVersion(versionId: string, options: {,)
+  async publishVersion(versionId: string, options: {)
   release_notes?: string;
   visibility?: 'private' | 'team' | 'community' | 'public';
   publish_date?: string;
@@ -361,7 +361,7 @@ export class ContentVersionManager {
       console.error('Failed to publish content version:', error);
       throw error;
   // Review and Editorial Workflow
-  async addReviewFeedback(versionId: string,)
+  async addReviewFeedback(versionId: string)
     feedback: Omit<ReviewFeedback,
     'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
   ): Promise<ReviewFeedback> {
@@ -418,9 +418,9 @@ export class ContentVersionManager {
   console.error('Failed to add contributor:', error);
   throw error;
   async getCollaborationHistory(contentId?: string): Promise<Array<{,
-  version_id: string;,
+  version_id: string;
   version_number: string;
-  contributors: ContentContributor;,
+  contributors: ContentContributor;
   created_at: string;
   change_summary: string;
 }>> {
@@ -433,9 +433,9 @@ export class ContentVersionManager {
   throw error;
   // Content Import/Export
   async importContent(options: ContentImportOptions): Promise<{,
-  success: boolean;,
+  success: boolean;
   imported_version: ContentVersion;
-  warnings: string;,
+  warnings: string;
   errors: string;
   quality_score?: ContentQualityScore;
 }> {
@@ -467,7 +467,7 @@ export class ContentVersionManager {
   async exportContent(versionId: string, options: ContentExportOptions): Promise<{,
   download_url?: string;
   file_data?: ArrayBuffer;
-  filename: string;,
+  filename: string;
   size: number;
   format: string;
 }> {
@@ -495,12 +495,12 @@ export class ContentVersionManager {
   throw error;
   // Version Comparison and Diff
   async compareVersions(fromVersionId: string, toVersionId: string): Promise<{,
-  from_version: ContentVersion;,
+  from_version: ContentVersion;
   to_version: ContentVersion;
-  diff: ContentVersionDiff;,
+  diff: ContentVersionDiff;
   similarity_score: number;
-  change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite';
-}> {
+  change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite'
+  }> {
     try {
       const response = await this.apiClient.get(;);
         `/api/content-versions/${fromVersionId}/compare/${toVersionId}`}
@@ -509,7 +509,7 @@ export class ContentVersionManager {
     } catch (error) {
   console.error('Failed to compare content versions:', error);
   throw error;
-  async getVersionHistory(options: {,)
+  async getVersionHistory(options: {)
   include_drafts?: boolean;
   branch_name?: string;
   limit?: number;
@@ -533,7 +533,7 @@ export class ContentVersionManager {
   console.error('Failed to get content version history:', error);
   throw error;
   // Quality Assessment Integration
-  async runQualityAssessment(versionId: string, options: {,)
+  async runQualityAssessment(versionId: string, options: {)
   include_plagiarism_check?: boolean;
   include_fact_check?: boolean;
   include_grammar_check?: boolean;
@@ -568,7 +568,7 @@ export class ContentVersionManager {
   const hasToc = content.content.tableOfContents && content.content.tableOfContents.length > 0;
   return {
   overall_score: 75, // Default score, will be updated by quality service,
-  dimensions: {,
+  dimensions: {
   accuracy: 80,
   clarity: 75,
   completeness: wordCount > 500 ? 80 : 60,
@@ -576,7 +576,7 @@ export class ContentVersionManager {
   originality: 85,
   engagement: hasImages ? 80 : 70,
 },
-  automated_checks: {,
+  automated_checks: {
   grammar_score: 75,
   readability_score: 70,
   seo_score: content.seo.metaDescription.length > 0 ? 80 : 60,
@@ -586,21 +586,21 @@ export class ContentVersionManager {
 // Content Bundle Format (for export/import)
 
 export interface ContentBundle {
-  format_version: string;,
+  format_version: string;
   created_at: string;
   created_by: string;
   // Primary content
   content: ContentVersion;
   // Related content and media
-  related_content: ContentVersion;,
+  related_content: ContentVersion;
   media_assets: ContentMediaAttachment;
   // Documentation and metadata
-  documentation: {,
-  readme: string;,
+  documentation: {
+  readme: string;
   changelog: string;
   usage_guide?: string;
   examples?: Array<{,
-  name: string;,
+  name: string;
   description: string;
   preview: string;
 }>;

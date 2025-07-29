@@ -26,23 +26,23 @@ import { professionalColors } from '../styles/professional-design-system';
 // Enhanced color palette for better UI consistency
 const uiColors = {
   ...professionalColors,
-  accent: {,
+  accent: {
   ...professionalColors.accent,
   primary: professionalColors.accent.orange,
   secondary: professionalColors.accent.blue,
 },
-  ui: {,
+  ui: {
   ...professionalColors.ui,
   selected: '#353535',
   disabled: '#6b7280',
 },
-  text: {,
+  text: {
   ...professionalColors.text,
   disabled: '#6b7280',
 };
 
 export interface TabbedPaletteProps {
-  nodes: NodeMeta;,
+  nodes: NodeMeta;
   collapsed: boolean;
   onToggle: () => void;
   onDragStart?: (nodeId: string) => void;
@@ -177,8 +177,8 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
           e.currentTarget.style.backgroundColor = uiColors.ui.hover;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'none';
-        }}
+          e.currentTarget.style.backgroundColor = 'none'
+  }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             onDragStart?.(node.id);
@@ -266,8 +266,8 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
               e.currentTarget.style.backgroundColor = uiColors.ui.selected;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+              e.currentTarget.style.backgroundColor = 'transparent'
+  }}
             title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
           >
             <FiStar size={12} fill={isFavorited ? 'currentColor' : 'none'} />
@@ -309,8 +309,8 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
               e.currentTarget.style.backgroundColor = uiColors.ui.hover;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
+            e.currentTarget.style.backgroundColor = 'transparent'
+  }}
         >
           {/* Collapse indicator */}
           {category.collapsible && ()
@@ -370,7 +370,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
         transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column';
+        flexDirection: 'column'
   }}
     >
       {/* Header with collapse button */}
@@ -401,8 +401,8 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
             e.currentTarget.style.backgroundColor = uiColors.ui.hover;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
+            e.currentTarget.style.backgroundColor = 'transparent'
+  }}
         >
           {collapsed ? '»' : '«'}
         </button>
@@ -495,7 +495,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
           borderBottom: `1px solid ${uiColors.ui.border}`}
 },
   background: uiColors.background.secondary,
-          scrollbarWidth: 'thin';
+          scrollbarWidth: 'thin'
   }}>
           {availableCategories.slice(0, 4).map((category) => {
             const isActive = activeTab === category.id;
@@ -518,7 +518,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
                   borderBottom: isActive ? `2px solid ${category.color}` : '2px solid transparent'}
 },
   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  whiteSpace: 'nowrap';
+                  whiteSpace: 'nowrap'
   }}
                 title={category.description}
               >

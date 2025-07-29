@@ -249,7 +249,7 @@ export interface ColorScheme {
     info: string;
     background: string;
     surface: string;
-    text: {,
+    text: {
         primary: string;
         secondary: string;
         disabled: string;
@@ -258,12 +258,12 @@ export interface ColorScheme {
     divider: string;
 
 export interface TypographyConfig {
-    fontFamily: {,
+    fontFamily: {
         primary: string;
         secondary?: string;
         monospace: string;
     };
-    fontSize: {,
+    fontSize: {
         xs: string;
         sm: string;
         base: string;
@@ -273,14 +273,14 @@ export interface TypographyConfig {
         '3xl': string;
         '4xl': string;
     };
-    fontWeight: {,
+    fontWeight: {
         light: number;
         normal: number;
         medium: number;
         semibold: number;
         bold: number;
     };
-    lineHeight: {,
+    lineHeight: {
         tight: number;
         normal: number;
         relaxed: number;

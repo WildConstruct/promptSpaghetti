@@ -12,14 +12,14 @@ interface PromotionSlot {
     name: string;
     type: string;
     location: string;
-    dimensions: {,
+    dimensions: {
         width: number;
         height: number;
     };
     traffic_allocation: number;
     priority: number;
 interface PromotionPreviewData {
-    schedule: {,
+    schedule: {
         id: string;
         title: string;
         promotion_type: string;
@@ -37,13 +37,13 @@ interface PromotionPreviewData {
         downloads: number;
         performance_score: number;
     }>;
-    rotation_config: {,
+    rotation_config: {
         pattern: string;
         duration_per_content?: number;
         click_threshold?: number;
         performance_threshold?: number;
     };
-    predicted_performance: {,
+    predicted_performance: {
         estimated_impressions: number;
         estimated_ctr: number;
         estimated_conversions: number;

@@ -10,50 +10,50 @@ import { SecurityEvent } from '../security/AlertingSystem';
 
 export interface SecurityAnalyticsMetrics {
   // Security-specific metrics extending performance metrics
-  threatDetectionMetrics: {,
-  threatsDetected: number;,
+  threatDetectionMetrics: {
+  threatsDetected: number;
   falsePositives: number;
-  truePositives: number;,
+  truePositives: number;
   threatLevel: number;
-  detectionAccuracy: number;,
+  detectionAccuracy: number;
   timeToDetection: number;
 };
-  complianceMetrics: {,
+  complianceMetrics: {
   complianceViolations: number;
-  auditTrailEntries: number;,
+  auditTrailEntries: number;
   dataAccessEvents: number;
-  policyEnforcements: number;,
+  policyEnforcements: number;
   complianceScore: number;
 };
-  accessControlMetrics: {,
+  accessControlMetrics: {
   authenticationAttempts: number;
-  failedAuthentications: number;,
+  failedAuthentications: number;
   privilegeEscalations: number;
-  sessionAnomalies: number;,
+  sessionAnomalies: number;
   accessViolations: number;
 };
-  dataProtectionMetrics: {,
+  dataProtectionMetrics: {
   encryptionOperations: number;
-  dataClassificationEvents: number;,
+  dataClassificationEvents: number;
   dataLeakageIncidents: number;
-  backupIntegrityChecks: number;,
+  backupIntegrityChecks: number;
   dataRetentionActions: number;
 };
-  incidentResponseMetrics: {,
+  incidentResponseMetrics: {
   incidentCount: number;
-  meanTimeToDetection: number;,
+  meanTimeToDetection: number;
   meanTimeToResponse: number;
-  meanTimeToResolution: number;,
+  meanTimeToResolution: number;
   escalationRate: number;
 };
 }
 export interface SecuritySystemHealth {
-  systemId: string;,
+  systemId: string;
   systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
-  status: 'healthy' | 'degraded' | 'critical' | 'offline';,
+  status: 'healthy' | 'degraded' | 'critical' | 'offline';
   lastHealthCheck: number;
   healthScore: number; // 0-100,
-  responseTime: number;,
+  responseTime: number;
   errorRate: number;
   uptime: number;
   // Security-specific health indicators
@@ -62,43 +62,43 @@ export interface SecuritySystemHealth {
   alertProcessingDelay: number; // milliseconds,
   ruleSyncStatus: 'synced' | 'syncing' | 'failed';
   // Performance indicators
-  cpuUsage: number;,
+  cpuUsage: number;
   memoryUsage: number;
-  diskUsage: number;,
+  diskUsage: number;
   networkLatency: number;
   // Configuration status
-  configurationVersion: string;,
+  configurationVersion: string;
   lastConfigUpdate: number;
   pendingUpdates: number;
 }
 export interface SecurityAnalyticsAlert extends PerformanceAlert {
-  securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';,
+  securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
   affectedSystems: string;
-  threatLevel: number;,
+  threatLevel: number;
   complianceImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
-  recommendedActions: string;,
+  recommendedActions: string;
   relatedEvents: string;
   export interface SecurityAnalyticsConfig {
   // Base performance monitoring config
-  performanceConfig: {,
-  enableMemoryTracking: boolean;,
+  performanceConfig: {
+  enableMemoryTracking: boolean;
   enableContextTracking: boolean;
-  enableAggregation: boolean;,
+  enableAggregation: boolean;
   enableAlerting: boolean;
-  slowExecutionThreshold: number;,
+  slowExecutionThreshold: number;
   memoryThreshold: number;
 };
   // Security-specific configuration
-  securityConfig: {,
+  securityConfig: {
   enableThreatDetection: boolean;
-  enableComplianceMonitoring: boolean;,
+  enableComplianceMonitoring: boolean;
   enableAccessControlTracking: boolean;
-  enableDataProtectionMonitoring: boolean;,
+  enableDataProtectionMonitoring: boolean;
   enableIncidentResponseTracking: boolean;
   // Thresholds
-  threatLevelThreshold: number;,
+  threatLevelThreshold: number;
   falsePositiveThreshold: number;
-  complianceScoreThreshold: number;,
+  complianceScoreThreshold: number;
   detectionTimeThreshold: number; // milliseconds,
   responseTimeThreshold: number; // milliseconds,
   // Health monitoring
@@ -107,9 +107,9 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
   alertCorrelationWindow: number; // milliseconds,
 };
   // Integration settings
-  integrationConfig: {,
+  integrationConfig: {
   siemIntegration: boolean;
-  complianceIntegration: boolean;,
+  complianceIntegration: boolean;
   auditIntegration: boolean;
   threatIntelIntegration: boolean;
 };
@@ -132,7 +132,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   constructor(config: Partial<SecurityAnalyticsConfig> = {}) {
   super();
   this.config = {
-  performanceConfig: {,
+  performanceConfig: {
   enableMemoryTracking: true,
   enableContextTracking: true,
   enableAggregation: true,
@@ -141,7 +141,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   memoryThreshold: 50 * 1024 * 1024,
   ...config.performanceConfig
 },
-  securityConfig: {,
+  securityConfig: {
   enableThreatDetection: true,
   enableComplianceMonitoring: true,
   enableAccessControlTracking: true,
@@ -157,7 +157,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   alertCorrelationWindow: 300000, // 5 minutes,
   ...config.securityConfig
 },
-  integrationConfig: {,
+  integrationConfig: {
   siemIntegration: true,
   complianceIntegration: true,
   auditIntegration: true,
@@ -280,20 +280,20 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
    * Get comprehensive security dashboard data
    */
   getSecurityDashboardData(): {
-    overallSecurityHealth: number;,
+    overallSecurityHealth: number;
   criticalAlerts: number;
     systemsStatus: { healthy: number; degraded: number; critical: number; offline: number };
-    threatLevel: number;,
+    threatLevel: number;
   complianceScore: number;
-    incidentStats: {,
+    incidentStats: {
   activeIncidents: number;
-  meanDetectionTime: number;,
+  meanDetectionTime: number;
   meanResponseTime: number;
 };
     topThreats: Array<{ type: string; count: number }>;
     systemPerformance: Array<{,
   systemId: string;
-  healthScore: number;,
+  healthScore: number;
   responseTime: number;
   threatDetectionRate: number;
 }>;
@@ -359,18 +359,18 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
    * Generate security analytics report
    */
   generateSecurityReport(timeRange: { start: number; end: number }): {
-  summary: {,
-  totalEvents: number;,
+  summary: {
+  totalEvents: number;
   threatsDetected: number;
-  complianceViolations: number;,
+  complianceViolations: number;
   incidentsResolved: number;
   averageResponseTime: number;
 };
-    trends: {,
+    trends: {
   threatTrend: 'increasing' | 'stable' | 'decreasing';
-  complianceTrend: 'improving' | 'stable' | 'degrading';,
-  performanceTrend: 'improving' | 'stable' | 'degrading';
-};
+  complianceTrend: 'improving' | 'stable' | 'degrading';
+  performanceTrend: 'improving' | 'stable' | 'degrading'
+  };
     recommendations: string;
     const metrics = Array.from(this.securityMetrics.values());
     const systems = Array.from(this.systemHealthMap.values());
@@ -403,14 +403,14 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     if (degradedSystems > 0) {
       recommendations.push(`${degradedSystems} security systems need attention`);}
     return {
-  summary: {,
+  summary: {
   totalEvents,
   threatsDetected,
   complianceViolations,
   incidentsResolved,
   averageResponseTime
 },
-  trends: {,
+  trends: {
         threatTrend,
         complianceTrend,
         performanceTrend
@@ -455,7 +455,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     });
   private createEmptySecurityMetrics(): SecurityAnalyticsMetrics {
   return {
-  threatDetectionMetrics: {,
+  threatDetectionMetrics: {
   threatsDetected: 0,
   falsePositives: 0,
   truePositives: 0,
@@ -463,28 +463,28 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   detectionAccuracy: 0,
   timeToDetection: 0,
 },
-  complianceMetrics: {,
+  complianceMetrics: {
   complianceViolations: 0,
   auditTrailEntries: 0,
   dataAccessEvents: 0,
   policyEnforcements: 0,
   complianceScore: 100,
 },
-  accessControlMetrics: {,
+  accessControlMetrics: {
   authenticationAttempts: 0,
   failedAuthentications: 0,
   privilegeEscalations: 0,
   sessionAnomalies: 0,
   accessViolations: 0,
 },
-  dataProtectionMetrics: {,
+  dataProtectionMetrics: {
   encryptionOperations: 0,
   dataClassificationEvents: 0,
   dataLeakageIncidents: 0,
   backupIntegrityChecks: 0,
   dataRetentionActions: 0,
 },
-  incidentResponseMetrics: {,
+  incidentResponseMetrics: {
   incidentCount: 0,
   meanTimeToDetection: 0,
   meanTimeToResponse: 0,

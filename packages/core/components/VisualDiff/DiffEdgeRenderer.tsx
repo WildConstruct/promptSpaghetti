@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
 interface DiffEdgeData {
-  originalEdge: Error;,
+  originalEdge: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
   changeDetails: Record<string, any>;
   side: 'source' | 'target';
@@ -37,20 +37,20 @@ interface DiffEdgeData {
   transition: 'all 0.2s ease',
 };
     const stateStyles = {
-  added: {,
+  added: {
   stroke: '#10b981',
   strokeDasharray: 'none',
 },
-  removed: {,
+  removed: {
   stroke: '#ef4444',
   strokeDasharray: '5,5',
   opacity: 0.7,
 },
-  modified: {,
+  modified: {
   stroke: '#f59e0b',
   strokeDasharray: 'none',
 },
-  unchanged: {,
+  unchanged: {
   stroke: '#6b7280',
   strokeDasharray: 'none',
 };

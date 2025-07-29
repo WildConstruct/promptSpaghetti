@@ -14,13 +14,13 @@ export interface PerformanceMetrics {
     startTime: number;
     endTime: number;
     duration: number;
-    memoryUsage: {,
+    memoryUsage: {
         before: number;
         after: number;
         peak: number;
         delta: number;
     };
-    contextSize: {,
+    contextSize: {
         variableCount: number;
         stateCount: number;
         cacheSize: number;

@@ -9,7 +9,7 @@ import { ActivityStats } from './ActivityStats';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEventWithActorInfo, ActivityEventFilter } from '../../types/workspace';
 interface ActivityFeedProps {
-  workspaceId: string;,
+  workspaceId: string;
   userId: string;
   projectId?: string;
   showStats?: boolean;
@@ -151,7 +151,7 @@ interface ActivityFeedProps {
   );
 };
 interface ActivityFeedSkeletonProps {
-  count: number;,
+  count: number;
   compact: boolean;
 const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, compact }) => ()
   <>
@@ -172,7 +172,7 @@ const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, comp
   </>
 );
 interface ActivityEventModalProps {
-  event: ActivityEventWithActorInfo;,
+  event: ActivityEventWithActorInfo;
   onClose: () => void;
 const ActivityEventModal: React.FC<ActivityEventModalProps> = ({ event, onClose }) => ()
   <div className="modal-overlay">

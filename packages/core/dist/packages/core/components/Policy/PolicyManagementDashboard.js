@@ -223,13 +223,13 @@ if (error) {
 }
 _jsx("style", { children: `
         .policy-management-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;,
+          -webkit-box-orient: vertical;
   overflow: hidden;
         .policy-overview .grid {
           gap: 1rem;

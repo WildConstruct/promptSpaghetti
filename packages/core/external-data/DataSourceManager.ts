@@ -5,52 +5,52 @@ import { EventEmitter } from 'events';
 // Core interfaces for external data integration
 
 export interface DataSource {
-  id: string;,
+  id: string;
   name: string;
-  type: 'api' | 'database' | 'file' | 'static';,
+  type: 'api' | 'database' | 'file' | 'static';
   enabled: boolean;
   // Connection configuration
   endpoint?: string;
-  authentication?: {,
-  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';,
+  authentication?: {
+  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
   credentials: Record<string, string>;
   headers?: Record<string, string>;
 };
   // Caching strategy
-  caching: {,
+  caching: {
   enabled: boolean;
   ttl: number; // Time to live in seconds,
-  strategy: 'memory' | 'disk' | 'hybrid';,
+  strategy: 'memory' | 'disk' | 'hybrid';
   maxSize: number; // Max cache size in MB,
 };
   // Data transformation pipeline
   transforms: DataTransform;
   // Rate limiting
   rateLimit?: {
-  requests: number;,
+  requests: number;
   window: number; // Window in seconds,
   burst?: number;
 };
   // Quality and reliability
-  reliability: {,
+  reliability: {
   timeout: number;
-  retries: number;,
+  retries: number;
   backoff: 'linear' | 'exponential';
   healthCheck?: string; // URL for health checks,
 };
   // Metadata
-  metadata: {,
+  metadata: {
   description: string;
-  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';,
+  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
   tags: string;
   lastSync?: string;
   version?: string;
 };
 }
 export interface DataTransform {
-  id: string;,
+  id: string;
   name: string;
-  type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';,
+  type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';
   config: Record<string, any>;
   enabled: boolean;
 }
@@ -66,17 +66,17 @@ export interface HistoricalQuery {
   limit?: number;
   offset?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export interface QueryResult<T = any> {
-  success: boolean;,
+  success: boolean;
   data: T;
-  metadata: {,
-  total: number;,
+  metadata: {
+  total: number;
   offset: number;
-  limit: number;,
+  limit: number;
   query: HistoricalQuery;
-  source: string;,
+  source: string;
   cached: boolean;
   executionTime: number;
 };
@@ -85,9 +85,9 @@ export interface QueryResult<T = any> {
 
 // Cache interface
 interface CacheEntry<T = any> {
-  data: T;,
+  data: T;
   timestamp: number;
-  ttl: number;,
+  ttl: number;
   hits: number;
   size: number; // Size in bytes
 
@@ -118,11 +118,11 @@ export class DataSourceManager extends EventEmitter {
       type: 'api',
       enabled: true,
       endpoint: 'https://data.getty.edu/vocab/api',
-      authentication: {,
+      authentication: {
   type: 'none',
         credentials: {}
   },
-  caching: {,
+  caching: {
   enabled: true,
   ttl: 3600, // 1 hour,
   strategy: 'hybrid',
@@ -133,24 +133,24 @@ export class DataSourceManager extends EventEmitter {
   id: 'getty-normalize',
   name: 'Getty Data Normalizer',
   type: 'normalize',
-  config: {,
+  config: {
   dateFormat: 'iso',
   textFields: ['preferred_label', 'description'],
   imageFields: ['thumbnail', 'image_url'],
 },
   enabled: true],
-      rateLimit: {,
+      rateLimit: {
   requests: 100,
   window: 60,
   burst: 10,
 },
-  reliability: {,
+  reliability: {
   timeout: 10000,
   retries: 3,
   backoff: 'exponential',
   healthCheck: 'https://data.getty.edu/vocab/api/health',
 },
-  metadata: {,
+  metadata: {
   description: 'Getty Research Institute Art & Architecture Thesaurus',
   category: 'cultural',
   tags: ['art', 'architecture', 'historical', 'authoritative'],
@@ -163,11 +163,11 @@ export class DataSourceManager extends EventEmitter {
       type: 'api',
       enabled: true,
       endpoint: 'https://collectionapi.metmuseum.org/public/collection/v1',
-      authentication: {,
+      authentication: {
   type: 'none',
         credentials: {}
   },
-  caching: {,
+  caching: {
   enabled: true,
   ttl: 7200, // 2 hours,
   strategy: 'hybrid',
@@ -178,8 +178,8 @@ export class DataSourceManager extends EventEmitter {
   id: 'met-mapper',
   name: 'Met Data Mapper',
   type: 'map',
-  config: {,
-  mapping: {,
+  config: {
+  mapping: {
   'title': 'name',
   'artistDisplayName': 'artist',
   'objectDate': 'era',
@@ -188,16 +188,16 @@ export class DataSourceManager extends EventEmitter {
   'primaryImageSmall': 'image',
 },
   enabled: true],
-      rateLimit: {,
+      rateLimit: {
   requests: 80,
   window: 60,
 },
-  reliability: {,
+  reliability: {
   timeout: 15000,
   retries: 2,
   backoff: 'linear',
 },
-  metadata: {,
+  metadata: {
   description: 'Metropolitan Museum of Art Collection Database',
   category: 'cultural',
   tags: ['museum', 'art', 'artifacts', 'historical'],
@@ -209,7 +209,7 @@ export class DataSourceManager extends EventEmitter {
   name: 'Medieval Clothing Database',
   type: 'static',
   enabled: true,
-  caching: {,
+  caching: {
   enabled: true,
   ttl: 86400, // 24 hours,
   strategy: 'memory',
@@ -220,19 +220,19 @@ export class DataSourceManager extends EventEmitter {
           id: 'medieval-classifier',
           name: 'Medieval Period Classifier',
           type: 'validate',
-          config: {,
-  eraValidation: {,
+          config: {
+  eraValidation: {
               'early-medieval': { start: 500, end: 1000 },
               'high-medieval': { start: 1000, end: 1300 },
               'late-medieval': { start: 1300, end: 1500 }
   },
   enabled: true],
-      reliability: {,
+      reliability: {
   timeout: 1000,
   retries: 1,
   backoff: 'linear',
 },
-  metadata: {,
+  metadata: {
   description: 'Curated medieval clothing and materials database',
   category: 'historical',
   tags: ['medieval', 'clothing', 'materials', 'demo'],
@@ -250,7 +250,7 @@ export class DataSourceManager extends EventEmitter {
   /**
   * Query historical data from configured sources
   */
-  async queryHistoricalData(query: HistoricalQuery,)
+  async queryHistoricalData(query: HistoricalQuery)
   sourceIds?: string): Promise<QueryResult> {,
   const results: QueryResult = [];
   const sources = sourceIds ;
@@ -267,7 +267,7 @@ export class DataSourceManager extends EventEmitter {
   const errorResult: QueryResult = {,
   success: false,
   data: [],
-  metadata: {,
+  metadata: {
   total: 0,
   offset: query.offset || 0,
   limit: query.limit || 50,
@@ -301,7 +301,7 @@ export class DataSourceManager extends EventEmitter {
   return {
   success: true,
   data: cached.data,
-  metadata: {,
+  metadata: {
   total: cached.data.length,
   offset: query.offset || 0,
   limit: query.limit || 50,
@@ -337,7 +337,7 @@ export class DataSourceManager extends EventEmitter {
   return {
   success: true,
   data,
-  metadata: {,
+  metadata: {
   total: data.length,
   offset: query.offset || 0,
   limit: query.limit || 50,
@@ -591,7 +591,7 @@ export class DataSourceManager extends EventEmitter {
         source: `${source.id}-database`}
 },
   timestamp: new Date().toISOString(),
-        metadata: {,
+        metadata: {
   queryHash: this.generateQueryHash(query),
   extractedAt: new Date().toISOString(),
 };

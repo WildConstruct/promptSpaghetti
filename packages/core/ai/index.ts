@@ -111,7 +111,7 @@ export * from './performance';
 
 // Utility functions and helpers
 interface HTTPRequestMapping {
-  inputPath: string;,
+  inputPath: string;
   outputPath: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;

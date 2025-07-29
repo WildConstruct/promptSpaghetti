@@ -45,13 +45,13 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 interface MergeRequestPanelProps {
-  projectId: string;,
+  projectId: string;
   visible: boolean;
   onClose: () => void;
   interface MergeRequestItemProps {
-  mergeRequest: BranchMergeRequest;,
-  onView: (mergeRequest: BranchMergeRequest) => void;,
-  onMerge: (mergeRequest: BranchMergeRequest) => void;,
+  mergeRequest: BranchMergeRequest;
+  onView: (mergeRequest: BranchMergeRequest) => void;
+  onMerge: (mergeRequest: BranchMergeRequest) => void;
   onClose: (mergeRequest: BranchMergeRequest) => void;
   const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ ),
   mergeRequest,
@@ -70,8 +70,8 @@ interface MergeRequestPanelProps {
   case 'draft':,
   return 'warning';
   default:,
-  return 'default';
-};
+  return 'default'
+  };
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString();
   };

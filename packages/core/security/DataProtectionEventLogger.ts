@@ -42,50 +42,50 @@ export enum DataProtectionEventType {
   HIPAA = 'hipaa',
   CUSTOM = 'custom'
   export interface DataProtectionEvent {
-  eventType: DataProtectionEventType;,
+  eventType: DataProtectionEventType;
   timestamp: Date;
-  correlationId: string;,
+  correlationId: string;
   userId: string;
   dataSubject?: string;
-  resourceType: string;,
+  resourceType: string;
   resourceId: string;
-  dataClassification: DataSensitivityLevel;,
+  dataClassification: DataSensitivityLevel;
   operation: 'read' | 'write' | 'export' | 'delete' | 'share' | 'anonymize';
   legalBasis?: string;
   consentId?: string;
   retentionPolicy?: string;
-  automatedDecision: boolean;,
+  automatedDecision: boolean;
   complianceFrameworks: ComplianceFramework;
   metadata?: Record<string, any>;
 }
 export interface DataDeletionEvent extends DataProtectionEvent {
-  deletionJobId: string;,
+  deletionJobId: string;
   scheduledTime: Date;
   executionTime?: Date;
-  deletionRule: string;,
-  affectedRecords: {,
-  expected: number;,
+  deletionRule: string;
+  affectedRecords: {
+  expected: number;
   processed: number;
-  successful: number;,
+  successful: number;
   failed: number;
 };
   failureReasons?: string;
   exemptionReasons?: string;
 
 export interface PrivacyRequestEvent extends DataProtectionEvent {
-  requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';,
+  requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
   requestId: string;
-  requestDate: Date;,
+  requestDate: Date;
   responseDeadline: Date;
-  status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';,
+  status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';
   dataCategories: string;
   processingPurposes: string;
   export interface PolicyViolationEvent extends DataProtectionEvent {
-  violationType: string;,
+  violationType: string;
   policyId: string;
-  policyVersion: string;,
+  policyVersion: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  riskScore: number;,
+  riskScore: number;
   mitigationActions: string;
   requiresNotification: boolean;
   notificationDeadline?: Date;
@@ -101,7 +101,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   constructor();
   securityLogger?: SecurityLogger,
   auditLogger?: AuditLogger,
-  options: {,
+  options: {
   complianceMode?: boolean;
   retentionPolicies?: Map<ComplianceFramework, number>;
 } = {}
@@ -126,7 +126,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   action: event.eventType,
   userId: event.userId,
   resourceId: event.resourceId,
-  details: {,
+  details: {
   eventType: event.eventType,
   dataClassification: event.dataClassification,
   operation: event.operation,
@@ -149,7 +149,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   resourceType: event.resourceType,
   resourceId: event.resourceId,
   outcome: 'success',
-  details: {,
+  details: {
   dataSubject: event.dataSubject,
   legalBasis: event.legalBasis,
   consentId: event.consentId,
@@ -169,7 +169,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   async logDataDeletionEvent(event: DataDeletionEvent): Promise<void> {
   const extendedEvent: DataProtectionEvent = {,
   ...event,
-  metadata: {,
+  metadata: {
   ...event.metadata,
   deletionJobId: event.deletionJobId,
   scheduledTime: event.scheduledTime.toISOString(),
@@ -189,7 +189,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   async logPrivacyRequestEvent(event: PrivacyRequestEvent): Promise<void> {,
   const extendedEvent: DataProtectionEvent = {,
   ...event,
-  metadata: {,
+  metadata: {
   ...event.metadata,
   requestType: event.requestType,
   requestId: event.requestId,
@@ -210,7 +210,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   const extendedEvent: DataProtectionEvent = {,
   ...event,
   eventType: DataProtectionEventType.POLICY_VIOLATION_DETECTED,
-  metadata: {,
+  metadata: {
   ...event.metadata,
   violationType: event.violationType,
   policyId: event.policyId,
@@ -228,7 +228,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   /**
    * Generate compliance report data for a specific framework and time period
    */
-  async generateComplianceReport(framework: ComplianceFramework,)
+  async generateComplianceReport(framework: ComplianceFramework)
     startDate: Date,
     endDate: Date): Promise<ComplianceReport> {,
     // This would integrate with the audit logger to retrieve events
@@ -285,7 +285,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   action: 'deletion_failure_alert',
   userId: event.userId,
   resourceId: event.resourceId,
-  details: {,
+  details: {
   deletionJobId: event.deletionJobId,
   failureReasons: event.failureReasons,
   affectedRecords: event.affectedRecords,
@@ -303,7 +303,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   action: 'privacy_request_overdue',
   userId: event.userId,
   resourceId: event.requestId,
-  details: {,
+  details: {
   requestType: event.requestType,
   responseDeadline: event.responseDeadline.toISOString(),
   daysPastDue: Math.floor((new Date().getTime() - event.responseDeadline.getTime()) / (1000 * 60 * 60 * 24)),
@@ -321,7 +321,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   action: 'critical_violation_detected',
   userId: event.userId,
   resourceId: event.resourceId,
-  details: {,
+  details: {
   violationType: event.violationType,
   policyId: event.policyId,
   severity: event.severity,
@@ -383,19 +383,19 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
 };
 
 export interface ComplianceReport {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   reportPeriod: { start: Date; end: Date };
-  eventCount: number;,
+  eventCount: number;
   eventTypes: Record<string, number>;
   dataSubjects: Record<string, number>;
-  violations: unknown;,
+  violations: unknown;
   privacyRequests: unknown;
-  retentionCompliance: ComplianceMetrics;,
+  retentionCompliance: ComplianceMetrics;
   generatedAt: Date;
 }
 export interface ComplianceMetrics {
-  totalEvents: number;,
+  totalEvents: number;
   pastRetentionEvents: number;
-  improperllyRetainedEvents: number;,
+  improperllyRetainedEvents: number;
   compliancePercentage: number;
 }

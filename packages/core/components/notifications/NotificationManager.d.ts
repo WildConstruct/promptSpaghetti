@@ -8,37 +8,37 @@ export interface NotificationPreferences {
     in_app_enabled: boolean;
     email_enabled: boolean;
     push_enabled: boolean;
-    comments: {,
+    comments: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
         mentions_only: boolean;
     };
-    collaboration: {,
+    collaboration: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
         presence_updates: boolean;
     };
-    workspace: {,
+    workspace: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
         member_changes: boolean;
     };
-    approvals: {,
+    approvals: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
     };
-    system: {,
+    system: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
         maintenance_only: boolean;
     };
-    quiet_hours: {,
+    quiet_hours: {
         enabled: boolean;
         start_time: string;
         end_time: string;
         timezone: string;
     };
-    digest: {,
+    digest: {
         enabled: boolean;
         frequency: 'hourly' | 'daily' | 'weekly';
         time: string;
@@ -57,7 +57,7 @@ export interface NotificationStats {
     unread: number;
     by_type: Record<string, number>;
     by_priority: Record<string, number>;
-    by_day: {,
+    by_day: {
         date: string;
         count: number;
     }[];

@@ -9,7 +9,7 @@ import { ChevronUp, ChevronDown, Search, Filter, Download, Eye, MoreHorizontal }
 import './DataTable.css';
 
 export interface TableColumn<T = any> {
-  key: string;,
+  key: string;
   title: string;
   dataIndex?: keyof T;
   render?: (value: any, record: T, index: number) => React.ReactNode;
@@ -20,7 +20,7 @@ export interface TableColumn<T = any> {
   className?: string;
 
 export interface TableAction<T = any> {
-  key: string;,
+  key: string;
   label: string;
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   onClick: (record: T, index: number) => void;
@@ -29,10 +29,10 @@ export interface TableAction<T = any> {
 
 export interface DataTableProps<T = any> {
   // Core data
-  data: T;,
+  data: T;
   columns: TableColumn<T>[];
   // Pagination
-  pagination?: {,
+  pagination?: {
   pageSize?: number;
   showSizeChanger?: boolean;
   showQuickJumper?: boolean;
@@ -69,7 +69,7 @@ export interface DataTableProps<T = any> {
   className?: string;
 type SortDirection = 'asc' | 'desc' | null;
 interface SortConfig {
-  key: string;,
+  key: string;
   direction: SortDirection;
 
 export const DataTable = <T extends Record<string, any>>({)

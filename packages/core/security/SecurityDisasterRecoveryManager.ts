@@ -12,19 +12,19 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 
 export interface DisasterRecoveryPlan {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   version: string;
   // Plan classification
-  classification: {,
-  disaster_type: 'natural' | 'cyber_attack' | 'hardware_failure' | 'human_error' | 'power_outage' | 'network_failure' | 'pandemic' | 'terrorism';,
+  classification: {
+  disaster_type: 'natural' | 'cyber_attack' | 'hardware_failure' | 'human_error' | 'power_outage' | 'network_failure' | 'pandemic' | 'terrorism';
   severity_level: 'minor' | 'major' | 'critical' | 'catastrophic';
-  scope: 'single_system' | 'datacenter' | 'region' | 'global';,
-  impact_category: 'availability' | 'integrity' | 'confidentiality' | 'all';
-};
+  scope: 'single_system' | 'datacenter' | 'region' | 'global';
+  impact_category: 'availability' | 'integrity' | 'confidentiality' | 'all'
+  };
   // Recovery objectives
-  objectives: {,
+  objectives: {
   recovery_time_objective: number; // milliseconds - maximum tolerable downtime,
   recovery_point_objective: number; // milliseconds - maximum acceptable data loss,
   maximum_tolerable_outage: number; // milliseconds - absolute maximum downtime,
@@ -33,70 +33,70 @@ export interface DisasterRecoveryPlan {
   // Recovery strategies
   strategies: RecoveryStrategy;
   // Backup requirements
-  backup_requirements: {,
+  backup_requirements: {
   backup_frequency: 'continuous' | 'hourly' | 'daily' | 'weekly';
-  retention_policy: {,
+  retention_policy: {
   daily_backups: number; // days to keep,
   weekly_backups: number; // weeks to keep,
   monthly_backups: number; // months to keep,
   yearly_backups: number; // years to keep,
 };
-    backup_types: ('full' | 'incremental' | 'differential' | 'continuous')[];,
+    backup_types: ('full' | 'incremental' | 'differential' | 'continuous')[];
   compression_enabled: boolean;
-    encryption_enabled: boolean;,
+    encryption_enabled: boolean;
   offsite_storage: boolean;
-    cloud_storage: boolean;,
+    cloud_storage: boolean;
   geographic_distribution: string; // regions for geo-distributed backups
   };
   // Testing and validation
-  testing: {,
+  testing: {
   test_frequency: 'monthly' | 'quarterly' | 'biannually' | 'annually';
-  last_test_date: number;,
+  last_test_date: number;
   next_test_date: number;
-  test_results: TestResult;,
+  test_results: TestResult;
   automated_testing: boolean;
   test_scenarios: string;
 };
   // Communication plan
-  communication: {,
+  communication: {
   notification_tree: NotificationTreeNode;
-  communication_channels: ('email' | 'sms' | 'phone' | 'slack' | 'teams' | 'public_announcement')[];,
+  communication_channels: ('email' | 'sms' | 'phone' | 'slack' | 'teams' | 'public_announcement')[];
   escalation_procedures: EscalationProcedure;
   stakeholder_groups: StakeholderGroup;
 };
   // Dependencies and prerequisites
-  dependencies: {,
+  dependencies: {
   required_systems: string;
-  required_personnel: string;,
+  required_personnel: string;
   required_resources: string;
   external_dependencies: ExternalDependency;
 };
   // Compliance and regulatory
-  compliance: {,
+  compliance: {
   frameworks: string; // SOX, GDPR, HIPAA, etc.,
-  regulatory_requirements: string;,
+  regulatory_requirements: string;
   audit_requirements: string;
   documentation_requirements: string;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
   last_updated: number;
   approved_by?: string;
   approved_at?: number;
-  next_review_date: number;,
-  status: 'draft' | 'approved' | 'active' | 'archived';
-}
+  next_review_date: number;
+  status: 'draft' | 'approved' | 'active' | 'archived'
+  }
 export interface RecoveryStrategy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   priority: number; // 1 = highest priority,
   // Strategy configuration
-  type: 'hot_standby' | 'warm_standby' | 'cold_standby' | 'pilot_light' | 'backup_restore' | 'multi_site' | 'cloud_failover';,
+  type: 'hot_standby' | 'warm_standby' | 'cold_standby' | 'pilot_light' | 'backup_restore' | 'multi_site' | 'cloud_failover';
   automation_level: 'manual' | 'semi_automatic' | 'automatic';
   // Target infrastructure
-  target: {,
-  location: string;,
+  target: {
+  location: string;
   datacenter: string;
   region: string;
   availability_zone?: string;
@@ -105,58 +105,58 @@ export interface RecoveryStrategy {
   // Recovery procedures
   procedures: RecoveryProcedure;
   // Resource requirements
-  resources: {,
-  infrastructure: {,
-  compute_instances: number;,
+  resources: {
+  infrastructure: {
+  compute_instances: number;
   storage_gb: number;
-  network_bandwidth_mbps: number;,
+  network_bandwidth_mbps: number;
   database_instances: number;
 };
-    personnel: {,
+    personnel: {
   required_roles: string;
-  minimum_staff: number;,
+  minimum_staff: number;
   on_call_requirements: boolean;
 };
-    estimated_cost: {,
+    estimated_cost: {
   setup_cost: number;
-  monthly_cost: number;,
+  monthly_cost: number;
   activation_cost: number;
 };
   };
   // Success criteria
-  success_criteria: {,
+  success_criteria: {
   rto_compliance: boolean;
-  rpo_compliance: boolean;,
+  rpo_compliance: boolean;
   data_integrity_verified: boolean;
-  service_functionality_verified: boolean;,
+  service_functionality_verified: boolean;
   performance_acceptable: boolean;
 };
-  created_at: number;,
+  created_at: number;
   last_tested: number;
   test_success_rate: number; // percentage
 }
 export interface RecoveryProcedure {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   order: number;
   // Procedure configuration
-  type: 'preparation' | 'activation' | 'recovery' | 'validation' | 'communication' | 'rollback';,
-  automation: {,
+  type: 'preparation' | 'activation' | 'recovery' | 'validation' | 'communication' | 'rollback';
+  automation: {
   automated: boolean;
   script_path?: string;
   manual_steps?: string;
-  approval_required: boolean;,
+  approval_required: boolean;
   timeout: number; // milliseconds,
 };
   // Dependencies
   dependencies: string; // IDs of procedures that must complete first,
   parallel_execution: boolean;
   // Validation
-  validation: {,
+  validation: {
   success_criteria: string;
   validation_script?: string;
-  manual_verification: boolean;,
+  manual_verification: boolean;
   rollback_on_failure: boolean;
 };
   estimated_duration: number; // milliseconds
@@ -164,51 +164,51 @@ export interface RecoveryProcedure {
   success_rate: number; // percentage
 }
 export interface BackupJob {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Job configuration
-  type: 'full' | 'incremental' | 'differential' | 'continuous';,
-  source: {,
-  system_id: string;,
+  type: 'full' | 'incremental' | 'differential' | 'continuous';
+  source: {
+  system_id: string;
   data_types: ('security_events' | 'audit_logs' | 'configurations' | 'user_data' | 'analytics_data' | 'system_state')[];
-  include_patterns: string;,
+  include_patterns: string;
   exclude_patterns: string;
 };
   // Destination configuration
-  destination: {,
+  destination: {
   primary_location: string;
   secondary_location?: string;
-  storage_type: 'file_system' | 'object_storage' | 'database' | 'tape' | 'cloud';,
-  encryption: {,
-  enabled: boolean;,
-  algorithm: string;
-  key_management: 'local' | 'hsm' | 'cloud_kms';
-};
-    compression: {,
+  storage_type: 'file_system' | 'object_storage' | 'database' | 'tape' | 'cloud';
+  encryption: {
   enabled: boolean;
-  algorithm: 'gzip' | 'lz4' | 'zstd';,
+  algorithm: string;
+  key_management: 'local' | 'hsm' | 'cloud_kms'
+  };
+    compression: {
+  enabled: boolean;
+  algorithm: 'gzip' | 'lz4' | 'zstd';
   level: number;
 };
   };
   // Scheduling
-  schedule: {,
+  schedule: {
   enabled: boolean;
   frequency: 'continuous' | 'hourly' | 'daily' | 'weekly' | 'monthly';
   cron_expression?: string;
-  time_window: {,
+  time_window: {
   start: string; // HH:MM format,
-  end: string;,
+  end: string;
   timezone: string;
 };
-    retry_policy: {,
+    retry_policy: {
   max_retries: number;
   retry_delay: number; // milliseconds,
-  backoff_strategy: 'linear' | 'exponential';
-};
+  backoff_strategy: 'linear' | 'exponential'
+  };
   };
   // Performance and resource limits
-  performance: {,
+  performance: {
   max_bandwidth_mbps: number;
   max_cpu_usage: number; // percentage,
   max_memory_usage: number; // percentage,
@@ -216,29 +216,29 @@ export interface BackupJob {
   throttling: boolean;
 };
   // Validation and verification
-  validation: {,
+  validation: {
   verify_after_backup: boolean;
-  checksum_validation: boolean;,
+  checksum_validation: boolean;
   test_restore: boolean;
-  test_restore_frequency: 'daily' | 'weekly' | 'monthly';
-};
+  test_restore_frequency: 'daily' | 'weekly' | 'monthly'
+  };
   // Retention and cleanup
-  retention: {,
+  retention: {
   keep_daily: number; // days,
   keep_weekly: number; // weeks,
   keep_monthly: number; // months,
   keep_yearly: number; // years,
   auto_cleanup: boolean;
 };
-  created_by: string;,
+  created_by: string;
   created_at: number;
-  last_updated: number;,
+  last_updated: number;
   last_run: number;
-  next_run: number;,
+  next_run: number;
   enabled: boolean;
 }
 export interface BackupExecution {
-  id: string;,
+  id: string;
   job_id: string;
   // Execution details
   start_time: number;
@@ -246,8 +246,8 @@ export interface BackupExecution {
   duration?: number;
   status: 'running' | 'completed' | 'failed' | 'cancelled' | 'retrying';
   // Progress tracking
-  progress: {,
-  total_items: number;,
+  progress: {
+  total_items: number;
   processed_items: number;
   failed_items: number;
   current_item?: string;
@@ -255,41 +255,41 @@ export interface BackupExecution {
   estimated_time_remaining?: number;
 };
   // Data metrics
-  metrics: {,
+  metrics: {
   data_size_bytes: number;
-  compressed_size_bytes: number;,
+  compressed_size_bytes: number;
   compression_ratio: number;
-  transfer_rate_mbps: number;,
+  transfer_rate_mbps: number;
   checksum: string;
   file_count: number;
 };
   // Results and validation
-  results: {,
+  results: {
   success: boolean;
   error_message?: string;
-  validation_results: {,
-  checksum_verified: boolean;,
+  validation_results: {
+  checksum_verified: boolean;
   restore_test_passed: boolean;
   integrity_check_passed: boolean;
 };
-    backup_location: string;,
+    backup_location: string;
   backup_files: string;
   };
   // Resource usage
-  resource_usage: {,
+  resource_usage: {
   cpu_usage_avg: number;
-  memory_usage_peak: number;,
+  memory_usage_peak: number;
   network_usage_mbps: number;
   disk_io_mbps: number;
 };
-  triggered_by: 'schedule' | 'manual' | 'event' | 'disaster_recovery';,
+  triggered_by: 'schedule' | 'manual' | 'event' | 'disaster_recovery';
   execution_log: string;
 }
 export interface DisasterRecoveryEvent {
-  id: string;,
+  id: string;
   plan_id: string;
   // Event classification
-  disaster_type: DisasterRecoveryPlan['classification']['disaster_type'];,
+  disaster_type: DisasterRecoveryPlan['classification']['disaster_type'];
   severity: DisasterRecoveryPlan['classification']['severity_level'];
   scope: DisasterRecoveryPlan['classification']['scope'];
   // Event timeline
@@ -299,108 +299,108 @@ export interface DisasterRecoveryEvent {
   recovery_completed_at?: number;
   business_resumed_at?: number;
   // Impact assessment
-  impact: {,
-  affected_systems: string;,
+  impact: {
+  affected_systems: string;
   affected_users: number;
-  affected_regions: string;,
+  affected_regions: string;
   data_loss_estimate: number; // bytes,
   revenue_impact: number; // currency amount,
-  compliance_impact: string;,
-  reputation_impact: 'minimal' | 'moderate' | 'significant' | 'severe';
-};
+  compliance_impact: string;
+  reputation_impact: 'minimal' | 'moderate' | 'significant' | 'severe'
+  };
   // Recovery execution
-  execution: {,
+  execution: {
   strategy_used: string; // RecoveryStrategy ID,
-  procedures_executed: string;,
+  procedures_executed: string;
   timeline: RecoveryTimelineEntry;
-  resources_utilized: {,
-  personnel: string;,
+  resources_utilized: {
+  personnel: string;
   infrastructure: string;
   external_services: string;
 };
   };
   // Results and metrics
-  results: {,
+  results: {
   recovery_successful: boolean;
   actual_rto: number; // milliseconds,
   actual_rpo: number; // milliseconds,
   service_level_achieved: number; // percentage,
-  data_recovery_percentage: number;,
+  data_recovery_percentage: number;
   systems_recovered: number;
   systems_total: number;
 };
   // Lessons learned and improvements
-  analysis: {,
+  analysis: {
   root_cause: string;
-  contributing_factors: string;,
+  contributing_factors: string;
   what_worked_well: string;
-  areas_for_improvement: string;,
+  areas_for_improvement: string;
   action_items: ActionItem;
   plan_updates_required: string;
 };
   // Communication and notifications
-  communications: {,
+  communications: {
   stakeholders_notified: string;
-  public_communications: string;,
+  public_communications: string;
   regulatory_notifications: string;
   media_statements: string;
 };
-  status: 'active' | 'resolved' | 'under_investigation';,
+  status: 'active' | 'resolved' | 'under_investigation';
   incident_commander: string;
   created_by: string;
 }
 export interface RecoveryTimelineEntry {
-  id: string;,
+  id: string;
   timestamp: number;
-  phase: 'detection' | 'assessment' | 'declaration' | 'activation' | 'recovery' | 'validation' | 'communication' | 'closure';,
+  phase: 'detection' | 'assessment' | 'declaration' | 'activation' | 'recovery' | 'validation' | 'communication' | 'closure';
   action: string;
-  responsible_party: string;,
+  responsible_party: string;
   status: 'started' | 'completed' | 'failed' | 'skipped';
   duration?: number;
   details: Record<string, any>;
   notes?: string;
 }
 export interface TestResult {
-  id: string;,
+  id: string;
   plan_id: string;
-  test_date: number;,
+  test_date: number;
   test_type: 'tabletop' | 'walkthrough' | 'simulation' | 'full_test' | 'partial_test';
   // Test configuration
-  scope: {,
-  strategies_tested: string;,
+  scope: {
+  strategies_tested: string;
   procedures_tested: string;
-  systems_involved: string;,
+  systems_involved: string;
   scenarios_tested: string;
 };
   // Test execution
-  execution: {,
+  execution: {
   duration: number;
-  participants: string;,
+  participants: string;
   test_lead: string;
-  environment: 'production' | 'staging' | 'test' | 'isolated';
-};
+  environment: 'production' | 'staging' | 'test' | 'isolated'
+  };
   // Results
-  results: {,
+  results: {
   overall_success: boolean;
-  rto_achieved: boolean;,
+  rto_achieved: boolean;
   rpo_achieved: boolean;
-  procedures_successful: number;,
+  procedures_successful: number;
   procedures_failed: number;
-  issues_identified: Issue;,
+  issues_identified: Issue;
   improvements_identified: string;
 };
   // Metrics
-  metrics: {,
+  metrics: {
   actual_rto: number;
-  actual_rpo: number;,
+  actual_rpo: number;
   data_recovery_percentage: number;
-  system_recovery_percentage: number;,
+  system_recovery_percentage: number;
   communication_effectiveness: number; // 1-10 scale,
 };
   // Follow-up
-  follow_up: {,
+  follow_up: {
   action_items: ActionItem;
-  plan_updates: string;,
+  plan_updates: string;
   retesting_required: boolean;
   next_test_date?: number;
 };
@@ -408,60 +408,60 @@ export interface TestResult {
   conducted_by: string;
 }
 export interface NotificationTreeNode {
-  id: string;,
+  id: string;
   name: string;
-  role: string;,
+  role: string;
   contact_methods: {;
   primary: { type: 'email' | 'sms' | 'phone'; value: string };
     secondary?: { type: 'email' | 'sms' | 'phone'; value: string };
     backup?: { type: 'email' | 'sms' | 'phone'; value: string };
   };
-  notification_order: number;,
+  notification_order: number;
   escalation_timeout: number; // milliseconds - escalate if no response
-  decision_authority: boolean;,
+  decision_authority: boolean;
   geographic_location: string;
   availability_schedule?: {
-    timezone: string;,
+    timezone: string;
   business_hours: { start: string; end: string };
     on_call_schedule?: string;
   };
 }
 export interface EscalationProcedure {
-  id: string;,
+  id: string;
   name: string;
-  trigger_conditions: string;,
-  escalation_levels: {,
-  level: number;,
+  trigger_conditions: string;
+  escalation_levels: {
+  level: number;
   timeout: number; // milliseconds,
-  recipients: string;,
+  recipients: string;
   communication_method: 'email' | 'sms' | 'phone' | 'all';
   authorization_required: boolean;
 }[];
   max_escalation_level: number;
 }
 export interface StakeholderGroup {
-  id: string;,
+  id: string;
   name: string;
-  type: 'internal' | 'external' | 'regulatory' | 'customer' | 'partner' | 'media';,
+  type: 'internal' | 'external' | 'regulatory' | 'customer' | 'partner' | 'media';
   members: string;
-  communication_preferences: {,
-  frequency: 'immediate' | 'hourly' | 'daily' | 'milestone';,
+  communication_preferences: {
+  frequency: 'immediate' | 'hourly' | 'daily' | 'milestone';
   methods: ('email' | 'sms' | 'phone' | 'portal' | 'public_announcement')[];
-  information_level: 'summary' | 'detailed' | 'technical';
-};
+  information_level: 'summary' | 'detailed' | 'technical'
+  };
   notification_triggers: string;
 }
 export interface ExternalDependency {
-  id: string;,
+  id: string;
   name: string;
-  type: 'vendor' | 'partner' | 'cloud_provider' | 'utility' | 'government' | 'third_party_service';,
-  contact_information: {,
-  primary_contact: string;,
+  type: 'vendor' | 'partner' | 'cloud_provider' | 'utility' | 'government' | 'third_party_service';
+  contact_information: {
+  primary_contact: string;
   support_phone: string;
   emergency_contact: string;
   account_manager?: string;
 };
-  dependency_level: 'critical' | 'important' | 'optional';,
+  dependency_level: 'critical' | 'important' | 'optional';
   sla_commitments: {;
   availability: number; // percentage,
   response_time: number; // milliseconds,
@@ -469,32 +469,32 @@ export interface ExternalDependency {
 };
 }
 export interface ActionItem {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   assigned_to: string;
-  due_date: number;,
+  due_date: number;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled';,
+  status: 'open' | 'in_progress' | 'completed' | 'cancelled';
   category: 'process' | 'technology' | 'training' | 'documentation' | 'testing';
-  estimated_effort: string;,
+  estimated_effort: string;
   completion_criteria: string;
   created_at: number;
   completed_at?: number;
 }
 export interface Issue {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  category: 'procedure' | 'technology' | 'communication' | 'resource' | 'training';,
+  category: 'procedure' | 'technology' | 'communication' | 'resource' | 'training';
   impact: string;
   root_cause?: string;
   recommendations: string;
 }
 export interface DisasterRecoveryMetrics {
   // Availability and reliability
-  availability: {,
+  availability: {
   system_uptime: number; // percentage,
   planned_downtime: number; // minutes,
   unplanned_downtime: number; // minutes,
@@ -502,7 +502,7 @@ export interface DisasterRecoveryMetrics {
   mttr: number; // mean time to recovery (minutes),
 };
   // Backup performance
-  backup_performance: {,
+  backup_performance: {
   backup_success_rate: number; // percentage
     average_backup_duration: number; // minutes,
   backup_size_trend: { date: string; size_gb: number }[];
@@ -510,94 +510,94 @@ export interface DisasterRecoveryMetrics {
   data_corruption_incidents: number;
   };
   // Recovery readiness
-  recovery_readiness: {,
+  recovery_readiness: {
   plans_current: number;
-    plans_total: number;,
+    plans_total: number;
   last_test_results: { plan_id: string; success: boolean; date: number }[];
     rto_compliance: number; // percentage,
   rpo_compliance: number; // percentage
     staff_training_completion: number; // percentage
   };
   // Disaster recovery events
-  dr_events: {,
+  dr_events: {
   total_events: number;
   events_by_type: Record<string, number>;
   events_by_severity: Record<string, number>;
-  successful_recoveries: number;,
+  successful_recoveries: number;
   average_recovery_time: number; // minutes,
   total_downtime: number; // minutes,
 };
   // Cost and resource utilization
-  cost_metrics: {,
+  cost_metrics: {
   backup_storage_cost: number;
-  dr_infrastructure_cost: number;,
+  dr_infrastructure_cost: number;
   testing_cost: number;
-  total_dr_investment: number;,
+  total_dr_investment: number;
   cost_per_gb_protected: number;
   roi_calculation: number;
 };
-  time_range: {,
+  time_range: {
   start: number;
   end: number;
 };
 }
 export interface DisasterRecoveryConfig {
   // Global settings
-  enabled: boolean;,
+  enabled: boolean;
   default_rto: number; // milliseconds,
   default_rpo: number; // milliseconds,
   // Backup configuration
-  backup: {,
-  enabled: boolean;,
+  backup: {
+  enabled: boolean;
   default_retention_days: number;
-  encryption_required: boolean;,
+  encryption_required: boolean;
   compression_enabled: boolean;
-  offsite_replication: boolean;,
+  offsite_replication: boolean;
   cloud_backup_enabled: boolean;
   backup_verification_enabled: boolean;
 };
   // Testing and validation
-  testing: {,
+  testing: {
   mandatory_testing: boolean;
-  test_frequency_days: number;,
+  test_frequency_days: number;
   automated_testing: boolean;
-  test_data_anonymization: boolean;,
+  test_data_anonymization: boolean;
   test_environment_isolation: boolean;
 };
   // Geographic distribution
-  geographic: {,
+  geographic: {
   multi_region_backup: boolean;
-  preferred_backup_regions: string;,
+  preferred_backup_regions: string;
   cross_region_replication: boolean;
   disaster_declaration_threshold: number; // number of affected regions,
 };
   // Communication and alerting
-  communication: {,
+  communication: {
   enabled: boolean;
-  emergency_notification_channels: string;,
+  emergency_notification_channels: string;
   stakeholder_notification_enabled: boolean;
-  public_communication_approval_required: boolean;,
+  public_communication_approval_required: boolean;
   regulatory_notification_required: boolean;
 };
   // Compliance and audit
-  compliance: {,
+  compliance: {
   audit_all_activities: boolean;
-  compliance_frameworks: string;,
+  compliance_frameworks: string;
   regulatory_reporting_required: boolean;
-  documentation_retention_years: number;,
+  documentation_retention_years: number;
   immutable_audit_trail: boolean;
 };
   // Resource management
-  resources: {,
+  resources: {
   dedicated_dr_team: boolean;
-  cross_training_required: boolean;,
+  cross_training_required: boolean;
   external_vendor_support: boolean;
   resource_reservation_percentage: number;
 };
   // Security
-  security: {,
+  security: {
   encrypt_backups: boolean;
-  encrypt_dr_communications: boolean;,
+  encrypt_dr_communications: boolean;
   require_multi_factor_auth: boolean;
   background_check_required: boolean;
 };
@@ -628,7 +628,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   enabled: true,
   default_rto: 4 * 60 * 60 * 1000, // 4 hours,
   default_rpo: 1 * 60 * 60 * 1000, // 1 hour,
-  backup: {,
+  backup: {
   enabled: true,
   default_retention_days: 90,
   encryption_required: true,
@@ -637,40 +637,40 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   cloud_backup_enabled: true,
   backup_verification_enabled: true,
 },
-  testing: {,
+  testing: {
   mandatory_testing: true,
   test_frequency_days: 90, // Quarterly,
   automated_testing: true,
   test_data_anonymization: true,
   test_environment_isolation: true,
 },
-  geographic: {,
+  geographic: {
   multi_region_backup: true,
   preferred_backup_regions: ['us-east-1', 'us-west-2', 'eu-west-1'],
   cross_region_replication: true,
   disaster_declaration_threshold: 2,
 },
-  communication: {,
+  communication: {
   enabled: true,
   emergency_notification_channels: ['email', 'sms', 'phone'],
   stakeholder_notification_enabled: true,
   public_communication_approval_required: true,
   regulatory_notification_required: true,
 },
-  compliance: {,
+  compliance: {
   audit_all_activities: true,
   compliance_frameworks: ['SOX', 'GDPR', 'HIPAA'],
   regulatory_reporting_required: true,
   documentation_retention_years: 7,
   immutable_audit_trail: true,
 },
-  resources: {,
+  resources: {
   dedicated_dr_team: true,
   cross_training_required: true,
   external_vendor_support: true,
   resource_reservation_percentage: 25,
 },
-  security: {,
+  security: {
   encrypt_backups: true,
   encrypt_dr_communications: true,
   require_multi_factor_auth: true,
@@ -744,13 +744,13 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   job_id: jobId,
   start_time: Date.now(),
   status: 'running',
-  progress: {,
+  progress: {
   total_items: 0,
   processed_items: 0,
   failed_items: 0,
   percentage_complete: 0,
 },
-  metrics: {,
+  metrics: {
   data_size_bytes: 0,
   compressed_size_bytes: 0,
   compression_ratio: 0,
@@ -758,9 +758,9 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   checksum: '',
   file_count: 0,
 },
-  results: {,
+  results: {
   success: false,
-  validation_results: {,
+  validation_results: {
   checksum_verified: false,
   restore_test_passed: false,
   integrity_check_passed: false,
@@ -768,7 +768,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   backup_location: '',
         backup_files: [];
   },
-  resource_usage: {,
+  resource_usage: {
   cpu_usage_avg: 0,
   memory_usage_peak: 0,
   network_usage_mbps: 0,
@@ -787,7 +787,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   /**
    * Declare a disaster and initiate recovery
    */
-  async declareDisaster(planId: string,)
+  async declareDisaster(planId: string)
     disasterType: DisasterRecoveryPlan['classification']['disaster_type'],
     severity: DisasterRecoveryPlan['classification']['severity_level'],
     description: string,
@@ -805,7 +805,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   scope: plan.classification.scope,
   detected_at: now,
   declared_at: now,
-  impact: {,
+  impact: {
   affected_systems: [],
   affected_users: 0,
   affected_regions: [],
@@ -814,16 +814,16 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   compliance_impact: [],
   reputation_impact: 'minimal',
 },
-  execution: {,
+  execution: {
   strategy_used: '',
   procedures_executed: [],
   timeline: [],
-  resources_utilized: {,
+  resources_utilized: {
   personnel: [],
   infrastructure: [],
   external_services: [],
 },
-  results: {,
+  results: {
   recovery_successful: false,
   actual_rto: 0,
   actual_rpo: 0,
@@ -832,7 +832,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   systems_recovered: 0,
   systems_total: 0,
 },
-  analysis: {,
+  analysis: {
   root_cause: description,
   contributing_factors: [],
   what_worked_well: [],
@@ -840,7 +840,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   action_items: [],
   plan_updates_required: [],
 },
-  communications: {,
+  communications: {
   stakeholders_notified: [],
   public_communications: [],
   regulatory_notifications: [],
@@ -862,7 +862,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   /**
    * Execute disaster recovery test
    */
-  async executeRecoveryTest(planId: string,)
+  async executeRecoveryTest(planId: string)
     testType: TestResult['test_type'],
     scope: Partial<TestResult['scope']>,
     testLead: string): Promise<string> {,
@@ -892,20 +892,20 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   plan_id: planId,
   test_date: startTime,
   test_type: testType,
-  scope: {,
+  scope: {
   strategies_tested: [],
   procedures_tested: [],
   systems_involved: [],
   scenarios_tested: [],
   ...scope
 },
-  execution: {,
+  execution: {
   duration: Date.now() - startTime,
   participants: [testLead],
   test_lead: testLead,
   environment: 'test',
 },
-  results: {,
+  results: {
   overall_success: false,
   rto_achieved: false,
   rpo_achieved: false,
@@ -922,14 +922,14 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
 }],
           improvements_identified: [];
   },
-  metrics: {,
+  metrics: {
   actual_rto: 0,
   actual_rpo: 0,
   data_recovery_percentage: 0,
   system_recovery_percentage: 0,
   communication_effectiveness: 0,
 },
-  follow_up: {,
+  follow_up: {
   action_items: [],
   plan_updates: [],
   retesting_required: true,
@@ -951,13 +951,13 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
    * Get system status
    */
   getSystemStatus(): {
-  recovery_plans: number;,
+  recovery_plans: number;
   active_backup_jobs: number;
-  running_backups: number;,
+  running_backups: number;
   active_recoveries: number;
-  recent_tests: TestResult;,
+  recent_tests: TestResult;
   backup_health: 'healthy' | 'degraded' | 'critical';
-  last_successful_backup: number;,
+  last_successful_backup: number;
   next_scheduled_test: number;
   const runningBackups = Array.from(this.activeExecutions.values()).filter(e => e.status === 'running').length;
   const recentTests = Array.from(this.testResults.values());
@@ -970,8 +970,8 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   : 1;
   let backupHealth: 'healthy' | 'degraded' | 'critical' = 'healthy';
   if (successRate < 0.5) {
-  backupHealth = 'critical';
-} else if (successRate < 0.8) {
+  backupHealth = 'critical'
+  } else if (successRate < 0.8) {
   backupHealth = 'degraded';
   const lastSuccessfulBackup = recentExecutions;
   .filter(e => e.results.success)
@@ -1231,7 +1231,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
     event.results.data_recovery_percentage = 100;
     event.results.systems_recovered = 8;
     event.results.systems_total = 10;
-  private async performRecoveryTest(plan: DisasterRecoveryPlan,)
+  private async performRecoveryTest(plan: DisasterRecoveryPlan)
     testType: TestResult['test_type'],
     scope: Partial<TestResult['scope']>,
     testLead: string): Promise<TestResult> {,
@@ -1259,20 +1259,20 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   plan_id: plan.id,
   test_date: startTime,
   test_type: testType,
-  scope: {,
+  scope: {
   strategies_tested: plan.strategies.map(s => s.id),
   procedures_tested: plan.strategies.flatMap(s => s.procedures.map(p => p.id)),
   systems_involved: ['security_analytics', 'monitoring', 'alerting'],
   scenarios_tested: [plan.classification.disaster_type],
   ...scope
 },
-  execution: {,
+  execution: {
   duration,
   participants: [testLead],
   test_lead: testLead,
   environment: testType === 'full_test' ? 'production' : 'test',
 },
-  results: {,
+  results: {
   overall_success: success,
   rto_achieved: success,
   rpo_achieved: success,
@@ -1281,14 +1281,14 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   issues_identified: issues,
   improvements_identified: success ? [] : ['Improve procedure documentation', 'Enhance automation'],
 },
-  metrics: {,
+  metrics: {
   actual_rto: success ? plan.objectives.recovery_time_objective * 0.8 : plan.objectives.recovery_time_objective * 1.2,
   actual_rpo: success ? plan.objectives.recovery_point_objective * 0.5 : plan.objectives.recovery_point_objective * 1.5,
   data_recovery_percentage: success ? 100 : 85,
   system_recovery_percentage: success ? 100 : 75,
   communication_effectiveness: Math.floor(Math.random() * 3) + 8 // 8-10 scale,
 },
-  follow_up: {,
+  follow_up: {
   action_items: issues.map(issue => ({;)
   id: this.generateActionItemId(),
           title: `Resolve: ${issue.title}`}
@@ -1547,13 +1547,13 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   name: 'Security Analytics System Failure',
   description: 'Recovery plan for complete security analytics system failure',
   version: '1.0',
-  classification: {,
+  classification: {
   disaster_type: 'hardware_failure' as const,
   severity_level: 'critical' as const,
   scope: 'single_system' as const,
   impact_category: 'availability' as const,
 },
-  objectives: {,
+  objectives: {
   recovery_time_objective: 4 * 60 * 60 * 1000, // 4 hours,
   recovery_point_objective: 1 * 60 * 60 * 1000, // 1 hour,
   maximum_tolerable_outage: 8 * 60 * 60 * 1000, // 8 hours,
@@ -1567,7 +1567,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   priority: 1,
   type: 'hot_standby' as const,
   automation_level: 'automatic' as const,
-  target: {,
+  target: {
   location: 'DR Site 1',
   datacenter: 'DC-DR-01',
   region: 'us-west-2',
@@ -1580,7 +1580,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   description: 'Bring hot standby system online',
   order: 1,
   type: 'activation' as const,
-  automation: {,
+  automation: {
   automated: true,
   script_path: '/scripts/activate_standby.sh',
   approval_required: false,
@@ -1588,31 +1588,31 @@ Status Dashboard: /disaster-recovery/events/${event.id}
 },
   dependencies: [],
                 parallel_execution: false,
-                validation: {,
+                validation: {
   success_criteria: ['System responds to health check', 'Data synchronization verified'],
   manual_verification: false,
   rollback_on_failure: true,
 },
   estimated_duration: 5 * 60 * 1000,
                 success_rate: 95],
-            resources: {,
-  infrastructure: {,
+            resources: {
+  infrastructure: {
   compute_instances: 10,
   storage_gb: 10000,
   network_bandwidth_mbps: 1000,
   database_instances: 5,
 },
-  personnel: {,
+  personnel: {
   required_roles: ['System Administrator', 'Security Analyst'],
   minimum_staff: 3,
   on_call_requirements: true,
 },
-  estimated_cost: {,
+  estimated_cost: {
   setup_cost: 50000,
   monthly_cost: 10000,
   activation_cost: 1000,
 },
-  success_criteria: {,
+  success_criteria: {
   rto_compliance: true,
   rpo_compliance: true,
   data_integrity_verified: true,
@@ -1622,9 +1622,9 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   created_at: Date.now(),
             last_tested: 0,
             test_success_rate: 90],
-        backup_requirements: {,
+        backup_requirements: {
   backup_frequency: 'hourly' as const,
-  retention_policy: {,
+  retention_policy: {
   daily_backups: 7,
   weekly_backups: 4,
   monthly_backups: 12,
@@ -1637,7 +1637,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           cloud_storage: true,
           geographic_distribution: ['us-east-1', 'us-west-2']
   },
-  testing: {,
+  testing: {
   test_frequency: 'quarterly' as const,
   last_test_date: 0,
   next_test_date: Date.now() + 90 * 24 * 60 * 60 * 1000,
@@ -1645,13 +1645,13 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   automated_testing: true,
   test_scenarios: ['Complete system failure', 'Database corruption', 'Network outage'],
 },
-  communication: {,
+  communication: {
   notification_tree: [,
             {
               id: 'nt_1',
               name: 'Security Operations Manager',
               role: 'Incident Commander',
-              contact_methods: {,
+              contact_methods: {
   primary: { type: 'email', value: 'security-ops@company.com' },
                 secondary: { type: 'sms', value: '+1-555-0101' }
   },
@@ -1663,13 +1663,13 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           escalation_procedures: [],
           stakeholder_groups: [];
   },
-  dependencies: {,
+  dependencies: {
   required_systems: ['Primary Database', 'Network Infrastructure'],
   required_personnel: ['Security Team', 'Infrastructure Team'],
   required_resources: ['Backup Storage', 'DR Site Access'],
   external_dependencies: [],
 },
-  compliance: {,
+  compliance: {
   frameworks: ['SOX', 'GDPR'],
   regulatory_requirements: ['Data Protection', 'Business Continuity'],
   audit_requirements: ['Annual DR Test', 'Quarterly Plan Review'],
@@ -1685,53 +1685,53 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   name: 'Security Events Backup',
   description: 'Daily backup of security events and alerts',
   type: 'incremental' as const,
-  source: {,
+  source: {
   system_id: 'security_analytics',
   data_types: ['security_events', 'audit_logs'] as const,
   include_patterns: ['*.log', '*.json'],
   exclude_patterns: ['*.tmp', '*.cache'],
 },
-  destination: {,
+  destination: {
   primary_location: '/backups/security_events',
   secondary_location: '/remote_backups/security_events',
   storage_type: 'object_storage' as const,
-  encryption: {,
+  encryption: {
   enabled: true,
   algorithm: 'AES-256',
   key_management: 'cloud_kms' as const,
 },
-  compression: {,
+  compression: {
   enabled: true,
   algorithm: 'zstd' as const,
   level: 6,
 },
-  schedule: {,
+  schedule: {
   enabled: true,
   frequency: 'daily' as const,
-  time_window: {,
+  time_window: {
   start: '02:00',
   end: '06:00',
   timezone: 'UTC',
 },
-  retry_policy: {,
+  retry_policy: {
   max_retries: 3,
   retry_delay: 30 * 60 * 1000,
   backoff_strategy: 'exponential' as const,
 },
-  performance: {,
+  performance: {
   max_bandwidth_mbps: 100,
   max_cpu_usage: 50,
   max_memory_usage: 60,
   parallelism: 4,
   throttling: true,
 },
-  validation: {,
+  validation: {
   verify_after_backup: true,
   checksum_validation: true,
   test_restore: true,
   test_restore_frequency: 'weekly' as const,
 },
-  retention: {,
+  retention: {
   keep_daily: 30,
   keep_weekly: 12,
   keep_monthly: 24,
@@ -1745,21 +1745,21 @@ Status Dashboard: /disaster-recovery/events/${event.id}
     console.log(`💾 Loaded ${defaultJobs.length} default backup jobs`);}
   private initializeMetrics(): DisasterRecoveryMetrics {
   return {
-  availability: {,
+  availability: {
   system_uptime: 99.9,
   planned_downtime: 0,
   unplanned_downtime: 0,
   mtbf: 8760, // hours,
   mttr: 15 // minutes,
 },
-  backup_performance: {,
+  backup_performance: {
   backup_success_rate: 100,
   average_backup_duration: 30,
   backup_size_trend: [],
   restore_test_success_rate: 95,
   data_corruption_incidents: 0,
 },
-  recovery_readiness: {,
+  recovery_readiness: {
   plans_current: 0,
   plans_total: 0,
   last_test_results: [],
@@ -1767,7 +1767,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   rpo_compliance: 100,
   staff_training_completion: 85,
 },
-  dr_events: {,
+  dr_events: {
   total_events: 0,
         events_by_type: {},
         events_by_severity: {},
@@ -1775,7 +1775,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
         average_recovery_time: 0,
         total_downtime: 0;
   },
-  cost_metrics: {,
+  cost_metrics: {
   backup_storage_cost: 5000,
   dr_infrastructure_cost: 25000,
   testing_cost: 2000,
@@ -1783,7 +1783,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   cost_per_gb_protected: 0.10,
   roi_calculation: 3.2,
 },
-  time_range: {,
+  time_range: {
   start: Date.now(),
   end: Date.now(),
 };

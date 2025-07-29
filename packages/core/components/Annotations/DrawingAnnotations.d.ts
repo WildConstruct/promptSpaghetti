@@ -22,7 +22,7 @@ export interface DrawingAnnotation {
     text?: string;
     transform?: {
         rotation: number;
-        scale: {,
+        scale: {
             x: number;
             y: number;
         };

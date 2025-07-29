@@ -43,7 +43,7 @@ export declare class RandomizerSystem {
      */
     getHistory(): {
         entries: import("./parameters/parameter-manager").ParameterHistory[];
-        stats: {,
+        stats: {
             totalGenerations: number;
             successRate: number;
             averageGenerationTime: number;

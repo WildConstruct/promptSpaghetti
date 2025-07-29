@@ -18,13 +18,13 @@ export interface UserProfile {
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
     viewedContent: Set<string>;
     completedTours: Set<string>;
-    preferences: {,
+    preferences: {
         showFilmTerminology: boolean;
         autoTriggerHelp: boolean;
         preferredComplexity: 'simple' | 'detailed' | 'comprehensive';
-        filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor';
-    };
-    progress: {,
+        filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor'
+  };
+    progress: {
         nodesCreated: number;
         connectionsBuilt: number;
         previewsGenerated: number;
@@ -38,7 +38,7 @@ export interface LearningPath {
     name: string;
     description: string;
     targetRole: string;
-    steps: {,
+    steps: {
         contentId: string;
         requiredProgress?: Record<string, number>;
         unlockConditions?: string[];

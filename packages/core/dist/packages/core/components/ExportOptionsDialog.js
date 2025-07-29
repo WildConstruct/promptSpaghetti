@@ -206,25 +206,29 @@ _jsxs("div", { style: { marginBottom: 20 }, children: [_jsx("label", { style: {
                         justifyContent: 'space-between',
                         alignItems: 'flex-start',
                         marginBottom: 4,
-                    }, children: [_jsx("div", { style: { fontSize: 14, fontWeight: 500 }, children: format.name }), _jsx("div", { style: ({
+                    }, children: [_jsx("div", { style: { fontSize: 14, fontWeight: 500 }, children: format.name }), _jsx("div", { style: {
                                 fontSize: 10,
                                 padding: '2px 6px',
                                 borderRadius: 4,
-                                background: {},
-                                text: '#e5e7eb',
-                                data: '#dbeafe',
-                                film: '#fef3c7',
-                                vfx: '#f3e8ff',
-                                analysis: '#ecfdf5',
-                            }[format.category],
-                                color) }), ": ", (,
-                            text), ": '#374151', data: '#1e40af', film: '#92400e', vfx: '#7c3aed', analysis: '#065f46', }[format.category] }}>", format.category.toUpperCase()] })] }), _jsx("div", { style: {
-                fontSize: 11,
-                color: professionalColors.text.secondary,
-                lineHeight: 1.4,
-            }, children: format.description })] });
-div >
-;
+                                background: {
+                                    text: '#e5e7eb',
+                                    data: '#dbeafe',
+                                    film: '#fef3c7',
+                                    vfx: '#f3e8ff',
+                                    analysis: '#ecfdf5',
+                                }[format.category],
+                                color: {
+                                    text: '#374151',
+                                    data: '#1e40af',
+                                    film: '#92400e',
+                                    vfx: '#7c3aed',
+                                    analysis: '#065f46',
+                                }[format.category]
+                            }, children: format.category.toUpperCase() })] }), _jsx("div", { style: {
+                        fontSize: 11,
+                        color: professionalColors.text.secondary,
+                        lineHeight: 1.4,
+                    }, children: format.description })] }), "))}"] });
 div >
     { /* Format-specific Options */};
 {

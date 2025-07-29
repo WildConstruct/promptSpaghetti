@@ -14,19 +14,19 @@ import {
 } from '../types/DataClassification';
 
 export interface InheritanceRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   priority: number;
-  enabled: boolean;,
+  enabled: boolean;
   conditions: InheritanceCondition;
-  action: InheritanceAction;,
+  action: InheritanceAction;
   overridePolicy: OverridePolicy;
 }
 export interface InheritanceCondition {
-  type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';,
+  type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
   field: string;
-  operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN';,
+  operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN';
   value: string | string;
   required: boolean;
 }
@@ -37,26 +37,26 @@ export interface InheritanceAction {
   rationale: string;
 }
 export interface OverridePolicy {
-  allowManualOverride: boolean;,
+  allowManualOverride: boolean;
   requireApprovalForOverride: boolean;
   maxOverrideLevel?: DataClassificationLevel;
   overrideReasons: string;
 }
 export interface DataRelationship {
-  parentId: string;,
+  parentId: string;
   childId: string;
-  relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES';,
+  relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES';
   strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
   metadata?: Record<string, any>;
 }
 export interface InheritanceContext {
-  parentElement: {,
-  id: string;,
+  parentElement: {
+  id: string;
   type: string;
   classification?: DataClassification;
   metadata?: Record<string, any>;
 };
-  childElement: {,
+  childElement: {
   id: string;
   type: string;
   existingClassification?: DataClassification;
@@ -66,17 +66,17 @@ export interface InheritanceContext {
   businessContext?: ClassificationContext;
 }
 export interface InheritanceResult {
-  elementId: string;,
+  elementId: string;
   inheritedClassification: DataClassification;
-  appliedRules: AppliedRule;,
+  appliedRules: AppliedRule;
   confidence: number;
-  requiresReview: boolean;,
+  requiresReview: boolean;
   validationResult: ValidationResult;
 }
 export interface AppliedRule {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  priority: number;,
+  priority: number;
   rationale: string;
   confidence: number;
   /**
@@ -113,11 +113,11 @@ export class ClassificationInheritanceService {
   operator: 'IN',
   value: ['STRONG', 'ABSOLUTE'],
   required: true],
-  action: {,
+  action: {
   type: 'INHERIT_EXACT',
   rationale: 'Direct containment requires same classification level',
 },
-  overridePolicy: {,
+  overridePolicy: {
   allowManualOverride: true,
   requireApprovalForOverride: false,
   overrideReasons: ['Business justification', 'Technical limitation', 'Regulatory exception'],
@@ -135,11 +135,11 @@ export class ClassificationInheritanceService {
   operator: 'EQUALS',
   value: 'DERIVES_FROM',
   required: true],
-  action: {,
+  action: {
   type: 'APPLY_MINIMUM',
   rationale: 'Derived data should be at least as protected as source data',
 },
-  overridePolicy: {,
+  overridePolicy: {
   allowManualOverride: true,
   requireApprovalForOverride: true,
   maxOverrideLevel: 'INTERNAL',
@@ -165,12 +165,12 @@ export class ClassificationInheritanceService {
   operator: 'CONTAINS',
   value: 'aggregated',
   required: false],
-  action: {,
+  action: {
   type: 'INHERIT_REDUCED',
   elevationLevel: -1,
   rationale: 'Aggregation may reduce individual data sensitivity',
 },
-  overridePolicy: {,
+  overridePolicy: {
   allowManualOverride: true,
   requireApprovalForOverride: true,
   overrideReasons: ['Aggregation maintains individual identifiability', 'Small sample size'],
@@ -195,12 +195,12 @@ export class ClassificationInheritanceService {
   operator: 'IN',
   value: ['production', 'secure'],
   required: false],
-  action: {,
+  action: {
   type: 'INHERIT_ELEVATED',
   elevationLevel: 1,
   rationale: 'Processing in production requires elevated protection',
 },
-  overridePolicy: {,
+  overridePolicy: {
   allowManualOverride: false,
   requireApprovalForOverride: true,
   overrideReasons: ['Approved security exception'],
@@ -218,12 +218,12 @@ export class ClassificationInheritanceService {
   operator: 'EQUALS',
   value: 'REFERENCES',
   required: true],
-  action: {,
+  action: {
   type: 'APPLY_MINIMUM',
   customClassification: 'INTERNAL',
   rationale: 'Referenced data requires minimum INTERNAL classification',
 },
-  overridePolicy: {,
+  overridePolicy: {
   allowManualOverride: true,
   requireApprovalForOverride: false,
   maxOverrideLevel: 'PUBLIC',
@@ -301,7 +301,7 @@ export class ClassificationInheritanceService {
       classificationDate: new Date(),
       reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       approvals: [],
-      metadata: {,
+      metadata: {
   businessJustification: 'Classification inherited from parent element',
   riskAssessment: 'Risk assessment inherited and may require review',
   regulatoryRequirements: context.businessContext?.regulatoryScope || [],
@@ -371,9 +371,9 @@ export class ClassificationInheritanceService {
   /**
    * Apply a specific rule to determine classification
    */
-  private applyRule(rule: InheritanceRule, context: InheritanceContext): {,
+  private applyRule(rule: InheritanceRule, context: InheritanceContext): {
   classification: DataClassificationLevel | null;
-    rationale: string;,
+    rationale: string;
   confidence: number;
     requiresReview: boolean;
     const parentClassification = context.parentElement.classification?.classification;

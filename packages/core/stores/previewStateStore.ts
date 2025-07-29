@@ -18,7 +18,7 @@ export interface PreviewResult {
   executionTimeMs?: number;
   executionPath?: Array<{ nodeId: string; output: unknown }>;
   weightChoices?: Array<{
-  nodeId: string;,
+  nodeId: string;
   selectedOption: unknown;
   availableOptions: unknown;
   weights?: number;
@@ -28,96 +28,96 @@ export interface PreviewResult {
   lockedAt?: number;
   lockedNote?: string;
   debugInfo?: {
-    nodeExecutionOrder: string;,
+    nodeExecutionOrder: string;
   randomChoices: Array<{ nodeId: string; choice: unknown }>;
     performanceBreakdown: Record<string, number>;
     memoryUsage?: { used: number; total: number };
   };
 }
 export interface PreviewCache {
-  graphHash: string;,
+  graphHash: string;
   timestamp: number;
-  results: PreviewResult;,
-  performanceStats: {,
-  totalTime: number;,
+  results: PreviewResult;
+  performanceStats: {
+  totalTime: number;
   averageTime: number;
 } | null;
 }
 export interface PreviewPerformanceMetrics {
-  totalExecutionTime: number;,
+  totalExecutionTime: number;
   averageExecutionTime: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   lastExecutionCount: number;
   peakMemoryUsage?: number;
   networkLatency?: number;
 }
 export interface PreviewStateStore {
   // Current preview state
-  isLoading: boolean;,
+  isLoading: boolean;
   error: string | null;
-  results: PreviewResult;,
+  results: PreviewResult;
   aggregateError: string | null;
-  performanceStats: {,
-  totalTime: number;,
+  performanceStats: {
+  totalTime: number;
   averageTime: number;
 } | null;
   // Real-time sync state
-  lastGraphHash: string | null;,
+  lastGraphHash: string | null;
   lastUpdateTimestamp: number;
-  isRealTimeEnabled: boolean;,
+  isRealTimeEnabled: boolean;
   syncInterval: number; // milliseconds
   // Preview cache system
   cache: Map<string, PreviewCache>;
-  maxCacheSize: number;,
+  maxCacheSize: number;
   cacheExpirationMs: number;
   // Result management state
-  lockedResults: number;,
+  lockedResults: number;
   regeneratingResults: number;
   // Performance monitoring
-  performanceMetrics: PreviewPerformanceMetrics;,
+  performanceMetrics: PreviewPerformanceMetrics;
   performanceHistory: PreviewPerformanceMetrics;
   maxHistoryLength: number;
   // Auto-refresh configuration
-  autoRefreshEnabled: boolean;,
+  autoRefreshEnabled: boolean;
   autoRefreshInterval: number;
   autoRefreshThreshold: number; // Graph change significance threshold
   // Actions
-  setLoading: (loading: boolean) => void;,
-  setError: (error: string | null) => void;,
-  setResults: (results: PreviewResult) => void;,
-  setAggregateError: (error: string | null) => void;,
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  setResults: (results: PreviewResult) => void;
+  setAggregateError: (error: string | null) => void;
   setPerformanceStats: (stats: { totalTime: number; averageTime: number } | null) => void;
   // Real-time sync actions
-  updateGraphHash: (hash: string) => void;,
-  enableRealTimeSync: (enabled: boolean) => void;,
+  updateGraphHash: (hash: string) => void;
+  enableRealTimeSync: (enabled: boolean) => void;
   setSyncInterval: (interval: number) => void;
   // Cache management
-  getCachedResults: (graphHash: string) => PreviewCache | null;,
+  getCachedResults: (graphHash: string) => PreviewCache | null;
   setCachedResults: (),
     graphHash: string,
     results: PreviewResult,
     stats: { totalTime: number; averageTime: number }
   ) => void;
-  clearCache: () => void;,
+  clearCache: () => void;
   pruneCacheByAge: () => void;
   pruneCacheBySize: () => void;
   // Result management
   lockResult: (index: number, note?: string) => void;
-  unlockResult: (index: number) => void;,
+  unlockResult: (index: number) => void;
   setRegeneratingResult: (index: number, regenerating: boolean) => void;
   // Performance monitoring
-  updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;,
+  updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
   addPerformanceSnapshot: () => void;
   getPerformanceInsights: () => {,
   trend: 'improving' | 'degrading' | 'stable';
-  bottlenecks: string;,
+  bottlenecks: string;
   recommendations: string;
 };
   // Auto-refresh
   setAutoRefresh: (enabled: boolean, interval?: number) => void;
   shouldAutoRefresh: (changeSignificance?: number) => boolean;
   // Utility actions
-  resetState: () => void;,
+  resetState: () => void;
   getStateSnapshot: () => any;
   restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 
@@ -173,7 +173,7 @@ export // Update last update timestamp
   const totalRequests = currentMetrics.lastExecutionCount + 1;
   const cacheHits = Math.round(currentMetrics.cacheHitRate * currentMetrics.lastExecutionCount) + 1;
   set({)
-  performanceMetrics: {,
+  performanceMetrics: {
   ...currentMetrics,
   cacheHitRate: cacheHits / totalRequests,
   lastExecutionCount: totalRequests,
@@ -256,7 +256,7 @@ export // Update last update timestamp
       updatePerformanceMetrics: (newMetrics) => {,
   const state = get();
   set({)
-  performanceMetrics: {,
+  performanceMetrics: {
   ...state.performanceMetrics,
   ...newMetrics
 });

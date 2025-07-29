@@ -22,7 +22,7 @@ export declare class DatabaseConnection {
     healthCheck(): Promise<{
         status: 'healthy' | 'unhealthy';
         latency: number;
-        connections: {,
+        connections: {
             total: number;
             idle: number;
             waiting: number;

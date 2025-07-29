@@ -11,8 +11,8 @@ import { ShareMetrics } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
 interface ShareAnalyticsDashboardProps {
   shareLinkId: string;
-  timeRange?: {,
-  start: Date;,
+  timeRange?: {
+  start: Date;
   end: Date;
 };
 
@@ -46,8 +46,8 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
   }, [shareLinkId, timeRange]);
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
+      return (num / 1000000).toFixed(1) + 'M'
+  } else if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
     return num.toString();
   };

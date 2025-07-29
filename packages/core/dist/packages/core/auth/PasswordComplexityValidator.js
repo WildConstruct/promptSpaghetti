@@ -509,7 +509,8 @@ true,
             'Password matches a recently used password': 'Password is not in recent history',
             suggestion: isReused ? 'Choose a password you have not used recently' : undefined,
             details: {
-                expected: `Not in last ${historyCount} passwords` }
+                expected: `Not in last ${historyCount} passwords`
+            }
         },
             actual;
         isReused ? 'Found in history' : 'Not in history';

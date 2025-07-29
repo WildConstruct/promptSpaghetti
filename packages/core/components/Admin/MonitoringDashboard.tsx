@@ -12,15 +12,15 @@ import { MonitoringWidget, WidgetConfig } from './MonitoringWidgets';
 // Dashboard Configuration Types
 
 export interface DashboardLayout {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   widgets: WidgetConfig;
-  roles: string;,
+  roles: string;
   refreshInterval: number;
 }
 export interface MonitoringDashboardProps {
-  userRole: string;,
+  userRole: string;
   userId: string;
   initialLayout?: string;
   allowLayoutCustomization?: boolean;
@@ -217,7 +217,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
             break;
           case 'resource-usage':
             data = {
-  resources: {,
+  resources: {
   cpu: Math.random() * 40 + 30,
   memory: Math.random() * 30 + 50,
   disk: Math.random() * 20 + 60,
@@ -226,7 +226,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
             break;
           case 'api-metrics':
             data = {
-  api: {,
+  api: {
   requestsPerSecond: Math.floor(Math.random() * 500) + 200,
   averageLatency: Math.floor(Math.random() * 100) + 50,
   errorRate: Math.random() * 2 + 0.1,
@@ -235,7 +235,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
             break;
           case 'security-overview':
             data = {
-              security: {,
+              security: {
   activeThreats: Math.floor(Math.random() * 3),
                 blockedAttempts: Math.floor(Math.random() * 50) + 10,
                 complianceScore: Math.floor(Math.random() * 10) + 90,
@@ -410,7 +410,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
       <div className={`monitoring-dashboard loading ${className}`} style={{},}
   padding: '20px',
         backgroundColor: '#f9fafb',
-        minHeight: '100vh';
+        minHeight: '100vh'
   }}>
         <DashboardHeader />
         <div style={{
@@ -442,7 +442,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
       <div className={`monitoring-dashboard error ${className}`} style={{},}
   padding: '20px',
         backgroundColor: '#f9fafb',
-        minHeight: '100vh';
+        minHeight: '100vh'
   }}>
         <div style={{
   padding: '40px',
@@ -466,7 +466,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
     <div className={`monitoring-dashboard ${className}`} style={{},}
   padding: '20px',
       backgroundColor: '#f9fafb',
-      minHeight: '100vh';
+      minHeight: '100vh'
   }}>
       <DashboardHeader />
       {/* Widget Grid */}

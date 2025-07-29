@@ -33,29 +33,29 @@ import {
 } from 'lucide-react';
 
 export interface PolicyData {
-  id: string;,
+  id: string;
   name: string;
-  type: 'trust_score' | 'fraud_detection' | 'content_quality' | 'user_behavior' | 'transaction_monitoring';,
+  type: 'trust_score' | 'fraud_detection' | 'content_quality' | 'user_behavior' | 'transaction_monitoring';
   status: 'active' | 'inactive' | 'draft' | 'suspended';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   enabled: boolean;
   violationsCount: number;
   lastTriggered?: Date;
   effectiveFrom: Date;
   effectiveUntil?: Date;
-  description: string;,
+  description: string;
   version: string;
-  createdBy: string;,
+  createdBy: string;
   updatedAt: Date;
 }
 export interface PolicyViolationData {
-  violationId: string;,
+  violationId: string;
   policyId: string;
-  policyName: string;,
+  policyName: string;
   entityType: 'user' | 'template' | 'transaction';
-  entityId: string;,
+  entityId: string;
   violationType: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   detectedAt: Date;
   status: 'pending' | 'reviewed' | 'dismissed' | 'enforced';
   reviewedBy?: string;
@@ -509,11 +509,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </Tabs>
       <style>{`
         .policy-management-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
@@ -521,7 +521,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -529,7 +529,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           font-size: 1rem;
         .overview-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .metrics-grid {
           display: grid;
@@ -544,42 +544,42 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           margin-bottom: 1rem;
         .metric-trend {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
           font-size: 0.75rem;
-          font-weight: 500;,
+          font-weight: 500;
   padding: 0.25rem 0.5rem;
           border-radius: 4px;
         .metric-trend.positive {
-          color: #059669;,
+          color: #059669;
   background: #d1fae5;
         .metric-trend.negative {
-          color: #dc2626;,
+          color: #dc2626;
   background: #fee2e2;
         .metric-percentage {
           font-size: 0.875rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #059669;
         .metric-content {
           text-align: center;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.5rem;
         .activity-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .activity-item {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 0.75rem;
-          padding: 0.75rem;,
+          padding: 0.75rem;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .activity-icon {
@@ -588,44 +588,44 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         .activity-content {
           flex: 1;
         .activity-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
         .activity-description {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-bottom: 0.5rem;
         .activity-time {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .policies-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .policies-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   gap: 1rem;
-          padding: 1rem;,
+          padding: 1rem;
   background: #f9fafb;
           border-radius: 8px;
         .search-filters {
-          display: flex;,
+          display: flex;
   gap: 0.75rem;
           flex: 1;
         .search-bar {
-          position: relative;,
+          position: relative;
   flex: 1;
           max-width: 300px;
         .search-bar .lucide {
-          position: absolute;,
+          position: absolute;
   left: 0.75rem;
-          top: 50%;,
+          top: 50%;
   transform: translateY(-50%);
           z-index: 1;
         .search-input {
-          width: 100%;,
+          width: 100%;
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -635,18 +635,18 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .filter-select {
-          padding: 0.5rem;,
+          padding: 0.5rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   background: white;
           min-width: 120px;
         .action-buttons {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .policies-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .policy-card .card-content {
           padding: 1.5rem;
@@ -659,78 +659,78 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           flex: 1;
         .policy-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
           margin-bottom: 0.5rem;
         .policy-title h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .policy-badges {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .policy-description {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .policy-toggle {
           margin-left: 1rem;
         .toggle-switch {
-          position: relative;,
+          position: relative;
   display: inline-block;
-          width: 50px;,
+          width: 50px;
   height: 24px;
         .toggle-switch input {
-          opacity: 0;,
+          opacity: 0;
   width: 0;
           height: 0;
         .toggle-slider {
-          position: absolute;,
+          position: absolute;
   cursor: pointer;
-          top: 0;,
+          top: 0;
   left: 0;
-          right: 0;,
+          right: 0;
   bottom: 0;
-          background-color: #ccc;,
+          background-color: #ccc;
   transition: 0.3s;
           border-radius: 24px;
         .toggle-slider:before {,
   position: absolute;
-          content: "";,
+          content: "";
   height: 18px;
-          width: 18px;,
+          width: 18px;
   left: 3px;
           bottom: 3px;
-          background-color: white;,
+          background-color: white;
   transition: 0.3s;
-          border-radius: 50%;,
+          border-radius: 50%;
   input:checked + .toggle-slider {,
-          background-color: #3b82f6;,
+          background-color: #3b82f6;
   input:checked + .toggle-slider:before {,
   transform: translateX(26px);
         .policy-stats {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
-          margin-bottom: 1rem;,
+          margin-bottom: 1rem;
   padding: 1rem 0;
           border-top: 1px solid #e5e7eb;
           border-bottom: 1px solid #e5e7eb;
         .stat-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           text-align: center;
         .stat-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         .policy-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           justify-content: flex-end;
         .violations-section {
@@ -742,11 +742,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           align-items: center;
         .violations-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
         .violation-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 1rem;
         .violation-main {
           display: flex;
@@ -757,9 +757,9 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           flex: 1;
         .violation-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .violation-description {
@@ -768,12 +768,12 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           margin-bottom: 0.5rem;
         .violation-meta {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #9ca3af;
         .violation-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           justify-content: flex-end;
         .approve-btn {
@@ -802,13 +802,13 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           .search-bar {
             max-width: none;
           .policy-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
             align-items: stretch;
           .policy-stats {
             grid-template-columns: repeat(2, 1fr);
           .violation-main {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
         @media (max-width: 480px) {
           .metrics-grid {

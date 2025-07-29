@@ -25,12 +25,12 @@ export enum CodeType {
   HEX = 'hex',                   // 1a2b3c4d
   UUID = 'uuid'                  // 550e8400-e29b-41d4-a716-446655440000
   export interface CodeGenerationOptions {
-  type: CodeType;,
+  type: CodeType;
   format: CodeFormat;
   length: number;
   expiryMinutes?: number;
-  userContext?: {,
-  userId: string;,
+  userContext?: {
+  userId: string;
   ipAddress: string;
   userAgent: string;
 };
@@ -39,17 +39,17 @@ export enum CodeType {
   enforceComplexity?: boolean;   // For passwords/tokens
 }
 export interface GeneratedCode {
-  code: string;,
+  code: string;
   hashedCode: string;
-  salt: string;,
+  salt: string;
   type: CodeType;
   format: CodeFormat;
   expiresAt?: Date;
-  metadata: {,
+  metadata: {
   generatedAt: Date;
   userId?: string;
   ipAddress?: string;
-  entropy: number;,
+  entropy: number;
   algorithm: string;
 };
 }
@@ -57,8 +57,8 @@ export interface CodeValidationResult {
   valid: boolean;
   reason?: 'expired' | 'invalid' | 'rate_limited' | 'used' | 'format_mismatch';
   remainingAttempts?: number;
-  metadata?: {,
-  validatedAt: Date;,
+  metadata?: {
+  validatedAt: Date;
   timingAttackSafe: boolean;
   processingTimeMs: number;
 };
@@ -133,9 +133,9 @@ class EntropyCalculator {
   /**
    * Calculate the theoretical time to crack a code
    */
-  static calculateCrackTime(entropy: number, attemptsPerSecond: number = 1000): {,
+  static calculateCrackTime(entropy: number, attemptsPerSecond: number = 1000): {
   averageTime: number;
-    worstCase: number;,
+    worstCase: number;
   unit: string;
     const possibleCombinations = Math.pow(2, entropy);
     const averageAttempts = possibleCombinations / 2;
@@ -171,7 +171,7 @@ class EntropyCalculator {
 // Rate Limiting Service
 // ========================================
 interface RateLimitState {
-  attempts: number;,
+  attempts: number;
   windowStart: Date;
   lastAttempt: Date;
 class RateLimitService {
@@ -220,8 +220,8 @@ class RateLimitService {
 };
   resetRateLimit(key: string): void {
   this.limitStates.delete(key);
-  getRateLimitInfo(key: string, codeType: CodeType): {,
-  currentAttempts: number;,
+  getRateLimitInfo(key: string, codeType: CodeType): {
+  currentAttempts: number;
   maxAttempts: number;
   windowMinutes: number;
   timeUntilReset?: number;
@@ -282,7 +282,7 @@ export class CodeGenerationService {
   type: validatedOptions.type,
   format: validatedOptions.format,
   expiresAt,
-  metadata: {,
+  metadata: {
   generatedAt: new Date(),
   userId: validatedOptions.userContext?.userId,
   ipAddress: validatedOptions.userContext?.ipAddress,
@@ -292,7 +292,7 @@ export class CodeGenerationService {
   /**
    * Validate a code against stored hash
    */
-  async validateCode(inputCode: string,)
+  async validateCode(inputCode: string)
     storedData: GeneratedCode,
     options: CodeValidationOptions = {}
   ): Promise<CodeValidationResult> {
@@ -321,7 +321,7 @@ export class CodeGenerationService {
   valid: false,
   reason: 'rate_limited',
   remainingAttempts: rateLimit.remainingAttempts,
-  metadata: {,
+  metadata: {
   validatedAt: new Date(),
   timingAttackSafe: false,
   processingTimeMs: Date.now() - startTime,
@@ -331,7 +331,7 @@ export class CodeGenerationService {
   return {
   valid: false,
   reason: 'expired',
-  metadata: {,
+  metadata: {
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
   processingTimeMs: Date.now() - startTime,
@@ -341,7 +341,7 @@ export class CodeGenerationService {
   return {
   valid: false,
   reason: 'format_mismatch',
-  metadata: {,
+  metadata: {
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
   processingTimeMs: Date.now() - startTime,
@@ -361,7 +361,7 @@ export class CodeGenerationService {
   return {
   valid: isValid,
   reason: isValid ? undefined : 'invalid',
-  metadata: {,
+  metadata: {
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
   processingTimeMs: Date.now() - startTime,
@@ -370,7 +370,7 @@ export class CodeGenerationService {
   return {
   valid: false,
   reason: 'invalid',
-  metadata: {,
+  metadata: {
   validatedAt: new Date(),
   timingAttackSafe: false,
   processingTimeMs: Date.now() - startTime,
@@ -380,7 +380,7 @@ export class CodeGenerationService {
    */
   async generateTOTPSecret(userId: string): Promise<{,
   secret: string;
-  qrCodeData: string;,
+  qrCodeData: string;
   manualEntryKey: string;
   backupCodes: string;
 }> {
@@ -515,11 +515,11 @@ export class CodeGenerationService {
   /**
   * Analyze the strength of a generated code
   */
-  static analyzeCodeStrength(generatedCode: GeneratedCode): {,
-  entropy: number;,
+  static analyzeCodeStrength(generatedCode: GeneratedCode): {
+  entropy: number;
   strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
-  crackTime: {,
-  averageTime: number;,
+  crackTime: {
+  averageTime: number;
   worstCase: number;
   unit: string;
 };

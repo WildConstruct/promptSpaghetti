@@ -40,7 +40,7 @@ export interface SecurityPolicyEnforcementResult {
     compliant: boolean;
     violations: string[];
     recommendations: string[];
-    requiredActions: {,
+    requiredActions: {
         encryption: boolean;
         accessControl: string[];
         monitoring: string;
@@ -98,7 +98,7 @@ export declare class DataClassificationHelpers {
     /**
      * Assess security for data transfer between systems
      */
-    static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel,)
+    static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel)
       targetLevel: DataSensitivityLevel,
       transferMethod: string,
       encryptionInPlace: boolean,
@@ -107,7 +107,7 @@ export declare class DataClassificationHelpers {
      * Generate data handling compliance report
      */
     static generateComplianceReport(elements: EnhancedDataElement[], currentPolicies: Record<string, any>): {
-        summary: {,
+        summary: {
             totalElements: number;
             compliantElements: number;
             highRiskElements: number;
@@ -145,7 +145,7 @@ export declare class DataClassifierIntegration {
     /**
      * Create DataElement from enhanced data with sensitivity
      */
-    static createDataElementFromSensitive(id: string,)
+    static createDataElementFromSensitive(id: string)
       fieldName: string,
       value: any,
       sensitivityLevel: DataSensitivityLevel,

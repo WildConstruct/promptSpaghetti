@@ -635,7 +635,9 @@ export var DependencyType;
         generateRecommendations(graph, violations) { return []; }
         async assessImpact(toggleIds) { return {}; }
         analyzeRiskFactors(graph, violations) { return []; }
-        calculateImpactSeverity(dependency) { return 'minimal'; }
+        calculateImpactSeverity(dependency) {
+            return 'minimal';
+        }
         async getToggleFeatures(toggleId) { return []; }
         describeUserImpact(dependency, action) { return ''; }
         async getCascadingImpact(toggleId, depth) { return []; }
@@ -647,7 +649,9 @@ export var DependencyType;
         calculateClusterStrength(toggles, edges) { return 0.5; }
         findExternalDependencies(toggles, edges) { return []; }
         findLongestPath(nodeId, nodes, edges) { return []; }
-        assessPathRisk(path, nodes) { return 'low'; }
+        assessPathRisk(path, nodes) {
+            return 'low';
+        }
         estimateActivationTime(path) { return 0; }
         identifyBottlenecks(path, edges) { return []; }
         findAlternativePaths(path, nodes, edges) { return []; }

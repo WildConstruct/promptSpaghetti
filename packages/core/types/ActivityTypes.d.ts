@@ -29,12 +29,12 @@ export interface ActivityStats {
         name: string;
         count: number;
     }>;
-    recent_activity: {,
+    recent_activity: {
         today: number;
         this_week: number;
         this_month: number;
     };
-    trends: {,
+    trends: {
         daily: Array<{,
             date: string;
             count: number;

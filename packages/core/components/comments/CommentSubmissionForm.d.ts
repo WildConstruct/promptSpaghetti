@@ -45,7 +45,7 @@ export interface CommentSubmissionConfig {
     autoSaveDrafts: boolean;
     enableSpellCheck: boolean;
     enablePreview: boolean;
-    moderationSettings: {,
+    moderationSettings: {
         requireApproval: boolean;
         enableAutoModeration: boolean;
         flagSuspiciousContent: boolean;

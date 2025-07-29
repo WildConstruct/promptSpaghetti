@@ -67,7 +67,7 @@ export interface ClassificationStatistics {
     encryptionRequired: number;
     totalClassified: number;
     uniqueDataElements: number;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };
@@ -94,13 +94,13 @@ export interface ClassificationAnomaly {
 
 export interface AlertConfig {
     enabled: boolean;
-    thresholds: {,
+    thresholds: {
         errorRate: number;
         responseTime: number;
         violationCount: number;
         anomalyConfidence: number;
     };
-    channels: {,
+    channels: {
         email: boolean;
         webhook: boolean;
         syslog: boolean;
@@ -185,8 +185,8 @@ export declare class ClassificationMonitor extends EventEmitter {
         compliance: ComplianceMetrics;
         recentAnomalies: ClassificationAnomaly[];
         alerts: MonitoringEvent[];
-        healthStatus: 'healthy' | 'warning' | 'critical';
-    };
+        healthStatus: 'healthy' | 'warning' | 'critical'
+  };
     /**
      * Export monitoring data
      */

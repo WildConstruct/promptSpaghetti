@@ -27,7 +27,7 @@ export interface VFXCharacter {
     culture: string;
     accuracy: number;
     clothing: string[];
-    position: {,
+    position: {
         x: number;
         y: number;
         z: number;
@@ -50,7 +50,7 @@ export interface MaterialProperty {
     historicallyAccurate: boolean;
 
 export interface SceneComposition {
-    cameraPosition: {,
+    cameraPosition: {
         x: number;
         y: number;
         z: number;

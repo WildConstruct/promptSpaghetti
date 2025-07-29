@@ -6,7 +6,7 @@ import {
   useCorrectionsEnabled
 } from './correctionsStore';
 interface CorrectionsPanelProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
   export const {
   rules,

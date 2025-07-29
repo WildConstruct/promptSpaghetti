@@ -68,7 +68,7 @@ export enum EscalationTriggerType {
   // =============================================================================
   // Validation Schemas
   // =============================================================================
-  export const EscalationConditionSchema = z.object({)
+  export const EscalationConditionSchema = z.object({
   conditionId: z.string(),
   type: z.enum(['value', 'time', 'count', 'percentage', 'custom']),
   field: z.string(),
@@ -77,7 +77,7 @@ export enum EscalationTriggerType {
   logicalOperator: z.enum(['AND', 'OR']).optional(),
 });
 
-export const NotificationMethodSchema = z.object({)
+export const NotificationMethodSchema = z.object({
   type: z.nativeEnum(NotificationType),
   address: z.string(),
   priority: z.nativeEnum(EscalationPriority),
@@ -86,7 +86,7 @@ export const NotificationMethodSchema = z.object({)
   retryInterval: z.number().min(1).optional(),
 });
 
-export const EscalationActionSchema = z.object({)
+export const EscalationActionSchema = z.object({
   actionId: z.string(),
   type: z.nativeEnum(EscalationActionType),
   configuration: z.record(z.unknown()),
@@ -94,7 +94,7 @@ export const EscalationActionSchema = z.object({)
   rollbackable: z.boolean(),
 });
 
-export const EscalationLevelSchema = z.object({)
+export const EscalationLevelSchema = z.object({
   levelId: z.string(),
   level: z.number().min(0),
   name: z.string().min(1).max(100),
@@ -110,7 +110,7 @@ export const EscalationLevelSchema = z.object({)
   escalationCriteria: z.array(EscalationConditionSchema).optional(),
 });
 
-export const EscalationRuleSchema = z.object({)
+export const EscalationRuleSchema = z.object({
   ruleId: z.string(),
   name: z.string().min(1).max(255),
   description: z.string().max(1000),
@@ -136,34 +136,34 @@ export const EscalationRuleSchema = z.object({)
 // =============================================================================
 
 export interface EscalationCondition {
-  conditionId: string;,
+  conditionId: string;
   type: 'value' | 'time' | 'count' | 'percentage' | 'custom';
-  field: string;,
+  field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';
   value: string | number | boolean;
-  logicalOperator?: 'AND' | 'OR';
-}
+  logicalOperator?: 'AND' | 'OR'
+  }
 export interface NotificationMethod {
-  type: NotificationType;,
+  type: NotificationType;
   address: string;
-  priority: EscalationPriority;,
+  priority: EscalationPriority;
   immediateDelivery: boolean;
   retryCount?: number;
   retryInterval?: number; // minutes,
 }
 export interface EscalationAction {
-  actionId: string;,
+  actionId: string;
   type: EscalationActionType;
   configuration: Record<string, any>;
-  executeImmediately: boolean;,
+  executeImmediately: boolean;
   rollbackable: boolean;
 }
 export interface EscalationLevel {
-  levelId: string;,
+  levelId: string;
   level: number;
-  name: string;,
+  name: string;
   description: string;
-  assignmentType: AssignmentType;,
+  assignmentType: AssignmentType;
   assignmentTarget: string;
   notificationMethods: NotificationMethod;
   notificationTemplate?: string;
@@ -174,13 +174,13 @@ export interface EscalationLevel {
   escalationCriteria?: EscalationCondition;
 }
 export interface EscalationRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  description: string;,
+  description: string;
   category: EscalationCategory;
-  enabled: boolean;,
+  enabled: boolean;
   triggerType: EscalationTriggerType;
-  conditions: EscalationCondition;,
+  conditions: EscalationCondition;
   escalationPath: EscalationLevel;
   initialDelay?: number; // minutes,
   escalationInterval?: number; // minutes between levels,
@@ -188,18 +188,18 @@ export interface EscalationRule {
   businessHoursOnly?: boolean;
   allowWeekends?: boolean;
   timeZone?: string;
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
-  lastModified: Date;,
+  lastModified: Date;
   version: number;
   // =============================================================================
   // Case and Workflow Interfaces
   // =============================================================================
 }
 export interface EscalationPathStep {
-  stepId: string;,
+  stepId: string;
   level: number;
-  levelName: string;,
+  levelName: string;
   assignedTo: string;
   assignedAt: Date;
   acknowledgedAt?: Date;
@@ -211,20 +211,20 @@ export interface EscalationPathStep {
   timeSpent?: number; // minutes,
 }
 export interface EscalationNotification {
-  notificationId: string;,
+  notificationId: string;
   method: string;
-  recipient: string;,
+  recipient: string;
   sentAt: Date;
   deliveredAt?: Date;
   readAt?: Date;
   failureReason?: string;
-  retryCount: number;,
+  retryCount: number;
   priority: EscalationPriority;
 }
 export interface EscalationActionLog {
-  actionId: string;,
+  actionId: string;
   actionType: string;
-  executedAt: Date;,
+  executedAt: Date;
   executedBy: string;
   success: boolean;
   result?: Record<string, any>;
@@ -233,22 +233,22 @@ export interface EscalationActionLog {
   rolledBackAt?: Date;
 }
 export interface EscalationResolution {
-  resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged' | 'expired';,
+  resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged' | 'expired';
   resolutionLevel: number;
-  resolvedBy: string;,
+  resolvedBy: string;
   resolutionTime: number; // minutes from creation,
   satisfactionRating?: number; // 1-5,
   lessonsLearned?: string;
   improvementSuggestions?: string;
 }
 export interface EscalationCase {
-  caseId: string;,
+  caseId: string;
   ruleId: string;
-  category: EscalationCategory;,
+  category: EscalationCategory;
   priority: EscalationPriority;
   status: EscalationStatus;
   // Source information
-  sourceType: string;,
+  sourceType: string;
   sourceId: string;
   sourceData: Record<string, any>;
   // Current escalation state
@@ -256,14 +256,14 @@ export interface EscalationCase {
   currentAssignee?: string;
   currentAssigneeType?: 'user' | 'group' | 'role';
   // Timing
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   escalatedAt?: Date;
   responseDeadline?: Date;
   resolutionDeadline?: Date;
   resolvedAt?: Date;
   // Tracking
-  escalationPath: EscalationPathStep;,
+  escalationPath: EscalationPathStep;
   notifications: EscalationNotification;
   actions: EscalationActionLog;
   // Resolution
@@ -271,50 +271,50 @@ export interface EscalationCase {
   resolutionNotes?: string;
   followUpRequired?: boolean;
   // Metadata
-  tags: string;,
+  tags: string;
   metadata: Record<string, any>;
   // =============================================================================
   // Metrics and Analytics Interfaces
   // =============================================================================
 }
 export interface EscalationCategoryMetrics {
-  category: EscalationCategory;,
+  category: EscalationCategory;
   totalCases: number;
-  averageResolutionTime: number;,
+  averageResolutionTime: number;
   escalationRate: number;
-  satisfactionScore: number;,
+  satisfactionScore: number;
   topIssues: string;
 }
 export interface EscalationLevelMetrics {
-  level: number;,
+  level: number;
   totalCases: number;
   resolutionRate: number; // percentage resolved at this level,
-  averageResponseTime: number;,
+  averageResponseTime: number;
   averageResolutionTime: number;
   escalationRate: number; // percentage escalated to next level,
   workloadDistribution: Map<string, number>; // assignee -> case count,
 }
 export interface EscalationTrend {
   period: string; // 'hourly', 'daily', 'weekly', 'monthly',
-  timestamp: Date;,
+  timestamp: Date;
   totalCases: number;
-  escalationRate: number;,
+  escalationRate: number;
   resolutionTime: number;
   satisfactionScore: number;
 }
 export interface EscalationMetrics {
-  totalCases: number;,
+  totalCases: number;
   activeCases: number;
-  resolvedCases: number;,
+  resolvedCases: number;
   escalatedCases: number;
-  expiredCases: number;,
+  expiredCases: number;
   averageResolutionTime: number; // hours,
-  averageEscalationLevels: number;,
+  averageEscalationLevels: number;
   firstLevelResolutionRate: number; // percentage,
   slaComplianceRate: number; // percentage,
   categoryMetrics: Map<EscalationCategory, EscalationCategoryMetrics>;
   levelMetrics: Map<number, EscalationLevelMetrics>;
-  trends: EscalationTrend;,
+  trends: EscalationTrend;
   satisfactionScore: number; // 1-5 average,
   ruleEffectivenessScore: number; // 0-100,
   // =============================================================================
@@ -322,56 +322,56 @@ export interface EscalationMetrics {
   // =============================================================================
 }
 export interface EscalationAlert {
-  alertId: string;,
+  alertId: string;
   type: 'sla_breach' | 'high_volume' | 'system_issue' | 'quality_concern' | 'capacity_limit';
-  severity: 'info' | 'warning' | 'critical';,
+  severity: 'info' | 'warning' | 'critical';
   title: string;
-  message: string;,
+  message: string;
   affectedCases: string;
-  recommendedActions: string;,
+  recommendedActions: string;
   createdAt: Date;
 }
 export interface EscalationRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   type: 'process_improvement' | 'resource_allocation' | 'rule_optimization' | 'training_need';
-  title: string;,
+  title: string;
   description: string;
-  expectedImpact: string;,
+  expectedImpact: string;
   implementationEffort: 'low' | 'medium' | 'high';
   priority: EscalationPriority;
   category?: EscalationCategory;
 }
 export interface WorkloadAssignment {
-  assignee: string;,
+  assignee: string;
   activeCases: number;
-  overdueItems: number;,
+  overdueItems: number;
   utilizationRate: number;
 }
 export interface CategoryBreakdown {
-  category: EscalationCategory;,
+  category: EscalationCategory;
   count: number;
-  percentage: number;,
-  trend: 'up' | 'down' | 'stable';
-}
+  percentage: number;
+  trend: 'up' | 'down' | 'stable'
+  }
 export interface EscalationDashboard {
-  overview: {,
-  activeCases: number;,
+  overview: {
+  activeCases: number;
   criticalCases: number;
-  overdueResponses: number;,
+  overdueResponses: number;
   overdueResolutions: number;
   averageWaitTime: number;
 };
-  recentEscalations: EscalationCase;,
+  recentEscalations: EscalationCase;
   urgentCases: EscalationCase;
-  performance: {,
+  performance: {
   slaCompliance: number;
-  firstCallResolution: number;,
+  firstCallResolution: number;
   customerSatisfaction: number;
   averageHandleTime: number;
 };
-  workloadDistribution: WorkloadAssignment;,
+  workloadDistribution: WorkloadAssignment;
   categoryBreakdown: CategoryBreakdown;
-  alerts: EscalationAlert;,
+  alerts: EscalationAlert;
   recommendations: EscalationRecommendation;
 
 // =============================================================================
@@ -383,7 +383,7 @@ export interface CreateEscalationRuleRequest {
   description?: string;
   category: EscalationCategory;
   enabled?: boolean;
-  triggerType: EscalationTriggerType;,
+  triggerType: EscalationTriggerType;
   conditions: EscalationCondition;
   escalationPath: Omit<EscalationLevel, 'levelId'>[];
   initialDelay?: number;
@@ -408,7 +408,7 @@ export interface UpdateEscalationRuleRequest {
   timeZone?: string;
 }
 export interface CreateEscalationCaseRequest {
-  sourceType: string;,
+  sourceType: string;
   sourceId: string;
   sourceData: Record<string, any>;
   ruleId?: string;
@@ -435,8 +435,8 @@ export interface GetEscalationCasesQuery {
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
+  sortOrder?: 'asc' | 'desc'
+  }
 export interface GetEscalationRulesQuery {
   category?: EscalationCategory;
   enabled?: boolean;
@@ -463,38 +463,38 @@ export interface EscalationAPIResponse<T = any> {
   error?: string;
   message?: string;
   export interface PaginatedResponse<T> {
-  items: T;,
-  pagination: {,
-  page: number;,
+  items: T;
+  pagination: {
+  page: number;
   limit: number;
-  total: number;,
+  total: number;
   pages: number;
 };
 
 export interface EscalationRuleTestResult {
-  ruleId: string;,
+  ruleId: string;
   testData: Record<string, any>;
-  wouldTrigger: boolean;,
+  wouldTrigger: boolean;
   matchedConditions: string;
-  suggestedLevel: number;,
-  estimatedEscalationPath: {,
-  level: number;,
+  suggestedLevel: number;
+  estimatedEscalationPath: {
+  level: number;
   assignee: string;
   estimatedTime: number;
 }[];
   warnings: string;
 }
 export interface AssigneePerformance {
-  assignee: string;,
-  period: {,
-  startDate: Date;,
+  assignee: string;
+  period: {
+  startDate: Date;
   endDate: Date;
 };
-  casesHandled: number;,
+  casesHandled: number;
   averageResolutionTime: number;
-  firstCallResolutionRate: number;,
+  firstCallResolutionRate: number;
   escalationRate: number;
-  satisfactionScore: number;,
+  satisfactionScore: number;
   workloadUtilization: number;
   specializations: EscalationCategory;
 
@@ -503,15 +503,15 @@ export interface AssigneePerformance {
 // =============================================================================
 }
 export interface EscalationIntegration {
-  integrationId: string;,
+  integrationId: string;
   name: string;
-  type: 'webhook' | 'api' | 'email' | 'slack' | 'teams' | 'custom';,
+  type: 'webhook' | 'api' | 'email' | 'slack' | 'teams' | 'custom';
   configuration: Record<string, any>;
-  enabled: boolean;,
+  enabled: boolean;
   events: EscalationEventType;
   credentials?: Record<string, string>;
-  rateLimits?: {,
-  requestsPerMinute: number;,
+  rateLimits?: {
+  requestsPerMinute: number;
   requestsPerHour: number;
   requestsPerDay: number;
 };
@@ -526,9 +526,9 @@ export enum EscalationEventType {
   NOTIFICATION_SENT = 'notification_sent',
   ACTION_EXECUTED = 'action_executed'
   export interface EscalationEvent {
-  eventId: string;,
+  eventId: string;
   type: EscalationEventType;
-  caseId: string;,
+  caseId: string;
   timestamp: Date;
   data: Record<string, any>;
   triggeredBy: string;
@@ -538,28 +538,28 @@ export enum EscalationEventType {
   // =============================================================================
 }
 export interface EscalationServiceConfig {
-  defaultTimezone: string;,
-  businessHours: {,
+  defaultTimezone: string;
+  businessHours: {
   startTime: string; // HH:MM format,
   endTime: string;   // HH:MM format,
   daysOfWeek: number; // 0-6, Sunday = 0,
 };
-  notifications: {,
+  notifications: {
   retryAttempts: number;
   retryInterval: number; // minutes,
-  enableBatching: boolean;,
+  enableBatching: boolean;
   batchSize: number;
   batchInterval: number; // minutes,
 };
-  performance: {,
+  performance: {
   metricsRetentionDays: number;
-  autoCleanupExpiredCases: boolean;,
+  autoCleanupExpiredCases: boolean;
   maxConcurrentEscalations: number;
 };
-  integrations: {,
+  integrations: {
   enableWebhooks: boolean;
   webhookTimeout: number; // seconds,
-  enableSlackNotifications: boolean;,
+  enableSlackNotifications: boolean;
   enableTeamsNotifications: boolean;
 };
 }

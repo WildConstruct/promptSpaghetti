@@ -17,15 +17,15 @@ jest.mock('../../hooks/useWebSocket');
 
 // Import types and interfaces (these would be defined in the actual implementation)
 interface ExtensionContext {
-  storage: unknown;,
+  storage: unknown;
   logging: unknown;
-  runtime: unknown;,
+  runtime: unknown;
   ui: unknown;
   api: unknown;
 interface Extension {
-  id: string;,
+  id: string;
   name: string;
-  version: string;,
+  version: string;
   state: ExtensionState;
   dependencies?: string;
   activate?(context: ExtensionContext): Promise<void>;
@@ -275,18 +275,18 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
   const context = lifecycleManager.createExtensionContext('sandbox-test');
   lifecycleManager.createExtensionContext.mockImplementationOnce((id: string) => {,
   return {
-  storage: {,
+  storage: {
   namespace: id, // Each extension has its own namespace,
   get: jest.fn<unknown, unknown>(),
   set: jest.fn<unknown, unknown>(),
 },
-  logging: {,
+  logging: {
   prefix: `[${id}]`}
 },
   log: jest.fn<unknown, unknown>(),
             error: jest.fn<unknown, unknown>()
   },
-  runtime: {,
+  runtime: {
   extensionId: id,
   version: '1.0.0',
 };

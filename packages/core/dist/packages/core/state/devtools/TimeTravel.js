@@ -56,7 +56,8 @@ string;
         domain,
         snapshot: compressed,
         metadata: {
-            description: options.description || `Snapshot for ${domain}` }
+            description: options.description || `Snapshot for ${domain}`
+        }
     }, tags;
      || [],
         branchId;
@@ -100,7 +101,8 @@ string;
         domain,
         change,
         metadata: {
-            description: options.description || `${change.type} in ${domain}` }
+            description: options.description || `${change.type} in ${domain}`
+        }
     }, tags;
      || [],
         branchId;
@@ -265,7 +267,8 @@ boolean;
                                                 type: 'merge',
                                                 domain: 'system',
                                                 metadata: {
-                                                    description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}` }
+                                                    description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}`
+                                                }
                                             }, tags, branchId, parentId, childIds, size, compressed;
                                         }
                                         ;

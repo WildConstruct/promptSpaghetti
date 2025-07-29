@@ -24,7 +24,7 @@ describe('AdvancedClassificationEngine', () => {
   fieldName: 'email_address',
   value: 'john.doe@example.com',
   dataType: 'string',
-  context: {,
+  context: {
   formField: 'user_registration',
   source: 'web_form',
 },
@@ -34,13 +34,13 @@ describe('AdvancedClassificationEngine', () => {
   const testContext: ClassificationContext = {,
   source: 'user_registration_form',
   purpose: 'user_account_creation',
-  userContext: {,
+  userContext: {
   userId: 'user-456',
   role: 'standard_user',
   department: 'marketing',
   clearanceLevel: 'low',
 },
-  environmentContext: {,
+  environmentContext: {
   system: 'web_app',
   network: 'corporate',
   location: 'domestic',
@@ -80,7 +80,7 @@ describe('AdvancedClassificationEngine', () => {
     test('should analyze contextual factors', async () => {
   const highRiskContext: ClassificationContext = {,
   ...testContext,
-  environmentContext: {,
+  environmentContext: {
   ...testContext.environmentContext,
   network: 'public',
   location: 'international',
@@ -164,7 +164,7 @@ describe('AdvancedClassificationEngine', () => {
   context: testContext,
 }
         {
-  data: {,
+  data: {
   ...testDataElement,
   id: 'data-456',
   value: 'public information',
@@ -363,7 +363,7 @@ describe('AdvancedClassificationEngine', () => {
     test('should track data flows', async () => {
   const contextWithDataFlow: ClassificationContext = {,
   ...testContext,
-  dataFlow: {,
+  dataFlow: {
   id: 'flow-123',
   source: 'user_input',
   destination: 'database',

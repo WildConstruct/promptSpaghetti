@@ -45,7 +45,7 @@ describe('LockoutNotificationService', () => {
   expiryTime: new Date(mockDate.getTime() + 30 * 60 * 1000), // 30 minutes,
   failedAttempts: 5,
   securityEvents: [],
-  metadata: {,
+  metadata: {
   ipAddress: '192.168.1.1',
   userAgent: 'Mozilla/5.0',
   riskScore: 75,
@@ -155,19 +155,19 @@ describe('LockoutNotificationService', () => {
   test('should respect user notification preferences', async () => {
   const preferences: UserNotificationPreferences = {,
   userId: 'user123',
-  channels: {,
+  channels: {
   email: true,
   sms: false,
   push: true,
 },
   language: 'en',
         timezone: 'UTC',
-        quietHours: {,
+        quietHours: {
   enabled: false,
   start: '22:00',
   end: '08:00',
 },
-  frequency: {,
+  frequency: {
   immediate: true,
   digest: false,
   digestFrequency: 'daily',
@@ -201,7 +201,7 @@ describe('LockoutNotificationService', () => {
         bodyText: 'Su cuenta ha sido bloqueada temporalmente.',
         variables: ['appName'],
         priority: NotificationPriority.MEDIUM,
-        retryPolicy: {,
+        retryPolicy: {
   maxAttempts: 3,
   backoffMultiplier: 2,
   baseDelaySeconds: 30,
@@ -229,7 +229,7 @@ describe('LockoutNotificationService', () => {
   bodyText: 'Test body',
   variables: [],
   priority: NotificationPriority.LOW,
-  retryPolicy: {,
+  retryPolicy: {
   maxAttempts: 1,
   backoffMultiplier: 1,
   baseDelaySeconds: 10,

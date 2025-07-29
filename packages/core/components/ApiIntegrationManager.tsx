@@ -19,25 +19,25 @@ import {
 } from '@heroicons/react/24/outline';
 // import { useWorkflowStore } from '../stores/workflowStore';
 interface ApiKey {
-  id: string;,
+  id: string;
   name: string;
-  key: string;,
+  key: string;
   permissions: string;
   created_at: Date;
   last_used?: Date;
-  usage_count: number;,
+  usage_count: number;
   rate_limit: number;
   expires_at?: Date;
   is_active: boolean;
   interface Webhook {
-  id: string;,
+  id: string;
   name: string;
-  url: string;,
+  url: string;
   events: string;
-  secret: string;,
+  secret: string;
   created_at: Date;
   last_triggered?: Date;
-  success_count: number;,
+  success_count: number;
   failure_count: number;
   is_active: boolean;
   interface ApiIntegrationManagerProps {
@@ -219,8 +219,8 @@ interface ApiKey {
   const webhookSuccessRate = useMemo(() => {
   const total = totalWebhookCalls;
   const successful = webhooks.reduce((sum, webhook) => sum + webhook.success_count, 0);
-  return total > 0 ? (successful / total * 100).toFixed(1) : '0';
-}, [webhooks, totalWebhookCalls]);
+  return total > 0 ? (successful / total * 100).toFixed(1) : '0'
+  }, [webhooks, totalWebhookCalls]);
   const availableEvents = [;
     'approval_requested',
     'approval_completed',
@@ -494,7 +494,7 @@ interface ApiKey {
   timestamp: '2024-01-20T10:30:00Z',
   workspace_id: 'workspace_uuid',
   resource_id: 'resource_uuid',
-  data: {,
+  data: {
   previous_state: 'draft',
   new_state: 'approved',
   actor_id: 'user_id',
@@ -718,7 +718,7 @@ const CreateApiKeyModal: React.FC<{,
 };
 const CreateWebhookModal: React.FC<{,
   onClose: () => void;
-  onSubmit: (data: Partial<Webhook>) => void;,
+  onSubmit: (data: Partial<Webhook>) => void;
   availableEvents: string;
 }> = ({ onClose, onSubmit, availableEvents }) => {
   const [formData, setFormData] = useState({)
@@ -810,7 +810,7 @@ const CreateWebhookModal: React.FC<{,
 };
 const DeleteConfirmationModal: React.FC<{,
   onClose: () => void;
-  onConfirm: () => void;,
+  onConfirm: () => void;
   itemType: string;
 }> = ({ onClose, onConfirm, itemType }) => {
   return;

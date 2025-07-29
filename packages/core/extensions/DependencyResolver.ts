@@ -10,44 +10,44 @@ import { ExtensionManifest, ExtensionVersionManager } from './ExtensionLifecycle
 import * as semver from 'semver';
 
 export interface DependencyNode {
-  id: string;,
+  id: string;
   version: string;
-  dependencies: string;,
+  dependencies: string;
   dependents: string;
-  resolved: boolean;,
+  resolved: boolean;
   optional: boolean;
 }
 export interface DependencyGraph {
   nodes: Map<string, DependencyNode>;
   edges: Array<{ from: string; to: string; optional: boolean }>;
-  resolved: boolean;,
+  resolved: boolean;
   conflicts: DependencyConflict;
   circularDependencies: CircularDependency;
 }
 export interface DependencyConflict {
-  packageId: string;,
+  packageId: string;
   requiredVersions: Array<{,
-  requiredBy: string;,
+  requiredBy: string;
   versionRange: string;
 }>;
   resolution?: {
-  selectedVersion: string;,
-  strategy: 'latest' | 'maxSatisfying' | 'manual';
-};
+  selectedVersion: string;
+  strategy: 'latest' | 'maxSatisfying' | 'manual'
+  };
 }
 export interface CircularDependency {
-  cycle: string;,
+  cycle: string;
   breakable: boolean;
   suggestions: string;
 }
 export type LoadOrder = string;
 
 export interface DependencyResolutionOptions {
-  allowOptionalDependencies: boolean;,
+  allowOptionalDependencies: boolean;
   strictVersionMatching: boolean;
-  allowPrerelease: boolean;,
+  allowPrerelease: boolean;
   maxDepth: number;
-  resolutionStrategy: 'latest' | 'maxSatisfying' | 'conservative';,
+  resolutionStrategy: 'latest' | 'maxSatisfying' | 'conservative';
   allowCircularDependencies: boolean;
 }
 export class DependencyResolver {
@@ -217,7 +217,7 @@ export class DependencyResolver {
   detectVersionConflicts(manifests: ExtensionManifest): DependencyConflict {,
   const conflicts: DependencyConflict = [];
   const dependencyVersions = new Map<string, Array<{
-  requiredBy: string;,
+  requiredBy: string;
   versionRange: string;
 }>>();
     // Collect all version requirements

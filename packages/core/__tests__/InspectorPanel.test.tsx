@@ -12,7 +12,7 @@ const mockGraphStore = {
   {
   id: 'test-node-id',
   type: 'WeightedChoice',
-  data: {,
+  data: {
   label: 'Test Node',
   value: 'test value',
   variations: ['var1', 'var2']],
@@ -51,7 +51,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
   const mockNode = {
   id: 'test-node',
   type: 'TestNode',
-  data: {,
+  data: {
   label: 'Test Node',
   value: 'test value',
   variations: ['var1', 'var2'],
@@ -224,7 +224,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
     it('efficiently handles large variation lists', () => {
       const largeVariationNode = {
         ...mockNode,
-        data: {,
+        data: {
           ...mockNode.data,
           variations: Array.from({ length: 1000 }, (_, i) => `Variation ${i}`)}
       };

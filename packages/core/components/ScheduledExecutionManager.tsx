@@ -19,28 +19,28 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 interface ScheduledExecution {
-  id: string;,
+  id: string;
   workspace_id: string;
-  resource_id: string;,
+  resource_id: string;
   schedule_name: string;
-  schedule_type: 'cron' | 'interval' | 'once';,
+  schedule_type: 'cron' | 'interval' | 'once';
   schedule_expression: string;
-  action_type: 'state_transition' | 'approval_request' | 'custom';,
+  action_type: 'state_transition' | 'approval_request' | 'custom';
   action_config: Record<string, any>;
   enabled: boolean;
   next_run_at?: Date;
   last_run_at?: Date;
   run_count: number;
   max_runs?: number;
-  retry_count: number;,
+  retry_count: number;
   max_retries: number;
-  created_by: string;,
+  created_by: string;
   created_at: Date;
   updated_at: Date;
   interface ExecutionLog {
-  id: string;,
+  id: string;
   schedule_id: string;
-  execution_id: string;,
+  execution_id: string;
   status: 'running' | 'completed' | 'failed' | 'cancelled';
   started_at: Date;
   completed_at?: Date;
@@ -86,7 +86,7 @@ interface ScheduledExecution {
   schedule_type: 'cron',
   schedule_expression: '0 9 * * *', // 9 AM daily,
   action_type: 'state_transition',
-  action_config: {,
+  action_config: {
   to_state_id: 'review-state',
   comment: 'Automated daily review trigger',
 },
@@ -109,7 +109,7 @@ interface ScheduledExecution {
   schedule_type: 'cron',
   schedule_expression: '0 0 * * 0', // Sunday midnight,
   action_type: 'custom',
-  action_config: {,
+  action_config: {
   action: 'generate_report',
   report_type: 'weekly_summary',
   email_recipients: ['admin@example.com'],
@@ -133,7 +133,7 @@ interface ScheduledExecution {
   schedule_type: 'once',
   schedule_expression: '2024-01-25T15:00:00Z',
   action_type: 'custom',
-  action_config: {,
+  action_config: {
   action: 'migrate_data',
   source: 'old_system',
   target: 'new_system',
@@ -165,7 +165,7 @@ interface ScheduledExecution {
   status: 'completed',
   started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
   completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
-  result_data: {,
+  result_data: {
   state_changed: true,
   new_state: 'review',
   affected_resources: 1,

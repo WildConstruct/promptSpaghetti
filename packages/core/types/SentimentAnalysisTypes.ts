@@ -58,12 +58,12 @@ export const SentimentAnalysisSchema = z.object({)
     flags: z.array(z.string()).default([]) // Specific toxicity flags detected;
   }),
   // Advanced analysis features
-  topics: z.array(z.object({,)
+  topics: z.array(z.object({)
   topic: z.string(),
   relevance: z.number().min(0).max(1),
   sentiment: z.enum(['positive', 'neutral', 'negative']),
 })).default([]),
-  keywords: z.array(z.object({,)
+  keywords: z.array(z.object({)
   keyword: z.string(),
   importance: z.number().min(0).max(1),
   sentiment: z.enum(['positive', 'neutral', 'negative']),
@@ -157,14 +157,14 @@ export const SentimentAnalyticsSchema = z.object({)
   // Trends over time
   trends: z.object({,)
   sentimentTrend: z.enum(['improving', 'stable', 'declining']).default('stable'),
-  sentimentOverTime: z.array(z.object({,)
+  sentimentOverTime: z.array(z.object({)
   timestamp: z.date(),
   positive: z.number().min(0).max(100),
   neutral: z.number().min(0).max(100),
   negative: z.number().min(0).max(100),
   averageScore: z.number().min(-1).max(1),
 })).default([]),
-    emotionTrends: z.array(z.object({,)
+    emotionTrends: z.array(z.object({)
   timestamp: z.date(),
       dominantEmotion: z.enum(['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'trust', 'anticipation']).optional(),
       emotionScores: z.record(z.number().min(0).max(1)).default({})
@@ -176,7 +176,7 @@ export const SentimentAnalyticsSchema = z.object({)
   insights: z.object({,)
   topPositiveKeywords: z.array(z.string()).default([]),
   topNegativeKeywords: z.array(z.string()).default([]),
-  emergingTopics: z.array(z.object({,)
+  emergingTopics: z.array(z.object({)
   topic: z.string(),
   sentiment: z.enum(['positive', 'neutral', 'negative']),
   growth: z.number() // Percentage growth,
@@ -186,7 +186,7 @@ export const SentimentAnalyticsSchema = z.object({)
   averageConstructiveness: z.number().min(0).max(100).default(0),
   averageHelpfulness: z.number().min(0).max(100).default(0),
 }),
-    recommendations: z.array(z.object({,)
+    recommendations: z.array(z.object({)
   type: z.enum(['improve_sentiment', 'address_concerns', 'enhance_moderation', 'boost_engagement', 'quality_improvement']),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   description: z.string(),
@@ -263,7 +263,7 @@ export type SentimentAnalysisConfig = z.infer<typeof SentimentAnalysisConfigSche
 
 // API request/response types
 export const AnalyzeSentimentRequestSchema = z.object({)
-  texts: z.array(z.object({,)
+  texts: z.array(z.object({)
   textId: z.string(),
     content: z.string().min(1),
     sourceType: z.enum(['comment', 'review', 'survey_response', 'support_ticket', 'social_media', 'email']),
@@ -316,14 +316,14 @@ export const validateSentimentAnalytics = (data: unknown): SentimentAnalytics =>
 // Helper types
 
 export interface SentimentSystemConfig {
-  enabledModels: AnalysisModelType;,
+  enabledModels: AnalysisModelType;
   defaultModel: AnalysisModelType;
-  cachingEnabled: boolean;,
+  cachingEnabled: boolean;
   realtimeProcessing: boolean;
-  moderationIntegration: boolean;,
+  moderationIntegration: boolean;
   analyticsRetentionDays: number;
-  batchProcessingSettings: {,
-  maxBatchSize: number;,
+  batchProcessingSettings: {
+  maxBatchSize: number;
   processingIntervalMs: number;
   retryAttempts: number;
 };

@@ -58,44 +58,44 @@ export interface ShareTrackingManagerProps {
   showAdvancedMetrics?: boolean;
 }
 export interface ShareTrackingData {
-  totalShares: number;,
+  totalShares: number;
   platformBreakdown: Record<string, PlatformShareData>;
-  timeSeriesData: TimeSeriesPoint;,
+  timeSeriesData: TimeSeriesPoint;
   conversionFunnel: ConversionFunnelData;
-  demographicInsights: DemographicAnalysis;,
+  demographicInsights: DemographicAnalysis;
   performanceMetrics: AggregatedMetrics;
-  alerts: ShareAlert;,
+  alerts: ShareAlert;
   recommendations: ShareRecommendation;
 }
 export interface PlatformShareData {
-  platform: string;,
+  platform: string;
   totalShares: number;
-  successRate: number;,
+  successRate: number;
   averageEngagement: number;
-  revenueGenerated: number;,
+  revenueGenerated: number;
   topPerformingContent: string;
   trends: TrendData;
 }
 export interface TimeSeriesPoint {
-  timestamp: Date;,
+  timestamp: Date;
   shares: number;
-  views: number;,
+  views: number;
   clicks: number;
-  conversions: number;,
+  conversions: number;
   revenue: number;
   platform?: string;
 }
 export interface ConversionFunnelData {
-  awareness: FunnelStage;,
+  awareness: FunnelStage;
   interest: FunnelStage;
-  consideration: FunnelStage;,
+  consideration: FunnelStage;
   purchase: FunnelStage;
   advocacy: FunnelStage;
 }
 export interface FunnelStage {
-  stage: string;,
+  stage: string;
   count: number;
-  percentage: number;,
+  percentage: number;
   dropOffRate: number;
   averageTime: number;
 }
@@ -106,46 +106,46 @@ export interface DemographicAnalysis {
   devicePreferences: { device: string; usage: number; performance: number }[];
 }
 export interface AggregatedMetrics {
-  totalReach: number;,
+  totalReach: number;
   engagementRate: number;
-  clickThroughRate: number;,
+  clickThroughRate: number;
   conversionRate: number;
-  viralCoefficient: number;,
+  viralCoefficient: number;
   customerAcquisitionCost: number;
-  lifetimeValue: number;,
+  lifetimeValue: number;
   returnOnInvestment: number;
 }
 export interface TrendData {
-  direction: 'up' | 'down' | 'stable';,
+  direction: 'up' | 'down' | 'stable';
   percentage: number;
-  significance: 'high' | 'medium' | 'low';,
+  significance: 'high' | 'medium' | 'low';
   period: string;
 }
 export interface ShareAlert {
-  id: string;,
+  id: string;
   type: 'success' | 'warning' | 'error' | 'info';
-  title: string;,
+  title: string;
   message: string;
   timestamp: Date;
   platform?: string;
-  actionRequired: boolean;,
+  actionRequired: boolean;
   dismissed: boolean;
 }
 export interface ShareRecommendation {
-  id: string;,
+  id: string;
   type: 'content' | 'timing' | 'platform' | 'targeting';
-  priority: 'high' | 'medium' | 'low';,
+  priority: 'high' | 'medium' | 'low';
   title: string;
-  description: string;,
+  description: string;
   impact: string;
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   confidence: number;
 }
 export interface ShareTrackingFilters {
   dateRange: { start: Date; end: Date };
-  platforms: string;,
+  platforms: string;
   shareTypes: string;
-  minEngagement: number;,
+  minEngagement: number;
   regions: string;
   devices: string;
 
@@ -250,14 +250,14 @@ export const ShareTrackingUtils = {
       totalShares: shares.length,
       platformBreakdown,
       timeSeriesData,
-      conversionFunnel: {,
+      conversionFunnel: {
   awareness: { stage: 'awareness', count: totalViews, percentage: 100, dropOffRate: 0, averageTime: 5 },
         interest: { stage: 'interest', count: totalClicks, percentage: (totalClicks / totalViews) * 100, dropOffRate: 75, averageTime: 30 },
         consideration: { stage: 'consideration', count: Math.floor(totalClicks * 0.6), percentage: 15, dropOffRate: 40, averageTime: 120 },
         purchase: { stage: 'purchase', count: totalConversions, percentage: 5, dropOffRate: 67, averageTime: 300 },
         advocacy: { stage: 'advocacy', count: Math.floor(totalConversions * 0.2), percentage: 1, dropOffRate: 80, averageTime: 600 }
   },
-  demographicInsights: {,
+  demographicInsights: {
   topAgeGroups: [,
           { group: '25-34', percentage: 45, engagement: 8.2 },
           { group: '35-44', percentage: 30, engagement: 7.8 },
@@ -279,7 +279,7 @@ export const ShareTrackingUtils = {
           { device: 'Tablet', usage: 5, performance: 6.8 }
         ]
   },
-  performanceMetrics: {,
+  performanceMetrics: {
   totalReach: totalViews,
   engagementRate: shares.length > 0 ? shares.reduce((sum, s) => sum + s.analytics.performance.engagementRate, 0) / shares.length : 0,
   clickThroughRate: totalViews > 0 ? (totalClicks / totalViews) * 100 : 0,
@@ -343,7 +343,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
   if (!prev) return null;
   return {
   ...prev,
-  performanceMetrics: {,
+  performanceMetrics: {
   ...prev.performanceMetrics,
   totalReach: prev.performanceMetrics.totalReach + Math.floor(Math.random() * 10),
   engagementRate: prev.performanceMetrics.engagementRate + (Math.random() - 0.5) * 0.1,
@@ -732,7 +732,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
                     style={{ 
                       width: `${Math.max(stage.percentage, 10)}%`}
 },
-  minWidth: '200px';
+  minWidth: '200px'
   }}
                   >
                     <div>

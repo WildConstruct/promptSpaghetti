@@ -43,7 +43,7 @@ export interface SessionPriorityConfig {
     maxTotalSessions: number;
     evictionPolicy: EvictionPolicy;
     conflictResolution: ConflictResolution;
-    priorityWeights: {,
+    priorityWeights: {
         userRole: number;
         deviceTrust: number;
         location: number;
@@ -93,7 +93,7 @@ export interface SessionConflict {
     id: string;
     type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
     affectedSessions: string[];
-    newSessionRequest: {,
+    newSessionRequest: {
         userId: string;
         deviceId: string;
         priority: SessionPriority;

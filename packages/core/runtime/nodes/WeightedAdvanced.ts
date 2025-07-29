@@ -22,7 +22,7 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
  */
 
 export interface WeightedChoice {
-  value: string;,
+  value: string;
   weight: number;
   /**
   * Configuration for weight distribution algorithms
@@ -58,7 +58,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   deterministic: true,
   cacheable: true,
   stateful: false,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 };
@@ -81,7 +81,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   dataType: 'numberArray',
   required: false,
   defaultValue: [],
-  constraints: {,
+  constraints: {
   min: 0,
   customValidator: (weights: number) => {,
   if (weights.some(w => w < 0)) {
@@ -156,11 +156,11 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   id: this.id,
   type: 'WeightedAdvanced',
   config: this.config,
-  data: {,
+  data: {
   choices: this.choices,
   distributionConfig: this.distributionConfig,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };
@@ -262,7 +262,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating WeightedAdvanced nodes
  */
-export function createWeightedAdvancedNode(id: string,)
+export function createWeightedAdvancedNode(id: string)
   choices: WeightedChoice,
   distributionConfig?: WeightDistributionConfig
 ): WeightedAdvancedNode {

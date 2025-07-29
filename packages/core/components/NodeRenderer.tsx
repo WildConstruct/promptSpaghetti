@@ -3,11 +3,11 @@ import { Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
 interface NodeRendererProps {
-  id: string;,
+  id: string;
   data: Record<string, unknown>;
   selected?: boolean;
-  onSelect: (nodeId: string) => void;,
-  getNodeMeta: (nodeType: string) => NodeMeta;,
+  onSelect: (nodeId: string) => void;
+  getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
   export const NodeRenderer = memo<NodeRendererProps>(({)
   id,

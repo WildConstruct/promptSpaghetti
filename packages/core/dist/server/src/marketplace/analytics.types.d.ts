@@ -267,6 +267,7 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     };
     limit?: number;
     offset?: number;
+    aggregation?: AggregationType;
     filters?: {
         countries?: string[];
         device_types?: string[];
@@ -274,13 +275,12 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
         min_value?: number;
         max_value?: number;
     };
-    start_date?: Date;
-    end_date?: Date;
-    aggregation?: AggregationType;
     creator_id?: string;
     template_ids?: string[];
     metric_types?: MetricType[];
     time_range?: TimeRange;
+    start_date?: Date;
+    end_date?: Date;
     group_by?: string[];
 }, {
     sort?: {
@@ -289,6 +289,7 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     };
     limit?: number;
     offset?: number;
+    aggregation?: AggregationType;
     filters?: {
         countries?: string[];
         device_types?: string[];
@@ -296,13 +297,12 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
         min_value?: number;
         max_value?: number;
     };
-    start_date?: Date;
-    end_date?: Date;
-    aggregation?: AggregationType;
     creator_id?: string;
     template_ids?: string[];
     metric_types?: MetricType[];
     time_range?: TimeRange;
+    start_date?: Date;
+    end_date?: Date;
     group_by?: string[];
 }>;
 export declare const CustomReportSchema: z.ZodObject<{
@@ -356,6 +356,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -363,13 +364,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         }, {
             sort?: {
@@ -378,6 +378,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -385,13 +386,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         }>;
         visualization: z.ZodObject<{
@@ -429,6 +429,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -436,13 +437,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         };
         refresh_interval?: number;
@@ -461,6 +461,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -468,13 +469,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         };
         refresh_interval?: number;
@@ -511,6 +511,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -518,13 +519,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         };
         refresh_interval?: number;
@@ -553,6 +553,7 @@ export declare const CustomReportSchema: z.ZodObject<{
             };
             limit?: number;
             offset?: number;
+            aggregation?: AggregationType;
             filters?: {
                 countries?: string[];
                 device_types?: string[];
@@ -560,13 +561,12 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value?: number;
                 max_value?: number;
             };
-            start_date?: Date;
-            end_date?: Date;
-            aggregation?: AggregationType;
             creator_id?: string;
             template_ids?: string[];
             metric_types?: MetricType[];
             time_range?: TimeRange;
+            start_date?: Date;
+            end_date?: Date;
             group_by?: string[];
         };
         refresh_interval?: number;

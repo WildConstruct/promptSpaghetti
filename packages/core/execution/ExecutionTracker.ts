@@ -121,8 +121,8 @@ export class GraphExecutionTracker implements ExecutionTracker {
   /**
   * Get statistics about active executions
   */
-  getTrackingStats(): {,
-  activeExecutions: number;,
+  getTrackingStats(): {
+  activeExecutions: number;
   totalExecutionsTracked: number;
   return {
   activeExecutions: this.activeExecutions.size,
@@ -155,9 +155,9 @@ export class ExecutionPathAnalyzer {
   /**
    * Find common execution patterns
    */
-  static findCommonPatterns(paths: ExecutionPath): {,
+  static findCommonPatterns(paths: ExecutionPath): {
   commonNodes: string;
-    divergencePoints: string;,
+    divergencePoints: string;
   sharedSequences: string[];
     if (paths.length === 0) {
       return { commonNodes: [], divergencePoints: [], sharedSequences: [] };
@@ -200,9 +200,9 @@ export class ExecutionPathAnalyzer {
   /**
    * Generate debugging information for an execution path
    */
-  static generateDebugInfo(path: ExecutionPath): {,
+  static generateDebugInfo(path: ExecutionPath): {
   performanceBreakdown: Record<string, number>;
-    bottleneckNodes: string;,
+    bottleneckNodes: string;
   randomizationSummary: string;
     const performanceBreakdown: Record<string, number> = {};
     const nodeExecutionTimes: Record<string, number> = {};

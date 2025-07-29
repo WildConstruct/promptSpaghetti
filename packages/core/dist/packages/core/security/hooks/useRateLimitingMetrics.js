@@ -56,7 +56,9 @@ export const useRateLimitingMetrics = ({
                                 highResponseTime: 200,
                                 lowThroughput: 100,
                                 highErrorRate: 10,
-                                highBlockRate: 25 } }
+                                highBlockRate: 25
+                            }
+                        }
                     };
             }
         }

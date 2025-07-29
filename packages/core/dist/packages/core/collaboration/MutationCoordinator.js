@@ -770,7 +770,7 @@ if (options) {
                                                 boolean,
                                                 conflicts: ConflictOperation
                                             } > {
-                                                const: conflicts, ConflictOperation = [],
+                                                const: conflicts, ConflictOperation, []:  = [],
                                                 // Check for internal conflicts within the batch
                                                 for(let, i = 0, i, , operations) { }, : .length, i
                                             }++

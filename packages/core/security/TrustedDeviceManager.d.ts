@@ -69,7 +69,7 @@ export interface TrustedDevice {
     loginCount: number;
     failedAttempts: number;
     suspiciousActivities: number;
-    settings: {,
+    settings: {
         requireLocationCheck: boolean;
         allowRoaming: boolean;
         maxLocationRadius: number;
@@ -95,7 +95,7 @@ export interface TrustDecision {
     riskScore: number;
     requiresVerification: boolean;
     verificationMethods?: VerificationMethod[];
-    factors: {,
+    factors: {
         deviceMatch: boolean;
         locationMatch: boolean;
         riskAcceptable: boolean;
@@ -112,7 +112,7 @@ export interface TrustedDeviceConfig {
     requireLocationCheck: boolean;
     allowRoaming: boolean;
     autoExpireInactiveDays: number;
-    riskThreshold: {,
+    riskThreshold: {
         full: number;
         partial: number;
         deny: number;

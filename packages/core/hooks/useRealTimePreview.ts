@@ -3,24 +3,24 @@ import { WeightControlOption } from '../components/Inspector/WeightControlSlider
 import { substituteVariables } from '../utils/templateParser';
 
 export interface PreviewVariant {
-  id: string;,
+  id: string;
   seed: number;
-  result: string;,
+  result: string;
   timestamp: number;
-  executionTime: number;,
+  executionTime: number;
   weightSnapshot: WeightControlOption;
   variables: Record<string, string>;
 }
 export interface PreviewPerformance {
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   totalGenerations: number;
-  successRate: number;,
+  successRate: number;
   lastUpdate: number;
 }
 export interface RealTimePreviewConfig {
-  maxVariants: number;,
+  maxVariants: number;
   debounceMs: number;
-  maxExecutionTime: number;,
+  maxExecutionTime: number;
   enablePerformanceTracking: boolean;
   autoRefresh: boolean;
   const DEFAULT_CONFIG: RealTimePreviewConfig = {,
@@ -189,7 +189,7 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
   return {
   template,
   variables,
-  variants: variants.map(v => ({,)
+  variants: variants.map(v => ({)
   seed: v.seed,
   result: v.result,
   weights: v.weightSnapshot,

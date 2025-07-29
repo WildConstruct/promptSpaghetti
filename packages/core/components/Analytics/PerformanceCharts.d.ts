@@ -6,7 +6,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 
 export interface PerformanceChartsProps {
     analyticsClient: AnalyticsClient;
-    timeRange: {,
+    timeRange: {
         startTime: number;
         endTime: number;
     };

@@ -138,7 +138,7 @@ export interface DataActivity extends BaseActivity {
 
 export interface PerformanceActivity extends BaseActivity {
     type: 'performance_event';
-    metrics: {,
+    metrics: {
         responseTime?: number;
         throughput?: number;
         errorRate?: number;
@@ -287,7 +287,7 @@ export interface ActivityMetrics {
     }>;
     errorRate: number;
     averageDuration: number;
-    performanceMetrics: {,
+    performanceMetrics: {
         p50: number;
         p95: number;
         p99: number;

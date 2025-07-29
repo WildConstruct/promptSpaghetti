@@ -14,20 +14,20 @@ import {
 } from '../types/attribution';
 interface UseAttributionReturn {
   // State
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
   // Actions
-  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;,
-  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;,
-  getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;,
+  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
+  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
+  getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
   getContributorStats: (projectId: string, dateRange?: { start: Date; end: Date }) => Promise<ContributorStatsResponse>;
-  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;,
+  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;
   startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;
-  endSession: (sessionId: string) => Promise<void>;,
-  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;,
-  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;,
-  cleanupOldData: (projectId: string) => Promise<void>;,
-  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>;,
+  endSession: (sessionId: string) => Promise<void>;
+  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
+  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
+  cleanupOldData: (projectId: string) => Promise<void>;
+  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>;
   getAuthorAttribution: (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }) => Promise<ChangeAttribution>;
   recordBatchAttributions: (projectId: string, attributions: any, batchId?: string) => Promise<ChangeAttribution>;
   // Utility
@@ -45,7 +45,7 @@ export const useAttribution = (): UseAttributionReturn => {
   setError(null);
   const response = await fetch(url, {)
   ...options,
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   ...options.headers
 });
@@ -149,7 +149,7 @@ export const useAttribution = (): UseAttributionReturn => {
   const cleanupOldData = useCallback(async (projectId: string): Promise<void> => {
     return apiCall<void>(`/api/attribution/cleanup/${projectId}`, {)}
   },
-  method: 'POST';
+  method: 'POST'
   });
   }, [apiCall]);
   const getResourceAttribution = useCallback(async (projectId: string, resourceType: string, resourceId: string): Promise<ChangeAttribution> => {

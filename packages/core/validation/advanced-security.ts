@@ -8,9 +8,9 @@ import { SecurityValidation } from './security';
 
 // ML-inspired pattern scoring system
 interface PatternSignature {
-  pattern: RegExp;,
+  pattern: RegExp;
   weight: number;
-  category: 'injection' | 'pollution' | 'traversal' | 'execution' | 'enumeration';,
+  category: 'injection' | 'pollution' | 'traversal' | 'execution' | 'enumeration';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   // Advanced threat pattern database
@@ -253,7 +253,7 @@ interface PatternSignature {
   private getCacheKey(input: string): string {
     // Create a cache key that's consistent but doesn't store full input
     return `${input.length}-${input.substring(0, 10)}-${input.substring(-10)}`;}
-  private buildResult(input: string,)
+  private buildResult(input: string)
     riskScore: number,
     threatsDetected: string = []): SecurityAnalysisResult {,
   return {
@@ -268,15 +268,15 @@ interface PatternSignature {
   return 0.5 + (extremeness * 0.5);
   // Type definitions
   export interface SecurityAnalysisResult {
-  isSecure: boolean;,
+  isSecure: boolean;
   riskScore: number; // 0.0 (safe) to 1.0 (dangerous),
-  threatsDetected: string;,
+  threatsDetected: string;
   confidence: number; // 0.0 (low) to 1.0 (high),
 }
 export interface SecurityMetrics {
-  patternsAnalyzed: number;,
+  patternsAnalyzed: number;
   cacheSize: number;
-  learningDataPoints: number;,
+  learningDataPoints: number;
   version: string;
   lastUpdated: Date;
   // Export singleton instance for application use

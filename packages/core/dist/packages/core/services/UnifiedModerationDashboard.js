@@ -71,7 +71,7 @@ export class UnifiedModerationDashboard {
   // Compile comprehensive overview
   const overview: DashboardOverview = {,
   timestamp: new Date(),
-  summary: {,
+  summary: {
   totalItems: automatedStats.totalProcessed || 0,
   pendingReview: queueStatus.pendingCount || 0,
   autoApproved: automatedStats.autoApproved || 0,
@@ -79,13 +79,13 @@ export class UnifiedModerationDashboard {
   escalated: automatedStats.escalated || 0,
   appealed: automatedStats.appealed || 0,
 },
-  queues: {,
+  queues: {
   highPriority: queueStatus.highPriority || 0,
   mediumPriority: queueStatus.mediumPriority || 0,
   lowPriority: queueStatus.lowPriority || 0,
   automated: queueStatus.automated || 0,
 },
-  performance: {,
+  performance: {
   avgProcessingTime: performanceData.avgProcessingTime || 0,
   throughputLast24h: performanceData.throughput24h || 0,
   moderatorEfficiency: performanceData.efficiency || 0,
@@ -114,7 +114,7 @@ failed: $;
    */
   async advancedSearch(query: AdvancedSearchQuery, moderatorId: string): Promise<{,
   items: any;
-  totalCount: number;,
+  totalCount: number;
   aggregations: Record<string, any>;
   suggestions: string;
 }> {
@@ -160,7 +160,7 @@ failed: $;
     actions: BulkModerationAction,
     moderatorId: string,
   ): Promise<{
-    successful: number;,
+    successful: number;
   failed: number;
     errors: Array<{ itemId: string; error: string }>;
     summary: Record<string, number>;
@@ -240,7 +240,7 @@ failed: $;
     distribution: 'urgent' | 'balanced' | 'expertise',
   ): Promise<{
     assignments: Array<{ moderatorId: string; itemIds: string }>;
-    unassigned: string;,
+    unassigned: string;
   reasoning: string;
   }> {
     const workloads = await this.getModeratorWorkloads();
@@ -478,7 +478,7 @@ type: $;
   accuracy: 96.8,
   specializations: ['content_moderation', 'spam_detection'],
   performanceRating: 4.2,
-  availabilityWindow: {,
+  availabilityWindow: {
   start: '09:00',
   end: '17:00',
   timezone: 'UTC',
@@ -601,7 +601,7 @@ moderators `);}
   return {
   expectedVolume24h: 1400,
   estimatedBacklog: 45,
-  resourceNeeds: {,
+  resourceNeeds: {
   additionalModerators: 2,
   peakHours: ['14:00', '15:00', '16:00'],
 };

@@ -15,19 +15,19 @@ import {
 } from '../services/AdvancedPromptingCollaborationService';
 
 export interface AdvancedCollaborationConfig {
-  enableRealTimeSync: boolean;,
+  enableRealTimeSync: boolean;
   enableMARSRegions: boolean;
-  enableZadaPatterns: boolean;,
+  enableZadaPatterns: boolean;
   enableVFXExport: boolean;
   autoSaveInterval: number; // seconds,
   maxCollaborators: number;
 }
 export interface AdvancedCollaborationState {
-  collaborationService: AdvancedPromptingCollaborationService | null;,
+  collaborationService: AdvancedPromptingCollaborationService | null;
   currentUser: FilmIndustryUser | null;
-  currentSession: PromptingMethodologySession | null;,
+  currentSession: PromptingMethodologySession | null;
   activeSessions: PromptingMethodologySession;
-  connectedUsers: FilmIndustryUser;,
+  connectedUsers: FilmIndustryUser;
   isConnected: boolean;
   lastSync: Date | null;
 }
@@ -36,12 +36,12 @@ export interface AdvancedCollaborationActions {
   createSession: (),
   title: string,
   methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => Promise<PromptingMethodologySession>;
-  joinSession: (sessionId: string) => Promise<boolean>;,
+  joinSession: (sessionId: string) => Promise<boolean>;
   leaveSession: () => Promise<void>;
-  createMARSRegion: (regionData: Partial<MARSRegionTemplate>) => Promise<MARSRegionTemplate>;,
-  createZadaPattern: (patternData: Partial<ZadaPromptPattern>) => Promise<ZadaPromptPattern>;,
+  createMARSRegion: (regionData: Partial<MARSRegionTemplate>) => Promise<MARSRegionTemplate>;
+  createZadaPattern: (patternData: Partial<ZadaPromptPattern>) => Promise<ZadaPromptPattern>;
   exportToVFXPipeline: () => Promise<any>;
-  applyMARSRegionToGraph: (regionId: string, nodeIds: string) => Promise<void>;,
+  applyMARSRegionToGraph: (regionId: string, nodeIds: string) => Promise<void>;
   applyZadaPatternToGraph: (patternId: string) => Promise<void>;
   const DEFAULT_CONFIG: AdvancedCollaborationConfig = {,
   enableRealTimeSync: true,
@@ -61,11 +61,11 @@ export interface AdvancedCollaborationActions {
 }
 export function useAdvancedPromptingCollaboration(config: Partial<AdvancedCollaborationConfig> = {})
 ): AdvancedCollaborationState & AdvancedCollaborationActions & {
-  config: AdvancedCollaborationConfig;,
+  config: AdvancedCollaborationConfig;
   getAvailableMARSRegions: () => MARSRegionTemplate;
-  getAvailableZadaPatterns: () => ZadaPromptPattern;,
+  getAvailableZadaPatterns: () => ZadaPromptPattern;
   getWorkflowTemplates: () => any;
-  getUsersByRole: (role: FilmIndustryRole) => FilmIndustryUser;,
+  getUsersByRole: (role: FilmIndustryRole) => FilmIndustryUser;
   getSessionParticipants: () => FilmIndustryUser;
   isUserCompatibleWithMethodology: (methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => boolean;
   const [state, setState] = useState<AdvancedCollaborationState>({)

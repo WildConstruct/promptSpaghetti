@@ -7,24 +7,24 @@
 import React, { useState, useMemo } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
 interface CreativeVarianceAnalyzerProps {
-  results: EnhancedPreviewResult;,
+  results: EnhancedPreviewResult;
   varianceAnalysis: VarianceAnalysis | null;
   className?: string;
 interface AdvancedVarianceMetrics {
   // Content structure analysis
-  sentenceLengthVariance: number;,
+  sentenceLengthVariance: number;
   paragraphCount: { min: number; max: number; avg: number };
   readingComplexity: number; // 0-100 scale
   // Semantic analysis
-  vocabularyRichness: number;,
+  vocabularyRichness: number;
   repetitionIndex: number;
   semanticCoherence: number;
   // Creative flow analysis
-  ideaDensity: number;,
+  ideaDensity: number;
   conceptualLeaps: number;
   narrativeConsistency: number;
   // Professional suitability
-  industryReadiness: number;,
+  industryReadiness: number;
   clientPresentability: number;
   revisionPotential: number;
 
@@ -210,7 +210,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
         borderRadius: 12,
         border: '1px solid #e2e8f0',
         padding: 24,
-        textAlign: 'center';
+        textAlign: 'center'
   }}>
         <div style={{ fontSize: 24, marginBottom: 12 }}>📊</div>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 8 }}>
@@ -225,7 +225,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
   title: string;
   value: number;
   suffix?: string;
-  description: string;,
+  description: string;
   color: string;
   onClick?: () => void;
 }> = ({ title, value, suffix = '', description, color, onClick }) => ()
@@ -297,7 +297,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
   background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{

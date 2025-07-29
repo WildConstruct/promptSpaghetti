@@ -7,26 +7,26 @@
 import React, { useState } from 'react';
 
 export interface MarketplaceTemplate {
-  id: string;,
+  id: string;
   title: string;
   description: string;
   thumbnailUrl?: string;
   price: number; // in cents,
-  currency: string;,
+  currency: string;
   tags: string;
   rating: number; // 0-5 scale,
-  reviewCount: number;,
+  reviewCount: number;
   creatorName: string;
   creatorAvatar?: string;
   compatibility: string; // Claude models,
-  isAiGenerated: boolean;,
+  isAiGenerated: boolean;
   status: 'draft' | 'listed' | 'blocked' | 'archived';
-  stats: {,
-  downloads: number;,
+  stats: {
+  downloads: number;
   views: number;
   likes: number;
 };
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
 interface MarketplaceCardProps {
   template: MarketplaceTemplate;

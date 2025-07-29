@@ -2,12 +2,12 @@ import { useState, useCallback, useEffect } from 'react';
 import { Edge, Node } from 'reactflow';
 import { ValidationError, validateConnection } from '../validation';
 interface UseValidationReturn {
-  errors: ValidationError;,
+  errors: ValidationError;
   styledEdges: Edge;
-  styledNodes: Node;,
+  styledNodes: Node;
   runValidation: (edges: Edge, nodes: Node) => void;
   interface UseValidationProps {
-  edges: Edge;,
+  edges: Edge;
   nodes: Node;
   highlightNodeIds?: Set<string>;
   highlightEdgeIds?: Set<string>;

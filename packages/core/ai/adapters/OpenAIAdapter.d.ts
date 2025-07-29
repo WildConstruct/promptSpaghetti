@@ -24,8 +24,8 @@ export interface OpenAIRequestOptions {
     stream?: boolean;
     seed?: number;
     response_format?: {
-        type: 'text' | 'json_object';
-    };
+        type: 'text' | 'json_object'
+  };
     tools?: unknown[];
     tool_choice?: string | object;
 
@@ -47,7 +47,7 @@ export interface OpenAIResponse {
         text?: string;
         finish_reason: string;
     }>;
-    usage: {,
+    usage: {
         prompt_tokens: number;
         completion_tokens: number;
         total_tokens: number;

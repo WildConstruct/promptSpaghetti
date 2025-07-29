@@ -16,7 +16,7 @@ export interface RecentFilesPanelProps {
   showFavorites?: boolean;
   showClearButton?: boolean;
 }
-export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
+export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
   onFileSelected,
   onFileLoad,
   onClearRecents,
@@ -33,7 +33,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
   // Theme styles
   const getThemeStyles = () => {
   const themes = {
-  light: {,
+  light: {
   background: '#ffffff',
   secondary: '#f8fafc',
   tertiary: '#f1f5f9',
@@ -44,7 +44,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
   hover: '#f3f4f6',
   selection: '#dbeafe',
 },
-  dark: {,
+  dark: {
   background: '#1f2937',
   secondary: '#111827',
   tertiary: '#0f172a',
@@ -55,7 +55,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
   hover: '#374151',
   selection: '#1e3a8a',
 },
-  cinema: {,
+  cinema: {
   background: 'var(--color-bg-primary, #1e1e1e)',
   secondary: 'var(--color-bg-secondary, #2a2a2a)',
   tertiary: 'var(--color-bg-tertiary, #353535)',
@@ -65,6 +65,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
   accent: 'var(--color-accent-orange, #ff7c00)',
   hover: 'var(--color-ui-hover, #2d2d2d)',
   selection: 'var(--color-ui-selection, #ff7c0040)',
+  }
 };
     return themes[theme];
   };
@@ -102,19 +103,20 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
       // For now, just refresh (in real implementation would clear the list)
       onClearRecents?.();
       loadRecentFiles();
+    }
   }, [onClearRecents, loadRecentFiles]);
   const formatDate = (date: Date): string => {
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - new Date(date).getTime());
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays === 0) {
-      return 'Today';
-    } else if (diffDays === 1) {
+      return 'Today'
+  } else if (diffDays === 1) {
       return 'Yesterday';
-    } else if (diffDays < 7) {
-      return `${diffDays} days ago`;}
+  } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
     } else {
-  return new Intl.DateTimeFormat('en-US', {)
+    return new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
@@ -127,7 +129,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
-  const FileItem: React.FC<{ file: PSGFile; compact?: boolean }> = ({ file, compact = false }) => ()
+  const FileItem: React.FC<{ file: PSGFile; compact?: boolean }> = ({ file, compact = false }) => (
     <div
       onClick={() => handleFileSelect(file)}
       onDoubleClick={() => handleFileLoad(file)}
@@ -137,19 +139,20 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
         gap: compact ? '8px' : '12px',
         padding: compact ? '8px 12px' : '12px 16px',
         backgroundColor: selectedFile?.id === file.id ? styles.selection : 'transparent',
-        border: `1px solid ${selectedFile?.id === file.id ? styles.accent : 'transparent'}`}
-},
+        border: `1px solid ${selectedFile?.id === file.id ? styles.accent : 'transparent'}`,
   borderRadius: '6px',
         cursor: 'pointer',
-        transition: 'all 0.15s ease';
+        transition: 'all 0.15s ease'
   }}
       onMouseOver={(e) => {
         if (selectedFile?.id !== file.id) {
           e.currentTarget.style.backgroundColor = styles.hover;
+        }
       }}
       onMouseOut={(e) => {
         if (selectedFile?.id !== file.id) {
           e.currentTarget.style.backgroundColor = 'transparent';
+        }
       }}
     >
       {/* File Icon */}
@@ -182,7 +185,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
           {file.metadata.title || file.name.replace('.psg', '')}
           {file.isFavorite && <span style={{ fontSize: '12px' }}>⭐</span>}
         </div>
-        {!compact && ()
+        {!compact && (
           <div style={{
   fontSize: '12px',
   color: styles.textSecondary,
@@ -221,7 +224,8 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
       </div>
     </div>
   );
-  return;
+
+  return (
     <div style={{
   backgroundColor: styles.background,
   color: styles.text,
@@ -237,7 +241,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '16px',
-        borderBottom: `1px solid ${styles.border}`}
+        borderBottom: `1px solid ${styles.border}`
       }}>
         <h2 style={{
   margin: 0,
@@ -250,7 +254,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {/* View Toggle */}
           <div style={{ display: 'flex', backgroundColor: styles.tertiary, borderRadius: '4px', padding: '2px' }}>
-            {(['list', 'grid'] as const).map(mode => ()
+            {(['list', 'grid'] as const).map(mode => (
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
@@ -269,7 +273,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
             ))}
           </div>
           {/* Clear Button */}
-          {showClearButton && recentFiles.length > 0 && ()
+          {showClearButton && recentFiles.length > 0 && (
             <button
               onClick={handleClearRecents}
               style={{
@@ -280,7 +284,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
   borderRadius: '4px',
                 color: styles.textSecondary,
                 fontSize: '12px',
-                cursor: 'pointer';
+                cursor: 'pointer'
   }}
             >
               Clear All

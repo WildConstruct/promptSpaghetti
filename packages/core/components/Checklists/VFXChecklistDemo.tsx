@@ -57,7 +57,7 @@ export interface VFXChecklistDemoProps {
   color: '#ff7c00',
   avatar: '/avatars/director.jpg',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: true,
@@ -73,7 +73,7 @@ export interface VFXChecklistDemoProps {
   color: '#3b82f6',
   avatar: '/avatars/vfx-supervisor.jpg',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -89,7 +89,7 @@ export interface VFXChecklistDemoProps {
   color: '#10b981',
   avatar: '/avatars/lead-artist.jpg',
   isOnline: false,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -105,7 +105,7 @@ export interface VFXChecklistDemoProps {
   color: '#8b5cf6',
   avatar: '/avatars/pipeline-td.jpg',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -121,7 +121,7 @@ export interface VFXChecklistDemoProps {
   color: '#f59e0b',
   avatar: '/avatars/producer.jpg',
   isOnline: true,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: false,
   canDelete: false,
@@ -137,7 +137,7 @@ export interface VFXChecklistDemoProps {
   color: '#ef4444',
   avatar: '/avatars/qa-lead.jpg',
   isOnline: false,
-  permissions: {,
+  permissions: {
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -160,7 +160,7 @@ export interface VFXChecklistDemoProps {
   updatedAt: '2025-07-22T14:30:00Z',
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['hero-shot', 'medieval', 'courtyard', 'crowd', 'establishing'],
-  metadata: {,
+  metadata: {
   totalItems: 12,
   completedItems: 8,
   overallProgress: 67,
@@ -525,7 +525,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   ...prev,
   items: [...prev.items, newItem],
   updatedAt: new Date().toISOString(),
-  metadata: {,
+  metadata: {
   ...prev.metadata,
   totalItems: prev.items.length + 1,
   lastActivity: new Date().toISOString(),
@@ -540,7 +540,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
           : item
       ),
       updatedAt: new Date().toISOString(),
-      metadata: {,
+      metadata: {
   ...prev.metadata,
   completedItems: prev.items.filter(item => ),
   item.id === itemId ? updates.status === 'approved' : item.status === 'approved').length,
@@ -552,7 +552,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   ...prev,
   items: prev.items.filter(item => item.id !== itemId),
   updatedAt: new Date().toISOString(),
-  metadata: {,
+  metadata: {
   ...prev.metadata,
   totalItems: prev.items.length - 1,
   lastActivity: new Date().toISOString(),
@@ -591,7 +591,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       tags: [],
-      metadata: {,
+      metadata: {
   totalItems: template.items.length,
   completedItems: 0,
   overallProgress: 0,

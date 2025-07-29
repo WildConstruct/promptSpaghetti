@@ -62,7 +62,7 @@ export interface MarkovConfig {
   */
 }
 export class StandardTransitionMatrix implements TransitionMatrix {
-  states: string;,
+  states: string;
   transitions: Record<string, Record<string, number>>;
   private initialState?: string;
   constructor();
@@ -154,7 +154,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
   deterministic: true,
   cacheable: false, // Don't cache since output depends on state,
   stateful: true,   // Maintains state between executions,
-  performanceHints: {,
+  performanceHints: {
   expectedExecutionTime: 'fast',
   memoryUsage: 'low',
 };
@@ -265,13 +265,13 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
   id: this.id,
   type: 'Markov',
   config: this.getConfig(),
-  data: {,
+  data: {
   states: this.transitionMatrix.states,
   transitions: this.transitionMatrix.transitions,
   initialState: this.transitionMatrix.getInitialState(),
   markovConfig: this.markovConfig,
 },
-  metadata: {,
+  metadata: {
   version: '1.0.0',
   created: new Date().toISOString(),
 };
@@ -323,7 +323,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Markov nodes
  */
-export function createMarkovNode(id: string,)
+export function createMarkovNode(id: string)
   states: string,
   transitions: Record<string, Record<string, number>>,
   initialState?: string,
@@ -334,8 +334,8 @@ export function createMarkovNode(id: string,)
   /**
   * Helper function to create transition matrix from simple configuration
   */
-  export function createTransitionMatrix(config: {,)
-  states: string;,
+  export function createTransitionMatrix(config: {)
+  states: string;
   transitions: Record<string, Record<string, number>>;
   initialState?: string;
 }): TransitionMatrix {
@@ -351,7 +351,7 @@ export const MarkovPresets = {
   /** Simple two-state toggle */
   toggle: (state1: string, state2: string) => createTransitionMatrix({,)
   states: [state1, state2],
-    transitions: {,
+    transitions: {
       [state1]: { [state2]: 1.0 },
       [state2]: { [state1]: 1.0 }
   }),

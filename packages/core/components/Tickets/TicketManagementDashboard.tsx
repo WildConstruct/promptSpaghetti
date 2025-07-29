@@ -14,14 +14,14 @@ import {
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
 interface TicketManagementDashboardProps {
-  ticketService: Epic16TicketIntegrationService;,
+  ticketService: Epic16TicketIntegrationService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onTicketSelect?: (ticket: MarketplaceTicket) => void;
 interface TicketFilters {
-  status: TicketStatus;,
+  status: TicketStatus;
   type: MarketplaceTicketType;
-  priority: TicketPriority;,
+  priority: TicketPriority;
   category: TicketCategory;
   assignedTo?: string;
   dateRange?: { start: Date; end: Date };
@@ -441,15 +441,15 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
 
 // Ticket List Item Component
 interface TicketListItemProps {
-  ticket: MarketplaceTicket;,
+  ticket: MarketplaceTicket;
   onSelect: () => void;
-  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void;,
-  onAssign: (ticketId: string, assigneeId: string) => void;,
-  onEscalate: (ticketId: string, reason: string) => void;,
+  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void;
+  onAssign: (ticketId: string, assigneeId: string) => void;
+  onEscalate: (ticketId: string, reason: string) => void;
   currentUserId: string;
-  userRole: 'user' | 'agent' | 'admin';,
+  userRole: 'user' | 'agent' | 'admin';
   selected: boolean;
-  renderStatusBadge: (status: TicketStatus) => React.ReactNode;,
+  renderStatusBadge: (status: TicketStatus) => React.ReactNode;
   renderPriorityBadge: (priority: TicketPriority) => React.ReactNode;
   const TicketListItem: React.FC<TicketListItemProps> = ({,)
   ticket,

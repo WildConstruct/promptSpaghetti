@@ -158,8 +158,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
       }}
       onMouseOut={(e) => {
         if (!showSubmenu) {
-          e.currentTarget.style.backgroundColor = 'transparent';
-        }
+          e.currentTarget.style.backgroundColor = 'transparent'
+  }
       }}
     >
       <span>{label}</span>
@@ -239,8 +239,8 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
         }}
         onMouseOut={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }
+            e.currentTarget.style.backgroundColor = 'transparent'
+  }
         }}
       >
         {label}

@@ -178,7 +178,7 @@ export const DragReorderDemo = ({
                     padding: '12px',
                     background: styles.secondary,
                     border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '12px'; }}>", _jsx("span", { style: {
+                } }), ", borderRadius: '12px' }}>", _jsx("span", { style: {
                     padding: '6px 12px',
                     background: styles.accent,
                     color: styles.background,
@@ -317,7 +317,7 @@ borderRadius: '16px',
                         padding: '12px',
                         background: styles.accent + '10',
                         border: `1px solid ${styles.accent}30`
-                    }, ", borderRadius: '8px'; }}>", _jsx("div", { style: { fontSize: '12px', opacity: 0.7, marginBottom: '4px' }, children: "Most Likely:" }), _jsx("div", { style: { fontWeight: 600, color: styles.accent }, children: statistics.mostLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: [((statistics.mostLikely.weight / statistics.totalWeight) * 100).toFixed(1), "% probability"] })] }));
+                    }, ", borderRadius: '8px' }}>", _jsx("div", { style: { fontSize: '12px', opacity: 0.7, marginBottom: '4px' }, children: "Most Likely:" }), _jsx("div", { style: { fontWeight: 600, color: styles.accent }, children: statistics.mostLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: [((statistics.mostLikely.weight / statistics.totalWeight) * 100).toFixed(1), "% probability"] })] }));
 div >
 ;
 div >

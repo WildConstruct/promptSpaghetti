@@ -57,7 +57,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
   // No manual collapse state needed - managed by ProgressiveDisclosureSection
   // State for validation
   const [codeValidation, setCodeValidation] = useState<{
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string;
 } | null>(null);
@@ -67,7 +67,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
   };
   const handlePythonConfigChange = (field: string, value: unknown) => {
   onChange({ )
-  pythonConfig: {,
+  pythonConfig: {
   ...pythonConfig,
   [field]: value,
 });

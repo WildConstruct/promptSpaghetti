@@ -8,13 +8,13 @@ import {
   UpdateDiffSessionRequest
 } from '../types/comparison';
 interface UseDiffSessionResult {
-  session: VisualDiffSession | null;,
+  session: VisualDiffSession | null;
   comparison: DetailedComparison | null;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  createSession: (request: CreateDiffSessionRequest) => Promise<void>;,
-  updateSession: (sessionId: string, updates: UpdateDiffSessionRequest) => Promise<void>;,
-  deleteSession: (sessionId: string) => Promise<void>;,
+  createSession: (request: CreateDiffSessionRequest) => Promise<void>;
+  updateSession: (sessionId: string, updates: UpdateDiffSessionRequest) => Promise<void>;
+  deleteSession: (sessionId: string) => Promise<void>;
   clearError: () => void;
 
 export const useDiffSession = (): UseDiffSessionResult => {
@@ -25,7 +25,7 @@ export const useDiffSession = (): UseDiffSessionResult => {
   const apiCall = useCallback(async (url: string, options: RequestInit = {}) => {
     const response = await fetch(`/api/visual-diff${url}`, {)}
   },
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   ...options.headers
 }
@@ -79,7 +79,7 @@ export const useDiffSession = (): UseDiffSessionResult => {
     try {
       await apiCall(`/sessions/${sessionId}`, {)}
   },
-  method: 'DELETE';
+  method: 'DELETE'
   });
       setSession(null);
       setComparison(null);

@@ -13,58 +13,58 @@ import { UsageQuotaDashboard } from './UsageQuotaDashboard';
 // Monitoring Interface Types
 
 export interface MonitoringMetrics {
-  system: {,
-  cpu: number;,
+  system: {
+  cpu: number;
   memory: number;
-  disk: number;,
-  network: {,
-  inbound: number;,
+  disk: number;
+  network: {
+  inbound: number;
   outbound: number;
 };
-    uptime: number;,
+    uptime: number;
   lastUpdated: string;
   };
-  api: {,
+  api: {
   requestsPerSecond: number;
-  averageLatency: number;,
+  averageLatency: number;
   errorRate: number;
-  activeConnections: number;,
+  activeConnections: number;
   totalRequests: number;
   failedRequests: number;
 };
-  security: {,
+  security: {
   activeThreats: number;
-  blockedAttempts: number;,
+  blockedAttempts: number;
   suspiciousActivity: number;
-  lastIncident: string | null;,
+  lastIncident: string | null;
   complianceScore: number;
 };
-  performance: {,
+  performance: {
   responseTime: number;
-  throughput: number;,
+  throughput: number;
   availability: number;
-  errorCount: number;,
+  errorCount: number;
   operationsPerSecond: number;
 };
 }
 export interface AlertData {
-  id: string;,
+  id: string;
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  title: string;,
+  title: string;
   description: string;
-  source: string;,
+  source: string;
   timestamp: string;
-  acknowledged: boolean;,
+  acknowledged: boolean;
   resolved: boolean;
   assignee?: string;
 }
 export interface MonitoringViewConfig {
-  layout: 'executive' | 'operational' | 'analytics' | 'compliance';,
+  layout: 'executive' | 'operational' | 'analytics' | 'compliance';
   refreshInterval: number;
-  widgets: string;,
+  widgets: string;
   rolePermissions: string;
   interface MonitoringInterfaceProps {
-  userRole: string;,
+  userRole: string;
   userId: string;
   onAlertAction?: (alertId: string, action: string) => void;
   onExport?: (type: string, timeRange: string) => void;
@@ -86,25 +86,25 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
   // View Configurations
   const viewConfigs: Record<MonitoringViewConfig['layout'], MonitoringViewConfig> = {,
-  executive: {,
+  executive: {
   layout: 'executive',
   refreshInterval: 30000,
   widgets: ['system-overview', 'alert-summary', 'key-metrics', 'health-score'],
   rolePermissions: ['admin', 'executive', 'manager'],
 },
-  operational: {,
+  operational: {
   layout: 'operational',
   refreshInterval: 5000,
   widgets: ['system-details', 'real-time-logs', 'performance-charts', 'alert-management'],
   rolePermissions: ['admin', 'operator', 'engineer'],
 },
-  analytics: {,
+  analytics: {
   layout: 'analytics',
   refreshInterval: 60000,
   widgets: ['trend-analysis', 'usage-patterns', 'performance-benchmarks', 'capacity-planning'],
   rolePermissions: ['admin', 'analyst', 'manager'],
 },
-  compliance: {,
+  compliance: {
   layout: 'compliance',
   refreshInterval: 300000,
   widgets: ['audit-trail', 'policy-enforcement', 'regulatory-status', 'evidence-collection'],
@@ -316,7 +316,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
 },
   height: '100%',
                 backgroundColor: metrics.system.cpu > 80 ? '#dc2626' : metrics.system.cpu > 60 ? '#f59e0b' : '#10b981',
-                borderRadius: '2px';
+                borderRadius: '2px'
   }} />
             </div>
           </div>
@@ -338,7 +338,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
 },
   height: '100%',
                 backgroundColor: metrics.system.memory > 80 ? '#dc2626' : metrics.system.memory > 60 ? '#f59e0b' : '#10b981',
-                borderRadius: '2px';
+                borderRadius: '2px'
   }} />
             </div>
           </div>
@@ -378,7 +378,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
               backgroundColor: '#f9fafb',
               borderLeft: `4px solid ${getSeverityColor(alert.severity)}`}
 },
-  borderRadius: '4px';
+  borderRadius: '4px'
   }}
           >
             <div style={{ flex: 1 }}>
@@ -456,7 +456,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     <div className={`monitoring-interface ${className}`} style={{ },}
   padding: '20px',
       backgroundColor: '#f9fafb',
-      minHeight: '100vh';
+      minHeight: '100vh'
   }}>
       <MonitoringHeader />
       {/* Executive View */}

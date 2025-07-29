@@ -59,15 +59,15 @@ export enum TransformType {
   // Transform Definition
   export interface TransformDefinition {
   // Basic metadata
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   version: string;
   type: TransformType;
   // Transform class
   transformClass: new (id: string, config: any) => DataTransform;
   // Schema definitions
-  inputSchema: z.ZodSchema<any>;,
+  inputSchema: z.ZodSchema<any>;
   outputSchema: z.ZodSchema<any>;
   configSchema: z.ZodSchema<any>;
   // UI configuration
@@ -106,10 +106,10 @@ export interface TransformEditorConfiguration {
   // Transform Editor Props
 }
 export interface TransformEditorProps {
-  transform: DataTransform;,
+  transform: DataTransform;
   config: any;
   onChange: (config: any) => void;
-  onTest?: (input: any) => void;,
+  onTest?: (input: any) => void;
   context: ExtensionContext;
   // Transform Field Configuration
 }
@@ -151,7 +151,7 @@ export interface TransformPreviewConfiguration {
   // Transform Preview Props
 }
 export interface TransformPreviewProps {
-  transform: DataTransform;,
+  transform: DataTransform;
   input: any;
   output: any;
   error?: Error;
@@ -167,10 +167,10 @@ export interface TransformHelpConfiguration {
   tutorial?: string;
   // Links
   links?: Array<{,
-  title: string;,
+  title: string;
   url: string;
-  type: 'documentation' | 'example' | 'tutorial' | 'reference';
-}>;
+  type: 'documentation' | 'example' | 'tutorial' | 'reference'
+  }>;
 
 // Transform Runtime Configuration
 }
@@ -199,7 +199,7 @@ export interface TransformPerformanceConfiguration {
   // Parallel processing
   parallelism?: number;
   // Optimization hints
-  optimizationHints?: {,
+  optimizationHints?: {
   cpuIntensive?: boolean;
   ioIntensive?: boolean;
   memoryIntensive?: boolean;
@@ -213,7 +213,7 @@ export interface TransformSecurityConfiguration {
   // Permissions
   permissions?: string;
   // Input validation
-  inputValidation?: {,
+  inputValidation?: {
   sanitize?: boolean;
   allowedTypes?: string;
   maxSize?: number;
@@ -254,7 +254,7 @@ export interface TransformPipelineConfiguration {
   inputCompatibility?: string;
   outputCompatibility?: string;
   // Pipeline optimization
-  optimization?: {,
+  optimization?: {
   fuseable?: boolean;
   parallelizable?: boolean;
   cacheable?: boolean;
@@ -263,17 +263,17 @@ export interface TransformPipelineConfiguration {
 // Transform Metadata
 }
 export interface TransformMetadata {
-  author: string;,
+  author: string;
   license: string;
   repository?: string;
   documentation?: string;
   examples?: TransformExample;
   // Performance characteristics
-  performance?: {,
-  complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';,
+  performance?: {
+  complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';
   memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
-  scalability: 'excellent' | 'good' | 'moderate' | 'limited';
-};
+  scalability: 'excellent' | 'good' | 'moderate' | 'limited'
+  };
   // Compatibility
   compatibility?: {
   minVersion: string;
@@ -289,9 +289,9 @@ export interface TransformMetadata {
 // Transform Example
 }
 export interface TransformExample {
-  name: string;,
+  name: string;
   description: string;
-  input: any;,
+  input: any;
   output: any;
   config?: any;
   explanation?: string;
@@ -300,26 +300,26 @@ export interface TransformExample {
 }
 export interface TransformContext {
   // Basic context
-  transformId: string;,
+  transformId: string;
   executionId: string;
   timestamp: Date;
   // Extension context
   extensionContext: ExtensionContext;
   // Performance tracking
-  performance: {,
+  performance: {
   startTime: number;
   endTime?: number;
   memoryUsage?: number;
 };
   // Metadata
-  metadata: {,
+  metadata: {
   inputSize?: number;
   outputSize?: number;
   transformVersion: string;
 };
   // Pipeline context
   pipeline?: {
-  position: number;,
+  position: number;
   total: number;
   previousOutput?: any;
   nextTransform?: string;
@@ -352,11 +352,11 @@ export interface TransformPipeline {
   // Pipeline Metadata
 }
 export interface PipelineMetadata {
-  transformCount: number;,
+  transformCount: number;
   estimatedExecutionTime: number;
-  estimatedMemoryUsage: number;,
+  estimatedMemoryUsage: number;
   inputType: string;
-  outputType: string;,
+  outputType: string;
   compatibility: string;
   // Transform Registry Interface
 }
@@ -411,15 +411,15 @@ export interface TransformExecutionMonitor {
   // Transform Execution Metrics
 }
 export interface TransformExecutionMetrics {
-  transformId: string;,
+  transformId: string;
   totalExecutions: number;
-  successfulExecutions: number;,
+  successfulExecutions: number;
   failedExecutions: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   minExecutionTime: number;
-  maxExecutionTime: number;,
+  maxExecutionTime: number;
   averageMemoryUsage: number;
-  totalInputSize: number;,
+  totalInputSize: number;
   totalOutputSize: number;
   lastExecuted: Date;
   lastError?: Error;

@@ -167,7 +167,9 @@ export const AuditLogDashboard = ({
                         },
                         filterSummary: {
                             appliedFilters: Object.keys(filter).filter(key => ),
-                            filter, [key]:  !== undefined } } } };
+                            filter, [key]:  !== undefined
+                        }
+                    } } };
         }
         finally {
         }

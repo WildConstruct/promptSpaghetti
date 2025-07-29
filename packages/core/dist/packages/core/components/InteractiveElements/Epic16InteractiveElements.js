@@ -751,17 +751,24 @@ if (loading) {
                             } })] }, elementState.id), "); })}", previewData && ()
                     < QuickPreviewWidget, "element=", {
                     type: InteractiveElementType.QUICK_PREVIEW,
-                    config: {},
-                    preview_config: {},
-                    preview_type: 'modal',
-                    auto_load: true,
-                    lazy_load: false,
-                    max_content_size: 10485760, // 10MB,
-                    supported_formats: ['jpg', 'png', 'gif', 'pdf', 'psd'],
-                    zoom_enabled: true,
-                    download_enabled: true,
-                    sharing_enabled: true,
-                }, "interactiveService=", interactiveService, "userId=", userId, "templateId=", previewData.templateId, "templateData=", previewData.templateData, "onClose=", () => setPreviewData(null), "onDownload=", (templateId) => {
+                    config: {
+                        preview_config: {
+                            preview_type: 'modal',
+                            auto_load: true,
+                            lazy_load: false,
+                            max_content_size: 10485760, // 10MB,
+                            supported_formats: ['jpg', 'png', 'gif', 'pdf', 'psd'],
+                            zoom_enabled: true,
+                            download_enabled: true,
+                            sharing_enabled: true,
+                        }
+                    },
+                    interactiveService = { interactiveService },
+                    userId = { userId },
+                    templateId = { previewData, : .templateId },
+                    templateData = { previewData, : .templateData },
+                    onClose = {}()
+                }, " => setPreviewData(null)} onDownload=", (templateId) => {
                     console.log('Download template:', templateId);
                     // Handle download
                 }, "onShare=", (templateId, platform) => {

@@ -29,9 +29,9 @@ export type ActivityStatus = 'pending' | 'in_progress' | 'completed' | 'failed' 
 // Core Activity Interface
 
 export interface BaseActivity {
-  id: string;,
+  id: string;
   timestamp: string;
-  type: ActivityType;,
+  type: ActivityType;
   severity: ActivitySeverity;
   status: ActivityStatus;
   // Actor Information
@@ -44,7 +44,7 @@ export interface BaseActivity {
   sourceVersion?: string;
   environment: 'development' | 'staging' | 'production';
   // Core Activity Data
-  action: string;,
+  action: string;
   description: string;
   category: string;
   // Resource Information
@@ -58,7 +58,7 @@ export interface BaseActivity {
   // Network Context
   ipAddress?: string;
   userAgent?: string;
-  geolocation?: {,
+  geolocation?: {
   country?: string;
   region?: string;
   city?: string;
@@ -88,9 +88,9 @@ export interface BaseActivity {
 // Change Tracking for Data Modifications
 }
 export interface ActivityChange {
-  field: string;,
+  field: string;
   oldValue: any;
-  newValue: any;,
+  newValue: any;
   changeType: 'create' | 'update' | 'delete' | 'restore';
   // User Action Activities
 }
@@ -110,7 +110,7 @@ export interface UserActivity extends BaseActivity {
   export interface SystemActivity extends BaseActivity {
   type: 'system_event';
   // System Metrics
-  systemMetrics?: {,
+  systemMetrics?: {
   cpuUsage?: number;
   memoryUsage?: number;
   diskUsage?: number;
@@ -152,7 +152,7 @@ export interface AdminActivity extends BaseActivity {
   responseTime?: string;
   blocked?: boolean;
   // Forensic Data
-  forensicData?: {,
+  forensicData?: {
   requestHeaders?: Record<string, string>;
   requestBody?: any;
   responseStatus?: number;
@@ -164,7 +164,7 @@ export interface AdminActivity extends BaseActivity {
 export interface ApiActivity extends BaseActivity {
   type: 'api_call';
   // HTTP Context
-  method: string;,
+  method: string;
   endpoint: string;
   statusCode: number;
   // Request/Response Data
@@ -194,7 +194,7 @@ export interface ApiActivity extends BaseActivity {
   export interface PerformanceActivity extends BaseActivity {
   type: 'performance_event';
   // Performance Metrics
-  metrics: {,
+  metrics: {
   responseTime?: number;
   throughput?: number;
   errorRate?: number;
@@ -233,7 +233,7 @@ export interface AuthenticationActivity extends BaseActivity {
   export interface FileActivity extends BaseActivity {
   type: 'file_operation';
   // File Information
-  fileName: string;,
+  fileName: string;
   filePath: string;
   fileSize?: number;
   fileType?: string;
@@ -250,7 +250,7 @@ export interface AuthenticationActivity extends BaseActivity {
   export interface WorkflowActivity extends BaseActivity {
   type: 'workflow_event';
   // Workflow Information
-  workflowId: string;,
+  workflowId: string;
   workflowName: string;
   workflowVersion: string;
   // Step Information
@@ -258,7 +258,7 @@ export interface AuthenticationActivity extends BaseActivity {
   stepName?: string;
   stepType?: string;
   // Execution Context
-  executionId: string;,
+  executionId: string;
   executionStatus: 'started' | 'running' | 'completed' | 'failed' | 'cancelled';
   // Input/Output Data
   inputs?: Record<string, any>;
@@ -314,13 +314,13 @@ export interface AuthenticationActivity extends BaseActivity {
   // Activity Aggregation Results
 }
 export interface ActivityAggregation {
-  field: string;,
+  field: string;
   value: any;
-  count: number;,
+  count: number;
   percentage: number;
 }
 export interface ActivityQueryResult {
-  activities: Activity;,
+  activities: Activity;
   totalCount: number;
   aggregations?: Record<string, ActivityAggregation>;
 
@@ -330,75 +330,75 @@ export interface ActivityQueryResult {
 // Activity Storage and Indexing
 }
 export interface ActivityIndex {
-  id: string;,
+  id: string;
   timestamp: string;
   type: ActivityType;
   userId?: string;
-  source: string;,
+  source: string;
   action: string;
   resourceType?: string;
   resourceId?: string;
-  severity: ActivitySeverity;,
+  severity: ActivitySeverity;
   status: ActivityStatus;
   tags: string;
   // Activity Streaming and Real-time
 }
 export interface ActivityStream {
-  subscriptionId: string;,
+  subscriptionId: string;
   filters: ActivityQuery;
-  isActive: boolean;,
+  isActive: boolean;
   createdAt: string;
   lastActivity?: string;
 }
 export interface ActivityStreamEvent {
-  streamId: string;,
+  streamId: string;
   activity: Activity;
   timestamp: string;
   // Activity Analytics
 }
 export interface ActivityMetrics {
-  totalActivities: number;,
+  totalActivities: number;
   activitiesByType: Record<ActivityType, number>;
   activitiesBySeverity: Record<ActivitySeverity, number>;
   activitiesByStatus: Record<ActivityStatus, number>;
   activitiesOverTime: Array<{,
-  timestamp: string;,
+  timestamp: string;
   count: number;
   types: Record<ActivityType, number>;
 }>;
   topSources: Array<{,
   source: string;
-  count: number;,
+  count: number;
   percentage: number;
 }>;
   topActions: Array<{,
   action: string;
-  count: number;,
+  count: number;
   percentage: number;
 }>;
   topUsers: Array<{,
   userId: string;
   userEmail?: string;
-  count: number;,
+  count: number;
   percentage: number;
 }>;
-  errorRate: number;,
+  errorRate: number;
   averageDuration: number;
-  performanceMetrics: {,
+  performanceMetrics: {
   p50: number;
-  p95: number;,
+  p95: number;
   p99: number;
 };
 
 // Activity Retention and Archiving
 }
 export interface ActivityRetentionPolicy {
-  id: string;,
+  id: string;
   name: string;
   description: string;
   // Retention Rules
   retentionPeriod: number; // days,
-  activityTypes: ActivityType;,
+  activityTypes: ActivityType;
   severities: ActivitySeverity;
   // Archive Configuration
   archiveEnabled: boolean;
@@ -410,7 +410,7 @@ export interface ActivityRetentionPolicy {
   // Compliance
   complianceRequirement?: string;
   legalHoldEnabled?: boolean;
-  createdAt: string;,
+  createdAt: string;
   updatedAt: string;
   isActive: boolean;
   // Export types for external use

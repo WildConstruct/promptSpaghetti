@@ -130,5 +130,14 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     private emergencyOverrides;
     private userLevelCache;
     constructor(hierarchy?: PermissionHierarchy);
+    private calculateRiskScore;
+    private resolveApprovers;
+    private processEscalationStep;
+    private canAutoDelegateTo;
+    private getInheritedPermissions;
+    private getDelegatedPermissions;
+    private getInheritanceSources;
+    private getActiveRestrictions;
+    private calculateUserRiskProfile;
 }
 //# sourceMappingURL=DataPermissionHierarchyManager.d.ts.map

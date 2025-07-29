@@ -128,10 +128,10 @@ describe('SettingsManager', () => {
   presets: [1, 3, 5, 10, 20],
 });
       expect(listener).toHaveBeenCalledWith()
-        expect.objectContaining({)
+        expect.objectContaining({
   key: 'runCount',
           value: expect.objectContaining({ value: 7 }),
-          source: 'user';
+          source: 'user'
   }
       );
       unsubscribe();
@@ -230,7 +230,7 @@ describe('SettingsManager', () => {
     });
     test('should load from localStorage on initialization', () => {
       const savedSettings = {
-        settings: {,
+        settings: {
   seed: { enabled: true, value: 54321, history: [], autoGenerate: false },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 15, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
@@ -307,7 +307,7 @@ describe('SettingsManager', () => {
     });
     test('should import valid settings', () => {
       const importData = {
-        settings: {,
+        settings: {
   seed: { enabled: true, value: 99999, history: [], autoGenerate: false },
           temperature: { enabled: true, value: 1.8, showIndicator: true, presets: [] },
           runCount: { value: 25, showPerformanceWarning: false, presets: [1, 3, 5, 10, 20] },
@@ -316,7 +316,7 @@ describe('SettingsManager', () => {
           ui: { theme: 'light', showTooltips: false, enableKeyboardShortcuts: false, reduceAnimations: true, highContrast: true },
           version: '1.0.0';
   },
-  metadata: {,
+  metadata: {
   exportedAt: new Date().toISOString(),
   version: '1.0.0',
   appVersion: '1.0.0',
@@ -329,7 +329,7 @@ describe('SettingsManager', () => {
     });
     test('should reject invalid import data', () => {
       const invalidData = {
-        settings: {,
+        settings: {
   runCount: { value: -5 } // Invalid
   },
   metadata: {}
@@ -340,7 +340,7 @@ describe('SettingsManager', () => {
     });
     test('should handle version mismatches', () => {
       const oldVersionData = {
-        settings: {,
+        settings: {
   seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 5, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
@@ -349,7 +349,7 @@ describe('SettingsManager', () => {
           ui: { theme: 'auto', showTooltips: true, enableKeyboardShortcuts: true, reduceAnimations: false, highContrast: false },
           version: '1.0.0';
   },
-  metadata: {,
+  metadata: {
   exportedAt: new Date().toISOString(),
   version: '0.9.0', // Old version,
   appVersion: '0.9.0',
@@ -481,7 +481,7 @@ describe('SettingsManager', () => {
     test('should still import when auto-save is disabled', () => {
       settingsManager.setAutoSave(false);
       const importData = {
-        settings: {,
+        settings: {
   seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 20, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
@@ -490,7 +490,7 @@ describe('SettingsManager', () => {
           ui: { theme: 'auto', showTooltips: true, enableKeyboardShortcuts: true, reduceAnimations: false, highContrast: false },
           version: '1.0.0';
   },
-  metadata: {,
+  metadata: {
   exportedAt: new Date().toISOString(),
   version: '1.0.0',
   appVersion: '1.0.0',

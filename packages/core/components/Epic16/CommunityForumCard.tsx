@@ -7,35 +7,35 @@
 import React, { useState } from 'react';
 
 export interface ForumUser {
-  id: string;,
+  id: string;
   name: string;
   avatar?: string;
-  reputation: number;,
+  reputation: number;
   badges: string;
-  isVerified: boolean;,
+  isVerified: boolean;
   isModerator: boolean;
 }
 export interface ForumPost {
-  id: string;,
+  id: string;
   title: string;
-  content: string;,
+  content: string;
   contentPreview: string; // Truncated version for cards,
-  author: ForumUser;,
+  author: ForumUser;
   category: string;
   tags: string;
   // Engagement metrics
-  likes: number;,
+  likes: number;
   dislikes: number;
-  replies: number;,
+  replies: number;
   views: number;
   bookmarks: number;
   // Status and metadata
-  isPinned: boolean;,
+  isPinned: boolean;
   isLocked: boolean;
-  isFeatured: boolean;,
+  isFeatured: boolean;
   status: 'active' | 'hidden' | 'deleted' | 'pending_moderation';
   // Timestamps
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   lastActivityAt: Date;
   // Moderation
@@ -44,9 +44,9 @@ export interface ForumPost {
   // Related content
   relatedTemplates?: string; // Template IDs,
   attachments?: Array<{,
-  id: string;,
+  id: string;
   name: string;
-  type: string;,
+  type: string;
   size: number;
   url: string;
 }>;

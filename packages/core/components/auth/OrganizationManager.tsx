@@ -16,7 +16,7 @@ import {
   Palette
 } from 'lucide-react';
 interface Organization {
-  id: string;,
+  id: string;
   name: string;
   slug: string;
   description?: string;
@@ -24,23 +24,23 @@ interface Organization {
   logoUrl?: string;
   branding: Record<string, unknown>;
   settings: Record<string, unknown>;
-  plan: 'free' | 'pro' | 'enterprise';,
+  plan: 'free' | 'pro' | 'enterprise';
   maxUsers: number;
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   interface OrganizationStats {
-  totalMembers: number;,
+  totalMembers: number;
   totalTeams: number;
-  activeTeams: number;,
+  activeTeams: number;
   recentActivity: number;
-  planLimits: {,
-  maxUsers: number;,
+  planLimits: {
+  maxUsers: number;
   maxTeams: number;
   maxStorage: number;
 };
-  usage: {,
+  usage: {
   users: number;
-  teams: number;,
+  teams: number;
   storage: number;
 };
 interface CreateOrganizationData {
@@ -104,7 +104,7 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {)}
   },
-  credentials: 'include';
+  credentials: 'include'
   });
       if (!response.ok) {
         throw new Error('Failed to load organization stats');
@@ -117,7 +117,7 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
   try {
   const response = await fetch('/api/auth/organizations', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -140,7 +140,7 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
       const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -166,7 +166,7 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
       const response = await fetch(`/api/auth/organizations/${organizationId}`, {)}
   },
   method: 'DELETE',
-        credentials: 'include';
+        credentials: 'include'
   });
       if (!response.ok) {
         const errorData = await response.json();

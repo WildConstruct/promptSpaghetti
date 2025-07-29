@@ -4,12 +4,12 @@
  */
 import React, { useState } from 'react';
 interface ActivityStatsData {
-  total_events: number;,
+  total_events: number;
   events_by_type: Record<string, number>;
   events_by_day: Array<{ date: string; count: number }>;
   most_active_users: Array<{ user_id: string; count: number }>;
 interface ActivityStatsProps {
-  stats: ActivityStatsData;,
+  stats: ActivityStatsData;
   workspaceId: string;
   className?: string;
   export const ActivityStats: React.FC<ActivityStatsProps> = ({,)

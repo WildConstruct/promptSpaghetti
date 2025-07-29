@@ -32,14 +32,14 @@ interface AdvancedExportTemplateManagerProps {
   search?: string;
   tags?: string;
   interface TemplateStats {
-  id: string;,
+  id: string;
   usageCount: number;
-  lastUsed: string | null;,
+  lastUsed: string | null;
   averageRating: number;
-  totalRatings: number;,
+  totalRatings: number;
   successRate: number;
   interface TemplateCustomization {
-  templateId: string;,
+  templateId: string;
   parameters: Record<string, unknown>;
   customFields: Record<string, unknown>;
   previewData?: unknown;
@@ -475,7 +475,7 @@ interface AdvancedExportTemplateManagerProps {
                           padding: '16px',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
-                          position: 'relative';
+                          position: 'relative'
   }}
                         onClick={() => handleSelectTemplate(template)}
                       >

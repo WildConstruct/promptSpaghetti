@@ -4,7 +4,7 @@
  */
 
 export interface PythonExecutionRequest {
-  code: string;,
+  code: string;
   input_data: any;
   timeout?: number;
   memory_limit?: string;
@@ -20,17 +20,17 @@ export interface PythonExecutionResult {
   error_code?: string;
   error_line?: number;
   traceback?: string;
-  execution_time: number;,
+  execution_time: number;
   memory_used: string;
-  peak_memory: string;,
+  peak_memory: string;
   cpu_usage: number;
-  warnings: string;,
+  warnings: string;
   modules_imported: string;
-  cache_hit: boolean;,
+  cache_hit: boolean;
   security_events: Array<{,
-  timestamp: number;,
+  timestamp: number;
   level: string;
-  type: string;,
+  type: string;
   message: string;
   details: Record<string, any>;
 }>;
@@ -41,21 +41,21 @@ export interface PythonValidationRequest {
   strict_mode?: boolean;
 }
 export interface PythonValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: string;
   warnings: string;
   complexity_score?: number;
   dangerous_patterns?: string;
 }
 export interface PythonExecutorConfig {
-  baseUrl: string;,
+  baseUrl: string;
   timeout: number;
-  retryAttempts: number;,
+  retryAttempts: number;
   retryDelay: number;
   apiKey?: string;
-  enableMetrics: boolean;,
+  enableMetrics: boolean;
   defaultMemoryLimit: string;
-  defaultTimeout: number;,
+  defaultTimeout: number;
   defaultStrictMode: boolean;
 }
 export class PythonExecutorClientError extends Error {
@@ -98,7 +98,7 @@ export class PythonExecutorClient {
       const response = await this.makeRequest('/v1/execute', {)
   method: 'POST',
         body: JSON.stringify(executeRequest),
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'X-Request-ID': requestId,
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })}
@@ -137,7 +137,7 @@ export class PythonExecutorClient {
       const response = await this.makeRequest('/v1/validate', {)
   method: 'POST',
         body: JSON.stringify(validateRequest),
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'X-Request-ID': requestId,
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })}
@@ -162,7 +162,7 @@ export class PythonExecutorClient {
     try {
       const response = await this.makeRequest('/health', {)
   method: 'GET',
-        headers: {,
+        headers: {
           'X-Request-ID': requestId,
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })}
       });
@@ -183,7 +183,7 @@ export class PythonExecutorClient {
     try {
       const response = await this.makeRequest('/metrics', {)
   method: 'GET',
-        headers: {,
+        headers: {
           'X-Request-ID': requestId,
           ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })}
       });
@@ -309,7 +309,7 @@ export async function isPythonExecutorAvailable(baseUrl?: string): Promise<boole
 /**
  * Utility function to execute Python code with default settings
  */
-export async function executePythonCode(code: string,)
+export async function executePythonCode(code: string)
   inputData: any,
   options: Partial<PythonExecutionRequest> = {}
 ): Promise<PythonExecutionResult> {

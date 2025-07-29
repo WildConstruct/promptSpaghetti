@@ -16,21 +16,21 @@ interface IndividualResultManagerProps {
   enableAnalytics?: boolean;
   maxDisplayResults?: number;
   interface ResultAction {
-  type: 'lock' | 'unlock' | 'regenerate' | 'delete' | 'compare' | 'analyze' | 'export';,
+  type: 'lock' | 'unlock' | 'regenerate' | 'delete' | 'compare' | 'analyze' | 'export';
   resultIndex: number;
   data?: unknown;
   interface ComparisonMode {
-  enabled: boolean;,
+  enabled: boolean;
   selectedResults: number;
   viewMode: 'side-by-side' | 'overlay' | 'diff';
   interface ResultAnalytics {
-  resultIndex: number;,
+  resultIndex: number;
   wordCount: number;
-  sentenceCount: number;,
+  sentenceCount: number;
   uniqueWords: number;
-  averageWordLength: number;,
+  averageWordLength: number;
   readabilityScore: number;
-  sentiment: 'positive' | 'neutral' | 'negative';,
+  sentiment: 'positive' | 'neutral' | 'negative';
   topics: string;
   similarity: number; // Compared to other results,
   export const IndividualResultManager: React.FC<IndividualResultManagerProps> = ({,)
@@ -65,7 +65,7 @@ interface IndividualResultManagerProps {
   const [resultAnalytics, setResultAnalytics] = useState<Map<number, ResultAnalytics>>(new Map());
   const [actionMenuIndex, setActionMenuIndex] = useState<number | null>(null);
   const [lockDialog, setLockDialog] = useState<{
-  visible: boolean;,
+  visible: boolean;
   resultIndex: number;
   note: string;
 }>({)
@@ -753,7 +753,7 @@ const menuButtonStyle: React.CSSProperties = {,
   cursor: 'pointer',
   fontSize: '14px',
   color: '#374151',
-  ':hover': {,
+  ':hover': {
   background: '#f3f4f6',
 };
 

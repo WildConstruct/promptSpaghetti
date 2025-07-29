@@ -17,40 +17,40 @@ import {
   ClipboardDocumentListIcon
 } from '@heroicons/react/24/outline';
 interface ApprovalCriteria {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  weight: number;,
+  weight: number;
   is_required: boolean;
   conditions: Record<string, any>;
   interface ApprovalRequest {
-  id: string;,
+  id: string;
   workspace_id: string;
-  resource_id: string;,
+  resource_id: string;
   transition_id: string;
-  requester_id: string;,
+  requester_id: string;
   title: string;
   description?: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   business_justification?: string;
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';,
+  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';
   requested_at: Date;
   due_date?: Date;
-  current_approvals: number;,
+  current_approvals: number;
   required_approvals: number;
   approval_percentage: number;
   interface ReviewerAssignment {
-  id: string;,
+  id: string;
   reviewer_id: string;
-  assignment_type: 'primary' | 'secondary' | 'escalated';,
+  assignment_type: 'primary' | 'secondary' | 'escalated';
   status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'abstained';
   reviewed_at?: Date;
   review_comment?: string;
   criteria_evaluations: Record<string, any>;
   interface ApprovalReviewInterfaceProps {
-  request: ApprovalRequest;,
+  request: ApprovalRequest;
   workspaceId: string;
-  currentUserId: string;,
+  currentUserId: string;
   onReviewSubmit: (decision: 'approve' | 'reject' | 'abstain', comment?: string, criteriaEvaluations?: Record<string, any>) => void;
   onClose: () => void;
   readOnly?: boolean;
@@ -113,7 +113,7 @@ interface ApprovalCriteria {
   const handleCriteriaEvaluation = (criteriaId: string, field: string, value: Error) => {
   setCriteriaEvaluations(prev => ({)
   ...prev,
-  [criteriaId]: {,
+  [criteriaId]: {
   ...prev[criteriaId],
   [field]: value,
 }));

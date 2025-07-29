@@ -16,7 +16,7 @@ import {
   FilmIndustryWorkflowTemplate
 } from '../../services/AdvancedPromptingCollaborationService';
 interface AdvancedPromptingCollaborationPanelProps {
-  collaborationService: AdvancedPromptingCollaborationService;,
+  collaborationService: AdvancedPromptingCollaborationService;
   currentUser: FilmIndustryUser;
   onMARSRegionCreate?: (region: MARSRegionTemplate) => void;
   onZadaPatternCreate?: (pattern: ZadaPromptPattern) => void;
@@ -360,7 +360,7 @@ interface AdvancedPromptingCollaborationPanelProps {
 },
   borderRadius: 8,
               padding: 16,
-              position: 'relative';
+              position: 'relative'
   }}
           >
             <div style={{
@@ -800,7 +800,7 @@ interface AdvancedPromptingCollaborationPanelProps {
   background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden';
+      overflow: 'hidden'
   }}>
       {/* Header */}
       <div style={{

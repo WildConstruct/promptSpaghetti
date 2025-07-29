@@ -23,7 +23,7 @@ describe('TimeTravel', () => {
   enableDiffing: true,
   compressionEnabled: false,
   persistHistory: false,
-  autoSnapshot: {,
+  autoSnapshot: {
   enabled: false,
   interval: 30000,
   maxSnapshots: 10,
@@ -75,7 +75,7 @@ describe('TimeTravel', () => {
         timestamp: Date.now(),
         type: 'UPDATE',
         payload: { count: 2 },
-        source: 'local';
+        source: 'local'
   };
       const entryId = timeTravel.recordStateChange(change, 'test-domain', {)
   description: 'Update count',
@@ -337,7 +337,7 @@ describe('TimeTravel', () => {
   timestamp: Date.now() + i * 1000,
           type: 'UPDATE',
           payload: { step: i },
-          source: 'local';
+          source: 'local'
   };
         timeTravel.recordStateChange(change, 'replay-test');
     });
@@ -455,7 +455,7 @@ describe('TimeTravel', () => {
   timestamp: Date.now() + i * 1000,
             type: 'UPDATE',
             payload: { index: i },
-            source: 'local';
+            source: 'local'
   };
           timeTravel.recordStateChange(change, domain, {)
   tags: ['test', domain],
@@ -464,7 +464,7 @@ describe('TimeTravel', () => {
     it('should query timeline by time range', () => {
   const now = Date.now();
   const results = timeTravel.queryTimeline({)
-  timeRange: {,
+  timeRange: {
   start: now + 2000,
   end: now + 6000,
 });

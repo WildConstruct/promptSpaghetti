@@ -26,11 +26,11 @@ import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
 
 // Import Epic 1 Analytics Infrastructure
 interface AnalyticsEvent {
-  id: string;,
+  id: string;
   timestamp: number;
-  type: string;,
+  type: string;
   userId: string;
-  sessionId: string;,
+  sessionId: string;
   properties: Record<string, any>;
 interface MetricQuery {
   metric: string;
@@ -38,7 +38,7 @@ interface MetricQuery {
   timeRange?: { start: number; end: number };
   groupBy?: string;
 interface MetricResult {
-  metric: string;,
+  metric: string;
   value: number;
   timestamp: number;
   dimensions?: Record<string, any>;
@@ -50,14 +50,14 @@ interface MetricResult {
   funnelId?: string;
   segmentId?: string;
   cohortId?: string;
-  startDate: number;,
+  startDate: number;
   endDate: number;
   // Metric specifications
   metrics: ConversionMetricType;
   groupBy?: ConversionGroupBy;
   filters?: ConversionFilter;
   // Aggregation settings
-  aggregation: {,
+  aggregation: {
   interval: 'hour' | 'day' | 'week' | 'month';
   timeZone?: string;
   fillGaps?: boolean;
@@ -96,19 +96,19 @@ export type ConversionGroupBy =
   | 'attribution_model';
 
 export interface ConversionFilter {
-  field: string;,
+  field: string;
   operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than' | 'contains';
   value: any;
   negate?: boolean;
 }
 export interface ConversionMetricResult {
-  metricType: ConversionMetricType;,
+  metricType: ConversionMetricType;
   value: number;
-  timestamp: number;,
-  metadata: {,
-  sampleSize: number;,
+  timestamp: number;
+  metadata: {
+  sampleSize: number;
   confidence: number;
-  variability: number;,
+  variability: number;
   trend: 'up' | 'down' | 'stable';
   comparison?: ComparisonData;
 };
@@ -116,74 +116,74 @@ export interface ConversionMetricResult {
   breakdowns?: MetricBreakdown;
 }
 export interface ComparisonData {
-  previousPeriod: {,
-  value: number;,
+  previousPeriod: {
+  value: number;
   changePercent: number;
   significance: number;
 };
   benchmark?: {
-  value: number;,
+  value: number;
   source: string;
   lastUpdated: number;
 };
 }
 export interface MetricBreakdown {
-  dimension: string;,
+  dimension: string;
   value: any;
-  metricValue: number;,
+  metricValue: number;
   percentage: number;
 }
 export interface ProcessingStageResult {
-  stage: string;,
+  stage: string;
   success: boolean;
-  processedCount: number;,
+  processedCount: number;
   errorCount: number;
   duration: number;
   errors?: ProcessingError;
 }
 export interface ProcessingError {
-  eventId: string;,
+  eventId: string;
   stage: string;
-  error: string;,
+  error: string;
   severity: 'warning' | 'error' | 'critical';
   context?: Record<string, any>;
 }
 export interface DataWarehouseConfig {
-  connectionString: string;,
+  connectionString: string;
   schemaName: string;
-  tablePrefix: string;,
-  partitioning: {,
-  strategy: 'time' | 'hash' | 'range';,
+  tablePrefix: string;
+  partitioning: {
+  strategy: 'time' | 'hash' | 'range';
   field: string;
   interval?: string;
 };
-  retention: {,
+  retention: {
   rawEvents: number; // days,
   aggregatedMetrics: number; // days,
   archivedData: number; // days,
 };
-  indexing: {,
+  indexing: {
   timeIndex: boolean;
-  userIndex: boolean;,
+  userIndex: boolean;
   funnelIndex: boolean;
   customIndices: string;
 };
 }
 export interface AnalyticsAPIConfig {
-  caching: {,
-  enabled: boolean;,
+  caching: {
+  enabled: boolean;
   ttl: number; // seconds,
   maxSize: number; // entries,
-  strategy: 'lru' | 'lfu' | 'ttl';
-};
-  rateLimiting: {,
+  strategy: 'lru' | 'lfu' | 'ttl'
+  };
+  rateLimiting: {
   enabled: boolean;
-  requestsPerMinute: number;,
+  requestsPerMinute: number;
   burstLimit: number;
 };
-  optimization: {,
+  optimization: {
   queryTimeout: number; // milliseconds,
-  maxConcurrentQueries: number;,
+  maxConcurrentQueries: number;
   enableQueryPlanning: boolean;
   precomputeMetrics: string;
 };
@@ -199,9 +199,9 @@ export class ConversionAnalyticsInfrastructure {
   private analyticsAPI: ConversionAnalyticsAPI;
   constructor();
     private epic1Analytics: AnalyticsInfrastructure,
-    private config: {,
+    private config: {
   dataWarehouse: DataWarehouseConfig;
-      api: AnalyticsAPIConfig;,
+      api: AnalyticsAPIConfig;
   processing: ProcessingConfig;
     this.processingPipeline = new ConversionProcessingPipeline()
       this.epic1Analytics,
@@ -323,9 +323,9 @@ export class ConversionProcessingPipeline {
   type: currentEvent.type,
   userId: currentEvent.userId,
   sessionId: currentEvent.sessionId,
-  properties: {,
+  properties: {
   ...currentEvent.properties,
-  conversionData: {,
+  conversionData: {
   funnelId: currentEvent.funnelContext.funnelId,
   stepId: currentEvent.funnelContext.stepId,
   value: currentEvent.value,
@@ -388,7 +388,7 @@ export class ConversionProcessingPipeline {
     return {
   healthy: allHealthy,
   uptime: Date.now(), // Simplified,
-  metrics: {,
+  metrics: {
   totalProcessed: 0, // TODO: Track actual metrics,
   errorRate: 0,
   averageLatency: 0,
@@ -418,7 +418,7 @@ export class ConversionMetricsCalculator {
         console.error(`Failed to calculate metric ${metricType}:`, error);}
         // Continue with other metrics
     return results;
-  private async calculateSingleMetric(metricType: ConversionMetricType,)
+  private async calculateSingleMetric(metricType: ConversionMetricType)
     query: ConversionMetricQuery,
     events: FlexibleConversionEvent): Promise<ConversionMetricResult> {,
   const calculator = this.getMetricCalculator(metricType);
@@ -455,7 +455,7 @@ export class ConversionMetricsCalculator {
   custom: new CustomMetricCalculator(),
 };
     return calculators[metricType];
-  private applyFilters(events: FlexibleConversionEvent,)
+  private applyFilters(events: FlexibleConversionEvent)
     filters?: ConversionFilter
   ): FlexibleConversionEvent {
   if (!filters || filters.length === 0) {
@@ -491,7 +491,7 @@ export class ConversionMetricsCalculator {
   return String(value).includes(String(filter.value));
   default:,
   return false;
-  private async calculateMetadata(metricType: ConversionMetricType,)
+  private async calculateMetadata(metricType: ConversionMetricType)
   value: number,
   events: FlexibleConversionEvent): Promise<ConversionMetricResult['metadata']> {,
   return {
@@ -522,12 +522,12 @@ export class ConversionMetricsCalculator {
     if (changePercent > 0.1) return 'up';
     if (changePercent < -0.1) return 'down';
     return 'stable';
-  private async calculateComparison(metricType: ConversionMetricType,)
+  private async calculateComparison(metricType: ConversionMetricType)
     value: number,
     events: FlexibleConversionEvent): Promise<ComparisonData | undefined> {,
     // TODO: Implement historical comparison logic
     return undefined;
-  private async calculateBreakdowns(metricType: ConversionMetricType,)
+  private async calculateBreakdowns(metricType: ConversionMetricType)
     events: FlexibleConversionEvent,
     groupBy: ConversionGroupBy): Promise<MetricBreakdown> {,
     const breakdowns: MetricBreakdown = [];
@@ -576,7 +576,7 @@ export class ConversionMetricsCalculator {
   funnelId: query.funnelId,
   segmentId: query.segmentId,
   cohortId: query.cohortId,
-  timeRange: {,
+  timeRange: {
   start: query.startDate,
   end: query.endDate,
 };
@@ -584,7 +584,7 @@ export class ConversionMetricsCalculator {
   return {
   healthy: true,
   uptime: Date.now(),
-  metrics: {,
+  metrics: {
   totalCalculations: 0,
   errorRate: 0,
   averageLatency: 0,
@@ -593,45 +593,45 @@ export class ConversionMetricsCalculator {
 // Supporting interfaces and types
 
 export interface ProcessingConfig {
-  validation: ValidationConfig;,
+  validation: ValidationConfig;
   enrichment: EnrichmentConfig;
-  transformation: TransformationConfig;,
+  transformation: TransformationConfig;
   aggregation: AggregationConfig;
-  storage: StorageConfig;,
+  storage: StorageConfig;
   calculations: any;
-  batchSize: number;,
+  batchSize: number;
   continueOnError: boolean;
   forwardToEpic1: boolean;
 }
 export interface ValidationConfig {
-  strict: boolean;,
+  strict: boolean;
   requiredFields: string;
   customRules: string;
 }
 export interface EnrichmentConfig {
-  enableUserEnrichment: boolean;,
+  enableUserEnrichment: boolean;
   enableTemplateEnrichment: boolean;
   enableLocationEnrichment: boolean;
 }
 export interface TransformationConfig {
-  normalizeTimestamps: boolean;,
+  normalizeTimestamps: boolean;
   calculateDerivedFields: boolean;
   applyPrivacyFilters: boolean;
 }
 export interface AggregationConfig {
-  enableRealTimeAggregation: boolean;,
+  enableRealTimeAggregation: boolean;
   aggregationWindows: string;
   customAggregations: string;
 }
 export interface StorageConfig {
-  primaryStorage: string;,
+  primaryStorage: string;
   archiveStorage: string;
   retentionPeriod: number;
 }
 export interface MetricCalculationConfig {
-  enableCaching: boolean;,
+  enableCaching: boolean;
   cacheTimeout: number;
-  parallelCalculations: boolean;,
+  parallelCalculations: boolean;
   customMetrics: Record<string, string>;
 }
 export interface BatchProcessingOptions {
@@ -640,55 +640,55 @@ export interface BatchProcessingOptions {
   continueOnError?: boolean;
 }
 export interface BatchProcessingResult {
-  totalEvents: number;,
+  totalEvents: number;
   processedCount: number;
-  errorCount: number;,
+  errorCount: number;
   duration: number;
   stageResults: ProcessingStageResult;
 }
 export interface RealTimeMetrics {
-  funnelId: string;,
+  funnelId: string;
   timestamp: number;
-  metrics: {,
-  activeUsers: number;,
+  metrics: {
+  activeUsers: number;
   conversionsLastHour: number;
-  conversionRate: number;,
+  conversionRate: number;
   averageTimeToConvert: number;
   topDropOffStep: string;
 };
 }
 export interface DataExportRequest {
-  format: 'csv' | 'json' | 'parquet';,
+  format: 'csv' | 'json' | 'parquet';
   query: ConversionMetricQuery;
   compression?: 'gzip' | 'zip';
-  destination?: 'download' | 's3' | 'api';
-}
+  destination?: 'download' | 's3' | 'api'
+  }
 export interface DataExportResult {
-  exportId: string;,
+  exportId: string;
   status: 'pending' | 'completed' | 'failed';
   downloadUrl?: string;
   fileSize?: number;
   recordCount?: number;
 }
 export interface InfrastructureHealthStatus {
-  processing: ComponentHealthStatus;,
+  processing: ComponentHealthStatus;
   metrics: ComponentHealthStatus;
-  dataWarehouse: ComponentHealthStatus;,
+  dataWarehouse: ComponentHealthStatus;
   api: ComponentHealthStatus;
 }
 export interface ComponentHealthStatus {
-  healthy: boolean;,
+  healthy: boolean;
   uptime: number;
-  metrics: {,
+  metrics: {
   totalProcessed?: number;
   totalCalculations?: number;
-  errorRate: number;,
+  errorRate: number;
   averageLatency: number;
 };
   details?: any;
 }
 export interface CachedMetric {
-  value: ConversionMetricResult;,
+  value: ConversionMetricResult;
   timestamp: number;
   ttl: number;
   // Processing stage interfaces
@@ -758,7 +758,8 @@ class CustomMetricCalculator implements MetricCalculator {
 // Processing stage implementations (simplified)
 class ValidationStage implements ProcessingStage {
   constructor(private config: ValidationConfig) {}
-  getName(): string { return 'validation'; }
+  getName(): string { return 'validation'
+  }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
   // Simplified validation
   const hasRequiredFields = this.config.requiredFields.every(field => ;);
@@ -789,7 +790,8 @@ class ValidationStage implements ProcessingStage {
     };
 class EnrichmentStage implements ProcessingStage {
   constructor(private config: EnrichmentConfig) {}
-  getName(): string { return 'enrichment'; }
+  getName(): string { return 'enrichment'
+  }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
     // Event is already enriched in ConversionDataRelationshipManager
     return { success: true, transformedEvent: event };
@@ -801,7 +803,8 @@ class EnrichmentStage implements ProcessingStage {
     };
 class TransformationStage implements ProcessingStage {
   constructor(private config: TransformationConfig) {}
-  getName(): string { return 'transformation'; }
+  getName(): string { return 'transformation'
+  }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
     const transformedEvent = { ...event };
     if (this.config.normalizeTimestamps) {
@@ -815,7 +818,8 @@ class TransformationStage implements ProcessingStage {
     };
 class AggregationStage implements ProcessingStage {
   constructor(private config: AggregationConfig) {}
-  getName(): string { return 'aggregation'; }
+  getName(): string { return 'aggregation'
+  }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
     // Real-time aggregation would happen here
     return { success: true, transformedEvent: event };
@@ -827,7 +831,8 @@ class AggregationStage implements ProcessingStage {
     };
 class StorageStage implements ProcessingStage {
   constructor(private config: StorageConfig) {}
-  getName(): string { return 'storage'; }
+  getName(): string { return 'storage'
+  }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
     // Storage logic would happen here
     return { success: true, transformedEvent: event };
@@ -860,7 +865,7 @@ class ConversionAnalyticsAPI {
   return {
   funnelId,
   timestamp: Date.now(),
-  metrics: {,
+  metrics: {
   activeUsers: 0,
   conversionsLastHour: 0,
   conversionRate: 0,
@@ -871,7 +876,7 @@ class ConversionAnalyticsAPI {
     return {
       exportId: `export-${Date.now()}`}
 },
-  status: 'pending';
+  status: 'pending'
   };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
     return {
@@ -882,8 +887,8 @@ class ConversionAnalyticsAPI {
 
 // Factory function
 }
-export function createConversionAnalyticsInfrastructure(epic1Analytics: any,)
-  config: {,
+export function createConversionAnalyticsInfrastructure(epic1Analytics: any)
+  config: {
   processing: ProcessingConfig;
 ): ConversionAnalyticsInfrastructure {
   return new ConversionAnalyticsInfrastructure(epic1Analytics, config);

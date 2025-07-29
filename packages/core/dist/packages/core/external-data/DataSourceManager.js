@@ -65,12 +65,13 @@ export class DataSourceManager extends EventEmitter {
                 id: 'getty-normalize',
                 name: 'Getty Data Normalizer',
                 type: 'normalize',
-                config: {},
-                dateFormat: 'iso',
-                textFields: ['preferred_label', 'description'],
-                imageFields: ['thumbnail', 'image_url'],
-            },
-            enabled, true],
+                config: {
+                    dateFormat: 'iso',
+                    textFields: ['preferred_label', 'description'],
+                    imageFields: ['thumbnail', 'image_url'],
+                },
+                enabled: true
+            }],
             rateLimit;
         {
             requests: 100,
@@ -132,16 +133,18 @@ export class DataSourceManager extends EventEmitter {
                 id: 'met-mapper',
                 name: 'Met Data Mapper',
                 type: 'map',
-                config: {},
-                mapping: {},
-                'title': 'name',
-                'artistDisplayName': 'artist',
-                'objectDate': 'era',
-                'culture': 'region',
-                'medium': 'materials',
-                'primaryImageSmall': 'image',
-            },
-            enabled, true],
+                config: {
+                    mapping: {
+                        'title': 'name',
+                        'artistDisplayName': 'artist',
+                        'objectDate': 'era',
+                        'culture': 'region',
+                        'medium': 'materials',
+                        'primaryImageSmall': 'image',
+                    },
+                    enabled: true
+                }
+            }],
             rateLimit;
         {
             requests: 80,
@@ -192,13 +195,15 @@ export class DataSourceManager extends EventEmitter {
                 id: 'medieval-classifier',
                 name: 'Medieval Period Classifier',
                 type: 'validate',
-                config: {},
-                eraValidation: {},
-                'early-medieval': { start: 500, end: 1000 },
-                'high-medieval': { start: 1000, end: 1300 },
-                'late-medieval': { start: 1300, end: 1500 }
-            },
-            enabled, true],
+                config: {
+                    eraValidation: {
+                        'early-medieval': { start: 500, end: 1000 },
+                        'high-medieval': { start: 1000, end: 1300 },
+                        'late-medieval': { start: 1300, end: 1500 }
+                    },
+                    enabled: true
+                }
+            }],
             reliability;
         {
             timeout: 1000,

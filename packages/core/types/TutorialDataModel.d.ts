@@ -145,7 +145,7 @@ export declare const tutorialMetadataSchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -153,7 +153,7 @@ export declare const tutorialMetadataSchema: z.ZodObject<{
     };
     lastUpdated: Date;
     language: string;
-    licensing: {,
+    licensing: {
         type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
         attribution?: string | undefined;
     };
@@ -164,7 +164,7 @@ export declare const tutorialMetadataSchema: z.ZodObject<{
     } | undefined;
 }, {
     version: string;
-    author: {,
+    author: {
         id: string;
         name: string;
         email: string;
@@ -172,7 +172,7 @@ export declare const tutorialMetadataSchema: z.ZodObject<{
     };
     lastUpdated: Date;
     language: string;
-    licensing: {,
+    licensing: {
         type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
         attribution?: string | undefined;
     };
@@ -360,7 +360,7 @@ export declare const tutorialSchema: z.ZodObject<{
         }>;
     }, "strip", z.ZodTypeAny, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -368,7 +368,7 @@ export declare const tutorialSchema: z.ZodObject<{
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -379,7 +379,7 @@ export declare const tutorialSchema: z.ZodObject<{
         } | undefined;
     }, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -387,7 +387,7 @@ export declare const tutorialSchema: z.ZodObject<{
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -439,7 +439,7 @@ export declare const tutorialSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     status: "draft" | "published" | "review" | "archived" | "suspended";
-    content: {,
+    content: {
         description: string;
         category: string;
         tags: string[];
@@ -450,9 +450,9 @@ export declare const tutorialSchema: z.ZodObject<{
         objectives: string[];
         prerequisites?: string[] | undefined;
     };
-    metadata: {,
+    metadata: {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -460,7 +460,7 @@ export declare const tutorialSchema: z.ZodObject<{
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -470,14 +470,14 @@ export declare const tutorialSchema: z.ZodObject<{
             transcriptAvailable: boolean;
         } | undefined;
     };
-    settings: {,
+    settings: {
         isPublic: boolean;
         maxAttempts: number;
         requiresApproval: boolean;
         allowComments: boolean;
         certificateEnabled: boolean;
     };
-    steps: {,
+    steps: {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
         content: string;
@@ -503,7 +503,7 @@ export declare const tutorialSchema: z.ZodObject<{
     } | undefined;
 }, {
     id: string;
-    content: {,
+    content: {
         description: string;
         category: string;
         tags: string[];
@@ -514,9 +514,9 @@ export declare const tutorialSchema: z.ZodObject<{
         objectives: string[];
         prerequisites?: string[] | undefined;
     };
-    metadata: {,
+    metadata: {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -524,7 +524,7 @@ export declare const tutorialSchema: z.ZodObject<{
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -534,14 +534,14 @@ export declare const tutorialSchema: z.ZodObject<{
             transcriptAvailable?: boolean | undefined;
         } | undefined;
     };
-    settings: {,
+    settings: {
         isPublic?: boolean | undefined;
         maxAttempts?: number | undefined;
         requiresApproval?: boolean | undefined;
         allowComments?: boolean | undefined;
         certificateEnabled?: boolean | undefined;
     };
-    steps: {,
+    steps: {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
         content: string;
@@ -600,7 +600,7 @@ export declare const learningPathSchema: z.ZodObject<{
     updatedAt: Date;
     description: string;
     category: string;
-    author: {,
+    author: {
         id: string;
         name: string;
     };
@@ -616,7 +616,7 @@ export declare const learningPathSchema: z.ZodObject<{
     updatedAt: Date;
     description: string;
     category: string;
-    author: {,
+    author: {
         id: string;
         name: string;
     };
@@ -813,7 +813,7 @@ export declare const schemas: {
             }>;
         }, "strip", z.ZodTypeAny, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -821,7 +821,7 @@ export declare const schemas: {
             };
             lastUpdated: Date;
             language: string;
-            licensing: {,
+            licensing: {
                 type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
                 attribution?: string | undefined;
             };
@@ -832,7 +832,7 @@ export declare const schemas: {
             } | undefined;
         }, {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -840,7 +840,7 @@ export declare const schemas: {
             };
             lastUpdated: Date;
             language: string;
-            licensing: {,
+            licensing: {
                 type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
                 attribution?: string | undefined;
             };
@@ -892,7 +892,7 @@ export declare const schemas: {
     }, "strip", z.ZodTypeAny, {
         id: string;
         status: "draft" | "published" | "review" | "archived" | "suspended";
-        content: {,
+        content: {
             description: string;
             category: string;
             tags: string[];
@@ -903,9 +903,9 @@ export declare const schemas: {
             objectives: string[];
             prerequisites?: string[] | undefined;
         };
-        metadata: {,
+        metadata: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -913,7 +913,7 @@ export declare const schemas: {
             };
             lastUpdated: Date;
             language: string;
-            licensing: {,
+            licensing: {
                 type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
                 attribution?: string | undefined;
             };
@@ -923,14 +923,14 @@ export declare const schemas: {
                 transcriptAvailable: boolean;
             } | undefined;
         };
-        settings: {,
+        settings: {
             isPublic: boolean;
             maxAttempts: number;
             requiresApproval: boolean;
             allowComments: boolean;
             certificateEnabled: boolean;
         };
-        steps: {,
+        steps: {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
             content: string;
@@ -956,7 +956,7 @@ export declare const schemas: {
         } | undefined;
     }, {
         id: string;
-        content: {,
+        content: {
             description: string;
             category: string;
             tags: string[];
@@ -967,9 +967,9 @@ export declare const schemas: {
             objectives: string[];
             prerequisites?: string[] | undefined;
         };
-        metadata: {,
+        metadata: {
             version: string;
-            author: {,
+            author: {
                 id: string;
                 name: string;
                 email: string;
@@ -977,7 +977,7 @@ export declare const schemas: {
             };
             lastUpdated: Date;
             language: string;
-            licensing: {,
+            licensing: {
                 type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
                 attribution?: string | undefined;
             };
@@ -987,14 +987,14 @@ export declare const schemas: {
                 transcriptAvailable?: boolean | undefined;
             } | undefined;
         };
-        settings: {,
+        settings: {
             isPublic?: boolean | undefined;
             maxAttempts?: number | undefined;
             requiresApproval?: boolean | undefined;
             allowComments?: boolean | undefined;
             certificateEnabled?: boolean | undefined;
         };
-        steps: {,
+        steps: {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
             content: string;
@@ -1159,7 +1159,7 @@ export declare const schemas: {
         }>;
     }, "strip", z.ZodTypeAny, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1167,7 +1167,7 @@ export declare const schemas: {
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -1178,7 +1178,7 @@ export declare const schemas: {
         } | undefined;
     }, {
         version: string;
-        author: {,
+        author: {
             id: string;
             name: string;
             email: string;
@@ -1186,7 +1186,7 @@ export declare const schemas: {
         };
         lastUpdated: Date;
         language: string;
-        licensing: {,
+        licensing: {
             type: "internal" | "cc0" | "cc-by" | "cc-by-sa" | "proprietary";
             attribution?: string | undefined;
         };
@@ -1261,7 +1261,7 @@ export declare const schemas: {
         updatedAt: Date;
         description: string;
         category: string;
-        author: {,
+        author: {
             id: string;
             name: string;
         };
@@ -1277,7 +1277,7 @@ export declare const schemas: {
         updatedAt: Date;
         description: string;
         category: string;
-        author: {,
+        author: {
             id: string;
             name: string;
         };

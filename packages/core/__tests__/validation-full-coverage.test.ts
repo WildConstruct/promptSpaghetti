@@ -132,7 +132,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
 },
   target: `node${i + 1}`}
 },
-  type: 'default';
+  type: 'default'
   });
       const start = Date.now();
       const errors = validateConnection(largeEdges, mockNodes);

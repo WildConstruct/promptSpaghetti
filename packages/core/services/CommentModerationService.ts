@@ -12,7 +12,7 @@ import { CommentAnalyticsService } from './CommentAnalyticsService';
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
 
 export interface CommentModerationRequest {
-  commentId: string;,
+  commentId: string;
   action: CommentModerationAction;
   moderatorId: string;
   reason?: string;
@@ -28,9 +28,9 @@ export interface CommentModerationAction {
   escalateTo?: string;
 }
 export interface CommentModerationResult {
-  commentId: string;,
+  commentId: string;
   action: CommentModerationAction;
-  status: 'success' | 'failed' | 'pending';,
+  status: 'success' | 'failed' | 'pending';
   moderatorId: string;
   timestamp: Date;
   previousState?: string;
@@ -46,16 +46,16 @@ export interface CommentModerationFilters {
   status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'hidden' | 'deleted';
   moderatorId?: string;
   authorId?: string;
-  dateRange?: {,
-  start: Date;,
+  dateRange?: {
+  start: Date;
   end: Date;
 };
   toxicityRange?: {
-  min: number;,
+  min: number;
   max: number;
 };
   qualityRange?: {
-  min: number;,
+  min: number;
   max: number;
 };
   reportCount?: {
@@ -72,77 +72,77 @@ export interface CommentModerationFilters {
   offset?: number;
 }
 export interface CommentModerationQueue {
-  queueId: string;,
+  queueId: string;
   name: string;
-  description: string;,
+  description: string;
   filters: CommentModerationFilters;
-  priority: number;,
+  priority: number;
   autoAssign: boolean;
-  assignedModerators: string;,
+  assignedModerators: string;
   slaMinutes: number;
-  enableAutoModeration: boolean;,
+  enableAutoModeration: boolean;
   escalationRules: EscalationRule;
 }
 export interface EscalationRule {
-  condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';,
+  condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
   threshold: number;
   action: 'escalate' | 'auto_reject' | 'require_supervisor' | 'flag_urgent';
   escalateTo?: string;
   notifyStakeholders: string;
 }
 export interface CommentModerationStats {
-  totalComments: number;,
+  totalComments: number;
   pendingReview: number;
-  approvedToday: number;,
+  approvedToday: number;
   rejectedToday: number;
-  flaggedComments: number;,
+  flaggedComments: number;
   escalatedComments: number;
-  avgProcessingTimeMinutes: number;,
+  avgProcessingTimeMinutes: number;
   moderatorWorkload: Array<{,
-  moderatorId: string;,
+  moderatorId: string;
   assignedComments: number;
-  completedToday: number;,
+  completedToday: number;
   avgTimeMinutes: number;
   accuracy: number;
 }>;
-  toxicityDistribution: {,
+  toxicityDistribution: {
   low: number;
-  medium: number;,
+  medium: number;
   high: number;
   critical: number;
 };
-  qualityDistribution: {,
+  qualityDistribution: {
   excellent: number;
-  good: number;,
+  good: number;
   fair: number;
   poor: number;
 };
-  recentTrends: {,
+  recentTrends: {
   volumeChange24h: number;
-  toxicityChange24h: number;,
+  toxicityChange24h: number;
   qualityChange24h: number;
 };
 }
 export interface BulkModerationRequest {
-  commentIds: string;,
+  commentIds: string;
   action: CommentModerationAction;
-  moderatorId: string;,
+  moderatorId: string;
   reason: string;
   batchSize?: number;
   parallel?: boolean;
   validateBeforeAction?: boolean;
 }
 export interface BulkModerationResult {
-  batchId: string;,
+  batchId: string;
   totalItems: number;
-  successful: number;,
+  successful: number;
   failed: number;
-  results: CommentModerationResult;,
+  results: CommentModerationResult;
   errors: Array<{,
-  commentId: string;,
+  commentId: string;
   error: string;
 }>;
-  processingTimeMs: number;,
+  processingTimeMs: number;
   summary: Record<string, number>;
 /**
  * Comment Moderation Service
@@ -248,11 +248,11 @@ export class CommentModerationService {
   /**
   * Get moderation queue with filtering
   */
-  async getModerationQueue(queueId: string,)
+  async getModerationQueue(queueId: string)
   filters?: CommentModerationFilters): Promise<{,
-  items: any;,
+  items: any;
   totalCount: number;
-  queueInfo: CommentModerationQueue;,
+  queueInfo: CommentModerationQueue;
   stats: Partial<CommentModerationStats>;
 }> {
     const queue = this.moderationQueues.get(queueId);
@@ -344,9 +344,9 @@ export class CommentModerationService {
   /**
    * Auto-moderate comments based on ML analysis
    */
-  async autoModerateComments(resourceId: string,)
+  async autoModerateComments(resourceId: string)
     resourceType: CommentableResourceType,
-    options: {,
+    options: {
   toxicityThreshold?: number;
   qualityThreshold?: number;
   spamThreshold?: number;
@@ -354,9 +354,9 @@ export class CommentModerationService {
   enableAutoRejection?: boolean;
 } = {}
   ): Promise<{
-  processed: number;,
+  processed: number;
   autoApproved: number;
-  autoRejected: number;,
+  autoRejected: number;
   flaggedForReview: number;
   errors: number;
 }> {
@@ -430,10 +430,10 @@ export class CommentModerationService {
         queueId: 'high_priority',
         name: 'High Priority',
         description: 'Comments flagged as high priority or toxic',
-        filters: {,
+        filters: {
   toxicityRange: { min: 0.7, max: 1.0 },
           reportCount: { min: 3 },
-          status: 'pending';
+          status: 'pending'
   },
   priority: 1,
         autoAssign: true,
@@ -452,7 +452,7 @@ export class CommentModerationService {
         queueId: 'standard',
         name: 'Standard Review',
         description: 'Regular comments pending moderation',
-        filters: {,
+        filters: {
   status: 'pending',
           toxicityRange: { min: 0, max: 0.7 }
   },
@@ -467,7 +467,7 @@ export class CommentModerationService {
   queueId: 'appeals',
   name: 'Appeals Review',
   description: 'Comments under appeal review',
-  filters: {,
+  filters: {
   status: 'rejected',
   // Additional appeal-specific filters would go here
 },
@@ -583,7 +583,7 @@ export class CommentModerationService {
   for (let i = 0; i < array.length; i += size) {
   chunks.push(array.slice(i, i + size));
   return chunks;
-  private async processBatchParallel(batch: string,)
+  private async processBatchParallel(batch: string)
   request: BulkModerationRequest,
   result: BulkModerationResult): Promise<void> {,
   const promises = batch.map(commentId =>;);
@@ -613,7 +613,7 @@ export class CommentModerationService {
   error: batchResult.reason?.message || 'Promise rejected',
 });
     });
-  private async processBatchSequential(batch: string,)
+  private async processBatchSequential(batch: string)
     request: BulkModerationRequest,
     result: BulkModerationResult): Promise<void> {,
   for (const commentId of batch) {

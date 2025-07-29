@@ -16,23 +16,23 @@ export interface StateSelector<T, R> {
   memoize?: boolean;
   name?: string;
   export interface ComponentDependency {
-  componentId: string;,
+  componentId: string;
   path: string;
   selector?: StateSelector<any, any>;
   lastValue?: any;
-  priority: 'low' | 'normal' | 'high' | 'critical';
-}
+  priority: 'low' | 'normal' | 'high' | 'critical'
+  }
 export interface StateUpdateBatch {
-  id: string;,
+  id: string;
   updates: StatePathUpdate;
-  priority: 'low' | 'normal' | 'high' | 'critical';,
+  priority: 'low' | 'normal' | 'high' | 'critical';
   timestamp: number;
   affectedComponents: Set<string>;
   scheduledTime?: number;
   executed?: boolean;
 }
 export interface StatePathUpdate {
-  path: string;,
+  path: string;
   value: any;
   operation: 'set' | 'merge' | 'delete' | 'append' | 'remove';
   metadata?: Record<string, any>;
@@ -40,40 +40,40 @@ export interface StatePathUpdate {
 export interface StateGraph {
   nodes: Map<string, StateGraphNode>;
   edges: Map<string, StateGraphEdge>;
-  rootPaths: Set<string>;,
+  rootPaths: Set<string>;
   dependencyMap: Map<string, Set<string>>;
 }
 export interface StateGraphNode {
-  path: string;,
+  path: string;
   value: any;
-  dependencies: Set<string>;,
+  dependencies: Set<string>;
   dependents: Set<string>;
-  lastModified: number;,
+  lastModified: number;
   accessCount: number;
   subscriptions: Set<string>;
 }
 export interface StateGraphEdge {
-  from: string;,
+  from: string;
   to: string;
-  type: 'dependency' | 'derivation' | 'subscription';,
+  type: 'dependency' | 'derivation' | 'subscription';
   weight: number;
 }
 export interface PerformanceMetrics {
-  updateLatency: number;,
+  updateLatency: number;
   renderCount: number;
-  skipCount: number;,
+  skipCount: number;
   batchCount: number;
-  memoryUsage: number;,
+  memoryUsage: number;
   cacheHitRate: number;
   selectorExecutionTime: Map<string, number>;
   componentUpdateTime: Map<string, number>;
 }
 export interface SelectorCache<T> {
-  key: string;,
+  key: string;
   value: T;
-  dependencies: any;,
+  dependencies: any;
   timestamp: number;
-  hitCount: number;,
+  hitCount: number;
   lastAccess: number;
   export interface UpdateScheduler {
   schedule(batch: StateUpdateBatch): void;
@@ -179,7 +179,7 @@ export class SelectiveStateManager extends EventEmitter {
   createSelector<T, R>()
     selector: (state: T) => R,
     dependencies?: (keyof T)[],
-    options: {,
+    options: {
   memoize?: boolean;
   name?: string;
   maxAge?: number;
@@ -225,7 +225,7 @@ export class SelectiveStateManager extends EventEmitter {
   subscribe<T>()
     selector: StateSelector<T, any>,
     callback: (value: any, prevValue: any) => void,
-    options: {,
+    options: {
   componentId?: string;
   immediate?: boolean;
   equalityFn?: (a: any, b: any) => boolean;
@@ -530,9 +530,9 @@ export class SelectiveStateManager extends EventEmitter {
   dependencyMap: new Map(this.stateGraph.dependencyMap),
 };
   getCacheStats(): {
-  size: number;,
+  size: number;
   hitRate: number;
-  totalHits: number;,
+  totalHits: number;
   oldestEntry: number;
   newestEntry: number;
   const caches = Array.from(this.selectorCache.values());

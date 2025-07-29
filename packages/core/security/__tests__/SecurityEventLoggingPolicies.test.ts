@@ -48,26 +48,26 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         event_types: [SecurityEventType.API_ABUSE_DETECTED],
         severity_threshold: SecurityEventSeverity.MEDIUM,
         enabled: true,
-        detection_rules: {,
+        detection_rules: {
   conditions: [,
             { field: 'request_rate', operator: 'gt' as const, value: 100 }
           ],
           time_window: 60000,
           frequency_threshold: 5;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['rate_limit', 'generate_alert'],
   escalation_actions: ['notify_api_team'],
   notification_channels: ['email'],
   automated_containment: true,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [ComplianceFramework.NIST],
   requirements: ['api_security'],
   retention_period: 365,
   requires_encryption: false,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: true,
   periodic_reports: ['daily'],
   stakeholders: ['api_team'],
@@ -477,24 +477,24 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         event_types: [SecurityEventType.API_ABUSE_DETECTED],
         severity_threshold: SecurityEventSeverity.LOW,
         enabled: true,
-        detection_rules: {,
+        detection_rules: {
   conditions: [{ field: 'test', operator: 'eq' as const, value: true }],
           time_window: 30000,
           frequency_threshold: 1;
   },
-  response_actions: {,
+  response_actions: {
   immediate_actions: ['log_event'],
   escalation_actions: [],
   notification_channels: [],
   automated_containment: false,
 },
-  compliance_mapping: {,
+  compliance_mapping: {
   frameworks: [],
   requirements: [],
   retention_period: 30,
   requires_encryption: false,
 },
-  reporting: {,
+  reporting: {
   real_time_alerts: false,
   periodic_reports: [],
   stakeholders: [],

@@ -19,7 +19,7 @@ import {
 // ========================================
 class MockEmailService {
   public sentEmails: Array<{,
-  to: string;,
+  to: string;
   template: any;
   variables: Record<string, string>;
   result: any;
@@ -110,16 +110,16 @@ class MockStorage {
   let mockStorage: MockStorage;
   const encryptionKey = crypto.randomBytes(32).toString('hex');
   const defaultConfig = {
-  encryption: {,
+  encryption: {
   algorithm: 'aes-256-gcm' as const,
   keyDerivation: 'pbkdf2' as const,
   iterations: 100000 as const,
 },
-  templates: {,
+  templates: {
   verificationCode: 'Your code is {{code}}',
       enrollmentCode: 'Enrollment code: {{code}}'
   },
-  rateLimit: {,
+  rateLimit: {
   maxDailyEmails: 5,
   cooldownMinutes: 15,
 };

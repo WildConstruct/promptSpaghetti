@@ -4,15 +4,15 @@ import React from 'react';
 import { ViewMode, HighlightMode } from '../../types/comparison';
 
 export interface ComparisonToolbarProps {
-  viewMode: ViewMode;,
+  viewMode: ViewMode;
   highlightMode: HighlightMode;
-  showUnchanged: boolean;,
+  showUnchanged: boolean;
   showMetadata: boolean;
-  zoomLevel: number;,
-  onViewModeChange: (mode: ViewMode) => void;,
-  onHighlightModeChange: (mode: HighlightMode) => void;,
-  onShowUnchangedChange: (show: boolean) => void;,
-  onShowMetadataChange: (show: boolean) => void;,
+  zoomLevel: number;
+  onViewModeChange: (mode: ViewMode) => void;
+  onHighlightModeChange: (mode: HighlightMode) => void;
+  onShowUnchangedChange: (show: boolean) => void;
+  onShowMetadataChange: (show: boolean) => void;
   onZoomChange: (zoom: number) => void;
   className?: string;
 }

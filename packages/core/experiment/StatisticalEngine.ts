@@ -12,24 +12,24 @@ import {
 } from '../types/experiment';
 
 export interface StatisticalTestResult {
-  pValue: number;,
+  pValue: number;
   testStatistic: number;
-  effect: number;,
+  effect: number;
   effectSize: number;
   confidenceInterval: [number, number];
-  significant: boolean;,
+  significant: boolean;
   practicallySignificant: boolean;
 }
 export interface BayesianResult {
-  posteriorProbability: number;,
+  posteriorProbability: number;
   credibleInterval: [number, number];
-  probabilityToBeatControl: number;,
+  probabilityToBeatControl: number;
   expectedLoss: number;
 }
 export interface SampleSizeCalculation {
-  requiredSampleSize: number;,
+  requiredSampleSize: number;
   estimatedDuration: number; // hours,
-  powerAchieved: number;,
+  powerAchieved: number;
   minimumDetectableEffect: number;
 }
 export class StatisticalEngine {
@@ -69,7 +69,7 @@ export class StatisticalEngine {
   experimentId: '',
   calculatedAt: new Date(),
   variants,
-  statistical: {,
+  statistical: {
   primaryMetric: primaryResults,
   guardrailMetrics: guardrailResults,
 },
@@ -277,7 +277,7 @@ export class StatisticalEngine {
   : 'No significant improvements detected',
 };
   // Private helper methods
-  private calculatePrimaryMetricResults(variants: VariantResults,)
+  private calculatePrimaryMetricResults(variants: VariantResults)
     controlVariant: VariantResults,
     metric: ExperimentMetric): StatisticalResults['primaryMetric'] {,
   const winnerDetection = this.detectWinner(variants, controlVariant.variantId, metric);
@@ -288,7 +288,7 @@ export class StatisticalEngine {
   practicalSignificance: winnerDetection.winner !== undefined,
   confidenceLevel: this.confidenceLevel,
 };
-  private calculateGuardrailResults(variants: VariantResults,)
+  private calculateGuardrailResults(variants: VariantResults)
     controlVariant: VariantResults,
     guardrailMetrics: ExperimentMetric): StatisticalResults['guardrailMetrics'] {,
   const results: StatisticalResults['guardrailMetrics'] = [];
@@ -311,7 +311,7 @@ export class StatisticalEngine {
   actualValue: relativeChange,
 });
     return results;
-  private generateInsights(variants: VariantResults,)
+  private generateInsights(variants: VariantResults)
     controlVariant: VariantResults,
     metrics: ExperimentMetric): ExperimentInsight {,
     const insights: ExperimentInsight = [];
@@ -370,7 +370,7 @@ export class StatisticalEngine {
             ]
           });
     return insights;
-  private calculateProportionSampleSize(baselineRate: number,)
+  private calculateProportionSampleSize(baselineRate: number)
     minimumDetectableEffect: number,
     power: number,
     alpha: number,
@@ -389,7 +389,7 @@ export class StatisticalEngine {
   powerAchieved: power,
   minimumDetectableEffect
 };
-  private calculateContinuousSampleSize(baselineMean: number,)
+  private calculateContinuousSampleSize(baselineMean: number)
     minimumDetectableEffect: number,
     power: number,
     alpha: number,

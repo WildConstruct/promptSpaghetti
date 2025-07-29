@@ -28,7 +28,7 @@ export interface RegionAnnotation {
 
 export interface RegionArea {
     shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
-    bounds: {,
+    bounds: {
         x: number;
         y: number;
         width: number;

@@ -15,16 +15,16 @@ import {
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
 interface LearningPathDashboardProps {
-  learningService: Epic16LearningPathService;,
+  learningService: Epic16LearningPathService;
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
   onPathSelect?: (path: LearningPath) => void;
 interface PathFilters {
-  category: LearningCategory;,
+  category: LearningCategory;
   difficulty: DifficultyLevel;
-  audience: TargetAudience;,
+  audience: TargetAudience;
   duration: { min?: number; max?: number };
-  certification: boolean | null;,
+  certification: boolean | null;
   searchQuery: string;
 
 export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)

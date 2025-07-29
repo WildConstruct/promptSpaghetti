@@ -788,7 +788,8 @@ if (!validationPassed) {
                 follow_up: {
                     action_items: issues.map(issue => ({})),
                     id: this.generateActionItemId(),
-                    title: `Resolve: ${issue.title}` }
+                    title: `Resolve: ${issue.title}`
+                }
             }, description, assigned_to, due_date;
             () + (30 * 24 * 60 * 60 * 1000),
                 priority;
@@ -1112,284 +1113,254 @@ Status Dashboard: /disaster-recovery/events/${event.id}
                                                                         name: 'Security Analytics System Failure',
                                                                         description: 'Recovery plan for complete security analytics system failure',
                                                                         version: '1.0',
-                                                                        classification: {},
-                                                                        disaster_type: 'hardware_failure',
-                                                                        severity_level: 'critical',
-                                                                        scope: 'single_system',
-                                                                        impact_category: 'availability',
-                                                                    },
-                                                                    objectives, {},
-                                                                    recovery_time_objective, 4 * 60 * 60 * 1000, // 4 hours,
-                                                                    recovery_point_objective, 1 * 60 * 60 * 1000, // 1 hour,
-                                                                    maximum_tolerable_outage, 8 * 60 * 60 * 1000, // 8 hours,
-                                                                    minimum_service_level, 80,]
-                                                            },
-                                                                strategies;
-                                                            [,
-                                                                {
-                                                                    id: 'strategy_1',
-                                                                    name: 'Hot Standby Failover',
-                                                                    description: 'Immediate failover to hot standby system',
-                                                                    priority: 1,
-                                                                    type: 'hot_standby',
-                                                                    automation_level: 'automatic',
-                                                                    target: {},
-                                                                    location: 'DR Site 1',
-                                                                    datacenter: 'DC-DR-01',
-                                                                    region: 'us-west-2',
-                                                                    capacity_percentage: 100,
+                                                                        classification: {
+                                                                            disaster_type: 'hardware_failure',
+                                                                            severity_level: 'critical',
+                                                                            scope: 'single_system',
+                                                                            impact_category: 'availability',
+                                                                        },
+                                                                        objectives: {
+                                                                            recovery_time_objective: 4 * 60 * 60 * 1000, // 4 hours,
+                                                                            recovery_point_objective: 1 * 60 * 60 * 1000, // 1 hour,
+                                                                            maximum_tolerable_outage: 8 * 60 * 60 * 1000, // 8 hours,
+                                                                            minimum_service_level: 80,
+                                                                        },
+                                                                        strategies: [,
+                                                                            {
+                                                                                id: 'strategy_1',
+                                                                                name: 'Hot Standby Failover',
+                                                                                description: 'Immediate failover to hot standby system',
+                                                                                priority: 1,
+                                                                                type: 'hot_standby',
+                                                                                automation_level: 'automatic',
+                                                                                target: {
+                                                                                    location: 'DR Site 1',
+                                                                                    datacenter: 'DC-DR-01',
+                                                                                    region: 'us-west-2',
+                                                                                    capacity_percentage: 100,
+                                                                                },
+                                                                                procedures: [,
+                                                                                    {
+                                                                                        id: 'proc_1',
+                                                                                        name: 'Activate Standby System',
+                                                                                        description: 'Bring hot standby system online',
+                                                                                        order: 1,
+                                                                                        type: 'activation',
+                                                                                        automation: {
+                                                                                            automated: true,
+                                                                                            script_path: '/scripts/activate_standby.sh',
+                                                                                            approval_required: false,
+                                                                                            timeout: 5 * 60 * 1000,
+                                                                                        },
+                                                                                        dependencies: [],
+                                                                                        parallel_execution: false,
+                                                                                        validation: {
+                                                                                            success_criteria: ['System responds to health check', 'Data synchronization verified'],
+                                                                                            manual_verification: false,
+                                                                                            rollback_on_failure: true,
+                                                                                        },
+                                                                                        estimated_duration: 5 * 60 * 1000,
+                                                                                        success_rate: 95
+                                                                                    }],
+                                                                                resources: {
+                                                                                    infrastructure: {
+                                                                                        compute_instances: 10,
+                                                                                        storage_gb: 10000,
+                                                                                        network_bandwidth_mbps: 1000,
+                                                                                        database_instances: 5,
+                                                                                    },
+                                                                                    personnel: {
+                                                                                        required_roles: ['System Administrator', 'Security Analyst'],
+                                                                                        minimum_staff: 3,
+                                                                                        on_call_requirements: true,
+                                                                                    },
+                                                                                    estimated_cost: {
+                                                                                        setup_cost: 50000,
+                                                                                        monthly_cost: 10000,
+                                                                                        activation_cost: 1000,
+                                                                                    },
+                                                                                    success_criteria: {
+                                                                                        rto_compliance: true,
+                                                                                        rpo_compliance: true,
+                                                                                        data_integrity_verified: true,
+                                                                                        service_functionality_verified: true,
+                                                                                        performance_acceptable: true,
+                                                                                    },
+                                                                                    created_at: Date.now(),
+                                                                                    last_tested: 0,
+                                                                                    test_success_rate: 90
+                                                                                }
+                                                                            }],
+                                                                        backup_requirements: {
+                                                                            backup_frequency: 'hourly',
+                                                                            retention_policy: {
+                                                                                daily_backups: 7,
+                                                                                weekly_backups: 4,
+                                                                                monthly_backups: 12,
+                                                                                yearly_backups: 7,
+                                                                            },
+                                                                            backup_types: ['full', 'incremental'],
+                                                                            compression_enabled: true,
+                                                                            encryption_enabled: true,
+                                                                            offsite_storage: true,
+                                                                            cloud_storage: true,
+                                                                            geographic_distribution: ['us-east-1', 'us-west-2']
+                                                                        },
+                                                                        testing: {
+                                                                            test_frequency: 'quarterly',
+                                                                            last_test_date: 0,
+                                                                            next_test_date: Date.now() + 90 * 24 * 60 * 60 * 1000,
+                                                                            test_results: [],
+                                                                            automated_testing: true,
+                                                                            test_scenarios: ['Complete system failure', 'Database corruption', 'Network outage'],
+                                                                        },
+                                                                        communication: {
+                                                                            notification_tree: [,
+                                                                                {
+                                                                                    id: 'nt_1',
+                                                                                    name: 'Security Operations Manager',
+                                                                                    role: 'Incident Commander',
+                                                                                    contact_methods: {
+                                                                                        primary: { type: 'email', value: 'security-ops@company.com' },
+                                                                                        secondary: { type: 'sms', value: '+1-555-0101' }
+                                                                                    },
+                                                                                    notification_order: 1,
+                                                                                    escalation_timeout: 15 * 60 * 1000,
+                                                                                    decision_authority: true,
+                                                                                    geographic_location: 'US-East'
+                                                                                }],
+                                                                            communication_channels: ['email', 'sms', 'slack'],
+                                                                            escalation_procedures: [],
+                                                                            stakeholder_groups: []
+                                                                        },
+                                                                        dependencies: {
+                                                                            required_systems: ['Primary Database', 'Network Infrastructure'],
+                                                                            required_personnel: ['Security Team', 'Infrastructure Team'],
+                                                                            required_resources: ['Backup Storage', 'DR Site Access'],
+                                                                            external_dependencies: [],
+                                                                        },
+                                                                        compliance: {
+                                                                            frameworks: ['SOX', 'GDPR'],
+                                                                            regulatory_requirements: ['Data Protection', 'Business Continuity'],
+                                                                            audit_requirements: ['Annual DR Test', 'Quarterly Plan Review'],
+                                                                            documentation_requirements: ['Recovery Procedures', 'Test Results'],
+                                                                        },
+                                                                        created_by: 'system'
+                                                                    }],
+                                                                for(, planDef, of, defaultPlans) {
+                                                                    await this.createRecoveryPlan(planDef);
+                                                                    console.log(`📋 Loaded ${defaultPlans.length} default recovery plans`);
                                                                 },
-                                                                procedures, [,
-                                                                    {
-                                                                        id: 'proc_1',
-                                                                        name: 'Activate Standby System',
-                                                                        description: 'Bring hot standby system online',
-                                                                        order: 1,
-                                                                        type: 'activation',
-                                                                        automation: {},
-                                                                        automated: true,
-                                                                        script_path: '/scripts/activate_standby.sh',
-                                                                        approval_required: false,
-                                                                        timeout: 5 * 60 * 1000,
-                                                                    },
-                                                                    dependencies, [],
-                                                                    parallel_execution, false,
-                                                                    validation, {},
-                                                                    success_criteria, ['System responds to health check', 'Data synchronization verified'],
-                                                                    manual_verification, false,
-                                                                    rollback_on_failure, true,]];
-                                                        }
-                                                        estimated_duration: 5 * 60 * 1000,
-                                                            success_rate;
-                                                        95;
-                                                        resources: {
-                                                            infrastructure: {
-                                                                compute_instances: 10,
-                                                                    storage_gb;
-                                                                10000,
-                                                                    network_bandwidth_mbps;
-                                                                1000,
-                                                                    database_instances;
-                                                                5,
-                                                                ;
-                                                            }
-                                                            personnel: {
-                                                                required_roles: ['System Administrator', 'Security Analyst'],
-                                                                    minimum_staff;
-                                                                3,
-                                                                    on_call_requirements;
-                                                                true,
-                                                                ;
-                                                            }
-                                                            estimated_cost: {
-                                                                setup_cost: 50000,
-                                                                    monthly_cost;
-                                                                10000,
-                                                                    activation_cost;
-                                                                1000,
-                                                                ;
-                                                            }
-                                                            success_criteria: {
-                                                                rto_compliance: true,
-                                                                    rpo_compliance;
-                                                                true,
-                                                                    data_integrity_verified;
-                                                                true,
-                                                                    service_functionality_verified;
-                                                                true,
-                                                                    performance_acceptable;
-                                                                true,
-                                                                ;
-                                                            }
-                                                            created_at: Date.now(),
-                                                                last_tested;
-                                                            0,
-                                                                test_success_rate;
-                                                            90;
-                                                            backup_requirements: {
-                                                                backup_frequency: 'hourly',
-                                                                    retention_policy;
-                                                                {
-                                                                    daily_backups: 7,
-                                                                        weekly_backups;
-                                                                    4,
-                                                                        monthly_backups;
-                                                                    12,
-                                                                        yearly_backups;
-                                                                    7,
-                                                                    ;
-                                                                }
-                                                                backup_types: ['full', 'incremental'],
-                                                                    compression_enabled;
-                                                                true,
-                                                                    encryption_enabled;
-                                                                true,
-                                                                    offsite_storage;
-                                                                true,
-                                                                    cloud_storage;
-                                                                true,
-                                                                    geographic_distribution;
-                                                                ['us-east-1', 'us-west-2'];
-                                                            }
-                                                            testing: {
-                                                                test_frequency: 'quarterly',
-                                                                    last_test_date;
-                                                                0,
-                                                                    next_test_date;
-                                                                Date.now() + 90 * 24 * 60 * 60 * 1000,
-                                                                    test_results;
-                                                                [],
-                                                                    automated_testing;
-                                                                true,
-                                                                    test_scenarios;
-                                                                ['Complete system failure', 'Database corruption', 'Network outage'],
-                                                                ;
-                                                            }
-                                                            communication: {
-                                                                notification_tree: [,
-                                                                    {
-                                                                        id: 'nt_1',
-                                                                        name: 'Security Operations Manager',
-                                                                        role: 'Incident Commander',
-                                                                        contact_methods: {},
-                                                                        primary: { type: 'email', value: 'security-ops@company.com' },
-                                                                        secondary: { type: 'sms', value: '+1-555-0101' }
-                                                                    },
-                                                                    notification_order, 1,
-                                                                    escalation_timeout, 15 * 60 * 1000,
-                                                                    decision_authority, true,
-                                                                    geographic_location, 'US-East'],
-                                                                    communication_channels;
-                                                                ['email', 'sms', 'slack'],
-                                                                    escalation_procedures;
-                                                                [],
-                                                                    stakeholder_groups;
-                                                                [];
-                                                            }
-                                                            dependencies: {
-                                                                required_systems: ['Primary Database', 'Network Infrastructure'],
-                                                                    required_personnel;
-                                                                ['Security Team', 'Infrastructure Team'],
-                                                                    required_resources;
-                                                                ['Backup Storage', 'DR Site Access'],
-                                                                    external_dependencies;
-                                                                [],
-                                                                ;
-                                                            }
-                                                            compliance: {
-                                                                frameworks: ['SOX', 'GDPR'],
-                                                                    regulatory_requirements;
-                                                                ['Data Protection', 'Business Continuity'],
-                                                                    audit_requirements;
-                                                                ['Annual DR Test', 'Quarterly Plan Review'],
-                                                                    documentation_requirements;
-                                                                ['Recovery Procedures', 'Test Results'],
-                                                                ;
-                                                            }
-                                                            created_by: 'system';
-                                                            ;
-                                                            for (const planDef of defaultPlans) {
-                                                                await this.createRecoveryPlan(planDef);
-                                                                console.log(`📋 Loaded ${defaultPlans.length} default recovery plans`);
-                                                            }
-                                                            async;
-                                                            loadDefaultBackupJobs();
-                                                            Promise < void  > {
-                                                                const: defaultJobs = [
+                                                                async loadDefaultBackupJobs() {
+                                                                    const defaultJobs = [];
                                                                     {
                                                                         name: 'Security Events Backup',
-                                                                        description: 'Daily backup of security events and alerts',
-                                                                        type: 'incremental',
-                                                                        source: {},
-                                                                        system_id: 'security_analytics',
-                                                                        data_types: ['security_events', 'audit_logs'],
-                                                                        include_patterns: ['*.log', '*.json'],
-                                                                        exclude_patterns: ['*.tmp', '*.cache'],
-                                                                    },
-                                                                    destination, {},
-                                                                    primary_location, '/backups/security_events',
-                                                                    secondary_location, '/remote_backups/security_events',
-                                                                    storage_type, 'object_storage',
-                                                                    encryption, {},
-                                                                    enabled, true,
-                                                                    algorithm, 'AES-256',
-                                                                    key_management, 'cloud_kms',]
-                                                            },
-                                                                compression;
-                                                            {
-                                                                enabled: true,
-                                                                    algorithm;
-                                                                'zstd',
-                                                                    level;
-                                                                6,
-                                                                ;
-                                                            }
-                                                            schedule: {
-                                                                enabled: true,
-                                                                    frequency;
-                                                                'daily',
-                                                                    time_window;
-                                                                {
-                                                                    start: '02:00',
-                                                                        end;
-                                                                    '06:00',
-                                                                        timezone;
-                                                                    'UTC',
-                                                                    ;
-                                                                }
-                                                                retry_policy: {
-                                                                    max_retries: 3,
-                                                                        retry_delay;
-                                                                    30 * 60 * 1000,
-                                                                        backoff_strategy;
-                                                                    'exponential',
-                                                                    ;
-                                                                }
-                                                                performance: {
-                                                                    max_bandwidth_mbps: 100,
-                                                                        max_cpu_usage;
-                                                                    50,
-                                                                        max_memory_usage;
-                                                                    60,
-                                                                        parallelism;
-                                                                    4,
-                                                                        throttling;
-                                                                    true,
-                                                                    ;
-                                                                }
-                                                                validation: {
-                                                                    verify_after_backup: true,
-                                                                        checksum_validation;
-                                                                    true,
-                                                                        test_restore;
-                                                                    true,
-                                                                        test_restore_frequency;
-                                                                    'weekly',
-                                                                    ;
-                                                                }
-                                                                retention: {
-                                                                    keep_daily: 30,
-                                                                        keep_weekly;
-                                                                    12,
-                                                                        keep_monthly;
-                                                                    24,
-                                                                        keep_yearly;
-                                                                    7,
-                                                                        auto_cleanup;
-                                                                    true,
-                                                                    ;
-                                                                }
-                                                                created_by: 'system',
-                                                                    enabled;
-                                                                true;
-                                                                ;
-                                                                for (const jobDef of defaultJobs) {
-                                                                    await this.createBackupJob(jobDef);
-                                                                    console.log(`💾 Loaded ${defaultJobs.length} default backup jobs`);
-                                                                }
-                                                                initializeMetrics();
-                                                                DisasterRecoveryMetrics;
-                                                                {
+                                                                            description;
+                                                                        'Daily backup of security events and alerts',
+                                                                            type;
+                                                                        'incremental',
+                                                                            source;
+                                                                        {
+                                                                            system_id: 'security_analytics',
+                                                                                data_types;
+                                                                            ['security_events', 'audit_logs'],
+                                                                                include_patterns;
+                                                                            ['*.log', '*.json'],
+                                                                                exclude_patterns;
+                                                                            ['*.tmp', '*.cache'],
+                                                                            ;
+                                                                        }
+                                                                        destination: {
+                                                                            primary_location: '/backups/security_events',
+                                                                                secondary_location;
+                                                                            '/remote_backups/security_events',
+                                                                                storage_type;
+                                                                            'object_storage',
+                                                                                encryption;
+                                                                            {
+                                                                                enabled: true,
+                                                                                    algorithm;
+                                                                                'AES-256',
+                                                                                    key_management;
+                                                                                'cloud_kms',
+                                                                                ;
+                                                                            }
+                                                                            compression: {
+                                                                                enabled: true,
+                                                                                    algorithm;
+                                                                                'zstd',
+                                                                                    level;
+                                                                                6,
+                                                                                ;
+                                                                            }
+                                                                            schedule: {
+                                                                                enabled: true,
+                                                                                    frequency;
+                                                                                'daily',
+                                                                                    time_window;
+                                                                                {
+                                                                                    start: '02:00',
+                                                                                        end;
+                                                                                    '06:00',
+                                                                                        timezone;
+                                                                                    'UTC',
+                                                                                    ;
+                                                                                }
+                                                                                retry_policy: {
+                                                                                    max_retries: 3,
+                                                                                        retry_delay;
+                                                                                    30 * 60 * 1000,
+                                                                                        backoff_strategy;
+                                                                                    'exponential',
+                                                                                    ;
+                                                                                }
+                                                                                performance: {
+                                                                                    max_bandwidth_mbps: 100,
+                                                                                        max_cpu_usage;
+                                                                                    50,
+                                                                                        max_memory_usage;
+                                                                                    60,
+                                                                                        parallelism;
+                                                                                    4,
+                                                                                        throttling;
+                                                                                    true,
+                                                                                    ;
+                                                                                }
+                                                                                validation: {
+                                                                                    verify_after_backup: true,
+                                                                                        checksum_validation;
+                                                                                    true,
+                                                                                        test_restore;
+                                                                                    true,
+                                                                                        test_restore_frequency;
+                                                                                    'weekly',
+                                                                                    ;
+                                                                                }
+                                                                                retention: {
+                                                                                    keep_daily: 30,
+                                                                                        keep_weekly;
+                                                                                    12,
+                                                                                        keep_monthly;
+                                                                                    24,
+                                                                                        keep_yearly;
+                                                                                    7,
+                                                                                        auto_cleanup;
+                                                                                    true,
+                                                                                    ;
+                                                                                }
+                                                                                created_by: 'system',
+                                                                                    enabled;
+                                                                                true;
+                                                                                ;
+                                                                                for (const jobDef of defaultJobs) {
+                                                                                    await this.createBackupJob(jobDef);
+                                                                                    console.log(`💾 Loaded ${defaultJobs.length} default backup jobs`);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                initializeMetrics() {
                                                                     return {
                                                                         availability: {
                                                                             system_uptime: 99.9,
@@ -1485,7 +1456,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
                                                                         }
                                                                     };
                                                                 }
-                                                            }
+                                                            };
                                                         }
                                                     }
                                                 }

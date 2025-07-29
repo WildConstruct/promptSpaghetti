@@ -37,90 +37,90 @@ import {
 // Algorithm configuration interfaces
 
 export interface RecommendationAlgorithm {
-  id: string;,
+  id: string;
   name: string;
-  type: 'collaborative_filtering' | 'content_based' | 'hybrid' | 'deep_learning' | 'performance_based';,
+  type: 'collaborative_filtering' | 'content_based' | 'hybrid' | 'deep_learning' | 'performance_based';
   description: string;
-  enabled: boolean;,
+  enabled: boolean;
   weight: number; // Weight in ensemble,
   parameters: Record<string, any>;
-  performance_metrics: {,
-  precision: number;,
+  performance_metrics: {
+  precision: number;
   recall: number;
-  ndcg: number;,
+  ndcg: number;
   click_through_rate: number;
   conversion_rate: number;
 };
   last_trained?: Date;
-  training_status: 'idle' | 'training' | 'failed' | 'completed';
-}
+  training_status: 'idle' | 'training' | 'failed' | 'completed'
+  }
 export interface FeaturedContentConfig {
-  algorithm_weights: {,
-  trending_boost: number;,
+  algorithm_weights: {
+  trending_boost: number;
   quality_boost: number;
-  diversity_boost: number;,
+  diversity_boost: number;
   recency_boost: number;
   creator_tier_boost: number;
 };
-  content_filters: {,
+  content_filters: {
   min_quality_score: number;
-  exclude_categories: string;,
+  exclude_categories: string;
   featured_categories_boost: Record<string, number>;
   creator_tier_weights: Record<string, number>;
 };
-  rotation_settings: {,
+  rotation_settings: {
   rotation_frequency: number; // minutes,
-  max_consecutive_shows: number;,
+  max_consecutive_shows: number;
   cooldown_period: number; // hours,
   randomization_factor: number; // 0-1,
 };
-  ab_testing: {,
+  ab_testing: {
   enabled: boolean;
-  variants: ABTestVariant;,
+  variants: ABTestVariant;
   traffic_allocation: number; // percentage for A/B testing,
 };
 }
 export interface ABTestVariant {
-  id: string;,
+  id: string;
   name: string;
-  config_override: Partial<FeaturedContentConfig>;,
+  config_override: Partial<FeaturedContentConfig>;
   allocation_percentage: number;
-  performance_metrics?: {,
-  ctr: number;,
+  performance_metrics?: {
+  ctr: number;
   conversion_rate: number;
-  engagement_score: number;,
+  engagement_score: number;
   revenue_per_view: number;
 };
 }
 export interface RecommendationMetrics {
-  overall_performance: {,
-  total_recommendations_served: number;,
+  overall_performance: {
+  total_recommendations_served: number;
   click_through_rate: number;
-  conversion_rate: number;,
+  conversion_rate: number;
   avg_engagement_time: number;
   revenue_impact: number;
 };
   algorithm_performance: Record<string, {
-  precision: number;,
+  precision: number;
   recall: number;
-  f1_score: number;,
+  f1_score: number;
   latency_ms: number;
   cache_hit_rate: number;
 }>;
-  featured_content_performance: {,
+  featured_content_performance: {
   impressions: number;
-  clicks: number;,
+  clicks: number;
   conversions: number;
-  revenue: number;,
+  revenue: number;
   top_performing_content: Array<{,
-  id: string;,
+  id: string;
   title: string;
   performance_score: number;
 }>;
   };
-  real_time_stats: {,
+  real_time_stats: {
   current_recommendations_per_minute: number;
-  active_users: number;,
+  active_users: number;
   cache_utilization: number;
   model_accuracy: number;
 };
@@ -133,40 +133,40 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
 }) => {
   const [activeTab, setActiveTab] = useState('algorithms');
   const [featuredConfig, setFeaturedConfig] = useState<FeaturedContentConfig>({)
-  algorithm_weights: {,
+  algorithm_weights: {
   trending_boost: 1.2,
   quality_boost: 1.5,
   diversity_boost: 0.8,
   recency_boost: 1.1,
   creator_tier_boost: 1.3,
 },
-  content_filters: {,
+  content_filters: {
   min_quality_score: 80,
   exclude_categories: ['nsfw', 'inappropriate'],
-  featured_categories_boost: {,
+  featured_categories_boost: {
   'business': 1.2,
   'creative': 1.1,
   'technology': 1.15,
 },
-  creator_tier_weights: {,
+  creator_tier_weights: {
   'premium': 1.5,
   'verified': 1.2,
   'community': 1.0,
 },
-  rotation_settings: {,
+  rotation_settings: {
   rotation_frequency: 60,
   max_consecutive_shows: 3,
   cooldown_period: 24,
   randomization_factor: 0.2,
 },
-  ab_testing: {,
+  ab_testing: {
   enabled: true,
   variants: [,
   {
   id: 'variant-quality',
   name: 'Quality Focused',
-  config_override: {,
-  algorithm_weights: {,
+  config_override: {
+  algorithm_weights: {
   trending_boost: 1.0,
   quality_boost: 2.0,
   diversity_boost: 0.8,
@@ -174,7 +174,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   creator_tier_boost: 1.4,
 },
   allocation_percentage: 40,
-          performance_metrics: {,
+          performance_metrics: {
   ctr: 4.2,
   conversion_rate: 14.8,
   engagement_score: 87.5,
@@ -183,8 +183,8 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         {
   id: 'variant-trending',
   name: 'Trending Focused',
-  config_override: {,
-  algorithm_weights: {,
+  config_override: {
+  algorithm_weights: {
   trending_boost: 2.0,
   quality_boost: 1.2,
   diversity_boost: 1.1,
@@ -192,7 +192,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   creator_tier_boost: 1.0,
 },
   allocation_percentage: 40,
-          performance_metrics: {,
+          performance_metrics: {
   ctr: 5.1,
   conversion_rate: 11.2,
   engagement_score: 92.1,
@@ -207,13 +207,13 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   description: 'User-based collaborative filtering using matrix factorization',
   enabled: true,
   weight: 0.4,
-  parameters: {,
+  parameters: {
   n_factors: 100,
   learning_rate: 0.005,
   regularization: 0.02,
   min_user_interactions: 5,
 },
-  performance_metrics: {,
+  performance_metrics: {
   precision: 0.78,
   recall: 0.65,
   ndcg: 0.82,
@@ -221,7 +221,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   conversion_rate: 12.8,
 },
   last_trained: new Date(Date.now() - 6 * 60 * 60 * 1000),
-      training_status: 'completed';
+      training_status: 'completed'
   }
     {
   id: 'content-based',
@@ -230,16 +230,16 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   description: 'Content similarity using TF-IDF and metadata features',
   enabled: true,
   weight: 0.3,
-  parameters: {,
+  parameters: {
   tfidf_max_features: 5000,
   similarity_threshold: 0.1,
-  metadata_weights: {,
+  metadata_weights: {
   category: 0.3,
   tags: 0.4,
   creator: 0.2,
   style: 0.1,
 },
-  performance_metrics: {,
+  performance_metrics: {
   precision: 0.71,
   recall: 0.58,
   ndcg: 0.75,
@@ -247,7 +247,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   conversion_rate: 10.5,
 },
   last_trained: new Date(Date.now() - 12 * 60 * 60 * 1000),
-      training_status: 'completed';
+      training_status: 'completed'
   }
     {
   id: 'deep-learning',
@@ -256,14 +256,14 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   description: 'Deep learning model with user and item embeddings',
   enabled: false,
   weight: 0.2,
-  parameters: {,
+  parameters: {
   embedding_dim: 128,
   hidden_layers: [256, 128, 64],
   dropout_rate: 0.3,
   learning_rate: 0.001,
   batch_size: 512,
 },
-  performance_metrics: {,
+  performance_metrics: {
   precision: 0.85,
   recall: 0.72,
   ndcg: 0.88,
@@ -271,7 +271,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   conversion_rate: 15.2,
 },
   last_trained: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-      training_status: 'idle';
+      training_status: 'idle'
   }
     {
   id: 'performance-based',
@@ -280,14 +280,14 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   description: 'Featured content optimization for promotional performance',
   enabled: true,
   weight: 0.1,
-  parameters: {,
+  parameters: {
   performance_window_days: 30,
   conversion_weight: 0.6,
   engagement_weight: 0.4,
   trending_decay: 0.95,
   quality_threshold: 4.0,
 },
-  performance_metrics: {,
+  performance_metrics: {
   precision: 0.82,
   recall: 0.69,
   ndcg: 0.84,
@@ -297,15 +297,15 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   last_trained: new Date(Date.now() - 2 * 60 * 60 * 1000),
       training_status: 'completed']);
   const [metrics] = useState<RecommendationMetrics>({)
-  overall_performance: {,
+  overall_performance: {
   total_recommendations_served: 2847392,
   click_through_rate: 4.35,
   conversion_rate: 13.2,
   avg_engagement_time: 127,
   revenue_impact: 284750,
 },
-  algorithm_performance: {,
-  'collaborative-filtering': {,
+  algorithm_performance: {
+  'collaborative-filtering': {
   precision: 0.78,
   recall: 0.65,
   f1_score: 0.71,
@@ -333,7 +333,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   latency_ms: 28,
   cache_hit_rate: 0.95,
 },
-  featured_content_performance: {,
+  featured_content_performance: {
   impressions: 1247893,
       clicks: 54287,
       conversions: 7165,
@@ -344,7 +344,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         { id: 'content-3', title: 'Marketing Flyer Pack', performance_score: 89.4 }
       ]
   },
-  real_time_stats: {,
+  real_time_stats: {
   current_recommendations_per_minute: 1250,
   active_users: 8374,
   cache_utilization: 87.5,
@@ -500,7 +500,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                       value={value}
                       onChange={(e) => setFeaturedConfig({)
   ...featuredConfig,
-  algorithm_weights: {,
+  algorithm_weights: {
   ...featuredConfig.algorithm_weights,
   [key]: parseFloat(e.target.value),
 })}
@@ -529,7 +529,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                   value={featuredConfig.content_filters.min_quality_score}
                   onChange={(e) => setFeaturedConfig({)
   ...featuredConfig,
-  content_filters: {,
+  content_filters: {
   ...featuredConfig.content_filters,
   min_quality_score: parseInt(e.target.value),
 })}
@@ -550,9 +550,9 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                         value={boost}
                         onChange={(e) => setFeaturedConfig({)
   ...featuredConfig,
-  content_filters: {,
+  content_filters: {
   ...featuredConfig.content_filters,
-  featured_categories_boost: {,
+  featured_categories_boost: {
   ...featuredConfig.content_filters.featured_categories_boost,
   [category]: parseFloat(e.target.value),
 })}
@@ -582,7 +582,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                     checked={featuredConfig.ab_testing.enabled}
                     onChange={(e) => setFeaturedConfig({)
   ...featuredConfig,
-  ab_testing: {,
+  ab_testing: {
   ...featuredConfig.ab_testing,
   enabled: e.target.checked,
 })}
@@ -598,7 +598,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                     value={featuredConfig.ab_testing.traffic_allocation}
                     onChange={(e) => setFeaturedConfig({)
   ...featuredConfig,
-  ab_testing: {,
+  ab_testing: {
   ...featuredConfig.ab_testing,
   traffic_allocation: parseInt(e.target.value),
 })}
@@ -836,11 +836,11 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
       </Tabs>
       <style>{`
         .recommendation-engine-admin {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;,
+          padding: 1.5rem;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1.5rem;
         .admin-header {
           display: flex;
@@ -848,7 +848,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -858,7 +858,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         .featured-config-section,
         .metrics-section {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .algorithms-header,
         .config-header,
@@ -869,58 +869,58 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         .algorithms-header h3,
         .config-header h3,
         .metrics-header h3 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .header-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
         .algorithms-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .algorithm-card .card-content {
           padding-top: 0;
         .algorithm-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;,
+          align-items: flex-start;
   gap: 1rem;
         .algorithm-info {
           flex: 1;
         .algorithm-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .algorithm-title h4 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .algorithm-info p {
           color: #6b7280;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   margin: 0;
         .algorithm-controls {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.75rem;
           align-items: flex-end;
         .weight-control {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           align-items: center;
         .weight-control label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .weight-slider {
           width: 80px;
         .enable-switch {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           cursor: pointer;
         .algorithm-metrics {
@@ -931,28 +931,28 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           gap: 1rem;
         .metric-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           text-align: center;
         .metric-label {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   color: #6b7280;
           font-weight: 500;
         .metric-value {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #1f2937;
           font-weight: 600;
         .algorithm-actions {
-          display: flex;,
+          display: flex;
   gap: 0.5rem;
           justify-content: flex-end;
         .config-sections {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .config-section .card-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
         .weights-grid {
           display: grid;
@@ -960,19 +960,19 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           gap: 1rem;
         .weight-control {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .weight-label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .weight-input-group {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .weight-slider {
           flex: 1;
         .weight-value {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           min-width: 30px;
           text-align: right;
@@ -982,40 +982,40 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           gap: 1rem;
         .filter-item {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .filter-item.span-2 {
           grid-column: span 2;
         .filter-item label {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
         .config-input {
-          padding: 0.5rem 0.75rem;,
+          padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
         .category-boosts {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.5rem;
         .category-boost-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
         .category-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           min-width: 100px;
           text-transform: capitalize;
         .boost-input {
-          width: 80px;,
+          width: 80px;
   padding: 0.25rem 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 4px;
           font-size: 0.875rem;
         .ab-testing-config {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .ab-header {
           display: flex;
@@ -1025,45 +1025,45 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           border-bottom: 1px solid #e5e7eb;
         .checkbox-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.5rem;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
           cursor: pointer;
         .traffic-allocation {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 0.25rem;
           align-items: center;
         .traffic-allocation label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
         .traffic-slider {
           width: 120px;
         .variants-list h5 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.75rem 0;
         .variant-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
           margin-bottom: 0.5rem;
         .variant-info h6 {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .variant-allocation {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
         .variant-metrics {
-          display: flex;,
+          display: flex;
   gap: 1rem;
         .variant-metric span {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #374151;
           font-weight: 500;
         .metrics-overview {
@@ -1081,29 +1081,29 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           margin-bottom: 1rem;
         .metric-trend {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.25rem;
           font-size: 0.75rem;
-          font-weight: 500;,
+          font-weight: 500;
   padding: 0.25rem 0.5rem;
           border-radius: 4px;
         .metric-trend.positive {
-          color: #059669;,
+          color: #059669;
   background: #d1fae5;
         .metric-content {
           text-align: center;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.5rem;
         .detailed-metrics {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 1rem;
         .algorithm-comparison {
           overflow-x: auto;
@@ -1115,9 +1115,9 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         .table-header {
           display: contents;
         .header-cell {
-          padding: 0.75rem;,
+          padding: 0.75rem;
   background: #f9fafb;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
           border-bottom: 2px solid #e5e7eb;
         .table-row {
@@ -1126,21 +1126,21 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
   background: #f9fafb;
         .cell {
           padding: 0.75rem;
-          border-bottom: 1px solid #e5e7eb;,
+          border-bottom: 1px solid #e5e7eb;
   display: flex;
           align-items: center;
         .algorithm-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
           gap: 0.5rem;
         .enabled-badge {
-          font-size: 0.75rem;,
+          font-size: 0.75rem;
   padding: 0.125rem 0.375rem;
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #059669;
         .metric-cell {
           justify-content: center;
-          font-weight: 600;,
+          font-weight: 600;
   color: #374151;
         .real-time-stats {
           display: grid;
@@ -1148,9 +1148,9 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           gap: 1rem;
         .stat-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 0.75rem;
-          padding: 1rem;,
+          padding: 1rem;
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .stat-icon {
@@ -1159,11 +1159,11 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
           flex: 1;
         .stat-value {
           font-size: 1.25rem;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           line-height: 1;
         .stat-label {
-          font-size: 0.875rem;,
+          font-size: 0.875rem;
   color: #6b7280;
           margin-top: 0.25rem;
         @media (max-width: 1200px) {
@@ -1179,22 +1179,22 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
             grid-column: span 1;
         @media (max-width: 768px) {
           .admin-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 1rem;
           .overview-cards {
             grid-template-columns: 1fr;
           .real-time-stats {
             grid-template-columns: 1fr;
           .algorithm-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.75rem;
           .ab-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 1rem;
           .variant-item {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 0.75rem;
       `}</style>
     </div>

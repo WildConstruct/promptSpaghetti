@@ -84,20 +84,20 @@ export enum AuditActivityType {
   mandatory: z.boolean().default(false),
   // Dependencies and Prerequisites
   dependencies: z.array(z.string()).default([]), // Other schedule IDs
-  prerequisites: z.array(z.object({,)
+  prerequisites: z.array(z.object({)
   type: z.enum(['task_completion', 'document_approval', 'system_ready']),
   description: z.string(),
   completed: z.boolean().default(false),
 })).default([]),
   // Notification Configuration
-  notifications: z.array(z.object({,)
+  notifications: z.array(z.object({)
   timing: z.nativeEnum(NotificationTiming),
   recipients: z.array(z.string()),
   message_template: z.string().optional(),
   channels: z.array(z.enum(['email', 'slack', 'sms', 'dashboard'])),
 })).default([]),
   // Deliverables and Outcomes
-  deliverables: z.array(z.object({,)
+  deliverables: z.array(z.object({)
   name: z.string(),
   type: z.enum(['report', 'documentation', 'certificate', 'assessment']),
   due_date: z.date().optional(),
@@ -114,13 +114,13 @@ export enum AuditActivityType {
   // Progress Tracking
   progress: z.object({,)
   completion_percentage: z.number().min(0).max(100).default(0),
-  milestones: z.array(z.object({,)
+  milestones: z.array(z.object({)
   name: z.string(),
   due_date: z.date(),
   completed: z.boolean().default(false),
   completion_date: z.date().optional(),
 })).default([]),
-    notes: z.array(z.object({,)
+    notes: z.array(z.object({)
   timestamp: z.date(),
   author: z.string(),
   content: z.string(),
@@ -216,10 +216,10 @@ export class AuditCalendarSystem {
   /**
   * Query schedules with advanced filtering
   */
-  querySchedules(query: SchedulingQuery): {,
-  schedules: AuditSchedule;,
+  querySchedules(query: SchedulingQuery): {
+  schedules: AuditSchedule;
   totalCount: number;
-  upcomingDeadlines: AuditSchedule;,
+  upcomingDeadlines: AuditSchedule;
   overdueSchedules: AuditSchedule;
   const validatedQuery = SchedulingQuerySchema.parse(query);
   // Apply filters
@@ -263,7 +263,7 @@ export class AuditCalendarSystem {
   /**
   * Complete a schedule and update progress
   */
-  completeSchedule(scheduleId: string, completionData: {,)
+  completeSchedule(scheduleId: string, completionData: {)
   actual_end?: Date;
   completion_notes?: string;
   deliverables_completed?: string;
@@ -277,7 +277,7 @@ export class AuditCalendarSystem {
   status: ScheduleStatus.COMPLETED,
   actual_end: completionData.actual_end || new Date(),
   updated_at: new Date(),
-  progress: {,
+  progress: {
   ...schedule.progress,
   completion_percentage: 100,
   notes: [,
@@ -301,24 +301,24 @@ export class AuditCalendarSystem {
   /**
   * Generate calendar view data
   */
-  generateCalendarView(config: CalendarViewConfig): {,
+  generateCalendarView(config: CalendarViewConfig): {
   events: Array<{,
-  id: string;,
+  id: string;
   title: string;
-  start: Date;,
+  start: Date;
   end: Date;
-  type: AuditActivityType;,
+  type: AuditActivityType;
   priority: SchedulePriority;
   status: ScheduleStatus;
   assignee?: string;
   color: string;
   description?: string;
 }>;
-    summary: {,
+    summary: {
   total_events: number;
   by_status: Record<ScheduleStatus, number>;
   by_priority: Record<SchedulePriority, number>;
-  overdue_count: number;,
+  overdue_count: number;
   upcoming_deadlines: number;
 };
     const validatedConfig = CalendarViewConfigSchema.parse(config);
@@ -400,7 +400,7 @@ export class AuditCalendarSystem {
   status: ScheduleStatus.SCHEDULED,
   created_at: new Date(),
   updated_at: new Date(),
-  metadata: {,
+  metadata: {
   ...baseSchedule.metadata,
   recurring_parent_id: scheduleId,
   occurrence_number: instances.length + 1,
@@ -413,13 +413,13 @@ export class AuditCalendarSystem {
    */
   processScheduleMonitoring(): {
   alerts: Array<{,
-  type: 'overdue' | 'upcoming' | 'dependency' | 'resource';,
+  type: 'overdue' | 'upcoming' | 'dependency' | 'resource';
   schedule_id: string;
-  message: string;,
+  message: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   action_required: string;
 }>;
-    notifications_sent: number;,
+    notifications_sent: number;
   schedules_updated: number;
     const alerts: any = [];
     let notificationsSent = 0;
@@ -464,10 +464,10 @@ export class AuditCalendarSystem {
    * Generate audit schedule analytics
    */
   generateScheduleAnalytics(dateRange: { start: Date; end: Date }): {
-  summary: {,
-  total_schedules: number;,
+  summary: {
+  total_schedules: number;
   completed_schedules: number;
-  overdue_schedules: number;,
+  overdue_schedules: number;
   completion_rate: number;
   average_duration: number;
 };
@@ -475,11 +475,11 @@ export class AuditCalendarSystem {
     priority_distribution: Record<SchedulePriority, number>;
     timeline_analysis: Array<{,
   date: string;
-  scheduled: number;,
+  scheduled: number;
   completed: number;
   overdue: number;
 }>;
-    resource_utilization: {,
+    resource_utilization: {
   by_assignee: Record<string, number>;
   by_activity_type: Record<AuditActivityType, number>;
 };
@@ -514,7 +514,7 @@ export class AuditCalendarSystem {
     // Resource utilization
     const resourceUtilization = this.calculateResourceUtilization(schedules);
     return {
-  summary: {,
+  summary: {
   total_schedules: totalSchedules,
   completed_schedules: completedSchedules,
   overdue_schedules: overdueSchedules,
@@ -584,14 +584,14 @@ export class AuditCalendarSystem {
     });
   private getEventColor(schedule: AuditSchedule, colorBy: string): string {
   const colors = {
-  priority: {,
+  priority: {
   [SchedulePriority.LOW]: '#52c41a',
   [SchedulePriority.MEDIUM]: '#faad14',
   [SchedulePriority.HIGH]: '#fa8c16',
   [SchedulePriority.CRITICAL]: '#f5222d',
   [SchedulePriority.REGULATORY]: '#722ed1',
 },
-  status: {,
+  status: {
   [ScheduleStatus.SCHEDULED]: '#1890ff',
   [ScheduleStatus.IN_PROGRESS]: '#faad14',
   [ScheduleStatus.COMPLETED]: '#52c41a',
@@ -698,7 +698,7 @@ export class AuditCalendarSystem {
   created_at: new Date(),
   updated_at: new Date(),
   progress: undefined,
-  metadata: {,
+  metadata: {
   ...schedule.metadata,
   recurring_parent_id: schedule.id,
 };

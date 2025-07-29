@@ -12,12 +12,12 @@ const mockStore = {
   nodes: [],
   edges: [],
   stickyNotes: [],
-  annotations: {,
+  annotations: {
   stickyNotes: [],
     nodeLabels: {},
     regionGroups: [],
     connectionLabels: [],
-    metadata: {,
+    metadata: {
   author: 'Anonymous',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),
@@ -65,12 +65,12 @@ describe('Graph Store - Sticky Notes Operations', () => {
     // Reset mock store state
     Object.assign(mockStore, {)
   stickyNotes: [],
-      annotations: {,
+      annotations: {
   stickyNotes: [],
         nodeLabels: {},
         regionGroups: [],
         connectionLabels: [],
-        metadata: {,
+        metadata: {
   author: 'Anonymous',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),
@@ -90,7 +90,7 @@ describe('Graph Store - Sticky Notes Operations', () => {
         nodeLabels: {},
         regionGroups: [],
         connectionLabels: [],
-        metadata: {,
+        metadata: {
   author: 'Anonymous',
   created: expect.any(String),
   modified: expect.any(String),

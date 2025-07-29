@@ -73,7 +73,7 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "video" | "image" | "screenshot";
@@ -215,7 +215,7 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "video" | "image" | "screenshot";
@@ -377,14 +377,14 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     reason: "other" | "inappropriate_content" | "copyright_violation" | "spam" | "low_quality" | "offensive_language" | "misleading_information" | "duplicate_content" | "terms_violation";
     visibility: "private" | "public" | "moderated";
     targetType: "template" | "user" | "platform" | "contribution";
-    evidence: {,
+    evidence: {
         type: "text" | "video" | "url" | "screenshot";
         content: string;
         description?: string | undefined;
     }[];
     helpfulVotes: number;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "video" | "image" | "screenshot";
@@ -545,7 +545,7 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "video" | "image" | "screenshot";
@@ -704,7 +704,7 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
     replies: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "video" | "image" | "screenshot";
@@ -823,7 +823,7 @@ export declare const FeedbackSummarySchema: z.ZodObject<{
     totalHelpfulVotes: number;
     moderationRate: number;
     totalReviews: number;
-    ratingDistribution: {,
+    ratingDistribution: {
         2: number;
         1: number;
         3: number;
@@ -841,7 +841,7 @@ export declare const FeedbackSummarySchema: z.ZodObject<{
     targetType: string;
     generatedAt: Date;
     targetId: string;
-    ratingDistribution: {,
+    ratingDistribution: {
         2?: number | undefined;
         1?: number | undefined;
         3?: number | undefined;
@@ -873,14 +873,14 @@ export declare const FeedbackVoteSchema: z.ZodObject<{
     createdAt: Date;
     userId: string;
     feedbackId: string;
-    voteType: "helpful" | "not_helpful";
-}, {
+    voteType: "helpful" | "not_helpful"
+  }, {
     id: string;
     createdAt: Date;
     userId: string;
     feedbackId: string;
-    voteType: "helpful" | "not_helpful";
-}>;
+    voteType: "helpful" | "not_helpful"
+  }>;
 export declare const FeedbackReplySchema: z.ZodObject<{
     id: z.ZodString;
     feedbackId: z.ZodString;
@@ -919,7 +919,7 @@ export declare const FeedbackReplySchema: z.ZodObject<{
     authorId: string;
     authorName: string;
     likes: number;
-    attachments: {,
+    attachments: {
         id: string;
         filename: string;
         type: "document" | "image";

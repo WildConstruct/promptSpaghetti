@@ -30,7 +30,7 @@ export interface PrerequisiteResult {
     checkDuration?: number;
 
 export interface PrerequisiteReport {
-    overall: {,
+    overall: {
         passed: boolean;
         totalChecks: number;
         passedChecks: number;
@@ -54,8 +54,8 @@ export interface PrerequisiteDependencyMap {
     [checkId: string]: {
         dependsOn: string[];
         requiredBy: string[];
-        status: 'pending' | 'checking' | 'passed' | 'failed' | 'skipped';
-    };
+        status: 'pending' | 'checking' | 'passed' | 'failed' | 'skipped'
+  };
 
 export interface Epic16PrerequisiteConfig {
     enabledCategories: string[];
@@ -66,7 +66,7 @@ export interface Epic16PrerequisiteConfig {
     retryAttempts: number;
     saveReports: boolean;
     reportRetentionDays: number;
-    services: {,
+    services: {
         authService?: string;
         analyticsService?: string;
         experimentationService?: string;

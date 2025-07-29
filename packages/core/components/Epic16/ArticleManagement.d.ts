@@ -29,12 +29,12 @@ export interface Article {
     featured: boolean;
     attachments?: ArticleAttachment[];
     relatedArticles?: string[];
-    seo: {,
+    seo: {
         metaTitle?: string;
         metaDescription?: string;
         keywords?: string[];
     };
-    analytics: {,
+    analytics: {
         averageRating: number;
         ratingCount: number;
         completionRate: number;

@@ -17,7 +17,7 @@ describe('DevTools Integration', () => {
     // Perform a state change
     await container.executeOperation({)
   type: 'ADD_NODE',
-      node: {,
+      node: {
   id: 'test-node',
         type: 'test',
         position: { x: 100, y: 100 },
@@ -42,20 +42,20 @@ describe('DevTools Integration', () => {
   status: 'active',
   createdAt: new Date(),
   updatedAt: new Date(),
-  profile: {,
+  profile: {
   firstName: 'Test',
   lastName: 'User',
-  preferences: {,
+  preferences: {
   theme: 'light',
   language: 'en',
   timezone: 'UTC',
-  notifications: {,
+  notifications: {
   email: true,
   push: false,
   desktop: true,
 },
   permissions: [],
-      activity: {,
+      activity: {
   loginCount: 0,
   lastActions: [],
   sessionsActive: 0,
@@ -73,7 +73,7 @@ describe('DevTools Integration', () => {
     // Record multiple state changes
     await container.executeOperation({)
   type: 'ADD_NODE',
-      node: {,
+      node: {
   id: 'node1',
         type: 'test',
         position: { x: 100, y: 100 },
@@ -82,7 +82,7 @@ describe('DevTools Integration', () => {
     });
     await container.executeOperation({)
   type: 'ADD_NODE',
-      node: {,
+      node: {
   id: 'node2',
         type: 'test',
         position: { x: 200, y: 200 },
@@ -103,7 +103,7 @@ describe('DevTools Integration', () => {
     // Perform operations that should be tracked
     await container.executeOperation({)
   type: 'ADD_NODE',
-      node: {,
+      node: {
   id: 'perf-test-node',
         type: 'test',
         position: { x: 100, y: 100 },

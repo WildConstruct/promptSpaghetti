@@ -322,7 +322,7 @@ export interface TrendForecast {
 export interface ForecastPeriod {
     predictedValue: number;
     confidence: number;
-    range: {,
+    range: {
         min: number;
         max: number;
     };
@@ -1935,7 +1935,7 @@ export interface LifecycleInsight {
     description: string;
     severity: string;
     affectedUsers: number;
-    potentialImpact: {,
+    potentialImpact: {
         scope: string;
         magnitude: string;
         confidence: number;
@@ -1949,7 +1949,7 @@ export interface LifecycleInsight {
         expectedOutcome: string;
         successMetrics: string[];
     }>;
-    data: {,
+    data: {
         charts: unknown[];
         tables: unknown[];
         statistics: unknown[];
@@ -1960,7 +1960,7 @@ export interface LifecycleExportMetadata {
     exportTimestamp: number;
     version: string;
     totalUsers: number;
-    analysisePeriod: {,
+    analysisePeriod: {
         start: number;
         end: number;
     };

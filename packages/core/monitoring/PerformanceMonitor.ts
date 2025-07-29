@@ -8,81 +8,81 @@ import { EventEmitter } from 'events';
 import { AdvancedExecutionContext } from '../runtime/advanced';
 
 export interface PerformanceMetrics {
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
   executionId: string;
   // Timing metrics
-  startTime: number;,
+  startTime: number;
   endTime: number;
   duration: number;
   // Resource usage
-  memoryUsage: {,
-  before: number;,
+  memoryUsage: {
+  before: number;
   after: number;
-  peak: number;,
+  peak: number;
   delta: number;
 };
   // Context metrics
-  contextSize: {,
+  contextSize: {
   variableCount: number;
-  stateCount: number;,
+  stateCount: number;
   cacheSize: number;
   evaluationDepth: number;
 };
   // Performance indicators
-  cacheHit: boolean;,
+  cacheHit: boolean;
   errors: string;
   warnings: string;
   // Custom metrics
   customMetrics: Map<string, number | string | boolean>;
 }
 export interface AggregatedMetrics {
-  nodeType: string;,
+  nodeType: string;
   totalExecutions: number;
-  successfulExecutions: number;,
+  successfulExecutions: number;
   failedExecutions: number;
   // Timing statistics
-  averageDuration: number;,
+  averageDuration: number;
   minDuration: number;
-  maxDuration: number;,
+  maxDuration: number;
   medianDuration: number;
-  p95Duration: number;,
+  p95Duration: number;
   p99Duration: number;
   // Resource statistics
-  averageMemoryDelta: number;,
+  averageMemoryDelta: number;
   peakMemoryUsage: number;
   // Context statistics
-  averageContextSize: number;,
+  averageContextSize: number;
   cacheHitRate: number;
   // Trend analysis
-  performanceTrend: 'improving' | 'stable' | 'degrading';,
+  performanceTrend: 'improving' | 'stable' | 'degrading';
   lastUpdated: number;
   // Recommendations
   optimizationRecommendations: string;
 }
 export interface PerformanceAlert {
-  id: string;,
+  id: string;
   timestamp: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   type: 'duration' | 'memory' | 'error_rate' | 'context_size' | 'custom';
   nodeType?: string;
   nodeId?: string;
-  message: string;,
+  message: string;
   details: Record<string, any>;
   resolved: boolean;
 }
 export interface PerformanceMonitorConfig {
-  enableMemoryTracking: boolean;,
+  enableMemoryTracking: boolean;
   enableContextTracking: boolean;
-  enableAggregation: boolean;,
+  enableAggregation: boolean;
   enableAlerting: boolean;
   // Thresholds
   slowExecutionThreshold: number; // milliseconds,
   memoryThreshold: number; // bytes,
-  contextSizeThreshold: number;,
+  contextSizeThreshold: number;
   errorRateThreshold: number; // percentage,
   // Storage settings
-  maxMetricsHistory: number;,
+  maxMetricsHistory: number;
   aggregationInterval: number; // milliseconds,
   retentionPeriod: number; // milliseconds,
   // Alert settings
@@ -97,9 +97,9 @@ export class PerformanceMonitor extends EventEmitter {
   private metrics: Map<string, PerformanceMetrics> = new Map();
   private aggregatedMetrics: Map<string, AggregatedMetrics> = new Map();
   private activeExecutions: Map<string, {,
-  startTime: number;,
+  startTime: number;
   initialMemory: number;
-  nodeId: string;,
+  nodeId: string;
   nodeType: string;
   executionId: string;
 }> = new Map();
@@ -169,7 +169,7 @@ export class PerformanceMonitor extends EventEmitter {
   startTime: execution.startTime,
   endTime,
   duration,
-  memoryUsage: {,
+  memoryUsage: {
   before: execution.initialMemory,
   after: currentMemory,
   peak: Math.max(execution.initialMemory, currentMemory),
@@ -224,14 +224,14 @@ export class PerformanceMonitor extends EventEmitter {
   /**
   * Get performance statistics summary
   */
-  getStatisticsSummary(): {,
-  totalExecutions: number;,
+  getStatisticsSummary(): {
+  totalExecutions: number;
   activeExecutions: number;
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   slowExecutions: number;
-  errorRate: number;,
+  errorRate: number;
   memoryPressure: number;
-  activeAlerts: number;,
+  activeAlerts: number;
   topPerformingTypes: string;
   underperformingTypes: string;
   const allMetrics = Array.from(this.metrics.values());
@@ -470,8 +470,8 @@ export class PerformanceMonitor extends EventEmitter {
   const olderAvg = olderMetrics.reduce((sum, m) => sum + m.duration, 0) / olderMetrics.length;
   const improvement = (olderAvg - recentAvg) / olderAvg;
   if (improvement > 0.1) {
-  performanceTrend = 'improving';
-} else if (improvement < -0.1) {
+  performanceTrend = 'improving'
+  } else if (improvement < -0.1) {
   performanceTrend = 'degrading';
   // Generate optimization recommendations
   const optimizationRecommendations: string = [];

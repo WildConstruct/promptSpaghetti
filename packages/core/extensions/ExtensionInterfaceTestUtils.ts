@@ -465,17 +465,17 @@ export class ExtensionInterfaceTestSuite {
 
 // Test Result Interfaces
 interface TestSuiteResult {
-  extensionId: string;,
+  extensionId: string;
   extensionName: string;
-  version: string;,
+  version: string;
   timestamp: Date;
-  overallPassed: boolean;,
+  overallPassed: boolean;
   tests: TestCategoryResult;
 interface TestCategoryResult {
-  category: string;,
+  category: string;
   results: TestResult;
 interface TestResult {
-  name: string;,
+  name: string;
   passed: boolean;
   error?: string;
   duration: number;

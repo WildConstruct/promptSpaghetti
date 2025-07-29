@@ -41,25 +41,25 @@ export enum MonitoringEventType {
   CRITICAL = 'critical'
   // Monitoring Event
   export interface MonitoringEvent {
-  id: string;,
+  id: string;
   type: MonitoringEventType;
-  timestamp: Date;,
+  timestamp: Date;
   dataId: string;
   classification?: ClassificationResult;
   metadata: Record<string, any>;
-  severity: AlertSeverity;,
+  severity: AlertSeverity;
   source: string;
   userId?: string;
   // Performance Metrics
 }
 export interface ClassificationPerformanceMetrics {
-  totalClassifications: number;,
+  totalClassifications: number;
   averageResponseTime: number;
-  p95ResponseTime: number;,
+  p95ResponseTime: number;
   p99ResponseTime: number;
-  throughput: number;,
+  throughput: number;
   errorRate: number;
-  cacheHitRate: number;,
+  cacheHitRate: number;
   queueDepth: number;
   lastUpdated: Date;
   // Classification Statistics
@@ -68,49 +68,49 @@ export interface ClassificationStatistics {
   byLevel: Record<ClassificationLevel, number>;
   byCategory: Record<DataCategory, number>;
   byComplianceFramework: Record<ComplianceFramework, number>;
-  encryptionRequired: number;,
+  encryptionRequired: number;
   totalClassified: number;
-  uniqueDataElements: number;,
-  timeRange: {,
-  start: Date;,
+  uniqueDataElements: number;
+  timeRange: {
+  start: Date;
   end: Date;
 };
 
 // Compliance Metrics
 }
 export interface ComplianceMetrics {
-  totalViolations: number;,
+  totalViolations: number;
   violationsByFramework: Record<ComplianceFramework, number>;
   violationTypes: Record<string, number>;
-  complianceRate: number;,
+  complianceRate: number;
   criticalViolations: number;
-  resolvedViolations: number;,
+  resolvedViolations: number;
   pendingRemediation: number;
   // Anomaly Detection
 }
 export interface ClassificationAnomaly {
-  id: string;,
+  id: string;
   type: 'volume' | 'pattern' | 'timing' | 'classification_change';
-  description: string;,
+  description: string;
   detectedAt: Date;
-  confidence: number;,
+  confidence: number;
   affectedDataIds: string;
-  expectedPattern: any;,
+  expectedPattern: any;
   actualPattern: any;
   recommendation: string;
   // Alert Configuration
 }
 export interface AlertConfig {
-  enabled: boolean;,
-  thresholds: {,
-  errorRate: number;,
+  enabled: boolean;
+  thresholds: {
+  errorRate: number;
   responseTime: number;
-  violationCount: number;,
+  violationCount: number;
   anomalyConfidence: number;
 };
-  channels: {,
+  channels: {
   email: boolean;
-  webhook: boolean;,
+  webhook: boolean;
   syslog: boolean;
 };
   recipients: string;
@@ -119,13 +119,13 @@ export interface AlertConfig {
 // Monitor Configuration
 }
 export interface MonitorConfig {
-  enableRealTimeMonitoring: boolean;,
+  enableRealTimeMonitoring: boolean;
   enablePerformanceTracking: boolean;
-  enableAnomalyDetection: boolean;,
+  enableAnomalyDetection: boolean;
   enableComplianceMonitoring: boolean;
-  retentionPeriodDays: number;,
+  retentionPeriodDays: number;
   aggregationIntervalMinutes: number;
-  alertConfig: AlertConfig;,
+  alertConfig: AlertConfig;
   dashboardRefreshIntervalSeconds: number;
   /**
   * Classification Monitoring Service
@@ -152,7 +152,7 @@ export class ClassificationMonitor extends EventEmitter {
   /**
   * Record a classification event
   */
-  public recordClassification(dataElement: DataElement,)
+  public recordClassification(dataElement: DataElement)
   result: ClassificationResult,
   responseTime: number): void {,
   if (!this.config.enableRealTimeMonitoring) return;
@@ -162,7 +162,7 @@ export class ClassificationMonitor extends EventEmitter {
   timestamp: new Date(),
   dataId: dataElement.id,
   classification: result,
-  metadata: {,
+  metadata: {
   fieldName: dataElement.fieldName,
   dataType: dataElement.dataType,
   source: dataElement.source,
@@ -186,7 +186,7 @@ export class ClassificationMonitor extends EventEmitter {
   /**
   * Record a rule trigger event
   */
-  public recordRuleTrigger(ruleId: string,)
+  public recordRuleTrigger(ruleId: string)
   dataId: string,
   metadata: Record<string, any>): void {,
   const event: MonitoringEvent = {,
@@ -194,18 +194,18 @@ export class ClassificationMonitor extends EventEmitter {
   type: MonitoringEventType.RULE_TRIGGERED,
   timestamp: new Date(),
   dataId,
-  metadata: {,
+  metadata: {
   ruleId,
   ...metadata
 },
   severity: AlertSeverity.INFO,
-      source: 'classification_rules';
+      source: 'classification_rules'
   };
     this.addEvent(event);
   /**
    * Record a compliance violation
    */
-  public recordComplianceViolation(dataId: string,)
+  public recordComplianceViolation(dataId: string)
     framework: ComplianceFramework,
     violation: string,
     severity: AlertSeverity = AlertSeverity.WARNING): void {,
@@ -214,13 +214,13 @@ export class ClassificationMonitor extends EventEmitter {
   type: MonitoringEventType.COMPLIANCE_VIOLATION,
   timestamp: new Date(),
   dataId,
-  metadata: {,
+  metadata: {
   framework,
   violation,
   requiresRemediation: true,
 }
       severity,
-      source: 'compliance_monitor';
+      source: 'compliance_monitor'
   };
     this.addEvent(event);
     this.updateComplianceMetrics(framework, violation);
@@ -229,7 +229,7 @@ export class ClassificationMonitor extends EventEmitter {
   /**
   * Record a performance warning
   */
-  public recordPerformanceWarning(metric: string,)
+  public recordPerformanceWarning(metric: string)
   value: number,
   threshold: number): void {,
   const event: MonitoringEvent = {,
@@ -237,14 +237,14 @@ export class ClassificationMonitor extends EventEmitter {
   type: MonitoringEventType.PERFORMANCE_WARNING,
   timestamp: new Date(),
   dataId: 'system',
-  metadata: {,
+  metadata: {
   metric,
   value,
   threshold,
   percentageOver: ((value - threshold) / threshold) * 100,
 },
   severity: AlertSeverity.WARNING,
-      source: 'performance_monitor';
+      source: 'performance_monitor'
   };
     this.addEvent(event);
     this.triggerAlert(event);
@@ -281,7 +281,7 @@ export class ClassificationMonitor extends EventEmitter {
   /**
   * Get recent events
   */
-  public getRecentEvents(limit: number = 100,)
+  public getRecentEvents(limit: number = 100)
   types?: MonitoringEventType): MonitoringEvent {,
   let events = this.events;
   if (types && types.length > 0) {
@@ -292,12 +292,12 @@ export class ClassificationMonitor extends EventEmitter {
   /**
   * Get dashboard metrics
   */
-  public getDashboardMetrics(): {,
-  performance: ClassificationPerformanceMetrics;,
+  public getDashboardMetrics(): {
+  performance: ClassificationPerformanceMetrics;
   statistics: ClassificationStatistics;
-  compliance: ComplianceMetrics;,
+  compliance: ComplianceMetrics;
   recentAnomalies: ClassificationAnomaly;
-  alerts: MonitoringEvent;,
+  alerts: MonitoringEvent;
   healthStatus: 'healthy' | 'warning' | 'critical';
   const healthStatus = this.calculateHealthStatus();
   return {
@@ -314,7 +314,7 @@ export class ClassificationMonitor extends EventEmitter {
   public exportData(format: 'json' | 'csv' = 'json'): string {
   const exportData = {
   exportedAt: new Date(),
-  timeRange: {,
+  timeRange: {
   start: this.events[0]?.timestamp || new Date(),
   end: this.events[this.events.length - 1]?.timestamp || new Date(),
 },
@@ -343,20 +343,20 @@ export class ClassificationMonitor extends EventEmitter {
   lastUpdated: new Date(),
 };
     this.statistics = {
-  byLevel: {,
+  byLevel: {
   [ClassificationLevel.PUBLIC]: 0,
   [ClassificationLevel.INTERNAL]: 0,
   [ClassificationLevel.CONFIDENTIAL]: 0,
   [ClassificationLevel.RESTRICTED]: 0,
 },
-  byCategory: {,
+  byCategory: {
   [DataCategory.PII]: 0,
   [DataCategory.AUTHENTICATION]: 0,
   [DataCategory.SYSTEM_CONFIG]: 0,
   [DataCategory.OPERATIONAL]: 0,
   [DataCategory.BUSINESS]: 0,
 },
-  byComplianceFramework: {,
+  byComplianceFramework: {
   [ComplianceFramework.GDPR]: 0,
   [ComplianceFramework.NIST]: 0,
   [ComplianceFramework.HIPAA]: 0,
@@ -365,13 +365,13 @@ export class ClassificationMonitor extends EventEmitter {
   encryptionRequired: 0,
       totalClassified: 0,
       uniqueDataElements: 0,
-      timeRange: {,
+      timeRange: {
   start: new Date(),
   end: new Date(),
 };
     this.complianceMetrics = {
   totalViolations: 0,
-  violationsByFramework: {,
+  violationsByFramework: {
   [ComplianceFramework.GDPR]: 0,
   [ComplianceFramework.NIST]: 0,
   [ComplianceFramework.HIPAA]: 0,
@@ -521,13 +521,13 @@ export class ClassificationMonitor extends EventEmitter {
   type: MonitoringEventType.ANOMALY_DETECTED,
   timestamp: new Date(),
   dataId: anomaly.affectedDataIds[0] || 'system',
-  metadata: {,
+  metadata: {
   anomalyType: anomaly.type,
   confidence: anomaly.confidence,
   description: anomaly.description,
 },
   severity: anomaly.confidence > 80 ? AlertSeverity.WARNING : AlertSeverity.INFO,
-      source: 'anomaly_detector';
+      source: 'anomaly_detector'
   };
     this.addEvent(event);
     if (anomaly.confidence > this.config.alertConfig.thresholds.anomalyConfidence) {

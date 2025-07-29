@@ -528,7 +528,8 @@ string;
         actor: {
             type: actorType,
             id: actorId,
-            email: actorType !== 'system' ? `${actorId}@company.com` : undefined }
+            email: actorType !== 'system' ? `${actorId}@company.com` : undefined
+        }
     };
     changes,
         reason,

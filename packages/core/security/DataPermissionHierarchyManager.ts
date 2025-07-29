@@ -30,114 +30,114 @@ import {
 } from '../types/DataClassification';
 
 export interface PermissionRequest {
-  id: string;,
+  id: string;
   requesterId: string;
-  operation: DataOperation;,
+  operation: DataOperation;
   dataClassification: DataClassificationLevel;
-  dataId: string;,
+  dataId: string;
   purpose: string;
-  urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   context: OperationContext;
   requestedAt: Date;
   expiresAt?: Date;
 }
 export interface PermissionGrant {
-  id: string;,
+  id: string;
   requestId: string;
-  grantedBy: string;,
+  grantedBy: string;
   grantedAt: Date;
-  permissions: string;,
+  permissions: string;
   conditions: PermissionCondition;
   timeLimit?: Date;
   usageLimit?: number;
-  usageCount: number;,
+  usageCount: number;
   revoked: boolean;
   revokedAt?: Date;
   revokedBy?: string;
   auditTrail: PermissionAuditEntry;
 }
 export interface PermissionAuditEntry {
-  timestamp: Date;,
+  timestamp: Date;
   userId: string;
-  action: 'GRANTED' | 'USED' | 'DENIED' | 'REVOKED' | 'DELEGATED' | 'ESCALATED' | 'EXPIRED';,
+  action: 'GRANTED' | 'USED' | 'DENIED' | 'REVOKED' | 'DELEGATED' | 'ESCALATED' | 'EXPIRED';
   details: Record<string, any>;
   riskScore: number;
 }
 export interface EscalationRequest {
-  id: string;,
+  id: string;
   originalRequestId: string;
-  escalationPath: string;,
+  escalationPath: string;
   currentStep: number;
-  status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'ESCALATED';,
+  status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'ESCALATED';
   createdAt: Date;
-  updatedAt: Date;,
+  updatedAt: Date;
   steps: EscalationStepStatus;
-  finalDecision?: {,
-  decision: 'APPROVED' | 'DENIED';,
+  finalDecision?: {
+  decision: 'APPROVED' | 'DENIED';
   decisionBy: string;
-  decisionAt: Date;,
+  decisionAt: Date;
   reason: string;
 };
 }
 export interface EscalationStepStatus {
-  stepId: string;,
+  stepId: string;
   status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'SKIPPED';
-  assignedTo: string;,
+  assignedTo: string;
   approvals: StepApproval;
   startedAt: Date;
   completedAt?: Date;
   timeoutAt: Date;
 }
 export interface StepApproval {
-  approver: string;,
+  approver: string;
   decision: 'APPROVED' | 'DENIED';
   timestamp: Date;
   comments?: string;
   conditions?: PermissionCondition;
 }
 export interface DelegationRequest {
-  id: string;,
+  id: string;
   delegatorId: string;
-  delegateeId: string;,
+  delegateeId: string;
   permissions: string;
   timeLimit: Date;
   usageLimit?: number;
-  conditions: DelegationCondition;,
+  conditions: DelegationCondition;
   justification: string;
-  status: 'PENDING' | 'APPROVED' | 'DENIED' | 'ACTIVE' | 'EXPIRED' | 'REVOKED';,
+  status: 'PENDING' | 'APPROVED' | 'DENIED' | 'ACTIVE' | 'EXPIRED' | 'REVOKED';
   createdAt: Date;
   approvedAt?: Date;
   approvedBy?: string;
 }
 export interface HierarchyAnalysis {
-  userLevel: number;,
+  userLevel: number;
   effectivePermissions: OperationPermission;
-  inheritedFrom: string;,
+  inheritedFrom: string;
   delegatedPermissions: DelegationGrant;
-  restrictions: PermissionRestriction;,
+  restrictions: PermissionRestriction;
   escalationPaths: string;
   riskProfile: HierarchyRiskProfile;
 }
 export interface DelegationGrant {
-  id: string;,
+  id: string;
   delegatorId: string;
-  permissions: string;,
+  permissions: string;
   conditions: DelegationCondition;
   expiresAt: Date;
   usageRemaining?: number;
-  source: 'DIRECT' | 'INHERITED' | 'EMERGENCY';
-}
+  source: 'DIRECT' | 'INHERITED' | 'EMERGENCY'
+  }
 export interface PermissionRestriction {
-  type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';,
+  type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
   description: string;
   configuration: Record<string, any>;
-  active: boolean;,
+  active: boolean;
   bypassable: boolean;
 }
 export interface HierarchyRiskProfile {
-  overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskFactors: string;
-  mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';,
+  mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';
   lastAssessment: Date;
   recommendedActions: string;
 }
@@ -163,7 +163,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   * Evaluate permission request based on hierarchy
   */
   async evaluatePermissionRequest(request: PermissionRequest): Promise<{,
-  granted: boolean;,
+  granted: boolean;
   reason: string;
   conditions?: PermissionCondition;
   escalationRequired?: boolean;
@@ -281,7 +281,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   /**
    * Grant permission based on evaluation
    */
-  async grantPermission(request: PermissionRequest,)
+  async grantPermission(request: PermissionRequest)
     grantedBy: string,
     conditions?: PermissionCondition,
     timeLimit?: Date,
@@ -303,7 +303,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   timestamp: new Date(),
   userId: grantedBy,
   action: 'GRANTED',
-  details: {,
+  details: {
   requestId: request.id,
   operation: request.operation,
   dataClassification: request.dataClassification,
@@ -361,7 +361,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   /**
    * Delegate permissions to another user
    */
-  async delegatePermissions(delegatorId: string,)
+  async delegatePermissions(delegatorId: string)
     delegateeId: string,
     permissions: string,
     timeLimit: Date,
@@ -445,26 +445,26 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         requiresExplicitGrant: config.level <= 2,
         maxDelegationLevel: config.maxDelegationLevel,
         auditLevel: config.auditLevel,
-        metadata: {,
+        metadata: {
   createdBy: 'system',
   createdAt: new Date(),
   lastModified: new Date(),
   version: '1.0',
-  compliance: {,
+  compliance: {
   frameworks: ['ISO27001', 'SOC2'],
   requirements: [],
   lastAudit: new Date(),
   nextReview: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
   certifications: [],
 },
-  riskAssessment: {,
+  riskAssessment: {
   overallRisk: config.level <= 2 ? 'HIGH' : config.level <= 5 ? 'MEDIUM' : 'LOW',
   riskFactors: [],
   mitigations: [],
   lastAssessment: new Date(),
   assessedBy: 'system',
 },
-  usageStatistics: {,
+  usageStatistics: {
   totalGrants: 0,
   activeUsers: 0,
   violationCount: 0,
@@ -521,7 +521,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   if (level <= 5) {
   return [{
   type: 'BUSINESS_HOURS',
-  configuration: {,
+  configuration: {
   startTime: '07:00',
   endTime: '19:00',
   daysOfWeek: [1, 2, 3, 4, 5], // Monday-Friday,
@@ -533,7 +533,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   }];
     return [{
   type: 'BUSINESS_HOURS',
-  configuration: {,
+  configuration: {
   startTime: '08:00',
   endTime: '18:00',
   daysOfWeek: [1, 2, 3, 4, 5], // Monday-Friday,

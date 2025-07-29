@@ -3,7 +3,7 @@
  * Real-time visualization and reporting system for performance KPIs
  */
 import { EventEmitter } from 'events';
-import { KPIMonitoringService } from './KPIMonitoringService';
+import { KPIMonitoringService, KPITrendAnalysis } from './KPIMonitoringService';
 import { PerformanceBaseline } from './PerformanceBaseline';
 import { PerformanceTargetConfig } from './PerformanceTargets';
 export interface DashboardWidget {
@@ -40,11 +40,24 @@ export interface DashboardMetrics {
     };
     categories: Record<string, {
         total: number;
-    }, healthy>;
-    number: any;
-    warning: number;
-    critical: number;
-    averageScore: number;
+        healthy: number;
+        warning: number;
+        critical: number;
+        averageScore: number;
+    }>;
+    alerts: {
+        total: number;
+        critical: number;
+        high: number;
+        medium: number;
+        low: number;
+        acknowledged: number;
+    };
+    trends: {
+        improving: KPITrendAnalysis;
+        degrading: KPITrendAnalysis;
+        stable: KPITrendAnalysis;
+    };
 }
 export interface DashboardReport {
     id: string;

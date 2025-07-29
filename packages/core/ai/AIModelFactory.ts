@@ -22,12 +22,12 @@ export interface FactoryConfig {
   defaultTimeout?: number;
   defaultRetries?: number;
   enableLogging?: boolean;
-  logLevel?: 'debug' | 'info' | 'warn' | 'error';
-}
+  logLevel?: 'debug' | 'info' | 'warn' | 'error'
+  }
 export interface ModelRegistration {
-  id: string;,
+  id: string;
   provider: AIModelProvider;
-  modelName: string;,
+  modelName: string;
   config: unknown;
   metadata?: Partial<ModelMetadata>;
   capabilities?: Partial<ModelCapabilities>;
@@ -95,7 +95,7 @@ export class AIModelFactory implements IAIModelFactory {
   ...baseConfig,
   provider: AIModelProvider.OPENAI,
   modelName: 'gpt-3.5-turbo',
-  parameters: {,
+  parameters: {
   temperature: 1,
   max_tokens: 1000,
 };
@@ -104,7 +104,7 @@ export class AIModelFactory implements IAIModelFactory {
   ...baseConfig,
   provider: AIModelProvider.OPENAI,
   modelName: 'dall-e-3',
-  parameters: {,
+  parameters: {
   size: '1024x1024',
   quality: 'standard',
 };
@@ -113,7 +113,7 @@ export class AIModelFactory implements IAIModelFactory {
   ...baseConfig,
   provider: AIModelProvider.OPENAI,
   modelName: 'tts-1',
-  parameters: {,
+  parameters: {
   voice: 'alloy',
   speed: 1,
 };
@@ -122,7 +122,7 @@ export class AIModelFactory implements IAIModelFactory {
   ...baseConfig,
   provider: AIModelProvider.OPENAI,
   modelName: 'gpt-4-vision-preview',
-  parameters: {,
+  parameters: {
   temperature: 0.7,
   max_tokens: 1000,
 };
@@ -229,8 +229,8 @@ export class AIModelFactory implements IAIModelFactory {
       if (!model) {
         return false;
       const health = await model.health();
-      return health.status === 'ready';
-    } catch (error) {
+      return health.status === 'ready'
+  } catch (error) {
       this._log('error', `Model test failed for ${modelId}:`, error);}
       return false;
   async getModelHealth(modelId: string): Promise<unknown> {

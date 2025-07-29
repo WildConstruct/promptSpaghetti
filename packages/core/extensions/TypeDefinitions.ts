@@ -140,7 +140,7 @@ export class ExtensionTypeChecker {
   /**
    * Validate extension type at runtime
    */
-  public validateExtensionType(extension: any): {,
+  public validateExtensionType(extension: any): {
   valid: boolean;
     type?: string;
     errors: string;
@@ -182,9 +182,9 @@ export class ExtensionTypeChecker {
   /**
    * Validate method signature
    */
-  public validateMethodSignature(obj: any,)
+  public validateMethodSignature(obj: any)
     methodName: string,
-    expectedSignature: {,
+    expectedSignature: {
       parameterCount?: number;
       parameterTypes?: string;
       returnType?: string;
@@ -310,10 +310,10 @@ export class ExtensionInterfaceValidator {
   /**
   * Validate extension interface implementation
   */
-  public validateInterface(extension: any, expectedInterface: string): {,
-  valid: boolean;,
+  public validateInterface(extension: any, expectedInterface: string): {
+  valid: boolean;
   missingMethods: string;
-  invalidMethods: string;,
+  invalidMethods: string;
   extraMethods: string;
   const result = {
   valid: true,
@@ -424,25 +424,25 @@ export class ExtensionInterfaceValidator {
   return extension?.extensionType === 'storage';
   // Runtime type information
   export const ExtensionTypeInfo = {
-  node: {,
+  node: {
   name: 'Node Extension',
   description: 'Extends the runtime node system',
   interfaces: ['BaseExtension', 'NodeExtension'],
   capabilities: ['node-creation', 'node-validation', 'advanced-nodes'],
 },
-  ui: {,
+  ui: {
   name: 'UI Extension',
   description: 'Extends the user interface system',
   interfaces: ['BaseExtension', 'UIExtension'],
   capabilities: ['components', 'themes', 'commands', 'menus', 'keybindings'],
 },
-  transform: {,
+  transform: {
   name: 'Transform Extension',
   description: 'Extends the data transformation system',
   interfaces: ['BaseExtension', 'TransformExtension'],
   capabilities: ['data-transformation', 'pipeline-support', 'validation'],
 },
-  storage: {,
+  storage: {
   name: 'Storage Extension',
   description: 'Extends the storage and persistence system',
   interfaces: ['BaseExtension', 'StorageExtension'],

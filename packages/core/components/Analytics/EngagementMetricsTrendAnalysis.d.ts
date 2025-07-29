@@ -155,7 +155,7 @@ export interface ForecastPrediction {
     timestamp: number;
     predictedValue: number;
     confidence: number;
-    range: {,
+    range: {
         lower: number;
         upper: number;
     };
@@ -192,11 +192,11 @@ export interface TrendAlert {
 export interface EngagementMetricsExportData {
     metricsData: EngagementMetricsData[];
     trendAnalyses: TrendAnalysis[];
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
-    metadata: {,
+    metadata: {
         exportTimestamp: number;
         version: string;
         totalDataPoints: number;

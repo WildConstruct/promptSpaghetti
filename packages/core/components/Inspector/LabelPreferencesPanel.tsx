@@ -94,8 +94,8 @@ interface LabelPreferencesPanelProps {
               e.currentTarget.style.background = 'var(--bg-secondary)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'none';
-            }}
+              e.currentTarget.style.background = 'none'
+  }}
           >
             ×
           </button>

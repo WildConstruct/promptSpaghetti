@@ -16,19 +16,19 @@ import {
   SuggestionType
 } from '../../services/Epic16KnowledgeBaseService';
 interface KnowledgeBaseSearchProps {
-  knowledgeService: Epic16KnowledgeBaseService;,
+  knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
   onArticleSelect?: (articleId: string) => void;
   onSearchPerformed?: (query: string, resultCount: number) => void;
   className?: string;
   interface SearchState {
-  query: string;,
+  query: string;
   filters: SearchFilters;
-  results: SearchResult | null;,
+  results: SearchResult | null;
   suggestions: SearchSuggestion;
-  loading: boolean;,
+  loading: boolean;
   error: string | null;
-  showFilters: boolean;,
+  showFilters: boolean;
   showSuggestions: boolean;
   export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({,)
   knowledgeService,
@@ -40,7 +40,7 @@ interface KnowledgeBaseSearchProps {
   // State management
   const [searchState, setSearchState] = useState<SearchState>({)
   query: '',
-    filters: {,
+    filters: {
   categories: [],
       types: [],
       tags: [],

@@ -16,13 +16,13 @@
  */
 
 export interface SystemUser {
-  id: string;,
+  id: string;
   username: string;
-  email: string;,
+  email: string;
   displayName: string;
   avatar?: string;
   // Account status
-  status: UserStatus;,
+  status: UserStatus;
   isActive: boolean;
   isVerified: boolean;
   lastLoginAt?: Date;
@@ -30,15 +30,15 @@ export interface SystemUser {
   // Profile information
   profile: UserProfile;
   // Access control
-  roles: UserRole;,
+  roles: UserRole;
   permissions: DirectPermission;
   systemAccess: SystemAccessLevel;
   // Security
-  mfaEnabled: boolean;,
+  mfaEnabled: boolean;
   securityClearance: SecurityClearance;
   accessRestrictions?: AccessRestriction;
   // Lifecycle
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   createdBy: string;
   lastModifiedBy?: string;
@@ -53,72 +53,72 @@ export interface UserProfile {
   department?: string;
   jobTitle?: string;
   location?: string;
-  timezone: string;,
+  timezone: string;
   language: string;
   phoneNumber?: string;
   organization?: string;
   manager?: string;
 }
 export interface UserRole {
-  id: string;,
+  id: string;
   roleId: string;
   roleName: string;
   roleDescription?: string;
-  assignedAt: Date;,
+  assignedAt: Date;
   assignedBy: string;
   expiresAt?: Date;
   scope: RoleScope;
   context?: Record<string, any>;
 }
 export interface DirectPermission {
-  id: string;,
+  id: string;
   permission: string;
   resource?: string;
   resourceId?: string;
-  action: string;,
+  action: string;
   granted: boolean;
-  grantedAt: Date;,
+  grantedAt: Date;
   grantedBy: string;
   expiresAt?: Date;
   conditions?: PermissionCondition;
 }
 export interface PermissionCondition {
-  type: 'time' | 'location' | 'device' | 'mfa' | 'approval';,
+  type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
   constraint: Record<string, any>;
   description: string;
 }
 export interface SystemRole {
-  id: string;,
+  id: string;
   name: string;
-  displayName: string;,
+  displayName: string;
   description: string;
-  type: RoleType;,
+  type: RoleType;
   level: number; // Hierarchy level (1-10, 10 = highest),
   // Permissions
-  permissions: RolePermission;,
+  permissions: RolePermission;
   systemAccess: SystemAccessLevel;
   // Constraints
   maxUsers?: number;
-  requiresApproval: boolean;,
+  requiresApproval: boolean;
   canDelegate: boolean;
   // Lifecycle
-  isActive: boolean;,
+  isActive: boolean;
   isSystem: boolean; // Cannot be deleted,
-  createdAt: Date;,
+  createdAt: Date;
   updatedAt: Date;
   createdBy: string;
 }
 export interface RolePermission {
-  permission: string;,
+  permission: string;
   resource: string;
-  actions: string;,
+  actions: string;
   scope: PermissionScope;
   conditions?: PermissionCondition;
 }
 export interface AccessRequest {
-  id: string;,
+  id: string;
   requesterId: string;
-  requesterName: string;,
+  requesterName: string;
   type: AccessRequestType;
   // Request details
   targetUserId?: string;
@@ -127,10 +127,10 @@ export interface AccessRequest {
   resource?: string;
   duration?: number; // hours,
   // Business justification
-  businessJustification: string;,
+  businessJustification: string;
   urgency: AccessUrgency;
   // Approval workflow
-  status: AccessRequestStatus;,
+  status: AccessRequestStatus;
   approvers: AccessApprover;
   currentApprover?: string;
   approvedBy?: string;
@@ -144,43 +144,43 @@ export interface AccessRequest {
   auditTrail: AccessAuditEntry;
 }
 export interface AccessApprover {
-  userId: string;,
+  userId: string;
   displayName: string;
-  order: number;,
+  order: number;
   required: boolean;
   status: ApprovalStatus;
   respondedAt?: Date;
   comments?: string;
 }
 export interface AccessAuditEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  action: string;,
+  action: string;
   performedBy: string;
   details: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
 }
 export interface AccessRestriction {
-  type: RestrictionType;,
+  type: RestrictionType;
   description: string;
   startDate?: Date;
   endDate?: Date;
   conditions: Record<string, any>;
-  appliedBy: string;,
+  appliedBy: string;
   appliedAt: Date;
 }
 export interface SystemAccess {
-  id: string;,
+  id: string;
   userId: string;
-  level: SystemAccessLevel;,
+  level: SystemAccessLevel;
   grantedAt: Date;
   grantedBy: string;
   lastUsed?: Date;
   restrictions: SystemRestriction;
 }
 export interface SystemRestriction {
-  type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';,
+  type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
   configuration: Record<string, any>;
   description: string;
   // Enums and Types
@@ -211,23 +211,23 @@ export interface AccessFilter {
   securityClearance?: SecurityClearance;
 }
 export interface AccessStats {
-  totalUsers: number;,
+  totalUsers: number;
   activeUsers: number;
-  pendingRequests: number;,
+  pendingRequests: number;
   expiredAccesses: number;
   byStatus: Record<UserStatus, number>;
   byAccessLevel: Record<SystemAccessLevel, number>;
   bySecurityClearance: Record<SecurityClearance, number>;
-  recentActivity: {,
-  newUsers: number;,
+  recentActivity: {
+  newUsers: number;
   accessGranted: number;
-  accessRevoked: number;,
+  accessRevoked: number;
   loginAttempts: number;
   failedLogins: number;
 };
-  compliance: {,
+  compliance: {
   mfaEnabled: number;
-  termsAccepted: number;,
+  termsAccepted: number;
   overdueCertifications: number;
   pendingReviews: number;
 };
@@ -251,7 +251,7 @@ export class SystemAccessManager {
   /**
   * User Management
   */
-  async createUser(userData: Omit<SystemUser, 'id' | 'createdAt' | 'updatedAt'>,)
+  async createUser(userData: Omit<SystemUser, 'id' | 'createdAt' | 'updatedAt'>)
   createdBy: string): Promise<SystemUser> {,
   const user: SystemUser = {,
   ...userData,
@@ -272,7 +272,7 @@ export class SystemAccessManager {
   email: user.email,
 });
     return user;
-  async updateUser(userId: string,)
+  async updateUser(userId: string)
     updates: Partial<SystemUser>,
     updatedBy: string): Promise<SystemUser | null> {,
     const user = this.users.get(userId);
@@ -312,7 +312,7 @@ export class SystemAccessManager {
   /**
    * Role Management
    */
-  async assignRole(userId: string,)
+  async assignRole(userId: string)
     roleId: string,
     assignedBy: string,
     options?: {
@@ -379,7 +379,7 @@ export class SystemAccessManager {
   /**
    * Permission Management
    */
-  async grantPermission(userId: string,)
+  async grantPermission(userId: string)
     permission: string,
     resource: string,
     action: string,
@@ -458,7 +458,7 @@ export class SystemAccessManager {
     // Notify approvers
     await this.notifyApprovers(request);
     return request;
-  async approveAccessRequest(requestId: string,)
+  async approveAccessRequest(requestId: string)
     approverId: string,
     comments?: string
   ): Promise<boolean> {
@@ -566,7 +566,7 @@ export class SystemAccessManager {
   byStatus: this.groupBy(users, 'status'),
   byAccessLevel: this.groupBy(users, 'systemAccess'),
   bySecurityClearance: this.groupBy(users, 'securityClearance'),
-  recentActivity: {,
+  recentActivity: {
   newUsers: users.filter(u => ),
   u.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length,
@@ -581,7 +581,7 @@ export class SystemAccessManager {
   loginAttempts: 0, // Would be populated from auth logs,
   failedLogins: 0   // Would be populated from auth logs,
 },
-  compliance: {,
+  compliance: {
   mfaEnabled: users.filter(u => u.mfaEnabled).length,
   termsAccepted: users.filter(u => u.termsAccepted).length,
   overdueCertifications: 0, // Would be calculated based on certification requirements,
@@ -686,7 +686,7 @@ export class SystemAccessManager {
         isSystem: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'system';
+        createdBy: 'system'
   }
       {
   id: 'admin',
@@ -708,7 +708,7 @@ export class SystemAccessManager {
         isSystem: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'system';
+        createdBy: 'system'
   }
       {
   id: 'user',

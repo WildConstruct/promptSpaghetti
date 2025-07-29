@@ -14,61 +14,61 @@ import {
 } from '../types/DataClassification';
 
 export interface EncryptionPolicy {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   classification: DataClassificationLevel;
-  requirements: EncryptionRequirements;,
+  requirements: EncryptionRequirements;
   algorithms: EncryptionAlgorithm;
-  keyManagement: KeyManagementPolicy;,
+  keyManagement: KeyManagementPolicy;
   complianceFrameworks: string;
-  effectiveDate: Date;,
+  effectiveDate: Date;
   version: string;
 }
 export interface EncryptionAlgorithm {
-  name: string;,
+  name: string;
   keyLength: number;
   mode?: string;
-  approved: boolean;,
+  approved: boolean;
   minClassification: DataClassificationLevel;
   maxClassification?: DataClassificationLevel;
-  fipsCompliant: boolean;,
+  fipsCompliant: boolean;
   quantumResistant: boolean;
   deprecatedDate?: Date;
 }
 export interface KeyManagementPolicy {
-  keyRotationDays: number;,
+  keyRotationDays: number;
   keyEscrowRequired: boolean;
-  hsmRequired: boolean;,
+  hsmRequired: boolean;
   keyDerivationFunction: string;
-  keyStorageLocation: 'SOFTWARE' | 'HSM' | 'CLOUD_KMS' | 'AIR_GAPPED_HSM';,
+  keyStorageLocation: 'SOFTWARE' | 'HSM' | 'CLOUD_KMS' | 'AIR_GAPPED_HSM';
   multiPartyControl: boolean;
-  keyRecoveryProcedure: string;,
+  keyRecoveryProcedure: string;
   auditLogging: boolean;
 }
 export interface EncryptionCompliance {
-  dataId: string;,
+  dataId: string;
   classification: DataClassificationLevel;
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIAL' | 'UNKNOWN';
   algorithm?: string;
   keyLength?: number;
   keyRotationCompliant: boolean;
   lastRotationDate?: Date;
-  complianceScore: number;,
+  complianceScore: number;
   violations: string;
-  recommendations: string;,
+  recommendations: string;
   assessmentDate: Date;
 }
 export interface EncryptionAuditEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
-  eventType: 'KEY_ROTATION' | 'ENCRYPTION_APPLIED' | 'DECRYPTION_ACCESSED' | 'POLICY_VIOLATION' | 'COMPLIANCE_CHECK';,
+  eventType: 'KEY_ROTATION' | 'ENCRYPTION_APPLIED' | 'DECRYPTION_ACCESSED' | 'POLICY_VIOLATION' | 'COMPLIANCE_CHECK';
   dataId: string;
-  classification: DataClassificationLevel;,
+  classification: DataClassificationLevel;
   userId: string;
-  algorithm: string;,
+  algorithm: string;
   keyId: string;
-  result: 'SUCCESS' | 'FAILURE' | 'WARNING';,
+  result: 'SUCCESS' | 'FAILURE' | 'WARNING';
   details: Record<string, any>;
 }
 export class ClassificationEncryptionPolicyService {
@@ -141,12 +141,12 @@ export class ClassificationEncryptionPolicyService {
   */
   private initializeDefaultEncryptionPolicies(): void {,
   const policies: Record<DataClassificationLevel, EncryptionPolicy> = {,
-  PUBLIC: {,
+  PUBLIC: {
   id: 'policy-encryption-public',
   name: 'Public Data Encryption Policy',
   description: 'Encryption policy for public data - optional encryption',
   classification: 'PUBLIC',
-  requirements: {,
+  requirements: {
   required: false,
   algorithm: 'AES-128',
   keyLength: 128,
@@ -155,7 +155,7 @@ export class ClassificationEncryptionPolicyService {
   keyEscrow: false,
 },
   algorithms: this.getAlgorithmsForClassification('PUBLIC'),
-        keyManagement: {,
+        keyManagement: {
   keyRotationDays: 365,
   keyEscrowRequired: false,
   hsmRequired: false,
@@ -169,12 +169,12 @@ export class ClassificationEncryptionPolicyService {
         effectiveDate: new Date('2024-01-01'),
         version: '1.0.0';
   },
-  INTERNAL: {,
+  INTERNAL: {
   id: 'policy-encryption-internal',
   name: 'Internal Data Encryption Policy',
   description: 'Encryption policy for internal data - mandatory AES-256',
   classification: 'INTERNAL',
-  requirements: {,
+  requirements: {
   required: true,
   algorithm: 'AES-256',
   keyLength: 256,
@@ -183,7 +183,7 @@ export class ClassificationEncryptionPolicyService {
   keyEscrow: false,
 },
   algorithms: this.getAlgorithmsForClassification('INTERNAL'),
-        keyManagement: {,
+        keyManagement: {
   keyRotationDays: 90,
   keyEscrowRequired: false,
   hsmRequired: false,
@@ -197,12 +197,12 @@ export class ClassificationEncryptionPolicyService {
         effectiveDate: new Date('2024-01-01'),
         version: '1.0.0';
   },
-  CONFIDENTIAL: {,
+  CONFIDENTIAL: {
   id: 'policy-encryption-confidential',
   name: 'Confidential Data Encryption Policy',
   description: 'Encryption policy for confidential data - mandatory AES-256-GCM with HSM',
   classification: 'CONFIDENTIAL',
-  requirements: {,
+  requirements: {
   required: true,
   algorithm: 'AES-256-GCM',
   keyLength: 256,
@@ -211,7 +211,7 @@ export class ClassificationEncryptionPolicyService {
   keyEscrow: true,
 },
   algorithms: this.getAlgorithmsForClassification('CONFIDENTIAL'),
-        keyManagement: {,
+        keyManagement: {
   keyRotationDays: 30,
   keyEscrowRequired: true,
   hsmRequired: true,
@@ -225,12 +225,12 @@ export class ClassificationEncryptionPolicyService {
         effectiveDate: new Date('2024-01-01'),
         version: '1.0.0';
   },
-  RESTRICTED: {,
+  RESTRICTED: {
   id: 'policy-encryption-restricted',
   name: 'Restricted Data Encryption Policy',
   description: 'Encryption policy for restricted data - quantum-resistant algorithms with air-gapped HSM',
   classification: 'RESTRICTED',
-  requirements: {,
+  requirements: {
   required: true,
   algorithm: 'CRYSTALS-Kyber',
   keyLength: 768,
@@ -239,7 +239,7 @@ export class ClassificationEncryptionPolicyService {
   keyEscrow: true,
 },
   algorithms: this.getAlgorithmsForClassification('RESTRICTED'),
-        keyManagement: {,
+        keyManagement: {
   keyRotationDays: 7,
   keyEscrowRequired: true,
   hsmRequired: true,
@@ -288,9 +288,9 @@ export class ClassificationEncryptionPolicyService {
   /**
   * Validate encryption compliance for data
   */
-  async validateEncryptionCompliance(dataId: string,)
+  async validateEncryptionCompliance(dataId: string)
   classification: DataClassificationLevel,
-  encryptionStatus: {,
+  encryptionStatus: {
   encrypted: boolean;
   algorithm?: string;
   keyLength?: number;
@@ -367,7 +367,7 @@ export class ClassificationEncryptionPolicyService {
   /**
    * Validate encryption algorithm
    */
-  private validateEncryptionAlgorithm(algorithm: string,)
+  private validateEncryptionAlgorithm(algorithm: string)
     classification: DataClassificationLevel,
     keyLength: number): ValidationResult {,
     const errors: string = [];

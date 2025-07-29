@@ -1485,7 +1485,8 @@ number | undefined;
                                                                                                                                             immediate_actions: topIssues.slice(),
                                                                                                                                             0: ,
                                                                                                                                             3: ,
-                                                                                                                                            : .map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`) }
+                                                                                                                                            : .map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`)
+                                                                                                                                        }
                                                                                                                                     },
                                                                                                                                         preventive_measures;
                                                                                                                                     [,

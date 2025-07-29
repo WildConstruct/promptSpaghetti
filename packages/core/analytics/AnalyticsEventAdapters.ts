@@ -44,7 +44,7 @@ export abstract class BaseAnalyticsAdapter {
         environment: 'production',
         tags: ['adapter', this.systemName],
         data: {},
-        metadata: {,
+        metadata: {
   originalSystem: this.systemName,
   adaptedAt: Date.now(),
 }
@@ -83,7 +83,7 @@ export class MainAnalyticsAdapter extends BaseAnalyticsAdapter {
   sessionId: legacyEvent.sessionId,
   userId: legacyEvent.userId?.toString(),
   organizationId: legacyEvent.organizationId?.toString(),
-  data: {,
+  data: {
   executionId: legacyEvent.executionId,
   graphId: legacyEvent.graphId,
   nodeId: legacyEvent.nodeId,
@@ -92,7 +92,7 @@ export class MainAnalyticsAdapter extends BaseAnalyticsAdapter {
   errorMessage: legacyEvent.errorMessage,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   originalEventType: legacyEvent.eventType,
   cost: legacyEvent.estimatedCostUsd,
   tokens: legacyEvent.totalTokens,
@@ -141,7 +141,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   severity: legacyEvent.success ? EventSeverity.INFO : EventSeverity.ERROR,
   userId: legacyEvent.context?.userId,
   sessionId: legacyEvent.context?.sessionId,
-  data: {,
+  data: {
   integrationId: legacyEvent.integrationId,
   integrationType: legacyEvent.integrationType,
   integrationName: legacyEvent.integrationName,
@@ -153,7 +153,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   errorMessage: legacyEvent.errorMessage,
   costData: legacyEvent.costData,
 },
-  metadata: {,
+  metadata: {
   integrationVersion: legacyEvent.integrationVersion,
   endpoint: legacyEvent.operationDetails?.endpoint,
   method: legacyEvent.operationDetails?.method,
@@ -180,7 +180,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   severity: EventSeverity.INFO,
   userId: legacyEvent.userId,
   sessionId: legacyEvent.sessionId,
-  data: {,
+  data: {
   behaviorType: legacyEvent.behaviorType,
   action: legacyEvent.action,
   target: legacyEvent.target,
@@ -188,7 +188,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   sequence: legacyEvent.sequence,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   userAgent: legacyEvent.userAgent,
   platform: legacyEvent.platform,
   viewport: legacyEvent.viewport,
@@ -210,7 +210,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   type: AnalyticsEventType.PERFORMANCE_METRIC,
   category: EventCategory.PERFORMANCE,
   severity: this.getPerformanceSeverity(legacyEvent),
-  data: {,
+  data: {
   metric: legacyEvent.metric,
   value: legacyEvent.value,
   unit: legacyEvent.unit,
@@ -220,7 +220,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   memoryUsage: legacyEvent.memoryUsage,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   performanceCategory: legacyEvent.category,
   baseline: legacyEvent.baseline,
   trend: legacyEvent.trend,
@@ -248,7 +248,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   severity: this.getSecuritySeverity(legacyEvent.riskLevel),
   userId: legacyEvent.userId,
   sessionId: legacyEvent.sessionId,
-  data: {,
+  data: {
   eventType: legacyEvent.eventType,
   riskLevel: legacyEvent.riskLevel,
   source: legacyEvent.source,
@@ -259,7 +259,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   userAgent: legacyEvent.userAgent,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   ruleName: legacyEvent.ruleName,
   ruleId: legacyEvent.ruleId,
   confidence: legacyEvent.confidence,
@@ -291,7 +291,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   severity: EventSeverity.INFO,
   userId: legacyEvent.userId,
   organizationId: legacyEvent.organizationId,
-  data: {,
+  data: {
   revenueType: legacyEvent.revenueType,
   amount: legacyEvent.amount,
   currency: legacyEvent.currency,
@@ -301,7 +301,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   billingPeriod: legacyEvent.billingPeriod,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   paymentMethod: legacyEvent.paymentMethod,
   subscriptionId: legacyEvent.subscriptionId,
   promotionCode: legacyEvent.promotionCode,
@@ -327,7 +327,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   severity: EventSeverity.INFO,
   userId: legacyEvent.userId,
   sessionId: legacyEvent.sessionId,
-  data: {,
+  data: {
   sessionEvent: legacyEvent.sessionEvent,
   duration: legacyEvent.duration,
   pageViews: legacyEvent.pageViews,
@@ -336,7 +336,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   bounceRate: legacyEvent.bounceRate,
   ...legacyEvent
 },
-  metadata: {,
+  metadata: {
   entryPoint: legacyEvent.entryPoint,
   referrer: legacyEvent.referrer,
   deviceType: legacyEvent.deviceType,
@@ -414,8 +414,8 @@ export class AnalyticsAdapterManager {
   /**
   * Get consolidated analytics metrics
   */
-  getConsolidatedMetrics(): {,
-  adapters: number;,
+  getConsolidatedMetrics(): {
+  adapters: number;
   enabledAdapters: number;
   eventBusMetrics: any;
   const enabledAdapters = Array.from(this.adapters.values());

@@ -14,21 +14,21 @@ import { EventEmitter } from 'events';
 // ==========================================
 
 export interface QuotaRecommendationConfig {
-  enablePatternAnalysis: boolean;,
+  enablePatternAnalysis: boolean;
   analysisWindow: number; // hours,
   recommendationInterval: number; // minutes,
-  usagePatterns: UsagePatternConfig;,
+  usagePatterns: UsagePatternConfig;
   quotaAdjustmentRules: QuotaAdjustmentRule;
-  fairnessConfig: FairnessConfig;,
+  fairnessConfig: FairnessConfig;
   abuseDetectionConfig: AbuseDetectionConfig;
   alertingConfig: QuotaAlertingConfig;
 }
 export interface UsagePatternConfig {
-  patternId: string;,
+  patternId: string;
   patternName: string;
-  patternType: UsagePatternType;,
+  patternType: UsagePatternType;
   detectionRules: PatternDetectionRule;
-  quotaImpact: QuotaImpact;,
+  quotaImpact: QuotaImpact;
   priority: number;
   enabled: boolean;
 }
@@ -42,17 +42,17 @@ export enum UsagePatternType {
   ABUSE_PATTERN = 'abuse_pattern',
   SEASONAL_PATTERN = 'seasonal_pattern'
   export interface PatternDetectionRule {
-  ruleId: string;,
+  ruleId: string;
   condition: string;
-  threshold: number;,
+  threshold: number;
   timeWindow: number; // minutes,
-  weight: number;,
+  weight: number;
   enabled: boolean;
 }
 export interface QuotaImpact {
-  quotaMultiplier: number;,
+  quotaMultiplier: number;
   adjustmentType: QuotaAdjustmentType;
-  maxAdjustment: number;,
+  maxAdjustment: number;
   minAdjustment: number;
   confidenceThreshold: number;
 }
@@ -63,19 +63,19 @@ export enum QuotaAdjustmentType {
   TEMPORARY_BOOST = 'temporary_boost',
   GRADUAL_CHANGE = 'gradual_change'
   export interface QuotaAdjustmentRule {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  conditions: AdjustmentCondition;,
+  conditions: AdjustmentCondition;
   actions: AdjustmentAction;
-  priority: number;,
+  priority: number;
   enabled: boolean;
   cooldownPeriod: number; // minutes,
   lastApplied?: Date;
 }
 export interface AdjustmentCondition {
-  conditionType: ConditionType;,
+  conditionType: ConditionType;
   field: string;
-  operator: string;,
+  operator: string;
   value: unknown;
   weight: number;
 }
@@ -89,7 +89,7 @@ export enum ConditionType {
   HISTORICAL_PATTERN = 'historical_pattern',
   BUSINESS_METRIC = 'business_metric'
   export interface AdjustmentAction {
-  actionType: AdjustmentActionType;,
+  actionType: AdjustmentActionType;
   parameters: Record<string, unknown>;
   duration: number; // minutes, 0 for permanent,
   priority: number;
@@ -104,17 +104,17 @@ export enum AdjustmentActionType {
   BLOCK_USER = 'block_user',
   THROTTLE_REQUESTS = 'throttle_requests'
   export interface FairnessConfig {
-  enableFairnessAnalysis: boolean;,
+  enableFairnessAnalysis: boolean;
   fairnessMetrics: FairnessMetric;
-  redistributionRules: RedistributionRule;,
+  redistributionRules: RedistributionRule;
   priorityTiers: PriorityTier;
 }
 export interface FairnessMetric {
-  metricId: string;,
+  metricId: string;
   metricName: string;
-  metricType: FairnessMetricType;,
+  metricType: FairnessMetricType;
   targetValue: number;
-  tolerance: number;,
+  tolerance: number;
   weight: number;
   enabled: boolean;
 }
@@ -126,61 +126,61 @@ export enum FairnessMetricType {
   RESPONSE_TIME_EQUITY = 'response_time_equity',
   ERROR_RATE_EQUITY = 'error_rate_equity'
   export interface RedistributionRule {
-  ruleId: string;,
+  ruleId: string;
   triggerCondition: string;
-  sourceConditions: SourceCondition;,
+  sourceConditions: SourceCondition;
   targetConditions: TargetCondition;
-  redistributionAmount: number;,
+  redistributionAmount: number;
   maxRedistribution: number;
   enabled: boolean;
 }
 export interface SourceCondition {
-  condition: string;,
+  condition: string;
   minUtilization: number;
   surplusAmount: number;
 }
 export interface TargetCondition {
-  condition: string;,
+  condition: string;
   maxUtilization: number;
   deficitAmount: number;
 }
 export interface PriorityTier {
-  tierId: string;,
+  tierId: string;
   tierName: string;
-  priority: number;,
+  priority: number;
   quotaMultiplier: number;
-  burstAllowance: number;,
+  burstAllowance: number;
   guaranteedMinimum: number;
   features: TierFeature;
 }
 export interface TierFeature {
-  featureId: string;,
+  featureId: string;
   featureName: string;
-  enabled: boolean;,
+  enabled: boolean;
   parameters: Record<string, unknown>;
 }
 export interface AbuseDetectionConfig {
-  enableAbuseDetection: boolean;,
+  enableAbuseDetection: boolean;
   abusePatterns: AbusePattern;
-  detectionSensitivity: number;,
+  detectionSensitivity: number;
   responseActions: AbuseResponseAction;
   whitelistRules: WhitelistRule;
 }
 export interface AbusePattern {
-  patternId: string;,
+  patternId: string;
   patternName: string;
-  description: string;,
+  description: string;
   detectionRules: AbuseDetectionRule;
-  severity: AbuseSeverity;,
+  severity: AbuseSeverity;
   confidence: number;
   enabled: boolean;
 }
 export interface AbuseDetectionRule {
-  ruleId: string;,
+  ruleId: string;
   ruleType: AbuseRuleType;
-  threshold: number;,
+  threshold: number;
   timeWindow: number; // minutes,
-  condition: string;,
+  condition: string;
   weight: number;
 }
 export enum AbuseRuleType {
@@ -197,11 +197,11 @@ export enum AbuseRuleType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface AbuseResponseAction {
-  actionId: string;,
+  actionId: string;
   severity: AbuseSeverity;
-  actionType: AbuseActionType;,
+  actionType: AbuseActionType;
   parameters: Record<string, unknown>;
-  autoExecute: boolean;,
+  autoExecute: boolean;
   escalation: boolean;
 }
 export enum AbuseActionType {
@@ -213,14 +213,14 @@ export enum AbuseActionType {
   CAPTCHA_CHALLENGE = 'captcha_challenge',
   ACCOUNT_REVIEW = 'account_review'
   export interface WhitelistRule {
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  conditions: string;,
+  conditions: string;
   exemptions: AbuseExemption;
   enabled: boolean;
 }
 export interface AbuseExemption {
-  exemptionType: ExemptionType;,
+  exemptionType: ExemptionType;
   value: string;
   reason: string;
   expiresAt?: Date;
@@ -232,15 +232,15 @@ export enum ExemptionType {
   USER_AGENT = 'user_agent',
   DOMAIN = 'domain'
   export interface QuotaAlertingConfig {
-  enableAlerting: boolean;,
+  enableAlerting: boolean;
   alertThresholds: AlertThreshold;
-  notificationChannels: NotificationChannel;,
+  notificationChannels: NotificationChannel;
   escalationRules: EscalationRule;
 }
 export interface AlertThreshold {
-  thresholdId: string;,
+  thresholdId: string;
   metricType: AlertMetricType;
-  warningLevel: number;,
+  warningLevel: number;
   criticalLevel: number;
   evaluationPeriod: number; // minutes,
   enabled: boolean;
@@ -252,7 +252,7 @@ export enum AlertMetricType {
   FAIRNESS_VIOLATION = 'fairness_violation',
   SYSTEM_OVERLOAD = 'system_overload'
   export interface NotificationChannel {
-  channelId: string;,
+  channelId: string;
   channelType: NotificationChannelType;
   configuration: Record<string, unknown>;
   enabled: boolean;
@@ -264,45 +264,45 @@ export enum NotificationChannelType {
   SMS = 'sms',
   DASHBOARD = 'dashboard'
   export interface EscalationRule {
-  ruleId: string;,
+  ruleId: string;
   triggerCondition: string;
   escalationDelay: number; // minutes,
-  escalationTarget: string;,
+  escalationTarget: string;
   maxEscalations: number;
   enabled: boolean;
 }
 export interface UsagePattern {
-  patternId: string;,
+  patternId: string;
   userId: string;
-  apiEndpoint: string;,
+  apiEndpoint: string;
   patternType: UsagePatternType;
-  detectedAt: Date;,
+  detectedAt: Date;
   confidence: number;
-  metrics: PatternMetrics;,
+  metrics: PatternMetrics;
   characteristics: PatternCharacteristics;
-  forecast: UsageForecast;,
+  forecast: UsageForecast;
   recommendations: PatternRecommendation;
 }
 export interface PatternMetrics {
-  averageRequestRate: number;,
+  averageRequestRate: number;
   peakRequestRate: number;
-  requestVariance: number;,
+  requestVariance: number;
   errorRate: number;
-  quotaUtilization: number;,
+  quotaUtilization: number;
   responseTimeDistribution: number;
   timingPattern: TimingPattern;
 }
 export interface TimingPattern {
-  peakHours: number;,
+  peakHours: number;
   peakDays: number;
-  seasonality: SeasonalityInfo;,
+  seasonality: SeasonalityInfo;
   burstFrequency: number;
   steadyStateRatio: number;
 }
 export interface SeasonalityInfo {
-  hasSeasonality: boolean;,
+  hasSeasonality: boolean;
   period: number; // hours,
-  amplitude: number;,
+  amplitude: number;
   phase: number;
 }
 export interface PatternCharacteristics {
@@ -315,37 +315,37 @@ export interface PatternCharacteristics {
 }
 export interface UsageForecast {
   forecastHorizon: number; // hours,
-  predictedUsage: ForecastPoint;,
+  predictedUsage: ForecastPoint;
   confidence: number;
-  uncertaintyBounds: UncertaintyBounds;,
+  uncertaintyBounds: UncertaintyBounds;
   scenarioForecasts: ScenarioForecast;
 }
 export interface ForecastPoint {
-  timestamp: Date;,
+  timestamp: Date;
   requestRate: number;
-  quotaUtilization: number;,
+  quotaUtilization: number;
   confidence: number;
 }
 export interface UncertaintyBounds {
-  upperBound: number;,
+  upperBound: number;
   lowerBound: number;
   confidenceInterval: number;
 }
 export interface ScenarioForecast {
-  scenarioId: string;,
+  scenarioId: string;
   scenarioName: string;
-  probability: number;,
+  probability: number;
   forecastPoints: ForecastPoint;
   description: string;
 }
 export interface PatternRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   recommendationType: RecommendationType;
-  priority: number;,
+  priority: number;
   description: string;
-  rationale: string;,
+  rationale: string;
   expectedBenefit: string;
-  implementationCost: ImplementationCost;,
+  implementationCost: ImplementationCost;
   riskLevel: RiskLevel;
   actionItems: ActionItem;
 }
@@ -368,47 +368,47 @@ export enum RecommendationType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface ActionItem {
-  itemId: string;,
+  itemId: string;
   description: string;
-  actionType: string;,
+  actionType: string;
   parameters: Record<string, unknown>;
   estimatedTime: number; // minutes,
   dependencies: string;
 }
 export interface QuotaRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   userId: string;
-  apiEndpoint: string;,
+  apiEndpoint: string;
   currentQuota: QuotaAllocation;
-  recommendedQuota: QuotaAllocation;,
+  recommendedQuota: QuotaAllocation;
   reason: string;
-  confidence: number;,
+  confidence: number;
   expectedImpact: QuotaImpactAnalysis;
-  validUntil: Date;,
+  validUntil: Date;
   priority: number;
   status: RecommendationStatus;
   appliedAt?: Date;
   feedback?: RecommendationFeedback;
 }
 export interface QuotaAllocation {
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   requestsPerMinute: number;
-  requestsPerHour: number;,
+  requestsPerHour: number;
   requestsPerDay: number;
-  concurrentConnections: number;,
+  concurrentConnections: number;
   burstAllowance: number;
   specialLimits: SpecialLimit;
 }
 export interface SpecialLimit {
-  limitType: string;,
+  limitType: string;
   value: number;
-  unit: string;,
+  unit: string;
   scope: string;
 }
 export interface QuotaImpactAnalysis {
-  performanceImpact: PerformanceImpact;,
+  performanceImpact: PerformanceImpact;
   businessImpact: BusinessImpact;
-  systemImpact: SystemImpact;,
+  systemImpact: SystemImpact;
   userExperienceImpact: UserExperienceImpact;
   costImpact: CostImpact;
 }
@@ -427,19 +427,19 @@ export interface BusinessImpact {
 export interface SystemImpact {
   resourceUtilizationChange: number; // percentage,
   capacityRequirementChange: number; // percentage,
-  scalingImplications: string;,
+  scalingImplications: string;
   infrastructureCost: number;
 }
 export interface UserExperienceImpact {
   satisfactionScore: number; // 0-100,
-  frustractionEvents: number;,
+  frustractionEvents: number;
   engagementChange: number; // percentage,
   feedbackSentiment: string;
 }
 export interface CostImpact {
-  operationalCostChange: number;,
+  operationalCostChange: number;
   infrastructureCostChange: number;
-  supportCostChange: number;,
+  supportCostChange: number;
   totalCostOfOwnership: number;
 }
 export enum RecommendationStatus {
@@ -450,28 +450,28 @@ export enum RecommendationStatus {
   EXPIRED = 'expired',
   MONITORING = 'monitoring'
   export interface RecommendationFeedback {
-  feedbackId: string;,
+  feedbackId: string;
   rating: number; // 1-5,
-  comments: string;,
+  comments: string;
   actualImpact: QuotaImpactAnalysis;
-  providedBy: string;,
+  providedBy: string;
   providedAt: Date;
 }
 export interface FairnessAnalysis {
-  analysisId: string;,
+  analysisId: string;
   timestamp: Date;
   overallFairnessScore: number; // 0-100,
-  fairnessMetrics: FairnessMetricResult;,
+  fairnessMetrics: FairnessMetricResult;
   inequalityIssues: InequalityIssue;
-  redistributionOpportunities: RedistributionOpportunity;,
+  redistributionOpportunities: RedistributionOpportunity;
   recommendations: FairnessRecommendation;
 }
 export interface FairnessMetricResult {
-  metricId: string;,
+  metricId: string;
   metricName: string;
-  currentValue: number;,
+  currentValue: number;
   targetValue: number;
-  deviation: number;,
+  deviation: number;
   severity: MetricSeverity;
 }
 export enum MetricSeverity {
@@ -480,11 +480,11 @@ export enum MetricSeverity {
   MAJOR_CONCERN = 'major_concern',
   CRITICAL_ISSUE = 'critical_issue'
   export interface InequalityIssue {
-  issueId: string;,
+  issueId: string;
   issueType: InequalityType;
-  description: string;,
+  description: string;
   affectedUsers: string;
-  severity: AbuseSeverity;,
+  severity: AbuseSeverity;
   measuredImpact: number;
   suggestedActions: string;
 }
@@ -495,20 +495,20 @@ export enum InequalityType {
   RESOURCE_MONOPOLIZATION = 'resource_monopolization',
   TIER_IMBALANCE = 'tier_imbalance'
   export interface RedistributionOpportunity {
-  opportunityId: string;,
+  opportunityId: string;
   sourceUsers: string;
-  targetUsers: string;,
+  targetUsers: string;
   redistributableQuota: number;
-  expectedBenefit: number;,
+  expectedBenefit: number;
   riskAssessment: string;
   implementationPlan: string;
 }
 export interface FairnessRecommendation {
-  recommendationId: string;,
+  recommendationId: string;
   category: FairnessCategory;
-  title: string;,
+  title: string;
   description: string;
-  priority: number;,
+  priority: number;
   expectedImprovement: number;
   actionItems: string;
 }
@@ -518,15 +518,15 @@ export enum FairnessCategory {
   POLICY_ADJUSTMENT = 'policy_adjustment',
   MONITORING_ENHANCEMENT = 'monitoring_enhancement'
   export interface AbuseDetectionResult {
-  detectionId: string;,
+  detectionId: string;
   userId: string;
-  detectedAt: Date;,
+  detectedAt: Date;
   abuseType: AbuseType;
-  severity: AbuseSeverity;,
+  severity: AbuseSeverity;
   confidence: number;
-  evidence: AbuseEvidence;,
+  evidence: AbuseEvidence;
   impact: AbuseImpact;
-  responseActions: ResponseAction;,
+  responseActions: ResponseAction;
   status: AbuseStatus;
 }
 export enum AbuseType {
@@ -538,7 +538,7 @@ export enum AbuseType {
   DOS_ATTACK = 'dos_attack',
   FRAUD_ATTEMPT = 'fraud_attempt'
   export interface AbuseEvidence {
-  evidenceType: EvidenceType;,
+  evidenceType: EvidenceType;
   description: string;
   data: Record<string, unknown>;
   strength: number; // 0-1,
@@ -555,13 +555,13 @@ export enum EvidenceType {
   systemImpact: number; // 0-100,
   userImpact: number; // 0-100,
   businessImpact: number; // dollar amount,
-  affectedUsers: number;,
+  affectedUsers: number;
   resourceConsumption: number;
 }
 export interface ResponseAction {
-  actionId: string;,
+  actionId: string;
   actionType: AbuseActionType;
-  appliedAt: Date;,
+  appliedAt: Date;
   duration: number; // minutes,
   parameters: Record<string, unknown>;
   effectiveness: number; // 0-1,
@@ -817,7 +817,7 @@ export enum ActionStatus {
         errorRate: 0,
         quotaUtilization: 0,
         responseTimeDistribution: [],
-        timingPattern: {,
+        timingPattern: {
   peakHours: [],
           peakDays: [],
           seasonality: { hasSeasonality: false, period: 0, amplitude: 0, phase: 0 },
@@ -1295,7 +1295,7 @@ export enum ActionStatus {
   lowerBound,
   confidenceInterval: 95,
 };
-  private generatePatternRecommendations(patternConfig: UsagePatternConfig,)
+  private generatePatternRecommendations(patternConfig: UsagePatternConfig)
     metrics: PatternMetrics,
     characteristics: PatternCharacteristics): PatternRecommendation {,
     const recommendations: PatternRecommendation = [];
@@ -1402,7 +1402,7 @@ export enum ActionStatus {
     const tolerance = 0.05; // 5% tolerance;
     return Math.abs(quota1.requestsPerSecond - quota2.requestsPerSecond) / quota1.requestsPerSecond < tolerance &&
            Math.abs(quota1.burstAllowance - quota2.burstAllowance) / quota1.burstAllowance < tolerance;
-  private generateRecommendationReason(pattern: UsagePattern,)
+  private generateRecommendationReason(pattern: UsagePattern)
     current: QuotaAllocation,
     recommended: QuotaAllocation): string {,
     const reasons: string = [];
@@ -1416,36 +1416,36 @@ export enum ActionStatus {
     if (pattern.patternType === UsagePatternType.GROWTH_PATTERN) {
       reasons.push(`Growth pattern detected (${pattern.characteristics.growthRate.toFixed(1)}% growth rate)`);}
     return reasons.join('; ') || 'Pattern analysis suggests quota optimization';
-  private async analyzeQuotaImpact(pattern: UsagePattern,)
+  private async analyzeQuotaImpact(pattern: UsagePattern)
     current: QuotaAllocation,
     recommended: QuotaAllocation): Promise<QuotaImpactAnalysis> {,
   const quotaChangeRatio = recommended.requestsPerSecond / current.requestsPerSecond;
   return {
-  performanceImpact: {,
+  performanceImpact: {
   responseTimeChange: quotaChangeRatio > 1 ? -10 : 5, // Better performance with higher quota,
   throughputChange: (quotaChangeRatio - 1) * 100,
   errorRateChange: quotaChangeRatio > 1 ? -20 : 10,
   availabilityChange: quotaChangeRatio > 1 ? 0.1 : -0.05,
 },
-  businessImpact: {,
+  businessImpact: {
   revenueImpact: 0, // Would require business context,
   userSatisfactionChange: quotaChangeRatio > 1 ? 10 : -5,
   churnRiskChange: quotaChangeRatio > 1 ? -5 : 2,
   competitiveAdvantage: quotaChangeRatio > 1 ? 'Improved service reliability' : 'Cost optimization',
 },
-  systemImpact: {,
+  systemImpact: {
   resourceUtilizationChange: (quotaChangeRatio - 1) * 80,
   capacityRequirementChange: (quotaChangeRatio - 1) * 90,
   scalingImplications: quotaChangeRatio > 1.2 ? ['May require infrastructure scaling'] : [],
   infrastructureCost: (quotaChangeRatio - 1) * 100 // Dollar amount,
 },
-  userExperienceImpact: {,
+  userExperienceImpact: {
   satisfactionScore: quotaChangeRatio > 1 ? 85 : 70,
   frustractionEvents: quotaChangeRatio > 1 ? -2 : 1,
   engagementChange: (quotaChangeRatio - 1) * 15,
   feedbackSentiment: quotaChangeRatio > 1 ? 'positive' : 'neutral',
 },
-  costImpact: {,
+  costImpact: {
   operationalCostChange: (quotaChangeRatio - 1) * 50,
   infrastructureCostChange: (quotaChangeRatio - 1) * 75,
   supportCostChange: quotaChangeRatio > 1 ? -20 : 10,
@@ -1494,7 +1494,7 @@ export enum ActionStatus {
   if (quotaChange < 0.9 && recommendation.currentQuota.requestsPerSecond > 50) {
   return 0.1;
   return 0;
-  private adjustForFairness(recommended: QuotaAllocation,)
+  private adjustForFairness(recommended: QuotaAllocation)
   current: QuotaAllocation,
   fairnessImpact: number): QuotaAllocation {,
   const adjustmentFactor = 1 + fairnessImpact; // Negative impact reduces the adjustment;
@@ -1661,7 +1661,7 @@ export enum ActionStatus {
   private mapRuleToEvidenceType(ruleType: AbuseRuleType): EvidenceType {,
   switch (ruleType) {
   case AbuseRuleType.RATE_SPIKE: return EvidenceType.RATE_ANOMALY;
-  case AbuseRuleType.ERROR_FLOOD: return EvidenceType.ERROR_PATTERN;,
+  case AbuseRuleType.ERROR_FLOOD: return EvidenceType.ERROR_PATTERN;
   default: return EvidenceType.BEHAVIORAL_ANOMALY;
   private mapPatternToAbuseType(pattern: AbusePattern): AbuseType {,
   return AbuseType.RATE_ABUSE; // Simplified mapping
@@ -1673,7 +1673,7 @@ export enum ActionStatus {
   affectedUsers: Math.floor(Math.random() * 100),
   resourceConsumption: Math.random() * 100,
 };
-  private async determineResponseActions(pattern: AbusePattern,)
+  private async determineResponseActions(pattern: AbusePattern)
     confidence: number,
     impact: AbuseImpact): Promise<ResponseAction> {,
     const actions: ResponseAction = [];
@@ -1763,29 +1763,29 @@ export enum ActionStatus {
   // SUPPORTING INTERFACES
   // ==========================================
   interface UsageDataPoint {
-  userId: string;,
+  userId: string;
   apiEndpoint: string;
-  timestamp: Date;,
+  timestamp: Date;
   requestCount: number;
-  errorCount: number;,
+  errorCount: number;
   averageResponseTime: number;
   quotaUtilization: number;
   interface AbuseRuleResult {
-  detected: boolean;,
+  detected: boolean;
   strength: number;
-  description: string;,
+  description: string;
   data: Record<string, unknown>;
   interface OptimizationResult {
-  optimizationId: string;,
+  optimizationId: string;
   timestamp: Date;
-  actionsApplied: number;,
+  actionsApplied: number;
   fairnessImprovement: number;
-  affectedUsers: string;,
+  affectedUsers: string;
   estimatedBenefit: number;
   interface OptimizationAction {
-  actionId: string;,
+  actionId: string;
   actionType: string;
-  affectedUsers: string;,
+  affectedUsers: string;
   parameters: Record<string, unknown>;
   // ==========================================
   // FACTORY CLASS
@@ -1809,7 +1809,7 @@ export enum ActionStatus {
   timeWindow: 15,
   weight: 1.0,
   enabled: true],
-  quotaImpact: {,
+  quotaImpact: {
   quotaMultiplier: 1.5,
   adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
   maxAdjustment: 100,
@@ -1831,7 +1831,7 @@ export enum ActionStatus {
   timeWindow: 60,
   weight: 1.0,
   enabled: true],
-  quotaImpact: {,
+  quotaImpact: {
   quotaMultiplier: 0.9,
   adjustmentType: QuotaAdjustmentType.DECREASE,
   maxAdjustment: 50,
@@ -1841,7 +1841,7 @@ export enum ActionStatus {
   priority: 3,
           enabled: true],
       quotaAdjustmentRules: [],
-      fairnessConfig: {,
+      fairnessConfig: {
   enableFairnessAnalysis: true,
   fairnessMetrics: [,
   {
@@ -1855,7 +1855,7 @@ export enum ActionStatus {
   redistributionRules: [],
   priorityTiers: [],
 },
-  abuseDetectionConfig: {,
+  abuseDetectionConfig: {
   enableAbuseDetection: true,
         abusePatterns: [,
           {
@@ -1884,7 +1884,7 @@ export enum ActionStatus {
             escalation: false],
         whitelistRules: [];
   },
-  alertingConfig: {,
+  alertingConfig: {
   enableAlerting: true,
   alertThresholds: [],
   notificationChannels: [],

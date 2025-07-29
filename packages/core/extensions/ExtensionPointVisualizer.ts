@@ -10,26 +10,26 @@ export interface VisualizationOptions {
   groupByCategory?: boolean;
   showDependencies?: boolean;
   showInterfaces?: boolean;
-  theme?: 'light' | 'dark';
-}
+  theme?: 'light' | 'dark'
+  }
 export interface ExtensionPointNode {
-  id: string;,
+  id: string;
   name: string;
-  category: ExtensionPointCategory;,
+  category: ExtensionPointCategory;
   priority: string;
-  lifecycle: string;,
+  lifecycle: string;
   interfaces: string;
-  dependencies: string;,
+  dependencies: string;
   location: string;
 }
 export interface ExtensionPointEdge {
-  source: string;,
+  source: string;
   target: string;
   type: 'dependency' | 'interface' | 'inheritance';
   label?: string;
 }
 export interface ExtensionPointGraph {
-  nodes: ExtensionPointNode;,
+  nodes: ExtensionPointNode;
   edges: ExtensionPointEdge;
   categories: Record<ExtensionPointCategory, ExtensionPointNode>;
 }
@@ -169,7 +169,7 @@ export class ExtensionPointVisualizer {
   private buildGraph(options: VisualizationOptions): ExtensionPointGraph {,
   const registry = extensionPointRegistry;
   const extensionPoints = registry.getAll();
-  const nodes: ExtensionPointNode = extensionPoints.map(ep => ({,)
+  const nodes: ExtensionPointNode = extensionPoints.map(ep => ({)
   id: ep.id,
   name: ep.name,
   category: ep.category,
@@ -202,7 +202,7 @@ export class ExtensionPointVisualizer {
             target: `${ep.id}.${iface.name}`}
 },
   type: 'interface',
-            label: 'provides';
+            label: 'provides'
   });
         });
       });

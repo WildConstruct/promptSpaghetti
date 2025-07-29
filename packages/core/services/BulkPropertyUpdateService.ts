@@ -9,46 +9,46 @@
  */
 
 export interface BulkUpdateTarget {
-  type: TargetType;,
+  type: TargetType;
   id: string;
   displayName?: string;
   currentValues?: Record<string, any>;
 }
 export interface BulkUpdateOperation {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  targets: BulkUpdateTarget;,
+  targets: BulkUpdateTarget;
   updates: PropertyUpdate;
-  validation: ValidationRules;,
+  validation: ValidationRules;
   execution: ExecutionSettings;
   rollback: RollbackSettings;
   // Status tracking
-  status: OperationStatus;,
+  status: OperationStatus;
   progress: OperationProgress;
   results: OperationResult;
   // Lifecycle
-  createdAt: Date;,
+  createdAt: Date;
   createdBy: string;
   executedAt?: Date;
   completedAt?: Date;
   rolledBackAt?: Date;
 }
 export interface PropertyUpdate {
-  property: string;,
+  property: string;
   operation: UpdateOperationType;
   value?: any;
   conditions?: UpdateCondition;
   transformation?: PropertyTransformation;
 }
 export interface UpdateCondition {
-  type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';,
+  type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
   field: string;
-  value: any;,
+  value: any;
   description: string;
 }
 export interface PropertyTransformation {
-  type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';,
+  type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
   parameters: Record<string, any>;
   description: string;
 }
@@ -59,13 +59,13 @@ export interface ValidationRules {
   skipInvalid?: boolean; // Continue with valid items if some are invalid,
 }
 export interface PropertyConstraint {
-  property: string;,
+  property: string;
   type: 'type' | 'length' | 'range' | 'pattern' | 'enum' | 'unique' | 'custom';
   parameters: Record<string, any>;
   message: string;
 }
 export interface CustomValidator {
-  name: string;,
+  name: string;
   function: string; // JavaScript function as string,
   parameters: Record<string, any>;
   message: string;
@@ -87,33 +87,33 @@ export interface RollbackSettings {
   backupExpiration?: Date;
 }
 export interface OperationProgress {
-  total: number;,
+  total: number;
   completed: number;
-  failed: number;,
+  failed: number;
   skipped: number;
   currentItem?: string;
   startTime?: Date;
   estimatedCompletion?: Date;
 }
 export interface OperationResult {
-  targetId: string;,
+  targetId: string;
   targetType: TargetType;
-  status: 'success' | 'failed' | 'skipped' | 'validation_error';,
+  status: 'success' | 'failed' | 'skipped' | 'validation_error';
   changes: PropertyChange;
-  errors: OperationError;,
+  errors: OperationError;
   executedAt: Date;
   duration: number; // milliseconds,
   backup?: Record<string, any>; // Original values,
 }
 export interface PropertyChange {
-  property: string;,
+  property: string;
   oldValue: any;
-  newValue: any;,
+  newValue: any;
   operation: UpdateOperationType;
   applied: boolean;
 }
 export interface OperationError {
-  type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';,
+  type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
   message: string;
   property?: string;
   details?: Record<string, any>;
@@ -157,17 +157,17 @@ export type OperationStatus =
   | 'rolled_back';
 
 export interface BulkUpdateTemplate {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   targetType: TargetType;
-  updates: PropertyUpdate;,
+  updates: PropertyUpdate;
   validation: ValidationRules;
   execution: ExecutionSettings;
   // Usage tracking
   usageCount: number;
   lastUsed?: Date;
-  createdBy: string;,
+  createdBy: string;
   createdAt: Date;
 }
 export interface BulkUpdateFilter {
@@ -179,28 +179,28 @@ export interface BulkUpdateFilter {
   hasErrors?: boolean;
 }
 export interface BulkUpdateStats {
-  totalOperations: number;,
+  totalOperations: number;
   completedOperations: number;
-  failedOperations: number;,
+  failedOperations: number;
   totalTargetsProcessed: number;
   averageProcessingTime: number;
   // Success rates by target type
   successRateByType: Record<TargetType, {,
-  total: number;,
+  total: number;
   successful: number;
   rate: number;
 }>;
   // Most common errors
   commonErrors: Array<{,
   type: string;
-  message: string;,
+  message: string;
   count: number;
   affectedTargets: number;
 }>;
   // Performance metrics
-  performanceMetrics: {,
+  performanceMetrics: {
   averageItemsPerSecond: number;
-  largestBatchSize: number;,
+  largestBatchSize: number;
   longestOperation: number; // milliseconds,
   totalProcessingTime: number; // milliseconds,
 };
@@ -228,10 +228,10 @@ export class BulkPropertyUpdateService {
   /**
   * Operation Management
   */
-  async createOperation(name: string,)
+  async createOperation(name: string)
   targets: BulkUpdateTarget,
   updates: PropertyUpdate,
-  options: {,
+  options: {
   validation?: Partial<ValidationRules>;
   execution?: Partial<ExecutionSettings>;
   rollback?: Partial<RollbackSettings>;
@@ -242,11 +242,11 @@ export class BulkPropertyUpdateService {
   name,
   targets,
   updates,
-  validation: {,
+  validation: {
   skipInvalid: false,
   ...options.validation
 },
-  execution: {,
+  execution: {
   mode: 'sequential',
   maxRetries: 3,
   retryDelay: 1000,
@@ -254,14 +254,14 @@ export class BulkPropertyUpdateService {
   backupBeforeUpdate: true,
   ...options.execution
 },
-  rollback: {,
+  rollback: {
   enabled: true,
   autoRollbackOnFailure: false,
   retainBackups: true,
   ...options.rollback
 },
   status: 'draft',
-      progress: {,
+      progress: {
   total: targets.length,
   completed: 0,
   failed: 0,
@@ -366,7 +366,7 @@ export class BulkPropertyUpdateService {
   /**
    * Template Management
    */
-  async createTemplate(name: string,)
+  async createTemplate(name: string)
     targetType: TargetType,
     updates: PropertyUpdate,
     validation: ValidationRules,
@@ -388,7 +388,7 @@ export class BulkPropertyUpdateService {
     this.templates.set(template.id, template);
     this.notifyListeners('template_created', template);
     return template;
-  async applyTemplate(templateId: string,)
+  async applyTemplate(templateId: string)
     targets: BulkUpdateTarget,
     operationName: string,
     createdBy: string): Promise<BulkUpdateOperation> {,
@@ -518,7 +518,7 @@ export class BulkPropertyUpdateService {
   averageProcessingTime,
   successRateByType,
   commonErrors,
-  performanceMetrics: {,
+  performanceMetrics: {
   averageItemsPerSecond,
   largestBatchSize,
   longestOperation,
@@ -665,7 +665,7 @@ export class BulkPropertyUpdateService {
 });
     result.duration = Date.now() - startTime;
     return result;
-  private async applyPropertyUpdate(entity: Record<string, any>,)
+  private async applyPropertyUpdate(entity: Record<string, any>)
     update: PropertyUpdate,
     originalEntity: Record<string, any>
   ): Promise<PropertyChange> {
@@ -755,7 +755,7 @@ export class BulkPropertyUpdateService {
   default:,
   return true;
 });
-  private applyTransformation(value: any,)
+  private applyTransformation(value: any)
     transformation: PropertyTransformation,
     entity: Record<string, any>
   ): any {
@@ -780,7 +780,7 @@ export class BulkPropertyUpdateService {
   return String(transformation.parameters.prefix || '') + String(value);
   default:,
   return value;
-  private async validateTarget(target: BulkUpdateTarget,)
+  private async validateTarget(target: BulkUpdateTarget)
   updates: PropertyUpdate,
   validation: ValidationRules): Promise<TargetValidationResult> {,
   const result: TargetValidationResult = {,
@@ -835,7 +835,7 @@ export class BulkPropertyUpdateService {
   message: error instanceof Error ? error.message : 'Validation error',
 });
     return result;
-  private validatePropertyConstraint(entity: Record<string, any>,)
+  private validatePropertyConstraint(entity: Record<string, any>)
     constraint: PropertyConstraint): { valid: boolean; message: string } {
     const value = entity[constraint.property];
     switch (constraint.type) {
@@ -915,20 +915,20 @@ export class BulkPropertyUpdateService {
   return new Promise(resolve => setTimeout(resolve, ms));
   // Supporting interfaces
   interface ValidationResult {
-  valid: boolean;,
+  valid: boolean;
   errors: OperationError;
-  warnings: OperationError;,
+  warnings: OperationError;
   targetResults: TargetValidationResult;
   interface TargetValidationResult {
-  targetId: string;,
+  targetId: string;
   valid: boolean;
-  errors: OperationError;,
+  errors: OperationError;
   warnings: OperationError;
   interface EntityProvider {
   getEntity: (id: string) => Promise<Record<string, any> | null>;
   updateEntity: (id: string, data: Record<string, any>) => Promise<Record<string, any>>;
   export interface BulkUpdateEvent {
-  type: string;,
+  type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance

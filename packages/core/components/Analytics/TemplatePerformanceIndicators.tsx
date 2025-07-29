@@ -31,9 +31,9 @@ import {
 // Template performance indicator interfaces
 
 export interface TemplatePerformanceIndicatorsProps {
-  templateId: string;,
+  templateId: string;
   templateMetadata: TemplateMetadata;
-  funnelDefinition: ConversionFunnelDefinition;,
+  funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   timeRange?: { start: number; end: number };
   displayMode?: IndicatorDisplayMode;
@@ -44,20 +44,20 @@ export interface TemplatePerformanceIndicatorsProps {
   onExport?: (data: TemplatePerformanceExportData) => void;
 }
 export interface TemplateMetadata {
-  templateId: string;,
+  templateId: string;
   templateName: string;
-  templateTitle: string;,
+  templateTitle: string;
   category: string;
   subcategory?: string;
-  creatorId: string;,
+  creatorId: string;
   creatorName: string;
-  publishDate: number;,
+  publishDate: number;
   lastModified: number;
-  version: string;,
+  version: string;
   tags: string;
-  description: string;,
+  description: string;
   pricing: TemplatePricing;
-  status: TemplateStatus;,
+  status: TemplateStatus;
   visibility: TemplateVisibility;
 }
 export interface TemplatePricing {
@@ -66,8 +66,8 @@ export interface TemplatePricing {
   originalPrice?: number;
   discountPercentage?: number;
   subscriptionTier?: string;
-  paymentModel: 'one_time' | 'recurring' | 'usage_based';
-}
+  paymentModel: 'one_time' | 'recurring' | 'usage_based'
+  }
 export type TemplateStatus = 'draft' | 'review' | 'published' | 'archived' | 'suspended';
 export type TemplateVisibility = 'public' | 'unlisted' | 'private' | 'premium_only';
 
@@ -80,225 +80,225 @@ export type IndicatorDisplayMode =
   | 'mobile';
 
 export interface TemplatePerformanceData {
-  templateMetrics: TemplateMetrics;,
+  templateMetrics: TemplateMetrics;
   funnelPerformance: TemplateFunnelPerformance;
-  performanceIndicators: PerformanceIndicator;,
+  performanceIndicators: PerformanceIndicator;
   competitivePosition: TemplateCompetitivePosition;
-  optimizationOpportunities: TemplateOptimizationOpportunity;,
+  optimizationOpportunities: TemplateOptimizationOpportunity;
   performanceAlerts: PerformanceAlert;
-  historicalTrends: PerformanceTrend;,
+  historicalTrends: PerformanceTrend;
   benchmarkComparison: BenchmarkComparison;
 }
 export interface TemplateMetrics {
-  views: TemplateViewMetrics;,
+  views: TemplateViewMetrics;
   engagement: TemplateEngagementMetrics;
-  conversion: TemplateConversionMetrics;,
+  conversion: TemplateConversionMetrics;
   revenue: TemplateRevenueMetrics;
-  quality: TemplateQualityMetrics;,
+  quality: TemplateQualityMetrics;
   performance: TemplatePerformanceMetrics;
   lastUpdated: number;
 }
 export interface TemplateViewMetrics {
-  totalViews: number;,
+  totalViews: number;
   uniqueViews: number;
-  viewsGrowth: number;,
+  viewsGrowth: number;
   viewsToday: number;
-  viewsThisWeek: number;,
+  viewsThisWeek: number;
   viewsThisMonth: number;
-  averageViewDuration: number;,
+  averageViewDuration: number;
   bounceRate: number;
   viewSources: ViewSource;
 }
 export interface ViewSource {
-  source: string;,
+  source: string;
   views: number;
-  percentage: number;,
+  percentage: number;
   conversionRate: number;
 }
 export interface TemplateEngagementMetrics {
-  engagementScore: number;,
+  engagementScore: number;
   engagementTrend: number;
-  averageTimeOnPage: number;,
+  averageTimeOnPage: number;
   interactionRate: number;
-  shareCount: number;,
+  shareCount: number;
   favoriteCount: number;
-  commentCount: number;,
+  commentCount: number;
   previewRate: number;
   downloadAttempts: number;
 }
 export interface TemplateConversionMetrics {
-  overallConversionRate: number;,
+  overallConversionRate: number;
   conversionTrend: number;
-  conversionsByStep: StepConversionData;,
+  conversionsByStep: StepConversionData;
   conversionsBySource: SourceConversionData;
-  conversionsByDevice: DeviceConversionData;,
+  conversionsByDevice: DeviceConversionData;
   conversionsByTime: TimeConversionData;
   dropoffPoints: DropoffPoint;
 }
 export interface StepConversionData {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  stepOrder: number;,
+  stepOrder: number;
   entries: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  dropoffRate: number;,
+  dropoffRate: number;
   averageTime: number;
   optimizationScore: number;
 }
 export interface SourceConversionData {
-  source: string;,
+  source: string;
   visits: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
   quality: number;
 }
 export interface DeviceConversionData {
-  deviceType: 'desktop' | 'mobile' | 'tablet';,
+  deviceType: 'desktop' | 'mobile' | 'tablet';
   visits: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
   averageTime: number;
 }
 export interface TimeConversionData {
-  timeSlot: string;,
+  timeSlot: string;
   conversions: number;
-  conversionRate: number;,
+  conversionRate: number;
   volume: number;
 }
 export interface DropoffPoint {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  dropoffRate: number;,
+  dropoffRate: number;
   dropoffCount: number;
-  reasons: DropoffReason;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
-}
+  reasons: DropoffReason;
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  }
 export interface DropoffReason {
-  reason: string;,
+  reason: string;
   frequency: number;
-  impact: number;,
+  impact: number;
   actionable: boolean;
 }
 export interface TemplateRevenueMetrics {
-  totalRevenue: number;,
+  totalRevenue: number;
   revenueGrowth: number;
-  revenuePerView: number;,
+  revenuePerView: number;
   revenuePerConversion: number;
-  averageOrderValue: number;,
+  averageOrderValue: number;
   lifetimeValue: number;
-  refundRate: number;,
+  refundRate: number;
   revenueBySource: RevenueBySource;
   revenueTrend: RevenueTrendData;
 }
 export interface RevenueBySource {
-  source: string;,
+  source: string;
   revenue: number;
-  percentage: number;,
+  percentage: number;
   growth: number;
 }
 export interface RevenueTrendData {
-  date: number;,
+  date: number;
   revenue: number;
-  conversions: number;,
+  conversions: number;
   averageValue: number;
 }
 export interface TemplateQualityMetrics {
-  qualityScore: number;,
+  qualityScore: number;
   qualityTrend: number;
-  averageRating: number;,
+  averageRating: number;
   ratingCount: number;
-  ratingDistribution: RatingDistribution;,
+  ratingDistribution: RatingDistribution;
   reviewSentiment: ReviewSentiment;
   qualityFactors: QualityFactor;
 }
 export interface RatingDistribution {
-  fiveStars: number;,
+  fiveStars: number;
   fourStars: number;
-  threeStars: number;,
+  threeStars: number;
   twoStars: number;
   oneStar: number;
 }
 export interface ReviewSentiment {
-  positive: number;,
+  positive: number;
   neutral: number;
-  negative: number;,
+  negative: number;
   sentimentScore: number;
   keyThemes: SentimentTheme;
 }
 export interface SentimentTheme {
-  theme: string;,
+  theme: string;
   sentiment: 'positive' | 'negative' | 'neutral';
-  frequency: number;,
+  frequency: number;
   impact: number;
 }
 export interface QualityFactor {
-  factor: string;,
+  factor: string;
   score: number;
-  weight: number;,
-  trend: 'improving' | 'declining' | 'stable';
-}
+  weight: number;
+  trend: 'improving' | 'declining' | 'stable'
+  }
 export interface TemplatePerformanceMetrics {
-  performanceScore: number;,
+  performanceScore: number;
   performanceTrend: number;
-  loadTime: number;,
+  loadTime: number;
   errorRate: number;
-  compatibility: number;,
+  compatibility: number;
   accessibility: number;
-  seoScore: number;,
+  seoScore: number;
   mobileScore: number;
 }
 export interface TemplateFunnelPerformance {
-  funnelId: string;,
+  funnelId: string;
   overallPerformance: FunnelOverallPerformance;
-  stepPerformance: FunnelStepPerformance;,
+  stepPerformance: FunnelStepPerformance;
   conversionPaths: ConversionPath;
-  optimizationInsights: FunnelOptimizationInsight;,
+  optimizationInsights: FunnelOptimizationInsight;
   performanceComparison: FunnelPerformanceComparison;
 }
 export interface FunnelOverallPerformance {
-  conversionRate: number;,
+  conversionRate: number;
   conversionRateTrend: number;
-  totalConversions: number;,
+  totalConversions: number;
   averageTimeToConvert: number;
-  conversionValue: number;,
+  conversionValue: number;
   efficiencyScore: number;
-  bottleneckStep: string;,
+  bottleneckStep: string;
   topPerformingStep: string;
 }
 export interface FunnelStepPerformance {
-  stepId: string;,
+  stepId: string;
   stepName: string;
-  stepType: string;,
+  stepType: string;
   position: number;
-  entries: number;,
+  entries: number;
   exits: number;
-  conversions: number;,
+  conversions: number;
   conversionRate: number;
-  dropoffRate: number;,
+  dropoffRate: number;
   averageTimeSpent: number;
-  errorCount: number;,
+  errorCount: number;
   satisfactionScore: number;
-  optimizationPotential: number;,
-  performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-}
+  optimizationPotential: number;
+  performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F'
+  }
 export interface ConversionPath {
-  pathId: string;,
+  pathId: string;
   steps: string;
-  frequency: number;,
+  frequency: number;
   conversionRate: number;
-  averageValue: number;,
+  averageValue: number;
   averageTime: number;
   efficiency: number;
 }
 export interface FunnelOptimizationInsight {
-  type: OptimizationInsightType;,
+  type: OptimizationInsightType;
   title: string;
-  description: string;,
+  description: string;
   impact: 'high' | 'medium' | 'low';
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   confidence: number;
-  expectedImprovement: number;,
+  expectedImprovement: number;
   affectedSteps: string;
   actionItems: string;
 }
@@ -311,27 +311,27 @@ export type OptimizationInsightType =
   | 'user_experience';
 
 export interface FunnelPerformanceComparison {
-  categoryAverage: number;,
+  categoryAverage: number;
   creatorAverage: number;
-  topPerformer: number;,
+  topPerformer: number;
   industryBenchmark: number;
-  percentileRank: number;,
-  competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging';
-}
+  percentileRank: number;
+  competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging'
+  }
 export interface PerformanceIndicator {
-  indicatorId: string;,
+  indicatorId: string;
   type: IndicatorType;
-  name: string;,
+  name: string;
   value: number | string;
-  displayValue: string;,
+  displayValue: string;
   trend: IndicatorTrend;
-  severity: IndicatorSeverity;,
+  severity: IndicatorSeverity;
   status: IndicatorStatus;
-  description: string;,
+  description: string;
   tooltip: string;
-  actionable: boolean;,
+  actionable: boolean;
   actions: IndicatorAction;
-  visualization: IndicatorVisualization;,
+  visualization: IndicatorVisualization;
   thresholds: IndicatorThreshold;
   lastUpdated: number;
 }
@@ -346,98 +346,98 @@ export type IndicatorType =
   | 'optimization_opportunity';
 
 export interface IndicatorTrend {
-  direction: 'up' | 'down' | 'stable' | 'volatile';,
+  direction: 'up' | 'down' | 'stable' | 'volatile';
   percentage: number;
-  timeframe: string;,
+  timeframe: string;
   confidence: number;
 }
 export type IndicatorSeverity = 'critical' | 'warning' | 'info' | 'success';
 export type IndicatorStatus = 'healthy' | 'attention_needed' | 'critical' | 'improving' | 'declining';
 
 export interface IndicatorAction {
-  actionId: string;,
+  actionId: string;
   title: string;
-  description: string;,
+  description: string;
   priority: 'high' | 'medium' | 'low';
-  effort: 'low' | 'medium' | 'high';,
+  effort: 'low' | 'medium' | 'high';
   expectedImpact: number;
-  actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation';
-}
+  actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation'
+  }
 export interface IndicatorVisualization {
-  type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';,
+  type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';
   config: VisualizationConfig;
   colorScheme: ColorScheme;
 }
 export interface VisualizationConfig {
-  showTrend: boolean;,
+  showTrend: boolean;
   showComparison: boolean;
-  timeframe: string;,
+  timeframe: string;
   granularity: string;
-  format: 'percentage' | 'currency' | 'number' | 'time' | 'score';
-}
+  format: 'percentage' | 'currency' | 'number' | 'time' | 'score'
+  }
 export interface ColorScheme {
-  primary: string;,
+  primary: string;
   secondary: string;
-  success: string;,
+  success: string;
   warning: string;
-  error: string;,
+  error: string;
   neutral: string;
 }
 export interface IndicatorThreshold {
-  level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';,
+  level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   minValue: number;
-  maxValue: number;,
+  maxValue: number;
   color: string;
   description: string;
 }
 export interface TemplateCompetitivePosition {
-  categoryRank: number;,
+  categoryRank: number;
   totalInCategory: number;
-  percentile: number;,
+  percentile: number;
   rankChange: number;
-  competitiveScore: number;,
+  competitiveScore: number;
   strengthAreas: CompetitiveStrength;
-  weaknessAreas: CompetitiveWeakness;,
+  weaknessAreas: CompetitiveWeakness;
   opportunities: CompetitiveOpportunity;
   threats: CompetitiveThreat;
 }
 export interface CompetitiveStrength {
-  area: string;,
+  area: string;
   score: number;
-  description: string;,
+  description: string;
   advantage: string;
 }
 export interface CompetitiveWeakness {
-  area: string;,
+  area: string;
   score: number;
-  description: string;,
+  description: string;
   impact: string;
   improvement: string;
 }
 export interface CompetitiveOpportunity {
-  opportunity: string;,
+  opportunity: string;
   description: string;
-  potential: number;,
+  potential: number;
   effort: 'low' | 'medium' | 'high';
   timeframe: number;
 }
 export interface CompetitiveThreat {
-  threat: string;,
+  threat: string;
   description: string;
-  severity: 'low' | 'medium' | 'high';,
+  severity: 'low' | 'medium' | 'high';
   probability: number;
   mitigation: string;
 }
 export interface TemplateOptimizationOpportunity {
-  opportunityId: string;,
+  opportunityId: string;
   title: string;
-  description: string;,
+  description: string;
   category: OpportunityCategory;
-  impact: OpportunityImpact;,
+  impact: OpportunityImpact;
   effort: OpportunityEffort;
-  priority: OpportunityPriority;,
+  priority: OpportunityPriority;
   timeline: OpportunityTimeline;
-  requirements: OpportunityRequirement;,
+  requirements: OpportunityRequirement;
   successMetrics: OpportunityMetric;
   relatedIndicators: string;
 }
@@ -450,60 +450,60 @@ export type OpportunityCategory =
   | 'pricing_strategy';
 
 export interface OpportunityImpact {
-  revenueIncrease: number;,
+  revenueIncrease: number;
   conversionImprovement: number;
-  trafficIncrease: number;,
+  trafficIncrease: number;
   ratingImprovement: number;
   confidenceLevel: number;
 }
 export interface OpportunityEffort {
-  estimatedHours: number;,
+  estimatedHours: number;
   skillsRequired: string;
-  resourcesNeeded: string;,
-  complexity: 'simple' | 'moderate' | 'complex' | 'expert';
-}
+  resourcesNeeded: string;
+  complexity: 'simple' | 'moderate' | 'complex' | 'expert'
+  }
 export type OpportunityPriority = 'critical' | 'high' | 'medium' | 'low';
 
 export interface OpportunityTimeline {
-  estimatedDuration: number;,
+  estimatedDuration: number;
   milestones: OpportunityMilestone;
-  dependencies: string;,
+  dependencies: string;
   risks: OpportunityRisk;
 }
 export interface OpportunityMilestone {
-  name: string;,
+  name: string;
   description: string;
-  targetDate: number;,
+  targetDate: number;
   deliverables: string;
 }
 export interface OpportunityRisk {
-  risk: string;,
+  risk: string;
   probability: number;
-  impact: number;,
+  impact: number;
   mitigation: string;
 }
 export interface OpportunityRequirement {
-  requirement: string;,
+  requirement: string;
   type: 'skill' | 'tool' | 'resource' | 'approval';
-  description: string;,
+  description: string;
   critical: boolean;
 }
 export interface OpportunityMetric {
-  metric: string;,
+  metric: string;
   currentValue: number;
-  targetValue: number;,
+  targetValue: number;
   measurementMethod: string;
 }
 export interface PerformanceAlert {
-  alertId: string;,
+  alertId: string;
   type: AlertType;
-  severity: AlertSeverity;,
+  severity: AlertSeverity;
   title: string;
-  message: string;,
+  message: string;
   indicators: string;
-  triggeredAt: number;,
+  triggeredAt: number;
   threshold: AlertThreshold;
-  status: AlertStatus;,
+  status: AlertStatus;
   actions: AlertAction;
   escalation: AlertEscalation;
 }
@@ -519,135 +519,135 @@ export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed';
 
 export interface AlertThreshold {
-  metric: string;,
+  metric: string;
   condition: 'above' | 'below' | 'equals' | 'change';
-  value: number;,
+  value: number;
   timeframe: number;
 }
 export interface AlertAction {
-  actionId: string;,
+  actionId: string;
   title: string;
-  description: string;,
+  description: string;
   actionType: 'investigate' | 'fix' | 'optimize' | 'escalate';
   automated: boolean;
 }
 export interface AlertEscalation {
-  escalationLevel: number;,
+  escalationLevel: number;
   escalationTime: number;
-  escalationTarget: string;,
+  escalationTarget: string;
   maxEscalations: number;
 }
 export interface PerformanceTrend {
-  metric: string;,
+  metric: string;
   timeframe: string;
-  dataPoints: TrendDataPoint;,
+  dataPoints: TrendDataPoint;
   trendAnalysis: TrendAnalysis;
-  forecast: TrendForecast;,
+  forecast: TrendForecast;
   seasonality: SeasonalityData;
 }
 export interface TrendDataPoint {
-  timestamp: number;,
+  timestamp: number;
   value: number;
-  volume: number;,
+  volume: number;
   context: Record<string, any>;
 }
 export interface TrendAnalysis {
-  direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';,
+  direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
   strength: number;
-  significance: number;,
+  significance: number;
   acceleration: number;
   inflectionPoints: InflectionPoint;
 }
 export interface InflectionPoint {
-  timestamp: number;,
+  timestamp: number;
   type: 'peak' | 'trough' | 'change';
-  significance: number;,
+  significance: number;
   context: string;
 }
 export interface TrendForecast {
-  nextPeriod: ForecastPeriod;,
+  nextPeriod: ForecastPeriod;
   confidence: number;
-  assumptions: string;,
+  assumptions: string;
   risks: string;
 }
 export interface ForecastPeriod {
-  timestamp: number;,
+  timestamp: number;
   predictedValue: number;
   confidenceInterval: { min: number; max: number };
 }
 export interface SeasonalityData {
-  detected: boolean;,
+  detected: boolean;
   patterns: SeasonalPattern;
-  strength: number;,
+  strength: number;
   reliability: number;
 }
 export interface SeasonalPattern {
-  type: 'daily' | 'weekly' | 'monthly' | 'yearly';,
+  type: 'daily' | 'weekly' | 'monthly' | 'yearly';
   amplitude: number;
-  phase: number;,
+  phase: number;
   confidence: number;
 }
 export interface BenchmarkComparison {
-  benchmarks: BenchmarkData;,
+  benchmarks: BenchmarkData;
   position: BenchmarkPosition;
-  gaps: PerformanceGap;,
+  gaps: PerformanceGap;
   opportunities: BenchmarkOpportunity;
 }
 export interface BenchmarkData {
-  benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';,
+  benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';
   name: string;
-  metrics: BenchmarkMetric;,
+  metrics: BenchmarkMetric;
   lastUpdated: number;
 }
 export interface BenchmarkMetric {
-  metric: string;,
+  metric: string;
   value: number;
-  percentile: number;,
-  trend: 'improving' | 'declining' | 'stable';
-}
+  percentile: number;
+  trend: 'improving' | 'declining' | 'stable'
+  }
 export interface BenchmarkPosition {
-  overallRank: number;,
+  overallRank: number;
   categoryRank: number;
-  percentile: number;,
+  percentile: number;
   competitiveAdvantage: string;
   improvementAreas: string;
 }
 export interface PerformanceGap {
-  metric: string;,
+  metric: string;
   gap: number;
-  gapPercentage: number;,
+  gapPercentage: number;
   priority: 'high' | 'medium' | 'low';
   actionItems: string;
 }
 export interface BenchmarkOpportunity {
-  opportunity: string;,
+  opportunity: string;
   description: string;
-  potentialGain: number;,
+  potentialGain: number;
   effort: 'low' | 'medium' | 'high';
   examples: BenchmarkExample;
 }
 export interface BenchmarkExample {
-  templateName: string;,
+  templateName: string;
   creatorName: string;
-  achievement: string;,
+  achievement: string;
   strategy: string;
 }
 export interface OptimizationAction {
-  actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';,
+  actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';
   targetId: string;
   details: Record<string, any>;
   timestamp: number;
 }
 export interface TemplatePerformanceExportData {
-  templateMetadata: TemplateMetadata;,
+  templateMetadata: TemplateMetadata;
   performanceData: TemplatePerformanceData;
-  indicators: PerformanceIndicator;,
+  indicators: PerformanceIndicator;
   trends: PerformanceTrend;
-  exportTimestamp: number;,
+  exportTimestamp: number;
   exportConfig: ExportConfig;
 }
 export interface ExportConfig {
-  format: 'json' | 'csv' | 'excel' | 'pdf';,
+  format: 'json' | 'csv' | 'excel' | 'pdf';
   includeCharts: boolean;
   timeRange: { start: number; end: number };
   metrics: string;
@@ -708,7 +708,7 @@ export const [error, setError] = useState<string | null>(null);
   // Generate template metrics
   const generateTemplateMetrics = (metadata: TemplateMetadata): TemplateMetrics => {
     return {
-      views: {,
+      views: {
   totalViews: 12540,
         uniqueViews: 8760,
         viewsGrowth: 0.156,
@@ -723,7 +723,7 @@ export const [error, setError] = useState<string | null>(null);
           { source: 'Social Media', views: 2800, percentage: 22.3, conversionRate: 0.15 }
         ]
   },
-  engagement: {,
+  engagement: {
   engagementScore: 0.78,
   engagementTrend: 0.12,
   averageTimeOnPage: 245,
@@ -734,7 +734,7 @@ export const [error, setError] = useState<string | null>(null);
   previewRate: 0.67,
   downloadAttempts: 890,
 },
-  conversion: {,
+  conversion: {
   overallConversionRate: 0.143,
         conversionTrend: 0.089,
         conversionsByStep: [,
@@ -766,7 +766,7 @@ export const [error, setError] = useState<string | null>(null);
             ],
             severity: 'high'];
   },
-  revenue: {,
+  revenue: {
   totalRevenue: 3780,
         revenueGrowth: 0.134,
         revenuePerView: 0.43,
@@ -785,19 +785,19 @@ export const [error, setError] = useState<string | null>(null);
   averageValue: 3.0 + Math.random() * 1.0,
 }))
   },
-  quality: {,
+  quality: {
   qualityScore: 0.86,
   qualityTrend: 0.05,
   averageRating: 4.3,
   ratingCount: 178,
-  ratingDistribution: {,
+  ratingDistribution: {
   fiveStars: 89,
   fourStars: 54,
   threeStars: 23,
   twoStars: 8,
   oneStar: 4,
 },
-  reviewSentiment: {,
+  reviewSentiment: {
   positive: 0.78,
           neutral: 0.15,
           negative: 0.07,
@@ -812,7 +812,7 @@ export const [error, setError] = useState<string | null>(null);
           { factor: 'Usability', score: 0.84, weight: 0.3, trend: 'improving' }
         ]
   },
-  performance: {,
+  performance: {
   performanceScore: 0.82,
   performanceTrend: 0.03,
   loadTime: 1.2,
@@ -829,7 +829,7 @@ export const [error, setError] = useState<string | null>(null);
   const generateFunnelPerformance = (funnel: ConversionFunnelDefinition): TemplateFunnelPerformance => {
   return {
   funnelId: funnel.id,
-  overallPerformance: {,
+  overallPerformance: {
   conversionRate: 0.143,
   conversionRateTrend: 0.089,
   totalConversions: 1254,
@@ -875,7 +875,7 @@ export const [error, setError] = useState<string | null>(null);
   expectedImprovement: 0.25,
   affectedSteps: ['preview'],
   actionItems: ['Enhance preview quality', 'Add interactive elements', 'Improve description']],
-  performanceComparison: {,
+  performanceComparison: {
   categoryAverage: 0.125,
   creatorAverage: 0.138,
   topPerformer: 0.234,
@@ -893,7 +893,7 @@ export const [error, setError] = useState<string | null>(null);
   name: 'Conversion Rate',
   value: 0.143,
   displayValue: '14.3%',
-  trend: {,
+  trend: {
   direction: 'up',
   percentage: 8.9,
   timeframe: 'last 30 days',
@@ -913,16 +913,16 @@ export const [error, setError] = useState<string | null>(null);
   effort: 'medium',
   expectedImpact: 0.15,
   actionType: 'optimization'],
-  visualization: {,
+  visualization: {
   type: 'gauge',
-  config: {,
+  config: {
   showTrend: true,
   showComparison: true,
   timeframe: '30d',
   granularity: 'daily',
   format: 'percentage',
 },
-  colorScheme: {,
+  colorScheme: {
   primary: '#3b82f6',
   secondary: '#93c5fd',
   success: '#10b981',
@@ -945,7 +945,7 @@ export const [error, setError] = useState<string | null>(null);
   name: 'Revenue Performance',
   value: 3780,
   displayValue: '$3,780',
-  trend: {,
+  trend: {
   direction: 'up',
   percentage: 13.4,
   timeframe: 'last 30 days',
@@ -965,16 +965,16 @@ export const [error, setError] = useState<string | null>(null);
   effort: 'low',
   expectedImpact: 0.12,
   actionType: 'optimization'],
-  visualization: {,
+  visualization: {
   type: 'trend',
-  config: {,
+  config: {
   showTrend: true,
   showComparison: true,
   timeframe: '30d',
   granularity: 'daily',
   format: 'currency',
 },
-  colorScheme: {,
+  colorScheme: {
   primary: '#10b981',
   secondary: '#6ee7b7',
   success: '#10b981',
@@ -997,7 +997,7 @@ export const [error, setError] = useState<string | null>(null);
   name: 'Quality Rating',
   value: 4.3,
   displayValue: '4.3 ⭐',
-  trend: {,
+  trend: {
   direction: 'up',
   percentage: 2.4,
   timeframe: 'last 30 days',
@@ -1017,16 +1017,16 @@ export const [error, setError] = useState<string | null>(null);
   effort: 'low',
   expectedImpact: 0.05,
   actionType: 'enhancement'],
-  visualization: {,
+  visualization: {
   type: 'gauge',
-  config: {,
+  config: {
   showTrend: true,
   showComparison: false,
   timeframe: '30d',
   granularity: 'weekly',
   format: 'score',
 },
-  colorScheme: {,
+  colorScheme: {
   primary: '#fbbf24',
   secondary: '#fde68a',
   success: '#10b981',
@@ -1049,7 +1049,7 @@ export const [error, setError] = useState<string | null>(null);
   name: 'Engagement Score',
   value: 0.78,
   displayValue: '78%',
-  trend: {,
+  trend: {
   direction: 'up',
   percentage: 12.0,
   timeframe: 'last 30 days',
@@ -1069,16 +1069,16 @@ export const [error, setError] = useState<string | null>(null);
   effort: 'medium',
   expectedImpact: 0.08,
   actionType: 'enhancement'],
-  visualization: {,
+  visualization: {
   type: 'progress',
-  config: {,
+  config: {
   showTrend: true,
   showComparison: true,
   timeframe: '30d',
   granularity: 'daily',
   format: 'percentage',
 },
-  colorScheme: {,
+  colorScheme: {
   primary: '#8b5cf6',
   secondary: '#c4b5fd',
   success: '#10b981',
@@ -1126,21 +1126,21 @@ export const [error, setError] = useState<string | null>(null);
   title: 'Enhance Preview Experience',
   description: 'Improve template preview quality and interactivity to reduce drop-off at preview stage',
   category: 'conversion_optimization',
-  impact: {,
+  impact: {
   revenueIncrease: 567,
   conversionImprovement: 0.08,
   trafficIncrease: 0.0,
   ratingImprovement: 0.1,
   confidenceLevel: 0.82,
 },
-  effort: {,
+  effort: {
   estimatedHours: 12,
   skillsRequired: ['UI/UX Design', 'Frontend Development'],
   resourcesNeeded: ['Design tools', 'Development environment'],
   complexity: 'moderate',
 },
   priority: 'high',
-        timeline: {,
+        timeline: {
   estimatedDuration: 14,
           milestones: [,
             { name: 'Design new preview layout', description: 'Create improved preview design', targetDate: Date.now() + 7 * 24 * 60 * 60 * 1000, deliverables: ['Design mockups', 'User flow diagram'] }
@@ -1172,7 +1172,7 @@ export const [error, setError] = useState<string | null>(null);
   message: 'Mobile conversion rate has dropped 15% over the last 7 days',
   indicators: ['conversion-rate', 'engagement-score'],
   triggeredAt: Date.now() - 2 * 60 * 60 * 1000,
-  threshold: {,
+  threshold: {
   metric: 'mobile_conversion_rate',
   condition: 'below',
   value: 0.10,
@@ -1186,7 +1186,7 @@ export const [error, setError] = useState<string | null>(null);
   description: 'Analyze mobile user experience and identify issues',
   actionType: 'investigate',
   automated: false],
-  escalation: {,
+  escalation: {
   escalationLevel: 0,
   escalationTime: 24,
   escalationTarget: 'template-owner',
@@ -1204,7 +1204,7 @@ export const [error, setError] = useState<string | null>(null);
           volume: 250 + Math.random() * 100,
           context: {}
         })),
-        trendAnalysis: {,
+        trendAnalysis: {
   direction: 'increasing',
           strength: 0.78,
           significance: 0.85,
@@ -1213,7 +1213,7 @@ export const [error, setError] = useState<string | null>(null);
             { timestamp: Date.now() - 15 * 24 * 60 * 60 * 1000, type: 'change', significance: 0.8, context: 'Preview optimization implemented' }
           ]
   },
-  forecast: {,
+  forecast: {
   nextPeriod: Array.from({ length: 7 }, (_, i) => ({)
   timestamp: Date.now() + (i + 1) * 24 * 60 * 60 * 1000,
             predictedValue: 0.15 + Math.random() * 0.01,
@@ -1223,7 +1223,7 @@ export const [error, setError] = useState<string | null>(null);
           assumptions: ['Current trend continues', 'No major market changes'],
           risks: ['Competitive pressure', 'Seasonal variations']
   },
-  seasonality: {,
+  seasonality: {
   detected: true,
           patterns: [,
             { type: 'weekly', amplitude: 0.02, phase: 0, confidence: 0.85 }
@@ -1243,7 +1243,7 @@ export const [error, setError] = useState<string | null>(null);
             { metric: 'average_rating', value: 4.1, percentile: 50, trend: 'stable' }
           ],
           lastUpdated: Date.now()],
-      position: {,
+      position: {
   overallRank: 23,
   categoryRank: 23,
   percentile: 85,
@@ -1318,7 +1318,7 @@ export const [error, setError] = useState<string | null>(null);
   indicators: performanceData.performanceIndicators,
   trends: performanceData.historicalTrends,
   exportTimestamp: Date.now(),
-  exportConfig: {,
+  exportConfig: {
   format: 'json',
   includeCharts: true,
   timeRange,

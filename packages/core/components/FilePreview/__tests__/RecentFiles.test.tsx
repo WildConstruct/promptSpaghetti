@@ -9,7 +9,7 @@ import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
-  projectManager: {,
+  projectManager: {
   getRecentFiles: jest.fn(),
   getFavoriteFiles: jest.fn(),
   toggleFavorite: jest.fn(),
@@ -35,7 +35,7 @@ describe('RecentFiles Component', () => {
   size: 2048,
   lastModified: new Date('2025-01-15T10:00:00Z'),
   nodeCount: 10,
-  metadata: {,
+  metadata: {
   title: 'Project 1',
   description: 'First project',
   tags: ['test'],
@@ -52,7 +52,7 @@ describe('RecentFiles Component', () => {
   size: 4096,
   lastModified: new Date('2025-01-14T15:30:00Z'),
   nodeCount: 20,
-  metadata: {,
+  metadata: {
   title: 'Project 2',
   description: 'Second project',
   tags: ['example'],

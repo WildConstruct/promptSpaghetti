@@ -28,17 +28,17 @@ import { Progress } from '../ui/Progress';
 import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
 interface SecurityLoggingConfig {
-  enabled: boolean;,
+  enabled: boolean;
   destinations: LoggingDestination;
-  event_types: SecurityEventType;,
+  event_types: SecurityEventType;
   alert_rules: AlertRule;
-  retention_policies: RetentionPolicy;,
+  retention_policies: RetentionPolicy;
   performance_settings: PerformanceSettings;
   compliance_settings: ComplianceSettings;
   interface LoggingDestination {
-  id: string;,
+  id: string;
   name: string;
-  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';,
+  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
   endpoint: string;
   enabled: boolean;
   credentials?: Record<string, string>;
@@ -46,44 +46,44 @@ interface SecurityLoggingConfig {
   batch_size?: number;
   flush_interval?: number;
   interface AlertRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   event_types: SecurityEventType;
-  severity_threshold: SecurityEventSeverity;,
+  severity_threshold: SecurityEventSeverity;
   conditions: AlertCondition;
-  actions: AlertAction;,
+  actions: AlertAction;
   enabled: boolean;
   notification_channels: string;
   interface AlertCondition {
-  field: string;,
+  field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
   value: Error;
   logic?: 'and' | 'or';
   interface AlertAction {
-  type: 'notification' | 'containment' | 'escalation' | 'logging';,
+  type: 'notification' | 'containment' | 'escalation' | 'logging';
   config: Record<string, any>;
   interface RetentionPolicy {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   retention_days: number;
   encryption_required: boolean;
   archive_after_days?: number;
   archive_destination?: string;
   interface PerformanceSettings {
-  batch_processing_enabled: boolean;,
+  batch_processing_enabled: boolean;
   batch_size: number;
-  batch_interval_ms: number;,
+  batch_interval_ms: number;
   queue_size_limit: number;
-  circuit_breaker_enabled: boolean;,
+  circuit_breaker_enabled: boolean;
   circuit_breaker_threshold: number;
   rate_limit_per_minute: number;
   interface ComplianceSettings {
-  frameworks: ComplianceFramework;,
+  frameworks: ComplianceFramework;
   automated_reporting: boolean;
-  external_notifications: boolean;,
+  external_notifications: boolean;
   validation_rules: ValidationRule;
   interface ValidationRule {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   field: string;
   required: boolean;
   pattern?: string;
@@ -98,7 +98,7 @@ interface SecurityLoggingConfig {
   event_types: [],
   alert_rules: [],
   retention_policies: [],
-  performance_settings: {,
+  performance_settings: {
   batch_processing_enabled: true,
   batch_size: 100,
   batch_interval_ms: 60000,
@@ -107,7 +107,7 @@ interface SecurityLoggingConfig {
   circuit_breaker_threshold: 100,
   rate_limit_per_minute: 1000,
 },
-  compliance_settings: {,
+  compliance_settings: {
   frameworks: [],
   automated_reporting: true,
   external_notifications: true,
@@ -1087,7 +1087,7 @@ async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
     ],
     alert_rules: [],
     retention_policies: [],
-    performance_settings: {,
+    performance_settings: {
   batch_processing_enabled: true,
   batch_size: 100,
   batch_interval_ms: 60000,
@@ -1096,7 +1096,7 @@ async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
   circuit_breaker_threshold: 100,
   rate_limit_per_minute: 1000,
 },
-  compliance_settings: {,
+  compliance_settings: {
   frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
   automated_reporting: true,
   external_notifications: true,

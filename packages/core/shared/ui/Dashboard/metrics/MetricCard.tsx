@@ -19,14 +19,14 @@ export interface MetricValue {
   prefix?: string;
 }
 export interface MetricTrend {
-  value: number;,
+  value: number;
   direction: 'up' | 'down' | 'neutral';
   period?: string;
   isGoodTrend?: boolean;
 }
 export interface MetricCardProps {
   // Core content
-  title: string;,
+  title: string;
   value: MetricValue;
   description?: string;
   // Visual elements
@@ -41,8 +41,8 @@ export interface MetricCardProps {
   helpText?: string;
   badge?: {
   text: string;
-  variant?: 'default' | 'success' | 'warning' | 'error';
-};
+  variant?: 'default' | 'success' | 'warning' | 'error'
+  };
   className?: string;
 const formatValue = (;);
   value: number | string, 

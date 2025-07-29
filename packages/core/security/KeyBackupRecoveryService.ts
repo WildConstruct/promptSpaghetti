@@ -67,9 +67,9 @@ export enum BackupType {
   VERIFICATION_FAILED = 'verification_failed'
   // Backup metadata
   export interface BackupMetadata {
-  id: string;,
+  id: string;
   type: BackupType;
-  status: BackupStatus;,
+  status: BackupStatus;
   tier: BackupStorageTier;
   // Timing
   createdAt: Date;
@@ -77,47 +77,47 @@ export enum BackupType {
   expiresAt?: Date;
   verifiedAt?: Date;
   // Content
-  keyCount: number;,
+  keyCount: number;
   totalSize: number;
   compressionRatio: number;
   // Security
-  encrypted: boolean;,
+  encrypted: boolean;
   encryptionAlgorithm: string;
   integrityHash: string;
   backupKeyId?: string;
   escrowKeyIds?: string;
   // Metadata
-  version: string;,
+  version: string;
   source: string;
   description?: string;
   tags: Record<string, string>;
   // Recovery info
-  recoveryComplexity: 'simple' | 'moderate' | 'complex' | 'critical';,
+  recoveryComplexity: 'simple' | 'moderate' | 'complex' | 'critical';
   requiredApprovals: number;
   emergencyContacts: string;
   // Verification
   verificationResults?: BackupVerificationResult;
   checksums: Record<string, string>;
   // Audit
-  createdBy: string;,
+  createdBy: string;
   accessLog: BackupAccessEvent;
   // Backup verification result
 }
 export interface BackupVerificationResult {
-  id: string;,
+  id: string;
   backupId: string;
-  timestamp: Date;,
+  timestamp: Date;
   successful: boolean;
   // Checks performed
-  integrityCheck: boolean;,
+  integrityCheck: boolean;
   decryptionCheck: boolean;
-  keyCountCheck: boolean;,
+  keyCountCheck: boolean;
   metadataCheck: boolean;
   checksumVerification: boolean;
   // Results
-  verifiedKeys: number;,
+  verifiedKeys: number;
   failedKeys: string;
-  corruptedData: string;,
+  corruptedData: string;
   missingKeys: string;
   // Performance
   verificationTime: number;
@@ -126,7 +126,7 @@ export interface BackupVerificationResult {
   // Backup issues
 }
 export interface BackupIssue {
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   type: 'corruption' | 'missing_data' | 'encryption_error' | 'integrity_failure' | 'metadata_mismatch';
   description: string;
   affectedKeys?: string;
@@ -135,39 +135,39 @@ export interface BackupIssue {
   // Recovery request
 }
 export interface RecoveryRequest {
-  id: string;,
+  id: string;
   type: RecoveryType;
   backupId?: string;
   targetTimestamp?: Date;
   specificKeys?: string;
   // Recovery options
-  overwriteExisting: boolean;,
+  overwriteExisting: boolean;
   verifyBeforeRestore: boolean;
   createRecoveryPoint: boolean;
   // Authorization
-  requestedBy: string;,
+  requestedBy: string;
   approvals: RecoveryApproval;
   emergencyProcedure: boolean;
   // Metadata
-  reason: string;,
+  reason: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
-  createdAt: Date;,
+  createdAt: Date;
   metadata: Record<string, any>;
   // Recovery approval
 }
 export interface RecoveryApproval {
-  approver: string;,
+  approver: string;
   approvedAt: Date;
   signature?: string;
   conditions?: string;
   // Recovery result
 }
 export interface RecoveryResult {
-  id: string;,
+  id: string;
   requestId: string;
   status: RecoveryStatus;
   // Results
-  recoveredKeys: number;,
+  recoveredKeys: number;
   failedKeys: string;
   skippedKeys: string;
   // Timing
@@ -177,14 +177,14 @@ export interface RecoveryResult {
   // Verification
   verificationResult?: BackupVerificationResult;
   // Issues
-  errors: string;,
+  errors: string;
   warnings: string;
   // Backup access event
 }
 export interface BackupAccessEvent {
-  id: string;,
+  id: string;
   timestamp: Date;
-  action: 'created' | 'accessed' | 'verified' | 'restored' | 'deleted' | 'modified';,
+  action: 'created' | 'accessed' | 'verified' | 'restored' | 'deleted' | 'modified';
   userId: string;
   ipAddress: string;
   userAgent?: string;
@@ -193,85 +193,85 @@ export interface BackupAccessEvent {
 }
 export interface BackupConfiguration {
   // Scheduling
-  enableAutomaticBackup: boolean;,
+  enableAutomaticBackup: boolean;
   fullBackupIntervalHours: number;
-  incrementalBackupIntervalHours: number;,
+  incrementalBackupIntervalHours: number;
   retentionPolicyDays: number;
   // Storage
-  defaultTier: BackupStorageTier;,
+  defaultTier: BackupStorageTier;
   enableMultiTierStorage: boolean;
   storageLocations: BackupStorageLocation;
   // Security
-  encryptBackups: boolean;,
+  encryptBackups: boolean;
   useKeyEscrow: boolean;
   escrowThreshold: number; // Minimum number of escrow keys needed,
   backupEncryptionKeyRotationDays: number;
   // Verification
-  enableAutomaticVerification: boolean;,
+  enableAutomaticVerification: boolean;
   verificationIntervalHours: number;
   verificationSamplePercentage: number;
   // Compliance
-  auditRetentionDays: number;,
+  auditRetentionDays: number;
   complianceMode: boolean;
   encryptionStandard: string;
   // Emergency
-  emergencyProceduresEnabled: boolean;,
+  emergencyProceduresEnabled: boolean;
   emergencyContactNotification: boolean;
   emergencyDecryptionKeys: string;
   // Performance
-  compressionEnabled: boolean;,
+  compressionEnabled: boolean;
   maxConcurrentBackups: number;
   backupTimeoutMinutes: number;
   // Storage location configuration
 }
 export interface BackupStorageLocation {
-  id: string;,
+  id: string;
   tier: BackupStorageTier;
-  path: string;,
+  path: string;
   encrypted: boolean;
-  credentials?: {,
+  credentials?: {
   username?: string;
   password?: string;
   apiKey?: string;
   certificatePath?: string;
 };
-  maxSize: number;,
+  maxSize: number;
   retentionDays: number;
   redundancy: number;
 
 // Backup package structure
 }
 export interface BackupPackage {
-  metadata: BackupMetadata;,
+  metadata: BackupMetadata;
   encryptedData: Buffer;
-  keyManifest: KeyManifestEntry;,
+  keyManifest: KeyManifestEntry;
   checksums: Record<string, string>;
   signature: string;
   // Key manifest entry
 }
 export interface KeyManifestEntry {
-  keyId: string;,
+  keyId: string;
   keyType: KeyType;
-  purpose: KeyPurpose;,
+  purpose: KeyPurpose;
   algorithm: string;
-  status: KeyStatus;,
+  status: KeyStatus;
   size: number;
-  checksum: string;,
+  checksum: string;
   encrypted: boolean;
-  offset: number;,
+  offset: number;
   length: number;
   // Statistics
 }
 export interface BackupStatistics {
-  totalBackups: number;,
+  totalBackups: number;
   successfulBackups: number;
-  failedBackups: number;,
+  failedBackups: number;
   totalRecoveries: number;
-  successfulRecoveries: number;,
+  successfulRecoveries: number;
   averageBackupTime: number;
-  averageRecoveryTime: number;,
+  averageRecoveryTime: number;
   totalStorageUsed: number;
-  compressionEfficiency: number;,
+  compressionEfficiency: number;
   verificationSuccessRate: number;
   lastBackupTime?: Date;
   nextScheduledBackup?: Date;
@@ -297,7 +297,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
   */
   public async createBackup()
   type: BackupType,
-  options: {,
+  options: {
   tier?: BackupStorageTier;
   description?: string;
   specificKeys?: string;

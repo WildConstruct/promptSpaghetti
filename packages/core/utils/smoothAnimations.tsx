@@ -9,7 +9,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // Animation easing functions inspired by Cinema 4D
 export const easingFunctions = {
   // Cinema 4D style easing curves
-  cinema4d: {,
+  cinema4d: {
   ease: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   easeIn: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
   easeOut: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
@@ -64,7 +64,7 @@ export function createAnimationStyle(property: string, )
 /**
  * Creates a comprehensive transition style for multiple properties
  */
-export function createSmoothTransition(properties: string,)
+export function createSmoothTransition(properties: string)
   duration: number = animationDurations.normal,
   easing: string = easingFunctions.cinema4d.professional): React.CSSProperties {,
   return {
@@ -106,7 +106,7 @@ export function useAnimation(initialState: boolean = false) {
 /**
  * Smooth scroll utilities
  */
-export function smoothScrollTo(element: HTMLElement,)
+export function smoothScrollTo(element: HTMLElement)
   top: number,
   duration: number = animationDurations.smooth): void {,
   const start = element.scrollTop;

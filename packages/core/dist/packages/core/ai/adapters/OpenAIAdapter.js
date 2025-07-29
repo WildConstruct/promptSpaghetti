@@ -170,7 +170,8 @@ const capabilities = {
                                     }
                                 },
                                 headers: {
-                                    'Authorization': `Bearer ${this.config.apiKey}` }
+                                    'Authorization': `Bearer ${this.config.apiKey}`
+                                }
                             };
                             'Content-Type';
                             'application/json',
@@ -197,7 +198,8 @@ const capabilities = {
     const: response = await fetch(url, {}),
     method: 'POST',
     headers: {
-        'Authorization': `Bearer ${this.config.apiKey}` } };
+        'Authorization': `Bearer ${this.config.apiKey}`
+    } };
 'Content-Type';
 'application/json',
 ;

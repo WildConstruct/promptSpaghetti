@@ -57,19 +57,19 @@ export interface InlineEditableNodeProps extends NodeProps<NodeData> {
 };
     // Theme-based colors
     const themeColors = {
-  cinema: {,
+  cinema: {
   background: '#2d3748',
   border: selected ? '#4299e1' : (isHovered ? '#63b3ed' : '#4a5568'),
   text: '#e2e8f0',
   accent: '#4299e1',
 },
-  dark: {,
+  dark: {
   background: '#1a202c',
   border: selected ? '#38a169' : (isHovered ? '#48bb78' : '#2d3748'),
   text: '#f7fafc',
   accent: '#38a169',
 },
-  light: {,
+  light: {
   background: '#ffffff',
   border: selected ? '#3182ce' : (isHovered ? '#4299e1' : '#e2e8f0'),
   text: '#2d3748',
@@ -202,7 +202,7 @@ export interface InlineEditableNodeProps extends NodeProps<NodeData> {
 // Node-specific preview components
 interface NodePreviewProps {
   type?: string;
-  data: NodeData;,
+  data: NodeData;
   theme: 'light' | 'dark' | 'cinema';
 const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
   const previewStyle = {

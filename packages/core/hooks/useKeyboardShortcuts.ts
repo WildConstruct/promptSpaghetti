@@ -12,7 +12,7 @@ export interface KeyboardShortcut {
   cmd?: boolean;
   alt?: boolean;
   shift?: boolean;
-  description: string;,
+  description: string;
   action: () => void;
   preventDefault?: boolean;
   enabled?: boolean;

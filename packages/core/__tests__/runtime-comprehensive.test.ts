@@ -364,7 +364,7 @@ describe('Runtime Engine - Comprehensive Tests', () => {
     });
     it('validates variable names', () => {
   const ctx = createContext({)
-  variables: {,
+  variables: {
   valid: 'value',
   '__proto__': 'dangerous',
   'constructor': 'dangerous',
@@ -385,7 +385,7 @@ describe('Runtime Engine - Comprehensive Tests', () => {
     });
     it('handles all variable types', () => {
       const ctx = createContext({)
-  variables: {,
+  variables: {
   str: 'string',
           num: 123,
           bool: true,
@@ -450,10 +450,10 @@ describe('Runtime Engine - Comprehensive Tests', () => {
     });
     it('handles deeply nested objects in SetVariable', () => {
   const deepObject = {
-  level1: {,
-  level2: {,
-  level3: {,
-  level4: {,
+  level1: {
+  level2: {
+  level3: {
+  level4: {
   value: 'deep',
 };
       const node = new SetVariableNode('set1', 'deep', deepObject);
@@ -513,7 +513,7 @@ describe('Runtime Engine - Comprehensive Tests', () => {
 });
     it('GetVariableNode can return any type', () => {
       const ctx = createContext({)
-  variables: {,
+  variables: {
   str: 'string',
           num: 123,
           bool: true,

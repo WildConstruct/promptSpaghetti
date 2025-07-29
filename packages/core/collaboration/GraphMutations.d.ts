@@ -40,7 +40,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
     type: 'NODE_ADD';
     nodeId: string;
     nodeType: z.infer<typeof NodeTypeEnum>;
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -361,7 +361,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
 }, "strip", z.ZodTypeAny, {
     type: "NODE_ADD";
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -379,7 +379,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     operationVector?: Record<string, number> | undefined;
 }, {
     type: "NODE_ADD";
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -532,7 +532,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
 }, "strip", z.ZodTypeAny, {
     type: "NODE_ADD";
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -550,7 +550,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     operationVector?: Record<string, number> | undefined;
 }, {
     type: "NODE_ADD";
-    position: {,
+    position: {
         x: number;
         y: number;
     };
@@ -681,7 +681,7 @@ declare const _default: {
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
     }, "strip", z.ZodTypeAny, {
         type: "NODE_ADD";
-        position: {,
+        position: {
             x: number;
             y: number;
         };
@@ -699,7 +699,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
     }, {
         type: "NODE_ADD";
-        position: {,
+        position: {
             x: number;
             y: number;
         };
@@ -843,7 +843,7 @@ declare const _default: {
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
     }, "strip", z.ZodTypeAny, {
         type: "NODE_ADD";
-        position: {,
+        position: {
             x: number;
             y: number;
         };
@@ -861,7 +861,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
     }, {
         type: "NODE_ADD";
-        position: {,
+        position: {
             x: number;
             y: number;
         };

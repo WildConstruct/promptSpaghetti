@@ -46,8 +46,8 @@ export const ExtensionSystemUtils = {
   * Get extension type from extension object
   */
   getExtensionType(extension: any): string {,
-  return extension?.extensionType || 'unknown';
-}
+  return extension?.extensionType || 'unknown'
+  }
   /**
    * Check if object is an extension
    */
@@ -57,16 +57,16 @@ export const ExtensionSystemUtils = {
            typeof obj.name === 'string' && 
            typeof obj.version === 'string' && 
            typeof obj.initialize === 'function' && 
-           typeof obj.activate === 'function';
+           typeof obj.activate === 'function'
   }
   /**
    * Get extension metadata
    */
-  getExtensionMetadata(extension: any): {,
+  getExtensionMetadata(extension: any): {
   id: string;
-  name: string;,
+  name: string;
   version: string;
-  type: string;,
+  type: string;
   author: string;
   description: string;
   return {
@@ -140,7 +140,7 @@ export const ExtensionSystemConstants = {
   // Validation Levels
   VALIDATION_LEVELS: ['error', 'warning', 'info'] as const,
   // Extension Capabilities
-  CAPABILITIES: {,
+  CAPABILITIES: {
   node: ['node-creation', 'node-validation', 'advanced-nodes'],
   ui: ['components', 'themes', 'commands', 'menus', 'keybindings'],
   transform: ['data-transformation', 'pipeline-support', 'validation'],

@@ -38,20 +38,20 @@ import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Autho
 // Navigation configuration interfaces
 
 export interface NavigationItem {
-  id: string;,
+  id: string;
   label: string;
   description?: string;
-  icon: React.ComponentType<unknown>;,
+  icon: React.ComponentType<unknown>;
   path: string;
   children?: NavigationItem;
-  requiredPermissions?: {,
-  resource: string;,
+  requiredPermissions?: {
+  resource: string;
   actions: string;
 }[];
   badge?: NavigationBadge;
-  metadata: {,
+  metadata: {
   category: string;
-  priority: number;,
+  priority: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   epic?: string;
   story?: string;
@@ -59,46 +59,46 @@ export interface NavigationItem {
 };
 }
 export interface NavigationBadge {
-  type: 'count' | 'status' | 'alert' | 'info';,
+  type: 'count' | 'status' | 'alert' | 'info';
   value: string | number;
   color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
   pulse?: boolean;
 }
 export interface NavigationContext {
-  currentPath: string;,
+  currentPath: string;
   currentSection: string;
-  parentSections: string;,
+  parentSections: string;
   breadcrumbs: BreadcrumbItem;
   availableActions: QuickAction;
 }
 export interface BreadcrumbItem {
-  label: string;,
+  label: string;
   path: string;
   icon?: React.ComponentType<unknown>;
   active: boolean;
 }
 export interface QuickAction {
-  id: string;,
+  id: string;
   label: string;
-  description: string;,
+  description: string;
   icon: React.ComponentType<unknown>;
   action: () => void;
   shortcut?: string;
-  category: 'primary' | 'secondary' | 'tertiary';,
+  category: 'primary' | 'secondary' | 'tertiary';
   enabled: boolean;
 }
 export interface NavigationState {
-  expandedSections: Set<string>;,
+  expandedSections: Set<string>;
   pinnedItems: Set<string>;
-  recentItems: RecentItem;,
+  recentItems: RecentItem;
   favoriteItems: Set<string>;
-  searchQuery: string;,
+  searchQuery: string;
   mobileMenuOpen: boolean;
 }
 export interface RecentItem {
-  id: string;,
+  id: string;
   label: string;
-  path: string;,
+  path: string;
   timestamp: Date;
   icon: React.ComponentType<unknown>;
   // Epic 17 Navigation Configuration
@@ -109,7 +109,7 @@ export interface RecentItem {
   description: 'System overview and dashboard',
   icon: Home,
   path: '/admin',
-  metadata: {,
+  metadata: {
   category: 'dashboard',
   priority: 100,
   riskLevel: 'low',
@@ -129,7 +129,7 @@ export interface RecentItem {
         icon: ToggleLeft,
         path: '/admin/features/toggles',
         badge: { type: 'count', value: 12, color: 'blue' },
-        metadata: {,
+        metadata: {
   category: 'feature_toggles',
   priority: 90,
   riskLevel: 'high',
@@ -142,7 +142,7 @@ export interface RecentItem {
   description: 'Manage toggle dependencies and conflicts',
   icon: Zap,
   path: '/admin/features/dependencies',
-  metadata: {,
+  metadata: {
   category: 'dependencies',
   priority: 85,
   riskLevel: 'high',
@@ -154,12 +154,12 @@ export interface RecentItem {
   description: 'Advanced targeting and conditions',
   icon: Settings,
   path: '/admin/features/conditions',
-  metadata: {,
+  metadata: {
   category: 'conditions',
   priority: 80,
   riskLevel: 'medium',
   tags: ['conditions', 'targeting', 'rules']],
-  metadata: {,
+  metadata: {
   category: 'feature_management',
   priority: 95,
   riskLevel: 'high',
@@ -180,7 +180,7 @@ export interface RecentItem {
         icon: Users,
         path: '/admin/users/accounts',
         badge: { type: 'count', value: 1247, color: 'green' },
-        metadata: {,
+        metadata: {
   category: 'user_accounts',
   priority: 80,
   riskLevel: 'critical',
@@ -193,7 +193,7 @@ export interface RecentItem {
         icon: Shield,
         path: '/admin/users/permissions',
         badge: { type: 'alert', value: '!', color: 'yellow', pulse: true },
-        metadata: {,
+        metadata: {
   category: 'permissions',
   priority: 85,
   riskLevel: 'critical',
@@ -205,12 +205,12 @@ export interface RecentItem {
   description: 'User activity and behavior tracking',
   icon: BarChart3,
   path: '/admin/users/activity',
-  metadata: {,
+  metadata: {
   category: 'monitoring',
   priority: 70,
   riskLevel: 'medium',
   tags: ['activity', 'monitoring', 'analytics']],
-  metadata: {,
+  metadata: {
   category: 'user_management',
   priority: 90,
   riskLevel: 'critical',
@@ -231,7 +231,7 @@ export interface RecentItem {
         icon: FileText,
         path: '/admin/content/review',
         badge: { type: 'count', value: 23, color: 'red', pulse: true },
-        metadata: {,
+        metadata: {
   category: 'content_review',
   priority: 75,
   riskLevel: 'medium',
@@ -243,12 +243,12 @@ export interface RecentItem {
   description: 'Manage content categories and tags',
   icon: Settings,
   path: '/admin/content/categories',
-  metadata: {,
+  metadata: {
   category: 'categories',
   priority: 60,
   riskLevel: 'low',
   tags: ['categories', 'taxonomy', 'organization']],
-  metadata: {,
+  metadata: {
   category: 'content_management',
   priority: 75,
   riskLevel: 'medium',
@@ -269,7 +269,7 @@ export interface RecentItem {
         icon: FileText,
         path: '/admin/marketplace/review',
         badge: { type: 'count', value: 8, color: 'purple' },
-        metadata: {,
+        metadata: {
   category: 'template_review',
   priority: 70,
   riskLevel: 'medium',
@@ -281,12 +281,12 @@ export interface RecentItem {
   description: 'Monitor transactions and payments',
   icon: BarChart3,
   path: '/admin/marketplace/transactions',
-  metadata: {,
+  metadata: {
   category: 'transactions',
   priority: 65,
   riskLevel: 'high',
   tags: ['transactions', 'payments', 'monitoring']],
-  metadata: {,
+  metadata: {
   category: 'marketplace',
   priority: 70,
   riskLevel: 'medium',
@@ -306,7 +306,7 @@ export interface RecentItem {
   description: 'Manage API keys and rate limits',
   icon: Key,
   path: '/admin/system/api',
-  metadata: {,
+  metadata: {
   category: 'api_management',
   priority: 60,
   riskLevel: 'high',
@@ -318,12 +318,12 @@ export interface RecentItem {
   description: 'Third-party integrations and webhooks',
   icon: Zap,
   path: '/admin/system/integrations',
-  metadata: {,
+  metadata: {
   category: 'integrations',
   priority: 55,
   riskLevel: 'medium',
   tags: ['integrations', 'webhooks', 'third-party']],
-  metadata: {,
+  metadata: {
   category: 'system_configuration',
   priority: 65,
   riskLevel: 'high',
@@ -343,7 +343,7 @@ export interface RecentItem {
   description: 'System health and performance dashboards',
   icon: BarChart3,
   path: '/admin/analytics/dashboards',
-  metadata: {,
+  metadata: {
   category: 'dashboards',
   priority: 50,
   riskLevel: 'low',
@@ -356,12 +356,12 @@ export interface RecentItem {
         icon: Bell,
         path: '/admin/analytics/alerts',
         badge: { type: 'status', value: 'OK', color: 'green' },
-        metadata: {,
+        metadata: {
   category: 'alerts',
   priority: 65,
   riskLevel: 'medium',
   tags: ['alerts', 'notifications', 'monitoring']],
-  metadata: {,
+  metadata: {
   category: 'analytics',
   priority: 60,
   riskLevel: 'low',
@@ -375,7 +375,7 @@ export interface RecentItem {
     icon: ScrollText,
     path: '/admin/audit',
     badge: { type: 'info', value: 'New', color: 'blue' },
-    metadata: {,
+    metadata: {
   category: 'audit_security',
   priority: 85,
   riskLevel: 'critical',

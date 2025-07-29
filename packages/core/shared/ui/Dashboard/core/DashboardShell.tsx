@@ -12,14 +12,14 @@ import { LoadingState, ErrorState } from '../states';
 import './DashboardShell.css';
 
 export interface TabConfig {
-  id: string;,
+  id: string;
   label: string;
   content: React.ReactNode;
   badge?: string | number;
   disabled?: boolean;
 }
 export interface TimeRangeOption {
-  label: string;,
+  label: string;
   value: string;
   days?: number;
 }

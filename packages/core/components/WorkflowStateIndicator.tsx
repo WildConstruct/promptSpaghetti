@@ -10,11 +10,11 @@ import {
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
 interface WorkflowState {
-  id: string;,
+  id: string;
   name: string;
   color: string;
   icon?: string;
-  is_initial: boolean;,
+  is_initial: boolean;
   is_final: boolean;
   is_locked: boolean;
   interface WorkflowStateIndicatorProps {
@@ -127,8 +127,8 @@ interface WorkflowState {
 // Simple version for use in lists
 export const WorkflowStateBadge: React.FC<{,
   state: WorkflowState;
-  size?: 'sm' | 'md' | 'lg';
-}> = ({ state, size = 'md' }) => {
+  size?: 'sm' | 'md' | 'lg'
+  }> = ({ state, size = 'md' }) => {
   const getStateIcon = (iconName?: string) => {
     const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
     switch (iconName) {

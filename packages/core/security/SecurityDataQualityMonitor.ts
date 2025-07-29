@@ -16,13 +16,13 @@ import { SecurityAnomaly } from './SecurityAnomalyDetector';
 // ==========================================
 
 export interface DataQualityConfig {
-  enableRealTimeValidation: boolean;,
+  enableRealTimeValidation: boolean;
   validationInterval: number;
-  qualityThresholds: QualityThresholds;,
+  qualityThresholds: QualityThresholds;
   enableAutomaticRemediation: boolean;
-  retentionPeriodDays: number;,
+  retentionPeriodDays: number;
   alertingEnabled: boolean;
-  reportingEnabled: boolean;,
+  reportingEnabled: boolean;
   validationRules: ValidationRule;
 }
 export interface QualityThresholds {
@@ -35,14 +35,14 @@ export interface QualityThresholds {
   overall: number; // 0-100%,
 }
 export interface ValidationRule {
-  id: string;,
+  id: string;
   name: string;
-  description: string;,
+  description: string;
   ruleType: ValidationRuleType;
-  severity: ValidationSeverity;,
+  severity: ValidationSeverity;
   enabled: boolean;
   parameters: Record<string, unknown>;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   executionCount: number;
   violationCount: number;
 }
@@ -63,23 +63,23 @@ export enum ValidationRuleType {
   ERROR = 'error',
   CRITICAL = 'critical'
   export interface DataQualityReport {
-  reportId: string;,
+  reportId: string;
   generatedAt: Date;
-  period: {,
-  start: Date;,
+  period: {
+  start: Date;
   end: Date;
 };
-  overallScore: number;,
+  overallScore: number;
   qualityDimensions: QualityDimensionScore;
-  violations: DataQualityViolation;,
+  violations: DataQualityViolation;
   trends: QualityTrend;
-  recommendations: QualityRecommendation;,
+  recommendations: QualityRecommendation;
   dataSourceMetrics: DataSourceQuality;
 }
 export interface QualityDimensionScore {
-  dimension: QualityDimension;,
+  dimension: QualityDimension;
   score: number; // 0-100,
-  trend: 'improving' | 'declining' | 'stable';,
+  trend: 'improving' | 'declining' | 'stable';
   violationCount: number;
   issuesSummary: string;
 }
@@ -91,27 +91,27 @@ export enum QualityDimension {
   VALIDITY = 'validity',
   UNIQUENESS = 'uniqueness'
   export interface DataQualityViolation {
-  violationId: string;,
+  violationId: string;
   timestamp: Date;
-  ruleId: string;,
+  ruleId: string;
   ruleName: string;
-  severity: ValidationSeverity;,
+  severity: ValidationSeverity;
   dimension: QualityDimension;
   dataSource: string;
   recordId?: string;
   fieldName?: string;
   expectedValue?: unknown;
   actualValue?: unknown;
-  description: string;,
+  description: string;
   context: Record<string, unknown>;
   isResolved: boolean;
   resolvedAt?: Date;
   remediation?: RemediationAction;
 }
 export interface RemediationAction {
-  actionType: RemediationActionType;,
+  actionType: RemediationActionType;
   description: string;
-  executedAt: Date;,
+  executedAt: Date;
   result: 'success' | 'failure' | 'partial';
   details: string;
 }
@@ -124,106 +124,106 @@ export enum RemediationActionType {
   ENRICHMENT = 'enrichment',
   TRANSFORMATION = 'transformation'
   export interface QualityTrend {
-  dimension: QualityDimension;,
+  dimension: QualityDimension;
   timeframe: string;
-  direction: 'improving' | 'declining' | 'stable';,
+  direction: 'improving' | 'declining' | 'stable';
   changePercent: number;
-  significance: 'high' | 'medium' | 'low';,
+  significance: 'high' | 'medium' | 'low';
   driverFactors: string;
 }
 export interface QualityRecommendation {
-  id: string;,
+  id: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
-  category: string;,
+  category: string;
   title: string;
-  description: string;,
+  description: string;
   expectedImpact: string;
-  estimatedEffort: string;,
+  estimatedEffort: string;
   targetDimensions: QualityDimension;
   implementationSteps: string;
 }
 export interface DataSourceQuality {
-  sourceName: string;,
+  sourceName: string;
   sourceType: string;
-  overallScore: number;,
+  overallScore: number;
   recordCount: number;
-  qualityIssues: number;,
+  qualityIssues: number;
   lastValidated: Date;
   dimensions: Record<QualityDimension, number>;
   commonIssues: string;
 }
 export interface DataQualityMetrics {
-  totalRecordsProcessed: number;,
+  totalRecordsProcessed: number;
   totalViolations: number;
-  criticalViolations: number;,
+  criticalViolations: number;
   averageQualityScore: number;
-  dataSourceCount: number;,
+  dataSourceCount: number;
   automatedRemediations: number;
-  manualInterventions: number;,
-  qualityTrend: 'improving' | 'declining' | 'stable';
-}
+  manualInterventions: number;
+  qualityTrend: 'improving' | 'declining' | 'stable'
+  }
 export interface ValidationContext {
-  recordId: string;,
+  recordId: string;
   dataSource: string;
-  timestamp: Date;,
+  timestamp: Date;
   metadata: Record<string, unknown>;
   relatedRecords?: unknown;
 }
 export interface QualityProfile {
-  dataSourceName: string;,
+  dataSourceName: string;
   expectedSchema: Record<string, FieldExpectation>;
-  statisticalBaseline: StatisticalBaseline;,
+  statisticalBaseline: StatisticalBaseline;
   businessRules: BusinessRule;
-  lastUpdated: Date;,
+  lastUpdated: Date;
   validationHistory: ValidationHistoryEntry;
 }
 export interface FieldExpectation {
-  fieldName: string;,
+  fieldName: string;
   dataType: string;
   required: boolean;
   format?: string;
   minValue?: number;
   maxValue?: number;
   allowedValues?: unknown;
-  nullablePercent: number;,
+  nullablePercent: number;
   uniquenessRequired: boolean;
 }
 export interface StatisticalBaseline {
-  recordCount: {,
-  mean: number;,
+  recordCount: {
+  mean: number;
   standardDeviation: number;
-  min: number;,
+  min: number;
   max: number;
 };
   fieldStatistics: Record<string, FieldStatistics>;
   temporalPatterns: TemporalPattern;
 }
 export interface FieldStatistics {
-  fieldName: string;,
+  fieldName: string;
   dataType: string;
-  nullPercent: number;,
+  nullPercent: number;
   uniquePercent: number;
   averageLength?: number;
   commonValues: Array<{ value: unknown; frequency: number }>;
   outlierThreshold: number;
 }
 export interface TemporalPattern {
-  pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';,
+  pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
   expectedVolume: number;
   variationThreshold: number;
 }
 export interface BusinessRule {
-  ruleId: string;,
+  ruleId: string;
   name: string;
-  description: string;,
+  description: string;
   expression: string;
-  severity: ValidationSeverity;,
+  severity: ValidationSeverity;
   enabled: boolean;
 }
 export interface ValidationHistoryEntry {
-  timestamp: Date;,
+  timestamp: Date;
   overallScore: number;
-  violationCount: number;,
+  violationCount: number;
   processingTime: number;
   recordsValidated: number;
   // ==========================================
@@ -252,7 +252,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   this.config = {
   enableRealTimeValidation: true,
   validationInterval: 60000, // 1 minute,
-  qualityThresholds: {,
+  qualityThresholds: {
   completeness: 95,
   accuracy: 90,
   consistency: 85,
@@ -421,7 +421,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   /**
    * Execute specific validation rule
    */
-  private async executeValidationRule(rule: ValidationRule,)
+  private async executeValidationRule(rule: ValidationRule)
     record: any,
     context: ValidationContext): Promise<DataQualityViolation> {,
     const violations: DataQualityViolation = [];
@@ -543,7 +543,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
           record.confidence
         ));
     return violations;
-  private async validateDuplicates(rule: ValidationRule,)
+  private async validateDuplicates(rule: ValidationRule)
     record: any,
     context: ValidationContext): Promise<DataQualityViolation> {,
     const violations: DataQualityViolation = [];
@@ -565,7 +565,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
           compositeKey
         ));
     return violations;
-  private validateStatisticalOutliers(rule: ValidationRule,)
+  private validateStatisticalOutliers(rule: ValidationRule)
     record: any,
     context: ValidationContext): DataQualityViolation {,
     const violations: DataQualityViolation = [];
@@ -587,7 +587,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
             record[field]
           ));
     return violations;
-  private validateTemporalConsistency(rule: ValidationRule,)
+  private validateTemporalConsistency(rule: ValidationRule)
     record: any,
     context: ValidationContext): DataQualityViolation {,
     const violations: DataQualityViolation = [];
@@ -857,7 +857,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   // ==========================================
   // UTILITY METHODS
   // ==========================================
-  private createViolation(rule: ValidationRule,)
+  private createViolation(rule: ValidationRule)
     dimension: QualityDimension,
     context: ValidationContext,
     description: string,

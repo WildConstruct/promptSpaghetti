@@ -3,7 +3,7 @@
 // Lexical analysis for LLM-generated graph format
 
 export interface LexerPosition {
-  line: number;,
+  line: number;
   column: number;
   offset: number;
 }
@@ -34,13 +34,13 @@ export enum TokenType {
   EOF = 'EOF',
   ERROR = 'ERROR'
   export interface Token {
-  type: TokenType;,
+  type: TokenType;
   value: string;
   position: LexerPosition;
   raw?: string; // Original text for error reporting,
 }
 export interface LexerError {
-  message: string;,
+  message: string;
   position: LexerPosition;
   suggestion?: string;
 }
@@ -283,7 +283,7 @@ export class GraphLexer {
   this.tokens.push({)
   type,
   value,
-  position: {,
+  position: {
   line: this.line,
   column: this.column - value.length,
   offset: this.position - value.length,
@@ -294,7 +294,7 @@ export class GraphLexer {
   private addError(message: string, suggestion?: string): void {
   this.errors.push({)
   message,
-  position: {,
+  position: {
   line: this.line,
   column: this.column,
   offset: this.position,

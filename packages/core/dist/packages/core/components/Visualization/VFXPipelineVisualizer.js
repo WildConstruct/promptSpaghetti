@@ -295,12 +295,12 @@ if (!selectedScene) {
     return;
     _jsxs("div", { className: `vfx-pipeline-visualizer ${className}`, children: ["}", _jsxs(Tabs, { value: activeView, onValueChange: setActiveView, children: [_jsx("div", { className: "mb-6", children: _jsxs(TabsList, { className: "grid w-full grid-cols-4", children: [_jsxs(TabsTrigger, { value: "scene", className: "flex items-center gap-2", children: [_jsx(Camera, { className: "w-4 h-4" }), "Scene"] }), _jsxs(TabsTrigger, { value: "accuracy", className: "flex items-center gap-2", children: [_jsx(CheckCircle, { className: "w-4 h-4" }), "Accuracy"] }), _jsxs(TabsTrigger, { value: "assets", className: "flex items-center gap-2", children: [_jsx(Layers, { className: "w-4 h-4" }), "Assets"] }), _jsxs(TabsTrigger, { value: "timeline", className: "flex items-center gap-2", children: [_jsx(Clock, { className: "w-4 h-4" }), "Timeline"] })] }) }), _jsxs(TabsContent, { value: "scene", className: "space-y-6", children: [_jsx(SceneVisualization3D, { scene: selectedScene }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsx(PerformanceMetricsVisualizer, { scene: selectedScene }), _jsx(CrowdVisualization, { characters: selectedScene.characters })] })] }), _jsx(TabsContent, { value: "accuracy", className: "space-y-6", children: _jsx(HistoricalAccuracyDashboard, { scene: selectedScene }) }), _jsxs(TabsContent, { value: "assets", className: "space-y-6", children: [_jsx(MaterialPropertiesVisualizer, { assets: selectedScene.assets }), _jsx(AssetRelationshipGraph, { assets: selectedScene.assets })] }), _jsx(TabsContent, { value: "timeline", className: "space-y-6", children: _jsx(TimelineVisualization, { scenes: scenes }) })] }), _jsx("style", { children: `
         .vfx-pipeline-visualizer {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
         .scene-visualization {
-          position: relative;,
+          position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 12px;,
+          border-radius: 12px;
   overflow: hidden;
         .accuracy-indicator {
           animation: pulse-accuracy 2s ease-in-out infinite;

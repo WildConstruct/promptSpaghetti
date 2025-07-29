@@ -69,7 +69,7 @@ export interface BackupMetadata {
     size: number;
     eventCount: number;
     systemSources: string[];
-    timeRange: {,
+    timeRange: {
         start: number;
         end: number;
     };
@@ -98,7 +98,7 @@ export interface RecoveryMetadata {
 export interface BackupProgress {
     backupId: string;
     status: BackupStatus;
-    progress: {,
+    progress: {
         percentage: number;
         processedEvents: number;
         totalEvents: number;
@@ -108,7 +108,7 @@ export interface BackupProgress {
         estimatedTimeRemaining: number;
     };
     currentOperation: string;
-    throughput: {,
+    throughput: {
         eventsPerSecond: number;
         bytesPerSecond: number;
     };

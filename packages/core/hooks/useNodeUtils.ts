@@ -6,7 +6,7 @@ interface UseNodeUtilsProps {
 
 
 interface UseNodeUtilsReturn {
-  getNodeMeta: (nodeType: string) => NodeMeta;,
+  getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
 
 export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsReturn => {

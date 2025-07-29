@@ -8,15 +8,15 @@ export interface SemanticError extends ParseError {
   nodeId?: string;
   errorCode: string;
   export interface ValidationContext {
-  nodeIds: Set<string>;,
+  nodeIds: Set<string>;
   nodeMap: Map<string, NodeDefinitionAST>;
   edgeMap: Map<string, Set<string>>; // source -> targets,
   reverseEdgeMap: Map<string, Set<string>>; // target -> sources,
-  visitedNodes: Set<string>;,
+  visitedNodes: Set<string>;
   currentPath: string;
 }
 export interface SemanticAnalysisResult {
-  graph: Graph | null;,
+  graph: Graph | null;
   errors: SemanticError;
   warnings: SemanticError;
 }
@@ -396,7 +396,7 @@ export class SemanticAnalyzer {
       message,
       nodeId,
       position: { line: 0, column: 0, offset: 0 },
-      severity: 'error';
+      severity: 'error'
   });
   private addWarning(errorCode: string, message: string, nodeId?: string): void {
     this.warnings.push({)
@@ -404,5 +404,5 @@ export class SemanticAnalyzer {
       message,
       nodeId,
       position: { line: 0, column: 0, offset: 0 },
-      severity: 'warning';
+      severity: 'warning'
   });

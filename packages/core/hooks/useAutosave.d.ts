@@ -6,7 +6,7 @@ interface UseAutosaveProps {
     storageKey?: string;
 interface UseAutosaveReturn {
     showRestorePrompt: boolean;
-    restoreDraft: {,
+    restoreDraft: {
         nodes: Node[];
         edges: Edge[];
     } | null;

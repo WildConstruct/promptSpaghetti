@@ -8,12 +8,12 @@ import { EventEmitter } from 'events';
 import { PricingOptimizer, PricingAnalytics, PricingModel } from './PricingOptimizer';
 
 export interface DashboardConfig {
-  refreshIntervalMs: number;,
+  refreshIntervalMs: number;
   showPredictiveAnalytics: boolean;
-  enableRealTimeUpdates: boolean;,
+  enableRealTimeUpdates: boolean;
   maxHistoryDays: number;
-  alertThresholds: {,
-  revenueDeclinePercent: number;,
+  alertThresholds: {
+  revenueDeclinePercent: number;
   demandDropPercent: number;
   competitiveThreatScore: number;
 };
@@ -21,72 +21,72 @@ export interface DashboardConfig {
 }
 export interface DashboardMetrics {
   // Revenue metrics
-  totalRevenue: number;,
+  totalRevenue: number;
   revenueGrowthRate: number;
-  averageOrderValue: number;,
+  averageOrderValue: number;
   revenuePerModel: Record<string, number>;
   // Performance metrics
-  totalCalculations: number;,
+  totalCalculations: number;
   averageResponseTime: number;
   successRate: number;
   // AI optimization metrics
-  aiOptimizationImpact: number;,
+  aiOptimizationImpact: number;
   priceOptimalityScore: number;
   demandPredictionAccuracy: number;
   // Film industry specific metrics
   studioTierBreakdown: Record<string, number>;
   productionTypeDistribution: Record<string, number>;
   seasonalTrends: Array<{,
-  period: string;,
+  period: string;
   revenue: number;
   growth: number;
 }>;
   // Competitive intelligence
-  marketPosition: 'leader' | 'challenger' | 'follower';,
+  marketPosition: 'leader' | 'challenger' | 'follower';
   competitiveAdvantage: number;
-  pricePositioning: 'premium' | 'competitive' | 'value';,
+  pricePositioning: 'premium' | 'competitive' | 'value';
   updatedAt: number;
 }
 export interface PricingAlert {
-  id: string;,
+  id: string;
   type: 'revenue_decline' | 'demand_drop' | 'competitive_threat' | 'optimization_opportunity';
-  severity: 'low' | 'medium' | 'high' | 'critical';,
+  severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   description: string;
   modelId?: string;
-  value: number;,
+  value: number;
   threshold: number;
-  recommendation: string;,
+  recommendation: string;
   createdAt: number;
   acknowledged: boolean;
 }
 export interface PricingInsight {
-  id: string;,
+  id: string;
   type: 'trend' | 'opportunity' | 'risk' | 'optimization';
-  category: 'revenue' | 'demand' | 'competition' | 'seasonality' | 'film_industry';,
+  category: 'revenue' | 'demand' | 'competition' | 'seasonality' | 'film_industry';
   title: string;
-  description: string;,
+  description: string;
   confidence: number;
-  impact: 'low' | 'medium' | 'high';,
+  impact: 'low' | 'medium' | 'high';
   actionItems: string;
   dataPoints: Array<{,
-  metric: string;,
+  metric: string;
   current: number;
-  previous: number;,
+  previous: number;
   change: number;
 }>;
   createdAt: number;
 }
 export interface RevenueProjection {
-  period: '1_month' | '3_months' | '6_months' | '1_year';,
+  period: '1_month' | '3_months' | '6_months' | '1_year';
   projectedRevenue: number;
-  confidenceInterval: {,
-  lower: number;,
+  confidenceInterval: {
+  lower: number;
   upper: number;
 };
-  assumptions: string;,
+  assumptions: string;
   keyFactors: Array<{;
-  factor: string;,
+  factor: string;
   impact: number;
   confidence: number;
 }>;
@@ -113,7 +113,7 @@ export class PricingDashboard extends EventEmitter {
   showPredictiveAnalytics: true,
   enableRealTimeUpdates: true,
   maxHistoryDays: 90,
-  alertThresholds: {,
+  alertThresholds: {
   revenueDeclinePercent: 10,
   demandDropPercent: 15,
   competitiveThreatScore: 0.7,
@@ -167,12 +167,12 @@ export class PricingDashboard extends EventEmitter {
   * Get competitive analysis dashboard data
   */
   async getCompetitiveAnalysisDashboard(): Promise<{,
-  currentPosition: string;,
+  currentPosition: string;
   competitiveAdvantage: number;
-  marketGaps: string;,
+  marketGaps: string;
   pricingRecommendations: string;
-  threatLevel: 'low' | 'medium' | 'high';
-}> {
+  threatLevel: 'low' | 'medium' | 'high'
+  }> {
   // Aggregate competitive analysis from all models
   const models = this.getAllModels();
   const competitiveAnalyses = await Promise.all(;);
@@ -216,7 +216,7 @@ export class PricingDashboard extends EventEmitter {
   volume,
   avgPrice: 500 + Math.random() * 1000 // Simplified pricing,
 })),
-      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({,)
+      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({)
   season: trend.period,
   multiplier: 1 + trend.growth / 100,
   revenue: trend.revenue,
@@ -472,7 +472,7 @@ export class PricingDashboard extends EventEmitter {
     return {
   period,
   projectedRevenue,
-  confidenceInterval: {,
+  confidenceInterval: {
   lower: projectedRevenue * 0.85,
   upper: projectedRevenue * 1.15,
 },

@@ -14,7 +14,7 @@ interface DragSelectBoxProps {
         height: number;
     }) => void;
     onSelectionCancel: () => void;
-    canvasOffset: {,
+    canvasOffset: {
         x: number;
         y: number;
     };

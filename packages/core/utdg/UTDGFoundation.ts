@@ -8,31 +8,31 @@ import { DataSourceManager } from '../external-data/DataSourceManager';
 import { MedievalDemo } from '../demo/MedievalDemo';
 
 export interface UTDGNode {
-  id: string;,
+  id: string;
   type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
-  label: string;,
+  label: string;
   description: string;
   properties: Record<string, any>;
-  metadata: {,
+  metadata: {
   era?: HistoricalEra;
   genre?: Genre;
   style?: Style;
-  tags: string;,
+  tags: string;
   confidence: number; // 0-1 accuracy score,
-  sources: string;,
+  sources: string;
   lastUpdated: Date;
 };
   relationships: UTDGRelationship;
 }
 export interface UTDGRelationship {
-  id: string;,
+  id: string;
   sourceNodeId: string;
-  targetNodeId: string;,
+  targetNodeId: string;
   type: 'contains' | 'partOf' | 'influences' | 'requires' | 'excludes' | 'similar' | 'temporal' | 'causal';
   strength: number; // 0-1 relationship strength,
   direction: 'bidirectional' | 'sourceToTarget' | 'targetToSource';
   context?: string;
-  temporalConstraints?: {,
+  temporalConstraints?: {
   before?: Date;
   after?: Date;
   duration?: number; // milliseconds,
@@ -48,7 +48,7 @@ export interface UTDGQuery {
   confidenceThreshold?: number;
   maxResults?: number;
   includeRelationships?: boolean;
-  spatialConstraints?: {,
+  spatialConstraints?: {
   regions?: string;
   excludeRegions?: string;
 };
@@ -64,32 +64,32 @@ export interface UTDGQuery {
 };
 }
 export interface UTDGContext {
-  historical: {,
+  historical: {
   era: HistoricalEra;
   year?: number;
   region?: string;
   culturalContext?: string;
 };
-  creative: {,
+  creative: {
   genre: Genre;
   style: Style;
   tone?: string;
   audience?: string;
 };
-  technical: {,
+  technical: {
   accuracy: 'strict' | 'moderate' | 'creative';
-  sources: 'academic' | 'popular' | 'mixed';,
+  sources: 'academic' | 'popular' | 'mixed';
   validation: boolean;
 };
 }
 export interface UTDGContentSuggestion {
-  type: 'character' | 'setting' | 'object' | 'event' | 'concept';,
+  type: 'character' | 'setting' | 'object' | 'event' | 'concept';
   content: any;
-  confidence: number;,
+  confidence: number;
   reasoning: string;
-  alternatives: any;,
-  historicalAccuracy: {,
-  score: number;,
+  alternatives: any;
+  historicalAccuracy: {
+  score: number;
   violations: string;
   suggestions: string;
 };
@@ -130,7 +130,7 @@ export class UTDGFoundation {
   type: 'concept',
         label: era.name,
         description: era.description,
-        properties: {,
+        properties: {
   startYear: era.startYear,
   endYear: era.endYear,
   characteristics: era.characteristics,
@@ -138,7 +138,7 @@ export class UTDGFoundation {
   technology: era.technology,
   artStyles: era.artStyles,
 },
-  metadata: {,
+  metadata: {
   era: era.id as HistoricalEra,
   tags: ['historical_era', 'chronology'],
   confidence: 1.0,
@@ -157,13 +157,13 @@ export class UTDGFoundation {
   type: 'concept',
         label: genre.name,
         description: genre.description,
-        properties: {,
+        properties: {
   characteristics: genre.characteristics,
   commonThemes: genre.commonThemes,
   typicalElements: genre.typicalElements,
   audienceExpectations: genre.audienceExpectations,
 },
-  metadata: {,
+  metadata: {
   genre: genre.id as Genre,
   tags: ['literary_genre', 'creative_writing'],
   confidence: 1.0,
@@ -185,13 +185,13 @@ export class UTDGFoundation {
         label: socialClass.replace('_', ' ').toUpperCase(),
         description: `Members of the ${socialClass} social class`}
 },
-  properties: {,
+  properties: {
   economicPower: this.getSocialClassEconomicPower(socialClass),
   politicalInfluence: this.getSocialClassPoliticalInfluence(socialClass),
   socialMobility: this.getSocialClassMobility(socialClass),
   typicalOccupations: this.getSocialClassOccupations(socialClass),
 },
-  metadata: {,
+  metadata: {
   tags: ['social_class', 'hierarchy', 'society'],
   confidence: 0.9,
   sources: ['Social history', 'Medieval studies'],
@@ -213,7 +213,7 @@ export class UTDGFoundation {
   type: 'entity',
         label: clothing.name,
         description: clothing.description,
-        properties: {,
+        properties: {
   socialClass: clothing.socialClass,
   gender: clothing.gender,
   materials: clothing.materials,
@@ -223,7 +223,7 @@ export class UTDGFoundation {
   seasonality: clothing.seasonality,
   occasions: clothing.occasions,
 },
-  metadata: {,
+  metadata: {
   era: 'medieval',
   tags: ['clothing', 'material_culture', clothing.socialClass, clothing.gender],
   confidence: clothing.historicalAccuracy === 'high' ? 0.9 : ,
@@ -256,7 +256,7 @@ export class UTDGFoundation {
         label: material.name,
         description: `${material.type} material used in medieval times`}
 },
-  properties: {,
+  properties: {
   type: material.type,
   availability: material.availability,
   cost: material.cost,
@@ -265,7 +265,7 @@ export class UTDGFoundation {
   tradingSources: material.tradingSources,
   primaryUses: material.primaryUses,
 },
-  metadata: {,
+  metadata: {
   era: 'medieval',
   tags: ['material', 'trade', 'economy', material.type],
   confidence: 0.9,
@@ -283,7 +283,7 @@ export class UTDGFoundation {
   type: 'entity',
         label: character.name,
         description: character.description,
-        properties: {,
+        properties: {
   profession: character.profession,
   socialClass: character.socialClass,
   gender: character.gender,
@@ -292,7 +292,7 @@ export class UTDGFoundation {
   possessions: character.possessions,
   socialConnections: character.socialConnections,
 },
-  metadata: {,
+  metadata: {
   era: 'medieval',
   tags: ['character', 'person', character.profession, character.socialClass],
   confidence: 0.8,
@@ -310,7 +310,7 @@ export class UTDGFoundation {
   type: 'entity',
         label: location.name,
         description: location.description,
-        properties: {,
+        properties: {
   type: location.type,
   socialContext: location.socialContext,
   typicalActivities: location.typicalActivities,
@@ -320,7 +320,7 @@ export class UTDGFoundation {
   geographicalRegion: location.geographicalRegion,
   politicalContext: location.politicalContext,
 },
-  metadata: {,
+  metadata: {
   era: 'medieval',
   tags: ['location', 'setting', location.type],
   confidence: 0.9,
@@ -499,9 +499,9 @@ export class UTDGFoundation {
   /**
    * Validate historical accuracy of content
    */
-  private validateHistoricalAccuracy(node: UTDGNode, context: UTDGContext): {,
+  private validateHistoricalAccuracy(node: UTDGNode, context: UTDGContext): {
   score: number;
-    violations: string;,
+    violations: string;
   suggestions: string;
     const violations: string = [];
     const suggestions: string = [];
@@ -552,7 +552,7 @@ export class UTDGFoundation {
   * Validate graph consistency
   */
   private async validateGraphConsistency(): Promise<{,
-  isValid: boolean;,
+  isValid: boolean;
   errors: string;
   warnings: string;
 }> {
@@ -649,7 +649,7 @@ export class UTDGFoundation {
    * Get graph statistics
    */
   public getGraphStats(): {
-    totalNodes: number;,
+    totalNodes: number;
   totalRelationships: number;
     nodesByType: Record<string, number>;
     nodesByEra: Record<string, number>;
@@ -673,17 +673,17 @@ export class UTDGFoundation {
    * Export graph data for external use
    */
   public exportGraph(): {
-  nodes: UTDGNode;,
+  nodes: UTDGNode;
   relationships: UTDGRelationship;
-  metadata: {,
-  exportDate: Date;,
+  metadata: {
+  exportDate: Date;
   version: string;
   stats: any;
 };
     return {
   nodes: Array.from(this.nodes.values()),
   relationships: Array.from(this.relationships.values()),
-  metadata: {,
+  metadata: {
   exportDate: new Date(),
   version: '1.0.0',
   stats: this.getGraphStats(),

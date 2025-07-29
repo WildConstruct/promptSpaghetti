@@ -77,7 +77,7 @@ export class GraphValidator extends EventEmitter {
   type: 'CUSTOM_VALIDATOR_ERROR',
             message: `Custom validator failed: ${error}`}
 },
-  severity: 'warning';
+  severity: 'warning'
   });
       // Emit validation events
       if (errors.length > 0) {
@@ -93,7 +93,7 @@ export class GraphValidator extends EventEmitter {
   type: 'VALIDATION_SYSTEM_ERROR',
         message: `Validation system error: ${error}`}
 },
-  severity: 'error';
+  severity: 'error'
   };
       return {
   valid: false,
@@ -130,7 +130,7 @@ export class GraphValidator extends EventEmitter {
   type: 'STATE_VALIDATION_ERROR',
           message: `State validation failed: ${error}`}
 },
-  severity: 'error';
+  severity: 'error'
   }],
         warnings: [];
   };
@@ -200,7 +200,7 @@ export class GraphValidator extends EventEmitter {
   type: 'UNSUPPORTED_OPERATION',
         message: `Operation type ${operation.type} is not supported`}
 },
-  severity: 'error';
+  severity: 'error'
   }];
   private async validateNodeAdd(()
     operation: NodeAddOperation,
@@ -551,7 +551,7 @@ export class GraphValidator extends EventEmitter {
   type: 'ORPHANED_NODES',
           message: `Found ${orphanedNodes.length} orphaned nodes`}
 },
-  severity: 'warning';
+  severity: 'warning'
   });
     return errors;
   private async validateGraphState(state: GraphState): Promise<ValidationError> {
@@ -564,7 +564,7 @@ export class GraphValidator extends EventEmitter {
   type: 'DUPLICATE_NODE_IDS',
         message: `Duplicate node IDs found: ${duplicateIds.join(', ')}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
     // Check for duplicate edge IDs
     const edgeIds = state.edges.map(e => e.id);
@@ -574,7 +574,7 @@ export class GraphValidator extends EventEmitter {
   type: 'DUPLICATE_EDGE_IDS',
         message: `Duplicate edge IDs found: ${duplicateEdgeIds.join(', ')}`}
 },
-  severity: 'error';
+  severity: 'error'
   });
     return errors;
   private isValidPosition(position: { x: number; y: number }): boolean {

@@ -219,10 +219,10 @@ div >
     _jsx("style", { children: `
         @keyframes slideIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: scale(0.95) translateY(-10px);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: scale(1) translateY(0);
       ` });
 div >

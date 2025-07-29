@@ -40,42 +40,42 @@ export enum AuditEventType {
   SYSTEM_EVENT = 'system_event'
   // Audit Log Entry
   export interface AuditLogEntry {
-  id: string;,
+  id: string;
   timestamp: Date;
-  eventType: AuditEventType;,
-  actor: {,
+  eventType: AuditEventType;
+  actor: {
   userId?: string;
   systemId?: string;
   ipAddress: string;
   userAgent?: string;
   sessionId?: string;
 };
-  target: {,
+  target: {
   dataId?: string;
-  resourceType: string;,
+  resourceType: string;
   resourceId: string;
   classification?: ClassificationResult;
 };
-  action: {,
+  action: {
   operation: string;
   result: 'success' | 'failure';
   reason?: string;
   duration?: number;
 };
-  context: {,
+  context: {
   environment: string;
   applicationVersion: string;
   correlationId?: string;
   parentEventId?: string;
   metadata: Record<string, any>;
 };
-  compliance: {,
+  compliance: {
   frameworks: ComplianceFramework;
   dataCategory?: DataCategory;
-  retentionRequired: boolean;,
+  retentionRequired: boolean;
   encryptionApplied: boolean;
 };
-  integrity: {,
+  integrity: {
   hash: string;
   previousHash: string;
   signature?: string;
@@ -99,42 +99,42 @@ export interface AuditQueryFilter {
   // Compliance Report
 }
 export interface ComplianceReport {
-  framework: ComplianceFramework;,
-  reportPeriod: {,
-  start: Date;,
+  framework: ComplianceFramework;
+  reportPeriod: {
+  start: Date;
   end: Date;
 };
-  summary: {,
+  summary: {
   totalEvents: number;
-  compliantEvents: number;,
+  compliantEvents: number;
   violations: number;
   complianceRate: number;
 };
-  dataProcessing: {,
+  dataProcessing: {
   classified: number;
-  accessed: number;,
+  accessed: number;
   exported: number;
   deleted: number;
 };
   violationDetails: Array<{,
   timestamp: Date;
-  eventId: string;,
+  eventId: string;
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation?: string;
 }>;
-  recommendations: string;,
+  recommendations: string;
   generatedAt: Date;
   generatedBy: string;
 
 // Retention Policy
 }
 export interface RetentionPolicy {
-  framework: ComplianceFramework;,
+  framework: ComplianceFramework;
   eventType: AuditEventType;
   retentionDays: number;
   archiveAfterDays?: number;
-  deleteAfterDays: number;,
+  deleteAfterDays: number;
   requiresApproval: boolean;
   // Export Format
 }
@@ -146,17 +146,17 @@ export enum ExportFormat {
   LEEF = 'leef' // Log Event Extended Format
   // Logger Configuration
   export interface AuditLoggerConfig {
-  enableRealTimeLogging: boolean;,
+  enableRealTimeLogging: boolean;
   enableCompression: boolean;
   enableEncryption: boolean;
   encryptionKey?: Buffer;
   signatureKey?: Buffer;
-  retentionPolicies: RetentionPolicy;,
+  retentionPolicies: RetentionPolicy;
   logRotationSizeMB: number;
-  logRotationIntervalHours: number;,
+  logRotationIntervalHours: number;
   archiveLocation: string;
   streamEndpoints?: Array<{,
-  url: string;,
+  url: string;
   format: ExportFormat;
   headers?: Record<string, string>;
 }>;
@@ -193,28 +193,28 @@ export class ClassificationAuditLogger extends EventEmitter {
   const entry = await this.createAuditEntry({)
   eventType: AuditEventType.CLASSIFICATION_PERFORMED,
   actor,
-  target: {,
+  target: {
   dataId: dataElement.id,
   resourceType: 'data_element',
   resourceId: dataElement.id,
   classification: result,
 },
-  action: {,
+  action: {
   operation: 'classify',
   result: 'success',
   duration
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
   applicationVersion: process.env.APP_VERSION || '1.0.0',
-  metadata: {,
+  metadata: {
   fieldName: dataElement.fieldName,
   dataType: dataElement.dataType,
   source: dataElement.source,
   confidence: result.confidence,
   matchedRules: result.matchedRules,
 },
-  compliance: {,
+  compliance: {
   frameworks: result.complianceRequirements,
   dataCategory: result.category,
   retentionRequired: true,
@@ -233,25 +233,25 @@ export class ClassificationAuditLogger extends EventEmitter {
   const entry = await this.createAuditEntry({)
   eventType: AuditEventType.CLASSIFICATION_UPDATED,
   actor,
-  target: {,
+  target: {
   dataId,
   resourceType: 'classification',
   resourceId: dataId,
 },
-  action: {,
+  action: {
   operation: 'update_classification',
   result: 'success',
   reason
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
   applicationVersion: process.env.APP_VERSION || '1.0.0',
-  metadata: {,
+  metadata: {
   oldLevel,
   newLevel,
   changeReason: reason,
 },
-  compliance: {,
+  compliance: {
   frameworks: [],
   retentionRequired: true,
   encryptionApplied: false,
@@ -261,36 +261,36 @@ export class ClassificationAuditLogger extends EventEmitter {
    * Log a policy violation
    */
   public async logPolicyViolation()
-    violation: {,
+    violation: {
   dataId: string;
-  policyId: string;,
+  policyId: string;
   description: string;
-  severity: AlertSeverity;,
+  severity: AlertSeverity;
   framework: ComplianceFramework;
 },
   actor: AuditLogEntry['actor']): Promise<string> {,
   const entry = await this.createAuditEntry({)
   eventType: AuditEventType.POLICY_VIOLATION,
   actor,
-  target: {,
+  target: {
   dataId: violation.dataId,
   resourceType: 'policy',
   resourceId: violation.policyId,
 },
-  action: {,
+  action: {
   operation: 'policy_check',
   result: 'failure',
   reason: violation.description,
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
   applicationVersion: process.env.APP_VERSION || '1.0.0',
-  metadata: {,
+  metadata: {
   severity: violation.severity,
   violationType: 'compliance',
   requiresRemediation: true,
 },
-  compliance: {,
+  compliance: {
   frameworks: [violation.framework],
   retentionRequired: true,
   encryptionApplied: false,
@@ -315,25 +315,25 @@ export class ClassificationAuditLogger extends EventEmitter {
   const entry = await this.createAuditEntry({)
   eventType: accessGranted ? AuditEventType.ACCESS_GRANTED : AuditEventType.ACCESS_DENIED,
   actor,
-  target: {,
+  target: {
   dataId,
   resourceType: 'data',
   resourceId: dataId,
   classification
 },
-  action: {,
+  action: {
   operation: 'access_request',
   result: accessGranted ? 'success' : 'failure',
   reason
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
   applicationVersion: process.env.APP_VERSION || '1.0.0',
-  metadata: {,
+  metadata: {
   accessType: 'read',
   accessGranted
 },
-  compliance: {,
+  compliance: {
   frameworks: classification?.complianceRequirements || [],
   dataCategory: classification?.category,
   retentionRequired: true,
@@ -424,11 +424,11 @@ export class ClassificationAuditLogger extends EventEmitter {
       : 100;
     const report: ComplianceReport = {
   framework,
-  reportPeriod: {,
+  reportPeriod: {
   start: startDate,
   end: endDate,
 },
-  summary: {,
+  summary: {
   totalEvents: relevantLogs.length,
   compliantEvents: relevantLogs.length - violations.length,
   violations: violations.length,
@@ -438,32 +438,32 @@ export class ClassificationAuditLogger extends EventEmitter {
       violationDetails,
       recommendations: this.generateRecommendations(framework, violations),
       generatedAt: new Date(),
-      generatedBy: 'system';
+      generatedBy: 'system'
   };
     // Log report generation
     await this.createAuditEntry({)
   eventType: AuditEventType.SYSTEM_EVENT,
-  actor: {,
+  actor: {
   systemId: 'audit_logger',
   ipAddress: '127.0.0.1',
 },
-  target: {,
+  target: {
   resourceType: 'compliance_report',
         resourceId: `report_${framework}_${Date.now()}`}
   },
-  action: {,
+  action: {
   operation: 'generate_report',
   result: 'success',
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
         applicationVersion: process.env.APP_VERSION || '1.0.0',
-        metadata: {,
+        metadata: {
           framework,
           reportPeriod: { start: startDate, end: endDate },
           violationCount: violations.length;
   },
-  compliance: {,
+  compliance: {
   frameworks: [framework],
   retentionRequired: true,
   encryptionApplied: false,
@@ -486,8 +486,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       return this.exportAsSyslog(logs);
     case ExportFormat.CEF:
       return this.exportAsCEF(logs);
-    case ExportFormat.LEEF:
-      return this.exportAsLEEF(logs);,
+    case ExportFormat.LEEF: return this.exportAsLEEF(logs);
   default:
       throw new Error(`Unsupported export format: ${format}`);}
   /**
@@ -497,7 +496,7 @@ export class ClassificationAuditLogger extends EventEmitter {
     startId?: string,
     endId?: string
   ): Promise<{
-    valid: boolean;,
+    valid: boolean;
   errors: Array<{ logId: string; error: string }>;
   }> {
     const errors: Array<{ logId: string; error: string }> = [];
@@ -538,7 +537,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   id: this.generateLogId(),
   timestamp: new Date(),
   ...data,
-  integrity: {,
+  integrity: {
   hash: '',
   previousHash: this.lastHash,
   sequenceNumber: ++this.sequenceNumber,
@@ -639,26 +638,26 @@ export class ClassificationAuditLogger extends EventEmitter {
     // Create rotation entry
     await this.createAuditEntry({)
   eventType: AuditEventType.SYSTEM_EVENT,
-  actor: {,
+  actor: {
   systemId: 'audit_logger',
   ipAddress: '127.0.0.1',
 },
-  target: {,
+  target: {
   resourceType: 'audit_logs',
   resourceId: rotationId,
 },
-  action: {,
+  action: {
   operation: 'rotate_logs',
   result: 'success',
 },
-  context: {,
+  context: {
   environment: process.env.NODE_ENV || 'production',
   applicationVersion: process.env.APP_VERSION || '1.0.0',
-  metadata: {,
+  metadata: {
   rotatedCount: rotatedLogs.length,
   previousSize: this.currentLogSize,
 },
-  compliance: {,
+  compliance: {
   frameworks: [],
   retentionRequired: true,
   encryptionApplied: false,
@@ -752,7 +751,7 @@ export class ClassificationAuditLogger extends EventEmitter {
     case AlertSeverity.INFO: return 'low';
     case AlertSeverity.WARNING: return 'medium';
     case AlertSeverity.ERROR: return 'high';
-    case AlertSeverity.CRITICAL: return 'critical';,
+    case AlertSeverity.CRITICAL: return 'critical';
   default: return 'medium';
   private generateRecommendations(()
     framework: ComplianceFramework,

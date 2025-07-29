@@ -210,7 +210,7 @@ export interface PatternStats {
 export interface CorrelationReport {
     reportId: string;
     generatedAt: Date;
-    timeRange: {,
+    timeRange: {
         start: Date;
         end: Date;
     };

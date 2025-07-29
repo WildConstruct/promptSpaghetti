@@ -16,17 +16,17 @@ export interface VideoConfig {
   defaultParameters?: Record<string, any>;
 }
 export interface VideoMetadata {
-  duration: number;,
+  duration: number;
   format: string;
-  resolution: {,
-  width: number;,
+  resolution: {
+  width: number;
   height: number;
 };
-  fps: number;,
+  fps: number;
   frame_count: number;
-  size: number;,
+  size: number;
   provider: string;
-  model: string;,
+  model: string;
   generation_time: number;
   cost: number;
   codec?: string;
@@ -36,7 +36,7 @@ export interface GeneratedVideo {
   url?: string;
   data?: ArrayBuffer;
   frames?: string;
-  format: string;,
+  format: string;
   metadata: VideoMetadata;
 }
 export class VideoGenerationNode extends AdvancedRuntimeNode {
@@ -99,7 +99,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
   data: result.video.data,
   frames: result.video.frames,
   format: result.video.format,
-  metadata: {,
+  metadata: {
   duration: result.video.duration,
   format: result.video.format,
   resolution: result.video.resolution,
@@ -112,7 +112,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
   cost: result.usage.cost || result.usage.estimated_cost,
 };
       return {
-  outputs: {,
+  outputs: {
   video: videoData,
   metadata: videoData.metadata,
   cost: videoData.metadata.cost,
@@ -234,9 +234,9 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
       const result = await adapter.generateVideoToVideo(prompt, sourceVideo, options);
       const processingTime = Date.now() - startTime;
       return {
-  outputs: {,
+  outputs: {
   transformed_video: result.video,
-  metadata: {,
+  metadata: {
   original_prompt: prompt,
   strength,
   preserve_motion: preserveMotion,
@@ -299,7 +299,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
   const analysis = await this._analyzeVideo(videoFile, analysisType);
   const processingTime = Date.now() - startTime;
   return {
-  outputs: {,
+  outputs: {
   duration: analysis.duration,
   format: analysis.format,
   resolution: analysis.resolution,
@@ -322,8 +322,8 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
   // Determine format from file type or extension
   let format = 'unknown';
   if (videoFile.type) {
-  format = videoFile.type.split('/')[1] || 'unknown';
-} else if (videoFile.name) {
+  format = videoFile.type.split('/')[1] || 'unknown'
+  } else if (videoFile.name) {
   const extension = videoFile.name.split('.').pop()?.toLowerCase();
   format = extension || 'unknown';
   // Estimate properties (in real implementation, would use video analysis libraries)
@@ -433,7 +433,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
   processingTime
 };
       return {
-  outputs: {,
+  outputs: {
   enhanced_video: enhancedVideo,
   metadata
 },
@@ -504,7 +504,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
   finalSize: composedVideo.byteLength,
 };
       return {
-  outputs: {,
+  outputs: {
   composed_video: composedVideo,
   metadata
 },

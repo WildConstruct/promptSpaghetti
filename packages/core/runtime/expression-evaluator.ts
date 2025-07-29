@@ -24,7 +24,7 @@ enum TokenType {
  * Token interface
  */
 interface Token {
-  type: TokenType;,
+  type: TokenType;
   value: string;
   position: number;
 /**

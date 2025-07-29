@@ -45,60 +45,60 @@ export enum BackupStatus {
   VALIDATED = 'validated'
   // Backup Metadata
   export interface BackupMetadata {
-  backupId: string;,
+  backupId: string;
   backupName: string;
   description?: string;
-  status: BackupStatus;,
+  status: BackupStatus;
   createdAt: number;
   completedAt?: number;
-  size: number;,
+  size: number;
   eventCount: number;
-  systemSources: string;,
-  timeRange: {,
-  start: number;,
+  systemSources: string;
+  timeRange: {
+  start: number;
   end: number;
 };
-  config: BackupConfig;,
+  config: BackupConfig;
   filePath: string;
   checksum?: string;
-  version: string;,
+  version: string;
   format: string;
-  compressed: boolean;,
+  compressed: boolean;
   encrypted: boolean;
 
 // Recovery Metadata
 }
 export interface RecoveryMetadata {
-  recoveryId: string;,
+  recoveryId: string;
   backupId: string;
-  status: RecoveryStatus;,
+  status: RecoveryStatus;
   startedAt: number;
   completedAt?: number;
-  targetSystem: string;,
+  targetSystem: string;
   recoveredEventCount: number;
   failedEventCount: number;
-  validationResults?: {,
-  passed: boolean;,
+  validationResults?: {
+  passed: boolean;
   issues: string;
 };
 
 // Backup Progress
 }
 export interface BackupProgress {
-  backupId: string;,
+  backupId: string;
   status: BackupStatus;
-  progress: {,
-  percentage: number;,
+  progress: {
+  percentage: number;
   processedEvents: number;
-  totalEvents: number;,
+  totalEvents: number;
   currentBatch: number;
-  totalBatches: number;,
+  totalBatches: number;
   bytesWritten: number;
   estimatedTimeRemaining: number;
 };
-  currentOperation: string;,
+  currentOperation: string;
   throughput: {;
-  eventsPerSecond: number;,
+  eventsPerSecond: number;
   bytesPerSecond: number;
 };
 /**
@@ -119,7 +119,7 @@ export class BackupRecoverySystem {
   /**
    * Create backup of analytics data
    */
-  async createBackup(backupName: string,)
+  async createBackup(backupName: string)
     filter?: EventFilter,
     config: Partial<BackupConfig> = {},
     description?: string
@@ -144,7 +144,7 @@ export class BackupRecoverySystem {
   const progress: BackupProgress = {,
   backupId,
   status: BackupStatus.RUNNING,
-  progress: {,
+  progress: {
   percentage: 0,
   processedEvents: 0,
   totalEvents: events.length,
@@ -154,7 +154,7 @@ export class BackupRecoverySystem {
   estimatedTimeRemaining: 0,
 },
   currentOperation: 'Initializing backup',
-        throughput: {,
+        throughput: {
   eventsPerSecond: 0,
   bytesPerSecond: 0,
 };
@@ -205,7 +205,7 @@ export class BackupRecoverySystem {
   /**
   * Perform the actual backup operation
   */
-  private async performBackup(backupId: string,)
+  private async performBackup(backupId: string)
   events: UnifiedAnalyticsEvent,
   filePath: string,
   config: BackupConfig): Promise<void> {,
@@ -306,7 +306,7 @@ export class BackupRecoverySystem {
   /**
    * Restore data from backup
    */
-  async restoreFromBackup(backupId: string,)
+  async restoreFromBackup(backupId: string)
     targetFilter?: EventFilter,
     validateBeforeRestore: boolean = true): Promise<string> {,
     const recoveryId = `recovery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -350,7 +350,7 @@ export class BackupRecoverySystem {
   /**
    * Perform the actual recovery operation
    */
-  private async performRecovery(recoveryId: string,)
+  private async performRecovery(recoveryId: string)
     backup: BackupMetadata,
     targetFilter?: EventFilter,
     validateBeforeRestore: boolean = true): Promise<void> {,
@@ -509,7 +509,7 @@ export class BackupRecoverySystem {
   /**
    * Format batch data for different formats
    */
-  private async formatBatchData(events: UnifiedAnalyticsEvent,)
+  private async formatBatchData(events: UnifiedAnalyticsEvent)
     format: string,
     isSubsequentBatch: boolean): Promise<string> {,
     switch (format) {
@@ -607,7 +607,7 @@ export class BackupRecoverySystem {
   /**
    * Validate recovery
    */
-  private async validateRecovery(recoveryId: string,)
+  private async validateRecovery(recoveryId: string)
     backup: BackupMetadata,
     expectedCount: number): Promise<{ passed: boolean; issues: string }> {
   const issues: string = [];
@@ -662,7 +662,7 @@ export class BackupRecoverySystem {
   /**
   * Update backup progress
   */
-  private updateBackupProgress(backupId: string,)
+  private updateBackupProgress(backupId: string)
   progressUpdate: Partial<BackupProgress['progress']>,
   throughputUpdate: Partial<BackupProgress['throughput']>): void {,
   const progress = this.activeBackups.get(backupId);
@@ -687,10 +687,10 @@ export class BackupRecoverySystem {
   /**
   * Get backup summary
   */
-  getBackupSummary(): {,
-  totalBackups: number;,
+  getBackupSummary(): {
+  totalBackups: number;
   completedBackups: number;
-  totalSize: number;,
+  totalSize: number;
   totalEvents: number;
   oldestBackup?: number;
   newestBackup?: number;

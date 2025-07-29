@@ -1,9 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-export const useCorrectionsStore = create()();
-devtools();
-persist();
-(set, get) => ({
+export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
     // Initial state
     rules: [],
     isEnabled: true,
@@ -15,16 +12,16 @@ persist();
             createdAt: new Date(),
             updatedAt: new Date(),
         };
-        set((state) => ({}), rules, [...state.rules, newRule].sort((a, b) => a.priority - b.priority));
+        set((state) => ({
+            rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
+        }));
+    },
+    updateRule: (id, updates) => {
+        set((state) => ({}), rules, state.rules.map((rule) => , rule.id === id
+            ? { ...rule, ...updates, updatedAt: new Date() }
+            : rule));
     }
-},
-    updateRule);
-(id, updates) => {
-    set((state) => ({}), rules, state.rules.map((rule) => , rule.id === id
-        ? { ...rule, ...updates, updatedAt: new Date() }
-        : rule));
-};
-;
+}))));
 deleteRule: (id) => {
     set((state) => ({}), rules, state.rules.filter((rule) => rule.id !== id));
 };

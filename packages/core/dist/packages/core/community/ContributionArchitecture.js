@@ -91,6 +91,9 @@ export const CONTRIBUTION_WORKFLOW_TEMPLATES = {
                     automated_thresholds: {
                         editorial_score: 75,
                         technical_accuracy: 80,
-                    } } } }
+                    }
+                }
+            }
+        }
     }
 };

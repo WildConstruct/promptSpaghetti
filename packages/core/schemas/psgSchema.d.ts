@@ -90,12 +90,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        position: {,
+        position: {
             x: number;
             y: number;
         };
         content: string;
-        size: {,
+        size: {
             width: number;
             height: number;
         };
@@ -104,12 +104,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         author?: string | undefined;
     }, {
         id: string;
-        position: {,
+        position: {
             x: number;
             y: number;
         };
         content: string;
-        size: {,
+        size: {
             width: number;
             height: number;
         };
@@ -148,11 +148,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -162,11 +162,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         }, {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -177,14 +177,14 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         connectionLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         nodeLabels: Record<string, string>;
-        regionGroups: {,
+        regionGroups: {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -198,11 +198,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         regionGroups?: {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -213,14 +213,14 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         connectionLabels?: Record<string, string> | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    stickyNotes: {,
+    stickyNotes: {
         id: string;
-        position: {,
+        position: {
             x: number;
             y: number;
         };
         content: string;
-        size: {,
+        size: {
             width: number;
             height: number;
         };
@@ -228,16 +228,16 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: string;
         author?: string | undefined;
     }[];
-    annotations: {,
+    annotations: {
         nodeLabels: Record<string, string>;
-        regionGroups: {,
+        regionGroups: {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -250,12 +250,12 @@ export declare const CollaborationDataSchema: z.ZodObject<{
 }, {
     stickyNotes?: {
         id: string;
-        position: {,
+        position: {
             x: number;
             y: number;
         };
         content: string;
-        size: {,
+        size: {
             width: number;
             height: number;
         };
@@ -268,11 +268,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         regionGroups?: {
             id: string;
             name: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -387,7 +387,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -405,7 +405,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, {
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -1264,7 +1264,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -1481,7 +1481,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -1724,12 +1724,12 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -1738,12 +1738,12 @@ export declare const PsgFileSchema: z.ZodObject<{
             author?: string | undefined;
         }, {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -1782,11 +1782,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             }, "strip", z.ZodTypeAny, {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1796,11 +1796,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             }, {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1811,14 +1811,14 @@ export declare const PsgFileSchema: z.ZodObject<{
             connectionLabels: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             nodeLabels: Record<string, string>;
-            regionGroups: {,
+            regionGroups: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1832,11 +1832,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1847,14 +1847,14 @@ export declare const PsgFileSchema: z.ZodObject<{
             connectionLabels?: Record<string, string> | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        stickyNotes: {,
+        stickyNotes: {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -1862,16 +1862,16 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: string;
             author?: string | undefined;
         }[];
-        annotations: {,
+        annotations: {
             nodeLabels: Record<string, string>;
-            regionGroups: {,
+            regionGroups: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1884,12 +1884,12 @@ export declare const PsgFileSchema: z.ZodObject<{
     }, {
         stickyNotes?: {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -1902,11 +1902,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -1923,7 +1923,7 @@ export declare const PsgFileSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     fileType: "psg";
     formatVersion: string;
-    metadata: {,
+    metadata: {
         createdAt: string;
         name: string;
         tags: string[];
@@ -1933,7 +1933,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         description?: string | undefined;
         author?: string | undefined;
     };
-    settings: {,
+    settings: {
         autoSave: boolean;
         backupInterval: number;
         maxBackups: number;
@@ -1943,11 +1943,11 @@ export declare const PsgFileSchema: z.ZodObject<{
         showMinimap: boolean;
         autoLayout: boolean;
     };
-    graph: {,
+    graph: {
         nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -2163,14 +2163,14 @@ export declare const PsgFileSchema: z.ZodObject<{
     };
     exportedAt: string;
     collaboration?: {
-        stickyNotes: {,
+        stickyNotes: {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -2178,16 +2178,16 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: string;
             author?: string | undefined;
         }[];
-        annotations: {,
+        annotations: {
             nodeLabels: Record<string, string>;
-            regionGroups: {,
+            regionGroups: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };
@@ -2203,7 +2203,7 @@ export declare const PsgFileSchema: z.ZodObject<{
 }, {
     fileType: "psg";
     formatVersion: string;
-    metadata: {,
+    metadata: {
         createdAt: string;
         name: string;
         lastModified: string;
@@ -2213,7 +2213,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         author?: string | undefined;
         fileFormatVersion?: string | undefined;
     };
-    settings: {,
+    settings: {
         autoSave?: boolean | undefined;
         backupInterval?: number | undefined;
         maxBackups?: number | undefined;
@@ -2223,11 +2223,11 @@ export declare const PsgFileSchema: z.ZodObject<{
         showMinimap?: boolean | undefined;
         autoLayout?: boolean | undefined;
     };
-    graph: {,
+    graph: {
         nodes: ({),
             id: string;
             type: "WeightedChoice";
-            choices: {,
+            choices: {
                 value: string;
                 weight: number;
             }[];
@@ -2445,12 +2445,12 @@ export declare const PsgFileSchema: z.ZodObject<{
     collaboration?: {
         stickyNotes?: {
             id: string;
-            position: {,
+            position: {
                 x: number;
                 y: number;
             };
             content: string;
-            size: {,
+            size: {
                 width: number;
                 height: number;
             };
@@ -2463,11 +2463,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             regionGroups?: {
                 id: string;
                 name: string;
-                position: {,
+                position: {
                     x: number;
                     y: number;
                 };
-                size: {,
+                size: {
                     width: number;
                     height: number;
                 };

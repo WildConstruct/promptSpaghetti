@@ -705,7 +705,8 @@ export class TrendingCommentsService {
                                                 replyCount: Math.floor(Math.random() * 5),
                                                 replyTree: [],
                                                 visibility: 'public',
-                                                language: 'en' },
+                                                language: 'en'
+                                            },
                                             return: comments,
                                             generateMockCommentContent() {
                                                 const contents = [];

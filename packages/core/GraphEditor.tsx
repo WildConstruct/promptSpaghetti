@@ -535,7 +535,7 @@ const NODE_TYPES: NodeMeta[] = [
   // Allow drop on canvas
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
+    event.dataTransfer.dropEffect = 'copy'
   }, []);
   // Node click handler
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {

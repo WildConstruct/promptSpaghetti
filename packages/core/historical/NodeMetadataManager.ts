@@ -7,53 +7,53 @@
  */
 
 export interface NodeMetadata {
-  id: string;,
+  id: string;
   nodeId: string;
-  tags: NodeTag;,
+  tags: NodeTag;
   era: EraTag;
-  genre: GenreTag;,
+  genre: GenreTag;
   style: StyleTag;
-  quality: QualityMetadata;,
+  quality: QualityMetadata;
   historicalContext: HistoricalContext;
-  created: string;,
+  created: string;
   updated: string;
   author: string;
 }
 export interface NodeTag {
-  id: string;,
+  id: string;
   type: 'era' | 'genre' | 'style' | 'material' | 'social_class' | 'region' | 'custom';
-  value: string;,
+  value: string;
   source: 'user' | 'system' | 'imported' | 'inferred';
   confidence: number; // 0-1 confidence score,
   metadata?: Record<string, any>;
 }
 export interface EraTag {
-  id: string;,
+  id: string;
   name: string;
-  period: {,
-  start: number;,
+  period: {
+  start: number;
   end: number;
 };
-  region: string;,
+  region: string;
   accuracy: 'high' | 'medium' | 'low';
   description: string;
   parent?: string; // For hierarchical periods
   children?: string; // Sub-periods
 }
 export interface GenreTag {
-  id: string;,
+  id: string;
   name: string;
-  category: 'artistic' | 'literary' | 'musical' | 'architectural' | 'cultural';,
+  category: 'artistic' | 'literary' | 'musical' | 'architectural' | 'cultural';
   description: string;
-  characteristics: string;,
+  characteristics: string;
   relatedGenres: string;
 }
 export interface StyleTag {
-  id: string;,
+  id: string;
   name: string;
-  category: 'fashion' | 'architecture' | 'art' | 'literature' | 'decoration';,
+  category: 'fashion' | 'architecture' | 'art' | 'literature' | 'decoration';
   period: string;
-  region: string;,
+  region: string;
   description: string;
   keyFeatures: string;
 }
@@ -65,29 +65,29 @@ export interface QualityMetadata {
   lastVerified?: string;
 }
 export interface HistoricalContext {
-  socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';,
+  socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';
   usage: 'daily' | 'ceremonial' | 'religious' | 'military' | 'trade' | 'artistic';
-  rarity: 'common' | 'uncommon' | 'rare' | 'very_rare' | 'unique';,
+  rarity: 'common' | 'uncommon' | 'rare' | 'very_rare' | 'unique';
   materials: string;
-  productionMethod: string;,
+  productionMethod: string;
   culturalSignificance: string;
 }
 export interface TagInheritanceRule {
-  id: string;,
+  id: string;
   name: string;
   sourceType: string; // Node type that provides tags,
   targetType: string; // Node type that receives tags,
-  conditions: TagCondition;,
+  conditions: TagCondition;
   transformations: TagTransformation;
   enabled: boolean;
 }
 export interface TagCondition {
-  field: string;,
+  field: string;
   operator: 'equals' | 'contains' | 'matches' | 'in' | 'not_in';
   value: any;
 }
 export interface TagTransformation {
-  type: 'copy' | 'modify' | 'merge' | 'filter';,
+  type: 'copy' | 'modify' | 'merge' | 'filter';
   config: Record<string, any>;
   /**
   * NodeMetadataManager - Manages metadata and tagging for nodes
@@ -384,7 +384,7 @@ export class NodeMetadataManager {
 },
   created: existing?.created || now,
       updated: now,
-      author: metadata.author || existing?.author || 'system';
+      author: metadata.author || existing?.author || 'system'
   };
     this.nodeMetadata.set(nodeId, updatedMetadata);
   /**
@@ -462,7 +462,7 @@ export class NodeMetadataManager {
   /**
   * Apply tag inheritance rules
   */
-  public applyTagInheritance(sourceNodeId: string,)
+  public applyTagInheritance(sourceNodeId: string)
   targetNodeId: string,
   sourceNodeType: string,
   targetNodeType: string): void {,
@@ -492,7 +492,7 @@ export class NodeMetadataManager {
   /**
    * Apply tag transformation
    */
-  private applyTagTransformation(sourceMetadata: NodeMetadata,)
+  private applyTagTransformation(sourceMetadata: NodeMetadata)
     targetNodeId: string,
     transformation: TagTransformation): void {,
     switch (transformation.type) {
@@ -622,11 +622,11 @@ export class NodeMetadataManager {
    * Get tag statistics
    */
   public getTagStatistics(): {
-    totalNodes: number;,
+    totalNodes: number;
   taggedNodes: number;
-    totalTags: number;,
+    totalTags: number;
   tagsByType: Record<string, number>;
-    averageTagsPerNode: number;,
+    averageTagsPerNode: number;
   topTags: { value: string; count: number }[];
     const totalNodes = this.nodeMetadata.size;
     const taggedNodes = totalNodes;

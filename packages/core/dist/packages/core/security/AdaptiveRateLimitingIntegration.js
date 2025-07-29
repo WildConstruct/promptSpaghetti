@@ -636,7 +636,8 @@ export var IntegrationMode;
                                                                                                                 system: 'rate_limiting',
                                                                                                                 strategy: CoordinationStrategy.MOST_RESTRICTIVE,
                                                                                                                 confidence: 60,
-                                                                                                                reasoning: `Fallback to rate limiting due to error: ${error instanceof Error ? error.message : 'Unknown error'}` }
+                                                                                                                reasoning: `Fallback to rate limiting due to error: ${error instanceof Error ? error.message : 'Unknown error'}`
+                                                                                                            }
                                                                                                         },
                                                                                                             recommendations;
                                                                                                         {
@@ -700,7 +701,8 @@ export var IntegrationMode;
                                                                                                         recentThrottling: 0, // Would track recent throttling events
                                                                                                         systemCondition: this.throttlingEngine.getSystemCondition(),
                                                                                                         activeRules: Array.from({ length: throttlingStats.activeRules }, (_, i) => `rule-${i}`)
-                                                                                                    } },
+                                                                                                    }
+                                                                                                },
                                                                                                 effectivenessScore: 85 // Would calculate from historical data;
                                                                                             };
                                                                                             // Add integration metadata

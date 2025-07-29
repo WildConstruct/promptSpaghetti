@@ -36,7 +36,7 @@ const mockGraphStore = {
     {
       id: 'test-node-id',
       type: 'WeightedChoice',
-      data: {,
+      data: {
   choices: [,
           { weight: 0.5, value: 'Option A' },
           { weight: 0.5, value: 'Option B' }
@@ -85,7 +85,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     const mockNode = {
   id: 'test-node',
   type: 'TestNode',
-  data: {,
+  data: {
   label: 'Test Node',
   value: 'test value',
   variations: ['var1', 'var2'],

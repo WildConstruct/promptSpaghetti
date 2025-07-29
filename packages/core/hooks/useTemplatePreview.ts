@@ -11,29 +11,29 @@ import {
 } from '../utils/templateParser';
 
 export interface TemplatePreviewVariant {
-  id: string;,
+  id: string;
   seed: number;
-  result: string;,
+  result: string;
   timestamp: number;
-  executionTime: number;,
+  executionTime: number;
   substitutions: Record<string, string>;
-  variablesUsed: string;,
+  variablesUsed: string;
   hasErrors: boolean;
   errorMessage?: string;
 }
 export interface TemplatePreviewPerformance {
-  averageExecutionTime: number;,
+  averageExecutionTime: number;
   totalGenerations: number;
-  successRate: number;,
+  successRate: number;
   lastUpdate: number;
   templatesProcessed: number;
 }
 export interface TemplatePreviewConfig {
-  maxVariants: number;,
+  maxVariants: number;
   debounceMs: number;
-  enablePerformanceTracking: boolean;,
+  enablePerformanceTracking: boolean;
   autoRefresh: boolean;
-  showVariableSubstitution: boolean;,
+  showVariableSubstitution: boolean;
   errorOnUndefinedVariables: boolean;
   const DEFAULT_CONFIG: TemplatePreviewConfig = {,
   maxVariants: 5,

@@ -9,7 +9,7 @@ import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import './TrendIndicator.css';
 
 export interface TrendIndicatorProps {
-  value: number;,
+  value: number;
   direction: 'up' | 'down' | 'neutral';
   period?: string;
   isGoodTrend?: boolean;
@@ -37,8 +37,8 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
   if (isGoodTrend !== undefined) {
   return direction === 'up' ? isGoodTrend : !isGoodTrend;
   // Default: up trends are positive, down trends are negative,
-  return direction === 'up';
-};
+  return direction === 'up'
+  };
   const getTrendIcon = () => {
   switch (direction) {
   case 'up':,

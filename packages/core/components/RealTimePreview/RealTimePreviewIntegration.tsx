@@ -17,7 +17,7 @@ import { EnhancedPreviewModal, EnhancedPreviewResult } from '../PreviewModal/Enh
 import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
 import { useRealTimePreview, PreviewVariant, RealTimePreviewConfig } from '../../hooks/useRealTimePreview';
 interface RealTimePreviewIntegrationProps {
-  nodes: Node;,
+  nodes: Node;
   edges: Edge;
   // Director-friendly configuration
   enableRealTime?: boolean;
@@ -117,7 +117,7 @@ interface RealTimePreviewIntegrationProps {
       seed: variant.seed,
       output: variant.result,
       executionTimeMs: variant.executionTime,
-      metadata: {,
+      metadata: {
   createdAt: new Date(variant.timestamp),
         wordCount: variant.result.split(/\s+/).length,
         characterCount: variant.result.length,
@@ -260,11 +260,11 @@ interface RealTimePreviewIntegrationProps {
         .preview-panel {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #444;
-          border-radius: 8px;,
+          border-radius: 8px;
   color: #fff;
           transition: all 0.3s ease;
         .preview-panel.compact {
-          height: 60px;,
+          height: 60px;
   overflow: hidden;
         .preview-panel.expanded {
           min-height: 200px;
@@ -272,69 +272,69 @@ interface RealTimePreviewIntegrationProps {
         .preview-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 12px 16px;
           border-bottom: 1px solid #444;
         .header-title {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
         .header-title h3 {
           margin: 0;
           font-size: 14px;
           font-weight: 600;
         .preview-icon {
-          font-size: 16px;,
+          font-size: 16px;
   color: #ffd700;
         .generating-indicator {
           display: flex;
           align-items: center;
           margin-left: 8px;
         .spinner {
-          width: 12px;,
+          width: 12px;
   height: 12px;
           border: 2px solid #444;
           border-top: 2px solid #ffd700;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         .header-controls {
-          display: flex;,
+          display: flex;
   gap: 8px;
         .expand-btn, .detailed-btn {
-          background: #444;,
+          background: #444;
   border: none;
-          color: #fff;,
+          color: #fff;
   padding: 6px 12px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
-          font-size: 12px;,
+          font-size: 12px;
   transition: background 0.2s ease;
         .expand-btn:hover, .detailed-btn:hover {,
   background: #555;
         .detailed-btn:disabled {,
   background: #333;
-          color: #666;,
+          color: #666;
   cursor: not-allowed;
         .performance-metrics {
           display: flex;
-          justify-content: space-around;,
+          justify-content: space-around;
   padding: 8px 16px;
           background: rgba(255, 215, 0, 0.1);
           border-bottom: 1px solid #444;
         .metric {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 2px;
         .metric-value {
           font-weight: 600;
-          font-size: 14px;,
+          font-size: 14px;
   color: #ffd700;
         .metric-label {
-          font-size: 10px;,
+          font-size: 10px;
   color: #aaa;
           text-transform: uppercase;
         .variants-container {
@@ -342,19 +342,19 @@ interface RealTimePreviewIntegrationProps {
           max-height: 300px;
           overflow-y: auto;
         .no-variants {
-          text-align: center;,
+          text-align: center;
   padding: 32px;
           color: #666;
         .variants-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 12px;
         .variant-item {
-          background: #333;,
+          background: #333;
   border: 1px solid #444;
-          border-radius: 6px;,
+          border-radius: 6px;
   padding: 12px;
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s ease;
         .variant-item:hover {,
   background: #3a3a3a;
@@ -369,7 +369,7 @@ interface RealTimePreviewIntegrationProps {
           margin-bottom: 8px;
           font-size: 12px;
         .variant-number {
-          background: #ffd700;,
+          background: #ffd700;
   color: #000;
           padding: 2px 6px;
           border-radius: 3px;
@@ -382,18 +382,18 @@ interface RealTimePreviewIntegrationProps {
         .variant-content {
           font-size: 13px;
           line-height: 1.4;
-          margin-bottom: 8px;,
+          margin-bottom: 8px;
   color: #ddd;
         .variant-stats {
           display: flex;
           justify-content: space-between;
-          font-size: 11px;,
+          font-size: 11px;
   color: #888;
         .error-display {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          padding: 12px 16px;,
+          padding: 12px 16px;
   background: rgba(255, 0, 0, 0.1);
           border-top: 1px solid #444;
         .error-icon {

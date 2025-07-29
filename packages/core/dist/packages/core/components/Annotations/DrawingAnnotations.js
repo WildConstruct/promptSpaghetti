@@ -518,7 +518,7 @@ Card >
 _jsxs("div", { className: "relative border border-gray-300 rounded-lg overflow-hidden", style: { width, height }, children: [backgroundImageUrl && ()
             < canvas, "ref=", backgroundCanvasRef, "width=", width, "height=", height, "className=\"absolute inset-0\" style=", {
             backgroundImage: `url(${backgroundImageUrl})`
-        }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }} /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
+        }, ", backgroundSize: 'cover', backgroundPosition: 'center' }} /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
                 setIsDrawing(false);
                 setCurrentPoints([]);
             }, style: {

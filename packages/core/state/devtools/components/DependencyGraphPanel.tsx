@@ -7,9 +7,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { DependencyGraph } from '../StateDevTools';
 
 export interface DependencyGraphPanelProps {
-  dependencyGraph: DependencyGraph | null;,
+  dependencyGraph: DependencyGraph | null;
   onGenerateGraph: () => void;
-  selectedDomain: string;,
+  selectedDomain: string;
   onDomainChange: (domain: string) => void;
 }
 export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
@@ -403,13 +403,13 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
       )}
       <style jsx>{`
         .dependency-graph-panel {
-          height: 100%;,
+          height: 100%;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
         .graph-controls {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
@@ -417,9 +417,9 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           flex-wrap: wrap;
         .control-group {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
         .control-group select {
           background: var(--devtools-input-bg, #2a2a2a);
@@ -430,7 +430,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           font-size: 12px;
         .checkbox-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
           cursor: pointer;
         .checkbox-label input[type="checkbox"] {
@@ -440,7 +440,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 4px 8px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 12px;
           min-width: 30px;
@@ -449,37 +449,37 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         .zoom-level {
           min-width: 50px;
           text-align: center;
-          font-size: 11px;,
+          font-size: 11px;
   color: var(--devtools-text-secondary, #aaa);
         .regenerate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;,
+          border: none;
   color: #000;
           padding: 6px 12px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 12px;
           font-weight: 500;
         .graph-content {
-          flex: 1;,
+          flex: 1;
   display: flex;
           overflow: hidden;
         .graph-viewer {
-          flex: 1;,
+          flex: 1;
   overflow: auto;
           display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   background: var(--devtools-graph-bg, #1a1a1a);
         .dependency-graph-svg {
           border: 1px solid var(--devtools-border, #333);
-          border-radius: 4px;,
+          border-radius: 4px;
   background: var(--devtools-bg, #1e1e1e);
         .empty-graph {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   height: 400px;
           color: var(--devtools-text-secondary, #aaa);
           text-align: center;
@@ -488,18 +488,18 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           margin-bottom: 16px;
         .generate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;,
+          border: none;
   color: #000;
           padding: 8px 16px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 14px;
           margin-top: 16px;
         .node-circle {
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s;
         .node-circle:hover {
-          stroke-width: 2;,
+          stroke-width: 2;
   filter: brightness(1.2);
         .node-label,
         .node-metric,
@@ -514,7 +514,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           overflow-y: auto;
         .node-details h4 {
           margin: 0 0 16px 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: var(--devtools-text, #fff);
           border-bottom: 1px solid var(--devtools-border, #333);
           padding-bottom: 8px;
@@ -522,7 +522,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           margin-bottom: 16px;
         .detail-section h5 {
           margin: 0 0 8px 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
           text-transform: uppercase;
         .detail-item {
@@ -542,7 +542,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           overflow-y: auto;
         .relationship-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           margin-bottom: 4px;
           font-size: 11px;
@@ -556,7 +556,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           color: var(--devtools-text, #fff);
           font-family: monospace;
         .graph-stats {
-          display: flex;,
+          display: flex;
   gap: 24px;
           padding: 12px;
           border-top: 1px solid var(--devtools-border, #333);
@@ -564,14 +564,14 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
         .stat-label {
-          font-size: 10px;,
+          font-size: 10px;
   color: var(--devtools-text-secondary, #aaa);
           text-transform: uppercase;
         .stat-value {
-          font-size: 14px;,
+          font-size: 14px;
   color: var(--devtools-text, #fff);
           font-weight: 600;
         .circular-deps {

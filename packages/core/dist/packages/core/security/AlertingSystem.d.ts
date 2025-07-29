@@ -61,8 +61,22 @@ export interface AlertRule {
         };
         custom_conditions?: Array<{
             field: string;
-        }, operator>;
+            operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex';
+            value: any;
+        }>;
     };
+    actions: {
+        notifications: NotificationAction;
+        escalation?: EscalationAction;
+        automation?: AutomationAction;
+    };
+    suppression?: {
+        duplicate_window: number;
+        similar_event_threshold: number;
+    };
+    created_by: string;
+    created_at: number;
+    last_modified: number;
 }
 export interface NotificationAction {
     type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';

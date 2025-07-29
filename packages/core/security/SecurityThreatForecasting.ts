@@ -16,17 +16,17 @@ import { SecurityAnomaly, AnomalySeverity } from './SecurityAnomalyDetector';
 // ==========================================
 
 export interface ThreatForecast {
-  forecastId: string;,
+  forecastId: string;
   timestamp: Date;
-  forecastType: ForecastType;,
+  forecastType: ForecastType;
   threatType: ThreatType;
   timeHorizon: number; // minutes,
-  confidence: number;,
+  confidence: number;
   predictedIntensity: number; // 0-100,
   predictedProbability: number; // 0-1,
-  seasonalFactors: SeasonalFactor;,
+  seasonalFactors: SeasonalFactor;
   trendComponents: TrendComponent;
-  riskMetrics: ForecastRiskMetrics;,
+  riskMetrics: ForecastRiskMetrics;
   recommendations: ForecastRecommendation;
   modelMetadata: ForecastModelMetadata;
 }
@@ -38,11 +38,11 @@ export enum ForecastType {
   TREND_BASED = 'trend_based', // Trend extrapolation
   SCENARIO_BASED = 'scenario_based' // Specific scenario modeling
   export interface SeasonalFactor {
-  period: SeasonalPeriod;,
+  period: SeasonalPeriod;
   amplitude: number;
-  phase: number;,
+  phase: number;
   strength: number;
-  nextPeak: Date;,
+  nextPeak: Date;
   historicalPattern: number;
 }
 export enum SeasonalPeriod {
@@ -52,12 +52,12 @@ export enum SeasonalPeriod {
   MONTHLY = 'monthly',
   QUARTERLY = 'quarterly'
   export interface TrendComponent {
-  trendType: TrendType;,
+  trendType: TrendType;
   direction: 'increasing' | 'decreasing' | 'stable';
-  magnitude: number;,
+  magnitude: number;
   acceleration: number;
   durability: number; // How long trend is expected to continue,
-  confidence: number;,
+  confidence: number;
   changePoints: ChangePoint;
 }
 export enum TrendType {
@@ -68,31 +68,31 @@ export enum TrendType {
   CYCLICAL = 'cyclical',
   VOLATILE = 'volatile'
   export interface ChangePoint {
-  timestamp: Date;,
+  timestamp: Date;
   magnitude: number;
-  type: 'level_shift' | 'trend_change' | 'variance_change';,
+  type: 'level_shift' | 'trend_change' | 'variance_change';
   confidence: number;
 }
 export interface ForecastRiskMetrics {
-  expectedValue: number;,
+  expectedValue: number;
   valueAtRisk: number; // 95th percentile,
   conditionalValueAtRisk: number; // Expected value beyond VaR,
-  volatilityIndex: number;,
+  volatilityIndex: number;
   uncertaintyRange: [number, number];
   scenarioRisks: ScenarioRisk;
 }
 export interface ScenarioRisk {
-  scenario: string;,
+  scenario: string;
   probability: number;
-  impact: number;,
+  impact: number;
   description: string;
 }
 export interface ForecastRecommendation {
-  type: RecommendationType;,
+  type: RecommendationType;
   priority: 'immediate' | 'high' | 'medium' | 'low';
-  description: string;,
+  description: string;
   expectedBenefit: number;
-  implementationCost: number;,
+  implementationCost: number;
   timeframe: string;
   dependencies: string;
 }
@@ -105,11 +105,11 @@ export enum RecommendationType {
   TRAINING_RECOMMENDATION = 'training_recommendation',
   INFRASTRUCTURE_CHANGE = 'infrastructure_change'
   export interface ForecastModelMetadata {
-  modelName: string;,
+  modelName: string;
   modelVersion: string;
-  algorithm: ForecastAlgorithm;,
+  algorithm: ForecastAlgorithm;
   trainingPeriod: [Date, Date];
-  accuracy: ModelAccuracyMetrics;,
+  accuracy: ModelAccuracyMetrics;
   features: string;
   hyperparameters: Record<string, unknown>;
   lastUpdated: Date;
@@ -131,41 +131,41 @@ export enum ForecastAlgorithm {
   directionalAccuracy: number; // Percentage of correct trend predictions,
 }
 export interface TimeSeriesData {
-  timestamp: Date;,
+  timestamp: Date;
   value: number;
   metadata: Record<string, unknown>;
 }
 export interface ForecastingConfig {
-  enableRealTimeForecasting: boolean;,
+  enableRealTimeForecasting: boolean;
   forecastUpdateInterval: number;
-  defaultTimeHorizon: number;,
+  defaultTimeHorizon: number;
   confidenceThreshold: number;
-  enableSeasonalDecomposition: boolean;,
+  enableSeasonalDecomposition: boolean;
   enableTrendAnalysis: boolean;
-  enableEnsembleModels: boolean;,
+  enableEnsembleModels: boolean;
   maxHistoryDays: number;
   minDataPointsForForecast: number;
 }
 export interface ThreatScenario {
-  scenarioId: string;,
+  scenarioId: string;
   name: string;
-  description: string;,
+  description: string;
   threatTypes: ThreatType;
-  triggers: ScenarioTrigger;,
+  triggers: ScenarioTrigger;
   expectedDuration: number;
-  expectedIntensity: number;,
+  expectedIntensity: number;
   likelihood: number;
   impactAssessment: ScenarioImpact;
 }
 export interface ScenarioTrigger {
-  triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';,
+  triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
   condition: string;
   weight: number;
 }
 export interface ScenarioImpact {
-  businessImpact: number;,
+  businessImpact: number;
   technicalImpact: number;
-  reputationalImpact: number;,
+  reputationalImpact: number;
   financialImpact: number;
   complianceImpact: number;
   // ==========================================
@@ -211,7 +211,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   const dataPoint: TimeSeriesData = {,
   timestamp: event.timestamp,
   value: event.riskScore,
-  metadata: {,
+  metadata: {
   eventType: event.eventType,
   severity: event.severity,
   userId: event.userId,
@@ -235,7 +235,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   const dataPoint: TimeSeriesData = {,
   timestamp: anomaly.timestamp,
   value: this.mapSeverityToValue(anomaly.severity),
-  metadata: {,
+  metadata: {
   anomalyType: anomaly.anomalyType,
   confidence: anomaly.confidence,
   affectedSystems: anomaly.affectedSystems,
@@ -306,7 +306,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   /**
    * Generate ensemble forecast using multiple models
    */
-  private async generateEnsembleForecast(timeSeries: TimeSeriesData,)
+  private async generateEnsembleForecast(timeSeries: TimeSeriesData)
     timeHorizon: number,
     seasonalFactors: SeasonalFactor,
     trendComponents: TrendComponent): Promise<EnsembleForecastResult> {,
@@ -332,7 +332,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   /**
    * Run individual forecasting model
    */
-  private async runForecastingModel(model: ForecastingModel,)
+  private async runForecastingModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number,
     seasonalFactors: SeasonalFactor,
@@ -353,7 +353,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   // ==========================================
   // INDIVIDUAL FORECASTING MODELS
   // ==========================================
-  private async runARIMAModel(model: ForecastingModel,)
+  private async runARIMAModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number): Promise<ModelForecastResult> {,
   // Simplified ARIMA implementation
@@ -373,7 +373,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   lowerBound: predictedValue - (this.calculateStandardDeviation(recentValues) * 1.96),
   weight: model.weight,
 };
-  private async runExponentialSmoothingModel(model: ForecastingModel,)
+  private async runExponentialSmoothingModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number): Promise<ModelForecastResult> {,
   const values = timeSeries.map(d => d.value);
@@ -394,7 +394,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   lowerBound: predictedValue - Math.sqrt(variance) * 1.96,
   weight: model.weight,
 };
-  private async runSeasonalNaiveModel(model: ForecastingModel,)
+  private async runSeasonalNaiveModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number,
     seasonalFactors: SeasonalFactor): Promise<ModelForecastResult> {,
@@ -418,7 +418,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   lowerBound: predictedValue * 0.7,
   weight: model.weight,
 };
-  private async runProphetModel(model: ForecastingModel,)
+  private async runProphetModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number,
     seasonalFactors: SeasonalFactor,
@@ -454,7 +454,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   lowerBound: predictedValue - this.calculateStandardDeviation(values),
   weight: model.weight,
 };
-  private async runLSTMModel(model: ForecastingModel,)
+  private async runLSTMModel(model: ForecastingModel)
     timeSeries: TimeSeriesData,
     timeHorizon: number): Promise<ModelForecastResult> {,
   // Simplified LSTM-like prediction (would use actual neural network in production)
@@ -667,7 +667,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   // ==========================================
   // RISK ASSESSMENT
   // ==========================================
-  private calculateForecastRisk(forecast: EnsembleForecastResult,)
+  private calculateForecastRisk(forecast: EnsembleForecastResult)
     seasonalFactors: SeasonalFactor,
     trendComponents: TrendComponent): ForecastRiskMetrics {,
     const expectedValue = forecast.predictedValue;
@@ -718,7 +718,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   // ==========================================
   // RECOMMENDATIONS
   // ==========================================
-  private generateForecastRecommendations(forecast: EnsembleForecastResult,)
+  private generateForecastRecommendations(forecast: EnsembleForecastResult)
     riskMetrics: ForecastRiskMetrics,
     threatType: ThreatType): ForecastRecommendation {,
     const recommendations: ForecastRecommendation = [];
@@ -816,12 +816,12 @@ export class SecurityThreatForecasting extends EventEmitter {
   upperBound: weightedUpperBound,
   lowerBound: weightedLowerBound,
   probability: Math.min(0.99, weightedPrediction / 100),
-  modelMetadata: {,
+  modelMetadata: {
   modelName: 'Ensemble',
   modelVersion: '1.0.0',
   algorithm: ForecastAlgorithm.ENSEMBLE,
   trainingPeriod: [new Date(Date.now() - 86400000 * 7), new Date()],
-  accuracy: {,
+  accuracy: {
   mape: 15,
   rmse: 8,
   mae: 6,
@@ -890,7 +890,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       case SeasonalPeriod.DAILY: return 86400;
       case SeasonalPeriod.WEEKLY: return 604800;
       case SeasonalPeriod.MONTHLY: return 2592000;
-      case SeasonalPeriod.QUARTERLY: return 7776000;,
+      case SeasonalPeriod.QUARTERLY: return 7776000;
   default: return 3600;
   private generateForecastId(): string {
     return `forecast_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -955,7 +955,7 @@ export class SecurityThreatForecasting extends EventEmitter {
         expectedDuration: 180, // minutes
         expectedIntensity: 85,
         likelihood: 0.15,
-        impactAssessment: {,
+        impactAssessment: {
   businessImpact: 90,
   technicalImpact: 85,
   reputationalImpact: 80,
@@ -1023,37 +1023,37 @@ export class SecurityThreatForecasting extends EventEmitter {
 // SUPPORTING INTERFACES
 // ==========================================
 interface ForecastingModel {
-  modelId: string;,
+  modelId: string;
   name: string;
-  algorithm: ForecastAlgorithm;,
+  algorithm: ForecastAlgorithm;
   weight: number;
-  isActive: boolean;,
+  isActive: boolean;
   accuracy: number;
   targetMetrics: string;
 interface ModelForecastResult {
-  modelId: string;,
+  modelId: string;
   algorithm: ForecastAlgorithm;
-  predictedValue: number;,
+  predictedValue: number;
   confidence: number;
-  upperBound: number;,
+  upperBound: number;
   lowerBound: number;
   weight: number;
 interface EnsembleForecastResult {
-  predictedValue: number;,
+  predictedValue: number;
   confidence: number;
-  upperBound: number;,
+  upperBound: number;
   lowerBound: number;
-  probability: number;,
+  probability: number;
   modelMetadata: ForecastModelMetadata;
 interface SeasonalDecomposition {
-  trend: number;,
+  trend: number;
   seasonal: number;
-  residual: number;,
+  residual: number;
   strength: number;
 interface SeasonalPattern {
-  amplitude: number;,
+  amplitude: number;
   phase: number;
-  strength: number;,
+  strength: number;
   pattern: number;
 
 export default SecurityThreatForecasting;

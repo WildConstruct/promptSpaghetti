@@ -6,28 +6,28 @@
  */
 
 export interface PerformanceMetric {
-  name: string;,
+  name: string;
   value: number;
   timestamp: number;
   context?: Record<string, any>;
-  threshold?: {,
-  warning: number;,
+  threshold?: {
+  warning: number;
   critical: number;
 };
 }
 export interface PerformanceReport {
-  period: {,
-  start: number;,
+  period: {
+  start: number;
   end: number;
   duration: number;
 };
-  metrics: {,
-  [key: string]: {,
-  count: number;,
+  metrics: {
+  [key: string]: {
+  count: number;
   average: number;
-  min: number;,
+  min: number;
   max: number;
-  p95: number;,
+  p95: number;
   p99: number;
   values: number;
 };
@@ -35,9 +35,9 @@ export interface PerformanceReport {
   alerts: PerformanceAlert;
 }
 export interface PerformanceAlert {
-  metric: string;,
+  metric: string;
   level: 'warning' | 'critical';
-  value: number;,
+  value: number;
   threshold: number;
   timestamp: number;
   context?: Record<string, any>;
@@ -123,12 +123,12 @@ export class PerformanceMonitor {
   /**
   * Get performance statistics for a metric
   */
-  public getMetricStats(name: string): {,
-  count: number;,
+  public getMetricStats(name: string): {
+  count: number;
   average: number;
-  min: number;,
+  min: number;
   max: number;
-  p95: number;,
+  p95: number;
   p99: number;
   recent: number;
 } | null {
@@ -154,7 +154,7 @@ export class PerformanceMonitor {
   const now = Date.now();
   const start = now - (periodMinutes * 60 * 1000);
   const report: PerformanceReport = {,
-  period: {,
+  period: {
   start,
   end: now,
   duration: periodMinutes * 60 * 1000,
@@ -319,18 +319,18 @@ export class PerformanceMonitor {
   /**
   * Get current performance dashboard data
   */
-  public getDashboardData(): {,
-  overview: {,
-  totalMetrics: number;,
+  public getDashboardData(): {
+  overview: {
+  totalMetrics: number;
   activeAlerts: number;
   healthScore: number; // 0-100,
 };
-    keyMetrics: {,
+    keyMetrics: {
   name: string;
-  current: number;,
+  current: number;
   average: number;
-  trend: 'improving' | 'stable' | 'degrading';
-}[];
+  trend: 'improving' | 'stable' | 'degrading'
+  }[];
     recentAlerts: PerformanceAlert;
     const totalMetrics = this.metrics.size;
     const recentAlerts = this.alerts.filter(alert => ;);
@@ -361,7 +361,7 @@ export class PerformanceMonitor {
   }
       .filter(Boolean) as any;
     return {
-  overview: {,
+  overview: {
   totalMetrics,
   activeAlerts: recentAlerts.length,
   healthScore

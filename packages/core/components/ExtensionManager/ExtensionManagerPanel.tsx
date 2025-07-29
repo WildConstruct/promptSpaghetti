@@ -15,8 +15,8 @@ import { ExtensionMarketplace } from './ExtensionMarketplace';
 export interface ExtensionManagerPanelProps {
   className?: string;
   onClose?: () => void;
-  initialView?: 'installed' | 'marketplace' | 'settings';
-}
+  initialView?: 'installed' | 'marketplace' | 'settings'
+  }
 export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
   className = '',
   onClose,

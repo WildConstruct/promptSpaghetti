@@ -11,13 +11,13 @@ import { PasswordResetFlow, ResetStep, PasswordStrength } from '../components/Pa
 
 // Mock the password reset managers
 jest.mock('../PasswordResetTokenManager', () => ({)
-  passwordResetTokenManager: {,
+  passwordResetTokenManager: {
   generateToken: jest.fn<unknown, unknown>(),
   validateToken: jest.fn<unknown, unknown>(),
   useToken: jest.fn<unknown, unknown>(),
 }));
 jest.mock('../VerificationCodeManager', () => ({)
-  verificationCodeManager: {,
+  verificationCodeManager: {
   generateCode: jest.fn<unknown, unknown>(),
   validateCode: jest.fn<unknown, unknown>(),
   useCode: jest.fn<unknown, unknown>(),
@@ -427,7 +427,7 @@ describe('PasswordResetFlow', () => {
   strength: PasswordStrength.WEAK,
   score: 0,
   feedback: ['Custom validation failed'],
-  requirements: {,
+  requirements: {
   length: false,
   uppercase: false,
   lowercase: false,

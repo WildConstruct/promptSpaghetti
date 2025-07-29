@@ -20,16 +20,16 @@ interface RevisionRequestFormProps {
   contentType?: RevisionContentType;
   contentId?: string;
   contentTitle?: string;
-  onSubmit: (formData: RevisionRequestFormData) => Promise<void>;,
+  onSubmit: (formData: RevisionRequestFormData) => Promise<void>;
   onCancel: () => void;
   isSubmitting?: boolean;
   className?: string;
 interface ValidationErrors {
   [key: string]: string;
 interface EvidenceItem {
-  id: string;,
+  id: string;
   type: RevisionEvidenceType;
-  title: string;,
+  title: string;
   description: string;
   file?: File;
   preview?: string;

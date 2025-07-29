@@ -26,7 +26,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async createWorkspace(data: Omit<Workspace, 'id' | 'created_at' | 'updated_at'>): Promise<Workspace> {
     const { query, params } = QueryBuilder
       .insert('workspaces')
-      .values({)
+      .values({
   name: data.name,
   description: data.description,
   settings: bindParams.json(data.settings),
@@ -95,7 +95,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async createProject(data: Omit<Project, 'id' | 'created_at' | 'updated_at' | 'last_activity_at'>): Promise<Project> {
     const { query, params } = QueryBuilder
       .insert('projects')
-      .values({)
+      .values({
   workspace_id: bindParams.workspaceId(data.workspace_id),
   name: data.name,
   description: data.description,
@@ -174,7 +174,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async createResource(data: Omit<Resource, 'id' | 'created_at' | 'updated_at' | 'version'>): Promise<Resource> {
     const { query, params } = QueryBuilder
       .insert('resources')
-      .values({)
+      .values({
   project_id: bindParams.projectId(data.project_id),
   name: data.name,
   type: data.type,
@@ -238,7 +238,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     invitedBy: UserId): Promise<WorkspaceMember> {,
     const { query, params } = QueryBuilder
       .insert('workspace_members')
-      .values({)
+      .values({
   workspace_id: bindParams.workspaceId(workspaceId),
   user_id: bindParams.userId(userId),
   role,
@@ -289,7 +289,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     invitedBy: UserId): Promise<ProjectMember> {,
     const { query, params } = QueryBuilder
       .insert('project_members')
-      .values({)
+      .values({
   project_id: bindParams.projectId(projectId),
   user_id: bindParams.userId(userId),
   role,
@@ -338,7 +338,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async logActivity(event: Omit<ActivityEvent, 'id' | 'created_at'>): Promise<ActivityEvent> {
     const { query, params } = QueryBuilder
       .insert('activity_events')
-      .values({)
+      .values({
   workspace_id: bindParams.workspaceId(event.workspace_id),
   project_id: event.project_id ? bindParams.projectId(event.project_id) : null,
   resource_id: event.resource_id ? bindParams.resourceId(event.resource_id) : null,
@@ -368,7 +368,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async createComment(data: Omit<Comment, 'id' | 'created_at' | 'updated_at'>): Promise<Comment> {
     const { query, params } = QueryBuilder
       .insert('comments')
-      .values({)
+      .values({
   workspace_id: bindParams.workspaceId(data.workspace_id),
   project_id: data.project_id ? bindParams.projectId(data.project_id) : null,
   resource_id: data.resource_id ? bindParams.resourceId(data.resource_id) : null,
@@ -414,7 +414,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification> {
     const { query, params } = QueryBuilder
       .insert('notifications')
-      .values({)
+      .values({
   user_id: bindParams.userId(data.user_id),
   workspace_id: bindParams.workspaceId(data.workspace_id),
   project_id: data.project_id ? bindParams.projectId(data.project_id) : null,

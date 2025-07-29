@@ -38,7 +38,7 @@ describe('AccessibilityManager', () => {
   test('should create accessibility profile with default settings', async () => {
   const profileData = {
   needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-  severityLevels: {,
+  severityLevels: {
   [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MODERATE,
 },
   assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
@@ -60,7 +60,7 @@ describe('AccessibilityManager', () => {
       // Update profile
       const updatedProfile = await manager.createAccessibilityProfile('user123', {)
   needs: [AccessibilityNeed.VISUAL_IMPAIRMENT, AccessibilityNeed.HEARING_IMPAIRMENT],
-  customSettings: {,
+  customSettings: {
   fontSize: 20,
   contrastRatio: 7.0,
   timeoutMultiplier: 2.0,
@@ -89,7 +89,7 @@ describe('AccessibilityManager', () => {
   test('should analyze context for screen reader users', async () => {
   await manager.createAccessibilityProfile('user123', {)
   needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-  severityLevels: {,
+  severityLevels: {
   [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.SEVERE,
 },
   assistiveTechnologies: [AssistiveTechnology.SCREEN_READER];
@@ -98,7 +98,7 @@ describe('AccessibilityManager', () => {
   userAgent: 'JAWS/2023',
         screenReaderDetected: true,
         assistiveTechDetected: [AssistiveTechnology.SCREEN_READER],
-        deviceCapabilities: {,
+        deviceCapabilities: {
   hasCamera: false,
           hasMicrophone: true,
           hasTouch: false,
@@ -107,13 +107,13 @@ describe('AccessibilityManager', () => {
           screenSize: { width: 1920, height: 1080 },
           colorDepth: 24;
   },
-  environmentalFactors: {,
+  environmentalFactors: {
   isNoisy: false,
   isLowLight: false,
   isPublicSpace: false,
   hasTimeConstraints: false,
 },
-  sessionContext: {,
+  sessionContext: {
   isEmergency: false,
   attemptCount: 1,
   timeRemaining: 300,
@@ -130,14 +130,14 @@ describe('AccessibilityManager', () => {
     test('should analyze context for hearing impaired users', async () => {
   await manager.createAccessibilityProfile('user456', {)
   needs: [AccessibilityNeed.HEARING_IMPAIRMENT],
-  severityLevels: {,
+  severityLevels: {
   [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.COMPLETE,
 });
       const context: AccessibilityContext = {,
   userAgent: 'Mozilla/5.0',
         screenReaderDetected: false,
         assistiveTechDetected: [],
-        deviceCapabilities: {,
+        deviceCapabilities: {
   hasCamera: true,
           hasMicrophone: false,
           hasTouch: true,
@@ -146,13 +146,13 @@ describe('AccessibilityManager', () => {
           screenSize: { width: 1280, height: 720 },
           colorDepth: 24;
   },
-  environmentalFactors: {,
+  environmentalFactors: {
   isNoisy: true,
   isLowLight: false,
   isPublicSpace: true,
   hasTimeConstraints: false,
 },
-  sessionContext: {,
+  sessionContext: {
   isEmergency: false,
   attemptCount: 1,
   timeRemaining: 300,
@@ -165,7 +165,7 @@ describe('AccessibilityManager', () => {
     test('should analyze context for motor impaired users', async () => {
   await manager.createAccessibilityProfile('user789', {)
   needs: [AccessibilityNeed.MOTOR_IMPAIRMENT],
-  severityLevels: {,
+  severityLevels: {
   [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.SEVERE,
 },
   assistiveTechnologies: [AssistiveTechnology.VOICE_CONTROL];
@@ -174,7 +174,7 @@ describe('AccessibilityManager', () => {
   userAgent: 'Dragon/16.0',
         screenReaderDetected: false,
         assistiveTechDetected: [AssistiveTechnology.VOICE_CONTROL],
-        deviceCapabilities: {,
+        deviceCapabilities: {
   hasCamera: true,
           hasMicrophone: true,
           hasTouch: false,
@@ -183,13 +183,13 @@ describe('AccessibilityManager', () => {
           screenSize: { width: 1024, height: 768 },
           colorDepth: 16;
   },
-  environmentalFactors: {,
+  environmentalFactors: {
   isNoisy: false,
   isLowLight: false,
   isPublicSpace: false,
   hasTimeConstraints: true,
 },
-  sessionContext: {,
+  sessionContext: {
   isEmergency: false,
   attemptCount: 2,
   timeRemaining: 180,
@@ -206,7 +206,7 @@ describe('AccessibilityManager', () => {
   userAgent: 'Mozilla/5.0',
         screenReaderDetected: false,
         assistiveTechDetected: [],
-        deviceCapabilities: {,
+        deviceCapabilities: {
   hasCamera: false,
           hasMicrophone: false,
           hasTouch: false,
@@ -215,13 +215,13 @@ describe('AccessibilityManager', () => {
           screenSize: { width: 320, height: 568 },
           colorDepth: 16;
   },
-  environmentalFactors: {,
+  environmentalFactors: {
   isNoisy: true,
   isLowLight: true,
   isPublicSpace: true,
   hasTimeConstraints: true,
 },
-  sessionContext: {,
+  sessionContext: {
   isEmergency: true,
   attemptCount: 5,
   timeRemaining: 30,
@@ -274,13 +274,13 @@ describe('AccessibilityManager', () => {
   const userProfile: UserAccessibilityProfile = {,
   userId: 'user123',
   needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-  severityLevels: {,
+  severityLevels: {
   [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.COMPLETE,
 },
   assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
         preferredFallbacks: [FallbackMethod.AUDIO_CAPTCHA],
         interfaceAdaptations: [InterfaceAdaptation.AUDIO_DESCRIPTIONS],
-        customSettings: {,
+        customSettings: {
   fontSize: 18,
   contrastRatio: 7.0,
   timeoutMultiplier: 2.0,
@@ -289,7 +289,7 @@ describe('AccessibilityManager', () => {
   hapticEnabled: true,
   animationsReduced: true,
 },
-  verificationMethods: {,
+  verificationMethods: {
   primary: ['audio'],
   fallback: ['phone'],
   emergency: ['human_assistance'],
@@ -394,7 +394,7 @@ describe('AccessibilityManager', () => {
   describe('Interface Adaptation Recommendations', () => {
   test('should recommend font size increase', async () => {
   await manager.createAccessibilityProfile('user123', {)
-  customSettings: {,
+  customSettings: {
   fontSize: 24,
   contrastRatio: 4.5,
   timeoutMultiplier: 1.0,
@@ -411,7 +411,7 @@ describe('AccessibilityManager', () => {
     });
     test('should recommend contrast enhancement', async () => {
   await manager.createAccessibilityProfile('user456', {)
-  customSettings: {,
+  customSettings: {
   fontSize: 16,
   contrastRatio: 7.0,
   timeoutMultiplier: 1.0,
@@ -427,7 +427,7 @@ describe('AccessibilityManager', () => {
     });
     test('should recommend motion reduction', async () => {
   await manager.createAccessibilityProfile('user789', {)
-  customSettings: {,
+  customSettings: {
   fontSize: 16,
   contrastRatio: 4.5,
   timeoutMultiplier: 1.0,
@@ -443,7 +443,7 @@ describe('AccessibilityManager', () => {
     });
     test('should recommend timeout extension', async () => {
   await manager.createAccessibilityProfile('user101', {)
-  customSettings: {,
+  customSettings: {
   fontSize: 16,
   contrastRatio: 4.5,
   timeoutMultiplier: 3.0,
@@ -459,7 +459,7 @@ describe('AccessibilityManager', () => {
     });
     test('should handle color blindness adaptations', async () => {
   await manager.createAccessibilityProfile('user202', {)
-  customSettings: {,
+  customSettings: {
   fontSize: 16,
   contrastRatio: 4.5,
   timeoutMultiplier: 1.0,

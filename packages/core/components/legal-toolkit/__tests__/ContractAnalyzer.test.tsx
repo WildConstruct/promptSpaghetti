@@ -18,7 +18,7 @@ const mockDocument: LegalDocument = {,
   title: 'Test Contract',
   type: 'contract',
   content: 'This is a comprehensive test contract with various clauses including termination, payment, liability, and confidentiality provisions. The contract establishes terms for services between parties.',
-  metadata: {,
+  metadata: {
   jurisdiction: 'US-CA',
   practiceArea: ['contract law', 'commercial law'],
   parties: ['Company A Inc.', 'Service Provider LLC'],

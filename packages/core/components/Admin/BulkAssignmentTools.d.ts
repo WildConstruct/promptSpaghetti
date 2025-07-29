@@ -96,7 +96,7 @@ export interface AssignmentTemplate {
     defaultParameters: Partial<BulkAssignmentParameters>;
     defaultResources: string[];
     targetFilters: TargetFilter[];
-    usage: {,
+    usage: {
         timesUsed: number;
         lastUsed?: Date;
         successRate: number;

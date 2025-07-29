@@ -17,7 +17,7 @@ jest.mock('child_process');
 
 // Integration test interfaces (would match actual implementation)
 interface PluginSystem {
-  loader: unknown;,
+  loader: unknown;
   lifecycle: unknown;
   registry: unknown;
   initialize(): Promise<void>;
@@ -35,14 +35,14 @@ interface PluginSystem {
   mockPluginFiles = new Map();
   // Mock integrated plugin system
   pluginSystem = {
-  loader: {,
+  loader: {
   loadPlugin: jest.fn<unknown, unknown>(),
   unloadPlugin: jest.fn<unknown, unknown>(),
   validatePlugin: jest.fn<unknown, unknown>(),
   getCachedPlugin: jest.fn<unknown, unknown>(),
   clearCache: jest.fn<unknown, unknown>(),
 },
-  lifecycle: {,
+  lifecycle: {
   registerExtension: jest.fn<unknown, unknown>(),
   activateExtension: jest.fn<unknown, unknown>(),
   deactivateExtension: jest.fn<unknown, unknown>(),
@@ -50,7 +50,7 @@ interface PluginSystem {
   getExtensionState: jest.fn<unknown, unknown>(),
   addEventListener: jest.fn<unknown, unknown>(),
 },
-  registry: {,
+  registry: {
   register: jest.fn<unknown, unknown>(),
   unregister: jest.fn<unknown, unknown>(),
   findByName: jest.fn<unknown, unknown>(),
@@ -72,7 +72,7 @@ interface PluginSystem {
 },
   version: '1.0.0',
         source,
-        status: 'loaded';
+        status: 'loaded'
   };
     });
     pluginSystem.lifecycle.activateExtension.mockResolvedValue(true as unknown as unknown as unknown);

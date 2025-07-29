@@ -172,7 +172,7 @@ export const Modal = ({
                             borderRadius: '12px',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
                             border: `1px solid ${uiColors.ui.border}`
-                        } }), ", display: 'flex', flexDirection: 'column', overflow: 'hidden', transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline: 'none'; }} >", _jsxs("div", { style: {
+                        } }), ", display: 'flex', flexDirection: 'column', overflow: 'hidden', transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline: 'none' }} >", _jsxs("div", { style: {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',

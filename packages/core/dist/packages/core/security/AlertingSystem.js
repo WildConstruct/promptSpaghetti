@@ -4,23 +4,6 @@
  *
  * Unified alerting system for security events across all analytics and monitoring systems
  */
-'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex';
-value: any;
- > ;
-;
-actions: {
-    notifications: NotificationAction;
-    escalation ?  : EscalationAction;
-    automation ?  : AutomationAction;
-}
-;
-suppression ?  : {
-    duplicate_window: number, // Don't send duplicate alerts within this window,
-    similar_event_threshold: number
-};
-created_by: string;
-created_at: number;
-last_modified: number;
 export class CrossSystemAlertingSystem {
     config;
     alertRules = new Map();

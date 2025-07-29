@@ -309,7 +309,8 @@ Promise < any > {
                         return {
                             metadata: {
                                 ...projectData.metadata,
-                                version: `${projectData.metadata.version}+delta.${state.version}` }
+                                version: `${projectData.metadata.version}+delta.${state.version}`
+                            }
                         },
                             graph;
                         {

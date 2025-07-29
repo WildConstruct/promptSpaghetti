@@ -17,13 +17,13 @@ export interface UseWebSocketOptions {
   onError?: (error: any) => void;
 }
 export interface UseWebSocketReturn {
-  connectionState: ConnectionState;,
+  connectionState: ConnectionState;
   isConnected: boolean;
-  isConnecting: boolean;,
-  sendGraphUpdate: (update: GraphUpdatePayload) => boolean;,
-  sendPresenceUpdate: (presence: PresenceUpdatePayload) => boolean;,
+  isConnecting: boolean;
+  sendGraphUpdate: (update: GraphUpdatePayload) => boolean;
+  sendPresenceUpdate: (presence: PresenceUpdatePayload) => boolean;
   connect: () => Promise<void>;
-  disconnect: () => void;,
+  disconnect: () => void;
   queuedMessages: number;
   clearQueue: () => void;
   const DEFAULT_CONFIG: Partial<WebSocketClientConfig> = {,
