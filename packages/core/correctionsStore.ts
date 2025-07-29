@@ -16,30 +16,32 @@ export interface ImportOptions {
   skipDuplicates?: boolean;
 }
 export interface CorrectionRule {
-  id: string;,
+  id: string;
   name: string;
   description?: string;
-  findPattern: string;,
+  findPattern: string;
   replaceWith: string;
-  isRegex: boolean;,
+  isRegex: boolean;
   isActive: boolean;
-  priority: number;,
+  priority: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
 interface CorrectionsState {
-  rules: CorrectionRule;,
+  rules: CorrectionRule[];
   isEnabled: boolean;
   // Actions
   addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateRule: (id: string, updates: Partial<CorrectionRule>) => void;,
-  deleteRule: (id: string) => void;,
-  toggleRule: (id: string) => void;,
-  reorderRules: (fromIndex: number, toIndex: number) => void;,
+  updateRule: (id: string, updates: Partial<CorrectionRule>) => void;
+  deleteRule: (id: string) => void;
+  toggleRule: (id: string) => void;
+  reorderRules: (fromIndex: number, toIndex: number) => void;
   clearAllRules: () => void;
   // Application
-  applyCorrections: (text: string) => string;,
-  getActiveRules: () => CorrectionRule;
-  getDraftRules: () => CorrectionRule;
+  applyCorrections: (text: string) => string;
+  getActiveRules: () => CorrectionRule[];
+  getDraftRules: () => CorrectionRule[];
   // Import/Export
   exportRules: (
     format: 'json' | 'yaml' | 'csv',
@@ -51,23 +53,23 @@ interface CorrectionsState {
     options?: ImportOptions
   ) => Promise<{ success: boolean; importedCount?: number; error?: string }>;
 }
-export const useCorrectionsStore = create<CorrectionsState>()()
-  devtools();
-    persist();
-      (set, get) => ({)
-  // Initial state
-  rules: [],
-  isEnabled: true,
-  // Actions
-  addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => {,
-  const newRule: CorrectionRule = {,
-  ...rule,
-  id: crypto.randomUUID(),
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-          set((state) => ({)
-  rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
+export const useCorrectionsStore = create<CorrectionsState>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        // Initial state
+        rules: [],
+        isEnabled: true,
+        // Actions
+        addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => {
+          const newRule: CorrectionRule = {
+            ...rule,
+            id: crypto.randomUUID(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+          set((state) => ({
+            rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
 }));
   },
   updateRule: (id: string, updates: Partial<CorrectionRule>) => {

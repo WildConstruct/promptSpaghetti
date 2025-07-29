@@ -188,26 +188,23 @@ export class ProjectManager {
    */
   getMockFile(name: string): PSGFile {
     return {
-      id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
-},
-  name: name.endsWith('.psg') ? name : `${name}.psg`}
-},
-  path: `/projects/default/${name}`}
-},
+      id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      name: name.endsWith('.psg') ? name : `${name}.psg`,
+      path: `/projects/default/${name}`,
   size: Math.floor(Math.random() * 1024 * 100), // 0-100KB
       lastModified: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000), // Last 30 days
       nodeCount: Math.floor(Math.random() * 50) + 5,
       metadata: {
-  title: name,
-        description: `Generated PSG file: ${name}`}
-},
-  tags: ['generated', 'mock'],
+        title: name,
+        description: `Generated PSG file: ${name}`,
+        tags: ['generated', 'mock'],
         version: '1.0.0',
         created: new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000), // Last 60 days
-        author: 'Mock User';
-  },
-  isFavorite: Math.random() > 0.7;
-  };
+        author: 'Mock User'
+      },
+      isFavorite: Math.random() > 0.7
+    };
+  }
   private loadUserData(): void {
     try {
       const stored = localStorage.getItem('projectManager_userData');
@@ -215,35 +212,46 @@ export class ProjectManager {
         const data = JSON.parse(stored);
         this.recentFiles = data.recentFiles || [];
         this.favoriteFiles = new Set(data.favoriteFiles || []);
+      }
     } catch (error) {
-  console.warn('Failed to load user data from localStorage:', error);
-  private saveUserData(): void {,
-  try {
-  const data = {
-  recentFiles: this.recentFiles,
-  favoriteFiles: Array.from(this.favoriteFiles),
-};
+      console.warn('Failed to load user data from localStorage:', error);
+    }
+  }
+
+  private saveUserData(): void {
+    try {
+      const data = {
+        recentFiles: this.recentFiles,
+        favoriteFiles: Array.from(this.favoriteFiles),
+      };
       localStorage.setItem('projectManager_userData', JSON.stringify(data));
     } catch (error) {
       console.warn('Failed to save user data to localStorage:', error);
+    }
+  }
+
   /**
    * Static method to save project to device (Story 6.1)
    */
-  static async saveProjectToDevice(graphData: { nodes: Node; edges: Edge },)
+  static async saveProjectToDevice(
+    graphData: { nodes: Node[]; edges: Edge[] },
     options: SaveProjectOptions,
-    settings: ProjectSettings): Promise<SaveProjectResult> {,
-  try {
-  // Create metadata
-  const metadata = createDefaultMetadata(;);
-  options.name,
-  options.author
-  );
-  if (options.description) {
-  metadata.description = options.description;
-  if (options.tags) {
-  metadata.tags = options.tags;
-  // Serialize project
-  const serializationOptions: SerializationOptions = {,
+    settings: ProjectSettings
+  ): Promise<SaveProjectResult> {
+    try {
+      // Create metadata
+      const metadata = createDefaultMetadata(
+        options.name,
+        options.author
+      );
+      if (options.description) {
+        metadata.description = options.description;
+      }
+      if (options.tags) {
+        metadata.tags = options.tags;
+      }
+      // Serialize project
+      const serializationOptions: SerializationOptions = {
   includeMetadata: true,
   includeSettings: true,
   includeCollaboration: true,

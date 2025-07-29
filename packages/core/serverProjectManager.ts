@@ -153,6 +153,7 @@ export class ServerProjectManager {
         success: false,
         error: `Failed to update project: ${error instanceof Error ? error.message : String(error)}`
       };
+    }
   }
 
   /**
