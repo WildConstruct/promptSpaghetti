@@ -327,9 +327,8 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
               width: '100%',
               padding: '8px 12px',
               backgroundColor: styles.tertiary,
-              border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+              border: `1px solid ${styles.border}`,
+              borderRadius: '6px',
               color: styles.text,
               fontSize: '13px',
               outline: 'none'
