@@ -4,7 +4,9 @@ interface NotificationSystemProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   maxVisible?: number;
   autoHideDuration?: number;
-  export const NotificationSystem: React.FC<NotificationSystemProps> = ({,)
+}
+
+export const NotificationSystem: React.FC<NotificationSystemProps> = ({
   position = 'top-right',
   maxVisible = 5,
   autoHideDuration = 5000

@@ -44,7 +44,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
     setApprovalComment('');
   };
   const handleBulkApprove = () => {
-    selectedRules.forEach(ruleId => {)
+    selectedRules.forEach(ruleId => {
   approveRule(ruleId, 'system');
     });
     setSelectedRules(new Set());
@@ -58,7 +58,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
   const handleBulkDeprecate = () => {
   const reason = prompt('Enter deprecation reason:');
   if (reason) {
-  selectedRules.forEach(ruleId => {)
+  selectedRules.forEach(ruleId => {
   deprecateRule(ruleId, reason);
 });
       setSelectedRules(new Set());

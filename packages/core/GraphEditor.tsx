@@ -1033,7 +1033,7 @@ const NODE_TYPES: NodeMeta[] = [
                 ));
               }}
               onExport={(format) => {
-                console.log(`Exporting in format: ${format}`);}
+                console.log(`Exporting in format: ${format}`);
                 // Export functionality would be implemented here
               }}
               onSave={() => handleSaveProject()}
@@ -1081,7 +1081,7 @@ const NODE_TYPES: NodeMeta[] = [
               <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
                 🖱️ Controls {showControls ? '▼' : '▶'}
               </div>
-              {showControls && ()
+              {showControls && (
                 <div style={{ marginTop: 8, lineHeight: 1.6 }}>
                   <div><b>Pan:</b> Left-click + drag on canvas</div>
                   <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
@@ -1104,7 +1104,7 @@ const NODE_TYPES: NodeMeta[] = [
   borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
 }}
           >
-            {selectedNode && ()
+            {selectedNode && (
               <div
                 style={{
   transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
@@ -1113,14 +1113,14 @@ const NODE_TYPES: NodeMeta[] = [
   height: '100%',
 }}
               >
-                {isPerformanceGood ? ()
+                {isPerformanceGood ? (
                   <SmoothInspectorPanel
                     node={selectedNode}
                     schema={selectedSchema}
                     onChange={handleInspectorChange}
                     onGlobalPreviewRequest={handleGlobalPreviewRequest}
                   />
-                ) : ()
+                ) : (
                   <InspectorPanel
                     node={selectedNode}
                     schema={selectedSchema}
@@ -1136,49 +1136,55 @@ const NODE_TYPES: NodeMeta[] = [
         <style>{`
         /* Professional Node Styling */
         .react-flow__node {
-          background: linear-gradient(),
+          background: linear-gradient(
             145deg,
-            var(--color-bg-tertiary)
-            #404040
-          ), var(--color-bg-secondary, #383838)) !important;
+            var(--color-bg-tertiary, #404040),
+            var(--color-bg-secondary, #383838)
+          ) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           border-radius: 8px !important;
           box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)) !important;
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
+        }
         .react-flow__node:hover {
-  transform: translateY(-3px) scale(1.03) !important;
+          transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
-          background: linear-gradient(),
+          background: linear-gradient(
             145deg,
-            var(--color-bg-quaternary)
-            #4a4a4a
-          ), var(--color-bg-tertiary, #404040)) !important;
+            var(--color-bg-quaternary, #4a4a4a),
+            var(--color-bg-tertiary, #404040)
+          ) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
+        }
         .react-flow__node.selected {
           box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)), 
                      0 0 0 3px var(--color-accent-orange, #ff7800),
                      0 0 20px rgba(255, 120, 0, 0.4) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
-          background: linear-gradient(),
+          background: linear-gradient(
             145deg,
-            var(--color-bg-quaternary)
-            #4a4a4a
-          ), var(--color-bg-tertiary, #404040)) !important;
+            var(--color-bg-quaternary, #4a4a4a),
+            var(--color-bg-tertiary, #404040)
+          ) !important;
+        }
         /* Professional Edge Styling */
         .react-flow__edge path {
           stroke: var(--color-ui-border-light, #525252) !important;
           stroke-width: 2px !important;
-  transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
+          transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
+        }
         .react-flow__edge:hover path {
-  stroke: var(--color-accent-orange, #ff7800) !important;
+          stroke: var(--color-accent-orange, #ff7800) !important;
           stroke-width: 4px !important;
-  filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
+          filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
+        }
         .react-flow__edge.selected path {
           stroke: var(--color-accent-orange, #ff7800) !important;
           stroke-width: 3px !important;
-  filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
+          filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
+        }
         /* Professional Handle Styling */
         .react-flow__handle {
           background: var(--color-bg-secondary, #383838) !important;
@@ -1271,9 +1277,11 @@ const NODE_TYPES: NodeMeta[] = [
                 previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
               } else {
                 run();
+              }
+            }
           }}
           onHighlightPath={(nodeIds, edgeIds) => {
-          // Highlight execution path on the canvas
+            // Highlight execution path on the canvas
             setHighlightNodeIds(new Set(nodeIds));
             setHighlightEdgeIds(new Set(edgeIds));
           }}
@@ -1313,9 +1321,10 @@ const NODE_TYPES: NodeMeta[] = [
               previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
             } else {
               run();
+            }
           }}
           onSaveJson={() => {
-            const blob = new Blob([);
+            const blob = new Blob([
               JSON.stringify({ nodes, edges }, null, 2)
             ], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1353,7 +1362,7 @@ const NODE_TYPES: NodeMeta[] = [
           onBrowseTemplates={handleBrowseTemplates}
         />
         {/* Professional Loading State */}
-        {(previewLoading || isCreatingNode) && ()
+        {(previewLoading || isCreatingNode) && (
           <div
             style={{
   position: 'fixed',
@@ -1378,7 +1387,7 @@ const NODE_TYPES: NodeMeta[] = [
           </div>
         )}
         {/* Performance Monitor (dev mode only) */}
-        {process.env.NODE_ENV === 'development' && ()
+        {process.env.NODE_ENV === 'development' && (
           <div
             className="development-only"
             style={{
@@ -1417,10 +1426,12 @@ const NODE_TYPES: NodeMeta[] = [
               setHighlightEdgeIds(new Set(res.usedEdgeIds));
             } else {
               setHighlightEdgeIds(new Set());
+            }
             if (res?.usedNodeIds) {
               setHighlightNodeIds(new Set(res.usedNodeIds));
             } else {
               setHighlightNodeIds(new Set());
+            }
           }}
         />
         <ResponsiveCorrectionsPanel
@@ -1431,7 +1442,7 @@ const NODE_TYPES: NodeMeta[] = [
           isOpen={statsOpen}
           onClose={() => setStatsOpen(false)}
         />
-        {extensionsOpen && ()
+        {extensionsOpen && (
           <ExtensionManagerPanel
             onClose={() => setExtensionsOpen(false)}
           />
@@ -1516,7 +1527,7 @@ const NODE_TYPES: NodeMeta[] = [
           onToggle={handlePerformanceMonitorToggle}
         />
         {/* Optimization Menu */}
-        {optimizationMenuOpen && ()
+        {optimizationMenuOpen && (
           <div data-optimization-menu style={{
   position: 'fixed',
   bottom: '60px',
@@ -1588,7 +1599,7 @@ const NODE_TYPES: NodeMeta[] = [
           </div>
         )}
         {/* Node Creation Animation Overlay */}
-        {nodeCreationAnimation && ()
+        {nodeCreationAnimation && (
           <div
             className="animate-node-create-overlay"
             style={{
@@ -1604,13 +1615,14 @@ const NODE_TYPES: NodeMeta[] = [
           />
         )}
         {/* Demo Performance Tester (development only) */}
-        {process.env.NODE_ENV === 'development' && ()
+        {process.env.NODE_ENV === 'development' && (
           <DemoPerformanceTester
             onTestComplete={(result) => {
               console.log('Performance test completed:', result);
               if (!result.passedThreshold) {
-                setStatusMessage(`Performance warning: ${result.recommendations[0]}`);}
+                setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
                 setTimeout(() => setStatusMessage(''), 5000);
+              }
             }}
             onGraphGenerated={(testNodes, testEdges) => {
             // Replace current graph with test graph
@@ -1624,11 +1636,13 @@ const NODE_TYPES: NodeMeta[] = [
       </div>
     </DemoModeManager>
   );
-};
+}; // Close GraphEditorInner component function
+
+} // Additional closing brace that was missing
 
 // Wrapper component with ReactFlowProvider
 export const GraphEditor: React.FC<GraphEditorProps> = (props) => {
-  return;
+  return (
     <ReactFlowProvider>
       <GraphEditorInner {...props} />
     </ReactFlowProvider>

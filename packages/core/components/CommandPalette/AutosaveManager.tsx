@@ -383,7 +383,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
         </div>
       </div>
       {/* Recovery Panel */}
-      {showRecovery && ()
+      {showRecovery && (
         <div
           style={{
   position: 'fixed',
@@ -402,26 +402,24 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
           <div
             style={{
               background: styles.background,
-              border: `1px solid ${styles.border}`}
-},
-  borderRadius: '12px',
+              border: `1px solid ${styles.border}`,
+              borderRadius: '12px',
               width: '90%',
               maxWidth: '600px',
               maxHeight: '80%',
               overflow: 'hidden',
               fontFamily: 'var(--font-family-primary)',
-              boxShadow: 'var(--shadow-xl)';
-  }}
+              boxShadow: 'var(--shadow-xl)'
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div
               style={{
                 padding: '20px',
-                borderBottom: `1px solid ${styles.border}`}
-},
-  background: styles.secondary;
-  }}
+                borderBottom: `1px solid ${styles.border}`,
+                background: styles.secondary
+              }}
             >
               <div style={{
   display: 'flex',
@@ -463,7 +461,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
   maxHeight: '400px',
   overflowY: 'auto',
 }}>
-              {availableVersions.length === 0 ? ()
+              {availableVersions.length === 0 ? (
                 <div style={{
   textAlign: 'center',
   padding: '40px',
@@ -472,22 +470,21 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
                   <div>No autosaved versions available</div>
                 </div>
-              ) : ()
+              ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {availableVersions.slice().reverse().map((version, index) => {
                     const isLatest = index === 0;
-                    return;
+                    return (
                       <div
                         key={version.version}
                         style={{
                           background: isLatest ? styles.accent + '10' : styles.secondary,
-                          border: `1px solid ${isLatest ? styles.accent : styles.border}`}
-},
-  borderRadius: '8px',
+                          border: `1px solid ${isLatest ? styles.accent : styles.border}`,
+                          borderRadius: '8px',
                           padding: '16px',
                           cursor: 'pointer',
-                          transition: 'all var(--transition-fast)';
-  }}
+                          transition: 'all var(--transition-fast)'
+                        }}
                         onClick={() => handleRestore(version.version)}
                       >
                         <div style={{
@@ -520,17 +517,16 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                           <span>{version.metadata.edgeCount} edges</span>
                           <span>Modified: {new Date(version.metadata.lastModified).toLocaleString()}</span>
                         </div>
-                        {version.metadata.sessionId !== autosaveSystem['sessionId'] && ()
+                        {version.metadata.sessionId !== autosaveSystem['sessionId'] && (
                           <div style={{
                             marginTop: '8px',
                             padding: '6px 8px',
                             background: styles.warning + '20',
-                            border: `1px solid ${styles.warning}`}
-},
-  borderRadius: '4px',
+                            border: `1px solid ${styles.warning}`,
+                            borderRadius: '4px',
                             color: styles.warning,
-                            fontSize: '11px';
-  }}>
+                            fontSize: '11px'
+                          }}>
                             ⚠️ Modified in different session
                           </div>
                         )}
@@ -543,13 +539,12 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
             {/* Footer */}
             <div style={{
               padding: '16px 20px',
-              borderTop: `1px solid ${styles.border}`}
-},
-  background: styles.secondary,
+              borderTop: `1px solid ${styles.border}`,
+              background: styles.secondary,
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center';
-  }}>
+              alignItems: 'center'
+            }}>
               <div style={{
   fontSize: '12px',
   color: styles.textSecondary,
@@ -562,12 +557,11 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
                   style={{
                     padding: '8px 12px',
                     background: 'transparent',
-                    border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
+                    border: `1px solid ${styles.border}`,
+                    borderRadius: '4px',
                     color: styles.text,
                     fontSize: '12px',
-                    cursor: 'pointer';
+                    cursor: 'pointer'
   }}
                 >
                   Clear All

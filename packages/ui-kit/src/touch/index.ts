@@ -116,7 +116,14 @@ export function initializeTouchSystem(options?: {
 /**
  * Touch device detection utilities
  */
-export   },
+export const touchUtils = {
+  
+  /**
+   * Check if device is touch-enabled
+   */
+  isTouchDevice(): boolean {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  },
   
   /**
    * Check if device supports haptic feedback

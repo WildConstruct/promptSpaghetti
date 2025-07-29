@@ -68,10 +68,10 @@ export interface ProjectFolder {
   name: string;
   path: string;
   parentId?: string;
-  children: (ProjectFolder | PSGFile)[];,
+  children: (ProjectFolder | PSGFile)[];
   metadata: {
   description?: string;
-  tags: string;,
+  tags: string;
   created: Date;
   lastModified: Date;
 };
@@ -80,14 +80,14 @@ export interface Project {
   id: string;
   name: string;
   description?: string;
-  rootFolder: ProjectFolder;,
-  settings: {,
-  autoSave: boolean;,
+  rootFolder: ProjectFolder;
+  settings: {
+  autoSave: boolean;
   backupEnabled: boolean;
-  collaborationEnabled: boolean;,
+  collaborationEnabled: boolean;
   visibility: 'private' | 'shared' | 'public';
 };
-  created: Date;,
+  created: Date;
   lastModified: Date;
   owner: string;
 }
@@ -99,10 +99,15 @@ export class ProjectManager {
   static getInstance(): ProjectManager {
     if (!ProjectManager.instance) {
       ProjectManager.instance = new ProjectManager();
+    }
     return ProjectManager.instance;
+  }
+
   private constructor() {
     // Load from localStorage or API
     this.loadUserData();
+  }
+
   /**
    * Generate thumbnail for PSG file
    */
@@ -120,24 +125,28 @@ export class ProjectManager {
         <text x="60" y="45" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">
           ${nodeCount} nodes}
         </text>
-        ${Array.from({length: Math.min(nodeCount, 8)}, (_, i) => {}
-    const x = 15 + (i % 4) * 25;
-    const y = 55 + Math.floor(i / 4) * 15;
-    const color = colors[i % colors.length];
-    return `<circle cx="${x}" cy="${y}" r="6" fill="${color}" opacity="0.7"/>`;}
-  }).join('')}
+        ${Array.from({length: Math.min(nodeCount, 8)}, (_, i) => {
+          const x = 15 + (i % 4) * 25;
+          const y = 55 + Math.floor(i / 4) * 15;
+          const color = colors[i % colors.length];
+          return `<circle cx="${x}" cy="${y}" r="6" fill="${color}" opacity="0.7"/>`;
+        }).join('')}
       </svg>
     `;
     return 'data:image/svg+xml;base64,' + btoa(svg);
+  }
+
   /**
    * Get recent files list
    */
-  getRecentFiles(limit: number = 10): PSGFile {
+  getRecentFiles(limit: number = 10): PSGFile[] {
   return this.recentFiles.slice(0, limit);
+  }
+
   /**
   * Add file to recent files
   */
-  addToRecentFiles(file: PSGFile): void {,
+  addToRecentFiles(file: PSGFile): void {
   // Remove if already exists
   this.recentFiles = this.recentFiles.filter(f => f.id !== file.id);
   // Add to beginning
@@ -145,26 +154,35 @@ export class ProjectManager {
   // Keep only last 20
   this.recentFiles = this.recentFiles.slice(0, 20);
   this.saveUserData();
+  }
+
   /**
   * Toggle favorite status
   */
-  toggleFavorite(fileId: string): boolean {,
+  toggleFavorite(fileId: string): boolean {
   if (this.favoriteFiles.has(fileId)) {
   this.favoriteFiles.delete(fileId);
   return false;
 } else {
       this.favoriteFiles.add(fileId);
       return true;
+  }
+  }
+
   /**
    * Check if file is favorite
    */
   isFavorite(fileId: string): boolean {
     return this.favoriteFiles.has(fileId);
+  }
+
   /**
    * Get favorite files
    */
-  getFavoriteFiles(): PSGFile {
+  getFavoriteFiles(): PSGFile[] {
     return this.recentFiles.filter(file => this.favoriteFiles.has(file.id));
+  }
+
   /**
    * Mock file data for development
    */

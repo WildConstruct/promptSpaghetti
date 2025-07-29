@@ -338,29 +338,27 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
         bottom: '20px',
         left: '20px',
         background: styles.background,
-        border: `1px solid ${styles.border}`}
-},
-  borderRadius: '8px',
+        border: `1px solid ${styles.border}`,
+        borderRadius: '8px',
         boxShadow: 'var(--shadow-lg)',
         zIndex: 1001,
         minWidth: '280px',
         maxWidth: '400px',
-        fontFamily: 'var(--font-family-primary)';
-  }}
+        fontFamily: 'var(--font-family-primary)'
+      }}
     >
       {/* Header */}
       <div
         style={{
           padding: '12px 16px',
           background: styles.secondary,
-          borderBottom: `1px solid ${styles.border}`}
-},
-  borderRadius: '8px 8px 0 0',
+          borderBottom: `1px solid ${styles.border}`,
+          borderRadius: '8px 8px 0 0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          cursor: 'pointer';
-  }}
+          cursor: 'pointer'
+        }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div style={{
@@ -395,7 +393,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
         </span>
       </div>
       {/* Expanded Content */}
-      {isExpanded && ()
+      {isExpanded && (
         <div style={{ padding: '16px' }}>
           {/* Selection Actions */}
           <div style={{
@@ -409,15 +407,14 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
               style={{
                 padding: '6px 12px',
                 background: styles.accent + '20',
-                border: `1px solid ${styles.accent}`}
-},
-  borderRadius: '4px',
+                border: `1px solid ${styles.accent}`,
+                borderRadius: '4px',
                 color: styles.accent,
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)';
-  }}
+                transition: 'all var(--transition-fast)'
+              }}
               title="Select All (⌘A)"
             >
               Select All
@@ -427,15 +424,14 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
               style={{
                 padding: '6px 12px',
                 background: 'transparent',
-                border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
+                border: `1px solid ${styles.border}`,
+                borderRadius: '4px',
                 color: styles.text,
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)';
-  }}
+                transition: 'all var(--transition-fast)'
+              }}
               title="Invert Selection (⌘I)"
             >
               Invert
@@ -445,22 +441,21 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
               style={{
                 padding: '6px 12px',
                 background: 'transparent',
-                border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
+                border: `1px solid ${styles.border}`,
+                borderRadius: '4px',
                 color: styles.text,
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)';
-  }}
+                transition: 'all var(--transition-fast)'
+              }}
               title="Clear Selection (Esc)"
             >
               Clear
             </button>
           </div>
           {/* Selected Nodes List */}
-          {selectedNodes.length > 0 && ()
+          {selectedNodes.length > 0 && (
             <div style={{ marginBottom: '12px' }}>
               <div style={{
   color: styles.textSecondary,
@@ -475,22 +470,20 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
               <div style={{
                 maxHeight: '120px',
                 overflowY: 'auto',
-                border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
-                background: styles.secondary;
-  }}>
-                {selectedNodes.map((node, index) => ()
+                border: `1px solid ${styles.border}`,
+                borderRadius: '4px',
+                background: styles.secondary
+              }}>
+                {selectedNodes.map((node, index) => (
                   <div
                     key={node.id}
                     style={{
                       padding: '8px 12px',
-                      borderBottom: index < selectedNodes.length - 1 ? `1px solid ${styles.border}` : 'none'}
-},
-  display: 'flex',
+                      borderBottom: index < selectedNodes.length - 1 ? `1px solid ${styles.border}` : 'none',
+                      display: 'flex',
                       alignItems: 'center',
-                      gap: '8px';
-  }}
+                      gap: '8px'
+                    }}
                   >
                     <div style={{
   width: '8px',
@@ -523,7 +516,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
             padding: '8px 12px',
             background: styles.secondary,
             borderRadius: '4px',
-            border: `1px solid ${styles.border}`}
+            border: `1px solid ${styles.border}`
           }}>
             <div style={{
   color: styles.textSecondary,

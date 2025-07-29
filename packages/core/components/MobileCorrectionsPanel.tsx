@@ -24,7 +24,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRule, setSelectedRule] = useState<CorrectionRule | null>(null);
   const [testText, setTestText] = useState('');
-  const [newRule, setNewRule] = useState({)
+  const [newRule, setNewRule] = useState({
   name: '',
   description: '',
   findPattern: '',

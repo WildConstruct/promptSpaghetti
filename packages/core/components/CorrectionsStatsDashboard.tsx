@@ -1,59 +1,61 @@
 import React, { useState, useEffect } from 'react';
 
 interface PerformanceMetrics {
-  total_rules: number;,
+  total_rules: number;
   active_rules: number;
-  total_executions: number;,
+  total_executions: number;
   average_execution_time: number;
-  error_rate: number;,
-  most_used_rules: Array<{,
-  rule_id: number;,
+  error_rate: number;
+  most_used_rules: Array<{
+  rule_id: number;
   rule_name: string;
-  total_applications: number;,
+  total_applications: number;
   total_characters_processed: number;
-  average_execution_time: number;,
+  average_execution_time: number;
   success_rate: number;
   last_used: string;
   // Enhanced effectiveness metrics
-  quality_score: number;,
+  quality_score: number;
   impact_rating: number;
   false_positive_rate: number;
   user_feedback_score?: number;
-  avg_characters_saved: number;,
+  avg_characters_saved: number;
   complexity_score: number;
-  usage_trend: 'increasing' | 'decreasing' | 'stable';,
+  usage_trend: 'increasing' | 'decreasing' | 'stable';
   performance_trend: 'improving' | 'degrading' | 'stable';
 }>;
-  performance_trends: Array<{,
+  performance_trends: Array<{
   date: string;
-  executions: number;,
+  executions: number;
   avg_time: number;
-  error_count: number;,
+  error_count: number;
   quality_score: number;
   impact_rating: number;
 }>;
   // Enhanced system metrics
-  overall_quality_score: number;,
+  overall_quality_score: number;
   average_impact_rating: number;
-  total_characters_saved: number;,
+  total_characters_saved: number;
   false_positive_rate: number;
   user_satisfaction_score?: number;
   // Rule effectiveness distribution
-  high_impact_rules: number;,
+  high_impact_rules: number;
   medium_impact_rules: number;
   low_impact_rules: number;
   // Performance categories
-  fast_rules: number;,
+  fast_rules: number;
   slow_rules: number;
   // Quality distribution
-  excellent_rules: number;,
+  excellent_rules: number;
   good_rules: number;
   poor_rules: number;
+}
 
 interface CorrectionsStatsDashboardProps {
-  isOpen: boolean;,
+  isOpen: boolean;
   onClose: () => void;
-  export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps> = ({ ),
+}
+export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps> = ({
   isOpen,
   onClose
 }) => {
@@ -65,12 +67,12 @@ interface CorrectionsStatsDashboardProps {
   useEffect(() => {
     if (isOpen) {
       fetchMetrics();
-
+    }
   }, [isOpen, selectedPeriod]);
   const fetchMetrics = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/corrections/stats?days=${selectedPeriod}`);}
+      const response = await fetch(`/api/corrections/stats?days=${selectedPeriod}`);
       if (response.ok) {
         const data = await response.json();
         setMetrics(data.data);
@@ -85,7 +87,7 @@ interface CorrectionsStatsDashboardProps {
 
   };
   if (!isOpen) return null;
-  return;
+  return (
     <div
       style={{
   position: 'fixed',
@@ -153,7 +155,7 @@ interface CorrectionsStatsDashboardProps {
             </button>
           </div>
         </div>
-        {loading && ()
+        {loading && (
           <div style={{
   display: 'flex',
   justifyContent: 'center',
@@ -164,7 +166,7 @@ interface CorrectionsStatsDashboardProps {
             Loading statistics...
           </div>
         )}
-        {error && ()
+        {error && (
           <div style={{
   background: '#fed7d7',
   color: '#c53030',
@@ -175,7 +177,7 @@ interface CorrectionsStatsDashboardProps {
             {error}
           </div>
         )}
-        {metrics && !loading && ()
+        {metrics && !loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* Overview Cards */}
             <div style={{
@@ -263,7 +265,7 @@ interface CorrectionsStatsDashboardProps {
                 <div style={{
   fontSize: '24px',
   fontWeight: 600,
-  color: metrics.overall_quality_score >= 80 ? '#68d391' : ,
+  color: metrics.overall_quality_score >= 80 ? '#68d391' :
   metrics.overall_quality_score >= 60 ? '#fbb040' : '#e53e3e',
 }}>
                   {metrics.overall_quality_score.toFixed(0)}/100
@@ -284,7 +286,7 @@ interface CorrectionsStatsDashboardProps {
                 <div style={{
   fontSize: '24px',
   fontWeight: 600,
-  color: metrics.average_impact_rating >= 4 ? '#68d391' : ,
+  color: metrics.average_impact_rating >= 4 ? '#68d391' :
   metrics.average_impact_rating >= 3 ? '#fbb040' : '#e53e3e',
 }}>
                   {metrics.average_impact_rating.toFixed(1)}/5
@@ -325,7 +327,7 @@ interface CorrectionsStatsDashboardProps {
                 <div style={{
   fontSize: '24px',
   fontWeight: 600,
-  color: metrics.false_positive_rate > 10 ? '#e53e3e' : ,
+  color: metrics.false_positive_rate > 10 ? '#e53e3e' :
   metrics.false_positive_rate > 5 ? '#fbb040' : '#68d391',
 }}>
                   {metrics.false_positive_rate.toFixed(1)}%
@@ -365,7 +367,7 @@ interface CorrectionsStatsDashboardProps {
                   <div>Success Rate</div>
                   <div>Trend</div>
                 </div>
-                {metrics.most_used_rules.slice(0, 10).map((rule) => ()
+                {metrics.most_used_rules.slice(0, 10).map((rule) => (
                   <div
                     key={rule.rule_id}
                     style={{
@@ -380,27 +382,27 @@ interface CorrectionsStatsDashboardProps {
                     <div style={{ fontWeight: 500 }}>{rule.rule_name}</div>
                     <div>{rule.total_applications.toLocaleString()}</div>
                     <div style={{
-  color: rule.quality_score >= 80 ? '#68d391' : ,
+  color: rule.quality_score >= 80 ? '#68d391' :
   rule.quality_score >= 60 ? '#fbb040' : '#e53e3e',
 }}>
                       {rule.quality_score.toFixed(0)}
                     </div>
                     <div style={{
-  color: rule.impact_rating >= 4 ? '#68d391' : ,
+  color: rule.impact_rating >= 4 ? '#68d391' :
   rule.impact_rating >= 3 ? '#fbb040' : '#e53e3e',
 }}>
                       {rule.impact_rating.toFixed(1)}
                     </div>
                     <div>{rule.average_execution_time.toFixed(1)}ms</div>
                     <div style={{
-  color: rule.success_rate > 95 ? '#68d391' : ,
+  color: rule.success_rate > 95 ? '#68d391' :
   rule.success_rate > 85 ? '#fbb040' : '#e53e3e',
 }}>
                       {rule.success_rate.toFixed(1)}%
                     </div>
                     <div>
                       <span style={{
-  color: rule.usage_trend === 'increasing' ? '#68d391' : ,
+  color: rule.usage_trend === 'increasing' ? '#68d391' :
   rule.usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
   fontSize: '12px',
 }}>
@@ -423,14 +425,14 @@ interface CorrectionsStatsDashboardProps {
   border: '1px solid #444',
   padding: '16px',
 }}>
-                {metrics.performance_trends.length > 0 ? ()
+                {metrics.performance_trends.length > 0 ? (
                   <div style={{
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
   gap: '12px',
   marginBottom: '16px',
 }}>
-                    {metrics.performance_trends.slice(-7).map((trend) => ()
+                    {metrics.performance_trends.slice(-7).map((trend) => (
                       <div
                         key={trend.date}
                         style={{
@@ -455,7 +457,7 @@ interface CorrectionsStatsDashboardProps {
                         <div style={{ fontSize: '11px', color: '#9f7aea' }}>
                           I: {trend.impact_rating.toFixed(1)}
                         </div>
-                        {trend.error_count > 0 && ()
+                        {trend.error_count > 0 && (
                           <div style={{ fontSize: '11px', color: '#e53e3e' }}>
                             {trend.error_count} errors
                           </div>
@@ -463,7 +465,7 @@ interface CorrectionsStatsDashboardProps {
                       </div>
                     ))}
                   </div>
-                ) : ()
+                ) : (
                   <div style={{
   color: '#a0aec0',
   textAlign: 'center',
@@ -551,7 +553,7 @@ interface CorrectionsStatsDashboardProps {
                     <span style={{ fontSize: '12px', color: '#e53e3e' }}>{metrics.slow_rules}</span>
                   </div>
                 </div>
-                {metrics.user_satisfaction_score && ()
+                {metrics.user_satisfaction_score && (
                   <div style={{
   background: '#2a2e37',
   padding: '16px',
@@ -564,7 +566,7 @@ interface CorrectionsStatsDashboardProps {
                     <div style={{
   fontSize: '24px',
   fontWeight: 600,
-  color: metrics.user_satisfaction_score >= 4 ? '#68d391' : ,
+  color: metrics.user_satisfaction_score >= 4 ? '#68d391' :
   metrics.user_satisfaction_score >= 3 ? '#fbb040' : '#e53e3e',
 }}>
                       {metrics.user_satisfaction_score.toFixed(1)}/5
