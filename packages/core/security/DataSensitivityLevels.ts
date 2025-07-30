@@ -47,10 +47,12 @@ export enum DataSensitivityLevel {
   * - Example: Personal data (PII), authentication credentials, trade secrets,
   */
   RESTRICTED = 'restricted'
-  /**
-  * Data handling requirements for each sensitivity level
-  */
-  export interface DataHandlingRequirements {
+}
+
+/**
+ * Data handling requirements for each sensitivity level
+ */
+export interface DataHandlingRequirements {
   /** Minimum access control requirements */
   accessControl: {
   authentication: 'none' | 'basic' | 'strong' | 'mfa';

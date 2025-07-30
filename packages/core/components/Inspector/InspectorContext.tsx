@@ -26,7 +26,9 @@ interface InspectorProviderProps {
   initialWidth?: number;
   initialCollapsed?: boolean;
   initialVisible?: boolean;
-  export const InspectorProvider: React.FC<InspectorProviderProps> = ({,)
+}
+
+export const InspectorProvider: React.FC<InspectorProviderProps> = ({
   children,
   onNodeUpdate,
   initialWidth = 320,
