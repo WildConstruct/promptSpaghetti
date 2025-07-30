@@ -208,13 +208,14 @@ export const professionalTypography: ProfessionalTypography = {
   relaxed: 1.75,
 },
   letterSpacing: {
-  tight: '-0.025em',
-  normal: '0em',
-  wide: '0.025em',
+    tight: '-0.025em',
+    normal: '0em',
+    wide: '0.025em'
+  }
 };
 
 // Professional Shadow System
-export const professionalShadows: ProfessionalShadows = {,
+export const professionalShadows: ProfessionalShadows = {
   elevation: {
   none: 'none',
   sm: '0 1px 2px 0 rgba(0, 0, 0, 0.25)',

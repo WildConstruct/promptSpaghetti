@@ -112,9 +112,8 @@ export function serializeProject(
       if (!validation.success) {
         return {
           success: false,
-          error: `Serialization validation failed: ${validation.error}`}
-},
-  warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)}
+          error: `Serialization validation failed: ${validation.error}`,
+          warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)
         };
     const finalContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
     return {
