@@ -396,39 +396,42 @@ export class ConstraintValidator {
   * Get default historical constraints
   */
   private getDefaultConstraints(): HistoricalConstraint[] {
-  return [
-  {
-  id: 'medieval-modern-separation',
-  rule: 'era_compatibility',
-  eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
-  enforcement: 'strict',
-  message: 'Medieval and modern items should not be mixed without historical justification',
-  historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
-}
+    return [
       {
-  id: 'silk-availability-medieval',
-  rule: 'material_availability',
-  eras: [HISTORICAL_ERAS.MEDIEVAL_EARLY],
-  regions: ['Northern Europe'],
-  enforcement: 'warning',
-  message: 'Silk was extremely rare and expensive in early medieval Northern Europe',
-  historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
-}
+        id: 'medieval-modern-separation',
+        rule: 'era_compatibility',
+        eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
+        enforcement: 'strict',
+        message: 'Medieval and modern items should not be mixed without historical justification',
+        historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
+      },
       {
-  id: 'social-class-clothing',
-  rule: 'social_class_appropriateness',
-  eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
-  social_classes: ['peasant'],
-  enforcement: 'warning',
-  message: 'Elaborate clothing items inappropriate for peasant social class',
-  historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe',
-}
+        id: 'silk-availability-medieval',
+        rule: 'material_availability',
+        eras: [HISTORICAL_ERAS.MEDIEVAL_EARLY],
+        regions: ['Northern Europe'],
+        enforcement: 'warning',
+        message: 'Silk was extremely rare and expensive in early medieval Northern Europe',
+        historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
+      },
+      {
+        id: 'social-class-clothing',
+        rule: 'social_class_appropriateness',
+        eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
+        social_classes: ['peasant'],
+        enforcement: 'warning',
+        message: 'Elaborate clothing items inappropriate for peasant social class',
+        historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe',
+      },
       {
         id: 'cultural-sensitivity-religious',
         rule: 'cultural_appropriateness',
         eras: Object.values(HISTORICAL_ERAS),
         enforcement: 'suggestion',
         message: 'Religious items should be used with cultural sensitivity and historical context',
-        historical_basis: 'Religious artifacts had sacred significance and specific usage contexts'];
+        historical_basis: 'Religious artifacts had sacred significance and specific usage contexts',
+      }
+    ];
+  }
 
 export default ConstraintValidator;

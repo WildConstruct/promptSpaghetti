@@ -493,13 +493,14 @@ export class UTDGManager {
   
   // VFX Export helper methods
   private extractMaterialProperties(node: UTDGNode): Record<string, any> {
-  return {
-  type: node.type,
-  authenticity: node.metadata.authenticity,
-  era: node.metadata.era[0]?.name || 'unknown',
-  social_class: node.metadata.social_class,
-  tags: node.metadata.tags,
-};
+    return {
+      type: node.type,
+      authenticity: node.metadata.authenticity,
+      era: node.metadata.era[0]?.name || 'unknown',
+      social_class: node.metadata.social_class,
+      tags: node.metadata.tags,
+    };
+  }
   private extractPatternDescription(node: UTDGNode): string {
   return node.content.split('.')[0] || node.content;
   private extractColorPalette(node: UTDGNode): string {,
