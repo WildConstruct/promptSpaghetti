@@ -121,10 +121,10 @@ export class MedievalDemoDatabase {
   }): {
     outfit: (MedievalClothing | UTDGNode)[];
     description: string;
-    historical_notes: string;
+    historical_notes: string[];
   } {
     const outfit: (MedievalClothing | UTDGNode)[] = [];
-  const historical_notes: string = [];
+    const historical_notes: string[] = [];
   // Base layer
     const undergarments = this.getClothing({
       era: criteria.era,

@@ -287,9 +287,12 @@ export class ExternalDataService {
       case 'enrich':
         transformedData = this.enrichData(transformedData, transform.config);
         break;
+      }
+    }
     // Ensure result is array of UTDGNode objects
     if (!Array.isArray(transformedData)) {
       transformedData = [transformedData];
+    }
     return transformedData.filter(this.isValidUTDGNode);
   }
   
