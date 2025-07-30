@@ -509,26 +509,35 @@ export class UTDGManager {
     };
   }
   private extractPatternDescription(node: UTDGNode): string {
-  return node.content.split('.')[0] || node.content;
-  private extractColorPalette(node: UTDGNode): string {,
-  // Extract colors mentioned in content and tags
-  const colors: string = [];
-  const colorWords = ['red', 'blue', 'green', 'yellow', 'brown', 'black', 'white', 'gray', 'purple'];
-  const text = node.content.toLowerCase() + ' ' + node.metadata.tags.join(' ').toLowerCase();
-  colorWords.forEach(color => {)
-  if (text.includes(color)) {
-  colors.push(color);
-});
+    return node.content.split('.')[0] || node.content;
+  }
+  
+  private extractColorPalette(node: UTDGNode): string[] {
+    // Extract colors mentioned in content and tags
+    const colors: string[] = [];
+    const colorWords = ['red', 'blue', 'green', 'yellow', 'brown', 'black', 'white', 'gray', 'purple'];
+    const text = node.content.toLowerCase() + ' ' + node.metadata.tags.join(' ').toLowerCase();
+    
+    colorWords.forEach(color => {
+      if (text.includes(color)) {
+        colors.push(color);
+      }
+    });
+    
     return colors.length > 0 ? colors : ['natural'];
-  private extractCharacterTypes(nodes: UTDGNode): string {
+  }
+  private extractCharacterTypes(nodes: UTDGNode[]): string[] {
     const types = new Set<string>();
-    nodes.forEach(node => {)
-  if (node.metadata.social_class) {
+    nodes.forEach(node => {
+      if (node.metadata.social_class) {
         node.metadata.social_class.forEach(cls => types.add(cls));
+      }
       if (node.metadata.occupation) {
         node.metadata.occupation.forEach(occ => types.add(occ));
+      }
     });
     return Array.from(types);
+  }
   private generateClothingCombinations(nodes: UTDGNode): string[] {
     const combinations: string = [];
     const garments = nodes.filter(node => node.type === 'garment');
