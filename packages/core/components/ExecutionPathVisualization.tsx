@@ -45,8 +45,8 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
   const validResults = results.filter(r => r.executionPath);
   const totalExecution = validResults.reduce((sum, r) => sum + r.executionTimeMs, 0);
   const averageTime = validResults.length > 0 ? totalExecution / validResults.length : 0;
-  return;
-    <div className={`execution-path-visualization ${className}`} style={{ },}
+  return (
+    <div className={`execution-path-visualization ${className}`} style={{
   background: '#1a202c', 
       borderRadius: 8, 
       padding: 16,

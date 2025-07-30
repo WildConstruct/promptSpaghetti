@@ -8,13 +8,13 @@ export interface PropertiesSectionProps {
   onChange: (partial: Record<string, unknown>) => void;
   onGlobalPreviewRequest?: () => void;
 }
-export const PropertiesSection: React.FC<PropertiesSectionProps> = ({)
+export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   node,
   schema,
   onChange,
   onGlobalPreviewRequest
 }) => {
-  return;
+  return (
     <div style={{ height: '100%' }}>
       <NodeEditorRouter 
         node={node}
