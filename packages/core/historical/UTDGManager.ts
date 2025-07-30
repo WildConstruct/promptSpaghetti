@@ -538,28 +538,36 @@ export class UTDGManager {
     });
     return Array.from(types);
   }
-  private generateClothingCombinations(nodes: UTDGNode): string[] {
-    const combinations: string = [];
+  private generateClothingCombinations(nodes: UTDGNode[]): string[][] {
+    const combinations: string[][] = [];
     const garments = nodes.filter(node => node.type === 'garment');
     if (garments.length >= 2) {
       for (let i = 0; i < garments.length - 1; i++) {
         combinations.push([garments[i].id, garments[i + 1].id]);
+      }
+    }
     return combinations;
-  private calculateSocialDistribution(nodes: UTDGNode): Record<string, number> {
+  }
+  private calculateSocialDistribution(nodes: UTDGNode[]): Record<string, number> {
     const distribution: Record<string, number> = {};
     let total = 0;
-    nodes.forEach(node => {)
-  if (node.metadata.social_class) {
-        node.metadata.social_class.forEach(cls => {)
-  distribution[cls] = (distribution[cls] || 0) + 1;
+    
+    nodes.forEach(node => {
+      if (node.metadata.social_class) {
+        node.metadata.social_class.forEach(cls => {
+          distribution[cls] = (distribution[cls] || 0) + 1;
           total++;
         });
+      }
     });
+    
     // Convert to percentages
-    Object.keys(distribution).forEach(key => {)
-  distribution[key] = distribution[key] / total;
+    Object.keys(distribution).forEach(key => {
+      distribution[key] = distribution[key] / total;
     });
+    
     return distribution;
+  }
   private determineArchitecturalStyle(era: Era): string {
     if (era.name.includes('Medieval')) {
       return 'Gothic'
