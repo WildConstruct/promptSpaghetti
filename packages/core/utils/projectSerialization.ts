@@ -60,11 +60,13 @@ export interface DeserializationResult {
   error?: string;
   warnings?: string;
   migrated?: boolean;
+}
+
 /**
  * Serializes graph state to .psg format
  */
-}
-export function serializeProject(graphState: GraphState)
+export function serializeProject(
+  graphState: GraphState,
   metadata: ProjectMetadata,
   settings: ProjectSettings,
   options: SerializationOptions = {}

@@ -137,21 +137,21 @@ export interface ProfessionalBorderRadius {
   full: string;         // 50%,
   // Professional Color Palette Implementation
 }
-export const professionalColors: ProfessionalColorPalette = {,
+export const professionalColors: ProfessionalColorPalette = {
   background: {
-  primary: '#1e1e1e',     // Cinema 4D-inspired dark gray,
-  secondary: '#2a2a2a',   // Panel backgrounds,
-  tertiary: '#353535',    // Elevated surfaces,
-  elevated: '#404040',    // Modal backgrounds,
-  inverse: '#f5f5f5'     // Light surfaces,
-},
+    primary: '#1e1e1e',     // Cinema 4D-inspired dark gray
+    secondary: '#2a2a2a',   // Panel backgrounds
+    tertiary: '#353535',    // Elevated surfaces
+    elevated: '#404040',    // Modal backgrounds
+    inverse: '#f5f5f5'      // Light surfaces
+  },
   text: {
-  primary: '#e8e8e8',     // Primary text - high contrast,
-  secondary: '#b8b8b8',   // Secondary text,
-  tertiary: '#888888',    // Disabled text,
-  inverse: '#1e1e1e',     // Text on light backgrounds,
-  accent: '#ff7c00'      // Cinema 4D orange accent,
-},
+    primary: '#e8e8e8',     // Primary text - high contrast
+    secondary: '#b8b8b8',   // Secondary text
+    tertiary: '#888888',    // Disabled text
+    inverse: '#1e1e1e',     // Text on light backgrounds
+    accent: '#ff7c00'       // Cinema 4D orange accent
+  },
   accent: {
   orange: '#ff7c00',      // Cinema 4D signature orange,
   blue: '#4a9eff',        // Technical blue,
