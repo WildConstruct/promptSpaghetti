@@ -14,7 +14,6 @@ import { AuditService } from '../auth/services/AuditService';
 
 const exec = promisify(execCallback);
 
-}
 export interface ModelEvaluationTriggerRequest {
   modelId: string;
   modelName: string;
@@ -28,9 +27,7 @@ export interface ModelEvaluationTriggerRequest {
   evaluationSuite?: 'standard' | 'comprehensive' | 'security' | 'performance';
   priority?: 'low' | 'medium' | 'high' | 'critical';
 }
-}
 
-}
 export interface ModelEvaluationJob {
   id: string;
   modelId: string;
@@ -46,15 +43,12 @@ export interface ModelEvaluationJob {
   githubRunUrl?: string;
   priority: string;
 }
-}
 
-}
 export interface ModelEvaluationResults {
   overall: {
     score: number;
     status: 'passed' | 'failed' | 'warning';
     summary: string;
-}
   };
   performance: {
     accuracy?: number;
@@ -92,7 +86,6 @@ export interface ModelEvaluationResults {
   };
 }
 
-}
 export interface ModelEvaluationConfig {
   enabled: boolean;
   defaultEvaluationSuite: 'standard' | 'comprehensive' | 'security' | 'performance';
@@ -111,7 +104,6 @@ export interface ModelEvaluationConfig {
     development: boolean;
     staging: boolean;
     production: boolean;
-}
   };
   qualityGates: {
     minAccuracy: number;
@@ -191,7 +183,7 @@ export class ModelEvaluationTriggerService {
           triggeredBy: request.triggeredBy,
           githubRunId: job.githubRunId,
           priority: job.priority
-  }
+        },
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -211,7 +203,7 @@ export class ModelEvaluationTriggerService {
           version: request.version,
           error: error.message,
           triggeredBy: request.triggeredBy
-  }
+        },
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -336,7 +328,7 @@ export class ModelEvaluationTriggerService {
           : undefined,
         hasResults: !!results,
         error
-  }
+      },
       riskLevel: status === 'failed' ? 'HIGH' : 'LOW',
       compliance: {
         frameworks: ['AI_GOVERNANCE'],
@@ -373,7 +365,7 @@ export class ModelEvaluationTriggerService {
         modelId: job.modelId,
         version: job.version,
         originalStatus: job.status
-  }
+      },
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['AI_GOVERNANCE'],
@@ -492,5 +484,30 @@ export class ModelEvaluationTriggerService {
 }
 
 // Default configuration for development
+export const defaultModelEvaluationConfig: ModelEvaluationConfig = {
+  enabled: true,
+  defaultEvaluationSuite: 'standard',
+  autoTriggerOnUpload: true,
+  autoTriggerOnUpdate: true,
+  githubToken: process.env.GITHUB_TOKEN || '',
+  repositoryOwner: process.env.GITHUB_OWNER || '',
+  repositoryName: process.env.GITHUB_REPO || '',
+  workflowFileName: 'model-evaluation.yml',
+  defaultBranch: 'main',
+  maxConcurrentEvaluations: 5,
+  evaluationTimeout: 3600,
+  retryAttempts: 3,
+  evaluationEnvironments: {
+    development: true,
+    staging: true,
+    production: false
+  },
+  qualityGates: {
+    minAccuracy: 0.8,
+    maxLatency: 1000,
+    maxVulnerabilities: 0,
+    requiredCompliance: ['AI_GOVERNANCE']
+  }
+};
 
 export default ModelEvaluationTriggerService;

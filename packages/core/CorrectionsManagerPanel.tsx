@@ -10,6 +10,8 @@ import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboar
 interface CorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
 type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | 'published' | 'deprecated';
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';

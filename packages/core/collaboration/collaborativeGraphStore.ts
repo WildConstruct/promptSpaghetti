@@ -59,8 +59,8 @@ export interface CollaborativeGraphState {
   getMetrics: () => any;
   getSyncState: () => any;
 }
-export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
-  subscribeWithSelector((set, get) => ({)
+export const useCollaborativeGraphStore = create<CollaborativeGraphState>()(
+  subscribeWithSelector((set, get) => ({
   // Initial state
     graph: { nodes: [], edges: [], metadata: { created: Date.now(), lastModified: Date.now() } },
     isCollaborative: false,
@@ -69,70 +69,71 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
     isConnected: false,
     connectionStatus: 'disconnected',
     // Enable collaborative editing
-    enableCollaboration: async (options: CollaborativeGraphOptions) => {,
+    enableCollaboration: async (options: CollaborativeGraphOptions) => {
       const currentGraph = get().graph;
       // Create CRDT adapter
-      const crdtAdapter = new GraphCRDTAdapter(;
-        {
-          ...options,
-          onGraphChange: (graph: Graph) => {,
-            set({ graph, lastSyncTime: Date.now() });
-  },
-  onUserPresence: (awareness: Map<string, unknown>) => {
-  const connectedUsers = new Map<string, UserPresence>();
-  awareness.forEach((presence, userId) => {
-  connectedUsers.set(userId, {)
-  userId: presence.userId,
-  name: presence.name || 'Anonymous',
-  color: presence.color || '#0066cc',
-  cursor: presence.cursor,
-  selection: presence.selection,
-  lastSeen: presence.timestamp,
-});
+      const crdtAdapter = new GraphCRDTAdapter({
+        ...options,
+        onGraphChange: (graph: Graph) => {
+          set({ graph, lastSyncTime: Date.now() });
+        },
+        onUserPresence: (awareness: Map<string, unknown>) => {
+          const connectedUsers = new Map<string, UserPresence>();
+          awareness.forEach((presence, userId) => {
+            connectedUsers.set(userId, {
+              userId: presence.userId,
+              name: presence.name || 'Anonymous',
+              color: presence.color || '#0066cc',
+              cursor: presence.cursor,
+              selection: presence.selection,
+              lastSeen: presence.timestamp,
             });
-            set({ connectedUsers });
-  },
-  onConnectionStatus: (connected: boolean) => {,
-  set({ )
-  isConnected: connected,
-  connectionStatus: connected ? 'connected' : 'disconnected',
-});
-  }
-        currentGraph
-      );
+          });
+          set({ connectedUsers });
+        },
+        onConnectionStatus: (connected: boolean) => {
+          set({
+            isConnected: connected,
+            connectionStatus: connected ? 'connected' : 'disconnected'
+          });
+        }
+      });
+      
       set({
-  crdtAdapter,
-  isCollaborative: true,
-  collaborationEnabled: true,
-  documentId: options.documentId,
-  userId: options.userId,
-  connectionStatus: 'connecting',
-  localPresence: {
-  userId: options.userId,
-  name: 'You',
-  color: '#0066cc',
-  lastSeen: Date.now(),
-});
-  }
+        crdtAdapter,
+        isCollaborative: true,
+        collaborationEnabled: true,
+        documentId: options.documentId,
+        userId: options.userId,
+        connectionStatus: 'connecting',
+        localPresence: {
+          userId: options.userId,
+          name: 'You',
+          color: '#0066cc',
+          lastSeen: Date.now()
+        }
+      });
+    },
     // Disable collaborative editing
-    disableCollaboration: () => {,
+    disableCollaboration: () => {
       const { crdtAdapter } = get();
       if (crdtAdapter) {
-  crdtAdapter.destroy();
-  set({
-  crdtAdapter: undefined,
-  isCollaborative: false,
-  collaborationEnabled: false,
-  documentId: undefined,
-  userId: undefined,
-  connectedUsers: new Map(),
-  localPresence: undefined,
-  isConnected: false,
-  connectionStatus: 'disconnected',
-});
-  }
+        crdtAdapter.destroy();
+        set({
+          crdtAdapter: undefined,
+          isCollaborative: false,
+          collaborationEnabled: false,
+          documentId: undefined,
+          userId: undefined,
+          connectedUsers: new Map(),
+          localPresence: undefined,
+          isConnected: false,
+          connectionStatus: 'disconnected',
+        });
+      }
+    },
     // Set entire graph (replaces current)
-    setGraph: (graph: Graph) => {,
+    setGraph: (graph: Graph) => {
       const { crdtAdapter, isCollaborative } = get();
       if (isCollaborative && crdtAdapter) {
         // For collaborative mode, we don't directly replace the graph
@@ -140,20 +141,23 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
         console.warn('Direct graph replacement not recommended in collaborative mode');
       } else {
         set({ graph });
-  }
+      }
+    },
     // Add node (collaborative when enabled)
     addNode: (node: Node, position?: { x: number; y: number }) => {
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.addNode(node, position);
       } else {
-  // Non-collaborative mode
-  const newGraph = {
-  nodes: [...graph.nodes, node],
-  edges: graph.edges,
-};
+        // Non-collaborative mode
+        const newGraph = {
+          ...graph,
+          nodes: [...graph.nodes, node],
+          edges: graph.edges,
+        };
         set({ graph: newGraph });
-  }
+      }
+    },
     // Update node (collaborative when enabled)
     updateNode: (nodeId: string, updates: Partial<Node>) => {
       const { crdtAdapter, isCollaborative, graph } = get();
@@ -163,115 +167,156 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
         // Non-collaborative mode
         const newGraph = {
           ...graph,
-          nodes: graph.nodes.map(node => ),
+          nodes: graph.nodes.map(node =>
             node.id === nodeId ? { ...node, ...updates } : node
+          )
         };
         set({ graph: newGraph });
-  }
+      }
+    },
     // Delete node (collaborative when enabled)
-    deleteNode: (nodeId: string) => {,
+    deleteNode: (nodeId: string) => {
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.deleteNode(nodeId);
       } else {
-  // Non-collaborative mode
-  const newGraph = {
-  nodes: graph.nodes.filter(node => node.id !== nodeId),
-  edges: graph.edges.filter(edge => ),
-  edge.source !== nodeId && edge.target !== nodeId
-};
+        // Non-collaborative mode
+        const newGraph = {
+          ...graph,
+          nodes: graph.nodes.filter(node => node.id !== nodeId),
+          edges: graph.edges.filter(edge => 
+            edge.source !== nodeId && edge.target !== nodeId
+          )
+        };
         set({ graph: newGraph });
-  }
+      }
+    },
     // Add edge (collaborative when enabled)
-    addEdge: (edge: Edge) => {,
+    addEdge: (edge: Edge) => {
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.addEdge(edge);
       } else {
-  // Non-collaborative mode
-  const newGraph = {
-  nodes: graph.nodes,
-  edges: [...graph.edges, edge],
-};
+        // Non-collaborative mode
+        const newGraph = {
+          ...graph,
+          nodes: graph.nodes,
+          edges: [...graph.edges, edge],
+        };
         set({ graph: newGraph });
-  }
+      }
+    },
     // Delete edge (collaborative when enabled)
-    deleteEdge: (edgeId: string) => {,
+    deleteEdge: (edgeId: string) => {
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.deleteEdge(edgeId);
       } else {
-  // Non-collaborative mode
-  const newGraph = {
-  nodes: graph.nodes,
-  edges: graph.edges.filter(edge => edge.id !== edgeId),
-};
+        // Non-collaborative mode
+        const newGraph = {
+          ...graph,
+          nodes: graph.nodes,
+          edges: graph.edges.filter(edge => edge.id !== edgeId),
+        };
         set({ graph: newGraph });
-  }
+      }
+    },
     // Update node position (React Flow integration)
     updateNodePosition: (nodeId: string, position: { x: number; y: number }) => {
       const { crdtAdapter, isCollaborative } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.updateNodePosition(nodeId, position);
+      }
       // In non-collaborative mode, position updates are handled by React Flow
-  }
+    },
     // Update local user presence
-    updateLocalPresence: (presence: Partial<UserPresence>) => {,
+    updateLocalPresence: (presence: Partial<UserPresence>) => {
       const { crdtAdapter, localPresence, userId } = get();
       if (localPresence && userId) {
         const newPresence = { ...localPresence, ...presence, lastSeen: Date.now() };
         if (crdtAdapter) {
-  crdtAdapter.setUserPresence({
-  cursor: newPresence.cursor,
-  selection: newPresence.selection,
-  name: newPresence.name,
-  color: newPresence.color,
-});
+          crdtAdapter.setUserPresence({
+            cursor: newPresence.cursor,
+            selection: newPresence.selection,
+            name: newPresence.name,
+            color: newPresence.color,
+          });
+        }
         set({ localPresence: newPresence });
-  }
+      }
+    },
     // Update user cursor position
     updateUserCursor: (nodeId?: string, position?: { x: number; y: number }) => {
       const { updateLocalPresence } = get();
       updateLocalPresence({
-  cursor: { nodeId, position }
+        cursor: { nodeId, position }
       });
-  }
+    },
     // Update user selection
-    updateUserSelection: (nodeIds: string) => {,
+    updateUserSelection: (nodeIds: string) => {
       const { updateLocalPresence } = get();
       updateLocalPresence({
-  selection: nodeIds,
-});
-  }
+        selection: nodeIds
+      });
+    },
     // Apply remote update
-    applyRemoteUpdate: (update: Uint8Array) => {,
+    applyRemoteUpdate: (update: Uint8Array) => {
       const { crdtAdapter } = get();
       if (crdtAdapter) {
         crdtAdapter.applyRemoteUpdate(update);
-  }
+      }
+    },
     // Get document state for initial sync
-    getDocumentState: () => {,
+    getDocumentState: () => {
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getDocumentState() : null;
-  }
+    },
     // Create snapshot
-    createSnapshot: () => {,
+    createSnapshot: () => {
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.createSnapshot() : null;
-  }
+    },
     // Get metrics
-    getMetrics: () => {,
+    getMetrics: () => {
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getMetrics() : null;
-  }
+    },
     // Get sync state
-    getSyncState: () => {,
+    getSyncState: () => {
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getSyncState() : null;
+    }
   }))
 );
 
 // Selector hooks for common use cases
 
-// Action hooks  
-export }));
+// Action hooks for selective updates
+export const useCollaborativeActions = () => useCollaborativeGraphStore(
+  (state) => ({
+    enableCollaboration: state.enableCollaboration,
+    disableCollaboration: state.disableCollaboration,
+    addNode: state.addNode,
+    updateNode: state.updateNode,
+    deleteNode: state.deleteNode,
+    addEdge: state.addEdge,
+    deleteEdge: state.deleteEdge,
+    updateNodePosition: state.updateNodePosition,
+    updateLocalPresence: state.updateLocalPresence,
+    updateUserCursor: state.updateUserCursor,
+    updateUserSelection: state.updateUserSelection
+  })
+);
+
+export const useCollaborativeState = () => useCollaborativeGraphStore(
+  (state) => ({
+    graph: state.graph,
+    isCollaborative: state.isCollaborative,
+    collaborationEnabled: state.collaborationEnabled,
+    connectedUsers: state.connectedUsers,
+    localPresence: state.localPresence,
+    isConnected: state.isConnected,
+    connectionStatus: state.connectionStatus,
+    lastSyncTime: state.lastSyncTime
+  })
+);

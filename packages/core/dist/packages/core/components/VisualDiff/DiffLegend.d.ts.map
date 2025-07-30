@@ -1,1 +1,0 @@
-{"version":3,"file":"DiffLegend.d.ts","sourceRoot":"","sources":["../../../../../components/VisualDiff/DiffLegend.tsx"],"names":[],"mappings":"AAEA,OAAO,KAAK,MAAM,OAAO,CAAC;AAC1B,OAAO,EAAE,aAAa,EAAE,MAAM,wBAAwB,CAAC;AAEvD,MAAM,WAAW,eAAe;IAC9B,aAAa,EAAE,aAAa,CAAC;IAC7B,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB;AACD,eAAO,MAAM,UAAU,EAAE,KAAK,CAAC,EAAE,CAAC,eAAe,CAG/C,CAAA"}

@@ -10,20 +10,20 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 51 modules transformed.
-✗ Build failed in 321ms
+✓ 114 modules transformed.
+✗ Build failed in 623ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/IntegratedFileBrowser.tsx:351:1: ERROR: Expected ">" but found ","
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/IntegratedFileBrowser.tsx:351:1
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/historical/UTDGManager.ts:63:8: ERROR: Expected ";" but found "generateHistoricalContent"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/historical/UTDGManager.ts:63:8
 
-Expected ">" but found ","
-349|                backgroundColor: styles.tertiary,
-350|                border: `1px solid ${styles.border}`}
-351|  },
-   |   ^
-352|    borderRadius: '4px',
-353|                color: styles.text,
+Expected ";" but found "generateHistoricalContent"
+61 |    * Generate historically accurate content for a specific scenario
+62 |    */
+63 |    async generateHistoricalContent(config: ContentGenerationConfig): Promise<GeneratedContent> {,
+   |          ^
+64 |    const startTime = performance.now();
+65 |    // Build query from configuration
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -38,20 +38,20 @@ Expected ">" but found ","
 Safe config failed, trying regular config...
 vite v7.0.5 building for production...
 transforming...
-✓ 55 modules transformed.
-✗ Build failed in 625ms
+✓ 97 modules transformed.
+✗ Build failed in 749ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/WorkspaceManager.tsx:283:11: ERROR: Expected "}" but found ")"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/FileManagement/WorkspaceManager.tsx:283:11
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/security/ClassificationEnforcementMiddleware.ts:199:0: ERROR: Unexpected "export"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/security/ClassificationEnforcementMiddleware.ts:199:0
 
-Expected "}" but found ")"
-281|                {currentSession.description}
-282|              </div>
-283|            ))
-   |             ^
-284|            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: styles.textSecondary }}>
-285|              <span>{currentSession.openFiles.length} files open</span>
+Unexpected "export"
+197|   * Create operation validation middleware
+198|   */
+199|  export function createOperationValidationMiddleware(): 
+   |  ^
+200|    (req: ClassificationAwareRequest, res: Response, next: NextFunction) => Promise<void> {
+201|    const enforcer = new ClassificationEnforcer();
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -79,7 +79,7 @@ Error: Command failed: vite build --config vite.config.production.ts
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 58476,
+  pid: 67097,
   stdout: null,
   stderr: null
 }

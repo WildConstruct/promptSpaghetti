@@ -25,7 +25,6 @@ export enum DependencyType {
   CUSTOM = 'custom'
 }
 
-}
 export interface HealthCheckResult {
   status: HealthStatus;
   responseTimeMs: number;
@@ -497,4 +496,5 @@ class HealthMonitoringService extends EventEmitter {
 }
 
 // Export singleton instance
+export const healthMonitoringService = new HealthMonitoringService();
 export default HealthMonitoringService;

@@ -1,1 +1,0 @@
-{"version":3,"file":"useBadgeSystem.d.ts","sourceRoot":"","sources":["../../../../hooks/useBadgeSystem.ts"],"names":[],"mappings":"AAeA,MAAM,WAAW,qBAAqB;IACpC,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,eAAe,CAAC,EAAE,OAAO,CAAC;IAC1B,mBAAmB,CAAC,EAAE,OAAO,CAAC;IAC9B,aAAa,CAAC,EAAE,MAAM,CAAC;CACxB;AACD,eAAO,MAAM,cAAc,GAAI,SAAQ,qBAA0B,SA6C5D,CAAA;AAwML,eAAe,cAAc,CAAC"}

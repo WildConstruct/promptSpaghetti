@@ -239,8 +239,10 @@ export enum ExtensionLifecycleState {
   DEACTIVATED = 'deactivated',
   ERROR = 'error',
   DISPOSED = 'disposed'
-  // Extension Error Types
-  export enum ExtensionErrorType {
+}
+
+// Extension Error Types
+export enum ExtensionErrorType {
   INITIALIZATION_ERROR = 'initialization_error',
   ACTIVATION_ERROR = 'activation_error',
   RUNTIME_ERROR = 'runtime_error',
@@ -248,23 +250,29 @@ export enum ExtensionLifecycleState {
   DEPENDENCY_ERROR = 'dependency_error',
   PERMISSION_ERROR = 'permission_error',
   VALIDATION_ERROR = 'validation_error'
-  // Extension Error
-  export class ExtensionError extends Error {
-  constructor();
-  public readonly type: ExtensionErrorType,
-  public readonly extensionId: string,
-  message: string,
-  public readonly cause?: Error,
-  super(message);
-  this.name = 'ExtensionError';
-  // Extension Validation Result
+}
+
+// Extension Error
+export class ExtensionError extends Error {
+  constructor(
+    public readonly type: ExtensionErrorType,
+    public readonly extensionId: string,
+    message: string,
+    public readonly cause?: Error
+  ) {
+    super(message);
+    this.name = 'ExtensionError';
+  }
+}
+
+// Extension Validation Result
   export interface ExtensionValidationResult {
   valid: boolean;
   errors: string;
   warnings: string;
   // Extension Manifest Schema (will be used in Story 8.4.3)
 }
-export const ExtensionManifestSchema = z.object({)
+export const ExtensionManifestSchema = z.object({
   id: z.string().regex(/^[a-zA-Z0-9-_.]+$/),
   name: z.string().min(1),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
@@ -272,8 +280,8 @@ export const ExtensionManifestSchema = z.object({)
   author: z.string().min(1),
   license: z.string().min(1),
   // Engine requirements
-  engines: z.object({,)
-  promptSpaghetti: z.string(),
+  engines: z.object({
+    promptSpaghetti: z.string(),
   node: z.string().optional(),
 }),
   // Dependencies
@@ -285,8 +293,8 @@ export const ExtensionManifestSchema = z.object({)
   main: z.string().optional(),
   browser: z.string().optional(),
   // Extension points
-  contributes: z.object({,)
-  nodes: z.array(z.string()).optional(),
+  contributes: z.object({
+    nodes: z.array(z.string()).optional(),
   commands: z.array(z.string()).optional(),
   menus: z.array(z.string()).optional(),
   themes: z.array(z.string()).optional(),
@@ -298,8 +306,8 @@ export const ExtensionManifestSchema = z.object({)
   bugs: z.string().optional(),
   keywords: z.array(z.string()).optional(),
   // Configuration
-  configuration: z.object({,)
-  type: z.literal('object'),
+  configuration: z.object({
+    type: z.literal('object'),
   properties: z.record(z.any()),
 }).optional()
 });

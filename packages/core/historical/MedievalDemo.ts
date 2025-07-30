@@ -30,88 +30,107 @@ export class MedievalDemoDatabase {
   private materialDatabase: UTDGNode = [];
   private accessoryDatabase: UTDGNode = [];
   constructor() {
-  this.initializeDatabase();
-  static getInstance(): MedievalDemoDatabase {,
-  if (!MedievalDemoDatabase.instance) {
-  MedievalDemoDatabase.instance = new MedievalDemoDatabase();
-  return MedievalDemoDatabase.instance;
+    this.initializeDatabase();
+  }
+
+  static getInstance(): MedievalDemoDatabase {
+    if (!MedievalDemoDatabase.instance) {
+      MedievalDemoDatabase.instance = new MedievalDemoDatabase();
+    }
+    return MedievalDemoDatabase.instance;
+  }
+
   /**
   * Get clothing items by criteria
   */
-  getClothing(criteria: {)
-  era?: Era;
+  getClothing(criteria: {
+    era?: Era;
   social_class?: SocialClass;
   gender?: 'male' | 'female' | 'unisex';
   garment_type?: string;
   ceremonial?: boolean;
 } = {}): MedievalClothing {
-    return this.clothingDatabase.filter(item => {)
-  if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
+    return this.clothingDatabase.filter(item => {
+      if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
-      if (criteria.social_class && )
+      }
+      if (criteria.social_class &&
           (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))) {
         return false;
-      if (criteria.gender && criteria.gender !== 'unisex' && )
+      }
+      if (criteria.gender && criteria.gender !== 'unisex' &&
           item.metadata.gender && item.metadata.gender !== criteria.gender && item.metadata.gender !== 'unisex') {
         return false;
+      }
       if (criteria.garment_type && item.medieval_specific.garment_type !== criteria.garment_type) {
         return false;
+      }
       if (criteria.ceremonial !== undefined && item.metadata.ceremonial !== criteria.ceremonial) {
         return false;
+      }
       return true;
     });
+  }
+
   /**
    * Get materials by criteria
    */
-  getMaterials(criteria: {)
-  era?: Era;
-  fabric_type?: string;
-  availability?: 'common' | 'expensive' | 'rare'
+  getMaterials(criteria: {
+    era?: Era;
+    fabric_type?: string;
+    availability?: 'common' | 'expensive' | 'rare'
   } = {}): UTDGNode {
-    return this.materialDatabase.filter(item => {)
-  if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
+    return this.materialDatabase.filter(item => {
+      if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
+      }
       if (criteria.fabric_type && !item.metadata.tags.includes(criteria.fabric_type)) {
         return false;
+      }
       return true;
     });
+  }
   /**
    * Get accessories by criteria
    */
-  getAccessories(criteria: {)
-  era?: Era;
-  social_class?: SocialClass;
-  type?: string;
-} = {}): UTDGNode {
-    return this.accessoryDatabase.filter(item => {)
-  if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
+  getAccessories(criteria: {
+    era?: Era;
+    social_class?: SocialClass;
+    type?: string;
+  } = {}): UTDGNode {
+    return this.accessoryDatabase.filter(item => {
+      if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
-      if (criteria.social_class && )
+      }
+      if (criteria.social_class &&
           (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))) {
         return false;
+      }
       return true;
     });
+  }
   /**
    * Generate a complete medieval outfit
    */
-  generateOutfit(criteria: {)
+  generateOutfit(criteria: {
   era: Era;
   social_class: SocialClass;
   gender: 'male' | 'female';
   occasion?: 'daily' | 'ceremonial' | 'work' | 'travel';
   season?: 'spring' | 'summer' | 'autumn' | 'winter'
   }): {
-  outfit: (MedievalClothing | UTDGNode)[];
-  description: string;
-  historical_notes: string;
-  const outfit: (MedievalClothing | UTDGNode)[] = [];
+    outfit: (MedievalClothing | UTDGNode)[];
+    description: string;
+    historical_notes: string;
+  } {
+    const outfit: (MedievalClothing | UTDGNode)[] = [];
   const historical_notes: string = [];
   // Base layer
-  const undergarments = this.getClothing({)
-  era: criteria.era,
-  social_class: criteria.social_class,
-  gender: criteria.gender,
-}).filter(item => )
+    const undergarments = this.getClothing({
+      era: criteria.era,
+      social_class: criteria.social_class,
+      gender: criteria.gender,
+    }).filter(item =>
       item.medieval_specific.garment_type === 'chemise' || 
       item.medieval_specific.garment_type === 'braies'
     );
@@ -119,12 +138,12 @@ export class MedievalDemoDatabase {
   outfit.push(undergarments[0]);
   historical_notes.push('Medieval people wore linen undergarments for hygiene and warmth');
   // Main garment
-  const mainGarments = this.getClothing({)
-  era: criteria.era,
-  social_class: criteria.social_class,
-  gender: criteria.gender,
-  ceremonial: criteria.occasion === 'ceremonial',
-}).filter(item => )
+    const mainGarments = this.getClothing({
+      era: criteria.era,
+      social_class: criteria.social_class,
+      gender: criteria.gender,
+      ceremonial: criteria.occasion === 'ceremonial',
+    }).filter(item =>
       item.medieval_specific.garment_type === 'tunic' || 
       item.medieval_specific.garment_type === 'gown'
     );
@@ -136,18 +155,18 @@ export class MedievalDemoDatabase {
   historical_notes.push('Peasant clothing was practical, made from coarse wool or hemp');
   // Outer layer for cold weather
   if (criteria.season === 'winter' || criteria.season === 'autumn') {
-  const cloaks = this.getClothing({)
-  era: criteria.era,
-  social_class: criteria.social_class,
-}).filter(item => item.medieval_specific.garment_type === 'cloak');
+    const cloaks = this.getClothing({
+      era: criteria.era,
+      social_class: criteria.social_class,
+    }).filter(item => item.medieval_specific.garment_type === 'cloak');
       if (cloaks.length > 0) {
   outfit.push(cloaks[0]);
   historical_notes.push('Cloaks were essential for warmth and weather protection');
   // Accessories
-  const accessories = this.getAccessories({)
-  era: criteria.era,
-  social_class: criteria.social_class,
-});
+    const accessories = this.getAccessories({
+      era: criteria.era,
+      social_class: criteria.social_class,
+    });
     if (accessories.length > 0) {
       outfit.push(accessories[0]);
     // Generate description

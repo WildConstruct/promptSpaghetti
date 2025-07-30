@@ -24,8 +24,10 @@ export interface UIExtension extends BaseExtension {
   onUIInitialized?(context: ExtensionContext): void;
   onUIDestroyed?(context: ExtensionContext): void;
   onThemeChanged?(theme: Theme): void;
-  // UI Component Definition
-  export interface UIComponentDefinition {
+}
+
+// UI Component Definition
+export interface UIComponentDefinition {
   // Basic metadata
   id: string;
   name: string;
@@ -53,8 +55,10 @@ export enum UIComponentCategory {
   WIDGET = 'widget',
   OVERLAY = 'overlay',
   CUSTOM = 'custom'
-  // UI Component UI Configuration
-  export interface UIComponentUIConfiguration {
+}
+
+// UI Component UI Configuration
+export interface UIComponentUIConfiguration {
   // Layout
   layout?: UIComponentLayout;
   // Styling
@@ -350,8 +354,10 @@ export enum MenuTarget {
   INSPECTOR = 'inspector',
   GRAPH = 'graph',
   CUSTOM = 'custom'
-  // Keybinding Contribution
-  export interface KeybindingContribution {
+}
+
+// Keybinding Contribution
+export interface KeybindingContribution {
   id: string;
   key: string;
   command: string;
@@ -419,8 +425,8 @@ export interface UIComponentFactory {
   // UI Extension Helper Functions
 }
 export namespace UIExtensionHelpers {
-  export function createTheme(partial: Partial<ThemeContribution>): ThemeContribution {,
-  return {
+  export function createTheme(partial: Partial<ThemeContribution>): ThemeContribution {
+    return {
   id: partial.id || 'custom-theme',
   name: partial.name || 'Custom Theme',
   description: partial.description || 'A custom theme',
@@ -467,9 +473,9 @@ export namespace UIExtensionHelpers {
   tight: '-0.025em',
   normal: '0em',
   wide: '0.025em',
-}
+},
         ...partial.typography
-  },
+      },
   spacing: {
   xs: '0.25rem',
   sm: '0.5rem',
@@ -505,9 +511,9 @@ export namespace UIExtensionHelpers {
   solid: 'solid',
   dashed: 'dashed',
   dotted: 'dotted',
-}
+},
         ...partial.borders
-  },
+      },
   transitions: {
   duration: {
   fast: '150ms',
@@ -520,11 +526,12 @@ export namespace UIExtensionHelpers {
   easeIn: 'ease-in',
   easeOut: 'ease-out',
   easeInOut: 'ease-in-out',
-}
+},
         ...partial.transitions
-  },
-  custom: partial.custom;
-  };
+      },
+      custom: partial.custom
+    };
+  }
 
   export function createCommand(partial: Partial<CommandContribution>): CommandContribution {
     return {
@@ -536,35 +543,40 @@ export namespace UIExtensionHelpers {
       handler: partial.handler || (() => {}),
       enablement: partial.enablement,
       keybinding: partial.keybinding,
-      context: partial.context;
-  };
+      context: partial.context
+    };
+  }
 
   export function createMenu(partial: Partial<MenuContribution>): MenuContribution {
-  return {
-  id: partial.id || 'custom-menu',
-  label: partial.label || 'Custom Menu',
-  icon: partial.icon,
-  order: partial.order || 0,
-  type: partial.type || 'item',
-  command: partial.command,
-  submenu: partial.submenu,
-  when: partial.when,
-  menu: partial.menu || MenuTarget.CUSTOM,
-};
+    return {
+      id: partial.id || 'custom-menu',
+      label: partial.label || 'Custom Menu',
+      icon: partial.icon,
+      order: partial.order || 0,
+      type: partial.type || 'item',
+      command: partial.command,
+      submenu: partial.submenu,
+      when: partial.when,
+      menu: partial.menu || MenuTarget.CUSTOM
+    };
+  }
 
   export function validateUIComponent(definition: UIComponentDefinition): ExtensionValidationResult {
-  const errors: string = [];
-  const warnings: string = [];
+    const errors: string[] = [];
+    const warnings: string[] = [];
   // Basic validation
   if (!definition.id) errors.push('Component ID is required');
   if (!definition.name) errors.push('Component name is required');
-  if (!definition.component) errors.push('Component class is required');
-  // React component validation
-  if (definition.component && typeof definition.component !== 'function') {
-  errors.push('Component must be a valid React component');
-  return {
-  valid: errors.length === 0,
-  errors,
-  warnings
-};
+    if (!definition.component) errors.push('Component class is required');
+    // React component validation
+    if (definition.component && typeof definition.component !== 'function') {
+      errors.push('Component must be a valid React component');
+    }
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+}
 

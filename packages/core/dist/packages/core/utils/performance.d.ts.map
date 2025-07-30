@@ -1,1 +1,0 @@
-{"version":3,"file":"performance.d.ts","sourceRoot":"","sources":["../../../../utils/performance.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,MAAM,WAAW,gBAAgB;IAC/B,QAAQ,EAAE,MAAM,CAAC;IACjB,SAAS,EAAE,MAAM,CAAC;IAClB,OAAO,EAAE,MAAM,CAAC;IAChB,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,QAAQ,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAC;CAIhC;AACD,wBAAsB,gBAAgB,CAAC,CAAC,SAAG"}

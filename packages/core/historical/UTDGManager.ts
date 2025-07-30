@@ -33,31 +33,40 @@ export class UTDGManager {
   this.constraintValidator = new ConstraintValidator(MEDIEVAL_DEMO_CONSTRAINTS);
   this.externalDataService = new ExternalDataService();
   this.medievalDemo = MedievalDemoDatabase.getInstance();
-  static getInstance(): UTDGManager {,
+  }
+
+  static getInstance(): UTDGManager {
   if (!UTDGManager.instance) {
   UTDGManager.instance = new UTDGManager();
+  }
   return UTDGManager.instance;
+  }
+
   /**
   * Query historical content from all available sources
   */
-  async queryHistoricalContent(query: HistoricalQuery): Promise<HistoricalQueryResult> {,
+  async queryHistoricalContent(query: HistoricalQuery): Promise<HistoricalQueryResult> {
   // Try external sources first
   try {
   const externalResults = await this.externalDataService.queryHistoricalData(query);
   // If we get good results from external sources, return them
   if (externalResults.nodes.length > 0) {
   return externalResults;
+  }
 } catch (error) {
   console.warn('External data query failed, falling back to local demo:', error);
   // Fallback to medieval demo database
   return this.queryMedievalDemo(query);
+  }
+  }
+
   /**
   * Generate historically accurate content for a specific scenario
   */
-  async generateHistoricalContent(config: ContentGenerationConfig): Promise<GeneratedContent> {,
+  async generateHistoricalContent(config: ContentGenerationConfig): Promise<GeneratedContent> {
   const startTime = performance.now();
   // Build query from configuration
-  const query: HistoricalQuery = {,
+  const query: HistoricalQuery = {
   era: config.era.name,
   region: config.region,
   category: this.getRelevantNodeTypes(config.scenario),
@@ -70,8 +79,8 @@ export class UTDGManager {
   forbidden_elements: config.forbidden_elements,
 },
   limit: 20,
-      min_authenticity: config.historical_accuracy === 'strict' ? 0.8 : ,
-        config.historical_accuracy === 'moderate' ? 0.6 : 0.4;
+      min_authenticity: config.historical_accuracy === 'strict' ? 0.8 :
+        config.historical_accuracy === 'moderate' ? 0.6 : 0.4
   };
     // Query for relevant content
     const queryResult = await this.queryHistoricalContent(query);
@@ -90,20 +99,23 @@ export class UTDGManager {
   nodes: selectedNodes,
   constraints_applied: appliedConstraints,
   generation_metadata: {
-  config,
-  generation_time: performance.now() - startTime,
-  accuracy_score: accuracyScore,
-  creativity_score: creativityScore,
-  historical_basis: selectedNodes.map(node => node.external_source?.url || node.metadata.source).filter(Boolean),
+    config,
+    generation_time: performance.now() - startTime,
+    accuracy_score: accuracyScore,
+    creativity_score: creativityScore,
+    historical_basis: selectedNodes.map(node => node.external_source?.url || node.metadata.source).filter(Boolean),
+  }
 };
+}
+
   /**
    * Generate medieval demo content specifically
    */
   generateMedievalDemo(scenario: 'court_scene' | 'village_life' | 'monastery' | 'market_day'): GeneratedContent {
   let config: ContentGenerationConfig;
   switch (scenario) {
-  case 'court_scene':,
-  config = {
+  case 'court_scene':
+      config = {
   era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
   region: 'France',
   social_class: 'noble',
@@ -157,26 +169,29 @@ export class UTDGManager {
 };
       break;
     default:
-      throw new Error(`Unknown medieval scenario: ${scenario}`);}
+      throw new Error(`Unknown medieval scenario: ${scenario}`);
+    }
     return this.generateHistoricalContentSync(config);
+  }
+
   /**
    * Export UTDG data for Wild Construct VFX pipeline
    */
-  exportForVFX(nodes: UTDGNode, era: Era, scene_description: string): VFXExportData {
+  exportForVFX(nodes: UTDGNode[], era: Era, scene_description: string): VFXExportData {
   // Generate material descriptions for VFX
-  const materials = nodes;
-  .filter(node => node.type === 'material' || node.type === 'texture')
-  .map(node => ({)
-  name: node.content.split(' ')[0], // First word as material name,
+  const materials = nodes
+    .filter(node => node.type === 'material' || node.type === 'texture')
+    .map(node => ({
+      name: node.content.split(' ')[0], // First word as material name
   properties: this.extractMaterialProperties(node),
   historical_basis: node.external_source?.url || node.metadata.source,
   authenticity_level: node.metadata.authenticity,
 }));
     // Generate texture descriptions
-    const textures = nodes;
+    const textures = nodes
       .filter(node => node.type === 'pattern' || node.type === 'texture')
-      .map(node => ({)
-  name: node.content,
+      .map(node => ({
+        name: node.content,
   pattern: this.extractPatternDescription(node),
   color_palette: this.extractColorPalette(node),
   historical_source: node.metadata.source,
@@ -210,11 +225,13 @@ export class UTDGManager {
   crowd_control_data: crowdControlData,
   backdrop_data: backdropData,
   meteor_data: meteorData,
-};
+    };
+  }
+
   /**
    * Validate UTDG data quality and historical accuracy
    */
-  validateUTDGData(nodes: UTDGNode): ValidationReport {
+  validateUTDGData(nodes: UTDGNode[]): ValidationReport {
   const issues: any = [];
   let completenessScore = 0;
   let consistencyScore = 0;
@@ -238,9 +255,9 @@ export class UTDGManager {
   completenessScore = filledFields / totalFields;
   // Check consistency
   const constraintResult = this.constraintValidator.validateNodes(nodes);
-  consistencyScore = constraintResult.valid ? 1.0 : Math.max(),
-  0,
-  1 - constraintResult.violations.length / nodes.length
+  consistencyScore = constraintResult.valid ? 1.0 : Math.max(
+    0,
+    1 - constraintResult.violations.length / nodes.length
   );
   // Check historical accuracy
   accuracyScore = nodes.reduce((sum, node) => sum + node.metadata.authenticity, 0) / nodes.length;
@@ -250,40 +267,44 @@ export class UTDGManager {
   // Check freshness (simplified)
   freshnessScore = 0.8; // Assume reasonably fresh for demo
   const overallScore = (completenessScore + consistencyScore + accuracyScore + reliabilityScore + freshnessScore) / 5;
-  return {
-  overall_score: overallScore,
-  metrics: {
-  completeness: completenessScore,
-  consistency: consistencyScore,
-  historical_accuracy: accuracyScore,
-  source_reliability: reliabilityScore,
-  freshness: freshnessScore,
-}
+    return {
+      overall_score: overallScore,
+      metrics: {
+        completeness: completenessScore,
+        consistency: consistencyScore,
+        historical_accuracy: accuracyScore,
+        source_reliability: reliabilityScore,
+        freshness: freshnessScore,
+      },
       issues,
-      recommendations: this.generateRecommendations(overallScore, {)
-  completeness: completenessScore,
-  consistency: consistencyScore,
-  historical_accuracy: accuracyScore,
-  source_reliability: reliabilityScore,
-  freshness: freshnessScore,
-}),
-      last_validated: new Date().toISOString();
-  };
+      recommendations: this.generateRecommendations(overallScore, {
+        completeness: completenessScore,
+        consistency: consistencyScore,
+        historical_accuracy: accuracyScore,
+        source_reliability: reliabilityScore,
+        freshness: freshnessScore,
+      }),
+      last_validated: new Date().toISOString()
+    };
+  }
   /**
    * Register external data sources
    */
   registerExternalSource(source: any): void {
-  this.externalDataService.registerDataSource(source);
+    this.externalDataService.registerDataSource(source);
+  }
   /**
   * Get constraint validator for custom validation
   */
-  getConstraintValidator(): ConstraintValidator {,
-  return this.constraintValidator;
+  getConstraintValidator(): ConstraintValidator {
+    return this.constraintValidator;
+  }
   /**
   * Get external data service for custom queries
   */
-  getExternalDataService(): ExternalDataService {,
-  return this.externalDataService;
+  getExternalDataService(): ExternalDataService {
+    return this.externalDataService;
+  }
   /**
   * Query medieval demo database directly
   */

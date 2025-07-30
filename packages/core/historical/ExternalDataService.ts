@@ -29,98 +29,120 @@ export class ExternalDataService {
   private cache: Map<string, CacheEntry> = new Map();
   private rateLimiters: Map<string, RateLimiter> = new Map();
   constructor() {
-  this.initializeDefaultDataSources();
+    this.initializeDefaultDataSources();
+  }
+
   /**
   * Register a new data source
   */
-  registerDataSource(dataSource: DataSource): void {,
+  registerDataSource(dataSource: DataSource): void {
   this.dataSources[dataSource.id] = dataSource;
   if (dataSource.rate_limiting) {
   this.rateLimiters.set(dataSource.id, new RateLimiter(dataSource.rate_limiting));
+  }
+  }
+
   /**
   * Remove a data source
   */
-  unregisterDataSource(sourceId: string): void {,
-  delete this.dataSources[sourceId];
-  this.rateLimiters.delete(sourceId);
-  this.clearCacheForSource(sourceId);
+  unregisterDataSource(sourceId: string): void {
+    delete this.dataSources[sourceId];
+    this.rateLimiters.delete(sourceId);
+    this.clearCacheForSource(sourceId);
+  }
+
   /**
   * Get all registered data sources
   */
-  getDataSources(): DataSource {,
-  return Object.values(this.dataSources);
+  getDataSources(): DataSource[] {
+    return Object.values(this.dataSources);
+  }
   /**
   * Get a specific data source by ID
   */
-  getDataSource(sourceId: string): DataSource | null {,
-  return this.dataSources[sourceId] || null;
+  getDataSource(sourceId: string): DataSource | null {
+    return this.dataSources[sourceId] || null;
+  }
   /**
   * Query historical data from external sources
   */
-  async queryHistoricalData(query: HistoricalQuery, sourcIds?: string): Promise<HistoricalQueryResult> {,
-  const startTime = performance.now();
-  const sourcesUsed: string = [];
-  // Generate cache key
-  const cacheKey = this.generateCacheKey(query, sourcIds);
-  // Check cache first
-  const cachedResult = this.getCachedData(cacheKey);
-  if (cachedResult) {
-  return {
-  nodes: cachedResult.data.nodes,
-  total_count: cachedResult.data.total_count,
-  query_metadata: {
-  query_time: performance.now() - startTime,
-  cache_hit: true,
-  sources_used: cachedResult.data.sources_used,
-};
+  async queryHistoricalData(query: HistoricalQuery, sourceIds?: string[]): Promise<HistoricalQueryResult> {
+    const startTime = performance.now();
+    const sourcesUsed: string[] = [];
+    // Generate cache key
+    const cacheKey = this.generateCacheKey(query, sourceIds);
+    // Check cache first
+    const cachedResult = this.getCachedData(cacheKey);
+    if (cachedResult) {
+      return {
+        nodes: cachedResult.data.nodes,
+        total_count: cachedResult.data.total_count,
+        query_metadata: {
+          query_time: performance.now() - startTime,
+          cache_hit: true,
+          sources_used: cachedResult.data.sources_used,
+        },
+      };
+    }
     // Determine which sources to query
-    const targetSources = sourcIds ? ;
-      sourcIds.map(id => this.dataSources[id]).filter(Boolean) :
+    const targetSources = sourceIds ? 
+      sourceIds.map(id => this.dataSources[id]).filter(Boolean) :
       this.getSourcesForQuery(query);
-    const allResults: UTDGNode = [];
+    const allResults: UTDGNode[] = [];
     // Query each source
     for (const source of targetSources) {
       try {
         // Check rate limiting
         const rateLimiter = this.rateLimiters.get(source.id);
         if (rateLimiter && !rateLimiter.canMakeRequest()) {
-          console.warn(`Rate limit exceeded for source ${source.id}, skipping...`);}
+          console.warn(`Rate limit exceeded for source ${source.id}, skipping...`);
           continue;
+        }
         const sourceResults = await this.queryDataSource(source, query);
         allResults.push(...sourceResults);
         sourcesUsed.push(source.id);
         // Update rate limiter
         if (rateLimiter) {
           rateLimiter.recordRequest();
+        }
       } catch (error) {
-        console.error(`Error querying source ${source.id}:`, error);}
+        console.error(`Error querying source ${source.id}:`, error);
+      }
+    }
     // Process and deduplicate results
     const processedResults = this.processResults(allResults, query);
-    const result: HistoricalQueryResult = {,
-  nodes: processedResults.slice(0, query.limit || 50),
-  total_count: processedResults.length,
-  query_metadata: {
-  query_time: performance.now() - startTime,
-  cache_hit: false,
-  sources_used: sourcesUsed,
-};
+    const result: HistoricalQueryResult = {
+      nodes: processedResults.slice(0, query.limit || 50),
+      total_count: processedResults.length,
+      query_metadata: {
+        query_time: performance.now() - startTime,
+        cache_hit: false,
+        sources_used: sourcesUsed,
+      },
+    };
     // Cache the result
     if (result.nodes.length > 0) {
-  this.setCachedData(cacheKey, {)
-  nodes: result.nodes,
-  total_count: result.total_count,
-  sources_used: sourcesUsed,
-});
+      this.setCachedData(cacheKey, {
+        nodes: result.nodes,
+        total_count: result.total_count,
+        sources_used: sourcesUsed,
+      });
+    }
     return result;
+  }
+
   /**
    * Import data from a specific source with transformation
    */
-  async importFromSource(sourceId: string, query: HistoricalQuery): Promise<UTDGNode> {
+  async importFromSource(sourceId: string, query: HistoricalQuery): Promise<UTDGNode[]> {
     const source = this.dataSources[sourceId];
     if (!source) {
-      throw new Error(`Data source ${sourceId} not found`);}
+      throw new Error(`Data source ${sourceId} not found`);
+    }
     const rawData = await this.queryDataSource(source, query);
     return this.applyTransforms(rawData, source.transforms);
+  }
+
   /**
    * Validate and test a data source connection
    */
@@ -128,24 +150,27 @@ export class ExternalDataService {
     const source = this.dataSources[sourceId];
     if (!source) {
       return {valid: false, error: 'Data source not found'};
+    }
     try {
       // Test with a minimal query
-      const testQuery: HistoricalQuery = {,
-  era: 'medieval',
+      const testQuery: HistoricalQuery = {
+        era: 'medieval',
         category: 'material',
         filters: {},
-        limit: 1;
-  };
+        limit: 1
+      };
       const results = await this.queryDataSource(source, testQuery);
       return {
   valid: true,
   sample_data: results[0] || null,
 };
     } catch (error) {
-  return {
-  valid: false,
-  error: error instanceof Error ? error.message : 'Unknown error',
-};
+      return {
+        valid: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
   /**
    * Clear cache for all or specific sources
    */
@@ -154,6 +179,8 @@ export class ExternalDataService {
       this.clearCacheForSource(sourceId);
     } else {
       this.cache.clear();
+    }
+  }
   /**
    * Get cache statistics
    */
@@ -163,49 +190,57 @@ export class ExternalDataService {
       return size + JSON.stringify(entry.data).length;
     }, 0);
     return {
-  total_entries: entries.length,
-  total_size: totalSize,
-  hit_rate: 0 // Would need to track hits/misses over time,
-};
+      total_entries: entries.length,
+      total_size: totalSize,
+      hit_rate: 0 // Would need to track hits/misses over time
+    };
+  }
   /**
    * Query a specific data source
    */
   private async queryDataSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode> {
     switch (source.type) {
-    case 'api':
-      return this.queryApiSource(source, query);
-    case 'database':
-      return this.queryDatabaseSource(source, query);
-    case 'file':
-      return this.queryFileSource(source, query);
-    default:
-      throw new Error(`Unsupported source type: ${source.type}`);}
+      case 'api':
+        return this.queryApiSource(source, query);
+      case 'database':
+        return this.queryDatabaseSource(source, query);
+      case 'file':
+        return this.queryFileSource(source, query);
+      default:
+        throw new Error(`Unsupported source type: ${source.type}`);
+    }
+  }
   /**
    * Query an API-based data source
    */
   private async queryApiSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode> {
-  if (!source.endpoint) {
-  throw new Error('API source requires endpoint');
-  const url = this.buildApiUrl(source.endpoint, query);
-  const headers = this.buildAuthHeaders(source.authentication);
-  try {
-  const response = await fetch(url, {)
-  method: 'GET',
-  headers,
-  timeout: 30000 // 30 second timeout,
-});
+    if (!source.endpoint) {
+      throw new Error('API source requires endpoint');
+    }
+    const url = this.buildApiUrl(source.endpoint, query);
+    const headers = this.buildAuthHeaders(source.authentication);
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+        timeout: 30000 // 30 second timeout
+      });
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`);}
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
       return this.applyTransforms(data, source.transforms);
     } catch (error) {
-      throw new Error(`API source query failed: ${error}`);}
+      throw new Error(`API source query failed: ${error}`);
+    }
+  }
   /**
    * Query a database-based data source (placeholder)
    */
   private async queryDatabaseSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode> {
     // This would integrate with actual database connectors
     throw new Error('Database sources not implemented yet');
+  }
   /**
    * Query a file-based data source (JSON/CSV files)
    */
@@ -224,9 +259,12 @@ export class ExternalDataService {
         data = this.parseCsvData(text);
       } else {
         throw new Error('Unsupported file format');
+      }
       return this.applyTransforms(data, source.transforms);
     } catch (error) {
-      throw new Error(`File source query failed: ${error}`);}
+      throw new Error(`File source query failed: ${error}`);
+    }
+  }
   /**
    * Apply data transformations
    */

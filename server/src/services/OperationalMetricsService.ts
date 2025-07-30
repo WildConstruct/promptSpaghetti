@@ -485,4 +485,5 @@ class OperationalMetricsService extends EventEmitter {
 }
 
 // Export singleton instance
+export const operationalMetricsService = new OperationalMetricsService();
 export default OperationalMetricsService;

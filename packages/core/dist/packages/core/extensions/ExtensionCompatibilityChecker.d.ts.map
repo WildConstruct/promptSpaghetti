@@ -1,1 +1,0 @@
-{"version":3,"file":"ExtensionCompatibilityChecker.d.ts","sourceRoot":"","sources":["../../../../extensions/ExtensionCompatibilityChecker.ts"],"names":[],"mappings":"AAQA,qBAAa,6BAA6B;IACxC,OAAO,CAAC,MAAM,CAAC,QAAQ,CAAgC;IACvD,OAAO,CAAC,kBAAkB,CAA6C;IACvE,OAAO,CAAC,gBAAgB,CAA2C;IACnE,OAAO,CAAC,kBAAkB,CAAqB;IAC/C,OAAO;WAGO,WAAW,IAAI,6BAA6B;IAI1D;;MAEE;IACK,2BAA2B;CAAC"}

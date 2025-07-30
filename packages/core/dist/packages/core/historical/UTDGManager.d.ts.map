@@ -1,1 +1,0 @@
-{"version":3,"file":"UTDGManager.d.ts","sourceRoot":"","sources":["../../../../historical/UTDGManager.ts"],"names":[],"mappings":"AAsBA;;GAEG;AACH,qBAAa,WAAW;IACtB,OAAO,CAAC,MAAM,CAAC,QAAQ,CAAc;IACrC,OAAO,CAAC,mBAAmB,CAAsB;IACjD,OAAO,CAAC,mBAAmB,CAAsB;IACjD,OAAO,CAAC,YAAY,CAAuB;IAC3C,OAAO,CAAC,YAAY,CAAoC;;IAKxD,MAAM,CAAC,WAAW,IAAI,WAAW;CA+eR"}

@@ -22,8 +22,10 @@ export interface TransformExtension extends BaseExtension {
   // Pipeline support
   supportsPipeline(): boolean;
   createPipeline?(transforms: DataTransform): TransformPipeline;
-  // Data Transform Interface
-  export interface DataTransform {
+}
+
+// Data Transform Interface
+export interface DataTransform {
   readonly id: string;
   readonly name: string;
   readonly type: TransformType;
@@ -56,8 +58,10 @@ export enum TransformType {
   BOOLEAN = 'boolean',
   DATE = 'date',
   CUSTOM = 'custom'
-  // Transform Definition
-  export interface TransformDefinition {
+}
+
+// Transform Definition
+export interface TransformDefinition {
   // Basic metadata
   id: string;
   name: string;
@@ -166,8 +170,8 @@ export interface TransformHelpConfiguration {
   interactive?: boolean;
   tutorial?: string;
   // Links
-  links?: Array<{,
-  title: string;
+  links?: Array<{
+    title: string;
   url: string;
   type: 'documentation' | 'example' | 'tutorial' | 'reference'
   }>;
@@ -433,7 +437,7 @@ export namespace TransformExtensionHelpers {
       description: config.description || 'A custom data transform',
       version: config.version || '1.0.0',
       type: config.type || TransformType.CUSTOM,
-      transformClass: config.transformClass || class implements DataTransform {,
+      transformClass: config.transformClass || class implements DataTransform {
         id = config.id || 'custom-transform';
         name = config.name || 'Custom Transform';
         type = config.type || TransformType.CUSTOM;
@@ -448,32 +452,35 @@ export namespace TransformExtensionHelpers {
         getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
         async initialize() {}
         async dispose() {}
-  },
-  inputSchema: config.inputSchema || z.any(),
+      },
+      inputSchema: config.inputSchema || z.any(),
       outputSchema: config.outputSchema || z.any(),
       configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
       pipeline: config.pipeline || {},
-      metadata: config.metadata || {,
-  author: 'Unknown',
-  license: 'MIT',
-};
+      metadata: config.metadata || {
+        author: 'Unknown',
+        license: 'MIT'
+      }
+    };
+  }
   export function validateTransformDefinition(definition: TransformDefinition): ExtensionValidationResult {
-  const errors: string = [];
-  const warnings: string = [];
+    const errors: string[] = [];
+    const warnings: string[] = [];
   // Basic validation
   if (!definition.id) errors.push('Transform ID is required');
   if (!definition.name) errors.push('Transform name is required');
   if (!definition.transformClass) errors.push('Transform class is required');
   // Schema validation
   if (!definition.inputSchema) errors.push('Input schema is required');
-  if (!definition.outputSchema) errors.push('Output schema is required');
-  return {
-  valid: errors.length === 0,
-  errors,
-  warnings
-};
+    if (!definition.outputSchema) errors.push('Output schema is required');
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
   export function createTransformRegistry(): TransformRegistry {
     const registry = new Map<string, TransformDefinition>();
     const eventEmitter = new EventTarget();
@@ -481,48 +488,52 @@ export namespace TransformExtensionHelpers {
       register(definition: TransformDefinition) {
         registry.set(definition.id, definition);
         eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-  }
+      },
       unregister(transformId: string) {
         const definition = registry.get(transformId);
         if (definition) {
           registry.delete(transformId);
           eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
-  }
+        }
+      },
       get(transformId: string) {
         return registry.get(transformId);
-  }
+      },
       getAll() {
         return Array.from(registry.values());
-  }
+      },
       getByType(type: TransformType) {
         return Array.from(registry.values()).filter(def => def.type === type);
-  }
+      },
       getByCategory(category: string) {
         return Array.from(registry.values()).filter(def => def.ui.category === category);
-  }
+      },
       search(query: string) {
         const lowercaseQuery = query.toLowerCase();
-        return Array.from(registry.values()).filter(def =>)
+        return Array.from(registry.values()).filter(def =>
           def.name.toLowerCase().includes(lowercaseQuery) ||
           def.description.toLowerCase().includes(lowercaseQuery)
         );
-  }
+      },
       filter(predicate: (definition: TransformDefinition) => boolean) {
         return Array.from(registry.values()).filter(predicate);
-  }
+      },
       getCompatible(inputType: string, outputType: string) {
-        return Array.from(registry.values()).filter(def => {)
-  const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
+        return Array.from(registry.values()).filter(def => {
+          const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
           const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
           return inputCompatible && outputCompatible;
         });
-  }
+      },
       validate(definition: TransformDefinition) {
         return validateTransformDefinition(definition);
-  }
+      },
       on(event: string, listener: any) {
         eventEmitter.addEventListener(event, listener);
-  }
+      },
       off(event: string, listener: any) {
         eventEmitter.removeEventListener(event, listener);
+      }
     };
+  }
+}

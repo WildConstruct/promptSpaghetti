@@ -1,3 +1,0 @@
-import { CorrectionRule } from './correctionsStore';
-export declare const rules: CorrectionRule[], addRule: (rule: Omit<CorrectionRule, "id" | "createdAt" | "updatedAt">) => void, updateRule: (id: string, updates: Partial<CorrectionRule>) => void, deleteRule: (id: string) => void, toggleRule: (id: string) => void, clearAllRules: () => void, applyCorrections: (text: string) => string;
-//# sourceMappingURL=CorrectionsPanel.d.ts.map

@@ -1,1 +1,0 @@
-{"version":3,"file":"security-audit-logger.d.ts","sourceRoot":"","sources":["../../../../runtime/security-audit-logger.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;GAgBG;AACH;;GAEG;AACH,oBAAY,gBAAgB;IAC1B,IAAI,SAAS,CAAY,yCAAyC;IAClE,OAAO,YAAY,CAAM,qCAAqC;IAC9D,KAAK,UAAU,CAAU,qBAAqB;IAC9C,QAAQ,aAAa;IACrB;;MAEE;KAHuB,6BAA6B;IACtD;;MAEE;IACF,MAAM;IAAC,IAAI;IAAC,qBAAqB;CAAA"}

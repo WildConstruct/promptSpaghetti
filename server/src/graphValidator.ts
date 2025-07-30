@@ -12,21 +12,17 @@
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import { z } from 'zod';
 
-}
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
 }
-}
 
-}
 export interface ValidationError {
   code: string;
   message: string;
   nodeId?: string;
   path?: string;
   severity: 'error' | 'warning';
-}
 }
 
 // Basic node schema with required fields

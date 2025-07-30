@@ -19,63 +19,82 @@ import {
 export class ConstraintValidator {
   private constraints: HistoricalConstraint = [];
   private enabledEnforcement: ('strict' | 'warning' | 'suggestion')[] = ['strict', 'warning', 'suggestion'];
-  constructor(constraints: HistoricalConstraint = []) {,
+  constructor(constraints: HistoricalConstraint = []) {
   this.constraints = [...constraints, ...this.getDefaultConstraints()];
+  }
+
   /**
   * Add a new constraint to the validator
   */
-  addConstraint(constraint: HistoricalConstraint): void {,
+  addConstraint(constraint: HistoricalConstraint): void {
   this.constraints.push(constraint);
+  }
+
   /**
   * Remove a constraint by ID
   */
-  removeConstraint(constraintId: string): void {,
+  removeConstraint(constraintId: string): void {
   this.constraints = this.constraints.filter(c => c.id !== constraintId);
+  }
+
   /**
   * Configure which enforcement levels are active
   */
-  setEnforcement(levels: ('strict' | 'warning' | 'suggestion')[]): void {,
+  setEnforcement(levels: ('strict' | 'warning' | 'suggestion')[]): void {
   this.enabledEnforcement = levels;
+  }
+
   /**
   * Validate a set of UTDG nodes against historical constraints
   */
-  validateNodes(nodes: UTDGNode): ConstraintValidationResult {,
-  const violations: ConstraintViolation = [];
-  const warnings: ConstraintWarning = [];
-  const suggestions: ConstraintSuggestion = [];
-  // Check each constraint against the node set
-  for (const constraint of this.constraints) {
-  if (!this.enabledEnforcement.includes(constraint.enforcement)) {
-  continue;
-  const result = this.evaluateConstraint(constraint, nodes);
-  if (result) {
-  switch (constraint.enforcement) {
-  case 'strict':,
-  violations.push(result as ConstraintViolation);
-  break;
-  case 'warning':,
-  warnings.push(result as ConstraintWarning);
-  break;
-  case 'suggestion':,
-  suggestions.push(result as ConstraintSuggestion);
-  break;
-  return {
-  valid: violations.length === 0,
-  violations,
-  warnings,
-  suggestions
-};
+  validateNodes(nodes: UTDGNode[]): ConstraintValidationResult {
+    const violations: ConstraintViolation[] = [];
+    const warnings: ConstraintWarning[] = [];
+    const suggestions: ConstraintSuggestion[] = [];
+    
+    // Check each constraint against the node set
+    for (const constraint of this.constraints) {
+      if (!this.enabledEnforcement.includes(constraint.enforcement)) {
+        continue;
+      }
+      
+      const result = this.evaluateConstraint(constraint, nodes);
+      if (result) {
+        switch (constraint.enforcement) {
+          case 'strict':
+            violations.push(result as ConstraintViolation);
+            break;
+          case 'warning':
+            warnings.push(result as ConstraintWarning);
+            break;
+          case 'suggestion':
+            suggestions.push(result as ConstraintSuggestion);
+            break;
+        }
+      }
+    }
+    
+    return {
+      valid: violations.length === 0,
+      violations,
+      warnings,
+      suggestions
+    };
+  }
+
   /**
    * Validate nodes for a specific era
    */
-  validateForEra(nodes: UTDGNode, era: Era): ConstraintValidationResult {
+  validateForEra(nodes: UTDGNode[], era: Era): ConstraintValidationResult {
     // Filter constraints relevant to the era
-    const eraConstraints = this.constraints.filter(constraint =>;);
+    const eraConstraints = this.constraints.filter(constraint =>
       constraint.eras.some(cEra => this.erasOverlap(cEra, era))
     );
     const validator = new ConstraintValidator(eraConstraints);
     validator.setEnforcement(this.enabledEnforcement);
     return validator.validateNodes(nodes);
+  }
+
   /**
    * Get suggestions for improving historical accuracy
    */
@@ -83,10 +102,11 @@ export class ConstraintValidator {
     const result = this.validateForEra(nodes, era);
     const suggestions: string = [];
     // Add suggestions from constraint violations
-    result.suggestions.forEach(suggestion => {)
-  suggestions.push(suggestion.message);
+    result.suggestions.forEach(suggestion => {
+      suggestions.push(suggestion.message);
       if (suggestion.suggested_alternatives) {
-        suggestions.push(...suggestion.suggested_alternatives.map(alt => `Consider: ${alt}`));}
+        suggestions.push(...suggestion.suggested_alternatives.map(alt => `Consider: ${alt}`));
+      }
     });
     // Add general improvement suggestions
     if (nodes.length > 0) {
@@ -95,63 +115,74 @@ export class ConstraintValidator {
         suggestions.push(`Average authenticity is ${(avgAuthenticity * 100).toFixed(0)}%. Consider using more historically verified items.`);}
       const missingSourceNodes = nodes.filter(node => !node.external_source);
       if (missingSourceNodes.length > 0) {
-        suggestions.push(`${missingSourceNodes.length} nodes lack external source validation. Consider verifying with historical databases.`);}
+        suggestions.push(`${missingSourceNodes.length} nodes lack external source validation. Consider verifying with historical databases.`);
+      }
+    }
     return suggestions;
+  }
+
   /**
    * Evaluate a single constraint against a set of nodes
    */
-  private evaluateConstraint(()
+  private evaluateConstraint(
     constraint: HistoricalConstraint,
-    nodes: UTDGNode,
+    nodes: UTDGNode[],
   ): ConstraintViolation | ConstraintWarning | ConstraintSuggestion | null {
   const violatingNodes: string = [];
   // Apply constraint-specific logic based on rule type
   switch (constraint.rule) {
-  case 'era_compatibility':,
-  violatingNodes.push(...this.checkEraCompatibility(constraint, nodes));
+  case 'era_compatibility':
+      violatingNodes.push(...this.checkEraCompatibility(constraint, nodes));
   break;
-  case 'social_class_appropriateness':,
-  violatingNodes.push(...this.checkSocialClassAppropriateness(constraint, nodes));
+  case 'social_class_appropriateness':
+      violatingNodes.push(...this.checkSocialClassAppropriateness(constraint, nodes));
   break;
-  case 'material_availability':,
-  violatingNodes.push(...this.checkMaterialAvailability(constraint, nodes));
+  case 'material_availability':
+      violatingNodes.push(...this.checkMaterialAvailability(constraint, nodes));
   break;
-  case 'cultural_appropriateness':,
-  violatingNodes.push(...this.checkCulturalAppropriateness(constraint, nodes));
+  case 'cultural_appropriateness':
+      violatingNodes.push(...this.checkCulturalAppropriateness(constraint, nodes));
   break;
-  case 'temporal_consistency':,
-  violatingNodes.push(...this.checkTemporalConsistency(constraint, nodes));
+  case 'temporal_consistency':
+      violatingNodes.push(...this.checkTemporalConsistency(constraint, nodes));
   break;
-  case 'regional_authenticity':,
-  violatingNodes.push(...this.checkRegionalAuthenticity(constraint, nodes));
+  case 'regional_authenticity':
+      violatingNodes.push(...this.checkRegionalAuthenticity(constraint, nodes));
   break;
-  default:,
-  // Generic constraint evaluation
-  violatingNodes.push(...this.evaluateGenericConstraint(constraint, nodes));
-  if (violatingNodes.length === 0) {
-  return null;
-  const baseResult = {
+    default:
+      // Generic constraint evaluation
+      violatingNodes.push(...this.evaluateGenericConstraint(constraint, nodes));
+      break;
+    }
+    
+    if (violatingNodes.length === 0) {
+      return null;
+    }
+    
+    const baseResult = {
   constraint_id: constraint.id,
   node_ids: violatingNodes,
   message: constraint.message,
 };
     switch (constraint.enforcement) {
-  case 'strict':,
-  return {
-  ...baseResult,
-  severity: 'major' as const,
-};
-    case 'warning':
-      return {
-  ...baseResult,
-  historical_context: constraint.historical_basis,
-};
-    case 'suggestion':
-      return {
-  ...baseResult,
-  suggested_alternatives: this.generateAlternatives(constraint, nodes),
-};
+      case 'strict':
+        return {
+          ...baseResult,
+          severity: 'major' as const,
+        };
+      case 'warning':
+        return {
+          ...baseResult,
+          historical_context: constraint.historical_basis,
+        };
+      case 'suggestion':
+        return {
+          ...baseResult,
+          suggested_alternatives: this.generateAlternatives(constraint, nodes),
+        };
+    }
     return null;
+  }
   /**
    * Check if items from different eras are inappropriately mixed
    */
@@ -162,10 +193,13 @@ export class ConstraintValidator {
     for (const node of nodes) {
       const primaryEra = node.metadata.era[0];
       if (primaryEra) {
-        const eraKey = `${primaryEra.name}-${primaryEra.period.start}`;}
+        const eraKey = `${primaryEra.name}-${primaryEra.period.start}`;
         if (!eraGroups.has(eraKey)) {
           eraGroups.set(eraKey, []);
+        }
         eraGroups.get(eraKey)!.push(node);
+      }
+    }
     // Check for era conflicts
     if (eraGroups.size > 1) {
       const eraNames = Array.from(eraGroups.keys());
@@ -176,7 +210,12 @@ export class ConstraintValidator {
           const era2Nodes = eraGroups.get(eraNames[j])!;
           if (this.areErasIncompatible(era1Nodes[0].metadata.era[0], era2Nodes[0].metadata.era[0])) {
             violatingNodes.push(...era1Nodes.map(n => n.id), ...era2Nodes.map(n => n.id));
+          }
+        }
+      }
+    }
     return violatingNodes;
+  }
   /**
    * Check if items are appropriate for the specified social classes
    */

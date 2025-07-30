@@ -22,8 +22,10 @@ interface ConnectionAnnotationsLayerProps {
   canEdit?: boolean;
   showTooltips?: boolean;
   visible?: boolean;
-  onSelectionChange?: (selectedAnnotations: string) => void;
-  export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps> = ({,)
+  onSelectionChange?: (selectedAnnotations: string[]) => void;
+}
+
+export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps> = ({
   canEdit = true,
   showTooltips = true,
   visible = true,

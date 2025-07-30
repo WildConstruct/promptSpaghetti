@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import { SecureValidation } from './validation/security';
 
-export const NodeTypeEnum = z.enum([)
+export const NodeTypeEnum = z.enum([
   'WeightedChoice',
   'Concat',
   'Output',
@@ -158,7 +158,7 @@ export const AnyNodeSchema = z.discriminatedUnion('type', [)
   PythonTransformNodeSchema
 ]);
 
-export const GraphSchema = z.object({)
+export const GraphSchema = z.object({
   nodes: z.array(AnyNodeSchema),
   seed: z.union([z.string(), z.number()]).optional(),
 });

@@ -1,1 +1,0 @@
-{"version":3,"file":"SessionPriorityManager.d.ts","sourceRoot":"","sources":["../../../../security/SessionPriorityManager.ts"],"names":[],"mappings":"AAmBA,oBAAY,eAAe;IACzB,QAAQ,aAAa,CAAM,iCAAiC;IAC5D,IAAI,SAAS,CAAa,gCAAgC;IAC1D,MAAM,WAAW,CAAS,0BAA0B;IACpD,GAAG,QAAQ,CAAc,sCAAsC;IAC/D,OAAO,YAAY,CAAO,iCAAiC;IAC3D,MAAM;IAAC,IAAI;IAAC,cAAc;CAAA"}

@@ -9,11 +9,13 @@ interface UserCursorProps {
   user: UserPresence;
   position: { x: number; y: number };
   nodeId?: string;
+}
+
 /**
  * Individual user cursor component
  */
 const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
-  const cursorStyle: React.CSSProperties = {,
+  const cursorStyle: React.CSSProperties = {
   position: 'absolute',
   left: position.x,
   top: position.y,
@@ -54,14 +56,16 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
 };
 interface NodeSelectionOverlayProps {
   nodeId: string;
-  users: UserPresence;
+  users: UserPresence[];
   nodePosition: { x: number; y: number };
   nodeWidth: number;
   nodeHeight: number;
+}
+
 /**
  * Selection overlay for nodes being edited by other users
  */
-const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
+const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({
   nodeId,
   users,
   nodePosition,
@@ -69,21 +73,20 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
   nodeHeight
 }) => {
   const primaryUser = users[0]; // Use first user's color;
-  const overlayStyle: React.CSSProperties = {,
-  position: 'absolute',
+  const overlayStyle: React.CSSProperties = {
+    position: 'absolute',
     left: nodePosition.x - 2,
     top: nodePosition.y - 2,
     width: nodeWidth + 4,
     height: nodeHeight + 4,
-    border: `2px solid ${primaryUser.color}`}
-},
-  borderRadius: 6,
+    border: `2px solid ${primaryUser.color}`,
+    borderRadius: 6,
     pointerEvents: 'none',
     zIndex: 999,
-    backgroundColor: `${primaryUser.color}20`, // 20% opacity},}
-  boxShadow: `0 0 0 1px ${primaryUser.color}40`}
+    backgroundColor: `${primaryUser.color}20`, // 20% opacity
+    boxShadow: `0 0 0 1px ${primaryUser.color}40`
   };
-  const labelStyle: React.CSSProperties = {,
+  const labelStyle: React.CSSProperties = {
   position: 'absolute',
   top: -24,
   left: 0,
@@ -107,49 +110,51 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
   );
 };
 interface CollaborativePresenceProps {
-  userCursors: Array<{,
-  userId: string;
+  userCursors: Array<{
+    userId: string;
     user: UserPresence;
-  position: { x: number; y: number };
+    position: { x: number; y: number };
     nodeId?: string;
   }>;
   remoteSelections: Map<string, UserPresence>;
   className?: string;
+}
+
 /**
  * Main collaborative presence overlay component
  */
-export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
+export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
   userCursors,
   remoteSelections,
   className
 }) => {
   const reactFlow = useReactFlow();
   // Get node positions for selection overlays
-  const getNodeRect = (nodeId: string) => {,
+  const getNodeRect = (nodeId: string) => {
   const node = reactFlow.getNode(nodeId);
   if (!node) return null;
   return {
   x: node.position.x,
   y: node.position.y,
-  width: node.width || 200, // Default width,
-  height: node.height || 100 // Default height,
+  width: node.width || 200, // Default width
+  height: node.height || 100 // Default height
 };
   };
   return (
     <div 
       className={className}
       style={{
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  pointerEvents: 'none',
-  zIndex: 1000,
-}}
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: 'none',
+        zIndex: 1000,
+      }}
     >
       {/* Render user cursors */}
-      {userCursors.map(({ userId, user, position }) => ()
+      {userCursors.map(({ userId, user, position }) => (
         <UserCursor
           key={userId}
           user={user}
@@ -179,10 +184,12 @@ interface CollaborationStatusProps {
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   connectedUserCount: number;
   className?: string;
-  /**
-  * Connection status indicator component
-  */
-  export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
+}
+
+/**
+ * Connection status indicator component
+ */
+export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
   isCollaborative,
   connectionStatus,
   connectedUserCount,
@@ -190,41 +197,43 @@ interface CollaborationStatusProps {
 }) => {
   if (!isCollaborative) return null;
   const getStatusColor = () => {
-  switch (connectionStatus) {
-  case 'connected': return '#10b981';
-  case 'connecting': return '#f59e0b';
-  case 'disconnected': return '#6b7280';
-  case 'error': return '#ef4444';
-  default: return '#6b7280';
-};
+    switch (connectionStatus) {
+      case 'connected': return '#10b981';
+      case 'connecting': return '#f59e0b';
+      case 'disconnected': return '#6b7280';
+      case 'error': return '#ef4444';
+      default: return '#6b7280';
+    }
+  };
   const getStatusText = () => {
     switch (connectionStatus) {
-    case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;}
-    case 'connecting': return 'Connecting...';
-    case 'disconnected': return 'Disconnected';
-    case 'error': return 'Connection error';
-    default: return 'Unknown'
+      case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
+      case 'connecting': return 'Connecting...';
+      case 'disconnected': return 'Disconnected';
+      case 'error': return 'Connection error';
+      default: return 'Unknown';
+    }
   };
-  const statusStyle: React.CSSProperties = {,
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-  padding: '4px 8px',
-  backgroundColor: '#1f2937',
-  color: 'white',
-  borderRadius: '6px',
-  fontSize: '12px',
-  fontWeight: 500,
-  border: '1px solid #374151',
-};
-  const dotStyle: React.CSSProperties = {,
-  width: '8px',
-  height: '8px',
-  borderRadius: '50%',
-  backgroundColor: getStatusColor(),
-  ...(connectionStatus === 'connecting' && {)
-  animation: 'pulse 2s infinite',
-}
+  const statusStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '4px 8px',
+    backgroundColor: '#1f2937',
+    color: 'white',
+    borderRadius: '6px',
+    fontSize: '12px',
+    fontWeight: 500,
+    border: '1px solid #374151',
+  };
+  const dotStyle: React.CSSProperties = {
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    backgroundColor: getStatusColor(),
+    ...(connectionStatus === 'connecting' && {
+      animation: 'pulse 2s infinite',
+    })
   };
   return (
     <div className={className} style={statusStyle}>
@@ -238,39 +247,41 @@ interface UserAvatarsProps {
   localUserId?: string;
   maxVisible?: number;
   className?: string;
-  /**
-  * Connected users avatar list
-  */
-  export const UserAvatars: React.FC<UserAvatarsProps> = ({
+}
+
+/**
+ * Connected users avatar list
+ */
+export const UserAvatars: React.FC<UserAvatarsProps> = ({
   connectedUsers,
   localUserId,
   maxVisible = 5,
   className
 }) => {
-  const users = Array.from(connectedUsers.values());
-  .filter(user => user.userId !== localUserId)
-  .slice(0, maxVisible);
-  const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user;
+  const users = Array.from(connectedUsers.values())
+    .filter(user => user.userId !== localUserId)
+    .slice(0, maxVisible);
+  const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user
   if (users.length === 0) return null;
-  const containerStyle: React.CSSProperties = {,
-  display: 'flex',
-  alignItems: 'center',
-  gap: '4px',
-};
-  const avatarStyle = (color: string): React.CSSProperties => ({,)
-  width: '24px',
-  height: '24px',
-  borderRadius: '50%',
-  backgroundColor: color,
-  color: 'white',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '10px',
-  fontWeight: 600,
-  border: '2px solid white',
-  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-});
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+  };
+  const avatarStyle = (color: string): React.CSSProperties => ({
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    backgroundColor: color,
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '10px',
+    fontWeight: 600,
+    border: '2px solid white',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+  });
   const getInitials = (name: string) => {
     return name.split(' ')
       .map(word => word[0])
@@ -280,7 +291,7 @@ interface UserAvatarsProps {
   };
   return (
     <div className={className} style={containerStyle}>
-      {users.map(user => ()
+      {users.map(user => (
         <div
           key={user.userId}
           style={avatarStyle(user.color)}

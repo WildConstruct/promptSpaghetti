@@ -31,7 +31,7 @@ export interface LLMRandomizerWorkflow {
   // 3. Validate and serialize graph
   validateAndSerialize: (graph: any) => Promise<string>;
   // 4. Full round-trip workflow
-  fullWorkflow: (request: any, provider?: string) => Promise<{,
+  fullWorkflow: (request: any, provider?: string) => Promise<{
   success: boolean;
   originalRequest: any;
   llmOutput: string;
@@ -51,16 +51,19 @@ export class LLMRandomizerSystem implements LLMRandomizerWorkflow {
 
     const { generateGraph } = await import('./agents');
     return generateGraph(request, provider);
+  }
 
   async parseFromLLM(llmOutput: string): Promise<any> {
 
     const { parseGraph } = await import('./parser');
     return parseGraph(llmOutput);
+  }
 
   async validateAndSerialize(graph: any): Promise<string> {
 
     const { serializeGraph } = await import('./serialization');
     return serializeGraph(graph);
+  }
 
   async fullWorkflow(request: any, provider = 'openai'): Promise<any> {
 
@@ -68,58 +71,62 @@ export class LLMRandomizerSystem implements LLMRandomizerWorkflow {
     if (!this.workflow) {
       const { RandomizerWorkflow } = await import('./generator');
       this.workflow = new RandomizerWorkflow();
+    }
 
     // Convert request to RandomizerParameters if needed
     const parameters = this.normalizeParameters(request, provider);
     return this.workflow.generateGraph(parameters);
+  }
 
   private normalizeParameters(request: any, provider: string): any {
-  // Convert various request formats to RandomizerParameters
-  if (typeof request === 'string') {
-  return {
-  purpose: request,
-  complexity: 'moderate',
-  nodeCount: 12,
-  style: 'balanced',
-  provider,
-  temperature: 0.7,
-  maxRetries: 3,
-  nodeTypes: [],
-  specificRequirements: [],
-  constraints: [],
-  focusAreas: [],
-  includeMetadata: true,
-  validateOutput: true,
-  enablePreview: true,
-  preferredPatterns: [],
-  avoidPatterns: [],
-  qualityLevel: 'standard',
-  diversityScore: 0.5,
-  outputFormat: 'both',
-  includeExplanation: false,
-  domain: undefined,
-  userContext: undefined,
-};
+    // Convert various request formats to RandomizerParameters
+    if (typeof request === 'string') {
+      return {
+        purpose: request,
+        complexity: 'moderate',
+        nodeCount: 12,
+        style: 'balanced',
+        provider,
+        temperature: 0.7,
+        maxRetries: 3,
+        nodeTypes: [],
+        specificRequirements: [],
+        constraints: [],
+        focusAreas: [],
+        includeMetadata: true,
+        validateOutput: true,
+        enablePreview: true,
+        preferredPatterns: [],
+        avoidPatterns: [],
+        qualityLevel: 'standard',
+        diversityScore: 0.5,
+        outputFormat: 'both',
+        includeExplanation: false,
+        domain: undefined,
+        userContext: undefined,
+      };
+    }
 
     return {
-  provider,
-  temperature: 0.7,
-  maxRetries: 3,
-  nodeTypes: [],
-  specificRequirements: [],
-  constraints: [],
-  focusAreas: [],
-  includeMetadata: true,
-  validateOutput: true,
-  enablePreview: true,
-  preferredPatterns: [],
-  avoidPatterns: [],
-  qualityLevel: 'standard',
-  diversityScore: 0.5,
-  outputFormat: 'both',
-  includeExplanation: false,
-  domain: undefined,
-  userContext: undefined,
-  ...request
-};
-
+      provider,
+      temperature: 0.7,
+      maxRetries: 3,
+      nodeTypes: [],
+      specificRequirements: [],
+      constraints: [],
+      focusAreas: [],
+      includeMetadata: true,
+      validateOutput: true,
+      enablePreview: true,
+      preferredPatterns: [],
+      avoidPatterns: [],
+      qualityLevel: 'standard',
+      diversityScore: 0.5,
+      outputFormat: 'both',
+      includeExplanation: false,
+      domain: undefined,
+      userContext: undefined,
+      ...request
+    };
+  }
+}
