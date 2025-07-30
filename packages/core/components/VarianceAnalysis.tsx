@@ -18,8 +18,12 @@ interface VarianceAnalysisProps {
   results: PreviewResultWithPath;
   onSuggestionClick?: (suggestion: VarianceSuggestion) => void;
   compact?: boolean;
+}
 
-export }, [results]);
+export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onSuggestionClick, compact = false }) => {
+  const analysis = useMemo(() => {
+    return varianceAnalysisService.analyzeVariance(results);
+  }, [results]);
   const indicators = useMemo(() => {
     return varianceAnalysisService.createDiversityIndicators(analysis);
   }, [analysis]);
