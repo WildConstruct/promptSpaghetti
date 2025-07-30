@@ -336,22 +336,28 @@ export class UTDGManager {
     
     // Query accessories
     if (!query.category || query.category.includes('accessory')) {
-  const accessories = this.medievalDemo.getAccessories({)
-  era,
-  social_class: query.social_class,
-});
+  const accessories = this.medievalDemo.getAccessories({
+        era,
+        social_class: query.social_class,
+      });
       results.push(...accessories);
+    }
+    
     // Apply limit
     if (query.limit) {
-  results = results.slice(0, query.limit);
-  return {
-  nodes: results,
-  total_count: results.length,
-  query_metadata: {
-  query_time: performance.now() - startTime,
-  cache_hit: false,
-  sources_used: ['medieval_demo'],
-};
+      results = results.slice(0, query.limit);
+    }
+    
+    return {
+      nodes: results,
+      total_count: results.length,
+      query_metadata: {
+        query_time: performance.now() - startTime,
+        cache_hit: false,
+        sources_used: ['medieval_demo'],
+      }
+    };
+  }
   /**
    * Synchronous content generation for demo scenarios
    */

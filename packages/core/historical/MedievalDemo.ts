@@ -166,8 +166,9 @@ export class MedievalDemoDatabase {
         outfit.push(cloaks[0]);
         historical_notes.push('Cloaks were essential for warmth and weather protection');
       }
+    }
       
-      // Accessories
+    // Accessories
     const accessories = this.getAccessories({
       era: criteria.era,
       social_class: criteria.social_class,
