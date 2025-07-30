@@ -239,19 +239,20 @@ export class UTDGManager {
   let reliabilityScore = 0;
   let freshnessScore = 0;
   // Check completeness
-  const totalFields = nodes.length * 10; // Assume 10 required fields per node;
+  const totalFields = nodes.length * 10; // Assume 10 required fields per node
   let filledFields = 0;
   for (const node of nodes) {
-  if (node.id) filledFields++;
-  if (node.type) filledFields++;
-  if (node.content) filledFields++;
-  if (node.metadata?.era?.length > 0) filledFields++;
-  if (node.metadata?.authenticity !== undefined) filledFields++;
-  if (node.metadata?.source) filledFields++;
-  if (node.metadata?.tags?.length > 0) filledFields++;
-  if (node.relationships) filledFields++;
-  if (node.constraints) filledFields++;
-  if (node.external_source) filledFields++;
+    if (node.id) filledFields++;
+    if (node.type) filledFields++;
+    if (node.content) filledFields++;
+    if (node.metadata?.era?.length > 0) filledFields++;
+    if (node.metadata?.authenticity !== undefined) filledFields++;
+    if (node.metadata?.source) filledFields++;
+    if (node.metadata?.tags?.length > 0) filledFields++;
+    if (node.relationships) filledFields++;
+    if (node.constraints) filledFields++;
+    if (node.external_source) filledFields++;
+  }
   completenessScore = filledFields / totalFields;
   // Check consistency
   const constraintResult = this.constraintValidator.validateNodes(nodes);

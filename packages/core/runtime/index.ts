@@ -133,6 +133,7 @@ import seedrandom from 'seedrandom';
 
 function seededRandom(seed: string | number): number {
   return seedrandom(String(seed))();
+}
 
 /* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
 
