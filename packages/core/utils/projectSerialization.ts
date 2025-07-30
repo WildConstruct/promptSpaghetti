@@ -188,7 +188,7 @@ export function deserializeProject(
       } else {
         warnings.push(compatibility.message || 'File format migration available');
     // Convert graph nodes back to ReactFlow format
-    const reactFlowNodes = psgFile.graph.nodes.map(node => ;);
+    const reactFlowNodes = psgFile.graph.nodes.map(node =>
       convertGraphNodeToReactFlowNode(node, { preserveIds })
     );
     // Create edges array (empty for now, will be populated based on node inputs)

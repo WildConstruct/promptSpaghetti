@@ -18,9 +18,28 @@ interface ExportOptionsDialogProps {
   individualIndex?: number;
   onExport: (format: ExportFormat, options: ResultExportOptions) => Promise<void>;
   sourceGraph?: unknown;
+}
+
+export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
+  open,
+  onClose,
+  results,
+  selectedIndices = [],
+  exportType,
+  individualIndex,
+  onExport,
+  sourceGraph
+}) => {
   const exportService = new ResultExportService();
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json-simple');
+  const [options, setOptions] = useState<ResultExportOptions>({
+    format: 'json-simple',
+    includeMetadata: true,
+    includeExecutionPaths: false,
+    includeDebugInfo: false
+  });
   const [isExporting, setIsExporting] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string>([]);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const availableFormats = useMemo(() => {
   return exportService.getAvailableFormats().filter(format => {)
   if (exportType === 'individual') {
