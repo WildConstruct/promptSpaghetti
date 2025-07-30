@@ -79,18 +79,22 @@ export class SetVariableNode extends RuntimeNode<void> {
     super(id);
   }
   run(ctx: ExecutionContext): void {
-  // Security: Validate variable name using the new alphanumeric pattern with 64 char limit,
-  if (!SecurityValidation.validateVariableName(this.key)) {
-  return; // Silently ignore invalid variable names
-  // Security: Validate value is safe,
-  if (this.value === null || this.value === undefined) {
-  ctx.variables[this.key] = this.value;
-  return;
-  // Only allow safe primitive types and simple objects/arrays
-  const valueType = typeof this.value;
-  if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
-  ctx.variables[this.key] = this.value;
-} else if (Array.isArray(this.value)) {
+    // Security: Validate variable name using the new alphanumeric pattern with 64 char limit
+    if (!SecurityValidation.validateVariableName(this.key)) {
+      return; // Silently ignore invalid variable names
+    }
+    
+    // Security: Validate value is safe
+    if (this.value === null || this.value === undefined) {
+      ctx.variables[this.key] = this.value;
+      return;
+    }
+    
+    // Only allow safe primitive types and simple objects/arrays
+    const valueType = typeof this.value;
+    if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
+      ctx.variables[this.key] = this.value;
+    } else if (Array.isArray(this.value)) {
       // Deep clone to prevent reference pollution
       ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
     } else if (valueType === 'object') {

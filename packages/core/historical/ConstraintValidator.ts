@@ -228,12 +228,17 @@ export class ConstraintValidator {
         const hasValidClass = nodeClasses.some(cls => allowedClasses.includes(cls));
         if (!hasValidClass) {
           violatingNodes.push(node.id);
+        }
+      }
+    }
     return violatingNodes;
+  }
+  
   /**
    * Check if materials were actually available in the specified era/region
    */
-  private checkMaterialAvailability(constraint: HistoricalConstraint, nodes: UTDGNode): string {
-    const violatingNodes: string = [];
+  private checkMaterialAvailability(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    const violatingNodes: string[] = [];
     for (const node of nodes) {
       if (node.type === 'material' || node.type === 'texture') {
         // Check if material was available in constraint eras/regions
