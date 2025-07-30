@@ -309,15 +309,19 @@ export class MedievalDemoDatabase {
   dye_availability: 'impossible',
   seasonal_use: 'all_season',
   ceremonial_context: 'religious',
-});
+    });
+    
     return clothing;
+  }
+  
   /**
    * Create medieval materials database
    */
-  private createMedievalMaterials(): UTDGNode {
-  const materials: UTDGNode = [];
-  // Wool Material
-  materials.push({)
+  private createMedievalMaterials(): UTDGNode[] {
+    const materials: UTDGNode[] = [];
+    
+    // Wool Material
+    materials.push({
   id: 'medieval_wool_material_001',
   type: 'material',
   content: 'Coarse woolen cloth woven from sheep\'s wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.',

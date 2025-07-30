@@ -252,7 +252,8 @@ export class ExternalDataService {
     try {
       const response = await fetch(source.endpoint);
       if (!response.ok) {
-        throw new Error(`File access failed: ${response.status}`);\n      }
+        throw new Error(`File access failed: ${response.status}`);
+      }
       let data;
       if (source.endpoint.endsWith('.json')) {
         data = await response.json();
