@@ -582,5 +582,7 @@ export class UTDGManager {
       'Consider smoke from hearths and candles',
       'Account for seasonal weather patterns'
     ];
+  }
+}
 
 export default UTDGManager;

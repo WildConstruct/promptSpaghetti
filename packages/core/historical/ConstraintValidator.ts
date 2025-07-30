@@ -433,5 +433,6 @@ export class ConstraintValidator {
       }
     ];
   }
+}
 
 export default ConstraintValidator;
