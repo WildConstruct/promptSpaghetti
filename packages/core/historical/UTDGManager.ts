@@ -473,14 +473,20 @@ export class UTDGManager {
   
   private generateRecommendations(overallScore: number, metrics: any): string[] {
     const recommendations: string[] = [];
-  if (metrics.completeness < 0.7) {
-  recommendations.push('Improve data completeness by filling missing required fields');
-  if (metrics.consistency < 0.7) {
-  recommendations.push('Address constraint violations to improve data consistency');
-  if (metrics.historical_accuracy < 0.7) {
-  recommendations.push('Verify historical accuracy with authoritative sources');
-  if (metrics.source_reliability < 0.5) {
-  recommendations.push('Add external source validation for more nodes');
+    
+    if (metrics.completeness < 0.7) {
+      recommendations.push('Improve data completeness by filling missing required fields');
+    }
+    if (metrics.consistency < 0.7) {
+      recommendations.push('Address constraint violations to improve data consistency');
+    }
+    if (metrics.historical_accuracy < 0.7) {
+      recommendations.push('Verify historical accuracy with authoritative sources');
+    }
+    if (metrics.source_reliability < 0.5) {
+      recommendations.push('Add external source validation for more nodes');
+    }
+    
     if (overallScore > 0.8) {
       recommendations.push('Data quality is excellent - ready for production use');
     } else if (overallScore > 0.6) {
@@ -488,6 +494,7 @@ export class UTDGManager {
     } else {
       recommendations.push('Data quality needs significant improvement before production use');
     }
+    
     return recommendations;
   }
   
