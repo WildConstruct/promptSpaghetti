@@ -231,14 +231,15 @@ export const professionalShadows: ProfessionalShadows = {
   focus: '0 0 0 3px rgba(74, 158, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35)',
 },
   glow: {
-  subtle: '0 0 10px rgba(255, 124, 0, 0.1)',
-  medium: '0 0 20px rgba(255, 124, 0, 0.2)',
-  strong: '0 0 30px rgba(255, 124, 0, 0.3)',
-  accent: '0 0 15px rgba(74, 158, 255, 0.25)',
+    subtle: '0 0 10px rgba(255, 124, 0, 0.1)',
+    medium: '0 0 20px rgba(255, 124, 0, 0.2)',
+    strong: '0 0 30px rgba(255, 124, 0, 0.3)',
+    accent: '0 0 15px rgba(74, 158, 255, 0.25)'
+  }
 };
 
 // Professional Spacing System (8px grid)
-export const professionalSpacing: ProfessionalSpacing = {,
+export const professionalSpacing: ProfessionalSpacing = {
   px: '1px',
   0.5: '2px',
   1: '4px',
