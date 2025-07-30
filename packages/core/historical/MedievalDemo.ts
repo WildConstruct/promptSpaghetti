@@ -336,9 +336,9 @@ export class MedievalDemoDatabase {
   relationships: {
   compatible: ['medieval_natural_dyes_001', 'medieval_linen_001'],
   incompatible: ['modern_synthetic_001'],
-  variations: [,
-  {
-  id: 'quality_variation_1',
+  variations: [
+    {
+      id: 'quality_variation_1',
   type: 'quality',
   value: 'fine wool for nobles',
   probability: 0.2,
@@ -376,6 +376,8 @@ export class MedievalDemoDatabase {
   constraints: [];
   });
     return materials;
+  }
+  
   /**
    * Create medieval accessories database
    */

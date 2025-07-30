@@ -253,18 +253,27 @@ export class ConstraintValidator {
                   nodeEra.region.some(r => constraintRegions.includes(r))) {
                 isAvailable = true;
                 break;
+              }
+            }
+          }
           if (isAvailable) break;
+        }
         if (!isAvailable) {
           violatingNodes.push(node.id);
+        }
+      }
+    }
     return violatingNodes;
+  }
+  
   /**
    * Check for cultural appropriateness and sensitivity
    */
-  private checkCulturalAppropriateness(constraint: HistoricalConstraint, nodes: UTDGNode): string {
-    const violatingNodes: string = [];
+  private checkCulturalAppropriateness(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    const violatingNodes: string[] = [];
     for (const node of nodes) {
       // Check for culturally sensitive items
-      const culturalTags = node.metadata.tags.filter(tag => ;);
+      const culturalTags = node.metadata.tags.filter(tag => 
         tag.includes('religious') || 
         tag.includes('sacred') || 
         tag.includes('ceremonial') ||
