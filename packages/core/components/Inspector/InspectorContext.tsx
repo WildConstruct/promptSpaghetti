@@ -40,10 +40,11 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
   const [panelWidth, setPanelWidth] = useState(initialWidth);
   const [panelCollapsed, setPanelCollapsed] = useState(initialCollapsed);
   const [panelVisible, setPanelVisible] = useState(initialVisible);
-  const updateNodeData = (nodeId: string, data: Record<string, unknown>) => {,
-  if (onNodeUpdate) {
-  onNodeUpdate(nodeId, data);
-};
+  const updateNodeData = (nodeId: string, data: Record<string, unknown>) => {
+    if (onNodeUpdate) {
+      onNodeUpdate(nodeId, data);
+    }
+  };
   const contextValue: InspectorContextValue = {
     // State
     selectedNode,

@@ -49,6 +49,7 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+    }
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
