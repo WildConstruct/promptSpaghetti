@@ -4,13 +4,15 @@ import { hasVariations } from '../../utils/nodeDataUtils';
 
 export interface PreviewSectionProps {
   node: Error;
-  interface PreviewExample {
+}
+
+interface PreviewExample {
   text: string;
   highlightInfo?: {
-  selectedVariation: string;
-  selectedIndex: number;
-  totalVariations: number;
-};
+    selectedVariation: string;
+    selectedIndex: number;
+    totalVariations: number;
+  };
 }
 export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
   const [previewCollapsed, setPreviewCollapsed] = useState(false);

@@ -105,31 +105,31 @@ export function serializeProject(
       };
     }
     try {
-    // Generate checksum for integrity
-    const content = JSON.stringify(psgFile, null, compress ? 0 : 2);
-    psgFile.checksum = generateChecksum(content);
-    // Validate output if requested
-    if (validateOutput) {
-      const validation = validatePsgFile(psgFile);
-      if (!validation.success) {
-        return {
-          success: false,
-          error: `Serialization validation failed: ${validation.error}`,
-          warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)
-        };
+      // Generate checksum for integrity
+      const content = JSON.stringify(psgFile, null, compress ? 0 : 2);
+      psgFile.checksum = generateChecksum(content);
+      // Validate output if requested
+      if (validateOutput) {
+        const validation = validatePsgFile(psgFile);
+        if (!validation.success) {
+          return {
+            success: false,
+            error: `Serialization validation failed: ${validation.error}`,
+            warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)
+          };
+        }
       }
-    }
-    const finalContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
-    return {
-      success: true,
-      data: finalContent,
-      warnings: []
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown serialization error'
-    };
+      const finalContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
+      return {
+        success: true,
+        data: finalContent,
+        warnings: []
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown serialization error'
+      };
   }
 }
 /**
