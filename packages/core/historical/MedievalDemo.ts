@@ -282,12 +282,14 @@ export class MedievalDemoDatabase {
   garment_type: 'gown',
   construction_method: 'sewn',
   fabric_type: 'wool',
-  dye_availability: 'expensive',
-  seasonal_use: 'all_season',
-  ceremonial_context: 'court',
-});
+        dye_availability: 'expensive',
+        seasonal_use: 'all_season',
+        ceremonial_context: 'court',
+      }
+    });
+    
     // Monk's Robe
-    clothing.push({)
+    clothing.push({
   id: 'medieval_monk_robe_001',
   type: 'garment',
   content: 'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.',

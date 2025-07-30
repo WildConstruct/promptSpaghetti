@@ -374,16 +374,17 @@ export class UTDGManager {
     });
       nodes = outfit.outfit;
     } else {
-  // Generate based on configuration
-  const query: HistoricalQuery = {,
-  era: config.era.name,
-  social_class: config.social_class,
-  category: 'garment',
-  filters: config,
-  limit: 5,
-};
+      // Generate based on configuration
+      const query: HistoricalQuery = {
+        era: config.era.name,
+        social_class: config.social_class,
+        category: 'garment',
+        filters: config,
+        limit: 5,
+      };
       const queryResult = this.queryMedievalDemo(query);
       nodes = queryResult.nodes;
+    }
     const constraintValidation = this.constraintValidator.validateForEra(nodes, config.era);
     const appliedConstraints = this.getAppliedConstraints(nodes, config.era);
     const accuracyScore = this.calculateAccuracyScore(nodes, constraintValidation);
