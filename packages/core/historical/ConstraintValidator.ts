@@ -382,19 +382,20 @@ export class ConstraintValidator {
   * Check if two eras are considered incompatible
   */
   private areErasIncompatible(era1: Era, era2: Era): boolean {
-  const timeDifference = Math.abs(era1.period.start - era2.period.start);
-  // Eras more than 500 years apart are generally incompatible
-  if (timeDifference > 500) return true;
-  // Different regions with no cultural connection
-  const hasCommonRegion = era1.region.some(r1 => ;);
-  era2.region.some(r2 => r1 === r2)
-  );
-  if (!hasCommonRegion && timeDifference > 200) return true;
-  return false;
+    const timeDifference = Math.abs(era1.period.start - era2.period.start);
+    // Eras more than 500 years apart are generally incompatible
+    if (timeDifference > 500) return true;
+    // Different regions with no cultural connection
+    const hasCommonRegion = era1.region.some(r1 => 
+      era2.region.some(r2 => r1 === r2)
+    );
+    if (!hasCommonRegion && timeDifference > 200) return true;
+    return false;
+  }
   /**
   * Get default historical constraints
   */
-  private getDefaultConstraints(): HistoricalConstraint {,
+  private getDefaultConstraints(): HistoricalConstraint[] {
   return [
   {
   id: 'medieval-modern-separation',

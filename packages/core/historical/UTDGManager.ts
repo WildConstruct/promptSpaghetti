@@ -481,15 +481,18 @@ export class UTDGManager {
   recommendations.push('Verify historical accuracy with authoritative sources');
   if (metrics.source_reliability < 0.5) {
   recommendations.push('Add external source validation for more nodes');
-  if (overallScore > 0.8) {
-  recommendations.push('Data quality is excellent - ready for production use');
-} else if (overallScore > 0.6) {
+    if (overallScore > 0.8) {
+      recommendations.push('Data quality is excellent - ready for production use');
+    } else if (overallScore > 0.6) {
       recommendations.push('Data quality is good - minor improvements recommended');
     } else {
-  recommendations.push('Data quality needs significant improvement before production use');
-  return recommendations;
+      recommendations.push('Data quality needs significant improvement before production use');
+    }
+    return recommendations;
+  }
+  
   // VFX Export helper methods
-  private extractMaterialProperties(node: UTDGNode): Record<string, any> {,
+  private extractMaterialProperties(node: UTDGNode): Record<string, any> {
   return {
   type: node.type,
   authenticity: node.metadata.authenticity,
