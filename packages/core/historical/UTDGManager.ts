@@ -468,9 +468,11 @@ export class UTDGManager {
   if (nodes.length === 0) return 0;
   const baseScore = nodes.reduce((sum, node) => sum + node.metadata.authenticity, 0) / nodes.length;
   const penaltyFactor = Math.max(0, 1 - (validation.violations.length * 0.1));
-  return baseScore * penaltyFactor;
-  private generateRecommendations(overallScore: number, metrics: any): string {,
-  const recommendations: string = [];
+    return baseScore * penaltyFactor;
+  }
+  
+  private generateRecommendations(overallScore: number, metrics: any): string[] {
+    const recommendations: string[] = [];
   if (metrics.completeness < 0.7) {
   recommendations.push('Improve data completeness by filling missing required fields');
   if (metrics.consistency < 0.7) {

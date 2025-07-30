@@ -347,38 +347,41 @@ export class ConstraintValidator {
   /**
   * Generic constraint evaluation for custom rules
   */
-  private evaluateGenericConstraint(constraint: HistoricalConstraint, nodes: UTDGNode): string {,
-  // This can be extended for custom constraint rules
-  return [];
+  private evaluateGenericConstraint(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    // This can be extended for custom constraint rules
+    return [];
+  }
   /**
   * Generate alternative suggestions for constraint violations
   */
-  private generateAlternatives(constraint: HistoricalConstraint, nodes: UTDGNode): string {,
-  const alternatives: string = [];
-  switch (constraint.rule) {
-  case 'era_compatibility':,
-  alternatives.push('Use items from a single historical period');
-  alternatives.push('Choose transitional periods for era mixing');
-  break;
-  case 'social_class_appropriateness':,
-  alternatives.push('Select items appropriate for the target social class');
-  alternatives.push('Use simpler materials for lower classes');
-  alternatives.push('Add luxury items for higher social classes');
-  break;
-  case 'material_availability':,
-  alternatives.push('Use locally available materials');
-  alternatives.push('Consider trade route materials for the period');
-  break;
-  return alternatives;
+  private generateAlternatives(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    const alternatives: string[] = [];
+    switch (constraint.rule) {
+      case 'era_compatibility':
+        alternatives.push('Use items from a single historical period');
+        alternatives.push('Choose transitional periods for era mixing');
+        break;
+      case 'social_class_appropriateness':
+        alternatives.push('Select items appropriate for the target social class');
+        alternatives.push('Use simpler materials for lower classes');
+        break;
+      default:
+        alternatives.push('Review historical accuracy requirements');
+        break;
+    }
+    
+    return alternatives;
+  }
   /**
   * Check if two eras overlap temporally
   */
-  private erasOverlap(era1: Era, era2: Era): boolean {,
-  return era1.period.start <= era2.period.end && era2.period.start <= era1.period.end;
+  private erasOverlap(era1: Era, era2: Era): boolean {
+    return era1.period.start <= era2.period.end && era2.period.start <= era1.period.end;
+  }
   /**
   * Check if two eras are considered incompatible
   */
-  private areErasIncompatible(era1: Era, era2: Era): boolean {,
+  private areErasIncompatible(era1: Era, era2: Era): boolean {
   const timeDifference = Math.abs(era1.period.start - era2.period.start);
   // Eras more than 500 years apart are generally incompatible
   if (timeDifference > 500) return true;
