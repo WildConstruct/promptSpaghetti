@@ -425,19 +425,25 @@ export class MedievalDemoDatabase {
   /**
   * Generate outfit description
   */
-  private generateOutfitDescription(()
-  outfit: (MedievalClothing | UTDGNode)[],
-  criteria: any): string {,
-  const garmentNames = outfit.map(item => {)
-  if ('medieval_specific' in item) {
-  return item.medieval_specific.garment_type;
-  return item.type;
-});
+  private generateOutfitDescription(
+    outfit: (MedievalClothing | UTDGNode)[],
+    criteria: any
+  ): string {
+    const garmentNames = outfit.map(item => {
+      if ('medieval_specific' in item) {
+        return item.medieval_specific.garment_type;
+      }
+      return item.type;
+    });
+    
     const socialClass = criteria.social_class;
     const gender = criteria.gender;
     const era = criteria.era.name;
-    return `A ${era} ${gender} ${socialClass} wearing ${garmentNames.join(', ')}. ` +}
+    return `A ${era} ${gender} ${socialClass} wearing ${garmentNames.join(', ')}. ` +
            'This outfit reflects the social status, practical needs, and fashion conventions of the period.';
+  }
+}
+
 /**
  * Medieval historical constraints specific to the demo
  */
