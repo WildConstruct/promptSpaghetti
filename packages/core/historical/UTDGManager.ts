@@ -309,12 +309,14 @@ export class UTDGManager {
   /**
   * Query medieval demo database directly
   */
-  private queryMedievalDemo(query: HistoricalQuery): HistoricalQueryResult {,
-  const startTime = performance.now();
-  let results: UTDGNode = [];
-  // Convert query to demo criteria
-  const era = Array.isArray(query.era) ? ;
-  HISTORICAL_ERAS[query.era[0].toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH :,
+  private queryMedievalDemo(query: HistoricalQuery): HistoricalQueryResult {
+    const startTime = performance.now();
+    let results: UTDGNode[] = [];
+    
+    // Convert query to demo criteria
+    const era = Array.isArray(query.era) ? 
+      HISTORICAL_ERAS[query.era[0].toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH :
+      HISTORICAL_ERAS.MEDIEVAL_HIGH;
   HISTORICAL_ERAS[query.era.toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH;
   // Query clothing
   if (!query.category || query.category.includes('garment')) {

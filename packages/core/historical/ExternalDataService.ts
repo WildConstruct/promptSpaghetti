@@ -247,6 +247,8 @@ export class ExternalDataService {
   private async queryFileSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode> {
     if (!source.endpoint) {
       throw new Error('File source requires file path');
+    }
+    
     try {
       const response = await fetch(source.endpoint);
       if (!response.ok) {
