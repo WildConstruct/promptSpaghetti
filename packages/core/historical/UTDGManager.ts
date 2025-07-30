@@ -389,15 +389,18 @@ export class UTDGManager {
     const appliedConstraints = this.getAppliedConstraints(nodes, config.era);
     const accuracyScore = this.calculateAccuracyScore(nodes, constraintValidation);
     return {
-  nodes,
-  constraints_applied: appliedConstraints,
-  generation_metadata: {
-  config,
-  generation_time: performance.now() - startTime,
-  accuracy_score: accuracyScore,
-  creativity_score: config.creativity_factor,
-  historical_basis: nodes.map(node => node.metadata.source),
-};
+      nodes,
+      constraints_applied: appliedConstraints,
+      generation_metadata: {
+        config,
+        generation_time: performance.now() - startTime,
+        accuracy_score: accuracyScore,
+        creativity_score: config.creativity_factor,
+        historical_basis: nodes.map(node => node.metadata.source),
+      }
+    };
+  }
+  
   // Helper methods for content generation and validation
   private getRelevantNodeTypes(scenario: string): any {
   switch (scenario) {

@@ -265,23 +265,24 @@ export class MedievalDemoDatabase {
   daily_use: false,
   ceremonial: true,
 },
-  relationships: {
-  compatible: ['medieval_noble_chemise_001', 'medieval_noble_belt_gold_001'],
-  incompatible: ['medieval_peasant_tunic_001'],
-  variations: [,
-  {
-  id: 'fabric_variation_1',
-          type: 'texture',
-          value: 'silk imported from Byzantine',
-          probability: 0.2,
-          era_specific: true
-        }
-      ],
-  constraints: [],
+      relationships: {
+        compatible: ['medieval_noble_chemise_001', 'medieval_noble_belt_gold_001'],
+        incompatible: ['medieval_peasant_tunic_001'],
+        variations: [
+          {
+            id: 'fabric_variation_1',
+            type: 'texture',
+            value: 'silk imported from Byzantine',
+            probability: 0.2,
+            era_specific: true
+          }
+        ]
+      },
+      constraints: [],
       medieval_specific: {
-  garment_type: 'gown',
-  construction_method: 'sewn',
-  fabric_type: 'wool',
+        garment_type: 'gown',
+        construction_method: 'sewn',
+        fabric_type: 'wool',
         dye_availability: 'expensive',
         seasonal_use: 'all_season',
         ceremonial_context: 'court',
