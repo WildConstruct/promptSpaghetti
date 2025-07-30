@@ -169,6 +169,8 @@ export class MedievalDemoDatabase {
     });
     if (accessories.length > 0) {
       outfit.push(accessories[0]);
+    }
+    
     // Generate description
     const description = this.generateOutfitDescription(outfit, criteria);
     return {
@@ -176,17 +178,21 @@ export class MedievalDemoDatabase {
       description,
       historical_notes
     };
+  }
+  
   /**
    * Initialize the medieval demo database with historically accurate content
    */
   private initializeDatabase(): void {
-  this.clothingDatabase = this.createMedievalClothing();
-  this.materialDatabase = this.createMedievalMaterials();
-  this.accessoryDatabase = this.createMedievalAccessories();
+    this.clothingDatabase = this.createMedievalClothing();
+    this.materialDatabase = this.createMedievalMaterials();
+    this.accessoryDatabase = this.createMedievalAccessories();
+  }
+  
   /**
-  * Create medieval clothing database
-  */
-  private createMedievalClothing(): MedievalClothing {,
+   * Create medieval clothing database
+   */
+  private createMedievalClothing(): MedievalClothing[] {
   const clothing: MedievalClothing = [];
   // Peasant Male Tunic
   clothing.push({)
