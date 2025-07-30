@@ -194,10 +194,10 @@ export function deserializeProject(
     // Create edges array (empty for now, will be populated based on node inputs)
     const reactFlowEdges = generateEdgesFromNodes(reactFlowNodes);
     // Build graph state
-    const graphState: GraphState = {,
-  nodes: reactFlowNodes,
-  edges: reactFlowEdges,
-};
+    const graphState: GraphState = {
+      nodes: reactFlowNodes,
+      edges: reactFlowEdges,
+    };
     // Add collaboration data if present
     if (psgFile.collaboration) {
   graphState.annotations = {
