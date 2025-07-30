@@ -18,7 +18,7 @@ interface ExecutionPathVisualizationProps {
   config?: Partial<ExecutionVisualizationConfig>;
   className?: string;
 
-export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProps> = ({)
+export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProps> = ({
   results,
   onNodeHighlight,
   config = {},
