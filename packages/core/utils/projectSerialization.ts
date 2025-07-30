@@ -130,6 +130,12 @@ export function serializeProject(
         success: false,
         error: error instanceof Error ? error.message : 'Unknown serialization error'
       };
+    }
+  } catch (outerError) {
+    return {
+      success: false,
+      error: outerError instanceof Error ? outerError.message : 'Unknown serialization error'
+    };
   }
 }
 /**

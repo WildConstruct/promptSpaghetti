@@ -28,7 +28,7 @@ export interface GraphEditorWithInlineEditingProps {
   showControls?: boolean;
   showBackground?: boolean;
 }
-export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditingProps> = ({)
+export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditingProps> = ({
   nodes,
   edges,
   onNodesChange,
