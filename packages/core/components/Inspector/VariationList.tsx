@@ -12,7 +12,7 @@ export interface VariationListProps {
   placeholder?: string;
   allowQuickEntry?: boolean;
 }
-export const VariationList: React.FC<VariationListProps> = ({)
+export const VariationList: React.FC<VariationListProps> = ({
   nodeId,
   variations,
   onAdd,

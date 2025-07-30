@@ -55,7 +55,8 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
         <p>No extensions match your current search and filter criteria.</p>
       </div>
     );
-  return;
+  }
+  return (
     <div className="extension-list-view">
       <div className="extension-list-header">
         <span className="header-icon">Type</span>
