@@ -570,37 +570,54 @@ export class UTDGManager {
   }
   private determineArchitecturalStyle(era: Era): string {
     if (era.name.includes('Medieval')) {
-      return 'Gothic'
-  } else if (era.name.includes('Roman')) {
+      return 'Gothic';
+    } else if (era.name.includes('Roman')) {
       return 'Classical Roman';
     } else if (era.name.includes('Renaissance')) {
       return 'Renaissance';
+    }
     return 'Period Appropriate';
-  private getAtmosphericConditions(era: Era): string {
+  }
+  private getAtmosphericConditions(era: Era): string[] {
     return ['torchlight', 'candlelight', 'natural daylight', 'fireplace glow'];
-  private getWeatherPatterns(era: Era): string {
+  }
+  
+  private getWeatherPatterns(era: Era): string[] {
     return ['clear', 'overcast', 'light rain', 'mist'];
-  private getSeasonalConditions(era: Era): string {
+  }
+  
+  private getSeasonalConditions(era: Era): string[] {
     return ['spring mild', 'summer warm', 'autumn cool', 'winter cold'];
-  private getTimePreferences(era: Era): string {
+  }
+  
+  private getTimePreferences(era: Era): string[] {
     return ['dawn', 'midday', 'afternoon', 'dusk'];
-  private generateAccuracyNotes(nodes: UTDGNode): string {
-    const notes: string = [];
+  }
+  private generateAccuracyNotes(nodes: UTDGNode[]): string[] {
+    const notes: string[] = [];
     const avgAuthenticity = nodes.reduce((sum, node) => sum + node.metadata.authenticity, 0) / nodes.length;
-    notes.push(`Average historical authenticity: ${(avgAuthenticity * 100).toFixed(0)}%`);}
+    notes.push(`Average historical authenticity: ${(avgAuthenticity * 100).toFixed(0)}%`);
+    
     const sourcedNodes = nodes.filter(node => node.external_source);
     if (sourcedNodes.length > 0) {
-      notes.push(`${sourcedNodes.length} items verified with external sources`);}
+      notes.push(`${sourcedNodes.length} items verified with external sources`);
+    }
+    
     const highAuthNodes = nodes.filter(node => node.metadata.authenticity > 0.8);
-    notes.push(`${highAuthNodes.length} items with high authenticity rating`);}
+    notes.push(`${highAuthNodes.length} items with high authenticity rating`);
+    
     return notes;
-  private generateLightingNotes(era: Era): string {
+  }
+  
+  private generateLightingNotes(era: Era): string[] {
     return [
       'Use warm, low-intensity lighting to match period sources',
       'Avoid electric lighting effects',
       'Consider seasonal and time-of-day appropriate lighting'
     ];
-  private generateAtmosphericNotes(era: Era): string {
+  }
+  
+  private generateAtmosphericNotes(era: Era): string[] {
     return [
       'Maintain period-appropriate atmospheric density',
       'Consider smoke from hearths and candles',
