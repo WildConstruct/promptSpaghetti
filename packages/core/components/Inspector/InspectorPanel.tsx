@@ -174,11 +174,10 @@ export const InspectorPanel = ({
             <span
               style={{
                 transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
-                transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`}
-},
-  display: 'inline-block',
+                transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`,
+                display: 'inline-block',
                 willChange: 'transform'
-  }}
+              }}
             >
               ◀
             </span>

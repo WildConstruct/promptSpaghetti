@@ -286,12 +286,12 @@ export const professionalDesignSystem: ProfessionalDesignSystem = {
 };
 
 // CSS Custom Properties Generator
-export const generateCSSCustomProperties = ()
+export const generateCSSCustomProperties = ({
   colors = professionalColors,
   shadows = professionalShadows,
   spacing = professionalSpacing,
   borderRadius = professionalBorderRadius
-) => {
+} = {}) => {
   return {
   // Background Colors
   '--bg-primary': colors.background.primary,
