@@ -23,6 +23,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
       setShowUnsavedWarning(true);
     } else {
       performLoad();
+    }
   };
   const performLoad = async () => {
     setIsLoading(true);
@@ -49,7 +50,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
     setShowUnsavedWarning(false);
   };
   if (!isOpen) return null;
-  return;
+  return (
     <div style={{
   position: 'fixed',
   top: 0,
@@ -106,7 +107,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
           </button>
         </div>
         {/* Unsaved Changes Warning */}
-        {showUnsavedWarning && ()
+        {showUnsavedWarning && (
           <div style={{
   backgroundColor: '#fff3cd',
   border: '1px solid #ffeaa7',
@@ -154,7 +155,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
           </div>
         )}
         {/* Main Content */}
-        {!showUnsavedWarning && ()
+        {!showUnsavedWarning && (
           <>
             <div style={{
   textAlign: 'center',
@@ -210,7 +211,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({
               </ul>
             </div>
             {/* Error Message */}
-            {error && ()
+            {error && (
               <div style={{
   backgroundColor: '#fee',
   border: '1px solid #fcc',

@@ -110,17 +110,18 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
     const diffTime = Math.abs(now.getTime() - new Date(date).getTime());
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays === 0) {
-      return 'Today'
-  } else if (diffDays === 1) {
+      return 'Today';
+    } else if (diffDays === 1) {
       return 'Yesterday';
-  } else if (diffDays < 7) {
+    } else if (diffDays < 7) {
       return `${diffDays} days ago`;
     } else {
-    return new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-}).format(new Date(date));
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(new Date(date));
+    }
   };
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
