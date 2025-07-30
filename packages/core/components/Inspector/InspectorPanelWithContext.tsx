@@ -6,7 +6,9 @@ interface InspectorPanelWithContextProps {
   onClose?: () => void;
   minWidth?: number;
   maxWidth?: number;
-  export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps> = ({,)
+}
+
+export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps> = ({
   onClose,
   minWidth = 280,
   maxWidth = 600
@@ -41,7 +43,7 @@ interface InspectorPanelWithContextProps {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none'
+      document.body.style.userSelect = 'none';
   } else {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -57,11 +59,13 @@ interface InspectorPanelWithContextProps {
   const handleChange = (partial: Record<string, unknown>) => {
     if (selectedNode) {
       updateNodeData(selectedNode.id, partial);
+    }
   };
   if (!panelVisible) {
-  return null;
+    return null;
+  }
   if (!selectedNode || !selectedSchema) {
-  return;
+    return (
   <aside
   style={{
   width: panelCollapsed ? 40 : panelWidth,
@@ -84,7 +88,7 @@ interface InspectorPanelWithContextProps {
   background: '#2d3748',
 }}
         >
-          {!panelCollapsed && ()
+          {!panelCollapsed && (
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
               Inspector
             </h3>
@@ -104,7 +108,7 @@ interface InspectorPanelWithContextProps {
             {panelCollapsed ? '◀' : '▶'}
           </button>
         </div>
-        {!panelCollapsed && ()
+        {!panelCollapsed && (
           <div style={{
   padding: 16,
   color: '#a0aec0',
@@ -131,7 +135,7 @@ interface InspectorPanelWithContextProps {
         />
       </aside>
     );
-  return;
+  return (
     <aside
       style={{
   width: panelCollapsed ? 40 : panelWidth,
@@ -154,13 +158,13 @@ interface InspectorPanelWithContextProps {
   background: '#2d3748',
 }}
       >
-        {!panelCollapsed && ()
+        {!panelCollapsed && (
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
             {selectedNode.data?.label || selectedNode.type} Inspector
           </h3>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {!panelCollapsed && onClose && ()
+          {!panelCollapsed && onClose && (
             <button
               onClick={onClose}
               style={{
@@ -192,7 +196,7 @@ interface InspectorPanelWithContextProps {
           </button>
         </div>
       </div>
-      {!panelCollapsed && ()
+      {!panelCollapsed && (
         <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           <PropertiesSection
             node={selectedNode}

@@ -8,7 +8,7 @@ import { useAnimation, animationDurations, easingFunctions } from '../../utils/s
 
 // Map technical node types to filmmaker-friendly names
 const getFilmmakerFriendlyName = (nodeType: string): string => {
-  const friendlyNames: Record<string, string> = {,
+  const friendlyNames: Record<string, string> = {
   'WeightedChoice': 'Random Selection',
   'Concat': 'Text Combiner',
   'Output': 'Final Output',
@@ -38,7 +38,7 @@ export interface InspectorPanelProps {
   minWidth?: number;
   maxWidth?: number;
 }
-export const InspectorPanel = ({ )
+export const InspectorPanel = ({
   node, 
   schema, 
   onChange,
@@ -84,12 +84,13 @@ export const InspectorPanel = ({ )
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none'
-  } else {
+      document.body.style.userSelect = 'none';
+    } else {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+    }
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -98,7 +99,7 @@ export const InspectorPanel = ({ )
     };
   }, [isResizing, handleMouseMove, handleMouseUp]);
   if (!node || !schema) {
-    return;
+    return (
       <aside
         className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
         style={{
@@ -137,7 +138,7 @@ export const InspectorPanel = ({ )
   background: '#2d3748',
 }}
         >
-          {!collapsed && ()
+          {!collapsed && (
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
               Editor Panel
             </h3>
@@ -185,7 +186,7 @@ export const InspectorPanel = ({ )
             </span>
           </button>
         </div>
-        {!collapsed && ()
+        {!collapsed && (
           <div 
             className="animate-inspector-toggle"
             style={{ 
@@ -221,7 +222,7 @@ export const InspectorPanel = ({ )
         />
       </aside>
     );
-  return;
+  return (
     <aside
       className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
       style={{
@@ -260,13 +261,13 @@ export const InspectorPanel = ({ )
   background: '#2d3748',
 }}
       >
-        {!collapsed && ()
+        {!collapsed && (
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
             <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || getFilmmakerFriendlyName(node.data?.nodeType || node.type)} Settings
           </h3>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {!collapsed && ()
+          {!collapsed && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <select
                 value={complexityLevel}
@@ -326,7 +327,7 @@ export const InspectorPanel = ({ )
               </button>
             </div>
           )}
-          {!collapsed && onClose && ()
+          {!collapsed && onClose && (
             <button
               onClick={onClose}
               style={{
@@ -358,9 +359,9 @@ export const InspectorPanel = ({ )
           </button>
         </div>
       </div>
-      {!collapsed && ()
+      {!collapsed && (
         <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          {showPreferences && ()
+          {showPreferences && (
             <div style={{
   padding: '0 16px 16px 16px',
   borderBottom: '1px solid #4a5568',
