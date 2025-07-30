@@ -16,7 +16,8 @@ export interface ExtensionListViewProps {
   onUpdateExtension: (extensionId: string) => void;
   onConfigureExtension: (extension: ExtensionManifest) => void;
 }
-export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
+
+export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
   extensions,
   selectedExtension,
   getExtensionStatus,
