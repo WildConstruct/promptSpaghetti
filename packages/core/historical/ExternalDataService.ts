@@ -314,12 +314,12 @@ export class ExternalDataService {
   tags: this.parseTags(item[fieldMapping.tags] || item.keywords || []),
 },
   relationships: {
-  compatible: [],
-  incompatible: [],
-  variations: [],
-},
-  constraints: [];
-  };
+    compatible: [],
+    incompatible: [],
+    variations: [],
+  },
+  constraints: []
+};
       return node as UTDGNode;
     });
   /**

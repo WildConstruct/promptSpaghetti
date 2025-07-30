@@ -135,9 +135,11 @@ export class MedievalDemoDatabase {
       item.medieval_specific.garment_type === 'braies'
     );
     if (undergarments.length > 0) {
-  outfit.push(undergarments[0]);
-  historical_notes.push('Medieval people wore linen undergarments for hygiene and warmth');
-  // Main garment
+      outfit.push(undergarments[0]);
+      historical_notes.push('Medieval people wore linen undergarments for hygiene and warmth');
+    }
+    
+    // Main garment
     const mainGarments = this.getClothing({
       era: criteria.era,
       social_class: criteria.social_class,
