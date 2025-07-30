@@ -14,9 +14,10 @@ export interface ExtensionSearchFilterProps {
   onSearchChange: (query: string) => void;
   filterOptions: FilterOptions;
   onFilterChange: (options: FilterOptions) => void;
-  viewMode: 'installed' | 'marketplace'
-  }
-export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
+  viewMode: 'installed' | 'marketplace';
+}
+
+export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
   searchQuery,
   onSearchChange,
   filterOptions,

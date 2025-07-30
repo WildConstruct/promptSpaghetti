@@ -80,12 +80,12 @@ export function serializeProject(
       validateOutput = true
     } = options;
     // Convert ReactFlow nodes/edges to graph schema format
-    const graph: Graph = {,
-  nodes: graphState.nodes.map(convertReactFlowNodeToGraphNode),
-  seed: undefined // Will be set during execution if needed,
-};
+    const graph: Graph = {
+      nodes: graphState.nodes.map(convertReactFlowNodeToGraphNode),
+      seed: undefined // Will be set during execution if needed
+    };
     // Build the .psg file structure
-    const psgFile: PsgFile = {,
+    const psgFile: PsgFile = {
   fileType: 'psg',
   formatVersion: PSG_FORMAT_VERSION,
   metadata: includeMetadata ? metadata : createDefaultMetadata('Untitled Project'),
