@@ -435,13 +435,12 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
 }}>
           <div style={{
             backgroundColor: styles.background,
-            border: `1px solid ${styles.border}`}
-},
-  borderRadius: '12px',
+            border: `1px solid ${styles.border}`,
+            borderRadius: '12px',
             padding: '24px',
             width: '400px',
             maxWidth: '90vw'
-  }}>
+          }}>
             <h3 style={{
   margin: '0 0 16px 0',
   fontSize: '18px',
@@ -469,9 +468,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                   width: '100%',
                   padding: '8px 12px',
                   backgroundColor: styles.secondary,
-                  border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+                  border: `1px solid ${styles.border}`,
+                  borderRadius: '6px',
                   color: styles.text,
                   fontSize: '14px',
                   outline: 'none'
@@ -497,9 +495,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                   width: '100%',
                   padding: '8px 12px',
                   backgroundColor: styles.secondary,
-                  border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+                  border: `1px solid ${styles.border}`,
+                  borderRadius: '6px',
                   color: styles.text,
                   fontSize: '14px',
                   outline: 'none',
@@ -522,9 +519,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
                 style={{
                   padding: '8px 16px',
                   backgroundColor: 'transparent',
-                  border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+                  border: `1px solid ${styles.border}`,
+                  borderRadius: '6px',
                   color: styles.text,
                   fontSize: '14px',
                   cursor: 'pointer'
