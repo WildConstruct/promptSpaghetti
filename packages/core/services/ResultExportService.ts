@@ -78,37 +78,38 @@ export class ResultExportService {
   /**
   * Export a single preview result in the specified format
   */
-  async exportIndividualResult(result: PreviewResultWithPath)
-  resultIndex: number,
-  totalResults: number,
-  options: ResultExportOptions,
-  sourceGraph?: any): Promise<ExportResult> {,
-  const exportData: IndividualExportData = {,
-  result,
-  index: resultIndex,
-  totalResults,
-  exportedAt: new Date().toISOString(),
-  sourceGraph
-};
+  async exportIndividualResult(result: PreviewResultWithPath,
+    resultIndex: number,
+    totalResults: number,
+    options: ResultExportOptions,
+    sourceGraph?: any): Promise<ExportResult> {
+    const exportData: IndividualExportData = {
+      result,
+      index: resultIndex,
+      totalResults,
+      exportedAt: new Date().toISOString(),
+      sourceGraph
+    };
     const filename = options.filename || this.generateFilename(options.format, 'individual', result.seed);
     return await this.performExport(exportData, options, filename, 'individual');
+  }
   /**
    * Export multiple selected results as a batch
    */
-  async exportBatchResults(results: PreviewResultWithPath)
-    selectedIndices: number,
+  async exportBatchResults(results: PreviewResultWithPath[],
+    selectedIndices: number[],
     options: ResultExportOptions,
     sourceGraph?: any
   ): Promise<ExportResult> {
   const selectedResults = selectedIndices.map(index => results[index]).filter(Boolean);
   const aggregateStats = this.calculateAggregateStats(selectedResults);
-  const exportData: BatchExportData = {,
-  results: selectedResults,
-  selectedIndices,
-  aggregateStats,
-  exportedAt: new Date().toISOString(),
-  sourceGraph
-};
+    const exportData: BatchExportData = {
+      results: selectedResults,
+      selectedIndices,
+      aggregateStats,
+      exportedAt: new Date().toISOString(),
+      sourceGraph
+    };
     const filename = options.filename || this.generateFilename(;);
       options.format,
       'batch',
