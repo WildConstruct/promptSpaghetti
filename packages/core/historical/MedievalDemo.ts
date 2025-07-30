@@ -195,18 +195,19 @@ export class MedievalDemoDatabase {
    * Create medieval clothing database
    */
   private createMedievalClothing(): MedievalClothing[] {
-  const clothing: MedievalClothing = [];
-  // Peasant Male Tunic
-  clothing.push({)
-  id: 'medieval_peasant_male_tunic_001',
-  type: 'garment',
-  content: 'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
-  description: 'Basic peasant tunic for daily wear',
-  metadata: {
-  era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
-  authenticity: 0.9,
-  source: 'Archaeological evidence from 12th-13th century England',
-  tags: ['tunic', 'peasant', 'wool', 'brown', 'daily-wear'],
+    const clothing: MedievalClothing[] = [];
+    
+    // Peasant Male Tunic
+    clothing.push({
+      id: 'medieval_peasant_male_tunic_001',
+      type: 'garment',
+      content: 'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
+      description: 'Basic peasant tunic for daily wear',
+      metadata: {
+        era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
+        authenticity: 0.9,
+        source: 'Archaeological evidence from 12th-13th century England',
+        tags: ['tunic', 'peasant', 'wool', 'brown', 'daily-wear'],
   social_class: ['peasant'],
   gender: 'male',
   daily_use: true,
