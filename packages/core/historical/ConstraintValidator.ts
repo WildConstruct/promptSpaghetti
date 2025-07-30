@@ -291,31 +291,42 @@ export class ConstraintValidator {
   /**
    * Check for temporal consistency within the same time period
    */
-  private checkTemporalConsistency(constraint: HistoricalConstraint, nodes: UTDGNode): string {
-    const violatingNodes: string = [];
+  private checkTemporalConsistency(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    const violatingNodes: string[] = [];
     if (nodes.length < 2) return violatingNodes;
+    
     // Find the most restrictive era overlap
     const commonPeriod = { start: -Infinity, end: Infinity };
+    
     for (const node of nodes) {
-  for (const era of node.metadata.era) {
-  commonPeriod.start = Math.max(commonPeriod.start, era.period.start);
-  commonPeriod.end = Math.min(commonPeriod.end, era.period.end);
-  // If no common period exists, flag all nodes
-  if (commonPeriod.start >= commonPeriod.end) {
-  return nodes.map(n => n.id);
-  // Check each node against the common period
-  for (const node of nodes) {
-  const nodeValidInPeriod = node.metadata.era.some(era => ;);
-  era.period.start <= commonPeriod.end && era.period.end >= commonPeriod.start
-  );
-  if (!nodeValidInPeriod) {
-  violatingNodes.push(node.id);
-  return violatingNodes;
+      for (const era of node.metadata.era) {
+        commonPeriod.start = Math.max(commonPeriod.start, era.period.start);
+        commonPeriod.end = Math.min(commonPeriod.end, era.period.end);
+      }
+    }
+    
+    // If no common period exists, flag all nodes
+    if (commonPeriod.start >= commonPeriod.end) {
+      return nodes.map(n => n.id);
+    }
+    
+    // Check each node against the common period
+    for (const node of nodes) {
+      const nodeValidInPeriod = node.metadata.era.some(era => 
+        era.period.start <= commonPeriod.end && era.period.end >= commonPeriod.start
+      );
+      if (!nodeValidInPeriod) {
+        violatingNodes.push(node.id);
+      }
+    }
+    
+    return violatingNodes;
+  }
   /**
   * Check for regional authenticity
   */
-  private checkRegionalAuthenticity(constraint: HistoricalConstraint, nodes: UTDGNode): string {,
-  const violatingNodes: string = [];
+  private checkRegionalAuthenticity(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
+    const violatingNodes: string[] = [];
   const constraintRegions = constraint.regions || [];
   if (constraintRegions.length === 0) return violatingNodes;
   for (const node of nodes) {
