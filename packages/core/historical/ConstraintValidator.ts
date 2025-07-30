@@ -283,7 +283,11 @@ export class ConstraintValidator {
         // Apply cultural sensitivity checks
         if (!node.metadata.ceremonial && culturalTags.some(tag => tag.includes('sacred'))) {
           violatingNodes.push(node.id);
+        }
+      }
+    }
     return violatingNodes;
+  }
   /**
    * Check for temporal consistency within the same time period
    */

@@ -451,8 +451,10 @@ export class UTDGManager {
           const scoreA = a.metadata.authenticity + Math.random() * 0.3;
           const scoreB = b.metadata.authenticity + Math.random() * 0.3;
           return scoreB - scoreA;
-  }
+        })
         .slice(0, targetCount);
+    }
+  }
   private getAppliedConstraints(nodes: UTDGNode, era: Era): any {
     const result = this.constraintValidator.validateForEra(nodes, era);
     return [
