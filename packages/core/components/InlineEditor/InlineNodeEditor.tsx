@@ -335,6 +335,7 @@ const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({
           No specialized editor for {nodeType} nodes
         </div>
       );
+  }
 };
 
 export default InlineNodeEditor;

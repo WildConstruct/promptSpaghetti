@@ -170,18 +170,19 @@ export const professionalColors: ProfessionalColorPalette = {
   transform: '#f59e0b'   // Amber for transforms,
 },
   ui: {
-  border: '#404040',      // Default borders,
-  borderHover: '#5a5a5a', // Hover borders,
-  borderActive: '#ff7c00', // Active borders (Cinema 4D orange),
-  focus: '#4a9eff',       // Focus ring color,
-  selection: '#ff7c0040', // Selection highlight with opacity,
-  hover: '#2d2d2d'       // Hover background,
+    border: '#404040',      // Default borders
+    borderHover: '#5a5a5a', // Hover borders
+    borderActive: '#ff7c00', // Active borders (Cinema 4D orange)
+    focus: '#4a9eff',       // Focus ring color
+    selection: '#ff7c0040', // Selection highlight with opacity
+    hover: '#2d2d2d'        // Hover background
+  }
 };
 
 // Professional Typography System
-export const professionalTypography: ProfessionalTypography = {,
+export const professionalTypography: ProfessionalTypography = {
   fontFamilies: {
-  // Technical-friendly font stack inspired by VFX tools
+    // Technical-friendly font stack inspired by VFX tools
   primary: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
   mono: '"SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Consolas", monospace',
   heading: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
