@@ -403,30 +403,37 @@ export class UTDGManager {
   
   // Helper methods for content generation and validation
   private getRelevantNodeTypes(scenario: string): any {
-  switch (scenario) {
-  case 'daily_life': return ['garment', 'accessory', 'tool'];
-  case 'ceremonial': return ['garment', 'decoration', 'accessory'];
-  case 'military': return ['garment', 'accessory', 'tool'];
-  case 'religious': return ['garment', 'decoration'];
-  case 'artistic': return ['decoration', 'pattern', 'texture'];
-  default: return ['garment', 'material', 'accessory'];
-  private filterByConfiguration(nodes: UTDGNode, config: ContentGenerationConfig): UTDGNode {,
-  return nodes.filter(node => {)
-  if (config.required_elements) {
-  const hasRequired = config.required_elements.some(element =>;);
-  node.content.toLowerCase().includes(element.toLowerCase()) ||
-  node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
-  );
-  if (!hasRequired) return false;
-  if (config.forbidden_elements) {
-  const hasForbidden = config.forbidden_elements.some(element =>;);
-  node.content.toLowerCase().includes(element.toLowerCase()) ||
-  node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
-  );
-  if (hasForbidden) return false;
-  return true;
-});
-  private applyCreativityFilter(nodes: UTDGNode, config: ContentGenerationConfig): UTDGNode {
+    switch (scenario) {
+      case 'daily_life': return ['garment', 'accessory', 'tool'];
+      case 'ceremonial': return ['garment', 'decoration', 'accessory'];
+      case 'military': return ['garment', 'accessory', 'tool'];
+      case 'religious': return ['garment', 'decoration'];
+      case 'artistic': return ['decoration', 'pattern', 'texture'];
+      default: return ['garment', 'material', 'accessory'];
+    }
+  }
+  
+  private filterByConfiguration(nodes: UTDGNode[], config: ContentGenerationConfig): UTDGNode[] {
+    return nodes.filter(node => {
+      if (config.required_elements) {
+        const hasRequired = config.required_elements.some(element =>
+          node.content.toLowerCase().includes(element.toLowerCase()) ||
+          node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
+        );
+        if (!hasRequired) return false;
+      }
+      if (config.forbidden_elements) {
+        const hasForbidden = config.forbidden_elements.some(element =>
+          node.content.toLowerCase().includes(element.toLowerCase()) ||
+          node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
+        );
+        if (hasForbidden) return false;
+      }
+      return true;
+    });
+  }
+  
+  private applyCreativityFilter(nodes: UTDGNode[], config: ContentGenerationConfig): UTDGNode[] {
     const targetCount = Math.min(nodes.length, 10);
     if (config.creativity_factor < 0.3) {
       // Low creativity - prefer most authentic items

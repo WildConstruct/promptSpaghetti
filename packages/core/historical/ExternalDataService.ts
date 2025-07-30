@@ -322,16 +322,21 @@ export class ExternalDataService {
 };
       return node as UTDGNode;
     });
+  }
+  
   /**
    * Filter data based on criteria
    */
   private filterData(data: any, config: any): any {
-    return data.filter(item => {)
-  for (const [field, value] of Object.entries(config.filters || {})) {
+    return data.filter(item => {
+      for (const [field, value] of Object.entries(config.filters || {})) {
         if (item[field] !== value) {
           return false;
+        }
+      }
       return true;
     });
+  }
   /**
    * Validate data quality
    */
