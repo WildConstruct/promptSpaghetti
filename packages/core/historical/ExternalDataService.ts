@@ -291,16 +291,17 @@ export class ExternalDataService {
     if (!Array.isArray(transformedData)) {
       transformedData = [transformedData];
     return transformedData.filter(this.isValidUTDGNode);
+  }
+  
   /**
    * Map external data fields to UTDG format
    */
-  private mapFields(data: any, config: any): UTDGNode {
+  private mapFields(data: any, config: any): UTDGNode[] {
     const fieldMapping = config.field_mapping || {};
-    return data.map(item => {)
-  const node: Partial<UTDGNode> = {,
-  id: item[fieldMapping.id] || `imported_${Date.now()}_${Math.random()}`}
-},
-  type: item[fieldMapping.type] || 'material',
+    return data.map(item => {
+      const node: Partial<UTDGNode> = {
+        id: item[fieldMapping.id] || `imported_${Date.now()}_${Math.random()}`,
+        type: item[fieldMapping.type] || 'material',
         content: item[fieldMapping.content] || item.name || item.description,
         description: item[fieldMapping.description],
         metadata: {

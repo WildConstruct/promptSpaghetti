@@ -249,7 +249,7 @@ export class ConstraintValidator {
         for (const nodeEra of nodeEras) {
           for (const constraintEra of constraintEras) {
             if (this.erasOverlap(nodeEra, constraintEra)) {
-              if (constraintRegions.length === 0 || )
+              if (constraintRegions.length === 0 || 
                   nodeEra.region.some(r => constraintRegions.includes(r))) {
                 isAvailable = true;
                 break;
