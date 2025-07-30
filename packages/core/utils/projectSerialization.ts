@@ -103,6 +103,8 @@ export function serializeProject(
           connectionLabels: graphState.annotations.connectionLabels || {}
         }
       };
+    }
+    try {
     // Generate checksum for integrity
     const content = JSON.stringify(psgFile, null, compress ? 0 : 2);
     psgFile.checksum = generateChecksum(content);

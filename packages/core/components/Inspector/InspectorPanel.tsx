@@ -156,12 +156,11 @@ export const InspectorPanel = ({
               color: '#a0aec0',
               padding: '8px',
               borderRadius: '4px',
-              transition: `all ${animationDurations.micro}ms ${easingFunctions.cinema4d.professional}`}
-},
-  willChange: 'background-color, transform',
+              transition: `all ${animationDurations.micro}ms ${easingFunctions.cinema4d.professional}`,
+              willChange: 'background-color, transform',
               WebkitBackfaceVisibility: 'hidden',
               backfaceVisibility: 'hidden'
-  }}
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
               e.currentTarget.style.transform = 'scale(1.1)';
