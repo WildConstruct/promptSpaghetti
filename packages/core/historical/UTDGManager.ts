@@ -462,7 +462,9 @@ export class UTDGManager {
       ...result.warnings.map(w => ({ type: 'warning', ...w })),
       ...result.suggestions.map(s => ({ type: 'suggestion', ...s }))
     ];
-  private calculateAccuracyScore(nodes: UTDGNode, validation: ConstraintValidationResult): number {
+  }
+  
+  private calculateAccuracyScore(nodes: UTDGNode[], validation: ConstraintValidationResult): number {
   if (nodes.length === 0) return 0;
   const baseScore = nodes.reduce((sum, node) => sum + node.metadata.authenticity, 0) / nodes.length;
   const penaltyFactor = Math.max(0, 1 - (validation.violations.length * 0.1));

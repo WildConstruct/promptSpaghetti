@@ -327,18 +327,23 @@ export class ConstraintValidator {
   */
   private checkRegionalAuthenticity(constraint: HistoricalConstraint, nodes: UTDGNode[]): string[] {
     const violatingNodes: string[] = [];
-  const constraintRegions = constraint.regions || [];
-  if (constraintRegions.length === 0) return violatingNodes;
-  for (const node of nodes) {
-  const nodeRegions = node.metadata.era.flatMap(era => era.region);
-  const hasValidRegion = nodeRegions.some(region => ;);
-  constraintRegions.some(cRegion => )
-  region.toLowerCase().includes(cRegion.toLowerCase()) ||
-  cRegion.toLowerCase().includes(region.toLowerCase())
-  );
-  if (!hasValidRegion) {
-  violatingNodes.push(node.id);
-  return violatingNodes;
+    const constraintRegions = constraint.regions || [];
+    if (constraintRegions.length === 0) return violatingNodes;
+    for (const node of nodes) {
+      const nodeRegions = node.metadata.era.flatMap(era => era.region);
+      const hasValidRegion = nodeRegions.some(region => 
+        constraintRegions.some(cRegion => 
+          region.toLowerCase().includes(cRegion.toLowerCase()) ||
+          cRegion.toLowerCase().includes(region.toLowerCase())
+        )
+      );
+      if (!hasValidRegion) {
+        violatingNodes.push(node.id);
+      }
+    }
+    
+    return violatingNodes;
+  }
   /**
   * Generic constraint evaluation for custom rules
   */
