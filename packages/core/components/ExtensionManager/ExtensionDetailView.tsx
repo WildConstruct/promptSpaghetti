@@ -17,7 +17,8 @@ export interface ExtensionDetailViewProps {
   onInstall?: () => void;
   onClose: () => void;
 }
-export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
+
+export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
   extension,
   status,
   viewMode,

@@ -98,9 +98,10 @@ export function serializeProject(
       psgFile.collaboration = {
         stickyNotes: graphState.annotations.stickyNotes || [],
         annotations: {
-  nodeLabels: graphState.annotations.nodeLabels || {},
+          nodeLabels: graphState.annotations.nodeLabels || {},
           regionGroups: graphState.annotations.regionGroups || [],
           connectionLabels: graphState.annotations.connectionLabels || {}
+        }
       };
     // Generate checksum for integrity
     const content = JSON.stringify(psgFile, null, compress ? 0 : 2);
