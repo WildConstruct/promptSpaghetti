@@ -381,10 +381,11 @@ export class MedievalDemoDatabase {
   /**
    * Create medieval accessories database
    */
-  private createMedievalAccessories(): UTDGNode {
-  const accessories: UTDGNode = [];
-  // Leather Belt
-  accessories.push({)
+  private createMedievalAccessories(): UTDGNode[] {
+    const accessories: UTDGNode[] = [];
+    
+    // Leather Belt
+    accessories.push({
   id: 'medieval_leather_belt_001',
   type: 'accessory',
   content: 'A sturdy leather belt with an iron buckle, used to cinch tunics and carry pouches or tools.',
@@ -405,19 +406,22 @@ export class MedievalDemoDatabase {
   type: 'decoration',
   value: 'bronze buckle with decoration',
   probability: 0.3,
-  social_class: ['merchant', 'noble']]
-},
-  constraints: [];
+        social_class: ['merchant', 'noble']
+      },
+      constraints: []
   });
     return accessories;
+  }
+  
   /**
    * Check if era matches criteria
    */
   private eraMatches(itemEras: Era, targetEra: Era): boolean {
-  return itemEras.some(era => )
-  era.name === targetEra.name ||
-  (era.period.start <= targetEra.period.end && era.period.end >= targetEra.period.start)
-  );
+    return itemEras.some(era => 
+      era.name === targetEra.name ||
+      (era.period.start <= targetEra.period.end && era.period.end >= targetEra.period.start)
+    );
+  }
   /**
   * Generate outfit description
   */

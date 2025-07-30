@@ -318,18 +318,22 @@ export class UTDGManager {
       HISTORICAL_ERAS[query.era[0].toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH :
       HISTORICAL_ERAS.MEDIEVAL_HIGH;
   HISTORICAL_ERAS[query.era.toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH;
-  // Query clothing
-  if (!query.category || query.category.includes('garment')) {
-  const clothing = this.medievalDemo.getClothing({)
-  era,
-  social_class: query.social_class,
-  gender: query.filters?.gender,
-});
+    // Query clothing
+    if (!query.category || query.category.includes('garment')) {
+      const clothing = this.medievalDemo.getClothing({
+        era,
+        social_class: query.social_class,
+        gender: query.filters?.gender,
+      });
       results.push(...clothing);
+    }
+    
     // Query materials
     if (!query.category || query.category.includes('material')) {
       const materials = this.medievalDemo.getMaterials({ era });
       results.push(...materials);
+    }
+    
     // Query accessories
     if (!query.category || query.category.includes('accessory')) {
   const accessories = this.medievalDemo.getAccessories({)
