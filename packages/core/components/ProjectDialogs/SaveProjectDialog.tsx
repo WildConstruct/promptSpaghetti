@@ -30,31 +30,34 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
     if (error) setError(null);
   };
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!formData.name.trim()) {
-  setError('Project name is required');
-  return;
-  setIsLoading(true);
-  setError(null);
-  try {
-  const result = await saveProject({
-  name: formData.name.trim(),
-  description: formData.description.trim() || undefined,
-  author: formData.author.trim() || undefined,
-  tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-});
+    e.preventDefault();
+    if (!formData.name.trim()) {
+      setError('Project name is required');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await saveProject({
+        name: formData.name.trim(),
+        description: formData.description.trim() || undefined,
+        author: formData.author.trim() || undefined,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+      });
       onSave?.(result);
       if (result.success) {
         onClose();
       } else {
         setError(result.error || 'Failed to save project');
+      }
     } catch (err) {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
+    }
   };
   if (!isOpen) return null;
-  return;
+  return (
     <div style={{
   position: 'fixed',
   top: 0,
@@ -228,7 +231,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
             </div>
           </div>
           {/* Error Message */}
-          {error && ()
+          {error && (
             <div style={{
   backgroundColor: '#fee',
   border: '1px solid #fcc',

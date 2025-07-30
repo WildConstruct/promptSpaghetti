@@ -23,6 +23,7 @@ export interface StorageExtension extends BaseExtension {
   // Migration support
   supportsMigration(): boolean;
   createMigration?(from: StorageProvider, to: StorageProvider): StorageMigration;
+}
 
 // Storage Provider Interface
 
@@ -98,13 +99,14 @@ export enum StorageType {
   TIME_SERIES = 'time_series',
   SEARCH = 'search',
   CUSTOM = 'custom'
-  // Storage Set Options
-  export interface StorageSetOptions {
+}
+
+// Storage Set Options
+export interface StorageSetOptions {
   ttl?: number;
   compress?: boolean;
   encrypt?: boolean;
   metadata?: Record<string, any>;
-  // Storage Provider Definition
 }
 export interface StorageProviderDefinition {
   // Basic metadata
@@ -626,7 +628,7 @@ export namespace StorageExtensionHelpers {
       description: config.description || 'A custom storage provider',
       version: config.version || '1.0.0',
       type: config.type || StorageType.CUSTOM,
-      providerClass: config.providerClass || class implements StorageProvider {,
+      providerClass: config.providerClass || class implements StorageProvider {
         id = config.id || 'custom-storage';
         name = config.name || 'Custom Storage';
         type = config.type || StorageType.CUSTOM;
@@ -663,7 +665,7 @@ export namespace StorageExtensionHelpers {
   configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
-      capabilities: config.capabilities || {,
+      capabilities: config.capabilities || {
   get: true,
   set: true,
   delete: true,
@@ -686,7 +688,10 @@ export namespace StorageExtensionHelpers {
   backup: false,
   restore: false,
 },
-  metadata: config.metadata || {,
-  author: 'Unknown',
-  license: 'MIT',
-};
+    metadata: config.metadata || {
+      author: 'Unknown',
+      license: 'MIT'
+    }
+  };
+}
+}
