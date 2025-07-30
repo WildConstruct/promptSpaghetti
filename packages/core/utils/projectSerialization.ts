@@ -135,7 +135,7 @@ export function serializeProject(
 /**
  * Deserializes .psg file content to graph state
  */
-export function deserializeProject(()
+export function deserializeProject(
     content: string,
     options: DeserializationOptions = {}
   ): DeserializationResult {
