@@ -160,9 +160,11 @@ export class MedievalDemoDatabase {
       social_class: criteria.social_class,
     }).filter(item => item.medieval_specific.garment_type === 'cloak');
       if (cloaks.length > 0) {
-  outfit.push(cloaks[0]);
-  historical_notes.push('Cloaks were essential for warmth and weather protection');
-  // Accessories
+        outfit.push(cloaks[0]);
+        historical_notes.push('Cloaks were essential for warmth and weather protection');
+      }
+      
+      // Accessories
     const accessories = this.getAccessories({
       era: criteria.era,
       social_class: criteria.social_class,
