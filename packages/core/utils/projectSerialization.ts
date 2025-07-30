@@ -166,8 +166,7 @@ export function deserializeProject(
       if (!validation.success) {
         return {
           success: false,
-          error: `Invalid .psg file format: ${validation.error}`}
-,
+          error: `Invalid .psg file format: ${validation.error}`,
           warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)}
         };
       psgData = validation.data;

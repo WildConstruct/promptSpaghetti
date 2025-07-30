@@ -277,7 +277,7 @@ export interface ProfessionalDesignSystem {
   spacing: ProfessionalSpacing;
   borderRadius: ProfessionalBorderRadius;
 }
-export const professionalDesignSystem: ProfessionalDesignSystem = {,
+export const professionalDesignSystem: ProfessionalDesignSystem = {
   colors: professionalColors,
   typography: professionalTypography,
   shadows: professionalShadows,
