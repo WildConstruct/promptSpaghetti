@@ -263,11 +263,11 @@ function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, un
     const { nodeType: _, ...nodeData } = reactFlowNode.data;
     // Handle specific node type conversions
     if (schemaType === 'WeightedChoice' && nodeData.variations) {
-  // Convert variations array to choices format for WeightedChoice nodes
-  baseNode.choices = (nodeData.variations as string).map((value: string) => ({)
-  value,
-  weight: 1.0 // Default equal weight,
-}));
+      // Convert variations array to choices format for WeightedChoice nodes
+      baseNode.choices = (nodeData.variations as string[]).map((value: string) => ({
+        value,
+        weight: 1.0 // Default equal weight
+      }));
       // Don't include the original variations field
       const { variations: _variations, ...restData } = nodeData;
       Object.assign(baseNode, restData);

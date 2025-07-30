@@ -24,13 +24,13 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
   onFilterChange,
   viewMode
 }) => {
-  const handleFilterChange = (key: keyof FilterOptions, value: string) => {,
-  onFilterChange({)
-  ...filterOptions,
-  [key]: value,
-});
+  const handleFilterChange = (key: keyof FilterOptions, value: string) => {
+    onFilterChange({
+      ...filterOptions,
+      [key]: value,
+    });
   };
-  return;
+  return (
     <div className="extension-search-filter">
       {/* Search Bar */}
       <div className="search-section">
@@ -43,7 +43,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />
-          {searchQuery && ()
+          {searchQuery && (
             <button 
               className="clear-search-btn"
               onClick={() => onSearchChange('')}
@@ -58,7 +58,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
       <div className="filter-section">
         <div className="filter-row">
           {/* Status Filter (only for installed extensions) */}
-          {viewMode === 'installed' && ()
+          {viewMode === 'installed' && (
             <div className="filter-group">
               <label className="filter-label">Status:</label>
               <select
@@ -120,7 +120,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
         {/* Quick Filters */}
         <div className="quick-filters">
           <span className="quick-filter-label">Quick filters:</span>
-          {viewMode === 'installed' && ()
+          {viewMode === 'installed' && (
             <>
               <button 
                 className={`quick-filter-btn ${filterOptions.status === 'enabled' ? 'active' : ''}`}
@@ -142,7 +142,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
               </button>
             </>
           )}
-          {viewMode === 'marketplace' && ()
+          {viewMode === 'marketplace' && (
             <>
               <button className="quick-filter-btn">
                 ⭐ Featured
@@ -184,22 +184,22 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
           </button>
         </div>
         {/* Active Filters Display */}
-        {(searchQuery || filterOptions.status !== 'all' || filterOptions.type !== 'all') && ()
+        {(searchQuery || filterOptions.status !== 'all' || filterOptions.type !== 'all') && (
           <div className="active-filters">
             <span className="active-filters-label">Active filters:</span>
-            {searchQuery && ()
+            {searchQuery && (
               <span className="active-filter">
                 Search: "{searchQuery}"
                 <button onClick={() => onSearchChange('')}>✕</button>
               </span>
             )}
-            {filterOptions.status !== 'all' && ()
+            {filterOptions.status !== 'all' && (
               <span className="active-filter">
                 Status: {filterOptions.status}
                 <button onClick={() => handleFilterChange('status', 'all')}>✕</button>
               </span>
             )}
-            {filterOptions.type !== 'all' && ()
+            {filterOptions.type !== 'all' && (
               <span className="active-filter">
                 Type: {filterOptions.type}
                 <button onClick={() => handleFilterChange('type', 'all')}>✕</button>
