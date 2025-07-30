@@ -258,7 +258,7 @@ export const professionalSpacing: ProfessionalSpacing = {
 };
 
 // Professional Border Radius
-export const professionalBorderRadius: ProfessionalBorderRadius = {,
+export const professionalBorderRadius: ProfessionalBorderRadius = {
   none: '0px',
   sm: '3px',
   md: '6px',

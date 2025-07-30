@@ -111,9 +111,8 @@ export const InspectorPanel = ({
           display: 'flex',
           flexDirection: 'column',
           // 60fps optimized transition
-          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`}
-},
-  willChange: 'width',
+          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+          willChange: 'width',
           overflow: 'hidden', // Prevent content spillover during animation
           WebkitBackfaceVisibility: 'hidden',
           backfaceVisibility: 'hidden'
