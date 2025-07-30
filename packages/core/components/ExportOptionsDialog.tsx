@@ -41,11 +41,12 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
   const [isExporting, setIsExporting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const availableFormats = useMemo(() => {
-  return exportService.getAvailableFormats().filter(format => {)
-  if (exportType === 'individual') {
-  return format.supportsIndividual;
-} else if (exportType === 'batch') {
+    return exportService.getAvailableFormats().filter(format => {
+      if (exportType === 'individual') {
+        return format.supportsIndividual;
+      } else if (exportType === 'batch') {
         return format.supportsBatch;
+      }
       return format.supportsBatch; // comparison uses batch support
     });
   }, [exportType]);
@@ -54,6 +55,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
       return [results[individualIndex]].filter(Boolean);
     } else if (exportType === 'batch') {
       return selectedIndices.map(index => results[index]).filter(Boolean);
+    }
     return results;
   }, [results, exportType, individualIndex, selectedIndices]);
   const sizeEstimate = useMemo(() => {
@@ -71,13 +73,14 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
     setValidationErrors(errors);
   };
   const handleOptionChange = (path: string, value: Error) => {
-    setOptions(prev => {)
+    setOptions(prev => {
   const newOptions = { ...prev };
       const keys = path.split('.');
       let current: unknown = newOptions;
       for (let i = 0; i < keys.length - 1; i++) {
         if (!current[keys[i]]) current[keys[i]] = {};
         current = current[keys[i]];
+      }
       current[keys[keys.length - 1]] = value;
       return newOptions;
     });
@@ -129,7 +132,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           alignItems: 'center',
           marginBottom: 20,
           paddingBottom: 16,
-          borderBottom: `1px solid ${professionalColors.border.subtle}`}
+          borderBottom: `1px solid ${professionalColors.border.subtle}`,
         }}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>
             Export Options
@@ -141,14 +144,14 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
   fontSize: 12,
   color: professionalColors.text.secondary,
 }}>
-            <span>📊 {exportType === 'individual' ? '1 result' : `${exportResults.length} results`}</span>}
-            {sizeEstimate && ()
+            <span>📊 {exportType === 'individual' ? '1 result' : `${exportResults.length} results`}</span>
+            {sizeEstimate && (
               <span>💾 ~{sizeEstimate.estimatedSize}{sizeEstimate.unit}</span>
             )}
           </div>
         </div>
         {/* Validation Errors */}
-        {validationErrors.length > 0 && ()
+        {validationErrors.length > 0 && (
           <div style={{
   background: '#fef2f2',
   border: '1px solid #fecaca',
@@ -156,7 +159,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
   padding: 12,
   marginBottom: 16,
 }}>
-            {validationErrors.map((error, index) => ()
+            {validationErrors.map((error, index) => (
               <div key={index} style={{
   color: '#dc2626',
   fontSize: 12,
@@ -168,7 +171,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           </div>
         )}
         {/* Size Warning */}
-        {sizeEstimate?.warning && ()
+        {sizeEstimate?.warning && (
           <div style={{
   background: '#fffbeb',
   border: '1px solid #fed7aa',
@@ -197,15 +200,15 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
   gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
   gap: 8,
 }}>
-            {availableFormats.map(format => ()
+            {availableFormats.map((format) => (
               <div
                 key={format.format}
                 onClick={() => handleFormatChange(format.format)}
                 style={{
   padding: 12,
-  border: selectedFormat === format.format ,
-  ? '2px solid #4d7cff'
-  : '1px solid #e5e7eb',
+  border: selectedFormat === format.format
+    ? '2px solid #4d7cff'
+    : '1px solid #e5e7eb',
   borderRadius: 6,
   cursor: 'pointer',
   background: selectedFormat === format.format ? '#f0f4ff' : '#fff',
@@ -253,7 +256,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           </div>
         </div>
         {/* Format-specific Options */}
-        {formatInfo && ()
+        {formatInfo && (
           <div style={{
   background: '#f8fafc',
   border: '1px solid #e2e8f0',
@@ -301,7 +304,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
               </label>
             </div>
             {/* Film Options */}
-            {formatInfo.category === 'film' && ()
+            {formatInfo.category === 'film' && (
               <div style={{ marginBottom: 16 }}>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>Film Industry Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -341,7 +344,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
               </div>
             )}
             {/* VFX Options */}
-            {formatInfo.category === 'vfx' && ()
+            {formatInfo.category === 'vfx' && (
               <div style={{ marginBottom: 16 }}>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>VFX Pipeline Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -381,7 +384,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
               </div>
             )}
             {/* Analysis Options */}
-            {formatInfo.category === 'analysis' && ()
+            {formatInfo.category === 'analysis' && (
               <div>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: 12, fontWeight: 500 }}>Analysis Options</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -473,7 +476,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
   gap: 8,
 }}
             >
-              {isExporting ? ()
+              {isExporting ? (
                 <>
                   <div style={{
   width: 12,

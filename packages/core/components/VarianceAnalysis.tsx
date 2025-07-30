@@ -31,8 +31,8 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
     return varianceAnalysisService.getVarianceLevelInfo(analysis.overallVariance);
   }, [analysis.overallVariance]);
   if (results.length < 2) {
-  return;
-  <div style={{
+    return (
+      <div style={{
   padding: 12,
   background: '#f8fafc',
   border: '1px solid #e2e8f0',
@@ -44,9 +44,13 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
         📊 Generate more results to analyze creative variance
       </div>
     );
+  }
+
   if (compact) {
     return <CompactVarianceDisplay analysis={analysis} varianceInfo={varianceInfo} />;
-  return;
+  }
+
+  return (
     <div style={{
   background: '#fff',
   border: '1px solid #e5e7eb',
@@ -57,10 +61,9 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
       <div style={{
         padding: 16,
         background: varianceInfo.background,
-        border: `1px solid ${varianceInfo.border}`}
-},
-  borderBottom: 'none'
-  }}>
+        border: `1px solid ${varianceInfo.border}`,
+        borderBottom: 'none',
+      }}>
         <div style={{
   display: 'flex',
   alignItems: 'center',
@@ -99,11 +102,10 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
   overflow: 'hidden',
 }}>
               <div style={{
-                width: `${analysis.varianceScore * 100}%`}
-},
-  height: '100%',
+                width: `${analysis.varianceScore * 100}%`,
+                height: '100%',
                 background: varianceInfo.color,
-                transition: 'width 0.3s ease';
+                transition: 'width 0.3s ease',
   }} />
             </div>
           </div>
@@ -132,7 +134,7 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
   gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
   gap: 12,
 }}>
-          {indicators.map((indicator, index) => ()
+          {indicators.map((indicator, index) => (
             <DiversityMetricCard key={index} indicator={indicator} />
           ))}
         </div>
@@ -239,7 +241,7 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
         </div>
       </div>
       {/* Suggestions */}
-      {analysis.suggestions.length > 0 && ()
+      {analysis.suggestions.length > 0 && (
         <div style={{
   padding: 16,
   borderTop: '1px solid #e5e7eb',
@@ -253,7 +255,7 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
             💡 Optimization Suggestions
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {analysis.suggestions.map((suggestion, index) => ()
+            {analysis.suggestions.map((suggestion, index) => (
               <SuggestionCard
                 key={index}
                 suggestion={suggestion}
@@ -266,20 +268,19 @@ export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onS
     </div>
   );
 };
-const CompactVarianceDisplay: React.FC<{,
+const CompactVarianceDisplay: React.FC<{
   analysis: VarianceMetrics;
   varianceInfo: ReturnType<typeof varianceAnalysisService.getVarianceLevelInfo>;
-}> = ({ analysis, varianceInfo }) => ()
+}> = ({ analysis, varianceInfo }) => (
   <div style={{
     display: 'flex',
     alignItems: 'center',
     gap: 8,
     padding: 8,
     background: varianceInfo.background,
-    border: `1px solid ${varianceInfo.border}`}
-},
-  borderRadius: 6,
-    fontSize: 11;
+    border: `1px solid ${varianceInfo.border}`,
+    borderRadius: 6,
+    fontSize: 11,
   }}>
     <span>{varianceInfo.icon}</span>
     <span style={{ fontWeight: 500, color: varianceInfo.color }}>
@@ -293,18 +294,17 @@ const CompactVarianceDisplay: React.FC<{,
   overflow: 'hidden',
 }}>
       <div style={{
-        width: `${analysis.varianceScore * 100}%`}
-},
-  height: '100%',
-        background: varianceInfo.color;
-  }} />
+        width: `${analysis.varianceScore * 100}%`,
+        height: '100%',
+        background: varianceInfo.color,
+      }} />
     </div>
     <span style={{ fontSize: 10, color: '#6b7280' }}>
       {(analysis.varianceScore * 100).toFixed(0)}%
     </span>
   </div>
 );
-const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indicator }) => ()
+const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indicator }) => (
   <div style={{
   padding: 10,
   background: '#fff',
@@ -345,11 +345,10 @@ const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indi
   marginBottom: 6,
 }}>
       <div style={{
-        width: `${indicator.value * 100}%`}
-},
-  height: '100%',
+        width: `${indicator.value * 100}%`,
+        height: '100%',
         background: indicator.color,
-        transition: 'width 0.3s ease';
+        transition: 'width 0.3s ease',
   }} />
     </div>
     <div style={{
@@ -361,7 +360,7 @@ const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indi
     </div>
   </div>
 );
-const SuggestionCard: React.FC<{,
+const SuggestionCard: React.FC<{
   suggestion: VarianceSuggestion;
   onClick?: () => void;
 }> = ({ suggestion, onClick }) => {
@@ -376,18 +375,18 @@ const SuggestionCard: React.FC<{,
   high: '🔴',
 };
   const colors = typeColors[suggestion.type];
-  return;
+
+  return (
     <div
       onClick={suggestion.actionable ? onClick : undefined}
       style={{
         padding: 10,
         background: colors.bg,
-        border: `1px solid ${colors.border}`}
-},
-  borderRadius: 4,
+        border: `1px solid ${colors.border}`,
+        borderRadius: 4,
         cursor: suggestion.actionable ? 'pointer' : 'default',
         transition: 'all 0.2s',
-        opacity: suggestion.actionable ? 1 : 0.7;
+        opacity: suggestion.actionable ? 1 : 0.7,
   }}
     >
       <div style={{

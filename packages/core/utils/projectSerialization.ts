@@ -212,23 +212,24 @@ export function deserializeProject(
   graph: graphState,
   metadata: psgFile.metadata,
   settings: psgFile.settings,
-  collaboration: psgFile.collaboration,
-}
-      warnings,
-      migrated
-    };
-  } catch (error) {
-  return {
-  success: false,
-  error: error instanceof Error ? error.message : 'Unknown deserialization error',
+    collaboration: psgFile.collaboration,
+  },
+  warnings,
+  migrated
 };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown deserialization error',
+    };
+  }
 /**
  * Converts ReactFlow node to graph schema node format
  */
 function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, unknown> {
   // Map nodeType to proper schema type
-  const getSchemaNodeType = (nodeType: string): string => {,
-  const typeMap: Record<string, string> = {,
+  const getSchemaNodeType = (nodeType: string): string => {
+  const typeMap: Record<string, string> = {
   'weighted-choice': 'WeightedChoice',
   'concat': 'Concat',
   'output': 'Output',
@@ -256,7 +257,7 @@ function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, un
     // Handle specific node type conversions
     if (schemaType === 'WeightedChoice' && nodeData.variations) {
   // Convert variations array to choices format for WeightedChoice nodes
-  baseNode.choices = (nodeData.variations as string).map((value: string) => ({,)
+  baseNode.choices = (nodeData.variations as string).map((value: string) => ({)
   value,
   weight: 1.0 // Default equal weight,
 }));
@@ -275,7 +276,7 @@ function convertGraphNodeToReactFlowNode(graphNode: Record<string, unknown>, )
   const { preserveIds = true } = options;
   // Map schema type back to UI nodeType
   const getUINodeType = (schemaType: string): string => {
-  const typeMap: Record<string, string> = {,
+  const typeMap: Record<string, string> = {
   'WeightedChoice': 'weighted-choice',
   'Concat': 'concat',
   'Output': 'output',
@@ -291,7 +292,7 @@ function convertGraphNodeToReactFlowNode(graphNode: Record<string, unknown>, )
     return typeMap[schemaType] || 'output'
   };
   const uiNodeType = getUINodeType(graphNode.type);
-  const reactFlowNode: Node = {,
+  const reactFlowNode: Node = {
   id: preserveIds ? graphNode.id : `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
 },
   type: 'default', // ReactFlow visual type

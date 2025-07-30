@@ -68,7 +68,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
 }}>
           Execution Path Analysis
         </h3>
-        {validResults.length > 0 && ()
+        {validResults.length > 0 && (
           <div style={{
   display: 'flex',
   gap: 16,
@@ -80,7 +80,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
           </div>
         )}
       </div>
-      {validResults.length === 0 ? ()
+      {validResults.length === 0 ? (
         <div style={{
   color: '#a0aec0',
   fontStyle: 'italic',
@@ -89,7 +89,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
 }}>
           No execution path data available
         </div>
-      ) : ()
+      ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {results.map((result, index) => {
             if (!result.executionPath) return null;
@@ -101,12 +101,11 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
               <div
                 key={index}
                 style={{
-                  border: `1px solid ${isSelected ? pathColor : '#4a5568'}`}
-},
-  borderRadius: 6,
+                  border: `1px solid ${isSelected ? pathColor : '#4a5568'}`,
+                  borderRadius: 6,
                   background: isSelected ? 'rgba(66, 153, 225, 0.1)' : '#2d3748',
-                  overflow: 'hidden'
-  }}
+                  overflow: 'hidden',
+                }}
               >
                 {/* Path Header */}
                 <div
@@ -132,7 +131,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                     <span style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 500 }}>
                       Seed {result.seed}
                     </span>
-                    {path.randomizationPoints.length > 0 && ()
+                    {path.randomizationPoints.length > 0 && (
                       <span style={{
   background: '#805ad5',
   color: '#fff',
@@ -167,14 +166,14 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                   </div>
                 </div>
                 {/* Path Details */}
-                {isExpanded && ()
+                {isExpanded && (
                   <div style={{
   borderTop: '1px solid #4a5568',
   padding: 12,
   background: '#1a202c',
 }}>
                     {/* Execution Steps */}
-                    {vizConfig.showExecutionOrder && ()
+                    {vizConfig.showExecutionOrder && (
                       <div style={{ marginBottom: 16 }}>
                         <div style={{
   color: '#e2e8f0',
@@ -185,7 +184,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                           Execution Order
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                          {path.nodeExecutionOrder.map((nodeId, stepIndex) => ()
+                          {path.nodeExecutionOrder.map((nodeId, stepIndex) => (
                             <div
                               key={`${nodeId}-${stepIndex}`}
                               style={{
@@ -204,7 +203,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                       </div>
                     )}
                     {/* Random Choices */}
-                    {vizConfig.showRandomChoices && path.randomizationPoints.length > 0 && ()
+                    {vizConfig.showRandomChoices && path.randomizationPoints.length > 0 && (
                       <div style={{ marginBottom: 16 }}>
                         <div style={{
   color: '#e2e8f0',
@@ -214,7 +213,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
 }}>
                           Randomization Points
                         </div>
-                        {path.randomizationPoints.map((choice, choiceIndex) => ()
+                        {path.randomizationPoints.map((choice, choiceIndex) => (
                           <div
                             key={choiceIndex}
                             style={{
@@ -233,7 +232,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                             <div style={{ opacity: 0.9, marginTop: 2 }}>
                               {choice.selectionReason}
                             </div>
-                            {choice.probability && ()
+                            {choice.probability && (
                               <div style={{ opacity: 0.8, marginTop: 2 }}>
                                 Probability: {(choice.probability * 100).toFixed(1)}%
                               </div>
@@ -243,7 +242,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
                       </div>
                     )}
                     {/* Performance Breakdown */}
-                    {vizConfig.showPerformanceMetrics && result.debugInfo && ()
+                    {vizConfig.showPerformanceMetrics && result.debugInfo && (
                       <div>
                         <div style={{
   color: '#e2e8f0',
@@ -261,7 +260,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
   fontFamily: 'monospace',
   color: '#a0aec0',
 }}>
-                          {Object.entries(result.debugInfo.performanceBreakdown).map(([nodeType, time]) => ()
+                          {Object.entries(result.debugInfo.performanceBreakdown).map(([nodeType, time]) => (
                             <div key={nodeType} style={{
   display: 'flex',
   justifyContent: 'space-between',

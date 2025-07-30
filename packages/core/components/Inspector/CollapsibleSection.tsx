@@ -6,7 +6,7 @@ export interface CollapsibleSectionProps {
   onToggle: () => void;
   children: React.ReactNode;
 }
-export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)
+export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   title,
   collapsed,
   onToggle,
@@ -50,7 +50,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)
           ▼
         </span>
       </button>
-      {!collapsed && ()
+      {!collapsed && (
         <div
           style={{
   maxHeight: collapsed ? 0 : '1000px',
