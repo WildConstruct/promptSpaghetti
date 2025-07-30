@@ -7,6 +7,8 @@ interface InspectorState {
   panelWidth: number;
   panelCollapsed: boolean;
   panelVisible: boolean;
+}
+
 interface InspectorActions {
   setSelectedNode: (node: Node | null) => void;
   setSelectedSchema: (schema: ZodSchema<unknown> | null) => void;
@@ -14,6 +16,8 @@ interface InspectorActions {
   setPanelCollapsed: (collapsed: boolean) => void;
   setPanelVisible: (visible: boolean) => void;
   updateNodeData: (nodeId: string, data: Record<string, unknown>) => void;
+}
+
 interface InspectorContextValue extends InspectorState, InspectorActions {}
 const InspectorContext = createContext<InspectorContextValue | null>(null);
 interface InspectorProviderProps {
