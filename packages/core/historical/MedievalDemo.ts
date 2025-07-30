@@ -271,11 +271,12 @@ export class MedievalDemoDatabase {
   variations: [,
   {
   id: 'fabric_variation_1',
-  type: 'texture',
-  value: 'silk imported from Byzantine',
-  probability: 0.2,
-  era_specific: true];
-  },
+          type: 'texture',
+          value: 'silk imported from Byzantine',
+          probability: 0.2,
+          era_specific: true
+        }
+      ],
   constraints: [],
       medieval_specific: {
   garment_type: 'gown',

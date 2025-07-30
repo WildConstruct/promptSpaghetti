@@ -364,14 +364,14 @@ export class UTDGManager {
   private generateHistoricalContentSync(config: ContentGenerationConfig): GeneratedContent {
   const startTime = performance.now();
   // Use medieval demo for synchronous generation
-  let nodes: UTDGNode = [];
+  let nodes: UTDGNode[] = [];
   if (config.scenario === 'ceremonial' && config.social_class === 'noble') {
-  const outfit = this.medievalDemo.generateOutfit({)
-  era: config.era,
-  social_class: config.social_class,
-  gender: config.gender || 'female',
-  occasion: 'ceremonial',
-});
+    const outfit = this.medievalDemo.generateOutfit({
+      era: config.era,
+      social_class: config.social_class,
+      gender: config.gender || 'female',
+      occasion: 'ceremonial',
+    });
       nodes = outfit.outfit;
     } else {
   // Generate based on configuration
