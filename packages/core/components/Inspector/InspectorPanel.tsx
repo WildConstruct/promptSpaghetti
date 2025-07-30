@@ -195,9 +195,8 @@ export const InspectorPanel = ({
               // Smooth fade in/out
               opacity: collapsed ? 0 : 1,
               transform: collapsed ? 'translateY(-10px)' : 'translateY(0)',
-              transition: `all ${animationDurations.fast}ms ${easingFunctions.cinema4d.professional}`}
-},
-  willChange: 'opacity, transform'
+              transition: `all ${animationDurations.fast}ms ${easingFunctions.cinema4d.professional}`,
+              willChange: 'opacity, transform'
             }}
           >
             Select an element to customize its options

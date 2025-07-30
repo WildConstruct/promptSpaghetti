@@ -27,7 +27,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
   onUpdateExtension,
   onConfigureExtension
 }) => {
-  const getExtensionIcon = (type: string): string => {,
+  const getExtensionIcon = (type: string): string => {
   switch (type) {
   case 'node': return '🔧';
   case 'ui': return '🎨';
