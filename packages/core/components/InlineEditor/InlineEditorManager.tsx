@@ -6,6 +6,7 @@ interface InlineEditorState {
   nodeId: string | null;
   position: { x: number; y: number };
   isActive: boolean;
+}
 
 export interface InlineEditorManagerProps {
   nodes: Node<NodeData>[];
