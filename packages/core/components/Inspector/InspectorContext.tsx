@@ -71,5 +71,6 @@ export const useInspectorContext = (): InspectorContextValue => {
   const context = useContext(InspectorContext);
   if (!context) {
     throw new Error('useInspectorContext must be used within an InspectorProvider');
+  }
   return context;
 };

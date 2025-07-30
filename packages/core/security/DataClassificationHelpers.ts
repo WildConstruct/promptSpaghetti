@@ -62,19 +62,20 @@ export interface EnhancedDataElement extends DataElement {
 
 export interface SecurityPolicyEnforcementResult {
   compliant: boolean;
-  violations: string;
-  recommendations: string;
+  violations: string[];
+  recommendations: string[];
   requiredActions: {
-  encryption: boolean;
-  accessControl: string;
-  monitoring: string;
-  retention: string;
-};
+    encryption: boolean;
+    accessControl: string[];
+    monitoring: string;
+    retention: string;
+  };
   riskScore: number;
+}
+
 /**
  * Data flow security assessment
  */
-}
 export interface DataFlowSecurityAssessment {
   sourceLevel: DataSensitivityLevel;
   targetLevel: DataSensitivityLevel;
@@ -105,12 +106,14 @@ export class DataClassificationHelpers {
   const level = sensitivityLevel || this.detectSensitivityLevel(element);
   const handlingRequirements = DataSensitivityUtils.getHandlingRequirements(level);
   const securityMarkings = DataSensitivityUtils.generateSecurityMarkings(level);
-  return {
-  ...element,
-  sensitivityLevel: level,
-  handlingRequirements,
-  securityMarkings
-};
+    return {
+      ...element,
+      sensitivityLevel: level,
+      handlingRequirements,
+      securityMarkings
+    };
+  }
+
   /**
    * Automatically detect sensitivity level from data element
    */
@@ -118,28 +121,37 @@ export class DataClassificationHelpers {
   const valueStr = String(element.value);
   const fieldName = element.fieldName.toLowerCase();
   // Apply automated classification rules
-  for (const rule of DATA_SENSITIVITY_GUIDELINES.automatedClassificationRules) {
-  if (rule.pattern.test(valueStr)) {
-  return rule.recommendedLevel;
-  // Apply field name-based detection
-  const fieldBasedLevel = this.detectFromFieldName(fieldName);
-  if (fieldBasedLevel) {
-  return fieldBasedLevel;
-  // Check context for additional clues
-  if (element.context) {
-  const contextLevel = this.detectFromContext(element.context);
-  if (contextLevel) {
-  return contextLevel;
-  // Default to internal if no specific classification found
-  return DataSensitivityLevel.INTERNAL;
+    for (const rule of DATA_SENSITIVITY_GUIDELINES.automatedClassificationRules) {
+      if (rule.pattern.test(valueStr)) {
+        return rule.recommendedLevel;
+      }
+    }
+
+    // Apply field name-based detection
+    const fieldBasedLevel = this.detectFromFieldName(fieldName);
+    if (fieldBasedLevel) {
+      return fieldBasedLevel;
+    }
+
+    // Check context for additional clues
+    if (element.context) {
+      const contextLevel = this.detectFromContext(element.context);
+      if (contextLevel) {
+        return contextLevel;
+      }
+    }
+
+    // Default to internal if no specific classification found
+    return DataSensitivityLevel.INTERNAL;
+  }
   /**
   * Detect sensitivity level from field name patterns
   */
-  private static detectFromFieldName(fieldName: string): DataSensitivityLevel | null {,
-  const fieldPatterns: Array<{,
-  pattern: RegExp;
-  level: DataSensitivityLevel;
-}> = [
+  private static detectFromFieldName(fieldName: string): DataSensitivityLevel | null {
+    const fieldPatterns: Array<{
+      pattern: RegExp;
+      level: DataSensitivityLevel;
+    }> = [
       // PII patterns
       { pattern: /email/i, level: DataSensitivityLevel.RESTRICTED },
       { pattern: /phone|mobile|tel/i, level: DataSensitivityLevel.RESTRICTED },
@@ -162,32 +174,44 @@ export class DataClassificationHelpers {
       { pattern: /website|announcement|news/i, level: DataSensitivityLevel.PUBLIC }
     ];
     for (const { pattern, level } of fieldPatterns) {
-  if (pattern.test(fieldName)) {
-  return level;
-  return null;
+      if (pattern.test(fieldName)) {
+        return level;
+      }
+    }
+    return null;
+  }
   /**
   * Detect sensitivity level from data context
   */
-  private static detectFromContext(context: Record<string, any>): DataSensitivityLevel | null {,
+  private static detectFromContext(context: Record<string, any>): DataSensitivityLevel | null {
   // Check for explicit sensitivity indicators
-  if (context.containsPII === true) {
-  return DataSensitivityLevel.RESTRICTED;
-  if (context.publiclyAvailable === true) {
-  return DataSensitivityLevel.PUBLIC;
-  if (context.customerData === true) {
-  return DataSensitivityLevel.CONFIDENTIAL;
-  if (context.internalOnly === true) {
-  return DataSensitivityLevel.INTERNAL;
+    if (context.containsPII === true) {
+      return DataSensitivityLevel.RESTRICTED;
+    }
+    if (context.publiclyAvailable === true) {
+      return DataSensitivityLevel.PUBLIC;
+    }
+    if (context.customerData === true) {
+      return DataSensitivityLevel.CONFIDENTIAL;
+    }
+    if (context.internalOnly === true) {
+      return DataSensitivityLevel.INTERNAL;
+    }
   // Check source system patterns
-  if (context.source) {
-  const source = String(context.source).toLowerCase();
-  if (source.includes('hr') || source.includes('payroll')) {
-  return DataSensitivityLevel.RESTRICTED;
-  if (source.includes('customer') || source.includes('crm')) {
-  return DataSensitivityLevel.CONFIDENTIAL;
-  if (source.includes('public') || source.includes('website')) {
-  return DataSensitivityLevel.PUBLIC;
-  return null;
+    if (context.source) {
+      const source = String(context.source).toLowerCase();
+      if (source.includes('hr') || source.includes('payroll')) {
+        return DataSensitivityLevel.RESTRICTED;
+      }
+      if (source.includes('customer') || source.includes('crm')) {
+        return DataSensitivityLevel.CONFIDENTIAL;
+      }
+      if (source.includes('public') || source.includes('website')) {
+        return DataSensitivityLevel.PUBLIC;
+      }
+    }
+    return null;
+  }
   /**
   * Enforce security policies based on sensitivity level
   */
