@@ -12,9 +12,9 @@ export interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
   // Node registration (supporting both legacy and new method names)
   getNodeDefinitions(): NodeDefinition;
-  getNodeTypes(): NodeDefinition; // Legacy method name used by engine,
+  getNodeTypes(): NodeDefinition; // Legacy method name used by engine
   createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
-  createNode(nodeType: string, nodeId: string, config: any): RuntimeNode<any>; // Legacy method name used by engine,
+  createNode(nodeType: string, nodeId: string, config: any): RuntimeNode<any>; // Legacy method name used by engine
   // Schema validation
   validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult;
   getNodeSchema(nodeType: string): z.ZodSchema<any>;
@@ -25,8 +25,10 @@ export interface NodeExtension extends BaseExtension {
   // Advanced node support
   supportsAdvancedNodes(): boolean;
   createAdvancedNodeInstance?(nodeType: string, nodeId: string, config: any): AdvancedRuntimeNode<any>;
-  // Node Definition
-  export interface NodeDefinition {
+}
+
+// Node Definition
+export interface NodeDefinition {
   // Basic metadata
   id: string;
   name: string;
@@ -45,7 +47,6 @@ export interface NodeExtension extends BaseExtension {
   metadata: NodeMetadata;
   // Validation
   validation?: NodeValidation;
-  // Node Categories
 }
 export enum NodeCategory {
   INPUT = 'input',
@@ -54,12 +55,15 @@ export enum NodeCategory {
   CONTROL = 'control',
   UTILITY = 'utility',
   CUSTOM = 'custom'
-  // Node Class Types
-  export type NodeClass =
-  | (new (id: string, config: any) => RuntimeNode<any>),
+}
+
+// Node Class Types
+export type NodeClass =
+  | (new (id: string, config: any) => RuntimeNode<any>)
   | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
-  // Node UI Configuration
-  export interface NodeUIConfiguration {
+
+// Node UI Configuration
+export interface NodeUIConfiguration {
   // Visual appearance
   icon?: string;
   color?: string;
@@ -70,7 +74,6 @@ export enum NodeCategory {
   palette?: NodePaletteConfiguration;
   // Preview configuration
   preview?: NodePreviewConfiguration;
-  // Node Editor Configuration
 }
 export interface NodeEditorConfiguration {
   // Custom editor component
@@ -82,7 +85,6 @@ export interface NodeEditorConfiguration {
   fields?: Record<string, NodeFieldConfiguration>;
   // Validation
   validation?: NodeEditorValidation;
-  // Node Editor Props
 }
 export interface NodeEditorProps {
   node: any;
@@ -90,7 +92,6 @@ export interface NodeEditorProps {
   onChange: (config: any) => void;
   onValidate?: (result: ExtensionValidationResult) => void;
   context: ExtensionContext;
-  // Node Field Configuration
 }
 export interface NodeFieldConfiguration {
   type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'multiselect' | 'custom';
@@ -100,15 +101,12 @@ export interface NodeFieldConfiguration {
   validation?: z.ZodSchema<any>;
   options?: Array<{ value: any; label: string }>;
   component?: React.ComponentType<any>;
-
-// Node Editor Validation
 }
 export interface NodeEditorValidation {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
   showErrors?: boolean;
   customValidation?: (config: any) => ExtensionValidationResult;
-  // Node Palette Configuration
 }
 export interface NodePaletteConfiguration {
   // Grouping
@@ -121,7 +119,6 @@ export interface NodePaletteConfiguration {
   dragData?: any;
   // Tooltip
   tooltip?: string;
-  // Node Preview Configuration
 }
 export interface NodePreviewConfiguration {
   // Preview component
@@ -132,14 +129,12 @@ export interface NodePreviewConfiguration {
   mode?: 'static' | 'dynamic' | 'interactive';
   // Update frequency
   updateFrequency?: 'onChange' | 'onFocus' | 'manual';
-  // Node Preview Props
 }
 export interface NodePreviewProps {
   node: any;
   config: any;
   context: ExtensionContext;
   executionResult?: any;
-  // Node Runtime Configuration
 }
 export interface NodeRuntimeConfiguration {
   // Execution settings
@@ -151,23 +146,20 @@ export interface NodeRuntimeConfiguration {
   security?: NodeSecuritySettings;
   // Caching
   caching?: NodeCachingConfiguration;
-  // Node Performance Hints
 }
 export interface NodePerformanceHints {
   expectedExecutionTime?: 'fast' | 'medium' | 'slow';
   memoryUsage?: 'low' | 'medium' | 'high';
   cpuIntensive?: boolean;
   ioIntensive?: boolean;
-  // Node Security Settings
 }
 export interface NodeSecuritySettings {
   sandboxed?: boolean;
-  permissions?: string;
+  permissions?: string[];
   allowedNetworkAccess?: string;
   allowedFileAccess?: string;
   maxMemoryUsage?: number;
   maxExecutionTime?: number;
-  // Node Caching Configuration
 }
 export interface NodeCachingConfiguration {
   enabled?: boolean;
@@ -175,27 +167,24 @@ export interface NodeCachingConfiguration {
   maxSize?: number;
   ttl?: number;
   keyGenerator?: (node: any, context: ExecutionContext) => string;
-  // Node Metadata
 }
 export interface NodeMetadata {
   author: string;
   license: string;
   repository?: string;
   documentation?: string;
-  examples?: NodeExample;
+  examples?: NodeExample[];
   changelog?: string;
   // Compatibility
   compatibility?: {
-  minVersion: string;
-  maxVersion?: string;
-  deprecatedIn?: string;
-  removedIn?: string;
-};
+    minVersion: string;
+    maxVersion?: string;
+    deprecatedIn?: string;
+    removedIn?: string;
+  };
   // Tags
-  tags?: string;
-  keywords?: string;
-
-// Node Example
+  tags?: string[];
+  keywords?: string[];
 }
 export interface NodeExample {
   name: string;
@@ -203,7 +192,6 @@ export interface NodeExample {
   config: any;
   expectedOutput?: any;
   code?: string;
-  // Node Validation
 }
 export interface NodeValidation {
   // Configuration validation
@@ -213,15 +201,13 @@ export interface NodeValidation {
   // Context validation
   contextValidation?: (context: ExecutionContext) => ExtensionValidationResult;
   // Custom validation rules
-  customRules?: NodeValidationRule;
-  // Node Validation Rule
+  customRules?: NodeValidationRule[];
 }
 export interface NodeValidationRule {
   name: string;
   description: string;
   validate: (node: any, context: any) => ExtensionValidationResult;
   severity: 'error' | 'warning' | 'info';
-  // Node Registry Interface
 }
 export interface NodeRegistry {
   // Registration
@@ -229,17 +215,16 @@ export interface NodeRegistry {
   unregister(nodeId: string): void;
   // Lookup
   get(nodeId: string): NodeDefinition | undefined;
-  getAll(): NodeDefinition;
-  getByCategory(category: NodeCategory): NodeDefinition;
+  getAll(): NodeDefinition[];
+  getByCategory(category: NodeCategory): NodeDefinition[];
   // Search
-  search(query: string): NodeDefinition;
-  filter(predicate: (definition: NodeDefinition) => boolean): NodeDefinition;
+  search(query: string): NodeDefinition[];
+  filter(predicate: (definition: NodeDefinition) => boolean): NodeDefinition[];
   // Validation
   validate(definition: NodeDefinition): ExtensionValidationResult;
   // Events
   on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
   off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
-  // Node Factory Interface
 }
 export interface NodeFactory {
   // Creation
@@ -252,41 +237,40 @@ export interface NodeFactory {
   // Capabilities
   supports(nodeType: string): boolean;
   supportsAdvanced(nodeType: string): boolean;
-  // Node Execution Context Extensions
 }
 export interface NodeExecutionContextExtensions {
   // Node-specific extensions
   nodeExtensions: Map<string, any>;
   // Performance tracking
   performanceTracking: {
-  startTime: number;
-  endTime?: number;
-  executionTime?: number;
-  memoryUsage?: number;
-};
+    startTime: number;
+    endTime?: number;
+    executionTime?: number;
+    memoryUsage?: number;
+  };
   // Security context
   securityContext: {
-  permissions: string;
-  sandboxed: boolean;
-  resourceLimits: {
-  memory?: number;
-  time?: number;
-};
+    permissions: string[];
+    sandboxed: boolean;
+    resourceLimits: {
+      memory?: number;
+      time?: number;
+    };
   };
   // Caching context
   cachingContext: {
-  enabled: boolean;
-  cacheKey?: string;
-  cacheHit?: boolean;
-  cacheSize?: number;
-};
-
-// Extended Execution Context
+    enabled: boolean;
+    cacheKey?: string;
+    cacheHit?: boolean;
+    cacheSize?: number;
+  };
 }
 export interface ExtendedExecutionContext extends AdvancedExecutionContext {
   extensions: NodeExecutionContextExtensions;
-  // Node Execution Monitor
-  export interface NodeExecutionMonitor {
+}
+
+// Node Execution Monitor
+export interface NodeExecutionMonitor {
   // Monitoring
   onExecutionStart(node: RuntimeNode<any>, context: ExtendedExecutionContext): void;
   onExecutionEnd(node: RuntimeNode<any>, context: ExtendedExecutionContext, result: any): void;
@@ -296,7 +280,6 @@ export interface ExtendedExecutionContext extends AdvancedExecutionContext {
   getAllMetrics(): Map<string, NodeExecutionMetrics>;
   // Events
   on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
-  // Node Execution Metrics
 }
 export interface NodeExecutionMetrics {
   nodeId: string;
@@ -309,7 +292,6 @@ export interface NodeExecutionMetrics {
   averageMemoryUsage: number;
   lastExecuted: Date;
   lastError?: Error;
-  // Node Extension Helper Functions
 }
 export namespace NodeExtensionHelpers {
   export function createNodeDefinition(config: Partial<NodeDefinition>): NodeDefinition {
@@ -319,21 +301,23 @@ export namespace NodeExtensionHelpers {
       category: config.category || NodeCategory.CUSTOM,
       description: config.description || 'A custom node',
       version: config.version || '1.0.0',
-      nodeClass: config.nodeClass || class extends RuntimeNode<unknown> {,
+      nodeClass: config.nodeClass || class extends RuntimeNode<unknown> {
         run() { return null; }
-  },
+      },
   configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
-      metadata: config.metadata || {,
-  author: 'Unknown',
-  license: 'MIT',
-}
+      metadata: config.metadata || {
+        author: 'Unknown',
+        license: 'MIT',
+      },
       ...config
     };
+  }
+
   export function validateNodeDefinition(definition: NodeDefinition): ExtensionValidationResult {
-    const errors: string = [];
-    const warnings: string = [];
+    const errors: string[] = [];
+    const warnings: string[] = [];
     // Basic validation
     if (!definition.id) errors.push('Node ID is required');
     if (!definition.name) errors.push('Node name is required');
@@ -342,12 +326,15 @@ export namespace NodeExtensionHelpers {
     try {
       definition.configSchema.parse({});
     } catch (e) {
-  warnings.push('Configuration schema validation failed');
-  return {
-  valid: errors.length === 0,
-  errors,
-  warnings
-};
+      warnings.push('Configuration schema validation failed');
+    }
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+
   export function createNodeRegistry(): NodeRegistry {
     const registry = new Map<string, NodeDefinition>();
     const eventEmitter = new EventTarget();
@@ -355,38 +342,42 @@ export namespace NodeExtensionHelpers {
       register(definition: NodeDefinition) {
         registry.set(definition.id, definition);
         eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-  }
+      },
       unregister(nodeId: string) {
         const definition = registry.get(nodeId);
         if (definition) {
           registry.delete(nodeId);
           eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
-  }
+        }
+      },
       get(nodeId: string) {
         return registry.get(nodeId);
-  }
+      },
       getAll() {
         return Array.from(registry.values());
-  }
+      },
       getByCategory(category: NodeCategory) {
         return Array.from(registry.values()).filter(def => def.category === category);
-  }
+      },
       search(query: string) {
         const lowercaseQuery = query.toLowerCase();
-        return Array.from(registry.values()).filter(def =>)
+        return Array.from(registry.values()).filter(def =>
           def.name.toLowerCase().includes(lowercaseQuery) ||
           def.description.toLowerCase().includes(lowercaseQuery)
         );
-  }
+      },
       filter(predicate: (definition: NodeDefinition) => boolean) {
         return Array.from(registry.values()).filter(predicate);
-  }
+      },
       validate(definition: NodeDefinition) {
         return validateNodeDefinition(definition);
-  }
+      },
       on(event: string, listener: any) {
         eventEmitter.addEventListener(event, listener);
-  }
+      },
       off(event: string, listener: any) {
         eventEmitter.removeEventListener(event, listener);
+      }
     };
+  }
+}
