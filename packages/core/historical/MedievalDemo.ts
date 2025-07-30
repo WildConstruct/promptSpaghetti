@@ -208,39 +208,43 @@ export class MedievalDemoDatabase {
         authenticity: 0.9,
         source: 'Archaeological evidence from 12th-13th century England',
         tags: ['tunic', 'peasant', 'wool', 'brown', 'daily-wear'],
-  social_class: ['peasant'],
-  gender: 'male',
-  daily_use: true,
-  ceremonial: false,
-},
-  relationships: {
-  compatible: ['medieval_peasant_braies_001', 'medieval_peasant_belt_001'],
-  incompatible: ['medieval_noble_silk_001', 'medieval_royal_purple_001'],
-  variations: [,
-  {
-  id: 'color_variation_1',
-  type: 'color',
-  value: 'natural gray wool',
-  probability: 0.3,
-  era_specific: true,
-}
+        social_class: ['peasant'],
+        gender: 'male',
+        daily_use: true,
+        ceremonial: false,
+      },
+      relationships: {
+        compatible: ['medieval_peasant_braies_001', 'medieval_peasant_belt_001'],
+        incompatible: ['medieval_noble_silk_001', 'medieval_royal_purple_001'],
+        variations: [
           {
-  id: 'condition_variation_1',
-  type: 'condition',
-  value: 'patched and mended',
-  probability: 0.6,
-  era_specific: true];
-  },
-  constraints: [],
+            id: 'color_variation_1',
+            type: 'color',
+            value: 'natural gray wool',
+            probability: 0.3,
+            era_specific: true,
+          },
+          {
+            id: 'condition_variation_1',
+            type: 'condition',
+            value: 'patched and mended',
+            probability: 0.6,
+            era_specific: true
+          }
+        ]
+      },
+      constraints: [],
       medieval_specific: {
-  garment_type: 'tunic',
-  construction_method: 'sewn',
-  fabric_type: 'wool',
-  dye_availability: 'common',
-  seasonal_use: 'all_season',
-});
+        garment_type: 'tunic',
+        construction_method: 'sewn',
+        fabric_type: 'wool',
+        dye_availability: 'common',
+        seasonal_use: 'all_season',
+      }
+    });
+    
     // Noble Female Gown
-    clothing.push({)
+    clothing.push({
   id: 'medieval_noble_female_gown_001',
   type: 'garment',
   content: 'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.',
