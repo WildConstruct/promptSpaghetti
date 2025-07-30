@@ -152,9 +152,12 @@ export class MedievalDemoDatabase {
       if (criteria.social_class === 'noble') {
         historical_notes.push('Noble garments featured fine wool or silk with elaborate decoration');
       } else if (criteria.social_class === 'peasant') {
-  historical_notes.push('Peasant clothing was practical, made from coarse wool or hemp');
-  // Outer layer for cold weather
-  if (criteria.season === 'winter' || criteria.season === 'autumn') {
+        historical_notes.push('Peasant clothing was practical, made from coarse wool or hemp');
+      }
+    }
+    
+    // Outer layer for cold weather
+    if (criteria.season === 'winter' || criteria.season === 'autumn') {
     const cloaks = this.getClothing({
       era: criteria.era,
       social_class: criteria.social_class,
