@@ -431,16 +431,16 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingTop: 16,
-          borderTop: `1px solid ${professionalColors.border.subtle}`}
+          borderTop: `1px solid ${professionalColors.border.subtle}`
         }}>
           <div style={{
   fontSize: 11,
   color: professionalColors.text.secondary,
 }}>
             {exportType === 'individual' 
-              ? `Exporting result ${(individualIndex || 0) + 1} of ${results.length}`}
+              ? `Exporting result ${(individualIndex || 0) + 1} of ${results.length}`
               : exportType === 'batch'
-              ? `Exporting ${selectedIndices.length} selected results`}
+              ? `Exporting ${selectedIndices.length} selected results`
               : `Exporting all ${results.length} results for comparison`}
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
@@ -488,7 +488,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
 }} />
                   Exporting...
                 </>
-              ) : ()
+              ) : (
                 <>
                   💾 Export {formatInfo?.name}
                 </>
@@ -502,6 +502,7 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
       `}</style>
     </div>
   );

@@ -37,6 +37,7 @@ export const VariationList: React.FC<VariationListProps> = ({
     if (editingIndex !== null && editInputRef.current) {
       editInputRef.current.focus();
       editInputRef.current.select();
+    }
   }, [editingIndex]);
   const handleAdd = () => {
     if (!newVariation.trim()) return;
@@ -121,7 +122,7 @@ export const VariationList: React.FC<VariationListProps> = ({
 }}>
           Variations ({variations.length})
         </label>
-        {allowQuickEntry && ()
+        {allowQuickEntry && (
           <button
             onClick={() => setQuickEntryMode(!quickEntryMode)}
             style={{
@@ -139,7 +140,7 @@ export const VariationList: React.FC<VariationListProps> = ({
           </button>
         )}
       </div>
-      {quickEntryMode ? ()
+      {quickEntryMode ? (
         <div style={{ marginBottom: 12 }}>
           <textarea
             value={quickEntryText}
@@ -252,7 +253,7 @@ export const VariationList: React.FC<VariationListProps> = ({
   borderRadius: 6,
   background: '#2d3748',
 }}>
-        {variations.length === 0 ? ()
+        {variations.length === 0 ? (
           <div style={{
   padding: 20,
   textAlign: 'center',
@@ -263,7 +264,7 @@ export const VariationList: React.FC<VariationListProps> = ({
             No variations yet. Add some above.
           </div>
         ) : ()
-          variations.map((variation, index) => ()
+          variations.map(([^=]*) => (
             <div
               key={index}
               draggable
@@ -295,7 +296,7 @@ export const VariationList: React.FC<VariationListProps> = ({
               >
                 ⋮⋮
               </div>
-              {editingIndex === index ? ()
+              {editingIndex === index ? (
                 <input
                   ref={editInputRef}
                   type="text"
@@ -351,7 +352,7 @@ export const VariationList: React.FC<VariationListProps> = ({
           ))
         )}
       </div>
-      {variations.length >= maxVariations && ()
+      {variations.length >= maxVariations && (
         <div style={{
   marginTop: 8,
   fontSize: 12,

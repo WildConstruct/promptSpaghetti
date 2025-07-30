@@ -13,15 +13,15 @@ export interface InlineEditorManagerProps {
   onNodeUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   canvasRef?: React.RefObject<HTMLDivElement>;
 }
-export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
+export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({
   nodes,
   onNodeUpdate,
   canvasRef
 }) => {
-  const [editorState, setEditorState] = useState<InlineEditorState>({)
-  nodeId: null,
+  const [editorState, setEditorState] = useState<InlineEditorState>({
+    nodeId: null,
     position: { x: 0, y: 0 },
-    isActive: false;
+    isActive: false
   });
   const { getNode, project, getViewport } = useReactFlow();
   const activationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -39,6 +39,7 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
       event.preventDefault();
       event.stopPropagation();
       activateEditor(nodeId, event);
+    }
   }, []);
   const activateEditor = useCallback((nodeId: string, event?: React.MouseEvent) => {
     const node = getNode(nodeId);
@@ -55,7 +56,7 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
     } else {
   // Position relative to node center
   const viewport = getViewport();
-  const nodeScreenPos = project({)
+  const nodeScreenPos = project({
   x: node.position.x + (node.width || 200) / 2,
   y: node.position.y + (node.height || 100) / 2,
 });
@@ -70,22 +71,25 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
   const maxHeight = 300;
   if (editorPosition.x + maxWidth > canvasRect.width) {
   editorPosition.x = canvasRect.width - maxWidth - 20;
+  }
   if (editorPosition.y + maxHeight > canvasRect.height) {
-  editorPosition.y = canvasRect.height - maxHeight - 20;
+    editorPosition.y = canvasRect.height - maxHeight - 20;
+  }
   editorPosition.x = Math.max(20, editorPosition.x);
   editorPosition.y = Math.max(20, editorPosition.y);
-  setEditorState({)
-  nodeId,
-  position: editorPosition,
-  isActive: true,
-});
+    }
+    setEditorState({
+      nodeId,
+      position: editorPosition,
+      isActive: true,
+    });
   }, [getNode, project, getViewport, canvasRef]);
   const closeEditor = useCallback(() => {
-    setEditorState({)
-  nodeId: null,
+    setEditorState({
+      nodeId: null,
       position: { x: 0, y: 0 },
-      isActive: false;
-  });
+      isActive: false
+    });
   }, []);
   const handleEditorSubmit = useCallback(() => {
     closeEditor();
@@ -99,14 +103,15 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
     return () => {
       if (activationTimeoutRef.current) {
         clearTimeout(activationTimeoutRef.current);
+      }
     };
   }, []);
   // Get active node
   const activeNode = editorState.nodeId ? nodes.find(n => n.id === editorState.nodeId) : null;
-  return;
+  return (
     <>
       {/* Render inline editor if active */}
-      {editorState.isActive && activeNode && ()
+      {editorState.isActive && activeNode && (
         <InlineNodeEditor
           node={activeNode}
           isActive={editorState.isActive}
@@ -117,7 +122,7 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
         />
       )}
       {/* Invisible event handlers for node double-clicks */}
-      {nodes.map(node => ()
+      {nodes.map((node) => (
         <NodeClickHandler
           key={node.id}
           node={node}
@@ -134,7 +139,9 @@ interface NodeClickHandlerProps {
   node: Node<NodeData>;
   onClick: (event: React.MouseEvent, nodeId: string) => void;
   isEditorActive: boolean;
-  const NodeClickHandler: React.FC<NodeClickHandlerProps> = ({ ),
+}
+
+const NodeClickHandler: React.FC<NodeClickHandlerProps> = ({
   node,
   onClick,
   isEditorActive
@@ -144,7 +151,7 @@ interface NodeClickHandlerProps {
   const viewport = getViewport();
   const screenPosition = project(node.position);
   if (isEditorActive) return null; // Don't render handler when editor is active
-  return;
+  return (
     <div
       style={{
   position: 'absolute',
@@ -169,7 +176,7 @@ interface NodeClickHandlerProps {
 // Hook for integrating inline editor with existing components
 export const useInlineEditor = () => {
   const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
-  const activateEditor = useCallback((nodeId: string) => {,
+  const activateEditor = useCallback((nodeId: string) => {
   setActiveNodeId(nodeId);
 }, []);
   const deactivateEditor = useCallback(() => {
@@ -194,11 +201,11 @@ export const InlineEditorContext = React.createContext<{
   isNodeBeingEdited: (nodeId: string) => boolean;
 } | null>(null);
 
-export const InlineEditorProvider: React.FC<{,
+export const InlineEditorProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const editorState = useInlineEditor();
-  return;
+  return (
     <InlineEditorContext.Provider value={editorState}>
       {children}
     </InlineEditorContext.Provider>
@@ -209,6 +216,7 @@ export const useInlineEditorContext = () => {
   const context = React.useContext(InlineEditorContext);
   if (!context) {
     throw new Error('useInlineEditorContext must be used within InlineEditorProvider');
+  }
   return context;
 };
 

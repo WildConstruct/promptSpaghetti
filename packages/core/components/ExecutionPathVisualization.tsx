@@ -34,13 +34,15 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
       newExpanded.delete(index);
     } else {
       newExpanded.add(index);
+    }
     setExpandedResults(newExpanded);
   };
   const handlePathSelect = (pathId: string, nodeIds: string) => {
-  setSelectedPath(selectedPath === pathId ? null : pathId);
-  if (onNodeHighlight) {
-  onNodeHighlight(selectedPath === pathId ? [] : nodeIds);
-};
+    setSelectedPath(selectedPath === pathId ? null : pathId);
+    if (onNodeHighlight) {
+      onNodeHighlight(selectedPath === pathId ? [] : nodeIds);
+    }
+  };
   // Calculate aggregate stats
   const validResults = results.filter(r => r.executionPath);
   const totalExecution = validResults.reduce((sum, r) => sum + r.executionTimeMs, 0);
@@ -97,7 +99,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
             const isExpanded = expandedResults.has(index);
             const isSelected = selectedPath === path.id;
             const pathColor = EXECUTION_PATH_COLORS[index % EXECUTION_PATH_COLORS.length];
-            return;
+            return (
               <div
                 key={index}
                 style={{

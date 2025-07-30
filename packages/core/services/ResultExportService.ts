@@ -110,11 +110,11 @@ export class ResultExportService {
       exportedAt: new Date().toISOString(),
       sourceGraph
     };
-    const filename = options.filename || this.generateFilename(;);
+    const filename = options.filename || this.generateFilename(
       options.format,
       'batch',
       selectedResults.map(r => r.seed)
-    ));
+    );
     return await this.performExport(exportData, options, filename, 'batch');
   /**
    * Export all results with comparison analysis
@@ -319,9 +319,9 @@ export class ResultExportService {
   private async performExport(data: IndividualExportData | BatchExportData | any)
     options: ResultExportOptions,
     filename: string,
-    exportType: 'individual' | 'batch' | 'comparison'): Promise<ExportResult> {,
+    exportType: 'individual' | 'batch' | 'comparison'): Promise<ExportResult> {
   // Transform data to match existing export system format
-  const exportRequest: ExportRequest = {,
+  const exportRequest: ExportRequest = {
   format: this.mapToExistingFormat(options.format),
   data: this.transformDataForExport(data, options, exportType),
   options: this.transformOptionsForExport(options),
@@ -332,8 +332,8 @@ export class ResultExportService {
     } catch (error) {
   // Fallback to custom export handling
   return await this.handleCustomExport(data, options, filename, exportType);
-  private mapToExistingFormat(format: ExportFormat): string {,
-  const formatMap: Record<ExportFormat, string> = {,
+  private mapToExistingFormat(format: ExportFormat): string {
+  const formatMap: Record<ExportFormat, string> = {
   'plain-text': 'json-complete', // Will be post-processed,
   'json-simple': 'json-complete',
   'json-complete': 'json-complete',
@@ -354,7 +354,7 @@ export class ResultExportService {
     return formatMap[format] || 'json-complete';
   private transformDataForExport(data: IndividualExportData | BatchExportData | any)
     options: ResultExportOptions,
-    exportType: string): any {,
+    exportType: string): any {
   const baseData = {
   exportType,
   results: 'results' in data ? data.results : [data.result],
@@ -374,7 +374,7 @@ export class ResultExportService {
   if (options.analysisOptions) {
   baseData.analysis = this.generateAnalysis(baseData.results, options.analysisOptions);
   return baseData;
-  private transformOptionsForExport(options: ResultExportOptions): any {,
+  private transformOptionsForExport(options: ResultExportOptions): any {
   return {
   includeMetadata: options.includeMetadata,
   includeExecutionPaths: options.includeExecutionPaths,
@@ -386,7 +386,7 @@ export class ResultExportService {
   private async handleCustomExport(data: any)
     options: ResultExportOptions,
     filename: string,
-    exportType: string): Promise<ExportResult> {,
+    exportType: string): Promise<ExportResult> {
   switch (options.format) {
   case 'plain-text':,
   return this.exportPlainText(data, options);
@@ -433,7 +433,7 @@ export class ResultExportService {
   const timeline = {
   exportType: 'execution-timeline',
   exportedAt: data.exportedAt,
-  results: results.map((result: PreviewResultWithPath, index: number) => ({,)
+  results: results.map((result: PreviewResultWithPath, index: number) => ({)
   resultIndex: index,
   seed: result.seed,
   output: result.output,
@@ -481,7 +481,7 @@ export class ResultExportService {
     const extension = this.getFileExtension(format);
     return `promptscape-${type}-${seedStr}-${timestamp}.${extension}`;}
   private getFileExtension(format: ExportFormat): string {
-  const extensions: Record<ExportFormat, string> = {,
+  const extensions: Record<ExportFormat, string> = {
   'plain-text': 'txt',
   'json-simple': 'json',
   'json-complete': 'json',
@@ -523,7 +523,7 @@ export class ResultExportService {
   const lengthVariance = lengths.reduce((sum, len) => sum + Math.pow(len - avgLength, 2), 0) / lengths.length;
   // Normalize to 0-100 scale
   return Math.min(100, Math.round((lengthVariance / avgLength) * 100));
-  private findCommonElements(results: PreviewResultWithPath): string {,
+  private findCommonElements(results: PreviewResultWithPath): string {
   const allWords = results;
   .map(r => r.output || '')
   .flatMap(output => output.toLowerCase().split(/\s+/))
@@ -641,14 +641,14 @@ export class ResultExportService {
   .filter(word => word.length > 0);
   const uniqueWords = new Set(allWords);
   return allWords.length > 0 ? uniqueWords.size / allWords.length : 0;
-  private buildExecutionTimeline(executionPath: ExecutionPath) {,
+  private buildExecutionTimeline(executionPath: ExecutionPath) {
   return executionPath.steps.map((step, index) => ({)
   stepIndex: index,
   nodeId: step.nodeId,
   nodeType: step.nodeType,
   timestamp: step.timestamp,
   executionTime: step.executionTimeMs,
-  randomChoice: step.randomChoice ? {,
+  randomChoice: step.randomChoice ? {
   type: step.randomChoice.choiceType,
   selected: step.randomChoice.selectedOption,
   reason: step.randomChoice.selectionReason,
@@ -690,7 +690,7 @@ export class ResultExportService {
   if (uniqueOutputs < results.length * 0.8) {
   recommendations.push('Some duplicate outputs detected - check for deterministic paths');
   return recommendations;
-  private generateBatchBreakdown(results: PreviewResultWithPath) {,
+  private generateBatchBreakdown(results: PreviewResultWithPath) {
   return {
   byExecutionTime: this.groupByExecutionTime(results),
   byOutputLength: this.groupByOutputLength(results),

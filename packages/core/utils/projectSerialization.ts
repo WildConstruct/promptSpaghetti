@@ -21,12 +21,12 @@ import {
 // Graph state interface matching the Zustand store
 
 export interface GraphState {
-  nodes: Node;
-  edges: Edge;
+  nodes: Node[];
+  edges: Edge[];
   annotations?: {
     stickyNotes?: Array<{ id: string; text: string; position: { x: number; y: number } }>;
     nodeLabels?: Record<string, string>;
-    regionGroups?: Array<{ id: string; name: string; nodeIds: string }>;
+    regionGroups?: Array<{ id: string; name: string; nodeIds: string[] }>;
     connectionLabels?: Record<string, string>;
     [key: string]: unknown;
   };
@@ -156,10 +156,11 @@ export function deserializeProject(
     try {
       psgData = JSON.parse(content);
     } catch (parseError) {
-  return {
-  success: false,
-  error: 'Invalid JSON format in .psg file',
-};
+      return {
+        success: false,
+        error: 'Invalid JSON format in .psg file',
+      };
+    }
     // Validate file format
     if (!skipValidation) {
       const validation = validatePsgFile(psgData);
@@ -167,19 +168,22 @@ export function deserializeProject(
         return {
           success: false,
           error: `Invalid .psg file format: ${validation.error}`,
-          warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)}
+          warnings: validation.issues?.map(issue => `${issue.path.join('.')}: ${issue.message}`) || []
         };
+      }
       psgData = validation.data;
+    }
     const psgFile = psgData as PsgFile;
-    const warnings: string = [];
+    const warnings: string[] = [];
     let migrated = false;
     // Check version compatibility
     const compatibility = isVersionCompatible(psgFile.formatVersion);
     if (!compatibility.compatible) {
-  return {
-  success: false,
-  error: compatibility.message || 'Incompatible file version',
-};
+      return {
+        success: false,
+        error: compatibility.message || 'Incompatible file version',
+      };
+    }
     if (compatibility.requiresMigration) {
       if (autoMigrate) {
         // Perform migration (placeholder for future versions)
@@ -187,6 +191,8 @@ export function deserializeProject(
         warnings.push(compatibility.message || 'File format was automatically updated');
       } else {
         warnings.push(compatibility.message || 'File format migration available');
+      }
+    }
     // Convert graph nodes back to ReactFlow format
     const reactFlowNodes = psgFile.graph.nodes.map(node =>
       convertGraphNodeToReactFlowNode(node, { preserveIds })
@@ -200,23 +206,24 @@ export function deserializeProject(
     };
     // Add collaboration data if present
     if (psgFile.collaboration) {
-  graphState.annotations = {
-  stickyNotes: psgFile.collaboration.stickyNotes,
-  nodeLabels: psgFile.collaboration.annotations.nodeLabels,
-  regionGroups: psgFile.collaboration.annotations.regionGroups,
-  connectionLabels: psgFile.collaboration.annotations.connectionLabels,
-};
+      graphState.annotations = {
+        stickyNotes: psgFile.collaboration.stickyNotes,
+        nodeLabels: psgFile.collaboration.annotations.nodeLabels,
+        regionGroups: psgFile.collaboration.annotations.regionGroups,
+        connectionLabels: psgFile.collaboration.annotations.connectionLabels,
+      };
+    }
     return {
-  success: true,
-  data: {
-  graph: graphState,
-  metadata: psgFile.metadata,
-  settings: psgFile.settings,
-    collaboration: psgFile.collaboration,
-  },
-  warnings,
-  migrated
-};
+      success: true,
+      data: {
+        graph: graphState,
+        metadata: psgFile.metadata,
+        settings: psgFile.settings,
+        collaboration: psgFile.collaboration,
+      },
+      warnings,
+      migrated
+    };
   } catch (error) {
     return {
       success: false,
