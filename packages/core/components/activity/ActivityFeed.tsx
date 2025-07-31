@@ -16,7 +16,7 @@ interface ActivityFeedProps {
   showFilters?: boolean;
   maxItems?: number;
   compact?: boolean;
-  export const ActivityFeed: React.FC<ActivityFeedProps> = ({,)
+  export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   workspaceId,
   userId,
   projectId,
@@ -25,7 +25,7 @@ interface ActivityFeedProps {
   maxItems,
   compact = false
 }) => {
-  const [filters, setFilters] = useState<ActivityEventFilter>({)
+  const [filters, setFilters] = useState<ActivityEventFilter>({})
   project_id: projectId,
 });
   const [selectedEvent, setSelectedEvent] = useState<ActivityEventWithActorInfo | null>(null);

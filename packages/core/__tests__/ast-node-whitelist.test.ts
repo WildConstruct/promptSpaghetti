@@ -311,7 +311,7 @@ describe('Real-world Expression Testing', () => {
   filter = createConditionalNodeFilter();
 });
   it('should allow safe conditional expressions', () => {
-    const safeExpressions = [;
+    const safeExpressions = [
       'x > 5',
       'name === "test"',
       'x > 0 && y < 10',
@@ -326,7 +326,7 @@ describe('Real-world Expression Testing', () => {
       expect(result.allowed).toBe(true);
   });
   it('should block dangerous expressions', () => {
-    const dangerousExpressions = [;
+    const dangerousExpressions = [
       'function() { return "bad"
   }',
       'new Date()',

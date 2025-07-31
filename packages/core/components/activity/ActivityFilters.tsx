@@ -9,7 +9,7 @@ interface ActivityFiltersProps {
   eventTypes: string;
   onFilterChange: (filters: Partial<ActivityEventFilter>) => void;
   className?: string;
-  export const ActivityFilters: React.FC<ActivityFiltersProps> = ({,)
+  export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
   filters,
   eventTypes,
   onFilterChange,

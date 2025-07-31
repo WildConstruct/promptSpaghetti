@@ -26,15 +26,15 @@ interface PreviewResult {
 export function usePreviewSeeds() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [results, setResults] = useState<PreviewResult>([]);
+  const [results, setResults] = useState<PreviewResult[]>([]);
   const [aggregateError, setAggregateError] = useState<string | null>(null);
   const [performanceStats, setPerformanceStats] = useState<{
   totalTime: number;
   averageTime: number;
 } | null>(null);
   // Epic 8.5 Task 3: Individual result management state
-  const [lockedResults, setLockedResults] = useState<number>([]);
-  const [regeneratingResults, setRegeneratingResults] = useState<number>([]);
+  const [lockedResults, setLockedResults] = useState<number[]>([]);
+  const [regeneratingResults, setRegeneratingResults] = useState<number[]>([]);
   // Epic 8.5 Task 5: Creative variance analysis state
   const [varianceMetrics, setVarianceMetrics] = useState<VarianceMetrics | null>(null);
   const abortRef = useRef<AbortController | null>(null);

@@ -22,7 +22,7 @@ jest.mock('../hooks/useExport', () => ({)
 import { AdvancedExportTemplateManager } from '../components/export/AdvancedExportTemplateManager';
 
 // Mock template data
-const mockTemplates = [;
+const mockTemplates = [
   {
     id: 'template-1',
     name: 'JSON Standard Export',
@@ -34,7 +34,7 @@ const mockTemplates = [;
     format_options: { indent: 2, includeMetadata: true },
     created_at: '2024-01-01T00:00:00Z',
     updated_at: '2024-01-01T00:00:00Z',
-    created_by: 'user-1';
+    created_by: 'user-1',
   }
   {
     id: 'template-2',
