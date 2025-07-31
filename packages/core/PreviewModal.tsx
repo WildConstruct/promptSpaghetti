@@ -315,7 +315,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 background: '#f7fafc',
                 borderRadius: 4,
               }}>
-                {selectedForComparison.length + ' / 3 selected'}
+                {selectedForComparison.length + ' of 3 selected'}
               </span>
             )}
           </div>

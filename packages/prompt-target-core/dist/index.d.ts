@@ -16,5 +16,5 @@ export { ResultGallerySystem, resultGallerySystem } from './gallery/ResultGaller
 export { MetadataManager, metadataManager } from './metadata/MetadataManager.js';
 export { ExportSystem, exportSystem } from './export/ExportSystem.js';
 export { PromptTargetingExample, createPromptTargetingExample } from './examples/PromptTargetingExample.js';
-export declare const VERSION = '0.1.0-alpha';
-export declare const PACKAGE_NAME = '@promptscape/prompt-target-core';
+export declare const VERSION = "0.1.0-alpha";
+export declare const PACKAGE_NAME = "@promptscape/prompt-target-core";

@@ -10,20 +10,20 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 39 modules transformed.
-✗ Build failed in 336ms
+✓ 38 modules transformed.
+✗ Build failed in 323ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/UndoRedoManager.tsx:17:0: ERROR: Unexpected "}"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/UndoRedoManager.tsx:17:0
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/MultiSelectionManager.tsx:292:2: ERROR: Unexpected "}"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/MultiSelectionManager.tsx:292:2
 
 Unexpected "}"
-15 |    id: string;
-16 |  }
-17 |  }
-   |  ^
-18 |  }
-19 |  export interface UndoRedoManagerProps {
+290|    theme: 'light' | 'dark' | 'cinema'
+291|  }
+292|    }
+   |    ^
+293|  
+294|  const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -38,20 +38,20 @@ Unexpected "}"
 Safe config failed, trying regular config...
 vite v7.0.5 building for production...
 transforming...
-✓ 47 modules transformed.
-✗ Build failed in 494ms
+✓ 48 modules transformed.
+✗ Build failed in 746ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:385:3: ERROR: Unexpected ","
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:385:3
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/PreviewModal.tsx:341:20: ERROR: Unterminated regular expression
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/PreviewModal.tsx:341:20
 
-Unexpected ","
-383|      NodeRenderComponent.displayName = 'NodeRenderComponent';
-384|      return NodeRenderComponent;
-385|    }, [selectedNodeId, getNodeMeta, getCategoryColor, isPerformanceGood]);
-   |     ^
-386|    // Node types mapping - SIMPLIFIED to prevent infinite loops
-387|    const nodeTypes = useMemo(() => {
+Unterminated regular expression
+339|                    }}
+340|                  />
+341|                </div>
+   |                      ^
+342|              )}
+343|              {/* Variance Analysis Component */}
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -79,7 +79,7 @@ Error: Command failed: vite build --config vite.config.production.ts
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 39846,
+  pid: 83024,
   stdout: null,
   stderr: null
 }

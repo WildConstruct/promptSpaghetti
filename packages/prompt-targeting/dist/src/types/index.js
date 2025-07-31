@@ -5,11 +5,9 @@
 /**
  * Zod schemas for runtime validation
  */
-export export export export 
-/**
+export class /**
  * Error classes for prompt targeting system
- */
-export class PromptTargetingError extends Error {
+ */ PromptTargetingError extends Error {
     code;
     platform;
     details;

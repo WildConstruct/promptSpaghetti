@@ -1,351 +1,357 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Content Authoring Handbook</title>
     <style>
-        /* PDF-specific styles */
-        @page {
-            size: A4;
-            margin: 20mm;
-            
-            @top-left {
-                content: "Content Authoring Handbook";
-                font-size: 10pt;
-                color: #666;
-            }
-            
-            @top-right {
-                content: "Page " counter(page);
-                font-size: 10pt;
-                color: #666;
-            }
-            
-            @bottom-center {
-                content: "Generated " date();
-                font-size: 8pt;
-                color: #999;
-            }
+      /* PDF-specific styles */
+      @page {
+        size: A4;
+        margin: 20mm;
+
+        @top-left {
+          content: 'Content Authoring Handbook';
+          font-size: 10pt;
+          color: #666;
         }
-        
-        @page :first {
-            @top-left { content: none; }
-            @top-right { content: none; }
+
+        @top-right {
+          content: 'Page ' counter(page);
+          font-size: 10pt;
+          color: #666;
         }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 12pt;
-            line-height: 1.6;
-            color: #333;
-            max-width: none;
-            margin: 0;
-            padding: 0;
+
+        @bottom-center {
+          content: 'Generated ' date();
+          font-size: 8pt;
+          color: #999;
         }
-        
-        .title-page {
-            page-break-after: always;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+      }
+
+      @page :first {
+        @top-left {
+          content: none;
         }
-        
-        .title-page h1 {
-            font-size: 36pt;
-            font-weight: bold;
-            color: #0969da;
-            margin-bottom: 20pt;
+        @top-right {
+          content: none;
         }
-        
-        .title-page .subtitle {
-            font-size: 18pt;
-            color: #666;
-            margin-bottom: 40pt;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 12pt;
+        line-height: 1.6;
+        color: #333;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .title-page {
+        page-break-after: always;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+      }
+
+      .title-page h1 {
+        font-size: 36pt;
+        font-weight: bold;
+        color: #0969da;
+        margin-bottom: 20pt;
+      }
+
+      .title-page .subtitle {
+        font-size: 18pt;
+        color: #666;
+        margin-bottom: 40pt;
+      }
+
+      .title-page .author {
+        font-size: 16pt;
+        margin-bottom: 10pt;
+      }
+
+      .title-page .version {
+        font-size: 14pt;
+        color: #666;
+        margin-bottom: 10pt;
+      }
+
+      .title-page .date {
+        font-size: 12pt;
+        color: #999;
+      }
+
+      .toc-page {
+        page-break-before: always;
+        page-break-after: always;
+      }
+
+      .toc-page h1 {
+        font-size: 24pt;
+        color: #0969da;
+        margin-bottom: 20pt;
+        border-bottom: 2pt solid #0969da;
+        padding-bottom: 10pt;
+      }
+
+      .toc-part {
+        margin-bottom: 20pt;
+      }
+
+      .toc-part h3 {
+        font-size: 16pt;
+        color: #24292e;
+        margin-bottom: 10pt;
+        font-weight: 600;
+      }
+
+      .toc-part ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+      }
+
+      .toc-part li {
+        margin-bottom: 5pt;
+        padding-left: 20pt;
+        position: relative;
+      }
+
+      .toc-part li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #0969da;
+      }
+
+      .toc-part a {
+        color: #0969da;
+        text-decoration: none;
+      }
+
+      .chapter-page {
+        page-break-before: always;
+        margin-bottom: 40pt;
+      }
+
+      .chapter-title {
+        font-size: 24pt;
+        color: #0969da;
+        margin-bottom: 20pt;
+        padding-bottom: 10pt;
+        border-bottom: 2pt solid #0969da;
+      }
+
+      .chapter-content h1 {
+        font-size: 20pt;
+        color: #24292e;
+        margin-top: 20pt;
+        margin-bottom: 10pt;
+        page-break-after: avoid;
+      }
+
+      .chapter-content h2 {
+        font-size: 18pt;
+        color: #24292e;
+        margin-top: 18pt;
+        margin-bottom: 8pt;
+        page-break-after: avoid;
+      }
+
+      .chapter-content h3 {
+        font-size: 16pt;
+        color: #24292e;
+        margin-top: 16pt;
+        margin-bottom: 8pt;
+        page-break-after: avoid;
+      }
+
+      .chapter-content h4 {
+        font-size: 14pt;
+        color: #24292e;
+        margin-top: 14pt;
+        margin-bottom: 6pt;
+        page-break-after: avoid;
+      }
+
+      .chapter-content p {
+        margin-bottom: 10pt;
+        text-align: justify;
+        orphans: 2;
+        widows: 2;
+      }
+
+      .chapter-content ul,
+      .chapter-content ol {
+        margin-bottom: 10pt;
+        padding-left: 20pt;
+      }
+
+      .chapter-content li {
+        margin-bottom: 5pt;
+      }
+
+      .chapter-content code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 10pt;
+        background: #f6f8fa;
+        padding: 2pt 4pt;
+        border-radius: 3pt;
+        border: 1pt solid #e1e4e8;
+      }
+
+      .chapter-content pre {
+        background: #f6f8fa;
+        padding: 10pt;
+        border-radius: 5pt;
+        border: 1pt solid #e1e4e8;
+        overflow-x: auto;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 10pt;
+        line-height: 1.4;
+        page-break-inside: avoid;
+      }
+
+      .chapter-content blockquote {
+        margin: 10pt 0;
+        padding: 10pt 15pt;
+        border-left: 4pt solid #0969da;
+        background: #f6f8fa;
+        font-style: italic;
+      }
+
+      .chapter-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10pt 0;
+        page-break-inside: avoid;
+      }
+
+      .chapter-content th,
+      .chapter-content td {
+        border: 1pt solid #e1e4e8;
+        padding: 8pt;
+        text-align: left;
+      }
+
+      .chapter-content th {
+        background: #f6f8fa;
+        font-weight: 600;
+      }
+
+      .chapter-content a {
+        color: #0969da;
+        text-decoration: none;
+      }
+
+      .chapter-content a:hover {
+        text-decoration: underline;
+      }
+
+      .chapter-content strong {
+        font-weight: 600;
+      }
+
+      .chapter-content em {
+        font-style: italic;
+      }
+
+      /* Interactive examples should be simplified for PDF */
+      .interactive-example {
+        border: 1pt solid #e1e4e8;
+        border-radius: 5pt;
+        padding: 10pt;
+        margin: 10pt 0;
+        background: #f6f8fa;
+        page-break-inside: avoid;
+      }
+
+      .interactive-example::before {
+        content: '💻 Interactive Example (see web version)';
+        display: block;
+        font-weight: 600;
+        margin-bottom: 10pt;
+        color: #0969da;
+      }
+
+      .interactive-example pre {
+        background: #ffffff;
+        border: 1pt solid #d1d5da;
+      }
+
+      /* Hide interactive-only elements */
+      .search-container,
+      .example-controls,
+      .search-results,
+      .nav-link:hover,
+      .toast-message {
+        display: none !important;
+      }
+
+      /* Footnotes */
+      .footnote {
+        font-size: 10pt;
+        color: #666;
+      }
+
+      .footnotes {
+        margin-top: 20pt;
+        padding-top: 10pt;
+        border-top: 1pt solid #e1e4e8;
+      }
+
+      .footnotes h3 {
+        font-size: 14pt;
+        margin-bottom: 10pt;
+      }
+
+      .footnotes ol {
+        padding-left: 20pt;
+      }
+
+      .footnotes li {
+        font-size: 10pt;
+        margin-bottom: 5pt;
+      }
+
+      /* Page breaks */
+      .page-break {
+        page-break-before: always;
+      }
+
+      .avoid-break {
+        page-break-inside: avoid;
+      }
+
+      /* Print-specific utilities */
+      @media print {
+        .no-print {
+          display: none !important;
         }
-        
-        .title-page .author {
-            font-size: 16pt;
-            margin-bottom: 10pt;
+
+        .print-only {
+          display: block !important;
         }
-        
-        .title-page .version {
-            font-size: 14pt;
-            color: #666;
-            margin-bottom: 10pt;
+
+        a[href]:after {
+          content: ' (' attr(href) ')';
+          font-size: 10pt;
+          color: #666;
         }
-        
-        .title-page .date {
-            font-size: 12pt;
-            color: #999;
+
+        a[href^='#']:after,
+        a[href^='javascript:']:after {
+          content: '';
         }
-        
-        .toc-page {
-            page-break-before: always;
-            page-break-after: always;
-        }
-        
-        .toc-page h1 {
-            font-size: 24pt;
-            color: #0969da;
-            margin-bottom: 20pt;
-            border-bottom: 2pt solid #0969da;
-            padding-bottom: 10pt;
-        }
-        
-        .toc-part {
-            margin-bottom: 20pt;
-        }
-        
-        .toc-part h3 {
-            font-size: 16pt;
-            color: #24292e;
-            margin-bottom: 10pt;
-            font-weight: 600;
-        }
-        
-        .toc-part ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-        
-        .toc-part li {
-            margin-bottom: 5pt;
-            padding-left: 20pt;
-            position: relative;
-        }
-        
-        .toc-part li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #0969da;
-        }
-        
-        .toc-part a {
-            color: #0969da;
-            text-decoration: none;
-        }
-        
-        .chapter-page {
-            page-break-before: always;
-            margin-bottom: 40pt;
-        }
-        
-        .chapter-title {
-            font-size: 24pt;
-            color: #0969da;
-            margin-bottom: 20pt;
-            padding-bottom: 10pt;
-            border-bottom: 2pt solid #0969da;
-        }
-        
-        .chapter-content h1 {
-            font-size: 20pt;
-            color: #24292e;
-            margin-top: 20pt;
-            margin-bottom: 10pt;
-            page-break-after: avoid;
-        }
-        
-        .chapter-content h2 {
-            font-size: 18pt;
-            color: #24292e;
-            margin-top: 18pt;
-            margin-bottom: 8pt;
-            page-break-after: avoid;
-        }
-        
-        .chapter-content h3 {
-            font-size: 16pt;
-            color: #24292e;
-            margin-top: 16pt;
-            margin-bottom: 8pt;
-            page-break-after: avoid;
-        }
-        
-        .chapter-content h4 {
-            font-size: 14pt;
-            color: #24292e;
-            margin-top: 14pt;
-            margin-bottom: 6pt;
-            page-break-after: avoid;
-        }
-        
-        .chapter-content p {
-            margin-bottom: 10pt;
-            text-align: justify;
-            orphans: 2;
-            widows: 2;
-        }
-        
-        .chapter-content ul, .chapter-content ol {
-            margin-bottom: 10pt;
-            padding-left: 20pt;
-        }
-        
-        .chapter-content li {
-            margin-bottom: 5pt;
-        }
-        
-        .chapter-content code {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 10pt;
-            background: #f6f8fa;
-            padding: 2pt 4pt;
-            border-radius: 3pt;
-            border: 1pt solid #e1e4e8;
-        }
-        
-        .chapter-content pre {
-            background: #f6f8fa;
-            padding: 10pt;
-            border-radius: 5pt;
-            border: 1pt solid #e1e4e8;
-            overflow-x: auto;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 10pt;
-            line-height: 1.4;
-            page-break-inside: avoid;
-        }
-        
-        .chapter-content blockquote {
-            margin: 10pt 0;
-            padding: 10pt 15pt;
-            border-left: 4pt solid #0969da;
-            background: #f6f8fa;
-            font-style: italic;
-        }
-        
-        .chapter-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10pt 0;
-            page-break-inside: avoid;
-        }
-        
-        .chapter-content th, .chapter-content td {
-            border: 1pt solid #e1e4e8;
-            padding: 8pt;
-            text-align: left;
-        }
-        
-        .chapter-content th {
-            background: #f6f8fa;
-            font-weight: 600;
-        }
-        
-        .chapter-content a {
-            color: #0969da;
-            text-decoration: none;
-        }
-        
-        .chapter-content a:hover {
-            text-decoration: underline;
-        }
-        
-        .chapter-content strong {
-            font-weight: 600;
-        }
-        
-        .chapter-content em {
-            font-style: italic;
-        }
-        
-        /* Interactive examples should be simplified for PDF */
-        .interactive-example {
-            border: 1pt solid #e1e4e8;
-            border-radius: 5pt;
-            padding: 10pt;
-            margin: 10pt 0;
-            background: #f6f8fa;
-            page-break-inside: avoid;
-        }
-        
-        .interactive-example::before {
-            content: "💻 Interactive Example (see web version)";
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10pt;
-            color: #0969da;
-        }
-        
-        .interactive-example pre {
-            background: #ffffff;
-            border: 1pt solid #d1d5da;
-        }
-        
-        /* Hide interactive-only elements */
-        .search-container,
-        .example-controls,
-        .search-results,
-        .nav-link:hover,
-        .toast-message {
-            display: none !important;
-        }
-        
-        /* Footnotes */
-        .footnote {
-            font-size: 10pt;
-            color: #666;
-        }
-        
-        .footnotes {
-            margin-top: 20pt;
-            padding-top: 10pt;
-            border-top: 1pt solid #e1e4e8;
-        }
-        
-        .footnotes h3 {
-            font-size: 14pt;
-            margin-bottom: 10pt;
-        }
-        
-        .footnotes ol {
-            padding-left: 20pt;
-        }
-        
-        .footnotes li {
-            font-size: 10pt;
-            margin-bottom: 5pt;
-        }
-        
-        /* Page breaks */
-        .page-break {
-            page-break-before: always;
-        }
-        
-        .avoid-break {
-            page-break-inside: avoid;
-        }
-        
-        /* Print-specific utilities */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            .print-only {
-                display: block !important;
-            }
-            
-            a[href]:after {
-                content: " (" attr(href) ")";
-                font-size: 10pt;
-                color: #666;
-            }
-            
-            a[href^="#"]:after,
-            a[href^="javascript:"]:after {
-                content: "";
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     
       <div class="title-page">
         <h1>Content Authoring Handbook</h1>
@@ -409,35 +415,29 @@
 <li><strong>Deterministic Randomization</strong>: Generate varied but reproducible content using seeds</li>
 <li><strong>Modular Architecture</strong>: Build complex generators from reusable components</li>
 <li><strong>Rich Rule System</strong>: Express complex content patterns with weighted choices, conditionals, and variables</li>
-<li><strong>Professional Tooling</strong>: Debug overlays, testing frameworks, and performance optimization</li><p>At its core, Prompt Spaghetti transforms structured rule definitions into dynamic, varied output while maintaining complete control over the generation process.</p><h2>Key Concepts and Terminology</h2><p>Before diving in, let's establish the fundamental concepts:</p><h3>Generators</h3>
-<p>A <strong>generator</strong> is a collection of rules that produce randomized content. Generators are defined in JSON format and contain:</p>
+<li><strong>Professional Tooling</strong>: Debug overlays, testing frameworks, and performance optimization</li><p>At its core, Prompt Spaghetti transforms structured rule definitions into dynamic, varied output while maintaining complete control over the generation process.</p><h2>Key Concepts and Terminology</h2><p>Before diving in, let's establish the fundamental concepts:</p><h3>Generators</h3><p>A <strong>generator</strong> is a collection of rules that produce randomized content. Generators are defined in JSON format and contain:</p>
 <li>Metadata (name, author, version)</li>
 <li>Grammar rules (the content patterns)</li>
 <li>Variables (dynamic values)</li>
-<li>Entry points (where generation begins)</li><h3>Nodes</h3>
-<p>In the visual editor, content is created using <strong>nodes</strong> - visual components that represent different operations:</p>
+<li>Entry points (where generation begins)</li><h3>Nodes</h3><p>In the visual editor, content is created using <strong>nodes</strong> - visual components that represent different operations:</p>
 <li><strong>WeightedChoice</strong>: Selects from weighted options</li>
 <li><strong>Concat</strong>: Combines multiple inputs</li>
 <li><strong>Output</strong>: Produces final text</li>
 <li><strong>SetVariable/GetVariable</strong>: Manages dynamic values</li>
 <li><strong>Conditional</strong>: Branches based on conditions</li>
 <li><strong>Sequential</strong>: Processes items in order</li>
-<li><strong>Markov</strong>: State-based transitions</li><h3>Rules</h3>
-<strong>Rules</strong> define how content varies. They can be:</p>
+<li><strong>Markov</strong>: State-based transitions</li><h3>Rules</h3><strong>Rules</strong> define how content varies. They can be:</p>
 <li>Simple strings: <code>"Hello, world!"</code></li>
 <li>Arrays of options: <code>["red", "blue", "green"]</code></li>
 <li>Weighted choices: <code>[{"w": 2, "v": "common"}, {"w": 1, "v": "rare"}]</code></li>
-<li>Nested structures with modifiers and conditions</li><h3>Deterministic Execution</h3>
-<p>Unlike pure random generation, Prompt Spaghetti uses <strong>deterministic randomization</strong>:</p>
+<li>Nested structures with modifiers and conditions</li><h3>Deterministic Execution</h3><p>Unlike pure random generation, Prompt Spaghetti uses <strong>deterministic randomization</strong>:</p>
 <li>Same seed + same generator = identical output</li>
 <li>Enables reproducible results</li>
 <li>Allows "favorite" generations to be saved</li>
-<li>Facilitates testing and debugging</li><h3>Variable Context</h3>
-<p>The <strong>variable context</strong> flows through the generation process:</p>
+<li>Facilitates testing and debugging</li><h3>Variable Context</h3><p>The <strong>variable context</strong> flows through the generation process:</p>
 <li>Variables can be set and retrieved at any point</li>
 <li>Context propagates through connected nodes</li>
-<li>Enables dynamic, context-aware generation</li><h2>How This Handbook is Organized</h2><p>This handbook is structured to support different learning paths:</p><h3>Progressive Learning Path</h3>
-<p>1. <strong>Foundation</strong> (Part 1): Understand the system architecture</p>
+<li>Enables dynamic, context-aware generation</li><h2>How This Handbook is Organized</h2><p>This handbook is structured to support different learning paths:</p><h3>Progressive Learning Path</h3><p>1. <strong>Foundation</strong> (Part 1): Understand the system architecture</p>
 <p>2. <strong>Content Development</strong> (Part 2): Learn to create generators</p>
 <p>3. <strong>Practical Guides</strong> (Part 4): Follow step-by-step tutorials</p>
 <p>4. <strong>Engine Reference</strong> (Part 3): Deep dive into technical details</p>
@@ -472,8 +472,7 @@
 <li>📝 Notes provide additional context</li>
 <li>⚠️ Warnings highlight potential issues</li>
 <li>💡 Tips offer best practices</li>
-<li>🚀 Examples show real-world usage</li><h3>Code Examples</h3><p>Examples show both JSON generator format:</p>
-<p>``<code>json</p>
+<li>🚀 Examples show real-world usage</li><h3>Code Examples</h3><p>Examples show both JSON generator format:</p><p>``<code>json</p>
 <p>{</p>
 <p>  "name": "Simple Generator",</p>
 <p>  "grammar": {</p>
@@ -485,7 +484,8 @@
 <li><strong>GitHub Repository</strong>: Report issues and contribute</li>
 <li><strong>Discord Server</strong>: Get help and share generators</li>
 <li><strong>Example Gallery</strong>: Learn from community creations</li>
-<li><strong>Video Tutorials</strong>: Visual learning resources</li></ul><h2>Ready to Create?</h2><p>You now have the foundation to begin your journey with Prompt Spaghetti. Whether you're creating character generators, story prompts, technical documentation, or entirely new types of content, this handbook will guide you every step of the way.</p><p>Let's start building amazing generators together!</p><p>---</p><strong>Next Chapter</strong>: <a href="02-architecture.md">Architecture & Core Concepts</a> →</p></div>
+<li><strong>Video Tutorials</strong>: Visual learning resources</li></ul><h2>Ready to Create?</h2><p>You now have the foundation to begin your journey with Prompt Spaghetti. Whether you're creating character generators, story prompts, technical documentation, or entirely new types of content, this handbook will guide you every step of the way.</p><p>Let's start building amazing generators together!</p><p>---</p><strong>Next Chapter</strong>: <a href="02-architecture.md">Architecture & Core Concepts</a> →</p>
+</div>
         </div>
       
         <div class="chapter-page">
@@ -518,8 +518,7 @@
 <li><strong>Performance Optimization</strong>: Caching and efficiency</li><h4>3. Schema Layer</h4>
 <li><strong>Zod Validation</strong>: Type-safe data structures</li>
 <li><strong>Graph Validation</strong>: Connection rules and constraints</li>
-<li><strong>Serialization</strong>: Save/load functionality</li><h2>The Generator Engine</h2><p>The heart of Prompt Spaghetti is its generator engine, which transforms node graphs into generated content.</p><h3>Execution Model</h3><p>1. <strong>Graph Traversal</strong>
-<p>   </code>`<code>typescript</p>
+<li><strong>Serialization</strong>: Save/load functionality</li><h2>The Generator Engine</h2><p>The heart of Prompt Spaghetti is its generator engine, which transforms node graphs into generated content.</p><h3>Execution Model</h3><p>1. <strong>Graph Traversal</strong><p>   </code>`<code>typescript</p>
 <p>   // Simplified execution flow</p>
 <p>   function execute(nodeId: string, context: ExecutionContext) {</p>
 <p>     const node = getNode(nodeId);</p>
@@ -535,7 +534,7 @@
 <li>Results cached within execution</li>
 <li>Efficient for complex graphs</li><h3>Deterministic Execution</h3><p>Prompt Spaghetti ensures reproducible results through deterministic execution:</p></code>`<code>javascript</p>
 <p>// Every execution with same seed produces identical output</p>
-<p>const seed = "abc123";</p>
+<p>const seed = 'abc123';</p>
 <p>const result1 = generator.execute(seed);</p>
 <p>const result2 = generator.execute(seed);</p>
 <p>console.log(result1 === result2); // true</p>
@@ -543,21 +542,18 @@
 <li><strong>Seeded RNG</strong>: Uses seedrandom for predictable randomness</li>
 <li><strong>Sub-seed Generation</strong>: </code>hash(nodeId + parentSeed)<code> for node isolation</li>
 <li><strong>No External State</strong>: Pure functions throughout</li>
-<li><strong>Consistent Ordering</strong>: Stable array iterations</li><h2>Node-Based Graph System</h2><p>Content generation uses a directed acyclic graph (DAG) of nodes:</p><h3>Node Types</h3><h4>Core Nodes</h4>
-<p>1. <strong>WeightedChoice</strong>: Probabilistic selection</p>
-<p>   </code>`<code>json</p>
+<li><strong>Consistent Ordering</strong>: Stable array iterations</li><h2>Node-Based Graph System</h2><p>Content generation uses a directed acyclic graph (DAG) of nodes:</p><h3>Node Types</h3><h4>Core Nodes</h4><p>1. <strong>WeightedChoice</strong>: Probabilistic selection</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "WeightedChoice",</p>
 <p>     "choices": [</p>
-<p>       {"weight": 70, "value": "common"},</p>
-<p>       {"weight": 30, "value": "rare"}</p>
+<p>       { "weight": 70, "value": "common" },</p>
+<p>       { "weight": 30, "value": "rare" }</p>
 <p>     ]</p>
 <p>   }</p>
-<p>   </code>`<code></p><p>2. <strong>Concat</strong>: String concatenation</p>
-<p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>2. <strong>Concat</strong>: String concatenation</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "Concat",</p>
-<p>     "inputs": ["Hello, ", {"$ref": "nameNode"}, "!"]</p>
+<p>     "inputs": ["Hello, ", { "$ref": "nameNode" }, "!"]</p>
 <p>   }</p>
 <p>   </code>`<code></p><p>3. <strong>Output</strong>: Final result production</p>
 <p>   </code>`<code>json</p>
@@ -565,13 +561,11 @@
 <p>     "type": "Output",</p>
 <p>     "template": "Generated: {input}"</p>
 <p>   }</p>
-<p>   </code>`<code></p><h4>Variable Nodes</h4>
-<p>1. <strong>SetVariable</strong>: Store values</p>
-<p>   </code>`<code>json</p>
+<p>   </code>`<code></p><h4>Variable Nodes</h4><p>1. <strong>SetVariable</strong>: Store values</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "SetVariable",</p>
 <p>     "variableName": "character_name",</p>
-<p>     "value": {"$ref": "nameGenerator"}</p>
+<p>     "value": { "$ref": "nameGenerator" }</p>
 <p>   }</p>
 <p>   </code>`<code></p><p>2. <strong>GetVariable</strong>: Retrieve values</p>
 <p>   </code>`<code>json</p>
@@ -580,15 +574,14 @@
 <p>     "variableName": "character_name",</p>
 <p>     "defaultValue": "Unknown"</p>
 <p>   }</p>
-<p>   </code>`<code></p><h4>Advanced Nodes (Epic 7)</h4>
-<p>1. <strong>Conditional</strong>: Logic branching</p>
+<p>   </code>`<code></p><h4>Advanced Nodes (Epic 7)</h4><p>1. <strong>Conditional</strong>: Logic branching</p>
 <p>2. <strong>Sequential</strong>: Ordered processing</p>
 <p>3. <strong>Markov</strong>: State transitions</p>
 <p>4. <strong>WeightedAdvanced</strong>: Complex distributions</p><h3>Node Connections</h3><p>Nodes connect through edges that define data flow:</p></code>`<code>typescript</p>
 <p>interface Edge {</p>
 <p>  id: string;</p>
-<p>  source: string;      // Source node ID</p>
-<p>  target: string;      // Target node ID</p>
+<p>  source: string; // Source node ID</p>
+<p>  target: string; // Target node ID</p>
 <p>  sourceHandle: string; // Output port</p>
 <p>  targetHandle: string; // Input port</p>
 <p>}</p>
@@ -604,20 +597,16 @@
 </code>`<code></p><h3>Scoping Rules</h3><p>1. <strong>Global Scope</strong>: Variables persist across entire execution</p>
 <p>2. <strong>Node Isolation</strong>: Each node gets context copy</p>
 <p>3. <strong>Immutable Updates</strong>: Context never mutated directly</p>
-<p>4. <strong>Default Values</strong>: Fallbacks for missing variables</p><p>Example context flow:</p>
-</code>`<code>javascript</p>
+<p>4. <strong>Default Values</strong>: Fallbacks for missing variables</p><p>Example context flow:</p></code>`<code>javascript</p>
 <p>// Initial context</p>
 <p>{ seed: "123", variables: {} }</p><p>// After SetVariable</p>
 <p>{ seed: "123", variables: { name: "Alice" } }</p><p>// After nested execution</p>
 <p>{ seed: "123-sub", variables: { name: "Alice", age: 25 } }</p>
-</code>`<code></p><h2>Execution Flow and Rule Resolution</h2><p>Understanding how rules resolve is key to effective generator design:</p><h3>Rule Types</h3><p>1. <strong>String Rules</strong>
-<p>   </code>`<code>json</p>
+</code>`<code></p><h2>Execution Flow and Rule Resolution</h2><p>Understanding how rules resolve is key to effective generator design:</p><h3>Rule Types</h3><p>1. <strong>String Rules</strong><p>   </code>`<code>json</p>
 <p>   "rule": "Simple text output"</p>
-<p>   </code>`<code></p><p>2. <strong>Array Rules</strong> (random selection)</p>
-<p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>2. <strong>Array Rules</strong> (random selection)</p><p>   </code>`<code>json</p>
 <p>   "rule": ["option1", "option2", "option3"]</p>
-<p>   </code>`<code></p><p>3. <strong>Weighted Rules</strong>
-<p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>3. <strong>Weighted Rules</strong><p>   </code>`<code>json</p>
 <p>   "rule": [</p>
 <p>     {"w": 60, "v": "common"},</p>
 <p>     {"w": 30, "v": "uncommon"},</p>
@@ -630,8 +619,7 @@
 <p>2. <strong>Reference Resolution</strong>: Replace with sub-rule results</p>
 <p>3. <strong>Modifier Application</strong>: Apply any text transformations</p>
 <p>4. <strong>Variable Interpolation</strong>: Replace </code>{varName}<code> with values</p>
-<p>5. <strong>Final Assembly</strong>: Combine all pieces</p><p>Example resolution:</p>
-</code>`<code></p>
+<p>5. <strong>Final Assembly</strong>: Combine all pieces</p><p>Example resolution:</p></code>`<code></p>
 <p>Input:  "The [size] [color] [animal]"</p>
 <p>Step 1: "The " + resolve([size]) + " " + resolve([color]) + " " + resolve([animal])</p>
 <p>Step 2: "The " + "large" + " " + "blue" + " " + "elephant"</p>
@@ -664,8 +652,7 @@
 <li>Pattern detection for malicious content</li><h3>Resource Limits</h3>
 <li>Maximum execution time</li>
 <li>Memory usage caps</li>
-<li>Recursion depth limits</li><h2>Integration Points</h2><p>The architecture provides multiple integration options:</p><h3>API Integration</h3>
-</code>`<code>javascript</p>
+<li>Recursion depth limits</li><h2>Integration Points</h2><p>The architecture provides multiple integration options:</p><h3>API Integration</h3></code>`<code>javascript</p>
 <p>// JavaScript API</p>
 <p>import { Generator } from '@prompt-spaghetti/core';</p>
 <p>const gen = new Generator(config);</p>
@@ -700,7 +687,8 @@
 <li><strong>Deterministic Engine</strong>: Reproducible results</li>
 <li><strong>Flexible System</strong>: Extensible and integrable</li>
 <li><strong>Performance Focus</strong>: Optimized execution</li>
-<li><strong>Security First</strong>: Safe content generation</li></ul><p>Understanding these architectural principles enables you to create more effective, efficient, and maintainable generators.</p><p>---</p><strong>Next Chapter</strong>: <a href="03-schema-reference.md">Generator JSON Schema Reference</a> →</p></div>
+<li><strong>Security First</strong>: Safe content generation</li></ul><p>Understanding these architectural principles enables you to create more effective, efficient, and maintainable generators.</p><p>---</p><strong>Next Chapter</strong>: <a href="03-schema-reference.md">Generator JSON Schema Reference</a> →</p>
+</div>
         </div>
       
         <div class="chapter-page">
@@ -756,38 +744,30 @@
 <li><strong>license</strong> (string): Distribution license</li>
 <li><strong>homepage</strong> (string): Project or documentation URL</li>
 <li><strong>category</strong> (string): Classification for organization</li>
-<li><strong>minEngineVersion</strong> (string): Minimum compatible engine version</li><h2>Grammar Rules Definition</h2><p>The </code>grammar<code> section contains the generation rules:</p><h3>Basic Rule Types</h3><h4>String Rules</h4>
-<p>Simple text output:</p>
-</code>`<code>json</p>
+<li><strong>minEngineVersion</strong> (string): Minimum compatible engine version</li><h2>Grammar Rules Definition</h2><p>The </code>grammar<code> section contains the generation rules:</p><h3>Basic Rule Types</h3><h4>String Rules</h4><p>Simple text output:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "greeting": "Hello, world!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h4>Array Rules</h4>
-<p>Random selection from options:</p>
-</code>`<code>json</p>
+</code>`<code></p><h4>Array Rules</h4><p>Random selection from options:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "color": ["red", "blue", "green", "yellow"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h4>Weighted Rules</h4>
-<p>Probability-based selection:</p>
-</code>`<code>json</p>
+</code>`<code></p><h4>Weighted Rules</h4><p>Probability-based selection:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "rarity": [</p>
-<p>      {"w": 60, "v": "common"},</p>
-<p>      {"w": 30, "v": "uncommon"},</p>
-<p>      {"w": 9, "v": "rare"},</p>
-<p>      {"w": 1, "v": "legendary"}</p>
+<p>      { "w": 60, "v": "common" },</p>
+<p>      { "w": 30, "v": "uncommon" },</p>
+<p>      { "w": 9, "v": "rare" },</p>
+<p>      { "w": 1, "v": "legendary" }</p>
 <p>    ]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Advanced Rule Patterns</h3><h4>Reference Expansion</h4>
-<p>Reference other rules using square brackets:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Advanced Rule Patterns</h3><h4>Reference Expansion</h4><p>Reference other rules using square brackets:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "character": "[name] the [class]",</p>
@@ -795,9 +775,7 @@
 <p>    "class": ["Warrior", "Mage", "Rogue"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h4>Nested References</h4>
-<p>Build complex structures:</p>
-</code>`<code>json</p>
+</code>`<code></p><h4>Nested References</h4><p>Build complex structures:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "npc": "[greeting], I am [character]",</p>
@@ -808,9 +786,7 @@
 <p>    "class": ["knight", "wizard", "thief"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h4>Modifier Application</h4>
-<p>Apply text transformations:</p>
-</code>`<code>json</p>
+</code>`<code></p><h4>Modifier Application</h4><p>Apply text transformations:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "title": "[name.capitalize] the [epithet.allcaps]",</p>
@@ -818,8 +794,7 @@
 <p>    "epithet": ["great", "terrible"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Variables and Their Types</h2><p>Variables provide dynamic state during generation:</p><h3>Variable Declaration</h3>
-</code>`<code>json</p>
+</code>`<code></p><h2>Variables and Their Types</h2><p>Variables provide dynamic state during generation:</p><h3>Variable Declaration</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "variables": {</p>
 <p>    "playerName": "Hero",</p>
@@ -833,18 +808,14 @@
 <li><strong>Number</strong>: Integers or decimals</li>
 <li><strong>Boolean</strong>: true/false</li>
 <li><strong>Array</strong>: Lists of values</li>
-<li><strong>Object</strong>: Nested structures</li><h3>Variable Usage</h3>
-<p>Reference variables with curly braces:</p>
-</code>`<code>json</p>
+<li><strong>Object</strong>: Nested structures</li><h3>Variable Usage</h3><p>Reference variables with curly braces:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "greeting": "Welcome, {playerName}!",</p>
 <p>    "levelUp": "You are now level {playerLevel}!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Dynamic Variables</h3>
-<p>Set variables during generation:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Dynamic Variables</h3><p>Set variables during generation:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[setName][greet]",</p>
@@ -857,17 +828,13 @@
 <p>    "greet": "Hello, {userName}!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Entry Points and Execution</h2><p>Entry points determine where generation begins:</p><h3>Default Entry Point</h3>
-<p>The </code>start<code> rule is the default:</p>
-</code>`<code>json</p>
+</code>`<code></p><h2>Entry Points and Execution</h2><p>Entry points determine where generation begins:</p><h3>Default Entry Point</h3><p>The </code>start<code> rule is the default:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "This is where generation begins"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Multiple Entry Points</h3>
-<p>Define multiple starting options:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Multiple Entry Points</h3><p>Define multiple starting options:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "entryPoints": ["character", "location", "item"],</p>
 <p>  "grammar": {</p>
@@ -876,9 +843,7 @@
 <p>    "item": "[quality] [itemType]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Execution Configuration</h3>
-<p>Control execution behavior:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Execution Configuration</h3><p>Control execution behavior:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "config": {</p>
 <p>    "defaultEntryPoint": "start",</p>
@@ -888,8 +853,7 @@
 <p>    "strictMode": false</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Include Patterns and Modularization</h2><p>Break large generators into manageable pieces:</p><h3>Basic Include</h3>
-</code>`<code>json</p>
+</code>`<code></p><h2>Include Patterns and Modularization</h2><p>Break large generators into manageable pieces:</p><h3>Basic Include</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "includes": {</p>
 <p>    "names": "./data/names.json",</p>
@@ -899,16 +863,12 @@
 <p>    "character": "[names:first] from [locations:city]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Include File Format</h3>
-</code>names.json<code>:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Include File Format</h3></code>names.json<code>:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "first": ["Alice", "Bob", "Charlie"],</p>
 <p>  "last": ["Smith", "Jones", "Brown"]</p>
 <p>}</p>
-</code>`<code></p><h3>Meta Merge Arrays</h3>
-<p>Special </code>_meta<code> array for extending includes:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Meta Merge Arrays</h3><p>Special </code>_meta<code> array for extending includes:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "includes": {</p>
 <p>    "base": "./base-generator.json"</p>
@@ -923,51 +883,44 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Node Type Definitions</h2><p>When using the visual editor, nodes map to JSON structures:</p><h3>WeightedChoice Node</h3>
-</code>`<code>json</p>
+</code>`<code></p><h2>Node Type Definitions</h2><p>When using the visual editor, nodes map to JSON structures:</p><h3>WeightedChoice Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "WeightedChoice",</p>
 <p>  "choices": [</p>
-<p>    {"value": "common", "weight": 70},</p>
-<p>    {"value": "rare", "weight": 30}</p>
+<p>    { "value": "common", "weight": 70 },</p>
+<p>    { "value": "rare", "weight": 30 }</p>
 <p>  ]</p>
 <p>}</p>
-</code>`<code></p><h3>Concat Node</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Concat Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Concat",</p>
 <p>  "inputs": ["Hello, ", "[name]", "!"]</p>
 <p>}</p>
-</code>`<code></p><h3>Output Node</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Output Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Output",</p>
 <p>  "template": "Generated: {result}"</p>
 <p>}</p>
-</code>`<code></p><h3>SetVariable Node</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>SetVariable Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "SetVariable",</p>
 <p>  "key": "characterName",</p>
 <p>  "value": "[generateName]"</p>
 <p>}</p>
-</code>`<code></p><h3>GetVariable Node</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>GetVariable Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "GetVariable",</p>
 <p>  "key": "characterName",</p>
 <p>  "default": "Unknown"</p>
 <p>}</p>
-</code>`<code></p><h2>Advanced Schema Features</h2><h3>Conditional Rules</h3>
-</code>`<code>json</p>
+</code>`<code></p><h2>Advanced Schema Features</h2><h3>Conditional Rules</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "conditional",</p>
 <p>  "condition": "{playerLevel} > 5",</p>
 <p>  "true": "You are experienced!",</p>
 <p>  "false": "You are a novice."</p>
 <p>}</p>
-</code>`<code></p><h3>Sequential Patterns</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Sequential Patterns</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Sequential",</p>
 <p>  "sequence": ["First", "Second", "Third"],</p>
@@ -978,8 +931,7 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Markov Chains</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Markov Chains</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Markov",</p>
 <p>  "states": {</p>
@@ -1008,17 +960,14 @@
 <li>Maximum recursion depth</li>
 <li>String length limits</li>
 <li>Array size limits</li>
-<li>Execution timeout</li><h2>Migration and Compatibility</h2><h3>Version Detection</h3>
-</code>`<code>json</p>
+<li>Execution timeout</li><h2>Migration and Compatibility</h2><h3>Version Detection</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "version": "2.0.0",</p>
 <p>    "compatibleWith": ["1.x", "2.x"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Legacy Format Support</h3>
-<p>Older formats automatically upgraded:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Legacy Format Support</h3><p>Older formats automatically upgraded:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": {</p>
@@ -1027,9 +976,7 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Future-Proofing</h3>
-<p>Use extension fields:</p>
-</code>`<code>json</p>
+</code>`<code></p><h3>Future-Proofing</h3><p>Use extension fields:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "x-custom-field": "value",</p>
@@ -1074,9 +1021,9 @@
 <p>    "character": "[name] the [adjective] {characterClass}",</p>
 <p>    "name": "[names:first] [names:last]",</p>
 <p>    "adjective": [</p>
-<p>      {"w": 60, "v": "[common_adjective]"},</p>
-<p>      {"w": 30, "v": "[uncommon_adjective]"},</p>
-<p>      {"w": 10, "v": "[rare_adjective]"}</p>
+<p>      { "w": 60, "v": "[common_adjective]" },</p>
+<p>      { "w": 30, "v": "[uncommon_adjective]" },</p>
+<p>      { "w": 10, "v": "[rare_adjective]" }</p>
 <p>    ],</p>
 <p>    "common_adjective": ["brave", "strong", "swift"],</p>
 <p>    "uncommon_adjective": ["cunning", "wise", "fierce"],</p>
@@ -1088,7 +1035,8 @@
 <p>    "enableDebug": true</p>
 <p>  }</p>
 <p>}</p>
-</code>``</p><p>This schema reference provides the foundation for understanding how Prompt Spaghetti generators work at the data level. Whether you're hand-crafting JSON or using the visual editor, these principles remain consistent.</p><p>---</p><strong>Next Chapter</strong>: <a href="../part2-content-development/04-basic-generator.md">Basic Generator Creation</a> →</p></div>
+</code>``</p><p>This schema reference provides the foundation for understanding how Prompt Spaghetti generators work at the data level. Whether you're hand-crafting JSON or using the visual editor, these principles remain consistent.</p><p>---</p><strong>Next Chapter</strong>: <a href="../part2-content-development/04-basic-generator.md">Basic Generator Creation</a> →</p>
+</div>
         </div>
       
         <div class="chapter-page">
@@ -1169,15 +1117,7 @@
 </code>`<code></p><h3>Pattern 2: Structured Combinations</h3><p>Building complex outputs from simple parts:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "start": "[setup]. [conflict]. [resolution].",</p><p>    "setup": [</p>
-<p>      "Once upon a time in [location]",</p>
-<p>      "Long ago in [location]",</p>
-<p>      "In the distant land of [location]"</p>
-<p>    ],</p><p>    "location": [</p>
-<p>      "a magical forest",</p>
-<p>      "an ancient kingdom",</p>
-<p>      "a hidden valley"</p>
-<p>    ],</p><p>    "conflict": [</p>
+<p>    "start": "[setup]. [conflict]. [resolution].",</p><p>    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],</p><p>    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],</p><p>    "conflict": [</p>
 <p>      "A terrible curse befell the land",</p>
 <p>      "An evil wizard threatened the peace",</p>
 <p>      "A mysterious plague spread rapidly"</p>
@@ -1191,11 +1131,7 @@
 </code>`<code></p><h3>Pattern 3: Variable Depth</h3><p>Some outputs need more detail than others:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "character": [</p>
-<p>      "[name]",</p>
-<p>      "[name] the [adjective]",</p>
-<p>      "[name] the [adjective] [profession]"</p>
-<p>    ],</p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
+<p>    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],</p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
 <p>    "adjective": ["brave", "clever", "mysterious"],</p>
 <p>    "profession": ["warrior", "scholar", "merchant"]</p>
 <p>  }</p>
@@ -1215,24 +1151,21 @@
 <p>}</p>
 </code>`<code></p><h3>Using Debug Mode</h3><p>Enable debug mode to see how rules are evaluated:</p><p>1. Add </code>?dev=1<code> to your URL</p>
 <p>2. Press </code>Ctrl+\<code> (or </code>Cmd+\<code> on Mac) to toggle debug overlay</p>
-<p>3. Generate content to see the expansion tree</p><h2>Common Mistakes to Avoid</h2><p>Learn from these frequent beginner errors:</p><h3>Mistake 1: Circular References</h3><p>❌ <strong>Wrong:</strong>
-</code>`<code>json</p>
+<p>3. Generate content to see the expansion tree</p><h2>Common Mistakes to Avoid</h2><p>Learn from these frequent beginner errors:</p><h3>Mistake 1: Circular References</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "a": "[b]",</p>
 <p>    "b": "[a]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong>
-</code>`<code>json</p>
+</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "a": "[b]",</p>
 <p>    "b": "final value"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 2: Missing References</h3><p>❌ <strong>Wrong:</strong>
-</code>`<code>json</p>
+</code>`<code></p><h3>Mistake 2: Missing References</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "The [color] [object]",</p>
@@ -1240,8 +1173,7 @@
 <p>    // Missing "object" rule!</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong>
-</code>`<code>json</p>
+</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "The [color] [object]",</p>
@@ -1249,8 +1181,7 @@
 <p>    "object": ["ball", "box", "book"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 3: Inconsistent Formatting</h3><p>❌ <strong>Wrong:</strong>
-</code>`<code>json</p>
+</code>`<code></p><h3>Mistake 3: Inconsistent Formatting</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[greeting][punctuation]",</p>
@@ -1258,9 +1189,7 @@
 <p>    "punctuation": ["!", ".", "?"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p>
-<p>This creates inconsistent spacing.</p><p>✅ <strong>Right:</strong>
-</code>`<code>json</p>
+</code>`<code></p><p>This creates inconsistent spacing.</p><p>✅ <strong>Right:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[greeting][punctuation]",</p>
@@ -1268,27 +1197,23 @@
 <p>    "punctuation": ["!", ".", "?"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 4: Unescaped Special Characters</h3><p>❌ <strong>Wrong:</strong>
-</code>`<code>json</p>
+</code>`<code></p><h3>Mistake 4: Unescaped Special Characters</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "price": "$[amount]",</p>
 <p>    "amount": ["10", "20", "30"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong>
-</code>`<code>json</p>
+</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "price": "\\$[amount]",</p>
 <p>    "amount": ["10", "20", "30"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Building a Complete Example</h2><p>Let's create a more sophisticated generator step by step:</p><h3>Fantasy Shop Generator</h3><strong>Goal</strong>: Generate descriptions of items in a fantasy shop.</p><strong>Step 1</strong>: Plan the structure</p>
-</code>`<code></p>
+</code>`<code></p><h2>Building a Complete Example</h2><p>Let's create a more sophisticated generator step by step:</p><h3>Fantasy Shop Generator</h3><strong>Goal</strong>: Generate descriptions of items in a fantasy shop.</p><strong>Step 1</strong>: Plan the structure</p></code>`<code></p>
 <p>[quality] [item] of [property] - [price] gold</p>
-</code>`<code></p><strong>Step 2</strong>: Create the base generator</p>
-</code>`<code>json</p>
+</code>`<code></p><strong>Step 2</strong>: Create the base generator</p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Fantasy Shop Items",</p>
@@ -1297,22 +1222,10 @@
 <p>    "description": "Generates random fantasy shop inventory"</p>
 <p>  },</p>
 <p>  "grammar": {</p>
-<p>    "start": "[quality] [item] of [property] - [price] gold",</p><p>    "quality": [</p>
-<p>      "Common", "Uncommon", "Rare", "Legendary"</p>
-<p>    ],</p><p>    "item": [</p>
-<p>      "sword", "shield", "potion", "scroll", </p>
-<p>      "ring", "amulet", "cloak", "boots"</p>
-<p>    ],</p><p>    "property": [</p>
-<p>      "fire", "ice", "lightning", "healing",</p>
-<p>      "strength", "wisdom", "speed", "protection"</p>
-<p>    ],</p><p>    "price": [</p>
-<p>      "10", "25", "50", "100", </p>
-<p>      "250", "500", "1000", "5000"</p>
-<p>    ]</p>
+<p>    "start": "[quality] [item] of [property] - [price] gold",</p><p>    "quality": ["Common", "Uncommon", "Rare", "Legendary"],</p><p>    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],</p><p>    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],</p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><strong>Step 3</strong>: Add variation and polish</p>
-</code>`<code>json</p>
+</code>`<code></p><strong>Step 3</strong>: Add variation and polish</p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Fantasy Shop Items",</p>
@@ -1325,32 +1238,44 @@
 <p>      "[quality] [item] of [property]",</p>
 <p>      "[quality] [material] [item]",</p>
 <p>      "[quality] [item] with [enhancement]"</p>
-<p>    ],</p><p>    "price_line": [</p>
-<p>      "Price: [price] gold",</p>
-<p>      "Cost: [price] gold pieces",</p>
-<p>      "Yours for only [price] gold!"</p>
-<p>    ],</p><p>    "quality": [</p>
-<p>      "Common", "Uncommon", "Rare", "Epic", "Legendary"</p>
-<p>    ],</p><p>    "item": [</p>
-<p>      "sword", "shield", "potion", "scroll", </p>
-<p>      "ring", "amulet", "cloak", "boots",</p>
-<p>      "helm", "gauntlets", "staff", "bow"</p>
-<p>    ],</p><p>    "material": [</p>
-<p>      "iron", "steel", "silver", "gold",</p>
-<p>      "mithril", "adamantine", "crystal", "dragon scale"</p>
-<p>    ],</p><p>    "property": [</p>
-<p>      "fire", "ice", "lightning", "healing",</p>
-<p>      "strength", "wisdom", "speed", "protection",</p>
-<p>      "invisibility", "telepathy", "regeneration", "luck"</p>
+<p>    ],</p><p>    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],</p><p>    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],</p><p>    "item": [</p>
+<p>      "sword",</p>
+<p>      "shield",</p>
+<p>      "potion",</p>
+<p>      "scroll",</p>
+<p>      "ring",</p>
+<p>      "amulet",</p>
+<p>      "cloak",</p>
+<p>      "boots",</p>
+<p>      "helm",</p>
+<p>      "gauntlets",</p>
+<p>      "staff",</p>
+<p>      "bow"</p>
+<p>    ],</p><p>    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],</p><p>    "property": [</p>
+<p>      "fire",</p>
+<p>      "ice",</p>
+<p>      "lightning",</p>
+<p>      "healing",</p>
+<p>      "strength",</p>
+<p>      "wisdom",</p>
+<p>      "speed",</p>
+<p>      "protection",</p>
+<p>      "invisibility",</p>
+<p>      "telepathy",</p>
+<p>      "regeneration",</p>
+<p>      "luck"</p>
 <p>    ],</p><p>    "enhancement": [</p>
-<p>      "+1 attack", "+2 defense", "glowing runes",</p>
-<p>      "ancient enchantment", "blessed by priests",</p>
-<p>      "forged in dragon fire", "moon-touched",</p>
-<p>      "star-blessed", "demon-ward", "fey-crafted"</p>
-<p>    ],</p><p>    "price": [</p>
-<p>      "10", "25", "50", "100", "250", </p>
-<p>      "500", "1000", "2500", "5000", "10000"</p>
-<p>    ]</p>
+<p>      "+1 attack",</p>
+<p>      "+2 defense",</p>
+<p>      "glowing runes",</p>
+<p>      "ancient enchantment",</p>
+<p>      "blessed by priests",</p>
+<p>      "forged in dragon fire",</p>
+<p>      "moon-touched",</p>
+<p>      "star-blessed",</p>
+<p>      "demon-ward",</p>
+<p>      "fey-crafted"</p>
+<p>    ],</p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]</p>
 <p>  }</p>
 <p>}</p>
 </code>``</p><strong>Sample Outputs</strong>:</p>
@@ -1363,9 +1288,10 @@
 <p>2. <strong>Menu Generator</strong>: Build a restaurant menu with appetizers, mains, and desserts</p>
 <p>3. <strong>Character Name Generator</strong>: Design a generator for fantasy character names with titles</p><h3>Moving Forward</h3><p>You've learned the fundamentals of generator creation. In the next chapters, we'll explore:</p>
 <li>Advanced rule syntax and weighted choices</li>
-<li>Variables and conditional logic  </li>
+<li>Variables and conditional logic</li>
 <li>Modularization for large projects</li>
-<li>Performance optimization</li></ul><p>Remember: Start simple, test often, and gradually add complexity. Happy generating!</p><p>---</p><strong>Next Chapter</strong>: <a href="05-advanced-rules.md">Advanced Rule Syntax</a> →</p></div>
+<li>Performance optimization</li></ul><p>Remember: Start simple, test often, and gradually add complexity. Happy generating!</p><p>---</p><strong>Next Chapter</strong>: <a href="05-advanced-rules.md">Advanced Rule Syntax</a> →</p>
+</div>
         </div>
       
         <div class="chapter-page">
@@ -1373,69 +1299,87 @@
           <div class="chapter-content"><h1>Chapter 15: Expansion Recipes for LLMs</h1><p>This chapter provides comprehensive patterns and recipes for Large Language Models (LLMs) to effectively expand and enhance generator content. These patterns are derived from real-world usage and optimized for AI-assisted content development.</p><h2>Understanding LLM Content Expansion</h2><p>When working with LLMs to expand generators, the key is providing clear, structured instructions that leverage the AI's strengths while maintaining consistency with existing content.</p><h3>Core Principles</h3><p>1. <strong>Context Preservation</strong>: Always provide sufficient context about the generator's theme and style</p>
 <p>2. <strong>Pattern Recognition</strong>: LLMs excel at recognizing and replicating patterns from examples</p>
 <p>3. <strong>Structured Output</strong>: Request specific formats to ensure compatibility</p>
-<p>4. <strong>Iterative Refinement</strong>: Build content incrementally for best results</p><h2>Basic Expansion Patterns</h2><h3>Adding Entries to Existing Categories</h3><h4>Recipe: Simple Array Expansion</h4>
-<p>``<code>markdown</p>
+<p>4. <strong>Iterative Refinement</strong>: Build content incrementally for best results</p><h2>Basic Expansion Patterns</h2><h3>Adding Entries to Existing Categories</h3><h4>Recipe: Simple Array Expansion</h4><p>``<code>markdown</p>
 <p>Task: Add 10 new entries to the "occupations" array in fantasy-generator.json</p><p>Current entries for reference:</p>
 <p>["Knight", "Wizard", "Merchant", "Blacksmith", "Innkeeper"]</p><p>Requirements:</p>
 <ul><li>Match the fantasy medieval theme</li>
 <li>Keep entries 1-2 words</li>
 <li>Avoid modern occupations</li>
 <li>Ensure variety in social classes</li>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
-<p>["Alchemist", "Scribe", "Fletcher", "Herbalist", "Minstrel", </p>
-<p> "Falconer", "Cartographer", "Armorer", "Apothecary", "Bailiff"]</p>
-</code>`<code></p><h4>Recipe: Weighted Entry Expansion</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  "Alchemist",</p>
+<p>  "Scribe",</p>
+<p>  "Fletcher",</p>
+<p>  "Herbalist",</p>
+<p>  "Minstrel",</p>
+<p>  "Falconer",</p>
+<p>  "Cartographer",</p>
+<p>  "Armorer",</p>
+<p>  "Apothecary",</p>
+<p>  "Bailiff"</p>
+<p>]</p>
+</code>`<code></p><h4>Recipe: Weighted Entry Expansion</h4></code>`<code>markdown</p>
 <p>Task: Add 5 new weighted entries to the "treasure" category</p><p>Current format:</p>
 <p>[</p>
-<p>  {"w": 60, "v": "copper coins"},</p>
-<p>  {"w": 30, "v": "silver coins"},</p>
-<p>  {"w": 10, "v": "gold coins"}</p>
+<p>{"w": 60, "v": "copper coins"},</p>
+<p>{"w": 30, "v": "silver coins"},</p>
+<p>{"w": 10, "v": "gold coins"}</p>
 <p>]</p><p>Requirements:</p>
 <li>Maintain rarity distribution (common: 50-70, uncommon: 20-40, rare: 5-15)</li>
 <li>Include both currency and items</li>
 <li>Keep value descriptions concise</li>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>[</p>
-<p>  {"w": 65, "v": "worn leather pouch"},</p>
-<p>  {"w": 55, "v": "iron trinkets"},</p>
-<p>  {"w": 35, "v": "small gemstone"},</p>
-<p>  {"w": 25, "v": "ancient map"},</p>
-<p>  {"w": 8, "v": "enchanted ring"}</p>
+<p>  { "w": 65, "v": "worn leather pouch" },</p>
+<p>  { "w": 55, "v": "iron trinkets" },</p>
+<p>  { "w": 35, "v": "small gemstone" },</p>
+<p>  { "w": 25, "v": "ancient map" },</p>
+<p>  { "w": 8, "v": "enchanted ring" }</p>
 <p>]</p>
-</code>`<code></p><h3>Creating New Categories</h3><h4>Recipe: Structured Category Creation</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h3>Creating New Categories</h3><h4>Recipe: Structured Category Creation</h4></code>`<code>markdown</p>
 <p>Task: Create a new "personality_traits" category for the character generator</p><p>Requirements:</p>
 <li>Create 20 diverse personality traits</li>
 <li>Mix positive, negative, and neutral traits</li>
 <li>Keep traits to 1-3 words</li>
 <li>Ensure traits work for any character type</li>
 <li>Format as a simple array</li><p>Context: This will be used in templates like "[name] is a [trait] [class]"</p>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "personality_traits": [</p>
-<p>    "ambitious", "cautious", "cheerful", "cynical", "determined",</p>
-<p>    "eccentric", "gentle", "grumpy", "honest", "impulsive",</p>
-<p>    "loyal", "mysterious", "naive", "patient", "proud",</p>
-<p>    "rebellious", "stoic", "thoughtful", "witty", "zealous"</p>
+<p>    "ambitious",</p>
+<p>    "cautious",</p>
+<p>    "cheerful",</p>
+<p>    "cynical",</p>
+<p>    "determined",</p>
+<p>    "eccentric",</p>
+<p>    "gentle",</p>
+<p>    "grumpy",</p>
+<p>    "honest",</p>
+<p>    "impulsive",</p>
+<p>    "loyal",</p>
+<p>    "mysterious",</p>
+<p>    "naive",</p>
+<p>    "patient",</p>
+<p>    "proud",</p>
+<p>    "rebellious",</p>
+<p>    "stoic",</p>
+<p>    "thoughtful",</p>
+<p>    "witty",</p>
+<p>    "zealous"</p>
 <p>  ]</p>
 <p>}</p>
-</code>`<code></p><h2>Advanced Expansion Patterns</h2><h3>Complex Object Arrays</h3><h4>Recipe: Detailed Item Generation</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h2>Advanced Expansion Patterns</h2><h3>Complex Object Arrays</h3><h4>Recipe: Detailed Item Generation</h4></code>`<code>markdown</p>
 <p>Task: Create 5 new entries for "magical_items" with structured data</p><p>Required format:</p>
 <p>{</p>
-<p>  "name": "Item Name",</p>
-<p>  "description": "Brief description",</p>
-<p>  "rarity": "common|uncommon|rare|legendary",</p>
-<p>  "effects": ["effect1", "effect2"],</p>
-<p>  "cost": number</p>
+<p>"name": "Item Name",</p>
+<p>"description": "Brief description",</p>
+<p>"rarity": "common|uncommon|rare|legendary",</p>
+<p>"effects": ["effect1", "effect2"],</p>
+<p>"cost": number</p>
 <p>}</p><p>Theme: Low-magic fantasy setting</p>
 <p>Power level: Modest, practical effects</p>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>[</p>
 <p>  {</p>
 <p>    "name": "Everburning Torch",</p>
@@ -1453,15 +1397,13 @@
 <p>  }</p>
 <p>  // ... more items</p>
 <p>]</p>
-</code>`<code></p><h3>Conditional Content</h3><h4>Recipe: Context-Aware Expansions</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h3>Conditional Content</h3><h4>Recipe: Context-Aware Expansions</h4></code>`<code>markdown</p>
 <p>Task: Add 10 weather descriptions that change based on season variable</p><p>Format:</p>
 <p>{</p>
-<p>  "condition": "{season} == 'value'",</p>
-<p>  "options": ["weather1", "weather2", "weather3"]</p>
+<p>"condition": "{season} == 'value'",</p>
+<p>"options": ["weather1", "weather2", "weather3"]</p>
 <p>}</p><p>Create entries for all four seasons</p>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "seasonal_weather": [</p>
 <p>    {</p>
@@ -1483,78 +1425,60 @@
 <p>    // ... more seasons</p>
 <p>  ]</p>
 <p>}</p>
-</code>`<code></p><h2>Modularization Patterns</h2><h3>Creating Subfiles</h3><h4>Recipe: Extracting Large Categories</h4>
-</code>`<code>markdown</p>
-<p>Task: Modularize the "locations" category into its own file</p><p>Current structure has 200+ entries. Create:</p>
-<p>1. A new locations.json file with all entries</p>
+</code>`<code></p><h2>Modularization Patterns</h2><h3>Creating Subfiles</h3><h4>Recipe: Extracting Large Categories</h4></code>`<code>markdown</p>
+<p>Task: Modularize the "locations" category into its own file</p><p>Current structure has 200+ entries. Create:</p><p>1. A new locations.json file with all entries</p>
 <p>2. Update the main file to reference it</p>
 <p>3. Add metadata for UI integration</p><p>Organize locations by type in the new file</p>
-</code>`<code></p><strong>Expected Output:</strong></code>locations.json<code>:</p>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>locations.json<code>:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "_meta": {</p>
 <p>    "version": "1.0.0",</p>
 <p>    "description": "Location data for the world generator",</p>
 <p>    "categories": ["urban", "rural", "wilderness", "mystical"]</p>
 <p>  },</p>
-<p>  "urban": [</p>
-<p>    "bustling marketplace",</p>
-<p>    "quiet library",</p>
-<p>    "royal palace"</p>
-<p>  ],</p>
-<p>  "rural": [</p>
-<p>    "farming village",</p>
-<p>    "mill by the river",</p>
-<p>    "crossroads inn"</p>
-<p>  ]</p>
+<p>  "urban": ["bustling marketplace", "quiet library", "royal palace"],</p>
+<p>  "rural": ["farming village", "mill by the river", "crossroads inn"]</p>
 <p>  // ... more categories</p>
 <p>}</p>
-</code>`<code></p><p>Main file reference:</p>
-</code>`<code>json</p>
+</code>`<code></p><p>Main file reference:</p></code>`<code>json</p>
 <p>{</p>
-<p>  "locations": [</p>
-<p>    {"_meta": {"uiLabel": "Locations"}},</p>
-<p>    {"$include": "./data/locations.json"}</p>
-<p>  ]</p>
+<p>  "locations": [{ "_meta": { "uiLabel": "Locations" } }, { "$include": "./data/locations.json" }]</p>
 <p>}</p>
 </code>`<code></p><h2>Slot-Based Content Assembly</h2><h3>Understanding Slot Taxonomy</h3><p>The slot system determines how content pieces are assembled into natural language:</p></code>`<code></p>
-<p>subject → style → condition → size → age → purpose → materials → </p>
-<p>colour → texture → controls → displays → lighting → sound → </p>
+<p>subject → style → condition → size → age → purpose → materials →</p>
+<p>colour → texture → controls → displays → lighting → sound →</p>
 <p>motion → background → markings → density → provenance → setting → view</p>
-</code>`<code></p><h4>Recipe: Slot-Aware Content Creation</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h4>Recipe: Slot-Aware Content Creation</h4></code>`<code>markdown</p>
 <p>Task: Create descriptors for a "futuristic device" generator using proper slots</p><p>Required slots:</p>
 <li>subject: The device type</li>
 <li>style: Aesthetic descriptor</li>
 <li>materials: Construction materials</li>
 <li>displays: Visual indicators</li>
 <li>controls: Input mechanisms</li><p>5 entries per slot, maintaining thematic consistency</p>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "device_subject": {</p>
-<p>    "_meta": {"slot": "subject"},</p>
+<p>    "_meta": { "slot": "subject" },</p>
 <p>    "values": ["scanner", "transmitter", "analyzer", "projector", "synthesizer"]</p>
 <p>  },</p>
 <p>  "device_style": {</p>
-<p>    "_meta": {"slot": "style", "connector": "with a"},</p>
+<p>    "_meta": { "slot": "style", "connector": "with a" },</p>
 <p>    "values": ["sleek", "industrial", "military-grade", "prototype", "consumer"]</p>
 <p>  },</p>
 <p>  "device_materials": {</p>
-<p>    "_meta": {"slot": "materials", "connector": "made of"},</p>
+<p>    "_meta": { "slot": "materials", "connector": "made of" },</p>
 <p>    "values": ["carbon fiber", "transparent aluminum", "bio-plastic", "quantum glass", "neo-steel"]</p>
 <p>  },</p>
 <p>  "device_displays": {</p>
-<p>    "_meta": {"slot": "displays", "connector": "featuring"},</p>
+<p>    "_meta": { "slot": "displays", "connector": "featuring" },</p>
 <p>    "values": ["holographic readouts", "neural interfaces", "quantum displays", "bio-feedback monitors", "AR overlays"]</p>
 <p>  },</p>
 <p>  "device_controls": {</p>
-<p>    "_meta": {"slot": "controls", "connector": "controlled by"},</p>
+<p>    "_meta": { "slot": "controls", "connector": "controlled by" },</p>
 <p>    "values": ["gesture recognition", "voice commands", "neural link", "haptic panels", "eye tracking"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Style and Tone Matching</h2><h3>Analyzing Existing Style</h3><h4>Recipe: Style Replication</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h2>Style and Tone Matching</h2><h3>Analyzing Existing Style</h3><h4>Recipe: Style Replication</h4></code>`<code>markdown</p>
 <p>Task: Analyze these examples and create 10 more in the same style</p><p>Examples from "villain_epithets":</p>
 <li>"the Dread Pirate Roberts"</li>
 <li>"Baroness von Bloodbath"</li>
@@ -1564,8 +1488,7 @@
 <li>Mix of titles and descriptive names</li>
 <li>Alliteration used frequently</li>
 <li>Combination of formal titles with dramatic descriptors</li>
-<li>Color and sound motifs</li><strong>Expected Output:</strong>
-</code>`<code>json</p>
+<li>Color and sound motifs</li><strong>Expected Output:</strong></code>`<code>json</p>
 <p>[</p>
 <p>  "Doctor Doomsday",</p>
 <p>  "The Violet Vendetta",</p>
@@ -1578,23 +1501,19 @@
 <p>  "Captain Chaos",</p>
 <p>  "The Emerald Eclipse"</p>
 <p>]</p>
-</code>`<code></p><h2>Common LLM Expansion Tasks</h2><h3>Batch Processing Instructions</h3><h4>Recipe: Multi-Category Expansion</h4>
-</code>`<code>markdown</p>
-<p>Task: Expand multiple related categories for a "space station" generator</p><p>Categories to expand (add 15 items each):</p>
-<p>1. station_modules: Different sections of the station</p>
+</code>`<code></p><h2>Common LLM Expansion Tasks</h2><h3>Batch Processing Instructions</h3><h4>Recipe: Multi-Category Expansion</h4></code>`<code>markdown</p>
+<p>Task: Expand multiple related categories for a "space station" generator</p><p>Categories to expand (add 15 items each):</p><p>1. station_modules: Different sections of the station</p>
 <p>2. station_problems: Technical issues that arise</p>
 <p>3. station_personnel: Job titles and roles</p>
 <p>4. station_events: Random occurrences</p><p>Maintain sci-fi theme consistency across all categories</p>
 <p>Ensure items can interconnect logically</p>
-</code>`<code></p><h3>Variation Generation</h3><h4>Recipe: Creating Variations</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h3>Variation Generation</h3><h4>Recipe: Creating Variations</h4></code>`<code>markdown</p>
 <p>Task: Generate 5 variations of this announcement template</p><p>Base: "Attention citizens of [location], the [authority] declares [event]"</p><p>Create variations that:</p>
 <li>Maintain the same information structure</li>
 <li>Vary tone (urgent, routine, celebratory)</li>
 <li>Use different vocabulary</li>
 <li>Keep placeholder references intact</li>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>[</p>
 <p>  "Citizens of [location], this is an urgent broadcast from the [authority] regarding [event]",</p>
 <p>  "Hear ye, people of [location]! The [authority] hereby proclaims [event]",</p>
@@ -1602,33 +1521,28 @@
 <p>  "[location] residents, please be advised that the [authority] has declared [event]",</p>
 <p>  "Breaking: [authority] officials in [location] confirm [event]"</p>
 <p>]</p>
-</code>`<code></p><h2>Quality Assurance Patterns</h2><h3>Validation Checks</h3><h4>Recipe: Content Validation</h4>
-</code>`<code>markdown</p>
-<p>Task: Review and validate this generated content</p><p>Check for:</p>
-<p>1. Duplicate entries</p>
+</code>`<code></p><h2>Quality Assurance Patterns</h2><h3>Validation Checks</h3><h4>Recipe: Content Validation</h4></code>`<code>markdown</p>
+<p>Task: Review and validate this generated content</p><p>Check for:</p><p>1. Duplicate entries</p>
 <p>2. Inconsistent formatting</p>
 <p>3. Theme violations</p>
 <p>4. Grammar/spelling errors</p>
 <p>5. Appropriate content</p><p>Flag issues and provide corrections</p>
-</code>`<code></p><h3>Testing Integration</h3><h4>Recipe: Test Case Generation</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h3>Testing Integration</h3><h4>Recipe: Test Case Generation</h4></code>`<code>markdown</p>
 <p>Task: Create test cases for the "character backstory" generator</p><p>Generate 5 test scenarios that verify:</p>
 <li>All paths produce valid output</li>
 <li>Variables are properly substituted</li>
 <li>Conditional logic works correctly</li>
 <li>No infinite loops occur</li>
 <li>Output length is reasonable</li>
-</code>`<code></p><h2>Optimization Strategies</h2><h3>Performance-Aware Content</h3><h4>Recipe: Efficient Rule Design</h4>
-</code>`<code>markdown</p>
+</code>`<code></p><h2>Optimization Strategies</h2><h3>Performance-Aware Content</h3><h4>Recipe: Efficient Rule Design</h4></code>`<code>markdown</p>
 <p>Task: Optimize this rule structure for better performance</p><p>Current:</p>
 <p>{</p>
-<p>  "description": "[color] [material] [item] with [detail1] and [detail2] and [detail3]"</p>
+<p>"description": "[color] [material] [item] with [detail1] and [detail2] and [detail3]"</p>
 <p>}</p><p>Requirements:</p>
 <li>Reduce redundant lookups</li>
 <li>Minimize deep nesting</li>
 <li>Use variables for repeated values</li>
-</code>`<code></p><strong>Expected Output:</strong>
-</code>`<code>json</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
 <p>{</p>
 <p>  "description": "[setBasic][getBasic] with [details]",</p>
 <p>  "setBasic": {</p>
@@ -1640,19 +1554,13 @@
 <p>    "type": "getVariable",</p>
 <p>    "key": "basic_desc"</p>
 <p>  },</p>
-<p>  "details": [</p>
-<p>    "[detail1]",</p>
-<p>    "[detail1] and [detail2]",</p>
-<p>    "[detail1], [detail2], and [detail3]"</p>
-<p>  ]</p>
+<p>  "details": ["[detail1]", "[detail1] and [detail2]", "[detail1], [detail2], and [detail3]"]</p>
 <p>}</p>
-</code>`<code></p><h2>Best Practices for LLM Expansion</h2><h3>Do's</h3>
-<p>1. <strong>Provide Clear Context</strong>: Always include theme, style, and purpose</p>
+</code>`<code></p><h2>Best Practices for LLM Expansion</h2><h3>Do's</h3><p>1. <strong>Provide Clear Context</strong>: Always include theme, style, and purpose</p>
 <p>2. <strong>Show Examples</strong>: Include 3-5 existing entries for pattern matching</p>
 <p>3. <strong>Specify Format</strong>: Be explicit about JSON structure required</p>
 <p>4. <strong>Request Validation</strong>: Ask LLM to check its own output</p>
-<p>5. <strong>Iterate</strong>: Build complex content in stages</p><h3>Don'ts</h3>
-<p>1. <strong>Don't Assume Knowledge</strong>: Always explain generator-specific concepts</p>
+<p>5. <strong>Iterate</strong>: Build complex content in stages</p><h3>Don'ts</h3><p>1. <strong>Don't Assume Knowledge</strong>: Always explain generator-specific concepts</p>
 <p>2. <strong>Don't Request Too Much</strong>: Limit to 20-30 items per request</p>
 <p>3. <strong>Don't Skip Validation</strong>: Always review generated content</p>
 <p>4. <strong>Don't Ignore Context</strong>: Ensure all content fits the generator theme</p>
@@ -1671,7 +1579,8 @@
 <li>Test all new content paths</li>
 <li>Verify theme consistency</li>
 <li>Check performance impact</li></ul>
-</code>``</p><h2>Conclusion</h2><p>Effective LLM expansion requires clear communication, structured thinking, and iterative refinement. By following these recipes and patterns, you can efficiently scale your generators while maintaining quality and consistency.</p><p>Remember: LLMs are tools to augment creativity, not replace it. Always review and refine generated content to ensure it meets your standards and enhances the user experience.</p><p>---</p><strong>Next Chapter</strong>: <a href="16-testing-qa.md">Testing & Quality Assurance</a> →</p></div>
+</code>``</p><h2>Conclusion</h2><p>Effective LLM expansion requires clear communication, structured thinking, and iterative refinement. By following these recipes and patterns, you can efficiently scale your generators while maintaining quality and consistency.</p><p>Remember: LLMs are tools to augment creativity, not replace it. Always review and refine generated content to ensure it meets your standards and enhances the user experience.</p><p>---</p><strong>Next Chapter</strong>: <a href="16-testing-qa.md">Testing & Quality Assurance</a> →</p>
+</div>
         </div>
       
         <div class="chapter-page">
@@ -1700,8 +1609,7 @@
 <p>    "greeting": ["Hello", "Hi", "Hey", "Greetings"],</p>
 <p>    "subject": ["friend", "world", "there", "everyone"]</p>
 <p>  }</p>
-<p>}'></div><strong>Try this</strong>: </p>
-<p>1. Add new greetings to the array: <code>"Welcome"</code>, <code>"Salutations"</code>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Add new greetings to the array: <code>"Welcome"</code>, <code>"Salutations"</code>
 <p>2. Try different seeds to see different outputs</p>
 <p>3. Add more subjects like <code>"stranger"</code>, <code>"adventurer"</code><h3>Example 3: Weighted Choices</h3><p>Sometimes you want some options to appear more often than others. Let's use weighted choices:</p><div id="example-weighted" data-interactive-example </p>
 <p>     data-title="Weighted Character Generator" </p>
@@ -1722,8 +1630,7 @@
 <p>      {"w": 5, "v": "Paladin"}</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div><strong>Try this</strong>:</p>
-<p>1. Notice how "Warrior" appears more often than "Paladin"</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Notice how "Warrior" appears more often than "Paladin"</p>
 <p>2. Change the weights - make "Mage" have weight 50</p>
 <p>3. Add a new class with weight 15</p><h3>Example 4: Variables and Context</h3><p>Variables let you store and reuse values throughout generation:</p><div id="example-variables" data-interactive-example </p>
 <p>     data-title="Variable Usage Example" </p>
@@ -1761,8 +1668,7 @@
 <p>      "solve the ancient riddle"</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div><strong>Try this</strong>:</p>
-<p>1. Notice how the name is consistent throughout</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Notice how the name is consistent throughout</p>
 <p>2. Add a new variable for the hero's weapon</p>
 <p>3. Use the weapon variable in both introduction and quest</p><h3>Example 5: Modularization with Includes</h3><p>For larger generators, you can split content into separate files:</p><div id="example-includes" data-interactive-example </p>
 <p>     data-title="Generator with Includes" </p>
@@ -1789,8 +1695,7 @@
 <p>      "the Crystal Cave"</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div><strong>Try this</strong>:</p>
-<p>1. Change from "warriors" to "mages" or "rogues"</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Change from "warriors" to "mages" or "rogues"</p>
 <p>2. Add your own character categories</p>
 <p>3. Try mixing different character types</p><h2>Interactive Exercises</h2><p>Now it's your turn! Use the examples below to practice creating generators:</p><h3>Exercise 1: Build a Restaurant Menu</h3><p>Create a generator that produces items for a restaurant menu:</p><div id="exercise-menu" data-interactive-example </p>
 <p>     data-title="Restaurant Menu Exercise" </p>
@@ -1867,24 +1772,24 @@
 <p>  script.src = '../assets/js/interactive-examples.js';</p>
 <p>  document.head.appendChild(script);</p>
 <p>});</p>
-</script></div>
+</script>
+</div>
         </div>
       
         <div class="chapter-page">
           <h1 class="chapter-title">Chapter 22: Quick Reference Tables</h1>
-          <div class="chapter-content"><h1>Chapter 22: Quick Reference Tables</h1><p>This chapter provides quick-lookup tables for common generator development tasks. Keep this handy while building generators!</p><h2>Modifier Reference Table</h2><p>Modifiers transform text after rule expansion. Apply them using dot notation: <code>[rule.modifier]</code><p>| Modifier | Purpose | Example Input | Example Output |</p>
-<p>|----------|---------|---------------|----------------|</p>
-<p>| <code>capitalize</code> | Capitalizes first character | <code>hello world</code> | <code>Hello world</code> |</p>
-<p>| <code>upper</code> | Converts to UPPERCASE | <code>hello world</code> | <code>HELLO WORLD</code> |</p>
-<p>| <code>lower</code> | Converts to lowercase | <code>Hello World</code> | <code>hello world</code> |</p>
-<p>| <code>a_an</code> | Prepends correct article | <code>apple</code> | <code>an apple</code> |</p>
-<p>| <code>plural</code> | Basic English pluralization | <code>cat</code> | <code>cats</code> |</p>
-<p>| <code>past</code> | Simple past tense | <code>walk</code> | <code>walked</code> |</p>
-<p>| <code>possessive</code> | Adds possessive form | <code>dog</code> | <code>dog's</code> |</p>
-<p>| <code>trim</code> | Removes whitespace | <code>  text  </code> | <code>text</code> |</p>
-<p>| <code>snake</code> | Converts to snake_case | <code>Hello World</code> | <code>hello_world</code> |</p>
-<p>| <code>kebab</code> | Converts to kebab-case | <code>Hello World</code> | <code>hello-world</code> |</p><h3>Usage Examples</h3>
-<p>``<code>json</p>
+          <div class="chapter-content"><h1>Chapter 22: Quick Reference Tables</h1><p>This chapter provides quick-lookup tables for common generator development tasks. Keep this handy while building generators!</p><h2>Modifier Reference Table</h2><p>Modifiers transform text after rule expansion. Apply them using dot notation: <code>[rule.modifier]</code><p>| Modifier     | Purpose                     | Example Input | Example Output |</p>
+<p>| ------------ | --------------------------- | ------------- | -------------- |</p>
+<p>| <code>capitalize</code> | Capitalizes first character | <code>hello world</code> | <code>Hello world</code>  |</p>
+<p>| <code>upper</code>      | Converts to UPPERCASE       | <code>hello world</code> | <code>HELLO WORLD</code>  |</p>
+<p>| <code>lower</code>      | Converts to lowercase       | <code>Hello World</code> | <code>hello world</code>  |</p>
+<p>| <code>a_an</code>       | Prepends correct article    | <code>apple</code>       | <code>an apple</code>     |</p>
+<p>| <code>plural</code>     | Basic English pluralization | <code>cat</code>         | <code>cats</code>         |</p>
+<p>| <code>past</code>       | Simple past tense           | <code>walk</code>        | <code>walked</code>       |</p>
+<p>| <code>possessive</code> | Adds possessive form        | <code>dog</code>         | <code>dog's</code>        |</p>
+<p>| <code>trim</code>       | Removes whitespace          | <code>  text  </code>    | <code>text</code>         |</p>
+<p>| <code>snake</code>      | Converts to snake_case      | <code>Hello World</code> | <code>hello_world</code>  |</p>
+<p>| <code>kebab</code>      | Converts to kebab-case      | <code>Hello World</code> | <code>hello-world</code>  |</p><h3>Usage Examples</h3><p>``<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "item": "[object.a_an.capitalize]",</p>
@@ -1895,36 +1800,36 @@
 <p>    "version": ["v1", "v2"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Node Type Reference</h2><h3>Basic Nodes</h3><p>| Node Type | Purpose | Key Properties |</p>
-<p>|-----------|---------|----------------|</p>
+</code>`<code></p><h2>Node Type Reference</h2><h3>Basic Nodes</h3><p>| Node Type        | Purpose                       | Key Properties               |</p>
+<p>| ---------------- | ----------------------------- | ---------------------------- |</p>
 <p>| </code>WeightedChoice<code> | Random selection with weights | </code>choices: [{value, weight}]<code> |</p>
-<p>| </code>Concat<code> | Combine multiple inputs | </code>inputs: [node_ids]<code> |</p>
-<p>| </code>Output<code> | Produce final result | </code>template: string<code> |</p>
-<p>| </code>Include<code> | Reference external rule | </code>name: string<code> |</p>
-<p>| </code>SetVariable<code> | Store a value | </code>key: string, value: any<code> |</p>
-<p>| </code>GetVariable<code> | Retrieve a value | </code>key: string<code> |</p><h3>Advanced Nodes (Epic 7)</h3><p>| Node Type | Purpose | Key Properties |</p>
-<p>|-----------|---------|----------------|</p>
+<p>| </code>Concat<code>         | Combine multiple inputs       | </code>inputs: [node_ids]<code>         |</p>
+<p>| </code>Output<code>         | Produce final result          | </code>template: string<code>           |</p>
+<p>| </code>Include<code>        | Reference external rule       | </code>name: string<code>               |</p>
+<p>| </code>SetVariable<code>    | Store a value                 | </code>key: string, value: any<code>    |</p>
+<p>| </code>GetVariable<code>    | Retrieve a value              | </code>key: string<code>                |</p><h3>Advanced Nodes (Epic 7)</h3><p>| Node Type          | Purpose               | Key Properties                           |</p>
+<p>| ------------------ | --------------------- | ---------------------------------------- |</p>
 <p>| </code>WeightedAdvanced<code> | Complex distributions | </code>distributionConfig: {type, parameters}<code> |</p>
-<p>| </code>Conditional<code> | If-then-else logic | </code>branches: [{condition, output}]<code> |</p>
-<p>| </code>Sequential<code> | Ordered processing | </code>sequence: [items], pattern: {type}<code> |</p>
-<p>| </code>Markov<code> | State transitions | </code>states: {state: {next: probability}}<code> |</p><h3>Python Integration (Epic 8)</h3><p>| Node Type | Purpose | Key Properties |</p>
-<p>|-----------|---------|----------------|</p>
-<p>| </code>PythonTransform<code> | Execute Python code | </code>code: string, timeout: number<code> |</p><h2>Variable Functions Reference</h2><p>Built-in functions available in conditional expressions:</p><p>| Function | Purpose | Example |</p>
-<p>|----------|---------|---------|</p>
-<p>| </code>startsWith(str, prefix)<code> | Check string prefix | </code>startsWith({name}, 'A')<code> |</p>
-<p>| </code>endsWith(str, suffix)<code> | Check string suffix | </code>endsWith({file}, '.txt')<code> |</p>
-<p>| </code>includes(str, sub)<code> | Check substring | </code>includes({text}, 'magic')<code> |</p>
-<p>| </code>getType(value)<code> | Get value type | </code>getType({data}) == 'array'<code> |</p>
-<p>| </code>toNumber(value)<code> | Convert to number | </code>toNumber({score}) > 50<code> |</p>
-<p>| </code>toString(value)<code> | Convert to string | </code>toString({id}) == '123'<code> |</p><h3>Operators</h3><p>| Operator | Purpose | Example |</p>
-<p>|----------|---------|---------|</p>
-<p>| </code>==<code> | Equality | </code>{level} == 5<code> |</p>
-<p>| </code>!=<code> | Inequality | </code>{class} != 'warrior'<code> |</p>
-<p>| </code>><code>, </code><<code> | Greater/Less than | </code>{health} > 0<code> |</p>
-<p>| </code>>=<code>, </code><=<code> | Greater/Less or equal | </code>{age} >= 18<code> |</p>
-<p>| </code>&&<code> | Logical AND | </code>{level} > 5 && {class} == 'mage'<code> |</p>
-<p>| </code>\|\|<code> | Logical OR | </code>{race} == 'elf' \|\| {race} == 'human'<code> |</p>
-<p>| </code>!<code> | Logical NOT | </code>!{isDead}<code> |</p><h2>Grammar Pattern Quick Reference</h2><h3>Basic Patterns</h3></code>`<code>json</p>
+<p>| </code>Conditional<code>      | If-then-else logic    | </code>branches: [{condition, output}]<code>        |</p>
+<p>| </code>Sequential<code>       | Ordered processing    | </code>sequence: [items], pattern: {type}<code>     |</p>
+<p>| </code>Markov<code>           | State transitions     | </code>states: {state: {next: probability}}<code>   |</p><h3>Python Integration (Epic 8)</h3><p>| Node Type         | Purpose             | Key Properties                  |</p>
+<p>| ----------------- | ------------------- | ------------------------------- |</p>
+<p>| </code>PythonTransform<code> | Execute Python code | </code>code: string, timeout: number<code> |</p><h2>Variable Functions Reference</h2><p>Built-in functions available in conditional expressions:</p><p>| Function                  | Purpose             | Example                      |</p>
+<p>| ------------------------- | ------------------- | ---------------------------- |</p>
+<p>| </code>startsWith(str, prefix)<code> | Check string prefix | </code>startsWith({name}, 'A')<code>    |</p>
+<p>| </code>endsWith(str, suffix)<code>   | Check string suffix | </code>endsWith({file}, '.txt')<code>   |</p>
+<p>| </code>includes(str, sub)<code>      | Check substring     | </code>includes({text}, 'magic')<code>  |</p>
+<p>| </code>getType(value)<code>          | Get value type      | </code>getType({data}) == 'array'<code> |</p>
+<p>| </code>toNumber(value)<code>         | Convert to number   | </code>toNumber({score}) > 50<code>     |</p>
+<p>| </code>toString(value)<code>         | Convert to string   | </code>toString({id}) == '123'<code>    |</p><h3>Operators</h3><p>| Operator   | Purpose               | Example                                  |</p>
+<p>| ---------- | --------------------- | ---------------------------------------- |</p>
+<p>| </code>==<code>       | Equality              | </code>{level} == 5<code>                           |</p>
+<p>| </code>!=<code>       | Inequality            | </code>{class} != 'warrior'<code>                   |</p>
+<p>| </code>><code>, </code><<code>   | Greater/Less than     | </code>{health} > 0<code>                           |</p>
+<p>| </code>>=<code>, </code><=<code> | Greater/Less or equal | </code>{age} >= 18<code>                            |</p>
+<p>| </code>&&<code>       | Logical AND           | </code>{level} > 5 && {class} == 'mage'<code>       |</p>
+<p>| </code>\|\|<code>     | Logical OR            | </code>{race} == 'elf' \|\| {race} == 'human'<code> |</p>
+<p>| </code>!<code>        | Logical NOT           | </code>!{isDead}<code>                              |</p><h2>Grammar Pattern Quick Reference</h2><h3>Basic Patterns</h3></code>`<code>json</p>
 <p>// Simple random choice</p>
 <p>"color": ["red", "blue", "green"]</p><p>// Weighted choice</p>
 <p>"rarity": [</p>
@@ -1953,16 +1858,14 @@
 <p>  "sequence": ["first", "second", "third"],</p>
 <p>  "pattern": {"type": "linear"}</p>
 <p>}</p>
-</code>`<code></p><h2>Common Rule Structures</h2><h3>Character Generator Pattern</h3>
-</code>`<code>json</p>
+</code>`<code></p><h2>Common Rule Structures</h2><h3>Character Generator Pattern</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "character": "[name] the [adjective] [class]",</p>
 <p>  "name": ["Aria", "Bjorn", "Cara"],</p>
 <p>  "adjective": ["brave", "wise", "swift"],</p>
 <p>  "class": ["warrior", "mage", "rogue"]</p>
 <p>}</p>
-</code>`<code></p><h3>Item Generator Pattern</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Item Generator Pattern</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "item": "[quality] [material] [type] of [property]",</p>
 <p>  "quality": ["crude", "fine", "masterwork"],</p>
@@ -1970,8 +1873,7 @@
 <p>  "type": ["sword", "shield", "armor"],</p>
 <p>  "property": ["strength", "speed", "protection"]</p>
 <p>}</p>
-</code>`<code></p><h3>Story Prompt Pattern</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Story Prompt Pattern</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "prompt": "[genre]: [protagonist] must [goal] before [deadline]",</p>
 <p>  "genre": ["Fantasy", "Sci-Fi", "Mystery"],</p>
@@ -1979,8 +1881,7 @@
 <p>  "goal": ["save the kingdom", "find the artifact", "solve the mystery"],</p>
 <p>  "deadline": ["sunset", "the army arrives", "time runs out"]</p>
 <p>}</p>
-</code>`<code></p><h2>File Organization Reference</h2><h3>Recommended Structure</h3>
-</code>`<code></p>
+</code>`<code></p><h2>File Organization Reference</h2><h3>Recommended Structure</h3></code>`<code></p>
 <p>my-generator/</p>
 <p>├── generator.json          # Main generator file</p>
 <p>├── data/                   # Modular data files</p>
@@ -1994,20 +1895,19 @@
 <p>│   └── README.md</p>
 <p>└── tests/                  # Test files</p>
 <p>    └── test-cases.json</p>
-</code>`<code></p><h3>Include Syntax</h3>
-</code>`<code>json</p>
+</code>`<code></p><h3>Include Syntax</h3></code>`<code>json</p>
 <p>// Basic include</p>
 <p>"names": {"$include": "./data/names.json"}</p><p>// Include with metadata</p>
 <p>"locations": [</p>
 <p>  {"_meta": {"uiLabel": "Locations"}},</p>
 <p>  {"$include": "./data/locations.json"}</p>
 <p>]</p>
-</code>`<code></p><h2>Performance Guidelines</h2><p>| Optimization | Impact | When to Use |</p>
-<p>|--------------|--------|-------------|</p>
-<p>| Variable caching | High | Repeated values |</p>
-<p>| Shallow nesting | Medium | Complex generators |</p>
-<p>| Array limits | Low | Large choice lists |</p>
-<p>| Include splitting | High | 1000+ line files |</p><h3>Performance Patterns</h3></code>`<code>json</p>
+</code>`<code></p><h2>Performance Guidelines</h2><p>| Optimization      | Impact | When to Use        |</p>
+<p>| ----------------- | ------ | ------------------ |</p>
+<p>| Variable caching  | High   | Repeated values    |</p>
+<p>| Shallow nesting   | Medium | Complex generators |</p>
+<p>| Array limits      | Low    | Large choice lists |</p>
+<p>| Include splitting | High   | 1000+ line files   |</p><h3>Performance Patterns</h3></code>`<code>json</p>
 <p>// Good: Cache repeated lookups</p>
 <p>{</p>
 <p>  "start": "[setName][useName][useName]",</p>
@@ -2029,20 +1929,21 @@
 <li>[ ] Weights are positive numbers</li>
 <li>[ ] File paths in includes are correct</li>
 <li>[ ] Special characters are escaped</li>
-<li>[ ] Output formatting is consistent</li></ul><h2>Keyboard Shortcuts</h2><p>| Shortcut | Action |</p>
-<p>|----------|--------|</p>
-<p>| </code>Ctrl+\<code> | Toggle debug overlay |</p>
-<p>| </code>Ctrl+S<code> | Save generator |</p>
-<p>| </code>Ctrl+P<code> | Preview generation |</p>
-<p>| </code>Ctrl+Z<code> | Undo |</p>
-<p>| </code>Ctrl+Shift+Z` | Redo |</p><h2>Error Messages Quick Fix</h2><p>| Error | Likely Cause | Fix |</p>
-<p>|-------|--------------|-----|</p>
-<p>| "Unknown rule: [x]" | Missing rule definition | Add rule "x" to grammar |</p>
-<p>| "Circular reference" | Rules reference each other | Break the cycle |</p>
-<p>| "Invalid JSON" | Syntax error | Check quotes and commas |</p>
-<p>| "Variable not found" | Uninitialized variable | Set variable before use |</p>
-<p>| "Maximum depth exceeded" | Too much nesting | Simplify rule structure |</p><p>---</p><strong>Next Chapter</strong>: <a href="23-templates.md">Templates & Boilerplates</a> →</p></div>
+<li>[ ] Output formatting is consistent</li></ul><h2>Keyboard Shortcuts</h2><p>| Shortcut       | Action               |</p>
+<p>| -------------- | -------------------- |</p>
+<p>| </code>Ctrl+\<code>       | Toggle debug overlay |</p>
+<p>| </code>Ctrl+S<code>       | Save generator       |</p>
+<p>| </code>Ctrl+P<code>       | Preview generation   |</p>
+<p>| </code>Ctrl+Z<code>       | Undo                 |</p>
+<p>| </code>Ctrl+Shift+Z` | Redo                 |</p><h2>Error Messages Quick Fix</h2><p>| Error                    | Likely Cause               | Fix                     |</p>
+<p>| ------------------------ | -------------------------- | ----------------------- |</p>
+<p>| "Unknown rule: [x]"      | Missing rule definition    | Add rule "x" to grammar |</p>
+<p>| "Circular reference"     | Rules reference each other | Break the cycle         |</p>
+<p>| "Invalid JSON"           | Syntax error               | Check quotes and commas |</p>
+<p>| "Variable not found"     | Uninitialized variable     | Set variable before use |</p>
+<p>| "Maximum depth exceeded" | Too much nesting           | Simplify rule structure |</p><p>---</p><strong>Next Chapter</strong>: <a href="23-templates.md">Templates & Boilerplates</a> →</p>
+</div>
         </div>
       
-</body>
+  </body>
 </html>
