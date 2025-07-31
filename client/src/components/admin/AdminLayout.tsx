@@ -28,15 +28,17 @@ import {
 }
 interface AdminLayoutProps {
   children: React.ReactNode;,
-  currentSection: string;
+  currentSection: string,
   onSectionChange: (section: string) => void;
-  const adminSections = [;
+  }
+
+const adminSections = [;
   {
   id: 'feature-toggles',
   label: 'Feature Toggles',
   icon: ToggleLeft,
   description: 'Manage feature flags and rollouts',
-  requiredRoles: ['admin', 'administrator', 'feature-admin'],
+  requiredRoles: ['admin', 'administrator', 'feature-admin']
 }
 }
   {
@@ -44,49 +46,49 @@ interface AdminLayoutProps {
   label: 'User Management',
   icon: Users,
   description: 'Manage users and permissions',
-  requiredRoles: ['admin', 'administrator', 'user-admin'],
+  requiredRoles: ['admin', 'administrator', 'user-admin']
 }
   {
   id: 'content',
   label: 'Content Management',
   icon: FileText,
   description: 'Moderate and manage content',
-  requiredRoles: ['admin', 'administrator', 'content-moderator'],
+  requiredRoles: ['admin', 'administrator', 'content-moderator']
 }
   {
   id: 'api-management',
   label: 'API Management',
   icon: Key,
   description: 'Manage API keys and access control',
-  requiredRoles: ['admin', 'administrator', 'api-admin'],
+  requiredRoles: ['admin', 'administrator', 'api-admin']
 }
   {
   id: 'marketplace',
   label: 'Marketplace Admin',
   icon: ShoppingCart,
   description: 'Review templates and transactions',
-  requiredRoles: ['admin', 'administrator', 'marketplace-admin'],
+  requiredRoles: ['admin', 'administrator', 'marketplace-admin']
 }
   {
   id: 'analytics',
   label: 'Analytics & Monitoring',
   icon: BarChart3,
   description: 'View system metrics and health',
-  requiredRoles: ['admin', 'administrator', 'analyst'],
+  requiredRoles: ['admin', 'administrator', 'analyst']
 }
   {
   id: 'system',
   label: 'System Configuration',
   icon: Settings,
   description: 'Configure system settings',
-  requiredRoles: ['admin', 'administrator'],
+  requiredRoles: ['admin', 'administrator']
 }
   {
   id: 'audit-logs',
   label: 'Audit Logs',
   icon: ScrollText,
   description: 'View system audit trail and security logs',
-  requiredRoles: ['admin', 'administrator', 'security-admin'],
+  requiredRoles: ['admin', 'administrator', 'security-admin']
 }
   {
     id: 'data-protection',
@@ -108,7 +110,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   high: 5,
   medium: 8,
   low: 3,
-  info: 1,
+  info: 1
 };
     setAlertCounts(mockAlertData);
     setLastAlertUpdate(new Date());
@@ -139,7 +141,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
     ? `${user.firstName[0]}${user.lastName[0]}`}
     : (displayName.slice(0, 2));
   // Filter sections based on user roles
-  const availableSections = adminSections.filter(section => {)
+  const availableSections = adminSections.filter(section => {
   if (!user || !user.roles) return false;
     return section.requiredRoles.some(role => user.roles.includes(role));
   });
@@ -229,7 +231,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   borderRadius: '4px',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'center'
 }}
           >
             <ArrowLeft size={18} aria-hidden="true" />
@@ -299,7 +301,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   justifyContent: 'center',
   backgroundColor: '#3b82f6',
   color: 'white',
-  fontWeight: '600',
+  fontWeight: '600'
 }}
             >
               {userInitials.toUpperCase()}

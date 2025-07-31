@@ -23,8 +23,10 @@ interface AlertStatusIndicatorProps {
   showTooltip?: boolean;
   showPulse?: boolean;
   onClick?: () => void;
-  className?: string;
-  const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({,)
+  }
+
+className?: string;
+  const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({
   alertCounts,
   systemStatus = 'healthy',
   lastUpdated,
@@ -37,7 +39,7 @@ interface AlertStatusIndicatorProps {
 }) => {
   const [showTooltipState, setShowTooltipState] = useState(false);
   // Calculate system status based on alert counts if not provided
-  const calculateSystemStatus = (): AlertSystemStatus => {,
+  const calculateSystemStatus = (): AlertSystemStatus => {
   if (systemStatus !== 'healthy') return systemStatus;
   if (alertCounts.critical > 0) return 'critical';
   if (alertCounts.high > 0) return 'warning';
@@ -53,7 +55,7 @@ interface AlertStatusIndicatorProps {
   bgColor: 'bg-green-50',
   borderColor: 'border-green-200',
   label: 'System Healthy',
-  description: 'All systems operating normally',
+  description: 'All systems operating normally'
 },
   warning: {
   icon: AlertTriangle,
@@ -61,7 +63,7 @@ interface AlertStatusIndicatorProps {
   bgColor: 'bg-yellow-50',
   borderColor: 'border-yellow-200',
   label: 'System Warning',
-  description: 'Some alerts require attention',
+  description: 'Some alerts require attention'
 },
   critical: {
   icon: AlertOctagon,
@@ -69,7 +71,7 @@ interface AlertStatusIndicatorProps {
   bgColor: 'bg-red-50',
   borderColor: 'border-red-200',
   label: 'Critical Alerts',
-  description: 'Immediate attention required',
+  description: 'Immediate attention required'
 },
   maintenance: {
   icon: Settings,
@@ -77,7 +79,7 @@ interface AlertStatusIndicatorProps {
   bgColor: 'bg-blue-50',
   borderColor: 'border-blue-200',
   label: 'Maintenance Mode',
-  description: 'System maintenance in progress',
+  description: 'System maintenance in progress'
 },
   unknown: {
   icon: AlertCircle,
@@ -85,27 +87,27 @@ interface AlertStatusIndicatorProps {
   bgColor: 'bg-gray-50',
   borderColor: 'border-gray-200',
   label: 'Status Unknown',
-  description: 'Unable to determine system status',
+  description: 'Unable to determine system status'
 };
     return configs[status];
   };
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs: Record<string, { icon: string; container: string; tooltip: string }> = {
+    const configs: Record<string, { icon: string, container: string; tooltip: string }> = {
   sm: {
   icon: 'w-4 h-4',
   container: 'p-1.5',
-  tooltip: 'text-xs',
+  tooltip: 'text-xs'
 },
   md: {
   icon: 'w-5 h-5',
   container: 'p-2',
-  tooltip: 'text-sm',
+  tooltip: 'text-sm'
 },
   lg: {
   icon: 'w-6 h-6',
   container: 'p-2.5',
-  tooltip: 'text-base',
+  tooltip: 'text-base'
 };
     return configs[sz];
   };

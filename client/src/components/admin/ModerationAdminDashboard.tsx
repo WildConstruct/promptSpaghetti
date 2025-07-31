@@ -5,33 +5,33 @@ import './ModerationAdminDashboard.css';
 }
 interface ModerationStats {
   pending: number;,
-  approved: number;
+  approved: number,
   rejected: number;,
-  flagged: number;
+  flagged: number,
   totalToday: number;,
-  averageProcessingTime: number;
+  averageProcessingTime: number,
   moderatorCount: number;,
   queueBacklog: number;
   interface ModerationItem {
   id: string;,
-  type: 'content' | 'user' | 'template' | 'comment';
+  type: 'content' | 'user' | 'template' | 'comment',
   content: string;,
   author: string;
-  reportedBy?: string;
+  reportedBy?: string,
   status: 'pending' | 'approved' | 'rejected' | 'flagged';,
   priority: 'low' | 'medium' | 'high' | 'critical';
-  reason?: string;
+  reason?: string,
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
   metadata?: Record<string, unknown>;
   interface ApprovalRequest {
   id: string;,
-  type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';
+  type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change',
   title: string;,
-  description: string;
+  description: string,
   requestedBy: string;,
-  requestedAt: Date;
+  requestedAt: Date,
   priority: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'approved' | 'rejected' | 'escalated';
   approvedBy?: string;
@@ -42,9 +42,11 @@ interface ModerationStats {
   metadata?: Record<string, unknown>;
   requiredApprovals?: number;
   currentApprovals?: string;
-  export const ModerationAdminDashboard: React.FC = () => {,
+  }
+
+export const ModerationAdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'queue' | 'approvals' | 'reports'>('overview');
-  const [stats, setStats] = useState<ModerationStats>({)
+  const [stats, setStats] = useState<ModerationStats>({
   pending: 0,
   approved: 0,
   rejected: 0,
@@ -52,11 +54,11 @@ interface ModerationStats {
   totalToday: 0,
   averageProcessingTime: 0,
   moderatorCount: 0,
-  queueBacklog: 0,
+  queueBacklog: 0
 }
 });
-  const [moderationItems, setModerationItems] = useState<ModerationItem>([]);
-  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest>([]);
+  const [moderationItems, setModerationItems] = useState<ModerationItem[]>([]);
+  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchModerationData();
@@ -67,7 +69,7 @@ interface ModerationStats {
   // Simulate API calls
   await new Promise(resolve => setTimeout(resolve, 1000));
   // Mock data for demonstration
-  setStats({)
+  setStats({
   pending: 23,
   approved: 156,
   rejected: 12,
@@ -75,7 +77,7 @@ interface ModerationStats {
   totalToday: 45,
   averageProcessingTime: 12.5,
   moderatorCount: 6,
-  queueBacklog: 31,
+  queueBacklog: 31
 });
       setModerationItems([)
         {
@@ -110,7 +112,7 @@ interface ModerationStats {
   priority: 'medium',
   status: 'pending',
   requiredApprovals: 2,
-  currentApprovals: ['moderator1'],
+  currentApprovals: ['moderator1']
 }
         {
   id: '2',

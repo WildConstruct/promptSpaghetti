@@ -54,53 +54,55 @@ const { Search } = Input;
 }
 interface PolicyStats {
   total_policies: number;,
-  active_policies: number;
+  active_policies: number,
   pending_approvals: number;,
-  total_violations: number;
+  total_violations: number,
   open_violations: number;,
   appeal_rate: number;
 }
 interface PolicyDashboardData {
   statistics: PolicyStats;,
-  recent_activities: unknown;
+  recent_activities: unknown,
   policy_compliance_scores: Record<string, number>;
   enforcement_metrics: unknown;,
   trending_violations: unknown;
 }
 interface Policy {
   id: string;,
-  title: string;
+  title: string,
   policy_type: string;,
-  status: string;
+  status: string,
   version: string;,
-  created_at: string;
+  created_at: string,
   last_modified: string;,
   compliance_score: number;
 }
 interface Violation {
   id: string;,
-  type: string;
+  type: string,
   severity: 'low' | 'medium' | 'high' | 'critical';,
-  status: string;
+  status: string,
   reported_at: string;,
   description: string;
-  policy_id?: string;
+  policy_id?: string,
   seller_id: string;
+
+}
 
 export const PolicyManagementDashboard: React.FC = () => {
   // State management
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<PolicyDashboardData | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [policies, setPolicies] = useState<Policy>([]);
-  const [violations, setViolations] = useState<Violation>([]);
+  const [policies, setPolicies] = useState<Policy[]>([]);
+  const [violations, setViolations] = useState<Violation[]>([]);
   const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(null);
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [ setFilters] = useState({)
+  const [ setFilters] = useState({
 }
-  dateRange: null as { start: Date; end: Date } | null,
+  dateRange: null as { start: Date, end: Date } | null,
     policyType: null as string | null,
     violationStatus: null as string | null;
   });
@@ -173,7 +175,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Policy Title',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string, record: Policy) => ()
+      render: (text: string, record: Policy) => (
         <Space direction="vertical" size={0}>
           <Text strong>{text}</Text>
           <Text type="secondary" style={{ fontSize: '12px' }}>
@@ -185,7 +187,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {,
+      render: (status: string) => {
         const statusConfig = {
           active: { color: 'green', icon: <CheckCircleOutlined /> },
           draft: { color: 'orange', icon: <EditOutlined /> },
@@ -209,7 +211,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Compliance Score',
       dataIndex: 'compliance_score',
       key: 'compliance_score',
-      render: (score: number) => (),
+      render: (score: number) => (,
         <Progress 
           percent={score} 
           size="small" 
@@ -220,12 +222,12 @@ export const PolicyManagementDashboard: React.FC = () => {
   title: 'Last Modified',
   dataIndex: 'last_modified',
   key: 'last_modified',
-  render: (date: string) => new Date(date).toLocaleDateString(),
+  render: (date: string) => new Date(date).toLocaleDateString()
 }
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Policy) => (),
+      render: (record: Policy) => (,
         <Space>
           <Button size="small" icon={<EyeOutlined />} onClick={() => handlePolicyEdit(record)} />
           <Button size="small" icon={<EditOutlined />} type="primary" />
@@ -245,7 +247,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: string) => (),
+      render: (type: string) => (,
         <Tag color="red">
           {type.replace('_', ' ').toUpperCase()}
         </Tag>
@@ -254,7 +256,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Severity',
       dataIndex: 'severity',
       key: 'severity',
-      render: (severity: string) => {,
+      render: (severity: string) => {
         const colors = { low: 'green', medium: 'orange', high: 'red', critical: 'purple' };
         return <Tag color={colors[severity as keyof typeof colors]}>{severity.toUpperCase()}</Tag>;
   }
@@ -262,7 +264,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {,
+      render: (status: string) => {
         const statusConfig = {
           open: { color: 'red', icon: <ExclamationCircleOutlined /> },
           under_review: { color: 'blue', icon: <EyeOutlined /> },
@@ -280,18 +282,18 @@ export const PolicyManagementDashboard: React.FC = () => {
   title: 'Reported Date',
   dataIndex: 'reported_at',
   key: 'reported_at',
-  render: (date: string) => new Date(date).toLocaleDateString(),
+  render: (date: string) => new Date(date).toLocaleDateString()
 }
     {
   title: 'Description',
   dataIndex: 'description',
   key: 'description',
-  ellipsis: true,
+  ellipsis: true
 }
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Violation) => (),
+      render: (record: Violation) => (,
         <Space>
           <Button 
             size="small" 
@@ -410,7 +412,7 @@ export const PolicyManagementDashboard: React.FC = () => {
                 <Card title="Recent Activities" style={{ marginBottom: '16px' }}>
                   <List
                     dataSource={dashboardData?.recent_activities?.slice(0, 5) || []}
-                    renderItem={(item: unknown) => ()
+                    renderItem={(item: unknown) => (
                       <List.Item>
                         <List.Item.Meta
                           avatar={<Avatar icon={<BellOutlined />} />}

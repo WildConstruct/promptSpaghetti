@@ -40,7 +40,7 @@ describe('NodeFactory', () => {
     test('should reject invalid templates', () => {
   const invalidTemplate = {
   id: 'invalid',
-  type: 'invalid-type',
+  type: 'invalid-type'
 } as any;
       const result = factory.registerTemplate(invalidTemplate);
       expect(result).toBe(false);
@@ -59,10 +59,10 @@ describe('NodeFactory', () => {
       const customPosition = { x: 100, y: 200 };
       const customId = 'custom-id';
       const customData = { label: 'Custom Label' };
-      const node = factory.createNode('archetype-2', {)
+      const node = factory.createNode('archetype-2', {
   position: customPosition,
   customId,
-  overrides: customData,
+  overrides: customData
 });
       expect(node).toBeDefined();
       expect(node!.id).toBe(customId);
@@ -85,10 +85,10 @@ describe('NodeFactory', () => {
       const transformTemplates = factory.getTemplatesByType('transform');
       expect(logicTemplates.length).toBeGreaterThan(0);
       expect(transformTemplates.length).toBeGreaterThan(0);
-      logicTemplates.forEach(template => {)
+      logicTemplates.forEach(template => {
   expect(template.type).toBe('logic');
       });
-      transformTemplates.forEach(template => {)
+      transformTemplates.forEach(template => {
   expect(template.type).toBe('transform');
       });
     });
@@ -119,7 +119,7 @@ describe('useNodeFactory Hook', () => {
   test('should create nodes through hook', () => {
     const { result } = renderHook(() => useNodeFactory());
     act(() => {
-      const node = result.current.createNode('archetype-2', {)
+      const node = result.current.createNode('archetype-2', {
   position: { x: 50, y: 50 }
       });
       expect(node).toBeDefined();

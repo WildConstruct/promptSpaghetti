@@ -15,21 +15,21 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock the API service
-jest.mock('../../services/templateService', () => ({)
+jest.mock('../../services/templateService', () => ({
   templateService: {
   createFromGraph: jest.fn<unknown, unknown>(),
   getTemplatesByCategory: jest.fn<unknown, unknown>(),
-  validateTemplate: jest.fn<unknown, unknown>(),
+  validateTemplate: jest.fn<unknown, unknown>()
 }));
 
 // Mock React Flow components
-jest.mock('reactflow', () => ({)
+jest.mock('reactflow', () => ({
   ReactFlow: ({ children, nodes = [], edges = [], ...props }: { )
     children?: React.ReactNode; 
     nodes?: unknown;
     edges?: unknown;
     [key: string]: unknown ;
-  }) => ()
+  }) => (
     <div data-testid="react-flow" {...props}>
       {children}
       <div data-testid="flow-nodes">{JSON.stringify(nodes)}</div>
@@ -41,7 +41,7 @@ jest.mock('reactflow', () => ({)
   useNodesState: () => [[], jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
   useEdgesState: () => [[], jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
   addEdge: jest.fn<unknown, unknown>(),
-  useReactFlow: () => ({,)
+  useReactFlow: () => ({
   getNodes: jest.fn(() => []),
     getEdges: jest.fn(() => []),
     setNodes: jest.fn<unknown, unknown>(),
@@ -51,7 +51,7 @@ jest.mock('reactflow', () => ({)
 }));
 
 // Mock the drag and drop context
-jest.mock('react-dnd', () => ({)
+jest.mock('react-dnd', () => ({
   useDrag: () => [{ isDragging: false }, jest.fn<unknown, unknown>(), jest.fn<unknown, unknown>()],
   useDrop: () => [{ isOver: false }, jest.fn<unknown, unknown>()],
   DndProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
@@ -59,13 +59,13 @@ jest.mock('react-dnd', () => ({)
 import { templateService } from '../../services/templateService';
 const mockTemplateService = templateService as jest.Mocked<{
   createFromGraph: jest.MockedFunction<any>;,
-  getTemplatesByCategory: jest.MockedFunction<any>;
+  getTemplatesByCategory: jest.MockedFunction<any>,
   validateTemplate: jest.MockedFunction<any>;
 }>;
 
 // Test wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const queryClient = new QueryClient({)
+  const queryClient = new QueryClient({
   defaultOptions: {
   queries: { retry: false },
       mutations: { retry: false }
@@ -104,7 +104,7 @@ describe('TemplateCreationWizard', () => {
   category: 'AI',
   language: 'en',
   license: 'MIT',
-  dependencies: [],
+  dependencies: []
 }
         // tags: ['ai', 'analytics'] // Tags property not in Template interface
   }
@@ -127,7 +127,7 @@ describe('TemplateCreationWizard', () => {
   category: 'Data',
   language: 'en',
   license: 'MIT',
-  dependencies: [],
+  dependencies: []
 }
         // tags: ['data'] // Tags property not in Template interface;
   }
@@ -394,9 +394,9 @@ describe('TemplateCreationWizard', () => {
   // Simulate drag and drop
   fireEvent.dragStart(inputNode);
   fireEvent.dragOver(canvas);
-  fireEvent.drop(canvas, {)
+  fireEvent.drop(canvas, {
   clientX: 200,
-  clientY: 200,
+  clientY: 200
 });
       // Assert: Node should be added to canvas
       await waitFor(() => {
@@ -671,7 +671,7 @@ describe('TemplateCreationWizard', () => {
   description: 'A complete test template',
   category_id: 1,
   author_id: 123,
-  created_at: new Date().toISOString(),
+  created_at: new Date().toISOString()
 };
       mockTemplateService.createFromGraph.mockResolvedValue(createdTemplate as unknown as unknown);
       render();
@@ -703,10 +703,10 @@ describe('TemplateCreationWizard', () => {
         expect(mockOnComplete).toHaveBeenCalledWith(createdTemplate);
       });
       expect(mockTemplateService.createFromGraph).toHaveBeenCalledWith()
-        expect.objectContaining({)
+        expect.objectContaining({
   name: 'Complete Template',
   description: 'A complete test template',
-  category_id: 1,
+  category_id: 1
 }
       );
     });

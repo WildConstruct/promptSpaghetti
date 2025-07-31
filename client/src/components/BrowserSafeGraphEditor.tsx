@@ -30,7 +30,7 @@ const nodeTypes = {
   border: '1px solid #ddd',
   borderRadius: '6px',
   background: 'white',
-  minWidth: '150px',
+  minWidth: '150px'
 }}>
       <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
         {data.label || 'Node'}
@@ -46,7 +46,7 @@ const nodeTypes = {
   border: '2px solid #4CAF50',
   borderRadius: '6px',
   background: '#f9fff9',
-  minWidth: '150px',
+  minWidth: '150px'
 }}>
       <div style={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '5px' }}>
         📥 {data.label || 'Input'}
@@ -62,7 +62,7 @@ const nodeTypes = {
   border: '2px solid #FF9800',
   borderRadius: '6px',
   background: '#fff9f0',
-  minWidth: '150px',
+  minWidth: '150px'
 }}>
       <div style={{ fontWeight: 'bold', color: '#FF9800', marginBottom: '5px' }}>
         📤 {data.label || 'Output'}
@@ -78,7 +78,7 @@ const nodeTypes = {
   border: '2px solid #2196F3',
   borderRadius: '6px',
   background: '#f0f9ff',
-  minWidth: '150px',
+  minWidth: '150px'
 }}>
       <div style={{ fontWeight: 'bold', color: '#2196F3', marginBottom: '5px' }}>
         ⚙️ {data.label || 'Process'}
@@ -112,7 +112,7 @@ const defaultEdges: Edge = [
   { id: 'e1-2', source: '1', target: '2' },
   { id: 'e2-3', source: '2', target: '3' }];
 
-export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
+export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
   initialNodes = [],
   initialEdges = []
 }) => {
@@ -138,7 +138,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
       type,
       position: {
   x: Math.random() * 400 + 100,
-  y: Math.random() * 300 + 100,
+  y: Math.random() * 300 + 100
 },
   data: {
   label: `New ${type}`}
@@ -187,7 +187,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   borderLeft: '1px solid #ddd',
   backgroundColor: 'white',
   padding: '20px',
-  overflowY: 'auto',
+  overflowY: 'auto'
 }}>
         <h3 style={{ margin: '0 0 20px 0', color: '#333' }}>🎨 Graph Tools</h3>
         {/* Add Node Section */}
@@ -203,7 +203,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   background: '#f9fff9',
   color: '#4CAF50',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
             >
               📥 Input Node
@@ -217,7 +217,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   background: '#f0f9ff',
   color: '#2196F3',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
             >
               ⚙️ Process Node
@@ -231,7 +231,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   background: '#fff9f0',
   color: '#FF9800',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
             >
               📤 Output Node
@@ -252,7 +252,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   background: selectedNode ? '#fff0f0' : '#f5f5f5',
   color: selectedNode ? '#f44336' : '#999',
   cursor: selectedNode ? 'pointer' : 'not-allowed',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
             >
               🗑️ Delete Selected
@@ -266,7 +266,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   background: '#f8f9fa',
   color: '#666',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
             >
               🧹 Clear All
@@ -281,7 +281,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   padding: '12px',
   border: '1px solid #ddd',
   borderRadius: '4px',
-  background: '#f8f9fa',
+  background: '#f8f9fa'
 }}>
               <div style={{ fontSize: '12px', marginBottom: '8px' }}>
                 <strong>ID:</strong> {selectedNode.id}
@@ -306,7 +306,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   border: '1px solid #ddd',
   borderRadius: '4px',
   background: '#f8f9fa',
-  fontSize: '12px',
+  fontSize: '12px'
 }}>
             <div style={{ marginBottom: '4px' }}>📊 Nodes: {nodes.length}</div>
             <div style={{ marginBottom: '4px' }}>🔗 Edges: {edges.length}</div>

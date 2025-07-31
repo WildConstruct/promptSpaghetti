@@ -23,36 +23,36 @@ import { useAuthStore } from '../../stores/authStore';
 interface ContentItem {
   id: string;,
   title: string;
-  description?: string;
+  description?: string,
   type: 'template' | 'documentation' | 'user_content' | 'system_content' | 'announcement' | 'tutorial';,
-  status: 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured';
+  status: 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured',
   visibility: 'public' | 'private' | 'organization' | 'admin_only';,
-  content: unknown;
+  content: unknown,
   metadata: {
   tags: string;,
-  category: string;
+  category: string,
   version: number;,
-  author: string;
+  author: string,
   authorId: string;
   lastEditor?: string;
-  lastEditorId?: string;
+  lastEditorId?: string,
   featured: boolean;,
   priority: number;
   expiresAt?: string;
-  publishedAt?: string;
+  publishedAt?: string,
   customFields: Record<string, unknown>;
 }
 };
   organizationId?: string;
-  parentId?: string;
+  parentId?: string,
   createdAt: string;,
   updatedAt: string;
 }
 interface ContentFilter {
   searchTerm: string;,
-  typeFilter: string;
+  typeFilter: string,
   statusFilter: string;,
-  visibilityFilter: string;
+  visibilityFilter: string,
   authorFilter: string;,
   categoryFilter: string;
   featuredFilter?: boolean;
@@ -70,39 +70,41 @@ interface ContentStatistics {
   featuredCount: number;,
   recentActivity: {
   created24h: number;,
-  updated24h: number;
+  updated24h: number,
   published24h: number;
 }
 };
   topCategories: Array<{
-  category: string;
+  category: string,
   count: number;
 }>;
   topAuthors: Array<{
-  authorId: string;
+  authorId: string,
   authorName: string;,
   count: number;
 }>;
 }
 interface DashboardState {
   items: ContentItem;,
-  loading: boolean;
+  loading: boolean,
   error: string | null;,
-  filters: ContentFilter;
+  filters: ContentFilter,
   selectedItems: Set<string>;,
-  viewMode: 'table' | 'cards';
+  viewMode: 'table' | 'cards',
   currentPage: number;,
-  pageSize: number;
+  pageSize: number,
   totalItems: number;,
-  statistics: ContentStatistics | null;
+  statistics: ContentStatistics | null,
   showFilters: boolean;,
   showBulkActions: boolean;
+}
+
 const ContentManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
 }
   const { user } = useAuthStore();
   // State management
-  const [state, setState] = useState<DashboardState>({)
+  const [state, setState] = useState<DashboardState>({
   items: [],
   loading: true,
   error: null,
@@ -112,7 +114,7 @@ const ContentManagementDashboard: React.FC = () => {
   statusFilter: '',
   visibilityFilter: '',
   authorFilter: '',
-  categoryFilter: '',
+  categoryFilter: ''
 },
   selectedItems: new Set<string>(),
     viewMode: 'table',
@@ -147,17 +149,17 @@ const ContentManagementDashboard: React.FC = () => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       const data = await response.json();
-      setState(prev => ({)
+      setState(prev => ({
   ...prev,
   items: data.data,
   totalItems: data.pagination.total,
-  loading: false,
+  loading: false
 }));
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   loading: false,
-  error: error instanceof Error ? error.message : 'Failed to load content',
+  error: error instanceof Error ? error.message : 'Failed to load content'
 }));
   }, [state.filters, state.currentPage, state.pageSize]);
   // Fetch statistics
@@ -165,7 +167,7 @@ const ContentManagementDashboard: React.FC = () => {
     if (!user || !['admin', 'super_admin'].includes(user.role)) {
       return;
     try {
-      const response = await fetch('/api/content-management/content/statistics', {)
+      const response = await fetch('/api/content-management/content/statistics', {
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
@@ -258,14 +260,14 @@ const ContentManagementDashboard: React.FC = () => {
   const handleBulkStatusUpdate = useCallback(async (status: string) => {
     if (state.selectedItems.size === 0) return;
     try {
-      const response = await fetch('/api/content-management/content/bulk/status', {)
+      const response = await fetch('/api/content-management/content/bulk/status', {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({
   contentIds: Array.from(state.selectedItems),
   status
 }
@@ -279,14 +281,14 @@ const ContentManagementDashboard: React.FC = () => {
 }, [state.selectedItems, fetchContent]);
   // Filter and selection handlers
   const handleFilterChange = (newFilters: Partial<ContentFilter>) => {
-    setState(prev => ({)
+    setState(prev => ({
   ...prev,
       filters: { ...prev.filters, ...newFilters },
       currentPage: 1;
   }));
   };
   const handleSelectItem = (itemId: string) => {
-    setState(prev => {)
+    setState(prev => {
   const newSelected = new Set(prev.selectedItems);
       if (newSelected.has(itemId)) {
         newSelected.delete(itemId);
@@ -296,11 +298,11 @@ const ContentManagementDashboard: React.FC = () => {
     });
   };
   const handleSelectAll = () => {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   selectedItems: prev.selectedItems.size === prev.items.length ,
   ? new Set()
-  : new Set(prev.items.map(item => item.id)),
+  : new Set(prev.items.map(item => item.id))
 }));
   };
   // Memoized filtered items for performance
@@ -385,7 +387,7 @@ const ContentManagementDashboard: React.FC = () => {
               onChange={(e) => handleFilterChange({ typeFilter: e.target.value })}
             >
               <option value="">All Types</option>
-              {Object.entries(contentTypeConfig).map(([key, config]) => ()
+              {Object.entries(contentTypeConfig).map(([key, config]) => (
                 <option key={key} value={key}>{config.label}</option>
               ))}
             </select>
@@ -397,7 +399,7 @@ const ContentManagementDashboard: React.FC = () => {
               onChange={(e) => handleFilterChange({ statusFilter: e.target.value })}
             >
               <option value="">All Statuses</option>
-              {Object.entries(statusConfig).map(([key, config]) => ()
+              {Object.entries(statusConfig).map(([key, config]) => (
                 <option key={key} value={key}>{config.label}</option>
               ))}
             </select>
@@ -409,7 +411,7 @@ const ContentManagementDashboard: React.FC = () => {
               onChange={(e) => handleFilterChange({ visibilityFilter: e.target.value })}
             >
               <option value="">All Visibility</option>
-              {Object.entries(visibilityConfig).map(([key, config]) => ()
+              {Object.entries(visibilityConfig).map(([key, config]) => (
                 <option key={key} value={key}>{config.label}</option>
               ))}
             </select>
@@ -610,7 +612,7 @@ const ContentManagementDashboard: React.FC = () => {
         .dashboard-title {
           font-size: 2rem;
           font-weight: 700;,
-  color: #1f2937;
+  color: #1f2937,
           margin: 0 0 8px 0;
         .dashboard-subtitle {
           color: #6b7280;,
@@ -621,14 +623,14 @@ const ContentManagementDashboard: React.FC = () => {
         .btn {
           display: flex;
           align-items: center;,
-  gap: 8px;
+  gap: 8px,
           padding: 8px 16px;,
   border: 1px solid #d1d5db;
           border-radius: 6px;,
-  background: #ffffff;
+  background: #ffffff,
           color: #374151;
           text-decoration: none;,
-  cursor: pointer;
+  cursor: pointer,
           transition: all 0.2s ease;
         .btn:hover {,
   background: #f3f4f6;
@@ -682,11 +684,11 @@ const ContentManagementDashboard: React.FC = () => {
           align-items: center;
         .search-input svg {
           position: absolute;,
-  left: 12px;
+  left: 12px,
           color: #6b7280;
         .search-input input {
           width: 100%;,
-  padding: 8px 12px 8px 36px;
+  padding: 8px 12px 8px 36px,
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
@@ -699,7 +701,7 @@ const ContentManagementDashboard: React.FC = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;,
-  background: #eff6ff;
+  background: #eff6ff,
           border: 1px solid #bfdbfe;
           border-radius: 8px;,
   padding: 12px 20px;
@@ -734,7 +736,7 @@ const ContentManagementDashboard: React.FC = () => {
           max-width: 300px;
         .content-title {
           font-weight: 500;,
-  color: #1f2937;
+  color: #1f2937,
           display: flex;
           align-items: center;,
   gap: 6px;
@@ -758,25 +760,25 @@ const ContentManagementDashboard: React.FC = () => {
           border-radius: 4px;
           font-size: 12px;
           font-weight: 500;
-        .status-draft { background: #f3f4f6; color: #374151; }
-        .status-published { background: #d1fae5; color: #065f46; }
-        .status-archived { background: #fee2e2; color: #991b1b; }
-        .status-under_review { background: #fef3c7; color: #92400e; }
-        .status-rejected { background: #fee2e2; color: #991b1b; }
-        .status-featured { background: #ede9fe; color: #5b21b6; }
+        .status-draft { background: #f3f4f6, color: #374151; }
+        .status-published { background: #d1fae5, color: #065f46; }
+        .status-archived { background: #fee2e2, color: #991b1b; }
+        .status-under_review { background: #fef3c7, color: #92400e; }
+        .status-rejected { background: #fee2e2, color: #991b1b; }
+        .status-featured { background: #ede9fe, color: #5b21b6; }
         .action-buttons {
           display: flex;,
   gap: 4px;
         .btn-icon {
           padding: 6px;,
-  border: none;
+  border: none,
           background: none;
           border-radius: 4px;,
-  cursor: pointer;
+  cursor: pointer,
           color: #6b7280;,
   transition: all 0.2s ease;
         .btn-icon:hover {,
-  background: #f3f4f6;
+  background: #f3f4f6,
           color: #374151;
         .btn-success:hover { color: #059669; }
         .btn-warning:hover { color: #d97706; }
@@ -786,11 +788,11 @@ const ContentManagementDashboard: React.FC = () => {
           flex-direction: column;
           align-items: center;
           justify-content: center;,
-  padding: 60px;
+  padding: 60px,
           color: #6b7280;
         .spinner {
           width: 32px;,
-  height: 32px;
+  height: 32px,
           border: 3px solid #f3f4f6;
           border-top: 3px solid #3b82f6;
           border-radius: 50%;,

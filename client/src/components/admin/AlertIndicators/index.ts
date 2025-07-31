@@ -21,9 +21,9 @@ type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 }
 type AlertCount = {
   critical: number;,
-  high: number;
+  high: number,
   medium: number;,
-  low: number;
+  low: number,
   info: number;
 };
 
@@ -32,20 +32,22 @@ type AlertCount = {
 }
 export interface AlertItem {
   id: string;,
-  type: string;
+  type: string,
   severity: AlertSeverity;,
-  title: string;
+  title: string,
   description: string;,
-  timestamp: Date;
+  timestamp: Date,
   source: string;,
   status: 'active' | 'acknowledged' | 'resolved';
   affectedComponent?: string;
   userId?: string;
-  userName?: string;
+  userName?: string;}
+
+
   // Utility functions
 }
 }
-export const getHighestAlertLevel = (alertCounts: { high: number; medium: number; low: number; info: number }) => {
+export const getHighestAlertLevel = (alertCounts: { high: number, medium: number; low: number, info: number }) => {
   if (alertCounts.high > 0) return 'high';
   if (alertCounts.medium > 0) return 'medium';
   if (alertCounts.low > 0) return 'low';

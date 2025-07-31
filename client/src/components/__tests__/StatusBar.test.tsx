@@ -24,10 +24,10 @@ describe('StatusBar Component', () => {
   test('has correct styling', () => {
     const { container } = render(<StatusBar errorCount={0} />);
     const statusBarDiv = container.firstChild as HTMLElement;
-    expect(statusBarDiv).toHaveStyle({)
+    expect(statusBarDiv).toHaveStyle({
   background: '#2a2a2a',
   borderTop: '1px solid #444',
-  height: '32px',
+  height: '32px'
 });
   });
   /**

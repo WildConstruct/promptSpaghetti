@@ -14,61 +14,61 @@ import { useAuth } from '../../hooks/useAuth';
 }
 interface GlobalApiKeyStats {
   totalKeys: number;,
-  activeKeys: number;
+  activeKeys: number,
   expiredKeys: number;,
-  revokedKeys: number;
+  revokedKeys: number,
   suspendedKeys: number;,
-  keysUsedLast24Hours: number;
+  keysUsedLast24Hours: number,
   keysUsedLast7Days: number;,
-  keysUsedLast30Days: number;
+  keysUsedLast30Days: number,
   topScopes: Array<{
   scope: string;,
-  count: number;
+  count: number,
   percentage: number;
 }
 }>;
   averageKeyAge: number;,
   keysByEnvironment: Record<string, number>;
   apiCallsLast24Hours: number;,
-  apiCallsLast7Days: number;
+  apiCallsLast7Days: number,
   totalApiCalls: number;,
-  averageCallsPerKey: number;
+  averageCallsPerKey: number,
   errorRate: number;,
   rateLimitViolations: number;
 }
 interface ApiKeyDetail {
   keyId: string;,
-  userId: string;
+  userId: string,
   userName: string;,
-  userEmail: string;
+  userEmail: string,
   keyPrefix: string;,
   name: string;
-  description?: string;
+  description?: string,
   scopes: string;,
-  status: 'active' | 'revoked' | 'expired' | 'suspended';
+  status: 'active' | 'revoked' | 'expired' | 'suspended',
   createdAt: Date;
   expiresAt?: Date;
-  lastUsedAt?: Date;
+  lastUsedAt?: Date,
   rateLimits: {
   requestsPerMinute: number;,
-  requestsPerHour: number;
+  requestsPerHour: number,
   requestsPerDay: number;
 }
 };
-  ipWhitelist?: string;
+  ipWhitelist?: string,
   metadata: {
-  createdBy: string;
+  createdBy: string,
   environment: string;,
-  rotationCount: number;
+  rotationCount: number,
   totalCalls: number;,
-  lastMonth: number;
+  lastMonth: number,
   errorCount: number;
   revokedBy?: string;
   revokedAt?: Date;
   revocationReason?: string;
 };
   recentActivity: Array<{
-  timestamp: Date;
+  timestamp: Date,
   action: 'call' | 'error' | 'rate_limit' | 'creation' | 'rotation' | 'revocation';,
   details: string;
   ipAddress?: string;
@@ -77,27 +77,29 @@ interface ApiKeyDetail {
 }
 interface UsageMetrics {
   keyId: string;,
-  callsLast1Hour: number;
+  callsLast1Hour: number,
   callsLast24Hours: number;,
-  callsLast7Days: number;
+  callsLast7Days: number,
   callsLast30Days: number;,
-  errorRate: number;
+  errorRate: number,
   averageResponseTime: number;,
-  rateLimitHits: number;
+  rateLimitHits: number,
   topEndpoints: Array<{
   endpoint: string;,
-  calls: number;
+  calls: number,
   errorRate: number;
 }
 }>;
 }
 interface RateLimitConfiguration {
   keyId: string;,
-  requestsPerMinute: number;
+  requestsPerMinute: number,
   requestsPerHour: number;,
-  requestsPerDay: number;
+  requestsPerDay: number,
   burstLimit: number;,
   windowSize: number;
+
+}
 
 export const ApiManagementDashboard: React.FC = () => {
 }
@@ -108,7 +110,7 @@ export const ApiManagementDashboard: React.FC = () => {
   // State for overview data
   const [globalStats, setGlobalStats] = useState<GlobalApiKeyStats | null>(null);
   // State for keys management
-  const [apiKeys, setApiKeys] = useState<ApiKeyDetail>([]);
+  const [apiKeys, setApiKeys] = useState<ApiKeyDetail[]>([]);
   const [selectedKey, setSelectedKey] = useState<ApiKeyDetail | null>(null);
   const [keyFilter, setKeyFilter] = useState<'all' | 'active' | 'expired' | 'revoked' | 'suspended'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -118,17 +120,17 @@ export const ApiManagementDashboard: React.FC = () => {
   // State for monitoring
   const [realTimeAlerts, setRealTimeAlerts] = useState<Array<{
   id: string;,
-  type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat';
+  type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat',
   severity: 'low' | 'medium' | 'high' | 'critical';,
-  message: string;
+  message: string,
   timestamp: Date;
-  keyId?: string;
+  keyId?: string,
   resolved: boolean;
 }>>([]);
   // State for configuration
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
-  const [selectedKeys, setSelectedKeys] = useState<string>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_rateLimitConfig, _setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
   // State for Epic 31 optimization integration
@@ -139,7 +141,7 @@ export const ApiManagementDashboard: React.FC = () => {
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('super_admin');
   const fetchGlobalStats = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/statistics', {)
+      const response = await fetch('/api/auth/api-keys/admin/statistics', {
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
@@ -153,7 +155,7 @@ export const ApiManagementDashboard: React.FC = () => {
 }, []);
   const fetchApiKeys = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/all', {)
+      const response = await fetch('/api/auth/api-keys/admin/all', {
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
@@ -182,7 +184,7 @@ export const ApiManagementDashboard: React.FC = () => {
 }, [timeRange]);
   const fetchRealTimeAlerts = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/alerts', {)
+      const response = await fetch('/api/auth/api-keys/admin/alerts', {
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
@@ -230,7 +232,7 @@ export const ApiManagementDashboard: React.FC = () => {
   }, [user, isAdmin, fetchGlobalStats, fetchApiKeys, fetchUsageMetrics, fetchRealTimeAlerts, fetchOptimizationInsights]);
   const adminRevokeKey = async (keyId: string, reason: string) => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/revoke', {)
+      const response = await fetch('/api/auth/api-keys/admin/revoke', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +252,7 @@ export const ApiManagementDashboard: React.FC = () => {
 };
   const suspendKey = async (keyId: string, reason: string, duration?: string) => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/suspend', {)
+      const response = await fetch('/api/auth/api-keys/admin/suspend', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -317,7 +319,7 @@ export const ApiManagementDashboard: React.FC = () => {
   switch (severity) {
   case 'critical': return 'bg-red-100 text-red-800 border-red-200';
   case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-  case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200',
   default: return 'bg-blue-100 text-blue-800 border-blue-200';
 };
   const getStatusColor = (status: string) => {
@@ -325,7 +327,7 @@ export const ApiManagementDashboard: React.FC = () => {
   case 'active': return 'bg-green-100 text-green-800';
   case 'expired': return 'bg-yellow-100 text-yellow-800';
   case 'revoked': return 'bg-red-100 text-red-800';
-  case 'suspended': return 'bg-orange-100 text-orange-800';
+  case 'suspended': return 'bg-orange-100 text-orange-800',
   default: return 'bg-gray-100 text-gray-800';
 };
   if (!isAdmin) {
@@ -382,14 +384,14 @@ export const ApiManagementDashboard: React.FC = () => {
             { key: 'monitoring', label: 'Monitoring', icon: '👁️' },
             { key: 'optimization', label: 'Optimization', icon: '🚀' },
             { key: 'configuration', label: 'Configuration', icon: '⚙️' }
-          ].map(tab => ()
+          ].map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration')}
               className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
   activeTab === tab.key
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
 }`}
             >
               <span>{tab.icon}</span>
@@ -471,7 +473,7 @@ export const ApiManagementDashboard: React.FC = () => {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Most Used Scopes</h3>
             <div className="space-y-3">
-              {globalStats.topScopes.map((scopeData, index) => ()
+              {globalStats.topScopes.map((scopeData, index) => (
                 <div key={scopeData.scope} className="flex items-center">
                   <div className="w-16 text-sm font-medium text-gray-500">#{index + 1}</div>
                   <div className="flex-1">
@@ -625,7 +627,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredKeys.map((key) => ()
+                  {filteredKeys.map((key) => (
                     <tr key={key.keyId} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <input
@@ -645,7 +647,7 @@ export const ApiManagementDashboard: React.FC = () => {
                           <div className="text-sm font-medium text-gray-900">{key.name}</div>
                           <div className="text-sm text-gray-500 font-mono">{key.keyPrefix}...</div>
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {key.scopes.slice(0, 3).map((scope) => ()
+                            {key.scopes.slice(0, 3).map((scope) => (
                               <span
                                 key={scope}
                                 className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
@@ -722,14 +724,14 @@ export const ApiManagementDashboard: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Usage Analytics</h3>
               <div className="flex space-x-2">
-                {(['1h', '24h', '7d', '30d'] as const).map((range) => ()
+                {(['1h', '24h', '7d', '30d'] as const).map((range) => (
                   <button
                     key={range}
                     onClick={() => setTimeRange(range)}
                     className={`px-3 py-1 text-sm rounded-md ${
   timeRange === range
   ? 'bg-blue-100 text-blue-700'
-  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
 }`}
                   >
                     {range}
@@ -769,7 +771,7 @@ export const ApiManagementDashboard: React.FC = () => {
   ? 'bg-green-100 text-green-800'
   : realTimeAlerts.some(alert => alert.severity === 'critical' && !alert.resolved),
   ? 'bg-red-100 text-red-800'
-  : 'bg-yellow-100 text-yellow-800',
+  : 'bg-yellow-100 text-yellow-800'
 }`}>
                 {realTimeAlerts.filter(alert => !alert.resolved).length} Active
               </span>
@@ -784,7 +786,7 @@ export const ApiManagementDashboard: React.FC = () => {
               ) : ()
                 realTimeAlerts
                   .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-                  .map((alert) => ()
+                  .map((alert) => (
                     <div
                       key={alert.id}
                       className={`border rounded-lg p-4 ${getSeverityColor(alert.severity)} ${}
@@ -849,7 +851,7 @@ export const ApiManagementDashboard: React.FC = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="flex space-x-2">
-                  {(['7', '30', '90'] as const).map((days) => ()
+                  {(['7', '30', '90'] as const).map((days) => (
                     <button
                       key={days}
                       onClick={() => {
@@ -859,7 +861,7 @@ export const ApiManagementDashboard: React.FC = () => {
                       className={`px-3 py-1 text-sm rounded-md ${
   optimizationTimeRange === days
   ? 'bg-blue-100 text-blue-700'
-  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
 }`}
                     >
                       {days} days
@@ -928,7 +930,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-4">Optimization Recommendations</h4>
                     <div className="space-y-4">
-                      {(optimizationInsights as any)?.recommendations?.slice(0, 10).map((rec: unknown, index: number) => ()
+                      {(optimizationInsights as any)?.recommendations?.slice(0, 10).map((rec: unknown, index: number) => (
                         <div
                           key={(rec as any)?.id || index}
                           className={`border rounded-lg p-4 ${
@@ -968,7 +970,7 @@ export const ApiManagementDashboard: React.FC = () => {
                                 <div>
                                   <p className="text-sm font-medium text-gray-700 mb-1">Implementation:</p>
                                   <ul className="text-sm text-gray-600 space-y-1">
-                                    {(rec as any)?.recommendation?.implementation?.slice(0, 3).map((step: string, stepIndex: number) => ()
+                                    {(rec as any)?.recommendation?.implementation?.slice(0, 3).map((step: string, stepIndex: number) => (
                                       <li key={stepIndex} className="flex items-start">
                                         <span className="text-blue-500 mr-2">•</span>
                                         <span>{step}</span>
@@ -1268,7 +1270,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   <h4 className="font-medium text-gray-900 mb-2">Scopes</h4>
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex flex-wrap gap-2">
-                      {selectedKey.scopes.map((scope) => ()
+                      {selectedKey.scopes.map((scope) => (
                         <span
                           key={scope}
                           className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -1285,7 +1287,7 @@ export const ApiManagementDashboard: React.FC = () => {
                     <h4 className="font-medium text-gray-900 mb-2">IP Whitelist</h4>
                     <div className="bg-gray-50 rounded-lg p-4">
                       <div className="space-y-1">
-                        {selectedKey.ipWhitelist.map((ip, index) => ()
+                        {selectedKey.ipWhitelist.map((ip, index) => (
                           <div key={index} className="text-sm font-mono text-gray-900">{ip}</div>
                         ))}
                       </div>
@@ -1297,7 +1299,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   <h4 className="font-medium text-gray-900 mb-2">Recent Activity</h4>
                   <div className="bg-gray-50 rounded-lg p-4 max-h-40 overflow-y-auto">
                     <div className="space-y-2">
-                      {selectedKey.recentActivity.slice(0, 10).map((activity, index) => ()
+                      {selectedKey.recentActivity.slice(0, 10).map((activity, index) => (
                         <div key={index} className="text-xs">
                           <div className="flex justify-between">
                             <span className="text-gray-500">{activity.timestamp.toLocaleString()}</span>

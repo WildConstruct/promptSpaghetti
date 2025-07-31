@@ -13,20 +13,20 @@ import React, { useState, useEffect, useCallback } from 'react';
 }
 export interface PasswordPolicy {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  minLength: number;
+  minLength: number,
   maxLength: number;,
-  requireUppercase: boolean;
+  requireUppercase: boolean,
   requireLowercase: boolean;,
-  requireNumbers: boolean;
+  requireNumbers: boolean,
   requireSymbols: boolean;,
-  minUniqueChars: number;
+  minUniqueChars: number,
   preventCommonPasswords: boolean;,
-  preventPasswordReuse: number;
+  preventPasswordReuse: number,
   maxAge: number; // days,
   warningDays: number;,
-  isActive: boolean;
+  isActive: boolean,
   createdAt: string;,
   updatedAt: string;
 }
@@ -35,23 +35,23 @@ export interface PasswordPolicy {
 export interface PasswordStrengthResult {
   score: number; // 0-100,
   level: 'weak' | 'fair' | 'good' | 'strong' | 'excellent';,
-  feedback: string;
+  feedback: string,
   suggestions: string;,
-  breachDetected: boolean;
+  breachDetected: boolean,
   entropy: number;
 }
 }
 }
 export interface SecurityEvent {
   id: string;,
-  type: 'password_breach' | 'weak_password' | 'policy_violation' | 'credential_rotation' | 'authentication_failure';
+  type: 'password_breach' | 'weak_password' | 'policy_violation' | 'credential_rotation' | 'authentication_failure',
   severity: 'low' | 'medium' | 'high' | 'critical';
   userId?: string;
-  userEmail?: string;
+  userEmail?: string,
   description: string;,
   details: Record<string, unknown>;
   ipAddress?: string;
-  userAgent?: string;
+  userAgent?: string,
   timestamp: string;,
   resolved: boolean;
   resolvedAt?: string;
@@ -61,21 +61,23 @@ export interface SecurityEvent {
 }
 export interface PasswordManagementStats {
   totalUsers: number;,
-  usersWithExpiredPasswords: number;
+  usersWithExpiredPasswords: number,
   usersWithWeakPasswords: number;,
-  usersWithBreachedPasswords: number;
+  usersWithBreachedPasswords: number,
   recentSecurityEvents: number;,
-  passwordPolicyCompliance: number;
+  passwordPolicyCompliance: number,
   averagePasswordStrength: number;,
-  credentialRotationRate: number;
+  credentialRotationRate: number,
   mfaAdoptionRate: number;
   interface PasswordManagementDashboardProps {
   userRole: string;
   onExport?: (type: string) => void;
-  className?: string;
+  }
+
+className?: string;
 }
 }
-export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardProps> = ({)
+export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardProps> = ({
   userRole,
   onExport,
   className = ''
@@ -83,8 +85,8 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   // State Management
   const [activeTab, setActiveTab] = useState<'overview' | 'policies' | 'security' | 'users'>('overview');
   const [stats, setStats] = useState<PasswordManagementStats | null>(null);
-  const [policies, setPolicies] = useState<PasswordPolicy>([]);
-  const [securityEvents, setSecurityEvents] = useState<SecurityEvent>([]);
+  const [policies, setPolicies] = useState<PasswordPolicy[]>([]);
+  const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ setSelectedPolicy] = useState<PasswordPolicy | null>(null);
@@ -113,7 +115,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   passwordPolicyCompliance: 87.5,
   averagePasswordStrength: 78.2,
   credentialRotationRate: 92.1,
-  mfaAdoptionRate: 68.3,
+  mfaAdoptionRate: 68.3
 };
       const mockPolicies: PasswordPolicy = [
         {
@@ -133,7 +135,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   warningDays: 14,
   isActive: true,
   createdAt: '2024-01-15T00:00:00Z',
-  updatedAt: '2024-03-01T00:00:00Z',
+  updatedAt: '2024-03-01T00:00:00Z'
 }
         {
           id: 'policy-002',
@@ -192,17 +194,17 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   }, [loadDashboardData]);
   // Utility Components
   const StatCard: React.FC<{,
-  title: string;
+  title: string,
   value: string | number;
   trend?: number;
-  status?: 'good' | 'warning' | 'critical';
+  status?: 'good' | 'warning' | 'critical',
   icon: string;
   description?: string;
 }> = ({ title, value, trend, status = 'good', icon, description }) => {
   const statusColors = {
   good: '#10b981',
   warning: '#f59e0b',
-  critical: '#ef4444',
+  critical: '#ef4444'
 };
     return;
       <div style={{
@@ -226,7 +228,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
             <span style={{
   fontSize: '12px',
   marginLeft: '8px',
-  color: trend >= 0 ? '#10b981' : '#ef4444',
+  color: trend >= 0 ? '#10b981' : '#ef4444'
 }}>
               {trend >= 0 ? '↗' : '↘'} {Math.abs(trend).toFixed(1)}%
             </span>
@@ -317,7 +319,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '8px',
   padding: '20px',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-  marginBottom: '24px',
+  marginBottom: '24px'
 }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
             Quick Actions
@@ -333,7 +335,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
               >
                 📋 Update Password Policy
@@ -348,7 +350,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
             >
               📊 Export Expired Passwords
@@ -362,7 +364,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
             >
               📈 Generate Security Report
@@ -377,7 +379,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
               >
                 🚨 View Security Events
@@ -395,7 +397,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: '20px',
+  marginBottom: '20px'
 }}>
         <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
           Password Policies
@@ -413,7 +415,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
           >
             + Create Policy
@@ -421,7 +423,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         )}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {policies.map(policy => ()
+        {policies.map(policy => (
           <div
             key={policy.id}
             style={{
@@ -429,7 +431,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '8px',
   padding: '20px',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-  border: policy.isActive ? '2px solid #10b981' : '1px solid #e5e7eb',
+  border: policy.isActive ? '2px solid #10b981' : '1px solid #e5e7eb'
 }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -444,7 +446,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   padding: '2px 8px',
   borderRadius: '12px',
   fontSize: '11px',
-  fontWeight: '500',
+  fontWeight: '500'
 }}>
                     ACTIVE
                   </span>
@@ -462,7 +464,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: '1px solid #d1d5db',
   borderRadius: '4px',
   fontSize: '12px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
                 >
                   Edit
@@ -504,7 +506,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         Security Events
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {securityEvents.map(event => ()
+        {securityEvents.map(event => (
           <div
             key={event.id}
             style={{
@@ -525,7 +527,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   fontSize: '16px',
   color: event.severity === 'critical' ? '#dc2626' :,
   event.severity === 'high' ? '#ea580c' :,
-  event.severity === 'medium' ? '#f59e0b' : '#6b7280',
+  event.severity === 'medium' ? '#f59e0b' : '#6b7280'
 }}>
                   {event.type === 'password_breach' ? '🚨' :
                     event.type === 'weak_password' ? '⚠️' :
@@ -543,7 +545,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   padding: '2px 8px',
   borderRadius: '12px',
   fontSize: '11px',
-  fontWeight: '500',
+  fontWeight: '500'
 }}>
                   RESOLVED
                 </span>
@@ -554,7 +556,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   padding: '2px 8px',
   borderRadius: '12px',
   fontSize: '11px',
-  fontWeight: '500',
+  fontWeight: '500'
 }}>
                   OPEN
                 </span>
@@ -584,7 +586,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   justifyContent: 'center',
   height: '400px',
   backgroundColor: '#f9fafb',
-  borderRadius: '8px',
+  borderRadius: '8px'
 }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -594,7 +596,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderTopColor: '#3b82f6',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-  margin: '0 auto 16px',
+  margin: '0 auto 16px'
 }} />
           <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading password management data...</div>
         </div>
@@ -608,7 +610,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   textAlign: 'center',
   backgroundColor: '#fef2f2',
   borderRadius: '8px',
-  border: '1px solid #fecaca',
+  border: '1px solid #fecaca'
 }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔐</div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600', color: '#dc2626' }}>
@@ -627,7 +629,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   border: 'none',
   borderRadius: '6px',
   fontSize: '14px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
         >
           Retry
@@ -635,7 +637,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
       </div>
     );
   return;
-    <div className={`password-management-dashboard ${className}`} style={{},}
+    <div className={`password-management-dashboard ${className}`} style={{}}
   backgroundColor: '#f9fafb',
       borderRadius: '8px',
       padding: '20px';
@@ -645,7 +647,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: '24px',
+  marginBottom: '24px'
 }}>
         <div>
           <h2 style={{ margin: '0 0 4px 0', fontSize: '24px', fontWeight: '600', color: '#1f2937' }}>
@@ -664,7 +666,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer',
-  color: '#374151',
+  color: '#374151'
 }}
         >
           🔄 Refresh
@@ -674,13 +676,13 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
       <div style={{
   display: 'flex',
   borderBottom: '1px solid #e5e7eb',
-  marginBottom: '24px',
+  marginBottom: '24px'
 }}>
         {[
           { key: 'overview', label: '📊 Overview', permission: true },
           { key: 'policies', label: '📋 Policies', permission: canManagePolicies },
           { key: 'security', label: '🚨 Security Events', permission: canViewSecurityEvents }
-        ].filter(tab => tab.permission).map(tab => ()
+        ].filter(tab => tab.permission).map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as 'overview' | 'policies' | 'security' | 'users')}
@@ -692,7 +694,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderBottom: activeTab === tab.key ? '2px solid #3b82f6' : 'none',
   fontSize: '14px',
   fontWeight: '500',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
           >
             {tab.label}

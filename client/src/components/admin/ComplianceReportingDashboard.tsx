@@ -35,104 +35,106 @@ import {
 }
 interface ComplianceFramework {
   id: string;,
-  name: string;
+  name: string,
   acronym: string;,
-  version: string;
+  version: string,
   description: string;,
-  enabled: boolean;
+  enabled: boolean,
   lastAssessment: string;,
-  complianceScore: number;
+  complianceScore: number,
   violations: number;,
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical',
   requirements: ComplianceRequirement;,
-  nextAuditDate: string;
+  nextAuditDate: string,
   certificationStatus: 'certified' | 'pending' | 'expired' | 'not_applicable';
 }
 interface ComplianceRequirement {
   id: string;,
-  frameworkId: string;
+  frameworkId: string,
   requirement: string;,
-  description: string;
+  description: string,
   category: string;,
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'critical',
   status: 'compliant' | 'partial' | 'non_compliant' | 'not_assessed';,
-  lastAssessed: string;
+  lastAssessed: string,
   evidenceFiles: string;,
-  remediationActions: RemediationAction;
+  remediationActions: RemediationAction,
   automatedCheck: boolean;,
   checkFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
 }
 interface ComplianceViolation {
   id: string;,
-  frameworkId: string;
+  frameworkId: string,
   requirementId: string;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical',
   title: string;,
-  description: string;
+  description: string,
   detectedAt: string;,
-  affectedSystems: string;
+  affectedSystems: string,
   affectedRecords: number;,
-  dataTypes: string;
+  dataTypes: string,
   status: 'open' | 'investigating' | 'resolving' | 'resolved' | 'dismissed';
   assignedTo?: string;
-  dueDate?: string;
+  dueDate?: string,
   businessImpact: string;,
-  technicalImpact: string;
+  technicalImpact: string,
   riskScore: number;
-  remediationPlan?: string;
+  remediationPlan?: string,
   evidence: string;,
   notifications: string;
 }
 interface RemediationAction {
   id: string;,
-  violationId: string;
+  violationId: string,
   title: string;,
-  description: string;
+  description: string,
   priority: 'low' | 'medium' | 'high' | 'critical';,
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
+  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled',
   assignedTo: string;,
   estimatedHours: number;
-  actualHours?: number;
+  actualHours?: number,
   dueDate: string;
-  completedDate?: string;
+  completedDate?: string,
   dependencies: string;,
   tasks: string;
 }
 interface ComplianceMetrics {
-  overallScore: number;,
+  overallScore: number;
 }
-  frameworkScores: { [key: string]: number };
+  frameworkScores: { [key: string]: number },
   totalViolations: number;,
-  activeViolations: number;
+  activeViolations: number,
   resolvedViolations: number;,
-  averageResolutionTime: number;
+  averageResolutionTime: number,
   violationTrend: 'improving' | 'stable' | 'declining';,
-  riskDistribution: { [key: string]: number };
+  riskDistribution: { [key: string]: number },
   upcomingAudits: number;,
-  certificationStatus: string;
+  certificationStatus: string,
   lastReportGenerated: string;
 }
 interface AuditLog {
   id: string;,
-  timestamp: string;
+  timestamp: string,
   userId: string;,
-  userName: string;
+  userName: string,
   action: string;,
-  resourceType: string;
+  resourceType: string,
   resourceId: string;
-  frameworkId?: string;
+  frameworkId?: string,
   details: string;,
-  ipAddress: string;
+  ipAddress: string,
   userAgent: string;,
   result: 'success' | 'failure' | 'warning';
+}
+
 const ComplianceReportingDashboard: React.FC = () => {
-  const [frameworks, setFrameworks] = useState<ComplianceFramework>([]);
-  const [violations, setViolations] = useState<ComplianceViolation>([]);
+  const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
+  const [violations, setViolations] = useState<ComplianceViolation[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_remediationActions, _setRemediationActions] = useState<RemediationAction>([]);
+  const [_remediationActions, _setRemediationActions] = useState<RemediationAction[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_auditLogs, _setAuditLogs] = useState<AuditLog>([]);
+  const [_auditLogs, _setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // View and filter states
@@ -143,9 +145,9 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }
-  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
+  const [_dateRange, _setDateRange] = useState<{ start: string, end: string }>({
   start: '',
-  end: '',
+  end: ''
 });
   // Modal and selection states
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -205,7 +207,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   riskLevel: 'low',
   nextAuditDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
   certificationStatus: 'certified',
-  requirements: [],
+  requirements: []
 }
         {
   id: 'sox',
@@ -240,7 +242,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   technicalImpact: 'Data exposure risk during transmission',
   riskScore: 8.5,
   evidence: ['network_scan_results.json', 'encryption_audit.pdf'],
-  notifications: ['privacy-officer@company.com', 'security@company.com'],
+  notifications: ['privacy-officer@company.com', 'security@company.com']
 }
         {
   id: 'violation-002',
@@ -266,7 +268,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   gdpr: 87,
   hipaa: 94,
   sox: 91,
-  ccpa: 85,
+  ccpa: 85
 },
   totalViolations: 45,
         activeViolations: 6,
@@ -277,7 +279,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   low: 2,
   medium: 2,
   high: 1,
-  critical: 1,
+  critical: 1
 },
   upcomingAudits: 3,
         certificationStatus: 'All frameworks certified or pending',
@@ -339,7 +341,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   case 'critical': return 'bg-red-100 text-red-800 border-red-200';
   case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
   case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-  case 'low': return 'bg-green-100 text-green-800 border-green-200';
+  case 'low': return 'bg-green-100 text-green-800 border-green-200',
   default: return 'bg-gray-100 text-gray-800 border-gray-200';
 };
   const getStatusBadgeClass = (status: string): string => {
@@ -364,7 +366,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   return 'bg-gray-100 text-gray-800';
 };
   const filteredViolations = useMemo(() => {
-    return violations.filter(violation => {)
+    return violations.filter(violation => {
   if (searchTerm && )
           !violation.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !violation.description.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -420,12 +422,12 @@ const ComplianceReportingDashboard: React.FC = () => {
               <button
                 onClick={() => setAutoRefresh(!autoRefresh)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-  autoRefresh ? 'bg-blue-600' : 'bg-gray-200',
+  autoRefresh ? 'bg-blue-600' : 'bg-gray-200'
 }`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-  autoRefresh ? 'translate-x-6' : 'translate-x-1',
+  autoRefresh ? 'translate-x-6' : 'translate-x-1'
 }`}
                 />
               </button>
@@ -527,14 +529,14 @@ const ComplianceReportingDashboard: React.FC = () => {
               { key: 'frameworks', label: 'Frameworks', icon: Shield, count: frameworks.length },
               { key: 'audit', label: 'Audit Trail', icon: FileText },
               { key: 'reports', label: 'Reports', icon: Download }
-            ].map(({ key, label, icon: Icon, count }) => ()
+            ].map(({ key, label, icon: Icon, count }) => (
               <button
                 key={key}
                 onClick={() => setActiveView(key as 'overview' | 'violations' | 'frameworks' | 'audit' | 'reports')}
                 className={`${
   activeView === key
   ? 'border-purple-500 text-purple-600 bg-purple-50'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
 } whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <Icon className="w-4 h-4" />
@@ -557,7 +559,7 @@ const ComplianceReportingDashboard: React.FC = () => {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Framework Compliance</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {frameworks.map(framework => ()
+                  {frameworks.map(framework => (
                     <div key={framework.id} className="bg-gray-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
@@ -581,7 +583,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   framework.complianceScore >= 95 ? 'bg-green-500' :,
   framework.complianceScore >= 85 ? 'bg-blue-500' :,
   framework.complianceScore >= 70 ? 'bg-yellow-500' :,
-  framework.complianceScore >= 50 ? 'bg-orange-500' : 'bg-red-500',
+  framework.complianceScore >= 50 ? 'bg-orange-500' : 'bg-red-500'
 }`}
                             style={{ width: `${framework.complianceScore}%` }}
                           />
@@ -607,7 +609,7 @@ const ComplianceReportingDashboard: React.FC = () => {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  {violations.slice(0, 3).map(violation => ()
+                  {violations.slice(0, 3).map(violation => (
                     <div key={violation.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -646,7 +648,7 @@ const ComplianceReportingDashboard: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Distribution</h3>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(metrics?.riskDistribution || {}).map(([risk, count]) => ()
+                    {Object.entries(metrics?.riskDistribution || {}).map(([risk, count]) => (
                       <div key={risk} className="text-center">
                         <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
   risk === 'critical' ? 'bg-red-100 text-red-600' :,
@@ -686,7 +688,7 @@ const ComplianceReportingDashboard: React.FC = () => {
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="all">All Frameworks</option>
-                    {frameworks.map(framework => ()
+                    {frameworks.map(framework => (
                       <option key={framework.id} value={framework.id}>{framework.acronym}</option>
                     ))}
                   </select>
@@ -716,7 +718,7 @@ const ComplianceReportingDashboard: React.FC = () => {
               </div>
               {/* Violations List */}
               <div className="space-y-4">
-                {filteredViolations.map(violation => ()
+                {filteredViolations.map(violation => (
                   <div key={violation.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -758,7 +760,7 @@ const ComplianceReportingDashboard: React.FC = () => {
                           <div className="mt-4">
                             <span className="text-sm text-gray-500 mb-2 block">Affected Systems:</span>
                             <div className="flex flex-wrap gap-1">
-                              {violation.affectedSystems.map(system => ()
+                              {violation.affectedSystems.map(system => (
                                 <span key={system} className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
                                   {system}
                                 </span>

@@ -16,9 +16,9 @@ import {
 }
 interface FeatureToggle {
   id: string;,
-  key: string;
+  key: string,
   name: string;,
-  enabled: boolean;
+  enabled: boolean,
   type: 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION';
   value?: unknown;
   percentage?: number;
@@ -35,7 +35,9 @@ interface FeatureToggle {
   onOverrideClick?: (toggleId: string) => void;
   onEmergencyDisable?: (toggleId: string, reason: string) => void;
   compact?: boolean;
-  const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({,)
+  }
+
+const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({
   toggle,
   onToggleChange,
   onPercentageChange,
@@ -175,7 +177,7 @@ interface FeatureToggle {
             className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
   toggle.enabled
   ? 'bg-green-100 text-green-700 hover:bg-green-200',
-  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
 }`}
             disabled={toggle.hasActiveOverride}
           >

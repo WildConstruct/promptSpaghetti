@@ -5,12 +5,12 @@ const professionalColors = {
   background: {
   primary: '#1e1e1e',
   secondary: '#2a2a2a',
-  tertiary: '#353535',
+  tertiary: '#353535'
 },
   text: {
   primary: '#e8e8e8',
   secondary: '#b8b8b8',
-  accent: '#ff7c00',
+  accent: '#ff7c00'
 },
   accent: {
   orange: '#ff7c00',
@@ -18,7 +18,7 @@ const professionalColors = {
   cyan: '#00d4ff',
   purple: '#b45cff',
   green: '#4ade80',
-  red: '#ef4444',
+  red: '#ef4444'
 },
   nodes: {
   text: '#4f46e5',
@@ -26,21 +26,21 @@ const professionalColors = {
   output: '#dc2626',
   variable: '#7c3aed',
   advanced: '#6366f1',
-  transform: '#f59e0b',
+  transform: '#f59e0b'
 },
   ui: {
     border: '#404040',
     borderHover: '#5a5a5a',
     borderActive: '#ff7c00',
     hover: '#2d2d2d',
-    selection: '#ff7c0040',
+    selection: '#ff7c0040'
   }
 };
 const professionalShadows = {
   node: {
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
-    selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
+    selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)'
   }
 };
 
@@ -106,7 +106,7 @@ const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: b
   marginBottom: '6px',
   fontSize: '14px',
   fontWeight: 600,
-  color: professionalColors.nodes.logic,
+  color: professionalColors.nodes.logic
 }}>
       <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
       {data.label}
@@ -114,7 +114,7 @@ const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: b
     <div style={{
   fontSize: '12px',
   color: professionalColors.text.secondary,
-  lineHeight: 1.3,
+  lineHeight: 1.3
 }}>
       {data.description}
     </div>
@@ -145,7 +145,7 @@ const InlineOption1 = ({ data, selected = false }: { data: any, selected?: boole
   marginBottom: '8px',
   fontSize: '14px',
   fontWeight: 600,
-  color: professionalColors.nodes.logic,
+  color: professionalColors.nodes.logic
 }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -164,7 +164,7 @@ const InlineOption1 = ({ data, selected = false }: { data: any, selected?: boole
       </div>
       <div style={{
   fontSize: '11px',
-  color: professionalColors.text.secondary,
+  color: professionalColors.text.secondary
 }}>
         + {data.options.length - 1} more options
       </div>
@@ -194,7 +194,7 @@ const InlineOption2 = ({ data, selected = false }: { data: any, selected?: boole
   marginBottom: '8px',
   fontSize: '14px',
   fontWeight: 600,
-  color: professionalColors.nodes.logic,
+  color: professionalColors.nodes.logic
 }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -214,7 +214,7 @@ const InlineOption2 = ({ data, selected = false }: { data: any, selected?: boole
   color: professionalColors.text.secondary,
   fontSize: '11px',
   marginTop: '4px',
-  fontStyle: 'italic',
+  fontStyle: 'italic'
 }}>
             + {data.options.length - 3} more...
           </div>
@@ -246,7 +246,7 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
   marginBottom: '8px',
   fontSize: '14px',
   fontWeight: 600,
-  color: professionalColors.nodes.logic,
+  color: professionalColors.nodes.logic
 }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -256,7 +256,7 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
   color: professionalColors.text.primary,
   display: 'flex',
   flexWrap: 'wrap',
-  gap: '4px',
+  gap: '4px'
 }}>
         {compactOptions.map((option: string, index: number) => (
           <span key={index} style={{
@@ -273,7 +273,7 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
           <span style={{
   color: professionalColors.text.secondary,
   fontSize: '11px',
-  alignSelf: 'center',
+  alignSelf: 'center'
 }}>
             +{data.options.length - 4}
           </span>
@@ -306,7 +306,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
   marginBottom: '8px',
   fontSize: '14px',
   fontWeight: 600,
-  color: professionalColors.nodes.logic,
+  color: professionalColors.nodes.logic
 }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -314,7 +314,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
       <div style={{
   fontSize: '12px',
   color: professionalColors.text.secondary,
-  marginBottom: '6px',
+  marginBottom: '6px'
 }}>
         Currently:
       </div>
@@ -334,7 +334,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
   display: 'flex',
   flexWrap: 'wrap',
   gap: '3px',
-  fontSize: '10px',
+  fontSize: '10px'
 }}>
         {data.options.slice(0, 3).map((option: any, index: number) => (
           <button
@@ -358,7 +358,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
   color: professionalColors.text.secondary,
   fontSize: '10px',
   alignSelf: 'center',
-  padding: '2px',
+  padding: '2px'
 }}>
             ...
           </span>
@@ -377,24 +377,24 @@ export const NodePrototypePage = () => {
   background: professionalColors.background.primary,
   padding: '20px',
   overflow: 'auto',
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif'
 }}>
       <div style={{
   marginBottom: '30px',
-  color: professionalColors.text.primary,
+  color: professionalColors.text.primary
 }}>
         <h1 style={{
   fontSize: '28px',
   fontWeight: 'bold',
   marginBottom: '10px',
-  color: professionalColors.accent.orange,
+  color: professionalColors.accent.orange
 }}>
           Node Design Prototypes
         </h1>
         <p style={{
   fontSize: '16px',
   color: professionalColors.text.secondary,
-  marginBottom: '20px',
+  marginBottom: '20px'
 }}>
           Comparing different approaches to showing node content inline
         </p>
@@ -422,14 +422,14 @@ export const NodePrototypePage = () => {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: '20px',
-  marginBottom: '40px',
+  marginBottom: '40px'
 }}>
         {Object.entries(sampleNodeData).map(([key, data]) => (
           <div key={key}>
             <h3 style={{
   color: professionalColors.text.primary,
   marginBottom: '10px',
-  fontSize: '18px',
+  fontSize: '18px'
 }}>
               {data.label}
             </h3>

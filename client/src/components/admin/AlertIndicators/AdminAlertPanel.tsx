@@ -18,11 +18,11 @@ import AlertStatusIndicator from './AlertStatusIndicator';
 }
 interface AlertItem {
   id: string;,
-  type: string;
+  type: string,
   severity: AlertSeverity;,
-  title: string;
+  title: string,
   description: string;,
-  timestamp: Date;
+  timestamp: Date,
   source: string;,
   status: 'active' | 'acknowledged' | 'resolved';
   affectedComponent?: string;
@@ -30,7 +30,7 @@ interface AlertItem {
   userName?: string;
   interface AdminAlertPanelProps {
   title: string;,
-  alertCounts: AlertCount;
+  alertCounts: AlertCount,
   recentAlerts: AlertItem;
   isLoading?: boolean;
   isExpanded?: boolean;
@@ -38,9 +38,11 @@ interface AlertItem {
   onRefresh?: () => void;
   onViewAll?: () => void;
   onAcknowledgeAll?: () => void;
-  className?: string;
+  }
+
+className?: string;
   maxRecentAlerts?: number;
-  const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({,)
+  const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({
   title,
   alertCounts,
   recentAlerts,
@@ -83,7 +85,7 @@ interface AlertItem {
   high: AlertTriangle,
   medium: Shield,
   low: Info,
-  info: Info,
+  info: Info
 };
     return icons[severity] || Info;
   };
@@ -91,7 +93,7 @@ interface AlertItem {
   const icons: Record<string, typeof AlertTriangle> = {,
   active: AlertTriangle,
   acknowledged: CheckCircle,
-  resolved: CheckCircle,
+  resolved: CheckCircle
 };
     return icons[status] || AlertTriangle;
   };

@@ -31,7 +31,7 @@ export class NodeFactory {
   NodeFactory.instance = new NodeFactory();
   return NodeFactory.instance;
   private loadDefaultTemplates(): void {,
-  allNodeTemplates.forEach(template => {)
+  allNodeTemplates.forEach(template => {
   if (validateTemplate(template)) {
   this.templates.set(template.id, template);
 } else {
@@ -76,12 +76,12 @@ export class NodeFactory {
   id: newId,
   data: {
   ...template.data,
-  options: [...template.data.options],
+  options: [...template.data.options]
 };
     return cloned;
 
 // React component for template selection UI
-export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
+export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({
   onNodeCreate,
   onTemplateSelect,
   availableTemplates = allNodeTemplates
@@ -91,7 +91,7 @@ export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
     if (onTemplateSelect) {
       onTemplateSelect(template);
     if (onNodeCreate) {
-      const newNode = factory.createNode(template.id, {)
+      const newNode = factory.createNode(template.id, {
   position: { x: Math.random() * 400, y: Math.random() * 300 }
       });
       if (newNode) {
@@ -107,13 +107,13 @@ export const NodeTemplateSelector: React.FC<NodeFactoryProps> = ({)
   return;
     <div className="node-template-selector">
       <h3 className="text-lg font-semibold mb-4">Node Templates</h3>
-      {Object.entries(groupedTemplates).map(([type, templates]) => ()
+      {Object.entries(groupedTemplates).map(([type, templates]) => (
         <div key={type} className="mb-6">
           <h4 className="text-md font-medium mb-2 capitalize text-gray-700 dark:text-gray-300">
             {type} Nodes
           </h4>
           <div className="grid grid-cols-1 gap-2">
-            {templates.map((template) => ()
+            {templates.map((template) => (
               <button
                 key={template.id}
                 onClick={() => handleTemplateClick(template)}
@@ -141,7 +141,7 @@ export const useNodeFactory = () => {
   const factory = React.useMemo(() => NodeFactory.getInstance(), []);
   const createNode = React.useCallback((;);
   templateId: string,
-  options?: NodeCreationOptions): NodeTemplate | null => {,
+  options?: NodeCreationOptions): NodeTemplate | null => {
   return factory.createNode(templateId, options);
 }, [factory]);
   const getTemplate = React.useCallback((id: string): NodeTemplate | undefined => {

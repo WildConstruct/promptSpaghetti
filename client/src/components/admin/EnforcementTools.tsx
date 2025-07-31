@@ -41,41 +41,41 @@ import {
 }
 interface EnforcementAction {
   actionId: string;,
-  entityType: 'user' | 'template' | 'transaction';
+  entityType: 'user' | 'template' | 'transaction',
   entityId: string;,
-  actionType: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template';
+  actionType: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template',
   severity: 'low' | 'medium' | 'high' | 'critical';,
-  reason: string;
+  reason: string,
   triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';,
-  triggerDetails: unknown;
+  triggerDetails: unknown,
   autoApplied: boolean;,
   actionTaken: boolean;
   actionTimestamp?: Date;
-  expiresAt?: Date;
+  expiresAt?: Date,
   reviewRequired: boolean;
   adminNotes?: string;
   reversal?: {
   reversedAt: Date;,
-  reversedBy: string;
+  reversedBy: string,
   reason: string;
 }
 };
 }
 interface EnforcementPolicy {
   policyId: string;,
-  name: string;
+  name: string,
   description: string;,
-  enabled: boolean;
+  enabled: boolean,
   triggers: {
   trustScoreThresholds?: {
   suspend: number;,
-  restrict: number;
+  restrict: number,
   flag: number;
 }
 };
     riskFactorRules?: {
   criticalRiskCount: number;,
-  highRiskCount: number;
+  highRiskCount: number,
   automaticSuspension: boolean;
 };
     fraudDetectionRules?: {
@@ -84,35 +84,35 @@ interface EnforcementPolicy {
 };
   };
   actions: {
-  autoSuspension: boolean;
+  autoSuspension: boolean,
   autoRestriction: boolean;,
-  autoFlagging: boolean;
+  autoFlagging: boolean,
   requireManualReview: boolean;,
   notifyAdmins: boolean;
 };
   exemptions?: {
   highTrustUsers: boolean;,
-  verifiedUsers: boolean;
+  verifiedUsers: boolean,
   whitelistedEntities: string;
 };
 }
 interface ViolationReport {
   reportId: string;,
-  type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
+  type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality',
   severity: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'investigating' | 'resolved' | 'dismissed' | 'appealed';
   userId?: string;
   templateId?: string;
-  transactionId?: string;
+  transactionId?: string,
   reporterType: 'automated' | 'user' | 'admin';
-  reporterId?: string;
+  reporterId?: string,
   evidence: string;,
-  description: string;
+  description: string,
   createdAt: Date;
   assignedTo?: string;
   resolution?: {
   action: string;,
-  reason: string;
+  reason: string,
   resolvedBy: string;,
   resolvedAt: Date;
 }
@@ -120,45 +120,47 @@ interface ViolationReport {
 }
 interface EnforcementStats {
   totalActions: number;,
-  pendingReviews: number;
+  pendingReviews: number,
   todayActions: number;,
-  appeals: number;
+  appeals: number,
   automatedActions: number;,
-  manualActions: number;
+  manualActions: number,
   actionBreakdown: {
   suspensions: number;,
-  restrictions: number;
+  restrictions: number,
   flags: number;,
-  blocks: number;
+  blocks: number,
   quarantines: number;
 }
 };
   severityBreakdown: {
-  low: number;
+  low: number,
   medium: number;,
-  high: number;
+  high: number,
   critical: number;
 };
   effectivenessMetrics: {
-  successRate: number;
+  successRate: number,
   appealRate: number;,
-  reversalRate: number;
+  reversalRate: number,
   avgResolutionTime: number;
 };
 
 }
 export interface EnforcementToolsProps {
-  className?: string;
+  }
+
+className?: string;
 }
 }
 export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);
   // Data state
   const [stats, setStats] = useState<EnforcementStats | null>(null);
-  const [recentActions, setRecentActions] = useState<EnforcementAction>([]);
-  const [pendingReviews, setPendingReviews] = useState<EnforcementAction>([]);
-  const [violationReports, setViolationReports] = useState<ViolationReport>([]);
-  const [policies, setPolicies] = useState<EnforcementPolicy>([]);
+  const [recentActions, setRecentActions] = useState<EnforcementAction[]>([]);
+  const [pendingReviews, setPendingReviews] = useState<EnforcementAction[]>([]);
+  const [violationReports, setViolationReports] = useState<ViolationReport[]>([]);
+  const [policies, setPolicies] = useState<EnforcementPolicy[]>([]);
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeverity, setSelectedSeverity] = useState('');
@@ -204,16 +206,16 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
         setError('Please fill in all required fields for manual action');
         return;
       setLoading(true);
-      const response = await fetch('/api/admin/enforcement/actions/manual', {)
+      const response = await fetch('/api/admin/enforcement/actions/manual', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({,)
+        body: JSON.stringify({
   entityType: getEntityTypeFromTarget(manualActionTarget),
   entityId: manualActionTarget,
   actionType: manualActionType,
   severity: manualActionSeverity,
   reason: manualActionReason,
-  triggeredBy: 'manual_review',
+  triggeredBy: 'manual_review'
 }
       });
       const result = await response.json();
@@ -292,7 +294,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
   case 'flag': return <Flag className="w-4 h-4" />;
   case 'require_verification': return <CheckCircle className="w-4 h-4" />;
   case 'block_transaction': return <XCircle className="w-4 h-4" />;
-  case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />;
+  case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />,
   default: return <Info className="w-4 h-4" />;
 };
   const getSeverityColor = (severity: string) => {
@@ -300,7 +302,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
   case 'critical': return 'text-red-600 bg-red-100';
   case 'high': return 'text-orange-600 bg-orange-100';
   case 'medium': return 'text-yellow-600 bg-yellow-100';
-  case 'low': return 'text-blue-600 bg-blue-100';
+  case 'low': return 'text-blue-600 bg-blue-100',
   default: return 'text-gray-600 bg-gray-100';
 };
   if (loading && !stats) {
@@ -381,7 +383,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(stats.actionBreakdown).map(([type, count]) => ()
+                        {Object.entries(stats.actionBreakdown).map(([type, count]) => (
                           <div key={type} className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
                               {getActionIcon(type)}
@@ -399,7 +401,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(stats.severityBreakdown).map(([severity, count]) => ()
+                        {Object.entries(stats.severityBreakdown).map(([severity, count]) => (
                           <div key={severity} className="flex justify-between items-center">
                             <span className="capitalize">{severity}</span>
                             <Badge className={getSeverityColor(severity)}>
@@ -418,7 +420,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      {recentActions.slice(0, 5).map((action) => ()
+                      {recentActions.slice(0, 5).map((action) => (
                         <div key={action.actionId} className="flex items-center justify-between p-2 border rounded">
                           <div className="flex items-center gap-2">
                             {getActionIcon(action.actionType)}
@@ -505,7 +507,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
             </div>
             {/* Actions List */}
             <div className="space-y-2">
-              {recentActions.map((action) => ()
+              {recentActions.map((action) => (
                 <Card key={action.actionId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -592,7 +594,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
               </Button>
             </div>
             <div className="space-y-2">
-              {pendingReviews.map((action) => ()
+              {pendingReviews.map((action) => (
                 <Card key={action.actionId} className="border-orange-200 bg-orange-50">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -643,7 +645,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
               </Button>
             </div>
             <div className="space-y-2">
-              {violationReports.map((report) => ()
+              {violationReports.map((report) => (
                 <Card key={report.reportId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -685,7 +687,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
               </Button>
             </div>
             <div className="space-y-2">
-              {policies.map((policy) => ()
+              {policies.map((policy) => (
                 <Card key={policy.policyId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">

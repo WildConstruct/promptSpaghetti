@@ -6,11 +6,13 @@ import { ValidationMessage } from '../common/ValidationMessage';
 }
 interface BulkOperationsModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void,
   selectedToggleIds: string;,
   onComplete: () => void;
   type BulkOperation = 'enable' | 'disable' | 'archive';
-  export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({,)
+  }
+
+export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
   isOpen,
   onClose,
   selectedToggleIds,
@@ -23,7 +25,7 @@ interface BulkOperationsModalProps {
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState<{
     success: string;,
-  failed: Array<{ id: string; error: string }>;
+  failed: Array<{ id: string, error: string }>;
   } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   if (!isOpen) return null;
@@ -68,7 +70,7 @@ interface BulkOperationsModalProps {
     setProcessing(true);
     setResults(null);
     const success: string = [];
-    const failed: Array<{ id: string; error: string }> = [];
+    const failed: Array<{ id: string, error: string }> = [];
     // Process toggles sequentially to avoid overwhelming the server
     for (const toggleId of selectedToggleIds) {
       try {
@@ -81,7 +83,7 @@ interface BulkOperationsModalProps {
           : operation === 'disable'
             ? { enabled: false, reason }
             : undefined;
-        const response = await fetch(endpoint, {)
+        const response = await fetch(endpoint, {
   method,
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`}
@@ -95,9 +97,9 @@ interface BulkOperationsModalProps {
           throw new Error(error.error || `HTTP ${response.status}`);}
         success.push(toggleId);
       } catch (error) {
-  failed.push({)
+  failed.push({
   id: toggleId,
-  error: error instanceof Error ? error.message : 'Unknown error',
+  error: error instanceof Error ? error.message : 'Unknown error'
 });
     setResults({ success, failed });
     setProcessing(false);
@@ -133,7 +135,7 @@ interface BulkOperationsModalProps {
               <div className="operation-selector">
                 <h3>Select Operation</h3>
                 <div className="operation-options">
-                  {Object.entries(operationConfig).map(([key, op]) => ()
+                  {Object.entries(operationConfig).map(([key, op]) => (
                     <label key={key} className="operation-option">
                       <input
                         type="radio"
@@ -191,7 +193,7 @@ interface BulkOperationsModalProps {
               <div className="selected-toggles-preview">
                 <h4>Affected Toggles ({selectedToggleIds.length})</h4>
                 <div className="toggle-ids-list">
-                  {selectedToggleIds.slice(0, 10).map(id => ()
+                  {selectedToggleIds.slice(0, 10).map(id => (
                     <code key={id} className="toggle-id">{id}</code>
                   ))}
                   {selectedToggleIds.length > 10 && ()
@@ -224,7 +226,7 @@ interface BulkOperationsModalProps {
                 <div className="failed-operations">
                   <h4>Failed Operations</h4>
                   <div className="failed-list">
-                    {results.failed.map(({ id, error }) => ()
+                    {results.failed.map(({ id, error }) => (
                       <div key={id} className="failed-item">
                         <code className="failed-id">{id}</code>
                         <span className="error-message">{error}</span>

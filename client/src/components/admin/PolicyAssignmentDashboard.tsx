@@ -29,24 +29,26 @@ interface DashboardFilters {
   includeInherited?: boolean;
   interface DashboardStats {
   totalAssignments: number;,
-  activeAssignments: number;
+  activeAssignments: number,
   pendingApprovals: number;,
-  conflicts: number;
+  conflicts: number,
   inheritanceChains: number;
-  export const PolicyAssignmentDashboard: React.FC = () => {,
-  const [assignments, setAssignments] = useState<PolicyAssignment>([]);
-  const [bulkAssignments, setBulkAssignments] = useState<BulkPolicyAssignment>([]);
-  const [conflicts, setConflicts] = useState<PolicyConflict>([]);
-  const [stats, setStats] = useState<DashboardStats>({)
+  }
+
+export const PolicyAssignmentDashboard: React.FC = () => {
+  const [assignments, setAssignments] = useState<PolicyAssignment[]>([]);
+  const [bulkAssignments, setBulkAssignments] = useState<BulkPolicyAssignment[]>([]);
+  const [conflicts, setConflicts] = useState<PolicyConflict[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({
   totalAssignments: 0,
   activeAssignments: 0,
   pendingApprovals: 0,
   conflicts: 0,
-  inheritanceChains: 0,
+  inheritanceChains: 0
 }
 });
   const [filters, setFilters] = useState<DashboardFilters>({});
-  const [selectedAssignments, setSelectedAssignments] = useState<string>([]);
+  const [selectedAssignments, setSelectedAssignments] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'assignments' | 'bulk' | 'conflicts' | 'analytics' | 'inheritance'>('assignments');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showBulkWizard, setShowBulkWizard] = useState(false);
@@ -70,9 +72,9 @@ interface DashboardFilters {
   }, [loadAssignments]);
   const loadAssignments = useCallback(async () => {
   try {
-  const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({)
+  const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({
   ...filters,
-  includeInherited: filters.includeInherited?.toString() || 'false',
+  includeInherited: filters.includeInherited?.toString() || 'false'
 }));
       const data = await response.json();
       setAssignments(data.data?.assignments || []);
@@ -100,19 +102,19 @@ interface DashboardFilters {
   const response = await fetch('/api/policy-assignments/assignments/analytics');
   const data = await response.json();
   if (data.success) {
-  setStats({)
+  setStats({
   totalAssignments: data.data.totalAssignments,
   activeAssignments: data.data.assignmentsByStatus?.ACTIVE || 0,
   pendingApprovals: data.data.assignmentsByStatus?.PENDING_APPROVAL || 0,
   conflicts: data.data.conflictsDetected?.length || 0,
-  inheritanceChains: data.data.inheritanceChains?.length || 0,
+  inheritanceChains: data.data.inheritanceChains?.length || 0
 });
     } catch (error) {
   console.error('Error loading stats:', error);
 };
   const handleCreateAssignment = async (assignmentData: Partial<PolicyAssignment>) => {
     try {
-      const response = await fetch('/api/policy-assignments/assignments', {)
+      const response = await fetch('/api/policy-assignments/assignments', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(assignmentData);
@@ -125,7 +127,7 @@ interface DashboardFilters {
 };
   const handleBulkAssignment = async (bulkData: unknown) => {
     try {
-      const response = await fetch('/api/policy-assignments/assignments/bulk', {)
+      const response = await fetch('/api/policy-assignments/assignments/bulk', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bulkData);
@@ -294,7 +296,7 @@ interface DashboardFilters {
             </tr>
           </thead>
           <tbody>
-            {assignments.map(assignment => ()
+            {assignments.map(assignment => (
               <tr key={assignment.assignmentId}>
                 <td>
                   <input 
@@ -354,7 +356,7 @@ interface DashboardFilters {
     <div className="bulk-assignments-section">
       <h3>Bulk Assignments</h3>
       <div className="bulk-assignments-list">
-        {bulkAssignments.map(bulk => ()
+        {bulkAssignments.map(bulk => (
           <div key={bulk.bulkAssignmentId} className="bulk-assignment-card">
             <div className="bulk-header">
               <h4>{bulk.title}</h4>

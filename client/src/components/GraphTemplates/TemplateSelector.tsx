@@ -13,8 +13,10 @@ import {
 interface TemplateSelectorProps {
   onTemplateSelect?: (template: GraphTemplate) => void;
   onNodeTemplateSelect?: (nodeTemplate: NodeTemplate) => void;
-  className?: string;
-  export const TemplateSelector: React.FC<TemplateSelectorProps> = ({,)
+  }
+
+className?: string;
+  export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   onTemplateSelect,
   onNodeTemplateSelect,
   className = ""
@@ -49,7 +51,7 @@ return templateCategories[selectedCategory] || [];
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
   activeTab === 'graphs'
   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
-  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
 }`}
           >
             Graph Templates
@@ -59,7 +61,7 @@ return templateCategories[selectedCategory] || [];
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
   activeTab === 'nodes'
   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
-  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
+  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
 }`}
           >
             Node Templates
@@ -73,7 +75,7 @@ return templateCategories[selectedCategory] || [];
               Complete Graph Templates
             </h3>
             <div className="space-y-3">
-              {graphTemplates.map((template, index) => ()
+              {graphTemplates.map((template, index) => (
                 <div
                   key={index}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
@@ -116,7 +118,7 @@ return templateCategories[selectedCategory] || [];
               </select>
             </div>
             <div className="space-y-3">
-              {getNodeTemplatesByCategory().map((template) => ()
+              {getNodeTemplatesByCategory().map((template) => (
                 <div
                   key={template.id}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
@@ -136,7 +138,7 @@ return templateCategories[selectedCategory] || [];
   ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
   : template.type === 'transform',
   ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
-  : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
+  : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'
 }`}>
                       {template.type}
                     </span>

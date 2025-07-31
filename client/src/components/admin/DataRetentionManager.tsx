@@ -33,61 +33,65 @@ import {
 }
 interface RetentionPolicy {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  dataType: string;
+  dataType: string,
   dataCategory: 'user_data' | 'system_data' | 'log_data' | 'analytics_data' | 'backup_data';,
-  retentionPeriod: number;
+  retentionPeriod: number,
   retentionUnit: 'days' | 'months' | 'years';,
-  autoDelete: boolean;
+  autoDelete: boolean,
   status: 'active' | 'inactive' | 'expired' | 'draft';,
-  complianceFrameworks: string;
+  complianceFrameworks: string;}
+
+
   // Scheduling
   scheduleType: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'custom';
-  cronExpression?: string;
+  cronExpression?: string,
   nextExecution: string;
   lastExecution?: string;
   // Metrics
   affectedRecords: number;,
-  totalSizeBytes: number;
+  totalSizeBytes: number,
   deletedRecords: number;,
   executionCount: number;
   // Metadata
   createdAt: string;,
-  updatedAt: string;
+  updatedAt: string,
   createdBy: string;,
   tags: string;
   // Configuration
   notifyBeforeExpiry: boolean;,
-  notificationDays: number;
+  notificationDays: number,
   exemptionRules: string;,
-  cascadeDelete: boolean;
+  cascadeDelete: boolean,
   backupBeforeDelete: boolean;
   interface PolicyTemplate {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  category: string;
+  category: string,
   retentionPeriod: number;,
-  retentionUnit: 'days' | 'months' | 'years';
+  retentionUnit: 'days' | 'months' | 'years',
   complianceFrameworks: string;,
-  recommended: boolean;
+  recommended: boolean,
   config: Partial<RetentionPolicy>;
   interface PolicyExecutionResult {
   id: string;,
-  policyId: string;
+  policyId: string,
   status: 'success' | 'partial' | 'failed';,
-  executedAt: string;
+  executedAt: string,
   recordsProcessed: number;,
-  recordsDeleted: number;
+  recordsDeleted: number,
   recordsSkipped: number;,
-  executionTimeMs: number;
+  executionTimeMs: number,
   errors: string;,
   warnings: string;
-  const DataRetentionManager: React.FC = () => {,
-  const [policies, setPolicies] = useState<RetentionPolicy>([]);
-  const [ setTemplates] = useState<PolicyTemplate>([]);
-  const [ setExecutionResults] = useState<PolicyExecutionResult>([]);
+  }
+
+const DataRetentionManager: React.FC = () => {
+  const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
+  const [ setTemplates] = useState<PolicyTemplate[]>([]);
+  const [ setExecutionResults] = useState<PolicyExecutionResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // View and filter states
@@ -105,7 +109,7 @@ interface RetentionPolicy {
   const [] = useState(false);
   const [] = useState<Set<string>>(new Set());
   // Form state for policy creation/editing
-  const [ ] = useState<Partial<RetentionPolicy>>({)
+  const [ ] = useState<Partial<RetentionPolicy>>({
   name: '',
   description: '',
   dataType: '',
@@ -121,7 +125,7 @@ interface RetentionPolicy {
   exemptionRules: [],
   cascadeDelete: false,
   backupBeforeDelete: true,
-  tags: [],
+  tags: []
 }
 });
   // Load data
@@ -132,13 +136,13 @@ interface RetentionPolicy {
     try {
       setLoading(true);
       const [policiesRes, templatesRes, executionsRes] = await Promise.all([)
-        fetch('/api/data-retention/policies', {)
+        fetch('/api/data-retention/policies', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-retention/templates', {)
+        fetch('/api/data-retention/templates', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-retention/executions', {)
+        fetch('/api/data-retention/executions', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
   }
       ]);
@@ -174,7 +178,7 @@ interface RetentionPolicy {
   case 'active': return 'bg-green-100 text-green-800';
   case 'inactive': return 'bg-yellow-100 text-yellow-800';
   case 'expired': return 'bg-red-100 text-red-800';
-  case 'draft': return 'bg-gray-100 text-gray-800';
+  case 'draft': return 'bg-gray-100 text-gray-800',
   default: return 'bg-gray-100 text-gray-800';
 };
   const getCategoryIcon = (category: string) => {
@@ -183,11 +187,11 @@ interface RetentionPolicy {
   case 'system_data': return <Settings className="w-4 h-4" />;
   case 'log_data': return <FileText className="w-4 h-4" />;
   case 'analytics_data': return <BarChart3 className="w-4 h-4" />;
-  case 'backup_data': return <Database className="w-4 h-4" />;
+  case 'backup_data': return <Database className="w-4 h-4" />,
   default: return <Database className="w-4 h-4" />;
 };
   const filteredPolicies = policies;
-    .filter(policy => {)
+    .filter(policy => {
   if (searchTerm && !policy.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !policy.description.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
@@ -388,7 +392,7 @@ interface RetentionPolicy {
       {/* Policy Cards View */}
       {view === 'cards' && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPolicies.map(policy => ()
+          {filteredPolicies.map(policy => (
             <div key={policy.id} className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -429,7 +433,7 @@ interface RetentionPolicy {
                       {policy.status}
                     </span>
                     <div className="flex items-center space-x-1">
-                      {policy.complianceFrameworks.map(framework => ()
+                      {policy.complianceFrameworks.map(framework => (
                         <span key={framework} className="px-1.5 py-0.5 text-xs bg-purple-100 text-purple-700 rounded">
                           {framework}
                         </span>

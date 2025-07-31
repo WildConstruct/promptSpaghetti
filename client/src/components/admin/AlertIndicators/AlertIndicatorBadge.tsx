@@ -15,9 +15,9 @@ export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 }
 export interface AlertCount {
   critical: number;,
-  high: number;
+  high: number,
   medium: number;,
-  low: number;
+  low: number,
   info: number;
   interface AlertIndicatorBadgeProps {
   alertCounts: AlertCount;
@@ -25,10 +25,12 @@ export interface AlertCount {
   maxDisplayCount?: number; // Max number to display before showing "99+",
   showIcon?: boolean;
   size?: 'sm' | 'md' | 'lg';
-  className?: string;
+  }
+
+className?: string;
   onClick?: () => void;
   animate?: boolean; // Pulse animation for active alerts,
-  const AlertIndicatorBadge: React.FC<AlertIndicatorBadgeProps> = ({,)
+  const AlertIndicatorBadge: React.FC<AlertIndicatorBadgeProps> = ({
   alertCounts,
   severity,
   maxDisplayCount = 99,
@@ -40,7 +42,7 @@ export interface AlertCount {
 }
 }) => {
   // Calculate total count or specific severity count
-  const getDisplayCount = (): number => {,
+  const getDisplayCount = (): number => {
   if (severity) {
   return alertCounts[severity];
   return Object.values(alertCounts).reduce((sum, count) => sum + count, 0);
@@ -62,55 +64,55 @@ export interface AlertCount {
   bgColor: 'bg-red-500',
   textColor: 'text-white',
   borderColor: 'border-red-500',
-  ringColor: 'ring-red-500/20',
+  ringColor: 'ring-red-500/20'
 },
   high: {
   icon: AlertTriangle,
   bgColor: 'bg-orange-500',
   textColor: 'text-white',
   borderColor: 'border-orange-500',
-  ringColor: 'ring-orange-500/20',
+  ringColor: 'ring-orange-500/20'
 },
   medium: {
   icon: AlertCircle,
   bgColor: 'bg-yellow-500',
   textColor: 'text-white',
   borderColor: 'border-yellow-500',
-  ringColor: 'ring-yellow-500/20',
+  ringColor: 'ring-yellow-500/20'
 },
   low: {
   icon: Info,
   bgColor: 'bg-blue-500',
   textColor: 'text-white',
   borderColor: 'border-blue-500',
-  ringColor: 'ring-blue-500/20',
+  ringColor: 'ring-blue-500/20'
 },
   info: {
   icon: Info,
   bgColor: 'bg-gray-500',
   textColor: 'text-white',
   borderColor: 'border-gray-500',
-  ringColor: 'ring-gray-500/20',
+  ringColor: 'ring-gray-500/20'
 };
     return configs[sev];
   };
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs: Record<string, { container: string; icon: string; text: string }> = {
+    const configs: Record<string, { container: string, icon: string; text: string }> = {
   sm: {
   container: 'px-1.5 py-0.5 text-xs min-w-[20px] h-5',
   icon: 'w-3 h-3',
-  text: 'text-xs',
+  text: 'text-xs'
 },
   md: {
   container: 'px-2 py-1 text-sm min-w-[24px] h-6',
   icon: 'w-4 h-4',
-  text: 'text-sm',
+  text: 'text-sm'
 },
   lg: {
   container: 'px-2.5 py-1.5 text-base min-w-[28px] h-7',
   icon: 'w-5 h-5',
-  text: 'text-base',
+  text: 'text-base'
 };
     return configs[sz];
   };

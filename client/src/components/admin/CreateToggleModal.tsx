@@ -8,15 +8,15 @@ import './targeting/TargetingRuleBuilder.css';
 }
 interface CreateToggleModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void,
   onSubmit: (toggleData: CreateToggleData) => Promise<void>;
 }
 interface CreateToggleData {
   key: string;,
   name: string;
-  description?: string;
+  description?: string,
   type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';,
-  value: unknown;
+  value: unknown,
   claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';,
   enabled: boolean;
 
@@ -24,14 +24,14 @@ interface CreateToggleData {
 export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<CreateToggleData>({)
+  const [formData, setFormData] = useState<CreateToggleData>({
   key: '',
   name: '',
   description: '',
   type: 'boolean',
   value: false,
   claudeImpact: 'NONE',
-  enabled: true,
+  enabled: true
 });
   if (!isOpen) return null;
   const validateForm = (): boolean => {
@@ -79,7 +79,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
       await onSubmit(formData);
       onClose();
       // Reset form
-      setFormData({)
+      setFormData({
   key: '',
         name: '',
         description: '',
@@ -125,7 +125,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
             <input
               type="checkbox"
               checked={formData.value.enabled}
-              onChange={(e) => setFormData(prev => ({)
+              onChange={(e) => setFormData(prev => ({
   ...prev,
                 value: { enabled: e.target.checked }
               }))}
@@ -143,7 +143,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
             min="0"
             max="100"
             value={formData.value.percentage || 0}
-            onChange={(e) => setFormData(prev => ({)
+            onChange={(e) => setFormData(prev => ({
   ...prev,
               value: { percentage: parseInt(e.target.value) || 0 }
             }))}
@@ -161,7 +161,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
           <div className="variants-editor">
             {formData.value.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number) => (),
+              index: number) => (,
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -170,7 +170,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                   onChange={(e) => {
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, key: e.target.value };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { variants: newVariants }
                     }));
@@ -183,7 +183,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                   onChange={(e) => {
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, value: e.target.value };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { variants: newVariants }
                     }));
@@ -198,7 +198,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                   onChange={(e) => {
                     const newVariants = [...formData.value.variants];
                     newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { variants: newVariants }
                     }));
@@ -216,7 +216,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   value: '',
                   percentage: 0;
   }];
-                setFormData(prev => ({)
+                setFormData(prev => ({
   ...prev,
                   value: { variants: newVariants }
                 }));
@@ -236,7 +236,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
               <input
                 type="checkbox"
                 checked={formData.value.enabled}
-                onChange={(e) => setFormData(prev => ({)
+                onChange={(e) => setFormData(prev => ({
   ...prev,
                   value: { ...prev.value, enabled: e.target.checked }
                 }))}
@@ -249,7 +249,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                 <input
                   type="datetime-local"
                   value={formData.value.startTime || ''}
-                  onChange={(e) => setFormData(prev => ({)
+                  onChange={(e) => setFormData(prev => ({
   ...prev,
                     value: { ...prev.value, startTime: e.target.value }
                   }))}
@@ -260,7 +260,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                 <input
                   type="datetime-local"
                   value={formData.value.endTime || ''}
-                  onChange={(e) => setFormData(prev => ({)
+                  onChange={(e) => setFormData(prev => ({
   ...prev,
                     value: { ...prev.value, endTime: e.target.value }
                   }))}
@@ -277,7 +277,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
           <div className="segmentation-editor">
             <TargetingRuleBuilder
               initialRules={formData.value.rules || []}
-              onRulesChange={(rules) => setFormData(prev => ({)
+              onRulesChange={(rules) => setFormData(prev => ({
   ...prev,
                 value: { ...prev.value, rules }
               }))}
@@ -286,7 +286,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   // Mock test implementation
   return {
   matches: true,
-  userCount: Math.floor(Math.random() * 5000) + 100,
+  userCount: Math.floor(Math.random() * 5000) + 100
 };
               }}
             />
@@ -296,7 +296,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
                 type="text"
                 placeholder="Value when no rules match (e.g., false, disabled)"
                 value={formData.value.defaultValue || ''}
-                onChange={(e) => setFormData(prev => ({)
+                onChange={(e) => setFormData(prev => ({
   ...prev,
                   value: { ...prev.value, defaultValue: e.target.value }
                 }))}

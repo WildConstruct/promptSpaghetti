@@ -7,20 +7,22 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 }
 interface EditToggleModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void,
   toggleId: string;,
   onSave: () => void;
   interface ToggleData {
   id: string;,
-  key: string;
+  key: string,
   name: string;
-  description?: string;
+  description?: string,
   type: string;,
-  value: unknown;
+  value: unknown,
   claudeImpact: string;,
-  enabled: boolean;
+  enabled: boolean,
   version: number;
-  export const EditToggleModal: React.FC<EditToggleModalProps> = ({,)
+  }
+
+export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   isOpen,
   onClose,
   toggleId,
@@ -49,12 +51,12 @@ interface EditToggleModalProps {
   throw new Error('Failed to load toggle');
   const data = await response.json();
   setToggle(data);
-  setFormData({)
+  setFormData({
   name: data.name,
   description: data.description,
   value: data.value,
   claudeImpact: data.claudeImpact,
-  enabled: data.enabled,
+  enabled: data.enabled
 });
     } catch (error) {
       setErrors({ fetch: error instanceof Error ? error.message : 'Failed to load toggle' });
@@ -114,7 +116,7 @@ interface EditToggleModalProps {
             <input
               type="checkbox"
               checked={formData.value?.enabled || false}
-              onChange={(e) => setFormData(prev => ({)
+              onChange={(e) => setFormData(prev => ({
   ...prev,
                 value: { enabled: e.target.checked }
               }))}
@@ -132,7 +134,7 @@ interface EditToggleModalProps {
             min="0"
             max="100"
             value={formData.value?.percentage || 0}
-            onChange={(e) => setFormData(prev => ({)
+            onChange={(e) => setFormData(prev => ({
   ...prev,
               value: { ...prev.value, percentage: parseInt(e.target.value) || 0 }
             }))}
@@ -150,7 +152,7 @@ interface EditToggleModalProps {
           <div className="variants-editor">
             {formData.value?.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number) => (),
+              index: number) => (,
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -159,7 +161,7 @@ interface EditToggleModalProps {
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, key: e.target.value };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -172,7 +174,7 @@ interface EditToggleModalProps {
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, value: e.target.value };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -187,7 +189,7 @@ interface EditToggleModalProps {
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -198,7 +200,7 @@ interface EditToggleModalProps {
                   className="btn-icon btn-danger"
                   onClick={() => {
                     const newVariants = (formData.value?.variants || []).filter((_: unknown, i: number) => i !== index);
-                    setFormData(prev => ({)
+                    setFormData(prev => ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -218,7 +220,7 @@ interface EditToggleModalProps {
   value: '',
                   percentage: 0;
   }];
-                setFormData(prev => ({)
+                setFormData(prev => ({
   ...prev,
                   value: { ...prev.value, variants: newVariants }
                 }));
@@ -238,7 +240,7 @@ interface EditToggleModalProps {
               <input
                 type="checkbox"
                 checked={formData.value?.enabled || false}
-                onChange={(e) => setFormData(prev => ({)
+                onChange={(e) => setFormData(prev => ({
   ...prev,
                   value: { ...prev.value, enabled: e.target.checked }
                 }))}
@@ -251,7 +253,7 @@ interface EditToggleModalProps {
                 <input
                   type="datetime-local"
                   value={formData.value?.startTime || ''}
-                  onChange={(e) => setFormData(prev => ({)
+                  onChange={(e) => setFormData(prev => ({
   ...prev,
                     value: { ...prev.value, startTime: e.target.value }
                   }))}
@@ -262,7 +264,7 @@ interface EditToggleModalProps {
                 <input
                   type="datetime-local"
                   value={formData.value?.endTime || ''}
-                  onChange={(e) => setFormData(prev => ({)
+                  onChange={(e) => setFormData(prev => ({
   ...prev,
                     value: { ...prev.value, endTime: e.target.value }
                   }))}

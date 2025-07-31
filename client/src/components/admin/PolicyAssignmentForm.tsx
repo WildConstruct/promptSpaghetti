@@ -20,32 +20,32 @@ import {
 import './PolicyAssignmentForm.css';
 }
 interface PolicyAssignmentFormProps {
-  assignment?: PolicyAssignment;
+  assignment?: PolicyAssignment,
   onSubmit: (data: Partial<PolicyAssignment>) => Promise<void>;,
   onCancel: () => void;
   interface FormData {
   policyId: string;,
-  policyType: string;
+  policyType: string,
   policyVersion: string;,
-  targetType: AssignmentTargetType;
+  targetType: AssignmentTargetType,
   targetId: string;,
-  targetDisplayName: string;
+  targetDisplayName: string,
   effectiveDate: string;,
-  expirationDate: string;
+  expirationDate: string,
   priority: number;,
-  conditions: AssignmentCondition;
+  conditions: AssignmentCondition,
   inheritance: {
   type: InheritanceType;,
-  inheritanceDepth: number;
+  inheritanceDepth: number,
   blockInheritance: boolean;
 }
 };
   metadata: {
-  reason: string;
+  reason: string,
   businessJustification: string;,
-  riskLevel: RiskLevel;
+  riskLevel: RiskLevel,
   reviewRequired: boolean;
-  reviewFrequencyDays?: number;
+  reviewFrequencyDays?: number,
   tags: string;,
   complianceFrameworks: string;
 };
@@ -63,7 +63,7 @@ const INITIAL_FORM_DATA: FormData = {,
   inheritance: {
   type: InheritanceType.NONE,
   inheritanceDepth: 0,
-  blockInheritance: false,
+  blockInheritance: false
 },
   metadata: {
   reason: '',
@@ -71,10 +71,10 @@ const INITIAL_FORM_DATA: FormData = {,
   riskLevel: RiskLevel.MEDIUM,
   reviewRequired: false,
   tags: [],
-  complianceFrameworks: [],
+  complianceFrameworks: []
 };
 
-export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
+export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
   assignment,
   onSubmit,
   onCancel
@@ -85,7 +85,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   const [activeTab, setActiveTab] = useState<'basic' | 'conditions' | 'inheritance' | 'metadata'>('basic');
   useEffect(() => {
   if (assignment) {
-  setFormData({)
+  setFormData({
   policyId: assignment.policyId,
   policyType: assignment.policyType,
   policyVersion: assignment.policyVersion,
@@ -97,7 +97,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   priority: assignment.priority,
   conditions: assignment.conditions,
   inheritance: assignment.inheritance,
-  metadata: assignment.metadata,
+  metadata: assignment.metadata
 });
   }, [assignment]);
   const validateForm = (): boolean => {
@@ -131,7 +131,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   expirationDate: formData.expirationDate ? new Date(formData.expirationDate) : undefined,
   metadata: {
   ...formData.metadata,
-  source: AssignmentSource.MANUAL,
+  source: AssignmentSource.MANUAL
 };
       await onSubmit(submitData);
     } catch (error) {
@@ -140,23 +140,23 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       setIsSubmitting(false);
   };
   const updateFormData = (field: string, value: Error) => {
-  setFormData(prev => ({)
+  setFormData(prev => ({
   ...prev,
-  [field]: value,
+  [field]: value
 }));
     // Clear error for this field
     if (errors[field]) {
-  setErrors(prev => ({)
+  setErrors(prev => ({
   ...prev,
-  [field]: undefined,
+  [field]: undefined
 }));
   };
   const updateNestedFormData = (section: string, field: string, value: Error) => {
-  setFormData(prev => ({)
+  setFormData(prev => ({
   ...prev,
   [section]: {
   ...prev[section as keyof FormData],
-  [field]: value,
+  [field]: value
 }));
   };
   const addCondition = () => {
@@ -169,22 +169,22 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
       value: '',
       description: '';
   };
-    setFormData(prev => ({)
+    setFormData(prev => ({
   ...prev,
-  conditions: [...prev.conditions, newCondition],
+  conditions: [...prev.conditions, newCondition]
 }));
   };
   const updateCondition = (index: number, field: keyof AssignmentCondition, value: Error) => {
-    setFormData(prev => ({)
+    setFormData(prev => ({
   ...prev,
       conditions: prev.conditions.map((condition, i) => 
         i === index ? { ...condition, [field]: value } : condition
     }));
   };
   const removeCondition = (index: number) => {
-  setFormData(prev => ({)
+  setFormData(prev => ({
   ...prev,
-  conditions: prev.conditions.filter((_, i) => i !== index),
+  conditions: prev.conditions.filter((_, i) => i !== index)
 }));
   };
   const addTag = (tag: string) => {
@@ -336,7 +336,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
           <p className="empty-state">No conditions defined. This assignment will always be active.</p>
         ) : ()
           <div className="conditions-list">
-            {formData.conditions.map((condition, index) => ()
+            {formData.conditions.map((condition, index) => (
               <div key={condition.conditionId} className="condition-card">
                 <div className="condition-header">
                   <span className="condition-label">Condition {index + 1}</span>
@@ -542,7 +542,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
           <label>Tags</label>
           <div className="tags-input">
             <div className="tags-list">
-              {formData.metadata.tags.map((tag, index) => ()
+              {formData.metadata.tags.map((tag, index) => (
                 <span key={index} className="tag">
                   {tag}
                   <button

@@ -27,7 +27,9 @@ import { Badge } from '../common/Badge';
 import './EnhancedToggleFilters.css';
 
 }
-export interface ToggleFilters {
+export interface ToggleFilters {}
+
+
   // Basic filters
   search: string;
   enabled?: boolean;
@@ -38,14 +40,14 @@ export interface ToggleFilters {
   createdBy?: string;
   dateRange?: {
   start: string;,
-  end: string;
+  end: string,
   field: 'created' | 'updated' | 'lastEvaluated';
 }
 };
   // Performance filters
   evaluationCount?: {
   min?: number;
-  max?: number;
+  max?: number,
   period: '24h' | '7d' | '30d';
 };
   successRate?: {
@@ -53,7 +55,7 @@ export interface ToggleFilters {
   max: number;
 };
   responseTime?: {
-  max: number; // milliseconds,
+  max: number; // milliseconds
 };
   // Relationship filters
   hasDependencies?: boolean;
@@ -93,26 +95,28 @@ export type SortField =
 export interface SavedFilter {
   id: string;,
   name: string;
-  description?: string;
+  description?: string,
   filters: ToggleFilters;,
   sort: SortConfig;
-  isDefault?: boolean;
+  isDefault?: boolean,
   createdBy: string;,
-  createdAt: string;
+  createdAt: string,
   usageCount: number;
 }
 interface EnhancedToggleFiltersProps {
   filters: ToggleFilters;,
-  sort: SortConfig;
+  sort: SortConfig,
   onFiltersChange: (filters: ToggleFilters) => void;,
   onSortChange: (sort: SortConfig) => void;,
-  onReset: () => void;
+  onReset: () => void;}
+
+
   // Data for dropdowns
-  availableTypes: string;,
+  availableTypes: string;
 }
-  availableOrganizations: Array<{ id: string; name: string }>;
-  availableUsers: Array<{ id: string; name: string }>;
-  availableToggles: Array<{ id: string; name: string }>;
+  availableOrganizations: Array<{ id: string, name: string }>;
+  availableUsers: Array<{ id: string, name: string }>;
+  availableToggles: Array<{ id: string, name: string }>;
   // Loading states
   loading?: boolean;
   filtersLoading?: boolean;
@@ -123,7 +127,7 @@ interface EnhancedToggleFiltersProps {
   showAdvanced?: boolean;
   allowSavedFilters?: boolean;
 }
-export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
+export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
   filters,
   sort,
   onFiltersChange,
@@ -139,7 +143,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [savedFilters, setSavedFilters] = useState<SavedFilter>([]);
+  const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [selectedSavedFilter, setSelectedSavedFilter] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // Load saved filters
@@ -157,7 +161,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
   filters: {
   search: '',
   enabled: true,
-  claudeImpact: 'PROMPT_COST,MODEL_VERSION,OUTPUT_QUALITY,HALLUCINATION_RISK',
+  claudeImpact: 'PROMPT_COST,MODEL_VERSION,OUTPUT_QUALITY,HALLUCINATION_RISK'
 },
   sort: { field: 'updatedAt', direction: 'desc' },
           createdBy: 'admin',
@@ -188,7 +192,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
   dateRange: {
   start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
-  field: 'created',
+  field: 'created'
 },
   sort: { field: 'createdAt', direction: 'desc' },
           createdBy: 'admin',
@@ -232,7 +236,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
   sort,
   createdBy: 'current-user',
   createdAt: new Date().toISOString(),
-  usageCount: 0,
+  usageCount: 0
 };
       setSavedFilters(prev => [...prev, newFilter]);
       setShowSaveModal(false);
@@ -296,7 +300,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                   }}
                 >
                   <option value="">Saved Filters</option>
-                  {savedFilters.map(filter => ()
+                  {savedFilters.map(filter => (
                     <option key={filter.id} value={filter.id}>
                       {filter.name} ({filter.usageCount})
                     </option>
@@ -361,7 +365,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 onChange={(e) => handleFilterChange({ type: e.target.value || undefined })}
               >
                 <option value="">All Types</option>
-                {availableTypes.map(type => ()
+                {availableTypes.map(type => (
                   <option key={type} value={type}>
                     {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                   </option>
@@ -394,7 +398,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                     onChange={(e) => handleFilterChange({ organizationId: e.target.value || undefined })}
                   >
                     <option value="">All Organizations</option>
-                    {availableOrganizations.map(org => ()
+                    {availableOrganizations.map(org => (
                       <option key={org.id} value={org.id}>{org.name}</option>
                     ))}
                   </select>
@@ -406,7 +410,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                     onChange={(e) => handleFilterChange({ createdBy: e.target.value || undefined })}
                   >
                     <option value="">All Users</option>
-                    {availableUsers.map(user => ()
+                    {availableUsers.map(user => (
                       <option key={user.id} value={user.id}>{user.name}</option>
                     ))}
                   </select>
@@ -440,11 +444,11 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       type="number"
                       placeholder="Min"
                       value={filters.evaluationCount?.min || ''}
-                      onChange={(e) => handleFilterChange({)
+                      onChange={(e) => handleFilterChange({
   evaluationCount: {
   ...filters.evaluationCount,
   min: e.target.value ? parseInt(e.target.value) : undefined,
-  period: filters.evaluationCount?.period || '24h',
+  period: filters.evaluationCount?.period || '24h'
 })}
                     />
                     <span>to</span>
@@ -452,11 +456,11 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       type="number"
                       placeholder="Max"
                       value={filters.evaluationCount?.max || ''}
-                      onChange={(e) => handleFilterChange({)
+                      onChange={(e) => handleFilterChange({
   evaluationCount: {
   ...filters.evaluationCount,
   max: e.target.value ? parseInt(e.target.value) : undefined,
-  period: filters.evaluationCount?.period || '24h',
+  period: filters.evaluationCount?.period || '24h'
 })}
                     />
                   </div>
@@ -472,10 +476,10 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       min="0"
                       max="100"
                       value={filters.successRate?.min || ''}
-                      onChange={(e) => handleFilterChange({)
+                      onChange={(e) => handleFilterChange({
   successRate: {
   min: e.target.value ? parseInt(e.target.value) : 0,
-  max: filters.successRate?.max || 100,
+  max: filters.successRate?.max || 100
 })}
                     />
                     <span>to</span>
@@ -485,10 +489,10 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       min="0"
                       max="100"
                       value={filters.successRate?.max || ''}
-                      onChange={(e) => handleFilterChange({)
+                      onChange={(e) => handleFilterChange({
   successRate: {
   min: filters.successRate?.min || 0,
-  max: e.target.value ? parseInt(e.target.value) : 100,
+  max: e.target.value ? parseInt(e.target.value) : 100
 })}
                     />
                   </div>
@@ -499,7 +503,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                     type="number"
                     placeholder="e.g. 100"
                     value={filters.responseTime?.max || ''}
-                    onChange={(e) => handleFilterChange({)
+                    onChange={(e) => handleFilterChange({
   responseTime: e.target.value ? { max: parseInt(e.target.value) } : undefined
                     })}
                   />
@@ -547,7 +551,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 { field: 'evaluationCount' as SortField, label: 'Usage', icon: <Activity size={14} /> },
                 { field: 'successRate' as SortField, label: 'Success Rate', icon: <TrendingUp size={14} /> },
                 { field: 'responseTime' as SortField, label: 'Performance', icon: <Zap size={14} /> }
-              ].map(option => ()
+              ].map(option => (
                 <button
                   key={option.field}
                   className={`sort-btn ${sort.field === option.field ? 'active' : ''}`}
@@ -573,12 +577,12 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 <input
                   type="date"
                   value={filters.dateRange?.start || ''}
-                  onChange={(e) => handleFilterChange({)
+                  onChange={(e) => handleFilterChange({
   dateRange: {
   ...filters.dateRange,
   start: e.target.value,
   end: filters.dateRange?.end || e.target.value,
-  field: filters.dateRange?.field || 'created',
+  field: filters.dateRange?.field || 'created'
 })}
                 />
               </div>
@@ -587,12 +591,12 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 <input
                   type="date"
                   value={filters.dateRange?.end || ''}
-                  onChange={(e) => handleFilterChange({)
+                  onChange={(e) => handleFilterChange({
   dateRange: {
   ...filters.dateRange,
   start: filters.dateRange?.start || e.target.value,
   end: e.target.value,
-  field: filters.dateRange?.field || 'created',
+  field: filters.dateRange?.field || 'created'
 })}
                 />
               </div>
@@ -600,12 +604,12 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 <label>Field</label>
                 <select
                   value={filters.dateRange?.field || 'created'}
-                  onChange={(e) => handleFilterChange({)
+                  onChange={(e) => handleFilterChange({
   dateRange: {
   ...filters.dateRange,
   start: filters.dateRange?.start || '',
   end: filters.dateRange?.end || '',
-  field: e.target.value as 'created' | 'updated' | 'lastEvaluated',
+  field: e.target.value as 'created' | 'updated' | 'lastEvaluated'
 })}
                 >
                   <option value="created">Created</option>
@@ -634,13 +638,13 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
 // Save Filter Modal Component
 }
 interface SaveFilterModalProps {
-  onSave: (name: string, description?: string) => void;
+  onSave: (name: string, description?: string) => void,
   onCancel: () => void;
 }
 const SaveFilterModal: React.FC<SaveFilterModalProps> = ({ onSave, onCancel }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const handleSubmit = (e: React.FormEvent) => {,
+  const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
   if (name.trim()) {
   onSave(name.trim(), description.trim() || undefined);

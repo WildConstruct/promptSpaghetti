@@ -26,53 +26,53 @@ import './targeting/TargetingModalExtensions.css';
 }
 interface ToggleDetailsModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void,
   toggleId: string;,
   onEdit: (toggleId: string) => void;
   interface ToggleDetails {
   id: string;,
-  key: string;
+  key: string,
   name: string;
-  description?: string;
+  description?: string,
   type: string;,
-  value: unknown;
+  value: unknown,
   enabled: boolean;,
-  claudeImpact: string;
+  claudeImpact: string,
   createdAt: string;,
-  updatedAt: string;
+  updatedAt: string,
   version: number;
   createdBy?: string;
-  updatedBy?: string;
+  updatedBy?: string,
   scopes: Array<{
   id: string;,
-  rule: unknown;
+  rule: unknown,
   priority: number;,
   createdAt: string;
 }
 }>;
   recentAudit: Array<{
-  id: string;
+  id: string,
   action: string;
   actorId?: string;
-  reason?: string;
+  reason?: string,
   createdAt: string;,
   isEmergency: boolean;
 }>;
   dependencies: {
   dependencies: {
   requires: string;,
-  conflicts: string;
+  conflicts: string,
   suggests: string;
 };
     dependents: {
-  requiredBy: string;
+  requiredBy: string,
   conflictsWith: string;,
   suggestedBy: string;
 };
     impactRadius: number;
   };
 
-export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
+export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
   isOpen,
   onClose,
   toggleId,
@@ -118,7 +118,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
     case 'OUTPUT_QUALITY':
       return { color: 'green', icon: <Eye size={14} />, text: 'Output Quality Impact' };
     case 'HALLUCINATION_RISK':
-      return { color: 'red', icon: <AlertTriangle size={14} />, text: 'Hallucination Risk' };
+      return { color: 'red', icon: <AlertTriangle size={14} />, text: 'Hallucination Risk' },
     default:
       return { color: 'gray', icon: <Info size={14} />, text: impact };
   };
@@ -153,7 +153,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
           <div className="variants-display">
             {toggle.value.variants?.map(()
               variant: { key?: string; value?: unknown; percentage?: number }, 
-              index: number) => (),
+              index: number) => (,
               <div key={index} className="variant-item">
                 <span className="variant-key">{variant.key}</span>
                 <span className="variant-percentage">{variant.percentage}%</span>
@@ -171,7 +171,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
       );
   };
   const formatAuditAction = (action: string) => {
-    const actionMap: Record<string, { label: string; color: string; icon: JSX.Element }> = {
+    const actionMap: Record<string, { label: string, color: string; icon: JSX.Element }> = {
       'created': { label: 'Created', color: 'blue', icon: <CheckCircle size={14} /> },
       'updated': { label: 'Updated', color: 'yellow', icon: <Edit size={14} /> },
       'activated': { label: 'Activated', color: 'green', icon: <CheckCircle size={14} /> },
@@ -340,7 +340,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                       <h3>Scoping Rules</h3>
                       {toggle.scopes.length > 0 ? ()
                         <div className="scopes-list">
-                          {toggle.scopes.map((scope) => ()
+                          {toggle.scopes.map((scope) => (
                             <div key={scope.id} className="scope-item">
                               <div className="scope-header">
                                 <span className="scope-priority">Priority {scope.priority}</span>
@@ -361,11 +361,11 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                     <div className="info-section">
                       <h3>Raw Configuration</h3>
                       <code className="raw-config">
-                        {JSON.stringify({)
+                        {JSON.stringify({
   type: toggle.type,
   value: toggle.value,
   enabled: toggle.enabled,
-  claudeImpact: toggle.claudeImpact,
+  claudeImpact: toggle.claudeImpact
 }, null, 2)}
                       </code>
                     </div>
@@ -431,12 +431,12 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                       <div className="dependency-section">
                         <h4>Dependencies</h4>
                         <p className="section-description">Toggles this toggle depends on</p>
-                        {Object.entries(toggle.dependencies.dependencies).map(([type, toggles]) => ()
+                        {Object.entries(toggle.dependencies.dependencies).map(([type, toggles]) => (
                           <div key={type} className="dependency-group">
                             <h5>{type.charAt(0).toUpperCase() + type.slice(1)}</h5>
                             {toggles.length > 0 ? ()
                               <ul>
-                                {toggles.map((toggleKey) => ()
+                                {toggles.map((toggleKey) => (
                                   <li key={toggleKey}>
                                     <code>{toggleKey}</code>
                                   </li>
@@ -451,12 +451,12 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                       <div className="dependency-section">
                         <h4>Dependents</h4>
                         <p className="section-description">Toggles that depend on this toggle</p>
-                        {Object.entries(toggle.dependencies.dependents).map(([type, toggles]) => ()
+                        {Object.entries(toggle.dependencies.dependents).map(([type, toggles]) => (
                           <div key={type} className="dependency-group">
                             <h5>{type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1')}</h5>
                             {toggles.length > 0 ? ()
                               <ul>
-                                {toggles.map((toggleKey) => ()
+                                {toggles.map((toggleKey) => (
                                   <li key={toggleKey}>
                                     <code>{toggleKey}</code>
                                   </li>
@@ -500,7 +500,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
                       <h4>Targeting Rules</h4>
                       {toggle.scopes.length > 0 ? ()
                         <div className="targeting-rules-list">
-                          {toggle.scopes.map((scope, index) => ()
+                          {toggle.scopes.map((scope, index) => (
                             <div key={scope.id} className="targeting-rule-item">
                               <div className="rule-header">
                                 <div className="rule-priority">

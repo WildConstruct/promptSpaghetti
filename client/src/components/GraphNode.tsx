@@ -13,7 +13,7 @@ const GraphNode = memo(({ data, selected }: NodeProps) => {
   fontSize: 14,
   fontWeight: 500,
   boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-  transition: 'all 0.2s ease',
+  transition: 'all 0.2s ease'
 }}
       className={selected ? 'selected' : ''}
       data-selected={selected ? 'true' : undefined}
@@ -27,7 +27,7 @@ const GraphNode = memo(({ data, selected }: NodeProps) => {
   width: 8,
   height: 8,
   backgroundColor: '#666',
-  border: '2px solid #e0e0e0',
+  border: '2px solid #e0e0e0'
 }} 
       />
       <Handle 
@@ -38,7 +38,7 @@ const GraphNode = memo(({ data, selected }: NodeProps) => {
   width: 8,
   height: 8,
   backgroundColor: '#666',
-  border: '2px solid #e0e0e0',
+  border: '2px solid #e0e0e0'
 }} 
       />
     </div>

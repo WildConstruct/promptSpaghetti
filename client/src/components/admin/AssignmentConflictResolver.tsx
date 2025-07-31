@@ -25,7 +25,9 @@ interface AssignmentConflictResolverProps {
   interface ConflictGroup {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';,
   conflicts: PolicyConflict;
-  export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({,)
+  }
+
+export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({
   conflicts,
   onResolve
 }
@@ -33,20 +35,20 @@ interface AssignmentConflictResolverProps {
   const [resolutions, setResolutions] = useState<Record<string, ConflictResolution>>({});
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
   const [isResolving, setIsResolving] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({)
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
   CRITICAL: true,
   HIGH: true,
   MEDIUM: false,
-  LOW: false,
+  LOW: false
 });
   useEffect(() => {
     // Initialize resolutions for all conflicts
     const initialResolutions: Record<string, ConflictResolution> = {};
-    conflicts.forEach(conflict => {)
+    conflicts.forEach(conflict => {
   initialResolutions[conflict.conflictId] = {
   conflictId: conflict.conflictId,
   strategy: ConflictResolutionStrategy.MOST_RESTRICTIVE,
-  manualOverride: false,
+  manualOverride: false
 };
     });
     setResolutions(initialResolutions);
@@ -58,7 +60,7 @@ interface AssignmentConflictResolverProps {
       { severity: 'MEDIUM', conflicts: [] },
       { severity: 'LOW', conflicts: [] }
     ];
-    conflicts.forEach(conflict => {)
+    conflicts.forEach(conflict => {
   const group = groups.find(g => g.severity === conflict.severity);
       if (group) {
         group.conflicts.push(conflict);
@@ -66,7 +68,7 @@ interface AssignmentConflictResolverProps {
     return groups.filter(group => group.conflicts.length > 0);
   };
   const updateResolution = (conflictId: string, updates: Partial<ConflictResolution>) => {
-  setResolutions(prev => ({)
+  setResolutions(prev => ({
   ...prev,
   [conflictId]: {
   ...prev[conflictId],
@@ -77,7 +79,7 @@ interface AssignmentConflictResolverProps {
     setIsResolving(true);
     try {
       // In a real implementation, this would send the resolutions to the backend
-      const response = await fetch('/api/policy-assignments/conflicts/resolve', {)
+      const response = await fetch('/api/policy-assignments/conflicts/resolve', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resolutions: Object.values(resolutions) })
@@ -91,7 +93,7 @@ interface AssignmentConflictResolverProps {
   };
   const handleBulkStrategy = (strategy: ConflictResolutionStrategy) => {
     const updates: Record<string, ConflictResolution> = {};
-    conflicts.forEach(conflict => {)
+    conflicts.forEach(conflict => {
   updates[conflict.conflictId] = {
         ...resolutions[conflict.conflictId],
         strategy
@@ -100,9 +102,9 @@ interface AssignmentConflictResolverProps {
     setResolutions(prev => ({ ...prev, ...updates }));
   };
   const toggleGroup = (severity: string) => {
-  setExpandedGroups(prev => ({)
+  setExpandedGroups(prev => ({
   ...prev,
-  [severity]: !prev[severity],
+  [severity]: !prev[severity]
 }));
   };
   const getSeverityColor = (severity: string) => {
@@ -110,7 +112,7 @@ interface AssignmentConflictResolverProps {
   case 'CRITICAL': return '#c53030';
   case 'HIGH': return '#e53e3e';
   case 'MEDIUM': return '#ed8936';
-  case 'LOW': return '#f6ad55';
+  case 'LOW': return '#f6ad55',
   default: return '#718096';
 };
   const getStrategyDescription = (strategy: ConflictResolutionStrategy) => {
@@ -149,7 +151,7 @@ interface AssignmentConflictResolverProps {
         <div className="conflict-assignments">
           <h5>Conflicting Assignments:</h5>
           <div className="assignment-list">
-            {conflict.conflictingAssignments.map((assignmentId: string) => ()
+            {conflict.conflictingAssignments.map((assignmentId: string) => (
               <div key={assignmentId} className="assignment-ref">
                 <code>{assignmentId}</code>
               </div>
@@ -161,8 +163,8 @@ interface AssignmentConflictResolverProps {
             <label>Resolution Strategy:</label>
             <select
               value={resolution.strategy}
-              onChange={(e) => updateResolution(conflict.conflictId, {)
-  strategy: e.target.value as ConflictResolutionStrategy,
+              onChange={(e) => updateResolution(conflict.conflictId, {
+  strategy: e.target.value as ConflictResolutionStrategy
 })}
             >
               <option value={ConflictResolutionStrategy.MOST_RESTRICTIVE}>Most Restrictive</option>
@@ -177,12 +179,12 @@ interface AssignmentConflictResolverProps {
               <label>Select Assignment:</label>
               <select
                 value={resolution.selectedAssignmentId || ''}
-                onChange={(e) => updateResolution(conflict.conflictId, {)
-  selectedAssignmentId: e.target.value,
+                onChange={(e) => updateResolution(conflict.conflictId, {
+  selectedAssignmentId: e.target.value
 })}
               >
                 <option value="">Choose assignment...</option>
-                {conflict.conflictingAssignments.map((assignmentId: string) => ()
+                {conflict.conflictingAssignments.map((assignmentId: string) => (
                   <option key={assignmentId} value={assignmentId}>
                     {assignmentId}
                   </option>
@@ -194,8 +196,8 @@ interface AssignmentConflictResolverProps {
             <label>Resolution Notes:</label>
             <textarea
               value={resolution.notes || ''}
-              onChange={(e) => updateResolution(conflict.conflictId, {)
-  notes: e.target.value,
+              onChange={(e) => updateResolution(conflict.conflictId, {
+  notes: e.target.value
 })}
               placeholder="Add notes about this resolution decision..."
               rows={2}
@@ -245,7 +247,7 @@ interface AssignmentConflictResolverProps {
             <div className="conflict-detail-section">
               <h4>Conflicting Assignments</h4>
               <div className="assignment-details">
-                {selectedConflict.conflictingAssignments.map((assignmentId: string) => ()
+                {selectedConflict.conflictingAssignments.map((assignmentId: string) => (
                   <div key={assignmentId} className="assignment-detail">
                     <code>{assignmentId}</code>
                     {/* In a real implementation, you would fetch and display full assignment details */}
@@ -311,7 +313,7 @@ interface AssignmentConflictResolverProps {
         </div>
       </div>
       <div className="conflict-groups">
-        {conflictGroups.map(group => ()
+        {conflictGroups.map(group => (
           <div key={group.severity} className="conflict-group">
             <div 
               className="group-header"

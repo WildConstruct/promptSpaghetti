@@ -40,21 +40,21 @@ import { TemplateSelector, useNodeFactory } from './GraphTemplates';
 // Professional Design System (kept from original)
 interface ProfessionalColors {
   background: {
-    primary: string;
+    primary: string,
     secondary: string;
     tertiary: string;
   };
   text: {
-    primary: string;
+    primary: string,
     secondary: string;
     accent: string;
   };
   accent: {
-    orange: string;
+    orange: string,
     blue: string;
-    cyan: string;
+    cyan: string,
     purple: string;
-    green: string;
+    green: string,
     red: string;
   };
   nodes: {
@@ -76,12 +76,12 @@ const professionalColors: ProfessionalColors = {,
   background: {
   primary: '#1e1e1e',
   secondary: '#2a2a2a',
-  tertiary: '#353535',
+  tertiary: '#353535'
 },
   text: {
   primary: '#e8e8e8',
   secondary: '#b8b8b8',
-  accent: '#ff7c00',
+  accent: '#ff7c00'
 },
   accent: {
   orange: '#ff7c00',
@@ -89,7 +89,7 @@ const professionalColors: ProfessionalColors = {,
   cyan: '#00d4ff',
   purple: '#b45cff',
   green: '#4ade80',
-  red: '#ef4444',
+  red: '#ef4444'
 },
   nodes: {
   text: '#4f46e5',
@@ -97,26 +97,26 @@ const professionalColors: ProfessionalColors = {,
   output: '#dc2626',
   variable: '#7c3aed',
   advanced: '#6366f1',
-  transform: '#f59e0b',
+  transform: '#f59e0b'
 },
   ui: {
   border: '#404040',
   borderHover: '#5a5a5a',
   borderActive: '#ff7c00',
   hover: '#2d2d2d',
-  selection: '#ff7c0040',
+  selection: '#ff7c0040'
 };
 const professionalShadows = {
   node: {
   default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
   hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
-  selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
+  selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)'
 };
 
 // Node components
-const TextNode = ({ data, selected }: { data: any, selected: boolean }) => ()
+const TextNode = ({ data, selected }: { data: any, selected: boolean }) => (
   <div className={`bg-slate-800 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
-  selected ? 'border-orange-500 shadow-orange-glow' : 'border-slate-600 hover:border-slate-500',
+  selected ? 'border-orange-500 shadow-orange-glow' : 'border-slate-600 hover:border-slate-500'
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-slate-600" />
     <div className="font-semibold text-slate-100 mb-1">{data.label}</div>
@@ -124,9 +124,9 @@ const TextNode = ({ data, selected }: { data: any, selected: boolean }) => ()
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-slate-600" />
   </div>
 );
-const LogicNode = ({ data, selected }: { data: any, selected: boolean }) => ()
+const LogicNode = ({ data, selected }: { data: any, selected: boolean }) => (
   <div className={`bg-emerald-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
-  selected ? 'border-orange-500 shadow-orange-glow' : 'border-emerald-600 hover:border-emerald-500',
+  selected ? 'border-orange-500 shadow-orange-glow' : 'border-emerald-600 hover:border-emerald-500'
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-emerald-600" />
     <div className="font-semibold text-emerald-100 mb-1">{data.label}</div>
@@ -139,9 +139,9 @@ const LogicNode = ({ data, selected }: { data: any, selected: boolean }) => ()
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-emerald-600" />
   </div>
 );
-const TransformNode = ({ data, selected }: { data: any, selected: boolean }) => ()
+const TransformNode = ({ data, selected }: { data: any, selected: boolean }) => (
   <div className={`bg-amber-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
-  selected ? 'border-orange-500 shadow-orange-glow' : 'border-amber-600 hover:border-amber-500',
+  selected ? 'border-orange-500 shadow-orange-glow' : 'border-amber-600 hover:border-amber-500'
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-amber-600" />
     <div className="font-semibold text-amber-100 mb-1">{data.label}</div>
@@ -154,9 +154,9 @@ const TransformNode = ({ data, selected }: { data: any, selected: boolean }) => 
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-amber-600" />
   </div>
 );
-const OutputNode = ({ data, selected }: { data: any, selected: boolean }) => ()
+const OutputNode = ({ data, selected }: { data: any, selected: boolean }) => (
   <div className={`bg-red-900 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
-  selected ? 'border-orange-500 shadow-orange-glow' : 'border-red-600 hover:border-red-500',
+  selected ? 'border-orange-500 shadow-orange-glow' : 'border-red-600 hover:border-red-500'
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-red-600" />
     <div className="font-semibold text-red-100 mb-1">{data.label}</div>
@@ -167,7 +167,7 @@ const nodeTypes: NodeTypes = {,
   text: TextNode,
   logic: LogicNode,
   transform: TransformNode,
-  output: OutputNode,
+  output: OutputNode
 };
 
 // Create default nodes using the modular templates
@@ -179,7 +179,7 @@ const createDefaultNodes = (): Node => [;
     data: {
   label: "Tech Panel Generator",
   description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
-  category: "content",
+  category: "content"
 }
   // Use the imported templates
   panelArchetypeTemplate,
@@ -191,7 +191,7 @@ const createDefaultNodes = (): Node => [;
     data: {
   label: "Faction Alignment",
   description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
-  category: "logic",
+  category: "logic"
 }
   wearLevelTemplate,
   colorPaletteTemplate,
@@ -203,7 +203,7 @@ const createDefaultNodes = (): Node => [;
     data: {
   label: "Screen Type",
   description: "CRT, LED Matrix, Hologram, etc.",
-  category: "logic",
+  category: "logic"
 }
   {
     id: "final-9",
@@ -224,7 +224,7 @@ const defaultEdges: Edge = [
   { id: 'e8-9', source: 'screen-8', target: 'final-9' }];
 
 // Professional control panel component
-const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => ()
+const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => (
   <div className="absolute top-4 left-4 bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-xl z-10">
     <div className="flex items-center space-x-3">
       <div className="flex items-center space-x-2">
@@ -243,7 +243,9 @@ const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => ()
 
 // Main component
 interface EnhancedGraphEditorProps {
-  className?: string;
+  }
+
+className?: string;
   showTemplateSelector?: boolean;
 }
 
@@ -306,7 +308,7 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
             fitView
             attributionPosition="top-right"
             style={{
-  backgroundColor: professionalColors.background.primary,
+  backgroundColor: professionalColors.background.primary
 }}
           >
             <Controls />

@@ -30,15 +30,15 @@ import './ToggleDetailsModal.css';
 }
 interface FeatureToggle {
   id: string;,
-  key: string;
+  key: string,
   name: string;
-  description?: string;
+  description?: string,
   type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';,
   value: boolean | number | string | Record<string, unknown>;
   enabled: boolean;,
-  claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';
+  claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK',
   createdAt: string;,
-  updatedAt: string;
+  updatedAt: string,
   version: number;
 }
 interface DashboardFilters {
@@ -49,18 +49,20 @@ interface DashboardFilters {
 }
 interface DashboardState {
   toggles: FeatureToggle;,
-  total: number;
+  total: number,
   loading: boolean;
-  error?: string;
+  error?: string,
   filters: DashboardFilters;,
-  currentPage: number;
+  currentPage: number,
   pageSize: number;
 
+}
+
 export const FeatureToggleDashboard: React.FC = () => {
-  const [state, setState] = useState<DashboardState>({)
+  const [state, setState] = useState<DashboardState>({
   toggles: [],
     total: 0,
-    loading: true,
+    loading: true
 }
     filters: { search: '' },
     currentPage: 1,
@@ -99,17 +101,17 @@ export const FeatureToggleDashboard: React.FC = () => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       const data = await response.json();
-      setState(prev => ({)
+      setState(prev => ({
   ...prev,
   toggles: data.toggles,
   total: data.total,
-  loading: false,
+  loading: false
 }));
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   loading: false,
-  error: error instanceof Error ? error.message : 'Failed to load toggles',
+  error: error instanceof Error ? error.message : 'Failed to load toggles'
 }));
   }, [state.filters, state.currentPage, state.pageSize]);
   useEffect(() => {
@@ -124,7 +126,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const body = toggle.enabled ;
         ? { reason: 'Manual deactivation from dashboard' }
         : { reason: 'Manual activation from dashboard' };
-      const response = await fetch(endpoint, {)
+      const response = await fetch(endpoint, {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
@@ -248,7 +250,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   case 'percentage_rollout': return 'green';
   case 'multivariate': return 'purple';
   case 'scheduled': return 'orange';
-  case 'segmentation': return 'pink';
+  case 'segmentation': return 'pink',
   default: return 'gray';
 };
   // Get Claude impact badge color and icon
@@ -263,7 +265,7 @@ export const FeatureToggleDashboard: React.FC = () => {
     case 'OUTPUT_QUALITY':
       return { color: 'green', icon: <Eye size={12} />, text: 'Quality' };
     case 'HALLUCINATION_RISK':
-      return { color: 'red', icon: <AlertTriangle size={12} />, text: 'Risk' };
+      return { color: 'red', icon: <AlertTriangle size={12} />, text: 'Risk' },
     default:
       return { color: 'gray', icon: null, text: impact };
   };
@@ -279,19 +281,19 @@ export const FeatureToggleDashboard: React.FC = () => {
     case 'scheduled':
       return toggle.value.enabled ? 'Active schedule' : 'Inactive';
     case 'segmentation':
-      return `${toggle.value.rules?.length || 0} rules`;},}
+      return `${toggle.value.rules?.length || 0} rules`;}}
   default:
       return 'Unknown';
   };
   const handleFilterChange = (newFilters: Partial<DashboardFilters>) => {
-    setState(prev => ({)
+    setState(prev => ({
   ...prev,
       filters: { ...prev.filters, ...newFilters },
       currentPage: 1 // Reset to first page on filter change;
   }));
   };
   const handleSelectToggle = (toggleId: string) => {
-    setSelectedToggles(prev => {)
+    setSelectedToggles(prev => {
   const newSet = new Set(prev);
       if (newSet.has(toggleId)) {
         newSet.delete(toggleId);
@@ -325,15 +327,15 @@ export const FeatureToggleDashboard: React.FC = () => {
     } else {
       setSelectedToggles(new Set(state.toggles.map(t => t.id)));
   };
-  const handleCreateToggle = async (toggleData: {)
-  key: string;
+  const handleCreateToggle = async (toggleData: {
+  key: string,
   name: string;
-  description?: string;
+  description?: string,
   type: string;,
   value: boolean | number | string | Record<string, unknown>;
   claudeImpact: string;
 }) => {
-    const response = await fetch('/api/feature-toggles/toggles', {)
+    const response = await fetch('/api/feature-toggles/toggles', {
   method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`}
@@ -534,7 +536,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   type: toggle.type.toUpperCase().replace('_', '_') as 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION',
   hasActiveOverride: false, // TODO: Add override detection logic,
   percentage: toggle.type === 'percentage_rollout' ? 50 : undefined,
-  rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined,
+  rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined
 }}
                         onToggleChange={handleToggleStatus}
                         onPercentageChange={handlePercentageChange}

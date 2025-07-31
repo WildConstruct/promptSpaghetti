@@ -16,7 +16,7 @@ export default function NodePalette(): React.ReactElement {
   return;
     <aside className="node-palette">
       <h4>Node Library</h4>
-      {NODE_TYPES.map((type) => ()
+      {NODE_TYPES.map((type) => (
         <button
           key={type}
           className="palette-item"

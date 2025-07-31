@@ -15,7 +15,7 @@ const NODE_TYPES = [;
 describe('NodePalette', () => {
   it('renders all node types with tooltips', () => {
     render(<NodePalette />);
-    NODE_TYPES.forEach(type => {)
+    NODE_TYPES.forEach(type => {
   const item = screen.getByTitle(type);
       expect(item).toBeInTheDocument();
       expect(item).toHaveTextContent(type);
@@ -37,7 +37,7 @@ describe('NodePalette', () => {
   const item = screen.getByTitle(NODE_TYPES[0]);
   const dataTransfer = {
   setData: jest.fn(),
-  effectAllowed: '',
+  effectAllowed: ''
 };
     fireEvent.dragStart(item, { dataTransfer });
     expect(dataTransfer.setData).toHaveBeenCalledWith('application/reactflow', NODE_TYPES[0]);

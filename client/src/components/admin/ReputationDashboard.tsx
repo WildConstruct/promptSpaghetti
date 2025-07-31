@@ -31,83 +31,85 @@ interface ReputationMetrics {
   totalUsers: number;,
   reputationDistribution: {
   veryHigh: number;,
-  high: number;
+  high: number,
   medium: number;,
-  low: number;
+  low: number,
   veryLow: number;
 }
 };
   verificationStats: {
-  identityVerified: number;
+  identityVerified: number,
   emailVerified: number;,
-  phoneVerified: number;
+  phoneVerified: number,
   fullyVerified: number;,
   verificationRate: number;
 };
   trustTrends: {
-  averageTrustScore: number;
+  averageTrustScore: number,
     trendDirection: 'improving' | 'stable' | 'declining';,
-  monthlyChange: number;
-    topReputationUsers: Array<{ userId: string; username: string; score: number }>;
+  monthlyChange: number,
+    topReputationUsers: Array<{ userId: string, username: string; score: number }>;
   };
   riskAnalysis: {
-  highRiskUsers: number;
+  highRiskUsers: number,
   flaggedUsers: number;,
-  suspiciousActivity: number;
+  suspiciousActivity: number,
   fraudPrevented: {
   estimatedValue: number;,
   incidentsBlocked: number;
 };
   };
   badgeStats: {
-  totalBadgesAwarded: number;
-    mostPopularBadges: Array<{ badgeType: string; count: number }>;
+  totalBadgesAwarded: number,
+    mostPopularBadges: Array<{ badgeType: string, count: number }>;
   };
 }
 interface ReputationAlert {
   alertId: string;,
-  userId: string;
+  userId: string,
   alertType: string;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical',
   title: string;,
-  description: string;
+  description: string,
   triggerScore: number;,
-  currentScore: number;
+  currentScore: number,
   riskFactors: string;,
-  suggestedActions: string;
+  suggestedActions: string,
   status: 'active' | 'investigating' | 'resolved' | 'dismissed';,
   createdAt: Date;
-  assignedTo?: string;
+  assignedTo?: string,
   priority: number;,
   escalated: boolean;
   interface UserReputationSummary {
   userId: string;,
-  username: string;
+  username: string,
   overallTrustScore: number;,
-  reputationLevel: string;
+  reputationLevel: string,
   verificationLevel: string;,
-  achievementCount: number;
+  achievementCount: number,
   flagged: boolean;,
   lastCalculated: Date;
   interface ReputationDashboardData {
   overview: {
   totalUsers: number;,
-  averageTrustScore: number;
+  averageTrustScore: number,
   verificationRate: number;,
-  activeAlerts: number;
+  activeAlerts: number,
   criticalAlerts: number;
 }
 };
   metrics: ReputationMetrics;,
-  alerts: ReputationAlert;
+  alerts: ReputationAlert,
   recentActivity: unknown;,
-  systemHealth: unknown;
+  systemHealth: unknown,
   lastUpdated: Date;
 }
 interface ReputationDashboardProps {
-  className?: string;
+  }
+
+className?: string;
   refreshInterval?: number;
-  export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({,)
+  export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
   className,
   refreshInterval = 60000
 }
@@ -117,24 +119,24 @@ interface ReputationDashboardProps {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   // User search and filtering
-  const [userSearchResults, setUserSearchResults] = useState<UserReputationSummary>([]);
+  const [userSearchResults, setUserSearchResults] = useState<UserReputationSummary[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFilters, setSearchFilters] = useState({)
+  const [searchFilters, setSearchFilters] = useState({
   reputationLevel: '',
   verificationLevel: '',
   riskLevel: '',
-  flagged: '',
+  flagged: ''
 });
   // Selected user for detailed view
   const [ setSelectedUser] = useState<string | null>(null);
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState<Array<{
   userId: string;,
-  username: string;
+  username: string,
   rank: number;,
-  reputationLevel: string;
+  reputationLevel: string,
   achievementCount: number;,
-  verificationLevel: string;
+  verificationLevel: string,
   overallTrustScore: number;
 }>>([]);
   // Fetch dashboard data
@@ -324,7 +326,7 @@ interface ReputationDashboardProps {
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Reputation Distribution</h3>
               <div className="space-y-2">
-                {Object.entries(metrics.reputationDistribution).map(([level, count]) => ()
+                {Object.entries(metrics.reputationDistribution).map(([level, count]) => (
                   <div key={level} className="flex justify-between items-center">
                     <span className="text-sm capitalize">{level.replace(/([A-Z])/g, ' $1')}</span>
                     <div className="flex items-center gap-2">
@@ -341,7 +343,7 @@ interface ReputationDashboardProps {
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Recent Alerts</h3>
               <div className="space-y-2">
-                {alerts.slice(0, 5).map((alert) => ()
+                {alerts.slice(0, 5).map((alert) => (
                   <div
                     key={alert.alertId}
                     className={`flex justify-between items-center p-2 rounded ${
@@ -457,7 +459,7 @@ interface ReputationDashboardProps {
             </div>
             {/* User Results */}
             <div className="space-y-2">
-              {userSearchResults.map((user) => ()
+              {userSearchResults.map((user) => (
                 <div key={user.userId} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -560,7 +562,7 @@ interface ReputationDashboardProps {
               </div>
             ) : ()
               <div className="space-y-3">
-                {alerts.map((alert) => ()
+                {alerts.map((alert) => (
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
@@ -601,7 +603,7 @@ interface ReputationDashboardProps {
                           <div className="mb-2">
                             <div className="text-xs text-gray-600 mb-1">Suggested Actions:</div>
                             <ul className="text-xs text-gray-500">
-                              {alert.suggestedActions.map((action, i) => ()
+                              {alert.suggestedActions.map((action, i) => (
                                 <li key={i}>• {action}</li>
                               ))}
                             </ul>
@@ -638,7 +640,7 @@ interface ReputationDashboardProps {
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Top Reputation Users</h3>
               <div className="space-y-2">
-                {leaderboard.map((user) => ()
+                {leaderboard.map((user) => (
                   <div key={user.userId} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-yellow-400 flex items-center justify-center text-white font-bold text-sm">
                       {user.rank}
@@ -690,7 +692,7 @@ interface ReputationDashboardProps {
                   Total Badges Awarded: {metrics.badgeStats.totalBadgesAwarded}
                 </div>
                 <div className="space-y-1">
-                  {metrics.badgeStats.mostPopularBadges.map((badge, i) => ()
+                  {metrics.badgeStats.mostPopularBadges.map((badge, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm capitalize">{badge.badgeType.replace(/_/g, ' ')}</span>
                       <Badge variant="secondary">{badge.count}</Badge>

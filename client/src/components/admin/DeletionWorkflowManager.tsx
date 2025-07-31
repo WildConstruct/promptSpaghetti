@@ -36,10 +36,12 @@ import {
 }
 interface DeletionWorkflow {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled',
+  priority: 'low' | 'normal' | 'high' | 'critical';}
+
+
   // Execution details
   progress: number;
   startedAt?: string;
@@ -48,25 +50,25 @@ interface DeletionWorkflow {
   executionTimeMs?: number;
   // Data processing
   recordsTotal: number;,
-  recordsProcessed: number;
+  recordsProcessed: number,
   recordsDeleted: number;,
-  recordsSkipped: number;
+  recordsSkipped: number,
   recordsErrored: number;,
-  dataSizeBytes: number;
+  dataSizeBytes: number,
   deletedSizeBytes: number;
   // Configuration
   retentionPolicyId: string;,
-  retentionPolicyName: string;
+  retentionPolicyName: string,
   dataTypes: string;,
-  sourceLocation: string;
+  sourceLocation: string,
   deletionCriteria: string;,
-  batchSize: number;
+  batchSize: number,
   maxRetries: number;
   // Safety and compliance
   dryRunMode: boolean;,
-  requireConfirmation: boolean;
+  requireConfirmation: boolean,
   backupBeforeDelete: boolean;,
-  complianceFrameworks: string;
+  complianceFrameworks: string,
   auditLevel: 'basic' | 'detailed' | 'verbose';
   // Scheduling
   scheduleType: 'immediate' | 'delayed' | 'recurring' | 'conditional';
@@ -78,41 +80,43 @@ interface DeletionWorkflow {
   warnings: string;
   // Metadata
   createdAt: string;,
-  updatedAt: string;
+  updatedAt: string,
   createdBy: string;,
-  lastModifiedBy: string;
+  lastModifiedBy: string,
   tags: string;
 }
 interface WorkflowError {
   id: string;,
-  timestamp: string;
+  timestamp: string,
   severity: 'warning' | 'error' | 'critical';,
   message: string;
   recordId?: string;
   stackTrace?: string;
-  resolution?: string;
+  resolution?: string,
   resolved: boolean;
 }
 interface WorkflowTemplate {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  category: 'user_data' | 'system_cleanup' | 'log_rotation' | 'compliance' | 'backup_cleanup';
+  category: 'user_data' | 'system_cleanup' | 'log_rotation' | 'compliance' | 'backup_cleanup',
   recommended: boolean;,
   config: Partial<DeletionWorkflow>;
 }
 interface WorkflowMetrics {
   totalWorkflows: number;,
-  activeWorkflows: number;
+  activeWorkflows: number,
   completedToday: number;,
-  failedToday: number;
+  failedToday: number,
   totalRecordsDeleted: number;,
-  totalDataDeleted: number;
+  totalDataDeleted: number,
   averageExecutionTime: number;,
   successRate: number;
+}
+
 const DeletionWorkflowManager: React.FC = () => {
-  const [workflows, setWorkflows] = useState<DeletionWorkflow>([]);
-  const [ setTemplates] = useState<WorkflowTemplate>([]);
+  const [workflows, setWorkflows] = useState<DeletionWorkflow[]>([]);
+  const [ setTemplates] = useState<WorkflowTemplate[]>([]);
   const [metrics, setMetrics] = useState<WorkflowMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -135,14 +139,14 @@ const DeletionWorkflowManager: React.FC = () => {
     try {
       setError(null);
       const [workflowsRes, templatesRes, metricsRes] = await Promise.all([)
-        fetch('/api/data-protection/workflows', {)
+        fetch('/api/data-protection/workflows', {
 }
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/workflow-templates', {)
+        fetch('/api/data-protection/workflow-templates', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/workflow-metrics', {)
+        fetch('/api/data-protection/workflow-metrics', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
   }
       ]);
@@ -197,7 +201,7 @@ const DeletionWorkflowManager: React.FC = () => {
   case 'scheduled': return 'bg-yellow-100 text-yellow-800';
   case 'paused': return 'bg-orange-100 text-orange-800';
   case 'cancelled': return 'bg-gray-100 text-gray-800';
-  case 'draft': return 'bg-purple-100 text-purple-800';
+  case 'draft': return 'bg-purple-100 text-purple-800',
   default: return 'bg-gray-100 text-gray-800';
 };
   const getPriorityBadgeClass = (priority: string): string => {
@@ -205,7 +209,7 @@ const DeletionWorkflowManager: React.FC = () => {
   case 'critical': return 'bg-red-100 text-red-800 border-red-200';
   case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
   case 'normal': return 'bg-blue-100 text-blue-800 border-blue-200';
-  case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
+  case 'low': return 'bg-gray-100 text-gray-800 border-gray-200',
   default: return 'bg-gray-100 text-gray-800 border-gray-200';
 };
   const getStatusIcon = (status: string) => {
@@ -216,7 +220,7 @@ const DeletionWorkflowManager: React.FC = () => {
   case 'scheduled': return <Clock className="w-4 h-4 text-yellow-600" />;
   case 'paused': return <Pause className="w-4 h-4 text-orange-600" />;
   case 'cancelled': return <Square className="w-4 h-4 text-gray-600" />;
-  case 'draft': return <FileText className="w-4 h-4 text-purple-600" />;
+  case 'draft': return <FileText className="w-4 h-4 text-purple-600" />,
   default: return <Activity className="w-4 h-4 text-gray-600" />;
 };
   // Workflow control actions
@@ -270,7 +274,7 @@ const DeletionWorkflowManager: React.FC = () => {
 };
   // Filter workflows based on current view and filters
   const filteredWorkflows = workflows;
-    .filter(workflow => {)
+    .filter(workflow => {
   // View filter
       if (view === 'active' && !['running', 'scheduled'].includes(workflow.status)) return false;
       if (view === 'scheduled' && workflow.status !== 'scheduled') return false;
@@ -328,12 +332,12 @@ const DeletionWorkflowManager: React.FC = () => {
               <button
                 onClick={() => setAutoRefresh(!autoRefresh)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-  autoRefresh ? 'bg-blue-600' : 'bg-gray-200',
+  autoRefresh ? 'bg-blue-600' : 'bg-gray-200'
 }`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-  autoRefresh ? 'translate-x-6' : 'translate-x-1',
+  autoRefresh ? 'translate-x-6' : 'translate-x-1'
 }`}
                 />
               </button>
@@ -426,14 +430,14 @@ const DeletionWorkflowManager: React.FC = () => {
                 'cancelled'].includes(w.status)
               )).length },
               { key: 'all', label: 'All', count: workflows.length }
-            ].map(({ key, label, count }) => ()
+            ].map(({ key, label, count }) => (
               <button
                 key={key}
                 onClick={() => setView(key as 'active' | 'scheduled' | 'completed' | 'all')}
                 className={`${
   view === key
   ? 'border-blue-500 text-blue-600 bg-blue-50'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
 } whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <span>{label}</span>
@@ -501,7 +505,7 @@ const DeletionWorkflowManager: React.FC = () => {
         </div>
         {/* Workflow List */}
         <div className="divide-y divide-gray-200">
-          {filteredWorkflows.map(workflow => ()
+          {filteredWorkflows.map(workflow => (
             <div key={workflow.id} className="p-6 hover:bg-gray-50 transition-colors duration-200">
               <div className="flex items-start justify-between">
                 <div className="flex items-start space-x-4 flex-1">

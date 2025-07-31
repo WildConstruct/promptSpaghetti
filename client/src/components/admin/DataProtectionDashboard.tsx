@@ -33,79 +33,81 @@ import {
 interface DataProtectionMetrics {
   retentionPolicies: {
   total: number;,
-  active: number;
+  active: number,
   expired: number;,
   violations: number;
 }
 };
   deletionWorkflows: {
-  total: number;
+  total: number,
   running: number;,
-  completed: number;
+  completed: number,
   failed: number;,
   scheduled: number;
 };
   dataVolume: {
-  totalSize: number;
+  totalSize: number,
   archivedSize: number;,
-  pendingDeletion: number;
+  pendingDeletion: number,
   recentlyDeleted: number;
 };
   compliance: {
-  gdprScore: number;
+  gdprScore: number,
   hipaaScore: number;,
-  soxScore: number;
+  soxScore: number,
   overallScore: number;,
-  violations: number;
+  violations: number,
   lastAudit: string;
 };
 }
 interface RetentionPolicy {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  dataType: string;
+  dataType: string,
   retentionPeriod: number;,
-  retentionUnit: 'days' | 'months' | 'years';
+  retentionUnit: 'days' | 'months' | 'years',
   status: 'active' | 'inactive' | 'expired';,
-  autoDelete: boolean;
+  autoDelete: boolean,
   complianceFrameworks: string;,
-  createdAt: string;
+  createdAt: string,
   updatedAt: string;,
-  nextExecution: string;
+  nextExecution: string,
   affectedRecords: number;
 }
 interface DeletionWorkflow {
   id: string;,
-  name: string;
+  name: string,
   status: 'running' | 'completed' | 'failed' | 'scheduled' | 'paused';,
   progress: number;
   startedAt?: string;
-  completedAt?: string;
+  completedAt?: string,
   recordsProcessed: number;,
-  recordsDeleted: number;
+  recordsDeleted: number,
   recordsSkipped: number;
-  estimatedCompletion?: string;
+  estimatedCompletion?: string,
   policyId: string;,
   errors: string;
 }
 interface ComplianceViolation {
   id: string;,
-  type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed';
+  type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed',
   severity: 'low' | 'medium' | 'high' | 'critical';,
-  description: string;
+  description: string,
   affectedRecords: number;,
-  detectedAt: string;
+  detectedAt: string,
   status: 'open' | 'investigating' | 'resolved' | 'dismissed';,
   framework: string;
   remediation?: string;
 type DashboardTab = 'overview' | 'policies' | 'workflows' | 'compliance' | 'analytics' | 'audit';
+}
+
 const DataProtectionDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const [metrics, setMetrics] = useState<DataProtectionMetrics | null>(null);
-  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy>([]);
-  const [deletionWorkflows, setDeletionWorkflows] = useState<DeletionWorkflow>([]);
-  const [complianceViolations, setComplianceViolations] = useState<ComplianceViolation>([]);
+  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy[]>([]);
+  const [deletionWorkflows, setDeletionWorkflows] = useState<DeletionWorkflow[]>([]);
+  const [complianceViolations, setComplianceViolations] = useState<ComplianceViolation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
@@ -118,9 +120,9 @@ const DataProtectionDashboard: React.FC = () => {
   const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }
-  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
+  const [_dateRange, _setDateRange] = useState<{ start: string, end: string }>({
   start: '',
-  end: '',
+  end: ''
 });
   // Modal states
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -137,16 +139,16 @@ const DataProtectionDashboard: React.FC = () => {
       setLoading(true);
       setError(null);
       const [metricsRes, policiesRes, workflowsRes, violationsRes] = await Promise.all([)
-        fetch('/api/data-protection/metrics', {)
+        fetch('/api/data-protection/metrics', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/policies', {)
+        fetch('/api/data-protection/policies', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/workflows', {)
+        fetch('/api/data-protection/workflows', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/violations', {)
+        fetch('/api/data-protection/violations', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
   }
       ]);
@@ -207,7 +209,7 @@ const DataProtectionDashboard: React.FC = () => {
   case 'critical': return 'bg-red-100 text-red-800 border-red-200';
   case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
   case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-  case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
+  case 'low': return 'bg-blue-100 text-blue-800 border-blue-200',
   default: return 'bg-gray-100 text-gray-800 border-gray-200';
 };
   const getStatusBadgeClass = (status: string): string => {
@@ -353,14 +355,14 @@ const DataProtectionDashboard: React.FC = () => {
               { key: 'compliance', label: 'Compliance', icon: Shield },
               { key: 'analytics', label: 'Analytics', icon: TrendingUp },
               { key: 'audit', label: 'Audit Trail', icon: FileText }
-            ].map(({ key, label, icon: Icon }) => ()
+            ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
                 onClick={() => setActiveTab(key as DashboardTab)}
                 className={`${
   activeTab === key
   ? 'border-blue-500 text-blue-600 bg-blue-50'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
 } whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <Icon className="w-4 h-4" />
@@ -381,7 +383,7 @@ const DataProtectionDashboard: React.FC = () => {
                     Recent Policy Activities
                   </h3>
                   <div className="space-y-3">
-                    {retentionPolicies.slice(0, 5).map(policy => ()
+                    {retentionPolicies.slice(0, 5).map(policy => (
                       <div key={policy.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <div className={`w-2 h-2 rounded-full ${getStatusBadgeClass(policy.status).includes('green') ? 'bg-green-400' : 'bg-gray-400'}`} />}
@@ -405,7 +407,7 @@ const DataProtectionDashboard: React.FC = () => {
                     Active Workflows
                   </h3>
                   <div className="space-y-3">
-                    {deletionWorkflows.slice(0, 5).map(workflow => ()
+                    {deletionWorkflows.slice(0, 5).map(workflow => (
                       <div key={workflow.id} className="p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-3">
@@ -444,7 +446,7 @@ const DataProtectionDashboard: React.FC = () => {
                   </h3>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="space-y-3">
-                      {complianceViolations.slice(0, 3).map(violation => ()
+                      {complianceViolations.slice(0, 3).map(violation => (
                         <div key={violation.id} className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">

@@ -18,46 +18,48 @@ import { AlertTriangle, TrendingUp, TrendingDown, Users, MessageSquare, Star } f
 }
 interface SatisfactionMetrics {
   overallScore: number;,
-  npsScore: number;
+  npsScore: number,
   responseRate: number;,
-  totalResponses: number;
+  totalResponses: number,
   trendDirection: 'up' | 'down' | 'stable';
 }
 interface SatisfactionAlert {
   alertId: string;,
-  alertType: string;
+  alertType: string,
   severity: 'low' | 'medium' | 'high' | 'critical';,
-  title: string;
+  title: string,
   description: string;,
-  affectedUsers: number;
+  affectedUsers: number,
   triggeredAt: Date;,
   acknowledged: boolean;
 }
 interface RecentFeedback {
 }
-  positive: { text: string; user: string; timestamp: Date }[];
-  negative: { text: string; user: string; timestamp: Date }[];
-  suggestions: { text: string; user: string; timestamp: Date }[];
+  positive: { text: string, user: string; timestamp: Date }[],
+  negative: { text: string, user: string; timestamp: Date }[],
+  suggestions: { text: string, user: string; timestamp: Date }[];
 
 // Currently unused but may be needed for future dashboard integration
-// interface SatisfactionDashboardData {
+// interface SatisfactionDashboardData {}
+
+
 //   summary: SatisfactionMetrics;
 //   realtime: {
 //     todayResponses: number;
 //     averageToday: number;
 
 }
-//     hourlyTrend: { hour: number; score: number; responses: number }[];
+//     hourlyTrend: { hour: number, score: number; responses: number }[];
 //   };
 //   segments: {
-//     userType: { segment: string; satisfaction: number; count: number }[];
-//     geography: { region: string; satisfaction: number; count: number }[];
-//     tenure: { group: string; satisfaction: number; count: number }[];
+//     userType: { segment: string, satisfaction: number; count: number }[];
+//     geography: { region: string, satisfaction: number; count: number }[];
+//     tenure: { group: string, satisfaction: number; count: number }[];
 //   };
 //   features: {
-//     topRated: { feature: string; rating: number; responses: number }[];
-//     bottomRated: { feature: string; rating: number; responses: number }[];
-//     trending: { feature: string; change: number; current: number }[];
+//     topRated: { feature: string, rating: number; responses: number }[];
+//     bottomRated: { feature: string, rating: number; responses: number }[];
+//     trending: { feature: string, change: number; current: number }[];
 //   };
 //   alerts: SatisfactionAlert;
 //   recentFeedback: RecentFeedback;
@@ -66,7 +68,9 @@ interface RecentFeedback {
 // }
 }
 interface SatisfactionSurveyWidgetProps {
-  className?: string;
+  }
+
+className?: string;
   refreshInterval?: number;
   export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> = ({ ),
   className,
@@ -79,7 +83,7 @@ interface SatisfactionSurveyWidgetProps {
   segments: Record<string, unknown>;
   features: Record<string, unknown>;
   alerts: SatisfactionAlert;,
-  recentFeedback: RecentFeedback;
+  recentFeedback: RecentFeedback,
   dataFreshness: number;
 } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -124,7 +128,7 @@ interface SatisfactionSurveyWidgetProps {
   // Create new survey
   const handleCreateSurvey = async (surveyType: string) => {
     try {
-      const response = await fetch('/api/admin/satisfaction/surveys', {)
+      const response = await fetch('/api/admin/satisfaction/surveys', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ surveyType })
@@ -230,7 +234,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="mt-3">
                 <div className="text-xs text-gray-500">Hourly Trend (last 24h)</div>
                 <div className="flex items-end space-x-1 mt-1">
-                  {realtime.hourlyTrend.map((point, i) => ()
+                  {realtime.hourlyTrend.map((point, i) => (
                     <div
                       key={i}
                       className="bg-blue-200 w-2"
@@ -263,7 +267,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By User Type</h3>
                 <div className="space-y-2">
-                  {segments.userType.map((segment, i) => ()
+                  {segments.userType.map((segment, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.segment}</span>
                       <div className="flex items-center gap-2">
@@ -278,7 +282,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By Region</h3>
                 <div className="space-y-2">
-                  {segments.geography.map((segment, i) => ()
+                  {segments.geography.map((segment, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.region}</span>
                       <div className="flex items-center gap-2">
@@ -293,7 +297,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By User Tenure</h3>
                 <div className="space-y-2">
-                  {segments.tenure.map((segment, i) => ()
+                  {segments.tenure.map((segment, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.group}</span>
                       <div className="flex items-center gap-2">
@@ -312,7 +316,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-green-600">Top Rated Features</h3>
                 <div className="space-y-2">
-                  {features.topRated.map((feature, i) => ()
+                  {features.topRated.map((feature, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
@@ -328,7 +332,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-red-600">Needs Improvement</h3>
                 <div className="space-y-2">
-                  {features.bottomRated.map((feature, i) => ()
+                  {features.bottomRated.map((feature, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
@@ -344,7 +348,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">Trending</h3>
                 <div className="space-y-2">
-                  {features.trending.map((feature, i) => ()
+                  {features.trending.map((feature, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
@@ -374,7 +378,7 @@ interface SatisfactionSurveyWidgetProps {
               </div>
             ) : ()
               <div className="space-y-3">
-                {alerts.map((alert) => ()
+                {alerts.map((alert) => (
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
@@ -438,7 +442,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-green-600">Recent Positive Feedback</h3>
                 <div className="space-y-3">
-                  {recentFeedback.positive.map((feedback, i) => ()
+                  {recentFeedback.positive.map((feedback, i) => (
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
@@ -452,7 +456,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-red-600">Recent Concerns</h3>
                 <div className="space-y-3">
-                  {recentFeedback.negative.map((feedback, i) => ()
+                  {recentFeedback.negative.map((feedback, i) => (
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
@@ -466,7 +470,7 @@ interface SatisfactionSurveyWidgetProps {
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-blue-600">Recent Suggestions</h3>
                 <div className="space-y-3">
-                  {recentFeedback.suggestions.map((feedback, i) => ()
+                  {recentFeedback.suggestions.map((feedback, i) => (
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">

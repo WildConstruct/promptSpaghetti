@@ -30,16 +30,16 @@ import {
 }
 interface EnhancedEvaluationResult {
   enabled: boolean;,
-  value: Error;
+  value: Error,
   reason: string;,
-  evaluationTime: number;
+  evaluationTime: number,
   cacheHit: boolean;
   ruleName?: string;
   dependencyStatus?: {
   checked: boolean;,
-  violations: unknown;
+  violations: unknown,
   warnings: unknown;,
-  blockers: string;
+  blockers: string,
   requirements: string;,
   canActivate: boolean;
 }
@@ -47,38 +47,40 @@ interface EnhancedEvaluationResult {
   cascadeEffects?: unknown;
   riskAssessment?: {
   riskScore: number;,
-  factors: unknown;
+  factors: unknown,
   mitigation: string;,
   recommendation: 'proceed' | 'caution' | 'review' | 'block';
 };
   impactScore?: number;
   claudeMetadata?: {
   costImpact: 'none' | 'low' | 'medium' | 'high';,
-  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
+  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative',
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   modelRecommendation?: string;
 };
 }
 interface OperationEnforcement {
   allowed: boolean;,
-  blockers: unknown;
+  blockers: unknown,
   warnings: unknown;,
-  cascadeActions: unknown;
+  cascadeActions: unknown,
   impactAssessment: unknown;,
-  riskScore: number;
+  riskScore: number,
   recommendation: unknown;
   rollbackPlan?: unknown;
   interface ImpactPreview {
   operation: unknown;,
-  directImpact: unknown;
+  directImpact: unknown,
   indirectImpact: unknown;,
-  cascadePreview: unknown;
+  cascadePreview: unknown,
   riskFactors: unknown;,
-  overallRiskScore: number;
+  overallRiskScore: number,
   estimatedAffectedUsers: number;,
-  estimatedExecutionTime: number;
+  estimatedExecutionTime: number,
   recommendedApprovals: string;,
-  safetyChecks: string;
+  safetyChecks: string;}
+
+
   // Custom hooks for enhanced toggle operations
   /**
   * Hook for enhanced toggle evaluation with dependency awareness
@@ -111,7 +113,7 @@ interface OperationEnforcement {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/enhanced-feature-toggles/enhanced-evaluation', {)
+      const response = await fetch('/api/enhanced-feature-toggles/enhanced-evaluation', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +160,7 @@ interface OperationEnforcement {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/enhanced-feature-toggles/bulk-enhanced-evaluation', {)
+      const response = await fetch('/api/enhanced-feature-toggles/bulk-enhanced-evaluation', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -197,13 +199,13 @@ export const useOperationEnforcement = () => {
   const enforceOperation = useCallback(async (;);
   operation: {
   type: 'activate' | 'deactivate' | 'modify_value' | 'modify_config' | 'archive';,
-  targetToggleId: string;
+  targetToggleId: string,
   reason: string;
   newState?: boolean;
   newValue?: unknown;
 },
   context: {
-  requestSource: 'admin_dashboard';
+  requestSource: 'admin_dashboard',
       urgencyLevel: 'low' | 'normal' | 'high' | 'emergency';
       approvals?: unknown;
       rolloutStrategy?: 'immediate' | 'gradual' | 'scheduled';
@@ -211,7 +213,7 @@ export const useOperationEnforcement = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/enhanced-feature-toggles/enforce-operation', {)
+      const response = await fetch('/api/enhanced-feature-toggles/enforce-operation', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -239,11 +241,11 @@ export const useOperationEnforcement = () => {
   const executeOperation = useCallback(async (;);
     operation: unknown,
     enforcement: OperationEnforcement,
-    context: unknown): Promise<boolean> => {,
+    context: unknown): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/enhanced-feature-toggles/execute-operation', {)
+      const response = await fetch('/api/enhanced-feature-toggles/execute-operation', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -283,7 +285,7 @@ export const useImpactPreview = () => {
   const getImpactPreview = useCallback(async (;);
   operation: {
   type: string;,
-  targetToggleId: string;
+  targetToggleId: string,
   reason: string;
 }
     context?: {
@@ -308,7 +310,7 @@ export const useImpactPreview = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/enhanced-feature-toggles/impact-preview', {)
+      const response = await fetch('/api/enhanced-feature-toggles/impact-preview', {
   method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -318,7 +320,7 @@ export const useImpactPreview = () => {
   operation,
   context: context || {,
   requestSource: 'admin_dashboard',
-  urgencyLevel: 'normal',
+  urgencyLevel: 'normal'
 }
       });
       if (!response.ok) {
@@ -384,7 +386,7 @@ export const RiskAssessmentBadge: React.FC<{
 export const ClaudeImpactDisplay: React.FC<{
   claudeMetadata?: {
   costImpact: 'none' | 'low' | 'medium' | 'high';,
-  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
+  qualityImpact: 'none' | 'positive' | 'neutral' | 'negative',
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   modelRecommendation?: string;
 };
@@ -394,13 +396,13 @@ export const ClaudeImpactDisplay: React.FC<{
   switch (claudeMetadata.costImpact) {
   case 'high': return 'text-red-600';
   case 'medium': return 'text-orange-600';
-  case 'low': return 'text-yellow-600';
+  case 'low': return 'text-yellow-600',
   default: return 'text-gray-600';
 };
   const getQualityIcon = () => {
     switch (claudeMetadata.qualityImpact) {
     case 'positive': return <TrendingUp size={12} className="text-green-600" />;
-    case 'negative': return <AlertTriangle size={12} className="text-red-600" />;
+    case 'negative': return <AlertTriangle size={12} className="text-red-600" />,
     default: return <Activity size={12} className="text-gray-600" />;
   };
   return;
@@ -429,7 +431,7 @@ export const ClaudeImpactDisplay: React.FC<{
  * Performance Metrics Display Component
  */
 export const PerformanceMetrics: React.FC<{,
-  evaluationTime: number;
+  evaluationTime: number,
   cacheHit: boolean;
 }> = ({ evaluationTime, cacheHit }) => {
   const getPerformanceColor = () => {
@@ -460,9 +462,9 @@ export const PerformanceMetrics: React.FC<{,
 export const DependencyStatusIndicator: React.FC<{
   dependencyStatus?: {
   checked: boolean;,
-  violations: unknown;
+  violations: unknown,
   warnings: unknown;,
-  blockers: string;
+  blockers: string,
   canActivate: boolean;
 };
 }> = ({ dependencyStatus }) => {
@@ -517,7 +519,7 @@ export const CascadeEffectsPreview: React.FC<{
         Cascade Effects ({cascadeEffects.length})
       </div>
       <div className="space-y-1">
-        {cascadeEffects.slice(0, 3).map((effect, index) => ()
+        {cascadeEffects.slice(0, 3).map((effect, index) => (
           <div key={index} className="text-xs text-blue-600">
             • {effect.targetToggle}: {effect.effect} - {effect.reason}
           </div>
@@ -535,11 +537,11 @@ export const CascadeEffectsPreview: React.FC<{
  * Impact Preview Modal Component
  */
 export const ImpactPreviewModal: React.FC<{,
-  isOpen: boolean;
+  isOpen: boolean,
   onClose: () => void;,
   operation: {
   type: string;,
-  targetToggleId: string;
+  targetToggleId: string,
   reason: string;
 };
   onProceed: (enforcement: OperationEnforcement) => void;
@@ -554,9 +556,9 @@ export const ImpactPreviewModal: React.FC<{,
   }, [isOpen, operation, getImpactPreview]);
   const handleProceedClick = async () => {
   if (!enforcement) {
-  const result = await enforceOperation(operation, {)
+  const result = await enforceOperation(operation, {
   requestSource: 'admin_dashboard',
-  urgencyLevel: 'normal',
+  urgencyLevel: 'normal'
 });
       if (result) {
         setEnforcement(result);
@@ -602,7 +604,7 @@ export const ImpactPreviewModal: React.FC<{,
   riskScore: preview.overallRiskScore,
   recommendation: preview.overallRiskScore >= 0.8 ? 'block' : ,
   preview.overallRiskScore >= 0.6 ? 'review' :,
-  preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed',
+  preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed'
 }} />
                   <div className="text-sm text-gray-600">
                     {preview.estimatedAffectedUsers.toLocaleString()} users affected
@@ -614,7 +616,7 @@ export const ImpactPreviewModal: React.FC<{,
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Direct Impact</h3>
                   <div className="space-y-1">
-                    {preview.directImpact.slice(0, 5).map((impact, index) => ()
+                    {preview.directImpact.slice(0, 5).map((impact, index) => (
                       <div key={index} className="text-sm text-gray-600 flex items-center gap-2">
                         <AlertCircle size={12} className="text-orange-500" />
                         {impact.toggleId}: {impact.description}
@@ -630,7 +632,7 @@ export const ImpactPreviewModal: React.FC<{,
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Safety Checks</h3>
                   <ul className="space-y-1">
-                    {preview.safetyChecks.map((check, index) => ()
+                    {preview.safetyChecks.map((check, index) => (
                       <li key={index} className="text-sm text-gray-600 flex items-center gap-2">
                         <Shield size={12} className="text-blue-500" />
                         {check}
@@ -685,7 +687,7 @@ export const ImpactPreviewModal: React.FC<{,
   ? 'bg-red-600 text-white hover:bg-red-700',
   : preview.overallRiskScore >= 0.6,
   ? 'bg-orange-600 text-white hover:bg-orange-700',
-  : 'bg-blue-600 text-white hover:bg-blue-700',
+  : 'bg-blue-600 text-white hover:bg-blue-700'
 }`}
               >
                 {enforcementLoading ? ()

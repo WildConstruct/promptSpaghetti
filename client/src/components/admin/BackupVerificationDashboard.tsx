@@ -68,47 +68,47 @@ enum VerificationStatus {
   PERFORMANCE = 'performance'
   interface BackupVerificationStep {
   stepId: string;,
-  stepName: string;
+  stepName: string,
   stepType: VerificationStepType;,
-  description: string;
+  description: string,
   required: boolean;,
-  timeout: number;
+  timeout: number,
   retryAttempts: number;
-  dependencies?: string;
+  dependencies?: string,
   configurable: boolean;,
   estimatedDuration: number;
   interface BackupVerificationResult {
   stepId: string;,
-  status: VerificationStatus;
+  status: VerificationStatus,
   message: string;,
-  timestamp: Date;
+  timestamp: Date,
   duration: number;,
   details: Record<string, unknown>;
   warnings?: string;
   recommendations?: string;
   interface VerificationSession {
   sessionId: string;,
-  backupId: string;
+  backupId: string,
   initiatedBy: string;,
   initiatedAt: Date;
-  completedAt?: Date;
+  completedAt?: Date,
   status: SessionStatus;,
-  steps: BackupVerificationResult;
+  steps: BackupVerificationResult,
   summary: VerificationSummary;,
   configuration: VerificationConfiguration;
   interface VerificationSummary {
   totalSteps: number;,
-  passedSteps: number;
+  passedSteps: number,
   failedSteps: number;,
-  warningSteps: number;
+  warningSteps: number,
   skippedSteps: number;,
-  totalDuration: number;
+  totalDuration: number,
   overallStatus: VerificationStatus;,
-  criticalIssues: string;
+  criticalIssues: string,
   riskLevel: RiskLevel;
   interface VerificationConfiguration {
   stepsEnabled: string;,
-  stepsDisabled: string;
+  stepsDisabled: string,
   timeoutOverrides: Record<string, number>;
   retryOverrides: Record<string, number>;
   customParameters: Record<string, unknown>;
@@ -116,17 +116,21 @@ enum VerificationStatus {
   abortOnCriticalFailure: boolean;
   interface BackupData {
   backupId: string;,
-  backupPath: string;
+  backupPath: string,
   backupType: string;,
-  createdAt: Date;
+  createdAt: Date,
   originalSize: number;,
-  compressedSize: number;
-  checksum: string;
+  compressedSize: number,
+  checksum: string;}
+
+
   // ==========================================
   // MAIN COMPONENT
   // ==========================================
   export interface BackupVerificationDashboardProps {
-  className?: string;
+  }
+
+className?: string;
 }
 }
 export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardProps> = ({ className }) => {
@@ -134,17 +138,17 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Data state
-  const [verificationSteps, setVerificationSteps] = useState<BackupVerificationStep>([]);
-  const [activeSessions, setActiveSessions] = useState<VerificationSession>([]);
-  const [recentSessions, setRecentSessions] = useState<VerificationSession>([]);
-  const [backups, setBackups] = useState<BackupData>([]);
+  const [verificationSteps, setVerificationSteps] = useState<BackupVerificationStep[]>([]);
+  const [activeSessions, setActiveSessions] = useState<VerificationSession[]>([]);
+  const [recentSessions, setRecentSessions] = useState<VerificationSession[]>([]);
+  const [backups, setBackups] = useState<BackupData[]>([]);
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBackup, setSelectedBackup] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [filterRiskLevel, setFilterRiskLevel] = useState<string>('');
   // Configuration state
-  const [verificationConfig, setVerificationConfig] = useState<Partial<VerificationConfiguration>>({)
+  const [verificationConfig, setVerificationConfig] = useState<Partial<VerificationConfiguration>>({
   stepsEnabled: [],
     stepsDisabled: [],
     timeoutOverrides: {},
@@ -186,7 +190,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   // Start backup verification
   const startVerification = async (backupId: string, config?: Partial<VerificationConfiguration>) => {
     try {
-      const response = await fetch('/api/admin/backup-verification/verify', {)
+      const response = await fetch('/api/admin/backup-verification/verify', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({),
@@ -368,7 +372,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       <SelectValue placeholder="Select backup to verify" />
                     </SelectTrigger>
                     <SelectContent>
-                      {backups.map(backup => ()
+                      {backups.map(backup => (
                         <SelectItem key={backup.backupId} value={backup.backupId}>
                           {backup.backupId} ({backup.backupType})
                         </SelectItem>
@@ -411,7 +415,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {recentSessions.slice(0, 5).map(session => ()
+                    {recentSessions.slice(0, 5).map(session => (
                       <div key={session.sessionId} className="flex items-center justify-between p-2 border rounded">
                         <div className="flex items-center gap-2">
                           <Badge className={getStatusColor(session.status)}>
@@ -436,7 +440,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {verificationSteps.slice(0, 5).map(step => {)
+                    {verificationSteps.slice(0, 5).map(step => {
   const successRate = Math.random() * 30 + 70; // Mock success rate;
                       return;
                         <div key={step.stepId}>
@@ -468,7 +472,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               </Button>
             </div>
             <div className="space-y-3">
-              {activeSessions.map(session => ()
+              {activeSessions.map(session => (
                 <Card key={session.sessionId} className="border-orange-200 bg-orange-50">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
@@ -590,7 +594,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
             </div>
             {/* History List */}
             <div className="space-y-2">
-              {recentSessions.map(session => ()
+              {recentSessions.map(session => (
                 <Card key={session.sessionId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -675,7 +679,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 <div>
                   <h4 className="font-medium mb-3">Step Configuration</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {verificationSteps.map(step => ()
+                    {verificationSteps.map(step => (
                       <div key={step.stepId} className="border rounded p-3">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
@@ -694,7 +698,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   : [...disabled, step.stepId];
   setVerificationConfig(prev => ({ )
   ...prev,
-  stepsDisabled: newDisabled,
+  stepsDisabled: newDisabled
 }));
                             }}
                             disabled={step.required}
@@ -729,7 +733,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Object.values(VerificationStepType).map(stepType => ()
+                  {Object.values(VerificationStepType).map(stepType => (
                     <div key={stepType}>
                       <h4 className="font-medium mb-2 flex items-center gap-2 capitalize">
                         {getStepIcon(stepType)}
@@ -738,7 +742,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-6">
                         {verificationSteps
                           .filter(step => step.stepType === stepType)
-                          .map(step => ()
+                          .map(step => (
                             <div key={step.stepId} className="border rounded p-3">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-medium text-sm">{step.stepName}</span>

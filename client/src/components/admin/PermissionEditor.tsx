@@ -15,49 +15,53 @@ import { useAuthStore } from '../../stores/authStore';
 }
 interface Permission {
   id: string;,
-  name: string;
+  name: string,
   resource: string;,
-  action: string;
+  action: string,
   scope: 'global' | 'organization' | 'team' | 'own';,
-  description: string;
+  description: string,
   category: string;
   interface Role {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  permissions: string;
+  permissions: string,
   scope: 'global' | 'organization' | 'team';
-  organizationId?: string;
+  organizationId?: string,
   createdAt: Date;,
   updatedAt: Date;
   interface User {
   id: string;,
-  username: string;
+  username: string,
   email: string;,
-  roles: string;
+  roles: string,
   directPermissions: string;,
   isActive: boolean;
   interface PermissionEditorProps {
   userId?: string;
-  roleId?: string;
+  roleId?: string,
   mode: 'user' | 'role' | 'resource';
   onSave?: (changes: unknown) => void;
   onCancel?: () => void;
-  className?: string;
+  }
+
+className?: string;
   interface PermissionEditorState {
   selectedUser?: User;
-  selectedRole?: Role;
+  selectedRole?: Role,
   availablePermissions: Permission;,
-  availableRoles: Role;
+  availableRoles: Role,
   users: User;,
-  searchTerm: string;
+  searchTerm: string,
   filterCategory: string;,
-  filterScope: string;
+  filterScope: string,
   isLoading: boolean;,
-  error: string | null;
+  error: string | null,
   hasChanges: boolean;,
-  selectedPermissions: Set<string>;
-  selectedRoles: Set<string>;
+  selectedPermissions: Set<string>,
+  selectedRoles: Set<string>;}
+
+
   // Mock data for development
   const mockPermissions: Permission = [
   {
@@ -67,7 +71,7 @@ interface Permission {
   action: 'read',
   scope: 'own',
   description: 'View project details and contents',
-  category: 'Projects',
+  category: 'Projects'
 }
 }
   {
@@ -77,7 +81,7 @@ interface Permission {
   action: 'write',
   scope: 'own',
   description: 'Create and modify project files',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_delete_projects',
@@ -86,7 +90,7 @@ interface Permission {
   action: 'delete',
   scope: 'own',
   description: 'Delete project files and folders',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_share_projects',
@@ -95,7 +99,7 @@ interface Permission {
   action: 'share',
   scope: 'team',
   description: 'Share projects with team members',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_admin_users',
@@ -104,7 +108,7 @@ interface Permission {
   action: 'manage',
   scope: 'organization',
   description: 'Create, edit, and deactivate user accounts',
-  category: 'Administration',
+  category: 'Administration'
 }
   {
   id: 'perm_admin_roles',
@@ -113,7 +117,7 @@ interface Permission {
   action: 'manage',
   scope: 'organization',
   description: 'Create and modify roles and permissions',
-  category: 'Administration',
+  category: 'Administration'
 }
   {
   id: 'perm_view_analytics',
@@ -122,7 +126,7 @@ interface Permission {
   action: 'read',
   scope: 'team',
   description: 'Access usage and performance analytics',
-  category: 'Analytics',
+  category: 'Analytics'
 }
   {
   id: 'perm_export_data',
@@ -131,7 +135,7 @@ interface Permission {
   action: 'export',
   scope: 'organization',
   description: 'Export system data and reports',
-  category: 'Data Management',
+  category: 'Data Management'
 }
   {
   id: 'perm_system_config',
@@ -149,7 +153,7 @@ interface Permission {
   permissions: ['perm_read_projects', 'perm_view_analytics'],
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15')
 }
   {
   id: 'role_editor',
@@ -158,7 +162,7 @@ interface Permission {
   permissions: ['perm_read_projects', 'perm_edit_projects', 'perm_share_projects'],
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15')
 }
   {
   id: 'role_admin',
@@ -171,7 +175,7 @@ interface Permission {
   ],
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-15'),
+  updatedAt: new Date('2024-01-15')
 }
   {
   id: 'role_superadmin',
@@ -192,7 +196,7 @@ interface Permission {
   email: 'john@example.com',
   roles: ['role_editor'],
   directPermissions: ['perm_view_analytics'],
-  isActive: true,
+  isActive: true
 }
   {
   id: 'user_2',
@@ -200,7 +204,7 @@ interface Permission {
   email: 'jane@example.com',
   roles: ['role_admin'],
   directPermissions: [],
-  isActive: true,
+  isActive: true
 }
   {
   id: 'user_3',
@@ -209,7 +213,7 @@ interface Permission {
   roles: ['role_viewer'],
   directPermissions: [],
   isActive: false];
-  export const PermissionEditor: React.FC<PermissionEditorProps> = ({,)
+  export const PermissionEditor: React.FC<PermissionEditorProps> = ({
   userId,
   roleId,
   mode,
@@ -218,7 +222,7 @@ interface Permission {
   className = ''
 }) => {
   useAuthStore(); // Hook for potential future use
-  const [state, setState] = useState<PermissionEditorState>({)
+  const [state, setState] = useState<PermissionEditorState>({
   availablePermissions: mockPermissions,
   availableRoles: mockRoles,
   users: mockUsers,
@@ -229,7 +233,7 @@ interface Permission {
   error: null,
   hasChanges: false,
   selectedPermissions: new Set(),
-  selectedRoles: new Set(),
+  selectedRoles: new Set()
 });
   // Load initial data
   useEffect(() => {
@@ -242,33 +246,33 @@ interface Permission {
   if (userId && mode === 'user') {
   const user = mockUsers.find(u => u.id === userId);
   if (user) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   selectedUser: user,
   selectedPermissions: new Set(user.directPermissions),
   selectedRoles: new Set(user.roles),
-  isLoading: false,
+  isLoading: false
 }));
       } else if (roleId && mode === 'role') {
   const role = mockRoles.find(r => r.id === roleId);
   if (role) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   selectedRole: role,
   selectedPermissions: new Set(role.permissions),
-  isLoading: false,
+  isLoading: false
 }));
       } else {
         setState(prev => ({ ...prev, isLoading: false }));
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   isLoading: false,
-  error: error instanceof Error ? error.message : 'Failed to load data',
+  error: error instanceof Error ? error.message : 'Failed to load data'
 }));
   }, [userId, roleId, mode, setState]);
   const handlePermissionToggle = useCallback((permissionId: string) => {
-    setState(prev => {)
+    setState(prev => {
   const newSelected = new Set(prev.selectedPermissions);
       if (newSelected.has(permissionId)) {
         newSelected.delete(permissionId);
@@ -277,12 +281,12 @@ interface Permission {
   return {
   ...prev,
   selectedPermissions: newSelected,
-  hasChanges: true,
+  hasChanges: true
 };
     });
   }, []);
   const handleRoleToggle = useCallback((roleId: string) => {
-    setState(prev => {)
+    setState(prev => {
   const newSelected = new Set(prev.selectedRoles);
       if (newSelected.has(roleId)) {
         newSelected.delete(roleId);
@@ -291,12 +295,12 @@ interface Permission {
   return {
   ...prev,
   selectedRoles: newSelected,
-  hasChanges: true,
+  hasChanges: true
 };
     });
   }, []);
   const handleBulkPermissionChange = (category: string, grant: boolean) => {
-    setState(prev => {)
+    setState(prev => {
   const categoryPermissions = prev.availablePermissions;
         .filter(p => p.category === category)
         .map(p => p.id);
@@ -308,7 +312,7 @@ interface Permission {
   return {
   ...prev,
   selectedPermissions: newSelected,
-  hasChanges: true,
+  hasChanges: true
 };
     });
   };
@@ -328,13 +332,13 @@ interface Permission {
       onSave?.(changes);
       setState(prev => ({ ...prev, hasChanges: false, isLoading: false }));
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   isLoading: false,
-  error: error instanceof Error ? error.message : 'Failed to save changes',
+  error: error instanceof Error ? error.message : 'Failed to save changes'
 }));
   };
-  const filteredPermissions = state.availablePermissions.filter(permission => {)
+  const filteredPermissions = state.availablePermissions.filter(permission => {
   const matchesSearch = !state.searchTerm || ;
       permission.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
       permission.description.toLowerCase().includes(state.searchTerm.toLowerCase());
@@ -357,7 +361,7 @@ interface Permission {
       </div>
     );
   return;
-    <div className={`permission-editor ${className}`} style={{ },}
+    <div className={`permission-editor ${className}`} style={{ }}
   padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '8px',
@@ -387,7 +391,7 @@ interface Permission {
   border: '1px solid #fcc',
   borderRadius: '4px',
   color: '#c33',
-  marginBottom: '16px',
+  marginBottom: '16px'
 }}>
           {state.error}
         </div>
@@ -398,7 +402,7 @@ interface Permission {
   gap: '12px',
   marginBottom: '24px',
   alignItems: 'center',
-  flexWrap: 'wrap',
+  flexWrap: 'wrap'
 }}>
         <input
           type="text"
@@ -409,7 +413,7 @@ interface Permission {
   padding: '8px 12px',
   border: '1px solid #ddd',
   borderRadius: '4px',
-  minWidth: '200px',
+  minWidth: '200px'
 }}
         />
         <select
@@ -418,11 +422,11 @@ interface Permission {
           style={{
   padding: '8px 12px',
   border: '1px solid #ddd',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}
         >
           <option value="">All Categories</option>
-          {categories.map(category => ()
+          {categories.map(category => (
             <option key={category} value={category}>{category}</option>
           ))}
         </select>
@@ -432,11 +436,11 @@ interface Permission {
           style={{
   padding: '8px 12px',
   border: '1px solid #ddd',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}
         >
           <option value="">All Scopes</option>
-          {scopes.map(scope => ()
+          {scopes.map(scope => (
             <option key={scope} value={scope}>
               {scope.charAt(0).toUpperCase() + scope.slice(1)}
             </option>
@@ -452,9 +456,9 @@ interface Permission {
           <div style={{
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-  gap: '12px',
+  gap: '12px'
 }}>
-            {state.availableRoles.map(role => ()
+            {state.availableRoles.map(role => (
               <div
                 key={role.id}
                 style={{
@@ -482,7 +486,7 @@ interface Permission {
   backgroundColor: role.scope === 'global' ? '#ffc107' : role.scope === 'organization' ? '#28a745' : '#6c757d',
   color: 'white',
   borderRadius: '12px',
-  fontSize: '10px',
+  fontSize: '10px'
 }}>
                     {role.scope}
                   </span>
@@ -503,12 +507,12 @@ interface Permission {
         <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 'bold' }}>
           Direct Permissions
         </h3>
-        {Object.entries(permissionsByCategory).map(([category, permissions]) => ()
+        {Object.entries(permissionsByCategory).map(([category, permissions]) => (
           <div key={category} style={{
   marginBottom: '24px',
   border: '1px solid #eee',
   borderRadius: '8px',
-  overflow: 'hidden',
+  overflow: 'hidden'
 }}>
             {/* Category Header */}
             <div style={{
@@ -517,7 +521,7 @@ interface Permission {
   borderBottom: '1px solid #eee',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: 'space-between'
 }}>
               <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
                 {category}
@@ -532,7 +536,7 @@ interface Permission {
   color: 'white',
   borderRadius: '4px',
   fontSize: '12px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
                 >
                   Grant All
@@ -546,7 +550,7 @@ interface Permission {
   color: 'white',
   borderRadius: '4px',
   fontSize: '12px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
                 >
                   Revoke All
@@ -555,7 +559,7 @@ interface Permission {
             </div>
             {/* Permissions List */}
             <div style={{ padding: '16px' }}>
-              {permissions.map(permission => ()
+              {permissions.map(permission => (
                 <div
                   key={permission.id}
                   style={{
@@ -566,7 +570,7 @@ interface Permission {
   borderRadius: '6px',
   marginBottom: '8px',
   cursor: 'pointer',
-  backgroundColor: state.selectedPermissions.has(permission.id) ? '#f0f8ff' : '#fff',
+  backgroundColor: state.selectedPermissions.has(permission.id) ? '#f0f8ff' : '#fff'
 }}
                   onClick={() => handlePermissionToggle(permission.id)}
                 >
@@ -586,7 +590,7 @@ interface Permission {
   permission.scope === 'team' ? '#17a2b8' : '#6c757d',
   color: 'white',
   borderRadius: '10px',
-  fontSize: '10px',
+  fontSize: '10px'
 }}>
                         {permission.scope}
                       </span>
@@ -610,7 +614,7 @@ interface Permission {
   gap: '12px',
   justifyContent: 'flex-end',
   paddingTop: '16px',
-  borderTop: '1px solid #eee',
+  borderTop: '1px solid #eee'
 }}>
         <button
           onClick={onCancel}
@@ -619,7 +623,7 @@ interface Permission {
   border: '1px solid #ddd',
   backgroundColor: '#fff',
   borderRadius: '4px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
         >
           Cancel
@@ -633,7 +637,7 @@ interface Permission {
   backgroundColor: state.hasChanges && !state.isLoading ? '#007bff' : '#6c757d',
   color: 'white',
   borderRadius: '4px',
-  cursor: state.hasChanges && !state.isLoading ? 'pointer' : 'not-allowed',
+  cursor: state.hasChanges && !state.isLoading ? 'pointer' : 'not-allowed'
 }}
         >
           {state.isLoading ? 'Saving...' : 'Save Changes'}
@@ -646,7 +650,7 @@ interface Permission {
   padding: '12px',
   backgroundColor: '#e7f3ff',
   border: '1px solid #b3d9ff',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}>
           <strong>Pending Changes:</strong>
           <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>

@@ -16,15 +16,15 @@ import { useAuthStore } from '../../stores/authStore';
 }
 interface Role {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
-  permissions: string;
+  permissions: string,
   scope: 'global' | 'organization' | 'team';
-  organizationId?: string;
+  organizationId?: string,
   createdAt: Date;,
   updatedAt: Date;
   metadata?: {
-  clonedFrom?: string;
+  clonedFrom?: string,
   cloneCount: number;
   templateVersion?: string;
 }
@@ -32,46 +32,50 @@ interface Role {
 }
 interface Permission {
   id: string;,
-  name: string;
+  name: string,
   resource: string;,
-  action: string;
+  action: string,
   scope: 'global' | 'organization' | 'team' | 'own';,
-  description: string;
+  description: string,
   category: string;
 }
 interface CloneOperation {
   id: string;,
-  sourceRoleId: string;
+  sourceRoleId: string,
   targetRoleName: string;,
-  targetDescription: string;
+  targetDescription: string,
   targetScope: Role['scope'];,
-  includePermissions: string;
+  includePermissions: string,
   excludePermissions: string;,
-  timestamp: Date;
+  timestamp: Date,
   status: 'pending' | 'success' | 'failed';
   error?: string;
 }
 interface RoleCloneManagerProps {
   onRoleCloned?: (clonedRole: Role) => void;
   onClose?: () => void;
-  className?: string;
+  }
+
+className?: string;
 }
 interface RoleCloneState {
   availableRoles: Role;,
   availablePermissions: Permission;
-  selectedSourceRole?: Role;
-  cloneOperations: CloneOperation;
+  selectedSourceRole?: Role,
+  cloneOperations: CloneOperation;}
+
+
   // Clone configuration
   targetName: string;,
-  targetDescription: string;
+  targetDescription: string,
   targetScope: Role['scope'];,
-  selectedPermissions: Set<string>;
+  selectedPermissions: Set<string>,
   excludedPermissions: Set<string>;
   // UI state
   searchTerm: string;,
-  filterScope: string;
+  filterScope: string,
   showAdvancedOptions: boolean;,
-  isLoading: boolean;
+  isLoading: boolean,
   error: string | null;
   // Validation
   nameExists: boolean;,
@@ -90,7 +94,7 @@ const mockRoles: Role = [
     ],
     scope: 'organization',
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15')
 }
     metadata: { cloneCount: 3 }
   }
@@ -122,7 +126,7 @@ const mockPermissions: Permission = [
   action: 'read',
   scope: 'own',
   description: 'View project details and contents',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_edit_projects',
@@ -131,7 +135,7 @@ const mockPermissions: Permission = [
   action: 'write',
   scope: 'own',
   description: 'Create and modify project files',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_delete_projects',
@@ -140,7 +144,7 @@ const mockPermissions: Permission = [
   action: 'delete',
   scope: 'own',
   description: 'Delete project files and folders',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_share_projects',
@@ -149,7 +153,7 @@ const mockPermissions: Permission = [
   action: 'share',
   scope: 'team',
   description: 'Share projects with team members',
-  category: 'Projects',
+  category: 'Projects'
 }
   {
   id: 'perm_admin_users',
@@ -158,7 +162,7 @@ const mockPermissions: Permission = [
   action: 'manage',
   scope: 'organization',
   description: 'Create, edit, and deactivate user accounts',
-  category: 'Administration',
+  category: 'Administration'
 }
   {
   id: 'perm_admin_roles',
@@ -167,7 +171,7 @@ const mockPermissions: Permission = [
   action: 'manage',
   scope: 'organization',
   description: 'Create and modify roles and permissions',
-  category: 'Administration',
+  category: 'Administration'
 }
   {
   id: 'perm_view_analytics',
@@ -176,7 +180,7 @@ const mockPermissions: Permission = [
   action: 'read',
   scope: 'team',
   description: 'Access usage and performance analytics',
-  category: 'Analytics',
+  category: 'Analytics'
 }
   {
   id: 'perm_export_data',
@@ -186,13 +190,13 @@ const mockPermissions: Permission = [
   scope: 'organization',
   description: 'Export system data and reports',
   category: 'Data Management'];
-  export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({,)
+  export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
   onRoleCloned,
   onClose,
   className = ''
 }) => {
   useAuthStore(); // Hook for potential future use
-  const [state, setState] = useState<RoleCloneState>({)
+  const [state, setState] = useState<RoleCloneState>({
   availableRoles: mockRoles,
   availablePermissions: mockPermissions,
   cloneOperations: [],
@@ -207,7 +211,7 @@ const mockPermissions: Permission = [
   isLoading: false,
   error: null,
   nameExists: false,
-  validationErrors: [],
+  validationErrors: []
 });
   // Load initial data
   useEffect(() => {
@@ -243,14 +247,14 @@ const mockPermissions: Permission = [
       await new Promise(resolve => setTimeout(resolve, 500));
       setState(prev => ({ ...prev, isLoading: false }));
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   isLoading: false,
-  error: error instanceof Error ? error.message : 'Failed to load data',
+  error: error instanceof Error ? error.message : 'Failed to load data'
 }));
   };
   const handleSourceRoleSelect = useCallback((role: Role) => {
-    setState(prev => ({)
+    setState(prev => ({
   ...prev,
       selectedSourceRole: role,
       targetName: `${role.name} Copy`}
@@ -263,7 +267,7 @@ const mockPermissions: Permission = [
   }));
   }, []);
   const handlePermissionToggle = useCallback((permissionId: string, include: boolean) => {
-    setState(prev => {)
+    setState(prev => {
   const newSelected = new Set(prev.selectedPermissions);
       const newExcluded = new Set(prev.excludedPermissions);
       if (include) {
@@ -275,7 +279,7 @@ const mockPermissions: Permission = [
   return {
   ...prev,
   selectedPermissions: newSelected,
-  excludedPermissions: newExcluded,
+  excludedPermissions: newExcluded
 };
     });
   }, []);
@@ -292,13 +296,13 @@ const mockPermissions: Permission = [
   includePermissions: Array.from(state.selectedPermissions),
   excludePermissions: Array.from(state.excludedPermissions),
   timestamp: new Date(),
-  status: 'pending',
+  status: 'pending'
 };
-    setState(prev => ({)
+    setState(prev => ({
   ...prev,
   cloneOperations: [...prev.cloneOperations, operation],
   isLoading: true,
-  error: null,
+  error: null
 }));
     try {
       // TODO: Make actual API call to clone role
@@ -314,7 +318,7 @@ const mockPermissions: Permission = [
         updatedAt: new Date(),
         metadata: {
   clonedFrom: state.selectedSourceRole.id,
-  cloneCount: 0,
+  cloneCount: 0
 };
       // Update source role clone count
       const updatedRoles = state.availableRoles.map(role =>;);
@@ -326,7 +330,7 @@ const mockPermissions: Permission = [
               cloneCount: (role.metadata?.cloneCount || 0) + 1,
           : role
       );
-      setState(prev => ({)
+      setState(prev => ({
   ...prev,
         availableRoles: [...updatedRoles, clonedRole],
         cloneOperations: prev.cloneOperations.map(op =>),
@@ -344,7 +348,7 @@ const mockPermissions: Permission = [
   }));
       onRoleCloned?.(clonedRole);
     } catch (error) {
-  setState(prev => ({)
+  setState(prev => ({
   ...prev,
   cloneOperations: prev.cloneOperations.map(op =>),
   op.id === operationId
@@ -354,7 +358,7 @@ const mockPermissions: Permission = [
   error: error instanceof Error ? error.message : 'Clone operation failed',
   : op),
   isLoading: false,
-  error: error instanceof Error ? error.message : 'Failed to clone role',
+  error: error instanceof Error ? error.message : 'Failed to clone role'
 }));
   };
   const handlePresetClone = (presetType: 'minimal' | 'standard' | 'extended') => {
@@ -372,7 +376,7 @@ const mockPermissions: Permission = [
   case 'standard':,
   // Read and basic write permissions
   selectedPermissions = new Set()
-  Array.from(sourcePermissions).filter(id => {)
+  Array.from(sourcePermissions).filter(id => {
   const permission = mockPermissions.find(p => p.id === id);
   return permission && ['read', 'write'].includes(permission.action);
 }
@@ -384,13 +388,13 @@ const mockPermissions: Permission = [
       break;
     default:
       selectedPermissions = new Set();
-    setState(prev => ({)
+    setState(prev => ({
   ...prev,
   selectedPermissions,
-  excludedPermissions: new Set(),
+  excludedPermissions: new Set()
 }));
   };
-  const filteredRoles = state.availableRoles.filter(role => {)
+  const filteredRoles = state.availableRoles.filter(role => {
   const matchesSearch = !state.searchTerm || ;
       role.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
       role.description.toLowerCase().includes(state.searchTerm.toLowerCase());
@@ -411,7 +415,7 @@ const mockPermissions: Permission = [
       </div>
     );
   return;
-    <div className={`role-clone-manager ${className}`} style={{},}
+    <div className={`role-clone-manager ${className}`} style={{}}
   padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '8px',
@@ -437,7 +441,7 @@ const mockPermissions: Permission = [
   border: '1px solid #ddd',
   backgroundColor: '#fff',
   borderRadius: '4px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
           >
             ✕
@@ -452,7 +456,7 @@ const mockPermissions: Permission = [
   border: '1px solid #fcc',
   borderRadius: '4px',
   color: '#c33',
-  marginBottom: '16px',
+  marginBottom: '16px'
 }}>
           {state.error}
         </div>
@@ -474,7 +478,7 @@ const mockPermissions: Permission = [
   flex: 1,
   padding: '8px 12px',
   border: '1px solid #ddd',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}
             />
             <select
@@ -483,11 +487,11 @@ const mockPermissions: Permission = [
               style={{
   padding: '8px 12px',
   border: '1px solid #ddd',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}
             >
               <option value="">All Scopes</option>
-              {scopes.map(scope => ()
+              {scopes.map(scope => (
                 <option key={scope} value={scope}>
                   {scope.charAt(0).toUpperCase() + scope.slice(1)}
                 </option>
@@ -496,7 +500,7 @@ const mockPermissions: Permission = [
           </div>
           {/* Role list */}
           <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {filteredRoles.map(role => ()
+            {filteredRoles.map(role => (
               <div
                 key={role.id}
                 style={{
@@ -518,7 +522,7 @@ const mockPermissions: Permission = [
   backgroundColor: role.scope === 'global' ? '#ffc107' : role.scope === 'organization' ? '#28a745' : '#6c757d',
   color: 'white',
   borderRadius: '12px',
-  fontSize: '10px',
+  fontSize: '10px'
 }}>
                     {role.scope}
                   </span>
@@ -550,7 +554,7 @@ const mockPermissions: Permission = [
   color: '#666',
   backgroundColor: '#f8f9fa',
   borderRadius: '8px',
-  border: '2px dashed #ddd',
+  border: '2px dashed #ddd'
 }}>
               Select a source role to begin cloning
             </div>
@@ -594,7 +598,7 @@ const mockPermissions: Permission = [
   padding: '8px 12px',
   border: '1px solid #ddd',
   borderRadius: '4px',
-  resize: 'vertical',
+  resize: 'vertical'
 }}
                     placeholder="Describe the new role"
                   />
@@ -610,10 +614,10 @@ const mockPermissions: Permission = [
   width: '100%',
   padding: '8px 12px',
   border: '1px solid #ddd',
-  borderRadius: '4px',
+  borderRadius: '4px'
 }}
                   >
-                    {scopes.map(scope => ()
+                    {scopes.map(scope => (
                       <option key={scope} value={scope}>
                         {scope.charAt(0).toUpperCase() + scope.slice(1)}
                       </option>
@@ -636,7 +640,7 @@ const mockPermissions: Permission = [
   color: 'white',
   borderRadius: '4px',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
                   >
                     Minimal
@@ -650,7 +654,7 @@ const mockPermissions: Permission = [
   color: 'white',
   borderRadius: '4px',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
                   >
                     Standard
@@ -664,7 +668,7 @@ const mockPermissions: Permission = [
   color: 'white',
   borderRadius: '4px',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '12px'
 }}
                   >
                     Extended
@@ -677,17 +681,17 @@ const mockPermissions: Permission = [
                   Select Permissions ({state.selectedPermissions.size} selected)
                 </h4>
                 <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #eee', borderRadius: '4px' }}>
-                  {Object.entries(permissionsByCategory).map(([category, permissions]) => ()
+                  {Object.entries(permissionsByCategory).map(([category, permissions]) => (
                     <div key={category} style={{ borderBottom: '1px solid #eee' }}>
                       <div style={{
   padding: '8px 12px',
   backgroundColor: '#f8f9fa',
   fontWeight: 'bold',
-  fontSize: '14px',
+  fontSize: '14px'
 }}>
                         {category}
                       </div>
-                      {permissions.map(permission => {)
+                      {permissions.map(permission => {
   const isSelected = state.selectedPermissions.has(permission.id);
                         const wasInSource = state.selectedSourceRole?.permissions.includes(permission.id) ?? false;
                         return;
@@ -698,7 +702,7 @@ const mockPermissions: Permission = [
   display: 'flex',
   alignItems: 'center',
   backgroundColor: isSelected ? '#f0f8ff' : '#fff',
-  borderLeft: wasInSource ? '3px solid #007bff' : '3px solid transparent',
+  borderLeft: wasInSource ? '3px solid #007bff' : '3px solid transparent'
 }}
                           >
                             <input
@@ -714,7 +718,7 @@ const mockPermissions: Permission = [
                                   <span style={{
   marginLeft: '8px',
   fontSize: '10px',
-  color: '#007bff',
+  color: '#007bff'
 }}>
                                     (from source)
                                   </span>
@@ -738,11 +742,11 @@ const mockPermissions: Permission = [
   backgroundColor: '#fee',
   border: '1px solid #fcc',
   borderRadius: '4px',
-  marginBottom: '16px',
+  marginBottom: '16px'
 }}>
                   <strong style={{ color: '#c33' }}>Please fix the following errors:</strong>
                   <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px', color: '#c33' }}>
-                    {state.validationErrors.map((error, index) => ()
+                    {state.validationErrors.map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
                   </ul>
@@ -764,7 +768,7 @@ const mockPermissions: Permission = [
   border: '1px solid #ddd',
   backgroundColor: '#fff',
   borderRadius: '4px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 }}
                 >
                   Cancel
@@ -778,7 +782,7 @@ const mockPermissions: Permission = [
   backgroundColor: state.validationErrors.length === 0 && !state.isLoading ? '#28a745' : '#6c757d',
   color: 'white',
   borderRadius: '4px',
-  cursor: state.validationErrors.length === 0 && !state.isLoading ? 'pointer' : 'not-allowed',
+  cursor: state.validationErrors.length === 0 && !state.isLoading ? 'pointer' : 'not-allowed'
 }}
                 >
                   {state.isLoading ? 'Cloning Role...' : 'Clone Role'}
@@ -795,7 +799,7 @@ const mockPermissions: Permission = [
             Clone Operations
           </h3>
           <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-            {state.cloneOperations.map(operation => ()
+            {state.cloneOperations.map(operation => (
               <div
                 key={operation.id}
                 style={{
@@ -804,7 +808,7 @@ const mockPermissions: Permission = [
   borderRadius: '4px',
   marginBottom: '8px',
   backgroundColor: operation.status === 'success' ? '#d4edda' : ,
-  operation.status === 'failed' ? '#f8d7da' : '#fff3cd',
+  operation.status === 'failed' ? '#f8d7da' : '#fff3cd'
 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -817,7 +821,7 @@ const mockPermissions: Permission = [
   fontSize: '10px',
   backgroundColor: operation.status === 'success' ? '#28a745' :,
   operation.status === 'failed' ? '#dc3545' : '#ffc107',
-  color: 'white',
+  color: 'white'
 }}>
                     {operation.status}
                   </span>

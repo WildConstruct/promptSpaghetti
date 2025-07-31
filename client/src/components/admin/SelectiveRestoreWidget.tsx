@@ -28,58 +28,60 @@ const { Option } = Select;
 }
 interface RecoveryPoint {
   id: string;,
-  backup_type: 'scheduled' | 'transaction' | 'manual' | 'compliance' | 'incident';
+  backup_type: 'scheduled' | 'transaction' | 'manual' | 'compliance' | 'incident',
   recovery_point_timestamp: string;,
-  backup_size_bytes: number;
+  backup_size_bytes: number,
   included_tables: string;,
-  excluded_tables: string;
+  excluded_tables: string,
   recovery_context: {
   description: string;,
   triggered_by: string;
-  retention_class: string;
+  retention_}
+
+class: string;
 }
 };
   validation_status: 'not_validated' | 'valid' | 'corrupted' | 'partially_valid';,
-  storage_info: {;
+  storage_info: {,
   storage_provider: string;,
-  location: string;
+  location: string,
   encryption_status: string;
 };
 }
 interface RestoreRequest {
   recovery_point_id: string;,
-  operation_type: 'selective_restore';
+  operation_type: 'selective_restore',
   restore_scope: 'full_database' | 'table_level' | 'record_level' | 'schema_only' | 'data_only';,
   restore_strategy: 'replace' | 'merge' | 'append' | 'compare_first' | 'backup_first';
-  target_database?: string;
+  target_database?: string,
   table_filters: {
   include_tables: string;,
-  exclude_tables: string;
+  exclude_tables: string,
   where_conditions: Record<string, string>;
   limit_records?: number;
 }
 };
   validation_level: 'none' | 'basic' | 'full' | 'business_rules' | 'compliance';,
-  notification_config: {;
+  notification_config: {,
   on_completion: boolean;,
-  on_error: boolean;
+  on_error: boolean,
   notification_channels: string;
 };
 }
 interface RestoreProgress {
   request_id: string;,
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
+  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled',
   progress_percentage: number;,
-  current_operation: string;
+  current_operation: string,
   tables_processed: number;,
-  total_tables: number;
+  total_tables: number,
   records_restored: number;,
-  conflicts_resolved: number;
+  conflicts_resolved: number,
   started_at: string;
-  estimated_completion?: string;
+  estimated_completion?: string,
   errors: Array<{
   table: string;,
-  error_type: string;
+  error_type: string,
   message: string;,
   severity: 'error' | 'warning';
 }
@@ -87,11 +89,13 @@ interface RestoreProgress {
 }
 interface SelectiveRestoreWidgetProps {
   onRestoreComplete?: (requestId: string) => void;
-  onError?: (error: string) => void;
+  onError?: (error: string) => void;}
+
+
   // =============================================================================
   // Main Component
   // =============================================================================
-  export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({,)
+  export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
   onRestoreComplete,
   onError
 }
@@ -99,9 +103,9 @@ interface SelectiveRestoreWidgetProps {
   // State Management
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('configure');
-  const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint>([]);
-  const [availableTables, setAvailableTables] = useState<string>([]);
-  const [activeRestores, setActiveRestores] = useState<RestoreProgress>([]);
+  const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint[]>([]);
+  const [availableTables, setAvailableTables] = useState<string[]>([]);
+  const [activeRestores, setActiveRestores] = useState<RestoreProgress[]>([]);
   const [loading, setLoading] = useState(false);
   const [previewData, setPreviewData] = useState<unknown>(null);
   const loadRecoveryPoints = useCallback(async () => {
@@ -149,19 +153,19 @@ interface SelectiveRestoreWidgetProps {
   if (point) {
   loadAvailableTables(recoveryPointId);
   // Auto-populate table filters from recovery point
-  form.setFieldsValue({)
+  form.setFieldsValue({
   'table_filters.include_tables': point.included_tables,
-  'table_filters.exclude_tables': point.excluded_tables,
+  'table_filters.exclude_tables': point.excluded_tables
 });
   }, [recoveryPoints, form, loadAvailableTables]);
   const generateRestorePreview = async () => {
     try {
       setLoading(true);
       const values = form.getFieldsValue();
-      const response = await fetch('/api/admin/backup/restore/preview', {)
+      const response = await fetch('/api/admin/backup/restore/preview', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({,)
+        body: JSON.stringify({
   recovery_point_id: values.recovery_point_id,
           table_filters: values.table_filters || {},
           restore_scope: values.restore_scope;
@@ -198,9 +202,9 @@ interface SelectiveRestoreWidgetProps {
         notification_config: {
   on_completion: values.notification_config?.on_completion ?? true,
   on_error: values.notification_config?.on_error ?? true,
-  notification_channels: values.notification_config?.notification_channels || ['email'],
+  notification_channels: values.notification_config?.notification_channels || ['email']
 };
-      const response = await fetch('/api/admin/backup/restore/execute', {)
+      const response = await fetch('/api/admin/backup/restore/execute', {
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(restoreConfig);
@@ -233,7 +237,7 @@ interface SelectiveRestoreWidgetProps {
   case 'completed': return 'green';
   case 'failed': return 'red';
   case 'in_progress': return 'blue';
-  case 'cancelled': return 'orange';
+  case 'cancelled': return 'orange',
   default: return 'default';
 };
   // =============================================================================
@@ -255,7 +259,7 @@ interface SelectiveRestoreWidgetProps {
             showSearch
             optionFilterProp="children"
           >
-            {recoveryPoints.map(point => ()
+            {recoveryPoints.map(point => (
               <Option key={point.id} value={point.id}>
                 <Space>
                   <Tag color={point.validation_status === 'valid' ? 'green' : 'orange'}>
@@ -396,7 +400,7 @@ interface SelectiveRestoreWidgetProps {
               message="Preview Warnings"
               description={
                 <ul>
-                  {previewData.warnings.map((warning: string, idx: number) => ()
+                  {previewData.warnings.map((warning: string, idx: number) => (
                     <li key={idx}>{warning}</li>
                   ))}
                 </ul>
@@ -426,7 +430,7 @@ interface SelectiveRestoreWidgetProps {
         </div>
       ) : ()
         <div>
-          {activeRestores.map(restore => ()
+          {activeRestores.map(restore => (
             <Card 
               key={restore.request_id} 
               size="small" 
@@ -474,7 +478,7 @@ interface SelectiveRestoreWidgetProps {
                       message={`${restore.errors.length} Issues Found`}
                       description={
                         <ul style={{ margin: 0, paddingLeft: 16 }}>
-                          {restore.errors.slice(0, 3).map((error, idx) => ()
+                          {restore.errors.slice(0, 3).map((error, idx) => (
                             <li key={idx}>
                               <strong>{error.table}:</strong> {error.message}
                             </li>

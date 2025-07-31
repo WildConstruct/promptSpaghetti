@@ -22,38 +22,38 @@ interface AnalyticsData {
   assignmentsByPolicyType: Record<string, number>;
   trendsOverTime: {
   date: string;,
-  created: number;
+  created: number,
   revoked: number;,
   expired: number;
 }
 }[];
   topPolicies: {
-  policyType: string;
+  policyType: string,
   count: number;,
   riskDistribution: Record<RiskLevel, number>;
 }[];
   conflictsDetected: {
-  conflictId: string;
+  conflictId: string,
   type: string;,
-  severity: string;
+  severity: string,
   affectedAssignments: number;
 }[];
   inheritanceChains: {
-  rootTargetType: AssignmentTargetType;
+  rootTargetType: AssignmentTargetType,
   rootTargetId: string;,
-  depth: number;
+  depth: number,
   totalAssignments: number;
 }[];
   complianceMetrics: {
-  averageApprovalTime: number;
+  averageApprovalTime: number,
   pendingApprovals: number;,
-  expiredAssignments: number;
+  expiredAssignments: number,
   reviewOverdue: number;
 };
   performanceMetrics: {
-  averageProcessingTime: number;
+  averageProcessingTime: number,
   successRate: number;,
-  errorRate: number;
+  errorRate: number,
   systemLoad: number;
 };
 }
@@ -61,21 +61,23 @@ interface ChartData {
   labels: string;,
   values: number;
   colors?: string;
-  export const AssignmentAnalytics: React.FC = () => {,
+  }
+
+export const AssignmentAnalytics: React.FC = () => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState({)
+  const [dateRange, setDateRange] = useState({
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  endDate: new Date().toISOString().split('T')[0],
+  endDate: new Date().toISOString().split('T')[0]
 }
 });
   const [selectedMetric, setSelectedMetric] = useState<'assignments' | 'conflicts' | 'performance' | 'compliance'>('assignments');
   const loadAnalytics = useCallback(async () => {
   setIsLoading(true);
   try {
-  const params = new URLSearchParams({)
+  const params = new URLSearchParams({
   startDate: dateRange.startDate,
-  endDate: dateRange.endDate,
+  endDate: dateRange.endDate
 });
       const response = await fetch(`/api/policy-assignments/assignments/analytics?${params}`);}
       const data = await response.json();
@@ -91,7 +93,7 @@ interface ChartData {
   useEffect(() => {
     loadAnalytics();
   }, [dateRange, loadAnalytics]);
-  const createMockAnalytics = (): AnalyticsData => ({)
+  const createMockAnalytics = (): AnalyticsData => ({
   totalAssignments: 1247,
   assignmentsByStatus: {
   [AssignmentStatus.ACTIVE]: 892,
@@ -99,7 +101,7 @@ interface ChartData {
   [AssignmentStatus.DRAFT]: 23,
   [AssignmentStatus.SUSPENDED]: 12,
   [AssignmentStatus.EXPIRED]: 189,
-  [AssignmentStatus.REVOKED]: 86,
+  [AssignmentStatus.REVOKED]: 86
 },
   assignmentsByTargetType: {
   [AssignmentTargetType.USER]: 456,
@@ -109,13 +111,13 @@ interface ChartData {
   [AssignmentTargetType.DEPARTMENT]: 89,
   [AssignmentTargetType.LOCATION]: 67,
   [AssignmentTargetType.DATA_TYPE]: 56,
-  [AssignmentTargetType.SYSTEM]: 33,
+  [AssignmentTargetType.SYSTEM]: 33
 },
   assignmentsByRiskLevel: {
   [RiskLevel.LOW]: 567,
   [RiskLevel.MEDIUM]: 445,
   [RiskLevel.HIGH]: 189,
-  [RiskLevel.CRITICAL]: 46,
+  [RiskLevel.CRITICAL]: 46
 },
   assignmentsByPolicyType: {
   'ACCESS_CONTROL': 345,
@@ -123,13 +125,13 @@ interface ChartData {
   'ENCRYPTION': 234,
   'RETENTION': 178,
   'ANONYMIZATION': 123,
-  'AUDIT_LOGGING': 78,
+  'AUDIT_LOGGING': 78
 },
-  trendsOverTime: Array.from({ length: 30 }, (_, i) => ({)
+  trendsOverTime: Array.from({ length: 30 }, (_, i) => ({
   date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   created: Math.floor(Math.random() * 20) + 5,
   revoked: Math.floor(Math.random() * 8) + 1,
-  expired: Math.floor(Math.random() * 12) + 2,
+  expired: Math.floor(Math.random() * 12) + 2
 })),
     topPolicies: [,
       {
@@ -139,7 +141,7 @@ interface ChartData {
   [RiskLevel.LOW]: 123,
   [RiskLevel.MEDIUM]: 134,
   [RiskLevel.HIGH]: 67,
-  [RiskLevel.CRITICAL]: 21,
+  [RiskLevel.CRITICAL]: 21
 }
       {
         policyType: 'DATA_FILTERING',
@@ -163,15 +165,15 @@ interface ChartData {
   averageApprovalTime: 2.3,
   pendingApprovals: 45,
   expiredAssignments: 189,
-  reviewOverdue: 23,
+  reviewOverdue: 23
 },
   performanceMetrics: {
   averageProcessingTime: 1.2,
   successRate: 97.8,
   errorRate: 2.2,
-  systemLoad: 68.5,
+  systemLoad: 68.5
 });
-  const createChartFromRecord = (data: Record<string, number>, colors?: string): ChartData => ({)
+  const createChartFromRecord = (data: Record<string, number>, colors?: string): ChartData => ({
   labels: Object.keys(data),
   values: Object.values(data),
   colors
@@ -207,7 +209,7 @@ interface ChartData {
               })}
             </svg>
             <div className="pie-legend">
-              {chartData.labels.map((label, index) => ()
+              {chartData.labels.map((label, index) => (
                 <div key={index} className="legend-item">
                   <span 
                     className="legend-color" 
@@ -225,7 +227,7 @@ interface ChartData {
       <div className="chart-container">
         <h3 className="chart-title">{title}</h3>
         <div className="bar-chart">
-          {chartData.labels.map((label, index) => ()
+          {chartData.labels.map((label, index) => (
             <div key={index} className="bar-item">
               <div className="bar-label">{label}</div>
               <div className="bar-container">
@@ -250,7 +252,7 @@ interface ChartData {
     value: string | number,
     subtitle?: string,
     trend?: 'up' | 'down' | 'neutral'
-  ) => ()
+  ) => (
     <div className="metric-card">
       <div className="metric-header">
         <h4>{title}</h4>
@@ -283,7 +285,7 @@ interface ChartData {
             </div>
           </div>
           <div className="trend-data">
-            {analyticsData.trendsOverTime.map((point, index) => ()
+            {analyticsData.trendsOverTime.map((point, index) => (
               <div key={index} className="trend-point">
                 <div className="trend-values">
                   <div className="trend-bar created" style={{ height: `${point.created * 3}px` }} />}
@@ -423,7 +425,7 @@ interface ChartData {
             </div>
             <div className="conflicts-list">
               <h3>Active Conflicts</h3>
-              {analyticsData.conflictsDetected.map(conflict => ()
+              {analyticsData.conflictsDetected.map(conflict => (
                 <div key={conflict.conflictId} className="conflict-summary">
                   <div className="conflict-id">{conflict.conflictId}</div>
                   <div className="conflict-info">

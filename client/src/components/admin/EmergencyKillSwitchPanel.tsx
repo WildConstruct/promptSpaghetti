@@ -25,39 +25,41 @@ import './EmergencyKillSwitchPanel.css';
 }
 interface EmergencyKillSwitch {
   id: string;,
-  name: string;
+  name: string,
   description: string;,
   scope: 'ALL' | 'CLAUDE_IMPACT' | 'CRITICAL_FEATURES' | 'CUSTOM';
   targetToggles?: string;
-  claudeImpactLevels?: string;
+  claudeImpactLevels?: string,
   enabled: boolean;,
-  createdAt: string;
+  createdAt: string,
   createdBy: string;
   lastActivated?: string;
-  lastActivatedBy?: string;
+  lastActivatedBy?: string,
   activationCount: number;
 }
 interface KillSwitchActivation {
   id: string;,
-  killSwitchId: string;
+  killSwitchId: string,
   activatedBy: string;,
-  activatedAt: string;
+  activatedAt: string,
   reason: string;,
-  affectedToggles: string;
+  affectedToggles: string,
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: string;
 }
 interface EmergencyMetrics {
   totalKillSwitches: number;,
-  activeKillSwitches: number;
+  activeKillSwitches: number,
   activeActivations: number;,
-  togglesCurrentlyDisabled: number;
+  togglesCurrentlyDisabled: number,
   totalActivations: number;
   lastActivation?: string;
 
+}
+
 export const EmergencyKillSwitchPanel: React.FC = () => {
-  const [killSwitches, setKillSwitches] = useState<EmergencyKillSwitch>([]);
-  const [activeActivations, setActiveActivations] = useState<KillSwitchActivation>([]);
+  const [killSwitches, setKillSwitches] = useState<EmergencyKillSwitch[]>([]);
+  const [activeActivations, setActiveActivations] = useState<KillSwitchActivation[]>([]);
   const [metrics, setMetrics] = useState<EmergencyMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,14 +76,14 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       setError(null);
       // Load kill switches, activations, and metrics in parallel
       const [killSwitchesRes, activationsRes, metricsRes] = await Promise.all([)
-        fetch('/api/emergency/kill-switches', {)
+        fetch('/api/emergency/kill-switches', {
 }
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/emergency/activations/active', {)
+        fetch('/api/emergency/activations/active', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/emergency/metrics', {)
+        fetch('/api/emergency/metrics', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
   }
       ]);
@@ -113,7 +115,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     const reason = prompt('Emergency reason (required):');
     if (!reason) return;
     try {
-      const response = await fetch('/api/emergency/disable-all', {)
+      const response = await fetch('/api/emergency/disable-all', {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
@@ -134,7 +136,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     const reason = prompt('Emergency reason (required):');
     if (!reason) return;
     try {
-      const response = await fetch('/api/emergency/disable-claude-impact', {)
+      const response = await fetch('/api/emergency/disable-claude-impact', {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
@@ -206,7 +208,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     case 'CRITICAL_FEATURES':
       return { text: 'Critical Features', color: 'yellow', icon: <Shield size={14} /> };
     case 'CUSTOM':
-      return { text: 'Custom', color: 'blue', icon: <Settings size={14} /> };
+      return { text: 'Custom', color: 'blue', icon: <Settings size={14} /> },
     default:
       return { text: scope, color: 'gray', icon: null };
   };
@@ -217,7 +219,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     case 'ROLLED_BACK':
       return { text: 'Rolled Back', color: 'green', icon: <CheckCircle size={14} /> };
     case 'EXPIRED':
-      return { text: 'Expired', color: 'gray', icon: <XCircle size={14} /> };
+      return { text: 'Expired', color: 'gray', icon: <XCircle size={14} /> },
     default:
       return { text: status, color: 'gray', icon: null };
   };

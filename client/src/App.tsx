@@ -50,13 +50,13 @@ try {
   height: '100%',
   backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
   flexDirection: 'column',
-  padding: '40px',
+  padding: '40px'
 }}>
       <div style={{
   fontSize: '32px',
   fontWeight: 'bold',
   marginBottom: '20px',
-  color: 'var(--color-text-primary, #e8e8e8)',
+  color: 'var(--color-text-primary, #e8e8e8)'
 }}>
         🎲 Professional Graph Editor
       </div>
@@ -66,7 +66,7 @@ try {
   textAlign: 'center',
   maxWidth: '600px',
   lineHeight: 1.6,
-  marginBottom: '20px',
+  marginBottom: '20px'
 }}>
         The professional-grade nodal prompt randomizer with Cinema 4D-inspired design.
         Full professional features are available in the Graph Editor.
@@ -75,7 +75,7 @@ try {
   fontSize: '14px',
   color: 'var(--color-text-secondary, #b8b8b8)',
   textAlign: 'center',
-  fontStyle: 'italic',
+  fontStyle: 'italic'
 }}>
         Command palette, undo/redo, multi-selection, and keyboard shortcuts included.
       </div>
@@ -101,7 +101,7 @@ function MainApp(): React.ReactElement {
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [selectedProjectFile, setSelectedProjectFile] = useState<PSGFile | null>(null);
-  const [recentFiles, setRecentFiles] = useState<PSGFile>([]);
+  const [recentFiles, setRecentFiles] = useState<PSGFile[]>([]);
   const projectManager = ProjectManager.getInstance();
   // Load recent files on mount
   useEffect(() => {
@@ -120,7 +120,7 @@ function MainApp(): React.ReactElement {
   editor: '/',
   randomizer: '/randomizer',
   files: '/files',
-  prototype: '/prototype',
+  prototype: '/prototype'
 };
     navigate(paths[tab] || '/');
   }, [navigate]);
@@ -219,7 +219,7 @@ function MainApp(): React.ReactElement {
   const event = new KeyboardEvent('keydown', {
   key: '?',
   shiftKey: true,
-  bubbles: true,
+  bubbles: true
 });
       document.dispatchEvent(event);
     }, []),
@@ -288,7 +288,7 @@ function MainApp(): React.ReactElement {
   console.log('Starting generation flow:', flow.name, params);
   setShowCommandPalette(false);
 }, []),
-    onNodeCreate: useCallback((nodeType: string, position: { x: number; y: number }, data?: any) => {
+    onNodeCreate: useCallback((nodeType: string, position: { x: number, y: number }, data?: any) => {
   // TODO: Integrate with node creation
   console.log('Creating node:', nodeType, position, data);
   setShowCommandPalette(false);
@@ -501,7 +501,7 @@ function MainApp(): React.ReactElement {
   backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
   padding: '0',
   height: '40px',
-  alignItems: 'center',
+  alignItems: 'center'
 }}>
         <div style={{ display: 'flex' }}>
           <button
@@ -514,7 +514,7 @@ function MainApp(): React.ReactElement {
   cursor: 'pointer',
   fontSize: '12px',
   fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
-  color: 'var(--color-text-primary, #e8e8e8)',
+  color: 'var(--color-text-primary, #e8e8e8)'
 }}
           >
             📊 Graph Editor
@@ -529,7 +529,7 @@ function MainApp(): React.ReactElement {
   cursor: 'pointer',
   fontSize: '12px',
   fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
-  color: 'var(--color-text-primary, #e8e8e8)',
+  color: 'var(--color-text-primary, #e8e8e8)'
 }}
           >
             🎲 LLM Randomizer
@@ -544,7 +544,7 @@ function MainApp(): React.ReactElement {
   cursor: 'pointer',
   fontSize: '12px',
   fontWeight: activeTab === 'files' ? 'bold' : 'normal',
-  color: 'var(--color-text-primary, #e8e8e8)',
+  color: 'var(--color-text-primary, #e8e8e8)'
 }}
           >
             📁 Files
@@ -559,7 +559,7 @@ function MainApp(): React.ReactElement {
   cursor: 'pointer',
   fontSize: '12px',
   fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
-  color: 'var(--color-text-primary, #e8e8e8)',
+  color: 'var(--color-text-primary, #e8e8e8)'
 }}
           >
             🔬 Prototype
@@ -582,7 +582,7 @@ function MainApp(): React.ReactElement {
   padding: '20px',
   height: '100%',
   overflow: 'auto',
-  backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
+  backgroundColor: 'var(--color-bg-primary, #1e1e1e)'
 }}>
             <RandomizerPanel
               onGraphGenerated={handleGraphGenerated}

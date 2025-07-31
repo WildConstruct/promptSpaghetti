@@ -6,8 +6,8 @@ import GraphNode from '../GraphNode';
 import { NodeProps, ReactFlowProvider } from 'reactflow';
 
 // Mock the reactflow module
-jest.mock('reactflow', () => ({)
-  Handle: ({ type, position, style }: { type: string, position: string, style: object }) => ()
+jest.mock('reactflow', () => ({
+  Handle: ({ type, position, style }: { type: string, position: string, style: object }) => (
     <div 
       data-testid={`handle-${type}-${position}`} }
       className={[
@@ -31,13 +31,13 @@ jest.mock('reactflow', () => ({)
   Top: 'top',
   Bottom: 'bottom',
   Left: 'left',
-  Right: 'right',
+  Right: 'right'
 },
   ReactFlowProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 
 // Create a complete mock NodeProps object to avoid TypeScript errors
-const createMockNodeProps = (label: string): NodeProps => ({,)
+const createMockNodeProps = (label: string): NodeProps => ({
   id: '1',
   type: 'graphNode',
   data: { label },
