@@ -1,7 +1,7 @@
 /**
  * Professional Undo/Redo System for Graph Editor
  * Phase 2: Critical Professional Features Implementation
- * 
+ *
  * Cinema 4D-inspired undo/redo functionality with visual feedback
  */
 import React, { useState, useCallback, useEffect, useRef } from 'react';
@@ -37,14 +37,14 @@ export class UndoRedoSystem {
       edges: JSON.parse(JSON.stringify(edges)), // Deep clone
       timestamp: Date.now(),
       description,
-      id: `state_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      id: `state_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     };
     // Remove any states after current index (we're creating a new branch)
     this.history = this.history.slice(0, this.currentIndex + 1);
     // Add new state
     this.history.push(state);
     this.currentIndex = this.history.length - 1;
-      // Maintain max size
+    // Maintain max size
     if (this.history.length > this.maxSize) {
       this.history.shift();
       this.currentIndex--;
@@ -121,7 +121,7 @@ export class UndoRedoSystem {
 export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
   onStateChange,
   maxHistorySize = 50,
-  theme = 'cinema'
+  theme = 'cinema',
 }) => {
   const [undoSystem] = useState(() => new UndoRedoSystem(maxHistorySize));
   const [canUndo, setCanUndo] = useState(false);
@@ -166,20 +166,23 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
       onStateChange(state);
     }
   }, [undoSystem, onStateChange]);
-  const handleHistorySelect = useCallback((index: number) => {
-    // Navigate directly to a specific state in history
-    while (undoSystem.getCurrentIndex() > index && undoSystem.canUndo()) {
-      undoSystem.undo();
-    }
-    while (undoSystem.getCurrentIndex() < index && undoSystem.canRedo()) {
-      undoSystem.redo();
-    }
-    const state = undoSystem.getCurrentState();
-    if (state) {
-      onStateChange(state);
-    }
-    setShowHistory(false);
-  }, [undoSystem, onStateChange]);
+  const handleHistorySelect = useCallback(
+    (index: number) => {
+      // Navigate directly to a specific state in history
+      while (undoSystem.getCurrentIndex() > index && undoSystem.canUndo()) {
+        undoSystem.undo();
+      }
+      while (undoSystem.getCurrentIndex() < index && undoSystem.canRedo()) {
+        undoSystem.redo();
+      }
+      const state = undoSystem.getCurrentState();
+      if (state) {
+        onStateChange(state);
+      }
+      setShowHistory(false);
+    },
+    [undoSystem, onStateChange]
+  );
   // Theme styles
   const getThemeStyles = () => {
     const themes = {
@@ -212,22 +215,25 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
         accent: 'var(--color-accent-orange)',
         hover: 'var(--color-ui-hover)',
         disabled: 'var(--color-text-disabled)',
-      }
+      },
     };
     return themes[theme];
   };
   const styles = getThemeStyles();
   // Expose the undo system for external use
-  React.useImperativeHandle(ref => ({
-    addState: (nodes: Node[], edges: Edge[], description: string) => {
-      undoSystem.addState(nodes, edges, description);
-    },
-  undo: handleUndo,
-    redo: handleRedo,
-    canUndo: () => canUndo,
-    canRedo: () => canRedo,
-    clear: () => undoSystem.clear()
-  }), [undoSystem, handleUndo, handleRedo, canUndo, canRedo]);
+  React.useImperativeHandle(
+    ref => ({
+      addState: (nodes: Node[], edges: Edge[], description: string) => {
+        undoSystem.addState(nodes, edges, description);
+      },
+      undo: handleUndo,
+      redo: handleRedo,
+      canUndo: () => canUndo,
+      canRedo: () => canRedo,
+      clear: () => undoSystem.clear(),
+    }),
+    [undoSystem, handleUndo, handleRedo, canUndo, canRedo]
+  );
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px' }}>
       {/* Undo Button */}
@@ -249,7 +255,7 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
           alignItems: 'center',
           gap: '6px',
           transition: 'all var(--transition-normal)',
-          fontFamily: 'var(--font-family-primary)'
+          fontFamily: 'var(--font-family-primary)',
         }}
       >
         <span style={{ fontSize: '16px' }}>↶</span>
@@ -274,7 +280,7 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
           alignItems: 'center',
           gap: '6px',
           transition: 'all var(--transition-normal)',
-          fontFamily: 'var(--font-family-primary)'
+          fontFamily: 'var(--font-family-primary)',
         }}
       >
         <span style={{ fontSize: '16px' }}>↷</span>
@@ -295,7 +301,7 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
           display: 'flex',
           alignItems: 'center',
           transition: 'all var(--transition-normal)',
-          fontFamily: 'var(--font-family-primary)'
+          fontFamily: 'var(--font-family-primary)',
         }}
       >
         <span style={{ fontSize: '16px' }}>📋</span>
@@ -316,17 +322,19 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
             borderRadius: '8px',
             boxShadow: 'var(--shadow-lg)',
             overflow: 'hidden',
-            zIndex: 1000
+            zIndex: 1000,
           }}
         >
-          <div style={{
-            padding: '12px 16px',
-            borderBottom: `1px solid ${styles.border}`,
-            background: styles.secondary,
-            fontSize: '14px',
-            fontWeight: '600',
-            color: styles.text
-          }}>
+          <div
+            style={{
+              padding: '12px 16px',
+              borderBottom: `1px solid ${styles.border}`,
+              background: styles.secondary,
+              fontSize: '14px',
+              fontWeight: '600',
+              color: styles.text,
+            }}
+          >
             History ({undoSystem.getHistory().length} states)
           </div>
           <div style={{ maxHeight: '300px', overflow: 'auto' }}>
@@ -343,35 +351,41 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({
                     background: isCurrent ? styles.accent + '20' : 'transparent',
                     borderLeft: isCurrent ? `4px solid ${styles.accent}` : '4px solid transparent',
                     borderBottom: `1px solid ${styles.border}`,
-                    transition: 'all var(--transition-fast)'
+                    transition: 'all var(--transition-fast)',
                   }}
                 >
-                  <div style={{
-                    fontSize: '13px',
-                    fontWeight: isCurrent ? '600' : '500',
-                    color: isCurrent ? styles.accent : styles.text,
-                    marginBottom: '4px',
-                  }}>
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      fontWeight: isCurrent ? '600' : '500',
+                      color: isCurrent ? styles.accent : styles.text,
+                      marginBottom: '4px',
+                    }}
+                  >
                     {state.description}
                   </div>
-                  <div style={{
-                    fontSize: '11px',
-                    color: styles.textSecondary,
-                  }}>
+                  <div
+                    style={{
+                      fontSize: '11px',
+                      color: styles.textSecondary,
+                    }}
+                  >
                     {relativeTime} • {state.nodes.length} nodes, {state.edges.length} edges
                   </div>
                 </div>
               );
             })}
           </div>
-          <div style={{
-            padding: '8px 16px',
-            borderTop: `1px solid ${styles.border}`,
-            background: styles.secondary,
-            fontSize: '11px',
-            color: styles.textSecondary,
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              padding: '8px 16px',
+              borderTop: `1px solid ${styles.border}`,
+              background: styles.secondary,
+              fontSize: '11px',
+              color: styles.textSecondary,
+              textAlign: 'center',
+            }}
+          >
             Click any state to jump to it
           </div>
         </div>

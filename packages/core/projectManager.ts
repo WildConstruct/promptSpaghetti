@@ -29,8 +29,7 @@ export interface SaveProjectOptions {
   tags?: string;
   fileName?: string;
 }
-}
-}
+
 export interface LoadProjectResult {
   success: boolean;
   data?: {

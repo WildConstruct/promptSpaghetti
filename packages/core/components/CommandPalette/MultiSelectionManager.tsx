@@ -14,8 +14,7 @@ export interface SelectionRect {
   currentY: number;
   active: boolean;
 }
-}
-}
+
 export interface MultiSelectionManagerProps {
   nodes: Node[];
   edges: Edge[];
@@ -23,7 +22,6 @@ export interface MultiSelectionManagerProps {
   selectedEdges: Edge[];
   onNodesSelect: (nodes: Node[]) => void;
   onEdgesSelect: (edges: Edge[]) => void;
-}
   onSelectionChange: (selection: { nodes: Node[]; edges: Edge[] }) => void;
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
@@ -283,7 +281,6 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
 };
 
 // Selection Info Panel Component
-}
 interface SelectionInfoPanelProps {
   selectedNodes: Node[];
   selectedEdges: Edge[];

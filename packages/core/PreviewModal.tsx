@@ -206,8 +206,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   alignItems: 'center',
   marginBottom: 16,
 }}>
-          <h2 style={{ margin: 0 }>Generated Content</h2>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }>
+          <h2 style={{ margin: 0 }}>Generated Content</h2>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {hasExecutionPaths && (
               <button
                 onClick={() => setShowExecutionPaths(!showExecutionPaths)}
@@ -238,7 +238,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-
+                }}
               >
                 {showVarianceAnalysis ? '📈 Hide Variance' : '📊 Show Variance'}
               </button>
@@ -280,7 +280,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-
+                }}
               >
                 💾 Export Selected
               </button>
@@ -301,7 +301,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-
+                }}
               >
                 📊 Export All
               </button>
