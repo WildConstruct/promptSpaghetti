@@ -85,8 +85,8 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                 }
               }}
             >
-              <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }>{node.tooltip}</span>
-              <span style={{ fontSize: 22, width: 28, textAlign: 'center' }>{node.icon}</span>
+              <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
+              <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
             </div>
           ))
         ) : (
@@ -123,7 +123,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
   letterSpacing: '0.5px',
   marginBottom: 8,
   paddingLeft: 8,
-}>
+}}>
                     {categoryLabels[categoryKey as keyof typeof categoryLabels]}
                   </div>
                   {categoryNodes.map((node) => (
@@ -164,8 +164,8 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         }
                       }}
                     >
-                      <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }>{node.tooltip}</span>
-                      <span style={{ fontSize: 22, width: 28, textAlign: 'center' }>{node.icon}</span>
+                      <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
+                      <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
                       <div style={{ flex: 1 }>
                         <div style={{ fontSize: 13, fontWeight: 500 }>{node.label}</div>
                         <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }>{node.tooltip}</div>

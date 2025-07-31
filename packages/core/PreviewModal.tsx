@@ -205,7 +205,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   justifyContent: 'space-between',
   alignItems: 'center',
   marginBottom: 16,
-}>
+}}>
           <h2 style={{ margin: 0 }>Generated Content</h2>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }>
             {hasExecutionPaths && (

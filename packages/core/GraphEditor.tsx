@@ -307,14 +307,14 @@ const NODE_TYPES: NodeMeta[] = [
   hasUnsavedChanges,
   projectName: currentProject?.name,
   onSave: async () => {
-  // Trigger save dialog and wait for result
-  return new Promise((resolve) => {
-  setSaveDialogOpen(true);
-  // Note: This is a simplified implementation,
-  // In practice, you'd need to wire this up with the actual save dialog result
-  resolve(true);
-  });
-
+    // Trigger save dialog and wait for result
+    return new Promise((resolve) => {
+      setSaveDialogOpen(true);
+      // Note: This is a simplified implementation,
+      // In practice, you'd need to wire this up with the actual save dialog result
+      resolve(true);
+    });
+  }
 });
 
   // Highlighted nodes & edges from preview result hover

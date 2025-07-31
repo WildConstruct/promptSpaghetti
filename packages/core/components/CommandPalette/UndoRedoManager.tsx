@@ -7,7 +7,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
-}
 export interface GraphState {
   nodes: Node[];
   edges: Edge[];

@@ -21,14 +21,13 @@ export interface ProfessionalIntegrationProps {
   onEdgesChange: (edges: Edge[]) => void;
   onNodesSelect: (nodes: Node[]) => void;
   onEdgesSelect: (edges: Edge[]) => void;
-}
   onNodeCreate: (nodeType: string, position: { x: number; y: number }, data?: Record<string, unknown>) => void;
   onNodeDelete: (nodeIds: string[]) => void;
   onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
   onSave: () => void;
   onLoad: () => void;
-  theme?: 'light' | 'dark' | 'cinema'
-  }
+  theme?: 'light' | 'dark' | 'cinema';
+}
 export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = ({
   nodes,
   edges,
