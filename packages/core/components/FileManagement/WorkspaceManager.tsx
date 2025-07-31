@@ -6,8 +6,6 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import { PSGFile } from '../../projectManager';
-
-}
 export interface WorkspaceSession {
   id: string;
   name: string;

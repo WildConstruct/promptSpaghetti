@@ -139,7 +139,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     const link = document.createElement('a');
     link.href = url;
     // Generate filename based on format and export type
-    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:\-]/g, '');
     const extension = getFileExtension(format);
     let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;
     if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
@@ -315,7 +315,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 background: '#f7fafc',
                 borderRadius: 4,
               }}>
-                {`${selectedForComparison.length}/3 selected`}
+                {selectedForComparison.length + '/3 selected'}
               </span>
             )}
           </div>
