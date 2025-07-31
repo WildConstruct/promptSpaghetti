@@ -190,36 +190,36 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   justifyContent: 'center',
 }>
       <div style={{
-  background: professionalColors.background.elevated,
-  borderRadius: 12,
-  padding: 24,
-  minWidth: 400,
-  maxWidth: hasExecutionPaths ? 800 : 600,
-  maxHeight: '90vh',
-  overflow: 'auto',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
-  color: professionalColors.text.primary,
-}>
+        background: professionalColors.background.elevated,
+        borderRadius: 12,
+        padding: 24,
+        minWidth: 400,
+        maxWidth: hasExecutionPaths ? 800 : 600,
+        maxHeight: '90vh',
+        overflow: 'auto',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+        color: professionalColors.text.primary,
+      }}>
         <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 16,
-}}>
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}>
           <h2 style={{ margin: 0 }}>Generated Content</h2>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {hasExecutionPaths && (
               <button
                 onClick={() => setShowExecutionPaths(!showExecutionPaths)}
                 style={{
-  background: showExecutionPaths ? '#4d7cff' : '#e2e8f0',
-  color: showExecutionPaths ? '#fff' : '#2d3748',
-  border: 'none',
-  borderRadius: 4,
-  padding: '8px 12px',
-  fontSize: 12,
-  fontWeight: 500,
-  cursor: 'pointer',
+                  background: showExecutionPaths ? '#4d7cff' : '#e2e8f0',
+                  color: showExecutionPaths ? '#fff' : '#2d3748',
+                  border: 'none',
+                  borderRadius: 4,
+                  padding: '8px 12px',
+                  fontSize: 12,
+                  fontWeight: 500,
+                  cursor: 'pointer',
                 }}
               >
                 {showExecutionPaths ? '📊 Hide Paths' : '🔍 Show Paths'}
@@ -250,17 +250,18 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   clearComparison();
                 } else {
                   setCompareMode(true);
-
+                }
+              }}
               style={{
-  background: compareMode ? '#10b981' : '#e2e8f0',
-  color: compareMode ? '#fff' : '#2d3748',
-  border: 'none',
-  borderRadius: 4,
-  padding: '8px 12px',
-  fontSize: 12,
-  fontWeight: 500,
-  cursor: 'pointer',
-
+                background: compareMode ? '#10b981' : '#e2e8f0',
+                color: compareMode ? '#fff' : '#2d3748',
+                border: 'none',
+                borderRadius: 4,
+                padding: '8px 12px',
+                fontSize: 12,
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
             >
               {compareMode ? '⚖️ Exit Compare' : '⚖️ Compare'}
             </button>
@@ -308,18 +309,18 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             )}
             {compareMode && selectedForComparison.length > 0 && (
               <span style={{
-  fontSize: 11,
-  color: '#4a5568',
-  padding: '4px 8px',
-  background: '#f7fafc',
-  borderRadius: 4,
-}>
+                fontSize: 11,
+                color: '#4a5568',
+                padding: '4px 8px',
+                background: '#f7fafc',
+                borderRadius: 4,
+              }}>
                 {selectedForComparison.length}/3 selected
               </span>
             )}
           </div>
         </div>
-        {loading && <div style={{marginBottom:12}>✨ Generating content...</div>}
+        {loading && <div style={{ marginBottom: 12 }}>✨ Generating content...</div>}
         {error && <div style={{ color: '#c00' }>⚠️ Something went wrong: {error}</div>}
         {!loading && !error && (
           <div>
