@@ -7,7 +7,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 
-}
 export interface SelectionRect {
   startX: number;
   startY: number;

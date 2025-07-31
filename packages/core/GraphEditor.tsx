@@ -239,7 +239,7 @@ const NODE_TYPES: NodeMeta[] = [
   const [statsOpen, setStatsOpen] = useState(false);
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number} | null>(null);
+  const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   // Canvas optimization and smooth animations
   const [isCreatingNode, setIsCreatingNode] = useState(false);
   const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
